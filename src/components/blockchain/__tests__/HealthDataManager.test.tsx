@@ -1,12 +1,10 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react-native';
 import { HealthDataManager } from '../HealthDataManager';
-import { HealthDataRecord } from '../../../types/blockchain';
 
 // Mock the useHealthDataOperations hook
 const mockUseHealthDataOperations = jest.fn();
 jest.mock('../../../hooks/useBlockchainService', () => ({
-  useHealthDataOperations: () => mockUseHealthDataOperations()
+  useHealthDataOperations: () => mockUseHealthDataOperations();
 }));
 
 describe('HealthDataManager', () => {
@@ -15,7 +13,7 @@ describe('HealthDataManager', () => {
       transactionId: 'tx-123',
       dataType: 'blood_pressure',
       dataHash: new Uint8Array([1, 2, 3]),
-      metadata: { 
+      metadata: {
         device: 'smartwatch',
         systolic: '120',
         diastolic: '80'
@@ -27,7 +25,7 @@ describe('HealthDataManager', () => {
       transactionId: 'tx-456',
       dataType: 'heart_rate',
       dataHash: new Uint8Array([4, 5, 6]),
-      metadata: { 
+      metadata: {
         device: 'fitness_tracker',
         bpm: '75'
       },
@@ -36,8 +34,7 @@ describe('HealthDataManager', () => {
     }
   ];
 
-  const defaultProps = {
-    userId: 'user-123'
+  const defaultProps = {userId: 'user-123';
   };
 
   beforeEach(() => {
@@ -96,9 +93,7 @@ describe('HealthDataManager', () => {
   });
 
   it('should render error state', () => {
-    const mockError = {
-      message: '获取数据失败',
-      code: 'NETWORK_ERROR'
+    const mockError = {message: '获取数据失败',code: 'NETWORK_ERROR';
     };
 
     mockUseHealthDataOperations.mockReturnValue({
@@ -191,4 +186,4 @@ describe('HealthDataManager', () => {
     expect(screen.getByText('2')).toBeTruthy(); // 总记录数
     expect(screen.getByText('2')).toBeTruthy(); // 数据类型数
   });
-}); 
+});

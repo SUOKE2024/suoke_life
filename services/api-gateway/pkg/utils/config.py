@@ -1,3 +1,13 @@
+"""
+config - 索克生活项目模块
+"""
+
+from internal.model.config import GatewayConfig
+from typing import Any, Dict, Optional, Union
+import logging
+import os
+import yaml
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,13 +15,8 @@
 配置加载工具，用于解析YAML配置文件并转换为配置对象
 """
 
-import logging
-import os
-from typing import Any, Dict, Optional, Union
 
-import yaml
 
-from internal.model.config import GatewayConfig
 
 
 logger = logging.getLogger(__name__)

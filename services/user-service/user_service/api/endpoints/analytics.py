@@ -1,13 +1,20 @@
-"""用户分析API端点"""
+"""
+analytics - 索克生活项目模块
+"""
 
-from typing import List, Optional, Dict, Any
 from datetime import datetime, timedelta
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.ext.asyncio import AsyncSession
-
-from user_service.database import get_db
-from user_service.auth import get_current_user, require_active_user
+from typing import List, Optional, Dict, Any
 from user_service.analytics import (
+from user_service.auth import get_current_user, require_active_user
+from user_service.database import get_db
+from user_service.models.user import User
+from user_service.performance import performance_monitor, query_cache
+
+"""用户分析API端点"""
+
+
     get_health_analyzer,
     get_profile_analyzer,
     get_recommendation_engine,
@@ -15,8 +22,6 @@ from user_service.analytics import (
     UserProfileAnalyzer,
     RecommendationEngine
 )
-from user_service.performance import performance_monitor, query_cache
-from user_service.models.user import User
 
 router = APIRouter()
 

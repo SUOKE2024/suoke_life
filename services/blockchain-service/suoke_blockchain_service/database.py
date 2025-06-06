@@ -1,17 +1,22 @@
 """
+database - 索克生活项目模块
+"""
+
+from .config import settings
+from .logging import get_logger
+from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
+from sqlalchemy.ext.asyncio import AsyncSession, AsyncEngine, async_sessionmaker, create_async_engine
+from typing import TYPE_CHECKING
+
+"""
 数据库连接管理
 
 提供异步数据库连接池和会话管理功能。
 """
 
-from contextlib import asynccontextmanager
-from typing import TYPE_CHECKING
-from collections.abc import AsyncGenerator
 
-from sqlalchemy.ext.asyncio import AsyncSession, AsyncEngine, async_sessionmaker, create_async_engine
 
-from .config import settings
-from .logging import get_logger
 
 logger = get_logger(__name__)
 

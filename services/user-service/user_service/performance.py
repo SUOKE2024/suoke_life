@@ -1,19 +1,27 @@
-"""用户服务性能优化模块"""
+"""
+performance - 索克生活项目模块
+"""
 
-import asyncio
-import time
+            from user_service.database import _async_engine
+        import gc
+        import psutil
 from contextlib import asynccontextmanager
-from typing import Dict, List, Optional, Any, Callable, TypeVar, Union
-from functools import wraps, lru_cache
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-import structlog
-import psutil
+from functools import wraps, lru_cache
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
-
+from typing import Dict, List, Optional, Any, Callable, TypeVar, Union
 from user_service.config import get_settings
 from user_service.database import get_async_session
+import asyncio
+import psutil
+import structlog
+import time
+
+"""用户服务性能优化模块"""
+
+
 
 logger = structlog.get_logger()
 
@@ -180,7 +188,8 @@ class QueryOptimizer:
                 "timestamp": datetime.utcnow()
             }
     
-    def record_query_stats(self, query: str, execution_time: float, result_count: int):
+        @cache(timeout=300)  # 5分钟缓存
+def record_query_stats(self, query: str, execution_time: float, result_count: int):
         """记录查询统计"""
         query_hash = str(hash(query))
         
@@ -228,7 +237,6 @@ class ConnectionPoolManager:
     async def get_pool_status(self) -> Dict[str, Any]:
         """获取连接池状态"""
         try:
-            from user_service.database import _async_engine
             
             if _async_engine:
                 pool = _async_engine.pool
@@ -267,13 +275,11 @@ class MemoryOptimizer:
     
     def optimize_memory_usage(self):
         """优化内存使用"""
-        import gc
         
         # 强制垃圾回收
         collected = gc.collect()
         
         # 记录内存使用情况
-        import psutil
         process = psutil.Process()
         memory_info = process.memory_info()
         
@@ -388,7 +394,8 @@ def performance_monitor(operation_name: str):
                 )
                 raise
         
-        return async_wrapper if asyncio.iscoroutinefunction(func) else sync_wrapper
+        return async_wrapper if asyncio.iscoroutinefunction(func) else sync_wra    @cache(timeout=300)  # 5分钟缓存
+pper
     
     return decorator
 
@@ -450,7 +457,6 @@ def query_cache(cache_key_func: Callable = None, ttl: int = 300):
 def _get_memory_usage() -> int:
     """获取当前内存使用量"""
     try:
-        import psutil
         process = psutil.Process()
         return process.memory_info().rss
     except Exception:

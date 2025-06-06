@@ -1,16 +1,21 @@
+"""
+linkerd_client - 索克生活项目模块
+"""
+
+    from kubernetes import client, config
+    from kubernetes.client.rest import ApiException
+from dataclasses import dataclass, field
+from typing import Any
+import logging
+
 #!/usr/bin/env python3
 """
 Linkerd客户端
 提供对Linkerd服务网格的支持
 """
 
-from dataclasses import dataclass, field
-import logging
-from typing import Any
 
 try:
-    from kubernetes import client, config
-    from kubernetes.client.rest import ApiException
 
     HAS_KUBERNETES = True
 except ImportError:

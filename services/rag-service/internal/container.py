@@ -1,3 +1,26 @@
+"""
+container - 索克生活项目模块
+"""
+
+from .generator.local_generator import LocalGenerator
+from .generator.openai_generator import OpenAIGenerator
+from .observability.metrics import MetricsCollector
+from .observability.tracer import TracingService
+from .repository.milvus_repository import MilvusRepository
+from .resilience.circuit_breaker import CircuitBreakerService
+from .retriever.hybrid_retriever import HybridRetriever
+from .retriever.kg_enhanced_retriever import KGEnhancedRetriever
+from .service.cache_service import CacheService
+from .service.embedding_service import EmbeddingService
+from .service.health_check import HealthCheckService
+from .service.kg_integration_service import KnowledgeGraphIntegrationService
+from .service.rag_service import RagService
+from .tcm.herb_recommender import HerbRecommender
+from .tcm.pulse_analyzer import PulseAnalyzer
+from .tcm.syndrome_analyzer import SyndromeAnalyzer
+from dependency_injector import containers, providers
+from typing import Dict, Any
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,25 +28,7 @@
 依赖注入容器，管理RAG服务的所有组件依赖
 """
 
-from dependency_injector import containers, providers
-from typing import Dict, Any
 
-from .service.rag_service import RagService
-from .service.embedding_service import EmbeddingService
-from .service.cache_service import CacheService
-from .service.kg_integration_service import KnowledgeGraphIntegrationService
-from .service.health_check import HealthCheckService
-from .retriever.hybrid_retriever import HybridRetriever
-from .retriever.kg_enhanced_retriever import KGEnhancedRetriever
-from .generator.openai_generator import OpenAIGenerator
-from .generator.local_generator import LocalGenerator
-from .repository.milvus_repository import MilvusRepository
-from .observability.metrics import MetricsCollector
-from .observability.tracer import TracingService
-from .resilience.circuit_breaker import CircuitBreakerService
-from .tcm.syndrome_analyzer import SyndromeAnalyzer
-from .tcm.herb_recommender import HerbRecommender
-from .tcm.pulse_analyzer import PulseAnalyzer
 
 class Container(containers.DeclarativeContainer):
     """依赖注入容器"""

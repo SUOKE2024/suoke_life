@@ -1,3 +1,20 @@
+"""
+test_middleware - 索克生活项目模块
+"""
+
+        from jose import jwt
+from fastapi import FastAPI, Request, Response
+from fastapi.testclient import TestClient
+from suoke_api_gateway.core.config import Settings
+from suoke_api_gateway.middleware.auth import AuthMiddleware
+from suoke_api_gateway.middleware.logging import LoggingMiddleware
+from suoke_api_gateway.middleware.rate_limit import RateLimitMiddleware
+from suoke_api_gateway.middleware.security import SecurityMiddleware
+from suoke_api_gateway.middleware.tracing import TracingMiddleware
+from unittest.mock import AsyncMock, MagicMock, patch
+import pytest
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,19 +22,8 @@
 中间件测试
 """
 
-import time
-from unittest.mock import AsyncMock, MagicMock, patch
 
-import pytest
-from fastapi import FastAPI, Request, Response
-from fastapi.testclient import TestClient
 
-from suoke_api_gateway.core.config import Settings
-from suoke_api_gateway.middleware.auth import AuthMiddleware
-from suoke_api_gateway.middleware.logging import LoggingMiddleware
-from suoke_api_gateway.middleware.rate_limit import RateLimitMiddleware
-from suoke_api_gateway.middleware.security import SecurityMiddleware
-from suoke_api_gateway.middleware.tracing import TracingMiddleware
 
 class TestAuthMiddleware:
     """认证中间件测试"""
@@ -78,7 +84,6 @@ class TestAuthMiddleware:
     
     def test_private_path_with_valid_token(self, app, settings):
         """测试私有路径有效令牌访问"""
-        from jose import jwt
         
         # 创建有效令牌
         payload = {

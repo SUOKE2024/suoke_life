@@ -1,11 +1,16 @@
 """
+analysis - 索克生活项目模块
+"""
+
+from datetime import date, datetime
+from typing import Dict, List, Optional, Any
+
+"""
 分析服务
 
 提供算诊分析相关的业务逻辑
 """
 
-from typing import Dict, List, Optional, Any
-from datetime import date, datetime
 
 
 class AnalysisService:

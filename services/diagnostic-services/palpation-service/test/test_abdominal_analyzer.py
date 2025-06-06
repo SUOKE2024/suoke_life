@@ -1,3 +1,12 @@
+"""
+test_abdominal_analyzer - 索克生活项目模块
+"""
+
+from internal.signal.abdominal_analyzer import AbdominalAnalyzer
+from pathlib import Path
+import sys
+import unittest
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,14 +14,10 @@
 腹诊分析器测试
 """
 
-import unittest
-import sys
-from pathlib import Path
 
 # 添加项目根目录到Python路径
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from internal.signal.abdominal_analyzer import AbdominalAnalyzer
 
 class TestAbdominalAnalyzer(unittest.TestCase):
     """测试腹诊分析器"""

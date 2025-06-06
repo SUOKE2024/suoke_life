@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {
+import {import Svg, {import { GraphData, GraphNode, GraphEdge } from '../../services/medKnowledgeService';
+
   View,
   Text,
   StyleSheet,
@@ -7,18 +8,16 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
-  ActivityIndicator,
+  ActivityIndicator
 } from 'react-native';
-import Svg, {
   Circle,
   Line,
   Text as SvgText,
   G,
   Defs,
   Marker,
-  Path,
+  Path
 } from 'react-native-svg';
-import { GraphData, GraphNode, GraphEdge } from '../../services/medKnowledgeService';
 
 interface KnowledgeGraphVisualizationProps {
   graphData: GraphData | null;
@@ -49,7 +48,7 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
   onNodePress,
   onEdgePress,
   width: propWidth,
-  height: propHeight,
+  height: propHeight
 }) => {
   const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
   const width = propWidth || screenWidth - 32;
@@ -69,7 +68,7 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
     herb: '#9C27B0',
     syndrome: '#F44336',
     treatment: '#00BCD4',
-    default: '#757575',
+    default: '#757575'
   };
 
   // 初始化布局
@@ -84,15 +83,12 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
     if (layoutNodes.length > 0) {
       startForceSimulation();
     }
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
+    return () => {if (animationRef.current) {cancelAnimationFrame(animationRef.current);
       }
     };
   }, [layoutNodes.length, layoutEdges]);
 
-  const initializeLayout = () => {
-    if (!graphData) return;
+  const initializeLayout = () => {if (!graphData) return;
 
     // 初始化节点位置
     const nodes: LayoutNode[] = graphData.nodes.map((node, index) => {
@@ -101,14 +97,7 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
       const centerX = width / 2;
       const centerY = height / 2;
 
-      return {
-        ...node,
-        x: centerX + Math.cos(angle) * radius,
-        y: centerY + Math.sin(angle) * radius,
-        vx: 0,
-        vy: 0,
-        radius: getNodeRadius(node),
-        color: nodeColors[node.type] || nodeColors.default,
+      return {...node,x: centerX + Math.cos(angle) * radius,y: centerY + Math.sin(angle) * radius,vx: 0,vy: 0,radius: getNodeRadius(node),color: nodeColors[node.type] || nodeColors.default;
       };
     });
 
@@ -119,10 +108,7 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
         const sourceNode = nodeMap.get(edge.source);
         const targetNode = nodeMap.get(edge.target);
         if (sourceNode && targetNode) {
-          return {
-            ...edge,
-            sourceNode,
-            targetNode,
+          return {...edge,sourceNode,targetNode;
           };
         }
         return null;
@@ -133,23 +119,19 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
     setLayoutEdges(edges);
   };
 
-  const getNodeRadius = (node: GraphNode): number => {
-    const baseRadius = 20;
+  const getNodeRadius = (node: GraphNode): number => {const baseRadius = 20;
     const typeMultipliers: Record<string, number> = {
       constitution: 1.2,
       syndrome: 1.1,
       symptom: 1.0,
       acupoint: 0.9,
       herb: 0.8,
-      treatment: 0.9,
+      treatment: 0.9
     };
     return baseRadius * (typeMultipliers[node.type] || 1.0);
   };
 
-  const startForceSimulation = () => {
-    const simulate = () => {
-      setLayoutNodes(prevNodes => {
-        const newNodes = [...prevNodes];
+  const startForceSimulation = () => {const simulate = () => {setLayoutNodes(prevNodes => {const newNodes = [...prevNodes];
         const alpha = 0.1;
         const linkDistance = 100;
         const linkStrength = 0.1;
@@ -229,18 +211,15 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
     simulate();
   };
 
-  const handleNodePress = (node: LayoutNode) => {
-    setSelectedNode(node);
+  const handleNodePress = (node: LayoutNode) => {setSelectedNode(node);
     onNodePress?.(node);
   };
 
-  const handleEdgePress = (edge: LayoutEdge) => {
-    onEdgePress?.(edge);
+  const handleEdgePress = (edge: LayoutEdge) => {onEdgePress?.(edge);
   };
 
-  const renderLegend = () => {
-    const nodeTypes = Object.keys(nodeColors).filter(type => type !== 'default');
-    
+  const renderLegend = () => {const nodeTypes = Object.keys(nodeColors).filter(type => type !== 'default');
+
     return (
       <View style={styles.legend}>
         <Text style={styles.legendTitle}>图例</Text>
@@ -249,108 +228,103 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
             <View key={type} style={styles.legendItem}>
               <View
                 style={[
-                  styles.legendColor,
-                  { backgroundColor: nodeColors[type] }
-                ]}
-              />
-              <Text style={styles.legendText}>
-                {type === 'constitution' ? '体质' :
-                 type === 'symptom' ? '症状' :
-                 type === 'acupoint' ? '穴位' :
-                 type === 'herb' ? '中药' :
-                 type === 'syndrome' ? '证型' :
-                 type === 'treatment' ? '治疗' : type}
-              </Text>
-            </View>
-          ))}
-        </View>
-      </View>
+                  styles.legendColor,{ backgroundColor: nodeColors[type] };
+                ]};
+              />;
+              <Text style={styles.legendText}>;
+                {type === 'constitution' ? '体质' :;
+                 type === 'symptom' ? '症状' :;
+                 type === 'acupoint' ? '穴位' :;
+                 type === 'herb' ? '中药' :;
+                 type === 'syndrome' ? '证型' :;
+                 type === 'treatment' ? '治疗' : type};
+              </Text>;
+            </View>;
+          ))};
+        </View>;
+      </View>;
     );
   };
 
-  const renderStatistics = () => {
-    if (!graphData || !showStatistics) return null;
+  const renderStatistics = () => {if (!graphData || !showStatistics) return null;
 
-    return (
-      <View style={styles.statistics}>
-        <Text style={styles.statisticsTitle}>图谱统计</Text>
-        <Text style={styles.statisticsText}>
-          节点总数: {graphData.statistics.total_nodes}
-        </Text>
-        <Text style={styles.statisticsText}>
-          边总数: {graphData.statistics.total_edges}
-        </Text>
-        <Text style={styles.statisticsText}>节点类型分布:</Text>
-        {Object.entries(graphData.statistics.node_types).map(([type, count]) => (
-          <Text key={type} style={styles.statisticsSubText}>
-            • {type}: {count}
-          </Text>
-        ))}
-      </View>
+    return (;
+      <View style={styles.statistics}>;
+        <Text style={styles.statisticsTitle}>图谱统计</Text>;
+        <Text style={styles.statisticsText}>;
+          节点总数: {graphData.statistics.total_nodes};
+        </Text>;
+        <Text style={styles.statisticsText}>;
+          边总数: {graphData.statistics.total_edges};
+        </Text>;
+        <Text style={styles.statisticsText}>节点类型分布:</Text>;
+        {Object.entries(graphData.statistics.node_types).map(([type, count]) => (;
+          <Text key={type} style={styles.statisticsSubText}>;
+            • {type}: {count};
+          </Text>;
+        ))};
+      </View>;
     );
   };
 
-  const renderNodeDetails = () => {
-    if (!selectedNode) return null;
+  const renderNodeDetails = () => {if (!selectedNode) return null;
 
     return (
       <View style={styles.nodeDetails}>
         <Text style={styles.nodeDetailsTitle}>{selectedNode.label}</Text>
         <Text style={styles.nodeDetailsType}>类型: {selectedNode.type}</Text>
         {selectedNode.properties && Object.keys(selectedNode.properties).length > 0 && (
-          <View style={styles.nodeProperties}>
-            <Text style={styles.nodePropertiesTitle}>属性:</Text>
-            {Object.entries(selectedNode.properties).slice(0, 3).map(([key, value]) => (
-              <Text key={key} style={styles.nodePropertyText}>
-                • {key}: {String(value).slice(0, 50)}
-              </Text>
-            ))}
-          </View>
-        )}
-        <TouchableOpacity
-          style={styles.closeButton}
-          onPress={() => setSelectedNode(null)}
-        >
-          <Text style={styles.closeButtonText}>关闭</Text>
-        </TouchableOpacity>
-      </View>
+          <View style={styles.nodeProperties}>;
+            <Text style={styles.nodePropertiesTitle}>属性:</Text>;
+            {Object.entries(selectedNode.properties).slice(0, 3).map(([key, value]) => (;
+              <Text key={key} style={styles.nodePropertyText}>;
+                • {key}: {String(value).slice(0, 50)};
+              </Text>;
+            ))};
+          </View>;
+        )};
+        <TouchableOpacity;
+          style={styles.closeButton};
+          onPress={() => setSelectedNode(null)};
+        >;
+          <Text style={styles.closeButtonText}>关闭</Text>;
+        </TouchableOpacity>;
+      </View>;
     );
   };
 
   if (loading) {
-    return (
-      <View style={[styles.container, styles.loadingContainer]}>
-        <ActivityIndicator size="large" color="#007AFF" />
-        <Text style={styles.loadingText}>正在加载知识图谱...</Text>
-      </View>
+    return (;
+      <View style={[styles.container, styles.loadingContainer]}>;
+        <ActivityIndicator size="large" color="#007AFF" />;
+        <Text style={styles.loadingText}>正在加载知识图谱...</Text>;
+      </View>;
     );
   }
 
   if (!graphData || graphData.nodes.length === 0) {
-    return (
-      <View style={[styles.container, styles.emptyContainer]}>
-        <Text style={styles.emptyText}>暂无图谱数据</Text>
-      </View>
+    return (;
+      <View style={[styles.container, styles.emptyContainer]}>;
+        <Text style={styles.emptyText}>暂无图谱数据</Text>;
+      </View>;
     );
   }
 
-  return (
-    <View style={styles.container}>
-      {/* 控制栏 */}
-      <View style={styles.controls}>
-        <TouchableOpacity
-          style={styles.controlButton}
-          onPress={() => setShowStatistics(!showStatistics)}
-        >
-          <Text style={styles.controlButtonText}>
-            {showStatistics ? '隐藏统计' : '显示统计'}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.controlButton}
-          onPress={() => {
-            if (animationRef.current) {
-              cancelAnimationFrame(animationRef.current);
+  return (;
+    <View style={styles.container}>;
+      {// 控制栏};
+      <View style={styles.controls}>;
+        <TouchableOpacity;
+          style={styles.controlButton};
+          onPress={() => setShowStatistics(!showStatistics)};
+        >;
+          <Text style={styles.controlButtonText}>;
+            {showStatistics ? '隐藏统计' : '显示统计'};
+          </Text>;
+        </TouchableOpacity>;
+        <TouchableOpacity;
+          style={styles.controlButton};
+          onPress={() => {if (animationRef.current) {cancelAnimationFrame(animationRef.current);
             } else {
               startForceSimulation();
             }
@@ -362,7 +336,7 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
         </TouchableOpacity>
       </View>
 
-      {/* SVG 图谱 */}
+      {// SVG 图谱}
       <ScrollView
         style={styles.graphContainer}
         horizontal
@@ -383,7 +357,7 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
             </Marker>
           </Defs>
 
-          {/* 渲染边 */}
+          {// 渲染边}
           {layoutEdges.map((edge, index) => (
             <G key={`edge-${index}`}>
               <Line
@@ -399,7 +373,7 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
             </G>
           ))}
 
-          {/* 渲染节点 */}
+          {// 渲染节点}
           {layoutNodes.map((node, index) => (
             <G key={`node-${index}`}>
               <Circle
@@ -426,13 +400,13 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
         </Svg>
       </ScrollView>
 
-      {/* 图例 */}
+      {// 图例}
       {renderLegend()}
 
-      {/* 统计信息 */}
+      {// 统计信息}
       {renderStatistics()}
 
-      {/* 节点详情 */}
+      {// 节点详情}
       {renderNodeDetails()}
     </View>
   );
@@ -441,24 +415,24 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFFFF'
   },
   loadingContainer: {
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   loadingText: {
     marginTop: 16,
     fontSize: 16,
-    color: '#666666',
+    color: '#666666'
   },
   emptyContainer: {
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   emptyText: {
     fontSize: 16,
-    color: '#999999',
+    color: '#999999'
   },
   controls: {
     flexDirection: 'row',
@@ -467,24 +441,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: '#F8F9FA',
     borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+    borderBottomColor: '#E0E0E0'
   },
   controlButton: {
     backgroundColor: '#007AFF',
     paddingHorizontal: 16,
     paddingVertical: 8,
-    borderRadius: 8,
+    borderRadius: 8
   },
   controlButtonText: {
     color: '#FFFFFF',
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   graphContainer: {
-    flex: 1,
+    flex: 1
   },
   svg: {
-    backgroundColor: '#FAFAFA',
+    backgroundColor: '#FAFAFA'
   },
   legend: {
     position: 'absolute',
@@ -494,30 +468,30 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#E0E0E0',
+    borderColor: '#E0E0E0'
   },
   legendTitle: {
     fontSize: 14,
     fontWeight: 'bold',
     color: '#333333',
-    marginBottom: 8,
+    marginBottom: 8
   },
   legendItems: {
-    gap: 4,
+    gap: 4
   },
   legendItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 8
   },
   legendColor: {
     width: 12,
     height: 12,
-    borderRadius: 6,
+    borderRadius: 6
   },
   legendText: {
     fontSize: 12,
-    color: '#666666',
+    color: '#666666'
   },
   statistics: {
     position: 'absolute',
@@ -528,24 +502,24 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#E0E0E0',
-    maxWidth: 200,
+    maxWidth: 200
   },
   statisticsTitle: {
     fontSize: 14,
     fontWeight: 'bold',
     color: '#333333',
-    marginBottom: 8,
+    marginBottom: 8
   },
   statisticsText: {
     fontSize: 12,
     color: '#666666',
-    marginBottom: 4,
+    marginBottom: 4
   },
   statisticsSubText: {
     fontSize: 11,
     color: '#999999',
     marginLeft: 8,
-    marginBottom: 2,
+    marginBottom: 2
   },
   nodeDetails: {
     position: 'absolute',
@@ -560,47 +534,35 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 2
     },
     shadowOpacity: 0.1,
     shadowRadius: 3.84,
-    elevation: 5,
+    elevation: 5
   },
   nodeDetailsTitle: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#333333',
-    marginBottom: 8,
+    marginBottom: 8
   },
   nodeDetailsType: {
     fontSize: 14,
     color: '#666666',
-    marginBottom: 8,
+    marginBottom: 8
   },
   nodeProperties: {
-    marginBottom: 12,
+    marginBottom: 12
   },
   nodePropertiesTitle: {
     fontSize: 14,
     fontWeight: '600',
     color: '#333333',
-    marginBottom: 4,
+    marginBottom: 4
   },
   nodePropertyText: {
-    fontSize: 12,
-    color: '#666666',
-    marginBottom: 2,
-  },
-  closeButton: {
-    alignSelf: 'flex-end',
-    backgroundColor: '#007AFF',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
-  },
-  closeButtonText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: '600',
-  },
+    fontSize: 12,color: '#666666',marginBottom: 2;
+  },closeButton: {alignSelf: 'flex-end',backgroundColor: '#007AFF',paddingHorizontal: 16,paddingVertical: 8,borderRadius: 8;
+  },closeButtonText: {color: '#FFFFFF',fontSize: 14,fontWeight: '600';
+  };
 }); 

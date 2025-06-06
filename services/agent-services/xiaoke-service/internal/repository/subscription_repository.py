@@ -1,3 +1,13 @@
+"""
+subscription_repository - 索克生活项目模块
+"""
+
+from datetime import datetime, timedelta
+from typing import Any
+import logging
+import random
+import uuid
+
 #!/usr/bin/env python
 
 """
@@ -5,11 +15,6 @@
 负责订阅数据的存储和管理
 """
 
-import logging
-import random
-import uuid
-from datetime import datetime, timedelta
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

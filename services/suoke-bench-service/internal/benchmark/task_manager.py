@@ -1,20 +1,25 @@
 """
-异步任务管理器
+task_manager - 索克生活项目模块
 """
 
-import asyncio
-import logging
-import time
-import uuid
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 from typing import Any
-
 import aiofiles
+import asyncio
+import logging
 import orjson
+import time
+import uuid
+
+"""
+异步任务管理器
+"""
+
+
 
 # 配置日志
 logger = logging.getLogger(__name__)

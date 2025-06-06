@@ -1,13 +1,18 @@
+"""
+test_client - 索克生活项目模块
+"""
+
+from pathlib import Path
+import asyncio
+import grpc
+import sys
+
 #!/usr/bin/env python3
 """
 小艾服务客户端测试脚本
 """
 
-import asyncio
-import sys
-from pathlib import Path
 
-import grpc
 
 # 添加项目根目录到PYTHONPATH
 sys.path.insert(0, Path().resolve())

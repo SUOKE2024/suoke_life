@@ -1,24 +1,29 @@
+"""
+cache_optimization - 索克生活项目模块
+"""
+
+from collections import OrderedDict
+from collections.abc import Callable
+from dataclasses import dataclass
+from enum import Enum
+from functools import wraps
+from prometheus_client import Counter, Gauge, Histogram
+from typing import Any
+import aioredis
+import asyncio
+import contextlib
+import hashlib
+import json
+import logging
+import time
+
 #!/usr/bin/env python3
 """
 缓存优化模块
 提供多级缓存、缓存预热、缓存策略等功能
 """
 
-import asyncio
-from collections import OrderedDict
-from collections.abc import Callable
-import contextlib
-from dataclasses import dataclass
-from enum import Enum
-from functools import wraps
-import hashlib
-import json
-import logging
-import time
-from typing import Any
 
-import aioredis
-from prometheus_client import Counter, Gauge, Histogram
 
 logger = logging.getLogger(__name__)
 

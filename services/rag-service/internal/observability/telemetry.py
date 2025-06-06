@@ -1,3 +1,26 @@
+"""
+telemetry - 索克生活项目模块
+"""
+
+from functools import wraps
+from loguru import logger
+from opentelemetry import trace, metrics
+from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry.instrumentation.aiohttp import AioHttpClientInstrumentor
+from opentelemetry.instrumentation.grpc import GrpcInstrumentor
+from opentelemetry.instrumentation.redis import RedisInstrumentor
+from opentelemetry.sdk.metrics import MeterProvider
+from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
+from opentelemetry.sdk.resources import Resource
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from prometheus_client import Counter, Histogram, start_http_server
+from typing import Dict, Optional
+import asyncio
+import socket
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,26 +28,8 @@
 遥测模块，实现OpenTelemetry分布式追踪和指标收集
 """
 
-import socket
-from typing import Dict, Optional
-from functools import wraps
-import time
-import asyncio
 
-from opentelemetry import trace, metrics
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.sdk.metrics import MeterProvider
-from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
-from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
-from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
-from opentelemetry.sdk.resources import Resource
-from opentelemetry.instrumentation.aiohttp import AioHttpClientInstrumentor
-from opentelemetry.instrumentation.grpc import GrpcInstrumentor
-from opentelemetry.instrumentation.redis import RedisInstrumentor
-from prometheus_client import Counter, Histogram, start_http_server
 
-from loguru import logger
 
 class Telemetry:
     """遥测服务类，管理分布式追踪和指标收集"""

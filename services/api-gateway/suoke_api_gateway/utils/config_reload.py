@@ -1,3 +1,20 @@
+"""
+config_reload - 索克生活项目模块
+"""
+
+                import json
+                import tomllib
+                import yaml
+from ..core.config import Settings
+from ..core.logging import get_logger
+from pathlib import Path
+from typing import Any, Callable, Dict, List, Optional, Set
+from watchdog.events import FileSystemEventHandler
+from watchdog.observers import Observer
+import asyncio
+import os
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -7,16 +24,7 @@
 支持配置文件和环境变量的动态更新，无需重启服务。
 """
 
-import asyncio
-import os
-import time
-from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Set
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
 
-from ..core.config import Settings
-from ..core.logging import get_logger
 
 logger = get_logger(__name__)
 
@@ -304,17 +312,14 @@ class ConfigReloadManager:
             suffix = file_path.suffix.lower()
             
             if suffix in ['.yaml', '.yml']:
-                import yaml
                 with open(file_path, 'r', encoding='utf-8') as f:
                     return yaml.safe_load(f) or {}
             
             elif suffix == '.json':
-                import json
                 with open(file_path, 'r', encoding='utf-8') as f:
                     return json.load(f)
             
             elif suffix == '.toml':
-                import tomllib
                 with open(file_path, 'rb') as f:
                     return tomllib.load(f)
             

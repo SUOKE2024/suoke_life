@@ -1,28 +1,25 @@
-import { useTheme } from "../contexts/ThemeContext/import { useAccessibility  } from ";";../contexts/AccessibilityContext";/import { responsive } from ../utils/responsive"/importText from "../components/ui/Text/importButton  from ";../components/ui/Button";/import ThemeToggle from ../components/ui/ThemeToggle"/import AccessibilityPanel from "../components/ui/AccessibilityPanel/import Modal from ";";../components/ui/////    Modal";"
+import { useTheme } from "../contexts/ThemeContext/import { useAccessibility  } from ;../contexts/AccessibilityContext";/import { responsive } from ../utils/responsive"/importText from "../components/ui/Text/importButton  from ";../components/ui/Button";/import ThemeToggle from ../components/ui/ThemeToggle"/const AccessibilityPanel = React.lazy(() => import('../components/ui/AccessibilityPanel/import Modal from ;../components/ui/////    Modal
+import { usePerformanceMonitor } from '))../hooks/usePerformanceMonitor/////      View,";
+
 /////
-//////     索克生活 - UI组件演示页面   展示所有新的UI组件和功能
-import React, {   useState   } from "react";";"
-import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/////      View,";
+// 索克生活 - UI组件演示页面   展示所有新的UI组件和功能
+import React, {   useState   } from "react;"
   ScrollView,
   StyleSheet,
   SafeAreaView,
   { Alert } from ";react-native";
-// 导入UI组件 //////
-export const UIDemo: React.FC  = () => {}
-  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor(UIDemo", { "
-    trackRender: true,;
-    trackMemory: false,;
-    warnThreshold: 100, // ms //////     };);
+// 导入UI组件 // export const UIDemo: React.FC  = () => {}
+  // 性能监控 // const performanceMonitor = usePerformanceMonitor(UIDemo", { ";
+    trackRender: true,trackMemory: false,warnThreshold: 100, // ms // };);
   const { theme, isDark   } = useTheme;
   const { announceForAccessibility   } = useAccessibility;
   const [showAccessibilityPanel, setShowAccessibilityPanel] = useState<boolean>(fals;e;);
-  // 演示按钮点击 //////     const handleButtonPress = useCallback(() => {}
-    // TODO: Implement function body *}, []) ////
-    Alert.alert("按钮点击, `您点击了${buttonType}按钮`)"
-    announceForAccessibility(`${buttonType}按钮已被点击`)
+  // 演示按钮点击 // const handleButtonPress = useCallback(() => {;
+    // TODO: Implement function body *}, []) ////;
+    Alert.alert("按钮点击, `您点击了${buttonType}按钮`)";
+    announceForAccessibility(`${buttonType}按钮已被点击`);
   };
-  // 记录渲染性能 //////
-  performanceMonitor.recordRender()
+  // 记录渲染性能 // performanceMonitor.recordRender();
   return (;
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.backgrou;n;d   }]} />/////          <ScrollView,
         style={styles.scrollView}
@@ -119,8 +116,7 @@ visible={showAccessibilityPanel}
         <AccessibilityPanel;
 onClose={() = /> setShowAccessibilityPanel(false)}/        />/      </Modal>/    </SafeAreaView>/////      );
 };
-const styles = StyleSheet.create({ container: {;
-    flex;: ;1  },
+const styles = StyleSheet.create({ container: {flex;: ;1  },
   scrollView: { flex: 1  },
   content: {
     padding: responsive.width(16),
@@ -142,7 +138,7 @@ const styles = StyleSheet.create({ container: {;
   colorPalette: { alignItems: center"  },"
   paletteTitle: { marginBottom: responsive.height(12)  },
   colorRow: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     gap: responsive.width(12)},
   colorSwatch: {
     width: responsive.width(50),
@@ -155,7 +151,7 @@ const styles = StyleSheet.create({ container: {;
   buttonDemo: { gap: responsive.height(20)  },
   demoSubtitle: { marginBottom: responsive.height(12)  },
   buttonRow: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     gap: responsive.width(12),
     flexWrap: "wrap"
   },
@@ -165,7 +161,7 @@ const styles = StyleSheet.create({ container: {;
   tcmText: { lineHeight: responsive.fontSize(24)  },
   tcmFeatures: {
     flexDirection: row","
-    justifyContent: "space-around,"
+    justifyContent: "space-around,",
     marginTop: responsive.height(16)},
   tcmFeature: {
     alignItems: "center',"'

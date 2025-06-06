@@ -1,19 +1,26 @@
+"""
+metrics - 索克生活项目模块
+"""
+
+            import asyncio
+        import asyncio
+from collections.abc import Callable
+from contextlib import contextmanager
+from dataclasses import dataclass
+from enum import Enum
+from functools import wraps
+from prometheus_client import (
+from typing import Any
+import logging
+import time
+
 #!/usr/bin/env python3
 """
 指标收集模块
 提供Prometheus指标收集、自定义指标和指标聚合功能
 """
 
-from collections.abc import Callable
-from contextlib import contextmanager
-from dataclasses import dataclass
-from enum import Enum
-from functools import wraps
-import logging
-import time
-from typing import Any
 
-from prometheus_client import (
     REGISTRY,
     CollectorRegistry,
     Counter,
@@ -363,7 +370,6 @@ class MetricsMiddleware:
                     )
 
             # 根据函数类型返回相应的包装器
-            import asyncio
 
             if asyncio.iscoroutinefunction(func):
                 return async_wrapper
@@ -411,7 +417,6 @@ class MetricsMiddleware:
                     )
 
             # 根据函数类型返回相应的包装器
-            import asyncio
 
             if asyncio.iscoroutinefunction(func):
                 return async_wrapper
@@ -517,7 +522,6 @@ def track_metrics(metric_type: str = "http_request", **kwargs):
                     collector.track_business_operation(operation, status)
 
         # 根据函数类型返回相应的包装器
-        import asyncio
 
         if asyncio.iscoroutinefunction(func):
             return async_wrapper

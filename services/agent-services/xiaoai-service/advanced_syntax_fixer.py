@@ -1,13 +1,18 @@
+"""
+advanced_syntax_fixer - 索克生活项目模块
+"""
+
+from pathlib import Path
+from typing import List, Dict, Tuple
+import ast
+import os
+import re
+import subprocess
+import sys
+
 #!/usr/bin/env python3
 """
 
-import os
-import re
-import ast
-import sys
-from pathlib import Path
-from typing import List, Dict, Tuple
-import subprocess
 
 
 高级语法修复脚本 - 专门处理xiaoai-service的语法错误

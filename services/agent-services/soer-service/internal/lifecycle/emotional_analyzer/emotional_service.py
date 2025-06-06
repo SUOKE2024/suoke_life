@@ -1,10 +1,15 @@
+"""
+emotional_service - 索克生活项目模块
+"""
+
+from typing import Any
+import logging
+
 #!/usr/bin/env python3
 """
 情绪分析服务
 负责分析用户输入（文本、语音等）中的情绪状态，并提供中医情志理论相关的情绪干预建议
 """
-import logging
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

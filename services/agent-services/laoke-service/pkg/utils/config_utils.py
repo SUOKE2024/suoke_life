@@ -1,3 +1,14 @@
+"""
+config_utils - 索克生活项目模块
+"""
+
+from dataclasses import dataclass, field
+from typing import Any
+import logging
+import os
+import re
+import yaml
+
 #!/usr/bin/env python3
 
 """
@@ -5,13 +16,7 @@
 提供从配置文件和环境变量加载配置的功能
 """
 
-import logging
-import os
-import re
-from dataclasses import dataclass, field
-from typing import Any
 
-import yaml
 
 logger = logging.getLogger(__name__)
 

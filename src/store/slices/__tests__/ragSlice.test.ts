@@ -1,6 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import ragReducer, {
-  queryRAG,
+import ragReducer, {queryRAG,
   streamQueryRAG,
   analyzeTCMSyndrome,
   recommendHerbs,
@@ -11,21 +10,12 @@ import ragReducer, {
 } from '../ragSlice';
 
 // Mock API responses
-const mockSuccessResponse = {
-  success: true,
-  data: {
-    answer: '测试回答',
-    confidence: 0.95,
-    sources: ['测试来源']
-  }
+const mockSuccessResponse = {success: true,data: {answer: '测试回答',confidence: 0.95,sources: ['测试来源'];
+  };
 };
 
-const mockErrorResponse = {
-  success: false,
-  error: {
-    code: 'TEST_ERROR',
-    message: '测试错误'
-  }
+const mockErrorResponse = {success: false,error: {code: 'TEST_ERROR',message: '测试错误';
+  };
 };
 
 describe('ragSlice', () => {
@@ -42,7 +32,7 @@ describe('ragSlice', () => {
   describe('初始状态', () => {
     it('应该返回正确的初始状态', () => {
       const state = store.getState().rag;
-      
+
       expect(state.isLoading).toBe(false);
       expect(state.error).toBeNull();
       expect(state.currentQuery).toBeNull();
@@ -92,10 +82,7 @@ describe('ragSlice', () => {
     });
 
     it('应该更新设置', () => {
-      const newSettings = {
-        maxCacheSize: 200,
-        cacheTimeout: 600000,
-        enableOfflineMode: true
+      const newSettings = {maxCacheSize: 200,cacheTimeout: 600000,enableOfflineMode: true;
       };
 
       store.dispatch(updateSettings(newSettings));
@@ -121,9 +108,7 @@ describe('ragSlice', () => {
     });
 
     it('应该处理查询成功状态', () => {
-      const queryRequest = {
-        query: '测试查询',
-        type: 'consultation' as const
+      const queryRequest = {query: '测试查询',type: 'consultation' as const;
       };
 
       store.dispatch(queryRAG.fulfilled(mockSuccessResponse, 'requestId', queryRequest));
@@ -138,9 +123,7 @@ describe('ragSlice', () => {
     });
 
     it('应该处理查询失败状态', () => {
-      const queryRequest = {
-        query: '测试查询',
-        type: 'consultation' as const
+      const queryRequest = {query: '测试查询',type: 'consultation' as const;
       };
 
       store.dispatch(queryRAG.rejected(
@@ -170,17 +153,11 @@ describe('ragSlice', () => {
     });
 
     it('应该处理流式查询成功状态', () => {
-      const queryRequest = {
-        query: '流式查询测试',
-        type: 'consultation' as const
+      const queryRequest = {query: '流式查询测试',type: 'consultation' as const;
       };
 
-      const streamResponse = {
-        success: true,
-        data: {
-          content: '完整的流式内容',
-          chunks: ['chunk1', 'chunk2', 'chunk3']
-        }
+      const streamResponse = {success: true,data: {content: '完整的流式内容',chunks: ['chunk1', 'chunk2', 'chunk3'];
+        };
       };
 
       store.dispatch(streamQueryRAG.fulfilled(streamResponse, 'requestId', queryRequest));
@@ -194,19 +171,11 @@ describe('ragSlice', () => {
 
   describe('异步操作 - analyzeTCMSyndrome', () => {
     it('应该处理中医分析成功状态', () => {
-      const analysisRequest = {
-        symptoms: ['头痛', '失眠'],
-        constitution: '气虚质'
+      const analysisRequest = {symptoms: ['头痛', '失眠'],constitution: '气虚质';
       };
 
-      const analysisResponse = {
-        success: true,
-        data: {
-          syndrome: '心脾两虚证',
-          confidence: 0.88,
-          description: '心脾两虚，气血不足',
-          recommendations: ['补益心脾', '养血安神']
-        }
+      const analysisResponse = {success: true,data: {syndrome: '心脾两虚证',confidence: 0.88,description: '心脾两虚，气血不足',recommendations: ['补益心脾', '养血安神'];
+        };
       };
 
       store.dispatch(analyzeTCMSyndrome.fulfilled(analysisResponse, 'requestId', analysisRequest));
@@ -220,24 +189,14 @@ describe('ragSlice', () => {
 
   describe('异步操作 - recommendHerbs', () => {
     it('应该处理中药推荐成功状态', () => {
-      const recommendRequest = {
-        syndrome: '肝郁气滞证',
-        constitution: '气郁质'
+      const recommendRequest = {syndrome: '肝郁气滞证',constitution: '气郁质';
       };
 
-      const recommendResponse = {
-        success: true,
-        data: {
-          formulas: [
-            {
-              name: '逍遥散',
-              ingredients: ['柴胡', '当归', '白芍'],
-              dosage: '每日两次，每次6g',
-              duration: '2-4周'
-            }
-          ],
-          precautions: ['孕妇慎用']
-        }
+      const recommendResponse = {success: true,data: {formulas: [;
+            {name: '逍遥散',ingredients: ['柴胡', '当归', '白芍'],dosage: '每日两次，每次6g',duration: '2-4周';
+            };
+          ],precautions: ['孕妇慎用'];
+        };
       };
 
       store.dispatch(recommendHerbs.fulfilled(recommendResponse, 'requestId', recommendRequest));
@@ -251,14 +210,12 @@ describe('ragSlice', () => {
 
   describe('性能指标', () => {
     it('应该正确更新性能指标', () => {
-      const queryRequest = {
-        query: '性能测试',
-        type: 'consultation' as const
+      const queryRequest = {query: '性能测试',type: 'consultation' as const;
       };
 
       // 成功查询
       store.dispatch(queryRAG.fulfilled(mockSuccessResponse, 'requestId1', queryRequest));
-      
+
       // 失败查询
       store.dispatch(queryRAG.rejected(
         { name: 'Error', message: '错误' },
@@ -274,18 +231,16 @@ describe('ragSlice', () => {
     });
 
     it('应该记录响应时间', () => {
-      const queryRequest = {
-        query: '响应时间测试',
-        type: 'consultation' as const
+      const queryRequest = {query: '响应时间测试',type: 'consultation' as const;
       };
 
       // 模拟查询开始
       store.dispatch(queryRAG.pending('requestId', queryRequest));
-      
+
       // 等待一段时间后完成
       setTimeout(() => {
         store.dispatch(queryRAG.fulfilled(mockSuccessResponse, 'requestId', queryRequest));
-        
+
         const state = store.getState().rag;
         expect(state.performance.averageResponseTime).toBeGreaterThan(0);
       }, 100);
@@ -296,9 +251,7 @@ describe('ragSlice', () => {
     it('应该正确管理缓存大小', () => {
       // 添加多个查询到缓存
       for (let i = 0; i < 5; i++) {
-        const queryRequest = {
-          query: `查询${i}`,
-          type: 'consultation' as const
+        const queryRequest = {query: `查询${i}`,type: 'consultation' as const;
         };
         store.dispatch(queryRAG.fulfilled(mockSuccessResponse, `requestId${i}`, queryRequest));
       }
@@ -308,14 +261,12 @@ describe('ragSlice', () => {
     });
 
     it('应该计算缓存命中率', () => {
-      const queryRequest = {
-        query: '缓存测试',
-        type: 'consultation' as const
+      const queryRequest = {query: '缓存测试',type: 'consultation' as const;
       };
 
       // 第一次查询（缓存未命中）
       store.dispatch(queryRAG.fulfilled(mockSuccessResponse, 'requestId1', queryRequest));
-      
+
       // 第二次相同查询（应该命中缓存）
       store.dispatch(queryRAG.fulfilled(mockSuccessResponse, 'requestId2', queryRequest));
 
@@ -327,17 +278,15 @@ describe('ragSlice', () => {
 
   describe('离线模式', () => {
     it('应该在离线时使用缓存', () => {
-      const queryRequest = {
-        query: '离线测试',
-        type: 'consultation' as const
+      const queryRequest = {query: '离线测试',type: 'consultation' as const;
       };
 
       // 在线时添加到缓存
       store.dispatch(queryRAG.fulfilled(mockSuccessResponse, 'requestId1', queryRequest));
-      
+
       // 设置为离线
       store.dispatch(setOnlineStatus(false));
-      
+
       // 离线时查询相同内容
       store.dispatch(queryRAG.fulfilled(mockSuccessResponse, 'requestId2', queryRequest));
 
@@ -349,14 +298,10 @@ describe('ragSlice', () => {
 
   describe('错误处理', () => {
     it('应该正确处理网络错误', () => {
-      const queryRequest = {
-        query: '网络错误测试',
-        type: 'consultation' as const
+      const queryRequest = {query: '网络错误测试',type: 'consultation' as const;
       };
 
-      const networkError = {
-        name: 'NetworkError',
-        message: '网络连接失败'
+      const networkError = {name: 'NetworkError',message: '网络连接失败';
       };
 
       store.dispatch(queryRAG.rejected(networkError, 'requestId', queryRequest));
@@ -367,14 +312,10 @@ describe('ragSlice', () => {
     });
 
     it('应该正确处理服务器错误', () => {
-      const queryRequest = {
-        query: '服务器错误测试',
-        type: 'consultation' as const
+      const queryRequest = {query: '服务器错误测试',type: 'consultation' as const;
       };
 
-      const serverError = {
-        name: 'ServerError',
-        message: '服务器内部错误'
+      const serverError = {name: 'ServerError',message: '服务器内部错误';
       };
 
       store.dispatch(queryRAG.rejected(serverError, 'requestId', queryRequest));
@@ -386,9 +327,7 @@ describe('ragSlice', () => {
 
   describe('状态持久化', () => {
     it('应该保存重要状态到本地存储', () => {
-      const queryRequest = {
-        query: '持久化测试',
-        type: 'consultation' as const
+      const queryRequest = {query: '持久化测试',type: 'consultation' as const;
       };
 
       store.dispatch(queryRAG.fulfilled(mockSuccessResponse, 'requestId', queryRequest));

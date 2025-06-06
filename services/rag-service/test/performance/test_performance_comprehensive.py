@@ -1,3 +1,23 @@
+"""
+test_performance_comprehensive - 索克生活项目模块
+"""
+
+from concurrent.futures import ThreadPoolExecutor
+from config.settings import get_settings
+from dataclasses import dataclass
+from internal.model.entities import Document, SearchQuery, GenerationRequest
+from internal.service.rag_service import RAGService
+from internal.service.vector_service import VectorService
+from loguru import logger
+from typing import List, Dict, Any, Tuple
+import asyncio
+import memory_profiler
+import numpy as np
+import psutil
+import pytest
+import statistics
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,22 +26,7 @@ RAG服务性能测试套件
 测试检索、生成、缓存等各项性能指标
 """
 
-import asyncio
-import time
-import statistics
-import numpy as np
-from typing import List, Dict, Any, Tuple
-from dataclasses import dataclass
-from concurrent.futures import ThreadPoolExecutor
-import pytest
-import psutil
-import memory_profiler
-from loguru import logger
 
-from config.settings import get_settings
-from internal.service.rag_service import RAGService
-from internal.service.vector_service import VectorService
-from internal.model.entities import Document, SearchQuery, GenerationRequest
 
 
 @dataclass
@@ -644,7 +649,8 @@ class TestRAGPerformance:
         """性能测试套件fixture"""
         return PerformanceTestSuite(rag_service, vector_service)
     
-    async def test_search_latency(self, performance_suite):
+    async     @cache(timeout=300)  # 5分钟缓存
+def test_search_latency(self, performance_suite):
         """测试搜索延迟"""
         queries = performance_suite.generate_test_queries(10)
         metrics = await performance_suite.test_runner.test_search_performance(

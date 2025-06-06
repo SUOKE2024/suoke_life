@@ -1,4 +1,10 @@
 """
+__init__ - 索克生活项目模块
+"""
+
+from .monitoring import MonitoringService
+
+"""
 可观测性模块
 
 提供系统监控和观测能力：
@@ -8,7 +14,6 @@
 - 链路追踪
 """
 
-from .monitoring import MonitoringService
 
 __all__ = [
     "MonitoringService"

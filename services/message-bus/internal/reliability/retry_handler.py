@@ -1,19 +1,24 @@
 """
+retry_handler - 索克生活项目模块
+"""
+
+from collections import defaultdict
+from dataclasses import dataclass, asdict
+from enum import Enum
+from internal.error.error_handler import MessageBusError, ErrorCode
+from internal.model.message import Message
+from typing import Dict, Any, Optional, Callable, List
+import asyncio
+import json
+import logging
+import random
+import time
+
+"""
 消息重试和死信队列处理机制
 """
 
-import asyncio
-import time
-import json
-import logging
-from typing import Dict, Any, Optional, Callable, List
-from dataclasses import dataclass, asdict
-from enum import Enum
-import random
-from collections import defaultdict
 
-from internal.model.message import Message
-from internal.error.error_handler import MessageBusError, ErrorCode
 
 logger = logging.getLogger(__name__)
 

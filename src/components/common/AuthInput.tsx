@@ -1,14 +1,15 @@
-import React from "react";
 import { colors, spacing, fonts, borderRadius, shadows } from "../../constants/////    theme";
-/////    ";"
+import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/////      View,"
+
+import React from "react";
+/////    
 importReact from ";react";
-import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/////      View,;"
   Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
   TextInputProps,
-  { Animated } from "react-native;"
+  { Animated } from "react-native;";
 interface AuthInputProps extends TextInputProps { label: string;
   error?: string;
   icon?: string;
@@ -19,11 +20,11 @@ interface AuthInputProps extends TextInputProps { label: string;
   onBlur?: () => void;
   counter?: boolean,
   maxLength?: number}
-export const AuthInput: React.FC<AuthInputProps /> = ({/  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor("";
-AuthInput", ;{; /////    "
+export const AuthInput: React.FC<AuthInputProps /> = ({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor("";
+AuthInput",{/////    "
     trackRender: true,
     trackMemory: false,
-    warnThreshold: 50, // ms //////     })
+    warnThreshold: 50, // ms // });
   label,
   error,
   icon,
@@ -37,14 +38,11 @@ AuthInput", ;{; /////    "
   value,
   ...props;
 }) => {}
-  // 记录渲染性能 //////
-  performanceMonitor.recordRender()
-  return (
-    <View style={styles.container} />/      <Text style={[styles.label, focused && styles.labelFocused]} />/////            {label}
-      </Text>///        <View style={[ ///  >
-        styles.inputWrapper,
-        focused && styles.inputWrapperFocused,
-        error && styles.inputWrapperError;
+  // 记录渲染性能 // performanceMonitor.recordRender();
+  return (;
+    <View style={styles.container} />/      <Text style={[styles.label, focused && styles.labelFocused]} />/////            {label};
+      </Text>///        <View style={[ ///  >;
+        styles.inputWrapper,focused && styles.inputWrapperFocused,error && styles.inputWrapperError;
       ]} />/        {icon && <Text style={styles.inputIcon} />{icon}</Text>}/////            <TextInput;
 style={styles.input}
           value={value}
@@ -64,8 +62,7 @@ style={styles.rightIconButton}
         <Animated.View style={styles.errorContainer} />/          <Text style={styles.errorText} />{error}</Text>/        </Animated.View>/////          )};
     </View>/////      ;);
 };
-const styles = StyleSheet.create({ container: {;
-    marginBottom: spacing.;l;g  },
+const styles = StyleSheet.create({ container: {marginBottom: spacing.;l;g  },
   label: {
     fontSize: fonts.size.md,
     fontWeight: 600","
@@ -73,7 +70,7 @@ const styles = StyleSheet.create({ container: {;
     marginBottom: spacing.sm},
   labelFocused: { color: colors.primary  },
   inputWrapper: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center',"'
     backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,

@@ -1,3 +1,20 @@
+"""
+platform_checker - 索克生活项目模块
+"""
+
+                import psutil
+                import shutil
+            import socket
+            import torch
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any
+import logging
+import os
+import platform
+import subprocess
+import sys
+
 #!/usr/bin/env python
 
 """
@@ -5,14 +22,6 @@
 用于检测和处理不同操作系统和环境的兼容性问题
 """
 
-import logging
-import os
-import platform
-import subprocess
-import sys
-from dataclasses import dataclass
-from enum import Enum
-from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -140,7 +149,6 @@ class PlatformChecker:
                         free_pages = int(line.split(':')[1].strip().rstrip('.'))
                         return free_pages * 4096  # Assuming 4KB page size
             elif self.is_windows():
-                import psutil
                 return psutil.virtual_memory().available
         except Exception:
             pass
@@ -154,7 +162,6 @@ class PlatformChecker:
         """Check if sufficient disk space is available."""
         try:
             if self.is_windows():
-                import shutil
                 total, used, free = shutil.disk_usage(path)
             else:
                 statvfs = os.statvfs(path)
@@ -168,7 +175,6 @@ class PlatformChecker:
     def check_network_connectivity(self, host: str = "8.8.8.8", timeout: int = 5) -> bool:
         """Check network connectivity."""
         try:
-            import socket
             socket.setdefaulttimeout(timeout)
             socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, 53))
             return True
@@ -202,7 +208,6 @@ class PlatformChecker:
 
         try:
             # Check for CUDA
-            import torch
             if torch.cuda.is_available():
                 gpu_info['cuda_available'] = True
                 gpu_info['cuda_version'] = torch.version.cuda

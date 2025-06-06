@@ -1,25 +1,30 @@
+"""
+data_import - 索克生活项目模块
+"""
+
+from app.core.config import get_settings
+from app.core.exceptions import DataImportException, DatabaseException
+from app.core.logger import get_logger
+from datetime import datetime
+from neo4j import AsyncGraphDatabase
+from pathlib import Path
+from typing import Dict, List, Any, Optional
+import argparse
+import asyncio
+import json
+import sys
+import yaml
+
 #!/usr/bin/env python3
 """
 医学知识数据导入脚本
 支持从JSON、CSV、Excel等格式导入数据到Neo4j知识图谱
 """
-import asyncio
-import json
-import sys
-import argparse
-from pathlib import Path
-from typing import Dict, List, Any, Optional
-from datetime import datetime
 
-from neo4j import AsyncGraphDatabase
-import yaml
 
 # 添加项目根目录到Python路径
 sys.path.append(str(Path(__file__).parent.parent))
 
-from app.core.config import get_settings
-from app.core.logger import get_logger
-from app.core.exceptions import DataImportException, DatabaseException
 
 class DataImporter:
     """数据导入器"""

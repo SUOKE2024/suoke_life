@@ -1,9 +1,14 @@
-"""API routes for look service."""
-
-from fastapi import APIRouter
+"""
+__init__ - 索克生活项目模块
+"""
 
 from .analysis import router as analysis_router
 from .health import router as health_router
+from fastapi import APIRouter
+
+"""API routes for look service."""
+
+
 
 # Main API router
 api_router = APIRouter()

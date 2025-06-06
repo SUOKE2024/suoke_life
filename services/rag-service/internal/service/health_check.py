@@ -1,3 +1,17 @@
+"""
+health_check - 索克生活项目模块
+"""
+
+from enum import Enum
+from redis.asyncio import Redis
+from services.rag_service.internal.observability.telemetry import trace_method
+from typing import Dict, Optional, List, Tuple, Any
+import aiohttp
+import asyncio
+import logging
+import qdrant_client
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,17 +19,8 @@
 健康检查服务，用于检查服务依赖组件的状态
 """
 
-import asyncio
-import time
-from typing import Dict, Optional, List, Tuple, Any
-from enum import Enum
-import logging
 
-import aiohttp
-from redis.asyncio import Redis
-import qdrant_client
 
-from services.rag_service.internal.observability.telemetry import trace_method
 
 class HealthStatus(Enum):
     """健康状态枚举"""

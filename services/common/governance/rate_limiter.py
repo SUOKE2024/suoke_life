@@ -1,16 +1,21 @@
+"""
+rate_limiter - 索克生活项目模块
+"""
+
+from abc import ABC, abstractmethod
+from collections import deque
+from dataclasses import dataclass
+from typing import Any
+import asyncio
+import logging
+import time
+
 #!/usr/bin/env python3
 """
 限流器实现
 提供令牌桶、滑动窗口等限流算法
 """
 
-from abc import ABC, abstractmethod
-import asyncio
-from collections import deque
-from dataclasses import dataclass
-import logging
-import time
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

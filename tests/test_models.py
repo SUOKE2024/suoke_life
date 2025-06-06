@@ -1,15 +1,20 @@
 """
+test_models - 索克生活项目模块
+"""
+
+from datetime import datetime, timedelta
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from suoke_blockchain_service.models import (
+import pytest
+
+"""
 数据模型测试模块
 
 测试SQLAlchemy数据模型的定义和关系。
 """
 
-import pytest
-from datetime import datetime, timedelta
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 
-from suoke_blockchain_service.models import (
     Base, BlockchainTransaction, HealthDataRecord, AccessGrant,
     ZKProofRegistry, SmartContract, BlockchainNode, AuditLog,
     TransactionStatus, DataType, AccessLevel

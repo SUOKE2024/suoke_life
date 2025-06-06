@@ -1,3 +1,13 @@
+"""
+soer_service_impl - 索克生活项目模块
+"""
+
+from ..integration.accessibility_client import AccessibilityClient
+from typing import Any
+import asyncio
+import logging
+import time
+
 #!/usr/bin/env python
 
 """
@@ -5,13 +15,8 @@
 集成无障碍服务，支持健康计划和传感器数据的无障碍功能
 """
 
-import asyncio
-import logging
-import time
-from typing import Any
 
 # 导入无障碍客户端
-from ..integration.accessibility_client import AccessibilityClient
 
 logger = logging.getLogger(__name__)
 

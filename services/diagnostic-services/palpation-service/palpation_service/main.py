@@ -1,25 +1,11 @@
-#!/usr/bin/env python3
-
 """
-索克生活 - 触诊服务主启动脚本
-整合所有优化模块，提供完整的服务启动和管理功能
+main - 索克生活项目模块
 """
 
-import asyncio
-import logging
-import signal
-import sys
-from contextlib import asynccontextmanager
-from pathlib import Path
-from typing import Any
-
-import uvicorn
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-
+        from fastapi.middleware.gzip import GZipMiddleware
+        from pydantic import BaseModel
+        import time
 from .internal.cache.intelligent_cache_manager import IntelligentCacheManager
-
-# 导入内部模块
 from .internal.config.config_manager import ConfigManager
 from .internal.fusion.multimodal_fusion_engine import MultimodalFusionEngine
 from .internal.monitoring.realtime_dashboard import RealtimeDashboard
@@ -27,6 +13,28 @@ from .internal.prediction.predictive_analyzer import PredictiveAnalyzer
 from .internal.report.intelligent_report_generator import IntelligentReportGenerator
 from .internal.service.intelligent_coordinator import IntelligentCoordinator
 from .internal.visualization.advanced_visualizer import AdvancedVisualizer
+from contextlib import asynccontextmanager
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pathlib import Path
+from typing import Any
+import asyncio
+import logging
+import signal
+import sys
+import uvicorn
+
+#!/usr/bin/env python3
+
+"""
+索克生活 - 触诊服务主启动脚本
+整合所有优化模块，提供完整的服务启动和管理功能
+"""
+
+
+
+
+# 导入内部模块
 
 # 配置日志
 logging.basicConfig(
@@ -169,7 +177,6 @@ class PalpationService:
     def _add_routes(self, app: FastAPI):
         """添加API路由"""
 
-        from pydantic import BaseModel
 
         # 数据模型
         class PalpationRequest(BaseModel):
@@ -188,13 +195,17 @@ class PalpationService:
             data_list: list[PalpationData]
 
         # API端点
-        @app.get("/")
+        @cache(expire=300)  # 5分钟缓存
+@limiter.limit("100/minute")  # 每分钟100次请求
+@app.get("/")
         async def root():
             """根端点"""
             return {
                 "service": "palpation-service",
                 "version": "1.0.0",
-                "status": "running" if self.is_running else "stopped",
+                "status": "running" if self.is_running else "stopp@cache(expire=@limiter.limit("100/minute")  # 每分钟100次请求
+300)  # 5分钟缓存
+ed",
             }
 
         @app.get("/health")
@@ -223,7 +234,8 @@ class PalpationService:
 
             except Exception as e:
                 logger.error(f"健康检查失败: {e}")
-                raise HTTPException(status_code=500, detail="Health check failed")
+        @limiter.limit("100/minute")  # 每分钟100次请求
+        raise HTTPException(status_code=500, detail="Health check failed")
 
         @app.post("/palpation/start")
         async def start_palpation_session(request: PalpationRequest):
@@ -241,7 +253,8 @@ class PalpationService:
 
                 return {"status": "success", "session_info": session_info}
 
-            except Exception as e:
+            except Exception as e@limiter.limit("100/minute")  # 每分钟100次请求
+:
                 logger.error(f"启动触诊会话失败: {e}")
                 raise HTTPException(status_code=500, detail=str(e))
 
@@ -256,7 +269,8 @@ class PalpationService:
                     modality=data.modality, data=data.data, timestamp=data.timestamp
                 )
 
-                return {"status": "success", "result": result}
+                return {"status": "success", "result": @limiter.limit("100/minute")  # 每分钟100次请求
+result}
 
             except Exception as e:
                 logger.error(f"处理触诊数据失败: {e}")
@@ -277,14 +291,16 @@ class PalpationService:
                     ],
                 )
 
-                return {"status": "success", "analysis": analysis_result}
+                return {"status": "success", "anal@limiter.limit("100/minute")  # 每分钟100次请求
+ysis": analysis_result}
 
             except Exception as e:
                 logger.error(f"综合分析失败: {e}")
-                raise HTTPException(status_code=500, detail=str(e))
+                raise@cache(expire=300)  # 5分钟缓存
+ HTTPException(status_code=500, detail=str(e))
 
         @app.get("/palpation/report/{session_id}")
-        async def get_palpation_report(session_id: str, format: str = "html"):
+        async async def get_palpation_report(
             """获取触诊报告"""
             try:
                 if not self.report_generator:
@@ -297,29 +313,33 @@ class PalpationService:
 
                 report = await self.report_generator.generate_report(
                     session_data=session_data, format=format
-                )
+                @limiter.limit("100/minute")  # 每分钟100次请求
+)
 
                 return {"status": "success", "report": report}
 
             except Exception as e:
-                logger.error(f"生成报告失败: {e}")
+                logger.error(f"生成报告失败:@cache(expire=300)  # 5分钟缓存
+ {e}")
                 raise HTTPException(status_code=500, detail=str(e))
 
         @app.get("/config")
-        async def get_config():
+        async async def get_config(
             """获取配置信息"""
             try:
                 if not self.config_manager:
-                    raise HTTPException(status_code=503, detail="Config service not ready")
+                    raise HTTPException(status_code=503, detail="Config servi@limiter.limit("100/minute")  # 每分钟100次请求
+ce not ready")
 
                 return {"status": "success", "config": self.config_manager.export_config()}
 
             except Exception as e:
-                logger.error(f"获取配置失败: {e}")
+          @cache(expire=300)  # 5分钟缓存
+      logger.error(f"获取配置失败: {e}")
                 raise HTTPException(status_code=500, detail=str(e))
 
         @app.get("/stats")
-        async def get_service_stats():
+        async async def get_service_stats(
             """获取服务统计"""
             try:
                 stats = {}
@@ -344,9 +364,7 @@ class PalpationService:
 
     def _add_middleware(self, app: FastAPI):
         """添加中间件"""
-        import time
 
-        from fastapi.middleware.gzip import GZipMiddleware
 
         # CORS中间件
         app.add_middleware(

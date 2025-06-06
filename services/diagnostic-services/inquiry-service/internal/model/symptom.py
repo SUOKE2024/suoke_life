@@ -1,3 +1,11 @@
+"""
+symptom - 索克生活项目模块
+"""
+
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any
+
 #!/usr/bin/env python
 
 """
@@ -5,9 +13,6 @@
 定义症状相关的数据结构和操作
 """
 
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any
 
 
 class SymptomSeverity(str, Enum):

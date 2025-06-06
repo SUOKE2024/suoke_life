@@ -1,22 +1,27 @@
 """
+evaluation_framework - 索克生活项目模块
+"""
+
+from collections import defaultdict, Counter
+from dataclasses import dataclass, asdict
+from datetime import datetime, timedelta
+from enum import Enum
+from loguru import logger
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics import precision_score, recall_score, f1_score, ndcg_score
+from sklearn.metrics.pairwise import cosine_similarity
+from typing import Dict, List, Optional, Any, Tuple, Set
+import asyncio
+import json
+import statistics
+
+"""
 高级评估框架
 
 全面评估RAG系统的检索质量、生成质量、用户体验和系统性能
 """
 
-import asyncio
-import json
-import statistics
-from datetime import datetime, timedelta
-from enum import Enum
-from typing import Dict, List, Optional, Any, Tuple, Set
-from dataclasses import dataclass, asdict
-from collections import defaultdict, Counter
 
-from sklearn.metrics import precision_score, recall_score, f1_score, ndcg_score
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-from loguru import logger
 
 class EvaluationMetric(Enum):
     """评估指标"""

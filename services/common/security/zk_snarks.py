@@ -1,3 +1,17 @@
+"""
+zk_snarks - 索克生活项目模块
+"""
+
+    from py_ecc import bn128
+    from py_ecc.bn128 import G1, G2, multiply, add, pairing, curve_order
+from dataclasses import dataclass, asdict
+from datetime import datetime
+from typing import Dict, List, Optional, Tuple, Any
+import hashlib
+import json
+import logging
+import secrets
+
 #!/usr/bin/env python3
 """
 zk-SNARKs 零知识验证实现
@@ -6,18 +20,9 @@ zk-SNARKs 零知识验证实现
 支持健康指标范围验证、数据完整性证明等场景。
 """
 
-import hashlib
-import json
-import secrets
-from dataclasses import dataclass, asdict
-from typing import Dict, List, Optional, Tuple, Any
-from datetime import datetime
-import logging
 
 # 使用py_ecc库进行椭圆曲线运算
 try:
-    from py_ecc import bn128
-    from py_ecc.bn128 import G1, G2, multiply, add, pairing, curve_order
 except ImportError:
     # 如果没有安装py_ecc，提供模拟实现
     logging.warning("py_ecc未安装，使用模拟实现")

@@ -1,3 +1,14 @@
+"""
+ai_tcm_analyzer - 索克生活项目模块
+"""
+
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any
+import asyncio
+import logging
+
 #!/usr/bin/env python3
 
 """
@@ -5,12 +16,6 @@ AI增强的中医证型分析器
 结合传统中医理论和现代机器学习技术，提供精准的证型识别和健康评估
 """
 
-import asyncio
-import logging
-from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass
-from enum import Enum
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

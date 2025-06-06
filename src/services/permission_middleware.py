@@ -1,11 +1,16 @@
+"""
+permission_middleware - 索克生活项目模块
+"""
+
+from fastapi import Request, HTTPException
+from starlette.middleware.base import BaseHTTPMiddleware
+
 # -*- coding: utf-8 -*-
 """
 权限中间件示例
 支持基于用户角色的最小权限控制
 适用于FastAPI等Python微服务
 """
-from fastapi import Request, HTTPException
-from starlette.middleware.base import BaseHTTPMiddleware
 
 # 角色-权限映射
 ROLE_PERMISSIONS = {

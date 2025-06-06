@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import {
+import {import React, { useState, useEffect } from "react";
   View,
   Text,
   StyleSheet,
@@ -8,9 +7,8 @@ import {
   Image,
   Alert,
   Switch;
-} from "../../placeholder";react-native";"
-export interface UserProfile {;
-  id: string;
+} from "../../placeholder";react-native
+export interface UserProfile {id: string;
   name: string;
   email: string;
   phone: string;
@@ -26,35 +24,30 @@ export interface UserProfile {;
     darkMode: boolean;
   };
 }
-export interface ProfileScreenProps {;
-  onEditProfile?: () => void;
+export interface ProfileScreenProps {onEditProfile?: () => void;
   onLogout?: () => void;
   onSettingsPress?: () => void;
 }
-/**////
- * 用户档案屏幕
+/**
+ * * 用户档案屏幕
  * 显示用户信息、健康数据和设置选项
 export const ProfileScreen: React.FC<ProfileScreenProps>  = ({
-  onEditProfile,;
-  onLogout,;
-  onSettingsPress;
+  onEditProfile,onLogout,onSettingsPress;
 }) => {}
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
-  useEffect(() => {}
+  useEffect(() => {
     loadUserProfile();
-  }, []);
-  const loadUserProfile = async() => {;}
-    try {;
-      //////     模拟加载用户档案数据
-const mockProfile: UserProfile = {;
-        id: user-001","
-        name: "张三,"
+  }, [])  // 检查是否需要添加依赖项;
+  const loadUserProfile = async() => {}
+    try {// 模拟加载用户档案数据
+const mockProfile: UserProfile = {id: user-001","
+        name: "张三,",
         email: "zhangsan@example.com",
         phone: 13800138000","
         avatar: undefined,
         age: 28,
-        gender: "male,"
+        gender: "male,",
         height: 175,
         weight: 70,
         healthGoals: ["减重", 改善睡眠", "增强体质],
@@ -71,10 +64,9 @@ const mockProfile: UserProfile = {;
       setLoading(false);
     }
   };
-  const handlePreferenceChange = (key: keyof UserProfile["preferences"], value: boolean) => {;}
+  const handlePreferenceChange = (key: keyof UserProfile["preferences"], value: boolean) => {}
     if (!profile) return;
-    const updatedProfile = {;
-      ...profile,
+    const updatedProfile = {...profile,
       preferences: {
         ...profile.preferences,
         [key]: value;
@@ -82,14 +74,13 @@ const mockProfile: UserProfile = {;
     };
     setProfile(updatedProfile);
   };
-  const handleLogout = () => {;}
+  const handleLogout = () => {}
     Alert.alert(
-      确认退出","
-      "您确定要退出登录吗？,"
+      确认退出",您确定要退出登录吗？,"
       [
         { text: "取消", style: cancel" },"
         {
-          text: "退出, "
+          text: "退出, ",
           style: "destructive",
           onPress: () => onLogout?.()
         }
@@ -100,7 +91,7 @@ const mockProfile: UserProfile = {;
     <View style={styles.headerContainer}>
       <View style={styles.avatarContainer}>
         {profile?.avatar ? (
-          <Image source={{ uri: profile.avatar }} style={styles.avatar} /////    >
+          <Image source={{ uri: profile.avatar }} style={styles.avatar} /////     loading="lazy" decoding="async" />
         ) : (
           <View style={styles.avatarPlaceholder}>
             <Text style={styles.avatarText}>
@@ -137,7 +128,7 @@ const mockProfile: UserProfile = {;
         <View style={styles.statItem}>
           <Text style={styles.statValue}>
             {profile?.weight && profile?.height;
-              ? (profile.weight / Math.pow(profile.height /////     100, 2)).toFixed(1)
+              ? (profile.weight / Math.pow(profile.height /////     100, 2)).toFixed(1);
               : 0""
             }
           </////    Text>
@@ -207,43 +198,42 @@ style={[styles.actionButton, styles.logoutButton]}
     </////    View>
   );
   if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <Text style={styles.loadingText}>加载中...</////    Text>
-      </////    View>
+    return (;
+      <View style={styles.loadingContainer}>;
+        <Text style={styles.loadingText}>加载中...</////    Text>;
+      </////    View>;
     );
   }
   if (!profile) {
-    return (
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>加载用户信息失败</////    Text>
-        <TouchableOpacity style={styles.retryButton} onPress={loadUserProfile}>
-          <Text style={styles.retryButtonText}>重试</////    Text>
-        </////    TouchableOpacity>
-      </////    View>
+    return (;
+      <View style={styles.errorContainer}>;
+        <Text style={styles.errorText}>加载用户信息失败</////    Text>;
+        <TouchableOpacity style={styles.retryButton} onPress={loadUserProfile}>;
+          <Text style={styles.retryButtonText}>重试</////    Text>;
+        </////    TouchableOpacity>;
+      </////    View>;
     );
   }
-  return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {renderProfileHeader()}
-      {renderHealthStats()}
-      {renderHealthGoals()}
-      {renderPreferences()}
-      {renderActions()}
-    </////    ScrollView>
+  return (;
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>;
+      {renderProfileHeader()};
+      {renderHealthStats()};
+      {renderHealthGoals()};
+      {renderPreferences()};
+      {renderActions()};
+    </////    ScrollView>;
   );
 };
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     flex: 1,
-    backgroundColor: "#f5f5f5},"
+    backgroundColor: "#f5f5f5},",
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: center"},"
   loadingText: {
     fontSize: 16,
-    color: "#666},"
+    color: "#666},",
   errorContainer: {
     flex: 1,
     justifyContent: "center",
@@ -251,7 +241,7 @@ const styles = StyleSheet.create({;
     padding: 20},
   errorText: {
     fontSize: 16,
-    color: "#666,"
+    color: "#666,",
     marginBottom: 16,
     textAlign: "center"},
   retryButton: {
@@ -260,13 +250,13 @@ const styles = StyleSheet.create({;
     paddingVertical: 10,
     borderRadius: 8},
   retryButtonText: {
-    color: "#fff,"
+    color: "#fff,",
     fontSize: 16,
     fontWeight: "500"},
   headerContainer: {
     backgroundColor: #fff","
     padding: 20,
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center"},
   avatarContainer: {
     marginRight: 16},
@@ -279,12 +269,12 @@ const styles = StyleSheet.create({;
     height: 80,
     borderRadius: 40,
     backgroundColor: #4CAF50","
-    justifyContent: "center,"
+    justifyContent: "center,",
     alignItems: "center"},
   avatarText: {
     fontSize: 32,
     fontWeight: bold","
-    color: "#fff},"
+    color: "#fff},",
   userInfo: {
     flex: 1},
   userName: {
@@ -294,7 +284,7 @@ const styles = StyleSheet.create({;
     marginBottom: 4},
   userEmail: {
     fontSize: 16,
-    color: "#666,"
+    color: "#666,",
     marginBottom: 12},
   editButton: {
     backgroundColor: "#4CAF50",
@@ -303,7 +293,7 @@ const styles = StyleSheet.create({;
     borderRadius: 20,
     alignSelf: flex-start"},"
   editButtonText: {
-    color: "#fff,"
+    color: "#fff,",
     fontSize: 14,
     fontWeight: "500"},
   section: {
@@ -312,25 +302,25 @@ const styles = StyleSheet.create({;
     padding: 20},
   sectionTitle: {
     fontSize: 18,
-    fontWeight: "bold,"
+    fontWeight: "bold,",
     color: "#333",
     marginBottom: 16},
   statsContainer: {
     flexDirection: row","
-    justifyContent: "space-around},"
+    justifyContent: "space-around},",
   statItem: {
     alignItems: "center"},
   statValue: {
     fontSize: 24,
     fontWeight: bold","
-    color: "#4CAF50,"
+    color: "#4CAF50,",
     marginBottom: 4},
   statLabel: {
     fontSize: 12,
     color: "#666"},
   goalsContainer: {
     flexDirection: row","
-    flexWrap: "wrap},"
+    flexWrap: "wrap},",
   goalTag: {
     backgroundColor: "#e8f5e8",
     paddingHorizontal: 12,
@@ -341,11 +331,11 @@ const styles = StyleSheet.create({;
   goalText: {
     fontSize: 14,
     color: #4CAF50","
-    fontWeight: "500},"
+    fontWeight: "500},",
   preferenceItem: {
     flexDirection: "row",
     justifyContent: space-between","
-    alignItems: "center,"
+    alignItems: "center,",
     paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: "#f0f0f0"},
@@ -355,13 +345,12 @@ const styles = StyleSheet.create({;
   actionButton: {
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#f0f0f0},"
+    borderBottomColor: "#f0f0f0},",
   actionButtonText: {
     fontSize: 16,
     color: "#333"},
   logoutButton: {
     borderBottomWidth: 0},
-  logoutButtonText: {;
-    color: #F44336"}});"
+  logoutButtonText: {color: #F44336"}});"
 export default ProfileScreen;
   */////

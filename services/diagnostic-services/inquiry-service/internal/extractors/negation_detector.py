@@ -1,14 +1,19 @@
+"""
+negation_detector - 索克生活项目模块
+"""
+
+from ..common.base import BaseService
+from ..common.utils import sanitize_text
+from typing import Any
+import re
+
 #!/usr/bin/env python
 
 """
 否定词检测器
 """
 
-import re
-from typing import Any
 
-from ..common.base import BaseService
-from ..common.utils import sanitize_text
 
 
 class NegationDetector(BaseService):

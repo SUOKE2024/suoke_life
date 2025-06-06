@@ -1,15 +1,24 @@
+"""
+optimize_all_services - 索克生活项目模块
+"""
+
+from motor.motor_asyncio import AsyncIOMotorClient
+from pathlib import Path
+from typing import Dict, List
+import asyncio
+import logging
+import os
+import redis.asyncio as redis
+import subprocess
+import sys
+import time
+
 #!/usr/bin/env python3
 """
 Agent Services 全面优化执行脚本
 将所有服务从当前完成度提升至100%
 """
 
-import os
-import subprocess
-import sys
-import time
-from pathlib import Path
-from typing import Dict, List
 
 
 class ServiceOptimizer:
@@ -246,10 +255,6 @@ XiaoKe智能体服务提供商业化健康服务，包括名医匹配、农产�
 Soer Service 数据库迁移脚本
 \"\"\"
 
-import asyncio
-import logging
-from motor.motor_asyncio import AsyncIOMotorClient
-import redis.asyncio as redis
 
 logger = logging.getLogger(__name__)
 

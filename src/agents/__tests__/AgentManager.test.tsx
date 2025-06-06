@@ -1,66 +1,64 @@
-import React from "react";
 import { AgentManager, agentManager } from "../AgentManager";
+import { AgentManager, agentManager } from "../AgentManager";
+
+import React from "react";
 describe("AgentManager", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  describe(AgentManager", () => {"
+  describe("AgentManager", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = AgentManager(/* valid params   */);
+const result = AgentManager(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = AgentManager(/* edge case params   */);
+const result = AgentManager(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        AgentManager(/* invalid params     */)
-      }).not.toThrow()
+        AgentManager(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = AgentManager(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = AgentManager(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(agentManager", () => {"
+  describe("agentManager", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = agentManager(/* valid params   */);
+const result = agentManager(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = agentManager(/* edge case params   */);
+const result = agentManager(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        agentManager(/* invalid params     */)
-      }).not.toThrow()
+        agentManager(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = agentManager(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = agentManager(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
 });
-import { performance } from "perf_hooks";
-import { AgentManager, agentManager } from "../AgentManager";
 describe("AgentManager Performance Tests", () => {
   it("should execute within performance thresholds", () => {
     const iterations = 10;
     const startTime = performance.now();
     for (let i = 0; i < iterations; i++) {
       // Execute performance-critical functions
-AgentManager(/* test params      */)
-      agentManager(/* test params      */);
+AgentManager(// test params);
+      agentManager(// test params);
     });
     const endTime = performance.now();
     const averageTime = (endTime - startTime) / iterations;
@@ -71,7 +69,7 @@ expect(averageTime).toBeLessThan(1);
     const largeDataset = new Array(10000).fill(0).map((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
-AgentManager(largeDataset)
+AgentManager(largeDataset);
     const endTime = performance.now();
     // Should handle large datasets within 100ms
 expect(endTime - startTime).toBeLessThan(100);
@@ -80,7 +78,7 @@ expect(endTime - startTime).toBeLessThan(100);
     const initialMemory = process.memoryUsage().heapUsed;
     // Execute function multiple times
 for (let i = 0; i < 1000; i++) {
-      AgentManager(/* test params      */);
+      AgentManager(// test params);
     });
     // Force garbage collection if available
 if (global.gc) {

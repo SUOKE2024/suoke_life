@@ -1,22 +1,27 @@
 """
+performance - 索克生活项目模块
+"""
+
+from auth_service.config.settings import get_settings
+from collections import defaultdict, deque
+from contextlib import asynccontextmanager
+from dataclasses import dataclass, asdict
+from datetime import datetime, timedelta
+from fastapi import Request, Response
+from fastapi.responses import JSONResponse
+from typing import Dict, Any, Optional, List
+import asyncio
+import json
+import logging
+import psutil
+import time
+
+"""
 性能监控和优化中间件
 提供请求性能监控、缓存优化、数据库连接池管理等功能
 """
 
-import time
-import asyncio
-import psutil
-from typing import Dict, Any, Optional, List
-from datetime import datetime, timedelta
-from collections import defaultdict, deque
-from fastapi import Request, Response
-from fastapi.responses import JSONResponse
-import logging
-import json
-from dataclasses import dataclass, asdict
-from contextlib import asynccontextmanager
 
-from auth_service.config.settings import get_settings
 
 
 @dataclass
@@ -335,7 +340,8 @@ class DatabaseQueryTracker:
         self.middleware = middleware
     
     @asynccontextmanager
-    async def track_query(self, query: str):
+    async     @cache(timeout=300)  # 5分钟缓存
+def track_query(self, query: str):
         """跟踪数据库查询"""
         start_time = time.time()
         try:

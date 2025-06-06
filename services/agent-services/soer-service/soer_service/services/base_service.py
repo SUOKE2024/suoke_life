@@ -1,15 +1,20 @@
 """
+base_service - 索克生活项目模块
+"""
+
+from ..config.settings import get_settings
+from ..core.database import get_mongodb, get_redis
+from ..core.logging import get_logger
+from abc import ABC, abstractmethod
+from typing import Any
+
+"""
 基础服务类
 
 提供所有服务的通用功能和接口
 """
 
-from abc import ABC, abstractmethod
-from typing import Any
 
-from ..config.settings import get_settings
-from ..core.database import get_mongodb, get_redis
-from ..core.logging import get_logger
 
 
 class BaseService(ABC):

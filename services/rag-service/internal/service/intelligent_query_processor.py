@@ -1,3 +1,15 @@
+"""
+intelligent_query_processor - 索克生活项目模块
+"""
+
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from loguru import logger
+from typing import Dict, List, Any, Optional, Tuple, Set
+import jieba
+import re
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,13 +17,6 @@
 智能查询处理器 - 提供高级查询理解和处理能力
 """
 
-import re
-from typing import Dict, List, Any, Optional, Tuple, Set
-from dataclasses import dataclass, field
-from enum import Enum
-from loguru import logger
-import jieba
-from datetime import datetime, timedelta
 
 class QueryType(Enum):
     """查询类型枚举"""

@@ -1,3 +1,18 @@
+"""
+enhanced_connection_pool - 索克生活项目模块
+"""
+
+                        import random
+from aiohttp import ClientSession, ClientTimeout, TCPConnector
+from aiohttp.client_exceptions import ClientError, ClientTimeout as ClientTimeoutError
+from contextlib import asynccontextmanager
+from dataclasses import dataclass
+from typing import Dict, Optional, Set, Tuple, Any
+import aiohttp
+import asyncio
+import logging
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,16 +21,7 @@
 提供智能连接管理、自动扩缩容和健康监控功能
 """
 
-import asyncio
-import logging
-import time
-from dataclasses import dataclass
-from typing import Dict, Optional, Set, Tuple, Any
-from contextlib import asynccontextmanager
 
-import aiohttp
-from aiohttp import ClientSession, ClientTimeout, TCPConnector
-from aiohttp.client_exceptions import ClientError, ClientTimeout as ClientTimeoutError
 
 logger = logging.getLogger(__name__)
 
@@ -227,7 +233,6 @@ class EnhancedConnectionPool:
                     # 计算退避时间
                     backoff = self.config.retry_backoff_factor ** (retries - 1)
                     if self.config.retry_jitter:
-                        import random
                         backoff *= (0.5 + random.random() * 0.5)
                     
                     await asyncio.sleep(backoff)

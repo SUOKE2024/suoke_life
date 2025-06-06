@@ -1,17 +1,22 @@
 """
+health - 索克生活项目模块
+"""
+
+from ...core.monitoring import record_health_recommendation
+from ...models.health import HealthAnalysis, HealthRecommendation
+from ...services.health_service import HealthService
+from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel
+from typing import Any
+
+"""
 健康管理 API 端点
 
 提供健康数据分析、健康建议等功能
 """
 
-from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel
 
-from ...core.monitoring import record_health_recommendation
-from ...models.health import HealthAnalysis, HealthRecommendation
-from ...services.health_service import HealthService
 
 router = APIRouter()
 

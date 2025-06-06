@@ -1,3 +1,15 @@
+"""
+embedding_service - 索克生活项目模块
+"""
+
+from ..model.document import Document
+from loguru import logger
+from sentence_transformers import SentenceTransformer
+from typing import Dict, List, Any, Optional
+import os
+import time
+import torch
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,14 +17,7 @@
 嵌入服务模块，负责生成文本的嵌入向量
 """
 
-import os
-import time
-from typing import Dict, List, Any, Optional
-import torch
-from sentence_transformers import SentenceTransformer
-from loguru import logger
 
-from ..model.document import Document
 
 class EmbeddingService:
     """

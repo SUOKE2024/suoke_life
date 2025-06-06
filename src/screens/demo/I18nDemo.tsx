@@ -1,33 +1,32 @@
+import { Card, Button } from "../../components/ui/import { useI18n  } from ;../../hooks/useI18n";/import { SupportedLanguage, CulturalPreferences } from ../../i18n/config"/import { theme } from "../../constants/////    theme
+import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/////      View,"
+
 import React from "react";
-import { Card, Button } from "../../components/ui/import { useI18n  } from ";";../../hooks/useI18n";/import { SupportedLanguage, CulturalPreferences } from ../../i18n/config"/import { theme } from "../../constants/////    theme";"
 /////
-//////     索克生活 - 国际化演示界面   展示完整的多语言和地区化功能
-importReact,{ useState } from ";react"
-import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/////      View,;"
+// 索克生活 - 国际化演示界面   展示完整的多语言和地区化功能
+importReact,{ useState } from ";react";
   Text,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
   Alert,
-  { ActivityIndicator } from "react-native;"
+  { ActivityIndicator } from "react-native;";
 export const I18nDemo: React.FC  = () => {}
-  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor(""
-I18nDemo", { "
-    trackRender: true,;
-    trackMemory: false,;
-    warnThreshold: 100, // ms //////     };);
-  const { // 当前状态 //////     language,
+  // 性能监控 // const performanceMonitor = usePerformanceMonitor("";
+I18nDemo", { ";
+    trackRender: true,trackMemory: false,warnThreshold: 100, // ms // };);
+  const { // 当前状态 // language,
     region,
     isRTL,
     culturalPreferences,
     isInitialized,
-    // 配置信息 //////     languageConfig,
+    // 配置信息 // languageConfig,
     regionConfig,
     supportedLanguages,
     supportedRegions,
-    // 翻译函数 //////     t,
+    // 翻译函数 // t,
     tn,
-    // 格式化函数 //////     formatDate,
+    // 格式化函数 // formatDate,
     formatTime,
     formatDateTime,
     formatCurrency,
@@ -37,10 +36,10 @@ I18nDemo", { "
     formatFileSize,
     formatDistance,
     formatTemperature,
-    // 设置函数 //////     setLanguage,
+    // 设置函数 // setLanguage,
     setRegion,
     setCulturalPreferences,
-    // 工具函数 //////     getFirstDayOfWeek,
+    // 工具函数 // getFirstDayOfWeek,
     getTimezone,
     getHolidays,
     isHoliday,
@@ -48,26 +47,25 @@ I18nDemo", { "
     } = useI18n;
   const [loading, setLoading] = useState<boolean>(false;);
   const [testResults, setTestResults] = useState<string[]>([;];);
-  // 测试数据 //////     const testDate = new Date;
+  // 测试数据 // const testDate = new Date;
   const testAmount = 1234.5;6;
   const testNumber = 9876543.;2;1;
-  const testBytes = 1024 * 1024 * 2;.;5; // 2.5MB // const testDistance = 15  / 1.5km* // const testTemperature = 2;5;  * / 25°C* // * //////
-  //////     切换语言  const handleLanguageChange = async (newLanguage: SupportedLanguage) => {}
+  const testBytes = 1024 * 1024 * 2;.;5; // 2.5MB // const testDistance = 15  / 1.5km* // const testTemperature = 2;5;  * / 25°C* // * // // 切换语言  const handleLanguageChange = async (newLanguage: SupportedLanguage) => {};
     setLoading(tru;e;);
     try {
-      await setLanguage(newLanguag;e;)
-      addTestResult(`语言切换成功: ${newLanguage}`)
+      await setLanguage(newLanguag;e;);
+      addTestResult(`语言切换成功: ${newLanguage}`);
     } catch (error) {
       Alert.alert(错误", `语言切换失败: ${error}`);"
     } finally {
       setLoading(false);
     }
   };
-  //////     切换地区  const handleRegionChange = async (newRegion: string) => {}
+  // 切换地区  const handleRegionChange = async (newRegion: string) => {};
     setLoading(tru;e;);
     try {
-      await setRegion(newRegio;n;)
-      addTestResult(`地区切换成功: ${newRegion}`)
+      await setRegion(newRegio;n;);
+      addTestResult(`地区切换成功: ${newRegion}`);
     } catch (error) {
       Alert.alert("错误, `地区切换失败: ${error}`);"
     } finally {
@@ -76,19 +74,19 @@ I18nDemo", { "
   };
   // 更新文化偏好  const handleCulturalPreferencesChange = async (preferences: Partial<CulturalPreferences />) => {/////        setLoading(true;);}
     try {
-      await setCulturalPreferences(preference;s;)
-      addTestResult(`文化偏好更新成功`)
+      await setCulturalPreferences(preference;s;);
+      addTestResult(`文化偏好更新成功`);
     } catch (error) {
       Alert.alert("错误", `文化偏好更新失败: ${error}`);
     } finally {
       setLoading(false);
     }
   };
-  //////     重置设置  const handleReset = async() => {}
+  // 重置设置  const handleReset = async() => {};
     setLoading(tru;e;);
     try {
       await reset;
-      setTestResults([])
+      setTestResults([]);
       addTestResult(设置已重置")"
     } catch (error) {
       Alert.alert("错误, `重置失败: ${error}`);"
@@ -96,12 +94,12 @@ I18nDemo", { "
       setLoading(false);
     }
   };
-  //////     添加测试结果  const addTestResult = useCallback(() => {}
-    // TODO: Implement function body *}, []) ////
-    setTestResults(prev => [...prev.slice(-9), `${new Date().toLocaleTimeString()}: ${result}`])
+  // 添加测试结果  const addTestResult = useCallback(() => {;
+    // TODO: Implement function body *}, []) ////;
+    setTestResults(prev => [...prev.slice(-9), `${new Date().toLocaleTimeString()}: ${result}`]);
   };
-  //////     测试所有格式化功能  const testAllFormatting = useCallback(() => {}
-    // TODO: Implement function body *}, []) ////
+  // 测试所有格式化功能  const testAllFormatting = useCallback(() => {;
+    // TODO: Implement function body *}, []) ////;
     const results = [;
       `日期: ${formatDate(testDate)}`,
       `时间: ${formatTime(testDate)}`,
@@ -117,14 +115,13 @@ I18nDemo", { "
     results.forEach(result => addTestResult(result););
   };
   if (!isInitialized) {
-    // 记录渲染性能 //////
-    performanceMonitor.recordRender()
-    return (
+    // 记录渲染性能 // performanceMonitor.recordRender();
+    return (;
       <View style={styles.loadingContainer} />/        <ActivityIndicator size="large" color={theme.colors.primary} />/        <Text style={styles.loadingText} />初始化国际化系统...</Text>/      </View>/////        ;);
   }
-  return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} />/      {// 标题 }/      <Text style={styles.title} />🌍 国际化演示</Text>/      <Text style={styles.subtitle} />完整的多语言和地区化功能展示</Text>/////
-      {// 当前状态 }/      <Card style={styles.card} />/        <Text style={styles.cardTitle} />📊 当前状态</Text>/        <View style={styles.statusGrid} />/          <View style={styles.statusItem} />/            <Text style={styles.statusLabel} />语言:</Text>/            <Text style={styles.statusValue} />{languageConfig.nativeName}</Text>/          </View>/          <View style={styles.statusItem} />/            <Text style={styles.statusLabel} />地区:</Text>/            <Text style={styles.statusValue} />{regionConfig.name}</Text>/          </View>/          <View style={styles.statusItem} />/            <Text style={styles.statusLabel} />RTL:</Text>/            <Text style={styles.statusValue} />{isRTL ? "是" : 否"}</Text>/          </View>/          <View style={styles.statusItem} />/            <Text style={styles.statusLabel} />时区:</Text>/            <Text style={styles.statusValue} />{getTimezone()}</Text>/          </View>/        </View>/      </Card>/////    "
+  return (;
+    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} />/      {// 标题 }/      <Text style={styles.title} />🌍 国际化演示</Text>/      <Text style={styles.subtitle} />完整的多语言和地区化功能展示</Text>/////;
+      {// 当前状态 }/      <Card style={styles.card} />/        <Text style={styles.cardTitle} />📊 当前状态</Text>/        <View style={styles.statusGrid} />/          <View style={styles.statusItem} />/            <Text style={styles.statusLabel} />语言:</Text>/            <Text style={styles.statusValue} />{languageConfig.nativeName}</Text>/          </View>/          <View style={styles.statusItem} />/            <Text style={styles.statusLabel} />地区:</Text>/            <Text style={styles.statusValue} />{regionConfig.name}</Text>/          </View>/          <View style={styles.statusItem} />/            <Text style={styles.statusLabel} />RTL:</Text>/            <Text style={styles.statusValue} />{isRTL ? "是" : 否"}</Text>/          </View>/          <View style={styles.statusItem} />/            <Text style={styles.statusLabel} />时区:</Text>/            <Text style={styles.statusValue} />{getTimezone()}</Text>/          </View>/        </View>/      </Card>/////    ";
       {// 语言切换 }/      <Card style={styles.card} />/        <Text style={styles.cardTitle} />🗣️ 语言切换</Text>/        <View style={styles.buttonGrid} />/////              {supportedLanguages.map((lang;) => (
             <TouchableOpacity,
               key={lang.code}
@@ -187,8 +184,7 @@ title="重置设置"
         <View style={styles.loadingOverlay} />/          <ActivityIndicator size="large" color={theme.colors.primary} />/        </View>/////          )}
     </ScrollView>/////      );
 }
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     flex: 1,
     backgroundColor: theme.colors.background;
   },
@@ -208,7 +204,7 @@ const styles = StyleSheet.create({;
     fontSize: theme.typography.h1.fontSize,
     fontWeight: theme.typography.h1.fontWeight,
     color: theme.colors.text,
-    textAlign: "center,"
+    textAlign: "center,",
     marginBottom: theme.spacing.sm;
   },
   subtitle: {
@@ -226,7 +222,7 @@ const styles = StyleSheet.create({;
   },
   statusGrid: {
     flexDirection: row","
-    flexWrap: "wrap,"
+    flexWrap: "wrap,",
     justifyContent: "space-between"
   },
   statusItem: {
@@ -294,7 +290,7 @@ const styles = StyleSheet.create({;
   formatItem: {
     flexDirection: "row",
     justifyContent: space-between","
-    alignItems: "center,"
+    alignItems: "center,",
     paddingVertical: theme.spacing.xs,
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.border;
@@ -329,7 +325,7 @@ const styles = StyleSheet.create({;
     justifyContent: space-between""
   },
   preferenceButton: {
-    width: "48%,"
+    width: "48%,",
     padding: theme.spacing.sm,
     borderRadius: theme.borderRadius.md,
     backgroundColor: theme.colors.surface,
@@ -367,9 +363,8 @@ const styles = StyleSheet.create({;
     top: 0,
     left: 0,
     right: 0,
-    bottom: 0,;
-    backgroundColor: rgba(0, 0, 0, 0.;3;)","
-    justifyContent: "center,"
+    bottom: 0,backgroundColor: rgba(0, 0, 0, 0.;3;)","
+    justifyContent: "center,",
     alignItems: "center'"'
   }
 });

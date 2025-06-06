@@ -1,10 +1,10 @@
+import React from 'react';
 import { renderHook, act } from "@testing-library/react-hooks";
-import { Provider } from "react-redux";
-import { configureStore } from @reduxjs/toolkit";"
-import performanceMonitor from "../performanceMonitor";
+import {  configureStore  } from "@reduxjs/toolkit";
+import { performance } from "perf_hooks";
+
 // Mock store for testing
-const mockStore = configureStore({;
-  reducer: {
+const mockStore = configureStore({reducer: {
     // Add your reducers here
   });};);
 const wrapper = ({ children }: { children: React.ReactNode }) => (;
@@ -17,7 +17,7 @@ describe("performanceMonitor", () => {
   it("should initialize with correct default values", () => {
     const { result   } = renderHook((); => performanceMonitor(), { wrapper });
     // Add assertions for initial state
-expect(result.current).toBeDefined()
+expect(result.current).toBeDefined();
   });
   it("should handle state updates correctly, async (); => {", () => {
     const { result   } = renderHook((); => performanceMonitor(), { wrapper });
@@ -26,7 +26,7 @@ expect(result.current).toBeDefined()
       // result.current.someFunction();
     });
     // Add assertions for state changes
-expect(result.current).toBeDefined()
+expect(result.current).toBeDefined();
   });
   it("should handle side effects properly", async (); => {
     const { result   } = renderHook((); => performanceMonitor(), { wrapper });
@@ -34,12 +34,12 @@ expect(result.current).toBeDefined()
       // Test side effects
     });
     // Add assertions for side effects
-expect(result.current).toBeDefined()
+expect(result.current).toBeDefined();
   });
   it("should cleanup resources on unmount", () => {
     const { unmount   } = renderHook((); => performanceMonitor(), { wrapper });
     // Test cleanup
-unmount()
+unmount();
     // Add assertions for cleanup
 expect(true).toBe(true);
   });
@@ -49,32 +49,30 @@ expect(true).toBe(true);
       // Trigger error scenarios
     });
     // Add error handling assertions
-expect(result.current).toBeDefined()
+expect(result.current).toBeDefined();
   });
 });
-import { performance } from "perf_hooks";
-import { PerformanceMonitor, performanceMonitor, startPerformanceMeasure, endPerformanceMeasure, recordNetworkPerformance, recordRenderPerformance, recordUserInteraction, getPerformanceStats, getNetworkPerformanceStats, clearPerformanceMetrics, startMonitoring, stopMonitoring, getPerformanceReport, clearPerformanceData, getOptimizationSuggestions } from ../performanceMonitor";"
 describe("performanceMonitor Performance Tests, () => {", () => {
   it("should execute within performance thresholds", () => {
     const iterations = 10;
     const startTime = performance.now();
     for (let i = 0; i < iterations; i++) {
       // Execute performance-critical functions
-PerformanceMonitor(/* test params      */)
-      performanceMonitor(/* test params      */);
-      startPerformanceMeasure(/* test params      */);
-      endPerformanceMeasure(/* test params      */);
-      recordNetworkPerformance(/* test params      */);
-      recordRenderPerformance(/* test params      */);
-      recordUserInteraction(/* test params      */);
-      getPerformanceStats(/* test params      */);
-      getNetworkPerformanceStats(/* test params      */);
-      clearPerformanceMetrics(/* test params      */);
-      startMonitoring(/* test params      */);
-      stopMonitoring(/* test params      */);
-      getPerformanceReport(/* test params      */);
-      clearPerformanceData(/* test params      */);
-      getOptimizationSuggestions(/* test params      */);
+PerformanceMonitor(// test params);
+      performanceMonitor(// test params);
+      startPerformanceMeasure(// test params);
+      endPerformanceMeasure(// test params);
+      recordNetworkPerformance(// test params);
+      recordRenderPerformance(// test params);
+      recordUserInteraction(// test params);
+      getPerformanceStats(// test params);
+      getNetworkPerformanceStats(// test params);
+      clearPerformanceMetrics(// test params);
+      startMonitoring(// test params);
+      stopMonitoring(// test params);
+      getPerformanceReport(// test params);
+      clearPerformanceData(// test params);
+      getOptimizationSuggestions(// test params);
     });
     const endTime = performance.now();
     const averageTime = (endTime - startTime) / iterations;
@@ -85,7 +83,7 @@ expect(averageTime).toBeLessThan(1);
     const largeDataset = new Array(10000).fill(0).map((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
-PerformanceMonitor(largeDataset)
+PerformanceMonitor(largeDataset);
     const endTime = performance.now();
     // Should handle large datasets within 100ms
 expect(endTime - startTime).toBeLessThan(100);
@@ -94,7 +92,7 @@ expect(endTime - startTime).toBeLessThan(100);
     const initialMemory = process.memoryUsage().heapUsed;
     // Execute function multiple times
 for (let i = 0; i < 1000; i++) {
-      PerformanceMonitor(/* test params      */);
+      PerformanceMonitor(// test params);
     });
     // Force garbage collection if available
 if (global.gc) {

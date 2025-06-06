@@ -1,14 +1,19 @@
 """
+test_simple_api - 索克生活项目模块
+"""
+
+from datetime import datetime
+from fastapi.testclient import TestClient
+from palpation_service.models import SessionType, SensorType, AnalysisType
+from palpation_service.simple_main import create_app
+import pytest
+
+"""
 简化版API测试
 测试基本的API端点功能
 """
 
-import pytest
-from datetime import datetime
-from fastapi.testclient import TestClient
 
-from palpation_service.simple_main import create_app
-from palpation_service.models import SessionType, SensorType, AnalysisType
 
 
 @pytest.fixture

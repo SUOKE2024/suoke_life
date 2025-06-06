@@ -1,11 +1,16 @@
+"""
+test_integration_simple - 索克生活项目模块
+"""
+
+import aiohttp
+import asyncio
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 简化的无障碍服务集成测试
 """
 
-import asyncio
-import aiohttp
 
 async def test_simple_integration():
     """简化的集成测试"""

@@ -1,6 +1,4 @@
 import { authService } from '../../services/authService';
-import { userService } from '../../services/userService';
-import { clearAuthTokens, storeAuthTokens, getAuthToken } from '../../utils/authUtils';
 
 // Mock AsyncStorage
 jest.mock('@react-native-async-storage/async-storage', () => ({
@@ -9,7 +7,7 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
   removeItem: jest.fn(),
   multiSet: jest.fn(),
   multiGet: jest.fn(),
-  clear: jest.fn(),
+  clear: jest.fn();
 }));
 
 // Mock DeviceInfo
@@ -17,7 +15,7 @@ jest.mock('react-native-device-info', () => ({
   getUniqueId: jest.fn(() => Promise.resolve('test-device-id')),
   getSystemName: jest.fn(() => 'iOS'),
   getSystemVersion: jest.fn(() => '15.0'),
-  getModel: jest.fn(() => 'iPhone'),
+  getModel: jest.fn(() => 'iPhone')
 }));
 
 // Mock API Client
@@ -27,8 +25,8 @@ jest.mock('../../services/apiClient', () => ({
     get: jest.fn(),
     post: jest.fn(),
     put: jest.fn(),
-    delete: jest.fn(),
-  },
+    delete: jest.fn();
+  }
 }));
 
 describe('Auth & User Service Integration Tests', () => {
@@ -39,31 +37,14 @@ describe('Auth & User Service Integration Tests', () => {
   describe('Authentication Flow', () => {
     it('should complete full login flow', async () => {
       // Mock successful login response
-      const mockLoginResponse = {
-        success: true,
-        data: {
-          user: {
-            id: 'user-123',
-            username: 'testuser',
-            email: 'test@example.com',
-          },
-          accessToken: 'mock-access-token',
-          refreshToken: 'mock-refresh-token',
-          expiresIn: 3600,
-        },
+      const mockLoginResponse = {success: true,data: {user: {id: 'user-123',username: 'testuser',email: 'test@example.com';
+          },accessToken: 'mock-access-token',refreshToken: 'mock-refresh-token',expiresIn: 3600;
+        };
       };
 
-      const mockUserResponse = {
-        success: true,
-        data: {
-          id: 'user-123',
-          username: 'testuser',
-          email: 'test@example.com',
-          profile: {
-            name: 'Test User',
-            age: 30,
-          },
-        },
+      const mockUserResponse = {success: true,data: {id: 'user-123',username: 'testuser',email: 'test@example.com',profile: {name: 'Test User',age: 30;
+          };
+        };
       };
 
       // Mock API responses
@@ -72,10 +53,7 @@ describe('Auth & User Service Integration Tests', () => {
       require('../../services/apiClient').apiClient.put.mockResolvedValueOnce({ success: true });
 
       // Test login
-      const loginResult = await authService.login({
-        email: 'test@example.com',
-        password: 'password123',
-        rememberMe: true,
+      const loginResult = await authService.login({email: 'test@example.com',password: 'password123',rememberMe: true;
       });
 
       expect(loginResult).toEqual(mockLoginResponse.data);
@@ -93,21 +71,19 @@ describe('Auth & User Service Integration Tests', () => {
         expect.objectContaining({
           email: 'test@example.com',
           password: 'password123',
-          rememberMe: true,
-        })
+          rememberMe: true
+        });
       );
 
       expect(require('../../services/apiClient').apiClient.get).toHaveBeenCalledWith('/users/me');
-      expect(require('../../services/apiClient').apiClient.put).toHaveBeenCalledWith('/users/me/last-active');
+      expect(require('../../services/apiClient').apiClient.put).toHaveBeenCalledWith(
+        '/users/me/last-active'
+      );
     });
 
     it('should handle login failure', async () => {
-      const mockErrorResponse = {
-        success: false,
-        error: {
-          code: 'INVALID_CREDENTIALS',
-          message: '邮箱或密码错误',
-        },
+      const mockErrorResponse = {success: false,error: {code: 'INVALID_CREDENTIALS',message: '邮箱或密码错误';
+        };
       };
 
       require('../../services/apiClient').apiClient.post.mockResolvedValueOnce(mockErrorResponse);
@@ -115,8 +91,8 @@ describe('Auth & User Service Integration Tests', () => {
       await expect(
         authService.login({
           email: 'test@example.com',
-          password: 'wrongpassword',
-        })
+          password: 'wrongpassword'
+        });
       ).rejects.toThrow('邮箱或密码错误');
     });
 
@@ -125,25 +101,19 @@ describe('Auth & User Service Integration Tests', () => {
 
       await authService.logout();
 
-      expect(require('../../services/apiClient').apiClient.post).toHaveBeenCalledWith('/auth/logout');
+      expect(require('../../services/apiClient').apiClient.post).toHaveBeenCalledWith(
+        '/auth/logout'
+      );
     });
   });
 
   describe('User Management', () => {
     it('should update user profile', async () => {
-      const updateData = {
-        username: 'newusername',
-        phone: '+86 138 0013 8000',
+      const updateData = {username: 'newusername',phone: '+86 138 0013 8000';
       };
 
-      const mockResponse = {
-        success: true,
-        data: {
-          id: 'user-123',
-          username: 'newusername',
-          email: 'test@example.com',
-          phone: '+86 138 0013 8000',
-        },
+      const mockResponse = {success: true,data: {id: 'user-123',username: 'newusername',email: 'test@example.com',phone: '+86 138 0013 8000';
+        };
       };
 
       require('../../services/apiClient').apiClient.put.mockResolvedValueOnce(mockResponse);
@@ -158,17 +128,9 @@ describe('Auth & User Service Integration Tests', () => {
     });
 
     it('should get user preferences', async () => {
-      const mockPreferences = {
-        success: true,
-        data: {
-          language: 'zh-CN',
-          timezone: 'Asia/Shanghai',
-          notifications: {
-            push: true,
-            email: false,
-            sms: true,
-          },
-        },
+      const mockPreferences = {success: true,data: {language: 'zh-CN',timezone: 'Asia/Shanghai',notifications: {push: true,email: false,sms: true;
+          };
+        };
       };
 
       require('../../services/apiClient').apiClient.get.mockResolvedValueOnce(mockPreferences);
@@ -176,25 +138,17 @@ describe('Auth & User Service Integration Tests', () => {
       const preferences = await userService.getPreferences();
 
       expect(preferences).toEqual(mockPreferences.data);
-      expect(require('../../services/apiClient').apiClient.get).toHaveBeenCalledWith('/users/me/preferences');
+      expect(require('../../services/apiClient').apiClient.get).toHaveBeenCalledWith(
+        '/users/me/preferences'
+      );
     });
 
     it('should manage user devices', async () => {
-      const deviceData = {
-        name: 'iPhone 13',
-        type: 'mobile',
-        os: 'iOS',
-        version: '15.0',
+      const deviceData = {name: 'iPhone 13',type: 'mobile',os: 'iOS',version: '15.0';
       };
 
-      const mockResponse = {
-        success: true,
-        data: {
-          id: 'device-123',
-          ...deviceData,
-          isActive: true,
-          lastSeen: new Date().toISOString(),
-        },
+      const mockResponse = {success: true,data: {id: 'device-123',...deviceData,isActive: true,lastSeen: new Date().toISOString();
+        };
       };
 
       require('../../services/apiClient').apiClient.post.mockResolvedValueOnce(mockResponse);
@@ -211,13 +165,8 @@ describe('Auth & User Service Integration Tests', () => {
 
   describe('Token Management', () => {
     it('should refresh access token', async () => {
-      const mockRefreshResponse = {
-        success: true,
-        data: {
-          accessToken: 'new-access-token',
-          refreshToken: 'new-refresh-token',
-          expiresIn: 3600,
-        },
+      const mockRefreshResponse = {success: true,data: {accessToken: 'new-access-token',refreshToken: 'new-refresh-token',expiresIn: 3600;
+        };
       };
 
       require('../../services/apiClient').apiClient.post.mockResolvedValueOnce(mockRefreshResponse);
@@ -225,7 +174,9 @@ describe('Auth & User Service Integration Tests', () => {
       const result = await authService.refreshToken();
 
       expect(result).toEqual(mockRefreshResponse.data);
-      expect(require('../../services/apiClient').apiClient.post).toHaveBeenCalledWith('/auth/refresh');
+      expect(require('../../services/apiClient').apiClient.post).toHaveBeenCalledWith(
+        '/auth/refresh'
+      );
     });
 
     it('should check auth status', async () => {
@@ -234,7 +185,9 @@ describe('Auth & User Service Integration Tests', () => {
       const isValid = await authService.checkAuthStatus();
 
       expect(isValid).toBe(true);
-      expect(require('../../services/apiClient').apiClient.get).toHaveBeenCalledWith('/auth/status');
+      expect(require('../../services/apiClient').apiClient.get).toHaveBeenCalledWith(
+        '/auth/status'
+      );
     });
   });
 
@@ -246,18 +199,14 @@ describe('Auth & User Service Integration Tests', () => {
       await expect(
         authService.login({
           email: 'test@example.com',
-          password: 'password123',
-        })
+          password: 'password123'
+        });
       ).rejects.toThrow('Network request failed');
     });
 
     it('should handle unauthorized errors', async () => {
-      const unauthorizedError = {
-        success: false,
-        error: {
-          code: 'UNAUTHORIZED',
-          message: '认证已过期，请重新登录',
-        },
+      const unauthorizedError = {success: false,error: {code: 'UNAUTHORIZED',message: '认证已过期，请重新登录';
+        };
       };
 
       require('../../services/apiClient').apiClient.get.mockResolvedValueOnce(unauthorizedError);
@@ -268,20 +217,11 @@ describe('Auth & User Service Integration Tests', () => {
 
   describe('Health Data Integration', () => {
     it('should sync health data', async () => {
-      const healthData = {
-        heartRate: 72,
-        bloodPressure: { systolic: 120, diastolic: 80 },
-        steps: 8500,
-        sleep: { duration: 7.5, quality: 'good' },
+      const healthData = {heartRate: 72,bloodPressure: { systolic: 120, diastolic: 80 },steps: 8500,sleep: { duration: 7.5, quality: 'good' };
       };
 
-      const mockResponse = {
-        success: true,
-        data: {
-          id: 'health-record-123',
-          ...healthData,
-          timestamp: new Date().toISOString(),
-        },
+      const mockResponse = {success: true,data: {id: 'health-record-123',...healthData,timestamp: new Date().toISOString();
+        };
       };
 
       require('../../services/apiClient').apiClient.post.mockResolvedValueOnce(mockResponse);
@@ -296,20 +236,10 @@ describe('Auth & User Service Integration Tests', () => {
     });
 
     it('should get health metrics', async () => {
-      const mockMetrics = {
-        success: true,
-        data: {
-          daily: {
-            steps: 8500,
-            calories: 2100,
-            activeMinutes: 45,
-          },
-          weekly: {
-            averageSteps: 8200,
-            totalCalories: 14700,
-            exerciseDays: 5,
-          },
-        },
+      const mockMetrics = {success: true,data: {daily: {steps: 8500,calories: 2100,activeMinutes: 45;
+          },weekly: {averageSteps: 8200,totalCalories: 14700,exerciseDays: 5;
+          };
+        };
       };
 
       require('../../services/apiClient').apiClient.get.mockResolvedValueOnce(mockMetrics);
@@ -317,7 +247,9 @@ describe('Auth & User Service Integration Tests', () => {
       const metrics = await userService.getHealthMetrics();
 
       expect(metrics).toEqual(mockMetrics.data);
-      expect(require('../../services/apiClient').apiClient.get).toHaveBeenCalledWith('/users/me/health-metrics');
+      expect(require('../../services/apiClient').apiClient.get).toHaveBeenCalledWith(
+        '/users/me/health-metrics'
+      );
     });
   });
-}); 
+});

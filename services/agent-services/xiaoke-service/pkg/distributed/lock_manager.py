@@ -1,19 +1,24 @@
+"""
+lock_manager - 索克生活项目模块
+"""
+
+from contextlib import asynccontextmanager, suppress
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any
+import aioredis
+import asyncio
+import logging
+import time
+import uuid
+
 #!/usr/bin/env python3
 """
 分布式锁管理器
 基于Redis实现分布式锁，支持可重入锁、读写锁，包含自动过期和死锁检测功能
 """
 
-import asyncio
-import logging
-import time
-import uuid
-from contextlib import asynccontextmanager, suppress
-from dataclasses import dataclass
-from enum import Enum
-from typing import Any
 
-import aioredis
 
 logger = logging.getLogger(__name__)
 

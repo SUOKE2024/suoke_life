@@ -1,13 +1,18 @@
+"""
+verify_uv_migration - 索克生活项目模块
+"""
+
+from pathlib import Path
+from typing import List, Tuple
+import subprocess
+import sys
+
 #!/usr/bin/env python3
 """
 索克生活无障碍服务 - UV 迁移验证脚本
 验证 Python 3.13.3 和 UV 包管理器迁移是否完成
 """
 
-import sys
-import subprocess
-from pathlib import Path
-from typing import List, Tuple
 
 def check_python_version() -> Tuple[bool, str]:
     """检查 Python 版本"""

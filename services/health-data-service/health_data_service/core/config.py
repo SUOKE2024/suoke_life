@@ -1,3 +1,14 @@
+"""
+config - 索克生活项目模块
+"""
+
+    from pydantic import BaseSettings
+    from pydantic_settings import BaseSettings, SettingsConfigDict
+from pathlib import Path
+from pydantic import Field, field_validator
+from typing import Any, Dict, List, Optional, Union
+import os
+
 #!/usr/bin/env python3
 """
 健康数据服务配置模块
@@ -5,21 +16,15 @@
 提供应用程序的配置管理，支持环境变量和配置文件。
 """
 
-import os
-from typing import Any, Dict, List, Optional, Union
-from pathlib import Path
 
 try:
-    from pydantic_settings import BaseSettings, SettingsConfigDict
 except ImportError:
     # 兼容性处理
-    from pydantic import BaseSettings
     
     class SettingsConfigDict:
         def __init__(self, **kwargs):
             pass
 
-from pydantic import Field, field_validator
 
 
 class DatabaseSettings(BaseSettings):

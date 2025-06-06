@@ -1,13 +1,18 @@
+"""
+python_example - 索克生活项目模块
+"""
+
+from typing import Any
+import json
+import requests
+
 #!/usr/bin/env python3
 
 """
 索克生活无障碍服务 Python SDK 示例
 """
 
-import json
-from typing import Any
 
-import requests
 
 
 class AccessibilityServiceClient:

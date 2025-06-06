@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Platform } from 'react-native';
 
 // 本地AI模型接口
 interface LocalAIModel {
@@ -32,10 +31,10 @@ class LocalAIService {
     try {
       // 加载预训练的轻量级模型
       await this.loadLocalModels();
-      
+
       // 初始化模型缓存
       await this.initializeModelCache();
-      
+
       this.isInitialized = true;
       console.log('本地AI服务初始化成功');
     } catch (error) {
@@ -77,7 +76,7 @@ class LocalAIService {
       try {
         // 检查模型是否已下载
         const isDownloaded = await this.isModelDownloaded(model.id);
-        
+
         if (isDownloaded) {
           // 加载模型到内存
           await this.loadModelToMemory(model);
@@ -86,7 +85,7 @@ class LocalAIService {
           // 下载轻量级模型
           await this.downloadModel(model);
         }
-        
+
         this.models.set(model.id, model);
       } catch (error) {
         console.warn(`模型 ${model.name} 加载失败:`, error);
@@ -109,13 +108,10 @@ class LocalAIService {
     try {
       // 模拟下载轻量级模型数据
       const modelData = await this.generateLightweightModel(model);
-      
+
       // 保存到本地存储
-      await AsyncStorage.setItem(
-        `local_model_${model.id}`,
-        JSON.stringify(modelData)
-      );
-      
+      await AsyncStorage.setItem(`local_model_${model.id}`, JSON.stringify(modelData));
+
       console.log(`模型 ${model.name} 下载完成`);
     } catch (error) {
       console.error(`模型 ${model.name} 下载失败:`, error);
@@ -128,53 +124,27 @@ class LocalAIService {
     // 根据模型类型生成对应的轻量级规则
     switch (model.id) {
       case 'tcm_symptom_classifier':
-        return {
-          rules: [
-            { pattern: /头痛|头晕/, category: '头部症状', severity: 0.7 },
-            { pattern: /咳嗽|痰多/, category: '呼吸系统', severity: 0.6 },
-            { pattern: /胃痛|腹痛/, category: '消化系统', severity: 0.8 },
-            { pattern: /失眠|多梦/, category: '神经系统', severity: 0.5 },
-            { pattern: /乏力|疲劳/, category: '全身症状', severity: 0.4 }
-          ],
-          weights: [0.3, 0.25, 0.2, 0.15, 0.1]
+        return {rules: [;
+            { pattern: /头痛|头晕/, category: '头部症状', severity: 0.7 },{ pattern: /咳嗽|痰多/, category: '呼吸系统', severity: 0.6 },{ pattern: /胃痛|腹痛/, category: '消化系统', severity: 0.8 },{ pattern: /失眠|多梦/, category: '神经系统', severity: 0.5 },{ pattern: /乏力|疲劳/, category: '全身症状', severity: 0.4 };
+          ],weights: [0.3, 0.25, 0.2, 0.15, 0.1];
         };
-      
+
       case 'constitution_analyzer':
-        return {
-          constitutionTypes: [
-            { name: '平和质', keywords: ['精力充沛', '睡眠良好', '食欲正常'] },
-            { name: '气虚质', keywords: ['乏力', '气短', '容易疲劳'] },
-            { name: '阳虚质', keywords: ['怕冷', '手脚冰凉', '精神不振'] },
-            { name: '阴虚质', keywords: ['口干', '盗汗', '五心烦热'] },
-            { name: '痰湿质', keywords: ['肥胖', '胸闷', '痰多'] }
-          ],
-          scoringMatrix: [
-            [1.0, 0.1, 0.1, 0.1, 0.1],
-            [0.1, 1.0, 0.3, 0.2, 0.2],
-            [0.1, 0.3, 1.0, 0.1, 0.2],
-            [0.1, 0.2, 0.1, 1.0, 0.1],
-            [0.1, 0.2, 0.2, 0.1, 1.0]
-          ]
+        return {constitutionTypes: [;
+            { name: '平和质', keywords: ['精力充沛', '睡眠良好', '食欲正常'] },{ name: '气虚质', keywords: ['乏力', '气短', '容易疲劳'] },{ name: '阳虚质', keywords: ['怕冷', '手脚冰凉', '精神不振'] },{ name: '阴虚质', keywords: ['口干', '盗汗', '五心烦热'] },{ name: '痰湿质', keywords: ['肥胖', '胸闷', '痰多'] };
+          ],scoringMatrix: [;
+            [1.0, 0.1, 0.1, 0.1, 0.1],[0.1, 1.0, 0.3, 0.2, 0.2],[0.1, 0.3, 1.0, 0.1, 0.2],[0.1, 0.2, 0.1, 1.0, 0.1],[0.1, 0.2, 0.2, 0.1, 1.0];
+          ];
         };
-      
+
       case 'pulse_pattern_recognizer':
-        return {
-          pulsePatterns: [
-            { name: '浮脉', characteristics: ['轻取即得', '重按稍减'] },
-            { name: '沉脉', characteristics: ['轻取不应', '重按始得'] },
-            { name: '迟脉', characteristics: ['脉率缓慢', '一息三至'] },
-            { name: '数脉', characteristics: ['脉率较快', '一息五至'] },
-            { name: '滑脉', characteristics: ['往来流利', '如珠走盘'] }
-          ],
-          recognitionRules: [
-            { feature: 'pressure', threshold: 0.3, pattern: '浮脉' },
-            { feature: 'pressure', threshold: 0.7, pattern: '沉脉' },
-            { feature: 'frequency', threshold: 60, pattern: '迟脉' },
-            { feature: 'frequency', threshold: 90, pattern: '数脉' },
-            { feature: 'smoothness', threshold: 0.8, pattern: '滑脉' }
-          ]
+        return {pulsePatterns: [;
+            { name: '浮脉', characteristics: ['轻取即得', '重按稍减'] },{ name: '沉脉', characteristics: ['轻取不应', '重按始得'] },{ name: '迟脉', characteristics: ['脉率缓慢', '一息三至'] },{ name: '数脉', characteristics: ['脉率较快', '一息五至'] },{ name: '滑脉', characteristics: ['往来流利', '如珠走盘'] };
+          ],recognitionRules: [;
+            { feature: 'pressure', threshold: 0.3, pattern: '浮脉' },{ feature: 'pressure', threshold: 0.7, pattern: '沉脉' },{ feature: 'frequency', threshold: 60, pattern: '迟脉' },{ feature: 'frequency', threshold: 90, pattern: '数脉' },{ feature: 'smoothness', threshold: 0.8, pattern: '滑脉' };
+          ];
         };
-      
+
       default:
         return { rules: [], weights: [] };
     }
@@ -207,42 +177,27 @@ class LocalAIService {
   // 本地症状分类
   async classifySymptoms(symptoms: string[]): Promise<LocalInferenceResult> {
     const startTime = Date.now();
-    
+
     try {
       const model = this.modelCache.get('tcm_symptom_classifier');
       if (!model) {
         throw new Error('症状分类模型未加载');
       }
 
-      const results = symptoms.map(symptom => {
-        for (const rule of model.rules) {
-          if (rule.pattern.test(symptom)) {
-            return {
-              symptom,
-              category: rule.category,
-              severity: rule.severity,
-              confidence: 0.85 + Math.random() * 0.1
+      const results = symptoms.map(symptom => {for (const rule of model.rules) {if (rule.pattern.test(symptom)) {return {symptom,category: rule.category,severity: rule.severity,confidence: 0.85 + Math.random() * 0.1;
             };
           }
         }
-        return {
-          symptom,
-          category: '其他症状',
-          severity: 0.3,
-          confidence: 0.6
+        return {symptom,category: '其他症状',severity: 0.3,confidence: 0.6;
         };
       });
 
       const processingTime = Date.now() - startTime;
-      
-      return {
-        confidence: 0.88,
-        result: {
-          classifications: results,
-          summary: this.generateSymptomSummary(results)
+
+      return {confidence: 0.88,result: {classifications: results,summary: this.generateSymptomSummary(results);
         },
         processingTime,
-        modelUsed: 'tcm_symptom_classifier'
+        modelUsed: 'tcm_symptom_classifier';
       };
     } catch (error) {
       console.error('本地症状分类失败:', error);
@@ -253,45 +208,35 @@ class LocalAIService {
   // 本地体质分析
   async analyzeConstitution(userData: any): Promise<LocalInferenceResult> {
     const startTime = Date.now();
-    
+
     try {
       const model = this.modelCache.get('constitution_analyzer');
       if (!model) {
         throw new Error('体质分析模型未加载');
       }
 
-      const scores = model.constitutionTypes.map((type: any) => {
-        let score = 0;
+      const scores = model.constitutionTypes.map((type: any) => {let score = 0;
         const userSymptoms = userData.symptoms || [];
-        
+
         for (const keyword of type.keywords) {
-          if (userSymptoms.some((symptom: string) => 
-            symptom.includes(keyword))) {
+          if (userSymptoms.some((symptom: string) => symptom.includes(keyword))) {
             score += 1;
           }
         }
-        
-        return {
-          type: type.name,
-          score: score / type.keywords.length,
-          confidence: 0.8 + Math.random() * 0.15
+
+        return {type: type.name,score: score / type.keywords.length,confidence: 0.8 + Math.random() * 0.15;
         };
       });
 
       // 排序并选择最高分
       scores.sort((a, b) => b.score - a.score);
-      
+
       const processingTime = Date.now() - startTime;
-      
-      return {
-        confidence: 0.85,
-        result: {
-          primaryConstitution: scores[0],
-          allScores: scores,
-          recommendations: this.generateConstitutionRecommendations(scores[0])
+
+      return {confidence: 0.85,result: {primaryConstitution: scores[0],allScores: scores,recommendations: this.generateConstitutionRecommendations(scores[0]);
         },
         processingTime,
-        modelUsed: 'constitution_analyzer'
+        modelUsed: 'constitution_analyzer';
       };
     } catch (error) {
       console.error('本地体质分析失败:', error);
@@ -302,7 +247,7 @@ class LocalAIService {
   // 本地脉象识别
   async recognizePulse(pulseData: any): Promise<LocalInferenceResult> {
     const startTime = Date.now();
-    
+
     try {
       const model = this.modelCache.get('pulse_pattern_recognizer');
       if (!model) {
@@ -310,10 +255,10 @@ class LocalAIService {
       }
 
       const recognizedPatterns = [];
-      
+
       for (const rule of model.recognitionRules) {
         const featureValue = pulseData[rule.feature] || 0;
-        
+
         if (this.matchesThreshold(featureValue, rule.threshold, rule.feature)) {
           recognizedPatterns.push({
             pattern: rule.pattern,
@@ -325,16 +270,11 @@ class LocalAIService {
       }
 
       const processingTime = Date.now() - startTime;
-      
-      return {
-        confidence: 0.82,
-        result: {
-          patterns: recognizedPatterns,
-          primaryPattern: recognizedPatterns[0] || null,
-          analysis: this.generatePulseAnalysis(recognizedPatterns)
+
+      return {confidence: 0.82,result: {patterns: recognizedPatterns,primaryPattern: recognizedPatterns[0] || null,analysis: this.generatePulseAnalysis(recognizedPatterns);
         },
         processingTime,
-        modelUsed: 'pulse_pattern_recognizer'
+        modelUsed: 'pulse_pattern_recognizer';
       };
     } catch (error) {
       console.error('本地脉象识别失败:', error);
@@ -360,20 +300,22 @@ class LocalAIService {
   private generateSymptomSummary(results: any[]): string {
     const categories = [...new Set(results.map(r => r.category))];
     const severityAvg = results.reduce((sum, r) => sum + r.severity, 0) / results.length;
-    
-    return `检测到 ${categories.length} 个症状类别，平均严重程度: ${(severityAvg * 100).toFixed(1)}%`;
+
+    return `检测到 ${categories.length} 个症状类别，平均严重程度: ${(severityAvg * 100).toFixed(;
+      1;
+    )}%`;
   }
 
   // 生成体质建议
   private generateConstitutionRecommendations(constitution: any): string[] {
     const recommendations: { [key: string]: string[] } = {
-      '平和质': ['保持规律作息', '适量运动', '均衡饮食'],
-      '气虚质': ['避免过度劳累', '多食补气食物', '适当休息'],
-      '阳虚质': ['注意保暖', '多食温热食物', '避免生冷'],
-      '阴虚质': ['滋阴润燥', '避免熬夜', '多食甘凉食物'],
-      '痰湿质': ['清淡饮食', '适量运动', '避免油腻食物']
+      平和质: ['保持规律作息', '适量运动', '均衡饮食'],
+      气虚质: ['避免过度劳累', '多食补气食物', '适当休息'],
+      阳虚质: ['注意保暖', '多食温热食物', '避免生冷'],
+      阴虚质: ['滋阴润燥', '避免熬夜', '多食甘凉食物'],
+      痰湿质: ['清淡饮食', '适量运动', '避免油腻食物']
     };
-    
+
     return recommendations[constitution.type] || ['保持健康生活方式'];
   }
 
@@ -382,9 +324,11 @@ class LocalAIService {
     if (patterns.length === 0) {
       return '脉象正常，未发现异常模式';
     }
-    
+
     const primaryPattern = patterns[0];
-    return `主要脉象: ${primaryPattern.pattern}，置信度: ${(primaryPattern.confidence * 100).toFixed(1)}%`;
+    return `主要脉象: ${primaryPattern.pattern}，置信度: ${(;
+      primaryPattern.confidence * 100;
+    ).toFixed(1)}%`;
   }
 
   // 获取模型状态
@@ -423,10 +367,10 @@ class LocalAIService {
     try {
       // 下载新版本模型
       await this.downloadModel(model);
-      
+
       // 重新加载到内存
       await this.loadModelToMemory(model);
-      
+
       console.log(`模型 ${model.name} 更新完成`);
     } catch (error) {
       console.error(`模型 ${model.name} 更新失败:`, error);
@@ -437,4 +381,4 @@ class LocalAIService {
 
 // 导出单例实例
 export const localAIService = new LocalAIService();
-export default localAIService; 
+export default localAIService;

@@ -1,7 +1,13 @@
+"""
+conftest - 索克生活项目模块
+"""
+
+            from app.main import app
+from fastapi.testclient import TestClient
+from unittest.mock import Mock, patch, AsyncMock
 import os
 import pytest
-from unittest.mock import Mock, patch, AsyncMock
-from fastapi.testclient import TestClient
+
 
 # 设置测试环境变量
 os.environ["ENVIRONMENT"] = "test"
@@ -45,7 +51,6 @@ def client():
             mock_lifespan.return_value.__aenter__ = AsyncMock(return_value=mock_container)
             mock_lifespan.return_value.__aexit__ = AsyncMock(return_value=None)
             
-            from app.main import app
             
             # 替换应用的生命周期处理器为空函数
             async def empty_lifespan(app):

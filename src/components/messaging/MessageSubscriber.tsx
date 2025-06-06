@@ -1,10 +1,11 @@
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import {import { messageBusService, Message } from '../../services/messageBusService';
+
 /**
  * 消息订阅组件
  * 用于订阅主题并显示接收到的消息
  */
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import {
   View,
   Text,
   TouchableOpacity,
@@ -12,9 +13,8 @@ import {
   FlatList,
   Alert,
   ActivityIndicator,
-  TextInput,
+  TextInput
 } from 'react-native';
-import { messageBusService, Message } from '../../services/messageBusService';
 
 interface MessageSubscriberProps {
   topic: string;
@@ -35,7 +35,7 @@ export const MessageSubscriber: React.FC<MessageSubscriberProps> = ({
   maxMessages = 100,
   onMessage,
   onError,
-  style,
+  style
 }) => {
   const [messages, setMessages] = useState<MessageItem[]>([]);
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -45,10 +45,7 @@ export const MessageSubscriber: React.FC<MessageSubscriberProps> = ({
   const flatListRef = useRef<FlatList>(null);
 
   // 处理接收到的消息
-  const handleMessage = useCallback((message: Message) => {
-    const messageItem: MessageItem = {
-      ...message,
-      receivedAt: new Date(),
+  const handleMessage = useCallback((message: Message) => {const messageItem: MessageItem = {...message,receivedAt: new Date();
     };
 
     setMessages(prev => {
@@ -66,8 +63,7 @@ export const MessageSubscriber: React.FC<MessageSubscriberProps> = ({
   }, [maxMessages, onMessage]);
 
   // 订阅主题
-  const handleSubscribe = useCallback(async () => {
-    if (isSubscribed) return;
+  const handleSubscribe = useCallback(async () => {if (isSubscribed) return;
 
     setIsConnecting(true);
     try {
@@ -84,8 +80,7 @@ export const MessageSubscriber: React.FC<MessageSubscriberProps> = ({
       }
 
       const finalFilter = { ...filter, ...parsedFilter };
-      const subId = await messageBusService.subscribe(topic, handleMessage, {
-        filter: Object.keys(finalFilter).length > 0 ? finalFilter : undefined,
+      const subId = await messageBusService.subscribe(topic, handleMessage, {filter: Object.keys(finalFilter).length > 0 ? finalFilter : undefined;
       });
 
       setSubscriptionId(subId);
@@ -101,8 +96,7 @@ export const MessageSubscriber: React.FC<MessageSubscriberProps> = ({
   }, [topic, filter, customFilter, isSubscribed, handleMessage, onError]);
 
   // 取消订阅
-  const handleUnsubscribe = useCallback(async () => {
-    if (!isSubscribed || !subscriptionId) return;
+  const handleUnsubscribe = useCallback(async () => {if (!isSubscribed || !subscriptionId) return;
 
     try {
       await messageBusService.unsubscribe(subscriptionId);
@@ -116,34 +110,31 @@ export const MessageSubscriber: React.FC<MessageSubscriberProps> = ({
   }, [isSubscribed, subscriptionId]);
 
   // 清空消息
-  const handleClearMessages = useCallback(() => {
-    setMessages([]);
+  const handleClearMessages = useCallback(() => {setMessages([]);
   }, []);
 
   // 组件卸载时自动取消订阅
   useEffect(() => {
-    return () => {
-      if (subscriptionId) {
-        messageBusService.unsubscribe(subscriptionId);
+    return () => {if (subscriptionId) {messageBusService.unsubscribe(subscriptionId);
       }
     };
   }, [subscriptionId]);
 
   // 渲染消息项
-  const renderMessageItem = ({ item }: { item: MessageItem }) => (
-    <View style={styles.messageItem}>
-      <View style={styles.messageHeader}>
-        <Text style={styles.messageId}>ID: {item.id}</Text>
-        <Text style={styles.messageTime}>
-          {item.receivedAt.toLocaleTimeString()}
-        </Text>
-      </View>
-      
-      <View style={styles.messageContent}>
-        <Text style={styles.messagePayload}>
-          {typeof item.payload === 'string' 
-            ? item.payload 
-            : JSON.stringify(item.payload, null, 2)
+  const renderMessageItem = ({ item }: { item: MessageItem }) => (;
+    <View style={styles.messageItem}>;
+      <View style={styles.messageHeader}>;
+        <Text style={styles.messageId}>ID: {item.id}</Text>;
+        <Text style={styles.messageTime}>;
+          {item.receivedAt.toLocaleTimeString()};
+        </Text>;
+      </View>;
+      ;
+      <View style={styles.messageContent}>;
+        <Text style={styles.messagePayload}>;
+          {typeof item.payload === 'string' ;
+            ? item.payload ;
+            : JSON.stringify(item.payload, null, 2);
           }
         </Text>
       </View>
@@ -167,14 +158,14 @@ export const MessageSubscriber: React.FC<MessageSubscriberProps> = ({
           </Text>
         )}
       </View>
-    </View>
+    </View>;
   );
 
   return (
     <View style={[styles.container, style]}>
       <Text style={styles.title}>订阅主题: {topic}</Text>
-      
-      {/* 过滤器配置 */}
+
+      {// 过滤器配置}
       <View style={styles.filterSection}>
         <Text style={styles.label}>消息过滤器 (JSON):</Text>
         <TextInput
@@ -189,7 +180,7 @@ export const MessageSubscriber: React.FC<MessageSubscriberProps> = ({
         />
       </View>
 
-      {/* 控制按钮 */}
+      {// 控制按钮}
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[
@@ -218,7 +209,7 @@ export const MessageSubscriber: React.FC<MessageSubscriberProps> = ({
         </TouchableOpacity>
       </View>
 
-      {/* 状态信息 */}
+      {// 状态信息}
       <View style={styles.statusContainer}>
         <Text style={styles.statusText}>
           状态: {isSubscribed ? '已订阅' : '未订阅'} | 
@@ -226,24 +217,23 @@ export const MessageSubscriber: React.FC<MessageSubscriberProps> = ({
         </Text>
       </View>
 
-      {/* 消息列表 */}
+      {// 消息列表}
       <FlatList
-        ref={flatListRef}
-        data={messages}
-        renderItem={renderMessageItem}
-        keyExtractor={(item, index) => `${item.id}_${index}`}
-        style={styles.messagesList}
-        contentContainerStyle={styles.messagesContainer}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>
-              {isSubscribed ? '等待消息...' : '请先订阅主题'}
-            </Text>
-          </View>
-        }
-        inverted
-      />
-    </View>
+        ref={flatListRef};
+        data={messages};
+        renderItem={renderMessageItem};
+        keyExtractor={(item, index) => `${item.id}_${index}`};
+        style={styles.messagesList};
+        contentContainerStyle={styles.messagesContainer};
+        ListEmptyComponent={<View style={styles.emptyContainer}>;
+            <Text style={styles.emptyText}>;
+              {isSubscribed ? '等待消息...' : '请先订阅主题'};
+            </Text>;
+          </View>;
+        };
+        inverted;
+      />;
+    </View>;
   );
 };
 
@@ -251,22 +241,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f5f5f5'
   },
   title: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 16,
-    color: '#333',
+    color: '#333'
   },
   filterSection: {
-    marginBottom: 16,
+    marginBottom: 16
   },
   label: {
     fontSize: 14,
     fontWeight: '600',
     marginBottom: 8,
-    color: '#555',
+    color: '#555'
   },
   filterInput: {
     borderWidth: 1,
@@ -275,11 +265,11 @@ const styles = StyleSheet.create({
     padding: 12,
     backgroundColor: '#fff',
     fontSize: 14,
-    minHeight: 60,
+    minHeight: 60
   },
   buttonContainer: {
     flexDirection: 'row',
-    marginBottom: 16,
+    marginBottom: 16
   },
   button: {
     flex: 1,
@@ -288,41 +278,41 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 4,
+    marginHorizontal: 4
   },
   subscribeButton: {
-    backgroundColor: '#28a745',
+    backgroundColor: '#28a745'
   },
   unsubscribeButton: {
-    backgroundColor: '#dc3545',
+    backgroundColor: '#dc3545'
   },
   clearButton: {
-    backgroundColor: '#6c757d',
+    backgroundColor: '#6c757d'
   },
   buttonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   disabledButton: {
-    backgroundColor: '#ccc',
+    backgroundColor: '#ccc'
   },
   statusContainer: {
     backgroundColor: '#e9ecef',
     padding: 8,
     borderRadius: 4,
-    marginBottom: 16,
+    marginBottom: 16
   },
   statusText: {
     fontSize: 12,
     color: '#495057',
-    textAlign: 'center',
+    textAlign: 'center'
   },
   messagesList: {
-    flex: 1,
+    flex: 1
   },
   messagesContainer: {
-    paddingBottom: 16,
+    paddingBottom: 16
   },
   messageItem: {
     backgroundColor: '#fff',
@@ -330,24 +320,24 @@ const styles = StyleSheet.create({
     padding: 12,
     marginBottom: 8,
     borderLeftWidth: 4,
-    borderLeftColor: '#007bff',
+    borderLeftColor: '#007bff'
   },
   messageHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 8,
+    marginBottom: 8
   },
   messageId: {
     fontSize: 12,
     color: '#6c757d',
-    fontFamily: 'monospace',
+    fontFamily: 'monospace'
   },
   messageTime: {
     fontSize: 12,
-    color: '#6c757d',
+    color: '#6c757d'
   },
   messageContent: {
-    marginBottom: 8,
+    marginBottom: 8
   },
   messagePayload: {
     fontSize: 14,
@@ -355,16 +345,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f9fa',
     padding: 8,
     borderRadius: 4,
-    fontFamily: 'monospace',
+    fontFamily: 'monospace'
   },
   messageAttributes: {
-    marginBottom: 8,
+    marginBottom: 8
   },
   attributesLabel: {
     fontSize: 12,
     fontWeight: '600',
     color: '#495057',
-    marginBottom: 4,
+    marginBottom: 4
   },
   attributesText: {
     fontSize: 12,
@@ -372,31 +362,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#e9ecef',
     padding: 6,
     borderRadius: 4,
-    fontFamily: 'monospace',
+    fontFamily: 'monospace'
   },
   messageFooter: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   publishTime: {
     fontSize: 11,
-    color: '#6c757d',
-  },
-  publisherId: {
-    fontSize: 11,
-    color: '#6c757d',
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 40,
-  },
-  emptyText: {
-    fontSize: 16,
-    color: '#6c757d',
-    textAlign: 'center',
-  },
+    color: '#6c757d'
+  },publisherId: {fontSize: 11,color: '#6c757d';
+  },emptyContainer: {flex: 1,justifyContent: 'center',alignItems: 'center',paddingVertical: 40;
+  },emptyText: {fontSize: 16,color: '#6c757d',textAlign: 'center';
+  };
 });
 
 export default MessageSubscriber; 

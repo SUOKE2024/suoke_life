@@ -1,5 +1,9 @@
+import {import { SafeAreaView } from "react-native-safe-area-context;"
+import { useNavigation } from "@react-navigation/////    native";
+import Icon from "../../placeholder";react-native-vector-icons/////    MaterialCommunityIcons
+import { colors, spacing } from ../../constants/////    theme
+
 import React, { useState, useEffect } from "react";
-import {
   View,
   Text,
   StyleSheet,
@@ -8,11 +12,7 @@ import {
   FlatList,
   Image,
   Alert,
-  ActivityIndicator} from "../../placeholder";react-native";"
-import { SafeAreaView } from "react-native-safe-area-context";";"
-import { useNavigation } from "@react-navigation/////    native";
-import Icon from "../../placeholder";react-native-vector-icons/////    MaterialCommunityIcons";"
-import { colors, spacing } from ../../constants/////    theme";"
+  ActivityIndicator} from "../../placeholder";react-native
 interface KnowledgeItem {
   id: string;
   title: string;
@@ -31,18 +31,17 @@ interface Category {
   icon: string;
   count: number;
 }
-const ExploreScreen: React.FC  = () => {;}
+const ExploreScreen: React.FC  = () => {}
   const navigation = useNavigation();
   const [knowledgeItems, setKnowledgeItems] = useState<KnowledgeItem[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("all);"
   const [loading, setLoading] = useState(true);
-  useEffect(() => {}
+  useEffect(() => {
     loadKnowledgeData();
-  }, []);
-  const loadKnowledgeData = async() => {;}
-    try {;
-      //////     模拟加载知识数据
+  }, [])  // 检查是否需要添加依赖项;
+  const loadKnowledgeData = async() => {}
+    try {// 模拟加载知识数据
 const mockCategories: Category[] = [;
         { id: "all", name: 全部", icon: "view-grid, count: 24 },
         { id: "tcm-theory", name: 中医理论", icon: "book-open-variant, count: 8 },
@@ -53,31 +52,31 @@ const mockCategories: Category[] = [;
         {
           id: "1",
           title: 中医五行学说详解","
-          description: "深入了解中医五行理论，掌握五脏六腑的相互关系,"
+          description: "深入了解中医五行理论，掌握五脏六腑的相互关系,",
           category: "tcm-theory",
           readTime: 15分钟","
-          difficulty: "intermediate,"
+          difficulty: "intermediate,",
           tags: ["五行", 中医基础", "理论],
           author: "老克",
           publishDate: 2024-01-15""
         },
         {
-          id: "2,"
+          id: "2,",
           title: "春季养生指南",
           description: 春季如何调理身体，预防疾病，保持健康","
-          category: "health-tips,"
+          category: "health-tips,",
           readTime: "10分钟",
           difficulty: beginner","
           tags: ["春季, "养生", 预防"],
-          author: "老克,"
+          author: "老克,",
           publishDate: "2024-01-14"
         },
         {
           id: 3","
-          title: "太极拳入门教程,"
+          title: "太极拳入门教程,",
           description: "从基础动作开始，学习太极拳的精髓",
           category: exercise","
-          readTime: "20分钟,"
+          readTime: "20分钟,",
           difficulty: "beginner",
           tags: [太极", "运动, "入门"],
           author: 老克","
@@ -86,10 +85,10 @@ const mockCategories: Category[] = [;
         {
           id: "4",
           title: 药膳食疗配方大全","
-          description: "常见疾病的食疗方法和药膳配方,"
+          description: "常见疾病的食疗方法和药膳配方,",
           category: "diet-therapy",
           readTime: 25分钟","
-          difficulty: "advanced,"
+          difficulty: "advanced,",
           tags: ["药膳", 食疗", "配方],
           author: "老克",
           publishDate: 2024-01-12""
@@ -105,9 +104,9 @@ const mockCategories: Category[] = [;
   const filteredItems = selectedCategory === "all;"
     ? knowledgeItems ;
     : knowledgeItems.filter(item => item.category === selectedCategory);
-  const getDifficultyColor = (difficulty: KnowledgeItem["difficulty"]) => {;}
+  const getDifficultyColor = (difficulty: KnowledgeItem["difficulty"]) => {}
     switch (difficulty) {
-      case beginner":;"
+      case beginner":"
         return colors.success;
       case "intermediate:"
         return colors.warning;
@@ -117,19 +116,19 @@ const mockCategories: Category[] = [;
         return colors.textSecondary;
     }
   };
-  const getDifficultyText = (difficulty: KnowledgeItem[difficulty"]) => {;}"
+  const getDifficultyText = (difficulty: KnowledgeItem[difficulty"]) => {}"
     switch (difficulty) {
-      case "beginner:;"
+      case "beginner:"
         return "入门";
       case intermediate":"
         return "进阶;"
       case "advanced":
-        return 高级";"
+        return 高级
       default:
         return "未知;"
     }
   };
-  const handleKnowledgeItemPress = (item: KnowledgeItem) => {;}
+  const handleKnowledgeItemPress = (item: KnowledgeItem) => {}
     Alert.alert(item.title, `即将阅读：${item.description}`);
   };
   const renderCategoryItem = ({ item }: { item: Category }) => (;
@@ -192,35 +191,35 @@ style={styles.knowledgeCard}
     </////    TouchableOpacity>
   );
   if (loading) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={colors.primary} /////    >
-          <Text style={styles.loadingText}>正在加载知识内容...</////    Text>
-        </////    View>
-      </////    SafeAreaView>
+    return (;
+      <SafeAreaView style={styles.container}>;
+        <View style={styles.loadingContainer}>;
+          <ActivityIndicator size="large" color={colors.primary} /////    >;
+          <Text style={styles.loadingText}>正在加载知识内容...</////    Text>;
+        </////    View>;
+      </////    SafeAreaView>;
     );
   }
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerContent}>
-          <View style={styles.agentInfo}>
-            <Text style={styles.agentEmoji}>👨‍⚕️</////    Text>
-            <View>
-              <Text style={styles.agentName}>老克</////    Text>
-              <Text style={styles.agentRole}>知识传播智能体</////    Text>
-            </////    View>
-          </////    View>
-          <TouchableOpacity style={styles.searchButton}>
-            <Icon name="magnify" size={24} color={colors.textSecondary} /////    >
-          </////    TouchableOpacity>
-        </////    View>
-        <Text style={styles.headerDescription}>
-          传播中医智慧，分享健康知识，让传统医学走进现代生活
-        </////    Text>
-      </////    View>
-      <View style={styles.categoriesContainer}>
+          <View style={styles.agentInfo}>;
+            <Text style={styles.agentEmoji}>👨‍⚕️</////    Text>;
+            <View>;
+              <Text style={styles.agentName}>老克</////    Text>;
+              <Text style={styles.agentRole}>知识传播智能体</////    Text>;
+            </////    View>;
+          </////    View>;
+          <TouchableOpacity style={styles.searchButton}>;
+            <Icon name="magnify" size={24} color={colors.textSecondary} /////    >;
+          </////    TouchableOpacity>;
+        </////    View>;
+        <Text style={styles.headerDescription}>;
+          传播中医智慧，分享健康知识，让传统医学走进现代生活;
+        </////    Text>;
+      </////    View>;
+      <View style={styles.categoriesContainer}>;
         <FlatList;
 data={categories}
           renderItem={renderCategoryItem}
@@ -240,8 +239,7 @@ data={filteredItems}
     </////    SafeAreaView>
   );
 };
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     flex: 1,
     backgroundColor: colors.background},
   loadingContainer: {
@@ -259,12 +257,12 @@ const styles = StyleSheet.create({;
     borderBottomWidth: 1,
     borderBottomColor: colors.border},
   headerContent: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     justifyContent: "space-between",
     alignItems: center","
     marginBottom: spacing.sm},
   agentInfo: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center"},
   agentEmoji: {
     fontSize: 32,
@@ -290,7 +288,7 @@ const styles = StyleSheet.create({;
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.md},
   categoryItem: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center",
     backgroundColor: colors.background,
     paddingHorizontal: spacing.md,
@@ -331,7 +329,7 @@ const styles = StyleSheet.create({;
     borderWidth: 1,
     borderColor: colors.border},
   cardHeader: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     justifyContent: "space-between",
     marginBottom: spacing.sm},
   cardInfo: {
@@ -347,7 +345,7 @@ const styles = StyleSheet.create({;
     color: colors.textSecondary,
     lineHeight: 18},
   cardMeta: {
-    alignItems: "flex-end},"
+    alignItems: "flex-end},",
   difficultyBadge: {
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -358,7 +356,7 @@ const styles = StyleSheet.create({;
     fontWeight: "600"},
   cardFooter: {
     flexDirection: row","
-    justifyContent: "space-between,"
+    justifyContent: "space-between,",
     alignItems: "center",
     paddingTop: spacing.sm,
     borderTopWidth: 1,
@@ -376,10 +374,9 @@ const styles = StyleSheet.create({;
     fontSize: 12,
     color: colors.textSecondary},
   cardStats: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center'},"'
   readTime: {
     fontSize: 12,
-    color: colors.textSecondary,;
-    marginLeft: 4}});
+    color: colors.textSecondary,marginLeft: 4}});
 export default ExploreScreen;

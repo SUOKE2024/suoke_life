@@ -1,24 +1,31 @@
 """
+main - 索克生活项目模块
+"""
+
+    from prometheus_client import start_http_server
+from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
+from corn_maze_service.config import get_settings
+from corn_maze_service.internal.delivery.grpc import create_grpc_server
+from corn_maze_service.internal.delivery.http import create_app
+from corn_maze_service.pkg.logging import get_logger, setup_logging
+from fastapi import FastAPI
+from fastapi.middleware.gzip import GZipMiddleware
+from grpc import aio as grpc_aio
+from typing import Any
+import asyncio
+import signal
+import sys
+import uvicorn
+
+"""
 Corn Maze Service 主入口
 
 启动 gRPC 和 HTTP 服务器。
 """
 
-import asyncio
-from collections.abc import AsyncGenerator
-from contextlib import asynccontextmanager
-import signal
-import sys
-from typing import Any
 
-from fastapi import FastAPI
-from grpc import aio as grpc_aio
-import uvicorn
 
-from corn_maze_service.config import get_settings
-from corn_maze_service.internal.delivery.grpc import create_grpc_server
-from corn_maze_service.internal.delivery.http import create_app
-from corn_maze_service.pkg.logging import get_logger, setup_logging
 
 logger = get_logger(__name__)
 
@@ -101,7 +108,6 @@ async def start_monitoring_server() -> None:
     if not settings.monitoring.enable_prometheus:
         return
 
-    from prometheus_client import start_http_server
 
     try:
         start_http_server(settings.monitoring.prometheus_port)

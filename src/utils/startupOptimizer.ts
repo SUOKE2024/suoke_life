@@ -1,15 +1,13 @@
-//////     启动任务接口
-export interface StartupTask {;
-  name: string;
+// 启动任务接口
+export interface StartupTask {name: string;
   priority: number;
   dependencies: string[];
   execute: () => Promise<void>;
   timeout?: number;
   critical?: boolean;
 }
-//////     启动优化器类
-export class StartupOptimizer {;
-  private static instance: StartupOptimizer;
+// 启动优化器类
+export class StartupOptimizer {private static instance: StartupOptimizer;
   private tasks = new Map<string, StartupTask>();
   private completed = new Set<string>();
   private running = new Set<string>();
@@ -22,17 +20,17 @@ export class StartupOptimizer {;
     }
     return StartupOptimizer.instance;
   }
-  //////     注册启动任务
+  // 注册启动任务
 registerTask(task: StartupTask): void {
     this.tasks.set(task.name, task);
   }
-  //////     执行所有任务
+  // 执行所有任务
 async executeAll(): Promise<void> {
     const criticalTasks = Array.from(this.tasks.values()).filter(task => task.critical);
     const nonCriticalTasks = Array.from(this.tasks.values()).filter(task => !task.critical);
-    //////     先执行关键任务
+    // 先执行关键任务
 await this.executeBatch(criticalTasks);
-    //////     延迟执行非关键任务
+    // 延迟执行非关键任务
 if (nonCriticalTasks.length > 0) {
       setTimeout(() => this.executeBatch(nonCriticalTasks), 100);
     }
@@ -72,11 +70,11 @@ if (nonCriticalTasks.length > 0) {
       throw error;
     }
   }
-  //////     获取执行统计
+  // 获取执行统计
 getMetrics(): Record<string, number> {
     return Object.fromEntries(this.metrics);
   }
-  //////     重置状态
+  // 重置状态
 reset(): void {
     this.tasks.clear();
     this.completed.clear();
@@ -85,6 +83,6 @@ reset(): void {
     this.metrics.clear();
   }
 }
-//////     导出单例实例
+// 导出单例实例
 export const startupOptimizer = StartupOptimizer.getInstance();
 export default startupOptimizer;

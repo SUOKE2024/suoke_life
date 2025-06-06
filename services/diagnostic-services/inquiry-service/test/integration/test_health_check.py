@@ -1,3 +1,13 @@
+"""
+test_health_check - 索克生活项目模块
+"""
+
+from internal.observability.health_check import HealthChecker, HealthStatus
+import asyncio
+import os
+import sys
+import unittest
+
 #!/usr/bin/env python
 
 """
@@ -5,14 +15,9 @@
 测试服务健康检查功能
 """
 
-import asyncio
-import os
-import sys
-import unittest
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 
-from internal.observability.health_check import HealthChecker, HealthStatus
 
 
 class TestHealthCheck(unittest.TestCase):

@@ -1,13 +1,20 @@
 """
+metrics_service - 索克生活项目模块
+"""
+
+        import asyncio
+from app.core.logger import get_logger
+from functools import wraps
+from prometheus_client import (
+from typing import Any
+import time
+
+"""
 监控服务
 提供Prometheus指标收集和性能监控功能
 """
 
-from functools import wraps
-import time
-from typing import Any
 
-from prometheus_client import (
     CollectorRegistry,
     Counter,
     Gauge,
@@ -16,7 +23,6 @@ from prometheus_client import (
     generate_latest,
 )
 
-from app.core.logger import get_logger
 
 # Prometheus 内容类型常量
 CONTENT_TYPE_LATEST = "text/plain; version=0.0.4; charset=utf-8"
@@ -139,7 +145,8 @@ class MetricsService:
         """更新缓存命中率"""
         self.cache_hit_ratio.set(ratio)
 
-    def record_graph_query(self, query_type: str, status: str, duration: float):
+        @cache(timeout=300)  # 5分钟缓存
+def record_graph_query(self, query_type: str, status: str, duration: float):
         """记录图查询指标"""
         self.graph_queries_total.labels(query_type=query_type, status=status).inc()
 
@@ -251,7 +258,6 @@ def monitor_performance(metrics_service: MetricsService | None = None):
                     metrics_service.record_graph_query(operation, status, duration)
 
         # 检查函数是否是协程
-        import asyncio
 
         if asyncio.iscoroutinefunction(func):
             return async_wrapper

@@ -1,15 +1,20 @@
-"""用户相关数据模型"""
+"""
+user - 索克生活项目模块
+"""
 
-import uuid
+from auth_service.models.base import BaseModel
 from datetime import datetime
 from enum import Enum
-from typing import List, Optional
-
 from sqlalchemy import Boolean, DateTime, Enum as SQLEnum, String, Text, func
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from typing import List, Optional
+import uuid
 
-from auth_service.models.base import BaseModel
+"""用户相关数据模型"""
+
+
+
 
 
 class UserStatus(str, Enum):
@@ -157,6 +162,18 @@ class User(BaseModel):
             and not self.is_locked()
         )
 
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'user'
+        ordering = ['-created_at']
+
 
 class UserProfile(BaseModel):
     """用户档案模型"""
@@ -240,6 +257,18 @@ class UserProfile(BaseModel):
         "User",
         back_populates="profile"
     )
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'usersession'
+        ordering = ['-created_at']
 
 
 class UserSession(BaseModel):

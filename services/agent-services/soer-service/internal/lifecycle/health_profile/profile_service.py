@@ -1,9 +1,14 @@
 """
-健康画像服务 - 管理用户健康状况全面视图
+profile_service - 索克生活项目模块
 """
-import logging
+
 from datetime import datetime
 from typing import Any
+import logging
+
+"""
+健康画像服务 - 管理用户健康状况全面视图
+"""
 
 logger = logging.getLogger(__name__)
 

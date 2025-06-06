@@ -1,12 +1,21 @@
 """
+models - 索克生活项目模块
+"""
+
+from .database import Base
+from enum import Enum as PyEnum
+from sqlalchemy import (
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
+import uuid
+
+"""
 数据库模型定义
 定义医疗资源服务相关的数据表结构
 """
 
-import uuid
-from enum import Enum as PyEnum
 
-from sqlalchemy import (
     JSON,
     Boolean,
     Column,
@@ -21,11 +30,7 @@ from sqlalchemy import (
     Text,
     UniqueConstraint,
 )
-from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import relationship
-from sqlalchemy.sql import func
 
-from .database import Base
 
 class ConstitutionType(PyEnum):
     """体质类型"""

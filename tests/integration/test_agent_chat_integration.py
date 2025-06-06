@@ -1,12 +1,17 @@
+"""
+test_agent_chat_integration - 索克生活项目模块
+"""
+
+import os
+import re
+import sys
+
 #!/usr/bin/env python3
 """
 测试智能体对话系统UI集成
 验证四个智能体（小艾、小克、老克、索儿）的对话功能是否正确集成到各个频道
 """
 
-import os
-import re
-import sys
 
 def check_file_exists(file_path):
     """检查文件是否存在"""

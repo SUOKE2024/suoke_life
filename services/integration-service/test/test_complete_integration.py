@@ -1,31 +1,36 @@
 """
+test_complete_integration - 索克生活项目模块
+"""
+
+from datetime import datetime, date, timedelta
+from fastapi.testclient import TestClient
+from integration_service.core.database import get_db
+from integration_service.core.security import create_access_token
+from integration_service.main import app
+from integration_service.models.base import Base
+from integration_service.models.health_data import HealthData, HealthDataType
+from integration_service.models.platform import Platform, PlatformConfig
+from integration_service.models.user import User
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import StaticPool
+from typing import Dict, Any
+from unittest.mock import Mock, patch
+import asyncio
+import os
+import pytest
+
+"""
 完整的集成测试套件
 """
 
 # 必须在导入应用之前设置环境变量
-import os
 os.environ["DATABASE_URL"] = "sqlite:///./test.db"
 os.environ["DEBUG"] = "true"
 os.environ["SECRET_KEY"] = "test-secret-key"
 
-import pytest
-import asyncio
-from datetime import datetime, date, timedelta
-from typing import Dict, Any
-from unittest.mock import Mock, patch
 
-from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.pool import StaticPool
 
-from integration_service.main import app
-from integration_service.core.database import get_db
-from integration_service.models.base import Base
-from integration_service.models.user import User
-from integration_service.models.platform import Platform, PlatformConfig
-from integration_service.models.health_data import HealthData, HealthDataType
-from integration_service.core.security import create_access_token
 
 
 # 测试数据库配置
@@ -40,6 +45,7 @@ engine = create_engine(
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
+    @cache(timeout=300)  # 5分钟缓存
 def override_get_db():
     """覆盖数据库依赖"""
     try:
@@ -156,7 +162,8 @@ class TestSystemEndpoints:
         assert "checks" in data
 
 
-class TestHealthDataAPI:
+class TestHealthDataA    @cache(timeout=300)  # 5分钟缓存
+PI:
     """健康数据API测试"""
     
     def test_get_health_data_list(self, client, auth_headers, test_user, test_platform):
@@ -186,7 +193,8 @@ class TestHealthDataAPI:
         if response.status_code == 200:
             assert isinstance(data, list)
         else:
-            # 错误响应应该有error字段
+           @cache(timeout=300)  # 5分钟缓存
+     # 错误响应应该有error字段
             assert "error" in data
     
     def test_get_supported_data_types(self, client):

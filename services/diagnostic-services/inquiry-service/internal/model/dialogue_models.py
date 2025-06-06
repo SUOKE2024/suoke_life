@@ -1,12 +1,17 @@
+"""
+dialogue_models - 索克生活项目模块
+"""
+
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
+
 #!/usr/bin/env python
 
 """
 对话模型定义
 """
 
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
 
 
 @dataclass

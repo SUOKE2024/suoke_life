@@ -1,18 +1,23 @@
+"""
+test_syndrome_differentiation - 索克生活项目模块
+"""
+
+from pathlib import Path
+from xiaoai.four_diagnosis.reasoning.syndrome_differentiation import (
+import sys
+import time
+import unittest
+
 #!/usr/bin/env python3
 """
 辨证分析引擎单元测试
 """
 
-import sys
-import time
-import unittest
-from pathlib import Path
 
 # 将项目根目录添加到Python路径
 project_root = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from xiaoai.four_diagnosis.reasoning.syndrome_differentiation import (
     SyndromeDifferentiationEngine,
 )
 

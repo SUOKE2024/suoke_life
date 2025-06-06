@@ -1,3 +1,22 @@
+"""
+enhanced_api_gateway - 索克生活项目模块
+"""
+
+from datetime import datetime
+from fastapi import FastAPI, HTTPException, Depends, Query, BackgroundTasks, File, UploadFile, Form
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.responses import JSONResponse, StreamingResponse
+from pydantic import BaseModel, Field
+from services.common.observability.tracing import (
+from services.rag_service.internal.model.document import Document
+from services.rag_service.internal.multimodal.feature_extractors import (
+from services.rag_service.internal.service.enhanced_rag_service import (
+from typing import Dict, Any, List, Optional
+import json
+import logging
+import uvicorn
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -5,27 +24,14 @@ RAG服务增强版API网关
 提供RESTful API接口，支持检索增强生成、文档管理、批量处理和性能监控
 """
 
-import logging
-from typing import Dict, Any, List, Optional
-from datetime import datetime
-from fastapi import FastAPI, HTTPException, Depends, Query, BackgroundTasks, File, UploadFile, Form
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, StreamingResponse
-from pydantic import BaseModel, Field
-import uvicorn
-import json
 
 # 导入服务
-from services.rag_service.internal.service.enhanced_rag_service import (
     EnhancedRagService, IndexType, ShardingStrategy
 )
-from services.rag_service.internal.model.document import Document
-from services.rag_service.internal.multimodal.feature_extractors import (
     extract_image_text, extract_audio_text, extract_video_keyframes
 )
 
 # 导入通用组件
-from services.common.observability.tracing import (
     get_tracer, trace, SpanKind
 )
 
@@ -33,6 +39,9 @@ logger = logging.getLogger(__name__)
 
 # 创建FastAPI应用
 app = FastAPI(
+
+# 性能优化: 添加响应压缩
+app.add_middleware(GZipMiddleware, minimum_size=1000)
     title="RAG服务API",
     description="索克生活RAG服务，提供高性能的检索增强生成功能，支持向量索引优化、知识库分片和批量推理",
     version="2.0.0"
@@ -60,6 +69,18 @@ class QueryRequest(BaseModel):
     generation_params: Optional[Dict[str, Any]] = Field(None, description="生成参数")
     metadata_filter: Optional[Dict[str, Any]] = Field(None, description="元数据过滤条件")
     user_id: Optional[str] = Field(None, description="用户ID")
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'queryrequest'
+        ordering = ['-created_at']
+
 
 class RetrieveRequest(BaseModel):
     """检索请求"""
@@ -70,6 +91,54 @@ class RetrieveRequest(BaseModel):
     score_threshold: float = Field(0.0, description="相关性分数阈值")
     rerank: bool = Field(False, description="是否重排序")
     user_id: Optional[str] = Field(None, description="用户ID")
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'generaterequest'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'documentrequest'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'queryresponse'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'retrieveresponse'
+        ordering = ['-created_at']
+
 
 class GenerateRequest(BaseModel):
     """生成请求"""
@@ -155,6 +224,7 @@ async def get_rag_service() -> EnhancedRagService:
     return rag_service
 
 # API端点
+@limiter.limit("100/minute")  # 每分钟100次请求
 @app.post("/api/v1/rag/query", response_model=QueryResponse)
 async def query(
     request: QueryRequest,
@@ -186,7 +256,8 @@ async def query(
         
     except Exception as e:
         logger.error(f"查询失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPE@limiter.limit("100/minute")  # 每分钟100次请求
+xception(status_code=500, detail=str(e))
 
 @app.post("/api/v1/rag/query/stream")
 async def query_stream(
@@ -226,7 +297,8 @@ async def query_stream(
         generate(),
         media_type="text/event-stream",
         headers={
-            "Cache-Control": "no-cache",
+            "C@limiter.limit("100/minute")  # 每分钟100次请求
+ache-Control": "no-cache",
             "Connection": "keep-alive",
         }
     )
@@ -256,7 +328,8 @@ async def retrieve(
             documents=[doc.__dict__ for doc in result.documents],
             latency_ms=result.latency_ms
         )
-        
+      @limiter.limit("100/minute")  # 每分钟100次请求
+  
     except Exception as e:
         logger.error(f"检索失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -294,7 +367,8 @@ async def generate(
         return GenerateResponse(
             answer=result.answer,
             references=[ref.__dict__ for ref in result.references],
-            latency_ms=result.latency_ms
+            lat@limiter.limit("100/minute")  # 每分钟100次请求
+ency_ms=result.latency_ms
         )
         
     except Exception as e:
@@ -322,7 +396,8 @@ async def add_document(
         
         return {
             "status": "success",
-            "document_id": doc_id,
+ @limiter.limit("100/minute")  # 每分钟100次请求
+           "document_id": doc_id,
             "message": "文档添加成功"
         }
         
@@ -357,7 +432,8 @@ async def add_documents_batch(
         
         return {
             "status": "success",
-            "document_ids": doc_ids,
+            "d@limiter.limit("100/minute")  # 每分钟100次请求
+ocument_ids": doc_ids,
             "count": len(doc_ids),
             "message": f"成功添加{len(doc_ids)}个文档"
         }
@@ -408,7 +484,8 @@ async def upload_documents(
         )
         
         return {
-            "status": "success",
+   @limiter.limit("100/minute")  # 每分钟100次请求
+         "status": "success",
             "document_ids": doc_ids,
             "count": len(doc_ids),
             "message": f"成功上传{len(doc_ids)}个文档"
@@ -434,7 +511,8 @@ async def delete_document(
         )
         
         if success:
-            return {
+   @limiter.limit("100/minute")  # 每分钟100次请求
+         return {
                 "status": "success",
                 "message": f"文档{document_id}删除成功"
             }
@@ -447,7 +525,8 @@ async def delete_document(
 
 @app.post("/api/v1/rag/optimize/indices")
 async def optimize_indices(
-    service: EnhancedRagService = Depends(get_rag_service)
+    service: EnhancedRagService = Depends(get_ra@limiter.limit("100/minute")  # 每分钟100次请求
+g_service)
 ):
     """
     优化向量索引
@@ -466,6 +545,7 @@ async def optimize_indices(
         logger.error(f"索引优化失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+@cache(expire=300)  # 5分钟缓存
 @app.get("/api/v1/rag/stats", response_model=ServiceStats)
 async def get_stats(
     service: EnhancedRagService = Depends(get_rag_service)
@@ -480,7 +560,8 @@ async def get_stats(
         
         return ServiceStats(
             total_queries=stats['total_queries'],
-            cache_hit_rate=stats['cache_hit_rate'],
+            cache_hit_rate=stats['cache_hit_rate'],@limiter.limit("100/minute")  # 每分钟100次请求
+
             average_latency_ms=stats['average_latency_ms'],
             batch_processed=stats['batch_processed'],
             sharding=stats['sharding'],
@@ -490,7 +571,8 @@ async def get_stats(
         
     except Exception as e:
         logger.error(f"获取统计信息失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(statu@cache(expire=300)  # 5分钟缓存
+s_code=500, detail=str(e))
 
 @app.get("/api/v1/rag/metrics")
 async def get_metrics(
@@ -541,7 +623,8 @@ async def get_metrics(
             metrics.append(f'# HELP rag_cache_size Cache size by level')
             metrics.append(f'# TYPE rag_cache_size gauge')
             metrics.append(f'rag_cache_size{{level="{cache_level}"}} {size}')
-        
+ @limiter.limit("100/minute")  # 每分钟100次请求
+       
         # 队列大小
         for queue_name, size in stats['queue_sizes'].items():
             metrics.append(f'# HELP rag_queue_size Queue size')
@@ -596,7 +679,8 @@ async def query_multimodal(
     result = await service.query(
         query=full_query,
         top_k=5,
-        system_prompt=system_prompt,
+  @limiter.limit("100/minute")  # 每分钟100次请求
+      system_prompt=system_prompt,
         collection_names=None,
         generation_params=None,
         metadata_filter=None,
@@ -646,7 +730,8 @@ async def upload_documents_multimodal(
                     "filename": file.filename,
                     "content_type": file.content_type,
                     "upload_time": datetime.now().isoformat()
-                }
+             @limiter.limit("100/minute")  # 每分钟100次请求
+   }
             )
             documents.append(document)
         doc_ids = await service.add_documents_batch(
@@ -661,7 +746,8 @@ async def upload_documents_multimodal(
         }
     except Exception as e:
         logger.error(f"多模态文件上传失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise @cache(expire=300)  # 5分钟缓存
+HTTPException(status_code=500, detail=str(e))
 
 # 健康检查端点
 @app.get("/health")

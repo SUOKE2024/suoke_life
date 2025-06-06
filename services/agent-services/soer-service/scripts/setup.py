@@ -1,15 +1,20 @@
-#!/usr/bin/env python3
 """
-初始化脚本
-创建服务运行所需的目录结构
+setup - 索克生活项目模块
 """
+
 import argparse
 import json
 import logging
 import os
 import shutil
-
 import yaml
+
+#!/usr/bin/env python3
+"""
+初始化脚本
+创建服务运行所需的目录结构
+"""
+
 
 # 配置日志
 logging.basicConfig(

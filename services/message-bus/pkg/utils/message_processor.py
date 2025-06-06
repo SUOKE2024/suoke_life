@@ -1,3 +1,21 @@
+"""
+message_processor - 索克生活项目模块
+"""
+
+                import snappy
+from abc import ABC, abstractmethod
+from aiokafka import AIOKafkaProducer, AIOKafkaConsumer
+from collections import deque
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Callable, Union
+import asyncio
+import gzip
+import logging
+import threading
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,19 +24,7 @@
 支持异步消息处理、批处理、压缩和内存优化
 """
 
-import asyncio
-import gzip
-import logging
-import time
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Callable, Union
-from collections import deque
-import threading
-from concurrent.futures import ThreadPoolExecutor
 
-from aiokafka import AIOKafkaProducer, AIOKafkaConsumer
 
 logger = logging.getLogger(__name__)
 
@@ -127,7 +133,6 @@ class MessageCompressor:
             return gzip.compress(data)
         elif compression_type == CompressionType.SNAPPY:
             try:
-                import snappy
                 return snappy.compress(data)
             except ImportError:
                 logger.warning("snappy not available, falling back to gzip")
@@ -148,7 +153,6 @@ class MessageCompressor:
             return gzip.decompress(data)
         elif compression_type == CompressionType.SNAPPY:
             try:
-                import snappy
                 return snappy.decompress(data)
             except ImportError:
                 logger.warning("snappy not available")

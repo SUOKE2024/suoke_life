@@ -1,3 +1,18 @@
+"""
+cli - 索克生活项目模块
+"""
+
+                import json
+    import subprocess
+from .main import PalpationService
+from pathlib import Path
+from rich.console import Console
+from rich.table import Table
+import asyncio
+import click
+import sys
+import uvicorn
+
 #!/usr/bin/env python3
 """
 索克生活触诊服务 CLI 工具
@@ -5,16 +20,8 @@
 提供开发、测试、部署等命令行功能。
 """
 
-import asyncio
-import sys
-from pathlib import Path
 
-import click
-import uvicorn
-from rich.console import Console
-from rich.table import Table
 
-from .main import PalpationService
 
 console = Console()
 
@@ -179,7 +186,6 @@ def health(output_format: str) -> None:
                 
                 console.print(table)
             else:
-                import json
                 result = {
                     "status": "healthy" if all(components.values()) else "unhealthy",
                     "components": {k: "ok" if v else "error" for k, v in components.items()},
@@ -215,7 +221,6 @@ def health(output_format: str) -> None:
 )
 def test(test_type: str, coverage: bool, verbose: bool) -> None:
     """运行测试"""
-    import subprocess
     
     console.print(f"[bold blue]运行 {test_type} 测试...[/bold blue]")
     
@@ -245,7 +250,6 @@ def test(test_type: str, coverage: bool, verbose: bool) -> None:
 )
 def lint(check_only: bool) -> None:
     """代码检查和格式化"""
-    import subprocess
     
     console.print("[bold blue]运行代码检查...[/bold blue]")
     
@@ -269,7 +273,6 @@ def lint(check_only: bool) -> None:
 @cli.command()
 def docs() -> None:
     """生成文档"""
-    import subprocess
     
     console.print("[bold blue]生成文档...[/bold blue]")
     
@@ -290,7 +293,6 @@ def docs() -> None:
 )
 def docs_serve(port: int) -> None:
     """启动文档服务器"""
-    import subprocess
     
     console.print(f"[bold blue]启动文档服务器 (端口: {port})...[/bold blue]")
     

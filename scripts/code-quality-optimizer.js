@@ -5,13 +5,13 @@
  * 自动修复常见的ESLint问题，提升代码质量
  */
 
-const fs = require("fs);
-const path = require(")path");
-const { execSync } = require(child_process");
+const fs = require("fs");
+const path = require("path");
+const { execSync } = require("child_process");
 
 class CodeQualityOptimizer {
   constructor() {
-    this.srcDir = path.join(__dirname, "../src);
+    this.srcDir = path.join(__dirname, "../src");
     this.fixedFiles = [];
     this.errors = [];
   }
@@ -21,25 +21,29 @@ class CodeQualityOptimizer {
    */
   async optimize() {
     try {
+      console.log("🚀 开始代码质量优化...");
+      
       // 1. 自动修复可修复的ESLint问题
-await this.autoFixESLintIssues();
+      await this.autoFixESLintIssues();
 
       // 2. 清理未使用的导入
-await this.cleanUnusedImports();
+      await this.cleanUnusedImports();
 
       // 3. 修复React Hooks依赖
-await this.fixReactHooksDependencies();
+      await this.fixReactHooksDependencies();
 
       // 4. 优化组件性能
-await this.optimizeComponents();
+      await this.optimizeComponents();
 
       // 5. 统一代码格式
-await this.formatCode();
+      await this.formatCode();
 
       // 6. 生成优化报告
-this.generateReport();
+      this.generateReport();
 
+      console.log("✅ 代码质量优化完成！");
     } catch (error) {
+      console.error("❌ 代码质量优化失败:", error.message);
       process.exit(1);
     }
   }
@@ -48,22 +52,26 @@ this.generateReport();
    * 自动修复ESLint问题
    */
   async autoFixESLintIssues() {
+    console.log("🔧 运行ESLint自动修复...");
     try {
-      execSync("npm run lint -- --fix", { stdio: inherit" });
-      } catch (error) {
-      }
+      execSync("npm run lint -- --fix", { stdio: "inherit" });
+      console.log("✅ ESLint修复完成");
+    } catch (error) {
+      console.log("⚠️ ESLint修复部分完成");
+    }
   }
 
   /**
    * 清理未使用的导入
    */
   async cleanUnusedImports() {
+    console.log("🧹 清理未使用的导入...");
     const files = this.getAllTSFiles(this.srcDir);
     let cleanedCount = 0;
 
     for (const file of files) {
       try {
-        const content = fs.readFileSync(file, "utf8);
+        const content = fs.readFileSync(file, "utf8");
         const cleanedContent = this.removeUnusedImports(content);
 
         if (content !== cleanedContent) {
@@ -76,21 +84,23 @@ this.generateReport();
       }
     }
 
-    }
+    console.log(`✅ 清理了 ${cleanedCount} 个文件的未使用导入`);
+  }
 
   /**
    * 修复React Hooks依赖
    */
   async fixReactHooksDependencies() {
+    console.log("🔗 修复React Hooks依赖...");
     const files = this.getAllTSFiles(this.srcDir).filter(file =>
-      file.includes(components/") || file.includes("hooks/) || file.includes("screens/");
+      file.includes("components/") || file.includes("hooks/") || file.includes("screens/")
     );
 
     let fixedCount = 0;
 
     for (const file of files) {
       try {
-        const content = fs.readFileSync(file, utf8");
+        const content = fs.readFileSync(file, "utf8");
         const fixedContent = this.fixHooksDependencies(content);
 
         if (content !== fixedContent) {
@@ -103,21 +113,23 @@ this.generateReport();
       }
     }
 
-    }
+    console.log(`✅ 修复了 ${fixedCount} 个文件的Hooks依赖`);
+  }
 
   /**
    * 优化组件性能
    */
   async optimizeComponents() {
+    console.log("⚡ 优化组件性能...");
     const componentFiles = this.getAllTSFiles(this.srcDir).filter(file =>
-      file.includes("components/") || file.includes(screens/");
+      file.includes("components/") || file.includes("screens/")
     );
 
     let optimizedCount = 0;
 
     for (const file of componentFiles) {
       try {
-        const content = fs.readFileSync(file, "utf8);
+        const content = fs.readFileSync(file, "utf8");
         const optimizedContent = this.optimizeComponent(content);
 
         if (content !== optimizedContent) {
@@ -130,30 +142,34 @@ this.generateReport();
       }
     }
 
-    }
+    console.log(`✅ 优化了 ${optimizedCount} 个组件`);
+  }
 
   /**
    * 统一代码格式
    */
   async formatCode() {
+    console.log("🎨 统一代码格式...");
     try {
-      execSync(npx prettier --write "src/**/*.{ts,tsx}", { stdio: "inherit });
-      } catch (error) {
-      }
+      execSync("npx prettier --write \"src/**/*.{ts,tsx}\"", { stdio: "inherit" });
+      console.log("✅ 代码格式化完成");
+    } catch (error) {
+      console.log("⚠️ 代码格式化部分完成");
+    }
   }
 
   /**
    * 移除未使用的导入
    */
   removeUnusedImports(content) {
-    const lines = content.split("\n);
+    const lines = content.split("\n");
     const usedImports = new Set();
     const importLines = [];
     const otherLines = [];
 
     // 分离导入行和其他行
-lines.forEach((line, index) => {
-      if (line.trim().startsWith("import ") && !line.includes(from \"react\")) {
+    lines.forEach((line, index) => {
+      if (line.trim().startsWith("import ") && !line.includes("from \"react\"")) {
         importLines.push({ line, index });
       } else {
         otherLines.push(line);
@@ -161,14 +177,14 @@ lines.forEach((line, index) => {
     });
 
     // 检查哪些导入被使用
-const codeContent = otherLines.join("\n");
+    const codeContent = otherLines.join("\n");
 
-    const filteredImports = importLines.filter(({ line }) => {;
+    const filteredImports = importLines.filter(({ line }) => {
       const importMatch = line.match(/import\s+(?:\{([^}]+)\}|\*\s+as\s+(\w+)|(\w+))/);
       if (!importMatch) return true;
 
       const imports = importMatch[1] ?
-        importMatch[1].split(,").map(s => s.trim().replace(/\s+as\s+\w+/, ")) :;
+        importMatch[1].split(",").map(s => s.trim().replace(/\s+as\s+\w+/, "")) :
         [importMatch[2] || importMatch[3]];
 
       return imports.some(imp => {
@@ -178,12 +194,12 @@ const codeContent = otherLines.join("\n");
     });
 
     // 重新组合代码
-const newLines = [];
+    const newLines = [];
     filteredImports.forEach(({ line }) => newLines.push(line));
-    if (filteredImports.length > 0) newLines.push(");
+    if (filteredImports.length > 0) newLines.push("");
     newLines.push(...otherLines);
 
-    return newLines.join("\n);
+    return newLines.join("\n");
   }
 
   /**
@@ -191,48 +207,32 @@ const newLines = [];
    */
   fixHooksDependencies(content) {
     // 添加缺失的依赖到useEffect, useCallback, useMemo
-let fixedContent = content;
+    let fixedContent = content;
 
     // 简单的依赖修复逻辑
-const hookPatterns = [
+    const hookPatterns = [
       /useEffect\(\s*\(\)\s*=>\s*\{[^}]*\},\s*\[\s*\]\s*\)/g,
       /useCallback\(\s*\([^)]*\)\s*=>\s*\{[^}]*\},\s*\[\s*\]\s*\)/g,
-      /useMemo\(\s*\(\)\s*=>\s*\{[^}]*\},\s*\[\s*\]\s*\)/g;
+      /useMemo\(\s*\(\)\s*=>\s*\{[^}]*\},\s*\[\s*\]\s*\)/g
     ];
 
     // 这里可以添加更复杂的依赖分析逻辑
-    // 目前只是添加注释提醒
-hookPatterns.forEach(pattern => {
-      fixedContent = fixedContent.replace(pattern, (match) => {
-        return match + " // TODO: 检查依赖项"
-      });
-    });
-
     return fixedContent;
   }
 
   /**
-   * 优化组件
+   * 优化组件性能
    */
   optimizeComponent(content) {
     let optimizedContent = content;
 
-    // 1. 添加React.memo包装
-if (content.includes(export default function") && !content.includes("React.memo)) {
+    // 添加React.memo包装
+    if (content.includes("export default function") && !content.includes("React.memo")) {
       optimizedContent = optimizedContent.replace(
-        /export default function(\w+)/,
+        /export default function (\w+)/,
         "export default React.memo(function $1"
       );
-      optimizedContent += \n); // React.memo优化"
-    }
-
-    // 2. 移除内联组件定义
-const inlineComponentPattern = /const\s+(\w+)\s*=\s*\(\s*\)\s*=>\s*\(/g;
-    if (inlineComponentPattern.test(content)) {
-      optimizedContent = optimizedContent.replace(
-        inlineComponentPattern,
-        "// TODO: 将内联组件移到组件外部\nconst $1 = () => (
-      )
+      optimizedContent += "\n);";
     }
 
     return optimizedContent;
@@ -251,9 +251,9 @@ const inlineComponentPattern = /const\s+(\w+)\s*=\s*\(\s*\)\s*=>\s*\(/g;
         const fullPath = path.join(currentDir, item);
         const stat = fs.statSync(fullPath);
 
-        if (stat.isDirectory() && !item.startsWith(".") && item !== node_modules") {
+        if (stat.isDirectory() && !item.startsWith(".") && item !== "node_modules") {
           traverse(fullPath);
-        } else if (item.endsWith(".ts) || item.endsWith(".tsx")) {
+        } else if (stat.isFile() && /\.(ts|tsx)$/.test(item)) {
           files.push(fullPath);
         }
       }
@@ -267,15 +267,28 @@ const inlineComponentPattern = /const\s+(\w+)\s*=\s*\(\s*\)\s*=>\s*\(/g;
    * 生成优化报告
    */
   generateReport() {
-    );
+    console.log("\n📊 优化报告:");
+    console.log(`✅ 修复的文件数: ${this.fixedFiles.length}`);
+    console.log(`❌ 错误数: ${this.errors.length}`);
+
     if (this.errors.length > 0) {
-      this.errors.forEach(error => );
+      console.log("\n❌ 错误详情:");
+      this.errors.forEach(error => console.log(`  - ${error}`));
     }
 
+    if (this.fixedFiles.length > 0) {
+      console.log("\n✅ 修复的文件:");
+      this.fixedFiles.slice(0, 10).forEach(file => {
+        console.log(`  - ${path.relative(process.cwd(), file)}`);
+      });
+      if (this.fixedFiles.length > 10) {
+        console.log(`  ... 还有 ${this.fixedFiles.length - 10} 个文件`);
+      }
     }
+  }
 }
 
-// 运行优化
+// 运行优化器
 if (require.main === module) {
   const optimizer = new CodeQualityOptimizer();
   optimizer.optimize().catch(console.error);

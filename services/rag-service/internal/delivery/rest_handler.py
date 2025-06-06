@@ -1,3 +1,19 @@
+"""
+rest_handler - 索克生活项目模块
+"""
+
+from ..container import Container
+from ..integration.api_gateway import APIGateway, ServiceType
+from ..routing.intelligent_router import (
+from ..tcm.tcm_models import ConstitutionType, SyndromeType
+from fastapi import APIRouter, HTTPException, Depends, Query, Body, Path
+from fastapi.responses import StreamingResponse
+from loguru import logger
+from pydantic import BaseModel, Field
+from typing import Dict, List, Any, Optional
+import time
+import uuid
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,21 +22,10 @@ REST API处理器
 提供完整的RAG服务API接口
 """
 
-import time
-import uuid
-from typing import Dict, List, Any, Optional
-from fastapi import APIRouter, HTTPException, Depends, Query, Body, Path
-from fastapi.responses import StreamingResponse
-from pydantic import BaseModel, Field
-from loguru import logger
 
-from ..container import Container
-from ..routing.intelligent_router import (
     IntelligentRouter, RoutingRequest, TaskType, 
     UrgencyLevel, ComplexityLevel, AgentType
 )
-from ..integration.api_gateway import APIGateway, ServiceType
-from ..tcm.tcm_models import ConstitutionType, SyndromeType
 
 # 请求模型
 class RAGQueryRequest(BaseModel):
@@ -37,6 +42,18 @@ class RAGQueryRequest(BaseModel):
     max_tokens: int = Field(default=1000, description="最大生成token数")
     temperature: float = Field(default=0.7, description="生成温度")
     stream: bool = Field(default=False, description="是否流式响应")
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'ragqueryrequest'
+        ordering = ['-created_at']
+
 
 class TCMAnalysisRequest(BaseModel):
     """中医分析请求"""
@@ -46,6 +63,54 @@ class TCMAnalysisRequest(BaseModel):
     medical_history: List[str] = Field(default_factory=list, description="病史")
     current_medications: List[str] = Field(default_factory=list, description="当前用药")
     lifestyle_factors: Dict[str, Any] = Field(default_factory=dict, description="生活方式因素")
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'herbrecommendationrequest'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'documentindexrequest'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'knowledgegraphqueryrequest'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'ragqueryresponse'
+        ordering = ['-created_at']
+
 
 class HerbRecommendationRequest(BaseModel):
     """中药推荐请求"""
@@ -57,6 +122,30 @@ class HerbRecommendationRequest(BaseModel):
     age: Optional[int] = Field(None, description="年龄")
     gender: Optional[str] = Field(None, description="性别")
     pregnancy_status: Optional[bool] = Field(None, description="是否怀孕")
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'tcmanalysisresponse'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'herbrecommendationresponse'
+        ordering = ['-created_at']
+
 
 class DocumentIndexRequest(BaseModel):
     """文档索引请求"""
@@ -65,6 +154,18 @@ class DocumentIndexRequest(BaseModel):
     source: str = Field(..., description="文档来源")
     metadata: Dict[str, Any] = Field(default_factory=dict, description="元数据")
     document_type: str = Field(default="general", description="文档类型")
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'servicestatusresponse'
+        ordering = ['-created_at']
+
 
 class KnowledgeGraphQueryRequest(BaseModel):
     """知识图谱查询请求"""

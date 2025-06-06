@@ -1,11 +1,20 @@
 """
+complete_usage_example - 索克生活项目模块
+"""
+
+            from services.common import shutdown_components
+        from services.common import get_components
+        from services.common.health import HealthChecker
+        from services.common.load_balancer import LoadBalancer, LoadBalancingStrategy
+import asyncio
+import json
+import logging
+
+"""
 索克生活平台通用组件完整使用示例
 展示如何使用所有通用组件构建微服务
 """
 
-import asyncio
-import json
-import logging
 
 # 配置日志
 logging.basicConfig(
@@ -115,7 +124,6 @@ async def main():
 
     try:
         # 导入并初始化组件管理器
-        from services.common import get_components
 
         components = await get_components(config)
         logger.info("✅ 通用组件初始化成功")
@@ -231,7 +239,6 @@ async def main():
         logger.info("⚖️ 演示负载均衡组件...")
 
         # 获取负载均衡器
-        from services.common.load_balancer import LoadBalancer, LoadBalancingStrategy
 
         load_balancer = LoadBalancer()
         await load_balancer.initialize(config["load_balancer"])
@@ -260,7 +267,6 @@ async def main():
         # 8. 演示健康检查组件
         logger.info("🏥 演示健康检查组件...")
 
-        from services.common.health import HealthChecker
 
         health_checker = HealthChecker()
         await health_checker.initialize(config["health"])
@@ -371,7 +377,6 @@ async def main():
         # 清理资源
         logger.info("🧹 清理资源...")
         try:
-            from services.common import shutdown_components
 
             await shutdown_components()
             logger.info("✅ 资源清理完成")

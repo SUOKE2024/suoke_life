@@ -1,3 +1,14 @@
+"""
+dependency_manager - 索克生活项目模块
+"""
+
+from collections.abc import Callable
+from functools import wraps
+from typing import Any
+import importlib
+import logging
+import warnings
+
 #!/usr/bin/env python
 
 """
@@ -5,12 +16,6 @@
 用于优雅处理可选的科学计算库和其他依赖
 """
 
-import importlib
-import logging
-import warnings
-from collections.abc import Callable
-from functools import wraps
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

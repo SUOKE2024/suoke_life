@@ -1,21 +1,27 @@
 """
-简化版触诊服务主程序
-只包含基本功能，用于测试和演示
+simple_main - 索克生活项目模块
 """
 
-import logging
+    import uvicorn
+from .config import get_settings
+from .models import (
 from contextlib import asynccontextmanager
 from datetime import datetime
-from typing import Dict, Any
-from uuid import uuid4
-
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
 from starlette.responses import Response
+from typing import Dict, Any
+from uuid import uuid4
+import logging
 
-from .config import get_settings
-from .models import (
+"""
+简化版触诊服务主程序
+只包含基本功能，用于测试和演示
+"""
+
+
+
     SuccessResponse,
     ErrorResponse,
     SessionCreateRequest,
@@ -246,7 +252,6 @@ def create_app() -> FastAPI:
 
 def main():
     """主函数"""
-    import uvicorn
     
     app = create_app()
     

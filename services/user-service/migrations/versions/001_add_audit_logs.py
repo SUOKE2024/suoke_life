@@ -1,3 +1,9 @@
+"""
+001_add_audit_logs - 索克生活项目模块
+"""
+
+from alembic import op
+
 """添加审计日志表和操作日志表
 
 Revision ID: 001
@@ -6,7 +12,6 @@ Create Date: 2024-05-22 14:30:00.000000
 
 """
 
-from alembic import op
 
 # revision identifiers, used by Alembic.
 revision = '001'

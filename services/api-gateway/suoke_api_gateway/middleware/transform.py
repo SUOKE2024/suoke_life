@@ -1,3 +1,22 @@
+"""
+transform - 索克生活项目模块
+"""
+
+            from urllib.parse import parse_qs
+            from urllib.parse import urlencode
+        import re
+from ..core.logging import get_logger
+from abc import ABC, abstractmethod
+from enum import Enum
+from fastapi import Request, Response
+from pydantic import BaseModel, ValidationError
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import JSONResponse, Response as StarletteResponse
+from typing import Any, Dict, List, Optional, Callable, Union
+import gzip
+import json
+import zlib
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -7,19 +26,8 @@
 支持数据格式转换、字段映射、数据验证、内容压缩等功能。
 """
 
-import json
-import gzip
-import zlib
-from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Optional, Callable, Union
-from enum import Enum
 
-from fastapi import Request, Response
-from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.responses import JSONResponse, Response as StarletteResponse
-from pydantic import BaseModel, ValidationError
 
-from ..core.logging import get_logger
 
 logger = get_logger(__name__)
 
@@ -140,7 +148,6 @@ class JSONFieldMapper(Transformer):
     
     def _to_snake_case(self, text: str) -> str:
         """转换为蛇形命名"""
-        import re
         s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', text)
         return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
     
@@ -318,7 +325,6 @@ class FormatConverter(Transformer):
         elif content_type == ContentType.XML:
             return self._xml_to_dict(ET.fromstring(content_str))
         elif content_type == ContentType.FORM:
-            from urllib.parse import parse_qs
             return parse_qs(content_str)
         elif content_type == ContentType.TEXT:
             return content_str
@@ -332,7 +338,6 @@ class FormatConverter(Transformer):
         elif content_type == ContentType.XML:
             return self._dict_to_xml(data).encode('utf-8')
         elif content_type == ContentType.FORM:
-            from urllib.parse import urlencode
             return urlencode(data).encode('utf-8')
         elif content_type == ContentType.TEXT:
             return str(data).encode('utf-8')

@@ -1,22 +1,22 @@
+import { useTheme } from "../../contexts/ThemeContext/import { useAccessibility  } from ;../../contexts/AccessibilityContext";/import { responsive } from ../../utils/responsive"/import { animations, createAnimatedValue } from "../../utils/////    animations
+import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/////      TouchableOpacity,"
+
 import React from "react";
-import { useTheme } from "../../contexts/ThemeContext/import { useAccessibility  } from ";";../../contexts/AccessibilityContext";/import { responsive } from ../../utils/responsive"/import { animations, createAnimatedValue } from "../../utils/////    animations";"
 /////
-//////     索克生活 - 主题切换组件   支持在浅色和暗黑模式之间切换
-importReact,{ useRef } from ";react"
-import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/////      TouchableOpacity,;"
+// 索克生活 - 主题切换组件   支持在浅色和暗黑模式之间切换
+importReact,{ useRef } from ";react";
   View,
   Text,
   StyleSheet,
-  { Animated } from "react-native"
+  { Animated } from "react-native";
 interface ThemeToggleProps {
   size?: ";small" | medium" | "large;
   showLabel?: boolean;
 style?: unknown}
-export const ThemeToggle: React.FC<ThemeToggleProps /> = ({/  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor("ThemeToggle", ;
-{; /////
+export const ThemeToggle: React.FC<ThemeToggleProps /> = ({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor("ThemeToggle",{/////
     trackRender: true,
     trackMemory: false,
-    warnThreshold: 50, // ms //////     })
+    warnThreshold: 50, // ms // });
   size = medium","
   showLabel = true,
   style;
@@ -25,22 +25,20 @@ export const ThemeToggle: React.FC<ThemeToggleProps /> = ({/  // 性能监控 //
   const { config, triggerHapticFeedback, announceForAccessibility   } = useAccessibility;
   // 动画值 // const switchAnimation = useRef(createAnimatedValue(isDark ? 1 : 0;);).current; ////
   const scaleAnimation = useRef(createAnimatedValue(1);).current;
-  // 切换主题 //////     const handleToggle = useCallback(() => {}
-    // TODO: Implement function body *}, []) ////
-    // 触觉反馈 //////     if (config.hapticFeedbackEnabled) {
-      triggerHapticFeedback("light)"
-    }
-    // 无障碍公告 // const newMode = isDark ? "浅色模式" : 暗黑模式"; "////
+  // 切换主题 // const handleToggle = useCallback(() => {;
+    // TODO: Implement function body *}, []) ////;
+    // 触觉反馈 // if (config.hapticFeedbackEnabled) {triggerHapticFeedback("light)";
+    };
+    // 无障碍公告 // const newMode = isDark ? "浅色模式" : 暗黑模式////
     announceForAccessibility(`已切换到${newMode}`);
     // 动画效果 // const toValue = isDark ? 0 : ;1; ////
     animations.fadeIn(switchAnimation, { duration: 200}).start();
-    // 按钮缩放动画 //////     animations.bounce(scaleAnimation).start()
-    // 切换主题 //////     toggleTheme()
+    // 按钮缩放动画 // animations.bounce(scaleAnimation).start();
+    // 切换主题 // toggleTheme();
   };
-  // 获取尺寸样式 //////     const getSizeStyles = useCallback(() => {}
-    // TODO: Implement function body *}, []) ////
-    const sizes = {;
-      small: {
+  // 获取尺寸样式 // const getSizeStyles = useCallback(() => {;
+    // TODO: Implement function body *}, []) ////;
+    const sizes = {small: {
         width: responsive.width(40),
         height: responsive.height(20),
         borderRadius: responsive.width(10),
@@ -58,14 +56,9 @@ export const ThemeToggle: React.FC<ThemeToggleProps /> = ({/  // 性能监控 //
     return sizes[siz;e;];
   };
   const sizeStyles = getSizeStyles;
-  // 计算滑块位置 //////     const thumbTranslateX = switchAnimation.interpolate({
-    inputRange: [0, 1],
-    outputRange: [2, sizeStyles.width - sizeStyles.thumbSize - 2];};);
-  // 背景颜色动画 //////     const backgroundColor = switchAnimation.interpolate({
-    inputRange: [0, 1],
-    outputRange: [theme.colors.outline, theme.colors.primary];};);
-  // 记录渲染性能 //////
-  performanceMonitor.recordRender()
+  // 计算滑块位置 // const thumbTranslateX = switchAnimation.interpolate({inputRange: [0, 1],outputRange: [2, sizeStyles.width - sizeStyles.thumbSize - 2];};);
+  // 背景颜色动画 // const backgroundColor = switchAnimation.interpolate({inputRange: [0, 1],outputRange: [theme.colors.outline, theme.colors.primary];};);
+  // 记录渲染性能 // performanceMonitor.recordRender();
   return (;
     <View style={[styles.container, style]} />/////          {showLabel && (;
         <Text style={[styles.label, { color: theme.colors.onSurfa;c;e   }]} />/          {isDark ? "暗黑模式 : "浅色模式"}"////
@@ -109,9 +102,8 @@ style={[
             }
           ]} />/          <View style={[styles.thumbIcon, { backgroundColor: isDark ? "#FFD700" : #87CEEB"}]} />/        </Animated.View>/      </TouchableOpacity>/    </View>/////      );"
 }
-const styles = StyleSheet.create({;
-  container: {
-    flexDirection: "row,"
+const styles = StyleSheet.create({container: {
+    flexDirection: "row,",
     alignItems: "center",
     gap: responsive.width(12)},
   label: {
@@ -119,17 +111,17 @@ const styles = StyleSheet.create({;
     fontWeight: 500""
   },
   switch: {
-    position: "relative,"
+    position: "relative,",
     justifyContent: "center"
   },
   track: { position: absolute"  },"
   thumb: {
-    position: "absolute,"
+    position: "absolute,",
     justifyContent: "center",
     alignItems: center""
   },
   thumbIcon: {
-    width: "60%,"
+    width: "60%,",
     height: "60%',"'
     borderRadius: 999;
   };};);

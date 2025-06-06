@@ -1,3 +1,13 @@
+"""
+websocket - 索克生活项目模块
+"""
+
+from ..core.logging import get_logger
+from ..services.websocket_manager import (
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect, HTTPException, Depends, Query
+from typing import Dict, Any, Optional
+import uuid
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -7,18 +17,13 @@ WebSocket API 端点
 提供 WebSocket 连接、管理和监控功能。
 """
 
-import uuid
-from typing import Dict, Any, Optional
 
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect, HTTPException, Depends, Query
 
-from ..services.websocket_manager import (
     get_websocket_manager,
     WebSocketManager,
     WebSocketMessage,
     MessageType,
 )
-from ..core.logging import get_logger
 
 logger = get_logger(__name__)
 

@@ -2,13 +2,12 @@ import { AgentType, AgentContext, AgentResponse } from "./types";
 import { AgentCoordinator } from "./AgentCoordinator";
 import { AgentManager } from "./AgentManager";
 import { AgentFactory } from "./factory/AgentFactory";
-import {
-  createAgent,
+import {createAgent,
   initializeAgentSystem,
   executeAgentTask,
   AgentSystemUtils,
   AGENT_CAPABILITIES,
-  COLLABORATION_STRATEGIES,
+  COLLABORATION_STRATEGIES
 } from "./index";
 
 /**
@@ -92,8 +91,8 @@ export class AgentSystemTester {
 
     // 测试工具函数
     await this.runTest("工具函数测试", async () => {
-      const xiaoaiCapabilities = AgentSystemUtils.getAgentCapabilities(
-        AgentType.XIAOAI
+      const xiaoaiCapabilities = AgentSystemUtils.getAgentCapabilities(;
+        AgentType.XIAOAI;
       );
       const xiaokeRole = AgentSystemUtils.getAgentRole(AgentType.XIAOKE);
       const chatAgent = AgentSystemUtils.getAgentByChannel("chat");
@@ -115,9 +114,8 @@ export class AgentSystemTester {
 
     // 测试上下文创建
     await this.runTest("上下文创建测试", async () => {
-      const context = AgentSystemUtils.createDefaultContext(
-        "test_user",
-        "suoke"
+      const context = AgentSystemUtils.createDefaultContext(;
+        "test_user","suoke";
       );
 
       if (!AgentSystemUtils.validateContext(context)) {
@@ -156,19 +154,16 @@ export class AgentSystemTester {
 
     // 测试批量创建
     await this.runTest("批量创建智能体", async () => {
-      const agents = await Promise.all([
-        createAgent(AgentType.XIAOAI),
-        createAgent(AgentType.XIAOKE),
-        createAgent(AgentType.LAOKE),
-        createAgent(AgentType.SOER),
+      const agents = await Promise.all([;
+        createAgent(AgentType.XIAOAI),createAgent(AgentType.XIAOKE),createAgent(AgentType.LAOKE),createAgent(AgentType.SOER);
       ]);
 
       for (const agent of agents) {
         await agent.initialize();
       }
 
-      const statuses = await Promise.all(
-        agents.map((agent) => agent.getHealthStatus())
+      const statuses = await Promise.all(;
+        agents.map((agent) => agent.getHealthStatus());
       );
 
       for (const agent of agents) {
@@ -197,9 +192,8 @@ export class AgentSystemTester {
     });
 
     await this.runTest("单智能体任务处理", async () => {
-      const context = AgentSystemUtils.createDefaultContext(
-        "test_user",
-        "chat"
+      const context = AgentSystemUtils.createDefaultContext(;
+        "test_user","chat";
       );
       const response = await this.coordinator.coordinateTask("你好", context);
 
@@ -211,22 +205,18 @@ export class AgentSystemTester {
     });
 
     await this.runTest("多智能体协作任务", async () => {
-      const context = AgentSystemUtils.createDefaultContext(
-        "test_user",
-        "chat"
+      const context = AgentSystemUtils.createDefaultContext(;
+        "test_user","chat";
       );
-      const response = await this.coordinator.coordinateTask(
-        "我感觉头痛，请帮我分析一下可能的原因并推荐相关服务",
-        context
+      const response = await this.coordinator.coordinateTask(;
+        "我感觉头痛，请帮我分析一下可能的原因并推荐相关服务",context;
       );
 
       if (!response.success) {
         throw new Error("协作任务处理失败");
       }
 
-      return {
-        response: response.response,
-        collaborationType: response.metadata?.collaborationType,
+      return {response: response.response,collaborationType: response.metadata?.collaborationType;
       };
     });
   }
@@ -277,10 +267,7 @@ export class AgentSystemTester {
     console.log("🏭 工厂模式测试");
 
     await this.runTest("工厂创建智能体", async () => {
-      const instance = await this.factory.createAgent({
-        agentType: AgentType.XIAOAI,
-        enableLogging: true,
-        maxConcurrentTasks: 3,
+      const instance = await this.factory.createAgent({agentType: AgentType.XIAOAI,enableLogging: true,maxConcurrentTasks: 3;
       });
 
       if (!instance.isActive) {
@@ -292,10 +279,8 @@ export class AgentSystemTester {
     });
 
     await this.runTest("批量创建和管理", async () => {
-      const configs = [
-        { agentType: AgentType.XIAOAI },
-        { agentType: AgentType.XIAOKE },
-        { agentType: AgentType.LAOKE },
+      const configs = [;
+        { agentType: AgentType.XIAOAI },{ agentType: AgentType.XIAOKE },{ agentType: AgentType.LAOKE };
       ];
 
       const instances = await this.factory.createAgentBatch(configs);
@@ -310,9 +295,7 @@ export class AgentSystemTester {
         await this.factory.releaseAgent(instance.id);
       }
 
-      return {
-        createdCount: instances.length,
-        activeCount: activeInstances.length,
+      return {createdCount: instances.length,activeCount: activeInstances.length;
       };
     });
 
@@ -333,23 +316,11 @@ export class AgentSystemTester {
       {
         name: "健康诊断协作",
         message: "我最近总是感到疲劳，睡眠质量也不好，请帮我分析一下",
-        expectedMode: "sequential",
-      },
-      {
-        name: "服务推荐协作",
-        message: "我想找一个好的中医医生，最好是专门看失眠的",
-        expectedMode: "sequential",
-      },
-      {
-        name: "知识学习协作",
-        message: "我想学习中医养生知识，请为我制定一个学习计划",
-        expectedMode: "single",
-      },
-      {
-        name: "紧急情况协作",
-        message: "紧急！我突然胸痛，需要立即帮助",
-        expectedMode: "parallel",
-      },
+        expectedMode: "sequential"
+      },{name: "服务推荐协作",message: "我想找一个好的中医医生，最好是专门看失眠的",expectedMode: "sequential";
+      },{name: "知识学习协作",message: "我想学习中医养生知识，请为我制定一个学习计划",expectedMode: "single";
+      },{name: "紧急情况协作",message: "紧急！我突然胸痛，需要立即帮助",expectedMode: "parallel";
+      };
     ];
 
     for (const scenario of collaborationScenarios) {
@@ -361,10 +332,7 @@ export class AgentSystemTester {
           throw new Error("协作任务失败");
         }
 
-        return {
-          response: response.response,
-          collaborationType: response.metadata?.collaborationType,
-          expectedMode: scenario.expectedMode,
+        return {response: response.response,collaborationType: response.metadata?.collaborationType,expectedMode: scenario.expectedMode;
         };
       });
     }
@@ -378,8 +346,8 @@ export class AgentSystemTester {
 
     await this.runTest("并发处理测试", async () => {
       const context = AgentSystemUtils.createDefaultContext("test_user");
-      const tasks = Array.from({ length: 5 }, (_, i) =>
-        executeAgentTask(`测试消息 ${i + 1}`, context)
+      const tasks = Array.from({ length: 5 }, (_, i) =>;
+        executeAgentTask(`测试消息 ${i + 1}`, context);
       );
 
       const startTime = Date.now();
@@ -392,11 +360,7 @@ export class AgentSystemTester {
         throw new Error(`期望5个成功，实际${successCount}个`);
       }
 
-      return {
-        totalTasks: 5,
-        successCount,
-        duration,
-        avgDuration: duration / 5,
+      return {totalTasks: 5,successCount,duration,avgDuration: duration / 5;
       };
     });
 
@@ -418,11 +382,7 @@ export class AgentSystemTester {
         throw new Error(`响应时间过长: ${avgResponseTime}ms`);
       }
 
-      return {
-        measurements,
-        avgResponseTime,
-        maxResponseTime: Math.max(...measurements),
-        minResponseTime: Math.min(...measurements),
+      return {measurements,avgResponseTime,maxResponseTime: Math.max(...measurements),minResponseTime: Math.min(...measurements);
       };
     });
   }
@@ -453,9 +413,7 @@ export class AgentSystemTester {
       const response = await executeAgentTask("", context);
 
       // 应该有某种形式的响应，即使是空消息
-      return {
-        responseReceived: !!response,
-        responseContent: response.response,
+      return {responseReceived: !!response,responseContent: response.response;
       };
     });
 
@@ -465,10 +423,7 @@ export class AgentSystemTester {
 
       const response = await executeAgentTask(longMessage, context);
 
-      return {
-        messageLength: longMessage.length,
-        responseReceived: !!response,
-        success: response.success,
+      return {messageLength: longMessage.length,responseReceived: !!response,success: response.success;
       };
     });
   }
@@ -490,7 +445,7 @@ export class AgentSystemTester {
         testName,
         success: true,
         duration,
-        data,
+        data
       });
 
       console.log(`  ✅ ${testName} (${duration}ms)`);
@@ -503,7 +458,7 @@ export class AgentSystemTester {
         testName,
         success: false,
         duration,
-        error: errorMessage,
+        error: errorMessage
       });
 
       console.log(`  ❌ ${testName} (${duration}ms): ${errorMessage}`);
@@ -517,9 +472,8 @@ export class AgentSystemTester {
     const totalTests = this.testResults.length;
     const passedTests = this.testResults.filter((r) => r.success).length;
     const failedTests = totalTests - passedTests;
-    const totalDuration = this.testResults.reduce(
-      (sum, r) => sum + r.duration,
-      0
+    const totalDuration = this.testResults.reduce(;
+      (sum, r) => sum + r.duration,0;
     );
 
     console.log("\n📊 测试结果汇总:");
@@ -569,13 +523,11 @@ export async function quickTest(): Promise<void> {
     console.log(`响应: ${response.response.substring(0, 100)}...`);
 
     // 测试智能体切换
-    const suokeContext = AgentSystemUtils.createDefaultContext(
-      "quick_test_user",
-      "suoke"
+    const suokeContext = AgentSystemUtils.createDefaultContext(;
+      "quick_test_user","suoke";
     );
-    const suokeResponse = await executeAgentTask(
-      "推荐一些健康服务",
-      suokeContext
+    const suokeResponse = await executeAgentTask(;
+      "推荐一些健康服务",suokeContext;
     );
 
     console.log("✅ 智能体切换测试通过");

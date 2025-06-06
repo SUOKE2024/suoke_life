@@ -1,14 +1,19 @@
-"""OAuth认证管理器"""
-
-import secrets
-import urllib.parse
-from typing import Dict, Any, Optional
-from datetime import datetime, timedelta
-from enum import Enum
-import httpx
-import json
+"""
+oauth - 索克生活项目模块
+"""
 
 from auth_service.config import get_settings
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Dict, Any, Optional
+import httpx
+import json
+import secrets
+import urllib.parse
+
+"""OAuth认证管理器"""
+
+
 
 
 class OAuthProvider(str, Enum):

@@ -1,9 +1,14 @@
 """
+main - 索克生活项目模块
+"""
+
+from rag_service.api.main import create_app
+import uvicorn
+
+"""
 rag-service 主入口文件
 """
 
-import uvicorn
-from rag_service.api.main import create_app
 
 def main():
     """主函数"""

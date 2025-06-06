@@ -1,3 +1,12 @@
+"""
+base - 索克生活项目模块
+"""
+
+from ..model.document import Document, DocumentReference, GenerateResult
+from typing import List, Dict, Any, AsyncGenerator, Optional
+import abc
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,10 +14,6 @@
 生成器基类定义
 """
 
-import abc
-import time
-from typing import List, Dict, Any, AsyncGenerator, Optional
-from ..model.document import Document, DocumentReference, GenerateResult
 
 
 class BaseGenerator(abc.ABC):

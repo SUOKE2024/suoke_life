@@ -1,16 +1,29 @@
 """
-模型工厂
-负责创建和管理不同类型的AI模型实例
+model_factory - 索克生活项目模块
 """
-import logging
+
+                from transformers import (
+                import anthropic
+                import openai
+                import torch
+            from sentence_transformers import SentenceTransformer
+            from transformers import AutoModelForCausalLM, AutoTokenizer
+            from transformers import AutoModelForSequenceClassification, AutoTokenizer
+            import torch
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import Any
-
 from pkg.utils.dependency_injection import ServiceLifecycle
 from pkg.utils.enhanced_config import get_config
 from pkg.utils.error_handling import ModelException, RetryConfig, retry_async
 from pkg.utils.metrics import get_metrics_collector
+from typing import Any
+import logging
+
+"""
+模型工厂
+负责创建和管理不同类型的AI模型实例
+"""
+
 
 logger = logging.getLogger(__name__)
 
@@ -73,13 +86,11 @@ class ChatModel(BaseModel):
         """初始化聊天模型"""
         try:
             if self.provider == ModelProvider.OPENAI:
-                import openai
                 self.client = openai.AsyncOpenAI(
                     api_key=self.config.get("api_key"),
                     base_url=self.config.get("base_url")
                 )
             elif self.provider == ModelProvider.ANTHROPIC:
-                import anthropic
                 self.client = anthropic.AsyncAnthropic(
                     api_key=self.config.get("api_key")
                 )
@@ -103,8 +114,6 @@ class ChatModel(BaseModel):
 
         # 示例：使用transformers库加载本地模型
         try:
-            import torch
-            from transformers import AutoModelForCausalLM, AutoTokenizer
 
             self.tokenizer = AutoTokenizer.from_pretrained(model_path)
             self.model = AutoModelForCausalLM.from_pretrained(
@@ -234,7 +243,6 @@ class EmbeddingModel(BaseModel):
         """初始化嵌入模型"""
         try:
             if self.provider == ModelProvider.OPENAI:
-                import openai
                 self.client = openai.AsyncOpenAI(
                     api_key=self.config.get("api_key"),
                     base_url=self.config.get("base_url")
@@ -254,7 +262,6 @@ class EmbeddingModel(BaseModel):
     async def _initialize_huggingface_model(self) -> None:
         """初始化HuggingFace模型"""
         try:
-            from sentence_transformers import SentenceTransformer
             self.model = SentenceTransformer(self.model_name)
         except ImportError:
             raise ModelException("sentence-transformers库未安装")
@@ -266,7 +273,6 @@ class EmbeddingModel(BaseModel):
             raise ModelException("本地嵌入模型路径未配置")
 
         try:
-            from sentence_transformers import SentenceTransformer
             self.model = SentenceTransformer(model_path)
         except ImportError:
             raise ModelException("sentence-transformers库未安装")
@@ -334,8 +340,6 @@ class ClassificationModel(BaseModel):
         """初始化分类模型"""
         try:
             if self.provider == ModelProvider.HUGGINGFACE:
-                import torch
-                from transformers import (
                     AutoModelForSequenceClassification,
                     AutoTokenizer,
                 )
@@ -366,8 +370,6 @@ class ClassificationModel(BaseModel):
             raise ModelException("本地分类模型路径未配置")
 
         try:
-            import torch
-            from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
             self.tokenizer = AutoTokenizer.from_pretrained(model_path)
             self.model = AutoModelForSequenceClassification.from_pretrained(model_path)
@@ -394,7 +396,6 @@ class ClassificationModel(BaseModel):
                 "model": self.model_name,
                 "type": "classification"
             }):
-                import torch
 
                 # 编码输入
                 inputs = self.tokenizer(

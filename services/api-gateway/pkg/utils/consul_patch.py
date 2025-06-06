@@ -1,3 +1,11 @@
+"""
+consul_patch - 索克生活项目模块
+"""
+
+import asyncio
+import functools
+import sys
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,9 +14,6 @@
 在Python 3.13中，asyncio.coroutine装饰器已被移除
 """
 
-import asyncio
-import functools
-import sys
 
 # 检查Python版本，仅当Python 3.10+并且缺少coroutine装饰器时执行修补
 if sys.version_info >= (3, 10) and not hasattr(asyncio, 'coroutine'):

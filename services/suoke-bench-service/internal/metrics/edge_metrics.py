@@ -1,10 +1,15 @@
-"""端侧性能评测指标实现。"""
-
-from dataclasses import dataclass
-from typing import Any
+"""
+edge_metrics - 索克生活项目模块
+"""
 
 from .agent_metrics import MetricResult
 from .metrics import Metric
+from dataclasses import dataclass
+from typing import Any
+
+"""端侧性能评测指标实现。"""
+
+
 
 @dataclass
 class DeviceInfo:

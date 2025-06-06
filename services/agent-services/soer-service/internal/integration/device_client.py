@@ -1,17 +1,22 @@
-#!/usr/bin/env python3
 """
-外部健康设备API集成客户端
+device_client - 索克生活项目模块
 """
+
+from datetime import datetime, timedelta
+from pkg.utils.config_loader import get_config
+from typing import Any
+import aiohttp
 import base64
 import logging
 import os
 import time
-from datetime import datetime, timedelta
-from typing import Any
 
-import aiohttp
+#!/usr/bin/env python3
+"""
+外部健康设备API集成客户端
+"""
 
-from pkg.utils.config_loader import get_config
+
 
 logger = logging.getLogger(__name__)
 

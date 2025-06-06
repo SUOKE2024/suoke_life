@@ -1,19 +1,24 @@
+"""
+async_optimization - 索克生活项目模块
+"""
+
+from collections.abc import Callable, Coroutine
+from contextlib import asynccontextmanager
+from dataclasses import dataclass
+from functools import wraps
+from typing import Any, TypeVar
+import aioredis
+import asyncio
+import asyncpg
+import logging
+
 #!/usr/bin/env python3
 """
 异步处理优化模块
 提供批量处理、连接池管理等异步优化功能
 """
 
-import asyncio
-from collections.abc import Callable, Coroutine
-from contextlib import asynccontextmanager
-from dataclasses import dataclass
-from functools import wraps
-import logging
-from typing import Any, TypeVar
 
-import aioredis
-import asyncpg
 
 logger = logging.getLogger(__name__)
 

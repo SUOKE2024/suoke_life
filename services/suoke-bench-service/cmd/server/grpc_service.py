@@ -1,16 +1,21 @@
 """
-SuokeBench gRPC服务实现
+grpc_service - 索克生活项目模块
 """
-
-import logging
-
-import grpc
 
 from api.grpc import benchmark_pb2, benchmark_pb2_grpc
 from internal.benchmark.model_interface import model_registry
 from internal.evaluation.report_generator import ReportGenerator
 from internal.metrics.basic_metrics import register_basic_metrics
 from internal.suokebench.config import BenchConfig
+import grpc
+import logging
+
+"""
+SuokeBench gRPC服务实现
+"""
+
+
+
 
 # 初始化基础指标
 register_basic_metrics()

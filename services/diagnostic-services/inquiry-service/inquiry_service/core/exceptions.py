@@ -1,10 +1,15 @@
 """
+exceptions - 索克生活项目模块
+"""
+
+from typing import Any
+
+"""
 异常类定义模块
 
 定义问诊服务中使用的所有自定义异常类。
 """
 
-from typing import Any
 
 
 class InquiryServiceError(Exception):

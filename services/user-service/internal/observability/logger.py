@@ -1,14 +1,19 @@
 """
-日志记录模块
-
-该模块提供统一的日志记录功能，支持不同级别的日志和结构化输出。
+logger - 索克生活项目模块
 """
+
+from typing import Any, Dict, Optional, Union
 import json
 import logging
 import os
 import sys
 import traceback
-from typing import Any, Dict, Optional, Union
+
+"""
+日志记录模块
+
+该模块提供统一的日志记录功能，支持不同级别的日志和结构化输出。
+"""
 
 # 日志级别映射
 LOG_LEVEL_MAP = {

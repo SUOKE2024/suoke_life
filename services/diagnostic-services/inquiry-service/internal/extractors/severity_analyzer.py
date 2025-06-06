@@ -1,13 +1,18 @@
+"""
+severity_analyzer - 索克生活项目模块
+"""
+
+from ..common.base import BaseService
+from ..common.utils import calculate_confidence, sanitize_text
+from typing import Any
+
 #!/usr/bin/env python
 
 """
 严重程度分析器
 """
 
-from typing import Any
 
-from ..common.base import BaseService
-from ..common.utils import calculate_confidence, sanitize_text
 
 
 class SeverityAnalyzer(BaseService):

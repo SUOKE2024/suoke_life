@@ -1,16 +1,21 @@
 """
-User-Service 简化性能测试
+test_performance_simple - 索克生活项目模块
 """
-import pytest
-import pytest_asyncio
-import asyncio
-import tempfile
-import os
-import time
 
+from internal.model.user import CreateUserRequest
 from internal.repository.sqlite_user_repository import SQLiteUserRepository
 from internal.service.user_service import UserService
-from internal.model.user import CreateUserRequest
+import asyncio
+import os
+import pytest
+import pytest_asyncio
+import tempfile
+import time
+
+"""
+User-Service 简化性能测试
+"""
+
 
 
 class TestUserServicePerformanceSimple:

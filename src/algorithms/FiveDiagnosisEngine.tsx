@@ -1,31 +1,25 @@
-import React from "react";
 import AlgorithmConfig from "./config/AlgorithmConfig";
 import TCMKnowledgeBase from "./knowledge/TCMKnowledgeBase";
 import QualityController from "./quality/QualityController";
 import PerformanceMonitor from "./monitoring/PerformanceMonitor";
-import CalculationDiagnosisAlgorithm, {
+import CalculationDiagnosisAlgorithm, {import LookingDiagnosisAlgorithm, {import ListeningDiagnosisAlgorithm, {import InquiryDiagnosisAlgorithm, {import PalpationDiagnosisAlgorithm, {import DiagnosisFusionAlgorithm, {import React from "react";
   CalculationData as CalcData,
-  CalculationResult as CalcResult,
+  CalculationResult as CalcResult
 } from "./modules/CalculationDiagnosisAlgorithm";
-import LookingDiagnosisAlgorithm, {
   LookingData as LookData,
-  LookingResult as LookResult,
+  LookingResult as LookResult
 } from "./modules/LookingDiagnosisAlgorithm";
-import ListeningDiagnosisAlgorithm, {
   ListeningData as ListenData,
-  ListeningResult as ListenResult,
+  ListeningResult as ListenResult
 } from "./modules/ListeningDiagnosisAlgorithm";
-import InquiryDiagnosisAlgorithm, {
   InquiryData as InqData,
-  InquiryResult as InqResult,
+  InquiryResult as InqResult
 } from "./modules/InquiryDiagnosisAlgorithm";
-import PalpationDiagnosisAlgorithm, {
   PalpationData as PalpData,
-  PalpationResult as PalpResult,
+  PalpationResult as PalpResult
 } from "./modules/PalpationDiagnosisAlgorithm";
-import DiagnosisFusionAlgorithm, {
   FusionInput,
-  FusionResult,
+  FusionResult
 } from "./modules/DiagnosisFusionAlgorithm";
 
 /**
@@ -122,7 +116,7 @@ export enum DiagnosisType {
   LISTENING = "listening",
   INQUIRY = "inquiry",
   PALPATION = "palpation",
-  CALCULATION = "calculation",
+  CALCULATION = "calculation"
 }
 
 export enum ProcessingStatus {
@@ -130,7 +124,7 @@ export enum ProcessingStatus {
   PROCESSING = "processing",
   COMPLETED = "completed",
   FAILED = "failed",
-  CANCELLED = "cancelled",
+  CANCELLED = "cancelled"
 }
 
 /**
@@ -232,8 +226,8 @@ export class FiveDiagnosisEngine {
           "listening",
           "inquiry",
           "palpation",
-          "fusion",
-        ],
+          "fusion"
+        ]
       });
     } catch (error) {
       this.emit("algorithms:error", { error, stage: "initialization" });
@@ -267,7 +261,7 @@ export class FiveDiagnosisEngine {
       if (input.lookingData) {
         this.emit("algorithm:progress", {
           stage: "looking_analysis",
-          progress: 0.3,
+          progress: 0.3
         });
         diagnosisResults.looking = await this.lookingAlgorithm.analyze(
           input.lookingData,
@@ -279,7 +273,7 @@ export class FiveDiagnosisEngine {
       if (input.listeningData) {
         this.emit("algorithm:progress", {
           stage: "listening_analysis",
-          progress: 0.4,
+          progress: 0.4
         });
         diagnosisResults.listening = await this.listeningAlgorithm.analyze(
           input.listeningData,
@@ -291,7 +285,7 @@ export class FiveDiagnosisEngine {
       if (input.inquiryData) {
         this.emit("algorithm:progress", {
           stage: "inquiry_analysis",
-          progress: 0.5,
+          progress: 0.5
         });
         diagnosisResults.inquiry = await this.inquiryAlgorithm.analyze(
           input.inquiryData,
@@ -303,7 +297,7 @@ export class FiveDiagnosisEngine {
       if (input.palpationData) {
         this.emit("algorithm:progress", {
           stage: "palpation_analysis",
-          progress: 0.6,
+          progress: 0.6
         });
         diagnosisResults.palpation = await this.palpationAlgorithm.analyze(
           input.palpationData,
@@ -315,7 +309,7 @@ export class FiveDiagnosisEngine {
       if (input.calculationData) {
         this.emit("algorithm:progress", {
           stage: "calculation_analysis",
-          progress: 0.7,
+          progress: 0.7
         });
         diagnosisResults.calculation = await this.calculationAlgorithm.analyze(
           input.calculationData,
@@ -326,7 +320,7 @@ export class FiveDiagnosisEngine {
       // 融合分析
       this.emit("algorithm:progress", {
         stage: "fusion_analysis",
-        progress: 0.8,
+        progress: 0.8
       });
 
       const fusionInput: FusionInput = {
@@ -339,9 +333,9 @@ export class FiveDiagnosisEngine {
             temperature: 25,
             humidity: 60,
             season: "spring",
-            timeOfDay: "morning",
-          },
-        },
+            timeOfDay: "morning"
+          }
+        }
       };
 
       const fusionResult = await this.fusionAlgorithm.analyze(fusionInput);
@@ -361,8 +355,8 @@ export class FiveDiagnosisEngine {
         qualityReport: {},
         performanceMetrics: {
           processingTime: Date.now() - startTime,
-          algorithmsUsed: Object.keys(diagnosisResults),
-        },
+          algorithmsUsed: Object.keys(diagnosisResults);
+        }
       };
 
       this.emit("diagnosis:completed", { sessionId, result });

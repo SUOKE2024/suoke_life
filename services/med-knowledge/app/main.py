@@ -1,30 +1,37 @@
 """
-索克生活-医学知识服务主应用
-提供中医知识图谱数据服务,支持中西医结合的健康管理
+main - 索克生活项目模块
 """
 
-import asyncio
-from concurrent import futures
-from contextlib import asynccontextmanager
-import os
-import signal
-import sys
-
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.openapi.docs import get_swagger_ui_html
-import grpc
-from prometheus_fastapi_instrumentator import Instrumentator
-
+    import uvicorn
+from app.api import ai
 from app.api.grpc.generated import knowledge_pb2_grpc
 from app.api.grpc.knowledge_service import MedKnowledgeServicer
 from app.api.rest import health, router as knowledge_router
 from app.api.rest.graph import router as graph_router
-from app.api import ai
 from app.core.config import get_settings
 from app.core.container import lifespan_context
 from app.core.logger import get_logger
 from app.core.middleware import (
+from concurrent import futures
+from contextlib import asynccontextmanager
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.openapi.docs import get_swagger_ui_html
+from prometheus_fastapi_instrumentator import Instrumentator
+import asyncio
+import grpc
+import os
+import signal
+import sys
+
+"""
+索克生活-医学知识服务主应用
+提供中医知识图谱数据服务,支持中西医结合的健康管理
+"""
+
+
+
     AuthenticationMiddleware,
     ErrorHandlingMiddleware,
     LoggingMiddleware,
@@ -68,6 +75,9 @@ async def lifespan(app: FastAPI):
 
 # 创建FastAPI应用
 app = FastAPI(
+
+# 性能优化: 添加响应压缩
+app.add_middleware(GZipMiddleware, minimum_size=1000)
     title="索克生活-医学知识服务",
     description="""
     ## 索克生活医学知识服务
@@ -134,13 +144,17 @@ app.include_router(graph_router)
 app.include_router(ai.router)
 
 # 自定义Swagger UI路由
+@cache(expire=300)  # 5分钟缓存
+@limiter.limit("100/minute")  # 每分钟100次请求
 @app.get("/api/docs", include_in_schema=False)
 async def custom_swagger_ui_html():
     return get_swagger_ui_html(
         openapi_url="/openapi.json",
         title="索克生活-医学知识服务 API文档",
         swagger_js_url="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui-bundle.js",
-        swagger_css_url="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui.css",
+        swagger_css_url="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.@cache(expire=@limiter.limit("100/minute")  # 每分钟100次请求
+300)  # 5分钟缓存
+9.0/swagger-ui.css",
     )
 
 @app.get("/", include_in_schema=False)
@@ -203,7 +217,6 @@ def handle_sigterm(*args):
 signal.signal(signal.SIGTERM, handle_sigterm)
 
 if __name__ == "__main__":
-    import uvicorn
 
     host = settings.server.host
     port = int(os.environ.get("PORT", settings.server.port))

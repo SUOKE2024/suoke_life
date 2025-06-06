@@ -1,18 +1,25 @@
+"""
+c_algorithms - 索克生活项目模块
+"""
+
+            import shutil
+            import time
+from dataclasses import dataclass
+from enum import Enum
+from typing import Optional, Tuple, List, Dict, Any
+import ctypes
+import logging
+import os
+import platform
+import subprocess
+import tempfile
+
 #!/usr/bin/env python3
 """
 索克生活 - 关键算法C扩展模块
 提供高性能C实现的核心算法接口
 """
 
-import ctypes
-import os
-import platform
-from typing import Optional, Tuple, List, Dict, Any
-import logging
-from dataclasses import dataclass
-from enum import Enum
-import subprocess
-import tempfile
 
 logger = logging.getLogger(__name__)
 
@@ -677,7 +684,6 @@ int pattern_matching(
             health_data = np.random.rand(size, 50).astype(np.float32)
             
             # 测试中医证候分析
-            import time
             start_time = time.time()
             for _ in range(100):
                 self.tcm_syndrome_analysis(symptoms, weights, patterns)
@@ -700,7 +706,6 @@ int pattern_matching(
     def __del__(self):
         """清理资源"""
         if self.temp_dir and os.path.exists(self.temp_dir):
-            import shutil
             try:
                 shutil.rmtree(self.temp_dir)
             except:

@@ -1,3 +1,13 @@
+"""
+knowledge_service - 索克生活项目模块
+"""
+
+from datetime import datetime
+from internal.repository.knowledge_repository import KnowledgeRepository
+from pkg.utils.metrics import get_metrics_collector
+from typing import Any
+import logging
+
 #!/usr/bin/env python
 
 """
@@ -5,12 +15,7 @@
 提供知识内容管理和学习路径功能
 """
 
-import logging
-from datetime import datetime
-from typing import Any
 
-from internal.repository.knowledge_repository import KnowledgeRepository
-from pkg.utils.metrics import get_metrics_collector
 
 logger = logging.getLogger(__name__)
 metrics = get_metrics_collector()

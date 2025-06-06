@@ -1,15 +1,24 @@
 """
+conftest_working - 索克生活项目模块
+"""
+
+    from httpx import AsyncClient
+from auth_service.cmd.server.main import create_app
+from auth_service.core.database import get_db
+from fastapi import FastAPI
+from fastapi.testclient import TestClient
+from sqlalchemy.ext.asyncio import AsyncSession
+from tests.test_database_manager import TestDatabaseManager, setup_test_database, teardown_test_database
+import asyncio
+import os
+import pytest
+import pytest_asyncio
+
+"""
 工作的测试配置文件
 使用测试数据库管理器解决数据库初始化问题
 """
 
-import os
-import asyncio
-import pytest
-import pytest_asyncio
-from fastapi.testclient import TestClient
-from fastapi import FastAPI
-from sqlalchemy.ext.asyncio import AsyncSession
 
 # 在模块级别设置环境变量，确保在任何导入之前就设置好
 os.environ.update({
@@ -41,9 +50,6 @@ os.environ.update({
     "HEALTH_CHECK_ENABLED": "true",
 })
 
-from tests.test_database_manager import TestDatabaseManager, setup_test_database, teardown_test_database
-from auth_service.core.database import get_db
-from auth_service.cmd.server.main import create_app
 
 
 @pytest_asyncio.fixture(scope="session")
@@ -88,7 +94,6 @@ def client(app):
 @pytest_asyncio.fixture
 async def async_client(app):
     """异步测试客户端fixture"""
-    from httpx import AsyncClient
     
     async with AsyncClient(app=app, base_url="http://testserver") as ac:
         yield ac

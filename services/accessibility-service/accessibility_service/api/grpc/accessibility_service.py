@@ -1,15 +1,26 @@
 """
+accessibility_service - 索克生活项目模块
+"""
+
+from ...ai_models.audio_model import AudioModel
+from ...ai_models.vision_model import VisionModel
+from ...config.settings import get_settings
+from ...core.service import AccessibilityService
+from ...models.accessibility import (
+from .accessibility_pb2 import (
+from .accessibility_pb2_grpc import AccessibilityServiceServicer
+from grpc import aio
+from typing import Dict, Any, Optional
+import asyncio
+import grpc
+import logging
+
+"""
 Complete gRPC service implementation for accessibility features.
 Provides comprehensive accessibility services through gRPC interface.
 """
 
-import asyncio
-import logging
-from typing import Dict, Any, Optional
-import grpc
-from grpc import aio
 
-from .accessibility_pb2 import (
     BlindAssistanceRequest, BlindAssistanceResponse,
     SignLanguageRequest, SignLanguageResponse,
     ScreenReadingRequest, ScreenReadingResponse,
@@ -20,18 +31,12 @@ from .accessibility_pb2 import (
     HealthAlertRequest, HealthAlertResponse,
     SpeechTranslationRequest, SpeechTranslationResponse
 )
-from .accessibility_pb2_grpc import AccessibilityServiceServicer
 
-from ...core.service import AccessibilityService
-from ...ai_models.vision_model import VisionModel
-from ...ai_models.audio_model import AudioModel
-from ...models.accessibility import (
     AccessibilityRequest,
     UserPreferences,
     VisualAnalysis,
     AudioAnalysis
 )
-from ...config.settings import get_settings
 
 logger = logging.getLogger(__name__)
 

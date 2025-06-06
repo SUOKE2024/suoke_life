@@ -1,3 +1,15 @@
+"""
+syndrome_analyzer - 索克生活项目模块
+"""
+
+from ..model.tcm_models import (
+from ..service.embedding_service import EmbeddingService
+from dataclasses import dataclass
+from enum import Enum
+from loguru import logger
+from typing import Dict, List, Any, Optional, Tuple
+import jieba
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,14 +17,7 @@
 中医辨证分析器 - 实现中医辨证论治的数字化分析
 """
 
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass
-from enum import Enum
-import jieba
-from loguru import logger
 
-from ..service.embedding_service import EmbeddingService
-from ..model.tcm_models import (
     Syndrome, SyndromePattern, ConstitutionType, 
     SymptomCategory, TreatmentPrinciple
 )

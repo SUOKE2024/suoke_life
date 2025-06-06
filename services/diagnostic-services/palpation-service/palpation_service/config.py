@@ -1,13 +1,18 @@
 """
+config - 索克生活项目模块
+"""
+
+from functools import lru_cache
+from pydantic import Field, field_validator
+from pydantic_settings import BaseSettings
+from typing import Any
+
+"""
 配置管理模块
 提供环境变量读取和配置验证功能
 """
 
-from functools import lru_cache
-from typing import Any
 
-from pydantic import Field, field_validator
-from pydantic_settings import BaseSettings
 
 
 class DatabaseConfig(BaseSettings):

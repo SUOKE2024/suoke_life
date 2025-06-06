@@ -1,12 +1,11 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react-native';
 import { BlockchainStatusCard } from '../BlockchainStatusCard';
-import { BlockchainStatus } from '../../../types/blockchain';
+
 
 // Mock the useBlockchainStatusMonitor hook
 const mockUseBlockchainStatusMonitor = jest.fn();
 jest.mock('../../../hooks/useBlockchainService', () => ({
-  useBlockchainStatusMonitor: () => mockUseBlockchainStatusMonitor()
+  useBlockchainStatusMonitor: () => mockUseBlockchainStatusMonitor();
 }));
 
 describe('BlockchainStatusCard', () => {
@@ -30,7 +29,7 @@ describe('BlockchainStatusCard', () => {
       status: null,
       isConnected: false,
       lastUpdate: null,
-      refresh: jest.fn()
+      refresh: jest.fn();
     });
 
     render(<BlockchainStatusCard />);
@@ -44,7 +43,7 @@ describe('BlockchainStatusCard', () => {
       status: mockStatus,
       isConnected: true,
       lastUpdate: new Date(),
-      refresh: jest.fn()
+      refresh: jest.fn();
     });
 
     render(<BlockchainStatusCard />);
@@ -66,7 +65,7 @@ describe('BlockchainStatusCard', () => {
       status: disconnectedStatus,
       isConnected: false,
       lastUpdate: new Date(),
-      refresh: jest.fn()
+      refresh: jest.fn();
     });
 
     render(<BlockchainStatusCard />);
@@ -85,7 +84,7 @@ describe('BlockchainStatusCard', () => {
       status: syncingStatus,
       isConnected: true,
       lastUpdate: new Date(),
-      refresh: jest.fn()
+      refresh: jest.fn();
     });
 
     render(<BlockchainStatusCard />);
@@ -109,4 +108,4 @@ describe('BlockchainStatusCard', () => {
     // This is just verifying the component renders with the mock
     expect(mockRefresh).toBeDefined();
   });
-}); 
+});

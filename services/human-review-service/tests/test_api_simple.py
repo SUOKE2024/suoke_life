@@ -1,16 +1,21 @@
 """
+test_api_simple - 索克生活项目模块
+"""
+
+from fastapi.testclient import TestClient
+from human_review_service.api.main import create_app
+from human_review_service.core.database import init_database
+from unittest.mock import AsyncMock, Mock, patch
+import pytest
+
+"""
 简化API测试
 Simplified API Tests
 
 专注于测试实际存在的API端点
 """
 
-import pytest
-from fastapi.testclient import TestClient
-from unittest.mock import AsyncMock, Mock, patch
 
-from human_review_service.api.main import create_app
-from human_review_service.core.database import init_database
 
 
 @pytest.fixture

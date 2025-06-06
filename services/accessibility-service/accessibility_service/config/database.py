@@ -1,15 +1,20 @@
 """
+database - 索克生活项目模块
+"""
+
+    from pydantic import BaseSettings
+    from pydantic_settings import BaseSettings
+from pydantic import Field, field_validator
+from typing import Any
+
+"""
 Database configuration for accessibility service.
 """
 
-from typing import Any
 
-from pydantic import Field, field_validator
 
 try:
-    from pydantic_settings import BaseSettings
 except ImportError:
-    from pydantic import BaseSettings
 
 
 class DatabaseConfig(BaseSettings):

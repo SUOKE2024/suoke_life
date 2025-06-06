@@ -1,7 +1,6 @@
+import React from 'react';
 import { renderHook, act } from '@testing-library/react-hooks';
-import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import { useRAGService } from '../useRAGService';
 import ragReducer from '../../store/slices/ragSlice';
 
 // Mock RAGService
@@ -17,19 +16,16 @@ jest.mock('../../services/ragService', () => ({
     clearCache: jest.fn(),
     on: jest.fn(),
     off: jest.fn(),
-    destroy: jest.fn()
+    destroy: jest.fn();
   }))
 }));
 
-const createWrapper = () => {
-  const store = configureStore({
-    reducer: {
-      rag: ragReducer
-    }
+const createWrapper = () => {const store = configureStore({reducer: {rag: ragReducer;
+    };
   });
 
-  return ({ children }: { children: React.ReactNode }) => (
-    <Provider store={store}>{children}</Provider>
+  return ({ children }: { children: React.ReactNode }) => (;
+    <Provider store={store}>{children}</Provider>;
   );
 };
 
@@ -104,9 +100,7 @@ describe('useRAGService', () => {
     const wrapper = createWrapper();
     const { result } = renderHook(() => useRAGService(), { wrapper });
 
-    const multimodalRequest = {
-      text: '分析这张图片',
-      images: ['data:image/jpeg;base64,test'],
+    const multimodalRequest = {text: '分析这张图片',images: ['data:image/jpeg;base64,test'],
       modality: 'image' as const
     };
 
@@ -175,10 +169,7 @@ describe('useRAGService', () => {
     const wrapper = createWrapper();
     const { result } = renderHook(() => useRAGService(), { wrapper });
 
-    const healthData = {
-      symptoms: ['头痛', '失眠'],
-      vitalSigns: { heartRate: 80, bloodPressure: '120/80' },
-      lifestyle: { exercise: 'moderate', diet: 'balanced' }
+    const healthData = {symptoms: ['头痛', '失眠'],vitalSigns: { heartRate: 80, bloodPressure: '120/80' },lifestyle: { exercise: 'moderate', diet: 'balanced' };
     };
 
     await act(async () => {
@@ -232,4 +223,4 @@ describe('useRAGService', () => {
 
     expect(result.current).toBeDefined();
   });
-}); 
+});

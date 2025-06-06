@@ -1,11 +1,17 @@
 """
+test_exceptions - 索克生活项目模块
+"""
+
+from suoke_blockchain_service.exceptions import (
+from suoke_blockchain_service.models import DataType
+import pytest
+
+"""
 异常处理测试
 
 测试增强的异常处理功能。
 """
 
-import pytest
-from suoke_blockchain_service.exceptions import (
     BlockchainServiceError,
     ValidationError,
     NotFoundError,
@@ -25,7 +31,6 @@ from suoke_blockchain_service.exceptions import (
     validate_field_length,
     validate_enum_value
 )
-from suoke_blockchain_service.models import DataType
 
 
 class TestEnhancedExceptions:

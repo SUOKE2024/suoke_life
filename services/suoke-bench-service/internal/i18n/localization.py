@@ -1,14 +1,19 @@
+"""
+localization - 索克生活项目模块
+"""
+
+from fastapi import Request
+from functools import lru_cache
+from pathlib import Path
+from typing import Dict, Any, Optional
+import json
+import os
+
 """国际化支持模块
 
 提供多语言支持和本地化功能
 """
 
-import json
-import os
-from typing import Dict, Any, Optional
-from pathlib import Path
-from functools import lru_cache
-from fastapi import Request
 
 
 class LocalizationManager:

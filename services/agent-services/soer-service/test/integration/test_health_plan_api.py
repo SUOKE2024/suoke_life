@@ -1,18 +1,23 @@
-#!/usr/bin/env python3
 """
-健康计划API集成测试
+test_health_plan_api - 索克生活项目模块
 """
+
+from fastapi.testclient import TestClient
+from internal.delivery.rest import init_rest_app
 import os
 import sys
 import unittest
 import uuid
 
-from fastapi.testclient import TestClient
+#!/usr/bin/env python3
+"""
+健康计划API集成测试
+"""
+
 
 # 确保能够导入应用代码
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-from internal.delivery.rest import init_rest_app
 
 
 class TestHealthPlanAPI(unittest.TestCase):
@@ -91,7 +96,8 @@ class TestHealthPlanAPI(unittest.TestCase):
                 break
         self.assertTrue(preferences_found, "运动偏好未被采纳")
 
-    def test_get_health_plan(self):
+        @cache(timeout=300)  # 5分钟缓存
+def test_get_health_plan(self):
         """测试获取健康计划"""
         response = self.client.get(
             f"/health-plans/{self.plan_id}",
@@ -137,7 +143,8 @@ class TestHealthPlanAPI(unittest.TestCase):
 
         # 验证进度
         self.assertGreater(data["progress_percentage"], 0)
-        self.assertLessEqual(data["progress_percentage"], 100)
+        self.assertLessEqual(data["    @cache(timeout=300)  # 5分钟缓存
+progress_percentage"], 100)
 
     def test_invalid_get_health_plan(self):
         """测试无效的健康计划获取请求"""

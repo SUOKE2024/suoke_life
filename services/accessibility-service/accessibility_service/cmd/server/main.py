@@ -1,26 +1,32 @@
+"""
+main - 索克生活项目模块
+"""
+
+    from api.grpc import accessibility_pb2, accessibility_pb2_grpc
+from concurrent import futures
+from config.config import Config, config
+from grpc_reflection.v1alpha import reflection
+from internal.delivery.grpc_server import AccessibilityServicer
+from internal.service.app import AccessibilityApp
+import argparse
+import grpc
+import logging
+import os
+import signal
+import sys
+import time
+
 #!/usr/bin/env python
 
 """
 无障碍服务主入口
 """
 
-import argparse
-import logging
-import os
-import signal
-import sys
-import time
-from concurrent import futures
 
-import grpc
-from grpc_reflection.v1alpha import reflection
 
 # 添加项目根目录到路径，以便导入其他模块
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-from config.config import Config, config
-from internal.delivery.grpc_server import AccessibilityServicer
-from internal.service.app import AccessibilityApp
 
 
 # 设置日志
@@ -90,7 +96,6 @@ def create_server(app, host, port):
     servicer = AccessibilityServicer(app.accessibility_service)
 
     # 注册服务
-    from api.grpc import accessibility_pb2, accessibility_pb2_grpc
     accessibility_pb2_grpc.add_AccessibilityServiceServicer_to_server(servicer, server)
 
     # 添加反射服务（用于grpcurl等工具探索服务）

@@ -1,30 +1,36 @@
+"""
+__init__ - 索克生活项目模块
+"""
+
+from .assertions import (
+from .fixtures import (
+from .mock_tools import (
+from .test_decorators import (
+from .test_framework import (
+
 #!/usr/bin/env python3
 """
 测试工具集模块
 提供统一的测试框架和工具
 """
 
-from .assertions import (
     AssertionHelper,
     DatabaseAssertion,
     PerformanceAssertion,
     ResponseAssertion,
 )
-from .fixtures import (
     DatabaseFixture,
     DataFixture,
     FixtureManager,
     ServiceFixture,
     get_fixture_manager,
 )
-from .mock_tools import (
     MockDatabase,
     MockHTTPClient,
     MockManager,
     MockService,
     create_mock_manager,
 )
-from .test_decorators import (
     integration_test,
     mock_service,
     performance_test,
@@ -32,7 +38,6 @@ from .test_decorators import (
     unit_test,
     use_fixture,
 )
-from .test_framework import (
     TestCase,
     TestFramework,
     TestResult,

@@ -1,7 +1,12 @@
-from typing import Any
+"""
+knowledge_graph_service - 索克生活项目模块
+"""
 
 from app.core.logger import get_logger
 from app.repositories.neo4j_repository import Neo4jRepository
+from typing import Any
+
+
 
 logger = get_logger()
 

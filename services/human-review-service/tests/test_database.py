@@ -1,22 +1,28 @@
 """
+test_database - 索克生活项目模块
+"""
+
+        from human_review_service.core.config import get_database_url
+from human_review_service.core.config import DatabaseSettings
+from human_review_service.core.database import (
+from unittest.mock import AsyncMock, Mock, patch, MagicMock
+import asyncio
+import pytest
+
+"""
 数据库模块测试
 Database Module Tests
 
 测试数据库连接、会话管理等功能
 """
 
-import pytest
-import asyncio
-from unittest.mock import AsyncMock, Mock, patch, MagicMock
 
-from human_review_service.core.database import (
     init_database,
     get_session_factory,
     get_session,
     get_session_dependency,
     close_database
 )
-from human_review_service.core.config import DatabaseSettings
 
 
 class TestDatabaseSettings:
@@ -305,7 +311,6 @@ class TestDatabasePerformance:
 
     def test_database_url_construction(self):
         """测试数据库URL构建"""
-        from human_review_service.core.config import get_database_url
         
         # 测试默认URL构建
         url = get_database_url()

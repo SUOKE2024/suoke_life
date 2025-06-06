@@ -1,17 +1,28 @@
+"""
+model_factory - 索克生活项目模块
+"""
+
+    from openai.types.chat import (
+    import openai
+    import zhipuai
+from pkg.utils.config_loader import get_config
+from pkg.utils.metrics import get_metrics_collector, track_llm_metrics
+from pkg.utils.resilience import circuit_breaker, rate_limiter
+from tenacity import (
+from typing import Any
+import asyncio
+import httpx
+import logging
+import os
+import time
+
 #!/usr/bin/env python3
 """
 大模型工厂类
 负责创建和管理不同类型的大模型客户端，为老克智能体提供支持
 """
 
-import asyncio
-import logging
-import os
-import time
-from typing import Any
 
-import httpx
-from tenacity import (
     retry,
     retry_if_exception_type,
     stop_after_attempt,
@@ -19,8 +30,6 @@ from tenacity import (
 )
 
 try:
-    import openai
-    from openai.types.chat import (
         ChatCompletionAssistantMessageParam,
         ChatCompletionSystemMessageParam,
         ChatCompletionUserMessageParam,
@@ -31,15 +40,11 @@ except ImportError:
     logging.warning("未安装openai库，无法使用OpenAI API")
 
 try:
-    import zhipuai
     HAS_ZHIPUAI = True
 except ImportError:
     HAS_ZHIPUAI = False
     logging.warning("未安装zhipuai库，无法使用智谱API")
 
-from pkg.utils.config_loader import get_config
-from pkg.utils.metrics import get_metrics_collector, track_llm_metrics
-from pkg.utils.resilience import circuit_breaker, rate_limiter
 
 logger = logging.getLogger(__name__)
 

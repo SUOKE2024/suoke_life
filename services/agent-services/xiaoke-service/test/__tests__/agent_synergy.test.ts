@@ -70,25 +70,25 @@ describe("小克智能体协同测试", () => {
   });
 
   describe("基础功能测试", () => {
-    test("应该能够初始化小克服务", async () => {
+    test(""应该能够初始化小克服务", async () => {
       // 测试服务初始化
       expect(mockRedis).toBeDefined();
       expect(mockRegistry).toBeDefined();
     });
 
-    test("应该能够连接到Redis", async () => {
+    test(""应该能够连接到Redis", async () => {
       const result = await mockRedis.ping();
       expect(result).toBe("PONG");
     });
 
-    test("应该能够注册到服务中心", async () => {
+    test(""应该能够注册到服务中心", async () => {
       const result = await mockRegistry.register();
       expect(result).toBe(true);
     });
   });
 
   describe("协同决策测试", () => {
-    test("应该能够接收决策请求", async () => {
+    test(""应该能够接收决策请求", async () => {
       const mockDecisionRequest = {
         id: "test-decision-001",
         type: "medical_diagnosis",
@@ -111,7 +111,7 @@ describe("小克智能体协同测试", () => {
       expect(result).toBe("OK");
     });
 
-    test("应该能够进行中医诊断分析", async () => {
+    test(""应该能够进行中医诊断分析", async () => {
       const symptoms = ["头痛", "发热", "咳嗽"];
       
       // 模拟中医诊断逻辑
@@ -131,7 +131,7 @@ describe("小克智能体协同测试", () => {
       expect(diagnosis.recommendations).toHaveLength(3);
     });
 
-    test("应该能够参与投票决策", async () => {
+    test(""应该能够参与投票决策", async () => {
       const voteData = {
         decisionId: "test-decision-001",
         agentId: "xiaoke",
@@ -154,7 +154,7 @@ describe("小克智能体协同测试", () => {
   });
 
   describe("通信协议测试", () => {
-    test("应该能够发送消息到其他智能体", async () => {
+    test(""应该能够发送消息到其他智能体", async () => {
       const message = {
         from: "xiaoke",
         to: "laoke",
@@ -174,7 +174,7 @@ describe("小克智能体协同测试", () => {
       expect(result).toBe(1);
     });
 
-    test("应该能够接收其他智能体的消息", async () => {
+    test(""应该能够接收其他智能体的消息", async () => {
       const mockMessage = {
         from: "laoke",
         to: "xiaoke",
@@ -196,7 +196,7 @@ describe("小克智能体协同测试", () => {
   });
 
   describe("性能测试", () => {
-    test("应该能够在规定时间内完成诊断", async () => {
+    test(""应该能够在规定时间内完成诊断", async () => {
       const startTime = Date.now();
       
       // 模拟诊断过程
@@ -209,7 +209,7 @@ describe("小克智能体协同测试", () => {
       expect(duration).toBeLessThan(500);
     });
 
-    test("应该能够处理并发请求", async () => {
+    test(""应该能够处理并发请求", async () => {
       const concurrentRequests = 10;
       const promises = [];
 
@@ -228,7 +228,7 @@ describe("小克智能体协同测试", () => {
   });
 
   describe("错误处理测试", () => {
-    test("应该能够处理网络连接错误", async () => {
+    test(""应该能够处理网络连接错误", async () => {
       // 模拟网络错误
       mockRedis.ping = jest.fn().mockRejectedValue(new Error("Connection failed"));
 
@@ -239,7 +239,7 @@ describe("小克智能体协同测试", () => {
       }
     });
 
-    test("应该能够处理无效的决策请求", async () => {
+    test(""应该能够处理无效的决策请求", async () => {
       const invalidRequest = {
         // 缺少必要字段
         type: "invalid"
@@ -252,7 +252,7 @@ describe("小克智能体协同测试", () => {
   });
 
   describe("诊断分析协同决策", () => {
-    test("应该提供基于现代医学的诊断分析", async () => {
+    test(""应该提供基于现代医学的诊断分析", async () => {
       const context: DecisionContext = {
         userId: "user-diagnosis-001",
         sessionId: "session-diagnosis-001",
@@ -297,8 +297,8 @@ describe("小克智能体协同测试", () => {
       expect(xiaokeVote?.recommendation).toHaveProperty("urgencyLevel");
     });
 
-    test(应该识别复杂症状模式并提供鉴别诊断", async () => {
-      const complexContext: DecisionContext = {;
+    test("应该识别复杂症状模式并提供鉴别诊断", async () => {
+      const complexContext: DecisionContext = {
         userId: "user-complex-001,
         sessionId: "session-complex-001",
         healthData: {
@@ -320,7 +320,7 @@ describe("小克智能体协同测试", () => {
         });
       };
 
-      const requestId = await decisionBus.submitDecisionRequest({;
+      const requestId = await decisionBus.submitDecisionRequest({
         requestId: "req-complex-diagnosis-001,
         decisionType: DecisionType.DIAGNOSIS_ANALYSIS,
         priority: DecisionPriority.HIGH,
@@ -343,8 +343,8 @@ const xiaokeVote = result?.agentVotes.find(v => v.agentType === AgentType.XIAOKE
       expect(xiaokeVote?.recommendation.urgencyLevel).toBe("high");
     });
 
-    test(应该评估药物相互作用和禁忌症", async () => {
-      const medicationContext: DecisionContext = {;
+    test("应该评估药物相互作用和禁忌症", async () => {
+      const medicationContext: DecisionContext = {
         userId: "user-medication-001,
         sessionId: "session-medication-001",
         healthData: {
@@ -365,7 +365,7 @@ const xiaokeVote = result?.agentVotes.find(v => v.agentType === AgentType.XIAOKE
         });
       };
 
-      const requestId = await decisionBus.submitDecisionRequest({;
+      const requestId = await decisionBus.submitDecisionRequest({
         requestId: req-medication-001",
         decisionType: DecisionType.TREATMENT_PLANNING,
         priority: DecisionPriority.MEDIUM,
@@ -390,8 +390,8 @@ const xiaokeVote = result?.agentVotes.find(v => v.agentType === AgentType.XIAOKE
   });
 
   describe("中医西医结合协同", () => {
-    test(应该与老克协同进行中西医结合诊断", async () => {
-      const integratedContext: DecisionContext = {;
+    test("应该与老克协同进行中西医结合诊断", async () => {
+      const integratedContext: DecisionContext = {
         userId: "user-integrated-001,
         sessionId: "session-integrated-001",
         healthData: {
@@ -415,7 +415,7 @@ const xiaokeVote = result?.agentVotes.find(v => v.agentType === AgentType.XIAOKE
         });
       };
 
-      const requestId = await decisionBus.submitDecisionRequest({;
+      const requestId = await decisionBus.submitDecisionRequest({
         requestId: req-integrated-001",
         decisionType: DecisionType.SYNDROME_DIFFERENTIATION,
         priority: DecisionPriority.MEDIUM,
@@ -439,8 +439,8 @@ const xiaokeVote = result?.agentVotes.find(v => v.agentType === AgentType.XIAOKE
       expect(result?.consensusScore).toBeGreaterThan(0.7);
     });
 
-    test(应该提供循证医学支持的治疗建议", async () => {
-      const evidenceContext: DecisionContext = {;
+    test("应该提供循证医学支持的治疗建议", async () => {
+      const evidenceContext: DecisionContext = {
         userId: "user-evidence-001,
         sessionId: "session-evidence-001",
         healthData: {
@@ -457,7 +457,7 @@ const xiaokeVote = result?.agentVotes.find(v => v.agentType === AgentType.XIAOKE
         });
       };
 
-      const requestId = await decisionBus.submitDecisionRequest({;
+      const requestId = await decisionBus.submitDecisionRequest({
         requestId: "req-evidence-001,
         decisionType: DecisionType.TREATMENT_PLANNING,
         priority: DecisionPriority.MEDIUM,
@@ -482,8 +482,8 @@ const xiaokeVote = result?.agentVotes.find(v => v.agentType === AgentType.XIAOKE
   });
 
   describe(紧急医疗协同响应", () => {
-    test("应该快速识别急性心肌梗死并协调紧急处理, async () => {
-      const emergencyContext: DecisionContext = {;
+    test(""应该快速识别急性心肌梗死并协调紧急处理, async () => {
+      const emergencyContext: DecisionContext = {
         userId: "user-ami-001",
         sessionId: session-ami-001",
         healthData: {
@@ -505,7 +505,7 @@ const xiaokeVote = result?.agentVotes.find(v => v.agentType === AgentType.XIAOKE
         });
       };
 
-      const requestId = await decisionBus.submitDecisionRequest({;
+      const requestId = await decisionBus.submitDecisionRequest({
         requestId: "req-ami-emergency-001,
         decisionType: DecisionType.EMERGENCY_RESPONSE,
         priority: DecisionPriority.EMERGENCY,
@@ -529,8 +529,8 @@ const xiaokeVote = result?.agentVotes.find(v => v.agentType === AgentType.XIAOKE
       expect(xiaokeVote?.recommendation).toHaveProperty("timeToTreatment");
     });
 
-    test(应该识别药物过敏反应并提供紧急处理方案", async () => {
-      const allergyContext: DecisionContext = {;
+    test("应该识别药物过敏反应并提供紧急处理方案", async () => {
+      const allergyContext: DecisionContext = {
         userId: "user-allergy-001,
         sessionId: "session-allergy-001",
         healthData: {
@@ -552,7 +552,7 @@ const xiaokeVote = result?.agentVotes.find(v => v.agentType === AgentType.XIAOKE
         });
       };
 
-      const requestId = await decisionBus.submitDecisionRequest({;
+      const requestId = await decisionBus.submitDecisionRequest({
         requestId: "req-allergy-emergency-001,
         decisionType: DecisionType.EMERGENCY_RESPONSE,
         priority: DecisionPriority.EMERGENCY,
@@ -577,8 +577,8 @@ const xiaokeVote = result?.agentVotes.find(v => v.agentType === AgentType.XIAOKE
   });
 
   describe(预防医学协同", () => {
-    test("应该提供基于风险评估的预防建议, async () => {
-      const preventionContext: DecisionContext = {;
+    test(""应该提供基于风险评估的预防建议, async () => {
+      const preventionContext: DecisionContext = {
         userId: "user-prevention-001",
         sessionId: session-prevention-001",
         healthData: {
@@ -598,7 +598,7 @@ const xiaokeVote = result?.agentVotes.find(v => v.agentType === AgentType.XIAOKE
         });
       };
 
-      const requestId = await decisionBus.submitDecisionRequest({;
+      const requestId = await decisionBus.submitDecisionRequest({
         requestId: "req-prevention-001,
         decisionType: DecisionType.PREVENTIVE_CARE,
         priority: DecisionPriority.MEDIUM,
@@ -621,8 +621,8 @@ const xiaokeVote = result?.agentVotes.find(v => v.agentType === AgentType.XIAOKE
       expect(xiaokeVote?.recommendation.riskAssessment).toHaveProperty("cardiovascularRisk");
     });
 
-    test(应该制定个性化健康监测计划", async () => {
-      const monitoringContext: DecisionContext = {;
+    test("应该制定个性化健康监测计划", async () => {
+      const monitoringContext: DecisionContext = {
         userId: "user-monitoring-001,
         sessionId: "session-monitoring-001",
         healthData: {
@@ -641,7 +641,7 @@ bloodPressure: { systolic: 140, diastolic: 88 },
         });
       };
 
-      const requestId = await decisionBus.submitDecisionRequest({;
+      const requestId = await decisionBus.submitDecisionRequest({
         requestId: req-monitoring-001",
         decisionType: DecisionType.PREVENTIVE_CARE,
         priority: DecisionPriority.MEDIUM,
@@ -666,8 +666,8 @@ const xiaokeVote = result?.agentVotes.find(v => v.agentType === AgentType.XIAOKE
   });
 
   describe("协同决策质量保证", () => {
-    test(应该提供高质量的医学证据支持", async () => {
-      const qualityContext: DecisionContext = {;
+    test("应该提供高质量的医学证据支持", async () => {
+      const qualityContext: DecisionContext = {
         userId: "user-quality-001,
         sessionId: "session-quality-001",
         healthData: {
@@ -683,7 +683,7 @@ const xiaokeVote = result?.agentVotes.find(v => v.agentType === AgentType.XIAOKE
         });
       };
 
-      const requestId = await decisionBus.submitDecisionRequest({;
+      const requestId = await decisionBus.submitDecisionRequest({
         requestId: "req-quality-001",
         decisionType: DecisionType.TREATMENT_PLANNING,
         priority: DecisionPriority.MEDIUM,
@@ -706,8 +706,8 @@ const xiaokeVote = result?.agentVotes.find(v => v.agentType === AgentType.XIAOKE
       expect(xiaokeVote?.recommendation).toHaveProperty("recommendationStrength);
     });
 
-    test("应该处理不确定性和提供替代方案", async () => {
-      const uncertainContext: DecisionContext = {;
+    test(""应该处理不确定性和提供替代方案", async () => {
+      const uncertainContext: DecisionContext = {
         userId: user-uncertain-001",
         sessionId: "session-uncertain-001,
         healthData: {
@@ -724,7 +724,7 @@ const xiaokeVote = result?.agentVotes.find(v => v.agentType === AgentType.XIAOKE
         });
       };
 
-      const requestId = await decisionBus.submitDecisionRequest({;
+      const requestId = await decisionBus.submitDecisionRequest({
         requestId: req-uncertain-001",
         decisionType: DecisionType.DIAGNOSIS_ANALYSIS,
         priority: DecisionPriority.HIGH,
@@ -749,11 +749,11 @@ const xiaokeVote = result?.agentVotes.find(v => v.agentType === AgentType.XIAOKE
   });
 
   describe("性能和可靠性测试", () => {
-    test(应该在高负载下保持诊断准确性", async () => {
+    test("应该在高负载下保持诊断准确性", async () => {
       const loadTestPromises = [];
 
       for (let i = 0; i < 10; i++) {
-        const context: DecisionContext = {;
+        const context: DecisionContext = {
           userId: `user-load-${i}`,
           sessionId: `session-load-${i}`,
           healthData: {
@@ -763,7 +763,7 @@ const xiaokeVote = result?.agentVotes.find(v => v.agentType === AgentType.XIAOKE
           symptoms: [`症状${i}`]
         };
 
-        const promise = decisionBus.submitDecisionRequest({;
+        const promise = decisionBus.submitDecisionRequest({
           requestId: `req-load-${i}`,
           decisionType: DecisionType.DIAGNOSIS_ANALYSIS,
           priority: DecisionPriority.MEDIUM,
@@ -792,7 +792,7 @@ for (const requestId of requestIds) {
       });
     });
 
-    test("应该处理服务故障并提供降级服务", async () => {
+    test(""应该处理服务故障并提供降级服务", async () => {
       // 模拟部分服务故障
 mockRegistry.getAgentService.mockImplementation((agentType) => {
         if (agentType === AgentType.XIAOAI) {
@@ -810,7 +810,7 @@ mockRegistry.getAgentService.mockImplementation((agentType) => {
         };
       });
 
-      const context: DecisionContext = {;
+      const context: DecisionContext = {
         userId: "user-degraded-001,
         sessionId: "session-degraded-001",
         healthData: {
@@ -820,7 +820,7 @@ mockRegistry.getAgentService.mockImplementation((agentType) => {
         symptoms: [胸痛", "气短]
       };
 
-      const requestId = await decisionBus.submitDecisionRequest({;
+      const requestId = await decisionBus.submitDecisionRequest({
         requestId: "req-degraded-001",
         decisionType: DecisionType.DIAGNOSIS_ANALYSIS,
         priority: DecisionPriority.HIGH,

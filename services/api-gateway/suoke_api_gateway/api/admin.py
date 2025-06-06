@@ -1,3 +1,18 @@
+"""
+admin - 索克生活项目模块
+"""
+
+        from ..core.config import get_settings
+from ..core.logging import get_logger
+from ..services.oauth2_provider import get_oauth2_provider
+from ..services.tracing import get_tracing_service
+from ..services.websocket_manager import get_websocket_manager
+from ..utils.metrics import get_metrics_collector
+from datetime import datetime
+from fastapi import APIRouter, Request, Depends, HTTPException
+from fastapi.responses import HTMLResponse, JSONResponse
+from typing import Dict, Any, Optional
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -7,17 +22,8 @@ API 网关管理界面
 提供可视化的管理功能。
 """
 
-from typing import Dict, Any, Optional
-from datetime import datetime
 
-from fastapi import APIRouter, Request, Depends, HTTPException
-from fastapi.responses import HTMLResponse, JSONResponse
 
-from ..services.websocket_manager import get_websocket_manager
-from ..services.oauth2_provider import get_oauth2_provider
-from ..services.tracing import get_tracing_service
-from ..utils.metrics import get_metrics_collector
-from ..core.logging import get_logger
 
 logger = get_logger(__name__)
 
@@ -339,7 +345,6 @@ async def admin_config() -> Dict[str, Any]:
         配置信息
     """
     try:
-        from ..core.config import get_settings
         settings = get_settings()
         
         # 只返回非敏感的配置信息

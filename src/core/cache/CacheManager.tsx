@@ -1,7 +1,6 @@
-import React from "react";
-import { usePerformanceMonitor } from "../../hooks/usePerformanceMonitor";
-import { errorHandler, ErrorType } from "../error/ErrorHandler";
 import { performanceMonitor, PerformanceCategory } from "../monitoring/PerformanceMonitor";
+
+import React from "react";
 
 /**
  * 索克生活 - 缓存管理系统
@@ -105,8 +104,7 @@ export class CacheManager {
     this.layers.set(name, layer);
 
     if (config.cleanupInterval) {
-      const interval = setInterval(() => {
-        this.cleanupLayer(name);
+      const interval = setInterval(() => {this.cleanupLayer(name);
       }, config.cleanupInterval);
       this.cleanupIntervals.set(name, interval);
     }
@@ -121,18 +119,14 @@ export class CacheManager {
       metadata?: Record<string, any>;
     } = {}
   ): Promise<boolean> {
-    return performanceMonitor.measureAsync(
-      "cache_set",
-      PerformanceCategory.MEMORY,
-      async () => {
-        const layer = this.layers.get(layerName);
+    return performanceMonitor.measureAsync(;
+      "cache_set",PerformanceCategory.MEMORY,async () => {const layer = this.layers.get(layerName);
         if (!layer) {
           return false;
         }
         const now = Date.now();
-        const serializedValue = await this.serializeValue(
-          value,
-          layer.config.compression && this.compressionEnabled
+        const serializedValue = await this.serializeValue(;
+          value,layer.config.compression && this.compressionEnabled;
         );
         const size = this.calculateSize(serializedValue);
         const item: CacheItem<T> = {
@@ -162,11 +156,8 @@ export class CacheManager {
   }
 
   public async get<T>(layerName: string, key: string): Promise<T | null> {
-    return performanceMonitor.measureAsync(
-      "cache_get",
-      PerformanceCategory.MEMORY,
-      async () => {
-        const layer = this.layers.get(layerName);
+    return performanceMonitor.measureAsync(;
+      "cache_get",PerformanceCategory.MEMORY,async () => {const layer = this.layers.get(layerName);
         if (!layer) {
           return null;
         }
@@ -190,7 +181,7 @@ export class CacheManager {
         if (item.encrypted) {
           value = await this.decryptData(value);
         }
-        
+
         if (item.compressed) {
           value = await this.decompressData(value);
         }
@@ -237,16 +228,7 @@ export class CacheManager {
   public getStats(layerName?: string): CacheStats | Map<string, CacheStats> {
     if (layerName) {
       const layer = this.layers.get(layerName);
-      return layer ? layer.stats : {
-        hits: 0,
-        misses: 0,
-        hitRate: 0,
-        totalItems: 0,
-        totalSize: 0,
-        memoryUsage: 0,
-        totalHits: 0,
-        totalMisses: 0,
-        evictionCount: 0
+      return layer ? layer.stats : {hits: 0,misses: 0,hitRate: 0,totalItems: 0,totalSize: 0,memoryUsage: 0,totalHits: 0,totalMisses: 0,evictionCount: 0;
       };
     }
     const allStats = new Map<string, CacheStats>();
@@ -292,10 +274,7 @@ export class CacheManager {
   ): Promise<void> {
     try {
       const data = await dataLoader();
-      const items = Array.from(data.entries()).map(([key, value]) => ({
-        key,
-        value,
-        options
+      const items = Array.from(data.entries()).map(([key, value]) => ({key,value,options;
       }));
       await this.setMultiple(layerName, items);
     } catch (error) {
@@ -347,7 +326,7 @@ export class CacheManager {
           if (typeof localStorage !== "undefined") {
             localStorage.setItem(
               `cache_${layer.name}_${key}`,
-              JSON.stringify(item)
+              JSON.stringify(item);
             );
             return true;
           }
@@ -356,7 +335,7 @@ export class CacheManager {
           if (typeof sessionStorage !== "undefined") {
             sessionStorage.setItem(
               `cache_${layer.name}_${key}`,
-              JSON.stringify(item)
+              JSON.stringify(item);
             );
             return true;
           }
@@ -433,7 +412,7 @@ export class CacheManager {
         break;
       case CacheType.LOCAL_STORAGE:
         if (typeof localStorage !== "undefined") {
-          const keys = Object.keys(localStorage).filter((key) =>
+          const keys = Object.keys(localStorage).filter((key) =>;
             key.startsWith(`cache_${layer.name}_`);
           );
           keys.forEach((key) => localStorage.removeItem(key));
@@ -441,7 +420,7 @@ export class CacheManager {
         break;
       case CacheType.SESSION_STORAGE:
         if (typeof sessionStorage !== "undefined") {
-          const keys = Object.keys(sessionStorage).filter((key) =>
+          const keys = Object.keys(sessionStorage).filter((key) =>;
             key.startsWith(`cache_${layer.name}_`);
           );
           keys.forEach((key) => sessionStorage.removeItem(key));
@@ -459,15 +438,15 @@ export class CacheManager {
         return Array.from(layer.cache.keys);
       case CacheType.LOCAL_STORAGE:
         if (typeof localStorage !== "undefined") {
-          return Object.keys(localStorage)
-            .filter((key) => key.startsWith(`cache_${layer.name}_`))
+          return Object.keys(localStorage);
+            .filter((key) => key.startsWith(`cache_${layer.name}_`));
             .map((key) => key.replace(`cache_${layer.name}_`, ""));
         }
         break;
       case CacheType.SESSION_STORAGE:
         if (typeof sessionStorage !== "undefined") {
-          return Object.keys(sessionStorage)
-            .filter((key) => key.startsWith(`cache_${layer.name}_`))
+          return Object.keys(sessionStorage);
+            .filter((key) => key.startsWith(`cache_${layer.name}_`));
             .map((key) => key.replace(`cache_${layer.name}_`, ""));
         }
         break;

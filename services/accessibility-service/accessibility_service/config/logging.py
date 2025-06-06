@@ -1,16 +1,23 @@
 """
+logging - 索克生活项目模块
+"""
+
+                from sentry_sdk.integrations.logging import LoggingIntegration
+                import sentry_sdk
+    from pydantic import BaseSettings
+    from pydantic_settings import BaseSettings
+from pydantic import Field, field_validator
+from typing import Any
+import logging
+
+"""
 Logging configuration for accessibility service.
 """
 
-import logging
-from typing import Any
 
-from pydantic import Field, field_validator
 
 try:
-    from pydantic_settings import BaseSettings
 except ImportError:
-    from pydantic import BaseSettings
 
 class LoggingConfig(BaseSettings):
     """Logging configuration settings."""
@@ -252,8 +259,6 @@ class LoggingConfig(BaseSettings):
         # Setup Sentry if enabled
         if self.sentry_enabled and self.sentry_dsn:
             try:
-                import sentry_sdk
-                from sentry_sdk.integrations.logging import LoggingIntegration
 
                 sentry_logging = LoggingIntegration(
                     level=logging.INFO,

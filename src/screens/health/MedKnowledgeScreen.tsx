@@ -1,5 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import {
+import {import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../store';
+import {import { KnowledgeSearchBar } from '../../components/health/KnowledgeSearchBar';
+import { ConstitutionCard } from '../../components/health/ConstitutionCard';
+import { KnowledgeQuery, KnowledgeResult } from '../../services/medKnowledgeService';
+
   View,
   Text,
   StyleSheet,
@@ -8,11 +13,8 @@ import {
   TouchableOpacity,
   Alert,
   SafeAreaView,
-  StatusBar,
+  StatusBar
 } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../store';
-import {
   fetchConstitutions,
   fetchSymptoms,
   fetchAcupoints,
@@ -26,11 +28,8 @@ import {
   selectServiceHealth,
   selectSearchResults,
   addToSearchHistory,
-  clearError,
+  clearError
 } from '../../store/slices/medKnowledgeSlice';
-import { KnowledgeSearchBar } from '../../components/health/KnowledgeSearchBar';
-import { ConstitutionCard } from '../../components/health/ConstitutionCard';
-import { KnowledgeQuery, KnowledgeResult } from '../../services/medKnowledgeService';
 
 interface TabItem {
   key: string;
@@ -55,19 +54,17 @@ export const MedKnowledgeScreen: React.FC = () => {
     { key: 'acupoint', title: '穴位', icon: '📍' },
     { key: 'herb', title: '中药', icon: '🌿' },
     { key: 'syndrome', title: '证型', icon: '📋' },
-    { key: 'search', title: '搜索', icon: '🔍' },
+    { key: 'search', title: '搜索', icon: '🔍' }
   ];
 
   // 初始化数据加载
   useEffect(() => {
     initializeData();
-  }, []);
+  }, [])  // 检查是否需要添加依赖项;
 
   // 检查服务健康状态
   useEffect(() => {
-    const checkHealth = async () => {
-      try {
-        await dispatch(checkServiceHealth()).unwrap();
+    const checkHealth = async () => {try {await dispatch(checkServiceHealth()).unwrap();
       } catch (error) {
         console.warn('Service health check failed:', error);
       }
@@ -79,23 +76,16 @@ export const MedKnowledgeScreen: React.FC = () => {
     return () => clearInterval(interval);
   }, [dispatch]);
 
-  const initializeData = useCallback(async () => {
-    try {
-      // 并行加载基础数据
-      await Promise.allSettled([
-        dispatch(fetchConstitutions()).unwrap(),
-        dispatch(fetchSymptoms()).unwrap(),
-        dispatch(fetchAcupoints()).unwrap(),
-        dispatch(fetchHerbs()).unwrap(),
-        dispatch(fetchSyndromes()).unwrap(),
+  const initializeData = useCallback(async () => {try {// 并行加载基础数据;
+      await Promise.allSettled([;
+        dispatch(fetchConstitutions()).unwrap(),dispatch(fetchSymptoms()).unwrap(),dispatch(fetchAcupoints()).unwrap(),dispatch(fetchHerbs()).unwrap(),dispatch(fetchSyndromes()).unwrap();
       ]);
     } catch (error) {
       console.error('Failed to initialize data:', error);
     }
   }, [dispatch]);
 
-  const handleRefresh = useCallback(async () => {
-    setRefreshing(true);
+  const handleRefresh = useCallback(async () => {setRefreshing(true);
     try {
       await initializeData();
     } finally {
@@ -103,14 +93,12 @@ export const MedKnowledgeScreen: React.FC = () => {
     }
   }, [initializeData]);
 
-  const handleSearch = useCallback(async (query: KnowledgeQuery) => {
-    try {
-      // 添加到搜索历史
+  const handleSearch = useCallback(async (query: KnowledgeQuery) => {try {// 添加到搜索历史;
       dispatch(addToSearchHistory(query.query));
-      
+
       // 执行搜索
       await dispatch(searchKnowledge(query)).unwrap();
-      
+
       // 切换到搜索结果标签
       setActiveTab('search');
     } catch (error) {
@@ -118,14 +106,12 @@ export const MedKnowledgeScreen: React.FC = () => {
     }
   }, [dispatch]);
 
-  const handleConstitutionPress = useCallback((constitution: any) => {
-    // 导航到体质详情页面
+  const handleConstitutionPress = useCallback((constitution: any) => {// 导航到体质详情页面;
     console.log('Navigate to constitution detail:', constitution.id);
   }, []);
 
-  const handleErrorRetry = useCallback((errorType: keyof typeof errors) => {
-    dispatch(clearError(errorType));
-    
+  const handleErrorRetry = useCallback((errorType: keyof typeof errors) => {dispatch(clearError(errorType));
+
     switch (errorType) {
       case 'constitutions':
         dispatch(fetchConstitutions());
@@ -145,25 +131,20 @@ export const MedKnowledgeScreen: React.FC = () => {
     }
   }, [dispatch]);
 
-  const renderServiceStatus = () => {
-    if (serviceHealth.status === 'unhealthy') {
-      return (
-        <View style={styles.serviceStatusContainer}>
-          <View style={styles.serviceStatusBanner}>
-            <Text style={styles.serviceStatusText}>
-              ⚠️ 医疗知识服务暂时不可用，部分功能可能受限
-            </Text>
-          </View>
-        </View>
+  const renderServiceStatus = () => {if (serviceHealth.status === 'unhealthy') {return (;
+        <View style={styles.serviceStatusContainer}>;
+          <View style={styles.serviceStatusBanner}>;
+            <Text style={styles.serviceStatusText}>;
+              ⚠️ 医疗知识服务暂时不可用，部分功能可能受限;
+            </Text>;
+          </View>;
+        </View>;
       );
     }
     return null;
   };
 
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case 'constitution':
-        return renderConstitutionTab();
+  const renderTabContent = () => {switch (activeTab) {case 'constitution':return renderConstitutionTab();
       case 'symptom':
         return renderSymptomTab();
       case 'acupoint':
@@ -179,26 +160,24 @@ export const MedKnowledgeScreen: React.FC = () => {
     }
   };
 
-  const renderConstitutionTab = () => {
-    if (loading.constitutions) {
-      return (
-        <View style={styles.loadingContainer}>
-          <Text style={styles.loadingText}>正在加载体质信息...</Text>
-        </View>
+  const renderConstitutionTab = () => {if (loading.constitutions) {return (;
+        <View style={styles.loadingContainer}>;
+          <Text style={styles.loadingText}>正在加载体质信息...</Text>;
+        </View>;
       );
     }
 
     if (errors.constitutions) {
-      return (
-        <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>{errors.constitutions}</Text>
-          <TouchableOpacity
-            style={styles.retryButton}
-            onPress={() => handleErrorRetry('constitutions')}
-          >
-            <Text style={styles.retryButtonText}>重试</Text>
-          </TouchableOpacity>
-        </View>
+      return (;
+        <View style={styles.errorContainer}>;
+          <Text style={styles.errorText}>{errors.constitutions}</Text>;
+          <TouchableOpacity;
+            style={styles.retryButton};
+            onPress={() => handleErrorRetry('constitutions')};
+          >;
+            <Text style={styles.retryButtonText}>重试</Text>;
+          </TouchableOpacity>;
+        </View>;
       );
     }
 
@@ -214,54 +193,50 @@ export const MedKnowledgeScreen: React.FC = () => {
           <Text style={styles.sectionSubtitle}>
             了解您的体质特点，获得个性化健康建议
           </Text>
-        </View>
-
-        {constitutions.map((constitution) => (
-          <ConstitutionCard
-            key={constitution.id}
-            constitution={constitution}
-            onPress={() => handleConstitutionPress(constitution)}
-          />
-        ))}
-
-        {constitutions.length === 0 && (
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>暂无体质信息</Text>
-          </View>
-        )}
-      </ScrollView>
+        </View>;
+;
+        {constitutions.map((constitution) => (;
+          <ConstitutionCard;
+            key={constitution.id};
+            constitution={constitution};
+            onPress={() => handleConstitutionPress(constitution)};
+          />;
+        ))};
+;
+        {constitutions.length === 0 && (;
+          <View style={styles.emptyContainer}>;
+            <Text style={styles.emptyText}>暂无体质信息</Text>;
+          </View>;
+        )};
+      </ScrollView>;
     );
   };
 
-  const renderSymptomTab = () => {
-    return (
-      <View style={styles.tabContent}>
-        <Text style={styles.comingSoonText}>症状管理功能即将上线</Text>
-      </View>
+  const renderSymptomTab = () => {return (;
+      <View style={styles.tabContent}>;
+        <Text style={styles.comingSoonText}>症状管理功能即将上线</Text>;
+      </View>;
     );
   };
 
-  const renderAcupointTab = () => {
-    return (
-      <View style={styles.tabContent}>
-        <Text style={styles.comingSoonText}>穴位信息功能即将上线</Text>
-      </View>
+  const renderAcupointTab = () => {return (;
+      <View style={styles.tabContent}>;
+        <Text style={styles.comingSoonText}>穴位信息功能即将上线</Text>;
+      </View>;
     );
   };
 
-  const renderHerbTab = () => {
-    return (
-      <View style={styles.tabContent}>
-        <Text style={styles.comingSoonText}>中药信息功能即将上线</Text>
-      </View>
+  const renderHerbTab = () => {return (;
+      <View style={styles.tabContent}>;
+        <Text style={styles.comingSoonText}>中药信息功能即将上线</Text>;
+      </View>;
     );
   };
 
-  const renderSyndromeTab = () => {
-    return (
-      <View style={styles.tabContent}>
-        <Text style={styles.comingSoonText}>证型分析功能即将上线</Text>
-      </View>
+  const renderSyndromeTab = () => {return (;
+      <View style={styles.tabContent}>;
+        <Text style={styles.comingSoonText}>证型分析功能即将上线</Text>;
+      </View>;
     );
   };
 
@@ -278,56 +253,56 @@ export const MedKnowledgeScreen: React.FC = () => {
         </View>
 
         {loading.search && (
-          <View style={styles.loadingContainer}>
-            <Text style={styles.loadingText}>正在搜索...</Text>
-          </View>
-        )}
-
-        {errors.search && (
-          <View style={styles.errorContainer}>
-            <Text style={styles.errorText}>{errors.search}</Text>
-          </View>
-        )}
-
-        {searchResults.map((result) => (
-          <View key={result.id} style={styles.searchResultCard}>
-            <Text style={styles.searchResultTitle}>{result.title}</Text>
-            <Text style={styles.searchResultContent} numberOfLines={3}>
-              {result.content}
-            </Text>
-            <View style={styles.searchResultMeta}>
-              <Text style={styles.searchResultType}>{result.type}</Text>
-              <Text style={styles.searchResultRelevance}>
-                相关度: {Math.round(result.relevance * 100)}%
-              </Text>
-            </View>
-          </View>
-        ))}
-
-        {searchResults.length === 0 && !loading.search && !errors.search && (
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>请使用上方搜索栏查找医疗知识</Text>
-          </View>
-        )}
-      </ScrollView>
+          <View style={styles.loadingContainer}>;
+            <Text style={styles.loadingText}>正在搜索...</Text>;
+          </View>;
+        )};
+;
+        {errors.search && (;
+          <View style={styles.errorContainer}>;
+            <Text style={styles.errorText}>{errors.search}</Text>;
+          </View>;
+        )};
+;
+        {searchResults.map((result) => (;
+          <View key={result.id} style={styles.searchResultCard}>;
+            <Text style={styles.searchResultTitle}>{result.title}</Text>;
+            <Text style={styles.searchResultContent} numberOfLines={3}>;
+              {result.content};
+            </Text>;
+            <View style={styles.searchResultMeta}>;
+              <Text style={styles.searchResultType}>{result.type}</Text>;
+              <Text style={styles.searchResultRelevance}>;
+                相关度: {Math.round(result.relevance * 100)}%;
+              </Text>;
+            </View>;
+          </View>;
+        ))};
+;
+        {searchResults.length === 0 && !loading.search && !errors.search && (;
+          <View style={styles.emptyContainer}>;
+            <Text style={styles.emptyText}>请使用上方搜索栏查找医疗知识</Text>;
+          </View>;
+        )};
+      </ScrollView>;
     );
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
-      
-      {/* 服务状态提示 */}
+
+      {// 服务状态提示}
       {renderServiceStatus()}
 
-      {/* 搜索栏 */}
+      {// 搜索栏}
       <KnowledgeSearchBar
         onSearch={handleSearch}
         loading={loading.search}
         placeholder="搜索中医知识、症状、治疗方法..."
       />
 
-      {/* 标签栏 */}
+      {// 标签栏}
       <View style={styles.tabBar}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View style={styles.tabList}>
@@ -336,7 +311,7 @@ export const MedKnowledgeScreen: React.FC = () => {
                 key={tab.key}
                 style={[
                   styles.tab,
-                  activeTab === tab.key && styles.activeTab,
+                  activeTab === tab.key && styles.activeTab
                 ]}
                 onPress={() => setActiveTab(tab.key)}
               >
@@ -344,54 +319,54 @@ export const MedKnowledgeScreen: React.FC = () => {
                 <Text
                   style={[
                     styles.tabText,
-                    activeTab === tab.key && styles.activeTabText,
-                  ]}
-                >
-                  {tab.title}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </ScrollView>
-      </View>
-
-      {/* 内容区域 */}
-      <View style={styles.content}>
-        {renderTabContent()}
-      </View>
-    </SafeAreaView>
+                    activeTab === tab.key && styles.activeTabText;
+                  ]};
+                >;
+                  {tab.title};
+                </Text>;
+              </TouchableOpacity>;
+            ))};
+          </View>;
+        </ScrollView>;
+      </View>;
+;
+      {// 内容区域};
+      <View style={styles.content}>;
+        {renderTabContent()};
+      </View>;
+    </SafeAreaView>;
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#F8F9FA'
   },
   serviceStatusContainer: {
     backgroundColor: '#FFF3CD',
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: 8
   },
   serviceStatusBanner: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   serviceStatusText: {
     fontSize: 14,
     color: '#856404',
-    flex: 1,
+    flex: 1
   },
   tabBar: {
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+    borderBottomColor: '#E0E0E0'
   },
   tabList: {
     flexDirection: 'row',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    gap: 8,
+    gap: 8
   },
   tab: {
     flexDirection: 'row',
@@ -400,96 +375,96 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 20,
     backgroundColor: '#F5F5F5',
-    marginRight: 8,
+    marginRight: 8
   },
   activeTab: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#007AFF'
   },
   tabIcon: {
     fontSize: 16,
-    marginRight: 6,
+    marginRight: 6
   },
   tabText: {
     fontSize: 14,
     color: '#666666',
-    fontWeight: '500',
+    fontWeight: '500'
   },
   activeTabText: {
-    color: '#FFFFFF',
+    color: '#FFFFFF'
   },
   content: {
-    flex: 1,
+    flex: 1
   },
   tabContent: {
-    flex: 1,
+    flex: 1
   },
   sectionHeader: {
     paddingHorizontal: 16,
     paddingVertical: 16,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
+    borderBottomColor: '#F0F0F0'
   },
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
     color: '#333333',
-    marginBottom: 4,
+    marginBottom: 4
   },
   sectionSubtitle: {
     fontSize: 14,
-    color: '#666666',
+    color: '#666666'
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 40,
+    paddingVertical: 40
   },
   loadingText: {
     fontSize: 16,
-    color: '#666666',
+    color: '#666666'
   },
   errorContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 40,
-    paddingHorizontal: 32,
+    paddingHorizontal: 32
   },
   errorText: {
     fontSize: 16,
     color: '#F44336',
     textAlign: 'center',
-    marginBottom: 16,
+    marginBottom: 16
   },
   retryButton: {
     backgroundColor: '#007AFF',
     paddingHorizontal: 24,
     paddingVertical: 12,
-    borderRadius: 8,
+    borderRadius: 8
   },
   retryButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 40,
+    paddingVertical: 40
   },
   emptyText: {
     fontSize: 16,
     color: '#999999',
-    textAlign: 'center',
+    textAlign: 'center'
   },
   comingSoonText: {
     fontSize: 16,
     color: '#999999',
     textAlign: 'center',
-    marginTop: 40,
+    marginTop: 40
   },
   searchResultCard: {
     backgroundColor: '#FFFFFF',
@@ -500,39 +475,27 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 2
     },
     shadowOpacity: 0.1,
     shadowRadius: 3.84,
-    elevation: 5,
+    elevation: 5
   },
   searchResultTitle: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#333333',
-    marginBottom: 8,
+    marginBottom: 8
   },
   searchResultContent: {
     fontSize: 14,
     color: '#666666',
     lineHeight: 20,
-    marginBottom: 12,
+    marginBottom: 12
   },
   searchResultMeta: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  searchResultType: {
-    fontSize: 12,
-    color: '#007AFF',
-    backgroundColor: '#E3F2FD',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  searchResultRelevance: {
-    fontSize: 12,
-    color: '#999999',
-  },
+    flexDirection: 'row',justifyContent: 'space-between',alignItems: 'center';
+  },searchResultType: {fontSize: 12,color: '#007AFF',backgroundColor: '#E3F2FD',paddingHorizontal: 8,paddingVertical: 4,borderRadius: 12;
+  },searchResultRelevance: {fontSize: 12,color: '#999999';
+  };
 }); 

@@ -1,9 +1,15 @@
 """
-独立的异常处理测试，避免复杂依赖
+test_exceptions_standalone - 索克生活项目模块
 """
+
+    from suoke_blockchain_service.exceptions import (
+import os
 import pytest
 import sys
-import os
+
+"""
+独立的异常处理测试，避免复杂依赖
+"""
 
 # 添加项目根目录到Python路径
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
@@ -11,7 +17,6 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 def test_basic_exception_classes():
     """测试基本异常类定义"""
     # 直接导入异常模块，避免通过__init__.py
-    from suoke_blockchain_service.exceptions import (
         BlockchainServiceError,
         ValidationError,
         EncryptionError,
@@ -46,7 +51,6 @@ def test_basic_exception_classes():
 
 def test_validation_functions():
     """测试验证函数"""
-    from suoke_blockchain_service.exceptions import (
         validate_required_fields,
         validate_field_type,
         validate_field_length,
@@ -84,7 +88,6 @@ def test_validation_functions():
 
 def test_exception_inheritance():
     """测试异常继承关系"""
-    from suoke_blockchain_service.exceptions import (
         BlockchainServiceError,
         ValidationError,
         EncryptionError

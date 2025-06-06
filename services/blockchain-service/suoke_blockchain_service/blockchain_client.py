@@ -1,25 +1,30 @@
 """
+blockchain_client - 索克生活项目模块
+"""
+
+from .config import settings
+from .logging import get_logger
+from .monitoring import record_blockchain_operation
+from dataclasses import dataclass
+from decimal import Decimal
+from eth_account import Account
+from eth_utils import to_checksum_address, is_address
+from typing import Any, Dict, List, Optional, Tuple
+from web3 import Web3
+from web3.contract import Contract
+from web3.exceptions import TransactionNotFound, BlockNotFound
+import aiofiles
+import asyncio
+import json
+
+"""
 区块链客户端模块
 
 提供与以太坊区块链的集成功能，包括智能合约交互、交易处理等。
 """
 
-import asyncio
-import json
-from typing import Any, Dict, List, Optional, Tuple
-from decimal import Decimal
-from dataclasses import dataclass
 
-from web3 import Web3
-from web3.contract import Contract
-from web3.exceptions import TransactionNotFound, BlockNotFound
-from eth_account import Account
-from eth_utils import to_checksum_address, is_address
-import aiofiles
 
-from .config import settings
-from .logging import get_logger
-from .monitoring import record_blockchain_operation
 
 logger = get_logger(__name__)
 

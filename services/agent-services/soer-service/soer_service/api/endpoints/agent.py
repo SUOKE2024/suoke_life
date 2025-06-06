@@ -1,16 +1,21 @@
 """
+agent - 索克生活项目模块
+"""
+
+from ...models.agent import MessageType
+from ...services.agent_service import AgentService
+from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect
+from pydantic import BaseModel
+from typing import Any
+
+"""
 智能体 API 端点
 
 提供索儿智能体的交互接口
 """
 
-from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect
-from pydantic import BaseModel
 
-from ...models.agent import MessageType
-from ...services.agent_service import AgentService
 
 router = APIRouter(tags=["智能体"])
 

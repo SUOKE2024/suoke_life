@@ -1,25 +1,33 @@
 """
+test_integration - 索克生活项目模块
+"""
+
+        from fastapi.testclient import TestClient
+        import os
+        import psutil
+from listen_service.core.audio_analyzer import AudioAnalyzer
+from listen_service.delivery.grpc_server import ListenServiceGRPCServer
+from listen_service.delivery.rest_api import create_rest_app
+from listen_service.models.audio_models import (
+from listen_service.models.tcm_models import (
+from listen_service.utils.cache import AudioCache, MemoryCache
+from listen_service.utils.performance import performance_monitor
+from unittest.mock import AsyncMock, patch
+import asyncio
+import pytest
+import time
+
+"""
 集成测试
 
 测试整个闻诊服务的端到端功能，包括音频分析、中医诊断、缓存系统等。
 """
 
-import asyncio
-import pytest
-from unittest.mock import AsyncMock, patch
-import time
 
-from listen_service.core.audio_analyzer import AudioAnalyzer
-from listen_service.models.audio_models import (
     AudioMetadata, AudioFormat, AnalysisRequest, VoiceFeatures
 )
-from listen_service.models.tcm_models import (
     TCMDiagnosis, ConstitutionType, EmotionState
 )
-from listen_service.utils.cache import AudioCache, MemoryCache
-from listen_service.utils.performance import performance_monitor
-from listen_service.delivery.rest_api import create_rest_app
-from listen_service.delivery.grpc_server import ListenServiceGRPCServer
 
 class TestEndToEndWorkflow:
     """端到端工作流测试"""
@@ -392,8 +400,6 @@ class TestPerformanceIntegration:
     @pytest.mark.asyncio
     async def test_memory_usage_stability(self, audio_analyzer, sample_audio_data):
         """测试内存使用稳定性"""
-        import psutil
-        import os
 
         process = psutil.Process(os.getpid())
         initial_memory = process.memory_info().rss
@@ -509,7 +515,6 @@ class TestFullSystemIntegration:
     @pytest.mark.asyncio
     async def test_rest_api_integration(self, sample_audio_data):
         """测试REST API集成"""
-        from fastapi.testclient import TestClient
 
         # 创建测试应用
         app = create_rest_app()

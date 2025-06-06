@@ -1,3 +1,11 @@
+"""
+__init__ - 索克生活项目模块
+"""
+
+from .logging import (
+from .metrics import (
+from .tracing import (
+
 #!/usr/bin/env python3
 """
 可观测性模块
@@ -6,7 +14,6 @@
 
 # 分布式追踪
 # 日志聚合
-from .logging import (
     JSONLogFormatter,
     LogAggregator,
     LogContext,
@@ -19,7 +26,6 @@ from .logging import (
 )
 
 # 指标收集
-from .metrics import (
     MetricConfig,
     MetricsCollector,
     MetricsMiddleware,
@@ -27,7 +33,6 @@ from .metrics import (
     get_metrics_collector,
     track_metrics,
 )
-from .tracing import (
     SpanKind,
     TracingExporter,
     TracingService,

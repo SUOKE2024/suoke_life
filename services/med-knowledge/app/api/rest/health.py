@@ -1,18 +1,24 @@
 """
-健康检查API路由
-提供系统健康状态检查功能
+health - 索克生活项目模块
 """
 
-import time
-from typing import Any
-
-from fastapi import APIRouter, Depends, HTTPException
-from fastapi.responses import JSONResponse
-
+        import psutil
 from app.api.rest.deps import get_cache_service, get_knowledge_service
 from app.core.logger import get_logger
 from app.services.cache_service import CacheService
 from app.services.knowledge_service import KnowledgeService
+from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import JSONResponse
+from typing import Any
+import time
+
+"""
+健康检查API路由
+提供系统健康状态检查功能
+"""
+
+
+
 
 logger = get_logger()
 router = APIRouter(tags=["健康检查"])
@@ -259,7 +265,6 @@ async def health_metrics(
 async def _get_system_metrics() -> dict[str, Any]:
     """获取系统资源指标"""
     try:
-        import psutil
 
         # CPU使用率
         cpu_percent = psutil.cpu_percent(interval=1)

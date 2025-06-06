@@ -1,23 +1,29 @@
 """
+main - 索克生活项目模块
+"""
+
+            import httpx
+from .core.app import create_app, create_dev_app
+from .core.config import Settings, get_settings, create_settings_from_file
+from .core.logging import get_logger, setup_logging
+from pathlib import Path
+from rich.console import Console
+from rich.table import Table
+from typing import Optional
+import asyncio
+import click
+import signal
+import sys
+import uvicorn
+
+"""
 主程序入口
 
 提供命令行接口和服务启动功能。
 """
 
-import asyncio
-import signal
-import sys
-from pathlib import Path
-from typing import Optional
 
-import click
-import uvicorn
-from rich.console import Console
-from rich.table import Table
 
-from .core.app import create_app, create_dev_app
-from .core.config import Settings, get_settings, create_settings_from_file
-from .core.logging import get_logger, setup_logging
 
 console = Console()
 logger = get_logger(__name__)
@@ -250,7 +256,6 @@ async def check_dependencies(settings: Settings) -> None:
     # 检查注册的服务
     for service_name, service_config in settings.services.items():
         try:
-            import httpx
             async with httpx.AsyncClient() as client:
                 url = f"http://{service_config.host}:{service_config.port}{service_config.health_check_path}"
                 response = await client.get(url, timeout=5.0)

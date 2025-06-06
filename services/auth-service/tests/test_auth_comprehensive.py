@@ -1,20 +1,25 @@
 """
-Auth Service 综合测试
-覆盖核心认证逻辑、JWT令牌、MFA、OAuth等功能
+test_auth_comprehensive - 索克生活项目模块
 """
 
-import pytest
-import asyncio
-from datetime import datetime, timedelta
-from unittest.mock import Mock, patch, AsyncMock
-from fastapi.testclient import TestClient
-from sqlalchemy.ext.asyncio import AsyncSession
-
+from auth_service.cmd.server.main import create_app
 from auth_service.core.auth import AuthService
 from auth_service.models.auth import LoginResult
 from auth_service.models.user import User, UserStatus, UserSession
 from auth_service.schemas.auth import LoginRequest, MFAVerifyRequest
-from auth_service.cmd.server.main import create_app
+from datetime import datetime, timedelta
+from fastapi.testclient import TestClient
+from sqlalchemy.ext.asyncio import AsyncSession
+from unittest.mock import Mock, patch, AsyncMock
+import asyncio
+import pytest
+
+"""
+Auth Service 综合测试
+覆盖核心认证逻辑、JWT令牌、MFA、OAuth等功能
+"""
+
+
 
 
 class TestAuthService:

@@ -1,12 +1,17 @@
 """
-用户相关的数据模型定义
+user - 索克生活项目模块
 """
+
 from datetime import datetime
 from enum import Enum
+from pydantic import BaseModel, Field, SecretStr, EmailStr, field_validator, model_validator
 from typing import Dict, List, Optional, Union, Set
 from uuid import UUID
 
-from pydantic import BaseModel, Field, SecretStr, EmailStr, field_validator, model_validator
+"""
+用户相关的数据模型定义
+"""
+
 
 
 class UserStatus(str, Enum):

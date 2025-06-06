@@ -1,23 +1,28 @@
+"""
+config_manager - 索克生活项目模块
+"""
+
+from collections.abc import Callable
+from dataclasses import dataclass
+from enum import Enum
+from pathlib import Path
+from typing import Any
+from watchdog.events import FileModifiedEvent, FileSystemEventHandler
+from watchdog.observers import Observer
+import json
+import logging
+import os
+import threading
+import time
+import yaml
+
 #!/usr/bin/env python3
 """
 配置管理器
 提供配置加载、合并、验证和热更新功能
 """
 
-from collections.abc import Callable
-from dataclasses import dataclass
-from enum import Enum
-import json
-import logging
-import os
-from pathlib import Path
-import threading
-import time
-from typing import Any
 
-from watchdog.events import FileModifiedEvent, FileSystemEventHandler
-from watchdog.observers import Observer
-import yaml
 
 logger = logging.getLogger(__name__)
 

@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
-import { 
+import {import { KnowledgeQuery } from '../../services/medKnowledgeService';
+
   View, 
   TextInput, 
   TouchableOpacity, 
@@ -8,7 +9,6 @@ import {
   ScrollView,
   ActivityIndicator 
 } from 'react-native';
-import { KnowledgeQuery } from '../../services/medKnowledgeService';
 
 interface KnowledgeSearchBarProps {
   onSearch: (query: KnowledgeQuery) => void;
@@ -27,27 +27,17 @@ export const KnowledgeSearchBar: React.FC<KnowledgeSearchBarProps> = ({
   const [selectedType, setSelectedType] = useState<KnowledgeQuery['type']>('general');
   const [showTypeSelector, setShowTypeSelector] = useState(false);
 
-  const searchTypes = [
-    { key: 'general', label: '综合' },
-    { key: 'symptom', label: '症状' },
-    { key: 'treatment', label: '治疗' },
-    { key: 'medicine', label: '中药' },
-    { key: 'constitution', label: '体质' },
-    { key: 'acupoint', label: '穴位' }
+  const searchTypes = [;
+    { key: 'general', label: '综合' },{ key: 'symptom', label: '症状' },{ key: 'treatment', label: '治疗' },{ key: 'medicine', label: '中药' },{ key: 'constitution', label: '体质' },{ key: 'acupoint', label: '穴位' };
   ] as const;
 
-  const handleSearch = useCallback(() => {
-    if (searchText.trim()) {
-      const query: KnowledgeQuery = {
-        query: searchText.trim(),
-        type: selectedType
+  const handleSearch = useCallback(() => {if (searchText.trim()) {const query: KnowledgeQuery = {query: searchText.trim(),type: selectedType;
       };
       onSearch(query);
     }
   }, [searchText, selectedType, onSearch]);
 
-  const handleTypeSelect = (type: KnowledgeQuery['type']) => {
-    setSelectedType(type);
+  const handleTypeSelect = (type: KnowledgeQuery['type']) => {setSelectedType(type);
     setShowTypeSelector(false);
     if (searchText.trim()) {
       const query: KnowledgeQuery = {
@@ -60,7 +50,7 @@ export const KnowledgeSearchBar: React.FC<KnowledgeSearchBarProps> = ({
 
   return (
     <View style={styles.container}>
-      {/* 搜索输入框 */}
+      {// 搜索输入框}
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
@@ -72,7 +62,7 @@ export const KnowledgeSearchBar: React.FC<KnowledgeSearchBarProps> = ({
           onSubmitEditing={handleSearch}
           editable={!loading}
         />
-        
+
         <TouchableOpacity 
           style={[styles.searchButton, loading && styles.searchButtonDisabled]}
           onPress={handleSearch}
@@ -86,7 +76,7 @@ export const KnowledgeSearchBar: React.FC<KnowledgeSearchBarProps> = ({
         </TouchableOpacity>
       </View>
 
-      {/* 搜索类型选择器 */}
+      {// 搜索类型选择器}
       {showFilters && (
         <View style={styles.filtersContainer}>
           <TouchableOpacity
@@ -127,23 +117,22 @@ export const KnowledgeSearchBar: React.FC<KnowledgeSearchBarProps> = ({
                 </View>
               </ScrollView>
             </View>
-          )}
-        </View>
-      )}
-
-      {/* 快速搜索建议 */}
-      <ScrollView 
-        horizontal 
-        showsHorizontalScrollIndicator={false}
-        style={styles.suggestionsContainer}
-      >
-        <View style={styles.suggestions}>
-          {['头痛', '失眠', '消化不良', '疲劳', '焦虑', '感冒'].map((suggestion, index) => (
-            <TouchableOpacity
-              key={index}
-              style={styles.suggestionChip}
-              onPress={() => {
-                setSearchText(suggestion);
+          )};
+        </View>;
+      )};
+;
+      {// 快速搜索建议};
+      <ScrollView ;
+        horizontal ;
+        showsHorizontalScrollIndicator={false};
+        style={styles.suggestionsContainer};
+      >;
+        <View style={styles.suggestions}>;
+          {['头痛', '失眠', '消化不良', '疲劳', '焦虑', '感冒'].map((suggestion, index) => (;
+            <TouchableOpacity;
+              key={index};
+              style={styles.suggestionChip};
+              onPress={() => {setSearchText(suggestion);
                 const query: KnowledgeQuery = {
                   query: suggestion,
                   type: selectedType
@@ -166,12 +155,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
+    borderBottomColor: '#F0F0F0'
   },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 12
   },
   searchInput: {
     flex: 1,
@@ -181,7 +170,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     fontSize: 16,
     color: '#333333',
-    marginRight: 12,
+    marginRight: 12
   },
   searchButton: {
     backgroundColor: '#007AFF',
@@ -190,18 +179,18 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     minWidth: 60,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   searchButtonDisabled: {
-    backgroundColor: '#CCCCCC',
+    backgroundColor: '#CCCCCC'
   },
   searchButtonText: {
     color: '#FFFFFF',
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   filtersContainer: {
-    marginBottom: 12,
+    marginBottom: 12
   },
   typeSelector: {
     flexDirection: 'row',
@@ -211,63 +200,51 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 8,
-    marginBottom: 8,
+    marginBottom: 8
   },
   typeSelectorText: {
     fontSize: 14,
     color: '#333333',
-    fontWeight: '500',
+    fontWeight: '500'
   },
   typeSelectorArrow: {
     fontSize: 12,
-    color: '#666666',
+    color: '#666666'
   },
   typeDropdown: {
     backgroundColor: '#FFFFFF',
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#E0E0E0',
-    padding: 8,
+    padding: 8
   },
   typeList: {
     flexDirection: 'row',
-    gap: 8,
+    gap: 8
   },
   typeOption: {
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 16,
     backgroundColor: '#F5F5F5',
-    marginRight: 8,
+    marginRight: 8
   },
   typeOptionSelected: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#007AFF'
   },
   typeOptionText: {
     fontSize: 14,
     color: '#666666',
-    fontWeight: '500',
+    fontWeight: '500'
   },
   typeOptionTextSelected: {
-    color: '#FFFFFF',
+    color: '#FFFFFF'
   },
   suggestionsContainer: {
-    maxHeight: 40,
+    maxHeight: 40
   },
-  suggestions: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  suggestionChip: {
-    backgroundColor: '#E3F2FD',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-    marginRight: 8,
-  },
-  suggestionText: {
-    fontSize: 12,
-    color: '#1976D2',
-    fontWeight: '500',
-  },
+  suggestions: {flexDirection: 'row',gap: 8;
+  },suggestionChip: {backgroundColor: '#E3F2FD',paddingHorizontal: 12,paddingVertical: 6,borderRadius: 16,marginRight: 8;
+  },suggestionText: {fontSize: 12,color: '#1976D2',fontWeight: '500';
+  };
 }); 

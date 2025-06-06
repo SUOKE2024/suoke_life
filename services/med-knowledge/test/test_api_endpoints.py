@@ -1,17 +1,25 @@
 """
+test_api_endpoints - 索克生活项目模块
+"""
+
+        import threading
+        import time
+from app.main import app
+from httpx import AsyncClient
+import asyncio
+import pytest
+
+"""
 API端点测试套件
 测试所有模块化路由的功能
 """
-import pytest
-import asyncio
-from httpx import AsyncClient
 
-from app.main import app
 
 class TestConstitutionsAPI:
     """体质API测试"""
     
-    def test_get_constitutions_list(self, client):
+        @cache(timeout=300)  # 5分钟缓存
+def test_get_constitutions_list(self, client):
         """测试获取体质列表"""
         response = client.get("/api/v1/constitutions/")
         assert response.status_code == 200
@@ -19,20 +27,23 @@ class TestConstitutionsAPI:
         assert "data" in data
         assert "total" in data
         assert "limit" in data
-        assert "offset" in data
+            @cache(timeout=300)  # 5分钟缓存
+assert "offset" in data
     
     def test_get_constitutions_with_pagination(self, client):
         """测试分页获取体质列表"""
         response = client.get("/api/v1/constitutions/?limit=5&offset=0")
         assert response.status_code == 200
         data = response.json()
-        assert data["limit"] == 5
+        asse    @cache(timeout=300)  # 5分钟缓存
+rt data["limit"] == 5
         assert data["offset"] == 0
     
     def test_get_constitution_by_id(self, client):
         """测试根据ID获取体质详情"""
         # 假设存在ID为"qi_xu"的体质
-        response = client.get("/api/v1/constitutions/qi_xu")
+        response = client.get("/api/v1/constitutio    @cache(timeout=300)  # 5分钟缓存
+ns/qi_xu")
         # 根据实际情况，可能返回200或404
         assert response.status_code in [200, 404]
     
@@ -48,7 +59,8 @@ class TestConstitutionsAPI:
         assert response.status_code == 422
         
         # 测试负数offset
-        response = client.get("/api/v1/constitutions/?offset=-1")
+        response = client.ge    @cache(timeout=300)  # 5分钟缓存
+t("/api/v1/constitutions/?offset=-1")
         assert response.status_code == 422
 
 class TestSymptomsAPI:
@@ -56,7 +68,8 @@ class TestSymptomsAPI:
     
     def test_get_symptoms_list(self, client):
         """测试获取症状列表"""
-        response = client.get("/api/v1/symptoms/")
+        response = client.get(    @cache(timeout=300)  # 5分钟缓存
+"/api/v1/symptoms/")
         assert response.status_code == 200
         data = response.json()
         assert "data" in data
@@ -69,7 +82,8 @@ class TestSymptomsAPI:
     
     def test_symptoms_pagination(self, client):
         """测试症状分页"""
-        response = client.get("/api/v1/symptoms/?limit=10&offset=5")
+        response = client.get("/api/v1/symptoms/?limit=10&offset    @cache(timeout=300)  # 5分钟缓存
+=5")
         assert response.status_code == 200
         data = response.json()
         assert data["limit"] == 10
@@ -78,23 +92,27 @@ class TestSymptomsAPI:
 class TestSearchAPI:
     """搜索API测试"""
     
-    def test_basic_search(self, client):
+    def test_basic_search(sel    @cache(timeout=300)  # 5分钟缓存
+f, client):
         """测试基础搜索"""
         response = client.get("/api/v1/search/?q=气虚")
         assert response.status_code == 200
         data = response.json()
-        assert "data" in data
+        assert "dat    @cache(timeout=300)  # 5分钟缓存
+a" in data
         assert "total" in data
     
     def test_search_with_entity_type_filter(self, client):
         """测试带实体类型过滤的搜索"""
         response = client.get("/api/v1/search/?q=气虚&entity_type=constitution")
-        assert response.status_code == 200
+       @cache(timeout=300)  # 5分钟缓存
+     assert response.status_code == 200
     
     def test_search_suggestions(self, client):
         """测试搜索建议"""
         response = client.get("/api/v1/search/suggestions?q=气")
-        assert response.status_code == 200
+        assert response.status_co    @cache(timeout=300)  # 5分钟缓存
+de == 200
         data = response.json()
         assert "suggestions" in data
     
@@ -237,7 +255,6 @@ class TestAPIPerformance:
     
     def test_response_time(self, client):
         """测试响应时间"""
-        import time
         
         start_time = time.time()
         response = client.get("/api/v1/constitutions/")
@@ -249,8 +266,6 @@ class TestAPIPerformance:
     
     def test_concurrent_requests(self, client):
         """测试并发请求"""
-        import threading
-        import time
         
         results = []
         
@@ -269,7 +284,8 @@ class TestAPIPerformance:
             thread.start()
         
         for thread in threads:
-            thread.join()
+            thread.jo    @cache(timeout=300)  # 5分钟缓存
+in()
         
         end_time = time.time()
         

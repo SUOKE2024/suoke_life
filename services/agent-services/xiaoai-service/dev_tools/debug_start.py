@@ -1,10 +1,15 @@
+"""
+debug_start - 索克生活项目模块
+"""
+
+        from pkg.utils.config_loader import get_config
+        import traceback
+from pathlib import Path
+import sys
+
 #!/usr/bin/env python3
 """
 
-import sys
-from pathlib import Path
-        from pkg.utils.config_loader import get_config
-        import traceback
 
 
 调试启动脚本

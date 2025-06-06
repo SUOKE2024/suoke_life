@@ -1,21 +1,27 @@
 """
+test_api_endpoints - 索克生活项目模块
+"""
+
+    from human_review_service.core.database import get_session_dependency
+from datetime import datetime, timezone
+from fastapi.testclient import TestClient
+from httpx import AsyncClient
+from human_review_service.api.main import create_app
+from human_review_service.core.models import (
+from unittest.mock import AsyncMock, Mock, patch, MagicMock
+from uuid import uuid4
+import asyncio
+import pytest
+
+"""
 API端点测试
 API Endpoints Tests
 
 测试所有API端点的功能和错误处理
 """
 
-import pytest
-import asyncio
-from datetime import datetime, timezone
-from unittest.mock import AsyncMock, Mock, patch, MagicMock
-from uuid import uuid4
 
-from fastapi.testclient import TestClient
-from httpx import AsyncClient
 
-from human_review_service.api.main import create_app
-from human_review_service.core.models import (
     ReviewerCreate,
     ReviewerDB,
     ReviewTaskCreate,
@@ -47,7 +53,6 @@ def app():
 @pytest.fixture
 def client(app, mock_session):
     """创建测试客户端"""
-    from human_review_service.core.database import get_session_dependency
     
     # Mock数据库依赖
     async def mock_get_session():

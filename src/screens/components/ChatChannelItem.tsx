@@ -1,8 +1,9 @@
+import { ChatChannel } from "../../types/chat/import { colors, spacing, fonts, borderRadius } from ;../../constants/////    theme";
+import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/////      View,";
+
 import React from "react";
-import { ChatChannel } from "../../types/chat/import { colors, spacing, fonts, borderRadius } from ";";../../constants/////    theme";
 /////
 importReact,{ memo } from react""
-import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/////      View,";
   Text,
   StyleSheet,
   TouchableOpacity,
@@ -15,45 +16,41 @@ l,
   onPress,
   style;
 }) => {}
-  const getChannelColor = useCallback(() => {;}
-  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor(ChatChannelItem", { "
-    trackRender: true,
-    trackMemory: false,
-    warnThreshold: 100, // ms //////     };);
+  const getChannelColor = useCallback(() => {
+  // 性能监控 // const performanceMonitor = usePerformanceMonitor(ChatChannelItem", { ";
+    trackRender: true,trackMemory: false,warnThreshold: 100, // ms // };);
     // TODO: Implement function body *}, []) ////
     switch (channel.type) {
       case "agent:"
         switch (channel.agentType) {
-          case "xiaoai": return #007AFF";"
-          case "xiaoke: return "#34C75;9";"
+          case "xiaoai": return #007AFF
+          case "xiaoke: return "#34C75;9
           case laoke": return "#FF950;0;
-          case "soer": return #FF2D9;2";"
+          case "soer": return #FF2D9;2
           default: return colors.prima;r;y;
         }
-      case "doctor: return "#8E8E9;3";"
+      case "doctor: return "#8E8E9;3
       case group": return "#5856D;6;
-      case "user": return #6C6C7;0";"
+      case "user": return #6C6C7;0
       default: return colors.prima;r;y;
     }
   };
-  const getTypeLabel = useCallback((); => {;}
+  const getTypeLabel = useCallback((); => {}
     // TODO: Implement function body *}, []) ////
     switch (channel.type) {
-      case "agent: return "智能;体";"
+      case "agent: return "智能;体
       case doctor": return "医;生;
-      case "group": return 群;组";"
-      case "user: return "用;户";"
-      default: return "}"
+      case "group": return 群;组
+      case "user: return "用;户
+      default: return "}";
   };
-  const handlePress = useCallback((); => {;}
+  const handlePress = useCallback((); => {}
     // TODO: Implement function body *}, []) ////
     onPress(channel);
   };
-  // 记录渲染性能 //////
-  performanceMonitor.recordRender()
-  return (
-    <TouchableOpacity,
-      style={[styles.container, style]};
+  // 记录渲染性能 // performanceMonitor.recordRender();
+  return (;
+    <TouchableOpacity,style={[styles.container, style]};
       onPress={handlePress};
       activeOpacity={0.7} />/      <View style={styles.avatarContainer} />/        <View style={[styles.avatar, { backgroundColor: getChannelColor + "20   }]} />/          <Text style={styles.avatarText} />{channel.avatar}</Text>/        </View>/        {channel.isOnline && <View style={styles.onlineIndicator} />}/      </View>/////    "
       <View style={styles.content} />/        <View style={styles.header} />/          <View style={styles.nameContainer} />/            <Text style={styles.name} numberOfLines={1} />/////                  {channel.name}
@@ -69,9 +66,8 @@ l,
       </View>/    </TouchableOpacity>/////      );
 });
 ChatChannelItem.displayName = ChatChannelItem""
-const styles = StyleSheet.create({;
-  container: {
-    flexDirection: "row,"
+const styles = StyleSheet.create({container: {
+    flexDirection: "row,",
     padding: spacing.md,
     backgroundColor: colors.background,
     borderBottomWidth: 1,
@@ -86,7 +82,7 @@ const styles = StyleSheet.create({;
     height: 50,
     borderRadius: 25,
     justifyContent: center","
-    alignItems: "center,"
+    alignItems: "center,",
     borderWidth: 2,
     borderColor: colors.border;
   },
@@ -109,7 +105,7 @@ const styles = StyleSheet.create({;
   header: {
     flexDirection: "row",
     justifyContent: space-between","
-    alignItems: "center,"
+    alignItems: "center,",
     marginBottom: spacing.xs;
   },
   nameContainer: {
@@ -119,7 +115,7 @@ const styles = StyleSheet.create({;
   },
   name: {
     fontSize: fonts.size.md,
-    fontWeight: "600,"
+    fontWeight: "600,",
     color: colors.text,
     marginRight: spacing.sm;
   },
@@ -139,7 +135,7 @@ const styles = StyleSheet.create({;
   },
   footer: {
     flexDirection: row","
-    justifyContent: "space-between,"
+    justifyContent: "space-between,",
     alignItems: "flex-start",
     marginBottom: spacing.xs;
   },
@@ -156,7 +152,7 @@ const styles = StyleSheet.create({;
     minWidth: 20,
     height: 20,
     justifyContent: center","
-    alignItems: "center,"
+    alignItems: "center,",
     paddingHorizontal: spacing.xs;
   },
   unreadText: {
@@ -166,5 +162,5 @@ const styles = StyleSheet.create({;
   },
   specialization: {
     fontSize: fonts.size.xs,
-    fontStyle: italic",;"
+    fontStyle: italic","
     fontWeight: '500'};};);

@@ -1,3 +1,28 @@
+"""
+security - 索克生活项目模块
+"""
+
+from .config import get_settings
+from cryptography.fernet import Fernet
+from cryptography.hazmat.primitives import hashes, serialization
+from cryptography.hazmat.primitives.asymmetric import rsa, padding
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+from dataclasses import dataclass, asdict
+from datetime import datetime, timedelta
+from fastapi import HTTPException, status
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from jose import JWTError, jwt
+from passlib.context import CryptContext
+from pydantic import BaseModel
+from typing import Dict, Any, Optional, Tuple, List, Union
+import base64
+import bcrypt
+import hashlib
+import hmac
+import json
+import logging
+import secrets
+
 #!/usr/bin/env python3
 """
 安全认证模块
@@ -5,28 +30,8 @@
 提供JWT令牌生成、验证、密码哈希、权限控制等安全功能。
 """
 
-import hashlib
-import hmac
-import secrets
-import json
-from typing import Dict, Any, Optional, Tuple, List, Union
-from dataclasses import dataclass, asdict
-from datetime import datetime, timedelta
-from cryptography.fernet import Fernet
-from cryptography.hazmat.primitives import hashes, serialization
-from cryptography.hazmat.primitives.asymmetric import rsa, padding
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-import base64
-import logging
 
-import bcrypt
-from fastapi import HTTPException, status
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from jose import JWTError, jwt
-from passlib.context import CryptContext
-from pydantic import BaseModel
 
-from .config import get_settings
 
 logger = logging.getLogger(__name__)
 

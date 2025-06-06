@@ -1,24 +1,29 @@
 """
+calculation - 索克生活项目模块
+"""
+
+from ...core.algorithms.wuyun_liuqi import WuyunLiuqiCalculator
+from ...services.calculation import CalculationService
+from ...utils.validators import validate_date_range, validate_patient_info
+from datetime import date, datetime
+from fastapi import APIRouter, HTTPException, Depends, BackgroundTasks
+from pydantic import BaseModel, Field
+from typing import Dict, List, Optional
+
+"""
 算诊计算API接口
 
 提供五运六气、八卦分析、子午流注等算诊方法的API接口
 """
 
-from datetime import date, datetime
-from typing import Dict, List, Optional
 
-from fastapi import APIRouter, HTTPException, Depends, BackgroundTasks
-from pydantic import BaseModel, Field
 
-from ...core.algorithms.wuyun_liuqi import WuyunLiuqiCalculator
     WuyunLiuqiModel,
     BaguaAnalysisModel,
     ZiwuLiuzhuModel,
     ConstitutionAnalysisModel,
     ComprehensiveAnalysisModel
 )
-from ...services.calculation import CalculationService
-from ...utils.validators import validate_date_range, validate_patient_info
 
 router = APIRouter()
 

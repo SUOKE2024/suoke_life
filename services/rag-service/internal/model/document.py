@@ -1,3 +1,11 @@
+"""
+document - 索克生活项目模块
+"""
+
+from dataclasses import dataclass, field
+from typing import List, Dict, Any, Optional, Union
+import uuid
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,9 +13,6 @@
 文档和结果模型定义
 """
 
-from typing import List, Dict, Any, Optional, Union
-from dataclasses import dataclass, field
-import uuid
 
 @dataclass
 class Document:

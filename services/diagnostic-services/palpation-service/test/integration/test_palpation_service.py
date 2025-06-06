@@ -1,3 +1,12 @@
+"""
+test_palpation_service - 索克生活项目模块
+"""
+
+from pathlib import Path
+import grpc
+import sys
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,10 +14,6 @@
 切诊服务集成测试
 """
 
-import sys
-import time
-import grpc
-from pathlib import Path
 
 # 添加项目根目录到Python路径
 project_root = Path(__file__).resolve().parents[2]

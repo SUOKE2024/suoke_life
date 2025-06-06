@@ -1,26 +1,31 @@
+"""
+config_center - 索克生活项目模块
+"""
+
+    import consul
+from collections.abc import Callable
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
+from pathlib import Path
+from typing import Any
+import consul
+import json
+import logging
+import threading
+import time
+import yaml
+
 #!/usr/bin/env python3
 """
 配置中心客户端
 支持Consul、Etcd等配置中心
 """
 
-from collections.abc import Callable
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
-import json
-import logging
-from pathlib import Path
-import threading
-import time
-from typing import Any
 
-import consul
-import yaml
 
 # 尝试导入配置中心客户端
 try:
-    import consul
 
     HAS_CONSUL = True
 except ImportError:

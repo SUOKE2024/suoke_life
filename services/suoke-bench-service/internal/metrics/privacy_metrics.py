@@ -1,10 +1,15 @@
-"""隐私安全评测指标实现。"""
-
-from dataclasses import dataclass
-from typing import Any
+"""
+privacy_metrics - 索克生活项目模块
+"""
 
 from .agent_metrics import MetricResult
 from .metrics import Metric
+from dataclasses import dataclass
+from typing import Any
+
+"""隐私安全评测指标实现。"""
+
+
 
 @dataclass
 class PrivacyTestCase:

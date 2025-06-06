@@ -1,18 +1,23 @@
 """
+health_monitor - 索克生活项目模块
+"""
+
+from .health_checker import HealthChecker
+from collections.abc import Callable
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any
+import asyncio
+import contextlib
+import logging
+import time
+
+"""
 健康监控器
 提供持续的健康状态监控和告警功能
 """
 
-import asyncio
-from collections.abc import Callable
-import contextlib
-from dataclasses import dataclass, field
-from enum import Enum
-import logging
-import time
-from typing import Any
 
-from .health_checker import HealthChecker
 
 logger = logging.getLogger(__name__)
 

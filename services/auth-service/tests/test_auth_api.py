@@ -1,15 +1,20 @@
-"""认证服务API测试"""
+"""
+test_auth_api - 索克生活项目模块
+"""
 
-import pytest
-import asyncio
-from httpx import AsyncClient
+from auth_service.core.database import get_db
+from auth_service.main import app
+from auth_service.models.base import BaseModel
 from fastapi.testclient import TestClient
+from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
+import asyncio
+import pytest
 
-from auth_service.main import app
-from auth_service.core.database import get_db
-from auth_service.models.base import BaseModel
+"""认证服务API测试"""
+
+
 
 
 # 测试数据库配置

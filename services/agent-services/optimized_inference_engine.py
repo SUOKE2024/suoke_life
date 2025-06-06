@@ -1,24 +1,29 @@
+"""
+optimized_inference_engine - 索克生活项目模块
+"""
+
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+from contextlib import asynccontextmanager
+from dataclasses import dataclass, asdict
+from datetime import datetime
+from multiprocessing import shared_memory, Queue, Manager
+from numba import jit, cuda
+from typing import List, Dict, Any, Optional, Union, Callable
+import asyncio
+import asyncpg
+import logging
+import multiprocessing
+import psutil
+import threading
+import time
+import uuid
+
 #!/usr/bin/env python3
 """
 索克生活 - 优化后的AI推理引擎
 实现跨进程内存隔离、异步I/O和JIT编译优化
 """
 
-import asyncio
-import time
-import multiprocessing
-import psutil
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
-from multiprocessing import shared_memory, Queue, Manager
-from typing import List, Dict, Any, Optional, Union, Callable
-import logging
-from dataclasses import dataclass, asdict
-from numba import jit, cuda
-import threading
-from contextlib import asynccontextmanager
-import uuid
-from datetime import datetime
-import asyncpg
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)

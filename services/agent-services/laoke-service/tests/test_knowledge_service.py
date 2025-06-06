@@ -1,14 +1,19 @@
+"""
+test_knowledge_service - 索克生活项目模块
+"""
+
+from datetime import datetime
+from unittest.mock import Mock, patch, AsyncMock
+import asyncio
+import json
+import pytest
+
 #!/usr/bin/env python3
 """
 知识服务测试
 测试老克智能体的知识管理功能
 """
 
-import pytest
-import asyncio
-from unittest.mock import Mock, patch, AsyncMock
-from datetime import datetime
-import json
 
 class TestKnowledgeService:
     """知识服务测试类"""

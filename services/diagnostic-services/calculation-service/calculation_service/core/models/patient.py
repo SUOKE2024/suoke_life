@@ -1,16 +1,22 @@
 """
+patient - 索克生活项目模块
+"""
+
+        from datetime import date
+from .base import BaseModel
+from datetime import date, time
+from enum import Enum
+from pydantic import Field, validator
+from typing import Optional
+
+"""
 患者信息数据模型
 
 定义患者基本信息和出生信息的数据结构
 """
 
-from datetime import date, time
-from enum import Enum
-from typing import Optional
 
-from pydantic import Field, validator
 
-from .base import BaseModel
 
 
 class Gender(str, Enum):
@@ -73,7 +79,6 @@ class BirthInfoModel(BaseModel):
     @validator('birth_date')
     def validate_birth_date(cls, v):
         """验证出生日期"""
-        from datetime import date
         if v > date.today():
             raise ValueError("出生日期不能晚于今天")
         return v

@@ -1,21 +1,27 @@
+"""
+collaborative_decision_bus - 索克生活项目模块
+"""
+
+            import aiohttp
+from ..common.service_registry.agent_discovery import (
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any, Dict, List, Optional, Set, Callable
+from uuid import uuid4
+import aioredis
+import asyncio
+import json
+import logging
+
 #!/usr/bin/env python3
 """
 四智能体协同决策总线
 实现小艾、小克、老克、索儿之间的协同决策机制
 """
 
-import asyncio
-import json
-import logging
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Callable
-from uuid import uuid4
 
-import aioredis
 
-from ..common.service_registry.agent_discovery import (
     AgentType, CapabilityType, AgentServiceRegistry, get_agent_registry
 )
 
@@ -386,7 +392,6 @@ class CollaborativeDecisionBus:
     async def _call_agent_service(self, service, vote_request: Dict[str, Any]) -> Optional[AgentVote]:
         """调用智能体服务API"""
         try:
-            import aiohttp
             
             url = f"http://{service.host}:{service.port}/api/v1/vote"
             

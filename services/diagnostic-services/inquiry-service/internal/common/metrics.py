@@ -1,21 +1,26 @@
+"""
+metrics - 索克生活项目模块
+"""
+
+    from prometheus_client import Counter, Gauge, Histogram, Info, start_http_server
+from collections import defaultdict
+from collections.abc import Callable
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from typing import Any
+import asyncio
+import logging
+import threading
+import time
+
 #!/usr/bin/env python
 
 """
 性能监控和指标收集模块
 """
 
-import asyncio
-from collections import defaultdict
-from collections.abc import Callable
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-import logging
-import threading
-import time
-from typing import Any
 
 try:
-    from prometheus_client import Counter, Gauge, Histogram, Info, start_http_server
 
     PROMETHEUS_AVAILABLE = True
 except ImportError:

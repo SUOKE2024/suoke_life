@@ -45,9 +45,7 @@ export class BenchmarkStreamingService {
 
     this.isConnecting = true;
 
-    return new Promise((resolve, reject) => {
-      try {
-        this.ws = new WebSocket(`${this.baseUrl}/ws/streaming`);
+    return new Promise((resolve, reject) => {try {this.ws = new WebSocket(`${this.baseUrl}/ws/streaming`);
 
         this.ws.onopen = () => {
           console.log('WebSocket连接已建立');
@@ -56,13 +54,13 @@ export class BenchmarkStreamingService {
           resolve();
         };
 
-        this.ws.onerror = (error) => {
+        this.ws.onerror = error => {
           console.error('WebSocket连接错误:', error);
           this.isConnecting = false;
           reject(new Error('WebSocket连接失败'));
         };
 
-        this.ws.onmessage = (event) => {
+        this.ws.onmessage = event => {
           try {
             const streamEvent: StreamEvent = JSON.parse(event.data);
             this.handleMessage(streamEvent);
@@ -71,7 +69,7 @@ export class BenchmarkStreamingService {
           }
         };
 
-        this.ws.onclose = (event) => {
+        this.ws.onclose = event => {
           console.log('WebSocket连接已关闭:', event.code, event.reason);
           this.isConnecting = false;
           this.ws = null;
@@ -109,9 +107,7 @@ export class BenchmarkStreamingService {
    */
   subscribeToEvents(eventTypes: string[]): void {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-      const message = {
-        command: 'subscribe',
-        event_types: eventTypes
+      const message = {command: 'subscribe',event_types: eventTypes;
       };
       this.ws.send(JSON.stringify(message));
     } else {
@@ -124,9 +120,7 @@ export class BenchmarkStreamingService {
    */
   unsubscribeFromEvents(eventTypes: string[]): void {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-      const message = {
-        command: 'unsubscribe',
-        event_types: eventTypes
+      const message = {command: 'unsubscribe',event_types: eventTypes;
       };
       this.ws.send(JSON.stringify(message));
     }
@@ -137,9 +131,7 @@ export class BenchmarkStreamingService {
    */
   startStreamingBenchmark(config: StreamConfig): void {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-      const message = {
-        command: 'start_benchmark',
-        config
+      const message = {command: 'start_benchmark',config;
       };
       this.ws.send(JSON.stringify(message));
     } else {
@@ -152,9 +144,7 @@ export class BenchmarkStreamingService {
    */
   stopStreamingBenchmark(benchmarkId: string): void {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-      const message = {
-        command: 'stop_benchmark',
-        benchmark_id: benchmarkId
+      const message = {command: 'stop_benchmark',benchmark_id: benchmarkId;
       };
       this.ws.send(JSON.stringify(message));
     }
@@ -216,7 +206,7 @@ export class BenchmarkStreamingService {
    */
   getConnectionState(): string {
     if (!this.ws) return 'CLOSED';
-    
+
     switch (this.ws.readyState) {
       case WebSocket.CONNECTING:
         return 'CONNECTING';
@@ -243,9 +233,7 @@ export class BenchmarkStreamingService {
    */
   sendHeartbeat(): void {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-      const message = {
-        command: 'ping',
-        timestamp: new Date().toISOString()
+      const message = {command: 'ping',timestamp: new Date().toISOString();
       };
       this.ws.send(JSON.stringify(message));
     }
@@ -262,4 +250,4 @@ export class BenchmarkStreamingService {
 }
 
 // 创建单例实例
-export const benchmarkStreamingService = new BenchmarkStreamingService(); 
+export const benchmarkStreamingService = new BenchmarkStreamingService();

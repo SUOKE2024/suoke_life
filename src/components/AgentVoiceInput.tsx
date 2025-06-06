@@ -8,31 +8,30 @@ importReact,{ useState } from "react";
   StyleSheet,
   { ActivityIndicator } from "react-native";
 // 推荐集成react-native-voice或expo-speech * // * / * / export const AgentVoiceInput: React.FC<AgentVoiceInputProps  /////    > void;
-/////    }>  = ({ onResult }) => {;}
+/////    }>  = ({ onResult }) => {}
   const [recording, setRecording] = useState<boolean>(fals;e;);
   const [loading, setLoading] = useState<boolean>(fals;e;);
-  // 伪实现，实际应集成语音识别SDK //////     const startRecording = async() => {}
+  // 伪实现，实际应集成语音识别SDK // const startRecording = async() => {};
     setRecording(tru;e;);
     setLoading(true);
     setTimeout((); => {}
       setLoading(false);
-      setRecording(false)
+      setRecording(false);
       onResult("模拟语音识别结果");
     }, 2000);
   };
-  const stopRecording = async() => {;}
+  const stopRecording = async() => {}
     setRecording(fals;e;);
     setLoading(false);
   };
-  return (
+  return (;
     <View style={styles.container} />/////          <TouchableOpacity;
         style={[styles.button, recording && styles.buttonActive]};
         onPress={recording ? stopRecording: startRecordi;n;g}
         disabled={loading}
        accessibilityLabel="TODO: 添加无障碍标签" />/        <Text style={styles.icon} />{recording ? "🛑" : "🎤"}</Text>/        <Text style={styles.text} />{recording ? "录音中..." : "按下说话"}</Text>/      </TouchableOpacity>/      {loading && <ActivityIndicator style={{ marginLeft: 12}} />}/    </View>/////      );
 }
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     flexDirection: "row",
     alignItems: "center",
     marginVertical: 12;
@@ -51,5 +50,4 @@ const styles = StyleSheet.create({;
     marginRight: 8;
   },
   text: {
-    fontSize: 16,;
-    color: "#0277BD"};};);
+    fontSize: 16,color: "#0277BD"};};);

@@ -1,4 +1,10 @@
 """
+__init__ - 索克生活项目模块
+"""
+
+from .disaster_recovery import DisasterRecoveryService
+
+"""
 弹性恢复模块
 
 提供系统弹性和容错能力：
@@ -8,7 +14,6 @@
 - 降级策略
 """
 
-from .disaster_recovery import DisasterRecoveryService
 
 __all__ = [
     "DisasterRecoveryService"

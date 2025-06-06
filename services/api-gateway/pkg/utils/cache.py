@@ -1,3 +1,15 @@
+"""
+cache - 索克生活项目模块
+"""
+
+from dataclasses import dataclass
+from fastapi import Request, Response
+from typing import Dict, List, Optional
+import json
+import logging
+import pickle
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,14 +17,7 @@
 缓存管理模块，支持内存和Redis缓存
 """
 
-import json
-import logging
-import pickle
-import time
-from dataclasses import dataclass
-from typing import Dict, List, Optional
 
-from fastapi import Request, Response
 
 logger = logging.getLogger(__name__)
 

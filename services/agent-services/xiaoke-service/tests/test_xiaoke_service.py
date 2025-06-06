@@ -1,22 +1,27 @@
+"""
+test_xiaoke_service - 索克生活项目模块
+"""
+
+    from xiaoke_service.api.xiaoke_api import XiaokeAPI
+    from xiaoke_service.core.appointment_service import AppointmentService
+    from xiaoke_service.core.blockchain_service import BlockchainService
+    from xiaoke_service.core.product_service import ProductService
+    from xiaoke_service.core.recommendation_service import RecommendationService
+from datetime import datetime, timedelta
+from unittest.mock import Mock, patch, AsyncMock
+import asyncio
+import json
+import pytest
+
 #!/usr/bin/env python3
 """
 小克智能体服务综合测试
 测试商业化功能的各个方面
 """
 
-import pytest
-import asyncio
-from unittest.mock import Mock, patch, AsyncMock
-from datetime import datetime, timedelta
-import json
 
 # 假设的服务导入（根据实际结构调整）
 try:
-    from xiaoke_service.api.xiaoke_api import XiaokeAPI
-    from xiaoke_service.core.appointment_service import AppointmentService
-    from xiaoke_service.core.product_service import ProductService
-    from xiaoke_service.core.blockchain_service import BlockchainService
-    from xiaoke_service.core.recommendation_service import RecommendationService
 except ImportError:
     # 如果导入失败，创建模拟类
     class XiaokeAPI:

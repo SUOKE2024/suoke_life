@@ -1,8 +1,5 @@
-#!/usr/bin/env python3
-
 """
-科学计算库自动安装脚本
-自动检测系统环境并安装所需的科学计算库
+install_scientific_libraries - 索克生活项目模块
 """
 
 import argparse
@@ -10,6 +7,14 @@ import logging
 import platform
 import subprocess
 import sys
+
+#!/usr/bin/env python3
+
+"""
+科学计算库自动安装脚本
+自动检测系统环境并安装所需的科学计算库
+"""
+
 
 # 配置日志
 logging.basicConfig(

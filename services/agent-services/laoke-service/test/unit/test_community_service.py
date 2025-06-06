@@ -1,21 +1,26 @@
+"""
+test_community_service - 索克生活项目模块
+"""
+
+from datetime import datetime
+from internal.community.community_service import CommunityService
+from unittest.mock import AsyncMock, MagicMock, patch
+import os
+import pytest
+import sys
+import unittest
+
 #!/usr/bin/env python
 
 """
 社区服务单元测试
 """
 
-import os
-import sys
-import unittest
-from datetime import datetime
-from unittest.mock import AsyncMock, MagicMock, patch
 
-import pytest
 
 # 添加项目根路径到 Python 路径
 sys.path.insert(0, os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))))
 
-from internal.community.community_service import CommunityService
 
 
 class TestCommunityService(unittest.TestCase):

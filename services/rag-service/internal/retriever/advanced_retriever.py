@@ -1,3 +1,20 @@
+"""
+advanced_retriever - 索克生活项目模块
+"""
+
+        import jieba
+from ..model.document import Document, DocumentMetadata
+from ..observability.metrics import MetricsCollector
+from ..repository.milvus_repository import MilvusRepository
+from ..resilience.circuit_breaker import CircuitBreakerService
+from ..service.embedding_service import EmbeddingService
+from dataclasses import dataclass
+from enum import Enum
+from loguru import logger
+from typing import Dict, List, Any, Optional, Tuple, Union
+import asyncio
+import re
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,18 +22,7 @@
 高级检索器 - 支持多种检索策略和智能策略选择
 """
 
-import asyncio
-import re
-from typing import Dict, List, Any, Optional, Tuple, Union
-from dataclasses import dataclass
-from enum import Enum
-from loguru import logger
 
-from ..model.document import Document, DocumentMetadata
-from ..service.embedding_service import EmbeddingService
-from ..repository.milvus_repository import MilvusRepository
-from ..observability.metrics import MetricsCollector
-from ..resilience.circuit_breaker import CircuitBreakerService
 
 class RetrievalStrategy(str, Enum):
     """检索策略枚举"""
@@ -120,7 +126,6 @@ class QueryAnalyzer:
     def _extract_keywords(self, query: str) -> List[str]:
         """提取关键词"""
         # 简单的关键词提取，实际应用中可以使用更复杂的NLP技术
-        import jieba
         words = jieba.lcut(query)
         # 过滤停用词
         stopwords = {"的", "是", "在", "有", "和", "或", "但", "如果", "因为", "所以"}
@@ -325,7 +330,6 @@ class ResultProcessor:
     
     def _calculate_keyword_match(self, content: str, query: str) -> float:
         """计算关键词匹配度"""
-        import jieba
         query_words = set(jieba.lcut(query))
         content_words = set(jieba.lcut(content))
         
@@ -382,7 +386,6 @@ class ResultProcessor:
     def _calculate_content_similarity(self, content1: str, content2: str) -> float:
         """计算内容相似度"""
         # 简化的相似度计算
-        import jieba
         words1 = set(jieba.lcut(content1))
         words2 = set(jieba.lcut(content2))
         

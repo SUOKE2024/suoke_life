@@ -1,24 +1,29 @@
+"""
+service_client - 索克生活项目模块
+"""
+
+from collections.abc import Callable
+from corn_maze_service.constants import HTTP_BAD_REQUEST
+from dataclasses import dataclass
+from enum import Enum
+from pkg.utils.cache import CacheManager
+from pkg.utils.metrics import errors_total, record_service_call
+from typing import Any
+from urllib.parse import urljoin
+import aiohttp
+import asyncio
+import logging
+import random
+import time
+
 #!/usr/bin/env python3
 
 """
 服务间通信客户端 - 支持负载均衡、熔断和重试机制
 """
 
-import asyncio
-from collections.abc import Callable
-from dataclasses import dataclass
-from enum import Enum
-import logging
-import random
-import time
-from typing import Any
-from urllib.parse import urljoin
 
-import aiohttp
 
-from corn_maze_service.constants import HTTP_BAD_REQUEST
-from pkg.utils.cache import CacheManager
-from pkg.utils.metrics import errors_total, record_service_call
 
 logger = logging.getLogger(__name__)
 

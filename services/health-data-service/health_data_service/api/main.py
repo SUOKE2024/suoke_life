@@ -1,4 +1,40 @@
 """
+main - 索克生活项目模块
+"""
+
+from collections.abc import AsyncGenerator
+from collections.abc import Awaitable
+from collections.abc import Callable
+from contextlib import asynccontextmanager
+from fastapi import FastAPI
+from fastapi import HTTPException
+from fastapi import Request
+from fastapi import Response
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
+from fastapi.responses import JSONResponse
+from health_data_service.api.routes import health_data_router
+from health_data_service.api.routes.auth import auth_router
+from health_data_service.core.cache import get_cache_manager
+from health_data_service.core.config import settings
+from health_data_service.core.database import get_database
+from health_data_service.core.docs import setup_docs
+from health_data_service.core.exceptions import DatabaseError
+from health_data_service.core.exceptions import NotFoundError
+from health_data_service.core.exceptions import ValidationError
+from health_data_service.core.monitoring import get_health_status, get_metrics, record_request_metrics
+from loguru import logger
+from starlette.middleware.base import BaseHTTPMiddleware
+from typing import Any
+import asyncio
+import logging
+import signal
+import sys
+import time
+import uvicorn
+
+"""
 索克生活健康数据服务 - FastAPI 应用主入口
 
 提供健康数据管理的REST API接口，包括：
@@ -8,39 +44,8 @@
 - API文档生成
 """
 
-import asyncio
-import logging
-import signal
-import sys
-import time
-from collections.abc import AsyncGenerator
-from collections.abc import Awaitable
-from collections.abc import Callable
-from contextlib import asynccontextmanager
-from typing import Any
 
-import uvicorn
-from fastapi import FastAPI
-from fastapi import HTTPException
-from fastapi import Request
-from fastapi import Response
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.gzip import GZipMiddleware
-from fastapi.middleware.trustedhost import TrustedHostMiddleware
-from fastapi.responses import JSONResponse
-from loguru import logger
-from health_data_service.core.monitoring import get_health_status, get_metrics, record_request_metrics
-from health_data_service.core.docs import setup_docs
-from starlette.middleware.base import BaseHTTPMiddleware
 
-from health_data_service.api.routes import health_data_router
-from health_data_service.api.routes.auth import auth_router
-from health_data_service.core.config import settings
-from health_data_service.core.database import get_database
-from health_data_service.core.cache import get_cache_manager
-from health_data_service.core.exceptions import DatabaseError
-from health_data_service.core.exceptions import NotFoundError
-from health_data_service.core.exceptions import ValidationError
 
 # 配置日志
 logging.basicConfig(
@@ -181,6 +186,8 @@ async def general_exception_handler(request: Request, exc: Exception) -> JSONRes
     )
 
 
+@cache(expire=300)  # 5分钟缓存
+@limiter.limit("100/minute")  # 每分钟100次请求
 @app.get("/")
 async def root() -> dict[str, str]:
     """根路径"""
@@ -220,7 +227,9 @@ async def health_check() -> dict[str, Any]:
         return result
     except Exception as e:
         logger.error(f"健康检查失败: {e}")
-        raise HTTPException(status_code=503, detail="服务不可用") from e
+        raise HTTPException(status_code=50@cache(expire=@limiter.limit("100/minute")  # 每分钟100次请求
+300)  # 5分钟缓存
+3, detail="服务不可用") from e
 
 
 @app.get("/metrics")

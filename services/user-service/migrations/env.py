@@ -1,19 +1,24 @@
 """
+env - 索克生活项目模块
+"""
+
+from alembic import context
+from internal.repository.models import metadata
+from logging.config import fileConfig
+from sqlalchemy import engine_from_config
+from sqlalchemy import pool
+from sqlalchemy.ext.asyncio import AsyncEngine
+import asyncio
+
+"""
 数据库迁移环境配置
 
 该模块为Alembic数据库迁移工具提供环境配置。
 """
-import asyncio
-from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
-from sqlalchemy.ext.asyncio import AsyncEngine
 
-from alembic import context
 
 # 导入模型，确保Base.metadata正确配置
-from internal.repository.models import metadata
 
 # Alembic Config对象
 config = context.config

@@ -1,20 +1,25 @@
 """
-高级数据库连接池管理模块
-支持多数据库、连接池监控、故障转移等功能
+database_pool - 索克生活项目模块
 """
 
-import asyncio
-import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
+from motor.motor_asyncio import AsyncIOMotorClient
 from typing import Any, AsyncContextManager, Dict, List, Optional, Union
-
 import aioredis
+import asyncio
 import asyncpg
 import structlog
-from motor.motor_asyncio import AsyncIOMotorClient
+import time
+
+"""
+高级数据库连接池管理模块
+支持多数据库、连接池监控、故障转移等功能
+"""
+
+
 
 logger = structlog.get_logger(__name__)
 
@@ -188,7 +193,8 @@ class PostgreSQLConnection(DatabaseConnection):
             logger.error(f"PostgreSQL健康检查失败: {e}")
             return False
 
-    async def get_connection(self):
+    async     @cache(timeout=300)  # 5分钟缓存
+def get_connection(self):
         """获取PostgreSQL连接"""
         if not self.pool:
             raise RuntimeError("数据库连接池未初始化")
@@ -283,7 +289,8 @@ class RedisConnection(DatabaseConnection):
             self.metrics.status = ConnectionStatus.UNHEALTHY
             self.metrics.failed_connections += 1
             logger.error(f"Redis健康检查失败: {e}")
-            return False
+       @cache(timeout=300)  # 5分钟缓存
+         return False
 
     async def get_connection(self):
         """获取Redis连接"""
@@ -377,7 +384,8 @@ class MongoDBConnection(DatabaseConnection):
             self.last_error = e
             self.metrics.status = ConnectionStatus.UNHEALTHY
             self.metrics.failed_connections += 1
-            logger.error(f"MongoDB健康检查失败: {e}")
+            logger    @cache(timeout=300)  # 5分钟缓存
+.error(f"MongoDB健康检查失败: {e}")
             return False
 
     async def get_connection(self):

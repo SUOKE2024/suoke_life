@@ -1,3 +1,23 @@
+"""
+enhanced_palpation_service - 索克生活项目模块
+"""
+
+from collections import defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from loguru import logger
+from scipy import signal
+from services.common.governance.circuit_breaker import CircuitBreakerConfig
+from services.common.governance.rate_limiter import RateLimitConfig, rate_limit
+from services.common.observability.tracing import SpanKind, trace
+from typing import Any
+import asyncio
+import hashlib
+import json
+import time
+import uuid
+
 #!/usr/bin/env python3
 
 """
@@ -7,24 +27,9 @@
 提供专业的中医切诊数据采集和分析服务。
 """
 
-import asyncio
-import hashlib
-import json
-import time
-import uuid
-from collections import defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-from typing import Any
 
-from loguru import logger
-from scipy import signal
 
 # 导入通用组件
-from services.common.governance.circuit_breaker import CircuitBreakerConfig
-from services.common.governance.rate_limiter import RateLimitConfig, rate_limit
-from services.common.observability.tracing import SpanKind, trace
 
 class PulsePosition(Enum):
     """脉位"""

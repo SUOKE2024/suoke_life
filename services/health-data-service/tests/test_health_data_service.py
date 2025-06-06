@@ -1,12 +1,18 @@
-"""健康数据服务测试"""
+"""
+test_health_data_service - 索克生活项目模块
+"""
 
-import pytest
-import asyncio
 from datetime import datetime
-from unittest.mock import AsyncMock, MagicMock, patch
-
 from health_data_service.core.exceptions import DatabaseError, NotFoundError, ValidationError
 from health_data_service.models import (
+from health_data_service.services.health_data_service import HealthDataService, VitalSignsService, TCMDiagnosisService
+from unittest.mock import AsyncMock, MagicMock, patch
+import asyncio
+import pytest
+
+"""健康数据服务测试"""
+
+
     CreateHealthDataRequest,
     CreateVitalSignsRequest,
     UpdateHealthDataRequest,
@@ -15,7 +21,6 @@ from health_data_service.models import (
     HealthData,
     VitalSigns,
 )
-from health_data_service.services.health_data_service import HealthDataService, VitalSignsService, TCMDiagnosisService
 
 
 class TestHealthDataService:

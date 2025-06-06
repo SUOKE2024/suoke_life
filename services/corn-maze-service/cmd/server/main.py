@@ -1,36 +1,41 @@
-#!/usr/bin/env python3
-
 """
-迷宫服务主程序 - 负责启动gRPC服务器和相关组件
+main - 索克生活项目模块
 """
 
-import asyncio
 from concurrent import futures
-import logging
-from pathlib import Path
-import signal
-import sys
-
-import grpc
-
-# 确保项目根目录在路径中
-sys.path.insert(0, str(Path(__file__).parent.parent.parent.resolve()))
-
 from internal.delivery.grpc.server import setup_grpc_server
 from internal.maze.generator import MazeGenerator
 from internal.repository.maze_repository import MazeRepository
 from internal.service.knowledge_service import KnowledgeService
 from internal.service.maze_service import MazeService
 from internal.service.progress_service import ProgressService
+from pathlib import Path
 from pkg.utils.config import get_value, load_config
 from pkg.utils.health import (
+from pkg.utils.logging import setup_logging
+from pkg.utils.metrics import start_metrics_server
+import asyncio
+import grpc
+import logging
+import signal
+import sys
+
+#!/usr/bin/env python3
+
+"""
+迷宫服务主程序 - 负责启动gRPC服务器和相关组件
+"""
+
+
+
+# 确保项目根目录在路径中
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.resolve()))
+
     register_health_check,
     set_status_ready,
     set_status_stopping,
     start_health_server,
 )
-from pkg.utils.logging import setup_logging
-from pkg.utils.metrics import start_metrics_server
 
 
 class MazeServiceManager:

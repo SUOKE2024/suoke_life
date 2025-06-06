@@ -1,3 +1,20 @@
+"""
+product_manager - 索克生活项目模块
+"""
+
+from datetime import datetime, timedelta
+from internal.agent.food_therapy_manager import FoodTherapyManager
+from internal.repository.blockchain_repository import BlockchainRepository
+from internal.repository.order_repository import OrderRepository
+from internal.repository.product_repository import ProductRepository
+from pkg.utils.config_loader import get_config
+from pkg.utils.metrics import get_metrics_collector
+from typing import Any
+import hashlib
+import logging
+import time
+import uuid
+
 #!/usr/bin/env python
 
 """
@@ -5,19 +22,7 @@
 负责农产品定制、溯源、支付处理和商品推荐等功能
 """
 
-import hashlib
-import logging
-import time
-import uuid
-from datetime import datetime, timedelta
-from typing import Any
 
-from internal.agent.food_therapy_manager import FoodTherapyManager
-from internal.repository.blockchain_repository import BlockchainRepository
-from internal.repository.order_repository import OrderRepository
-from internal.repository.product_repository import ProductRepository
-from pkg.utils.config_loader import get_config
-from pkg.utils.metrics import get_metrics_collector
 
 logger = logging.getLogger(__name__)
 

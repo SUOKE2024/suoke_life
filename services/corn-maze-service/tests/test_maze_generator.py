@@ -1,20 +1,25 @@
+"""
+test_maze_generator - 索克生活项目模块
+"""
+
+from internal.maze.generator import MazeGenerator
+from internal.model.knowledge import KnowledgeNode
+from pathlib import Path
+from unittest.mock import AsyncMock, patch
+import random
+import sys
+import unittest
+
 #!/usr/bin/env python3
 
 """
 迷宫生成器单元测试
 """
 
-from pathlib import Path
-import random
-import sys
-import unittest
-from unittest.mock import AsyncMock, patch
 
 # 添加项目根目录到Python路径
 sys.path.insert(0, str(Path(__file__).parent.parent.resolve()))
 
-from internal.maze.generator import MazeGenerator
-from internal.model.knowledge import KnowledgeNode
 
 
 class TestMazeGenerator(unittest.TestCase):

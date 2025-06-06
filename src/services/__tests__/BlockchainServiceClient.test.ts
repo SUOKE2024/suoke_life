@@ -1,6 +1,5 @@
 import { BlockchainServiceClient } from '../blockchain/BlockchainServiceClient';
-import {
-  StoreHealthDataRequest,
+import {StoreHealthDataRequest,
   VerifyHealthDataRequest,
   VerifyWithZKPRequest,
   GetHealthDataRecordsRequest,
@@ -33,11 +32,7 @@ describe('BlockchainServiceClient', () => {
         timestamp: 1701432000
       };
 
-      const mockResponse = {
-        transaction_id: 'tx-123',
-        block_hash: '0xblock123',
-        success: true,
-        message: 'Data stored successfully'
+      const mockResponse = {transaction_id: 'tx-123',block_hash: '0xblock123',success: true,message: 'Data stored successfully';
       };
 
       mockFetch.mockResolvedValueOnce({
@@ -55,7 +50,7 @@ describe('BlockchainServiceClient', () => {
           method: 'POST',
           headers: expect.objectContaining({
             'Content-Type': 'application/json'
-          })
+          });
         })
       );
     });
@@ -80,13 +75,10 @@ describe('BlockchainServiceClient', () => {
     it('should verify health data successfully', async () => {
       const request: VerifyHealthDataRequest = {
         transactionId: 'tx-123',
-        dataHash: new Uint8Array([1, 2, 3])
+        dataHash: new Uint8Array([1, 2, 3]);
       };
 
-      const mockResponse = {
-        valid: true,
-        message: 'Data verified successfully',
-        verification_timestamp: 1701432000
+      const mockResponse = {valid: true,message: 'Data verified successfully',verification_timestamp: 1701432000;
       };
 
       mockFetch.mockResolvedValueOnce({
@@ -108,13 +100,10 @@ describe('BlockchainServiceClient', () => {
         verifierId: 'verifier-456',
         dataType: 'age_verification',
         proof: new Uint8Array([1, 2, 3]),
-        publicInputs: new Uint8Array([4, 5, 6])
+        publicInputs: new Uint8Array([4, 5, 6]);
       };
 
-      const mockResponse = {
-        valid: true,
-        message: 'ZKP verification successful',
-        verification_details: { circuit: 'age_verification' }
+      const mockResponse = {valid: true,message: 'ZKP verification successful',verification_details: { circuit: 'age_verification' };
       };
 
       mockFetch.mockResolvedValueOnce({
@@ -138,20 +127,10 @@ describe('BlockchainServiceClient', () => {
         pageSize: 10
       };
 
-      const mockResponse = {
-        records: [
-          {
-            transaction_id: 'tx-123',
-            data_type: 'blood_pressure',
-            data_hash: [1, 2, 3],
-            metadata: { device: 'smartwatch' },
-            timestamp: 1701432000,
-            block_hash: '0xblock123'
-          }
-        ],
-        total_count: 1,
-        page: 1,
-        page_size: 10
+      const mockResponse = {records: [;
+          {transaction_id: 'tx-123',data_type: 'blood_pressure',data_hash: [1, 2, 3],metadata: { device: 'smartwatch' },timestamp: 1701432000,block_hash: '0xblock123';
+          };
+        ],total_count: 1,page: 1,page_size: 10;
       };
 
       mockFetch.mockResolvedValueOnce({
@@ -177,10 +156,7 @@ describe('BlockchainServiceClient', () => {
         accessPolicies: { read: 'true', write: 'false' }
       };
 
-      const mockResponse = {
-        authorization_id: 'auth-789',
-        success: true,
-        message: 'Access authorized successfully'
+      const mockResponse = {authorization_id: 'auth-789',success: true,message: 'Access authorized successfully';
       };
 
       mockFetch.mockResolvedValueOnce({
@@ -203,10 +179,7 @@ describe('BlockchainServiceClient', () => {
         revocationReason: 'User request'
       };
 
-      const mockResponse = {
-        success: true,
-        message: 'Access revoked successfully',
-        revocation_timestamp: 1701432000
+      const mockResponse = {success: true,message: 'Access revoked successfully',revocation_timestamp: 1701432000;
       };
 
       mockFetch.mockResolvedValueOnce({
@@ -227,13 +200,7 @@ describe('BlockchainServiceClient', () => {
         includeNodeInfo: true
       };
 
-      const mockResponse = {
-        current_block_height: 12345,
-        connected_nodes: 5,
-        consensus_status: 'SYNCED',
-        sync_percentage: 100,
-        node_info: { version: '1.0.0' },
-        last_block_timestamp: 1701432000
+      const mockResponse = {current_block_height: 12345,connected_nodes: 5,consensus_status: 'SYNCED',sync_percentage: 100,node_info: { version: '1.0.0' },last_block_timestamp: 1701432000;
       };
 
       mockFetch.mockResolvedValueOnce({

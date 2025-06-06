@@ -1,5 +1,6 @@
-import React from "react";
 import { performance } from "perf_hooks";
+
+import React from "react";
 describe("AgentCoordinator", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -35,8 +36,7 @@ describe("AgentCoordinator", () => {
   });
   describe("submitTask Function", () => {
     it("should submit tasks successfully", () => {
-      const mockTask = {;
-        id: "task-1",
+      const mockTask = {id: "task-1",
         type: "diagnosis",
         priority: "high"
       };
@@ -88,8 +88,7 @@ describe("AgentCoordinator", () => {
       expect(averageTime).toBeLessThan(10);
     });
     it("should handle large datasets efficiently", () => {
-      const largeDataset = new Array(1000).fill(0).map((_, i) => ({;
-        id: `agent-${i}`,
+      const largeDataset = new Array(1000).fill(0).map((_, i) => ({id: `agent-${i}`,
         status: "active"
       }));
       const startTime = performance.now();

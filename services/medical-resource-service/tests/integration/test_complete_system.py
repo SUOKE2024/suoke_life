@@ -1,18 +1,24 @@
 """
+test_complete_system - 索克生活项目模块
+"""
+
+        import time
+from datetime import datetime, timedelta
+from internal.enhanced_medical_resource_service import EnhancedMedicalResourceService
+from internal.service.enhanced_food_agriculture_service import EnhancedFoodAgricultureService, ConstitutionType
+from internal.service.famous_doctor_service import FamousDoctorService, DoctorSearchCriteria, FamousDoctorLevel
+from internal.service.intelligent_appointment_service import IntelligentAppointmentService, AppointmentType, PriorityLevel
+from internal.service.wellness_tourism_service import WellnessTourismService, WellnessRequest, WellnessType
+import asyncio
+import pytest
+import uuid
+
+"""
 完整系统集成测试
 测试所有服务模块的集成功能
 """
 
-import pytest
-import asyncio
-from datetime import datetime, timedelta
-import uuid
 
-from internal.enhanced_medical_resource_service import EnhancedMedicalResourceService
-from internal.service.wellness_tourism_service import WellnessTourismService, WellnessRequest, WellnessType
-from internal.service.enhanced_food_agriculture_service import EnhancedFoodAgricultureService, ConstitutionType
-from internal.service.famous_doctor_service import FamousDoctorService, DoctorSearchCriteria, FamousDoctorLevel
-from internal.service.intelligent_appointment_service import IntelligentAppointmentService, AppointmentType, PriorityLevel
 
 
 class TestCompleteSystemIntegration:
@@ -202,7 +208,6 @@ class TestCompleteSystemIntegration:
             tasks.append(wellness_task)
         
         # 执行所有任务并测量时间
-        import time
         start_time = time.time()
         
         results = await asyncio.gather(*tasks, return_exceptions=True)

@@ -1,3 +1,17 @@
+"""
+fault_tolerance - 索克生活项目模块
+"""
+
+from ..observability.metrics import MetricsCollector
+from dataclasses import dataclass, field
+from enum import Enum
+from loguru import logger
+from typing import Dict, List, Any, Optional, Callable, Union
+import asyncio
+import random
+import time
+import uuid
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,16 +19,7 @@
 故障恢复和容错机制 - 确保RAG服务的高可用性
 """
 
-import asyncio
-import time
-import uuid
-from typing import Dict, List, Any, Optional, Callable, Union
-from dataclasses import dataclass, field
-from enum import Enum
-import random
-from loguru import logger
 
-from ..observability.metrics import MetricsCollector
 
 class HealthStatus(str, Enum):
     """健康状态"""

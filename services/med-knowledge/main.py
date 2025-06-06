@@ -1,26 +1,31 @@
+"""
+main - 索克生活项目模块
+"""
+
+from app.core.config import get_settings
+from app.core.logger import setup_logging
+from loguru import logger
+from pathlib import Path
+from typing import Optional
+import argparse
+import asyncio
+import os
+import signal
+import sys
+import uvicorn
+
 #!/usr/bin/env python3
 """
 索克生活-医学知识服务启动脚本
 支持开发、生产、测试等多种运行模式
 """
 
-import asyncio
-import os
-import sys
-import signal
-import argparse
-from pathlib import Path
-from typing import Optional
 
-import uvicorn
-from loguru import logger
 
 # 添加项目路径
 project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
 
-from app.core.config import get_settings
-from app.core.logger import setup_logging
 
 
 class MedKnowledgeServer:

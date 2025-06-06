@@ -1,10 +1,18 @@
-import io
-from typing import List, Optional
+"""
+feature_extractors - 索克生活项目模块
+"""
+
+    import cv2
+    import easyocr
+    import tempfile
+    import whisper
 from PIL import Image
+from typing import List, Optional
+import io
+
 
 # 图片OCR
 try:
-    import easyocr
     _ocr_reader = easyocr.Reader(['ch_sim', 'en'], gpu=False)
 except ImportError:
     _ocr_reader = None
@@ -18,7 +26,6 @@ def extract_image_text(image_bytes: bytes) -> str:
 
 # 音频ASR
 try:
-    import whisper
     _asr_model = whisper.load_model('base')
 except ImportError:
     _asr_model = None
@@ -26,7 +33,6 @@ except ImportError:
 def extract_audio_text(audio_bytes: bytes) -> str:
     if not _asr_model:
         return "[ASR模块未安装]"
-    import tempfile
     with tempfile.NamedTemporaryFile(suffix='.wav') as f:
         f.write(audio_bytes)
         f.flush()
@@ -35,14 +41,12 @@ def extract_audio_text(audio_bytes: bytes) -> str:
 
 # 视频帧抽取
 try:
-    import cv2
 except ImportError:
     cv2 = None
 
 def extract_video_keyframes(video_bytes: bytes, max_frames: int = 3) -> List[bytes]:
     if not cv2:
         return []
-    import tempfile
     frames = []
     with tempfile.NamedTemporaryFile(suffix='.mp4') as f:
         f.write(video_bytes)

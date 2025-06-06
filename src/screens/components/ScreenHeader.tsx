@@ -1,8 +1,9 @@
-import React from "react";
-//////     ScreenHeader.tsx   索克生活APP - 自动生成的类型安全文件     @description TODO: 添加文件描述 @author 索克生活开发团队   @version 1.0.0;
 import { SafeAreaView } from "react-native-safe-area-context";
-importIcon from ";../../components/common/Icon"/import { colors, spacing, fonts } from ../../constants/theme"//////    "
-importReact from "react"
+
+import React from "react";
+// ScreenHeader.tsx   索克生活APP - 自动生成的类型安全文件     @description TODO: 添加文件描述 @author 索克生活开发团队   @version 1.0.0;
+importIcon from ";../../components/common/Icon"/import { colors, spacing, fonts } from ../../constants/theme"// ";
+importReact from "react";
   View,
   Text,
   StyleSheet,
@@ -29,13 +30,11 @@ export const ScreenHeader: React.FC<ScreenHeaderProps />  = ({/////      title,
   backgroundColor = colors.surface,
   textColor = colors.text,
   showBackButton = false,
-  style,;
-  centerComponent,;
-  rightComponent;
+  style,centerComponent,rightComponent;
 }) => {}
   const isDark = backgroundColor === colors.primary || backgroundColor === colors.primaryDa;
 r;k;
-return (
+return (;
     <SafeAreaView style={[styles.container, { backgroundColor }, style]} />/////          <StatusBar;
 barStyle={isDark ? light-content" : "dark-content}
         backgroundColor={backgroundColor} />/////
@@ -77,8 +76,7 @@ style={styles.iconButton}
           )}
         </View>/      </View>/    </SafeAreaView>/////      );
 }
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     shadowColor: colors.black,
     shadowOffset: {
       width: 0,
@@ -112,16 +110,16 @@ const styles = StyleSheet.create({;
     width: 40,
     height: 40,
     borderRadius: 20,
-    justifyContent: "center,"
+    justifyContent: "center,",
     alignItems: "center"
   },
   titleContainer: { alignItems: center"  },"
   title: {
     fontSize: fonts.size.lg,
-    fontWeight: "bold,"
+    fontWeight: "bold,",
     textAlign: "center"
   },
   subtitle: {
     fontSize: fonts.size.sm,
-    textAlign: center",;"
+    textAlign: center","
     marginTop: 2};};);

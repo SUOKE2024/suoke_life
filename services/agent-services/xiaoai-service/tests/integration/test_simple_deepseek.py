@@ -1,13 +1,22 @@
+"""
+test_simple_deepseek - 索克生活项目模块
+"""
+
+        from internal.agent.agent_manager import AgentManager
+        from internal.agent.deepseek_model_factory import DeepSeekModelFactory
+        from internal.agent.deepseek_model_factory import get_deepseek_model_factory
+        import openai
+import asyncio
+import os
+import sys
+import traceback
+
 #!/usr/bin/env python3
 """
 简单的DeepSeek集成测试
 直接验证核心功能,不依赖复杂的配置系统
 """
 
-import asyncio
-import os
-import sys
-import traceback
 
 # 添加项目路径
 sys.path.append('.')
@@ -19,7 +28,6 @@ async def test_direct_deepseek_api():
     print("🔍 直接测试DeepSeek API...")
 
     try:
-        import openai
 
         client = openai.OpenAI(
             api_key=os.environ['DEEPSEEK_API_KEY'],
@@ -57,7 +65,6 @@ async def test_deepseek_factory_direct():
     print("\n🔍 直接测试DeepSeek模型工厂...")
 
     try:
-        from internal.agent.deepseek_model_factory import DeepSeekModelFactory
 
         factory = DeepSeekModelFactory()
         print(f"  📋 API密钥: {factory.api_key[:10]}..." if factory.api_key else "  ❌ 无API密钥")
@@ -107,8 +114,6 @@ async def test_agent_manager_forced_deepseek():
     print("\n🔍 强制智能体管理器使用DeepSeek...")
 
     try:
-        from internal.agent.agent_manager import AgentManager
-        from internal.agent.deepseek_model_factory import get_deepseek_model_factory
 
         agent_manager = AgentManager()
 
@@ -146,7 +151,6 @@ async def test_chinese_medicine_consultation():
     print("\n🔍 测试中医咨询功能...")
 
     try:
-        from internal.agent.deepseek_model_factory import get_deepseek_model_factory
 
         factory = await get_deepseek_model_factory()
 

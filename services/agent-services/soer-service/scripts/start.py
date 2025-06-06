@@ -1,3 +1,15 @@
+"""
+start - 索克生活项目模块
+"""
+
+from pathlib import Path
+from soer_service.config.settings import get_settings
+from soer_service.core.logging import get_logger
+from soer_service.main import app
+import asyncio
+import sys
+import uvicorn
+
 #!/usr/bin/env python3
 """
 索儿服务启动脚本
@@ -5,19 +17,12 @@
 用于启动 soer-service 微服务
 """
 
-import asyncio
-import sys
-from pathlib import Path
 
 # 添加项目根目录到 Python 路径
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-import uvicorn
 
-from soer_service.config.settings import get_settings
-from soer_service.core.logging import get_logger
-from soer_service.main import app
 
 logger = get_logger(__name__)
 

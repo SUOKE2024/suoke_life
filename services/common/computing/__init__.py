@@ -1,3 +1,13 @@
+"""
+__init__ - 索克生活项目模块
+"""
+
+        import numpy as np
+    from .distributed.distributed_computing import (
+    from .extensions.c_algorithms import (
+    from .gpu.gpu_acceleration import (
+    import numpy as np
+
 #!/usr/bin/env python3
 """
 索克生活 - 计算模块统一接口
@@ -6,7 +16,6 @@
 
 # 分布式计算模块
 try:
-    from .distributed.distributed_computing import (
         DistributedComputeCluster,
         DistributedComputeNode,
         DistributedConfig,
@@ -22,7 +31,6 @@ except ImportError as e:
 
 # C扩展模块
 try:
-    from .extensions.c_algorithms import (
         CAlgorithmExtension,
         CExtensionConfig,
         AlgorithmType,
@@ -40,7 +48,6 @@ except ImportError as e:
 
 # GPU加速模块
 try:
-    from .gpu.gpu_acceleration import (
         GPUAccelerator,
         GPUConfig,
         GPUBackend,
@@ -139,7 +146,6 @@ class SuokeComputingEngine:
                 print(f"C扩展计算失败，回退到Python: {e}")
         
         # Python回退实现
-        import numpy as np
         weighted_symptoms = symptoms * weights
         scores = np.dot(patterns, weighted_symptoms)
         total = np.sum(scores)
@@ -160,7 +166,6 @@ class SuokeComputingEngine:
                 print(f"C扩展计算失败，回退到Python: {e}")
         
         # Python回退实现
-        import numpy as np
         mean = np.mean(data, axis=0)
         std = np.std(data, axis=0)
         std = np.where(std > 1e-8, std, 1.0)
@@ -181,7 +186,6 @@ class SuokeComputingEngine:
                 print(f"C扩展计算失败，回退到Python: {e}")
         
         # Python回退实现
-        import numpy as np
         user_norm = np.linalg.norm(user_profile)
         food_norms = np.linalg.norm(food_database, axis=1)
         
@@ -342,7 +346,6 @@ if __name__ == "__main__":
     print(f"性能信息: {perf_info}")
     
     # 测试智能计算函数
-    import numpy as np
     
     # 测试数据
     symptoms = np.random.rand(20).astype(np.float32)

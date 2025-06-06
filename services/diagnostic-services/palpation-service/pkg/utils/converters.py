@@ -1,14 +1,19 @@
+"""
+converters - 索克生活项目模块
+"""
+
+from datetime import datetime, date
+from google.protobuf.json_format import MessageToDict
+from google.protobuf.struct_pb2 import Struct
+from typing import Any, Dict, List, Union
+import json
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 数据转换工具函数
 """
 
-import json
-from datetime import datetime, date
-from typing import Any, Dict, List, Union
-from google.protobuf.json_format import MessageToDict
-from google.protobuf.struct_pb2 import Struct
 
 
 def dict_to_proto_struct(data: Dict[str, Any]) -> Struct:

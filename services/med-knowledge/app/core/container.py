@@ -1,14 +1,6 @@
 """
-依赖注入容器
-管理应用程序的所有依赖项和服务实例
+container - 索克生活项目模块
 """
-
-from collections.abc import AsyncGenerator
-from contextlib import asynccontextmanager
-from typing import Any
-
-import redis
-from neo4j import AsyncGraphDatabase
 
 from app.core.config import get_settings
 from app.core.logger import get_logger
@@ -16,6 +8,19 @@ from app.repositories.neo4j_repository import Neo4jRepository
 from app.services.cache_service import CacheService
 from app.services.knowledge_service import KnowledgeService
 from app.services.metrics_service import MetricsService
+from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
+from neo4j import AsyncGraphDatabase
+from typing import Any
+import redis
+
+"""
+依赖注入容器
+管理应用程序的所有依赖项和服务实例
+"""
+
+
+
 
 class Container:
     """依赖注入容器"""

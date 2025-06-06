@@ -1,21 +1,31 @@
 """
-用户服务入口点
-处理服务启动、配置加载和请求分发
+main - 索克生活项目模块
 """
+
+        import uuid
+    import yaml
+from contextlib import asynccontextmanager
+from fastapi import FastAPI, Request, Response, Depends
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.responses import JSONResponse
+from internal.repository.sqlite_user_repository import SQLiteUserRepository
+from internal.service.user_service import UserService
+from pathlib import Path
+from typing import Dict, List, Optional, Any
 import argparse
 import asyncio
 import logging
 import os
 import signal
 import time
-from contextlib import asynccontextmanager
-from pathlib import Path
-from typing import Dict, List, Optional, Any
-
 import uvicorn
-from fastapi import FastAPI, Request, Response, Depends
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+
+"""
+用户服务入口点
+处理服务启动、配置加载和请求分发
+"""
+
 
 # 内部模块导入
 # from internal.delivery.grpc.server import start_grpc_server
@@ -25,8 +35,6 @@ from fastapi.responses import JSONResponse
 # from internal.observability.logging_config import configure_logging
 # from internal.observability.metrics import prometheus_metrics
 # from internal.repository.operation_log_repository import AuditLogRepository
-from internal.repository.sqlite_user_repository import SQLiteUserRepository
-from internal.service.user_service import UserService
 # from pkg.middleware.rate_limit import add_rate_limit_middleware
 # from pkg.middleware.rbac import RBACMiddleware
 
@@ -104,7 +112,6 @@ def load_config(config_path: str) -> Dict[str, Any]:
     Returns:
         Dict[str, Any]: 配置字典
     """
-    import yaml
     
     # 解析命令行参数中的配置文件路径
     if not Path(config_path).exists():
@@ -176,6 +183,9 @@ def create_app(config_path: str) -> FastAPI:
     
     # 创建FastAPI应用
     app = FastAPI(
+
+# 性能优化: 添加响应压缩
+app.add_middleware(GZipMiddleware, minimum_size=1000)
         title="用户服务",
         description="索克生命平台的用户管理服务",
         version="1.0.0",
@@ -236,7 +246,6 @@ def create_app(config_path: str) -> FastAPI:
     @app.middleware("http")
     async def add_request_id_middleware(request: Request, call_next):
         """为每个请求添加唯一标识符"""
-        import uuid
         request_id = str(uuid.uuid4())
         request.state.request_id = request_id
         

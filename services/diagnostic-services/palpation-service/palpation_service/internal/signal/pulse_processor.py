@@ -1,3 +1,12 @@
+"""
+pulse_processor - 索克生活项目模块
+"""
+
+from scipy import signal
+from typing import Any
+import logging
+import pywt
+
 #!/usr/bin/env python
 
 """
@@ -5,11 +14,7 @@
 负责脉搏波形的处理、分析和特征提取
 """
 
-import logging
-from typing import Any
 
-import pywt
-from scipy import signal
 
 logger = logging.getLogger(__name__)
 

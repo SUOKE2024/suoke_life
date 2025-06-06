@@ -1,14 +1,19 @@
+"""
+metrics - 索克生活项目模块
+"""
+
+from collections import defaultdict
+from typing import Any
+import logging
+import threading
+import time
+
 #!/usr/bin/env python3
 """
 指标收集器
 负责收集和上报服务指标, 包括请求量、延迟、错误率等
 """
 
-import logging
-import threading
-import time
-from collections import defaultdict
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

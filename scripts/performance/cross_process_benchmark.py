@@ -1,19 +1,24 @@
+"""
+cross_process_benchmark - 索克生活项目模块
+"""
+
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+from dataclasses import dataclass
+from multiprocessing import shared_memory
+from numba import jit
+from typing import List, Dict, Any, Callable
+import asyncio
+import json
+import multiprocessing
+import psutil
+import time
+
 #!/usr/bin/env python3
 """
 跨进程内存隔离性能基准测试
 评估不同GIL优化策略的性能表现
 """
 
-import asyncio
-import time
-import multiprocessing
-import psutil
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
-from multiprocessing import shared_memory
-from typing import List, Dict, Any, Callable
-import json
-from dataclasses import dataclass
-from numba import jit
 
 @dataclass
 class BenchmarkResult:

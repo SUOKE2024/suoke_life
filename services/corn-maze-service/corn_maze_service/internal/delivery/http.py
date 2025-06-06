@@ -1,24 +1,29 @@
 """
-HTTP API 交付层
-
-提供 FastAPI HTTP 接口。
+http - 索克生活项目模块
 """
 
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
+from corn_maze_service.config import get_settings
+from corn_maze_service.internal.model.maze import (
 from datetime import UTC, datetime
-import logging
-from typing import Any
-from uuid import uuid4
-
 from fastapi import FastAPI, HTTPException, Query, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
+from typing import Any
+from uuid import uuid4
+import logging
 
-from corn_maze_service.config import get_settings
-from corn_maze_service.internal.model.maze import (
+"""
+HTTP API 交付层
+
+提供 FastAPI HTTP 接口。
+"""
+
+
+
     Maze,
     MazeDifficulty,
     MazeNode,

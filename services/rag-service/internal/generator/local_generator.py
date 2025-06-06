@@ -1,3 +1,16 @@
+"""
+local_generator - 索克生活项目模块
+"""
+
+from ..model.document import Document, DocumentReference
+from .base import BaseGenerator
+from loguru import logger
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from typing import List, Dict, Any, Optional, AsyncGenerator, Tuple
+import asyncio
+import re
+import torch
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,15 +18,7 @@
 本地生成器实现
 """
 
-import re
-import asyncio
-from typing import List, Dict, Any, Optional, AsyncGenerator, Tuple
-import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
-from loguru import logger
 
-from ..model.document import Document, DocumentReference
-from .base import BaseGenerator
 
 class LocalGenerator(BaseGenerator):
     """

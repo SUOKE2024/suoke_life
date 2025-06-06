@@ -1,13 +1,18 @@
-"""用户服务分析模块"""
+"""
+analytics - 索克生活项目模块
+"""
 
-import json
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass
+from datetime import datetime, timedelta
 from enum import Enum
+from typing import Dict, List, Optional, Any, Tuple
+from user_service.config import get_settings
+import json
 import structlog
 
-from user_service.config import get_settings
+"""用户服务分析模块"""
+
+
 
 logger = structlog.get_logger()
 

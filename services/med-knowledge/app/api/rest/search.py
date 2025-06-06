@@ -1,20 +1,25 @@
 """
-搜索相关API路由
-提供智能搜索和知识发现功能
+search - 索克生活项目模块
 """
-
-from fastapi import APIRouter, Depends, HTTPException, Query
 
 from app.api.rest.deps import get_knowledge_service
 from app.core.exceptions import (
-    InvalidQueryException,
-    SearchException,
-    ValidationException,
-)
 from app.core.logger import get_logger
 from app.models.entities import SearchResponse
 from app.models.requests import SearchRequest
 from app.services.knowledge_service import KnowledgeService
+from fastapi import APIRouter, Depends, HTTPException, Query
+
+"""
+搜索相关API路由
+提供智能搜索和知识发现功能
+"""
+
+
+    InvalidQueryException,
+    SearchException,
+    ValidationException,
+)
 
 logger = get_logger()
 router = APIRouter(prefix="/search", tags=["智能搜索"])

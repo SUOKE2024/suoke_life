@@ -1,10 +1,15 @@
+"""
+test_health_manager - 索克生活项目模块
+"""
+
+from unittest.mock import Mock, patch
+import pytest
+
 #!/usr/bin/env python3
 """
 health_manager 测试
 """
 
-import pytest
-from unittest.mock import Mock, patch
 
 class TestHealthManager:
     """测试类"""

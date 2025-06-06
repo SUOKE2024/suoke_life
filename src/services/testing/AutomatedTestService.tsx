@@ -1,27 +1,24 @@
+import { usePerformanceMonitor } from "../../placeholder";../hooks/////    usePerformanceMonitor
+
 import React from "react";
-import { usePerformanceMonitor } from "../../placeholder";../hooks/////    usePerformanceMonitor";"
-//////     索克生活自动化测试服务   实现持续集成测试、回归测试和性能测试
-export interface TestCase  {;
-;
-  //////     测试用例ID  id: string;
-  //////     测试名称  name: string;
-  //////     测试描述  description: string;
-  //////     测试类型  type: "unit" | "integration" | "e2e" | "performance" | "regression"
-  //////     测试优先级  priority: "low" | "medium" | "high" | "critical"
-  //////     测试标签  tags: string[]
+// 索克生活自动化测试服务   实现持续集成测试、回归测试和性能测试
+export interface TestCase   {// 测试用例ID  id: string;
+  // 测试名称  name: string;
+  // 测试描述  description: string;
+  // 测试类型  type: "unit" | "integration" | "e2e" | "performance" | "regression"
+  // 测试优先级  priority: "low" | "medium" | "high" | "critical"
+  // 测试标签  tags: string[]
   // 测试函数  testFn: () => Promise<TestResult /////    >
-  //////     超时时间（毫秒）  timeout: number;
-  //////     重试次数  retries: number;
+  // 超时时间（毫秒）  timeout: number;
+  // 重试次数  retries: number;
   // 前置条件  prerequisites?: string[]////
   // 依赖的测试用例  dependencies?: string[]////
 }
-export interface TestResult  {;
-;
-  //////     测试用例ID  testId: string;
-  //////     测试状态  status: "passed" | "failed" | "skipped" | "error"
-  //////     执行时间（毫秒）  duration: number;
-  //////     开始时间  startTime: number;
-  //////     结束时间  endTime: number;
+export interface TestResult   {// 测试用例ID  testId: string;
+  // 测试状态  status: "passed" | "failed" | "skipped" | "error"
+  // 执行时间（毫秒）  duration: number;
+  // 开始时间  startTime: number;
+  // 结束时间  endTime: number;
   // 错误信息  error?: { message: string////
     stack?: string;
     type: string};
@@ -30,66 +27,54 @@ export interface TestResult  {;
   // 截图（E2E测试）  screenshots?: string[]////
   // 日志  logs?: string[]////
 }
-export interface AssertionResult  {;
-;
-  //////     断言描述  description: string;
-  //////     断言结果  passed: boolean;
-  //////     期望值  expected: unknown;
-  //////     实际值  actual: unknown;
+export interface AssertionResult   {// 断言描述  description: string;
+  // 断言结果  passed: boolean;
+  // 期望值  expected: unknown;
+  // 实际值  actual: unknown;
   // 错误信息  error?: string}////
-export interface TestSuite {;
-;
-  //////     测试套件ID  id: string;
-  //////     套件名称  name: string;
-  //////     套件描述  description: string;
-  //////     测试用例  testCases: TestCase[]
-  //////     套件配置  config: { parallel: boolean,
+export interface TestSuite  {// 测试套件ID  id: string;
+  // 套件名称  name: string;
+  // 套件描述  description: string;
+  // 测试用例  testCases: TestCase[]
+  // 套件配置  config: { parallel: boolean,
     maxConcurrency: number,
     timeout: number,
     retries: number}
 }
-export interface TestRun  {;
-;
-  //////     测试运行ID  id: string;
-  //////     测试套件ID  suiteId: string;
-  //////     运行状态  status: "running" | "completed" | "failed" | "cancelled"
-  //////     开始时间  startTime: number;
+export interface TestRun   {// 测试运行ID  id: string;
+  // 测试套件ID  suiteId: string;
+  // 运行状态  status: "running" | "completed" | "failed" | "cancelled"
+  // 开始时间  startTime: number;
   // 结束时间  endTime?: number////
-  //////     总测试数  totalTests: number;
-  //////     通过测试数  passedTests: number;
-  //////     失败测试数  failedTests: number;
-  //////     跳过测试数  skippedTests: number;
-  //////     测试结果  results: TestResult[]
+  // 总测试数  totalTests: number;
+  // 通过测试数  passedTests: number;
+  // 失败测试数  failedTests: number;
+  // 跳过测试数  skippedTests: number;
+  // 测试结果  results: TestResult[]
   // 覆盖率报告  coverage?: CoverageReport////
   // 性能报告  performance?: PerformanceReport}////
-export interface CoverageReport {;
-;
-  //////     总行数  totalLines: number;
-  //////     覆盖行数  coveredLines: number;
-  //////     覆盖率百分比  percentage: number;
-  //////     文件覆盖率  files: Record<string,
+export interface CoverageReport  {// 总行数  totalLines: number;
+  // 覆盖行数  coveredLines: number;
+  // 覆盖率百分比  percentage: number;
+  // 文件覆盖率  files: Record<string,
     { lines: number,
       covered: number,
       percentage: number}
   >
 }
-export interface PerformanceReport  {;
-;
-  //////     平均响应时间  averageResponseTime: number;
-  //////     最大响应时间  maxResponseTime: number;
-  //////     最小响应时间  minResponseTime: number;
-  //////     内存使用  memoryUsage: { peak: number,
+export interface PerformanceReport   {// 平均响应时间  averageResponseTime: number;
+  // 最大响应时间  maxResponseTime: number;
+  // 最小响应时间  minResponseTime: number;
+  // 内存使用  memoryUsage: { peak: number,
     average: number}
-  //////     CPU使用率  cpuUsage: { peak: number,
+  // CPU使用率  cpuUsage: { peak: number,
     average: number}
-  //////     网络请求统计  networkStats: { totalRequests: number,
+  // 网络请求统计  networkStats: { totalRequests: number,
     successfulRequests: number,
     failedRequests: number,
     averageLatency: number}
 }
-export class AutomatedTestService  {;
-;
-  private static instance: AutomatedTestService;
+export class AutomatedTestService   {private static instance: AutomatedTestService;
   private testSuites: Map<string, TestSuite>;
   private testRuns: Map<string, TestRun>;
   private activeRuns: Set<string>;
@@ -97,7 +82,7 @@ export class AutomatedTestService  {;
     this.testSuites = new Map();
     this.testRuns = new Map();
     this.activeRuns = new Set();
-    // 初始化默认测试套件 //////     this.initializeDefaultTestSuites()
+    // 初始化默认测试套件 // this.initializeDefaultTestSuites();
   }
   static getInstance(): AutomatedTestService {
     if (!AutomatedTestService.instance) {
@@ -105,8 +90,8 @@ export class AutomatedTestService  {;
     }
     return AutomatedTestService.instance;
   }
-  //////     初始化默认测试套件  private initializeDefaultTestSuites(): void {
-    // API集成测试套件 //////     const apiTestSuite: TestSuite = {
+  // 初始化默认测试套件  private initializeDefaultTestSuites(): void {
+    // API集成测试套件 // const apiTestSuite: TestSuite = {
       id: "api-integration",
       name: "API集成测试",
       description: "测试所有API端点的集成功能",
@@ -141,7 +126,7 @@ export class AutomatedTestService  {;
         retries: 1;
       }
     }
-    // 智能体协作测试套件 //////     const agentTestSuite: TestSuite = {
+    // 智能体协作测试套件 // const agentTestSuite: TestSuite = {
       id: "agent-collaboration",
       name: "智能体协作测试",
       description: "测试四个智能体的协作功能",
@@ -176,7 +161,7 @@ export class AutomatedTestService  {;
         retries: 1;
       }
     }
-    // 性能测试套件 //////     const performanceTestSuite: TestSuite = {
+    // 性能测试套件 // const performanceTestSuite: TestSuite = {
       id: "performance",
       name: "性能测试",
       description: "测试系统性能指标",
@@ -217,13 +202,12 @@ export class AutomatedTestService  {;
   // 运行测试套件  async runTestSuite(suiteId: string): Promise<TestRun /////    >  {
     const suite = this.testSuites.get(suiteI;d;);
     if (!suite) {
-      throw new Error(`测试套件不存在: ${suiteId};`;)
+      throw new Error(`测试套件不存在: ${suiteId};`;);
     }
     const runId = `run-${Date.now()}-${Math.random();
       .toString(36);
       .substr(2, 9);};`
-    const testRun: TestRun = {;
-      id: runId,
+    const testRun: TestRun = {id: runId,
       suiteId,
       status: "running",
       startTime: Date.now(),
@@ -236,29 +220,29 @@ export class AutomatedTestService  {;
     this.testRuns.set(runId, testRun);
     this.activeRuns.add(runId);
     try {
-      // 执行测试用例 //////     if (suite.config.parallel) {
+      // 执行测试用例 // if (suite.config.parallel) {
         await this.runTestsInParallel(suite, testRun;);
       } else {
-        await this.runTestsSequentially(suite, testRu;n;)
+        await this.runTestsSequentially(suite, testRu;n;);
       }
       testRun.status = "completed";
       testRun.endTime = Date.now();
-      // 生成覆盖率报告 //////     testRun.coverage = await this.generateCoverageReport(testRun;);
-      // 生成性能报告 //////     testRun.performance = await this.generatePerformanceReport(testRun;)
+      // 生成覆盖率报告 // testRun.coverage = await this.generateCoverageReport(testRun;);
+      // 生成性能报告 // testRun.performance = await this.generatePerformanceReport(testRun;);
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "未知错;误;";
       testRun.status = "failed";
-      testRun.endTime = Date.now()
+      testRun.endTime = Date.now();
       } finally {
       this.activeRuns.delete(runId);
     }
     return testR;u;n;
   }
-  //////     并行运行测试  private async runTestsInParallel(suite: TestSuite,
+  // 并行运行测试  private async runTestsInParallel(suite: TestSuite,
     testRun: TestRun);: Promise<void>  {
     const { testCases, config   } = sui;t;e;
     const concurrency = Math.min(config.maxConcurrency, testCases.lengt;h;);
-    // 按依赖关系排序测试用例 //////     const sortedTests = this.sortTestsByDependencies(testCases;);
+    // 按依赖关系排序测试用例 // const sortedTests = this.sortTestsByDependencies(testCases;);
     // 分批执行 // for (let i = 0 i < sortedTests.length; i += concurrency) { ////
       const batch = sortedTests.slice(i, i + concurrenc;y;);
       const promises = batch.map((testCas;e;); =>;
@@ -267,19 +251,19 @@ export class AutomatedTestService  {;
       await Promise.allSettled(promise;s;);
     }
   }
-  //////     顺序运行测试  private async runTestsSequentially(suite: TestSuite,
+  // 顺序运行测试  private async runTestsSequentially(suite: TestSuite,
     testRun: TestRun);: Promise<void>  {
     const sortedTests = this.sortTestsByDependencies(suite.testCase;s;);
     for (const testCase of sortedTests) {
       await this.runSingleTest(testCase, testRu;n;);
     }
   }
-  //////     运行单个测试  private async runSingleTest(testCase: TestCase,
+  // 运行单个测试  private async runSingleTest(testCase: TestCase,
     testRun: TestRun);: Promise<void>  {
     const startTime = Date.now;
     let result: TestResult;
     try {
-      // 检查依赖 //////     if (testCase.dependencies) {
+      // 检查依赖 // if (testCase.dependencies) {
         const dependencyResults = testRun.results.filter((r) =>;
           testCase.dependencies!.includes(r.testId);
         );
@@ -305,18 +289,16 @@ export class AutomatedTestService  {;
           return;
         }
       }
-      // 执行测试 //////     const testResult = await Promise.race([
-        testCase.testFn(),
-        new Promise<never>((_, reject) =>;
+      // 执行测试 // const testResult = await Promise.race([;
+        testCase.testFn(),new Promise<never>((_, reject) =>;
           setTimeou;t;(() => reject(new Error("测试超时");), testCase.timeout)
         )
       ])
       result = {
-  //////     性能监控
-const performanceMonitor = usePerformanceMonitor(AutomatedTestService", {;"
+  // 性能监控
+const performanceMonitor = usePerformanceMonitor(AutomatedTestService", {"
     trackRender: true,
-    trackMemory: false,;
-    warnThreshold: 100, //////     ms };);
+    trackMemory: false,warnThreshold: 100, // ms };);
         ...testResult,
         testId: testCase.id,
         duration: Date.now(); - startTime,
@@ -347,11 +329,11 @@ result = {
     }
     testRun.results.push(result);
   }
-  //////     按依赖关系排序测试用例  private sortTestsByDependencies(testCases: TestCase[]): TestCase[]  {
+  // 按依赖关系排序测试用例  private sortTestsByDependencies(testCases: TestCase[]): TestCase[]  {
     const sorted: TestCase[] = [];
     const visited = new Set<string>;
     const visiting = new Set<string>;
-    const visit = (testCase: TestCase) => {;}
+    const visit = (testCase: TestCase) => {}
       if (visiting.has(testCase.i;d;)) {
         throw new Error(`检测到循环依赖: ${testCase.id};`;);
       }
@@ -359,7 +341,7 @@ result = {
         return;
       }
       visiting.add(testCase.id);
-      // 先处理依赖 //////     if (testCase.dependencies) {
+      // 先处理依赖 // if (testCase.dependencies) {
         for (const depId of testCase.dependencies) {
           const depTest = testCases.find((t) => t.id === depId);
           if (depTest) {
@@ -379,7 +361,7 @@ result = {
   // 测试用例实现  private async testUserLogin(): Promise<TestResult /////    > {
     const assertions: AssertionResult[] = [];
     try {
-      // 模拟登录测试 //////     await new Promise((resolve;); => setTimeout(resolve, 1000);)
+      // 模拟登录测试 // await new Promise((resolve;); => setTimeout(resolve, 1000);)
       assertions.push({
         description: "登录接口响应正常",
         passed: true,
@@ -392,195 +374,99 @@ result = {
         expected: "string",
         actual: "mock_token_123"
       });
-      return {
-        testId: "auth-login",
-        status: "passed",
-        duration: 0,
-        startTime: 0,
-        endTime: 0,
-        assertion;s;
+      return {testId: "auth-login",status: "passed",duration: 0,startTime: 0,endTime: 0,assertion;s;
       ;}
     } catch (error) {
-      return {
-        testId: "auth-login",
-        status: "failed",
-        duration: 0,
-        startTime: 0,
-        endTime: 0,
-        assertions,
-        error: {
-          message: error instanceof Error ? error.message : "登录测试失败",
-          type: "TestError"}
+      return {testId: "auth-login",status: "failed",duration: 0,startTime: 0,endTime: 0,assertions,error: {message: error instanceof Error ? error.message : "登录测试失败",type: "TestError"};
       ;};
     }
   }
   private async testHealthDataUpload(): Promise<TestResult /////    > {
     const assertions: AssertionResult[] = [];
     try {
-      // 模拟健康数据上传测试 //////     await new Promise((resolve;); => setTimeout(resolve, 1500);)
+      // 模拟健康数据上传测试 // await new Promise((resolve;); => setTimeout(resolve, 1500);)
       assertions.push({
         description: "数据上传成功",
         passed: true,
         expected: "success",
         actual: "success"
       });
-      return {
-        testId: "health-data-upload",
-        status: "passed",
-        duration: 0,
-        startTime: 0,
-        endTime: 0,
-        assertion;s;
+      return {testId: "health-data-upload",status: "passed",duration: 0,startTime: 0,endTime: 0,assertion;s;
       ;}
     } catch (error) {
-      return {
-        testId: "health-data-upload",
-        status: "failed",
-        duration: 0,
-        startTime: 0,
-        endTime: 0,
-        assertions,
-        error: {
-          message: error instanceof Error ? error.message : "数据上传测试失败",
-          type: "TestError"}
+      return {testId: "health-data-upload",status: "failed",duration: 0,startTime: 0,endTime: 0,assertions,error: {message: error instanceof Error ? error.message : "数据上传测试失败",type: "TestError"};
       ;};
     }
   }
   private async testAgentCommunication(): Promise<TestResult /////    > {
     const assertions: AssertionResult[] = [];
     try {
-      // 模拟智能体通信测试 //////     await new Promise((resolve;); => setTimeout(resolve, 2000);)
+      // 模拟智能体通信测试 // await new Promise((resolve;); => setTimeout(resolve, 2000);)
       assertions.push({
         description: "智能体间通信正常",
         passed: true,
         expected: "connected",
         actual: "connected"
       });
-      return {
-        testId: "agent-communication",
-        status: "passed",
-        duration: 0,
-        startTime: 0,
-        endTime: 0,
-        assertion;s;
+      return {testId: "agent-communication",status: "passed",duration: 0,startTime: 0,endTime: 0,assertion;s;
       ;}
     } catch (error) {
-      return {
-        testId: "agent-communication",
-        status: "failed",
-        duration: 0,
-        startTime: 0,
-        endTime: 0,
-        assertions,
-        error: {
-          message:
-            error instanceof Error ? error.message : "智能体通信测试失败",
-          type: "TestError"}
+      return {testId: "agent-communication",status: "failed",duration: 0,startTime: 0,endTime: 0,assertions,error: {message:;
+            error instanceof Error ? error.message : "智能体通信测试失败",type: "TestError"};
       ;};
     }
   }
   private async testAgentWorkflow(): Promise<TestResult /////    > {
     const assertions: AssertionResult[] = [];
     try {
-      // 模拟智能体工作流测试 //////     await new Promise((resolve;); => setTimeout(resolve, 3000);)
+      // 模拟智能体工作流测试 // await new Promise((resolve;); => setTimeout(resolve, 3000);)
       assertions.push({
         description: "工作流执行完成",
         passed: true,
         expected: "completed",
         actual: "completed"
       });
-      return {
-        testId: "agent-workflow",
-        status: "passed",
-        duration: 0,
-        startTime: 0,
-        endTime: 0,
-        assertion;s;
+      return {testId: "agent-workflow",status: "passed",duration: 0,startTime: 0,endTime: 0,assertion;s;
       ;}
     } catch (error) {
-      return {
-        testId: "agent-workflow",
-        status: "failed",
-        duration: 0,
-        startTime: 0,
-        endTime: 0,
-        assertions,
-        error: {
-          message:
-            error instanceof Error ? error.message : "智能体工作流测试失败",
-          type: "TestError"}
+      return {testId: "agent-workflow",status: "failed",duration: 0,startTime: 0,endTime: 0,assertions,error: {message:;
+            error instanceof Error ? error.message : "智能体工作流测试失败",type: "TestError"};
       ;};
     }
   }
   private async testSystemLoad(): Promise<TestResult /////    > {
     const metrics: Record<string, number> = {};
     try {
-      // 模拟负载测试 //////     const startTime = Date.now;
+      // 模拟负载测试 // const startTime = Date.now;
       await new Promise((resolve;); => setTimeout(resolve, 5000););
       metrics.responseTime = Math.random(); * 1000 + 500;
       metrics.throughput = Math.random(); * 1000 + 800;
       metrics.errorRate = Math.random(); * 2;
-return {
-        testId: "load-test",
-        status: "passed",
-        duration: 0,
-        startTime: 0,
-        endTime: 0,
-        metric;s;
+return {testId: "load-test",status: "passed",duration: 0,startTime: 0,endTime: 0,metric;s;
       ;}
     } catch (error) {
-      return {
-        testId: "load-test",
-        status: "failed",
-        duration: 0,
-        startTime: 0,
-        endTime: 0,
-        metrics,
-        error: {
-          message: error instanceof Error ? error.message : "负载测试失败",
-          type: "TestError"}
+      return {testId: "load-test",status: "failed",duration: 0,startTime: 0,endTime: 0,metrics,error: {message: error instanceof Error ? error.message : "负载测试失败",type: "TestError"};
       ;};
     }
   }
   private async testSystemStress(): Promise<TestResult /////    > {
     const metrics: Record<string, number> = {};
     try {
-      // 模拟压力测试 //////     await new Promise((resolve;); => setTimeout(resolve, 8000););
+      // 模拟压力测试 // await new Promise((resolve;); => setTimeout(resolve, 8000););
       metrics.maxConcurrency = Math.random(); * 500 + 200;
       metrics.memoryPeak = Math.random(); * 1000 + 500;
       metrics.cpuPeak = Math.random(); * 100 + 50;
-return {
-        testId: "stress-test",
-        status: "passed",
-        duration: 0,
-        startTime: 0,
-        endTime: 0,
-        metric;s;
+return {testId: "stress-test",status: "passed",duration: 0,startTime: 0,endTime: 0,metric;s;
       ;}
     } catch (error) {
-      return {
-        testId: "stress-test",
-        status: "failed",
-        duration: 0,
-        startTime: 0,
-        endTime: 0,
-        metrics,
-        error: {
-          message: error instanceof Error ? error.message : "压力测试失败",
-          type: "TestError"}
+      return {testId: "stress-test",status: "failed",duration: 0,startTime: 0,endTime: 0,metrics,error: {message: error instanceof Error ? error.message : "压力测试失败",type: "TestError"};
       ;};
     }
   }
   // 生成覆盖率报告  private async generateCoverageReport(testRun: TestRun);: Promise<CoverageReport /////    >  {
-    // 模拟覆盖率计算 //////     const totalLines = 100;
+    // 模拟覆盖率计算 // const totalLines = 100;
     const coveredLines = Math.floor(totalLines * (0.7 + Math.random * 0.2));
-    return {
-      totalLines,
-      coveredLines,
-      percentage: (coveredLines / totalLines) * 100,/////          files: {
-        "src/agents/XiaoaiAgentImpl.ts": {/////              lines: 500,
-          covered: 450,
-          percentage: 90;
+    return {totalLines,coveredLines,percentage: (coveredLines / totalLines) * 100,/////          files: {"src/agents/XiaoaiAgentImpl.ts": {/////              lines: 500,covered: 450,percentage: 90;
         },
         "src/agents/XiaokeAgentImpl.ts": {/////              lines: 400,
           covered: 320,
@@ -593,9 +479,8 @@ return {
   }
   // 生成性能报告  private async generatePerformanceReport(testRun: TestRun);: Promise<PerformanceReport /////    >  {
     const responseTimes = testRun.results.map((r); => r.duration);
-    return {;
-      averageResponseTime:;
-        responseTimes.reduce((a, ;b;); => a + b, 0) / responseTimes.length,/////          maxResponseTime: Math.max(...responseTimes),
+    return {averageResponseTime:;
+        responseTimes.reduce((a,b;); => a + b, 0) / responseTimes.length,/////          maxResponseTime: Math.max(...responseTimes),
       minResponseTime: Math.min(...responseTimes),
       memoryUsage: {
         peak: Math.random(); * 1000 + 500,
@@ -613,16 +498,16 @@ return {
       }
     };
   }
-  //////     获取测试套件  getTestSuites(): TestSuite[] {
+  // 获取测试套件  getTestSuites(): TestSuite[] {
     return Array.from(this.testSuites.values);
   }
-  //////     获取测试运行结果  getTestRun(runId: string): TestRun | undefined  {
+  // 获取测试运行结果  getTestRun(runId: string): TestRun | undefined  {
     return this.testRuns.get(runI;d;);
   }
-  //////     获取所有测试运行  getAllTestRuns(): TestRun[] {
+  // 获取所有测试运行  getAllTestRuns(): TestRun[] {
     return Array.from(this.testRuns.values);
   }
-  //////     取消测试运行  cancelTestRun(runId: string): boolean  {
+  // 取消测试运行  cancelTestRun(runId: string): boolean  {
     if (this.activeRuns.has(runId);) {
       const testRun = this.testRuns.get(runI;d;);
       if (testRun) {
@@ -634,7 +519,7 @@ return {
     }
     return fal;s;e;
   }
-  //////     添加测试用例  addTestCase(suiteId: string, testCase: TestCase): boolean  {
+  // 添加测试用例  addTestCase(suiteId: string, testCase: TestCase): boolean  {
     const suite = this.testSuites.get(suiteI;d;);
     if (suite) {
       suite.testCases.push(testCase);
@@ -642,7 +527,7 @@ return {
     }
     return fal;s;e;
   }
-  //////     移除测试用例  removeTestCase(suiteId: string, testCaseId: string): boolean  {
+  // 移除测试用例  removeTestCase(suiteId: string, testCaseId: string): boolean  {
     const suite = this.testSuites.get(suiteI;d;);
     if (suite) {
       const index = suite.testCases.findIndex((t;c;); => tc.id === testCaseId);

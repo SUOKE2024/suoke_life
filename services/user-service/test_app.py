@@ -1,12 +1,17 @@
 """
+test_app - 索克生活项目模块
+"""
+
+from fastapi import FastAPI, HTTPException, Depends
+from internal.model.user import CreateUserRequest, UpdateUserRequest, BindDeviceRequest
+from internal.repository.sqlite_user_repository import SQLiteUserRepository
+from internal.service.user_service import UserService
+import os
+
+"""
 测试用的简化应用
 用于运行User-Service的测试
 """
-import os
-from fastapi import FastAPI, HTTPException, Depends
-from internal.repository.sqlite_user_repository import SQLiteUserRepository
-from internal.service.user_service import UserService
-from internal.model.user import CreateUserRequest, UpdateUserRequest, BindDeviceRequest
 
 # 创建简化的FastAPI应用
 app = FastAPI(

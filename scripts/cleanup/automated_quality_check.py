@@ -1,14 +1,21 @@
+"""
+automated_quality_check - 索克生活项目模块
+"""
+
+                import json
+    import argparse
+from pathlib import Path
+from typing import Dict, List, Tuple
+import subprocess
+import sys
+import time
+
 #!/usr/bin/env python3
 """
 索克生活项目自动化质量检查脚本
 整合所有质量工具，提供一键式质量检查和修复
 """
 
-import sys
-import subprocess
-import time
-from pathlib import Path
-from typing import Dict, List, Tuple
 
 class AutomatedQualityChecker:
     def __init__(self, project_root: str):
@@ -97,7 +104,6 @@ class AutomatedQualityChecker:
             # 尝试读取质量门禁结果
             gate_result_file = self.project_root / 'quality_gate_result.json'
             if gate_result_file.exists():
-                import json
                 with open(gate_result_file, 'r', encoding='utf-8') as f:
                     gate_data = json.load(f)
                 
@@ -295,7 +301,6 @@ python3 scripts/cleanup/automated_quality_check.py --check-only
         return report
 
 def main():
-    import argparse
     
     parser = argparse.ArgumentParser(description='索克生活项目自动化质量检查')
     parser.add_argument('--auto-fix', action='store_true', 

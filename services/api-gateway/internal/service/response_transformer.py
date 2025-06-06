@@ -1,3 +1,12 @@
+"""
+response_transformer - 索克生活项目模块
+"""
+
+from fastapi import Response
+from internal.model.config import GatewayConfig
+from typing import Dict, List, Optional, Set
+import logging
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,11 +15,7 @@
 支持添加CORS头、压缩响应内容、添加链路追踪ID等功能
 """
 
-import logging
-from typing import Dict, List, Optional, Set
 
-from fastapi import Response
-from internal.model.config import GatewayConfig
 
 logger = logging.getLogger(__name__)
 

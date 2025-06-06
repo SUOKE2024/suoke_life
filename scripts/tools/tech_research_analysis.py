@@ -1,13 +1,19 @@
+"""
+tech_research_analysis - 索克生活项目模块
+"""
+
+                import base64
+from typing import Dict, List, Any
+import json
+import requests
+import time
+
 #!/usr/bin/env python3
 """
 技术调研分析脚本
 深入研究推荐的核心项目，分析其架构模式和最佳实践
 """
 
-import requests
-import json
-from typing import Dict, List, Any
-import time
 
 class TechResearchAnalyzer:
     def __init__(self, token: str = None):
@@ -50,7 +56,6 @@ class TechResearchAnalyzer:
             response.raise_for_status()
             content = response.json()
             if content.get('encoding') == 'base64':
-                import base64
                 return base64.b64decode(content['content']).decode('utf-8')
             return content.get('content', '')
         except requests.RequestException as e:

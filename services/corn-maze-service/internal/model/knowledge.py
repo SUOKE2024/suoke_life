@@ -1,11 +1,16 @@
+"""
+knowledge - 索克生活项目模块
+"""
+
+from dataclasses import dataclass, field
+from typing import Any
+
 #!/usr/bin/env python3
 
 """
 知识节点模型定义
 """
 
-from dataclasses import dataclass, field
-from typing import Any
 
 
 @dataclass

@@ -1,12 +1,20 @@
 """
+test_auth_final_working - 索克生活项目模块
+"""
+
+from auth_service.cmd.server.main import create_app
+from auth_service.core.database import get_db
+from fastapi.testclient import TestClient
+from test_database_manager_fixed import TestDatabaseManager
+import os
+import pytest
+import pytest_asyncio
+
+"""
 Auth-Service 最终工作的测试
 使用修复版测试数据库管理器，完全解决数据库初始化问题
 """
 
-import os
-import pytest
-import pytest_asyncio
-from fastapi.testclient import TestClient
 
 # 设置测试环境变量
 os.environ.update({
@@ -29,9 +37,6 @@ os.environ.update({
     "HEALTH_CHECK_ENABLED": "true",
 })
 
-from test_database_manager_fixed import TestDatabaseManager
-from auth_service.core.database import get_db
-from auth_service.cmd.server.main import create_app
 
 
 @pytest_asyncio.fixture(scope="session")

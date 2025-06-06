@@ -1,3 +1,18 @@
+"""
+multimodal_fusion_engine - 索克生活项目模块
+"""
+
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from sklearn.decomposition import PCA
+from sklearn.ensemble import IsolationForest
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from typing import Any
+import asyncio
+import logging
+
 #!/usr/bin/env python3
 
 """
@@ -6,17 +21,7 @@
 提供更准确的综合健康评估和时序数据分析
 """
 
-import asyncio
-import logging
-from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
-from typing import Any
 
-from sklearn.decomposition import PCA
-from sklearn.ensemble import IsolationForest
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 logger = logging.getLogger(__name__)
 

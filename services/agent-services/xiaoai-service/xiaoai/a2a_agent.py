@@ -1,3 +1,14 @@
+"""
+a2a_agent - 索克生活项目模块
+"""
+
+from json import json
+from logging import logging
+from loguru import logger
+from os import os
+from typing import Any
+import self.logging
+
 #!/usr/bin/env python3
 """"""
 #  A2A
@@ -7,12 +18,6 @@
 """"""
 
 
-from logging import logging
-from json import json
-from os import os
-from typing import Any
-from loguru import logger
-import self.logging
 
 
 

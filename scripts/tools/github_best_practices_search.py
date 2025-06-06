@@ -1,13 +1,19 @@
+"""
+github_best_practices_search - 索克生活项目模块
+"""
+
+            from datetime import datetime, timedelta
+from typing import List, Dict
+import json
+import requests
+import time
+
 #!/usr/bin/env python3
 """
 GitHub最佳实践搜索脚本
 用于搜索和评估与索克生活项目相关的最佳实践
 """
 
-import requests
-import json
-import time
-from typing import List, Dict
 
 class GitHubBestPracticesSearcher:
     def __init__(self, token: str = None):
@@ -83,7 +89,6 @@ class GitHubBestPracticesSearcher:
         
         # 最近更新（6个月内）
         try:
-            from datetime import datetime, timedelta
             last_update = datetime.strptime(evaluation["last_updated"][:10], "%Y-%m-%d")
             if datetime.now() - last_update < timedelta(days=180):
                 score += 2

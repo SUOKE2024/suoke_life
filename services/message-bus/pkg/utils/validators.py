@@ -1,9 +1,14 @@
 """
+validators - 索克生活项目模块
+"""
+
+from typing import Dict, Any, Optional
+import json
+import re
+
+"""
 验证工具，提供各种数据验证功能
 """
-import re
-import json
-from typing import Dict, Any, Optional
 
 def validate_topic_name(topic_name: str) -> bool:
     """

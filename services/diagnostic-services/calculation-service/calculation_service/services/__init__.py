@@ -1,12 +1,17 @@
 """
+__init__ - 索克生活项目模块
+"""
+
+from .analysis import AnalysisService
+from .calculation import CalculationService
+from .recommendation import RecommendationService
+
+"""
 服务层
 
 提供算诊相关的业务逻辑服务
 """
 
-from .calculation import CalculationService
-from .analysis import AnalysisService
-from .recommendation import RecommendationService
 
 __all__ = [
     "CalculationService",

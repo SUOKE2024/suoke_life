@@ -1,3 +1,12 @@
+"""
+pagination - 索克生活项目模块
+"""
+
+from typing import Any, Generic, TypeVar
+import base64
+import json
+import strawberry
+
 #!/usr/bin/env python
 
 """
@@ -5,11 +14,7 @@
 提供标准的游标分页和边缘连接类型
 """
 
-import base64
-import json
-from typing import Any, Generic, TypeVar
 
-import strawberry
 
 # 泛型类型变量
 T = TypeVar('T')

@@ -1,19 +1,26 @@
 """
+model_interface - 索克生活项目模块
+"""
+
+                import torch
+            import torch
+from abc import ABC, abstractmethod
+from pydantic import BaseModel
+from typing import Any
+import aiohttp
+import json
+import logging
+import os
+import requests
+import time
+
+"""
 模型集成接口
 
 提供统一的接口连接不同类型的模型，支持本地模型和远程API模型的集成。
 """
 
-import json
-import logging
-import os
-import time
-from abc import ABC, abstractmethod
-from typing import Any
 
-import aiohttp
-import requests
-from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +29,18 @@ class ModelRequest(BaseModel):
 
     inputs: Any
     parameters: dict[str, Any] | None = None
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'modelrequest'
+        ordering = ['-created_at']
+
 
 class ModelResponse(BaseModel):
     """模型响应结果"""
@@ -65,6 +84,18 @@ class ModelInterface(ABC):
             模型响应
         """
         pass
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'localmodel'
+        ordering = ['-created_at']
+
 
 class LocalModel(ModelInterface):
     """本地模型接口"""
@@ -127,7 +158,6 @@ class LocalModel(ModelInterface):
     def _load_pytorch_model(self):
         """加载PyTorch模型"""
         try:
-            import torch
 
             logger.info(f"加载PyTorch模型: {self.model_path}")
             self.model = torch.load(self.model_path, map_location=self.device)
@@ -194,7 +224,6 @@ class LocalModel(ModelInterface):
             # 根据模型类型进行不同的预测调用
             if hasattr(self.model, "forward") and callable(self.model.forward):
                 # PyTorch模型
-                import torch
 
                 with torch.no_grad():
                     outputs = self.model(processed_inputs)
@@ -271,6 +300,18 @@ class LocalModel(ModelInterface):
         # 实际项目中应根据模型类型实现具体的后处理逻辑
         # 这里仅做简单示例
         return outputs
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'remoteapimodel'
+        ordering = ['-created_at']
+
 
 class RemoteAPIModel(ModelInterface):
     """远程API模型接口"""

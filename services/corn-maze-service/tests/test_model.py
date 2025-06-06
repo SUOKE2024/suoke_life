@@ -1,15 +1,20 @@
+"""
+test_model - 索克生活项目模块
+"""
+
+from corn_maze_service.internal.model.maze import (
+from datetime import UTC, datetime
+from uuid import uuid4
+import pytest
+
 #!/usr/bin/env python3
 
 """
 模型单元测试
 """
 
-from datetime import UTC, datetime
-from uuid import uuid4
 
-import pytest
 
-from corn_maze_service.internal.model.maze import (
     Maze,
     MazeDifficulty,
     MazeNode,

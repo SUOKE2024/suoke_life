@@ -1,19 +1,25 @@
 """
+test_integration_comprehensive - 索克生活项目模块
+"""
+
+        from app.models.entities import SearchResponse, SearchItem
+from app.core.config import get_settings
+from app.main import app
+from app.models.entities import Constitution, Syndrome, Symptom
+from app.services.cache_service import CacheService
+from app.services.knowledge_service import KnowledgeService
+from typing import Dict, Any, List
+from unittest.mock import AsyncMock, patch
+import asyncio
+import httpx
+import pytest
+
+"""
 医学知识服务综合集成测试
 测试完整的业务流程和组件集成
 """
 
-import asyncio
-import pytest
-import httpx
-from typing import Dict, Any, List
-from unittest.mock import AsyncMock, patch
 
-from app.main import app
-from app.core.config import get_settings
-from app.services.knowledge_service import KnowledgeService
-from app.services.cache_service import CacheService
-from app.models.entities import Constitution, Syndrome, Symptom
 
 
 class TestMedKnowledgeIntegration:
@@ -51,7 +57,6 @@ class TestMedKnowledgeIntegration:
         )
         
         # 模拟搜索结果
-        from app.models.entities import SearchResponse, SearchItem
         service.search_knowledge.return_value = SearchResponse(
             items=[
                 SearchItem(

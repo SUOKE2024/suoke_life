@@ -1,10 +1,9 @@
+import {   View, Text, Image, StyleSheet   } from 'react-native';
 
 interface AgentAvatarProps {
   // TODO: 定义组件属性类型children?: React.ReactNode * } ////
-import {   View, Text, Image, StyleSheet   } from 'react-native';
 import React from "react";
-const AGENT_META = {;
-  xiaoai: {
+const AGENT_META = {xiaoai: {
     name: "小艾",
     color: "#4FC3F7",
     avatar: require("../assets/avatars/xiaoai.png"),/////      },
@@ -18,12 +17,11 @@ const AGENT_META = {;
     avatar: require("../assets/avatars/laoke.png"),/////      },
   soer: {
     name: "索儿",
-    color: "#BA68C8",;
-    avatar: require("../assets/avatars/soer.png"),/////      ;}
+    color: "#BA68C8",avatar: require("../assets/avatars/soer.png"),/////      ;}
 ;}
 export const AgentAvatar: React.FC<AgentAvatarProps />  = ({ agentType, emotion = "neutral", size = 64 }) => {/////      const meta = AGENT_META[agentTyp;}
 e;];
-  // 可根据emotion切换不同表情图片 //////     return (
+  // 可根据emotion切换不同表情图片 // return (;
     <View;
 style={[;
         styles.container,
@@ -35,8 +33,7 @@ style={{ width: size, height: size, borderRadius: size / 2}}/      / accessibili
         </Text>/////          )}
     </View>/////      )
 }
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 48,
@@ -48,5 +45,4 @@ const styles = StyleSheet.create({;
     color: "#333",
     marginTop: 4},
   emotion: {
-    fontSize: 18,;
-    marginTop: 2};};);
+    fontSize: 18,marginTop: 2};};);

@@ -1,13 +1,19 @@
-"""用户服务缓存层"""
+"""
+cache - 索克生活项目模块
+"""
 
-import json
-import pickle
+        import hashlib
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional, Union
+from user_service.config import get_settings
 import aioredis
+import json
+import pickle
 import structlog
 
-from user_service.config import get_settings
+"""用户服务缓存层"""
+
+
 
 logger = structlog.get_logger()
 
@@ -322,7 +328,6 @@ class QueryCache:
         """生成查询缓存键"""
         # 将参数排序并序列化，确保相同查询生成相同键
         sorted_params = json.dumps(params, sort_keys=True, ensure_ascii=False)
-        import hashlib
         param_hash = hashlib.md5(sorted_params.encode()).hexdigest()
         return f"query:{query_type}:{param_hash}"
     

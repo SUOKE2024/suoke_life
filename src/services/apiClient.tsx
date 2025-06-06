@@ -1,12 +1,12 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { API_CONFIG, ERROR_CODES, STORAGE_CONFIG } from "../constants/config";
-import { EventEmitter } from "../utils/eventEmitter";
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API_CONFIG, ERROR_CODES, STORAGE_CONFIG } from '../constants/config';
+import { EventEmitter } from '../utils/eventEmitter';
 
 // 请求接口
 interface ApiRequest {
   url: string;
-  method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   data?: unknown;
   params?: unknown;
   headers?: Record<string, string>;
@@ -47,10 +47,10 @@ class ApiClient {
       baseURL: API_CONFIG.BASE_URL,
       timeout: API_CONFIG.TIMEOUT,
       headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        "X-Client-Version": "1.0.0",
-        "X-Platform": "react-native"
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'X-Client-Version': '1.0.0',
+        'X-Platform': 'react-native'
       }
     });
     this.setupInterceptors();
@@ -60,26 +60,22 @@ class ApiClient {
   private setupInterceptors() {
     // 请求拦截器
     this.client.interceptors.request.use(
-      async (config) => {
+      async config => {
         // 添加认证token
-        const token = await AsyncStorage.getItem(
-          STORAGE_CONFIG.KEYS.AUTH_TOKEN
-        );
+        const token = await AsyncStorage.getItem(STORAGE_CONFIG.KEYS.AUTH_TOKEN);
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
 
         // 添加设备ID
-        const deviceId = await AsyncStorage.getItem(
-          STORAGE_CONFIG.KEYS.DEVICE_ID
-        );
+        const deviceId = await AsyncStorage.getItem(STORAGE_CONFIG.KEYS.DEVICE_ID);
         if (deviceId) {
-          config.headers["X-Device-ID"] = deviceId;
+          config.headers['X-Device-ID'] = deviceId;
         }
 
         // 添加请求ID用于追踪
         const requestId = this.generateRequestId();
-        config.headers["X-Request-ID"] = requestId;
+        config.headers['X-Request-ID'] = requestId;
 
         console.log(`API请求: ${config.method?.toUpperCase()} ${config.url}`, {
           requestId,
@@ -89,7 +85,7 @@ class ApiClient {
 
         return config;
       },
-      (error) => {
+      error => {
         return Promise.reject(error);
       }
     );
@@ -97,15 +93,15 @@ class ApiClient {
     // 响应拦截器
     this.client.interceptors.response.use(
       (response: AxiosResponse) => {
-        const requestId = response.config.headers["X-Request-ID"];
+        const requestId = response.config.headers['X-Request-ID'];
         console.log(`API响应: ${response.status} ${response.config.url}`, {
           requestId,
           data: response.data
         });
         return response;
       },
-      async (error) => {
-        const requestId = error.config?.headers?.["X-Request-ID"];
+      async error => {
+        const requestId = error.config?.headers?.['X-Request-ID'];
         console.error(`API错误: ${error.config?.url}`, {
           requestId,
           status: error.response?.status,
@@ -119,16 +115,12 @@ class ApiClient {
 
         // 处理网络错误
         if (!error.response) {
-          return Promise.reject(
-            this.createApiError(ERROR_CODES.NETWORK_ERROR, "网络连接失败")
-          );
+          return Promise.reject(this.createApiError(ERROR_CODES.NETWORK_ERROR, '网络连接失败'));
         }
 
         // 处理服务器错误
-        const apiError = this.createApiError(
-          error.response.data?.code || ERROR_CODES.OPERATION_FAILED,
-          error.response.data?.message || error.message,
-          error.response.data
+        const apiError = this.createApiError(;
+          error.response.data?.code || ERROR_CODES.OPERATION_FAILED,error.response.data?.message || error.message,error.response.data;
         );
 
         return Promise.reject(apiError);
@@ -140,21 +132,16 @@ class ApiClient {
   private async handleAuthError() {
     try {
       // 尝试刷新token
-      const refreshToken = await AsyncStorage.getItem(
-        STORAGE_CONFIG.KEYS.REFRESH_TOKEN
-      );
+      const refreshToken = await AsyncStorage.getItem(STORAGE_CONFIG.KEYS.REFRESH_TOKEN);
       if (refreshToken) {
         const response = await this.refreshToken(refreshToken);
         if (response.success) {
-          await AsyncStorage.setItem(
-            STORAGE_CONFIG.KEYS.AUTH_TOKEN,
-            response.data.accessToken
-          );
+          await AsyncStorage.setItem(STORAGE_CONFIG.KEYS.AUTH_TOKEN, response.data.accessToken);
           return;
         }
       }
     } catch (error) {
-      console.error("刷新token失败:", error);
+      console.error('刷新token失败:', error);
     }
 
     // 清除认证信息并触发登出事件
@@ -163,17 +150,13 @@ class ApiClient {
       STORAGE_CONFIG.KEYS.REFRESH_TOKEN,
       STORAGE_CONFIG.KEYS.USER_ID
     ]);
-    this.eventEmitter.emit("auth:logout");
+    this.eventEmitter.emit('auth:logout');
   }
 
   // 刷新token
   private async refreshToken(refreshToken: string): Promise<ApiResponse> {
-    const response = await axios.post(
-      `${API_CONFIG.SERVICES.AUTH}/auth/refresh`,
-      {
-        refreshToken
-      }
-    );
+    const response = await axios.post(`${API_CONFIG.SERVICES.AUTH}/auth/refresh`, {refreshToken;
+    });
     return response.data;
   }
 
@@ -183,25 +166,15 @@ class ApiClient {
   }
 
   // 创建API错误对象
-  private createApiError(
-    code: string,
-    message: string,
-    details?: unknown
-  ): ApiError {
-    return {
-      code,
-      message,
-      details,
-      timestamp: new Date().toISOString()
+  private createApiError(code: string, message: string, details?: unknown): ApiError {
+    return {code,message,details,timestamp: new Date().toISOString();
     };
   }
 
   // 请求去重
   private getRequestKey(config: ApiRequest): string {
-    const { url, method = "GET", data, params } = config;
-    return `${method}:${url}:${JSON.stringify(data || {})}:${JSON.stringify(
-      params || {}
-    )}`;
+    const { url, method = 'GET', data, params } = config;
+    return `${method}:${url}:${JSON.stringify(data || {})}:${JSON.stringify(params || {})}`;
   }
 
   // 执行请求
@@ -229,9 +202,7 @@ class ApiClient {
   }
 
   // 执行实际请求
-  private async executeRequest<T = any>(
-    config: ApiRequest
-  ): Promise<ApiResponse<T>> {
+  private async executeRequest<T = any>(config: ApiRequest): Promise<ApiResponse<T>> {
     const { retries = API_CONFIG.RETRY_ATTEMPTS } = config;
     let lastError: unknown;
 
@@ -239,7 +210,7 @@ class ApiClient {
       try {
         const axiosConfig: AxiosRequestConfig = {
           url: config.url,
-          method: config.method || "GET",
+          method: config.method || 'GET',
           data: config.data,
           params: config.params,
           headers: config.headers,
@@ -249,29 +220,22 @@ class ApiClient {
         const response = await this.client.request(axiosConfig);
 
         // 标准化响应格式
-        if (response.data && typeof response.data === "object") {
-          return {
-            success: true,
-            data: response.data.data || response.data,
-            message: response.data.message,
-            code: response.data.code,
-            timestamp: new Date().toISOString()
+        if (response.data && typeof response.data === 'object') {
+          return {success: true,data: response.data.data || response.data,message: response.data.message,code: response.data.code,timestamp: new Date().toISOString();
           };
         }
 
-        return {
-          success: true,
-          data: response.data,
-          timestamp: new Date().toISOString()
+        return {success: true,data: response.data,timestamp: new Date().toISOString();
         };
       } catch (error: unknown) {
         lastError = error;
         if (attempt < retries) {
           const delay = API_CONFIG.RETRY_DELAY * Math.pow(2, attempt - 1); // 指数退避
-                     console.log(`请求失败，${delay}ms后重试 (${attempt}/${retries}):`, 
-             (error as Error).message || error
-           );
-          await new Promise<void>((resolve) => setTimeout(resolve, delay));
+          console.log(
+            `请求失败，${delay}ms后重试 (${attempt}/${retries}):`,
+            (error as Error).message || error
+          );
+          await new Promise<void>(resolve => setTimeout(resolve, delay));
         }
       }
     }
@@ -285,11 +249,7 @@ class ApiClient {
     params?: unknown,
     config?: Partial<ApiRequest>
   ): Promise<ApiResponse<T>> {
-    return this.request<T>({
-      url,
-      method: "GET",
-      params,
-      ...config
+    return this.request<T>({url,method: 'GET',params,...config;
     });
   }
 
@@ -299,11 +259,7 @@ class ApiClient {
     data?: unknown,
     config?: Partial<ApiRequest>
   ): Promise<ApiResponse<T>> {
-    return this.request<T>({
-      url,
-      method: "POST",
-      data,
-      ...config
+    return this.request<T>({url,method: 'POST',data,...config;
     });
   }
 
@@ -313,23 +269,13 @@ class ApiClient {
     data?: unknown,
     config?: Partial<ApiRequest>
   ): Promise<ApiResponse<T>> {
-    return this.request<T>({
-      url,
-      method: "PUT",
-      data,
-      ...config
+    return this.request<T>({url,method: 'PUT',data,...config;
     });
   }
 
   // DELETE请求
-  async delete<T = any>(
-    url: string,
-    config?: Partial<ApiRequest>
-  ): Promise<ApiResponse<T>> {
-    return this.request<T>({
-      url,
-      method: "DELETE",
-      ...config
+  async delete<T = any>(url: string, config?: Partial<ApiRequest>): Promise<ApiResponse<T>> {
+    return this.request<T>({url,method: 'DELETE',...config;
     });
   }
 
@@ -339,11 +285,7 @@ class ApiClient {
     data?: unknown,
     config?: Partial<ApiRequest>
   ): Promise<ApiResponse<T>> {
-    return this.request<T>({
-      url,
-      method: "PATCH",
-      data,
-      ...config
+    return this.request<T>({url,method: 'PATCH',data,...config;
     });
   }
 
@@ -353,25 +295,14 @@ class ApiClient {
     formData: FormData,
     config?: Partial<ApiRequest>
   ): Promise<ApiResponse<T>> {
-    return this.request<T>({
-      url,
-      method: "POST",
-      data: formData,
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-      ...config
+    return this.request<T>({url,method: 'POST',data: formData,headers: {'Content-Type': 'multipart/form-data';
+      },...config;
     });
   }
 
   // 下载文件
-  async download(
-    url: string,
-    config?: Partial<ApiRequest>
-  ): Promise<Blob> {
-    const response = await this.client.get(url, {
-      responseType: 'blob',
-      ...config
+  async download(url: string, config?: Partial<ApiRequest>): Promise<Blob> {
+    const response = await this.client.get(url, {responseType: 'blob',...config;
     });
     return response.data;
   }

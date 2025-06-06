@@ -1,16 +1,14 @@
+import { usePerformanceMonitor } from "../../placeholder";../hooks/////    usePerformanceMonitor
+import {   Platform, Alert, AppState   } from "react-native;"
+import permissionManager from "./////    permissions";
+
 import React from "react";
-import { usePerformanceMonitor } from "../../placeholder";../hooks/////    usePerformanceMonitor";"
 interface ApiResponse<T = any /> { data: T;/////     , success: boolean;
   message?: string;
 code?: number}
-import {   Platform, Alert, AppState   } from "react-native";";"
-import permissionManager from "./////    permissions";
-//////
-// 通知类型定义 * export interface NotificationData {////
+// // 通知类型定义 * export interface NotificationData {////
  /////
-  id: string,;
-  title: string,;
-  body: string;
+  id: string,title: string,body: string;
   data?: Record<string, any>;
   sound?: string;
   badge?: number;
@@ -18,31 +16,27 @@ import permissionManager from "./////    permissions";
   userInfo?: Record<string, any>;
 }
 export interface LocalNotificationConfig  {
-  id: string,;
-  title: string,;
-  body: string;
+  id: string,title: string,body: string;
   date?: Date;
 repeatType?: "minute" | "hour" | "day" | "week" | "month";
   sound?: string;
   badge?: number;
   userInfo?: Record<string, any>;
 }
-export interface NotificationAction { id: string,;
-  title: string;
+export interface NotificationAction { id: string,title: string;
   options?: {
     foreground?: boolean;
     destructive?: boolean;
     authenticationRequired?: boolean};
 }
-export interface NotificationCategory { id: string,;
-  actions: NotificationAction[];
+export interface NotificationCategory { id: string,actions: NotificationAction[];
   options?: {
     customDismissAction?: boolean;
     allowInCarPlay?: boolean;
     allowAnnouncement?: boolean}
 }
-// 健康提醒类型 * export type HealthReminderType = | "medicatio;"////
-n;"; "
+// 健康提醒类型 * export type HealthReminderType = | "medicatio;"////;
+n;
   | "exercise"
   | "checkup"
   | "diet"
@@ -53,9 +47,7 @@ export interface HealthReminder  {
   id: string,
   type: HealthReminderType,
   title: string,
-  message: string,;
-  time: Date,;
-  repeat: boolean;
+  message: string,time: Date,repeat: boolean;
 repeatInterval?: "daily" | "weekly" | "monthly";
   enabled: boolean;
   metadata?: Record<string, any>;
@@ -67,17 +59,17 @@ class NotificationManager {
   private deviceToken: string | null = null;
   private healthReminders: HealthReminder[] = [];
   constructor() {
-    this.initializeNotifications()
+    this.initializeNotifications();
   }
-  //////     初始化通知模块  private async initializeNotifications() {
+  // 初始化通知模块  private async initializeNotifications() {
     try {
-      // 动态导入推送通知模块 //////     if (Platform.OS === "ios" || Platform.OS === "android") {
+      // 动态导入推送通知模块 // if (Platform.OS === "ios" || Platform.OS === "android") {
         try {
           // React Native Firebase Messaging // const messaging = await import("@react-native-firebase / messagin;g";); * this.messagingModule = messaging.default; ////
           } catch (error) {
           }
         try {
-          // React Native Push Notification (备用方案) //////     const PushNotification = await import(
+          // React Native Push Notification (备用方案) // const PushNotification = await import(;
             "react-native-push-notificati;o;n;"
           ;);
           this.notificationModule = PushNotification.default;
@@ -89,16 +81,16 @@ class NotificationManager {
     } catch (error) {
       }
   }
-  //////     设置通知配置  private async setupNotifications() {
+  // 设置通知配置  private async setupNotifications() {
     if (this.notificationModule) {
-      // 配置本地通知 //////     this.notificationModule.configure({ onRegister: (token: unknown) => {}
+      // 配置本地通知 // this.notificationModule.configure({ onRegister: (token: unknown) => {}
           this.deviceToken = token.token;
           },
         onNotification: (notification: unknown) => {}
           this.handleNotificationReceived(notification);
         },
         onAction: (notification: unknown) => {}
-          this.handleNotificationAction(notification)
+          this.handleNotificationAction(notification);
         },
         onRegistrationError: (error: unknown) => {}
           },
@@ -110,35 +102,35 @@ class NotificationManager {
         popInitialNotification: true,
         requestPermissions: true;
       });
-      // 创建健康提醒通知分类 //////     this.createHealthReminderCategories()
+      // 创建健康提醒通知分类 // this.createHealthReminderCategories();
     }
     if (this.messagingModule) {
-      // 配置远程推送 //////     await this.setupRemoteNotifications;
+      // 配置远程推送 // await this.setupRemoteNotifications;
     }
   }
-  //////     设置远程推送通知  private async setupRemoteNotifications() {
+  // 设置远程推送通知  private async setupRemoteNotifications() {
     if (!this.messagingModule) {
       return;
     }
     try {
-      // 请求权限 //////     const authStatus = await this.messagingModule.requestPermissio;n;
+      // 请求权限 // const authStatus = await this.messagingModule.requestPermissio;n;
       const enabled =;
         authStatus === this.messagingModule.AuthorizationStatus.AUTHORIZED ||;
         authStatus === this.messagingModule.AuthorizationStatus.PROVISION;A;L;
       if (enabled) {
-        // 获取FCM令牌 //////     const token = await this.messagingModule.getToke;n;
+        // 获取FCM令牌 // const token = await this.messagingModule.getToke;n;
         if (token) {
           this.deviceToken = token;
-          // 这里应该将令牌发送到服务器 //////     await this.sendTokenToServer(token;);
+          // 这里应该将令牌发送到服务器 // await this.sendTokenToServer(token;);
         }
-        // 监听令牌刷新 //////     this.messagingModule.onTokenRefresh((token: string) => {}
+        // 监听令牌刷新 // this.messagingModule.onTokenRefresh((token: string) => {}
           this.deviceToken = token;
           this.sendTokenToServer(token);
         });
-        // 监听前台消息 //////     this.messagingModule.onMessage(async (remoteMessage: unknown) => {}
+        // 监听前台消息 // this.messagingModule.onMessage(async (remoteMessage: unknown) => {}
           this.handleRemoteMessage(remoteMessage);
         });
-        // 监听后台消息 //////     this.messagingModule.setBackgroundMessageHandler(
+        // 监听后台消息 // this.messagingModule.setBackgroundMessageHandler(
           async (remoteMessage: unknown) => {}
             this.handleRemoteMessage(remoteMessage);
           });
@@ -147,12 +139,11 @@ class NotificationManager {
     } catch (error) {
       }
   }
-  //////     创建健康提醒通知分类  private createHealthReminderCategories() {
+  // 创建健康提醒通知分类  private createHealthReminderCategories() {
     if (!this.notificationModule) {
       return;
     }
-    const categories: NotificationCategory[] = [{;
-        id: "HEALTH_REMINDER",
+    const categories: NotificationCategory[] = [{id: "HEALTH_REMINDER",
         actions: [{
             id: "COMPLETE",
             title: "已完成",
@@ -190,18 +181,18 @@ class NotificationManager {
         ]
       }
     ];
-    // 注册通知分类（实际实现需要原生模块支持） //////     }
-  //////     检查通知权限  async checkNotificationPermission(): Promise<boolean> {
+    // 注册通知分类（实际实现需要原生模块支持） // }
+  // 检查通知权限  async checkNotificationPermission(): Promise<boolean> {
     try {
       if (this.messagingModule) {
         const authStatus = await this.messagingModule.hasPermissi;o;n;
-        //////     记录渲染性能
+        // 记录渲染性能
 performanceMonitor.recordRender();
         return (;
           authStatus === this.messagingModule.AuthorizationStatus.AUTHORIZE;D;
         ;);
       }
-      // 备用检查方式 //////     const permission = await permissionManager.checkPermission(
+      // 备用检查方式 // const permission = await permissionManager.checkPermission(;
         "notificatio;n;s;"
       ;);
       return permission.grant;e;d;
@@ -209,7 +200,7 @@ performanceMonitor.recordRender();
       return fal;s;e;
     }
   }
-  //////     请求通知权限  async requestNotificationPermission(): Promise<boolean> {
+  // 请求通知权限  async requestNotificationPermission(): Promise<boolean> {
     try {
       if (this.messagingModule) {
         const authStatus = await this.messagingModule.requestPermissi;o;n;
@@ -217,7 +208,7 @@ performanceMonitor.recordRender();
           authStatus === this.messagingModule.AuthorizationStatus.AUTHORIZE;D;
         ;);
       }
-      // 备用请求方式 //////     const permission = await permissionManager.requestPermissionWithDialog(
+      // 备用请求方式 // const permission = await permissionManager.requestPermissionWithDialog(;
         "notificatio;n;s;"
       ;);
       return permission.grant;e;d;
@@ -225,23 +216,21 @@ performanceMonitor.recordRender();
       return fal;s;e;
     }
   }
-  //////     发送本地通知  async scheduleLocalNotification(config: LocalNotificationConfig): Promise<boolean>  {
+  // 发送本地通知  async scheduleLocalNotification(config: LocalNotificationConfig): Promise<boolean>  {
     if (!this.notificationModule) {
       return fal;s;e;
     }
     try {
-      // 检查权限 //////     const hasPermission = await this.checkNotificationPermissio;n;
+      // 检查权限 // const hasPermission = await this.checkNotificationPermissio;n;
       if (!hasPermission) {
         const granted = await this.requestNotificationPermissi;o;n;
         if (!granted) {
           return fal;s;e;
         }
       }
-      const notification = {;
-        id: config.id,
+      const notification = {id: config.id,
         title: config.title,
-        message: config.body,;
-        date: config.date || new Date(Date.now;(;) + 1000), // 默认1秒后 //////     playSound: !!config.sound,
+        message: config.body,date: config.date || new Date(Date.now;(;) + 1000), // 默认1秒后 // playSound: !!config.sound,
         soundName: config.sound || "default",
         number: config.badge || 0,
         userInfo: config.userInfo || {},
@@ -253,22 +242,21 @@ performanceMonitor.recordRender();
       return fal;s;e;
     }
   }
-  //////     取消本地通知  cancelLocalNotification(id: string): void  {
+  // 取消本地通知  cancelLocalNotification(id: string): void  {
     if (this.notificationModule) {
       this.notificationModule.cancelLocalNotifications({ id });
       }
   }
-  //////     取消所有本地通知  cancelAllLocalNotifications(): void {
+  // 取消所有本地通知  cancelAllLocalNotifications(): void {
     if (this.notificationModule) {
-      this.notificationModule.cancelAllLocalNotifications()
+      this.notificationModule.cancelAllLocalNotifications();
       }
   }
   // 创建健康提醒  async createHealthReminder(reminder: Omit<HealthReminder, "id" />/////      ): Promise<string>  {
     const id = `health_reminder_${Date.now()}_${Math.random();
       .toString(36);
       .substr(2, 9);};`;
-    const healthReminder: HealthReminder = {;
-      id,
+    const healthReminder: HealthReminder = {id,
       ...reminder;
     };
     this.healthReminders.push(healthReminder);
@@ -277,9 +265,8 @@ performanceMonitor.recordRender();
     }
     return i;d;
   }
-  //////     安排健康提醒通知  private async scheduleHealthReminder(reminder: HealthReminder): Promise<void>  {
-    const config: LocalNotificationConfig = {;
-      id: reminder.id,
+  // 安排健康提醒通知  private async scheduleHealthReminder(reminder: HealthReminder): Promise<void>  {
+    const config: LocalNotificationConfig = {id: reminder.id,
       title: reminder.title,
       body: reminder.message,
       date: reminder.time,
@@ -306,7 +293,7 @@ performanceMonitor.recordRender();
         return undefin;e;d;
     }
   }
-  //////     更新健康提醒  async updateHealthReminder(id: string,
+  // 更新健康提醒  async updateHealthReminder(id: string,
     updates: Partial<HealthReminder />/////      ): Promise<boolean>  {
     const index = this.healthReminders.findIndex((r); => r.id === id);
     if (index === -1) {
@@ -315,13 +302,13 @@ performanceMonitor.recordRender();
     const oldReminder = this.healthReminders[inde;x;];
     const updatedReminder = { ...oldReminder, ...update;s ;};
     this.healthReminders[index] = updatedReminder;
-    // 取消旧通知 //////     this.cancelLocalNotification(id)
-    // 如果启用，重新安排通知 //////     if (updatedReminder.enabled) {
+    // 取消旧通知 // this.cancelLocalNotification(id);
+    // 如果启用，重新安排通知 // if (updatedReminder.enabled) {
       await this.scheduleHealthReminder(updatedReminder;);
     }
     return tr;u;e;
   }
-  //////     删除健康提醒  deleteHealthReminder(id: string): boolean  {
+  // 删除健康提醒  deleteHealthReminder(id: string): boolean  {
     const index = this.healthReminders.findIndex((r); => r.id === id);
     if (index === -1) {
       return fal;s;e;
@@ -330,45 +317,45 @@ performanceMonitor.recordRender();
     this.cancelLocalNotification(id);
     return tr;u;e;
   }
-  //////     获取所有健康提醒  getHealthReminders(): HealthReminder[] {
+  // 获取所有健康提醒  getHealthReminders(): HealthReminder[] {
     return [...this.healthReminder;s;];
   }
-  //////     处理通知接收  private handleNotificationReceived(notification: unknown): void  {
+  // 处理通知接收  private handleNotificationReceived(notification: unknown): void  {
     // 根据通知类型执行不同操作 // if (notification.userInfo?.type === "health_reminder") { ////
-      this.handleHealthReminderNotification(notification)
+      this.handleHealthReminderNotification(notification);
     }
   }
-  //////     处理通知操作  private handleNotificationAction(notification: unknown): void  {
+  // 处理通知操作  private handleNotificationAction(notification: unknown): void  {
     const { action, userInfo   } = notificati;o;n;
 if (userInfo?.type === "health_reminder") {
       this.handleHealthReminderAction(action, userInfo);
     }
   }
-  //////     处理健康提醒通知  private handleHealthReminderNotification(notification: unknown): void  {
+  // 处理健康提醒通知  private handleHealthReminderNotification(notification: unknown): void  {
     const { reminderType, reminderId   } = notification.userIn;f;o;
     `);
     // 这里可以添加特定的健康提醒处理逻辑 // / 例如：更新应用状态、记录用户行为等* // } * /////
-  //////     处理健康提醒操作  private handleHealthReminderAction(action: string, userInfo: unknown): void  {
+  // 处理健康提醒操作  private handleHealthReminderAction(action: string, userInfo: unknown): void  {
     const { reminderType, reminderId   } = userIn;f;o;
     switch (action) {
       case "COMPLETE":
       case "TAKEN":
         `);
-        // 记录完成状态 //////     break;
+        // 记录完成状态 // break;
       case "SNOOZE":
         `)
-        // 安排延迟提醒 //////     this.snoozeHealthReminder(reminderId)
+        // 安排延迟提醒 // this.snoozeHealthReminder(reminderId);
         break;
 case "SKIP":
         `);
-        // 记录跳过状态 //////     break;
+        // 记录跳过状态 // break;
       case "VIEW":
       case "DETAILS":
         `)
-        // 打开应用到相关页面 //////     break;
+        // 打开应用到相关页面 // break;
     }
   }
-  //////     延迟健康提醒  private async snoozeHealthReminder(reminderId: string,
+  // 延迟健康提醒  private async snoozeHealthReminder(reminderId: string,
     minutes: number = 10);: Promise<void>  {
     const reminder = this.healthReminders.find((r); => r.id === reminderId);
     if (!reminder) {
@@ -387,8 +374,8 @@ case "SKIP":
       }
     });
   }
-  //////     处理远程消息  private handleRemoteMessage(remoteMessage: unknown): void  {
-    // 如果应用在前台，显示自定义通知 //////     if (AppState.currentState === "active") {
+  // 处理远程消息  private handleRemoteMessage(remoteMessage: unknown): void  {
+    // 如果应用在前台，显示自定义通知 // if (AppState.currentState === "active") {
       Alert.alert(
         remoteMessage.notification?.title || "新消息",
         remoteMessage.notification?.body || "您有一条新消息",
@@ -402,61 +389,55 @@ case "SKIP":
       );
     }
   }
-  //////     处理远程消息操作  private handleRemoteMessageAction(remoteMessage: unknown): void  {
-  //////     性能监控
-const performanceMonitor = usePerformanceMonitor("notifications, {;"
+  // 处理远程消息操作  private handleRemoteMessageAction(remoteMessage: unknown): void  {
+  // 性能监控
+const performanceMonitor = usePerformanceMonitor("notifications, {"
     trackRender: true,
-    trackMemory: false,;
-    warnThreshold: 100, //////     ms };);
-    // 根据消息数据执行相应操作 //////     const { data   } = remoteMessag;e;
+    trackMemory: false,warnThreshold: 100, // ms };);
+    // 根据消息数据执行相应操作 // const { data   } = remoteMessag;e;
     if (data?.type === "health_alert") {
       // 处理健康警报 // } else if (data?.type === "appointment_reminder") { ////
-      // 处理预约提醒 //////     }
+      // 处理预约提醒 // }
   }
-  //////     发送设备令牌到服务器  private async sendTokenToServer(token: string): Promise<void>  {
+  // 发送设备令牌到服务器  private async sendTokenToServer(token: string): Promise<void>  {
     try {
       // 这里应该调用您的后端API来保存设备令牌 // / 示例API调用* // * // await fetch("https:* * * your-api.com * * // device-tokens", {* // * // method: POST",//  * // headers: { "Content-Type: "application * / json' },//  * // body: JSON.stringify({ token, platform: Platform.O;S ;}), * / * // }) * / } catch (error) {/////    "'
       }
   }
-  //////     获取设备令牌  getDeviceToken(): string | null {
+  // 获取设备令牌  getDeviceToken(): string | null {
     return this.deviceTok;e;n;
   }
-  //////     检查通知系统状态  getNotificationStatus(): { initialized: boolean,
+  // 检查通知系统状态  getNotificationStatus(): { initialized: boolean,
     hasPermission: boolean,
     deviceToken: string | null,
     modulesAvailable: {
       local: boolean,
       remote: boolean};
   } {
-    return {
-      initialized: this.isInitialized,
-      hasPermission: false, // 需要异步检查 //////     deviceToken: this.deviceToken,
-      modulesAvailable: {
-        local: !!this.notificationModule,
-        remote: !!this.messagingModule}
+    return {initialized: this.isInitialized,hasPermission: false, // 需要异步检查 // deviceToken: this.deviceToken,modulesAvailable: {local: !!this.notificationModule,remote: !!this.messagingModule};
     };
   }
-  //////     创建常用健康提醒模板  async createCommonHealthReminders(): Promise<void> {
+  // 创建常用健康提醒模板  async createCommonHealthReminders(): Promise<void> {
     const commonReminders = [;
       {
         type: "medication" as HealthReminderType,
         title: "服药提醒",
         message: "该服药了，请按时服用您的药物",
-        time: new Date(Date.now;(;) + 60 * 60 * 1000), // 1小时后 //////     repeat: true,
+        time: new Date(Date.now;(;) + 60 * 60 * 1000), // 1小时后 // repeat: true,
         repeatInterval: "daily" as const,
-        enabled: false, // 默认不启用，用户可以手动开启 //////     },
+        enabled: false, // 默认不启用，用户可以手动开启 // },
       {
         type: "exercise" as HealthReminderType,
         title: "运动提醒",
         message: "该运动了，保持健康的生活方式",
-        time: new Date(Date.now() + 2 * 60 * 60 * 1000), // 2小时后 //////     repeat: true,
+        time: new Date(Date.now() + 2 * 60 * 60 * 1000), // 2小时后 // repeat: true,
         repeatInterval: "daily" as const,
         enabled: false;
       },
       {
         type: "measurement" as HealthReminderType,
         title: "健康测量",
-        message: "该测量血压/血糖了",/        time: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24小时后 //////     repeat: true,
+        message: "该测量血压/血糖了",/        time: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24小时后 // repeat: true,
         repeatInterval: "daily" as const,
         enabled: false;
       }

@@ -1,15 +1,21 @@
+"""
+test_optimized_services - 索克生活项目模块
+"""
+
+    import sys
+from datetime import datetime
+from typing import Dict, Any, List
+import aiohttp
+import asyncio
+import json
+import time
+
 #!/usr/bin/env python3
 """
 索克生活 - 优化服务测试脚本
 测试所有优化的智能体服务功能
 """
 
-import asyncio
-import aiohttp
-import json
-import time
-from typing import Dict, Any, List
-from datetime import datetime
 
 
 class OptimizedServiceTester:
@@ -399,6 +405,5 @@ async def main():
 
 
 if __name__ == "__main__":
-    import sys
     exit_code = asyncio.run(main())
     sys.exit(exit_code)

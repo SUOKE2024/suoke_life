@@ -1,19 +1,24 @@
+"""
+metrics - 索克生活项目模块
+"""
+
+    from prometheus_client import CollectorRegistry, Counter, Gauge, Histogram, Summary
+    from prometheus_client.exposition import pushadd_to_gateway
+from functools import wraps
+from threading import Lock
+import logging
+import os
+import time
+
 #!/usr/bin/env python
 
 """
 小克服务指标采集模块
 """
 
-import logging
-import os
-import time
-from functools import wraps
-from threading import Lock
 
 # 尝试导入Prometheus客户端库，如果不可用则使用dummy实现
 try:
-    from prometheus_client import CollectorRegistry, Counter, Gauge, Histogram, Summary
-    from prometheus_client.exposition import pushadd_to_gateway
 
     PROMETHEUS_AVAILABLE = True
 except ImportError:

@@ -1,3 +1,17 @@
+"""
+generate_api_docs - 索克生活项目模块
+"""
+
+    import argparse
+from datetime import datetime
+from typing import Any
+from typing import Optional, Dict, Any
+import json
+import os
+import requests
+import sys
+import yaml
+
 #!/usr/bin/env python3
 
 """
@@ -5,13 +19,7 @@ API文档生成器
 自动生成accessibility-service的API文档
 """
 
-import json
-import os
-import sys
-from datetime import datetime
-from typing import Any
 
-import yaml
 
 # 添加服务路径
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'internal', 'service'))
@@ -936,9 +944,6 @@ curl -X POST "{self.service_info['base_url']}/{service_id}/..." \\
 索克生活无障碍服务 Python SDK 示例
 """
 
-import requests
-import json
-from typing import Optional, Dict, Any
 
 
 class AccessibilityServiceClient:
@@ -1287,7 +1292,6 @@ if (typeof module !== 'undefined' && module.exports) {
 
 def main():
     """主函数"""
-    import argparse
 
     parser = argparse.ArgumentParser(description='生成API文档')
     parser.add_argument('--output', '-o', default='docs/api', help='输出目录')

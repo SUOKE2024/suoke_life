@@ -1,10 +1,15 @@
-"""安全中间件"""
+"""
+security - 索克生活项目模块
+"""
 
-from typing import Callable
-
-import structlog
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
+from typing import Callable
+import structlog
+
+"""安全中间件"""
+
+
 
 logger = structlog.get_logger(__name__)
 

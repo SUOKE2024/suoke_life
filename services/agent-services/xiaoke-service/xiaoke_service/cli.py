@@ -1,16 +1,23 @@
 """
+cli - 索克生活项目模块
+"""
+
+    import subprocess
+    import uvicorn
+from rich.console import Console
+from rich.table import Table
+from xiaoke_service.core.config import get_settings
+from xiaoke_service.core.database import DatabaseManager
+import asyncio
+import click
+import sys
+
+"""
 小克智能体服务命令行工具
 """
 
-import asyncio
-import sys
 
-import click
-from rich.console import Console
-from rich.table import Table
 
-from xiaoke_service.core.config import get_settings
-from xiaoke_service.core.database import DatabaseManager
 
 console = Console()
 settings = get_settings()
@@ -29,7 +36,6 @@ def cli():
 @click.option("--debug", is_flag=True, help="启用调试模式")
 def dev(host: str, port: int, reload: bool, debug: bool):
     """启动开发服务器"""
-    import uvicorn
 
     console.print("[bold green]启动小克智能体开发服务器[/bold green]")
     console.print(f"服务地址: http://{host}:{port}")
@@ -167,7 +173,6 @@ def db(create: bool, drop: bool, migrate: bool):
 @click.option("--all", "run_all", is_flag=True, help="运行所有检查")
 def check(format_code: bool, lint: bool, type_check: bool, test: bool, run_all: bool):
     """代码质量检查"""
-    import subprocess
 
     console.print("[bold blue]代码质量检查[/bold blue]")
 

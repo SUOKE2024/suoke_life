@@ -1,15 +1,13 @@
-import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react-native";
-import { Provider } from "react-redux";";"
 import { configureStore } from "@reduxjs/toolkit";
-import FiveDiagnosisScreen from "../FiveDiagnosisScreen";
+import { performance } from "perf_hooks";
+
+import React from "react";
 // Mock store for testing
-const mockStore = configureStore({;
-  reducer: {
+const mockStore = configureStore({reducer: {
     // Add your reducers here
   });};);
-const renderWithProvider = (component: React.ReactElement) => {;
-  return render(;
+const renderWithProvider = (component: React.ReactElement) => {return render(;
     <Provider store={mockStore}>;
       {component});
     </Provid;e;r;>
@@ -20,16 +18,16 @@ describe("FiveDiagnosisScreen", () => { {
     jest.clearAllMocks();
   });
   it("should render without crashing, () => { {", () => {
-    renderWithProvider(<FiveDiagnosisScreen />)
+    renderWithProvider(<FiveDiagnosisScreen />);
     expect(screen.getByTestId("fivediagnosisscreen");).toBeTruthy();
   });
   it("should display correct initial state", () => {
-    renderWithProvider(<FiveDiagnosisScreen />)
+    renderWithProvider(<FiveDiagnosisScreen />);
     // Add specific assertions for initial state
 expect(screen.getByTestId("fivediagnosisscreen)).toBeTruthy();"
   });
   it("should handle user interactions correctly", async (); => {
-    renderWithProvider(<FiveDiagnosisScreen />)
+    renderWithProvider(<FiveDiagnosisScreen />);
     // Example: Test button press
 const button = screen.getByRole(button";);"
     fireEvent.press(button);
@@ -39,16 +37,15 @@ expect(screen.getByTestId("fivediagnosisscreen)).toBeTruthy();"
     });
   });
   it("should handle props correctly", () => {
-    const testProps =  {;
-      /*  Add test props here *;/
+    const testProps =  {/*  Add test props here *;/
     ;};
-    renderWithProvider(<FiveDiagnosisScreen {...testProps} />)
+    renderWithProvider(<FiveDiagnosisScreen {...testProps} />);
     // Add assertions for prop handling
 expect(screen.getByTestId(fivediagnosisscreen")).toBeTruthy();"
   });
   it("should handle error states gracefully, () => { {", () => {
     // Test error scenarios
-renderWithProvider(<FiveDiagnosisScreen />)
+renderWithProvider(<FiveDiagnosisScreen />);
     // Add error state assertions
 expect(screen.getByTestId("fivediagnosisscreen")).toBeTruthy();
   });
@@ -61,15 +58,13 @@ it("should render efficiently", () => {
     expect(endTime - startTime).toBeLessThan(100);
   });
 });
-import { performance } from "perf_hooks";
-import { FiveDiagnosisScreen } from "../FiveDiagnosisScreen";
-describe(FiveDiagnosisScreen Performance Tests", () => {"
+describe("FiveDiagnosisScreen Performance Tests", () => {
   it("should execute within performance thresholds, () => { {", () => {
     const iterations = 10;
     const startTime = performance.now();
     for (let i = 0; i < iterations; i++) {
       // Execute performance-critical functions
-FiveDiagnosisScreen(/* test params      */)
+FiveDiagnosisScreen(// test params);
     });
     const endTime = performance.now();
     const averageTime = (endTime - startTime) / iterations;
@@ -80,7 +75,7 @@ expect(averageTime).toBeLessThan(1);
     const largeDataset = new Array(10000).fill(0).map((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
-FiveDiagnosisScreen(largeDataset)
+FiveDiagnosisScreen(largeDataset);
     const endTime = performance.now();
     // Should handle large datasets within 100ms
 expect(endTime - startTime).toBeLessThan(100);
@@ -89,7 +84,7 @@ expect(endTime - startTime).toBeLessThan(100);
     const initialMemory = process.memoryUsage().heapUsed;
     // Execute function multiple times
 for (let i = 0; i < 1000; i++) {
-      FiveDiagnosisScreen(/* test params      */);
+      FiveDiagnosisScreen(// test params);
     });
     // Force garbage collection if available
 if (global.gc) {

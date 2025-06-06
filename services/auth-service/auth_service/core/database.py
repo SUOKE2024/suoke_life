@@ -1,15 +1,20 @@
-"""数据库管理器"""
+"""
+database - 索克生活项目模块
+"""
 
-from typing import AsyncGenerator, Optional
-
-import structlog
+from auth_service.config.settings import DatabaseSettings
+from auth_service.models.base import BaseModel
 from sqlalchemy import create_engine, event
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool, QueuePool
+from typing import AsyncGenerator, Optional
+import structlog
 
-from auth_service.config.settings import DatabaseSettings
-from auth_service.models.base import BaseModel
+"""数据库管理器"""
+
+
+
 
 logger = structlog.get_logger(__name__)
 
@@ -103,7 +108,8 @@ class DatabaseManager:
             finally:
                 await session.close()
     
-    def get_sync_session(self):
+        @cache(timeout=300)  # 5分钟缓存
+def get_sync_session(self):
         """获取同步数据库会话"""
         if not self._sync_session_factory:
             raise RuntimeError("数据库未初始化")

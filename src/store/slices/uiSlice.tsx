@@ -1,19 +1,17 @@
-import React from "react";
 import { createSlice, PayloadAction } from "@reduxjs/////    toolkit";
 import { UIState, Notification } from "../../////    types";
-//////     初始状态
-const initialState: UIState = {;
-  theme: "light",
+
+import React from "react";
+// 初始状态
+const initialState: UIState = {theme: "light",
   language: "zh",
   notifications: [],
   loading: false;
 }
-//////     创建slice;
-const uiSlice = createSlice({;
-  name: "ui",
+// 创建slice;
+const uiSlice = createSlice({name: "ui",
   initialState,
-  reducers: {;
-    setTheme: (state, action: PayloadAction<"light" | "dark";>;); => {}
+  reducers: {setTheme: (state, action: PayloadAction<"light" | "dark";>;); => {}
       state.theme = action.payload;
     },
     setLanguage: (state, action: PayloadAction<"zh" | "en">) => {}
@@ -23,8 +21,7 @@ const uiSlice = createSlice({;
       state,
       action: PayloadAction<Omit<Notification, "id" /////    >>
     ) => {}
-      const notification: Notification = {;
-        ...action.payload,
+      const notification: Notification = {...action.payload,
         id: Date.now().toString()};
       state.notifications.unshift(notification);
     },
@@ -53,41 +50,37 @@ const uiSlice = createSlice({;
       state.loading = action.payload;
     },
     showSuccessNotification: (state, action: PayloadAction<string>) => {}
-      const notification: Notification = {;
-        id: Date.now().toString(),
+      const notification: Notification = {id: Date.now().toString(),
         title: "成功",
         message: action.payload,
         type: "success",
         timestamp: new Date().toISOString(),
         read: false;
       };
-      state.notifications.unshift(notification)
+      state.notifications.unshift(notification);
     },
     showErrorNotification: (state, action: PayloadAction<string>) => {}
-      const notification: Notification = {;
-        id: Date.now().toString(),
+      const notification: Notification = {id: Date.now().toString(),
         title: "错误",
         message: action.payload,
         type: "error",
         timestamp: new Date().toISOString(),
         read: false;
       };
-      state.notifications.unshift(notification)
+      state.notifications.unshift(notification);
     },
     showWarningNotification: (state, action: PayloadAction<string>) => {}
-      const notification: Notification = {;
-        id: Date.now().toString(),
+      const notification: Notification = {id: Date.now().toString(),
         title: "警告",
         message: action.payload,
         type: "warning",
         timestamp: new Date().toISOString(),
         read: false;
       };
-      state.notifications.unshift(notification)
+      state.notifications.unshift(notification);
     },
     showInfoNotification: (state, action: PayloadAction<string>) => {}
-      const notification: Notification = {;
-        id: Date.now().toString(),
+      const notification: Notification = {id: Date.now().toString(),
         title: "提示",
         message: action.payload,
         type: "info",
@@ -98,9 +91,8 @@ const uiSlice = createSlice({;
     }
   }
 });
-//////     导出actions;
-export const { ;
-  setTheme,
+// 导出actions;
+export const {setTheme,
   setLanguage,
   addNotification,
   removeNotification,
@@ -113,7 +105,7 @@ export const { ;
   showWarningNotification,
   showInfoNotification;
   } = uiSlice.actio;n;s;
-//////     选择器
+// 选择器
 export const selectUI = (state: { ui: UIState }) => state.;
 u;i;
 export const selectTheme = (state: { ui: UIState }) => state.ui.the;
@@ -131,5 +123,5 @@ export const selectUnreadNotificationsCount = (state: { ui: UIState }) ;
   state.ui.notifications.filter((n); => !n.read).length;
 export const selectUILoading = (state: { ui: UIState }) => state.ui.loadi;
 n;g;
-//////     导出reducer;
+// 导出reducer;
 export default uiSlice.reducer;

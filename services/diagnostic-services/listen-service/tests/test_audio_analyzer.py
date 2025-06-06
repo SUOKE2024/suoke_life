@@ -1,16 +1,22 @@
 """
+test_audio_analyzer - 索克生活项目模块
+"""
+
+        import time
+from listen_service.core.audio_analyzer import AudioAnalyzer
+from listen_service.core.audio_processor import AudioProcessor
+from listen_service.models.audio_models import (
+import asyncio
+import numpy as np
+import pytest
+
+"""
 音频分析器单元测试
 
 测试音频特征提取和分析功能。
 """
 
-import pytest
-import asyncio
-import numpy as np
 
-from listen_service.core.audio_analyzer import AudioAnalyzer
-from listen_service.core.audio_processor import AudioProcessor
-from listen_service.models.audio_models import (
     AudioMetadata, AudioFormat, AnalysisRequest, VoiceFeatures
 )
 
@@ -341,7 +347,6 @@ class TestAudioAnalyzerIntegration:
             requests.append(request)
         
         # 测量处理时间
-        import time
         start_time = time.time()
         
         tasks = [analyzer.analyze_audio(req) for req in requests]

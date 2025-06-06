@@ -1,21 +1,26 @@
+"""
+health_check - 索克生活项目模块
+"""
+
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from pymongo import MongoClient
+import json
+import logging
+import os
+import psycopg2
+import redis
+import requests
+import threading
+import time
+import traceback
+
 #!/usr/bin/env python
 
 """
 健康检查和就绪检查HTTP处理器
 """
 
-import json
-import logging
-import os
-import threading
-import time
-import traceback
-from http.server import BaseHTTPRequestHandler, HTTPServer
 
-import psycopg2
-import redis
-import requests
-from pymongo import MongoClient
 
 logger = logging.getLogger(__name__)
 

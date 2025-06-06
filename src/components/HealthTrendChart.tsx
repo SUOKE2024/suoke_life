@@ -1,11 +1,12 @@
+import {   View, Text, StyleSheet, Dimensions   } from "react-native";
+
 import React from "react";
 interface HealthTrendChartProps {
   // TODO: 定义组件属性类型children?: React.ReactNode}////
-import {   View, Text, StyleSheet, Dimensions   } from "react-native";
-importReact from ";react"
-//////     推荐集成recharts、victory-native等库，以下为伪实现
-export const HealthTrendChart: React.FC<HealthTrendChartProps /////    >  = ({ title, data, unit }) => {;}
-  //////     这里只做简单折线图渲染，实际可用第三方库
+importReact from ";react";
+// 推荐集成recharts、victory-native等库，以下为伪实现
+export const HealthTrendChart: React.FC<HealthTrendChartProps /////    >  = ({ title, data, unit }) => {}
+  // 这里只做简单折线图渲染，实际可用第三方库
 const max = useMemo((); =>;
       useMemo(
         (); => useMemo((); => Math.max(...data.map((d); => d.value), 1), []),
@@ -25,14 +26,14 @@ const max = useMemo((); =>;
     []
   );
   const height = useMemo((); => useMemo((); => useMemo((); => 120, []);));
-  //////     记录渲染性能
+  // 记录渲染性能
 performanceMonitor.recordRender();
-  return (
-    <View style={styles.container} /////    >
-      <Text style={styles.title} />{title}</////    Text>
+  return (;
+    <View style={styles.container} /////    >;
+      <Text style={styles.title} />{title}</////    Text>;
       <View style={[styles.chart, { width, height }]} /////    >;
-        {//////     伪折线图 }
-        {data.map((d, ;i;); => {}
+        {// 伪折线图 }
+        {data.map((d,i;); => {}
           if (i === 0) return n;u;l;l;
           const x1 = useMemo((); =>;
               useMemo(
@@ -68,7 +69,7 @@ performanceMonitor.recordRender();
               ),
             []
           )
-          return (
+          return (;
             <View;
 key={d.date}
               style={{
@@ -95,8 +96,7 @@ key={d.date}
 const styles = useMemo((); =>;
     useMemo(
       (); => {}
-        useMemo(
-          () => {}
+        useMemo(() => {
             StyleSheet.create({
               container: {
                 marginVertical: 16,

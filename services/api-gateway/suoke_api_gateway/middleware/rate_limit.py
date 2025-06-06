@@ -1,18 +1,23 @@
 """
+rate_limit - 索克生活项目模块
+"""
+
+from ..core.config import get_settings
+from ..core.logging import get_logger, log_security_event
+from fastapi import Request, Response, status
+from limits import RateLimitItemPerSecond, parse
+from limits.storage import RedisStorage
+from starlette.middleware.base import BaseHTTPMiddleware
+import time
+
+"""
 限流中间件
 
 基于 Redis 的分布式限流实现，支持多种限流策略。
 """
 
-import time
 
-from fastapi import Request, Response, status
-from limits import RateLimitItemPerSecond, parse
-from limits.storage import RedisStorage
-from starlette.middleware.base import BaseHTTPMiddleware
 
-from ..core.config import get_settings
-from ..core.logging import get_logger, log_security_event
 
 logger = get_logger(__name__)
 

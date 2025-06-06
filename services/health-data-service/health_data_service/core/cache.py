@@ -1,3 +1,19 @@
+"""
+cache - 索克生活项目模块
+"""
+
+    import aioredis
+    import redis.asyncio as aioredis
+from .config import get_settings
+from contextlib import asynccontextmanager
+from datetime import datetime, timedelta
+from loguru import logger
+from typing import Any, Dict, List, Optional, Union, Callable
+import asyncio
+import json
+import pickle
+import time
+
 #!/usr/bin/env python3
 """
 缓存管理模块
@@ -5,21 +21,10 @@
 提供Redis缓存操作、分布式锁、会话管理等功能。
 """
 
-import asyncio
-import json
-import pickle
-import time
-from typing import Any, Dict, List, Optional, Union, Callable
-from datetime import datetime, timedelta
-from contextlib import asynccontextmanager
 
 try:
-    import redis.asyncio as aioredis
 except ImportError:
-    import aioredis
-from loguru import logger
 
-from .config import get_settings
 
 settings = get_settings()
 

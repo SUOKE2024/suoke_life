@@ -1,15 +1,20 @@
+"""
+config - 索克生活项目模块
+"""
+
+from pathlib import Path
+from typing import Any
+import logging
+import os
+import yaml
+
 #!/usr/bin/env python3
 
 """
 配置加载工具
 """
 
-import logging
-import os
-from pathlib import Path
-from typing import Any
 
-import yaml
 
 # 初始化日志
 logger = logging.getLogger(__name__)

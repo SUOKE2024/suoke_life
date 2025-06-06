@@ -1,21 +1,26 @@
 """
-服务器启动模块
-
-提供 gRPC 和 HTTP 服务器的启动功能。
+server - 索克生活项目模块
 """
-
-import asyncio
-import signal
-import sys
-
-import grpc
-from loguru import logger
-import uvicorn
 
 from inquiry_service.api.grpc.server import create_grpc_server
 from inquiry_service.api.http.app import create_fastapi_app
 from inquiry_service.core.config import get_settings
 from inquiry_service.core.logging import setup_logging
+from loguru import logger
+import asyncio
+import grpc
+import signal
+import sys
+import uvicorn
+
+"""
+服务器启动模块
+
+提供 gRPC 和 HTTP 服务器的启动功能。
+"""
+
+
+
 
 
 class ServiceManager:

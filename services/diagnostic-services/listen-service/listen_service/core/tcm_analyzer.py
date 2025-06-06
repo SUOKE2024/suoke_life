@@ -1,27 +1,32 @@
 """
+tcm_analyzer - 索克生活项目模块
+"""
+
+from ..config.settings import get_settings
+from ..models.audio_models import VoiceFeatures
+from ..models.tcm_models import (
+from ..utils.performance import async_timer
+from dataclasses import dataclass
+from enum import Enum
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
+from typing import Any
+import asyncio
+import numpy as np
+import structlog
+import time
+
+"""
 中医特征分析器
 
 基于传统中医理论和现代音频分析技术，从语音特征中提取中医诊断相关信息。
 支持体质分析、情绪状态识别、脏腑功能评估等功能。
 """
 
-import asyncio
-import time
-from dataclasses import dataclass
-from enum import Enum
-from typing import Any
 
-import numpy as np
-import structlog
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.svm import SVC
 
-from ..config.settings import get_settings
-from ..models.audio_models import VoiceFeatures
-from ..models.tcm_models import (
     TCMDiagnosis,
 )
-from ..utils.performance import async_timer
 
 logger = structlog.get_logger(__name__)
 

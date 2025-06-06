@@ -1,19 +1,24 @@
 """
+analysis - 索克生活项目模块
+"""
+
+from ...core.tactile_analyzer import (
+from datetime import datetime
+from fastapi import APIRouter, HTTPException, Depends, Body, Form
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel, Field
+from typing import Dict, Any, Optional, List
+import asyncio
+import json
+import logging
+
+"""
 切诊分析API路由
 
 提供脉象分析、腹诊分析、穴位分析的智能接口
 """
 
-import asyncio
-import logging
-import json
-from datetime import datetime
-from fastapi import APIRouter, HTTPException, Depends, Body, Form
-from fastapi.responses import JSONResponse
-from typing import Dict, Any, Optional, List
-from pydantic import BaseModel, Field
 
-from ...core.tactile_analyzer import (
     TactileAnalyzer,
     PulseAnalysisResult,
     AbdominalAnalysisResult,

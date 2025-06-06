@@ -1,15 +1,24 @@
 """
-小克智能体核心模块
-负责医疗资源的智能管理和协调
+xiaoke_agent - 索克生活项目模块
 """
 
-import logging
+from ..domain.models import (
+from ..repository.analytics_repository import AnalyticsRepository
+from ..repository.resource_repository import ResourceRepository
+from ..repository.user_repository import UserRepository
+from .decision_engine import DecisionEngine
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
+import logging
 
-from ..domain.models import (
+"""
+小克智能体核心模块
+负责医疗资源的智能管理和协调
+"""
+
+
     Appointment,
     Doctor,
     Recommendation,
@@ -17,10 +26,6 @@ from ..domain.models import (
     ResourceType,
     UrgencyLevel,
 )
-from ..repository.analytics_repository import AnalyticsRepository
-from ..repository.resource_repository import ResourceRepository
-from ..repository.user_repository import UserRepository
-from .decision_engine import DecisionEngine
 
 logger = logging.getLogger(__name__)
 

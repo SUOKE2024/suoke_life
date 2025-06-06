@@ -1,4 +1,15 @@
 """
+__init__ - 索克生活项目模块
+"""
+
+    from accessibility_service.models.accessibility import (
+from collections.abc import Generator
+import asyncio
+import os
+import pytest
+import sys
+
+"""
 测试模块
 
 包含无障碍服务的所有测试：
@@ -8,12 +19,7 @@
 - performance: 性能测试
 """
 
-import asyncio
-import os
-import sys
-from collections.abc import Generator
 
-import pytest
 
 # 添加项目根目录到Python路径
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -33,7 +39,6 @@ def event_loop() -> Generator:
 @pytest.fixture
 def sample_accessibility_request():
     """Sample accessibility request for testing."""
-    from accessibility_service.models.accessibility import (
         AccessibilityRequest,
         AccessibilityType,
     )

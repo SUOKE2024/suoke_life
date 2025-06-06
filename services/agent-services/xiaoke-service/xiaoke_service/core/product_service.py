@@ -1,10 +1,15 @@
+"""
+product_service - 索克生活项目模块
+"""
+
+from typing import Dict, List, Optional
+import asyncio
+
 #!/usr/bin/env python3
 """
 ProductService 实现
 """
 
-from typing import Dict, List, Optional
-import asyncio
 
 class ProductService:
     """服务类"""

@@ -1,17 +1,22 @@
 """
+settings - 索克生活项目模块
+"""
+
+from enum import Enum
+from functools import lru_cache
+from pathlib import Path
+from pydantic import Field, computed_field, field_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from typing import Any
+
+"""
 现代化配置管理
 
 使用 Pydantic Settings 进行配置管理，支持环境变量、配置文件和默认值。
 专为 Python 3.13.3 和生产环境优化。
 """
 
-from enum import Enum
-from functools import lru_cache
-from pathlib import Path
-from typing import Any
 
-from pydantic import Field, computed_field, field_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Environment(str, Enum):

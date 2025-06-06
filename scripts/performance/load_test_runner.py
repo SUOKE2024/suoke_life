@@ -1,19 +1,25 @@
+"""
+load_test_runner - 索克生活项目模块
+"""
+
+                import random
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Dict, List, Optional
+import aiohttp
+import argparse
+import asyncio
+import json
+import statistics
+import time
+
 #!/usr/bin/env python3
 """
 负载测试运行器
 使用Locust进行Auth-Service和User-Service的负载测试
 """
 
-import asyncio
-import aiohttp
-import json
-import time
-import statistics
-from concurrent.futures import ThreadPoolExecutor
-from typing import Dict, List, Optional
-from dataclasses import dataclass
-from datetime import datetime
-import argparse
 
 
 @dataclass
@@ -458,7 +464,6 @@ class LoadTestRunner:
             
             # 对已创建的用户进行随机操作
             if created_users:
-                import random
                 random_user = random.choice(created_users)
                 await tester.test_user_retrieval(random_user)
             

@@ -1,11 +1,16 @@
+"""
+service_modules - 索克生活项目模块
+"""
+
+from dataclasses import dataclass, field
+import enum
+
 #!/usr/bin/env python3
 """
 小克智能体功能模块定义
 这个文件定义了小克智能体的所有核心功能模块和能力域
 """
 
-import enum
-from dataclasses import dataclass, field
 
 
 class ModuleStatus(enum.Enum):

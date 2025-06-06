@@ -97,4 +97,4 @@ export interface DiagnosisServiceClient {
     symptoms?: string[];
   }): Promise<any>;
   clearCache(): void;
-} 
+}

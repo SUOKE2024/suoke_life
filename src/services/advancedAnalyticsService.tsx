@@ -1,16 +1,14 @@
-import React from "react";
-import { usePerformanceMonitor } from "../../placeholder";../hooks/////    usePerformanceMonitor";"
+import { usePerformanceMonitor } from "../../placeholder";../hooks/////    usePerformanceMonitor
 import { apiClient } from "./////    apiClient";
-//////
-//////     高级数据分析服务   索克生活APP - 健康数据分析和预测服务
-// 数据分析类型 * export type AnalysisType = | "health_trend"  / 健康趋势分析* // | "risk_assessment"  * // 风险评估* // | "pattern_recognition"  * // 模式识别* // | "predictive_modeling"  * // 预测建模* // | "correlation_analysis"  * // 相关性分析* // | "anomaly_detection"  * // 异常检测* // | "cohort_analysis"  * // 队列分析* // | "survival_analysis"  * // 生存分析* // | "time_series"  * // 时间序列分析* // | "clustering"  * // 聚类分析* // | "classification"  * // 分类分析* // | "regression"  * // 回归分析* // | "deep_learning"  * // 深度学习分析* // | "nlp_analysis"  * // 自然语言处理分析* //////     | "image_analysi;"
+
+import React from "react";
+// // 高级数据分析服务   索克生活APP - 健康数据分析和预测服务
+// 数据分析类型 * export type AnalysisType = | "health_trend"  / 健康趋势分析* // | "risk_assessment"  * // 风险评估* // | "pattern_recognition"  * // 模式识别* // | "predictive_modeling"  * // 预测建模* // | "correlation_analysis"  * // 相关性分析* // | "anomaly_detection"  * // 异常检测* // | "cohort_analysis"  * // 队列分析* // | "survival_analysis"  * // 生存分析* // | "time_series"  * // 时间序列分析* // | "clustering"  * // 聚类分析* // | "classification"  * // 分类分析* // | "regression"  * // 回归分析* // | "deep_learning"  * // 深度学习分析* // | "nlp_analysis"  * // 自然语言处理分析* // | "image_analysi;"
 s";  * / 图像分析* // * /////     "
 // 数据源类型 * export interface DataSource {////
  /////
   id: string,
-  name: string,;
-  type: "database" | "api" | "file" | "stream" | "sensor" | "manual",;
-  connection: {url?: string;
+  name: string,type: "database" | "api" | "file" | "stream" | "sensor" | "manual",connection: {url?: string;
     credentials?: Record<string, any>;
     headers?: Record<string, string>;
     parameters?: Record<string, any>;
@@ -74,11 +72,9 @@ s";  * / 图像分析* // * /////     "
   updatedAt: string,
   createdBy: string}
 // 分析结果 * export interface AnalysisResult { id: string, ////
-  configId: string,;
-  status: "running" | "completed" | "failed" | "cancelled",;
-  startTime: string;
+  configId: string,status: "running" | "completed" | "failed" | "cancelled",startTime: string;
   endTime?: string;
-  duration?: number; // 秒 //////     results: {summary: {totalRecords: number,
+  duration?: number; // 秒 // results: {summary: {totalRecords: number,
       processedRecords: number,
       errorRecords: number,
       insights: string[],
@@ -170,8 +166,7 @@ s";  * / 图像分析* // * /////     "
         column: number,
         rowSpan: number,
         columnSpan: number};
-      config: {;
-        title?: string;
+      config: {title?: string;
         analysisId?: string;
         visualizationId?: string;
         refreshRate?: number; // 秒 // filters?: Record<string, any> ////
@@ -224,7 +219,7 @@ s";  * / 图像分析* // * /////     "
   updatedAt: string,
   createdBy: string}
 // 高级数据分析服务类 * class AdvancedAnalyticsService { ////
-  private dataSources: Map<string, DataSource> = new Map()
+  private dataSources: Map<string, DataSource> = new Map();
   private analysisConfigs: Map<string, AnalysisConfig> = new Map();
   private analysisResults: Map<string, AnalysisResult> = new Map();
   private dashboards: Map<string, DashboardConfig> = new Map();
@@ -233,27 +228,26 @@ s";  * / 图像分析* // * /////     "
   constructor() {
     this.initializeService();
   }
-  //////     初始化服务  private async initializeService(): Promise<void> {
+  // 初始化服务  private async initializeService(): Promise<void> {
     try {
-      // 加载数据源 //////     await this.loadDataSources;
-      // 加载分析配置 //////     await this.loadAnalysisConfigs;
-      // 加载仪表板 //////     await this.loadDashboards;
-      // 加载报告配置 //////     await this.loadReports;
-      // 启动定时任务 //////     this.startScheduledTasks()
+      // 加载数据源 // await this.loadDataSources;
+      // 加载分析配置 // await this.loadAnalysisConfigs;
+      // 加载仪表板 // await this.loadDashboards;
+      // 加载报告配置 // await this.loadReports;
+      // 启动定时任务 // this.startScheduledTasks();
     } catch (error) {
       }
   }
   // 创建数据源  async createDataSource(dataSource: Omit<DataSource, "id" | "lastUpdated" | "status" />/  ): Promise<DataSource /////    >  {
     try {
       const id = this.generateId("ds";);
-      const newDataSource: DataSource = {;
-        id,
+      const newDataSource: DataSource = {id,
         ...dataSource,
         lastUpdated: new Date().toISOString(),
         status: "active"};
-      this.dataSources.set(id, newDataSource)
+      this.dataSources.set(id, newDataSource);
       // 保存到后端 // await apiClient.post(" / api * v1 /analytics/data-sources", newDataSource;);/////
-      // 测试连接 //////     await this.testDataSourceConnection(id;);
+      // 测试连接 // await this.testDataSourceConnection(id;);
       return newDataSour;c;e;
     } catch (error) {
       throw err;o;r;
@@ -263,23 +257,22 @@ s";  * / 图像分析* // * /////     "
     try {
       const id = this.generateId("ac";);
       const now = new Date().toISOString;
-      const newConfig: AnalysisConfig = {;
-        id,
+      const newConfig: AnalysisConfig = {id,
         ...config,
         createdAt: now,
         updatedAt: now};
-      this.analysisConfigs.set(id, newConfig)
+      this.analysisConfigs.set(id, newConfig);
       // 保存到后端 // await apiClient.post(" / api * v1 /analytics/configs", newConfig;);/////
       return newConf;i;g;
     } catch (error) {
       throw error;
     }
   }
-  //////     运行分析  async runAnalysis(configId: string,
+  // 运行分析  async runAnalysis(configId: string,
     options?:  {
       async?: boolean,
       priority?: "low" | "normal" | "high"
-      timeout?: number; // 秒 //////     }
+      timeout?: number; // 秒 // }
   ): Promise<AnalysisResult /////    >  {
     try {
       const config = this.analysisConfigs.get(configI;d;);
@@ -287,12 +280,11 @@ s";  * / 图像分析* // * /////     "
         throw new Error("Analysis config not found;";);
       }
       if (this.runningAnalyses.has(configId)) {
-        throw new Error("Analysis is already running;";)
+        throw new Error("Analysis is already running;";);
       }
       const resultId = this.generateId("ar;";);
       const startTime = new Date().toISOString;(;);
-      const result: AnalysisResult = {;
-        id: resultId,
+      const result: AnalysisResult = {id: resultId,
         configId,
         status: "running",
         startTime,
@@ -317,10 +309,10 @@ s";  * / 图像分析* // * /////     "
       this.analysisResults.set(resultId, result);
       this.runningAnalyses.add(configId);
       // 异步执行分析 // if (options?.async !== false) { ////
-        this.executeAnalysisAsync(config, result)
+        this.executeAnalysisAsync(config, result);
         return result;
       } else {
-        return await this.executeAnalysis(config, res;u;l;t;)
+        return await this.executeAnalysis(config, res;u;l;t;);
       }
     } catch (error) {
       throw error;
@@ -330,7 +322,7 @@ s";  * / 图像分析* // * /////     "
     try {
       let result = this.analysisResults.get(resultI;d;);
       if (!result) {
-        // 从后端加载 //////     const response = await apiClient.get(
+        // 从后端加载 // const response = await apiClient.get(;
           `/api/v1/analytics/results/////    ${resultId;};`);
         result = response.data;
         if (result) {
@@ -346,19 +338,18 @@ s";  * / 图像分析* // * /////     "
     try {
       const id = this.generateId("db";);
       const now = new Date().toISOString;
-      const newDashboard: DashboardConfig = {;
-        id,
+      const newDashboard: DashboardConfig = {id,
         ...dashboard,
         createdAt: now,
         updatedAt: now};
-      this.dashboards.set(id, newDashboard)
+      this.dashboards.set(id, newDashboard);
       // 保存到后端 // await apiClient.post(" / api * v1 /analytics/dashboards", newDashboard;);/////
       return newDashboa;r;d;
     } catch (error) {
       throw err;o;r;
     }
   }
-  //////     生成报告  async generateReport(reportConfigId: string,
+  // 生成报告  async generateReport(reportConfigId: string,
     options?:  {
       format?: "pdf" | "html" | "excel" | "word"
       includeData?: boolean;
@@ -371,7 +362,7 @@ s";  * / 图像分析* // * /////     "
     try {
       const reportConfig = this.reports.get(reportConfigI;d;);
       if (!reportConfig) {
-        throw new Error("Report config not found;";)
+        throw new Error("Report config not found;";);
       }
       const response = await apiClient.post(;
         "/api/v1/analytics/reports/generate",/////            {
@@ -388,7 +379,7 @@ s";  * / 图像分析* // * /////     "
       throw error;
     }
   }
-  //////     健康趋势分析  async analyzeHealthTrends(userId: string,
+  // 健康趋势分析  async analyzeHealthTrends(userId: string,
     metrics: string[],
     timeRange: { start: string, end: string}): Promise< { trends: Array<{
       metric: string,
@@ -404,8 +395,7 @@ s";  * / 图像分析* // * /////     "
     recommendations: string[]
   }> {
     try {
-      const response = await apiClient.post("/api/v1/analytics/health-trends", {/////            userId,;
-        metrics,
+      const response = await apiClient.post("/api/v1/analytics/health-trends", {/////            userId,metrics,
         timeRan;g;e;
       ;};);
       return response.da;t;a;
@@ -413,7 +403,7 @@ s";  * / 图像分析* // * /////     "
       throw error;
     }
   }
-  //////     风险评估  async assessRisk(userId: string,
+  // 风险评估  async assessRisk(userId: string,
     riskFactors: Record<string, any>,
     models?: string[]
   ): Promise< { overallRisk: {
@@ -445,7 +435,7 @@ s";  * / 图像分析* // * /////     "
       throw err;o;r;
     }
   }
-  //////     异常检测  async detectAnomalies(dataSourceId: string,
+  // 异常检测  async detectAnomalies(dataSourceId: string,
     field: string,
     algorithm:   | "isolation_forest"| "one_class_svm",
       | "local_outlier_factor"
@@ -477,7 +467,7 @@ s";  * / 图像分析* // * /////     "
       throw err;o;r;
     }
   }
-  //////     预测建模  async createPredictiveModel(name: string,
+  // 预测建模  async createPredictiveModel(name: string,
     dataSourceId: string,
     targetVariable: string,
     features: string[],
@@ -513,7 +503,7 @@ s";  * / 图像分析* // * /////     "
       throw err;o;r;
     }
   }
-  //////     聚类分析  async performClustering(dataSourceId: string,
+  // 聚类分析  async performClustering(dataSourceId: string,
     features: string[],
     algorithm: "kmeans" | "dbscan" | "hierarchical" = "kmeans",
     numClusters?: number;
@@ -535,8 +525,7 @@ s";  * / 图像分析* // * /////     "
     recommendations: string[]
   }> {
     try {
-      const response = await apiClient.post("/api/v1/analytics/clustering", {/////            dataSourceId,;
-        features,
+      const response = await apiClient.post("/api/v1/analytics/clustering", {/////            dataSourceId,features,
         algorithm,
         numCluste;r;s;
       ;};);
@@ -545,7 +534,7 @@ s";  * / 图像分析* // * /////     "
       throw err;o;r;
     }
   }
-  //////     相关性分析  async analyzeCorrelations(dataSourceId: string,
+  // 相关性分析  async analyzeCorrelations(dataSourceId: string,
     variables: string[],
     method: "pearson" | "spearman" | "kendall" = "pearson"): Promise< { correlationMatrix: number[][],
     significantCorrelations: Array<{
@@ -557,8 +546,7 @@ s";  * / 图像分析* // * /////     "
     insights: string[]
   }> {
     try {
-      const response = await apiClient.post("/api/v1/analytics/correlations", {/////            dataSourceId,;
-        variables,
+      const response = await apiClient.post("/api/v1/analytics/correlations", {/////            dataSourceId,variables,
         meth;o;d;
       ;};);
       return response.da;t;a;
@@ -575,7 +563,7 @@ s";  * / 图像分析* // * /////     "
   // 获取仪表板列表  async getDashboards(): Promise<DashboardConfig[] /////    > {
     return Array.from(this.dashboards.values);
   }
-  //////     私有方法实现  private async loadDataSources(): Promise<void> {
+  // 私有方法实现  private async loadDataSources(): Promise<void> {
     try {
       const response = await apiClient.get("/api/v1/analytics/data-source;s;";);/////          const dataSources: DataSource[] = response.data;
       dataSources.forEach((ds); => {}
@@ -612,12 +600,12 @@ s";  * / 图像分析* // * /////     "
       }
   }
   private startScheduledTasks(): void {
-    // 每分钟检查定时任务 //////     setInterval(async() => {}
-  //////     性能监控
-const performanceMonitor = usePerformanceMonitor(advancedAnalyticsService", {;"
+    // 每分钟检查定时任务 // setInterval(async() => {}
+  // 性能监控
+const performanceMonitor = usePerformanceMonitor(advancedAnalyticsService", {"
     trackRender: true,
     trackMemory: false,
-    warnThreshold: 100, //////     ms };);
+    warnThreshold: 100, // ms };);
       await this.checkScheduledAnalyses;
     }, 60 * 1000);
   }
@@ -638,7 +626,7 @@ const performanceMonitor = usePerformanceMonitor(advancedAnalyticsService", {;"
   private shouldRunScheduledAnalysis(config: AnalysisConfig,
     now: Date;);: boolean  {
     if (!config.schedule?.enabled) return f;a;l;s;e;
-    // 简化的调度逻辑 //////     const lastRun = this.getLastRunTime(config.id;);
+    // 简化的调度逻辑 // const lastRun = this.getLastRunTime(config.id;);
     if (!lastRun) return t;r;u;e;
     const timeDiff = now.getTime - lastRun.getTime();
     const frequency = config.schedule.frequen;c;y;
@@ -655,9 +643,9 @@ case "monthly":
     }
   }
   private getLastRunTime(configId: string);: Date | null  {
-    // 从结果中查找最后运行时间 //////     const results = Array.from(this.analysisResults.values)
+    // 从结果中查找最后运行时间 // const results = Array.from(this.analysisResults.values);
       .filter((result) => result.configId === configId)
-      .sort(
+      .sort(;
         (a, b); => {}
           new Date(b.startTime).getTime(); - new Date(a.startTime).getTime();
       );
@@ -675,15 +663,14 @@ case "monthly":
   private async executeAnalysisAsync(config: AnalysisConfig,
     result: AnalysisResult;);: Promise<void>  {
     try {
-      await this.executeAnalysis(config, resul;t;)
+      await this.executeAnalysis(config, resul;t;);
     } catch (error) {
       }
   }
   private async executeAnalysis(config: AnalysisConfig,
     result: AnalysisResult;): Promise<AnalysisResult /////    >  {
     try {
-      // 调用后端执行分析 // const response = await apiClient.post(" / api * v1 /analytics/execute", {/////            config,
-        resultId: result.;i;d;
+      // 调用后端执行分析 // const response = await apiClient.post(" / api * v1 /analytics/execute", {/////            config,resultId: result.;i;d;
       ;};);
       const updatedResult = response.da;t;a;
       this.analysisResults.set(result.id, updatedResult);
@@ -691,7 +678,7 @@ case "monthly":
       return updatedResu;l;t;
     } catch (error) {
       result.status = "failed";
-      result.endTime = new Date().toISOString()
+      result.endTime = new Date().toISOString();
       result.error = {
         code: "EXECUTION_ERROR",
         message: error instanceof Error ? error.message : "Unknown error"};

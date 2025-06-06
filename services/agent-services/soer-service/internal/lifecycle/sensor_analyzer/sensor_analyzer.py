@@ -1,11 +1,16 @@
+"""
+sensor_analyzer - 索克生活项目模块
+"""
+
+from typing import Any
+import logging
+import time
+
 #!/usr/bin/env python3
 """
 传感器数据分析器
 """
 
-import logging
-import time
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

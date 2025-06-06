@@ -1,15 +1,20 @@
 """
+test_models - 索克生活项目模块
+"""
+
+from datetime import datetime, timezone
+from human_review_service.core.models import (
+from uuid import uuid4
+import pytest
+
+"""
 数据模型测试
 Data Models Tests
 
 测试数据模型的各种功能
 """
 
-import pytest
-from datetime import datetime, timezone
-from uuid import uuid4
 
-from human_review_service.core.models import (
     ReviewerCreate,
     ReviewerDB,
     ReviewerUpdate,

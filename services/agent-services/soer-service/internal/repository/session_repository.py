@@ -1,3 +1,17 @@
+"""
+session_repository - 索克生活项目模块
+"""
+
+from datetime import datetime, timedelta
+from pkg.utils.connection_pool import (
+from pkg.utils.dependency_injection import ServiceLifecycle
+from pkg.utils.error_handling import DatabaseException, RetryConfig, retry_async
+from pkg.utils.metrics import get_metrics_collector
+from typing import Any
+import json
+import logging
+import uuid
+
 #!/usr/bin/env python
 
 """
@@ -5,20 +19,11 @@
 提供用户与智能体的会话管理和持久化
 """
 
-import json
-import logging
-import uuid
-from datetime import datetime, timedelta
-from typing import Any
 
-from pkg.utils.connection_pool import (
     DatabaseConnectionPool,
     RedisConnectionPool,
     get_pool_manager,
 )
-from pkg.utils.dependency_injection import ServiceLifecycle
-from pkg.utils.error_handling import DatabaseException, RetryConfig, retry_async
-from pkg.utils.metrics import get_metrics_collector
 
 logger = logging.getLogger(__name__)
 metrics = get_metrics_collector()

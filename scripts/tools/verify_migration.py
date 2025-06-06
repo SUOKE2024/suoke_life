@@ -1,13 +1,18 @@
+"""
+verify_migration - 索克生活项目模块
+"""
+
+from pathlib import Path
+from typing import Dict, List
+import subprocess
+import time
+
 #!/usr/bin/env python3
 """
 索克生活项目 - uv迁移验证脚本
 快速验证所有迁移服务的基本功能
 """
 
-import subprocess
-import time
-from pathlib import Path
-from typing import Dict, List
 
 class MigrationVerifier:
     """迁移验证器"""

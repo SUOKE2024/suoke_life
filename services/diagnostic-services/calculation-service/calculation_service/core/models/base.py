@@ -1,14 +1,19 @@
 """
+base - 索克生活项目模块
+"""
+
+from datetime import datetime
+from pydantic import BaseModel as PydanticBaseModel, Field, ConfigDict
+from typing import Any, Dict, Optional, List
+from uuid import UUID, uuid4
+
+"""
 基础数据模型
 
 定义所有模型的基类和通用字段
 """
 
-from datetime import datetime
-from typing import Any, Dict, Optional, List
-from uuid import UUID, uuid4
 
-from pydantic import BaseModel as PydanticBaseModel, Field, ConfigDict
 
 
 class BaseModel(PydanticBaseModel):

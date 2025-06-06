@@ -1,62 +1,58 @@
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "../../placeholder";react-native
+
 import React from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "../../placeholder";react-native";"
-export interface EcoService {;
-  id: string;
+export interface EcoService {id: string;
   name: string;
   description: string;
   category: string;
   icon: string;
   available: boolean;
 }
-export interface EcoServicesProps {;
-  services?: EcoService[];
+export interface EcoServicesProps {services?: EcoService[];
   onServicePress?: (service: EcoService) => void;
 }
-/**////
- * 索克生活 - 生态服务组件
+/**
+ * * 索克生活 - 生态服务组件
  * 展示平台提供的各种生态服务
-export const EcoServices: React.FC<EcoServicesProps>  = ({;
-  services = [],;
-  onServicePress;
+export const EcoServices: React.FC<EcoServicesProps>  = ({services = [],onServicePress;
 }) => {}
   const defaultServices: EcoService[] = [;
     {
       id: health-consultation","
-      name: "健康咨询,"
+      name: "健康咨询,",
       description: "专业中医健康咨询服务",
       category: 健康","
-      icon: "🏥,"
+      icon: "🏥,",
       available: true;
     },
     {
       id: "food-agriculture",
       name: 食农结合","
-      description: "有机农产品溯源与配送,"
+      description: "有机农产品溯源与配送,",
       category: "农业",
       icon: 🌱","
       available: true;
     },
     {
-      id: "mountain-wellness,"
+      id: "mountain-wellness,",
       name: "山水养生",
       description: 自然环境下的养生体验","
-      category: "养生,"
+      category: "养生,",
       icon: "🏔️",
       available: true;
     },
     {
       id: tcm-diagnosis","
-      name: "中医诊断,"
+      name: "中医诊断,",
       description: "四诊合参智能诊断",
       category: 诊断","
-      icon: "🔍,"
+      icon: "🔍,",
       available: true;
     }
   ];
   const displayServices = services.length > 0 ? services : defaultServices;
-  const handleServicePress = (service: EcoService) => {;}
-    if (service.available && onServicePress) {;
-      onServicePress(service);
+  const handleServicePress = (service: EcoService) => {}
+    if (service.available && onServicePress) {onServicePress(service);
     }
   };
   const renderService = (service: EcoService) => (;
@@ -84,9 +80,9 @@ key={service.id}
       )}
     </////    TouchableOpacity>
   );
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>生态服务</////    Text>
+  return (;
+    <View style={styles.container}>;
+      <Text style={styles.title}>生态服务</////    Text>;
       <ScrollView;
 style={styles.scrollView}
         showsVerticalScrollIndicator={false}
@@ -96,15 +92,14 @@ style={styles.scrollView}
     </////    View>
   );
 };
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     flex: 1,
     padding: 16,
     backgroundColor: "#f5f5f5"},
   title: {
     fontSize: 24,
     fontWeight: bold","
-    color: "#333,"
+    color: "#333,",
     marginBottom: 16,
     textAlign: "center"},
   scrollView: {
@@ -114,7 +109,7 @@ const styles = StyleSheet.create({;
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center",
     shadowColor: #000","
     shadowOffset: {
@@ -125,14 +120,14 @@ const styles = StyleSheet.create({;
     elevation: 5},
   serviceCardDisabled: {
     opacity: 0.6,
-    backgroundColor: "#f0f0f0},"
+    backgroundColor: "#f0f0f0},",
   serviceIcon: {
     width: 50,
     height: 50,
     borderRadius: 25,
     backgroundColor: "#e8f5e8",
     justifyContent: center","
-    alignItems: "center,"
+    alignItems: "center,",
     marginRight: 16},
   iconText: {
     fontSize: 24},
@@ -145,7 +140,7 @@ const styles = StyleSheet.create({;
     marginBottom: 4},
   serviceDescription: {
     fontSize: 14,
-    color: "#666,"
+    color: "#666,",
     marginBottom: 4},
   serviceCategory: {
     fontSize: 12,
@@ -154,7 +149,7 @@ const styles = StyleSheet.create({;
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 10,
-    alignSelf: "flex-start},"
+    alignSelf: "flex-start},",
   unavailableBadge: {
     backgroundColor: "#ff6b6b",
     paddingHorizontal: 8,
@@ -162,6 +157,5 @@ const styles = StyleSheet.create({;
     borderRadius: 12},
   unavailableText: {
     color: #fff","
-    fontSize: 12,;
-    fontWeight: '500'}});
+    fontSize: 12,fontWeight: '500'}});
 export default EcoServices; */////

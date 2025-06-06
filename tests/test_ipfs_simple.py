@@ -1,14 +1,19 @@
 """
+test_ipfs_simple - 索克生活项目模块
+"""
+
+from suoke_blockchain_service.exceptions import IPFSError
+from suoke_blockchain_service.ipfs_client import IPFSClient
+from unittest.mock import patch, MagicMock, AsyncMock
+import pytest
+
+"""
 IPFS客户端测试模块
 
 测试IPFS数据存储和检索功能。
 """
 
-import pytest
-from unittest.mock import patch, MagicMock, AsyncMock
 
-from suoke_blockchain_service.ipfs_client import IPFSClient
-from suoke_blockchain_service.exceptions import IPFSError
 
 
 class TestIPFSClient:

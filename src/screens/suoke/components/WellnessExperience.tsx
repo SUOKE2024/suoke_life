@@ -1,8 +1,9 @@
-import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-importIcon from ";../../../components/common/Icon"/import { colors, spacing } from ../../../constants/theme"//////    "
-importReact,{ useState, useEffect, useRef } from "react;"
-import { usePerformanceMonitor  } from "../../placeholder";../hooks/usePerformanceMonitor";/////      View,;"
+import { usePerformanceMonitor  } from "../../placeholder";../hooks/usePerformanceMonitor";/////      View,"
+
+import React from "react";
+importIcon from ";../../../components/common/Icon"/import { colors, spacing } from ../../../constants/theme"// ";
+importReact,{ useState, useEffect, useRef } from "react;";
   Text,
   StyleSheet,
   ScrollView,
@@ -22,65 +23,62 @@ interface WellnessScene { id: string,
   difficulty: easy" | "medium | "hard",
   benefits: string[]
   }
-const WellnessExperience: React.FC<WellnessExperienceProps /> = ({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor(WellnessExperience", { /////    "
-    trackRender: true,
-    trackMemory: true,
-    warnThreshold: 50, // ms //////     };);
+const WellnessExperience: React.FC<WellnessExperienceProps /> = ({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor(WellnessExperience", { /////    ";
+    trackRender: true,trackMemory: true,warnThreshold: 50, // ms // };);
   visible,
   onClose;
 }) => {}
   const [selectedScene, setSelectedScene] = useState<WellnessScene | null />(nul;l;);/////      const [isExperiencing, setIsExperiencing] = useState<boolean>(fals;e;);
   const fadeAnim = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useRef(new Animated.Value(0);).current, []);)))));
-  // 山水养生场景数据 //////     const wellnessScenes: WellnessScene[] = [{
-      id: "mountain_sunrise,"
+  // 山水养生场景数据 // const wellnessScenes: WellnessScene[] = [{
+      id: "mountain_sunrise,",
       name: "山巅日出",
       type: mountain","
-      description: "在高山之巅迎接第一缕阳光，感受天地间的纯净能量,"
+      description: "在高山之巅迎接第一缕阳光，感受天地间的纯净能量,",
       duration: 30,
       difficulty: "medium",
       benefits: [补充阳气", "振奋精神, "增强体质", 改善睡眠"]"
     },
     {
-      id: "forest_bath,"
+      id: "forest_bath,",
       name: "森林浴",
       type: forest","
-      description: "沉浸在原始森林中，与大自然建立深层连接,"
+      description: "沉浸在原始森林中，与大自然建立深层连接,",
       duration: 45,
       difficulty: "easy",
       benefits: [净化空气", "减压放松, "增强免疫", 改善情绪"]"
     },
     {
-      id: "lake_reflection,"
+      id: "lake_reflection,",
       name: "湖心映月",
       type: water","
-      description: "在宁静的湖水边，感受水的柔和与包容,"
+      description: "在宁静的湖水边，感受水的柔和与包容,",
       duration: 40,
       difficulty: "easy",
       benefits: [滋阴润燥", "平静心神, "改善睡眠", 调节情绪"]"
     },
     {
-      id: "temple_zen,"
+      id: "temple_zen,",
       name: "古寺禅修",
       type: temple","
-      description: "在千年古寺中体验禅修的智慧与宁静,"
+      description: "在千年古寺中体验禅修的智慧与宁静,",
       duration: 60,
       difficulty: "hard",
       benefits: [开发智慧", "净化心灵, "增强定力", 减轻压力"]"
     }
   ]
   useEffect((); => {}
-    const effectStart = performance.now()
+    const effectStart = performance.now();
     if (visible) {
       Animated.timing(fadeAnim, {
         toValue: 1,
-        duration: 500,
-        useNativeDriver: true}).start();
+        duration: 500,useNativeDriver: true}).start();
     }
-      const effectEnd = performance.now()
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [visible]);
-  const startExperience = useCallback((); => {;}
-    setSelectedScene(scene)
+  const startExperience = useCallback((); => {}
+    setSelectedScene(scene);
     Alert.alert(
       "开始体验,"
       `即将开始${scene.name}体验\n\n建议体验时长：${scene.duration}分钟\n难度：${scene.difficulty === "easy" ? 简单" : scene.difficulty === "medium ? "中等" : 困难"}\n\n请找一个安静的环境，准备好了吗？`,"
@@ -90,13 +88,13 @@ const WellnessExperience: React.FC<WellnessExperienceProps /> = ({/  // 性能�
       ]
     );
   };
-  const getSceneIcon = useCallback(() => {;}
+  const getSceneIcon = useCallback(() => {
     switch (type) {
-      case "mountain: return "mountai;n";"
+      case "mountain: return "mountai;n
       case water": return "wave;s;
-      case "forest": return tre;e";"
-      case "temple: return "hom;e";"
-      default: return map-marke;r";"
+      case "forest": return tre;e
+      case "temple: return "hom;e
+      default: return map-marke;r
     }
   };
   const renderSceneCard = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => (scene: WellnessScene) => (;
@@ -118,22 +116,20 @@ name={getSceneIcon(scene.type)}
       <View style={styles.sceneFooter} />/        <Text style={styles.sceneDuration} />{scene.duration}分钟</Text>/        <View style={styles.difficultyBadge} />/          <Text style={styles.difficultyText} />/            {scene.difficulty === "easy" ? 简单" :"////
              scene.difficulty === "medium ? "中等" : 困难"}
           </Text>/        </View>/      </View>/    </TouchableOpacity>/////      ), []);
-  // 记录渲染性能 //////
-  performanceMonitor.recordRender()
-  return (
-    <Modal visible={visible} animationType="slide" presentationStyle="pageSheet" />/      <SafeAreaView style={styles.container} />/        {// 头部 }/        <View style={styles.header} />/          <TouchableOpacity onPress={onClose} style={styles.closeButton} accessibilityLabel="TODO: 添加无障碍标签" />/            <Icon name="x" size={24} color={colors.text} />/          </TouchableOpacity>/          <Text style={styles.title} />山水养生体验</Text>/          <View style={styles.placeholder} />/        </View>/////
-        {// 介绍 }/        <View style={styles.introduction} />/          <Text style={styles.introTitle} />🏔️ 沉浸式养生体验</Text>/          <Text style={styles.introText} />/////                通过虚拟现实技术，让您在家中就能体验到大自然的治愈力量。
-            结合传统中医养生理论，为您提供个性化的身心调理方案。
-          </Text>/        </View>/////
-        {// 场景列表 }/        <ScrollView style={styles.scenesList} showsVerticalScrollIndicator={false} />/////              {wellnessScenes.map(renderSceneCard)}
+  // 记录渲染性能 // performanceMonitor.recordRender();
+  return (;
+    <Modal visible={visible} animationType="slide" presentationStyle="pageSheet" />/      <SafeAreaView style={styles.container} />/        {// 头部 }/        <View style={styles.header} />/          <TouchableOpacity onPress={onClose} style={styles.closeButton} accessibilityLabel="TODO: 添加无障碍标签" />/            <Icon name="x" size={24} color={colors.text} />/          </TouchableOpacity>/          <Text style={styles.title} />山水养生体验</Text>/          <View style={styles.placeholder} />/        </View>/////;
+        {// 介绍 }/        <View style={styles.introduction} />/          <Text style={styles.introTitle} />🏔️ 沉浸式养生体验</Text>/          <Text style={styles.introText} />/////                通过虚拟现实技术，让您在家中就能体验到大自然的治愈力量。;
+            结合传统中医养生理论，为您提供个性化的身心调理方案。;
+          </Text>/        </View>/////;
+        {// 场景列表 }/        <ScrollView style={styles.scenesList} showsVerticalScrollIndicator={false} />/////              {wellnessScenes.map(renderSceneCard)};
         </ScrollView>/      </SafeAreaView>/    </Modal>/////      ;);
 };
-const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({;
-  container: {
+const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({container: {
     flex: 1,
     backgroundColor: colors.background},
   header: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center",
     justifyContent: space-between","
     paddingHorizontal: spacing.lg,
@@ -143,7 +139,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   closeButton: { padding: spacing.sm  },
   title: {
     fontSize: 18,
-    fontWeight: "600,"
+    fontWeight: "600,",
     color: colors.text},
   placeholder: { width: 40  },
   introduction: {
@@ -169,14 +165,14 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     padding: spacing.lg,
     marginBottom: spacing.lg,
     elevation: 2,
-    shadowColor: "#000,"
+    shadowColor: "#000,",
     shadowOffset: { width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 4},
   sceneHeader: {
     flexDirection: "row",
     justifyContent: space-between","
-    alignItems: "center,"
+    alignItems: "center,",
     marginBottom: spacing.md},
   sceneName: {
     fontSize: 18,
@@ -184,7 +180,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     color: colors.text},
   sceneType: {
     flexDirection: row","
-    alignItems: "center,"
+    alignItems: "center,",
     backgroundColor: colors.primary + "20",
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
@@ -214,13 +210,13 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     color: colors.textSecondary,
     marginLeft: spacing.sm},
   sceneFooter: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     justifyContent: "space-between",
     alignItems: center"},"
   sceneDuration: {
     fontSize: 14,
     color: colors.primary,
-    fontWeight: "600},"
+    fontWeight: "600},",
   difficultyBadge: {
     backgroundColor: colors.warning + "20",
     paddingHorizontal: spacing.sm,

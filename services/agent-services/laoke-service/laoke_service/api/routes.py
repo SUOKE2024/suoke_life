@@ -1,16 +1,21 @@
 """
+routes - 索克生活项目模块
+"""
+
+from fastapi import APIRouter, Depends, HTTPException, Request, Body
+from laoke_service.core.agent import AgentMessage, LaoKeAgent, FourDiagnosisAggregator
+from laoke_service.core.exceptions import LaoKeServiceError
+from pydantic import BaseModel, Field
+from typing import Any
+
+"""
 API 路由模块
 
 定义所有的 API 端点
 """
 
-from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException, Request, Body
-from pydantic import BaseModel, Field
 
-from laoke_service.core.agent import AgentMessage, LaoKeAgent, FourDiagnosisAggregator
-from laoke_service.core.exceptions import LaoKeServiceError
 
 # 创建主路由器
 api_router = APIRouter()

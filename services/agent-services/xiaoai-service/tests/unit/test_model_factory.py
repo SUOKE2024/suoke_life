@@ -1,12 +1,19 @@
+"""
+test_model_factory - 索克生活项目模块
+"""
+
+        from internal.agent.agent_manager import AgentManager
+        from internal.agent.model_factory import get_model_factory
+import asyncio
+import logging
+import sys
+
 #!/usr/bin/env python3
 
 """
 测试统一后的模型工厂
 """
 
-import asyncio
-import logging
-import sys
 
 # 添加项目路径
 sys.path.append('.')
@@ -19,7 +26,6 @@ async def test_model_factory():
     """测试模型工厂"""
     try:
         # 导入模型工厂
-        from internal.agent.model_factory import get_model_factory
 
         factory = await get_model_factory()
 
@@ -44,7 +50,6 @@ async def test_model_factory():
 async def test_agent_manager():
     """测试智能体管理器"""
     try:
-        from internal.agent.agent_manager import AgentManager
 
         manager = AgentManager()
 

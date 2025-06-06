@@ -1,92 +1,91 @@
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "../../placeholder";react-native
+
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "../../placeholder";react-native";"
-export interface Agent {;
-  id: string;
+export interface Agent {id: string;
   name: string;
-  type: xiaoai" | "xiaoke | "laoke" | soer";"
+  type: xiaoai" | "xiaoke | "laoke" | soer
   status: "idle | "working" | collaborating";
   currentTask?: string;
 }
-export interface CollaborationTask {;
-  id: string;
+export interface CollaborationTask {id: string;
   title: string;
   description: string;
   participants: string[];
   status: "pending | "active" | completed";
   progress: number;
 }
-/**////
- * 智能体协作演示屏幕
+/**
+ * * 智能体协作演示屏幕
  * 展示四个智能体如何协作完成健康管理任务
 export const AgentCollaborationDemoScreen: React.FC  = () => {};
   const [agents, setAgents] = useState<Agent[]>([]);
   const [tasks, setTasks] = useState<CollaborationTask[]>([]);
   const [selectedTask, setSelectedTask] = useState<string | null>(null);
-  useEffect(() => {}
+  useEffect(() => {
     initializeDemo();
-  }, []);
-  const initializeDemo = () => {;}
-    //////     初始化智能体
+  }, [])  // 检查是否需要添加依赖项;
+  const initializeDemo = () => {}
+    // 初始化智能体
 const initialAgents: Agent[] = [;
       {
-        id: "xiaoai,"
+        id: "xiaoai,",
         name: "小艾",
         type: xiaoai","
         status: "idle},"
       {
         id: "xiaoke",
         name: 小克","
-        type: "xiaoke,"
+        type: "xiaoke,",
         status: "idle"},
       {
         id: laoke","
-        name: "老克,"
+        name: "老克,",
         type: "laoke",
         status: idle"},"
       {
-        id: "soer,"
+        id: "soer,",
         name: "索儿",
         type: soer","
         status: "idle}];"
-    //////     初始化协作任务
+    // 初始化协作任务
 const initialTasks: CollaborationTask[] = [;
       {
         id: "health-assessment",
         title: 综合健康评估","
-        description: "为用户进行全面的健康状况评估,"
+        description: "为用户进行全面的健康状况评估,",
         participants: ["xiaoai", xiaoke", "laoke],
         status: "pending",
         progress: 0},
       {
         id: lifestyle-optimization","
-        title: "生活方式优化,"
+        title: "生活方式优化,",
         description: "基于健康数据优化用户的生活方式",
         participants: [xiaoke", "laoke, "soer"],
         status: pending","
         progress: 0},
       {
-        id: "preventive-care,"
+        id: "preventive-care,",
         title: "预防性护理计划",
         description: 制定个性化的预防性健康护理方案","
         participants: ["xiaoai, "laoke", soer"],
-        status: "pending,"
+        status: "pending,",
         progress: 0}];
     setAgents(initialAgents);
     setTasks(initialTasks);
   };
-  const startCollaboration = (taskId: string) => {;}
+  const startCollaboration = (taskId: string) => {}
     setSelectedTask(taskId);
-    //////     更新任务状态
+    // 更新任务状态
 setTasks(prev => prev.map(task => {}
       task.id === taskId;
         ? { ...task, status: "active" as const }
         : task;
     ));
-    //////     更新参与智能体状态
+    // 更新参与智能体状态
 const task = tasks.find(t => t.id === taskId);
     if (task) {
       setAgents(prev => prev.map(agent => {}
-        task.participants.includes(agent.id)
+        task.participants.includes(agent.id);
           ? {
               ...agent,
               status: collaborating" as const,"
@@ -94,13 +93,13 @@ const task = tasks.find(t => t.id === taskId);
             }
           : agent;
       ));
-      //////     模拟协作进度
+      // 模拟协作进度
 simulateCollaboration(taskId);
     }
   };
-  const simulateCollaboration = (taskId: string) => {;}
+  const simulateCollaboration = (taskId: string) => {}
     let progress = 0;
-    const interval = setInterval(() => {;}
+    const interval = setInterval(() => {
       progress += 10;
       setTasks(prev => prev.map(task => {}
         task.id === taskId;
@@ -109,17 +108,17 @@ simulateCollaboration(taskId);
       ));
       if (progress >= 100) {
         clearInterval(interval);
-        //////     完成任务
+        // 完成任务
 setTasks(prev => prev.map(task => {}
           task.id === taskId;
             ? { ...task, status: "completed as const, progress: 100 }"
             : task;
         ));
-        //////     重置智能体状态
+        // 重置智能体状态
 const task = tasks.find(t => t.id === taskId);
         if (task) {
           setAgents(prev => prev.map(agent => {}
-            task.participants.includes(agent.id)
+            task.participants.includes(agent.id);
               ? {
                   ...agent,
                   status: "idle" as const,
@@ -132,24 +131,23 @@ const task = tasks.find(t => t.id === taskId);
       }
     }, 500);
   };
-  const getAgentColor = (type: Agent[type"]): string => {;}"
+  const getAgentColor = (type: Agent[type"]): string => {}"
     switch (type) {
-      case "xiaoai:;"
+      case "xiaoai:"
         return "#4CAF50";
       case xiaoke":"
         return "#2196F3;"
       case "laoke":
-        return #FF9800";"
+        return #FF9800
       case "soer:"
         return "#9C27B0";
       default:
-        return #757575";"
+        return #757575
     }
   };
-  const getStatusColor = (status: Agent["status]): string => {;}"
+  const getStatusColor = (status: Agent["status]): string => {}"
     switch (status) {
-      case "idle":;
-        return #757575";"
+      case "idle":return #757575
       case "working:"
         return "#FF9800";
       case collaborating":"
@@ -158,14 +156,14 @@ const task = tasks.find(t => t.id === taskId);
         return "#757575";
     }
   };
-  const getTaskStatusColor = (status: CollaborationTask[status"]): string => {;}"
+  const getTaskStatusColor = (status: CollaborationTask[status"]): string => {}"
     switch (status) {
-      case "pending:;"
+      case "pending:"
         return "#757575";
       case active":"
         return "#2196F3;"
       case "completed":
-        return #4CAF50";"
+        return #4CAF50
       default:
         return "#757575;"
     }
@@ -196,9 +194,9 @@ const task = tasks.find(t => t.id === taskId);
       <View style={styles.participantsContainer}>
         <Text style={styles.participantsLabel}>参与智能体:</////    Text>
         <View style={styles.participantsList}>
-          {task.participants.map(participantId => {;}
+          {task.participants.map(participantId => {}
             const agent = agents.find(a => a.id === participantId);
-            return agent ? (
+            return agent ? (;
               <View;
 key={participantId}
                 style={[styles.participantBadge, { backgroundColor: getAgentColor(agent.type) }]}
@@ -243,39 +241,38 @@ style={styles.startButton}
       </////    Text>
       <Text style={styles.sectionTitle}>智能体状态</////    Text>
       <View style={styles.agentsContainer}>
-        {agents.map(renderAgent)}
-      </////    View>
-      <Text style={styles.sectionTitle}>协作任务</////    Text>
-      <View style={styles.tasksContainer}>
-        {tasks.map(renderTask)}
-      </////    View>
-      <View style={styles.infoContainer}>
-        <Text style={styles.infoTitle}>协作流程说明</////    Text>
-        <Text style={styles.infoText}>
-          1. 选择一个协作任务开始演示{"\n"}
-          2. 相关智能体将自动参与协作{\n"}"
-          3. 观察任务进度和智能体状态变化{"\n}"
-          4. 任务完成后智能体返回空闲状态
-        </////    Text>
-      </////    View>
-    </////    ScrollView>
+        {agents.map(renderAgent)};
+      </////    View>;
+      <Text style={styles.sectionTitle}>协作任务</////    Text>;
+      <View style={styles.tasksContainer}>;
+        {tasks.map(renderTask)};
+      </////    View>;
+      <View style={styles.infoContainer}>;
+        <Text style={styles.infoTitle}>协作流程说明</////    Text>;
+        <Text style={styles.infoText}>;
+          1. 选择一个协作任务开始演示{"\n"};
+          2. 相关智能体将自动参与协作{\n"}";
+          3. 观察任务进度和智能体状态变化{"\n}";
+          4. 任务完成后智能体返回空闲状态;
+        </////    Text>;
+      </////    View>;
+    </////    ScrollView>;
   );
 };
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     flex: 1,
     backgroundColor: "#f5f5f5",
     padding: 16},
   title: {
     fontSize: 24,
     fontWeight: bold","
-    color: "#333,"
+    color: "#333,",
     textAlign: "center",
     marginBottom: 8},
   subtitle: {
     fontSize: 16,
     color: #666","
-    textAlign: "center,"
+    textAlign: "center,",
     marginBottom: 24},
   sectionTitle: {
     fontSize: 20,
@@ -284,18 +281,18 @@ const styles = StyleSheet.create({;
     marginBottom: 16,
     marginTop: 16},
   agentsContainer: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     flexWrap: "wrap",
     justifyContent: space-between","
     marginBottom: 16},
   agentCard: {
-    backgroundColor: "#fff,"
+    backgroundColor: "#fff,",
     borderRadius: 12,
     padding: 16,
     alignItems: "center",
     width: 48%","
     marginBottom: 12,
-    shadowColor: "#000,"
+    shadowColor: "#000,",
     shadowOffset: {
       width: 0,
       height: 2},
@@ -310,13 +307,13 @@ const styles = StyleSheet.create({;
     alignItems: center","
     marginBottom: 8},
   agentAvatarText: {
-    color: "#fff,"
+    color: "#fff,",
     fontSize: 18,
     fontWeight: "bold"},
   agentName: {
     fontSize: 16,
     fontWeight: bold","
-    color: "#333,"
+    color: "#333,",
     marginBottom: 8},
   statusBadge: {
     paddingHorizontal: 12,
@@ -329,7 +326,7 @@ const styles = StyleSheet.create({;
     fontWeight: 600"},"
   currentTask: {
     fontSize: 12,
-    color: "#666,"
+    color: "#666,",
     textAlign: "center"},
   tasksContainer: {
     marginBottom: 16},
@@ -338,7 +335,7 @@ const styles = StyleSheet.create({;
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
-    shadowColor: "#000,"
+    shadowColor: "#000,",
     shadowOffset: {
       width: 0,
       height: 2},
@@ -348,7 +345,7 @@ const styles = StyleSheet.create({;
   taskHeader: {
     flexDirection: "row",
     justifyContent: space-between","
-    alignItems: "center,"
+    alignItems: "center,",
     marginBottom: 8},
   taskTitle: {
     fontSize: 18,
@@ -360,7 +357,7 @@ const styles = StyleSheet.create({;
     paddingVertical: 4,
     borderRadius: 8},
   taskStatusText: {
-    color: "#fff,"
+    color: "#fff,",
     fontSize: 12,
     fontWeight: "600"},
   taskDescription: {
@@ -372,12 +369,12 @@ const styles = StyleSheet.create({;
     marginBottom: 16},
   participantsLabel: {
     fontSize: 14,
-    fontWeight: "bold,"
+    fontWeight: "bold,",
     color: "#333",
     marginBottom: 8},
   participantsList: {
     flexDirection: row","
-    flexWrap: "wrap},"
+    flexWrap: "wrap},",
   participantBadge: {
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -392,7 +389,7 @@ const styles = StyleSheet.create({;
     marginBottom: 16},
   progressLabel: {
     fontSize: 14,
-    color: "#333,"
+    color: "#333,",
     marginBottom: 8},
   progressBar: {
     height: 8,
@@ -400,26 +397,26 @@ const styles = StyleSheet.create({;
     borderRadius: 4,
     overflow: hidden"},"
   progressFill: {
-    height: "100%,"
+    height: "100%,",
     backgroundColor: "#4CAF50"},
   startButton: {
     backgroundColor: #2196F3","
     paddingVertical: 12,
     borderRadius: 8,
-    alignItems: "center},"
+    alignItems: "center},",
   startButtonText: {
     color: "#fff",
     fontSize: 16,
     fontWeight: 600"},"
   completedBadge: {
-    backgroundColor: "#E8F5E8,"
+    backgroundColor: "#E8F5E8,",
     paddingVertical: 8,
     borderRadius: 8,
     alignItems: "center"},
   completedText: {
     color: #4CAF50","
     fontSize: 16,
-    fontWeight: "600},"
+    fontWeight: "600},",
   infoContainer: {
     backgroundColor: "#fff",
     borderRadius: 12,
@@ -434,12 +431,12 @@ const styles = StyleSheet.create({;
     elevation: 5},
   infoTitle: {
     fontSize: 16,
-    fontWeight: "bold,"
+    fontWeight: "bold,",
     color: "#333",
     marginBottom: 8},
   infoText: {
     fontSize: 14,
-    color: #666",;"
+    color: #666","
     lineHeight: 20}});
 export default AgentCollaborationDemoScreen;
   */////

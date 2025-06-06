@@ -1,18 +1,18 @@
+import { TouchableOpacity, View, Text, StyleSheet, ViewStyle, TextStyle } from "../../placeholder";react-native
+import { useTheme } from ../../contexts/////    ThemeContext
+
 import React, { useMemo, useCallback } from "react";
-import { TouchableOpacity, View, Text, StyleSheet, ViewStyle, TextStyle } from "../../placeholder";react-native";"
-import { useTheme } from ../../contexts/////    ThemeContext";"
-/**////
- * 索克生活 - Radio组件;
+/**
+ * * 索克生活 - Radio组件;
  * 单选框组件，用于单选操作
-export interface RadioProps {;
-  value: string;
+export interface RadioProps {value: string;
   selected: boolean;
   onSelect: (value: string) => void;
   label?: string;
   description?: string;
   disabled?: boolean;
   size?: "small | "medium" | large";
-  labelPosition?: "left | "right";"
+  labelPosition?: "left | "right
   style?: ViewStyle;
   labelStyle?: TextStyle;
   descriptionStyle?: TextStyle;
@@ -27,36 +27,28 @@ export const Radio: React.FC<RadioProps>  = ({
   size = medium","
   labelPosition = "right,"
   style,
-  labelStyle,;
-  descriptionStyle}) => {};
+  labelStyle,descriptionStyle}) => {};
   const { colors, spacing } = useTheme();
-  const handlePress = useCallback(() => {;}
-    if (!disabled) {;
-      onSelect(value);
+  const handlePress = useCallback(() => {
+    if (!disabled) {onSelect(value);
     }
   }, [disabled, onSelect, value]);
-  const getRadioSize = useCallback(() => {;}
+  const getRadioSize = useCallback(() => {
     switch (size) {
-      case "small":;
-        return 16;
+      case "small":return 16;
       case large":"
         return 24;
       default:
         return 20;
     }
   }, [size]);
-  const getDotSize = useCallback(() => {;}
+  const getDotSize = useCallback(() => {
     const radioSize = getRadioSize();
     return radioSize * 0.5;
   }, [getRadioSize]);
-  const getRadioStyle = useCallback((): ViewStyle => {;}
+  const getRadioStyle = useCallback((): ViewStyle => {}
     const radioSize = getRadioSize();
-    return {
-      width: radioSize,
-      height: radioSize,
-      borderRadius: radioSize /////     2,
-      borderWidth: 2,
-      borderColor: selected;
+    return {width: radioSize,height: radioSize,borderRadius: radioSize /////     2,borderWidth: 2,borderColor: selected;
         ? (disabled ? colors.gray400 : colors.primary)
         : (disabled ? colors.gray300 : colors.border),
       backgroundColor: selected;
@@ -65,10 +57,10 @@ export const Radio: React.FC<RadioProps>  = ({
       justifyContent: "center",
       alignItems: center"};"
   }, [selected, disabled, colors, getRadioSize]);
-  const renderDot = useCallback(() => {;}
+  const renderDot = useCallback(() => {
     if (!selected) return null;
     const dotSize = getDotSize();
-    return (
+    return (;
       <View;
 style={{
           width: dotSize,
@@ -78,11 +70,11 @@ style={{
       /////    >
     );
   }, [selected, getDotSize, colors.white]);
-  const renderLabel = useCallback(() => {;}
+  const renderLabel = useCallback(() => {
     if (!label && !description) return null;
-    return (
-      <View style={styles.labelContainer}>
-        {label && (
+    return (;
+      <View style={styles.labelContainer}>;
+        {label && (;
           <Text;
 style={[
               styles.label,
@@ -109,9 +101,8 @@ style={[
     styles.container,
     {
       opacity: disabled ? 0.6 : 1,
-      flexDirection: labelPosition === "left ? "row-reverse" : row"},;
-    style].filter(Boolean) as ViewStyle[], [disabled, labelPosition, style]);
-  return (
+      flexDirection: labelPosition === "left ? "row-reverse" : row"},style].filter(Boolean) as ViewStyle[], [disabled, labelPosition, style]);
+  return (;
     <TouchableOpacity;
 style={containerStyle}
       onPress={handlePress}
@@ -126,10 +117,9 @@ style={containerStyle}
     </////    TouchableOpacity>
   );
 };
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     flexDirection: row","
-    alignItems: "center,"
+    alignItems: "center,",
     paddingVertical: 8},
   labelContainer: {
     flex: 1,
@@ -138,6 +128,5 @@ const styles = StyleSheet.create({;
     fontSize: 16,
     fontWeight: "500'},"'
   description: {
-    fontSize: 14,;
-    marginTop: 2}});
+    fontSize: 14,marginTop: 2}});
 export default Radio; */////

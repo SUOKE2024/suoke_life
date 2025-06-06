@@ -1,3 +1,26 @@
+"""
+distributed_storage - 索克生活项目模块
+"""
+
+from .message_processor import MessageEnvelope
+from aiokafka import AIOKafkaProducer, AIOKafkaConsumer
+from aiokafka.admin import AIOKafkaAdminClient, ConfigResource, ConfigResourceType
+from aiokafka.admin.config_resource import ConfigResource
+from aiokafka.admin.new_partitions import NewPartitions
+from aiokafka.admin.new_topic import NewTopic
+from aiokafka.errors import TopicAlreadyExistsError, KafkaError
+from collections import defaultdict
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Set, Tuple, Union
+import aiokafka
+import aioredis
+import asyncio
+import hashlib
+import json
+import logging
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,26 +29,8 @@
 支持Kafka集群管理、分区动态调整、副本管理和数据一致性保证
 """
 
-import asyncio
-import json
-import logging
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
-from collections import defaultdict
-import hashlib
 
-import aiokafka
-from aiokafka import AIOKafkaProducer, AIOKafkaConsumer
-from aiokafka.admin import AIOKafkaAdminClient, ConfigResource, ConfigResourceType
-from aiokafka.admin.config_resource import ConfigResource
-from aiokafka.admin.new_topic import NewTopic
-from aiokafka.admin.new_partitions import NewPartitions
-from aiokafka.errors import TopicAlreadyExistsError, KafkaError
-import aioredis
 
-from .message_processor import MessageEnvelope
 
 logger = logging.getLogger(__name__)
 

@@ -1,4 +1,10 @@
 """
+__init__ - 索克生活项目模块
+"""
+
+from .grpc_server import AccessibilityServicer
+
+"""
 API交付层
 
 负责处理外部请求和响应：
@@ -7,7 +13,6 @@ API交付层
 - websocket: WebSocket实时通信
 """
 
-from .grpc_server import AccessibilityServicer
 
 __all__ = [
     "AccessibilityServicer"

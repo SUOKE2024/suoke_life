@@ -1,17 +1,22 @@
 """
+logging - 索克生活项目模块
+"""
+
+from .config import LoggingConfig, get_settings
+from loguru import logger as loguru_logger
+from pathlib import Path
+from typing import Any
+import structlog
+import sys
+
+"""
 日志配置模块
 
 提供结构化日志、多种输出格式和性能优化的日志系统
 """
 
-import sys
-from pathlib import Path
-from typing import Any
 
-import structlog
-from loguru import logger as loguru_logger
 
-from .config import LoggingConfig, get_settings
 
 
 def setup_logging(config: LoggingConfig | None = None) -> None:

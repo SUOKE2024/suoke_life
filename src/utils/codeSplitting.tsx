@@ -1,8 +1,6 @@
 import React from "react";
-//////     动态导入工具export class DynamicImporter {;
-;
-  private cache = new Map<string, Promise<any>>();
-//////     动态导入模块  async import<T>(modulePath: string): Promise<T>  {
+// 动态导入工具export class DynamicImporter  {private cache = new Map<string, Promise<any>>();
+// 动态导入模块  async import<T>(modulePath: string): Promise<T>  {
     if (this.cache.has(modulePath);) {
       return this.cache.get(modulePat;h;);
     }
@@ -10,33 +8,31 @@ import React from "react";
     this.cache.set(modulePath, importPromise);
     return importPromi;s;e;
   }
-  //////     预加载模块  preload(modulePaths: string[]) {
+  // 预加载模块  preload(modulePaths: string[]) {
     modulePaths.forEach((path) => {}
       if (!this.cache.has(path);) {
-this.import(path).catch((error) => {;}
+this.import(path).catch((error) => {}
           });
       }
     });
   }
-  //////     清理缓存  clearCache() {
-    this.cache.clear()
+  // 清理缓存  clearCache() {
+    this.cache.clear();
   }
 }
-//////     路由级别的代码分割export function createLazyRoute(;
+// 路由级别的代码分割export function createLazyRoute(;
 ;
 importFunc: (); => Promise< { default: React.ComponentType<any>   }>;
 ) {
   return React.lazy(importFun;c;);
 }
-//////     功能级别的代码分割export function createLazyFeature<T>(;
+// 功能级别的代码分割export function createLazyFeature<T>(;
 ;
-importFunc: () => Promise< { default: T   }>,;
-  fallback?: T;
+importFunc: () => Promise< { default: T   }>,fallback?: T;
 ): () => Promise<T> {
   let cached: T | null = null;
-  return async() => {;}
-    if (cached) {;
-      return cach;e;d;
+  return async() => {}
+    if (cached) {return cach;e;d;
     }
     try {
       const module = await importFu;n;c;

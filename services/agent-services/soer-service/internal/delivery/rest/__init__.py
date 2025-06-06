@@ -1,8 +1,13 @@
-from fastapi import FastAPI
+"""
+__init__ - 索克生活项目模块
+"""
 
 from .emotional_routes import router as emotional_router
 from .health_plan_routes import router as health_plan_router
 from .health_routes import router as health_router
+from fastapi import FastAPI
+
+
 
 
 def init_rest_app():

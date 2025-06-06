@@ -1,24 +1,33 @@
-"""FastAPI application factory."""
+"""
+app - 索克生活项目模块
+"""
 
+        from .models import ComplexionAnalysis
+        from .models import TongueAnalysis
+    from datetime import datetime
+    import uuid
+from ..core.config import settings
+from ..core.logging import get_logger
+from ..exceptions import setup_exception_handlers
+from ..middleware import (
+from .models import FHIRObservationResponse, LookDiagnosisRequest, LookDiagnosisResult
+from .routes import api_router
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from prometheus_client import make_asgi_app
 
-from ..core.config import settings
-from ..core.logging import get_logger
-from ..exceptions import setup_exception_handlers
-from ..middleware import (
+"""FastAPI application factory."""
+
+
+
     LoggingMiddleware,
     MetricsMiddleware,
     RateLimitMiddleware,
     SecurityMiddleware,
 )
-from .routes import api_router
-from .models import FHIRObservationResponse, LookDiagnosisRequest, LookDiagnosisResult
 
 logger = get_logger(__name__)
 
@@ -149,8 +158,6 @@ def look_diagnosis_algorithm(data: LookDiagnosisRequest) -> LookDiagnosisResult:
     Returns:
         望诊分析结果
     """
-    from datetime import datetime
-    import uuid
     
     # 这是一个占位符实现，实际应该调用真正的望诊算法
     result = LookDiagnosisResult(
@@ -165,7 +172,6 @@ def look_diagnosis_algorithm(data: LookDiagnosisRequest) -> LookDiagnosisResult:
     
     # 根据分析类型添加具体分析结果
     if "complexion" in data.analysis_type:
-        from .models import ComplexionAnalysis
         result.complexion = ComplexionAnalysis(
             color_type="正常",
             confidence=0.8,
@@ -174,7 +180,6 @@ def look_diagnosis_algorithm(data: LookDiagnosisRequest) -> LookDiagnosisResult:
         )
     
     if "tongue" in data.analysis_type:
-        from .models import TongueAnalysis
         result.tongue = TongueAnalysis(
             tongue_body={"color": "淡红", "texture": "正常"},
             tongue_coating={"color": "薄白", "texture": "润泽"},

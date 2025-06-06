@@ -1,20 +1,18 @@
 import React, { useState, useCallback } from 'react';
-import {
-  View,
+import {import { ragService } from '../../services/ragService';
+import type {View,
   Text,
   TextInput,
   TouchableOpacity,
   ScrollView,
   StyleSheet,
   Alert,
-  ActivityIndicator,
+  ActivityIndicator
 } from 'react-native';
-import { ragService } from '../../services/ragService';
-import type {
   TCMAnalysisRequest,
   TCMAnalysisResponse,
   HerbRecommendationRequest,
-  HerbRecommendationResponse,
+  HerbRecommendationResponse
 } from '../../services/ragService';
 
 interface TCMAnalysisComponentProps {
@@ -28,58 +26,40 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
   userId,
   onAnalysisResult,
   onHerbResult,
-  onError,
+  onError
 }) => {
   const [symptoms, setSymptoms] = useState<string[]>(['']);
   const [constitutionType, setConstitutionType] = useState<string>('balanced');
   const [medicalHistory, setMedicalHistory] = useState('');
   const [currentMedications, setCurrentMedications] = useState('');
-  const [lifestyle, setLifestyle] = useState({
-    diet: '',
-    exercise: '',
-    sleep: '',
-    stress: '',
-    environment: '',
+  const [lifestyle, setLifestyle] = useState({diet: '',exercise: '',sleep: '',stress: '',environment: '';
   });
-  
+
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isRecommending, setIsRecommending] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<TCMAnalysisResponse | null>(null);
   const [herbResult, setHerbResult] = useState<HerbRecommendationResponse | null>(null);
 
   // 体质类型选项
-  const constitutionTypes = [
-    { value: 'balanced', label: '平和质' },
-    { value: 'qi_deficiency', label: '气虚质' },
-    { value: 'yang_deficiency', label: '阳虚质' },
-    { value: 'yin_deficiency', label: '阴虚质' },
-    { value: 'phlegm_dampness', label: '痰湿质' },
-    { value: 'damp_heat', label: '湿热质' },
-    { value: 'blood_stasis', label: '血瘀质' },
-    { value: 'qi_stagnation', label: '气郁质' },
-    { value: 'special_constitution', label: '特禀质' },
+  const constitutionTypes = [;
+    { value: 'balanced', label: '平和质' },{ value: 'qi_deficiency', label: '气虚质' },{ value: 'yang_deficiency', label: '阳虚质' },{ value: 'yin_deficiency', label: '阴虚质' },{ value: 'phlegm_dampness', label: '痰湿质' },{ value: 'damp_heat', label: '湿热质' },{ value: 'blood_stasis', label: '血瘀质' },{ value: 'qi_stagnation', label: '气郁质' },{ value: 'special_constitution', label: '特禀质' };
   ];
 
   // 添加症状
-  const addSymptom = useCallback(() => {
-    setSymptoms(prev => [...prev, '']);
+  const addSymptom = useCallback(() => {setSymptoms(prev => [...prev, '']);
   }, []);
 
   // 更新症状
-  const updateSymptom = useCallback((index: number, value: string) => {
-    setSymptoms(prev => prev.map((symptom, i) => i === index ? value : symptom));
+  const updateSymptom = useCallback((index: number, value: string) => {setSymptoms(prev => prev.map((symptom, i) => i === index ? value : symptom));
   }, []);
 
   // 删除症状
-  const removeSymptom = useCallback((index: number) => {
-    if (symptoms.length > 1) {
-      setSymptoms(prev => prev.filter((_, i) => i !== index));
+  const removeSymptom = useCallback((index: number) => {if (symptoms.length > 1) {setSymptoms(prev => prev.filter((_, i) => i !== index));
     }
   }, [symptoms.length]);
 
   // 执行中医分析
-  const handleAnalysis = useCallback(async () => {
-    const validSymptoms = symptoms.filter(s => s.trim());
+  const handleAnalysis = useCallback(async () => {const validSymptoms = symptoms.filter(s => s.trim());
     if (validSymptoms.length === 0) {
       Alert.alert('提示', '请至少输入一个症状');
       return;
@@ -100,8 +80,8 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
           exercise: lifestyle.exercise || undefined,
           sleep: lifestyle.sleep || undefined,
           stress: lifestyle.stress || undefined,
-          environment: lifestyle.environment || undefined,
-        },
+          environment: lifestyle.environment || undefined
+        }
       };
 
       const result = await ragService.analyzeTCM(request);
@@ -117,9 +97,7 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
   }, [symptoms, userId, constitutionType, medicalHistory, currentMedications, lifestyle, onAnalysisResult, onError]);
 
   // 获取中药推荐
-  const handleHerbRecommendation = useCallback(async () => {
-    if (!analysisResult) {
-      Alert.alert('提示', '请先进行中医分析');
+  const handleHerbRecommendation = useCallback(async () => {if (!analysisResult) {Alert.alert('提示', '请先进行中医分析');
       return;
     }
 
@@ -131,7 +109,7 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
         syndromeType: analysisResult.syndromeAnalysis.primarySyndrome,
         constitutionType: analysisResult.constitutionAssessment.constitutionType,
         userId,
-        currentSymptoms: symptoms.filter(s => s.trim()),
+        currentSymptoms: symptoms.filter(s => s.trim())
       };
 
       const result = await ragService.recommendHerbs(request);
@@ -147,8 +125,7 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
   }, [analysisResult, symptoms, userId, onHerbResult, onError]);
 
   // 清除结果
-  const handleClear = useCallback(() => {
-    setSymptoms(['']);
+  const handleClear = useCallback(() => {setSymptoms(['']);
     setConstitutionType('balanced');
     setMedicalHistory('');
     setCurrentMedications('');
@@ -157,26 +134,18 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
       exercise: '',
       sleep: '',
       stress: '',
-      environment: '',
+      environment: ''
     });
     setAnalysisResult(null);
     setHerbResult(null);
   }, []);
 
   // 导出分析报告
-  const handleExportReport = useCallback(() => {
-    if (!analysisResult) {
-      Alert.alert('提示', '请先进行中医分析');
+  const handleExportReport = useCallback(() => {if (!analysisResult) {Alert.alert('提示', '请先进行中医分析');
       return;
     }
 
-    const report = {
-      timestamp: new Date().toISOString(),
-      userId,
-      symptoms: symptoms.filter(s => s.trim()),
-      constitutionType,
-      analysisResult,
-      herbResult,
+    const report = {timestamp: new Date().toISOString(),userId,symptoms: symptoms.filter(s => s.trim()),constitutionType,analysisResult,herbResult;
     };
 
     // 这里可以实现导出功能，比如保存到本地存储或发送到服务器
@@ -185,13 +154,7 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
   }, [analysisResult, herbResult, userId, symptoms, constitutionType]);
 
   // 保存为模板
-  const handleSaveTemplate = useCallback(() => {
-    const template = {
-      symptoms: symptoms.filter(s => s.trim()),
-      constitutionType,
-      medicalHistory,
-      currentMedications,
-      lifestyle,
+  const handleSaveTemplate = useCallback(() => {const template = {symptoms: symptoms.filter(s => s.trim()),constitutionType,medicalHistory,currentMedications,lifestyle;
     };
 
     // 保存到本地存储
@@ -205,35 +168,23 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
   }, [symptoms, constitutionType, medicalHistory, currentMedications, lifestyle]);
 
   // 快速填充常见症状
-  const handleQuickFill = useCallback((symptomSet: string[]) => {
-    setSymptoms(symptomSet);
+  const handleQuickFill = useCallback((symptomSet: string[]) => {setSymptoms(symptomSet);
   }, []);
 
   // 常见症状组合
   const commonSymptomSets = [
-    {
-      name: '感冒症状',
-      symptoms: ['发热', '头痛', '鼻塞', '咳嗽', '咽痛']
-    },
-    {
-      name: '消化不良',
-      symptoms: ['腹胀', '食欲不振', '恶心', '腹痛', '便秘']
-    },
-    {
-      name: '失眠焦虑',
-      symptoms: ['失眠', '多梦', '心悸', '焦虑', '健忘']
-    },
-    {
-      name: '疲劳乏力',
-      symptoms: ['疲劳', '乏力', '气短', '头晕', '精神不振']
-    }
+    {name: '感冒症状',symptoms: ['发热', '头痛', '鼻塞', '咳嗽', '咽痛'];
+    },{name: '消化不良',symptoms: ['腹胀', '食欲不振', '恶心', '腹痛', '便秘'];
+    },{name: '失眠焦虑',symptoms: ['失眠', '多梦', '心悸', '焦虑', '健忘'];
+    },{name: '疲劳乏力',symptoms: ['疲劳', '乏力', '气短', '头晕', '精神不振'];
+    };
   ];
 
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>中医智能分析</Text>
 
-      {/* 症状输入 */}
+      {// 症状输入}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>症状描述</Text>
         {symptoms.map((symptom, index) => (
@@ -257,8 +208,8 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
         <TouchableOpacity style={styles.addButton} onPress={addSymptom}>
           <Text style={styles.addButtonText}>+ 添加症状</Text>
         </TouchableOpacity>
-        
-        {/* 快速填充 */}
+
+        {// 快速填充}
         <View style={styles.quickFillContainer}>
           <Text style={styles.quickFillTitle}>常见症状组合:</Text>
           <View style={styles.quickFillButtons}>
@@ -275,7 +226,7 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
         </View>
       </View>
 
-      {/* 体质类型选择 */}
+      {// 体质类型选择}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>体质类型</Text>
         <View style={styles.constitutionGrid}>
@@ -284,14 +235,14 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
               key={type.value}
               style={[
                 styles.constitutionButton,
-                constitutionType === type.value && styles.constitutionButtonActive,
+                constitutionType === type.value && styles.constitutionButtonActive
               ]}
               onPress={() => setConstitutionType(type.value)}
             >
               <Text
                 style={[
                   styles.constitutionButtonText,
-                  constitutionType === type.value && styles.constitutionButtonTextActive,
+                  constitutionType === type.value && styles.constitutionButtonTextActive
                 ]}
               >
                 {type.label}
@@ -301,7 +252,7 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
         </View>
       </View>
 
-      {/* 病史和用药 */}
+      {// 病史和用药}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>病史和用药</Text>
         <TextInput
@@ -320,7 +271,7 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
         />
       </View>
 
-      {/* 生活方式 */}
+      {// 生活方式}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>生活方式</Text>
         <TextInput
@@ -355,7 +306,7 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
         />
       </View>
 
-      {/* 操作按钮 */}
+      {// 操作按钮}
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[styles.button, styles.analysisButton]}
@@ -390,7 +341,7 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
         </TouchableOpacity>
       </View>
 
-      {/* 高级功能按钮 */}
+      {// 高级功能按钮}
       <View style={styles.advancedButtonContainer}>
         <TouchableOpacity
           style={[styles.smallButton, styles.saveButton]}
@@ -411,12 +362,12 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
         )}
       </View>
 
-      {/* 分析结果 */}
+      {// 分析结果}
       {analysisResult && (
         <View style={styles.resultSection}>
           <Text style={styles.resultTitle}>中医分析结果</Text>
-          
-          {/* 证候分析 */}
+
+          {// 证候分析}
           <View style={styles.resultCard}>
             <Text style={styles.cardTitle}>证候分析</Text>
             <Text style={styles.primarySyndrome}>
@@ -425,7 +376,7 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
             <Text style={styles.confidence}>
               置信度: {(analysisResult.syndromeAnalysis.confidence * 100).toFixed(1)}%
             </Text>
-            
+
             {analysisResult.syndromeAnalysis.secondarySyndromes.length > 0 && (
               <View style={styles.secondarySyndromes}>
                 <Text style={styles.secondaryTitle}>次证:</Text>
@@ -445,7 +396,7 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
             )}
           </View>
 
-          {/* 体质评估 */}
+          {// 体质评估}
           <View style={styles.resultCard}>
             <Text style={styles.cardTitle}>体质评估</Text>
             <Text style={styles.constitutionResult}>
@@ -454,7 +405,7 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
             <Text style={styles.constitutionScore}>
               评分: {analysisResult.constitutionAssessment.score}/100
             </Text>
-            
+
             {analysisResult.constitutionAssessment.characteristics.length > 0 && (
               <View style={styles.characteristics}>
                 <Text style={styles.characteristicsTitle}>特征:</Text>
@@ -465,7 +416,7 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
             )}
           </View>
 
-          {/* 治疗原则 */}
+          {// 治疗原则}
           {analysisResult.treatmentPrinciples.length > 0 && (
             <View style={styles.resultCard}>
               <Text style={styles.cardTitle}>治疗原则</Text>
@@ -475,7 +426,7 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
             </View>
           )}
 
-          {/* 生活建议 */}
+          {// 生活建议}
           {analysisResult.lifestyleRecommendations.length > 0 && (
             <View style={styles.resultCard}>
               <Text style={styles.cardTitle}>生活建议</Text>
@@ -487,12 +438,12 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
         </View>
       )}
 
-      {/* 中药推荐结果 */}
+      {// 中药推荐结果}
       {herbResult && (
         <View style={styles.resultSection}>
           <Text style={styles.resultTitle}>中药推荐</Text>
-          
-          {/* 推荐方剂 */}
+
+          {// 推荐方剂}
           {herbResult.recommendedFormulas.length > 0 && (
             <View style={styles.resultCard}>
               <Text style={styles.cardTitle}>推荐方剂</Text>
@@ -502,7 +453,7 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
                   <Text style={styles.formulaConfidence}>
                     置信度: {(formula.confidence * 100).toFixed(1)}%
                   </Text>
-                  
+
                   <View style={styles.composition}>
                     <Text style={styles.compositionTitle}>组成:</Text>
                     {formula.composition.map((herb, herbIndex) => (
@@ -511,7 +462,7 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
                       </Text>
                     ))}
                   </View>
-                  
+
                   <Text style={styles.preparation}>制法: {formula.preparation}</Text>
                   <Text style={styles.dosage}>用法: {formula.dosage}</Text>
                   <Text style={styles.duration}>疗程: {formula.duration}</Text>
@@ -520,7 +471,7 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
             </View>
           )}
 
-          {/* 单味药 */}
+          {// 单味药}
           {herbResult.singleHerbs.length > 0 && (
             <View style={styles.resultCard}>
               <Text style={styles.cardTitle}>单味药推荐</Text>
@@ -542,41 +493,41 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
             </View>
           )}
 
-          {/* 安全警告 */}
+          {// 安全警告}
           {herbResult.safetyWarnings.length > 0 && (
             <View style={[styles.resultCard, styles.warningCard]}>
               <Text style={styles.warningTitle}>⚠️ 安全警告</Text>
               {herbResult.safetyWarnings.map((warning, index) => (
-                <Text key={index} style={styles.warningItem}>• {warning}</Text>
-              ))}
-            </View>
-          )}
-
-          {/* 用药指导 */}
-          <View style={styles.resultCard}>
-            <Text style={styles.cardTitle}>用药指导</Text>
-            <Text style={styles.instructionItem}>制备: {herbResult.usageInstructions.preparation}</Text>
-            <Text style={styles.instructionItem}>服用: {herbResult.usageInstructions.administration}</Text>
-            <Text style={styles.instructionItem}>时间: {herbResult.usageInstructions.timing}</Text>
-            <Text style={styles.instructionItem}>疗程: {herbResult.usageInstructions.duration}</Text>
-          </View>
-        </View>
-      )}
-    </ScrollView>
+                <Text key={index} style={styles.warningItem}>• {warning}</Text>;
+              ))};
+            </View>;
+          )};
+;
+          {// 用药指导};
+          <View style={styles.resultCard}>;
+            <Text style={styles.cardTitle}>用药指导</Text>;
+            <Text style={styles.instructionItem}>制备: {herbResult.usageInstructions.preparation}</Text>;
+            <Text style={styles.instructionItem}>服用: {herbResult.usageInstructions.administration}</Text>;
+            <Text style={styles.instructionItem}>时间: {herbResult.usageInstructions.timing}</Text>;
+            <Text style={styles.instructionItem}>疗程: {herbResult.usageInstructions.duration}</Text>;
+          </View>;
+        </View>;
+      )};
+    </ScrollView>;
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f5f5f5'
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 20,
-    color: '#333',
+    color: '#333'
   },
   section: {
     backgroundColor: '#fff',
@@ -587,18 +538,18 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
+    elevation: 3
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
     marginBottom: 12,
-    color: '#333',
+    color: '#333'
   },
   symptomRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 8
   },
   symptomInput: {
     flex: 1,
@@ -606,18 +557,18 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
     borderRadius: 6,
     padding: 10,
-    fontSize: 16,
+    fontSize: 16
   },
   removeButton: {
     marginLeft: 8,
     paddingHorizontal: 12,
     paddingVertical: 8,
     backgroundColor: '#FF3B30',
-    borderRadius: 6,
+    borderRadius: 6
   },
   removeButtonText: {
     color: '#fff',
-    fontSize: 14,
+    fontSize: 14
   },
   addButton: {
     alignSelf: 'flex-start',
@@ -625,17 +576,17 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     backgroundColor: '#007AFF',
     borderRadius: 6,
-    marginTop: 8,
+    marginTop: 8
   },
   addButtonText: {
     color: '#fff',
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: '500'
   },
   constitutionGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
+    gap: 8
   },
   constitutionButton: {
     paddingHorizontal: 12,
@@ -643,19 +594,19 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: '#f0f0f0',
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#ddd'
   },
   constitutionButtonActive: {
     backgroundColor: '#007AFF',
-    borderColor: '#007AFF',
+    borderColor: '#007AFF'
   },
   constitutionButtonText: {
     fontSize: 14,
-    color: '#666',
+    color: '#666'
   },
   constitutionButtonTextActive: {
     color: '#fff',
-    fontWeight: '600',
+    fontWeight: '600'
   },
   textInput: {
     borderWidth: 1,
@@ -664,45 +615,45 @@ const styles = StyleSheet.create({
     padding: 12,
     fontSize: 16,
     marginBottom: 8,
-    minHeight: 40,
+    minHeight: 40
   },
   buttonContainer: {
     flexDirection: 'row',
     gap: 12,
-    margin: 16,
+    margin: 16
   },
   button: {
     flex: 1,
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   analysisButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#007AFF'
   },
   herbButton: {
-    backgroundColor: '#34C759',
+    backgroundColor: '#34C759'
   },
   clearButton: {
-    backgroundColor: '#FF3B30',
+    backgroundColor: '#FF3B30'
   },
   buttonDisabled: {
-    backgroundColor: '#ccc',
+    backgroundColor: '#ccc'
   },
   buttonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   resultSection: {
-    margin: 16,
+    margin: 16
   },
   resultTitle: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 16,
-    color: '#333',
+    color: '#333'
   },
   resultCard: {
     backgroundColor: '#fff',
@@ -713,205 +664,205 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
+    elevation: 3
   },
   cardTitle: {
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 8,
-    color: '#007AFF',
+    color: '#007AFF'
   },
   primarySyndrome: {
     fontSize: 16,
     fontWeight: '500',
     marginBottom: 4,
-    color: '#333',
+    color: '#333'
   },
   confidence: {
     fontSize: 14,
     color: '#666',
-    marginBottom: 8,
+    marginBottom: 8
   },
   secondarySyndromes: {
-    marginTop: 8,
+    marginTop: 8
   },
   secondaryTitle: {
     fontSize: 14,
     fontWeight: '500',
     marginBottom: 4,
-    color: '#333',
+    color: '#333'
   },
   secondaryItem: {
     fontSize: 14,
     color: '#666',
-    marginBottom: 2,
+    marginBottom: 2
   },
   reasoning: {
-    marginTop: 8,
+    marginTop: 8
   },
   reasoningTitle: {
     fontSize: 14,
     fontWeight: '500',
     marginBottom: 4,
-    color: '#333',
+    color: '#333'
   },
   reasoningItem: {
     fontSize: 14,
     color: '#666',
-    marginBottom: 2,
+    marginBottom: 2
   },
   constitutionResult: {
     fontSize: 16,
     fontWeight: '500',
     marginBottom: 4,
-    color: '#333',
+    color: '#333'
   },
   constitutionScore: {
     fontSize: 14,
     color: '#666',
-    marginBottom: 8,
+    marginBottom: 8
   },
   characteristics: {
-    marginTop: 8,
+    marginTop: 8
   },
   characteristicsTitle: {
     fontSize: 14,
     fontWeight: '500',
     marginBottom: 4,
-    color: '#333',
+    color: '#333'
   },
   characteristicItem: {
     fontSize: 14,
     color: '#666',
-    marginBottom: 2,
+    marginBottom: 2
   },
   principleItem: {
     fontSize: 14,
     color: '#333',
-    marginBottom: 4,
+    marginBottom: 4
   },
   recommendationItem: {
     fontSize: 14,
     color: '#333',
-    marginBottom: 4,
+    marginBottom: 4
   },
   formulaItem: {
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
     paddingBottom: 12,
-    marginBottom: 12,
+    marginBottom: 12
   },
   formulaName: {
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 4,
-    color: '#333',
+    color: '#333'
   },
   formulaConfidence: {
     fontSize: 14,
     color: '#666',
-    marginBottom: 8,
+    marginBottom: 8
   },
   composition: {
-    marginBottom: 8,
+    marginBottom: 8
   },
   compositionTitle: {
     fontSize: 14,
     fontWeight: '500',
     marginBottom: 4,
-    color: '#333',
+    color: '#333'
   },
   herbItem: {
     fontSize: 13,
     color: '#666',
-    marginBottom: 2,
+    marginBottom: 2
   },
   preparation: {
     fontSize: 14,
     color: '#333',
-    marginBottom: 2,
+    marginBottom: 2
   },
   dosage: {
     fontSize: 14,
     color: '#333',
-    marginBottom: 2,
+    marginBottom: 2
   },
   duration: {
     fontSize: 14,
-    color: '#333',
+    color: '#333'
   },
   singleHerbItem: {
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
     paddingBottom: 8,
-    marginBottom: 8,
+    marginBottom: 8
   },
   herbName: {
     fontSize: 15,
     fontWeight: '600',
     marginBottom: 4,
-    color: '#333',
+    color: '#333'
   },
   herbFunction: {
     fontSize: 14,
     color: '#666',
-    marginBottom: 2,
+    marginBottom: 2
   },
   herbDosage: {
     fontSize: 14,
     color: '#666',
-    marginBottom: 4,
+    marginBottom: 4
   },
   precautions: {
-    marginTop: 4,
+    marginTop: 4
   },
   precautionsTitle: {
     fontSize: 13,
     fontWeight: '500',
     marginBottom: 2,
-    color: '#FF3B30',
+    color: '#FF3B30'
   },
   precautionItem: {
     fontSize: 12,
     color: '#FF3B30',
-    marginBottom: 1,
+    marginBottom: 1
   },
   warningCard: {
     borderLeftWidth: 4,
-    borderLeftColor: '#FF3B30',
+    borderLeftColor: '#FF3B30'
   },
   warningTitle: {
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 8,
-    color: '#FF3B30',
+    color: '#FF3B30'
   },
   warningItem: {
     fontSize: 14,
     color: '#FF3B30',
-    marginBottom: 4,
+    marginBottom: 4
   },
   instructionItem: {
     fontSize: 14,
     color: '#333',
-    marginBottom: 4,
+    marginBottom: 4
   },
   quickFillContainer: {
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#eee',
+    borderTopColor: '#eee'
   },
   quickFillTitle: {
     fontSize: 14,
     fontWeight: '500',
     marginBottom: 8,
-    color: '#333',
+    color: '#333'
   },
   quickFillButtons: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
+    gap: 8
   },
   quickFillButton: {
     paddingHorizontal: 12,
@@ -919,38 +870,27 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: '#E3F2FD',
     borderWidth: 1,
-    borderColor: '#2196F3',
+    borderColor: '#2196F3'
   },
   quickFillButtonText: {
     fontSize: 12,
     color: '#2196F3',
-    fontWeight: '500',
+    fontWeight: '500'
   },
   advancedButtonContainer: {
     flexDirection: 'row',
     gap: 12,
     marginBottom: 16,
-    justifyContent: 'space-around',
+    justifyContent: 'space-around'
   },
   smallButton: {
     paddingHorizontal: 16,
     paddingVertical: 8,
-    borderRadius: 6,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-  },
-  smallButtonText: {
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: '500',
-  },
-  saveButton: {
-    backgroundColor: '#4CAF50',
-  },
-  exportButton: {
-    backgroundColor: '#FF9800',
-  },
+    borderRadius: 6,alignItems: 'center',justifyContent: 'center',flex: 1;
+  },smallButtonText: {color: '#fff',fontSize: 12,fontWeight: '500';
+  },saveButton: {backgroundColor: '#4CAF50';
+  },exportButton: {backgroundColor: '#FF9800';
+  };
 });
 
 export default TCMAnalysisComponent; 

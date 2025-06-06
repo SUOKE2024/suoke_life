@@ -1,6 +1,5 @@
-//////     服务分类类型
-export type ServiceCategory = 
-  | "diagnosis"
+// 服务分类类型
+export type ServiceCategory  = | "diagnosis"
   | "product"
   | "service"
   | "subscription"
@@ -9,15 +8,14 @@ export type ServiceCategory =
   | "custom"
   | "supplier"
   | "eco";
-//////     诊断类型
+// 诊断类型
 export type DiagnosisType = "look" | "listen" | "inquiry" | "palpation";
-//////     服务状态
-export type ServiceStatus = 
-  | "available"
+// 服务状态
+export type ServiceStatus  = | "available"
   | "unavailable"
   | "coming_soon"
   | "maintenance";
-//////     服务项接口
+// 服务项接口
 export interface ServiceItem {
   id: string;
   title: string;
@@ -35,7 +33,7 @@ export interface ServiceItem {
   estimatedTime?: string;
   tags?: string[];
 }
-//////     分类配置接口
+// 分类配置接口
 export interface CategoryConfig {
   key: ServiceCategory | "all";
   label: string;
@@ -43,7 +41,7 @@ export interface CategoryConfig {
   color?: string;
   description?: string;
 }
-//////     服务预约接口
+// 服务预约接口
 export interface ServiceBooking {
   id: string;
   serviceId: string;
@@ -53,7 +51,7 @@ export interface ServiceBooking {
   notes?: string;
   price: number;
 }
-//////     诊断结果接口
+// 诊断结果接口
 export interface DiagnosisResult {
   id: string;
   type: DiagnosisType;
@@ -68,7 +66,7 @@ export interface DiagnosisResult {
   };
   followUpRequired: boolean;
 }
-//////     健康评估接口
+// 健康评估接口
 export interface HealthAssessment {
   id: string;
   userId: string;
@@ -83,7 +81,7 @@ export interface HealthAssessment {
   recommendations: string[];
   nextAssessmentDate: string;
 }
-//////     服务使用统计接口
+// 服务使用统计接口
 export interface ServiceUsageStats {
   serviceId: string;
   totalUsage: number;

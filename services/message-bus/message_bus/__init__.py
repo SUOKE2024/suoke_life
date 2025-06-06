@@ -1,4 +1,10 @@
 """
+__init__ - 索克生活项目模块
+"""
+
+from .main import main
+
+"""
 索克生活消息总线服务
 
 负责系统间事件传递和通知的分布式消息中间件，支持：
@@ -13,6 +19,5 @@ __version__ = "0.1.0"
 __author__ = "Suoke Life Team"
 __email__ = "dev@suokelife.com"
 
-from .main import main
 
 __all__ = ["main"]

@@ -1,23 +1,29 @@
 """
+cache - 索克生活项目模块
+"""
+
+            import sys
+from ..models.audio_models import AudioMetadata, VoiceFeatures
+from ..models.tcm_models import TCMDiagnosis
+from abc import ABC, abstractmethod
+from collections.abc import Callable
+from dataclasses import dataclass
+from typing import Any
+import hashlib
+import json
+import pickle
+import structlog
+import threading
+import time
+
+"""
 音频分析缓存工具
 
 提供音频特征和分析结果的缓存功能，支持内存缓存和Redis缓存。
 """
 
-import hashlib
-import json
-import pickle
-import threading
-import time
-from abc import ABC, abstractmethod
-from collections.abc import Callable
-from dataclasses import dataclass
-from typing import Any
 
-import structlog
 
-from ..models.audio_models import AudioMetadata, VoiceFeatures
-from ..models.tcm_models import TCMDiagnosis
 
 logger = structlog.get_logger(__name__)
 
@@ -193,7 +199,6 @@ class MemoryCache(CacheBackend):
     def _estimate_memory_usage(self) -> int:
         """估算内存使用量"""
         try:
-            import sys
 
             total_size = 0
             for entry in self.cache.values():
@@ -220,7 +225,8 @@ class RedisCache(CacheBackend):
             "errors": 0,
         }
 
-    async def _get_redis(self):
+    async     @cache(timeout=300)  # 5分钟缓存
+def _get_redis(self):
         """获取Redis连接"""
         if self.redis is None:
             try:

@@ -1,3 +1,12 @@
+"""
+dev - 索克生活项目模块
+"""
+
+from corn_maze_service.constants import MIN_COMMAND_ARGS
+from pathlib import Path
+import subprocess
+import sys
+
 #!/usr/bin/env python3
 """
 开发工具脚本
@@ -5,11 +14,7 @@
 提供开发、测试、代码检查等常用命令
 """
 
-from pathlib import Path
-import subprocess
-import sys
 
-from corn_maze_service.constants import MIN_COMMAND_ARGS
 
 
 def run_command(cmd: list[str], cwd: Path | None = None) -> int:

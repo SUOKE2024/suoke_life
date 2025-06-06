@@ -1,15 +1,22 @@
+"""
+metrics_controller - 索克生活项目模块
+"""
+
+from fastapi import APIRouter, Response
+from pkg.utils.config import Config
+from pkg.utils.logger import get_logger
+from prometheus_client import (
+import os
+import psutil
+import time
+
 #!/usr/bin/env python
 
 """
 Prometheus指标控制器
 """
 
-import os
-import time
 
-import psutil
-from fastapi import APIRouter, Response
-from prometheus_client import (
     CONTENT_TYPE_LATEST,
     CollectorRegistry,
     Counter,
@@ -19,8 +26,6 @@ from prometheus_client import (
     generate_latest,
 )
 
-from pkg.utils.config import Config
-from pkg.utils.logger import get_logger
 
 # 创建指标注册表
 registry = CollectorRegistry(auto_describe=True)

@@ -1,10 +1,9 @@
+import axios, { AxiosInstance } from 'axios';
+
 /**
  * 消息总线服务客户端
  * 提供消息发布/订阅、主题管理等功能
  */
-
-import axios, { AxiosInstance } from 'axios';
-import { ApiResponse } from './apiClient';
 
 // 类型定义
 export interface Message {
@@ -113,15 +112,15 @@ export class MessageBusService {
       retryDelay: 1000,
       enableWebSocket: true,
       webSocketUrl: 'ws://localhost:8004/ws',
-      ...config
+      ...config,
     };
-    
+
     this.apiClient = axios.create({
       baseURL: this.config.baseUrl,
       timeout: this.config.timeout,
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     });
 
     // 如果启用WebSocket，则初始化连接
@@ -211,13 +210,13 @@ export class MessageBusService {
     } = {}
   ): Promise<string> {
     const subscriptionId = `${topic}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    
+
     const subscription: Subscription = {
       id: subscriptionId,
       topic,
       callback,
       filter: options.filter,
-      isActive: true
+      isActive: true,
     };
 
     this.subscriptions.set(subscriptionId, subscription);
@@ -229,7 +228,7 @@ export class MessageBusService {
         subscriptionId,
         topic,
         filter: options.filter,
-        subscriptionName: options.subscriptionName
+        subscriptionName: options.subscriptionName,
       });
     }
 
@@ -252,7 +251,7 @@ export class MessageBusService {
     if (this.webSocket && this.webSocket.readyState === WebSocket.OPEN) {
       this.sendWebSocketMessage({
         type: 'unsubscribe',
-        subscriptionId
+        subscriptionId,
       });
     }
 
@@ -290,16 +289,16 @@ export class MessageBusService {
 
     try {
       this.webSocket = new WebSocket(this.config.webSocketUrl);
-      
+
       this.webSocket.onopen = () => {
         console.log('WebSocket connected to message bus');
         this.reconnectAttempts = 0;
-        
+
         // 重新订阅所有活跃的订阅
         this.resubscribeAll();
       };
 
-      this.webSocket.onmessage = (event) => {
+      this.webSocket.onmessage = event => {
         try {
           const data = JSON.parse(event.data);
           this.handleWebSocketMessage(data);
@@ -313,10 +312,9 @@ export class MessageBusService {
         this.handleWebSocketReconnect();
       };
 
-      this.webSocket.onerror = (error) => {
+      this.webSocket.onerror = error => {
         console.error('WebSocket error:', error);
       };
-
     } catch (error) {
       console.error('Failed to initialize WebSocket:', error);
     }
@@ -335,9 +333,9 @@ export class MessageBusService {
           payload: data.message.payload,
           attributes: data.message.attributes,
           publishTime: data.message.publishTime,
-          publisherId: data.message.publisherId
+          publisherId: data.message.publisherId,
         };
-        
+
         try {
           subscription.callback(message);
         } catch (error) {
@@ -363,9 +361,11 @@ export class MessageBusService {
     if (this.reconnectAttempts < this.maxReconnectAttempts) {
       this.reconnectAttempts++;
       const delay = this.reconnectDelay * Math.pow(2, this.reconnectAttempts - 1);
-      
-      console.log(`Attempting to reconnect WebSocket in ${delay}ms (attempt ${this.reconnectAttempts})`);
-      
+
+      console.log(
+        `Attempting to reconnect WebSocket in ${delay}ms (attempt ${this.reconnectAttempts})`
+      );
+
       setTimeout(() => {
         this.initializeWebSocket();
       }, delay);
@@ -384,7 +384,7 @@ export class MessageBusService {
           type: 'subscribe',
           subscriptionId: subscription.id,
           topic: subscription.topic,
-          filter: subscription.filter
+          filter: subscription.filter,
         });
       }
     }
@@ -408,4 +408,4 @@ export class MessageBusService {
 }
 
 // 创建默认实例
-export const messageBusService = new MessageBusService(); 
+export const messageBusService = new MessageBusService();

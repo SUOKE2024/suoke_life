@@ -1,3 +1,26 @@
+"""
+tracing - 索克生活项目模块
+"""
+
+from contextlib import asynccontextmanager
+from dataclasses import dataclass, field
+from enum import Enum
+from loguru import logger
+from opentelemetry import trace
+from opentelemetry.exporter.jaeger.thrift import JaegerExporter
+from opentelemetry.instrumentation.asyncpg import AsyncPGInstrumentor
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+from opentelemetry.instrumentation.redis import RedisInstrumentor
+from opentelemetry.instrumentation.requests import RequestsInstrumentor
+from opentelemetry.propagate import inject, extract
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from typing import Dict, List, Any, Optional, Callable
+import asyncio
+import json
+import time
+import uuid
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,25 +28,7 @@
 分布式追踪模块 - 实现Jaeger分布式追踪
 """
 
-import asyncio
-import time
-import uuid
-from typing import Dict, List, Any, Optional, Callable
-from dataclasses import dataclass, field
-from enum import Enum
-from contextlib import asynccontextmanager
-import json
-from loguru import logger
 
-from opentelemetry import trace
-from opentelemetry.exporter.jaeger.thrift import JaegerExporter
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
-from opentelemetry.instrumentation.requests import RequestsInstrumentor
-from opentelemetry.instrumentation.asyncpg import AsyncPGInstrumentor
-from opentelemetry.instrumentation.redis import RedisInstrumentor
-from opentelemetry.propagate import inject, extract
 
 class SpanKind(str, Enum):
     """Span类型"""

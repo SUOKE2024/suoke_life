@@ -1,4 +1,6 @@
-"""数据模型模块"""
+"""
+__init__ - 索克生活项目模块
+"""
 
 from .base import BaseEntity
 from .base import BaseRequest
@@ -15,6 +17,9 @@ from .health_data import HealthDataResponse
 from .health_data import UpdateHealthDataRequest
 from .health_data import VitalSigns
 from .health_data import VitalSignsResponse
+
+"""数据模型模块"""
+
 
 __all__ = [
     # 基础模型

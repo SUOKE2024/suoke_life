@@ -1,25 +1,30 @@
 """
+server - 索克生活项目模块
+"""
+
+from ...core.config import settings
+from pathlib import Path
+from rich.console import Console
+from rich.live import Live
+from rich.table import Table
+from typing import Optional
+import click
+import os
+import psutil
+import structlog
+import sys
+import time
+import uvicorn
+
+"""
 服务器管理命令
 Server Management Commands
 
 提供服务器的启动、停止、重启等管理功能
 """
 
-import os
-import sys
-import time
-from pathlib import Path
-from typing import Optional
 
-import click
-import psutil
-import structlog
-import uvicorn
-from rich.console import Console
-from rich.live import Live
-from rich.table import Table
 
-from ...core.config import settings
 
 logger = structlog.get_logger(__name__)
 console = Console()

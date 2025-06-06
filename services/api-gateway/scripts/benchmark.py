@@ -1,3 +1,20 @@
+"""
+benchmark - 索克生活项目模块
+"""
+
+from dataclasses import dataclass, asdict
+from datetime import datetime, timedelta
+from rich.console import Console
+from rich.progress import Progress, BarColumn, TextColumn, TimeRemainingColumn
+from rich.table import Table
+from typing import Dict, List, Any, Optional
+import aiohttp
+import argparse
+import asyncio
+import json
+import statistics
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -7,19 +24,7 @@ API 网关性能测试脚本
 测试 API 网关的性能和负载能力，包括并发测试、压力测试、延迟测试等。
 """
 
-import asyncio
-import time
-import json
-import argparse
-import statistics
-from typing import Dict, List, Any, Optional
-from datetime import datetime, timedelta
-from dataclasses import dataclass, asdict
 
-import aiohttp
-from rich.console import Console
-from rich.table import Table
-from rich.progress import Progress, BarColumn, TextColumn, TimeRemainingColumn
 
 @dataclass
 class TestResult:

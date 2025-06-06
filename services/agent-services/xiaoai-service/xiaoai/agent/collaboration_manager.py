@@ -1,15 +1,20 @@
-#!/usr/bin/env python3
-
-""""""
+"""
+collaboration_manager - 索克生活项目模块
+"""
 
 from asyncio import asyncio
 from logging import logging
+from loguru import logger
 from os import os
 from time import time
 from typing import Any
 from uuid import uuid4
-from loguru import logger
 import self.logging
+
+#!/usr/bin/env python3
+
+""""""
+
 
 
 

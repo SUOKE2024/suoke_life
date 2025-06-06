@@ -1,20 +1,25 @@
+"""
+test_edu_integration - 索克生活项目模块
+"""
+
+from internal.integration.edu.edu_service import EducationService
+from unittest.mock import AsyncMock, patch
+import json
+import os
+import pytest
+import sys
+
 #!/usr/bin/env python
 
 """
 教育服务集成测试
 """
 
-import json
-import os
-import sys
-from unittest.mock import AsyncMock, patch
 
-import pytest
 
 # 添加项目根路径到 Python 路径
 sys.path.insert(0, os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))))
 
-from internal.integration.edu.edu_service import EducationService
 
 
 @pytest.fixture

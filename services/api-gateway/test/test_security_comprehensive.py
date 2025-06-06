@@ -1,3 +1,25 @@
+"""
+test_security_comprehensive - 索克生活项目模块
+"""
+
+                import html
+                import re
+            from cryptography.fernet import Fernet
+from datetime import datetime, timedelta
+from typing import Dict, List, Any
+from unittest.mock import AsyncMock, Mock, patch
+import asyncio
+import base64
+import hashlib
+import hmac
+import json
+import jwt as pyjwt
+import os
+import pytest
+import sys
+import time
+import uuid
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,22 +28,8 @@ API网关全面安全测试套件
 包含认证、授权、输入验证、注入攻击等安全测试
 """
 
-import asyncio
-import base64
-import hashlib
-import hmac
-import json
-import time
-import uuid
-from datetime import datetime, timedelta
-from typing import Dict, List, Any
-from unittest.mock import AsyncMock, Mock, patch
-import pytest
-import jwt as pyjwt
 
 # 添加项目根目录到Python路径
-import os
-import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
@@ -332,7 +340,6 @@ class TestInputValidationSecurity(SecurityTestSuite):
                     r"(?i)'\s*(or|and)\s*'",
                 ]
                 
-                import re
                 for pattern in sql_patterns:
                     if re.search(pattern, user_input):
                         return False
@@ -375,8 +382,6 @@ class TestInputValidationSecurity(SecurityTestSuite):
             
             def sanitize_input(user_input: str) -> str:
                 """模拟输入清理函数"""
-                import html
-                import re
                 
                 # HTML编码
                 sanitized = html.escape(user_input)
@@ -589,7 +594,6 @@ class TestDataSecurity(SecurityTestSuite):
         try:
             def mask_sensitive_data(data: dict) -> dict:
                 """脱敏敏感数据"""
-                import re
                 
                 masked_data = data.copy()
                 
@@ -641,7 +645,6 @@ class TestDataSecurity(SecurityTestSuite):
         test_name = "Data Encryption"
         
         try:
-            from cryptography.fernet import Fernet
             
             # 生成密钥
             key = Fernet.generate_key()

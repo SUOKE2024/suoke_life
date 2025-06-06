@@ -1,3 +1,15 @@
+"""
+test_retriever - 索克生活项目模块
+"""
+
+from internal.model.document import Document
+from internal.retriever.base import BaseRetriever
+from typing import List, Dict, Any
+import asyncio
+import os
+import pytest
+import sys
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,17 +17,10 @@
 检索器单元测试
 """
 
-import sys
-import os
-import pytest
-import asyncio
-from typing import List, Dict, Any
 
 # 将项目根目录添加到路径中
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from internal.model.document import Document
-from internal.retriever.base import BaseRetriever
 
 
 class MockRetriever(BaseRetriever):

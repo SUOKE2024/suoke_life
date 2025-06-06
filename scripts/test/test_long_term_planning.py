@@ -1,16 +1,28 @@
+"""
+test_long_term_planning - 索克生活项目模块
+"""
+
+                from services.common.computing.gpu.gpu_acceleration import health_data_normalize_gpu
+            from services.common.computing.distributed.distributed_computing import (
+            from services.common.computing.extensions.c_algorithms import (
+            from services.common.computing.gpu.gpu_acceleration import (
+            from services.common.computing.gpu.gpu_acceleration import health_data_normalize_gpu
+        from services.common.computing.gpu.gpu_acceleration import health_data_normalize_gpu
+        import psutil
+from pathlib import Path
+from typing import Dict, Any, List
+import asyncio
+import logging
+import sys
+import time
+import traceback
+
 #!/usr/bin/env python3
 """
 索克生活 - 长期规划测试脚本
 测试C扩展、分布式计算和GPU加速的集成功能
 """
 
-import sys
-import time
-import asyncio
-import logging
-from pathlib import Path
-from typing import Dict, Any, List
-import traceback
 
 # 添加项目根目录到路径
 project_root = Path(__file__).parent.parent.parent
@@ -75,7 +87,6 @@ class LongTermPlanningTester:
 
         try:
             # 导入C扩展模块
-            from services.common.computing.extensions.c_algorithms import (
                 CAlgorithmExtension as CExtensionManager, AlgorithmType, CExtensionConfig
             )
 
@@ -156,7 +167,6 @@ class LongTermPlanningTester:
 
         try:
             # 导入分布式计算模块
-            from services.common.computing.distributed.distributed_computing import (
                 create_distributed_cluster, ComputeMode, DistributedConfig
             )
 
@@ -277,7 +287,6 @@ class LongTermPlanningTester:
 
         try:
             # 导入GPU加速模块
-            from services.common.computing.gpu.gpu_acceleration import (
                 get_gpu_accelerator, GPUConfig, GPUBackend,
                 tcm_syndrome_analysis_gpu, health_data_normalize_gpu,
                 nutrition_optimization_gpu
@@ -469,7 +478,6 @@ class LongTermPlanningTester:
         preprocessed_data = self.test_data['health_data']['large']
 
         # 使用GPU进行主要计算
-        from services.common.computing.gpu.gpu_acceleration import health_data_normalize_gpu
         gpu_result = health_data_normalize_gpu(preprocessed_data)
 
         end_time = time.time()
@@ -495,7 +503,6 @@ class LongTermPlanningTester:
         # 模拟并行处理
         results = []
         for task_data in tasks:
-            from services.common.computing.gpu.gpu_acceleration import health_data_normalize_gpu
             result = health_data_normalize_gpu(task_data)
             results.append(result)
 
@@ -529,7 +536,6 @@ class LongTermPlanningTester:
         ]
 
         # 3. GPU加速计算
-        from services.common.computing.gpu.gpu_acceleration import health_data_normalize_gpu
         gpu_results = []
         for chunk in chunks:
             result = health_data_normalize_gpu(chunk)
@@ -572,7 +578,6 @@ class LongTermPlanningTester:
         pipeline_stages.append({'stage': 'feature_extraction', 'shape': features.shape})
 
         # 阶段4：标准化
-        from services.common.computing.gpu.gpu_acceleration import health_data_normalize_gpu
         normalized_features = health_data_normalize_gpu(features)
         pipeline_stages.append({'stage': 'normalization', 'shape': normalized_features.shape})
 
@@ -605,7 +610,6 @@ class LongTermPlanningTester:
 
             # 模拟处理（使用最快的可用方法）
             if self.test_results['gpu_acceleration']['status'] == 'success':
-                from services.common.computing.gpu.gpu_acceleration import health_data_normalize_gpu
                 health_data_normalize_gpu(batch_data)
             else:
                 # CPU回退
@@ -636,7 +640,6 @@ class LongTermPlanningTester:
             sample_data = np.random.rand(1, 50).astype(np.float32)
 
             if self.test_results['gpu_acceleration']['status'] == 'success':
-                from services.common.computing.gpu.gpu_acceleration import health_data_normalize_gpu
                 health_data_normalize_gpu(sample_data)
             else:
                 mean = np.mean(sample_data, axis=0)
@@ -699,7 +702,6 @@ class LongTermPlanningTester:
 
     async def _test_resource_usage(self) -> Dict[str, Any]:
         """测试资源使用情况"""
-        import psutil
 
         # 获取初始资源状态
         initial_cpu = psutil.cpu_percent(interval=1)
@@ -712,7 +714,6 @@ class LongTermPlanningTester:
             large_data = np.random.rand(2000, 100).astype(np.float32)
 
             if self.test_results['gpu_acceleration']['status'] == 'success':
-                from services.common.computing.gpu.gpu_acceleration import health_data_normalize_gpu
                 health_data_normalize_gpu(large_data)
             else:
                 mean = np.mean(large_data, axis=0)
@@ -747,7 +748,6 @@ class LongTermPlanningTester:
             start_time = time.time()
 
             if self.test_results['gpu_acceleration']['status'] == 'success':
-                from services.common.computing.gpu.gpu_acceleration import health_data_normalize_gpu
                 health_data_normalize_gpu(test_data)
             else:
                 mean = np.mean(test_data, axis=0)

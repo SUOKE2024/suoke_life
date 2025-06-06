@@ -1,18 +1,25 @@
 """
+server - 索克生活项目模块
+"""
+
+        from fastapi import Response
+        from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
+from ..api.v1 import calculation_router, calendar_router, constitution_router
+from ..core.config import get_settings
+from ..middleware.logging import LoggingMiddleware
+from ..middleware.metrics import MetricsMiddleware
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
+import uvicorn
+
+"""
 算诊微服务主服务器
 
 启动FastAPI应用程序
 """
 
-import uvicorn
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.gzip import GZipMiddleware
 
-from ..api.v1 import calculation_router, calendar_router, constitution_router
-from ..core.config import get_settings
-from ..middleware.logging import LoggingMiddleware
-from ..middleware.metrics import MetricsMiddleware
 
 
 def create_app() -> FastAPI:
@@ -66,8 +73,6 @@ def create_app() -> FastAPI:
     @app.get("/metrics")
     async def metrics():
         """指标监控"""
-        from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
-        from fastapi import Response
         
         return Response(
             generate_latest(),

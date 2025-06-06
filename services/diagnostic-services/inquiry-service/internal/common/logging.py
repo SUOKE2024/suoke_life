@@ -1,18 +1,24 @@
+"""
+logging - 索克生活项目模块
+"""
+
+        import asyncio
+    import structlog
+from datetime import datetime
+from typing import Any
+import json
+import logging
+import os
+import sys
+
 #!/usr/bin/env python
 
 """
 统一日志管理模块
 """
 
-from datetime import datetime
-import json
-import logging
-import os
-import sys
-from typing import Any
 
 try:
-    import structlog
 
     STRUCTLOG_AVAILABLE = True
 except ImportError:
@@ -304,7 +310,6 @@ def log_function_call(
                 logger.error("函数调用失败", **log_data)
                 raise
 
-        import asyncio
 
         if asyncio.iscoroutinefunction(func):
             return async_wrapper

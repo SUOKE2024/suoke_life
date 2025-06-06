@@ -1,13 +1,19 @@
 """
+test_assignment_engine - 索克生活项目模块
+"""
+
+        import asyncio
+from human_review_service.core.assignment_engine import AssignmentEngine
+from human_review_service.core.models import ReviewerDB, ReviewerStatus, ReviewPriority, ReviewType
+from sqlalchemy.ext.asyncio import AsyncSession
+from unittest.mock import AsyncMock, Mock, patch
+import pytest
+
+"""
 任务分配引擎测试
 """
 
-import pytest
-from unittest.mock import AsyncMock, Mock, patch
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from human_review_service.core.assignment_engine import AssignmentEngine
-from human_review_service.core.models import ReviewerDB, ReviewerStatus, ReviewPriority, ReviewType
 
 
 class TestAssignmentEngine:
@@ -354,7 +360,6 @@ class TestAssignmentEngine:
     @pytest.mark.asyncio
     async def test_concurrent_assignment_requests(self, engine, mock_session):
         """测试并发分配请求"""
-        import asyncio
         
         # 模拟多个并发请求
         tasks = []

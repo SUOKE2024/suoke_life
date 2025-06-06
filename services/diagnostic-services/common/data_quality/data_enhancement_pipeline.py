@@ -1,27 +1,33 @@
 """
+data_enhancement_pipeline - 索克生活项目模块
+"""
+
+    import time
+from dataclasses import dataclass
+from datetime import datetime
+from pathlib import Path
+from sklearn.metrics import classification_report
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+from transformers import AutoTokenizer, AutoModel
+from typing import Dict, List, Any, Optional, Tuple
+import asyncio
+import cv2
+import jieba
+import json
+import librosa
+import logging
+import numpy as np
+import pandas as pd
+import re
+import torch
+import torch.nn as nn
+
+"""
 数据质量提升管道 - 五诊系统数据增强
 包含数据清洗、增强、验证和知识库优化
 """
 
-import asyncio
-import logging
-import pandas as pd
-import numpy as np
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass
-from pathlib import Path
-import json
-import cv2
-import librosa
-from sklearn.preprocessing import StandardScaler, LabelEncoder
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report
-import torch
-import torch.nn as nn
-from transformers import AutoTokenizer, AutoModel
-import jieba
-import re
-from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -760,7 +766,6 @@ async def run_data_enhancement():
     return result
 
 if __name__ == "__main__":
-    import time
     
     result = asyncio.run(run_data_enhancement())
     

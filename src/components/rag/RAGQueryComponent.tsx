@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import {
-  View,
+import {import { ragService } from '../../services/ragService';
+import type {View,
   Text,
   TextInput,
   TouchableOpacity,
@@ -9,14 +9,11 @@ import {
   Alert,
   ActivityIndicator,
   Dimensions,
-  Platform,
+  Platform
 } from 'react-native';
-import { ragService } from '../../services/ragService';
-import { RAG_CONFIG } from '../../constants/config';
-import type {
   RAGQueryRequest,
   RAGQueryResponse,
-  StreamResponse,
+  StreamResponse
 } from '../../services/ragService';
 
 interface RAGQueryComponentProps {
@@ -28,7 +25,7 @@ interface RAGQueryComponentProps {
 export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
   userId,
   onResult,
-  onError,
+  onError
 }) => {
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -39,9 +36,7 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
 
   // 初始化RAG服务
   useEffect(() => {
-    const initializeService = async () => {
-      try {
-        await ragService.initialize();
+    const initializeService = async () => {try {await ragService.initialize();
       } catch (error) {
         console.error('RAG服务初始化失败:', error);
         Alert.alert('错误', 'RAG服务初始化失败');
@@ -65,16 +60,13 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
     ragService.on('queryComplete', handleQueryComplete);
     ragService.on('queryError', handleQueryError);
 
-    return () => {
-      ragService.off('queryComplete', handleQueryComplete);
+    return () => {ragService.off('queryComplete', handleQueryComplete);
       ragService.off('queryError', handleQueryError);
     };
   }, [onResult, onError]);
 
   // 执行基础查询
-  const handleQuery = useCallback(async () => {
-    if (!query.trim()) {
-      Alert.alert('提示', '请输入查询内容');
+  const handleQuery = useCallback(async () => {if (!query.trim()) {Alert.alert('提示', '请输入查询内容');
       return;
     }
 
@@ -88,8 +80,8 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
         taskType,
         context: {
           timestamp: Date.now(),
-          source: 'mobile_app',
-        },
+          source: 'mobile_app'
+        }
       };
 
       const response = await ragService.query(request);
@@ -105,9 +97,7 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
   }, [query, userId, taskType, onResult, onError]);
 
   // 执行流式查询
-  const handleStreamQuery = useCallback(async () => {
-    if (!query.trim()) {
-      Alert.alert('提示', '请输入查询内容');
+  const handleStreamQuery = useCallback(async () => {if (!query.trim()) {Alert.alert('提示', '请输入查询内容');
       return;
     }
 
@@ -123,13 +113,13 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
         stream: true,
         context: {
           timestamp: Date.now(),
-          source: 'mobile_app',
-        },
+          source: 'mobile_app'
+        }
       };
 
       await ragService.streamQuery(request, (chunk: StreamResponse) => {
         setStreamingText(prev => prev + chunk.answerFragment);
-        
+
         if (chunk.isFinal && chunk.sources) {
           // 构建最终结果
           const finalResult: RAGQueryResponse = {
@@ -145,13 +135,13 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
             agentInfo: {
               agentName: 'RAG服务',
               agentType: 'rag',
-              processingTime: 0,
+              processingTime: 0
             },
             processingTime: 0,
             followUpQuestions: [],
-            metadata: {},
+            metadata: {}
           };
-          
+
           setResult(finalResult);
           onResult?.(finalResult);
         }
@@ -166,15 +156,13 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
   }, [query, userId, taskType, streamingText, onResult, onError]);
 
   // 清除结果
-  const handleClear = useCallback(() => {
-    setQuery('');
+  const handleClear = useCallback(() => {setQuery('');
     setResult(null);
     setStreamingText('');
   }, []);
 
   // 批量查询处理
-  const handleBatchQuery = useCallback(async (queries: string[]) => {
-    if (queries.length === 0 || isLoading || isStreaming) return;
+  const handleBatchQuery = useCallback(async (queries: string[]) => {if (queries.length === 0 || isLoading || isStreaming) return;
 
     setIsLoading(true);
     setResult(null);
@@ -187,12 +175,12 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
         context: {
           timestamp: Date.now(),
           source: 'mobile_app',
-          batch: true,
-        },
+          batch: true
+        }
       }));
 
       const responses = await ragService.batchQuery(requests);
-      
+
       // 合并批量查询结果
       if (responses.length > 0) {
         const combinedResult: RAGQueryResponse = {
@@ -204,13 +192,13 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
           agentInfo: {
             agentName: '批量RAG服务',
             agentType: 'batch_rag',
-            processingTime: responses.reduce((sum, r) => sum + r.processingTime, 0),
+            processingTime: responses.reduce((sum, r) => sum + r.processingTime, 0)
           },
           processingTime: responses.reduce((sum, r) => sum + r.processingTime, 0),
           followUpQuestions: responses.flatMap(r => r.followUpQuestions),
-          metadata: { batchSize: responses.length },
+          metadata: { batchSize: responses.length }
         };
-        
+
         setResult(combinedResult);
         onResult?.(combinedResult);
       }
@@ -224,15 +212,12 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
   }, [userId, taskType, isLoading, isStreaming, onResult, onError]);
 
   // 清除缓存
-  const handleClearCache = useCallback(() => {
-    ragService.clearCache();
+  const handleClearCache = useCallback(() => {ragService.clearCache();
     Alert.alert('成功', '缓存已清除');
   }, []);
 
   // 健康检查
-  const handleHealthCheck = useCallback(async () => {
-    try {
-      const health = await ragService.performHealthCheck();
+  const handleHealthCheck = useCallback(async () => {try {const health = await ragService.performHealthCheck();
       Alert.alert(
         '健康检查结果',
         `服务状态: ${health.isHealthy ? '正常' : '异常'}\n` +
@@ -246,14 +231,13 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
   }, []);
 
   // 获取性能指标
-  const handleGetMetrics = useCallback(() => {
-    const metrics = ragService.getPerformanceMetrics();
+  const handleGetMetrics = useCallback(() => {const metrics = ragService.getPerformanceMetrics();
     const cacheStats = ragService.getCacheStats();
-    
-    const metricsText = Array.from(metrics.entries())
-      .map(([key, value]) => `${key}: ${value}ms`)
+
+    const metricsText = Array.from(metrics.entries());
+      .map(([key, value]) => `${key}: ${value}ms`);
       .join('\n');
-    
+
     Alert.alert(
       '性能指标',
       `${metricsText}\n\n缓存大小: ${cacheStats.size}\n缓存键数: ${cacheStats.keys.length}`
@@ -263,8 +247,8 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
   return (
     <View style={styles.container}>
       <Text style={styles.title}>RAG智能查询</Text>
-      
-      {/* 任务类型选择 */}
+
+      {// 任务类型选择}
       <View style={styles.taskTypeContainer}>
         <Text style={styles.label}>查询类型:</Text>
         <View style={styles.taskTypeButtons}>
@@ -273,14 +257,14 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
               key={type}
               style={[
                 styles.taskTypeButton,
-                taskType === type && styles.taskTypeButtonActive,
+                taskType === type && styles.taskTypeButtonActive
               ]}
               onPress={() => setTaskType(type)}
             >
               <Text
                 style={[
                   styles.taskTypeButtonText,
-                  taskType === type && styles.taskTypeButtonTextActive,
+                  taskType === type && styles.taskTypeButtonTextActive
                 ]}
               >
                 {type === 'consultation' && '咨询'}
@@ -293,7 +277,7 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
         </View>
       </View>
 
-      {/* 查询输入 */}
+      {// 查询输入}
       <View style={styles.inputContainer}>
         <Text style={styles.label}>查询内容:</Text>
         <TextInput
@@ -307,7 +291,7 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
         />
       </View>
 
-      {/* 操作按钮 */}
+      {// 操作按钮}
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[styles.button, styles.queryButton]}
@@ -342,7 +326,7 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
         </TouchableOpacity>
       </View>
 
-      {/* 高级功能按钮 */}
+      {// 高级功能按钮}
       <View style={styles.advancedButtonContainer}>
         <TouchableOpacity
           style={[styles.smallButton, styles.healthButton]}
@@ -369,9 +353,9 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
         </TouchableOpacity>
       </View>
 
-      {/* 结果显示 */}
+      {// 结果显示}
       <ScrollView style={styles.resultContainer}>
-        {/* 流式结果 */}
+        {// 流式结果}
         {isStreaming && (
           <View style={styles.streamingContainer}>
             <Text style={styles.resultTitle}>实时回答:</Text>
@@ -380,25 +364,25 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
           </View>
         )}
 
-        {/* 最终结果 */}
+        {// 最终结果}
         {result && (
           <View style={styles.resultContent}>
             <Text style={styles.resultTitle}>查询结果:</Text>
-            
-            {/* 回答内容 */}
+
+            {// 回答内容}
             <View style={styles.answerContainer}>
               <Text style={styles.answerTitle}>回答:</Text>
               <Text style={styles.answerText}>{result.answer}</Text>
             </View>
 
-            {/* 置信度 */}
+            {// 置信度}
             <View style={styles.confidenceContainer}>
               <Text style={styles.confidenceLabel}>
                 置信度: {(result.confidence * 100).toFixed(1)}%
               </Text>
             </View>
 
-            {/* 来源文档 */}
+            {// 来源文档}
             {result.sources && result.sources.length > 0 && (
               <View style={styles.sourcesContainer}>
                 <Text style={styles.sourcesTitle}>参考来源:</Text>
@@ -414,25 +398,25 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
               </View>
             )}
 
-            {/* 后续问题 */}
+            {// 后续问题}
             {result.followUpQuestions && result.followUpQuestions.length > 0 && (
               <View style={styles.followUpContainer}>
-                <Text style={styles.followUpTitle}>相关问题:</Text>
-                {result.followUpQuestions.map((question, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    style={styles.followUpItem}
-                    onPress={() => setQuery(question)}
-                  >
-                    <Text style={styles.followUpText}>{question}</Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            )}
-          </View>
-        )}
-      </ScrollView>
-    </View>
+                <Text style={styles.followUpTitle}>相关问题:</Text>;
+                {result.followUpQuestions.map((question, index) => (;
+                  <TouchableOpacity;
+                    key={index};
+                    style={styles.followUpItem};
+                    onPress={() => setQuery(question)};
+                  >;
+                    <Text style={styles.followUpText}>{question}</Text>;
+                  </TouchableOpacity>;
+                ))};
+              </View>;
+            )};
+          </View>;
+        )};
+      </ScrollView>;
+    </View>;
   );
 };
 
@@ -440,28 +424,28 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f5f5f5'
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 20,
-    color: '#333',
+    color: '#333'
   },
   taskTypeContainer: {
-    marginBottom: 16,
+    marginBottom: 16
   },
   label: {
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 8,
-    color: '#333',
+    color: '#333'
   },
   taskTypeButtons: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
+    gap: 8
   },
   taskTypeButton: {
     paddingHorizontal: 12,
@@ -469,22 +453,22 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: '#e0e0e0',
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#ccc'
   },
   taskTypeButtonActive: {
     backgroundColor: '#007AFF',
-    borderColor: '#007AFF',
+    borderColor: '#007AFF'
   },
   taskTypeButtonText: {
     fontSize: 14,
-    color: '#666',
+    color: '#666'
   },
   taskTypeButtonTextActive: {
     color: '#fff',
-    fontWeight: '600',
+    fontWeight: '600'
   },
   inputContainer: {
-    marginBottom: 16,
+    marginBottom: 16
   },
   textInput: {
     borderWidth: 1,
@@ -493,36 +477,36 @@ const styles = StyleSheet.create({
     padding: 12,
     backgroundColor: '#fff',
     fontSize: 16,
-    minHeight: 80,
+    minHeight: 80
   },
   buttonContainer: {
     flexDirection: 'row',
     gap: 12,
-    marginBottom: 16,
+    marginBottom: 16
   },
   button: {
     flex: 1,
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   queryButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#007AFF'
   },
   streamButton: {
-    backgroundColor: '#34C759',
+    backgroundColor: '#34C759'
   },
   clearButton: {
-    backgroundColor: '#FF3B30',
+    backgroundColor: '#FF3B30'
   },
   buttonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   resultContainer: {
-    flex: 1,
+    flex: 1
   },
   streamingContainer: {
     backgroundColor: '#fff',
@@ -530,58 +514,58 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 16,
     borderLeftWidth: 4,
-    borderLeftColor: '#34C759',
+    borderLeftColor: '#34C759'
   },
   streamingText: {
     fontSize: 16,
     lineHeight: 24,
     color: '#333',
-    marginBottom: 8,
+    marginBottom: 8
   },
   streamingIndicator: {
-    alignSelf: 'flex-start',
+    alignSelf: 'flex-start'
   },
   resultContent: {
     backgroundColor: '#fff',
     borderRadius: 8,
-    padding: 16,
+    padding: 16
   },
   resultTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 12,
-    color: '#333',
+    color: '#333'
   },
   answerContainer: {
-    marginBottom: 16,
+    marginBottom: 16
   },
   answerTitle: {
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 8,
-    color: '#007AFF',
+    color: '#007AFF'
   },
   answerText: {
     fontSize: 16,
     lineHeight: 24,
-    color: '#333',
+    color: '#333'
   },
   confidenceContainer: {
-    marginBottom: 16,
+    marginBottom: 16
   },
   confidenceLabel: {
     fontSize: 14,
     color: '#666',
-    fontWeight: '500',
+    fontWeight: '500'
   },
   sourcesContainer: {
-    marginBottom: 16,
+    marginBottom: 16
   },
   sourcesTitle: {
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 8,
-    color: '#333',
+    color: '#333'
   },
   sourceItem: {
     backgroundColor: '#f8f9fa',
@@ -589,32 +573,32 @@ const styles = StyleSheet.create({
     padding: 12,
     marginBottom: 8,
     borderLeftWidth: 3,
-    borderLeftColor: '#007AFF',
+    borderLeftColor: '#007AFF'
   },
   sourceTitle: {
     fontSize: 14,
     fontWeight: '600',
     marginBottom: 4,
-    color: '#333',
+    color: '#333'
   },
   sourceSnippet: {
     fontSize: 13,
     lineHeight: 18,
     color: '#666',
-    marginBottom: 4,
+    marginBottom: 4
   },
   sourceInfo: {
     fontSize: 12,
-    color: '#999',
+    color: '#999'
   },
   followUpContainer: {
-    marginTop: 8,
+    marginTop: 8
   },
   followUpTitle: {
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 8,
-    color: '#333',
+    color: '#333'
   },
   followUpItem: {
     backgroundColor: '#f0f8ff',
@@ -622,17 +606,17 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 6,
     borderWidth: 1,
-    borderColor: '#e0e8f0',
+    borderColor: '#e0e8f0'
   },
   followUpText: {
     fontSize: 14,
-    color: '#007AFF',
+    color: '#007AFF'
   },
   advancedButtonContainer: {
     flexDirection: 'row',
     gap: 8,
     marginBottom: 16,
-    justifyContent: 'space-around',
+    justifyContent: 'space-around'
   },
   smallButton: {
     paddingHorizontal: 12,
@@ -640,22 +624,12 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     alignItems: 'center',
     justifyContent: 'center',
-    flex: 1,
-  },
-  smallButtonText: {
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: '500',
-  },
-  healthButton: {
-    backgroundColor: '#FF9500',
-  },
-  metricsButton: {
-    backgroundColor: '#5856D6',
-  },
-  cacheButton: {
-    backgroundColor: '#FF2D92',
-  },
+    flex: 1;
+  },smallButtonText: {color: '#fff',fontSize: 12,fontWeight: '500';
+  },healthButton: {backgroundColor: '#FF9500';
+  },metricsButton: {backgroundColor: '#5856D6';
+  },cacheButton: {backgroundColor: '#FF2D92';
+  };
 });
 
 export default RAGQueryComponent; 

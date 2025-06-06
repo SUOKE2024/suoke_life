@@ -1,10 +1,15 @@
+"""
+test_main - 索克生活项目模块
+"""
+
+from fastapi.testclient import TestClient
+from health_data_service.api.main import app
+from unittest.mock import AsyncMock, patch
+import pytest
+
 """主应用测试"""
 
-import pytest
-from unittest.mock import AsyncMock, patch
-from fastapi.testclient import TestClient
 
-from health_data_service.api.main import app
 
 
 @pytest.fixture

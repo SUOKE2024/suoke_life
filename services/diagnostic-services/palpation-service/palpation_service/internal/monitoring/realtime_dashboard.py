@@ -1,17 +1,8 @@
-#!/usr/bin/env python3
-
 """
-实时监控仪表板
-提供系统性能监控、设备状态监控、用户活动监控和健康指标监控功能
-支持实时数据更新、告警通知、历史数据分析和可视化展示
+realtime_dashboard - 索克生活项目模块
 """
 
-import asyncio
-import json
-import logging
-import sqlite3
-import threading
-import time
+from aiohttp import WSMsgType, web
 from collections import defaultdict, deque
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
@@ -20,9 +11,23 @@ from datetime import datetime, timedelta
 from enum import Enum
 from pathlib import Path
 from typing import Any
-
+import asyncio
+import json
+import logging
 import psutil
-from aiohttp import WSMsgType, web
+import sqlite3
+import threading
+import time
+
+#!/usr/bin/env python3
+
+"""
+实时监控仪表板
+提供系统性能监控、设备状态监控、用户活动监控和健康指标监控功能
+支持实时数据更新、告警通知、历史数据分析和可视化展示
+"""
+
+
 
 logger = logging.getLogger(__name__)
 

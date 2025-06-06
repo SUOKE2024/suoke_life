@@ -1,16 +1,23 @@
+"""
+optimized_quality_gate - 索克生活项目模块
+"""
+
+                    import re
+        import re
+from pathlib import Path
+from typing import Dict, List, Tuple, Optional
+import json
+import os
+import subprocess
+import sys
+import time
+
 #!/usr/bin/env python3
 """
 索克生活项目优化质量门禁系统
 专注于核心源代码的质量检查
 """
 
-import os
-import sys
-import json
-import subprocess
-from pathlib import Path
-from typing import Dict, List, Tuple, Optional
-import time
 
 class OptimizedQualityGate:
     def __init__(self, project_root: str):
@@ -193,7 +200,6 @@ class OptimizedQualityGate:
     
     def _calculate_simple_complexity(self, content: str) -> int:
         """简单的复杂度计算"""
-        import re
         complexity = 1
         
         # 计算控制流语句
@@ -220,7 +226,6 @@ class OptimizedQualityGate:
                     with open(file_path, 'r', encoding='utf-8') as f:
                         content = f.read()
                     
-                    import re
                     console_logs = re.findall(r'console\.(log|debug|info)', content)  # 不包括warn和error
                     console_log_count += len(console_logs)
                     
@@ -308,7 +313,6 @@ class OptimizedQualityGate:
                     with open(file_path, 'r', encoding='utf-8') as f:
                         content = f.read()
                     
-                    import re
                     for pattern in dangerous_patterns:
                         matches = re.findall(pattern, content)
                         security_issues += len(matches)

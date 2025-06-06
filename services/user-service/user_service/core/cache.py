@@ -1,12 +1,17 @@
-"""缓存管理"""
+"""
+cache - 索克生活项目模块
+"""
 
+from redis.asyncio import Redis
+from typing import Any, Optional, Union
+from user_service.config import get_settings
 import json
 import logging
-from typing import Any, Optional, Union
 import redis.asyncio as redis
-from redis.asyncio import Redis
 
-from user_service.config import get_settings
+"""缓存管理"""
+
+
 
 logger = logging.getLogger(__name__)
 

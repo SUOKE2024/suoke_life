@@ -1,3 +1,20 @@
+"""
+rag_service - 索克生活项目模块
+"""
+
+from ..model.document import Document, DocumentReference, RetrieveResult, GenerateResult, QueryResult
+from ..platform.model_manager import get_model_manager, ModelType
+from ..repository.milvus_repository import MilvusRepository
+from ..retriever.hybrid_retriever import HybridRetriever
+from ..retriever.kg_enhanced_retriever import KGEnhancedRetriever
+from .cache_service import CacheService
+from .embedding_service import EmbeddingService
+from .kg_integration_service import KnowledgeGraphIntegrationService
+from loguru import logger
+from typing import Dict, List, Any, Optional, AsyncGenerator, Tuple
+import time
+import uuid
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,19 +22,7 @@
 RAG服务实现，提供检索增强生成的核心功能
 """
 
-import time
-import uuid
-from typing import Dict, List, Any, Optional, AsyncGenerator, Tuple
-from loguru import logger
 
-from ..model.document import Document, DocumentReference, RetrieveResult, GenerateResult, QueryResult
-from ..retriever.hybrid_retriever import HybridRetriever
-from ..repository.milvus_repository import MilvusRepository
-from .embedding_service import EmbeddingService
-from .cache_service import CacheService
-from .kg_integration_service import KnowledgeGraphIntegrationService
-from ..retriever.kg_enhanced_retriever import KGEnhancedRetriever
-from ..platform.model_manager import get_model_manager, ModelType
 
 class RagService:
     """

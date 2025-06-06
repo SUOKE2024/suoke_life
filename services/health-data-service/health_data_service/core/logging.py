@@ -1,3 +1,13 @@
+"""
+logging - 索克生活项目模块
+"""
+
+from health_data_service.core.config import settings
+from loguru import logger
+from pathlib import Path
+from typing import Any, Optional, Tuple
+import sys
+
 #!/usr/bin/env python3
 """
 日志配置模块
@@ -5,13 +15,8 @@
 提供统一的日志配置和记录功能。
 """
 
-import sys
-from pathlib import Path
-from typing import Any, Optional, Tuple
 
-from loguru import logger
 
-from health_data_service.core.config import settings
 
 
 def setup_logging() -> None:

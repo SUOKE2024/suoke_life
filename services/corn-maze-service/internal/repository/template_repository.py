@@ -1,20 +1,25 @@
+"""
+template_repository - 索克生活项目模块
+"""
+
+from datetime import datetime
+from internal.model.template import MazeTemplate
+from pathlib import Path
+from typing import Any
+import aiosqlite
+import json
+import logging
+import os
+import uuid
+
 #!/usr/bin/env python3
 
 """
 模板存储库 - 负责迷宫模板的存储和检索
 """
 
-from datetime import datetime
-import json
-import logging
-import os
-from pathlib import Path
-from typing import Any
-import uuid
 
-import aiosqlite
 
-from internal.model.template import MazeTemplate
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +30,8 @@ class TemplateRepository:
         self.db_path = os.environ.get("MAZE_DB_PATH", "data/maze.db")
         logger.info(f"模板存储库初始化, 数据库路径: {self.db_path}")
 
-    async def _get_db(self):
+    async     @cache(timeout=300)  # 5分钟缓存
+def _get_db(self):
         """获取数据库连接"""
         # 确保数据库目录存在
         Path(self.db_path).parent.mkdir(parents=True, exist_ok=True)

@@ -1,13 +1,19 @@
 """
+health_aware_balancer - 索克生活项目模块
+"""
+
+        from .algorithms import (
+from .load_balancer import LoadBalancingAlgorithm, ServiceEndpoint
+from typing import Any
+import logging
+import time
+
+"""
 健康感知负载均衡器
 根据端点健康状态和性能指标进行智能负载均衡
 """
 
-import logging
-import time
-from typing import Any
 
-from .load_balancer import LoadBalancingAlgorithm, ServiceEndpoint
 
 logger = logging.getLogger(__name__)
 
@@ -189,7 +195,6 @@ class AdaptiveLoadBalancer(LoadBalancingAlgorithm):
 
     async def initialize(self, config: dict[str, Any]):
         """初始化自适应负载均衡器"""
-        from .algorithms import (
             LeastConnectionsBalancer,
             RoundRobinBalancer,
             WeightedRoundRobinBalancer,

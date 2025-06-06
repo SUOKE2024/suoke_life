@@ -1,3 +1,14 @@
+"""
+conversation_processor - 索克生活项目模块
+"""
+
+from internal.knowledge.knowledge_connector import KnowledgeConnector
+from internal.llm.llm_client import LLMClient
+import json
+import logging
+import os
+import time
+
 #!/usr/bin/env python3
 
 """
@@ -7,13 +18,7 @@
 辨证分析、医学实体识别等核心功能，使LLM能更精准地进行中医诊断分析。
 """
 
-import json
-import logging
-import os
-import time
 
-from internal.knowledge.knowledge_connector import KnowledgeConnector
-from internal.llm.llm_client import LLMClient
 
 logger = logging.getLogger(__name__)
 

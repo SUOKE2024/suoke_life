@@ -1,19 +1,24 @@
 """
+tracing - 索克生活项目模块
+"""
+
+from ..core.config import get_settings
+from ..core.logging import get_logger
+from fastapi import Request, Response
+from opentelemetry import trace
+from opentelemetry.trace import Status, StatusCode
+from starlette.middleware.base import BaseHTTPMiddleware
+from typing import Optional
+import time
+
+"""
 链路追踪中间件
 
 集成 OpenTelemetry 进行分布式链路追踪。
 """
 
-import time
-from typing import Optional
 
-from fastapi import Request, Response
-from opentelemetry import trace
-from opentelemetry.trace import Status, StatusCode
-from starlette.middleware.base import BaseHTTPMiddleware
 
-from ..core.config import get_settings
-from ..core.logging import get_logger
 
 logger = get_logger(__name__)
 

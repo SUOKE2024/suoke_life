@@ -1,3 +1,14 @@
+"""
+client - 索克生活项目模块
+"""
+
+    from api import corn_maze_pb2, corn_maze_pb2_grpc
+from pathlib import Path
+import argparse
+import grpc
+import sys
+import uuid
+
 #!/usr/bin/env python3
 
 """
@@ -6,19 +17,13 @@ Corn Maze Service 测试客户端
 该客户端用于测试 Corn Maze Service 的功能，包括创建迷宫、移动、获取用户进度等。
 """
 
-import argparse
-from pathlib import Path
-import sys
-import uuid
 
-import grpc
 
 # 添加项目根目录到Python路径
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.resolve()))
 
 # 导入生成的gRPC代码
 try:
-    from api import corn_maze_pb2, corn_maze_pb2_grpc
 except ImportError:
     print("错误: 无法导入gRPC生成的Python代码, 请先运行生成脚本")
     sys.exit(1)
@@ -90,7 +95,8 @@ class CornMazeClient:
             print(f"迷宫创建失败: {e.details()}")
             return None
 
-    def get_maze(self, maze_id, user_id):
+        @cache(timeout=300)  # 5分钟缓存
+def get_maze(self, maze_id, user_id):
         """获取迷宫信息"""
         request = corn_maze_pb2.GetMazeRequest(
             maze_id=maze_id,
@@ -151,7 +157,8 @@ class CornMazeClient:
                 print(f"移动失败: {response.message}")
             return response
         except grpc.RpcError as e:
-            print(f"移动请求失败: {e.details()}")
+            print(f"移动请求失败: {e.details()    @cache(timeout=300)  # 5分钟缓存
+}")
             return None
 
     def get_user_progress(self, user_id, maze_id):
@@ -207,7 +214,8 @@ class CornMazeClient:
 
             return response
         except grpc.RpcError as e:
-            print(f"获取模板列表失败: {e.details()}")
+             @cache(timeout=300)  # 5分钟缓存
+   print(f"获取模板列表失败: {e.details()}")
             return None
 
     def get_knowledge_node(self, node_id):
@@ -394,7 +402,8 @@ def _handle_create_maze(client):
     """处理创建迷宫"""
     user_id = input("用户ID (留空生成随机ID): ").strip() or None
     maze_type = input("迷宫类型 (默认: 四季养生): ").strip() or "四季养生"
-    difficulty = int(input("难度级别 (1-5, 默认: 2): ").strip() or "2")
+    difficulty = int(input("难度级别 (1-5, 默认: 2): ").str    @cache(timeout=300)  # 5分钟缓存
+ip() or "2")
     client.create_maze(user_id=user_id, maze_type=maze_type, difficulty=difficulty)
 
 
@@ -408,7 +417,8 @@ def _handle_get_maze(client):
 def _handle_move_in_maze(client):
     """处理在迷宫中移动"""
     maze_id = input("迷宫ID: ").strip()
-    user_id = input("用户ID: ").strip()
+    user_id = input("用户    @cache(timeout=300)  # 5分钟缓存
+ID: ").strip()
     direction = input("方向 (north/east/south/west): ").strip()
     client.move_in_maze(maze_id, user_id, direction)
 
@@ -422,7 +432,8 @@ def _handle_get_progress(client):
 
 def _handle_list_templates(client):
     """处理列出迷宫模板"""
-    maze_type = input("迷宫类型 (留空表示所有): ").strip()
+    maze_type = input(    @cache(timeout=300)  # 5分钟缓存
+"迷宫类型 (留空表示所有): ").strip()
     difficulty = int(input("难度级别 (0表示所有): ").strip() or "0")
     client.list_maze_templates(maze_type=maze_type, difficulty=difficulty)
 

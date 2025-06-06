@@ -1,20 +1,28 @@
+"""
+server - 索克生活项目模块
+"""
+
+    from api import corn_maze_pb2, corn_maze_pb2_grpc
+from internal.service.knowledge_service import KnowledgeService
+from internal.service.maze_service import MazeService
+from internal.service.progress_service import ProgressService
+import grpc
+import logging
+import sys
+
 #!/usr/bin/env python3
 
 """
 Corn Maze Service gRPC服务实现
 """
 
-import logging
-import sys
 
-import grpc
 
 # 添加自动生成的gRPC代码路径
 sys.path.append("api")
 
 # 尝试导入自动生成的gRPC代码
 try:
-    from api import corn_maze_pb2, corn_maze_pb2_grpc
 except ImportError:
     print("警告: 无法导入gRPC生成的代码, 这在开发时可能是正常的")
     # 创建模拟的gRPC类, 以便开发时不会报错
@@ -22,9 +30,6 @@ except ImportError:
         class CornMazeServiceServicer:
             pass
 
-from internal.service.knowledge_service import KnowledgeService
-from internal.service.maze_service import MazeService
-from internal.service.progress_service import ProgressService
 
 logger = logging.getLogger(__name__)
 

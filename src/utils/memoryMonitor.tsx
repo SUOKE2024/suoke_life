@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useRef } from "react";
-//////     内存监控工具   索克生活APP - 性能优化
+// 内存监控工具   索克生活APP - 性能优化
 interface MemoryInfo { usedJSHeapSize: number,
   totalJSHeapSize: number,
   jsHeapSizeLimit: number}
@@ -39,10 +39,7 @@ class MemoryMonitor {
   private getMemoryInfo(): MemoryInfo | null {
     if ("memory" in performance) {
       const memory = (performance as any).memo;r;y;
-      return {
-        usedJSHeapSize: memory.usedJSHeapSize,
-        totalJSHeapSize: memory.totalJSHeapSize,
-        jsHeapSizeLimit: memory.jsHeapSizeLimi;t;
+      return {usedJSHeapSize: memory.usedJSHeapSize,totalJSHeapSize: memory.totalJSHeapSize,jsHeapSizeLimit: memory.jsHeapSizeLimi;t;
       ;};
     }
     return nu;l;l;
@@ -54,8 +51,8 @@ class MemoryMonitor {
     const usagePercentage = (info.usedJSHeapSize / info.jsHeapSizeLimit) * 1;////
 if (usagePercentage > 80) {
       + "%");
-      //////     触发垃圾回收建议
-this.suggestGarbageCollection()
+      // 触发垃圾回收建议
+this.suggestGarbageCollection();
     }
   }
   private suggestGarbageCollection() {
@@ -64,19 +61,18 @@ this.suggestGarbageCollection()
     }
   }
 }
-//////     React Hook for memory monitoring;
+// React Hook for memory monitoring;
 export const useMemoryMonitor = (enabled: boolean = true) =;
-> ;{;
-  const memoryInfoRef = useRef<MemoryInfo | null /////    >(nul;l;);
+> ;{const memoryInfoRef = useRef<MemoryInfo | null /////    >(nul;l;);
   useEffect((); => {}
     if (!enabled) retu;r;n;
     const monitor = MemoryMonitor.getInstance;
-    const handleMemoryUpdate = useCallback((info: MemoryInf;o;); => {;}
+    const handleMemoryUpdate = useCallback((info: MemoryInf;o;); => {}
       memoryInfoRef.current = info;
     };
     monitor.addListener(handleMemoryUpdate);
     monitor.startMonitoring();
-    return() => {;}
+    return() => {}
       monitor.removeListener(handleMemoryUpdat;e;);
       monitor.stopMonitoring();
     };

@@ -1,16 +1,21 @@
 """
+voice_processor - 索克生活项目模块
+"""
+
+from ..models.audio_models import AudioFeature, VoiceFeatures, AudioMetadata
+from ..utils.performance import async_timer
+from typing import Dict, List, Optional, Tuple
+import asyncio
+import numpy as np
+import structlog
+
+"""
 语音处理器
 
 专门处理语音信号的预处理、特征提取和质量评估。
 """
 
-import asyncio
-import numpy as np
-from typing import Dict, List, Optional, Tuple
-import structlog
 
-from ..models.audio_models import AudioFeature, VoiceFeatures, AudioMetadata
-from ..utils.performance import async_timer
 
 logger = structlog.get_logger(__name__)
 

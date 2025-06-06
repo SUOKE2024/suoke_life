@@ -1,3 +1,17 @@
+"""
+knowledge_reasoning_engine - 索克生活项目模块
+"""
+
+        import hashlib
+from collections import defaultdict, deque
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from loguru import logger
+from typing import Dict, List, Any, Optional, Tuple, Set, Union
+import json
+import uuid
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,14 +19,6 @@
 知识图谱推理引擎 - 基于中医理论的智能推理和决策支持系统
 """
 
-import json
-import uuid
-from typing import Dict, List, Any, Optional, Tuple, Set, Union
-from dataclasses import dataclass, field
-from enum import Enum
-from datetime import datetime, timedelta
-from loguru import logger
-from collections import defaultdict, deque
 
 class ReasoningType(Enum):
     """推理类型"""
@@ -813,7 +819,6 @@ class KnowledgeReasoningEngine:
         context_str = json.dumps(context, sort_keys=True) if context else ""
         
         # 生成哈希
-        import hashlib
         combined_str = f"{evidence_str}|{type_str}|{context_str}"
         return hashlib.md5(combined_str.encode()).hexdigest()
     

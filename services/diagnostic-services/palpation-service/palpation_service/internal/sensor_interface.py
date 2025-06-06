@@ -1,21 +1,26 @@
 """
-脉象传感器数据对接模块
-支持多种传感器设备的数据采集和处理
+sensor_interface - 索克生活项目模块
 """
 
-import asyncio
-import json
-import logging
-import struct
 from abc import ABC, abstractmethod
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, asdict
 from datetime import datetime
 from enum import Enum
 from typing import Dict, List, Optional, Any, Callable, Union
-from concurrent.futures import ThreadPoolExecutor
+import asyncio
+import bluetooth
+import json
+import logging
 import serial
 import socket
-import bluetooth
+import struct
+
+"""
+脉象传感器数据对接模块
+支持多种传感器设备的数据采集和处理
+"""
+
 
 logger = logging.getLogger(__name__)
 

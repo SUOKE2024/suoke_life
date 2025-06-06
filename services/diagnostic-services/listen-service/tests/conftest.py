@@ -1,15 +1,25 @@
 """
+conftest - 索克生活项目模块
+"""
+
+    from listen_service.config.settings import Settings, Environment
+    from listen_service.core.audio_analyzer import AudioAnalyzer
+    from listen_service.models.audio_models import AudioAnalysisRequest, AnalysisType
+    from listen_service.models.audio_models import VoiceFeatures, AudioAnalysisResponse
+    from listen_service.models.tcm_models import TCMDiagnosis
+from unittest.mock import AsyncMock, MagicMock
+import asyncio
+import pytest
+import uuid
+
+"""
 现代化测试配置
 
 为 listen-service 提供全面的测试配置，支持异步测试、音频测试、
 集成测试和性能测试。基于 Python 3.13.3 和 pytest 最佳实践。
 """
 
-import asyncio
-import uuid
 
-import pytest
-from unittest.mock import AsyncMock, MagicMock
 
 # 测试配置
 pytest_plugins = ["pytest_asyncio"]
@@ -24,7 +34,6 @@ def event_loop():
 @pytest.fixture(scope="session")
 def test_settings():
     """测试配置"""
-    from listen_service.config.settings import Settings, Environment
     
     return Settings(
         environment=Environment.TESTING,
@@ -38,9 +47,6 @@ def test_settings():
 @pytest.fixture
 def mock_audio_analyzer():
     """模拟音频分析器"""
-    from listen_service.core.audio_analyzer import AudioAnalyzer
-    from listen_service.models.audio_models import VoiceFeatures, AudioAnalysisResponse
-    from listen_service.models.tcm_models import TCMDiagnosis
     
     analyzer = AsyncMock(spec=AudioAnalyzer)
     
@@ -107,7 +113,6 @@ def sample_audio_data():
 @pytest.fixture
 def audio_analysis_request():
     """音频分析请求示例"""
-    from listen_service.models.audio_models import AudioAnalysisRequest, AnalysisType
     
     return AudioAnalysisRequest(
         analysis_types=[

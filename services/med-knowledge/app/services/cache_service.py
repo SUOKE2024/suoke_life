@@ -1,16 +1,21 @@
 """
+cache_service - 索克生活项目模块
+"""
+
+from app.core.logger import get_logger
+from pydantic import BaseModel
+from typing import Any
+import json
+import pickle
+import redis
+
+"""
 缓存服务
 提供Redis缓存功能,支持数据缓存和性能优化
 """
 
-import json
-import pickle
-from typing import Any
 
-import redis
-from pydantic import BaseModel
 
-from app.core.logger import get_logger
 
 class CacheService:
     """缓存服务"""

@@ -1,3 +1,24 @@
+"""
+intelligent_tcm_constitution_engine - 索克生活项目模块
+"""
+
+from ..observability.metrics import MetricsCollector
+from ..observability.tracing import trace_operation, SpanKind
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from loguru import logger
+from sklearn.cluster import KMeans
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.preprocessing import StandardScaler
+from typing import Dict, List, Any, Optional, Tuple, Union, Set, Callable
+import asyncio
+import json
+import numpy as np
+import pandas as pd
+import warnings
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,24 +27,8 @@
 结合传统中医体质学说和现代数据分析技术，为用户提供精准的体质辨识和个性化调理方案
 """
 
-import asyncio
-import json
-import numpy as np
-from typing import Dict, List, Any, Optional, Tuple, Union, Set, Callable
-from dataclasses import dataclass, field
-from enum import Enum
-from datetime import datetime, timedelta
-from loguru import logger
-import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.cluster import KMeans
-import warnings
 warnings.filterwarnings('ignore')
 
-from ..observability.metrics import MetricsCollector
-from ..observability.tracing import trace_operation, SpanKind
 
 
 class TCMConstitution(str, Enum):

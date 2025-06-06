@@ -1,22 +1,13 @@
-"""健康数据服务"""
+"""
+health_data_service - 索克生活项目模块
+"""
 
-import contextlib
-import time
+from .base import BaseService
 from datetime import datetime
-from typing import Any, Optional, List, Tuple
-
-from loguru import logger
-
+from health_data_service.core.database import (
 from health_data_service.core.exceptions import DatabaseError
 from health_data_service.core.exceptions import NotFoundError
 from health_data_service.core.exceptions import ValidationError
-from health_data_service.core.database import (
-    get_database, 
-    health_data_repo, 
-    vital_signs_repo,
-    tcm_diagnosis_repo,
-    processing_records_repo
-)
 from health_data_service.models import CreateHealthDataRequest
 from health_data_service.models import CreateVitalSignsRequest
 from health_data_service.models import DataSource
@@ -24,8 +15,22 @@ from health_data_service.models import DataType
 from health_data_service.models import HealthData
 from health_data_service.models import UpdateHealthDataRequest
 from health_data_service.models import VitalSigns
+from loguru import logger
+from typing import Any, Optional, List, Tuple
+import contextlib
+import time
 
-from .base import BaseService
+"""健康数据服务"""
+
+
+
+    get_database, 
+    health_data_repo, 
+    vital_signs_repo,
+    tcm_diagnosis_repo,
+    processing_records_repo
+)
+
 
 class HealthDataService(BaseService[HealthData, CreateHealthDataRequest, UpdateHealthDataRequest]):
     """健康数据服务"""

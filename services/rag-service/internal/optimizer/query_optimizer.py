@@ -1,3 +1,16 @@
+"""
+query_optimizer - 索克生活项目模块
+"""
+
+from ..observability.metrics import MetricsCollector
+from ..tcm.tcm_models import ConstitutionType, SyndromeType
+from dataclasses import dataclass, field
+from enum import Enum
+from loguru import logger
+from typing import Dict, List, Any, Optional, Tuple, Set
+import asyncio
+import jieba
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,15 +19,7 @@
 支持查询重写、扩展、中医特色优化和多策略优化
 """
 
-import asyncio
-from typing import Dict, List, Any, Optional, Tuple, Set
-from dataclasses import dataclass, field
-from enum import Enum
-import jieba
-from loguru import logger
 
-from ..observability.metrics import MetricsCollector
-from ..tcm.tcm_models import ConstitutionType, SyndromeType
 
 class OptimizationStrategy(str, Enum):
     """优化策略"""

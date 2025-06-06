@@ -1,13 +1,26 @@
 """
-索克生活平台通用组件集成测试示例
-测试负载均衡、健康检查、监控和聚合等新增功能
+integration_test_example - 索克生活项目模块
 """
 
+    from services.common.health import AlertLevel, HealthAggregator, HealthStatus
+    from services.common.health import HealthAggregator, HealthChecker, HealthMonitor
+    from services.common.health import HealthChecker
+    from services.common.health import HealthMonitor
+    from services.common.health.health_monitor import HealthAlert
+    from services.common.load_balancer import (
+    from services.common.load_balancer import LoadBalancer, LoadBalancingStrategy
+    from services.common.load_balancer.health_aware_balancer import (
 import asyncio
 import json
 import logging
 import random
 import time
+
+"""
+索克生活平台通用组件集成测试示例
+测试负载均衡、健康检查、监控和聚合等新增功能
+"""
+
 
 # 配置日志
 logging.basicConfig(
@@ -20,12 +33,10 @@ async def test_load_balancer():
     """测试负载均衡器功能"""
     logger.info("🔄 开始测试负载均衡器...")
 
-    from services.common.load_balancer import (
         LoadBalancer,
         LoadBalancingStrategy,
         ServiceEndpoint,
     )
-    from services.common.load_balancer.health_aware_balancer import (
         HealthAwareLoadBalancer,
     )
 
@@ -129,7 +140,6 @@ async def test_health_checker():
     """测试健康检查器功能"""
     logger.info("🏥 开始测试健康检查器...")
 
-    from services.common.health import HealthChecker
 
     # 创建健康检查器
     health_checker = HealthChecker()
@@ -169,7 +179,6 @@ async def test_health_monitor():
     """测试健康监控器功能"""
     logger.info("📊 开始测试健康监控器...")
 
-    from services.common.health import HealthMonitor
 
     # 创建健康监控器
     health_monitor = HealthMonitor()
@@ -226,8 +235,6 @@ async def test_health_aggregator():
     """测试健康聚合器功能"""
     logger.info("🔗 开始测试健康聚合器...")
 
-    from services.common.health import AlertLevel, HealthAggregator, HealthStatus
-    from services.common.health.health_monitor import HealthAlert
 
     # 创建健康聚合器
     aggregator = HealthAggregator()
@@ -351,8 +358,6 @@ async def test_integrated_scenario():
     """测试集成场景 - 模拟真实的微服务环境"""
     logger.info("🎭 开始集成场景测试...")
 
-    from services.common.health import HealthAggregator, HealthChecker, HealthMonitor
-    from services.common.load_balancer import LoadBalancer, LoadBalancingStrategy
 
     # 1. 初始化所有组件
     load_balancer = LoadBalancer()

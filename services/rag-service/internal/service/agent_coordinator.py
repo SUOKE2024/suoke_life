@@ -1,3 +1,18 @@
+"""
+agent_coordinator - 索克生活项目模块
+"""
+
+        from collections import Counter
+from collections import defaultdict, deque
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from loguru import logger
+from typing import Dict, List, Any, Optional, Tuple, Set, Union, Callable
+import asyncio
+import json
+import uuid
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,15 +20,6 @@
 智能体协调器 - 管理四个智能体的协同工作和任务分配
 """
 
-import asyncio
-import json
-import uuid
-from typing import Dict, List, Any, Optional, Tuple, Set, Union, Callable
-from dataclasses import dataclass, field
-from enum import Enum
-from datetime import datetime, timedelta
-from loguru import logger
-from collections import defaultdict, deque
 
 class AgentType(Enum):
     """智能体类型"""
@@ -1017,7 +1023,6 @@ class AgentCoordinator:
             confidence_scores.append(result.get("confidence", 0.5))
         
         # 统计建议出现频率
-        from collections import Counter
         recommendation_counts = Counter(all_recommendations)
         
         # 出现频率高的作为共识点

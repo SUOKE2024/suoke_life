@@ -1,11 +1,16 @@
 """
-基础服务类
+base_service - 索克生活项目模块
 """
-
-from typing import Generic, TypeVar
 
 from sqlalchemy.ext.declarative import DeclarativeMeta
 from sqlalchemy.orm import Session
+from typing import Generic, TypeVar
+
+"""
+基础服务类
+"""
+
+
 
 ModelType = TypeVar("ModelType", bound=DeclarativeMeta)
 
@@ -31,7 +36,7 @@ class BaseService(Generic[ModelType]):
 
     async def get_multi(self, skip: int = 0, limit: int = 100) -> list[ModelType]:
         """获取多个对象"""
-        return self.db.query(self.model).offset(skip).limit(limit).all()
+        return self.db.query(self.model).offset(skip).limit(limit).all()[:1000]  # 限制查询结果数量
 
     async def update(self, db_obj: ModelType, obj_in: dict) -> ModelType:
         """更新对象"""
@@ -49,3 +54,15 @@ class BaseService(Generic[ModelType]):
             self.db.delete(obj)
             self.db.commit()
         return obj
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'baseservice'
+        ordering = ['-created_at']
+

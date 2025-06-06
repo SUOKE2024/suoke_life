@@ -1,11 +1,17 @@
-"""健康数据API路由"""
+"""
+health_data - 索克生活项目模块
+"""
 
-from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from fastapi.responses import JSONResponse
-
 from health_data_service.core.exceptions import DatabaseError, NotFoundError, ValidationError
 from health_data_service.models import (
+from health_data_service.services.health_data_service import HealthDataService, VitalSignsService, TCMDiagnosisService
+from typing import List, Optional
+
+"""健康数据API路由"""
+
+
     CreateHealthDataRequest,
     CreateVitalSignsRequest,
     HealthData,
@@ -16,7 +22,6 @@ from health_data_service.models import (
     DataType,
     DataSource,
 )
-from health_data_service.services.health_data_service import HealthDataService, VitalSignsService, TCMDiagnosisService
 
 router = APIRouter(prefix="/health-data", tags=["健康数据"])
 

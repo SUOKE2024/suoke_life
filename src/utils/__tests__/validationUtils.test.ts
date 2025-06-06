@@ -1,329 +1,316 @@
 import { validateEmail, validatePhone, validatePassword, validateUsername, validateIdCard, validateRequired, validateNumberRange, validateAgeNumber, validateAge, validateHeight, validateWeight, validateUrl, validateField } from "../validationUtils";
+import { validateEmail, validatePhone, validatePassword, validateUsername, validateIdCard, validateRequired, validateNumberRange, validateAgeNumber, validateAge, validateHeight, validateWeight, validateUrl, validateField } from "../validationUtils";
+
 describe("validationUtils", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  describe(validateEmail", () => {"
+  describe("validateEmail", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = validateEmail(/* valid params   */);
+const result = validateEmail(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = validateEmail(/* edge case params   */);
+const result = validateEmail(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        validateEmail(/* invalid params     */)
-      }).not.toThrow()
+        validateEmail(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = validateEmail(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = validateEmail(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(validatePhone", () => {"
+  describe("validatePhone", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = validatePhone(/* valid params   */);
+const result = validatePhone(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = validatePhone(/* edge case params   */);
+const result = validatePhone(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        validatePhone(/* invalid params     */)
-      }).not.toThrow()
+        validatePhone(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = validatePhone(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = validatePhone(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(validatePassword", () => {"
+  describe("validatePassword", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = validatePassword(/* valid params   */);
+const result = validatePassword(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = validatePassword(/* edge case params   */);
+const result = validatePassword(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        validatePassword(/* invalid params     */)
-      }).not.toThrow()
+        validatePassword(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = validatePassword(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = validatePassword(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(validateUsername", () => {"
+  describe("validateUsername", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = validateUsername(/* valid params   */);
+const result = validateUsername(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = validateUsername(/* edge case params   */);
+const result = validateUsername(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        validateUsername(/* invalid params     */)
-      }).not.toThrow()
+        validateUsername(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = validateUsername(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = validateUsername(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(validateIdCard", () => {"
+  describe("validateIdCard", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = validateIdCard(/* valid params   */);
+const result = validateIdCard(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = validateIdCard(/* edge case params   */);
+const result = validateIdCard(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        validateIdCard(/* invalid params     */)
-      }).not.toThrow()
+        validateIdCard(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = validateIdCard(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = validateIdCard(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(validateRequired", () => {"
+  describe("validateRequired", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = validateRequired(/* valid params   */);
+const result = validateRequired(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = validateRequired(/* edge case params   */);
+const result = validateRequired(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        validateRequired(/* invalid params     */)
-      }).not.toThrow()
+        validateRequired(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = validateRequired(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = validateRequired(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(validateNumberRange", () => {"
+  describe("validateNumberRange", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = validateNumberRange(/* valid params   */);
+const result = validateNumberRange(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = validateNumberRange(/* edge case params   */);
+const result = validateNumberRange(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        validateNumberRange(/* invalid params     */)
-      }).not.toThrow()
+        validateNumberRange(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = validateNumberRange(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = validateNumberRange(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(validateAgeNumber", () => {"
+  describe("validateAgeNumber", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = validateAgeNumber(/* valid params   */);
+const result = validateAgeNumber(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = validateAgeNumber(/* edge case params   */);
+const result = validateAgeNumber(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        validateAgeNumber(/* invalid params     */)
-      }).not.toThrow()
+        validateAgeNumber(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = validateAgeNumber(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = validateAgeNumber(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(validateAge", () => {"
+  describe("validateAge", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = validateAge(/* valid params   */);
+const result = validateAge(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = validateAge(/* edge case params   */);
+const result = validateAge(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        validateAge(/* invalid params     */)
-      }).not.toThrow()
+        validateAge(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = validateAge(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = validateAge(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(validateHeight", () => {"
+  describe("validateHeight", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = validateHeight(/* valid params   */);
+const result = validateHeight(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = validateHeight(/* edge case params   */);
+const result = validateHeight(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        validateHeight(/* invalid params     */)
-      }).not.toThrow()
+        validateHeight(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = validateHeight(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = validateHeight(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(validateWeight", () => {"
+  describe("validateWeight", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = validateWeight(/* valid params   */);
+const result = validateWeight(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = validateWeight(/* edge case params   */);
+const result = validateWeight(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        validateWeight(/* invalid params     */)
-      }).not.toThrow()
+        validateWeight(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = validateWeight(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = validateWeight(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(validateUrl", () => {"
+  describe("validateUrl", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = validateUrl(/* valid params   */);
+const result = validateUrl(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = validateUrl(/* edge case params   */);
+const result = validateUrl(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        validateUrl(/* invalid params     */)
-      }).not.toThrow()
+        validateUrl(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = validateUrl(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = validateUrl(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(validateField", () => {"
+  describe("validateField", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = validateField(/* valid params   */);
+const result = validateField(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = validateField(/* edge case params   */);
+const result = validateField(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        validateField(/* invalid params     */)
-      }).not.toThrow()
+        validateField(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = validateField(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = validateField(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
 });
-import { performance } from "perf_hooks";
-import { validateEmail, validatePhone, validatePassword, validateUsername, validateIdCard, validateRequired, validateNumberRange, validateAgeNumber, validateAge, validateHeight, validateWeight, validateUrl, validateField } from "../validationUtils";
 describe("validationUtils Performance Tests", () => {
   it("should execute within performance thresholds", () => {
     const iterations = 10;
     const startTime = performance.now();
     for (let i = 0; i < iterations; i++) {
       // Execute performance-critical functions
-validateEmail(/* test params      */)
-      validatePhone(/* test params      */);
-      validatePassword(/* test params      */);
-      validateUsername(/* test params      */);
-      validateIdCard(/* test params      */);
-      validateRequired(/* test params      */);
-      validateNumberRange(/* test params      */);
-      validateAgeNumber(/* test params      */);
-      validateAge(/* test params      */);
-      validateHeight(/* test params      */);
-      validateWeight(/* test params      */);
-      validateUrl(/* test params      */);
-      validateField(/* test params      */);
+validateEmail(// test params);
+      validatePhone(// test params);
+      validatePassword(// test params);
+      validateUsername(// test params);
+      validateIdCard(// test params);
+      validateRequired(// test params);
+      validateNumberRange(// test params);
+      validateAgeNumber(// test params);
+      validateAge(// test params);
+      validateHeight(// test params);
+      validateWeight(// test params);
+      validateUrl(// test params);
+      validateField(// test params);
     });
     const endTime = performance.now();
     const averageTime = (endTime - startTime) / iterations;
@@ -334,7 +321,7 @@ expect(averageTime).toBeLessThan(1);
     const largeDataset = new Array(10000).fill(0).map((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
-validateEmail(largeDataset)
+validateEmail(largeDataset);
     const endTime = performance.now();
     // Should handle large datasets within 100ms
 expect(endTime - startTime).toBeLessThan(100);
@@ -343,7 +330,7 @@ expect(endTime - startTime).toBeLessThan(100);
     const initialMemory = process.memoryUsage().heapUsed;
     // Execute function multiple times
 for (let i = 0; i < 1000; i++) {
-      validateEmail(/* test params      */);
+      validateEmail(// test params);
     });
     // Force garbage collection if available
 if (global.gc) {

@@ -1,31 +1,31 @@
-import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-importIcon from ";./Icon"/import { colors, spacing, fonts } from ../../constants/theme"/import { accessibilityService, UserPreferences } from "../../services/accessibilityService/////    ";"
+import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/////      View,"
+
+import React from "react";
+importIcon from ";./Icon"/import { colors, spacing, fonts } from ../../constants/theme"/import { accessibilityService, UserPreferences } from "../../services/accessibilityService/////    
 importReact,{ useState, useEffect } from ";react";
-import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/////      View,;"
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
   Switch,
   Modal,
-  { Alert } from "react-native;"
+  { Alert } from "react-native;";
 interface AccessibilitySettingsProps { visible: boolean,
   onClose: () => void,
   userId: string,
   onSettingsChange?: (enabled: boolean) => void}
-const AccessibilitySettings: React.FC<AccessibilitySettingsProps /> = ({/  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor("AccessibilitySettings", { ,;
-    trackRender: true,
+const AccessibilitySettings: React.FC<AccessibilitySettingsProps /> = ({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor("AccessibilitySettings", { ,trackRender: true,
     trackMemory: true,
-    warnThreshold: 50, // ms //////     };)
+    warnThreshold: 50, // ms // };);
   visible,
   onClose,
   userId,
   onSettingsChange;
 }) => {}
-  const [preferences, setPreferences] = useState<UserPreferences />({/////        fontSize: medium",;"
+  const [preferences, setPreferences] = useState<UserPreferences />({/////        fontSize: medium","
     highContrast: false,
-    voiceType: "female,"
+    voiceType: "female,",
     speechRate: 1.0,
     language: "zh_CN",
     screenReader: false,
@@ -33,26 +33,25 @@ const AccessibilitySettings: React.FC<AccessibilitySettingsProps /> = ({/  // �
     enabledFeatures: [];};);
   const [loading, setLoading] = useState<boolean>(fals;e;);
   useEffect((); => {}
-    const effectStart = performance.now()
-    if (visible) {
-      loadUserPreferences();
+    const effectStart = performance.now();
+    if (visible) {loadUserPreferences();
     }
-      const effectEnd = performance.now()
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [visible]);
-  const loadUserPreferences = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => async() => {;}
+  const loadUserPreferences = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => async() => {}
     try {
       setLoading(true), []);
       const userPrefs = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => await accessibilityService.getUserPreferences(userId), [;];);)))));
-      setPreferences(userPrefs)
+      setPreferences(userPrefs);
     } catch (error) {
       Alert.alert("错误, "无法加载无障碍设置");"
     } finally {
       setLoading(false);
     }
   };
-  const updatePreferences = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => async (newPreferences: Partial<UserPreferences />) => {/////        try {;}
-      const updatedPrefs = { ...preferences, ...newPreferences     const effectEnd = performance.now()
+  const updatePreferences = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => async (newPreferences: Partial<UserPreferences />) => {/////        try {}
+      const updatedPrefs = { ...preferences, ...newPreferences     const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
       setPreferences(updatedPrefs);
@@ -63,20 +62,19 @@ const AccessibilitySettings: React.FC<AccessibilitySettingsProps /> = ({/  // �
                                   updatedPrefs.signLanguage, []);
         onSettingsChange?.(hasEnabledFeatures)
       } else {
-        Alert.alert(错误", "保存设置失败，请重试)
+        Alert.alert(错误", "保存设置失败，请重试);
       }
     } catch (error) {
       Alert.alert(错误", "保存设置失败);
     }
   };
-  const toggleFeature = useCallback((); => {;}
+  const toggleFeature = useCallback((); => {}
     const enabledFeatures = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => preferences.enabledFeatures.includes(feature);
       ? preferences.enabledFeatures.filter(f => f !== feature);: [...preferences.enabledFeatures, feature], []);
     updatePreferences( { enabledFeatures });
   };
-  // 记录渲染性能 //////
-  performanceMonitor.recordRender()
-  return (
+  // 记录渲染性能 // performanceMonitor.recordRender();
+  return (;
     <Modal;
 visible={visible}
       animationType="slide"
@@ -108,13 +106,12 @@ value={preferences.enabledFeatures.includes(feature.key)}
                   thumbColor={preferences.enabledFeatures.includes(feature.key); ? colors.primary: colors.textSecondary} />/              </View>/////                ))}
           </View>/        </ScrollView>/      </SafeAreaView>/    </Modal>/////      );
 };
-const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({;
-  container: {
+const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({container: {
     flex: 1,
     backgroundColor: colors.background},
   header: {
     flexDirection: row","
-    justifyContent: "space-between,"
+    justifyContent: "space-between,",
     alignItems: "center",
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
@@ -132,13 +129,13 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   settingSection: { marginVertical: spacing.lg  },
   sectionTitle: {
     fontSize: fonts.size.lg,
-    fontWeight: "600,"
+    fontWeight: "600,",
     color: colors.text,
     marginBottom: spacing.md},
   settingRow: {
     flexDirection: "row",
     justifyContent: space-between","
-    alignItems: "center,"
+    alignItems: "center,",
     paddingVertical: spacing.md,
     borderBottomWidth: 1,
     borderBottomColor: colors.border},

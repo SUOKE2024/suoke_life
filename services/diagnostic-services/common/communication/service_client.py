@@ -1,28 +1,34 @@
 """
+service_client - 索克生活项目模块
+"""
+
+        import random
+from ..config.settings import get_settings
+from ..database.manager import get_cache_manager
+from contextlib import asynccontextmanager
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from grpc import aio as grpc_aio
+from typing import Dict, Any, List, Optional, Union, Callable
+import asyncio
+import backoff
+import consul
+import etcd3
+import grpc
+import httpx
+import json
+import logging
+import time
+
+"""
 服务间通信客户端
 
 支持HTTP和gRPC协议，提供服务发现、负载均衡、重试机制、
 熔断器、监控等功能，实现五诊服务间的可靠通信。
 """
 
-import asyncio
-import logging
-import time
-import json
-from typing import Dict, Any, List, Optional, Union, Callable
-from dataclasses import dataclass, field
-from enum import Enum
-import httpx
-import grpc
-from grpc import aio as grpc_aio
-from datetime import datetime, timedelta
-import backoff
-import consul
-import etcd3
-from contextlib import asynccontextmanager
 
-from ..config.settings import get_settings
-from ..database.manager import get_cache_manager
 
 logger = logging.getLogger(__name__)
 
@@ -234,7 +240,6 @@ class LoadBalancer:
         if total_weight == 0:
             return instances[0]
         
-        import random
         random_weight = random.randint(1, total_weight)
         weight_sum = 0
         
@@ -251,7 +256,6 @@ class LoadBalancer:
     
     def _random_select(self, instances: List[ServiceInstance]) -> ServiceInstance:
         """随机选择"""
-        import random
         return random.choice(instances)
 
 class CircuitBreaker:

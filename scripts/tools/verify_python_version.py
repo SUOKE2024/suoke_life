@@ -1,3 +1,12 @@
+"""
+verify_python_version - 索克生活项目模块
+"""
+
+from pathlib import Path
+import logging
+import re
+import sys
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -5,10 +14,6 @@
 验证所有微服务的Python版本是否统一为3.13.3
 """
 
-import re
-import sys
-from pathlib import Path
-import logging
 
 # 配置日志
 logging.basicConfig(

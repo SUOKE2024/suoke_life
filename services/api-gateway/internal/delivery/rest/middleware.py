@@ -1,3 +1,21 @@
+"""
+middleware - 索克生活项目模块
+"""
+
+from fastapi import FastAPI, Request, Response
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.responses import JSONResponse
+from internal.model.config import GatewayConfig, AuthConfig, CorsConfig, MiddlewareConfig, RateLimitConfig
+from pkg.utils.auth import JWTManager
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.middleware.trustedhost import TrustedHostMiddleware
+from typing import Callable, Dict, List, Optional, Set, Union
+import fnmatch
+import logging
+import time
+import uuid
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,21 +24,8 @@ REST API中间件模块
 提供CORS、身份验证、请求日志等功能
 """
 
-import fnmatch
-import logging
-import time
-import uuid
-from typing import Callable, Dict, List, Optional, Set, Union
 
-from fastapi import FastAPI, Request, Response
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.gzip import GZipMiddleware
-from fastapi.responses import JSONResponse
-from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.middleware.trustedhost import TrustedHostMiddleware
 
-from internal.model.config import GatewayConfig, AuthConfig, CorsConfig, MiddlewareConfig, RateLimitConfig
-from pkg.utils.auth import JWTManager
 
 
 logger = logging.getLogger(__name__)

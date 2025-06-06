@@ -1,17 +1,22 @@
 """
+test_service_simple - 索克生活项目模块
+"""
+
+from datetime import datetime, timezone
+from human_review_service.core.models import (
+from human_review_service.core.service import HumanReviewService
+from unittest.mock import AsyncMock, Mock, patch
+from uuid import uuid4
+import pytest
+
+"""
 简化的服务测试
 Simple Service Tests
 
 专注于测试基本功能，避免复杂的Mock验证
 """
 
-import pytest
-from unittest.mock import AsyncMock, Mock, patch
-from datetime import datetime, timezone
-from uuid import uuid4
 
-from human_review_service.core.service import HumanReviewService
-from human_review_service.core.models import (
     ReviewerCreate, ReviewTaskCreate, ReviewType, ReviewPriority
 )
 

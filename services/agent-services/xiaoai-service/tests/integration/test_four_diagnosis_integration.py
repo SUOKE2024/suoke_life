@@ -1,28 +1,33 @@
+"""
+test_four_diagnosis_integration - 索克生活项目模块
+"""
+
+from internal.four_diagnosis.fusion.multimodal_fusion import MultimodalFusionEngine
+from internal.four_diagnosis.reasoning.syndrome_differentiation import (
+from internal.four_diagnosis.recommendation.health_advisor import HealthAdvisor
+from internal.orchestrator.diagnosis_coordinator import DiagnosisCoordinator
+from pathlib import Path
+from unittest.mock import MagicMock, patch
+import json
+import logging
+import sys
+import time
+import unittest
+
 #!/usr/bin/env python3
 """
 四诊合参流程集成测试
 测试从数据输入到健康建议输出的完整流程
 """
 
-import json
-import logging
-import sys
-import time
-import unittest
-from pathlib import Path
-from unittest.mock import MagicMock, patch
 
 # 将项目根目录添加到Python路径
 project_root = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 # 导入测试目标模块
-from internal.four_diagnosis.fusion.multimodal_fusion import MultimodalFusionEngine
-from internal.four_diagnosis.reasoning.syndrome_differentiation import (
     SyndromeDifferentiationEngine,
 )
-from internal.four_diagnosis.recommendation.health_advisor import HealthAdvisor
-from internal.orchestrator.diagnosis_coordinator import DiagnosisCoordinator
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)

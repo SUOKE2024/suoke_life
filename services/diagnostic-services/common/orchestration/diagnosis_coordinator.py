@@ -1,22 +1,27 @@
 """
+diagnosis_coordinator - 索克生活项目模块
+"""
+
+from ..communication.service_client import get_diagnosis_client
+from ..config.settings import get_settings
+from ..database.manager import get_data_access
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Dict, Any, List, Optional, Tuple
+import asyncio
+import logging
+import numpy as np
+import time
+
+"""
 综合诊断协调器
 
 统一协调五诊服务，提供完整的中医诊断流程和结果整合，
 支持并行分析、结果融合、置信度评估等功能。
 """
 
-import asyncio
-import logging
-import time
-from typing import Dict, Any, List, Optional, Tuple
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
-import numpy as np
 
-from ..communication.service_client import get_diagnosis_client
-from ..database.manager import get_data_access
-from ..config.settings import get_settings
 
 logger = logging.getLogger(__name__)
 

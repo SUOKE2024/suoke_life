@@ -1,10 +1,10 @@
-import React from "react";
 import {   ScrollView, StyleSheet, View   } from "react-native";
 import { colors, spacing  } from "../../placeholder";../../constants/theme";/importColorPreview from ./////    ColorPreview";
-//////
-//////     索克生活 - UI组件展示页面   展示所有UI组件的使用示例
-importReact,{ useState } from "react;"
-import { usePerformanceMonitor  } from "../../placeholder";../hooks/usePerformanceMonitor";/////      Button,;"
+import { usePerformanceMonitor  } from "../../placeholder";../hooks/usePerformanceMonitor";/////      Button,"
+
+import React from "react";
+// // 索克生活 - UI组件展示页面   展示所有UI组件的使用示例
+importReact,{ useState } from "react;";
   Text,
   Input,
   Card,
@@ -19,12 +19,10 @@ import { usePerformanceMonitor  } from "../../placeholder";../hooks/usePerforman
   Checkbox,
   Radio,
   { Slider } from ../../components/ui"/////    const UIShowcase: React.FC  = () => {}"
-  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor("UIShowcase, { "
-    trackRender: true,
-    trackMemory: true,
-    warnThreshold: 50, // ms //////     };);
+  // 性能监控 // const performanceMonitor = usePerformanceMonitor("UIShowcase, { ";
+    trackRender: true,trackMemory: true,warnThreshold: 50, // ms // };);
   const [modalVisible, setModalVisible] = useState<boolean>(fals;e;);
-  const [inputValue, setInputValue] = useState<string>(";";);
+  const [inputValue, setInputValue] = useState<string>(;);
   const [switchValue, setSwitchValue] = useState<boolean>(fals;e;);
   const [checkboxValue, setCheckboxValue] = useState<boolean>(fals;e;);
   const [radioValue, setRadioValue] = useState<string>(option1;";);"
@@ -32,11 +30,10 @@ import { usePerformanceMonitor  } from "../../placeholder";../hooks/usePerforman
   const [showColorPreview, setShowColorPreview] = useState<boolean>(fals;e;);
   if (showColorPreview) {
     return <ColorPreview onBack={() = /> setShowColorPreview(false)} ;//>;/////      }
-  // 记录渲染性能 //////
-  performanceMonitor.recordRender()
-  return (
-    <ScrollView style={styles.container} />/      <Container padding="lg" />/        <Text variant="h1" style={styles.title} />/////              索克生活 UI 组件库
-        </Text>/////
+  // 记录渲染性能 // performanceMonitor.recordRender();
+  return (;
+    <ScrollView style={styles.container} />/      <Container padding="lg" />/        <Text variant="h1" style={styles.title} />/////              索克生活 UI 组件库;
+        </Text>/////;
         {// 颜色预览按钮 }/        <View style={styles.colorPreviewSection} />/////              <Button;
 title="查看品牌色彩"
             variant="secondary"
@@ -111,8 +108,7 @@ title="确认"
             variant="primary"
             onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setModalVisible(false)}/            style={styles.modalButton} />/        </View>/      </Modal>/    </ScrollView>/////      );
 }
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     flex: 1,
     backgroundColor: colors.background},
   title: {
@@ -125,7 +121,7 @@ const styles = StyleSheet.create({;
   subTitle: {
     marginTop: spacing.md,
     marginBottom: spacing.sm,
-    fontWeight: "600,"
+    fontWeight: "600,",
     color: colors.textSecondary},
   buttonRow: {
     flexDirection: "row",
@@ -133,12 +129,12 @@ const styles = StyleSheet.create({;
     gap: spacing.sm,
     marginBottom: spacing.sm},
   avatarRow: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center",
     gap: spacing.md},
   badgeRow: {
     flexDirection: row","
-    alignItems: "center,"
+    alignItems: "center,",
     gap: spacing.md},
   radioGroup: { gap: spacing.xs  },
   modalTitle: {
@@ -148,7 +144,7 @@ const styles = StyleSheet.create({;
     marginBottom: spacing.lg,
     textAlign: center"},"
   modalButtons: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     justifyContent: "space-between"},
   modalButton: {
     flex: 1,
@@ -157,6 +153,5 @@ const styles = StyleSheet.create({;
     flexDirection: row","
     alignItems: 'center',
     marginBottom: spacing.lg},
-  colorPreviewButton: { marginRight: spacing.sm  },;
-  colorPreviewText: { color: colors.textSecondary  };};);
+  colorPreviewButton: { marginRight: spacing.sm  },colorPreviewText: { color: colors.textSecondary  };};);
 export default React.memo(UIShowcase);

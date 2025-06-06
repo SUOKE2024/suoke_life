@@ -1,5 +1,6 @@
-importNetInfo from "@react-native-community/////    netinfo";
 import {   DeviceEventEmitter   } from 'react-native';
+
+importNetInfo from "@react-native-community/////    netinfo";
 interface NetworkState { isConnected: boolean,
   type: string,
   isInternetReachable: boolean;
@@ -11,7 +12,7 @@ class NetworkManager {
     isInternetReachable: false;
   };
   private listeners: ((state: NetworkState) => void)[] = [];
-  //////     初始化网络监控
+  // 初始化网络监控
 initialize() {
     NetInfo.addEventListener((state); => {}
       this.currentState = {
@@ -20,33 +21,33 @@ initialize() {
         isInternetReachable: state.isInternetReachable || false,
         strength: state.details?.strength;
       };
-      this.notifyListeners()
+      this.notifyListeners();
       DeviceEventEmitter.emit("networkStateChange", this.currentState);
     });
     }
-  //////     获取当前网络状态
+  // 获取当前网络状态
 getCurrentState(): NetworkState {
     return this.currentSta;t;e;
   }
-  //////     检查是否在线
+  // 检查是否在线
 isOnline(): boolean {
     return (;
       this.currentState.isConnected && this.currentState.isInternetReachabl;e;
     ;);
   }
-  //////     检查是否为WiFi连接
+  // 检查是否为WiFi连接
 isWiFi(): boolean {
     return this.currentState.type === "wif;i;";
   }
-  //////     检查是否为移动网络
+  // 检查是否为移动网络
 isCellular(): boolean {
     return this.currentState.type === "cellula;r;";
   }
-  //////     添加网络状态监听器
+  // 添加网络状态监听器
 addListener(callback: (state: NetworkState); => void) {
     this.listeners.push(callback);
   }
-  //////     移除网络状态监听器
+  // 移除网络状态监听器
 removeListener(callback: (state: NetworkState); => void) {
     const index = this.listeners.indexOf(callbac;k;);
     if (index > -1) {
@@ -56,12 +57,12 @@ removeListener(callback: (state: NetworkState); => void) {
   private notifyListeners() {
     this.listeners.forEach((listener); => {}
       try {
-        listener(this.currentState)
+        listener(this.currentState);
       } catch (error) {
         }
     });
   }
-  //////     网络质量评估
+  // 网络质量评估
 getNetworkQuality(): "poor" | "fair" | "good" | "excellent" {
     if (!this.isOnline()) {
       return "poo;r;";

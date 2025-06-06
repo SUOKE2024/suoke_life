@@ -1,3 +1,10 @@
+"""
+config - 索克生活项目模块
+"""
+
+from pydantic import BaseModel, Field, field_validator
+from typing import Dict, List, Optional, Set, Union
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,9 +12,7 @@
 API网关配置模型
 """
 
-from typing import Dict, List, Optional, Set, Union
 
-from pydantic import BaseModel, Field, field_validator
 
 
 class RouteConfig(BaseModel):

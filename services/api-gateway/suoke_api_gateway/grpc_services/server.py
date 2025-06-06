@@ -1,18 +1,23 @@
 """
+server - 索克生活项目模块
+"""
+
+from ..core.config import Settings
+from ..core.logging import get_logger
+from .gateway_service import GatewayService
+from grpc import aio
+from typing import Optional
+import asyncio
+import signal
+
+"""
 gRPC 服务器
 
 提供 gRPC 接口的网关服务。
 """
 
-import asyncio
-import signal
-from typing import Optional
 
-from grpc import aio
 
-from ..core.config import Settings
-from ..core.logging import get_logger
-from .gateway_service import GatewayService
 
 logger = get_logger(__name__)
 

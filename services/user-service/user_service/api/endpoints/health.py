@@ -1,14 +1,19 @@
-"""健康数据管理API端点"""
+"""
+health - 索克生活项目模块
+"""
 
-from typing import List, Optional, Dict, Any
 from datetime import datetime, timedelta
 from fastapi import APIRouter, Depends, HTTPException, status, Query, Body
-from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import BaseModel, Field, validator
-
-from user_service.database import get_db
+from sqlalchemy.ext.asyncio import AsyncSession
+from typing import List, Optional, Dict, Any
 from user_service.auth import get_current_active_user
+from user_service.database import get_db
 from user_service.performance import performance_monitor, query_cache
+
+"""健康数据管理API端点"""
+
+
 
 router = APIRouter()
 

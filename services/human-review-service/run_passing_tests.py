@@ -1,3 +1,11 @@
+"""
+run_passing_tests - 索克生活项目模块
+"""
+
+from pathlib import Path
+import subprocess
+import sys
+
 #!/usr/bin/env python3
 """
 运行能够通过的测试脚本
@@ -6,9 +14,6 @@ Run Passing Tests Script
 专门运行能够通过的测试，展示测试覆盖率提升成果
 """
 
-import subprocess
-import sys
-from pathlib import Path
 
 def run_command(cmd, description):
     """运行命令并显示结果"""

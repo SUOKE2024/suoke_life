@@ -1,3 +1,13 @@
+"""
+pattern_mapper - 索克生活项目模块
+"""
+
+from internal.model.dialogue_models import Symptom, TCMPattern, TCMPatternMappingResult
+from internal.model.tcm_models import (
+import json
+import logging
+import os
+
 #!/usr/bin/env python
 
 """
@@ -5,12 +15,7 @@
 负责将现代症状描述映射到传统中医证型体系
 """
 
-import json
-import logging
-import os
 
-from internal.model.dialogue_models import Symptom, TCMPattern, TCMPatternMappingResult
-from internal.model.tcm_models import (
     DetailedTCMPattern,
     SymptomTCMMapping,
     TCMDiagnosisRule,

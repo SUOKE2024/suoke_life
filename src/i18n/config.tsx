@@ -1,8 +1,9 @@
+import {   I18nManager   } from "react-native;"
+
 import React from "react";
-import {   I18nManager   } from "react-native";";"
-//////     索克生活 - 国际化配置   完整的多语言和地区化支持系统
-// 支持的语言类型 * export type SupportedLanguage = | "zh-C;"////
-N;"; "
+// 索克生活 - 国际化配置   完整的多语言和地区化支持系统
+// 支持的语言类型 * export type SupportedLanguage = | "zh-C;"////;
+N;
   | "zh-TW"
   | "en-US"
   | "en-GB"
@@ -18,9 +19,7 @@ N;"; "
   isRTL: boolean,
   dateFormat: string,
   timeFormat: string,
-  numberFormat: {decimal: string,;
-    thousands: string,;
-    currency: string};
+  numberFormat: {decimal: string,thousands: string,currency: string};
   culturalPreferences: { primaryColor: string,
     accentColor: string,
     preferredFontSize: number,
@@ -161,17 +160,14 @@ N;"; "
 // 回退语言 * export const FALLBACK_LANGUAGE: SupportedLanguage = "en-US"////  ;
  /////    ;
 // 存储键 * export const STORAGE_KEYS = ////   ;
-{;
-  LANGUAGE: "@suoke_life:language",
+{LANGUAGE: "@suoke_life:language",
   REGION: "@suoke_life:region",
   CULTURAL_PREFERENCES: "@suoke_life:cultural_preferences"};
 // 地区配置接口 * export interface RegionConfig {////
   code: string,
   name: string,
   timezone: string,
-  currency: string,;
-  measurementSystem: "metric" | "imperial",;
-  firstDayOfWeek: 0 | 1; // 0 = Sunday, 1 = Monday //////     holidays: string[]
+  currency: string,measurementSystem: "metric" | "imperial",firstDayOfWeek: 0 | 1; // 0 = Sunday, 1 = Monday // holidays: string[]
 }
 // 地区配置映射 * export const REGION_CONFIGS: Record<string, RegionConfig> = {////
   CN: {
@@ -256,15 +252,14 @@ N;"; "
   reducedMotion: false};
 ;
 // 检查是否为RTL语言 * export const isRTLLanguage = (language: SupportedLanguage): boolean =////   ;
->  ;{; /////
+>  ;{/////
   return RTL_LANGUAGES.includes(languag;e;);
 };
 // 获取语言的地区代码 * export const getRegionFromLanguage = (language: SupportedLanguage): string =////   ;
->  ;{;
-  return language.split("-")[1] || "C;N";
+>  ;{return language.split("-")[1] || "C;N";
 };
 // 应用RTL布局 * export const applyRTLLayout = (isRTL: boolean): void =////   ;
->  ;{; /////
+>  ;{/////
   if (I18nManager.isRTL !== isRTL) {
     I18nManager.allowRTL(isRTL);
     I18nManager.forceRTL(isRTL);

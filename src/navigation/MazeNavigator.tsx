@@ -4,8 +4,7 @@ import { MazeMainScreen, MazeGameScreen, CreateMazeScreen } from '../screens/maz
 import { MazeStatsScreen, MazeCompletionScreen } from '../components/maze';
 import { MazeTheme, MazeDifficulty, GameReward } from '../types/maze';
 
-export type MazeStackParamList = {
-  MazeMain: undefined;
+export type MazeStackParamList = {MazeMain: undefined;
   MazeGame: {
     mazeId: string;
     userId: string;
@@ -33,53 +32,50 @@ const Stack = createNativeStackNavigator<MazeStackParamList>();
 export const MazeNavigator: React.FC = () => {
   return (
     <Stack.Navigator
-      initialRouteName="MazeMain"
+      initialRouteName='MazeMain'
       screenOptions={{
         headerShown: false,
         animation: 'slide_from_right',
         gestureEnabled: true,
-        gestureDirection: 'horizontal',
+        gestureDirection: 'horizontal'
       }}
     >
       <Stack.Screen
-        name="MazeMain"
+        name='MazeMain'
         component={MazeMainScreen}
         options={{
-          gestureEnabled: false,
+          gestureEnabled: false
         }}
       />
       <Stack.Screen
-        name="MazeGame"
+        name='MazeGame'
         component={MazeGameScreen}
         options={{
           animation: 'slide_from_bottom',
-          gestureEnabled: false,
+          gestureEnabled: false
         }}
       />
       <Stack.Screen
-        name="CreateMaze"
+        name='CreateMaze'
         component={CreateMazeScreen}
         options={{
-          animation: 'slide_from_right',
+          animation: 'slide_from_right'
         }}
       />
-      <Stack.Screen
-        name="MazeStats"
-        component={MazeStatsScreen}
-        options={{
-          animation: 'slide_from_right',
-        }}
-      />
-      <Stack.Screen
-        name="MazeCompletion"
-        component={MazeCompletionScreen}
-        options={{
-          animation: 'slide_from_bottom',
-          gestureEnabled: false,
-        }}
-      />
-    </Stack.Navigator>
+      <Stack.Screen;
+        name='MazeStats';
+        component={MazeStatsScreen};
+        options={{animation: 'slide_from_right';
+        }};
+      />;
+      <Stack.Screen;
+        name='MazeCompletion';
+        component={MazeCompletionScreen};
+        options={{animation: 'slide_from_bottom',gestureEnabled: false;
+        }};
+      />;
+    </Stack.Navigator>;
   );
 };
 
-export default MazeNavigator; 
+export default MazeNavigator;

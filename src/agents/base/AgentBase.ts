@@ -1,8 +1,7 @@
-import {
-  AgentType,
+import {AgentType,
   AgentCapability,
   AgentResponse,
-  AgentContext,
+  AgentContext
 } from "../types";
 
 /**
@@ -107,8 +106,8 @@ export abstract class AgentBase {
    * 生成响应ID
    */
   protected generateResponseId(): string {
-    return `${this.agentType}_${Date.now()}_${Math.random()
-      .toString(36)
+    return `${this.agentType}_${Date.now()}_${Math.random();
+      .toString(36);
       .substr(2, 9)}`;
   }
 
@@ -121,8 +120,7 @@ export abstract class AgentBase {
     data?: any
   ): void {
     const timestamp = new Date().toISOString();
-    const logMessage = `[${timestamp}] [${
-      this.agentType
+    const logMessage = `[${timestamp}] [${this.agentType;
     }] [${level.toUpperCase()}] ${message}`;
 
     switch (level) {
@@ -146,16 +144,8 @@ export abstract class AgentBase {
     error?: any,
     context?: AgentContext
   ): AgentResponse {
-    return {
-      success: false,
-      response: message,
-      error: error?.message || error,
-      context: context || { userId: "unknown" },
-      metadata: {
-        agentType: this.agentType,
-        timestamp: new Date().toISOString(),
-        responseId: this.generateResponseId(),
-      },
+    return {success: false,response: message,error: error?.message || error,context: context || { userId: "unknown" },metadata: {agentType: this.agentType,timestamp: new Date().toISOString(),responseId: this.generateResponseId();
+      };
     };
   }
 
@@ -168,17 +158,8 @@ export abstract class AgentBase {
     context?: AgentContext,
     metadata?: any
   ): AgentResponse {
-    return {
-      success: true,
-      response: message,
-      data,
-      context: context || { userId: "unknown" },
-      metadata: {
-        agentType: this.agentType,
-        timestamp: new Date().toISOString(),
-        responseId: this.generateResponseId(),
-        ...metadata,
-      },
+    return {success: true,response: message,data,context: context || { userId: "unknown" },metadata: {agentType: this.agentType,timestamp: new Date().toISOString(),responseId: this.generateResponseId(),...metadata;
+      };
     };
   }
 }

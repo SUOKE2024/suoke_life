@@ -1,17 +1,22 @@
+"""
+circuit_breaker - 索克生活项目模块
+"""
+
+from collections.abc import Callable
+from contextlib import asynccontextmanager
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any
+import asyncio
+import logging
+import time
+
 #!/usr/bin/env python3
 """
 断路器模式实现
 提供故障隔离、快速失败和自动恢复功能
 """
 
-import asyncio
-from collections.abc import Callable
-from contextlib import asynccontextmanager
-from dataclasses import dataclass
-from enum import Enum
-import logging
-import time
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

@@ -1,3 +1,8 @@
+"""
+main - 索克生活项目模块
+"""
+
+
 def main():
     print("Hello from user-service!")
 

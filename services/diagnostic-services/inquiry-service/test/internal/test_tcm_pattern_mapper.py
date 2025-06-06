@@ -1,15 +1,20 @@
+"""
+test_tcm_pattern_mapper - 索克生活项目模块
+"""
+
+from internal.model.dialogue_models import Symptom, SymptomDuration, SymptomSeverity
+from internal.tcm.pattern_mapping.pattern_mapper import PatternMapper
+import json
+import os
+import unittest
+
 #!/usr/bin/env python
 
 """
 中医证型映射器单元测试
 """
 
-import json
-import os
-import unittest
 
-from internal.model.dialogue_models import Symptom, SymptomDuration, SymptomSeverity
-from internal.tcm.pattern_mapping.pattern_mapper import PatternMapper
 
 
 class TestPatternMapper(unittest.TestCase):

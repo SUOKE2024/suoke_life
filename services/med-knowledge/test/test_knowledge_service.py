@@ -1,14 +1,19 @@
-import pytest
-from unittest.mock import AsyncMock, MagicMock, patch
+"""
+test_knowledge_service - 索克生活项目模块
+"""
 
 from app.models.entities import (
+from app.services.knowledge_service import KnowledgeService
+from unittest.mock import AsyncMock, MagicMock, patch
+import pytest
+
+
     Constitution, ConstitutionListResponse, Symptom, SymptomListResponse,
     Syndrome, SyndromeListResponse, Biomarker, BiomarkerListResponse,
     WesternDisease, WesternDiseaseListResponse, PreventionEvidence,
     PreventionEvidenceListResponse, IntegratedTreatment, IntegratedTreatmentListResponse,
     LifestyleIntervention, LifestyleInterventionListResponse
 )
-from app.services.knowledge_service import KnowledgeService
 
 class TestKnowledgeService:
     """知识服务测试类"""

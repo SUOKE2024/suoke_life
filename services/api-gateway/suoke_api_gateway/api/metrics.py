@@ -1,3 +1,19 @@
+"""
+metrics - 索克生活项目模块
+"""
+
+        from ..core.config import get_settings
+        import os
+        import platform
+        import psutil
+        import sys
+from ..core.logging import get_logger
+from ..utils.health_check import get_health_checker
+from ..utils.metrics import get_metrics_manager
+from fastapi import APIRouter, Response, HTTPException
+from fastapi.responses import PlainTextResponse
+from typing import Dict, Any
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -7,13 +23,7 @@
 提供 Prometheus 指标导出和健康状态查询。
 """
 
-from typing import Dict, Any
-from fastapi import APIRouter, Response, HTTPException
-from fastapi.responses import PlainTextResponse
 
-from ..utils.metrics import get_metrics_manager
-from ..utils.health_check import get_health_checker
-from ..core.logging import get_logger
 
 logger = get_logger(__name__)
 
@@ -196,10 +206,6 @@ async def get_system_info() -> Dict[str, Any]:
         系统信息
     """
     try:
-        import platform
-        import sys
-        import psutil
-        import os
         
         # 获取系统基本信息
         system_info = {
@@ -275,7 +281,6 @@ async def get_config_info() -> Dict[str, Any]:
         配置信息
     """
     try:
-        from ..core.config import get_settings
         
         settings = get_settings()
         

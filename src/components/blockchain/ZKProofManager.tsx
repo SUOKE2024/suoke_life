@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import {
+import {import { useBlockchainService } from '../../hooks/useBlockchainService';
+import { ZKProof, VerifyWithZKPRequest } from '../../types/blockchain';
+
   View,
   Text,
   StyleSheet,
@@ -10,8 +12,6 @@ import {
   Modal,
   ScrollView
 } from 'react-native';
-import { useBlockchainService } from '../../hooks/useBlockchainService';
-import { ZKProof, VerifyWithZKPRequest } from '../../types/blockchain';
 
 interface ZKProofManagerProps {
   userId: string;
@@ -28,30 +28,20 @@ export const ZKProofManager: React.FC<ZKProofManagerProps> = ({ userId }) => {
 
   const [showGenerateModal, setShowGenerateModal] = useState(false);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
-  const [generatedProofs, setGeneratedProofs] = useState<Array<{
-    id: string;
+  const [generatedProofs, setGeneratedProofs] = useState<Array<{id: string;
     proof: ZKProof;
     dataType: string;
     circuitType: string;
     timestamp: number;
   }>>([]);
 
-  const handleGenerateProof = async (
-    dataType: string,
-    privateInputs: Record<string, any>,
-    circuitType: string
-  ) => {
-    try {
-      const proof = await generateZKProof(userId, dataType, privateInputs, circuitType);
-      
-      const proofRecord = {
-        id: Date.now().toString(),
-        proof,
-        dataType,
-        circuitType,
-        timestamp: Date.now()
+  const handleGenerateProof = async (;
+    dataType: string,privateInputs: Record<string, any>,circuitType: string;
+  ) => {try {const proof = await generateZKProof(userId, dataType, privateInputs, circuitType);
+
+      const proofRecord = {id: Date.now().toString(),proof,dataType,circuitType,timestamp: Date.now();
       };
-      
+
       setGeneratedProofs(prev => [proofRecord, ...prev]);
       Alert.alert('成功', '零知识证明生成成功');
       setShowGenerateModal(false);
@@ -60,9 +50,7 @@ export const ZKProofManager: React.FC<ZKProofManagerProps> = ({ userId }) => {
     }
   };
 
-  const handleVerifyProof = async (request: VerifyWithZKPRequest) => {
-    try {
-      const result = await verifyWithZKP(request);
+  const handleVerifyProof = async (request: VerifyWithZKPRequest) => {try {const result = await verifyWithZKP(request);
       Alert.alert(
         '验证结果',
         result.valid ? '零知识证明验证通过' : '零知识证明验证失败',
@@ -82,15 +70,14 @@ export const ZKProofManager: React.FC<ZKProofManagerProps> = ({ userId }) => {
     }
   };
 
-  const formatProofHash = (proof: Uint8Array) => {
-    return Array.from(proof.slice(0, 8))
-      .map(b => b.toString(16).padStart(2, '0'))
+  const formatProofHash = (proof: Uint8Array) => {return Array.from(proof.slice(0, 8));
+      .map(b => b.toString(16).padStart(2, '0'));
       .join('') + '...';
   };
 
   return (
     <View style={styles.container}>
-      {/* 头部统计 */}
+      {// 头部统计}
       <View style={styles.statsContainer}>
         <View style={styles.statItem}>
           <Text style={styles.statValue}>{generatedProofs.length}</Text>
@@ -113,7 +100,7 @@ export const ZKProofManager: React.FC<ZKProofManagerProps> = ({ userId }) => {
         </View>
       </View>
 
-      {/* 操作按钮 */}
+      {// 操作按钮}
       <View style={styles.actionContainer}>
         <TouchableOpacity
           style={styles.generateButton}
@@ -130,7 +117,7 @@ export const ZKProofManager: React.FC<ZKProofManagerProps> = ({ userId }) => {
         </TouchableOpacity>
       </View>
 
-      {/* 错误显示 */}
+      {// 错误显示}
       {error && (
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>{error.message}</Text>
@@ -140,7 +127,7 @@ export const ZKProofManager: React.FC<ZKProofManagerProps> = ({ userId }) => {
         </View>
       )}
 
-      {/* 证明列表 */}
+      {// 证明列表}
       <ScrollView style={styles.proofsList} showsVerticalScrollIndicator={false}>
         {generatedProofs.length === 0 ? (
           <View style={styles.emptyContainer}>
@@ -178,23 +165,23 @@ export const ZKProofManager: React.FC<ZKProofManagerProps> = ({ userId }) => {
         )}
       </ScrollView>
 
-      {/* 生成证明模态框 */}
-      <GenerateProofModal
-        visible={showGenerateModal}
-        onClose={() => setShowGenerateModal(false)}
-        onSubmit={handleGenerateProof}
-        isLoading={isLoading}
-      />
-
-      {/* 验证证明模态框 */}
-      <VerifyProofModal
-        visible={showVerifyModal}
-        onClose={() => setShowVerifyModal(false)}
-        onSubmit={handleVerifyProof}
-        isLoading={isLoading}
-        userId={userId}
-      />
-    </View>
+      {// 生成证明模态框}
+      <GenerateProofModal;
+        visible={showGenerateModal};
+        onClose={() => setShowGenerateModal(false)};
+        onSubmit={handleGenerateProof};
+        isLoading={isLoading};
+      />;
+;
+      {// 验证证明模态框};
+      <VerifyProofModal;
+        visible={showVerifyModal};
+        onClose={() => setShowVerifyModal(false)};
+        onSubmit={handleVerifyProof};
+        isLoading={isLoading};
+        userId={userId};
+      />;
+    </View>;
   );
 };
 
@@ -209,9 +196,7 @@ const GenerateProofModal: React.FC<{
   const [circuitType, setCircuitType] = useState('age_verification');
   const [privateInputs, setPrivateInputs] = useState('');
 
-  const handleSubmit = () => {
-    if (!dataType.trim() || !privateInputs.trim()) {
-      Alert.alert('错误', '请填写所有必填字段');
+  const handleSubmit = () => {if (!dataType.trim() || !privateInputs.trim()) {Alert.alert('错误', '请填写所有必填字段');
       return;
     }
 
@@ -254,22 +239,22 @@ const GenerateProofModal: React.FC<{
               multiline
               numberOfLines={8}
             />
-          </View>
-
-          <TouchableOpacity
-            style={[styles.submitButton, isLoading && styles.submitButtonDisabled]}
-            onPress={handleSubmit}
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <ActivityIndicator size="small" color="#FFFFFF" />
-            ) : (
-              <Text style={styles.submitButtonText}>生成证明</Text>
-            )}
-          </TouchableOpacity>
-        </ScrollView>
-      </View>
-    </Modal>
+          </View>;
+;
+          <TouchableOpacity;
+            style={[styles.submitButton, isLoading && styles.submitButtonDisabled]};
+            onPress={handleSubmit};
+            disabled={isLoading};
+          >;
+            {isLoading ? (;
+              <ActivityIndicator size="small" color="#FFFFFF" />;
+            ) : (;
+              <Text style={styles.submitButtonText}>生成证明</Text>;
+            )};
+          </TouchableOpacity>;
+        </ScrollView>;
+      </View>;
+    </Modal>;
   );
 };
 
@@ -286,9 +271,7 @@ const VerifyProofModal: React.FC<{
   const [proofData, setProofData] = useState('');
   const [publicInputs, setPublicInputs] = useState('');
 
-  const handleSubmit = () => {
-    if (!verifierId.trim() || !dataType.trim() || !proofData.trim() || !publicInputs.trim()) {
-      Alert.alert('错误', '请填写所有字段');
+  const handleSubmit = () => {if (!verifierId.trim() || !dataType.trim() || !proofData.trim() || !publicInputs.trim()) {Alert.alert('错误', '请填写所有字段');
       return;
     }
 
@@ -363,80 +346,80 @@ const VerifyProofModal: React.FC<{
               multiline
               numberOfLines={4}
             />
-          </View>
-
-          <TouchableOpacity
-            style={[styles.submitButton, isLoading && styles.submitButtonDisabled]}
-            onPress={handleSubmit}
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <ActivityIndicator size="small" color="#FFFFFF" />
-            ) : (
-              <Text style={styles.submitButtonText}>验证证明</Text>
-            )}
-          </TouchableOpacity>
-        </ScrollView>
-      </View>
-    </Modal>
+          </View>;
+;
+          <TouchableOpacity;
+            style={[styles.submitButton, isLoading && styles.submitButtonDisabled]};
+            onPress={handleSubmit};
+            disabled={isLoading};
+          >;
+            {isLoading ? (;
+              <ActivityIndicator size="small" color="#FFFFFF" />;
+            ) : (;
+              <Text style={styles.submitButtonText}>验证证明</Text>;
+            )};
+          </TouchableOpacity>;
+        </ScrollView>;
+      </View>;
+    </Modal>;
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#F8F9FA'
   },
   statsContainer: {
     flexDirection: 'row',
     backgroundColor: '#FFFFFF',
     padding: 16,
-    marginBottom: 8,
+    marginBottom: 8
   },
   statItem: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   statValue: {
     fontSize: 18,
     fontWeight: '700',
     color: '#2C3E50',
-    marginBottom: 4,
+    marginBottom: 4
   },
   statLabel: {
     fontSize: 12,
     color: '#6C757D',
-    textAlign: 'center',
+    textAlign: 'center'
   },
   actionContainer: {
     flexDirection: 'row',
     paddingHorizontal: 16,
     paddingVertical: 8,
-    gap: 12,
+    gap: 12
   },
   generateButton: {
     flex: 1,
     backgroundColor: '#8E44AD',
     paddingVertical: 12,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   generateButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   verifyButton: {
     flex: 1,
     backgroundColor: '#3498DB',
     paddingVertical: 12,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   verifyButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   errorContainer: {
     backgroundColor: '#FFE6E6',
@@ -446,24 +429,24 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   errorText: {
     color: '#D32F2F',
     fontSize: 14,
-    flex: 1,
+    flex: 1
   },
   errorCloseButton: {
-    padding: 4,
+    padding: 4
   },
   errorCloseText: {
     color: '#D32F2F',
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   proofsList: {
     flex: 1,
-    paddingHorizontal: 16,
+    paddingHorizontal: 16
   },
   proofCard: {
     backgroundColor: '#FFFFFF',
@@ -476,60 +459,60 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
-    elevation: 2,
+    elevation: 2
   },
   proofHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 12
   },
   proofDataType: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#2C3E50',
+    color: '#2C3E50'
   },
   proofTime: {
     fontSize: 12,
-    color: '#6C757D',
+    color: '#6C757D'
   },
   proofContent: {
-    marginBottom: 12,
+    marginBottom: 12
   },
   proofRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 8,
+    marginBottom: 8
   },
   proofLabel: {
     fontSize: 14,
     color: '#6C757D',
-    flex: 1,
+    flex: 1
   },
   proofValue: {
     fontSize: 14,
     color: '#2C3E50',
     flex: 2,
     textAlign: 'right',
-    fontFamily: 'monospace',
+    fontFamily: 'monospace'
   },
   emptyContainer: {
     padding: 32,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   emptyText: {
     fontSize: 16,
     color: '#6C757D',
-    marginBottom: 8,
+    marginBottom: 8
   },
   emptySubtext: {
     fontSize: 14,
     color: '#ADB5BD',
-    textAlign: 'center',
+    textAlign: 'center'
   },
   modalContainer: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFFFF'
   },
   modalHeader: {
     flexDirection: 'row',
@@ -537,29 +520,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#DEE2E6',
+    borderBottomColor: '#DEE2E6'
   },
   modalTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#2C3E50',
+    color: '#2C3E50'
   },
   modalCloseText: {
     fontSize: 16,
-    color: '#007AFF',
+    color: '#007AFF'
   },
   modalContent: {
     flex: 1,
-    padding: 16,
+    padding: 16
   },
   inputGroup: {
-    marginBottom: 20,
+    marginBottom: 20
   },
   inputLabel: {
     fontSize: 14,
     fontWeight: '500',
     color: '#2C3E50',
-    marginBottom: 8,
+    marginBottom: 8
   },
   textInput: {
     borderWidth: 1,
@@ -567,25 +550,13 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFFFF'
   },
   textArea: {
     height: 120,
-    textAlignVertical: 'top',
-  },
-  submitButton: {
-    backgroundColor: '#8E44AD',
-    paddingVertical: 16,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  submitButtonDisabled: {
-    backgroundColor: '#ADB5BD',
-  },
-  submitButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
-  },
+    textAlignVertical: 'top'
+  },submitButton: {backgroundColor: '#8E44AD',paddingVertical: 16,borderRadius: 8,alignItems: 'center',marginTop: 20;
+  },submitButtonDisabled: {backgroundColor: '#ADB5BD';
+  },submitButtonText: {color: '#FFFFFF',fontSize: 16,fontWeight: '600';
+  };
 }); 

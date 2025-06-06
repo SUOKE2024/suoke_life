@@ -1,3 +1,25 @@
+"""
+test_integration - 索克生活项目模块
+"""
+
+        from httpx import AsyncClient
+    from httpx import AsyncClient
+from datetime import datetime, timedelta
+from fastapi.testclient import TestClient
+from health_data_service.api.main import app
+from health_data_service.core.cache import cache_manager
+from health_data_service.core.config import get_settings
+from health_data_service.core.database import get_database
+from health_data_service.core.security import security_manager
+from health_data_service.models.health_data import DataType, DataSource
+from health_data_service.services.health_data_service import HealthDataService
+from httpx import AsyncClient
+from typing import Dict, Any, List
+import asyncio
+import json
+import pytest
+import pytest_asyncio
+
 #!/usr/bin/env python3
 """
 健康数据服务集成测试
@@ -5,22 +27,7 @@
 测试完整的API流程、数据处理管道、缓存、认证等功能。
 """
 
-import asyncio
-import json
-import pytest
-import pytest_asyncio
-from datetime import datetime, timedelta
-from typing import Dict, Any, List
-from httpx import AsyncClient
-from fastapi.testclient import TestClient
 
-from health_data_service.api.main import app
-from health_data_service.core.config import get_settings
-from health_data_service.core.database import get_database
-from health_data_service.core.cache import cache_manager
-from health_data_service.core.security import security_manager
-from health_data_service.models.health_data import DataType, DataSource
-from health_data_service.services.health_data_service import HealthDataService
 
 
 class TestHealthDataServiceIntegration:
@@ -35,7 +42,6 @@ class TestHealthDataServiceIntegration:
     @pytest_asyncio.fixture
     async def async_client(self, setup_test_environment):
         """异步HTTP客户端"""
-        from httpx import AsyncClient
         async with AsyncClient(base_url="http://test") as client:
             yield client
 
@@ -546,7 +552,6 @@ class TestHealthDataServiceIntegration:
 async def test_full_system_integration():
     """完整系统集成测试"""
     # 这个测试模拟完整的用户使用流程
-    from httpx import AsyncClient
     async with AsyncClient(base_url="http://test") as client:
         # 1. 用户注册
         user_data = {

@@ -1,25 +1,31 @@
 """
+main - 索克生活项目模块
+"""
+
+from contextlib import asynccontextmanager
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
+from fastapi.responses import JSONResponse
+from typing import AsyncGenerator
+from user_service.api.router import api_router
+from user_service.config import get_settings
+from user_service.core.cache import init_cache, close_cache
+from user_service.core.database import init_database, close_database
+from user_service.core.exceptions import UserServiceException
+from user_service.middleware.auth import AuthMiddleware
+from user_service.middleware.logging import LoggingMiddleware
+from user_service.middleware.rate_limit import RateLimitMiddleware
+import logging
+import uvicorn
+
+"""
 用户服务主应用
 """
 
-import logging
-from contextlib import asynccontextmanager
-from typing import AsyncGenerator
 
-from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.trustedhost import TrustedHostMiddleware
-from fastapi.responses import JSONResponse
-import uvicorn
 
-from user_service.api.router import api_router
-from user_service.config import get_settings
-from user_service.core.database import init_database, close_database
-from user_service.core.cache import init_cache, close_cache
-from user_service.core.exceptions import UserServiceException
-from user_service.middleware.logging import LoggingMiddleware
-from user_service.middleware.auth import AuthMiddleware
-from user_service.middleware.rate_limit import RateLimitMiddleware
 
 
 # 配置日志
@@ -77,6 +83,9 @@ def create_app() -> FastAPI:
     
     # 创建应用实例
     app = FastAPI(
+
+# 性能优化: 添加响应压缩
+app.add_middleware(GZipMiddleware, minimum_size=1000)
         title="索克生活用户服务",
         description="提供用户管理、设备管理、健康数据管理等功能",
         version="1.0.0",

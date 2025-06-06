@@ -1,18 +1,23 @@
 """
+logging - 索克生活项目模块
+"""
+
+from loguru import logger as loguru_logger
+from pathlib import Path
+from typing import Any
+from xiaoke_service.core.config import settings
+import structlog
+import sys
+
+"""
 日志配置模块
 
 使用 structlog 和 loguru 提供结构化日志记录,
 支持JSON格式输出、链路追踪、性能监控等功能。
 """
 
-import sys
-from pathlib import Path
-from typing import Any
 
-import structlog
-from loguru import logger as loguru_logger
 
-from xiaoke_service.core.config import settings
 
 
 def configure_structlog() -> None:

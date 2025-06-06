@@ -1,28 +1,37 @@
+"""
+distributed_computing - 索克生活项目模块
+"""
+
+                import psutil
+            import cupy
+        import psutil
+    import sys
+from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+from dataclasses import dataclass, asdict
+from datetime import datetime, timedelta
+from enum import Enum
+from pathlib import Path
+from typing import Dict, Any, List, Optional, Callable, Union, Tuple
+import asyncio
+import hashlib
+import json
+import logging
+import multiprocessing
+import numpy as np
+import pickle
+import redis
+import socket
+import threading
+import time
+import zmq
+import zmq.asyncio
+
 #!/usr/bin/env python3
 """
 索克生活 - 分布式计算集成模块
 支持多节点计算、任务分发、结果聚合等功能
 """
 
-import asyncio
-import json
-import time
-import logging
-import pickle
-import hashlib
-import socket
-from datetime import datetime, timedelta
-from typing import Dict, Any, List, Optional, Callable, Union, Tuple
-from dataclasses import dataclass, asdict
-from enum import Enum
-import threading
-import multiprocessing
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
-import numpy as np
-import redis
-import zmq
-import zmq.asyncio
-from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
@@ -148,7 +157,6 @@ class DistributedComputeNode:
     
     def _detect_capabilities(self) -> Dict[str, Any]:
         """检测节点能力"""
-        import psutil
         
         return {
             "cpu_count": multiprocessing.cpu_count(),
@@ -162,7 +170,6 @@ class DistributedComputeNode:
     def _check_gpu_availability(self) -> bool:
         """检查GPU可用性"""
         try:
-            import cupy
             return cupy.cuda.is_available()
         except ImportError:
             return False
@@ -269,7 +276,6 @@ class DistributedComputeNode:
                 )
                 
                 # 更新负载信息
-                import psutil
                 self.load = len(self.active_tasks)
                 cpu_usage = psutil.cpu_percent()
                 memory_usage = psutil.virtual_memory().percent
@@ -867,7 +873,6 @@ async def create_distributed_cluster(num_workers: int = 2,
 
 
 if __name__ == "__main__":
-    import sys
     
     async def test_distributed_computing():
         """测试分布式计算"""

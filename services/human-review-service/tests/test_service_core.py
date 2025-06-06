@@ -1,18 +1,24 @@
 """
+test_service_core - 索克生活项目模块
+"""
+
+        import time
+from datetime import datetime, timezone, timedelta
+from human_review_service.core.models import (
+from human_review_service.core.service import HumanReviewService
+from unittest.mock import AsyncMock, Mock, patch, MagicMock
+from uuid import uuid4
+import asyncio
+import pytest
+
+"""
 服务层核心功能测试
 Service Core Tests
 
 专注于测试实际存在的HumanReviewService功能
 """
 
-import pytest
-import asyncio
-from datetime import datetime, timezone, timedelta
-from unittest.mock import AsyncMock, Mock, patch, MagicMock
-from uuid import uuid4
 
-from human_review_service.core.service import HumanReviewService
-from human_review_service.core.models import (
     ReviewerCreate,
     ReviewerUpdate,
     ReviewerDB,
@@ -961,7 +967,6 @@ class TestServiceIntegration:
     @pytest.mark.asyncio
     async def test_service_performance(self, review_service, mock_session):
         """测试服务性能"""
-        import time
         
         # 模拟大量数据查询
         def create_perf_reviewer(i):

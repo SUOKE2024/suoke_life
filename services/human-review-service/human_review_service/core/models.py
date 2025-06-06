@@ -1,24 +1,30 @@
 """
+models - 索克生活项目模块
+"""
+
+from datetime import datetime, timedelta
+from enum import Enum
+from pydantic import BaseModel, ConfigDict, Field
+from sqlalchemy import (
+from sqlalchemy import Enum as SQLEnum
+from sqlalchemy.dialects.postgresql import UUID as PGUUID
+from sqlalchemy.orm import DeclarativeBase, relationship
+from typing import Any, Dict, List, Optional
+from uuid import UUID, uuid4
+
+"""
 核心数据模型
 Core Data Models
 
 定义人工审核系统的核心数据结构和业务模型
 """
 
-from datetime import datetime, timedelta
-from enum import Enum
-from typing import Any, Dict, List, Optional
-from uuid import UUID, uuid4
 
-from pydantic import BaseModel, ConfigDict, Field
-from sqlalchemy import (
     JSON,
     Boolean,
     Column,
     DateTime,
 )
-from sqlalchemy import Enum as SQLEnum
-from sqlalchemy import (
     Float,
     ForeignKey,
     Integer,
@@ -26,8 +32,6 @@ from sqlalchemy import (
     Text,
     func,
 )
-from sqlalchemy.dialects.postgresql import UUID as PGUUID
-from sqlalchemy.orm import DeclarativeBase, relationship
 
 
 class Base(DeclarativeBase):
@@ -221,6 +225,30 @@ class ReviewTaskBase(BaseModel):
     estimated_duration: int = 1800
     expires_at: Optional[datetime] = None
 
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'reviewtaskbase'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'reviewtaskupdate'
+        ordering = ['-created_at']
+
 
 class ReviewTaskCreate(ReviewTaskBase):
     """创建审核任务模型"""
@@ -238,6 +266,30 @@ class ReviewTaskUpdate(BaseModel):
     reviewer_notes: Optional[str] = None
     review_comments: Optional[str] = None
     review_result: Optional[Dict[str, Any]] = None
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'reviewerbase'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'reviewerupdate'
+        ordering = ['-created_at']
 
 
 class ReviewTask(ReviewTaskBase):
@@ -275,6 +327,42 @@ class ReviewerBase(BaseModel):
     working_hours: Optional[Dict[str, Any]] = None
     timezone: str = "Asia/Shanghai"
 
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'reviewdecision'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'reviewstatistics'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'dashboarddata'
+        ordering = ['-created_at']
+
 
 class ReviewerCreate(ReviewerBase):
     """创建审核员模型"""
@@ -297,6 +385,18 @@ class ReviewerUpdate(BaseModel):
     timezone: Optional[str] = None
     status: Optional[ReviewerStatus] = None
     is_available: Optional[bool] = None
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'paginatedresponse'
+        ordering = ['-created_at']
 
 
 class Reviewer(ReviewerBase):

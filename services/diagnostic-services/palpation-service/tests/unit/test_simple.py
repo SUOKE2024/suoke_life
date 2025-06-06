@@ -1,12 +1,18 @@
 """
+test_simple - 索克生活项目模块
+"""
+
+    from palpation_service import __version__
+from datetime import datetime
+from palpation_service.config import settings, get_settings
+from palpation_service.models import (
+import pytest
+
+"""
 简化测试 - 只测试基本功能，不依赖internal模块
 """
 
-import pytest
-from datetime import datetime
 
-from palpation_service.config import settings, get_settings
-from palpation_service.models import (
     SuccessResponse, 
     ErrorResponse, 
     SessionCreateRequest,
@@ -218,7 +224,6 @@ class TestUtilities:
 
 def test_basic_import():
     """测试基本导入功能"""
-    from palpation_service import __version__
     assert __version__ == "1.0.0"
 
 def test_config_access():

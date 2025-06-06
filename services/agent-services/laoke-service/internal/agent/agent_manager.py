@@ -1,26 +1,32 @@
+"""
+agent_manager - 索克生活项目模块
+"""
+
+            import psutil
+from .model_factory import ModelFactory
+from contextlib import asynccontextmanager
+from dataclasses import asdict, dataclass
+from enum import Enum
+from pkg.utils.cache import CacheManager
+from pkg.utils.config import Config
+from pkg.utils.metrics import MetricsCollector
+from pkg.utils.rate_limiter import RateLimiter
+from pkg.utils.validator import RequestValidator
+from typing import Any
+import asyncio
+import logging
+import time
+import uuid
+import weakref
+
 #!/usr/bin/env python3
 """
 智能体管理器
 负责老克智能体的核心逻辑，包括中医知识传播、社群管理和教育内容生成
 """
 
-import asyncio
-import logging
-import time
-import uuid
-import weakref
-from contextlib import asynccontextmanager
-from dataclasses import asdict, dataclass
-from enum import Enum
-from typing import Any
 
-from pkg.utils.cache import CacheManager
-from pkg.utils.config import Config
-from pkg.utils.metrics import MetricsCollector
-from pkg.utils.rate_limiter import RateLimiter
-from pkg.utils.validator import RequestValidator
 
-from .model_factory import ModelFactory
 
 logger = logging.getLogger(__name__)
 
@@ -163,14 +169,14 @@ class AgentManager:
     def _get_memory_usage(self) -> float:
         """获取内存使用量（MB）"""
         try:
-            import psutil
             process = psutil.Process()
             return process.memory_info().rss / 1024 / 1024
         except ImportError:
             return 0.0
 
     @asynccontextmanager
-    async def _get_session(self, user_id: str, session_id: str | None = None):
+    async     @cache(timeout=300)  # 5分钟缓存
+def _get_session(self, user_id: str, session_id: str | None = None):
         """获取或创建会话的上下文管理器"""
         if not session_id:
             session_id = str(uuid.uuid4())

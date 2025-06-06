@@ -1,6 +1,9 @@
-#!/usr/bin/env python3
+"""
+chat_with_xiaoai - 索克生活项目模块
 """
 
+            from internal.agent.agent_manager import AgentManager
+from datetime import datetime
 from time import time
 from uuid import uuid4
 import asyncio
@@ -8,8 +11,10 @@ import os
 import sys
 import traceback
 import uuid
-from datetime import datetime
-            from internal.agent.agent_manager import AgentManager
+
+#!/usr/bin/env python3
+"""
+
 
 
 

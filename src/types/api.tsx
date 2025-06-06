@@ -1,6 +1,7 @@
-import React from "react";
-//////     API相关的类型定义   替换any类型，提供类型安全
-//////     基础API响应类型
+import React from 'react';
+
+// API相关的类型定义   替换any类型，提供类型安全
+// 基础API响应类型
 export interface ApiResponse<T = unknown> {
   success: boolean;
   data?: T;
@@ -8,32 +9,32 @@ export interface ApiResponse<T = unknown> {
   message?: string;
   timestamp: string;
 }
-//////     API错误类型
+// API错误类型
 export interface ApiError {
   code: string;
   message: string;
   details?: Record<string, unknown>;
   stack?: string;
 }
-//////     API请求配置
+// API请求配置
 export interface ApiRequest {
   url: string;
-  method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   data?: Record<string, unknown>;
   params?: Record<string, string | number | boolean>;
   headers?: Record<string, string>;
   timeout?: number;
 }
-//////     离线数据类型
+// 离线数据类型
 export interface OfflineData {
   id: string;
   timestamp: number;
-  operation: "CREATE" | "UPDATE" | "DELETE";
+  operation: 'CREATE' | 'UPDATE' | 'DELETE';
   entity: string;
   payload: Record<string, unknown>;
   synced: boolean;
 }
-//////     数据冲突类型
+// 数据冲突类型
 export interface DataConflict {
   id: string;
   entity: string;
@@ -42,34 +43,34 @@ export interface DataConflict {
   timestamp: number;
   resolved: boolean;
 }
-//////     健康数据类型
+// 健康数据类型
 export interface HealthMetric {
   id: string;
-  type: "heart_rate" | "blood_pressure" | "weight" | "blood_sugar" | "sleep" | "steps";
+  type: 'heart_rate' | 'blood_pressure' | 'weight' | 'blood_sugar' | 'sleep' | 'steps';
   value: number | string;
   unit: string;
   timestamp: string;
-  source: "manual" | "device" | "api";
+  source: 'manual' | 'device' | 'api';
   metadata?: Record<string, unknown>;
 }
-//////     智能体消息类型
+// 智能体消息类型
 export interface AgentMessage {
   id: string;
   agentId: string;
   content: string;
-  type: "text" | "image" | "audio" | "file";
+  type: 'text' | 'image' | 'audio' | 'file';
   timestamp: string;
   metadata?: Record<string, unknown>;
 }
-//////     诊断数据类型
+// 诊断数据类型
 export interface DiagnosisData {
   id: string;
   userId: string;
-  type: "five_diagnosis" | "symptom_analysis" | "health_assessment";
+  type: 'five_diagnosis' | 'symptom_analysis' | 'health_assessment';
   data: Record<string, unknown>;
   result?: DiagnosisResult;
   timestamp: string;
-  status: "pending" | "processing" | "completed" | "failed";
+  status: 'pending' | 'processing' | 'completed' | 'failed';
 }
 export interface DiagnosisResult {
   id: string;
@@ -79,10 +80,10 @@ export interface DiagnosisResult {
   followUp?: string;
   metadata?: Record<string, unknown>;
 }
-//////     用户配置类型
+// 用户配置类型
 export interface UserPreferences {
-  theme: "light" | "dark" | "auto";
-  language: "zh" | "en";
+  theme: 'light' | 'dark' | 'auto';
+  language: 'zh' | 'en';
   notifications: NotificationSettings;
   privacy: PrivacySettings;
   accessibility: AccessibilitySettings;
@@ -108,7 +109,7 @@ export interface PrivacySettings {
   third_party_integrations: boolean;
 }
 export interface AccessibilitySettings {
-  font_size: "small" | "medium" | "large" | "extra_large";
+  font_size: 'small' | 'medium' | 'large' | 'extra_large';
   high_contrast: boolean;
   screen_reader: boolean;
   voice_commands: boolean;

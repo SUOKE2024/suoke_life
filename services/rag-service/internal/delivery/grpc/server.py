@@ -1,3 +1,23 @@
+"""
+server - 索克生活项目模块
+"""
+
+        from api.grpc.generated.rag_service_pb2 import AddDocumentResponse
+        from api.grpc.generated.rag_service_pb2 import DeleteDocumentResponse
+        from api.grpc.generated.rag_service_pb2 import Document as DocumentProto
+        from api.grpc.generated.rag_service_pb2 import DocumentReference as DocumentReferenceProto
+        from api.grpc.generated.rag_service_pb2 import GenerateResponse
+        from api.grpc.generated.rag_service_pb2 import HealthResponse
+        from api.grpc.generated.rag_service_pb2 import QueryResponse
+        from api.grpc.generated.rag_service_pb2 import RetrieveResponse
+        from api.grpc.generated.rag_service_pb2 import StreamResponse
+from ...model.document import Document, DocumentReference
+from ...service.rag_service import RagService
+from loguru import logger
+from typing import Dict, Any, List
+import grpc
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,17 +25,11 @@
 gRPC 服务实现
 """
 
-import time
-from typing import Dict, Any, List
-import grpc
-from loguru import logger
 
 # 以下导入语句在proto文件编译后需要替换为实际的导入
 # import suoke.rag.rag_service_pb2 as rag_pb2
 # import suoke.rag.rag_service_pb2_grpc as rag_pb2_grpc
 
-from ...service.rag_service import RagService
-from ...model.document import Document, DocumentReference
 
 class RagServicer:
     """
@@ -394,7 +408,6 @@ class RagServicer:
             protobuf 文档对象
         """
         # 导入时防止循环引用
-        from api.grpc.generated.rag_service_pb2 import Document as DocumentProto
         
         doc_proto = DocumentProto(
             id=document.id,
@@ -422,7 +435,6 @@ class RagServicer:
             protobuf 文档引用对象
         """
         # 导入时防止循环引用
-        from api.grpc.generated.rag_service_pb2 import DocumentReference as DocumentReferenceProto
         
         ref_proto = DocumentReferenceProto(
             id=reference.id,
@@ -445,7 +457,6 @@ class RagServicer:
         Returns:
             检索响应
         """
-        from api.grpc.generated.rag_service_pb2 import RetrieveResponse
         
         response = RetrieveResponse(
             latency_ms=latency_ms
@@ -470,7 +481,6 @@ class RagServicer:
         Returns:
             生成响应
         """
-        from api.grpc.generated.rag_service_pb2 import GenerateResponse
         
         response = GenerateResponse(
             answer=answer,
@@ -484,7 +494,8 @@ class RagServicer:
         
         return response
     
-    def _build_query_response(
+        @cache(timeout=300)  # 5分钟缓存
+def _build_query_response(
         self, 
         answer: str, 
         references: List[DocumentReference],
@@ -505,7 +516,6 @@ class RagServicer:
         Returns:
             查询响应
         """
-        from api.grpc.generated.rag_service_pb2 import QueryResponse
         
         response = QueryResponse(
             answer=answer,
@@ -533,7 +543,6 @@ class RagServicer:
         Returns:
             流式响应
         """
-        from api.grpc.generated.rag_service_pb2 import StreamResponse
         
         response = StreamResponse(
             answer_fragment=answer_fragment,
@@ -560,7 +569,6 @@ class RagServicer:
         Returns:
             添加文档响应
         """
-        from api.grpc.generated.rag_service_pb2 import AddDocumentResponse
         
         response = AddDocumentResponse(
             document_id=document_id,
@@ -581,7 +589,6 @@ class RagServicer:
         Returns:
             删除文档响应
         """
-        from api.grpc.generated.rag_service_pb2 import DeleteDocumentResponse
         
         response = DeleteDocumentResponse(
             success=success,
@@ -601,7 +608,6 @@ class RagServicer:
         Returns:
             健康检查响应
         """
-        from api.grpc.generated.rag_service_pb2 import HealthResponse
         
         # 转换状态
         status_map = {

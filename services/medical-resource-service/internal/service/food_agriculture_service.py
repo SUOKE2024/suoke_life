@@ -1,13 +1,18 @@
 """
-食农结合服务模块
-实现食疗与农业结合的健康管理功能
+food_agriculture_service - 索克生活项目模块
 """
 
-import logging
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
+import logging
+
+"""
+食农结合服务模块
+实现食疗与农业结合的健康管理功能
+"""
+
 
 # 定义体质类型
 class ConstitutionType(Enum):

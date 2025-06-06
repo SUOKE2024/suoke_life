@@ -1,24 +1,29 @@
 """
+test_user_service - 索克生活项目模块
+"""
+
+from internal.model.user import User, UserStatus, UserProfile, UserRole, ConstitutionType
+from internal.model.user import UserCreate, UserUpdate, UserProfileUpdate
+from internal.repository.exceptions import UserNotFoundError, UserAlreadyExistsError
+from internal.repository.sqlite_user_repository import SQLiteUserRepository
+from internal.service.user_service import UserService
+from typing import List, Optional, Dict, Any
+from unittest.mock import MagicMock, AsyncMock, patch, PropertyMock
+import datetime
+import os
+import pytest
+import sys
+import uuid
+
+"""
 用户服务的单元测试
 测试用户服务的核心功能
 """
-import datetime
-import os
-import sys
-import uuid
-from typing import List, Optional, Dict, Any
-from unittest.mock import MagicMock, AsyncMock, patch, PropertyMock
 
-import pytest
 
 # 确保能够导入内部模块
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../")))
 
-from internal.model.user import User, UserStatus, UserProfile, UserRole, ConstitutionType
-from internal.model.user import UserCreate, UserUpdate, UserProfileUpdate
-from internal.repository.sqlite_user_repository import SQLiteUserRepository
-from internal.service.user_service import UserService
-from internal.repository.exceptions import UserNotFoundError, UserAlreadyExistsError
 
 @pytest.fixture
 def mock_user_repo():
@@ -238,7 +243,8 @@ class TestUserService:
             await user_service.create_user(user_data)
     
     @pytest.mark.asyncio
-    async def test_get_user_by_id(self, user_service, mock_user_repo):
+    async     @cache(timeout=300)  # 5分钟缓存
+def test_get_user_by_id(self, user_service, mock_user_repo):
         """测试通过ID获取用户"""
         # 准备测试数据
         user_id = "test-id"
@@ -272,7 +278,8 @@ class TestUserService:
         # 验证存储库调用
         mock_user_repo.get_user_by_id.assert_called_once_with(user_id)
     
-    @pytest.mark.asyncio
+      @cache(timeout=300)  # 5分钟缓存
+  @pytest.mark.asyncio
     async def test_get_user_by_id_not_found(self, user_service, mock_user_repo):
         """测试通过ID获取不存在的用户"""
         # 设置模拟行为

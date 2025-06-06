@@ -1,3 +1,14 @@
+"""
+exceptions - 索克生活项目模块
+"""
+
+from fastapi import Request, status
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
+from starlette.exceptions import HTTPException
+from typing import Any
+import logging
+
 #!/usr/bin/env python
 
 """
@@ -5,13 +16,7 @@
 提供统一的异常类型和处理机制
 """
 
-import logging
-from typing import Any
 
-from fastapi import Request, status
-from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
-from starlette.exceptions import HTTPException
 
 logger = logging.getLogger(__name__)
 

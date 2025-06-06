@@ -1,37 +1,36 @@
 import React, { useEffect, useState } from 'react';
-import {
+import {import { Card, Button, ProgressBar, Chip, Badge } from 'react-native-paper';
+import { useSelector, useDispatch } from 'react-redux';
+import { useBenchmarkStreaming } from '../../hooks';
+import {import type { AppDispatch } from '../../store';
+
   View,
   Text,
   StyleSheet,
   ScrollView,
-  RefreshControl,
+  RefreshControl
 } from 'react-native';
-import { Card, Button, ProgressBar, Chip, Badge } from 'react-native-paper';
-import { useSelector, useDispatch } from 'react-redux';
-import { useBenchmarkStreaming } from '../../hooks';
-import {
   selectTaskStats,
   selectStreamingStatus,
   selectHealthStatus,
   fetchHealthStatus,
-  updateStreamingStatus,
+  updateStreamingStatus
 } from '../../store/slices/benchmarkSlice';
-import type { AppDispatch } from '../../store';
 
 interface BenchmarkMonitorProps {
   onTaskSelect?: (taskId: string) => void;
 }
 
 export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
-  onTaskSelect,
+  onTaskSelect
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const taskStats = useSelector(selectTaskStats);
   const streamingStatus = useSelector(selectStreamingStatus);
   const healthStatus = useSelector(selectHealthStatus);
-  
+
   const [refreshing, setRefreshing] = useState(false);
-  
+
   const {
     isConnected,
     connectionState,
@@ -42,10 +41,8 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
     clearEvents,
     getEventsByType,
     getLatestEvent,
-    eventCount,
-  } = useBenchmarkStreaming({
-    autoConnect: true,
-    maxEvents: 50,
+    eventCount
+  } = useBenchmarkStreaming({autoConnect: true,maxEvents: 50;
   });
 
   // 同步流式状态到Redux
@@ -53,13 +50,12 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
     dispatch(updateStreamingStatus({
       isConnected,
       connectionState,
-      lastEvent: getLatestEvent(),
+      lastEvent: getLatestEvent();
     }));
   }, [isConnected, connectionState, events, dispatch, getLatestEvent]);
 
   // 刷新数据
-  const handleRefresh = async () => {
-    setRefreshing(true);
+  const handleRefresh = async () => {setRefreshing(true);
     try {
       await dispatch(fetchHealthStatus()).unwrap();
     } catch (error) {
@@ -70,9 +66,7 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
   };
 
   // 连接状态指示器
-  const getConnectionStatusColor = () => {
-    switch (connectionState) {
-      case 'OPEN': return '#4CAF50';
+  const getConnectionStatusColor = () => {switch (connectionState) {case 'OPEN': return '#4CAF50';
       case 'CONNECTING': return '#FF9800';
       case 'CLOSED': return '#F44336';
       default: return '#9E9E9E';
@@ -80,11 +74,10 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
   };
 
   // 获取系统状态
-  const getSystemStatus = () => {
-    if (!healthStatus) return 'unknown';
-    
+  const getSystemStatus = () => {if (!healthStatus) return 'unknown';
+
     const { cpu_usage, memory_usage, disk_usage } = healthStatus.system_info;
-    
+
     if (cpu_usage > 90 || memory_usage > 90 || disk_usage > 90) {
       return 'critical';
     } else if (cpu_usage > 70 || memory_usage > 70 || disk_usage > 70) {
@@ -94,9 +87,7 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
   };
 
   // 获取状态颜色
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'healthy': return '#4CAF50';
+  const getStatusColor = (status: string) => {switch (status) {case 'healthy': return '#4CAF50';
       case 'warning': return '#FF9800';
       case 'critical': return '#F44336';
       default: return '#9E9E9E';
@@ -104,9 +95,7 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
   };
 
   // 处理连接操作
-  const handleConnectionToggle = () => {
-    if (isConnected) {
-      disconnect();
+  const handleConnectionToggle = () => {if (isConnected) {disconnect();
     } else {
       connect();
     }
@@ -124,7 +113,7 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
         <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
       }
     >
-      {/* 连接状态卡片 */}
+      {// 连接状态卡片}
       <Card style={styles.card}>
         <Card.Title title="实时连接状态" />
         <Card.Content>
@@ -146,11 +135,11 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
               {isConnected ? '断开' : '连接'}
             </Button>
           </View>
-          
+
           {error && (
             <Text style={styles.errorText}>连接错误: {error}</Text>
           )}
-          
+
           <View style={styles.metricsRow}>
             <Text style={styles.metricText}>事件数量: {eventCount}</Text>
             <Button mode="text" onPress={clearEvents} compact>
@@ -160,7 +149,7 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
         </Card.Content>
       </Card>
 
-      {/* 任务统计卡片 */}
+      {// 任务统计卡片}
       <Card style={styles.card}>
         <Card.Title title="任务统计" />
         <Card.Content>
@@ -191,7 +180,7 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
         </Card.Content>
       </Card>
 
-      {/* 系统健康状态 */}
+      {// 系统健康状态}
       {healthStatus && (
         <Card style={styles.card}>
           <Card.Title 
@@ -219,7 +208,7 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
                   {healthStatus.system_info.cpu_usage.toFixed(1)}%
                 </Text>
               </View>
-              
+
               <View style={styles.metricItem}>
                 <Text style={styles.metricLabel}>内存使用率</Text>
                 <ProgressBar 
@@ -231,7 +220,7 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
                   {healthStatus.system_info.memory_usage.toFixed(1)}%
                 </Text>
               </View>
-              
+
               <View style={styles.metricItem}>
                 <Text style={styles.metricLabel}>磁盘使用率</Text>
                 <ProgressBar 
@@ -244,7 +233,7 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
                 </Text>
               </View>
             </View>
-            
+
             <View style={styles.serviceStatus}>
               <Text style={styles.serviceLabel}>服务状态:</Text>
               <Chip 
@@ -260,7 +249,7 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
         </Card>
       )}
 
-      {/* 最近事件 */}
+      {// 最近事件}
       <Card style={styles.card}>
         <Card.Title title="最近事件" />
         <Card.Content>
@@ -296,7 +285,7 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
         </Card.Content>
       </Card>
 
-      {/* 事件统计 */}
+      {// 事件统计}
       <Card style={styles.card}>
         <Card.Title title="事件统计" />
         <Card.Content>
@@ -307,170 +296,159 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
               </Text>
               <Text style={styles.eventStatLabel}>错误</Text>
             </View>
-            <View style={styles.eventStatItem}>
-              <Text style={[styles.eventStatNumber, { color: '#FF9800' }]}>
-                {progressEvents.length}
-              </Text>
-              <Text style={styles.eventStatLabel}>进度</Text>
-            </View>
-            <View style={styles.eventStatItem}>
-              <Text style={[styles.eventStatNumber, { color: '#4CAF50' }]}>
-                {completeEvents.length}
-              </Text>
-              <Text style={styles.eventStatLabel}>完成</Text>
-            </View>
-          </View>
-        </Card.Content>
-      </Card>
-    </ScrollView>
+            <View style={styles.eventStatItem}>;
+              <Text style={[styles.eventStatNumber, { color: '#FF9800' }]}>;
+                {progressEvents.length};
+              </Text>;
+              <Text style={styles.eventStatLabel}>进度</Text>;
+            </View>;
+            <View style={styles.eventStatItem}>;
+              <Text style={[styles.eventStatNumber, { color: '#4CAF50' }]}>;
+                {completeEvents.length};
+              </Text>;
+              <Text style={styles.eventStatLabel}>完成</Text>;
+            </View>;
+          </View>;
+        </Card.Content>;
+      </Card>;
+    </ScrollView>;
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f5f5f5'
   },
   card: {
     margin: 16,
-    marginBottom: 8,
+    marginBottom: 8
   },
   statusRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 8
   },
   statusItem: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   statusBadge: {
     width: 12,
     height: 12,
     borderRadius: 6,
-    marginRight: 8,
+    marginRight: 8
   },
   statusText: {
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: '500'
   },
   errorText: {
     color: '#F44336',
     fontSize: 12,
-    marginTop: 4,
+    marginTop: 4
   },
   metricsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 8,
+    marginTop: 8
   },
   metricText: {
     fontSize: 14,
-    color: '#666',
+    color: '#666'
   },
   statsGrid: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-around'
   },
   statItem: {
-    alignItems: 'center',
+    alignItems: 'center'
   },
   statNumber: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#333'
   },
   statLabel: {
     fontSize: 12,
     color: '#666',
-    marginTop: 4,
+    marginTop: 4
   },
   statusChip: {
-    marginRight: 16,
+    marginRight: 16
   },
   metricsContainer: {
-    marginTop: 8,
+    marginTop: 8
   },
   metricItem: {
-    marginBottom: 16,
+    marginBottom: 16
   },
   metricLabel: {
     fontSize: 14,
     color: '#666',
-    marginBottom: 4,
+    marginBottom: 4
   },
   progressBar: {
     height: 8,
     borderRadius: 4,
-    marginBottom: 4,
+    marginBottom: 4
   },
   metricValue: {
     fontSize: 12,
     color: '#333',
-    textAlign: 'right',
+    textAlign: 'right'
   },
   serviceStatus: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 8,
+    marginTop: 8
   },
   serviceLabel: {
     fontSize: 14,
     color: '#666',
-    marginRight: 8,
+    marginRight: 8
   },
   serviceChip: {
-    height: 24,
+    height: 24
   },
   noEventsText: {
     textAlign: 'center',
     color: '#666',
     fontStyle: 'italic',
-    padding: 16,
+    padding: 16
   },
   eventsContainer: {
-    marginTop: 8,
+    marginTop: 8
   },
   eventItem: {
     backgroundColor: '#f9f9f9',
     padding: 12,
     borderRadius: 8,
-    marginBottom: 8,
+    marginBottom: 8
   },
   eventHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 4,
+    marginBottom: 4
   },
   eventTypeChip: {
-    height: 20,
+    height: 20
   },
   eventTime: {
     fontSize: 10,
-    color: '#666',
+    color: '#666'
   },
   eventData: {
     fontSize: 10,
     color: '#333',
-    fontFamily: 'monospace',
+    fontFamily: 'monospace'
   },
-  eventStatsGrid: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  eventStatItem: {
-    alignItems: 'center',
-  },
-  eventStatNumber: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  eventStatLabel: {
-    fontSize: 12,
-    color: '#666',
-    marginTop: 4,
-  },
+  eventStatsGrid: {flexDirection: 'row',justifyContent: 'space-around';
+  },eventStatItem: {alignItems: 'center';
+  },eventStatNumber: {fontSize: 20,fontWeight: 'bold';
+  },eventStatLabel: {fontSize: 12,color: '#666',marginTop: 4;
+  };
 }); 

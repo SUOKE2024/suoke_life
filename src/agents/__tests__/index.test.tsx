@@ -1,786 +1,754 @@
-import React from "react";
 import { createAgent, initializeAgentSystem, executeAgentTask, getAgentStatus, getAgentMetrics, cleanupAgentSystem, AGENT_CAPABILITIES, AGENT_ROLES, AGENT_CHANNELS, COLLABORATION_MODES, TASK_TYPES, TASK_PRIORITIES, AGENT_STATUSES, HEALTH_STATUSES, COLLABORATION_STRATEGIES, AGENT_SYSTEM_METADATA, DEFAULT_AGENT_CONFIG, hasCapability, getAgentRole, getAgentByChannel, getCollaborationStrategy, isValidAgentType, isValidTaskType, isValidTaskPriority, createTaskId, createSessionId, formatAgentStatus, calculateSystemHealth, isXiaoaiAgent, isXiaokeAgent, isLaokeAgent, isSoerAgent } from "../index";
+import { createAgent, initializeAgentSystem, executeAgentTask, getAgentStatus, getAgentMetrics, cleanupAgentSystem, AGENT_CAPABILITIES, AGENT_ROLES, AGENT_CHANNELS, COLLABORATION_MODES, TASK_TYPES, TASK_PRIORITIES, AGENT_STATUSES, HEALTH_STATUSES, COLLABORATION_STRATEGIES, AGENT_SYSTEM_METADATA, DEFAULT_AGENT_CONFIG, hasCapability, getAgentRole, getAgentByChannel, getCollaborationStrategy, isValidAgentType, isValidTaskType, isValidTaskPriority, createTaskId, createSessionId, formatAgentStatus, calculateSystemHealth, isXiaoaiAgent, isXiaokeAgent, isLaokeAgent, isSoerAgent } from "../index";
+
+import React from "react";
 describe("index", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  describe(createAgent", () => {"
+  describe("createAgent", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = createAgent(/* valid params   */);
+const result = createAgent(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = createAgent(/* edge case params   */);
+const result = createAgent(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        createAgent(/* invalid params     */)
-      }).not.toThrow()
+        createAgent(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = createAgent(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = createAgent(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(initializeAgentSystem", () => {"
+  describe("initializeAgentSystem", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = initializeAgentSystem(/* valid params   */);
+const result = initializeAgentSystem(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = initializeAgentSystem(/* edge case params   */);
+const result = initializeAgentSystem(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        initializeAgentSystem(/* invalid params     */)
-      }).not.toThrow()
+        initializeAgentSystem(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = initializeAgentSystem(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = initializeAgentSystem(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(executeAgentTask", () => {"
+  describe("executeAgentTask", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = executeAgentTask(/* valid params   */);
+const result = executeAgentTask(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = executeAgentTask(/* edge case params   */);
+const result = executeAgentTask(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        executeAgentTask(/* invalid params     */)
-      }).not.toThrow()
+        executeAgentTask(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = executeAgentTask(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = executeAgentTask(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(getAgentStatus", () => {"
+  describe("getAgentStatus", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = getAgentStatus(/* valid params   */);
+const result = getAgentStatus(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = getAgentStatus(/* edge case params   */);
+const result = getAgentStatus(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        getAgentStatus(/* invalid params     */)
-      }).not.toThrow()
+        getAgentStatus(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = getAgentStatus(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = getAgentStatus(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(getAgentMetrics", () => {"
+  describe("getAgentMetrics", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = getAgentMetrics(/* valid params   */);
+const result = getAgentMetrics(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = getAgentMetrics(/* edge case params   */);
+const result = getAgentMetrics(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        getAgentMetrics(/* invalid params     */)
-      }).not.toThrow()
+        getAgentMetrics(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = getAgentMetrics(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = getAgentMetrics(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(cleanupAgentSystem", () => {"
+  describe("cleanupAgentSystem", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = cleanupAgentSystem(/* valid params   */);
+const result = cleanupAgentSystem(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = cleanupAgentSystem(/* edge case params   */);
+const result = cleanupAgentSystem(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        cleanupAgentSystem(/* invalid params     */)
-      }).not.toThrow()
+        cleanupAgentSystem(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = cleanupAgentSystem(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = cleanupAgentSystem(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(AGENT_CAPABILITIES", () => {"
+  describe("AGENT_CAPABILITIES", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = AGENT_CAPABILITIES(/* valid params   */);
+const result = AGENT_CAPABILITIES(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = AGENT_CAPABILITIES(/* edge case params   */);
+const result = AGENT_CAPABILITIES(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        AGENT_CAPABILITIES(/* invalid params     */)
-      }).not.toThrow()
+        AGENT_CAPABILITIES(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = AGENT_CAPABILITIES(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = AGENT_CAPABILITIES(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(AGENT_ROLES", () => {"
+  describe("AGENT_ROLES", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = AGENT_ROLES(/* valid params   */);
+const result = AGENT_ROLES(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = AGENT_ROLES(/* edge case params   */);
+const result = AGENT_ROLES(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        AGENT_ROLES(/* invalid params     */)
-      }).not.toThrow()
+        AGENT_ROLES(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = AGENT_ROLES(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = AGENT_ROLES(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(AGENT_CHANNELS", () => {"
+  describe("AGENT_CHANNELS", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = AGENT_CHANNELS(/* valid params   */);
+const result = AGENT_CHANNELS(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = AGENT_CHANNELS(/* edge case params   */);
+const result = AGENT_CHANNELS(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        AGENT_CHANNELS(/* invalid params     */)
-      }).not.toThrow()
+        AGENT_CHANNELS(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = AGENT_CHANNELS(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = AGENT_CHANNELS(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(COLLABORATION_MODES", () => {"
+  describe("COLLABORATION_MODES", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = COLLABORATION_MODES(/* valid params   */);
+const result = COLLABORATION_MODES(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = COLLABORATION_MODES(/* edge case params   */);
+const result = COLLABORATION_MODES(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        COLLABORATION_MODES(/* invalid params     */)
-      }).not.toThrow()
+        COLLABORATION_MODES(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = COLLABORATION_MODES(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = COLLABORATION_MODES(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(TASK_TYPES", () => {"
+  describe("TASK_TYPES", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = TASK_TYPES(/* valid params   */);
+const result = TASK_TYPES(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = TASK_TYPES(/* edge case params   */);
+const result = TASK_TYPES(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        TASK_TYPES(/* invalid params     */)
-      }).not.toThrow()
+        TASK_TYPES(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = TASK_TYPES(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = TASK_TYPES(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(TASK_PRIORITIES", () => {"
+  describe("TASK_PRIORITIES", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = TASK_PRIORITIES(/* valid params   */);
+const result = TASK_PRIORITIES(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = TASK_PRIORITIES(/* edge case params   */);
+const result = TASK_PRIORITIES(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        TASK_PRIORITIES(/* invalid params     */)
-      }).not.toThrow()
+        TASK_PRIORITIES(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = TASK_PRIORITIES(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = TASK_PRIORITIES(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(AGENT_STATUSES", () => {"
+  describe("AGENT_STATUSES", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = AGENT_STATUSES(/* valid params   */);
+const result = AGENT_STATUSES(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = AGENT_STATUSES(/* edge case params   */);
+const result = AGENT_STATUSES(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        AGENT_STATUSES(/* invalid params     */)
-      }).not.toThrow()
+        AGENT_STATUSES(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = AGENT_STATUSES(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = AGENT_STATUSES(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(HEALTH_STATUSES", () => {"
+  describe("HEALTH_STATUSES", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = HEALTH_STATUSES(/* valid params   */);
+const result = HEALTH_STATUSES(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = HEALTH_STATUSES(/* edge case params   */);
+const result = HEALTH_STATUSES(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        HEALTH_STATUSES(/* invalid params     */)
-      }).not.toThrow()
+        HEALTH_STATUSES(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = HEALTH_STATUSES(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = HEALTH_STATUSES(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(COLLABORATION_STRATEGIES", () => {"
+  describe("COLLABORATION_STRATEGIES", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = COLLABORATION_STRATEGIES(/* valid params   */);
+const result = COLLABORATION_STRATEGIES(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = COLLABORATION_STRATEGIES(/* edge case params   */);
+const result = COLLABORATION_STRATEGIES(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        COLLABORATION_STRATEGIES(/* invalid params     */)
-      }).not.toThrow()
+        COLLABORATION_STRATEGIES(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = COLLABORATION_STRATEGIES(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = COLLABORATION_STRATEGIES(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(AGENT_SYSTEM_METADATA", () => {"
+  describe("AGENT_SYSTEM_METADATA", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = AGENT_SYSTEM_METADATA(/* valid params   */);
+const result = AGENT_SYSTEM_METADATA(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = AGENT_SYSTEM_METADATA(/* edge case params   */);
+const result = AGENT_SYSTEM_METADATA(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        AGENT_SYSTEM_METADATA(/* invalid params     */)
-      }).not.toThrow()
+        AGENT_SYSTEM_METADATA(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = AGENT_SYSTEM_METADATA(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = AGENT_SYSTEM_METADATA(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(DEFAULT_AGENT_CONFIG", () => {"
+  describe("DEFAULT_AGENT_CONFIG", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = DEFAULT_AGENT_CONFIG(/* valid params   */);
+const result = DEFAULT_AGENT_CONFIG(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = DEFAULT_AGENT_CONFIG(/* edge case params   */);
+const result = DEFAULT_AGENT_CONFIG(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        DEFAULT_AGENT_CONFIG(/* invalid params     */)
-      }).not.toThrow()
+        DEFAULT_AGENT_CONFIG(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = DEFAULT_AGENT_CONFIG(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = DEFAULT_AGENT_CONFIG(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(hasCapability", () => {"
+  describe("hasCapability", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = hasCapability(/* valid params   */);
+const result = hasCapability(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = hasCapability(/* edge case params   */);
+const result = hasCapability(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        hasCapability(/* invalid params     */)
-      }).not.toThrow()
+        hasCapability(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = hasCapability(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = hasCapability(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(getAgentRole", () => {"
+  describe("getAgentRole", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = getAgentRole(/* valid params   */);
+const result = getAgentRole(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = getAgentRole(/* edge case params   */);
+const result = getAgentRole(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        getAgentRole(/* invalid params     */)
-      }).not.toThrow()
+        getAgentRole(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = getAgentRole(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = getAgentRole(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(getAgentByChannel", () => {"
+  describe("getAgentByChannel", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = getAgentByChannel(/* valid params   */);
+const result = getAgentByChannel(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = getAgentByChannel(/* edge case params   */);
+const result = getAgentByChannel(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        getAgentByChannel(/* invalid params     */)
-      }).not.toThrow()
+        getAgentByChannel(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = getAgentByChannel(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = getAgentByChannel(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(getCollaborationStrategy", () => {"
+  describe("getCollaborationStrategy", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = getCollaborationStrategy(/* valid params   */);
+const result = getCollaborationStrategy(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = getCollaborationStrategy(/* edge case params   */);
+const result = getCollaborationStrategy(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        getCollaborationStrategy(/* invalid params     */)
-      }).not.toThrow()
+        getCollaborationStrategy(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = getCollaborationStrategy(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = getCollaborationStrategy(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(isValidAgentType", () => {"
+  describe("isValidAgentType", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = isValidAgentType(/* valid params   */);
+const result = isValidAgentType(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = isValidAgentType(/* edge case params   */);
+const result = isValidAgentType(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        isValidAgentType(/* invalid params     */)
-      }).not.toThrow()
+        isValidAgentType(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = isValidAgentType(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = isValidAgentType(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(isValidTaskType", () => {"
+  describe("isValidTaskType", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = isValidTaskType(/* valid params   */);
+const result = isValidTaskType(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = isValidTaskType(/* edge case params   */);
+const result = isValidTaskType(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        isValidTaskType(/* invalid params     */)
-      }).not.toThrow()
+        isValidTaskType(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = isValidTaskType(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = isValidTaskType(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(isValidTaskPriority", () => {"
+  describe("isValidTaskPriority", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = isValidTaskPriority(/* valid params   */);
+const result = isValidTaskPriority(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = isValidTaskPriority(/* edge case params   */);
+const result = isValidTaskPriority(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        isValidTaskPriority(/* invalid params     */)
-      }).not.toThrow()
+        isValidTaskPriority(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = isValidTaskPriority(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = isValidTaskPriority(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(createTaskId", () => {"
+  describe("createTaskId", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = createTaskId(/* valid params   */);
+const result = createTaskId(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = createTaskId(/* edge case params   */);
+const result = createTaskId(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        createTaskId(/* invalid params     */)
-      }).not.toThrow()
+        createTaskId(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = createTaskId(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = createTaskId(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(createSessionId", () => {"
+  describe("createSessionId", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = createSessionId(/* valid params   */);
+const result = createSessionId(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = createSessionId(/* edge case params   */);
+const result = createSessionId(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        createSessionId(/* invalid params     */)
-      }).not.toThrow()
+        createSessionId(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = createSessionId(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = createSessionId(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(formatAgentStatus", () => {"
+  describe("formatAgentStatus", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = formatAgentStatus(/* valid params   */);
+const result = formatAgentStatus(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = formatAgentStatus(/* edge case params   */);
+const result = formatAgentStatus(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        formatAgentStatus(/* invalid params     */)
-      }).not.toThrow()
+        formatAgentStatus(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = formatAgentStatus(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = formatAgentStatus(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(calculateSystemHealth", () => {"
+  describe("calculateSystemHealth", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = calculateSystemHealth(/* valid params   */);
+const result = calculateSystemHealth(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = calculateSystemHealth(/* edge case params   */);
+const result = calculateSystemHealth(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        calculateSystemHealth(/* invalid params     */)
-      }).not.toThrow()
+        calculateSystemHealth(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = calculateSystemHealth(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = calculateSystemHealth(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(isXiaoaiAgent", () => {"
+  describe("isXiaoaiAgent", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = isXiaoaiAgent(/* valid params   */);
+const result = isXiaoaiAgent(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = isXiaoaiAgent(/* edge case params   */);
+const result = isXiaoaiAgent(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        isXiaoaiAgent(/* invalid params     */)
-      }).not.toThrow()
+        isXiaoaiAgent(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = isXiaoaiAgent(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = isXiaoaiAgent(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(isXiaokeAgent", () => {"
+  describe("isXiaokeAgent", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = isXiaokeAgent(/* valid params   */);
+const result = isXiaokeAgent(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = isXiaokeAgent(/* edge case params   */);
+const result = isXiaokeAgent(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        isXiaokeAgent(/* invalid params     */)
-      }).not.toThrow()
+        isXiaokeAgent(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = isXiaokeAgent(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = isXiaokeAgent(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(isLaokeAgent", () => {"
+  describe("isLaokeAgent", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = isLaokeAgent(/* valid params   */);
+const result = isLaokeAgent(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = isLaokeAgent(/* edge case params   */);
+const result = isLaokeAgent(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        isLaokeAgent(/* invalid params     */)
-      }).not.toThrow()
+        isLaokeAgent(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = isLaokeAgent(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = isLaokeAgent(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(isSoerAgent", () => {"
+  describe("isSoerAgent", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = isSoerAgent(/* valid params   */);
+const result = isSoerAgent(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = isSoerAgent(/* edge case params   */);
+const result = isSoerAgent(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        isSoerAgent(/* invalid params     */)
-      }).not.toThrow()
+        isSoerAgent(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = isSoerAgent(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = isSoerAgent(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
 });
-import { performance } from "perf_hooks";
-import { createAgent, initializeAgentSystem, executeAgentTask, getAgentStatus, getAgentMetrics, cleanupAgentSystem, AGENT_CAPABILITIES, AGENT_ROLES, AGENT_CHANNELS, COLLABORATION_MODES, TASK_TYPES, TASK_PRIORITIES, AGENT_STATUSES, HEALTH_STATUSES, COLLABORATION_STRATEGIES, AGENT_SYSTEM_METADATA, DEFAULT_AGENT_CONFIG, hasCapability, getAgentRole, getAgentByChannel, getCollaborationStrategy, isValidAgentType, isValidTaskType, isValidTaskPriority, createTaskId, createSessionId, formatAgentStatus, calculateSystemHealth, isXiaoaiAgent, isXiaokeAgent, isLaokeAgent, isSoerAgent } from "../index";
 describe("index Performance Tests", () => {
   it("should execute within performance thresholds", () => {
     const iterations = 10;
     const startTime = performance.now();
     for (let i = 0; i < iterations; i++) {
       // Execute performance-critical functions
-createAgent(/* test params      */)
-      initializeAgentSystem(/* test params      */);
-      executeAgentTask(/* test params      */);
-      getAgentStatus(/* test params      */);
-      getAgentMetrics(/* test params      */);
-      cleanupAgentSystem(/* test params      */);
-      AGENT_CAPABILITIES(/* test params      */);
-      AGENT_ROLES(/* test params      */);
-      AGENT_CHANNELS(/* test params      */);
-      COLLABORATION_MODES(/* test params      */);
-      TASK_TYPES(/* test params      */);
-      TASK_PRIORITIES(/* test params      */);
-      AGENT_STATUSES(/* test params      */);
-      HEALTH_STATUSES(/* test params      */);
-      COLLABORATION_STRATEGIES(/* test params      */);
-      AGENT_SYSTEM_METADATA(/* test params      */);
-      DEFAULT_AGENT_CONFIG(/* test params      */);
-      hasCapability(/* test params      */);
-      getAgentRole(/* test params      */);
-      getAgentByChannel(/* test params      */);
-      getCollaborationStrategy(/* test params      */);
-      isValidAgentType(/* test params      */);
-      isValidTaskType(/* test params      */);
-      isValidTaskPriority(/* test params      */);
-      createTaskId(/* test params      */);
-      createSessionId(/* test params      */);
-      formatAgentStatus(/* test params      */);
-      calculateSystemHealth(/* test params      */);
-      isXiaoaiAgent(/* test params      */);
-      isXiaokeAgent(/* test params      */);
-      isLaokeAgent(/* test params      */);
-      isSoerAgent(/* test params      */);
+createAgent(// test params);
+      initializeAgentSystem(// test params);
+      executeAgentTask(// test params);
+      getAgentStatus(// test params);
+      getAgentMetrics(// test params);
+      cleanupAgentSystem(// test params);
+      AGENT_CAPABILITIES(// test params);
+      AGENT_ROLES(// test params);
+      AGENT_CHANNELS(// test params);
+      COLLABORATION_MODES(// test params);
+      TASK_TYPES(// test params);
+      TASK_PRIORITIES(// test params);
+      AGENT_STATUSES(// test params);
+      HEALTH_STATUSES(// test params);
+      COLLABORATION_STRATEGIES(// test params);
+      AGENT_SYSTEM_METADATA(// test params);
+      DEFAULT_AGENT_CONFIG(// test params);
+      hasCapability(// test params);
+      getAgentRole(// test params);
+      getAgentByChannel(// test params);
+      getCollaborationStrategy(// test params);
+      isValidAgentType(// test params);
+      isValidTaskType(// test params);
+      isValidTaskPriority(// test params);
+      createTaskId(// test params);
+      createSessionId(// test params);
+      formatAgentStatus(// test params);
+      calculateSystemHealth(// test params);
+      isXiaoaiAgent(// test params);
+      isXiaokeAgent(// test params);
+      isLaokeAgent(// test params);
+      isSoerAgent(// test params);
     });
     const endTime = performance.now();
     const averageTime = (endTime - startTime) / iterations;
@@ -791,7 +759,7 @@ expect(averageTime).toBeLessThan(1);
     const largeDataset = new Array(10000).fill(0).map((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
-createAgent(largeDataset)
+createAgent(largeDataset);
     const endTime = performance.now();
     // Should handle large datasets within 100ms
 expect(endTime - startTime).toBeLessThan(100);
@@ -800,7 +768,7 @@ expect(endTime - startTime).toBeLessThan(100);
     const initialMemory = process.memoryUsage().heapUsed;
     // Execute function multiple times
 for (let i = 0; i < 1000; i++) {
-      createAgent(/* test params      */);
+      createAgent(// test params);
     });
     // Force garbage collection if available
 if (global.gc) {

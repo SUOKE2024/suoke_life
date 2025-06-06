@@ -1,11 +1,16 @@
 """
-智能对话 API 端点
+chat - 索克生活项目模块
 """
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-
 from xiaoke_service.core.logging import get_logger
+
+"""
+智能对话 API 端点
+"""
+
+
 
 router = APIRouter()
 logger = get_logger(__name__)

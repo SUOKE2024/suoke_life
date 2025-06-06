@@ -1,19 +1,24 @@
 """
+routes - 索克生活项目模块
+"""
+
+from ..core.algorithms.bagua.calculator import BaguaCalculator
+from ..core.algorithms.comprehensive_calculator import ComprehensiveCalculator
+from ..core.algorithms.constitution.calculator import ConstitutionCalculator
+from ..core.algorithms.wuyun_liuqi.calculator import WuyunLiuqiCalculator
+from ..core.algorithms.ziwu_liuzhu.calculator import ZiwuLiuzhuCalculator
+from datetime import datetime, date
+from fastapi import APIRouter, HTTPException, Query
+from pydantic import BaseModel, Field
+from typing import Optional
+
+"""
 算诊服务API路由
 
 提供五诊中"算诊"功能的REST API接口
 """
 
-from datetime import datetime, date
-from typing import Optional
-from fastapi import APIRouter, HTTPException, Query
-from pydantic import BaseModel, Field
 
-from ..core.algorithms.comprehensive_calculator import ComprehensiveCalculator
-from ..core.algorithms.ziwu_liuzhu.calculator import ZiwuLiuzhuCalculator
-from ..core.algorithms.constitution.calculator import ConstitutionCalculator
-from ..core.algorithms.bagua.calculator import BaguaCalculator
-from ..core.algorithms.wuyun_liuqi.calculator import WuyunLiuqiCalculator
 
 router = APIRouter(prefix="/api/v1/calculation", tags=["算诊"])
 

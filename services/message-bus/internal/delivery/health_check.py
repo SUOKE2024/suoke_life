@@ -1,13 +1,20 @@
+"""
+health_check - 索克生活项目模块
+"""
+
+            from aiokafka.admin import AIOKafkaAdminClient
+            import aioredis
+from aiohttp import web
+from enum import Enum
+from grpc_health.v1 import health_pb2, health_pb2_grpc
+from internal.observability.metrics import up
+from internal.service.message_service import MessageService
+from typing import Dict, Any, Optional
 import asyncio
 import logging
 import time
-from typing import Dict, Any, Optional
-from enum import Enum
-from aiohttp import web
-from grpc_health.v1 import health_pb2, health_pb2_grpc
 
-from internal.service.message_service import MessageService
-from internal.observability.metrics import up
+
 
 logger = logging.getLogger(__name__)
 
@@ -195,7 +202,6 @@ class HealthCheck:
             message_repo = self.message_service.message_repository
             
             # 创建一个临时消费者检测Kafka连通性
-            from aiokafka.admin import AIOKafkaAdminClient
             admin_client = AIOKafkaAdminClient(
                 bootstrap_servers=kafka_servers,
                 client_id=f"health-check-{int(time.time())}"
@@ -244,7 +250,6 @@ class HealthCheck:
             redis_config = self.settings.redis
             
             # 尝试连接Redis并执行PING命令
-            import aioredis
             redis = await aioredis.create_redis_pool(
                 f"redis://{redis_config.host}:{redis_config.port}",
                 db=redis_config.db,

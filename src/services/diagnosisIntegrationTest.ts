@@ -1,10 +1,10 @@
+import { FiveDiagnosisService, FiveDiagnosisInput } from './fiveDiagnosisService';
+import { DiagnosisCacheManager } from './diagnosisCacheManager';
+
 /**
  * 诊断服务前端集成测试套件
  * 测试五诊服务的API集成、错误处理、缓存机制等功能
  */
-
-import { FiveDiagnosisService, FiveDiagnosisInput } from './fiveDiagnosisService';
-import { DiagnosisCacheManager } from './diagnosisCacheManager';
 
 interface TestResult {
   testName: string;
@@ -44,7 +44,7 @@ export class DiagnosisIntegrationTester {
    */
   async runFullTestSuite(): Promise<IntegrationTestReport> {
     console.log('🚀 开始运行诊断服务前端集成测试套件...');
-    
+
     const startTime = Date.now();
     this.testResults = [];
 
@@ -53,25 +53,25 @@ export class DiagnosisIntegrationTester {
 
     // API集成测试
     await this.runApiIntegrationTests();
-    
+
     // 错误处理测试
     await this.runErrorHandlingTests();
-    
+
     // 缓存管理测试
     await this.runCacheManagementTests();
-    
+
     // 数据验证测试
     await this.runDataValidationTests();
-    
+
     // 性能优化测试
     await this.runPerformanceTests();
 
     const totalDuration = Date.now() - startTime;
     const report = this.generateTestReport(totalDuration);
-    
+
     console.log('✅ 测试套件运行完成');
     this.printTestReport(report);
-    
+
     return report;
   }
 
@@ -107,12 +107,12 @@ export class DiagnosisIntegrationTester {
         },
         calculationData: {
           birthDate: '1990-05-15',
-          currentTime: new Date().toISOString()
+          currentTime: new Date().toISOString();
         }
       };
 
       const result = await this.fiveDiagnosisService.performDiagnosis(input);
-      
+
       if (!result || !result.diagnosticResults) {
         throw new Error('诊断结果为空');
       }
@@ -137,9 +137,9 @@ export class DiagnosisIntegrationTester {
           faceImage: 'data:image/jpeg;base64,test'
         }
       };
-      
+
       const result = await this.fiveDiagnosisService.performDiagnosis(input);
-      
+
       if (!result || !result.diagnosticResults) {
         throw new Error('望诊结果不完整');
       }
@@ -155,9 +155,9 @@ export class DiagnosisIntegrationTester {
           voiceRecording: 'data:audio/wav;base64,test'
         }
       };
-      
+
       const result = await this.fiveDiagnosisService.performDiagnosis(input);
-      
+
       if (!result || !result.diagnosticResults) {
         throw new Error('闻诊结果不完整');
       }
@@ -175,9 +175,9 @@ export class DiagnosisIntegrationTester {
           lifestyle: { sleep: '8小时' }
         }
       };
-      
+
       const result = await this.fiveDiagnosisService.performDiagnosis(input);
-      
+
       if (!result || !result.diagnosticResults) {
         throw new Error('问诊结果不完整');
       }
@@ -193,9 +193,9 @@ export class DiagnosisIntegrationTester {
           pulseData: [72, 75, 70, 73, 74]
         }
       };
-      
+
       const result = await this.fiveDiagnosisService.performDiagnosis(input);
-      
+
       if (!result || !result.diagnosticResults) {
         throw new Error('切诊结果不完整');
       }
@@ -209,12 +209,12 @@ export class DiagnosisIntegrationTester {
         userId: 'test-user-006',
         calculationData: {
           birthDate: '1990-05-15',
-          currentTime: new Date().toISOString()
+          currentTime: new Date().toISOString();
         }
       };
-      
+
       const result = await this.fiveDiagnosisService.performDiagnosis(input);
-      
+
       if (!result || !result.diagnosticResults) {
         throw new Error('算诊结果不完整');
       }
@@ -240,11 +240,15 @@ export class DiagnosisIntegrationTester {
             lifestyle: {}
           }
         };
-        
+
         await this.fiveDiagnosisService.performDiagnosis(input);
         throw new Error('应该抛出数据验证错误');
       } catch (error: any) {
-        if (error.message.includes('验证') || error.message.includes('无效') || error.message.includes('症状')) {
+        if (
+          error.message.includes('验证') ||
+          error.message.includes('无效') ||
+          error.message.includes('症状');
+        ) {
           return { success: true, errorHandled: true };
         }
         throw error;
@@ -261,11 +265,15 @@ export class DiagnosisIntegrationTester {
             faceImage: 'test'
           }
         };
-        
+
         await this.fiveDiagnosisService.performDiagnosis(input);
         throw new Error('应该抛出用户ID错误');
       } catch (error: any) {
-        if (error.message.includes('用户') || error.message.includes('ID') || error.message.includes('空')) {
+        if (
+          error.message.includes('用户') ||
+          error.message.includes('ID') ||
+          error.message.includes('空');
+        ) {
           return { success: true, errorHandled: true };
         }
         throw error;
@@ -276,14 +284,18 @@ export class DiagnosisIntegrationTester {
     await this.runTest('无诊断数据处理', async () => {
       try {
         const input: FiveDiagnosisInput = {
-          userId: 'test-user'
+          userId: 'test-user',
           // 没有任何诊断数据
         };
-        
+
         await this.fiveDiagnosisService.performDiagnosis(input);
         throw new Error('应该抛出无数据错误');
       } catch (error: any) {
-        if (error.message.includes('数据') || error.message.includes('诊断') || error.message.includes('提供')) {
+        if (
+          error.message.includes('数据') ||
+          error.message.includes('诊断') ||
+          error.message.includes('提供');
+        ) {
           return { success: true, errorHandled: true };
         }
         throw error;
@@ -298,18 +310,8 @@ export class DiagnosisIntegrationTester {
     console.log('💾 运行缓存管理测试...');
 
     await this.runTest('缓存保存和读取', async () => {
-      const testSession = {
-        sessionId: 'test-cache-session',
-        userId: 'test-user',
-        startTime: Date.now(),
-        lastUpdateTime: Date.now(),
-        currentStep: 'looking',
-        collectedData: {
-          userId: 'test-user',
-          sessionId: 'test-cache-session',
-          lookingData: { tongueImage: 'test', faceImage: 'test' }
-        },
-        isCompleted: false
+      const testSession = {sessionId: 'test-cache-session',userId: 'test-user',startTime: Date.now(),lastUpdateTime: Date.now(),currentStep: 'looking',collectedData: {userId: 'test-user',sessionId: 'test-cache-session',lookingData: { tongueImage: 'test', faceImage: 'test' };
+        },isCompleted: false;
       };
 
       // 保存到缓存
@@ -326,14 +328,8 @@ export class DiagnosisIntegrationTester {
     });
 
     await this.runTest('缓存过期处理', async () => {
-      const expiredSession = {
-        sessionId: 'expired-session',
-        userId: 'test-user',
-        startTime: Date.now() - (25 * 60 * 60 * 1000), // 25小时前
-        lastUpdateTime: Date.now() - (25 * 60 * 60 * 1000),
-        currentStep: 'inquiry',
-        collectedData: {},
-        isCompleted: false
+      const expiredSession = {sessionId: 'expired-session',userId: 'test-user',startTime: Date.now() - 25 * 60 * 60 * 1000, // 25小时前;
+        lastUpdateTime: Date.now() - 25 * 60 * 60 * 1000,currentStep: 'inquiry',collectedData: {},isCompleted: false;
       };
 
       await this.cacheManager.saveSession(expiredSession);
@@ -366,9 +362,9 @@ export class DiagnosisIntegrationTester {
     console.log('🔍 运行数据验证测试...');
 
     await this.runTest('输入数据验证', async () => {
-      const invalidInputs = [
-        { userId: '', sessionId: 'test' }, // 空用户ID
-        { userId: 'test', sessionId: 'test' }, // 无诊断数据
+      const invalidInputs = [;
+        { userId: '', sessionId: 'test' }, // 空用户ID;
+        { userId: 'test', sessionId: 'test' }, // 无诊断数据;
       ];
 
       for (const input of invalidInputs) {
@@ -376,8 +372,12 @@ export class DiagnosisIntegrationTester {
           await this.fiveDiagnosisService.performDiagnosis(input as any);
           throw new Error(`无效输入应该被拒绝: ${JSON.stringify(input)}`);
         } catch (error: any) {
-          if (!error.message.includes('验证') && !error.message.includes('无效') && 
-              !error.message.includes('用户') && !error.message.includes('数据')) {
+          if (
+            !error.message.includes('验证') &&
+            !error.message.includes('无效') &&
+            !error.message.includes('用户') &&
+            !error.message.includes('数据');
+          ) {
             throw new Error(`验证错误消息不正确: ${error.message}`);
           }
         }
@@ -419,7 +419,7 @@ export class DiagnosisIntegrationTester {
 
     await this.runTest('响应时间测试', async () => {
       const startTime = Date.now();
-      
+
       const input: FiveDiagnosisInput = {
         userId: 'perf-test-user',
         sessionId: 'perf-test-session',
@@ -427,10 +427,11 @@ export class DiagnosisIntegrationTester {
       };
 
       await this.fiveDiagnosisService.performDiagnosis(input);
-      
+
       const duration = Date.now() - startTime;
-      
-      if (duration > 10000) { // 10秒超时
+
+      if (duration > 10000) {
+        // 10秒超时
         throw new Error(`响应时间过长: ${duration}ms`);
       }
 
@@ -455,7 +456,7 @@ export class DiagnosisIntegrationTester {
       }
 
       const results = await Promise.all(promises);
-      
+
       if (results.length !== concurrentRequests) {
         throw new Error('并发请求处理失败');
       }
@@ -465,16 +466,12 @@ export class DiagnosisIntegrationTester {
 
     await this.runTest('服务状态监控测试', async () => {
       const status = this.fiveDiagnosisService.getServiceStatus();
-      
+
       if (!status || typeof status.isInitialized !== 'boolean') {
         throw new Error('服务状态监控异常');
       }
 
-      return { 
-        success: true, 
-        status,
-        isInitialized: status.isInitialized,
-        performanceMetrics: status.performanceMetrics
+      return {success: true,status,isInitialized: status.isInitialized,performanceMetrics: status.performanceMetrics;
       };
     });
   }
@@ -484,30 +481,30 @@ export class DiagnosisIntegrationTester {
    */
   private async runTest(testName: string, testFunction: () => Promise<any>): Promise<void> {
     const startTime = Date.now();
-    
+
     try {
       console.log(`  🧪 运行测试: ${testName}`);
       const result = await testFunction();
       const duration = Date.now() - startTime;
-      
+
       this.testResults.push({
         testName,
         passed: true,
         duration,
         details: result
       });
-      
+
       console.log(`  ✅ ${testName} - 通过 (${duration}ms)`);
     } catch (error: any) {
       const duration = Date.now() - startTime;
-      
+
       this.testResults.push({
         testName,
         passed: false,
         duration,
         error: error.message
       });
-      
+
       console.log(`  ❌ ${testName} - 失败: ${error.message} (${duration}ms)`);
     }
   }
@@ -521,25 +518,28 @@ export class DiagnosisIntegrationTester {
     const failedTests = totalTests - passedTests;
 
     // 计算覆盖率
-    const apiTests = this.testResults.filter(r => r.testName.includes('API') || r.testName.includes('数据处理')).length;
-    const errorTests = this.testResults.filter(r => r.testName.includes('错误') || r.testName.includes('处理')).length;
+    const apiTests = this.testResults.filter(;
+      r => r.testName.includes('API') || r.testName.includes('数据处理');
+    ).length;
+    const errorTests = this.testResults.filter(;
+      r => r.testName.includes('错误') || r.testName.includes('处理');
+    ).length;
     const cacheTests = this.testResults.filter(r => r.testName.includes('缓存')).length;
     const validationTests = this.testResults.filter(r => r.testName.includes('验证')).length;
-    const performanceTests = this.testResults.filter(r => r.testName.includes('性能') || r.testName.includes('响应') || r.testName.includes('并发') || r.testName.includes('监控')).length;
+    const performanceTests = this.testResults.filter(;
+      r =>;
+        r.testName.includes('性能') ||;
+        r.testName.includes('响应') ||;
+        r.testName.includes('并发') ||;
+        r.testName.includes('监控');
+    ).length;
 
-    return {
-      totalTests,
-      passedTests,
-      failedTests,
-      totalDuration,
-      results: this.testResults,
-      coverage: {
-        apiIntegration: Math.min(100, (apiTests / 6) * 100), // 6个API测试
-        errorHandling: Math.min(100, (errorTests / 3) * 100), // 3个错误处理测试
-        cacheManagement: Math.min(100, (cacheTests / 3) * 100), // 3个缓存测试
-        dataValidation: Math.min(100, (validationTests / 2) * 100), // 2个验证测试
-        performanceOptimization: Math.min(100, (performanceTests / 3) * 100) // 3个性能测试
-      }
+    return {totalTests,passedTests,failedTests,totalDuration,results: this.testResults,coverage: {apiIntegration: Math.min(100, (apiTests / 6) * 100), // 6个API测试;
+        errorHandling: Math.min(100, (errorTests / 3) * 100), // 3个错误处理测试;
+        cacheManagement: Math.min(100, (cacheTests / 3) * 100), // 3个缓存测试;
+        dataValidation: Math.min(100, (validationTests / 2) * 100), // 2个验证测试;
+        performanceOptimization: Math.min(100, (performanceTests / 3) * 100), // 3个性能测试;
+      };
     };
   }
 
@@ -554,23 +554,23 @@ export class DiagnosisIntegrationTester {
     console.log(`失败测试: ${report.failedTests}`);
     console.log(`成功率: ${((report.passedTests / report.totalTests) * 100).toFixed(1)}%`);
     console.log(`总耗时: ${report.totalDuration}ms`);
-    
+
     console.log('\n📈 功能覆盖率:');
     console.log(`API集成: ${report.coverage.apiIntegration.toFixed(1)}%`);
     console.log(`错误处理: ${report.coverage.errorHandling.toFixed(1)}%`);
     console.log(`缓存管理: ${report.coverage.cacheManagement.toFixed(1)}%`);
     console.log(`数据验证: ${report.coverage.dataValidation.toFixed(1)}%`);
     console.log(`性能优化: ${report.coverage.performanceOptimization.toFixed(1)}%`);
-    
+
     if (report.failedTests > 0) {
       console.log('\n❌ 失败的测试:');
       report.results
-        .filter(r => !r.passed)
+        .filter(r => !r.passed);
         .forEach(r => {
           console.log(`  - ${r.testName}: ${r.error}`);
         });
     }
-    
+
     console.log('\n' + '='.repeat(50));
   }
 }
@@ -580,7 +580,8 @@ export const diagnosisIntegrationTester = new DiagnosisIntegrationTester();
 
 // 如果直接运行此文件，执行测试
 if (require.main === module) {
-  diagnosisIntegrationTester.runFullTestSuite()
+  diagnosisIntegrationTester
+    .runFullTestSuite();
     .then(report => {
       process.exit(report.failedTests > 0 ? 1 : 0);
     })
@@ -588,4 +589,4 @@ if (require.main === module) {
       console.error('测试套件运行失败:', error);
       process.exit(1);
     });
-} 
+}

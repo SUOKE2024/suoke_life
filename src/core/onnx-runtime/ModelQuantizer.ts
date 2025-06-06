@@ -1,29 +1,26 @@
 import { EventEmitter } from "events";
-import {
-  QuantizationConfig,
+import {import {QuantizationConfig,
   ONNXModel,
   QuantizationLevel,
   TargetDevice,
   OptimizationLevel,
   ONNXError,
-  { ONNXEvent } from "../../placeholder";./////    types";"
-import {
+  { ONNXEvent } from "../../placeholder";./////    types
   QUANTIZATION_CONFIGS,
   OPTIMIZATION_LEVELS,
   ERROR_MESSAGES,
-  { EVENT_NAMES  } from ./////    constants";"
-/**////
- * 模型量化工具 - 支持多种量化策略和设备优化
+  { EVENT_NAMES  } from ./////    constants
+/**
+ * * 模型量化工具 - 支持多种量化策略和设备优化
  * 实现INT8、INT16、FP16和动态量化
-export class ModelQuantizer extends EventEmitter {;
-  private isQuantizing: boolean = false;
+export class ModelQuantizer extends EventEmitter {private isQuantizing: boolean = false;
   private quantizationQueue: QuantizationTask[] = [];
   private calibrationData: Map<string, Float32Array[]> = new Map();
   constructor() {
     super();
   }
-  /**////
-   * 量化ONNX模型
+  /**
+ * * 量化ONNX模型
   async quantizeModel(
     model: ONNXModel,
     config: QuantizationConfig;
@@ -34,20 +31,19 @@ export class ModelQuantizer extends EventEmitter {;
     this.isQuantizing = true;
     const startTime = Date.now();
     try {
-      //////     验证配置
+      // 验证配置
 this.validateQuantizationConfig(config);
-      //////     创建量化任务
-const task: QuantizationTask = {;
-        id: `quant_${Date.now()}`,
+      // 创建量化任务
+const task: QuantizationTask = {id: `quant_${Date.now()}`,
         model,
         config,
         status: "pending",
-        createdAt: new Date()
+        createdAt: new Date();
       };
       this.quantizationQueue.push(task);
-      //////     执行量化
+      // 执行量化
 const quantizedModel = await this.executeQuantization(task);
-      //////     验证量化结果
+      // 验证量化结果
 await this.validateQuantizedModel(model, quantizedModel, config);
       const duration = Date.now() - startTime;
       this.emit(EVENT_NAMES.QUANTIZATION_COMPLETED, {
@@ -62,8 +58,7 @@ await this.validateQuantizedModel(model, quantizedModel, config);
       } as ONNXEvent);
       return quantizedModel;
     } catch (error) {
-      const onnxError: ONNXError = {;
-        code: "QUANTIZATION_FAILED,"
+      const onnxError: ONNXError = {code: "QUANTIZATION_FAILED,",
         message: `模型量化失败: ${error.message}`,
         details: error,
         timestamp: new Date(),
@@ -76,8 +71,8 @@ await this.validateQuantizedModel(model, quantizedModel, config);
       this.quantizationQueue = this.quantizationQueue.filter(t => t.model.id !== model.id);
     }
   }
-  /**////
-   * 批量量化模型
+  /**
+ * * 批量量化模型
   async quantizeModels(
     models: ONNXModel[],
     configs: QuantizationConfig[]
@@ -91,13 +86,13 @@ await this.validateQuantizedModel(model, quantizedModel, config);
         const quantizedModel = await this.quantizeModel(models[i], configs[i]);
         results.push(quantizedModel);
       } catch (error) {
-        //////     继续处理其他模型
+        // 继续处理其他模型
       }
     }
     return results;
   }
-  /**////
-   * 添加校准数据
+  /**
+ * * 添加校准数据
   async addCalibrationData(
     modelId: string,
     data: Float32Array[]
@@ -108,8 +103,8 @@ await this.validateQuantizedModel(model, quantizedModel, config);
     const existingData = this.calibrationData.get(modelId)!;
     existingData.push(...data);
     }
-  /**////
-   * 清除校准数据
+  /**
+ * * 清除校准数据
   clearCalibrationData(modelId?: string): void {
     if (modelId) {
       this.calibrationData.delete(modelId);
@@ -117,64 +112,48 @@ await this.validateQuantizedModel(model, quantizedModel, config);
       this.calibrationData.clear();
     }
   }
-  /**////
-   * 获取量化配置建议
+  /**
+ * * 获取量化配置建议
   getQuantizationRecommendation(
     model: ONNXModel,
     targetDevice: TargetDevice,
     performanceRequirement: "speed | "accuracy" | size"
   ): QuantizationConfig {
-    const baseConfig: QuantizationConfig = {;
-      level: "int8,"
+    const baseConfig: QuantizationConfig = {level: "int8,",
       outputPath: `${model.path.replace(".onnx", ")}_quantized.onnx`,"
       preserveAccuracy: true,
       targetDevice,
       optimizationLevel: "extended"
     };
-    //////     根据性能要求调整配置
+    // 根据性能要求调整配置
 switch (performanceRequirement) {
       case "speed":
-        return {
-          ...baseConfig,
-          level: int8","
-          preserveAccuracy: false,
-          optimizationLevel: "all"
+        return {...baseConfig,level: int8",";
+          preserveAccuracy: false,optimizationLevel: "all";
         };
       case "accuracy":
-        return {
-          ...baseConfig,
-          level: fp16","
-          preserveAccuracy: true,
-          optimizationLevel: "basic"
+        return {...baseConfig,level: fp16",";
+          preserveAccuracy: true,optimizationLevel: "basic";
         };
       case "size":
-        return {
-          ...baseConfig,
-          level: int8","
-          preserveAccuracy: false,
-          optimizationLevel: "all"
+        return {...baseConfig,level: int8",";
+          preserveAccuracy: false,optimizationLevel: "all";
         };
       default:
         return baseConfig;
     }
   }
-  /**////
-   * 估算量化效果
+  /**
+ * * 估算量化效果
   estimateQuantizationImpact(
     model: ONNXModel,
     level: QuantizationLevel;
   ): QuantizationImpact {
     const config = QUANTIZATION_CONFIGS[level];
-    return {
-      sizeReduction: config.memoryReduction,
-      speedGain: config.speedGain,
-      accuracyLoss: config.accuracyLoss,
-      memoryReduction: config.memoryReduction,
-      estimatedSize: model.size * (1 - config.memoryReduction),
-      compressionRatio: config.compressionRatio;
+    return {sizeReduction: config.memoryReduction,speedGain: config.speedGain,accuracyLoss: config.accuracyLoss,memoryReduction: config.memoryReduction,estimatedSize: model.size * (1 - config.memoryReduction),compressionRatio: config.compressionRatio;
     };
   }
-  //////     私有方法
+  // 私有方法
 private validateQuantizationConfig(config: QuantizationConfig): void {
     if (!config.level || !config.outputPath) {
       throw new Error("量化配置不完整");
@@ -187,10 +166,10 @@ private validateQuantizationConfig(config: QuantizationConfig): void {
     }
   }
   private async executeQuantization(task: QuantizationTask): Promise<ONNXModel> {
-    task.status = running";"
+    task.status = running
     const { model, config } = task;
     try {
-      //////     根据量化级别选择策略
+      // 根据量化级别选择策略
 switch (config.level) {
         case "int8:"
           return await this.quantizeToInt8(model, config);
@@ -213,19 +192,18 @@ switch (config.level) {
     model: ONNXModel,
     config: QuantizationConfig;
   ): Promise<ONNXModel> {
-    //////     获取校准数据
+    // 获取校准数据
 const calibrationData = this.calibrationData.get(model.id);
     if (!calibrationData && config.preserveAccuracy) {
       }
-    //////     模拟量化过程
+    // 模拟量化过程
 await this.simulateQuantizationProcess(2000);
-    //////     创建量化后的模型对象
-const quantizedModel: ONNXModel = {;
-      ...model,
+    // 创建量化后的模型对象
+const quantizedModel: ONNXModel = {...model,
       id: `${model.id}_int8`,
       name: `${model.name} (INT8量化)`,
       path: config.outputPath,
-      size: Math.round(model.size * 0.25), //////     INT8通常减少75%大小
+      size: Math.round(model.size * 0.25), // INT8通常减少75%大小
 isQuantized: true,
       quantizationLevel: "int8",
       metadata: {
@@ -241,12 +219,11 @@ isQuantized: true,
     config: QuantizationConfig;
   ): Promise<ONNXModel> {
     await this.simulateQuantizationProcess(1500);
-    const quantizedModel: ONNXModel = {;
-      ...model,
+    const quantizedModel: ONNXModel = {...model,
       id: `${model.id}_int16`,
       name: `${model.name} (INT16量化)`,
       path: config.outputPath,
-      size: Math.round(model.size * 0.5), //////     INT16通常减少50%大小
+      size: Math.round(model.size * 0.5), // INT16通常减少50%大小
 isQuantized: true,
       quantizationLevel: int16","
       metadata: {
@@ -262,14 +239,13 @@ isQuantized: true,
     config: QuantizationConfig;
   ): Promise<ONNXModel> {
     await this.simulateQuantizationProcess(1000);
-    const quantizedModel: ONNXModel = {;
-      ...model,
+    const quantizedModel: ONNXModel = {...model,
       id: `${model.id}_fp16`,
       name: `${model.name} (FP16量化)`,
       path: config.outputPath,
-      size: Math.round(model.size * 0.5), //////     FP16通常减少50%大小
+      size: Math.round(model.size * 0.5), // FP16通常减少50%大小
 isQuantized: true,
-      quantizationLevel: "fp16,"
+      quantizationLevel: "fp16,",
       metadata: {
         ...model.metadata,
         description: `${model.metadata.description} - FP16量化版本`,
@@ -283,12 +259,11 @@ isQuantized: true,
     config: QuantizationConfig;
   ): Promise<ONNXModel> {
     await this.simulateQuantizationProcess(1800);
-    const quantizedModel: ONNXModel = {;
-      ...model,
+    const quantizedModel: ONNXModel = {...model,
       id: `${model.id}_dynamic`,
       name: `${model.name} (动态量化)`,
       path: config.outputPath,
-      size: Math.round(model.size * 0.33), //////     动态量化通常减少67%大小
+      size: Math.round(model.size * 0.33), // 动态量化通常减少67%大小
 isQuantized: true,
       quantizationLevel: "dynamic",
       metadata: {
@@ -304,37 +279,37 @@ isQuantized: true,
     quantizedModel: ONNXModel,
     config: QuantizationConfig;
   ): Promise<void> {
-    //////     检查文件大小
+    // 检查文件大小
 if (quantizedModel.size >= originalModel.size) {
       }
-    //////     检查量化级别
+    // 检查量化级别
 if (quantizedModel.quantizationLevel !== config.level) {
       throw new Error("量化级别不匹配);"
     }
-    //////     模拟精度验证
+    // 模拟精度验证
 if (config.preserveAccuracy) {
       await this.simulateAccuracyValidation();
     }
     }
   private async simulateQuantizationProcess(duration: number): Promise<void> {
-    //////     模拟量化过程的时间消耗
-return new Promise(resolve => {}
+    // 模拟量化过程的时间消耗
+return new Promise(resolve => {};
       setTimeout(resolve, duration);
     });
   }
   private async simulateAccuracyValidation(): Promise<void> {
-    //////     模拟精度验证过程
-return new Promise(resolve => {}
+    // 模拟精度验证过程
+return new Promise(resolve => {};
       setTimeout(resolve, 500);
     });
   }
 }
-//////     辅助接口和类型
+// 辅助接口和类型
 interface QuantizationTask {
   id: string;
   model: ONNXModel;
   config: QuantizationConfig;
-  status: pending" | "running | "completed" | failed";"
+  status: pending" | "running | "completed" | failed
   createdAt: Date;
   completedAt?: Date;
   error?: string;

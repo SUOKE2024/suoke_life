@@ -1,14 +1,19 @@
+"""
+config_loader - 索克生活项目模块
+"""
+
+from typing import Any
+import logging
+import os
+import yaml
+
 #!/usr/bin/env python3
 """
 配置加载器
 负责加载和管理小克智能体服务的配置
 """
 
-import logging
-import os
-from typing import Any
 
-import yaml
 
 logger = logging.getLogger(__name__)
 

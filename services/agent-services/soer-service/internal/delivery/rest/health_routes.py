@@ -1,8 +1,13 @@
-import logging
-import time
+"""
+health_routes - 索克生活项目模块
+"""
 
 from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel
+import logging
+import time
+
+
 
 logger = logging.getLogger(__name__)
 

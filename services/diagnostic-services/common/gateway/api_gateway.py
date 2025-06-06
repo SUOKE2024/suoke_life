@@ -1,29 +1,35 @@
 """
+api_gateway - 索克生活项目模块
+"""
+
+        import random
+from ..config.settings import get_settings
+from ..database.manager import get_cache_manager
+from contextlib import asynccontextmanager
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from fastapi import FastAPI, Request, Response, HTTPException, Depends
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from typing import Dict, Any, List, Optional, Callable
+import asyncio
+import hashlib
+import httpx
+import json
+import jwt
+import logging
+import redis.asyncio as redis
+import time
+
+"""
 API网关
 
 提供统一的API入口、路由分发、负载均衡、认证授权、
 限流、监控等功能，支持五诊服务的统一访问。
 """
 
-import asyncio
-import logging
-import time
-import json
-from typing import Dict, Any, List, Optional, Callable
-from dataclasses import dataclass, field
-from fastapi import FastAPI, Request, Response, HTTPException, Depends
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.gzip import GZipMiddleware
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-import httpx
-import redis.asyncio as redis
-from datetime import datetime, timedelta
-import jwt
-import hashlib
-from contextlib import asynccontextmanager
 
-from ..config.settings import get_settings
-from ..database.manager import get_cache_manager
 
 logger = logging.getLogger(__name__)
 
@@ -184,7 +190,6 @@ class LoadBalancer:
             return endpoints[0]
         
         # 加权选择
-        import random
         weight_sum = 0
         random_weight = random.randint(1, total_weight)
         

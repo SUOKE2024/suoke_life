@@ -1,16 +1,21 @@
 """
-小克智能体决策引擎
-基于规则和机器学习的智能决策系统
+decision_engine - 索克生活项目模块
 """
 
-import logging
+from ..domain.models import (
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
+import logging
 
-from ..domain.models import (
+"""
+小克智能体决策引擎
+基于规则和机器学习的智能决策系统
+"""
+
+
     Appointment,
     ConstitutionType,
     Doctor,

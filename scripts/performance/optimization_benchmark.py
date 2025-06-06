@@ -1,31 +1,36 @@
+"""
+optimization_benchmark - 索克生活项目模块
+"""
+
+    from services.agent_services.optimized_agent_base import OptimizedAgentBase, JITOptimizedAlgorithms
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Dict, List, Any, Optional
+import aiohttp
+import asyncio
+import json
+import logging
+import multiprocessing
+import os
+import psutil
+import statistics
+import sys
+import time
+import uuid
+
 #!/usr/bin/env python3
 """
 索克生活 - 优化性能基准测试
 验证进程池、异步I/O和JIT编译优化的效果
 """
 
-import asyncio
-import time
-import multiprocessing
-import json
-import logging
-from typing import Dict, List, Any, Optional
-from dataclasses import dataclass
-from datetime import datetime
-import aiohttp
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
-import psutil
-import uuid
-import statistics
-import sys
-import os
 
 # 添加项目路径
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../'))
 
 # 导入优化后的组件
 try:
-    from services.agent_services.optimized_agent_base import OptimizedAgentBase, JITOptimizedAlgorithms
 except ImportError as e:
     print(f"导入错误: {e}")
     print("请确保已创建优化后的组件文件")

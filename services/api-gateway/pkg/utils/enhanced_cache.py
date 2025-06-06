@@ -1,3 +1,19 @@
+"""
+enhanced_cache - 索克生活项目模块
+"""
+
+        import re
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, asdict
+from enum import Enum
+from fastapi import Request, Response
+from typing import Any, Dict, List, Optional, Union, Callable
+import asyncio
+import hashlib
+import json
+import logging
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,17 +22,7 @@
 支持内存缓存、Redis缓存、智能失效策略和缓存预热
 """
 
-import asyncio
-import hashlib
-import json
-import logging
-import time
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, asdict
-from typing import Any, Dict, List, Optional, Union, Callable
-from enum import Enum
 
-from fastapi import Request, Response
 
 logger = logging.getLogger(__name__)
 
@@ -545,7 +551,6 @@ class SmartCacheManager:
     
     def _match_rule(self, request: Request, rule: Dict) -> bool:
         """检查请求是否匹配缓存规则"""
-        import re
         
         # 检查URL模式
         if not re.match(rule["pattern"], request.url.path):

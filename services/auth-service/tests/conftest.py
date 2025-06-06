@@ -1,14 +1,23 @@
 """
-测试配置文件
+conftest - 索克生活项目模块
 """
 
-import os
-import asyncio
-import pytest
-import pytest_asyncio
+        from auth_service.config.settings import get_settings
+        from auth_service.core.database import DatabaseManager, set_db_manager
+    from auth_service.cmd.server.main import create_app
+    from httpx import AsyncClient
 from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
+import asyncio
+import os
+import pytest
+import pytest_asyncio
+
+"""
+测试配置文件
+"""
+
 
 # 在模块级别设置环境变量，确保在任何导入之前就设置好
 os.environ.update({
@@ -53,8 +62,6 @@ def get_test_db_manager():
     """获取测试数据库管理器"""
     global _test_db_manager
     if _test_db_manager is None:
-        from auth_service.config.settings import get_settings
-        from auth_service.core.database import DatabaseManager, set_db_manager
         
         settings = get_settings()
         _test_db_manager = DatabaseManager(settings.database)
@@ -103,7 +110,6 @@ def client():
     # 确保数据库管理器已初始化
     get_test_db_manager()
     
-    from auth_service.cmd.server.main import create_app
     app = create_app()
     return TestClient(app)
 
@@ -111,12 +117,10 @@ def client():
 @pytest_asyncio.fixture
 async def async_client():
     """异步测试客户端"""
-    from httpx import AsyncClient
     
     # 确保数据库管理器已初始化
     get_test_db_manager()
     
-    from auth_service.cmd.server.main import create_app
     app = create_app()
     async with AsyncClient(app=app, base_url="http://testserver") as client:
         yield client

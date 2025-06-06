@@ -1,17 +1,22 @@
 """
-医疗资源统一管理服务
-负责中医师、现代医疗机构、设备、药材等各类医疗资源的统一管理
+resource_management_service - 索克生活项目模块
 """
 
-import logging
-import uuid
+from ..domain.models import ResourceType
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional, Set, Tuple
+import logging
+import uuid
 
-from ..domain.models import ResourceType
+"""
+医疗资源统一管理服务
+负责中医师、现代医疗机构、设备、药材等各类医疗资源的统一管理
+"""
+
+
 
 logger = logging.getLogger(__name__)
 

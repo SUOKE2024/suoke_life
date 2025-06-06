@@ -1,26 +1,31 @@
 """
-认证相关的API路由
+auth - 索克生活项目模块
 """
 
-import logging
+from ...core.database import get_db
+from ...core.security import (
+from ...models.user import User
+from ...services.user_service import UserService
 from datetime import timedelta
-from typing import Any, Dict
-
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
+from typing import Any, Dict
+import logging
 
-from ...core.database import get_db
-from ...core.security import (
+"""
+认证相关的API路由
+"""
+
+
+
     create_token_pair,
     verify_password,
     verify_refresh_token,
     Token,
     TokenData
 )
-from ...models.user import User
-from ...services.user_service import UserService
 
 logger = logging.getLogger(__name__)
 

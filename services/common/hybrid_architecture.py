@@ -1,24 +1,29 @@
+"""
+hybrid_architecture - 索克生活项目模块
+"""
+
+from collections import defaultdict, deque
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor, as_completed
+from dataclasses import dataclass, asdict
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Dict, List, Any, Optional, Union, Callable, Tuple
+import aioredis
+import asyncio
+import json
+import logging
+import multiprocessing
+import psutil
+import threading
+import time
+import uuid
+
 #!/usr/bin/env python3
 """
 索克生活 - 混合架构设计
 实现同步/异步、本地/分布式混合处理架构
 """
 
-import asyncio
-import time
-import logging
-import json
-import uuid
-import threading
-from typing import Dict, List, Any, Optional, Union, Callable, Tuple
-from dataclasses import dataclass, asdict
-from datetime import datetime, timedelta
-from enum import Enum
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor, as_completed
-from collections import defaultdict, deque
-import psutil
-import aioredis
-import multiprocessing
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)

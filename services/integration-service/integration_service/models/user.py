@@ -1,11 +1,16 @@
 """
-用户模型
+user - 索克生活项目模块
 """
 
+from .base import BaseModel
 from sqlalchemy import JSON, Boolean, Column, DateTime, ForeignKey, String
 from sqlalchemy.orm import relationship
 
-from .base import BaseModel
+"""
+用户模型
+"""
+
+
 
 
 class User(BaseModel):
@@ -26,6 +31,18 @@ class User(BaseModel):
 
     def __repr__(self) -> str:
         return f"<User(id={self.id}, username={self.username})>"
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'user'
+        ordering = ['-created_at']
 
 
 class UserPlatformAuth(BaseModel):

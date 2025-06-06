@@ -1,14 +1,19 @@
 """
+cache - 索克生活项目模块
+"""
+
+from functools import wraps
+from typing import Any, Dict, Optional
+import hashlib
+import json
+import time
+
+"""
 缓存管理工具
 
 提供算诊结果的缓存功能
 """
 
-import json
-import hashlib
-import time
-from typing import Any, Dict, Optional
-from functools import wraps
 
 
 class CacheManager:

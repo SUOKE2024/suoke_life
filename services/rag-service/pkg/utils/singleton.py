@@ -1,7 +1,12 @@
 """
+singleton - 索克生活项目模块
+"""
+
+from typing import Dict, Any, Type
+
+"""
 单例模式实用工具，提供Singleton元类
 """
-from typing import Dict, Any, Type
 
 
 class Singleton(type):

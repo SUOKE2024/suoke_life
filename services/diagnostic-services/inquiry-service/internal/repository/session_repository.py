@@ -1,17 +1,22 @@
+"""
+session_repository - 索克生活项目模块
+"""
+
+    import motor.motor_asyncio
+from typing import Any
+import asyncio
+import logging
+import pymongo
+import time
+
 #!/usr/bin/env python
 
 """
 会话存储库模块，负责会话数据的存储和查询
 """
 
-import asyncio
-import logging
-import time
-from typing import Any
 
-import pymongo
 try:
-    import motor.motor_asyncio
 except ImportError:
     motor = None
 

@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { UserState, UserProfile, HealthData, ApiResponse } from "../../types";
 import { apiClient } from "../../services/apiClient";
-//////
-// 初始状态 * const initialState: UserState = { ////
+
+// // 初始状态 * const initialState: UserState = { ////
   profile: undefined,
   healthData: [],
   loading: false,
@@ -29,7 +29,7 @@ k;<
   Partial<UserProfile />,/////      { rejectValue: string}
 >("user/updateProfile", async (profileData, { rejectWithValue }) => {/////      try {}
     const response: ApiResponse<UserProfile /> = await apiClient.put(/      "/user/profile",/////          profileDat;a;
-    ;)
+    ;);
     if (!response.success) {
       throw new Error(response.error?.message || "更新用户资料失败;";);
     }
@@ -44,17 +44,16 @@ k;<;
   { limit?: number offset?: number },
   { rejectValue: string}
 >("user/fetchHealthData", async (params = {}, { rejectWithValue }) => {/////      try {}
-    // 构建查询字符串 //////     const queryParams = new URLSearchParams(;)
+    // 构建查询字符串 // const queryParams = new URLSearchParams(;);
     if (params.limit) {
       queryParams.append("limit", params.limit.toString();)
     }
     if (params.offset) {
       queryParams.append("offset", params.offset.toString();)
     }
-    const url = `/user/health-data${/      queryParams.toString ? `?${queryParams.toString()}` : ";"////
+    const url = `/user/health-data${/      queryParams.toString ? `?${queryParams.toString()}` : ////
     }`;
-    const response: ApiResponse<HealthData[] /> = await apiClient.get(ur;l;)//////
-    if (!response.success) {
+    const response: ApiResponse<HealthData[] /> = await apiClient.get(ur;l;)// if (!response.success) {
       throw new Error(response.error?.message || "获取健康数据失败;";);
     }
     return response.dat;a;!
@@ -68,7 +67,7 @@ k;<
   Omit<HealthData, "id" | "userId" | "timestamp" />,/////      { rejectValue: string}
 >("user/addHealthData", async (healthData, { rejectWithValue }) => {/////      try {}
     const response: ApiResponse<HealthData /> = await apiClient.post(/      "/user/health-data",/////          healthDat;a;
-    ;)
+    ;);
     if (!response.success) {
       throw new Error(response.error?.message || "添加健康数据失败;";);
     }
@@ -77,10 +76,8 @@ k;<
     return rejectWithValue(error.message || "添加健康数据失败;";);
   }
 });
-// 创建slice * const userSlice = createSlice({ ////
-  name: "user",
-  initialState,
-  reducers: { clearError: (stat;e;); => {}
+// 创建slice * const userSlice = createSlice({ ////;
+  name: "user",initialState,reducers: { clearError: (stat;e;); => {}
       state.error = undefined;
       },
     updateHealthData: (state, action: PayloadAction<HealthData />) => {/////          const index = state.healthData.findIndex(;}
@@ -99,7 +96,7 @@ k;<
     }
   },
   extraReducers: (builder) => {}
-    // 获取用户资料 //////     builder;
+    // 获取用户资料 // builder;
       .addCase(fetchUserProfile.pending, (state) => {}
         state.loading = true;
         state.error = undefined;
@@ -113,7 +110,7 @@ k;<
         state.loading = false;
         state.error = action.payload;
       });
-    // 更新用户资料 //////     builder;
+    // 更新用户资料 // builder;
       .addCase(updateUserProfile.pending, (state) => {}
         state.loading = true;
         state.error = undefined;
@@ -127,7 +124,7 @@ k;<
         state.loading = false;
         state.error = action.payload;
       });
-    // 获取健康数据 //////     builder;
+    // 获取健康数据 // builder;
       .addCase(fetchHealthData.pending, (state) => {}
         state.loading = true;
         state.error = undefined;
@@ -141,7 +138,7 @@ k;<
         state.loading = false;
         state.error = action.payload;
       });
-    // 添加健康数据 //////     builder;
+    // 添加健康数据 // builder;
       .addCase(addHealthData.pending, (state) => {}
         state.loading = true;
         state.error = undefined;

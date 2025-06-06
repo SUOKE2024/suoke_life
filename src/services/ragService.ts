@@ -1,7 +1,6 @@
 import { apiClient } from './apiClient';
 import { EventEmitter } from '../utils/eventEmitter';
 import { RAG_CONFIG, getCurrentEnvConfig } from '../constants/config';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // RAG查询请求接口
 export interface RAGQueryRequest {
@@ -64,7 +63,16 @@ export interface StreamResponse {
 export interface TCMAnalysisRequest {
   symptoms: string[];
   userId: string;
-  constitutionType?: 'qi_deficiency' | 'yang_deficiency' | 'yin_deficiency' | 'phlegm_dampness' | 'damp_heat' | 'blood_stasis' | 'qi_stagnation' | 'special_constitution' | 'balanced';
+  constitutionType?:
+    | 'qi_deficiency'
+    | 'yang_deficiency'
+    | 'yin_deficiency'
+    | 'phlegm_dampness'
+    | 'damp_heat'
+    | 'blood_stasis'
+    | 'qi_stagnation'
+    | 'special_constitution'
+    | 'balanced';
   medicalHistory?: string[];
   currentMedications?: string[];
   lifestyleFactors?: {
@@ -190,12 +198,10 @@ export class RAGService extends EventEmitter {
       const healthUrl = `${envConfig.RAG_SERVICE_URL}/health`;
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), this.config.PERFORMANCE.TIMEOUT);
-      
-      const response = await fetch(healthUrl, {
-        method: 'GET',
-        signal: controller.signal
+
+      const response = await fetch(healthUrl, {method: 'GET',signal: controller.signal;
       });
-      
+
       clearTimeout(timeoutId);
       const data = await response.json();
       return data?.status === 'healthy';
@@ -222,7 +228,7 @@ export class RAGService extends EventEmitter {
     this.emit('performance', {
       operation,
       duration,
-      timestamp: Date.now()
+      timestamp: Date.now();
     });
   }
 
@@ -234,7 +240,7 @@ export class RAGService extends EventEmitter {
 
     const startTime = Date.now();
     const cacheKey = this.generateCacheKey(request);
-    
+
     // 检查缓存
     if (this.queryCache.has(cacheKey)) {
       const cachedResult = this.queryCache.get(cacheKey)!;
@@ -246,35 +252,30 @@ export class RAGService extends EventEmitter {
     try {
       const envConfig = getCurrentEnvConfig();
       const queryUrl = `${envConfig.RAG_SERVICE_URL}${this.config.ENDPOINTS.QUERY}`;
-      
+
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), this.config.PERFORMANCE.TIMEOUT);
-      
-      const response = await fetch(queryUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(request),
-        signal: controller.signal
+
+      const response = await fetch(queryUrl, {method: 'POST',headers: {'Content-Type': 'application/json';
+        },body: JSON.stringify(request),signal: controller.signal;
       });
-      
+
       clearTimeout(timeoutId);
-      
+
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
-      
+
       const result: RAGQueryResponse = await response.json();
-      
+
       // 缓存结果
       this.queryCache.set(cacheKey, result);
-      
+
       // 记录性能
       this.recordPerformance('query', Date.now() - startTime);
-      
+
       this.emit('query_completed', { request, result });
-      
+
       return result;
     } catch (error) {
       this.recordError(error);
@@ -289,36 +290,31 @@ export class RAGService extends EventEmitter {
     }
 
     const startTime = Date.now();
-    
+
     try {
       const envConfig = getCurrentEnvConfig();
       const queryUrl = `${envConfig.RAG_SERVICE_URL}${this.config.ENDPOINTS.MULTIMODAL_QUERY}`;
-      
+
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), this.config.PERFORMANCE.TIMEOUT);
-      
-      const response = await fetch(queryUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(request),
-        signal: controller.signal
+
+      const response = await fetch(queryUrl, {method: 'POST',headers: {'Content-Type': 'application/json';
+        },body: JSON.stringify(request),signal: controller.signal;
       });
-      
+
       clearTimeout(timeoutId);
-      
+
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
-      
+
       const result: RAGQueryResponse = await response.json();
-      
+
       // 记录性能
       this.recordPerformance('multimodal_query', Date.now() - startTime);
-      
+
       this.emit('multimodal_query_completed', { request, result });
-      
+
       return result;
     } catch (error) {
       this.recordError(error);
@@ -327,23 +323,22 @@ export class RAGService extends EventEmitter {
   }
 
   // 流式RAG查询
-  async streamQuery(request: RAGQueryRequest, onChunk: (chunk: StreamResponse) => void): Promise<void> {
+  async streamQuery(
+    request: RAGQueryRequest,
+    onChunk: (chunk: StreamResponse) => void
+  ): Promise<void> {
     if (!this.isInitialized) {
       await this.initialize();
     }
 
     const requestId = this.generateRequestId();
-    
+
     try {
       this.emit('streamStart', { requestId, request });
 
       // 使用fetch进行流式请求
-      const response = await fetch('/rag/query/stream', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ ...request, requestId }),
+      const response = await fetch('/rag/query/stream', {method: 'POST',headers: {'Content-Type': 'application/json';
+        },body: JSON.stringify({ ...request, requestId });
       });
 
       if (!response.body) {
@@ -355,7 +350,7 @@ export class RAGService extends EventEmitter {
 
       while (true) {
         const { done, value } = await reader.read();
-        
+
         if (done) {
           this.emit('streamComplete', requestId);
           break;
@@ -363,13 +358,13 @@ export class RAGService extends EventEmitter {
 
         const chunk = decoder.decode(value);
         const lines = chunk.split('\n');
-        
+
         for (const line of lines) {
           if (line.startsWith('data: ')) {
             try {
               const data = JSON.parse(line.slice(6)) as StreamResponse;
               onChunk(data);
-              
+
               if (data.isFinal) {
                 return;
               }
@@ -393,9 +388,9 @@ export class RAGService extends EventEmitter {
 
     try {
       this.emit('tcmAnalysisStart', request);
-      
+
       const response = await apiClient.post('/rag/tcm/analysis', request);
-      
+
       if (!response.data) {
         throw new Error('中医分析失败：无响应数据');
       }
@@ -417,9 +412,9 @@ export class RAGService extends EventEmitter {
 
     try {
       this.emit('herbRecommendationStart', request);
-      
+
       const response = await apiClient.post('/rag/tcm/herbs', request);
-      
+
       if (!response.data) {
         throw new Error('中药推荐失败：无响应数据');
       }
@@ -434,14 +429,16 @@ export class RAGService extends EventEmitter {
   }
 
   // 文档索引
-  async indexDocument(request: DocumentIndexRequest): Promise<{ documentId: string; success: boolean }> {
+  async indexDocument(
+    request: DocumentIndexRequest
+  ): Promise<{ documentId: string; success: boolean }> {
     if (!this.isInitialized) {
       await this.initialize();
     }
 
     try {
       const response = await apiClient.post('/rag/documents/index', request);
-      
+
       if (!response.data) {
         throw new Error('文档索引失败：无响应数据');
       }
@@ -454,41 +451,37 @@ export class RAGService extends EventEmitter {
 
   // 搜索文档
   async searchDocuments(
-    query: string, 
+    query: string,
     options: {
       limit?: number;
       threshold?: number;
       documentType?: string;
       collectionName?: string;
     } = {}
-  ): Promise<Array<{
-    id: string;
-    title: string;
-    content: string;
-    score: number;
-    metadata: Record<string, any>;
-  }>> {
+  ): Promise<
+    Array<{
+      id: string;
+      title: string;
+      content: string;
+      score: number;
+      metadata: Record<string, any>;
+    }>
+  > {
     if (!this.isInitialized) {
       await this.initialize();
     }
 
     try {
-      const params = new URLSearchParams({
-        query,
-        limit: options.limit?.toString() || '10',
-        threshold: options.threshold?.toString() || '0.7',
-        ...(options.documentType && { documentType: options.documentType }),
-        ...(options.collectionName && { collectionName: options.collectionName })
+      const params = new URLSearchParams({query,limit: options.limit?.toString() || '10',threshold: options.threshold?.toString() || '0.7',...(options.documentType && { documentType: options.documentType }),...(options.collectionName && { collectionName: options.collectionName });
       });
-      
+
       const response = await apiClient.get(`/rag/documents/search?${params}`);
-      
+
       if (!response.data) {
         throw new Error('文档搜索失败：无响应数据');
       }
 
-      return response.data as Array<{
-        id: string;
+      return response.data as Array<{id: string;
         title: string;
         content: string;
         score: number;
@@ -507,19 +500,13 @@ export class RAGService extends EventEmitter {
 
   // 获取缓存统计
   getCacheStats(): { size: number; keys: string[] } {
-    return {
-      size: this.queryCache.size,
-      keys: Array.from(this.queryCache.keys())
+    return {size: this.queryCache.size,keys: Array.from(this.queryCache.keys());
     };
   }
 
   // 生成缓存键
   private generateCacheKey(request: RAGQueryRequest): string {
-    const key = {
-      query: request.query,
-      userId: request.userId,
-      taskType: request.taskType,
-      context: request.context
+    const key = {query: request.query,userId: request.userId,taskType: request.taskType,context: request.context;
     };
     return btoa(JSON.stringify(key));
   }
@@ -545,37 +532,26 @@ export class RAGService extends EventEmitter {
     timestamp: number;
   }> {
     const startTime = Date.now();
-    
+
     try {
       const envConfig = getCurrentEnvConfig();
-      
+
       // 并行检查RAG和TCM服务
-      const [ragHealth, tcmHealth] = await Promise.allSettled([
-        this.checkServiceHealth(envConfig.RAG_SERVICE_URL),
-        this.checkServiceHealth(envConfig.TCM_SERVICE_URL)
+      const [ragHealth, tcmHealth] = await Promise.allSettled([;
+        this.checkServiceHealth(envConfig.RAG_SERVICE_URL),this.checkServiceHealth(envConfig.TCM_SERVICE_URL);
       ]);
 
       const latency = Date.now() - startTime;
-      
-      const result = {
-        isHealthy: ragHealth.status === 'fulfilled' && tcmHealth.status === 'fulfilled',
-        services: {
-          rag: ragHealth.status === 'fulfilled',
-          tcm: tcmHealth.status === 'fulfilled'
-        },
-        latency,
-        timestamp: Date.now()
+
+      const result = {isHealthy: ragHealth.status === 'fulfilled' && tcmHealth.status === 'fulfilled',services: {rag: ragHealth.status === 'fulfilled',tcm: tcmHealth.status === 'fulfilled';
+        },latency,timestamp: Date.now();
       };
 
       this.emit('health_check_completed', result);
       return result;
     } catch (error) {
       this.recordError(error);
-      return {
-        isHealthy: false,
-        services: { rag: false, tcm: false },
-        latency: Date.now() - startTime,
-        timestamp: Date.now()
+      return {isHealthy: false,services: { rag: false, tcm: false },latency: Date.now() - startTime,timestamp: Date.now();
       };
     }
   }
@@ -584,13 +560,11 @@ export class RAGService extends EventEmitter {
   private async checkServiceHealth(serviceUrl: string): Promise<boolean> {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000); // 5秒超时
-    
+
     try {
-      const response = await fetch(`${serviceUrl}/health`, {
-        method: 'GET',
-        signal: controller.signal
+      const response = await fetch(`${serviceUrl}/health`, {method: 'GET',signal: controller.signal;
       });
-      
+
       clearTimeout(timeoutId);
       return response.ok;
     } catch (error) {
@@ -600,40 +574,41 @@ export class RAGService extends EventEmitter {
   }
 
   // 智能重试机制
-  async queryWithRetry(request: RAGQueryRequest, maxRetries: number = 3): Promise<RAGQueryResponse> {
+  async queryWithRetry(
+    request: RAGQueryRequest,
+    maxRetries: number = 3
+  ): Promise<RAGQueryResponse> {
     let lastError: Error | null = null;
-    
+
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
         const result = await this.query(request);
-        
+
         // 成功时重置错误计数
         this.errorCount = 0;
         return result;
       } catch (error) {
         lastError = error as Error;
-        
+
         // 如果不是最后一次尝试，等待后重试
         if (attempt < maxRetries) {
           const delay = Math.min(1000 * Math.pow(2, attempt - 1), 5000); // 指数退避，最大5秒
           await new Promise(resolve => setTimeout(resolve, delay));
-          
+
           this.emit('retry_attempt', { attempt, maxRetries, delay, error });
         }
       }
     }
-    
+
     throw lastError || new Error('查询失败，已达到最大重试次数');
   }
 
   // 批量查询
   async batchQuery(requests: RAGQueryRequest[]): Promise<RAGQueryResponse[]> {
     const startTime = Date.now();
-    
+
     try {
-      const results = await Promise.allSettled(
-        requests.map(request => this.query(request))
-      );
+      const results = await Promise.allSettled(requests.map(request => this.query(request)));
 
       const responses: RAGQueryResponse[] = [];
       const errors: Error[] = [];
@@ -647,7 +622,7 @@ export class RAGService extends EventEmitter {
       });
 
       this.recordPerformance('batch_query', Date.now() - startTime);
-      
+
       this.emit('batch_query_completed', {
         total: requests.length,
         successful: responses.length,
@@ -666,17 +641,13 @@ export class RAGService extends EventEmitter {
   // 预热缓存
   async warmupCache(commonQueries: string[]): Promise<void> {
     const startTime = Date.now();
-    
+
     try {
-      const warmupRequests = commonQueries.map(query => ({
-        query,
-        userId: 'system',
-        taskType: 'consultation' as const,
-        context: { warmup: true }
+      const warmupRequests = commonQueries.map(query => ({query,userId: 'system',taskType: 'consultation' as const,context: { warmup: true };
       }));
 
       await this.batchQuery(warmupRequests);
-      
+
       this.recordPerformance('cache_warmup', Date.now() - startTime);
       this.emit('cache_warmed_up', { queries: commonQueries.length });
     } catch (error) {
@@ -689,7 +660,7 @@ export class RAGService extends EventEmitter {
   async cleanup(): Promise<void> {
     // 清除缓存
     this.queryCache.clear();
-    
+
     this.isInitialized = false;
     this.emit('cleanup');
   }
@@ -698,4 +669,4 @@ export class RAGService extends EventEmitter {
 // 创建RAG服务实例
 export const ragService = new RAGService();
 
-// 导出类型已在上面定义，无需重复导出 
+// 导出类型已在上面定义，无需重复导出

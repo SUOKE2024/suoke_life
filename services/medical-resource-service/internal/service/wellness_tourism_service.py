@@ -1,17 +1,22 @@
 """
+wellness_tourism_service - 索克生活项目模块
+"""
+
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Dict, List, Optional, Any, Tuple
+import asyncio
+import json
+import logging
+import math
+import uuid
+
+"""
 山水养生服务
 提供养生旅游规划、环境评估、活动推荐等功能
 """
 
-import asyncio
-import logging
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Any, Tuple
-from dataclasses import dataclass, field
-from enum import Enum
-import uuid
-import json
-import math
 
 logger = logging.getLogger(__name__)
 

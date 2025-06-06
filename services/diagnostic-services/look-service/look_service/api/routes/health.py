@@ -1,10 +1,15 @@
-"""Health check routes."""
-
-from fastapi import APIRouter
-from pydantic import BaseModel
+"""
+health - 索克生活项目模块
+"""
 
 from ...core.config import settings
 from ...core.logging import get_logger
+from fastapi import APIRouter
+from pydantic import BaseModel
+
+"""Health check routes."""
+
+
 
 logger = get_logger(__name__)
 router = APIRouter()

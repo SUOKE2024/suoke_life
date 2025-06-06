@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import {
+import {import { ragService } from '../../services/ragService';
+import { useSelector } from 'react-redux';
+import { selectPerformanceMetrics, selectCacheStats } from '../../store/slices/ragSlice';
+
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
   Alert,
-  RefreshControl,
+  RefreshControl
 } from 'react-native';
-import { ragService } from '../../services/ragService';
-import { useSelector } from 'react-redux';
-import { selectPerformanceMetrics, selectCacheStats } from '../../store/slices/ragSlice';
 
 interface PerformanceData {
   responseTime: number;
@@ -22,13 +22,7 @@ interface PerformanceData {
 }
 
 export const RAGPerformanceMonitor: React.FC = () => {
-  const [performanceData, setPerformanceData] = useState<PerformanceData>({
-    responseTime: 0,
-    cacheHitRate: 0,
-    errorRate: 0,
-    totalQueries: 0,
-    averageResponseTime: 0,
-    lastUpdateTime: Date.now(),
+  const [performanceData, setPerformanceData] = useState<PerformanceData>({responseTime: 0,cacheHitRate: 0,errorRate: 0,totalQueries: 0,averageResponseTime: 0,lastUpdateTime: Date.now();
   });
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isMonitoring, setIsMonitoring] = useState(false);
@@ -37,9 +31,8 @@ export const RAGPerformanceMonitor: React.FC = () => {
   const cacheStats = useSelector(selectCacheStats);
 
   // 更新性能数据
-  const updatePerformanceData = useCallback(() => {
-    const errorRate = performanceMetrics.totalQueries > 0 
-      ? (performanceMetrics.failureCount / (performanceMetrics.totalQueries + performanceMetrics.failureCount)) * 100
+  const updatePerformanceData = useCallback(() => {const errorRate = performanceMetrics.totalQueries > 0 ;
+      ? (performanceMetrics.failureCount / (performanceMetrics.totalQueries + performanceMetrics.failureCount)) * 100;
       : 0;
 
     setPerformanceData({
@@ -48,22 +41,20 @@ export const RAGPerformanceMonitor: React.FC = () => {
       errorRate,
       totalQueries: performanceMetrics.totalQueries,
       averageResponseTime: performanceMetrics.averageResponseTime,
-      lastUpdateTime: Date.now(),
+      lastUpdateTime: Date.now();
     });
   }, [performanceMetrics, cacheStats]);
 
   // 监听性能事件
   useEffect(() => {
-    const handlePerformanceUpdate = (data: any) => {
-      updatePerformanceData();
+    const handlePerformanceUpdate = (data: any) => {updatePerformanceData();
     };
 
     ragService.on('performance', handlePerformanceUpdate);
     ragService.on('cache_hit', handlePerformanceUpdate);
     ragService.on('error', handlePerformanceUpdate);
 
-    return () => {
-      ragService.off('performance', handlePerformanceUpdate);
+    return () => {ragService.off('performance', handlePerformanceUpdate);
       ragService.off('cache_hit', handlePerformanceUpdate);
       ragService.off('error', handlePerformanceUpdate);
     };
@@ -78,8 +69,7 @@ export const RAGPerformanceMonitor: React.FC = () => {
   }, [isMonitoring, updatePerformanceData]);
 
   // 刷新数据
-  const handleRefresh = useCallback(async () => {
-    setIsRefreshing(true);
+  const handleRefresh = useCallback(async () => {setIsRefreshing(true);
     try {
       // 获取最新的缓存统计
       const cacheStats = ragService.getCacheStats();
@@ -94,32 +84,18 @@ export const RAGPerformanceMonitor: React.FC = () => {
   // 清除性能数据
   const handleClearMetrics = useCallback(() => {
     Alert.alert(
-      '确认清除',
-      '确定要清除所有性能数据吗？',
-      [
-        { text: '取消', style: 'cancel' },
-        {
-          text: '确定',
-          style: 'destructive',
-          onPress: () => {
-            // 这里可以调用Redux action来重置性能指标
-            setPerformanceData({
-              responseTime: 0,
-              cacheHitRate: 0,
-              errorRate: 0,
-              totalQueries: 0,
-              averageResponseTime: 0,
-              lastUpdateTime: Date.now(),
+      '确认清除','确定要清除所有性能数据吗？',[;
+        { text: '取消', style: 'cancel' },{text: '确定',style: 'destructive',onPress: () => {// 这里可以调用Redux action来重置性能指标;
+            setPerformanceData({responseTime: 0,cacheHitRate: 0,errorRate: 0,totalQueries: 0,averageResponseTime: 0,lastUpdateTime: Date.now();
             });
-          },
-        },
+          }
+        }
       ]
     );
   }, []);
 
   // 切换监控状态
-  const toggleMonitoring = useCallback(() => {
-    setIsMonitoring(!isMonitoring);
+  const toggleMonitoring = useCallback(() => {setIsMonitoring(!isMonitoring);
   }, [isMonitoring]);
 
   // 获取性能状态颜色
@@ -130,8 +106,7 @@ export const RAGPerformanceMonitor: React.FC = () => {
   };
 
   // 格式化时间
-  const formatTime = (timestamp: number) => {
-    return new Date(timestamp).toLocaleTimeString();
+  const formatTime = (timestamp: number) => {return new Date(timestamp).toLocaleTimeString();
   };
 
   return (
@@ -153,7 +128,7 @@ export const RAGPerformanceMonitor: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      {/* 实时状态指示器 */}
+      {// 实时状态指示器}
       <View style={styles.statusIndicator}>
         <View style={[styles.statusDot, { backgroundColor: isMonitoring ? '#4caf50' : '#9e9e9e' }]} />
         <Text style={styles.statusText}>
@@ -164,9 +139,9 @@ export const RAGPerformanceMonitor: React.FC = () => {
         </Text>
       </View>
 
-      {/* 性能指标卡片 */}
+      {// 性能指标卡片}
       <View style={styles.metricsContainer}>
-        {/* 响应时间 */}
+        {// 响应时间}
         <View style={styles.metricCard}>
           <Text style={styles.metricTitle}>平均响应时间</Text>
           <Text
@@ -183,7 +158,7 @@ export const RAGPerformanceMonitor: React.FC = () => {
           </Text>
         </View>
 
-        {/* 缓存命中率 */}
+        {// 缓存命中率}
         <View style={styles.metricCard}>
           <Text style={styles.metricTitle}>缓存命中率</Text>
           <Text
@@ -200,7 +175,7 @@ export const RAGPerformanceMonitor: React.FC = () => {
           </Text>
         </View>
 
-        {/* 错误率 */}
+        {// 错误率}
         <View style={styles.metricCard}>
           <Text style={styles.metricTitle}>错误率</Text>
           <Text
@@ -217,7 +192,7 @@ export const RAGPerformanceMonitor: React.FC = () => {
           </Text>
         </View>
 
-        {/* 总查询数 */}
+        {// 总查询数}
         <View style={styles.metricCard}>
           <Text style={styles.metricTitle}>总查询数</Text>
           <Text style={[styles.metricValue, { color: '#2196f3' }]}>
@@ -229,7 +204,7 @@ export const RAGPerformanceMonitor: React.FC = () => {
         </View>
       </View>
 
-      {/* 缓存统计 */}
+      {// 缓存统计}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>缓存统计</Text>
         <View style={styles.cacheStats}>
@@ -248,12 +223,12 @@ export const RAGPerformanceMonitor: React.FC = () => {
         </View>
       </View>
 
-      {/* 操作按钮 */}
+      {// 操作按钮}
       <View style={styles.actions}>
         <TouchableOpacity style={styles.actionButton} onPress={handleRefresh}>
           <Text style={styles.actionButtonText}>刷新数据</Text>
         </TouchableOpacity>
-        
+
         <TouchableOpacity 
           style={[styles.actionButton, styles.clearButton]} 
           onPress={handleClearMetrics}
@@ -262,7 +237,7 @@ export const RAGPerformanceMonitor: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      {/* 性能建议 */}
+      {// 性能建议}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>性能建议</Text>
         <View style={styles.suggestions}>
@@ -275,29 +250,29 @@ export const RAGPerformanceMonitor: React.FC = () => {
             <Text style={styles.suggestion}>
               • 缓存命中率较低，建议优化缓存策略
             </Text>
-          )}
-          {performanceData.errorRate > 5 && (
-            <Text style={styles.suggestion}>
-              • 错误率较高，建议检查服务稳定性
-            </Text>
-          )}
-          {performanceData.averageResponseTime <= 1000 && 
-           performanceData.cacheHitRate >= 80 && 
-           performanceData.errorRate <= 1 && (
-            <Text style={[styles.suggestion, { color: '#4caf50' }]}>
-              • 性能表现优秀，系统运行良好
-            </Text>
-          )}
-        </View>
-      </View>
-    </ScrollView>
+          )};
+          {performanceData.errorRate > 5 && (;
+            <Text style={styles.suggestion}>;
+              • 错误率较高，建议检查服务稳定性;
+            </Text>;
+          )};
+          {performanceData.averageResponseTime <= 1000 && ;
+           performanceData.cacheHitRate >= 80 && ;
+           performanceData.errorRate <= 1 && (;
+            <Text style={[styles.suggestion, { color: '#4caf50' }]}>;
+              • 性能表现优秀，系统运行良好;
+            </Text>;
+          )};
+        </View>;
+      </View>;
+    </ScrollView>;
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f5f5f5'
   },
   header: {
     flexDirection: 'row',
@@ -306,57 +281,57 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#fff',
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: '#e0e0e0'
   },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#333'
   },
   monitorButton: {
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#2196f3',
+    borderColor: '#2196f3'
   },
   monitorButtonActive: {
-    backgroundColor: '#2196f3',
+    backgroundColor: '#2196f3'
   },
   monitorButtonText: {
     color: '#2196f3',
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   monitorButtonTextActive: {
-    color: '#fff',
+    color: '#fff'
   },
   statusIndicator: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
     backgroundColor: '#fff',
-    marginTop: 8,
+    marginTop: 8
   },
   statusDot: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    marginRight: 8,
+    marginRight: 8
   },
   statusText: {
     fontSize: 14,
     color: '#333',
-    flex: 1,
+    flex: 1
   },
   lastUpdateText: {
     fontSize: 12,
-    color: '#666',
+    color: '#666'
   },
   metricsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    padding: 8,
+    padding: 8
   },
   metricCard: {
     width: '48%',
@@ -367,84 +342,74 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 1,
+      height: 1
     },
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
-    elevation: 3,
+    elevation: 3
   },
   metricTitle: {
     fontSize: 12,
     color: '#666',
-    marginBottom: 8,
+    marginBottom: 8
   },
   metricValue: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 4,
+    marginBottom: 4
   },
   metricDescription: {
     fontSize: 10,
-    color: '#999',
+    color: '#999'
   },
   section: {
     backgroundColor: '#fff',
     margin: 8,
     padding: 16,
-    borderRadius: 8,
+    borderRadius: 8
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 12,
+    marginBottom: 12
   },
   cacheStats: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-around'
   },
   cacheStatItem: {
-    alignItems: 'center',
+    alignItems: 'center'
   },
   cacheStatLabel: {
     fontSize: 12,
     color: '#666',
-    marginBottom: 4,
+    marginBottom: 4
   },
   cacheStatValue: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#2196f3',
+    color: '#2196f3'
   },
   actions: {
     flexDirection: 'row',
     padding: 16,
-    gap: 12,
+    gap: 12
   },
   actionButton: {
     flex: 1,
     backgroundColor: '#2196f3',
     paddingVertical: 12,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   actionButtonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: '600',
-  },
-  clearButton: {
-    backgroundColor: '#f44336',
-  },
-  clearButtonText: {
-    color: '#fff',
-  },
-  suggestions: {
-    gap: 8,
-  },
-  suggestion: {
-    fontSize: 14,
-    color: '#666',
-    lineHeight: 20,
-  },
+    fontWeight: '600';
+  },clearButton: {backgroundColor: '#f44336';
+  },clearButtonText: {color: '#fff';
+  },suggestions: {gap: 8;
+  },suggestion: {fontSize: 14,color: '#666',lineHeight: 20;
+  };
 }); 

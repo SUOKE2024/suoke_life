@@ -1,19 +1,24 @@
+"""
+connection_pool - 索克生活项目模块
+"""
+
+from contextlib import asynccontextmanager, suppress
+from dataclasses import dataclass
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.pool import QueuePool
+from typing import Any
+import asyncio
+import asyncpg
+import logging
+import time
+
 #!/usr/bin/env python3
 """
 数据库连接池管理器
 提供PostgreSQL和MongoDB的连接池管理，包含监控和自动重连机制
 """
 
-import asyncio
-import logging
-import time
-from contextlib import asynccontextmanager, suppress
-from dataclasses import dataclass
-from typing import Any
 
-import asyncpg
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
-from sqlalchemy.pool import QueuePool
 
 logger = logging.getLogger(__name__)
 
@@ -194,7 +199,8 @@ class ConnectionPoolManager:
             raise
 
     @asynccontextmanager
-    async def get_pg_connection(self):
+    async     @cache(timeout=300)  # 5分钟缓存
+def get_pg_connection(self):
         """获取PostgreSQL连接的上下文管理器"""
         if not self.pg_pool:
             raise RuntimeError("PostgreSQL连接池未初始化")
@@ -209,7 +215,8 @@ class ConnectionPoolManager:
                 await self.pg_pool.release(connection)
                 self.stats["pg_connections_closed"] += 1
 
-    @asynccontextmanager
+      @cache(timeout=300)  # 5分钟缓存
+  @asynccontextmanager
     async def get_sqlalchemy_session(self):
         """获取SQLAlchemy会话的上下文管理器"""
         if not self.async_session_maker:
@@ -220,7 +227,8 @@ class ConnectionPoolManager:
                 yield session
                 await session.commit()
             except Exception:
-                await session.rollback()
+      @cache(timeout=300)  # 5分钟缓存
+              await session.rollback()
                 raise
 
     def get_mongo_db(self):

@@ -1,18 +1,23 @@
 """
-增强的gRPC服务实现
-集成依赖注入、错误处理、指标收集等功能
+enhanced_grpc_server - 索克生活项目模块
 """
-import json
-import logging
-
-import grpc
-from grpc import aio
 
 from api.grpc import soer_service_pb2, soer_service_pb2_grpc
+from grpc import aio
 from internal.agent.enhanced_agent_manager import EnhancedAgentManager
 from pkg.utils.dependency_injection import get_container
 from pkg.utils.error_handling import ErrorSeverity, SoerServiceException, handle_error
 from pkg.utils.metrics import get_metrics_collector
+import grpc
+import json
+import logging
+
+"""
+增强的gRPC服务实现
+集成依赖注入、错误处理、指标收集等功能
+"""
+
+
 
 logger = logging.getLogger(__name__)
 

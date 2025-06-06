@@ -1,3 +1,16 @@
+"""
+health_check - 索克生活项目模块
+"""
+
+            import psutil
+from collections.abc import Awaitable, Callable
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any
+import asyncio
+import logging
+import time
+
 #!/usr/bin/env python
 
 """
@@ -5,13 +18,6 @@
 提供服务健康状态检查和报告功能
 """
 
-import asyncio
-from collections.abc import Awaitable, Callable
-from dataclasses import dataclass, field
-from enum import Enum
-import logging
-import time
-from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -79,7 +85,6 @@ class HealthChecker:
     async def _check_memory(self) -> tuple[bool, str | None, dict[str, Any]]:
         """检查内存使用情况"""
         try:
-            import psutil
 
             memory = psutil.virtual_memory()
 
@@ -103,7 +108,6 @@ class HealthChecker:
     async def _check_cpu(self) -> tuple[bool, str | None, dict[str, Any]]:
         """检查CPU使用情况"""
         try:
-            import psutil
 
             # 获取CPU使用率
             cpu_percent = psutil.cpu_percent(interval=0.5)
@@ -123,7 +127,6 @@ class HealthChecker:
     async def _check_disk(self) -> tuple[bool, str | None, dict[str, Any]]:
         """检查磁盘使用情况"""
         try:
-            import psutil
 
             # 获取服务目录所在磁盘使用情况
             disk_usage = psutil.disk_usage("/")

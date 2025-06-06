@@ -1,16 +1,21 @@
 """
+test_ai_service - 索克生活项目模块
+"""
+
+from app.services.ai_service import AIService
+from app.services.cache_service import CacheService
+from app.services.knowledge_graph_service import KnowledgeGraphService
+from app.services.knowledge_service import KnowledgeService
+from app.services.metrics_service import MetricsService
+from typing import Dict, Any, List
+from unittest.mock import AsyncMock, MagicMock
+import pytest
+
+"""
 AI服务测试
 """
 
-import pytest
-from unittest.mock import AsyncMock, MagicMock
-from typing import Dict, Any, List
 
-from app.services.ai_service import AIService
-from app.services.knowledge_service import KnowledgeService
-from app.services.knowledge_graph_service import KnowledgeGraphService
-from app.services.cache_service import CacheService
-from app.services.metrics_service import MetricsService
 
 
 @pytest.fixture

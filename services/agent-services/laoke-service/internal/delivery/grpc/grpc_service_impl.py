@@ -1,15 +1,28 @@
+"""
+grpc_service_impl - 索克生活项目模块
+"""
+
+                from internal.knowledge.learning_service import LearningService
+from api.grpc.laoke_service_pb2 import (
+from api.grpc.laoke_service_pb2_grpc import (
+from internal.agent.agent_manager import AgentManager
+from internal.community.community_service import CommunityService
+from internal.knowledge.knowledge_service import KnowledgeService
+from pkg.utils.config import Config
+from pkg.utils.logger import get_logger
+from pkg.utils.metrics import increment_counter, observe_latency
+import grpc
+import time
+
 #!/usr/bin/env python
 
 """
 老克智能体 gRPC 服务实现
 """
 
-import time
 
-import grpc
 
 # proto定义导入
-from api.grpc.laoke_service_pb2 import (
     ContentModerationResponse,
     ContributionEvaluationResponse,
     CourseInfo,
@@ -24,18 +37,11 @@ from api.grpc.laoke_service_pb2 import (
     TrendingItem,
     UserLearningPathResponse,
 )
-from api.grpc.laoke_service_pb2_grpc import (
     LaokeServiceServicer,
     add_LaokeServiceServicer_to_server,
 )
-from internal.agent.agent_manager import AgentManager
-from internal.community.community_service import CommunityService
 
 # 服务依赖导入
-from internal.knowledge.knowledge_service import KnowledgeService
-from pkg.utils.config import Config
-from pkg.utils.logger import get_logger
-from pkg.utils.metrics import increment_counter, observe_latency
 
 logger = get_logger(__name__)
 config = Config()
@@ -113,7 +119,6 @@ class LaokeServiceServicer(LaokeServiceServicer):
         try:
             # 延迟初始化学习服务
             if self.learning_service is None:
-                from internal.knowledge.learning_service import LearningService
                 self.learning_service = LearningService()
 
             # 调用学习服务获取学习路径
@@ -348,7 +353,6 @@ class LaokeServiceServicer(LaokeServiceServicer):
         try:
             # 延迟初始化学习服务
             if self.learning_service is None:
-                from internal.knowledge.learning_service import LearningService
                 self.learning_service = LearningService()
 
             # 调用学习服务获取教育内容

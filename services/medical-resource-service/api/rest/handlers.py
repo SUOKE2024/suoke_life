@@ -1,22 +1,28 @@
 """
-医疗资源服务REST API处理器
+handlers - 索克生活项目模块
 """
 
-import logging
+        from ...internal.domain.models import UrgencyLevel
+from ...internal.infrastructure.container import (
+from ...internal.infrastructure.models import ResourceType
 from datetime import datetime
-from typing import Any, Dict, List, Optional
-
 from fastapi import APIRouter, Depends, HTTPException, Path, Query
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
+from typing import Any, Dict, List, Optional
+import logging
 
-from ...internal.infrastructure.container import (
+"""
+医疗资源服务REST API处理器
+"""
+
+
+
     get_database_manager,
     get_medical_resource_coordinator,
     get_scheduler_service,
     get_xiaoke_agent,
 )
-from ...internal.infrastructure.models import ResourceType
 
 logger = logging.getLogger(__name__)
 
@@ -113,7 +119,6 @@ async def recommend_resources(request: ResourceRecommendationRequest):
         agent = await get_xiaoke_agent()
         
         # 转换紧急程度
-        from ...internal.domain.models import UrgencyLevel
         urgency_map = {
             "low": UrgencyLevel.LOW,
             "normal": UrgencyLevel.NORMAL,

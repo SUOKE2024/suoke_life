@@ -1,6 +1,7 @@
+import { log } from "../services/Logger";
+
 import React from "react";
 import { useEffect, useRef, useState } from "react";
-import { log } from "../services/Logger";
 
 interface PerformanceMetrics {
   renderTime: number;
@@ -14,13 +15,13 @@ interface UsePerformanceMonitorOptions {
   threshold?: number; // 渲染时间阈值(ms)
 }
 
-export const usePerformanceMonitor = (
+export const usePerformanceMonitor = (;
   options: UsePerformanceMonitorOptions
 ) => {
   const {
     componentName,
     enableMemoryMonitoring = false,
-    threshold = 16,
+    threshold = 16
   } = options;
   const renderStartTime = useRef<number>(0);
   const [metrics, setMetrics] = useState<PerformanceMetrics | null>(null);
@@ -33,7 +34,7 @@ export const usePerformanceMonitor = (
     const renderTime = performance.now() - renderStartTime.current;
     const newMetrics: PerformanceMetrics = {
       renderTime,
-      componentName,
+      componentName
     };
 
     // 获取内存使用情况（如果支持）
@@ -50,7 +51,7 @@ export const usePerformanceMonitor = (
         {
           renderTime,
           threshold,
-          memoryUsage: newMetrics.memoryUsage,
+          memoryUsage: newMetrics.memoryUsage
         }
       );
     }
@@ -65,12 +66,11 @@ export const usePerformanceMonitor = (
 };
 
 // 高阶组件版本
-export const withPerformanceMonitor = <P extends object>(
+export const withPerformanceMonitor = <P extends object>(;
   WrappedComponent: React.ComponentType<P>,
   options: UsePerformanceMonitorOptions
 ) => {
-  const WithPerformanceMonitor = (props: P) => {
-    usePerformanceMonitor(options);
+  const WithPerformanceMonitor = (props: P) => {usePerformanceMonitor(options);
     return <WrappedComponent {...props} />;
   };
 

@@ -1,22 +1,29 @@
 """
+main - 索克生活项目模块
+"""
+
+    import uvicorn
+from .api.routes import auth, platforms, health_data, integration
+from .config import settings
+from .core.database import init_db, create_tables, check_database_health
+from contextlib import asynccontextmanager
+from datetime import datetime
+from fastapi import FastAPI, Request, status
+from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
+from fastapi.responses import JSONResponse
+from starlette.exceptions import HTTPException as StarletteHTTPException
+import logging
+import time
+
+"""
 Integration Service 主应用
 """
 
-import logging
-import time
-from datetime import datetime
-from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Request, status
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.trustedhost import TrustedHostMiddleware
-from fastapi.responses import JSONResponse
-from fastapi.exceptions import RequestValidationError
-from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from .config import settings
-from .core.database import init_db, create_tables, check_database_health
-from .api.routes import auth, platforms, health_data, integration
 
 # 配置日志
 logging.basicConfig(
@@ -60,6 +67,9 @@ async def lifespan(app: FastAPI):
 
 # 创建 FastAPI 应用实例
 app = FastAPI(
+
+# 性能优化: 添加响应压缩
+app.add_middleware(GZipMiddleware, minimum_size=1000)
     title="Integration Service",
     description="索克生活平台第三方健康平台集成服务",
     version="1.0.0",
@@ -172,6 +182,8 @@ app.include_router(integration.router, prefix="/api/v1")
 
 
 # 根路径
+@cache(expire=300)  # 5分钟缓存
+@limiter.limit("100/minute")  # 每分钟100次请求
 @app.get("/", tags=["系统"])
 async def root():
     """根路径，返回服务信息"""
@@ -180,7 +192,9 @@ async def root():
         "version": "1.0.0",
         "description": "索克生活平台第三方健康平台集成服务",
         "status": "running",
-        "docs_url": "/docs" if settings.debug else None
+        "docs_url": "/docs" if settings.debug@cache(expire=@limiter.limit("100/minute")  # 每分钟100次请求
+300)  # 5分钟缓存
+ else None
     }
 
 
@@ -215,7 +229,9 @@ async def health_check():
             content={
                 "status": "unhealthy",
                 "timestamp": datetime.utcnow().isoformat(),
-                "error": str(e)
+           @limiter.limit("100/minute")  # 每分钟100次请求
+@cache(expire=300)  # 5分钟缓存
+     "error": str(e)
             }
         )
 
@@ -249,7 +265,9 @@ async def readiness_check():
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             content={
                 "status": "not_ready",
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": @limiter.limit("100/minute")  # 每分钟100次请求
+datetime.utcno@cache(expire=300)  # 5分钟缓存
+w().isoformat(),
                 "error": str(e)
             }
         )
@@ -293,7 +311,6 @@ def create_app() -> FastAPI:
 
 
 if __name__ == "__main__":
-    import uvicorn
     
     uvicorn.run(
         "main:app",

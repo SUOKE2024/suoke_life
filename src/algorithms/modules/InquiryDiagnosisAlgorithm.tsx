@@ -1,10 +1,8 @@
+import { InquiryConfig } from "../../placeholder";../config/AlgorithmConfig";/import { TCMKnowledgeBase } from "../knowledge/////    TCMKnowledgeBase
+
 import React from "react";
-import { InquiryConfig } from "../../placeholder";../config/AlgorithmConfig";/import { TCMKnowledgeBase } from "../knowledge/////    TCMKnowledgeBase";"
-//////
-//////     问诊算法模块     实现中医问诊功能，包括症状分析、病史分析、自然语言处理     @author 索克生活技术团队   @version 1.0.0;
-export interface InquiryData  {;
-;
-  symptoms?: SymptomData[];
+// // 问诊算法模块     实现中医问诊功能，包括症状分析、病史分析、自然语言处理     @author 索克生活技术团队   @version 1.0.0;
+export interface InquiryData   {symptoms?: SymptomData[];
   medicalHistory?: MedicalHistoryData;
   lifestyle?: LifestyleData;
   familyHistory?: FamilyHistoryData;
@@ -15,10 +13,8 @@ export interface InquiryData  {;
   emotionalState?: EmotionalState;
   metadata?: Record<string, any>;
 }
-export interface SymptomData { name: string,;
-  description: string,;
-  severity: number;
- // 1-10 //////     , duration: string,
+export interface SymptomData { name: string,description: string,severity: number;
+ // 1-10 // , duration: string,
   frequency: string,
   triggers: string[],
   relievingFactors: string[],
@@ -29,57 +25,41 @@ export interface MedicalHistoryData { previousDiagnoses: string[],
   surgeries: string[],
   hospitalizations: string[],
   medications: MedicationData[],
-  allergies: string[],;
-  immunizations: string[],;
-  familyHistory: string[];
+  allergies: string[],immunizations: string[],familyHistory: string[];
   }
 export interface MedicationData { name: string,
   dosage: string,
-  frequency: string,;
-  duration: string,;
-  purpose: string;
+  frequency: string,duration: string,purpose: string;
   sideEffects?: string[];
   }
 export interface LifestyleData { occupation: string,
   exerciseHabits: string,
-  smokingStatus: string,;
-  alcoholConsumption: string,;
-  stressLevel: number;
- // 1-10 //////     , workEnvironment: string,
+  smokingStatus: string,alcoholConsumption: string,stressLevel: number;
+ // 1-10 // , workEnvironment: string,
   hobbies: string[]
   }
 export interface FamilyHistoryData { parents: string[],
   siblings: string[],
-  grandparents: string[],;
-  commonDiseases: string[],;
-  geneticConditions: string[];
+  grandparents: string[],commonDiseases: string[],geneticConditions: string[];
   }
-export interface PainAssessment { location: string[],;
-  intensity: number;
+export interface PainAssessment { location: string[],intensity: number;
  // 1-10 // quality: string  / 刺痛、胀痛、隐痛等* // , timing: string  * / 持续性、间歇性* // , aggravatingFactors: string[], * /////
   relievingFactors: string[]
   radiationPattern?: string}
 export interface SleepPattern { bedtime: string,
-  wakeTime: string,;
-  sleepDuration: number,;
-  sleepQuality: number;
+  wakeTime: string,sleepDuration: number,sleepQuality: number;
  // 1-10 // , difficulties: string[]  / 入睡困难、易醒等* // , dreams: string  * / 多梦、噩梦等* // } * /////
 export interface DietaryHabits { mealTimes: string[],
   appetite: string,
   preferences: string[],
-  aversions: string[],;
-  digestiveIssues: string[],;
-  waterIntake: number;
+  aversions: string[],digestiveIssues: string[],waterIntake: number;
  // 升 * 天 /////     , specialDiets: string[]
   }
-export interface EmotionalState { mood: string,;
-  stressLevel: number;
+export interface EmotionalState { mood: string,stressLevel: number;
  // 1-10 // , anxietyLevel: number  / 1-10* // , recentChanges: string[], * /////
   copingMechanisms: string[],
   socialSupport: string}
-export interface InquiryResult { confidence: number,;
-  features: InquiryFeatures,;
-  analysis: string;
+export interface InquiryResult { confidence: number,features: InquiryFeatures,analysis: string;
   symptomAnalysis?: SymptomAnalysis;
   constitutionalAnalysis?: ConstitutionalAnalysis;
   syndromePatterns?: SyndromePattern[];
@@ -91,9 +71,7 @@ export interface InquiryFeatures { symptoms: ProcessedSymptom[],
 export interface ProcessedSymptom { name: string,
   tcmCategory: string,
   severity: number,
-  chronicity: string,;
-  pattern: string,;
-  organSystem: string[];
+  chronicity: string,pattern: string,organSystem: string[];
   }
 export interface ConstitutionalFeatures { bodyType: string,
   energyLevel: string,
@@ -123,9 +101,8 @@ export interface SymptomPattern { name: string,
   symptoms: string[],
   confidence: number,
   tcmInterpretation: string};
-export interface OrganSystemAnalysis { system: string,;
-  involvement: number;
- // 0-1 //////     , symptoms: string[],
+export interface OrganSystemAnalysis { system: string,involvement: number;
+ // 0-1 // , symptoms: string[],
   dysfunction: string}
 export interface PathogenesisAnalysis { primaryCause: string,
   secondaryCauses: string[],
@@ -153,9 +130,7 @@ export interface UserProfile { age: number,
   allergies: string[],
   medications: string[]
   }
-//////     问诊算法类export class InquiryDiagnosisAlgorithm {;
-;
-  private config: InquiryConfig;
+// 问诊算法类export class InquiryDiagnosisAlgorithm  {private config: InquiryConfig;
   private knowledgeBase: TCMKnowledgeBase;
   private symptomAnalyzer!: SymptomAnalyzer;
   private nlpProcessor!: NLPProcessor;
@@ -165,7 +140,7 @@ export interface UserProfile { age: number,
     this.knowledgeBase = knowledgeBase;
     this.initializeAnalyzers();
   }
-  //////     初始化分析器  private initializeAnalyzers(): void {
+  // 初始化分析器  private initializeAnalyzers(): void {
     this.symptomAnalyzer = new SymptomAnalyzer(
       this.config.models.symptomAnalysis,
       this.knowledgeBase;
@@ -179,32 +154,32 @@ export interface UserProfile { age: number,
       this.knowledgeBase;
     );
   }
-  //////     执行问诊分析  public async analyze(data: InquiryData,
+  // 执行问诊分析  public async analyze(data: InquiryData,
     userProfile?: UserProfile;
   ): Promise<InquiryResult /////    >  {
     if (!this.config.enabled) {
-      throw new Error("问诊功能未启用";)
+      throw new Error("问诊功能未启用";);
     }
     try {
       this.emit("algorithm:progress", {
         stage: "preprocessing",
         progress: 0.1;
       });
-      // 数据预处理 //////     const processedData = await this.preprocessData(da;t;a;)
+      // 数据预处理 // const processedData = await this.preprocessData(da;t;a;);
       this.emit("algorithm:progress", {
         stage: "nlp_processing",
         progress: 0.3;
       });
-      // 自然语言处理 //////     const nlpResults = await this.processNaturalLanguage(processedDa;t;a;)
+      // 自然语言处理 // const nlpResults = await this.processNaturalLanguage(processedDa;t;a;);
       this.emit("algorithm:progress", {
         stage: "feature_extraction",
         progress: 0.5;
       });
-      // 特征提取 //////     const features = await this.extractFeatures(processedData, nlpResul;t;s;)
+      // 特征提取 // const features = await this.extractFeatures(processedData, nlpResul;t;s;);
       this.emit("algorithm:progress", { stage: "analysis", progress: 0.7});
-      // 执行各项分析 //////     const analyses = await this.performAnalyses(features, userProfi;l;e;)
+      // 执行各项分析 // const analyses = await this.performAnalyses(features, userProfi;l;e;);
       this.emit("algorithm:progress", { stage: "integration", progress: 0.9});
-      // 整合分析结果 //////     const result = await this.integrateResults(features, analys;e;s;)
+      // 整合分析结果 // const result = await this.integrateResults(features, analys;e;s;);
       this.emit("algorithm:progress", { stage: "completed", progress: 1.0});
       return resu;l;t;
     } catch (error) {
@@ -213,8 +188,7 @@ export interface UserProfile { age: number,
     }
   }
   // 数据预处理  private async preprocessData(data: InquiryData);: Promise<ProcessedInquiryData /////    >  {
-    const processed: ProcessedInquiryData = {;
-      symptoms: [],
+    const processed: ProcessedInquiryData = {symptoms: [],
       medicalHistory: data.medicalHistory,
       lifestyle: data.lifestyle,
       familyHistory: data.familyHistory,
@@ -223,10 +197,10 @@ export interface UserProfile { age: number,
       dietaryHabits: data.dietaryHabits,
       emotionalState: data.emotionalState;
     };
-    // 处理症状数据 //////     if (data.symptoms) {
+    // 处理症状数据 // if (data.symptoms) {
       processed.symptoms = await this.preprocessSymptoms(data.symptoms;);
     }
-    // 处理主诉 //////     if (data.currentComplaints) {
+    // 处理主诉 // if (data.currentComplaints) {
       processed.currentComplaints = await this.preprocessText(
         data.currentComplaints;
       ;);
@@ -239,115 +213,107 @@ export interface UserProfile { age: number,
       name: this.normalizeSymptomName(symptom.name),
       description: this.normalizeText(symptom.description)}));
   }
-  //////     预处理文本  private async preprocessText(text: string): Promise<string>  {
-    // 文本清理和标准化 //////     return text.trim().toLowerCase;
+  // 预处理文本  private async preprocessText(text: string): Promise<string>  {
+    // 文本清理和标准化 // return text.trim().toLowerCase;
   }
   // 自然语言处理  private async processNaturalLanguage(data: ProcessedInquiryData);: Promise<NLPResults /////    >  {
-    const results: NLPResults = {;
-      extractedSymptoms: [],
+    const results: NLPResults = {extractedSymptoms: [],
       medicalEntities: [],
       sentimentAnalysis: null,
       keyPhrases: []
     };
-    // 从主诉中提取症状 //////     if (data.currentComplaints) {
+    // 从主诉中提取症状 // if (data.currentComplaints) {
       results.extractedSymptoms = await this.nlpProcessor.extractSymptoms(
         data.currentComplaints;
       ;);
     }
-    // 提取医学实体 //////     results.medicalEntities = await this.nlpProcessor.extractMedicalEntities(
+    // 提取医学实体 // results.medicalEntities = await this.nlpProcessor.extractMedicalEntities(
       data;
     ;);
-    // 情感分析 //////     results.sentimentAnalysis = await this.nlpProcessor.analyzeSentiment(data;);
-    // 关键短语提取 //////     results.keyPhrases = await this.nlpProcessor.extractKeyPhrases(data;);
+    // 情感分析 // results.sentimentAnalysis = await this.nlpProcessor.analyzeSentiment(data;);
+    // 关键短语提取 // results.keyPhrases = await this.nlpProcessor.extractKeyPhrases(data;);
     return resul;t;s;
   }
-  //////     特征提取  private async extractFeatures(data: ProcessedInquiryData,
+  // 特征提取  private async extractFeatures(data: ProcessedInquiryData,
     nlpResults: NLPResults): Promise<InquiryFeatures /////    >  {
-    const features: InquiryFeatures = {;
-      symptoms: [],
+    const features: InquiryFeatures = {symptoms: [],
       constitution: {
-        bodyType: ","
+        bodyType: ",",
         energyLevel: ","
-        temperaturePreference: ","
+        temperaturePreference: ",",
         digestiveStrength: ","
         sleepQuality: ""
       },
       lifestyle: {
-        activityLevel: ","
+        activityLevel: ",",
         stressFactors: [],
         environmentalFactors: [],
         socialFactors: []
       },
       emotional: {
-        dominantEmotion: ","
+        dominantEmotion: ",",
         emotionalStability: ","
-        stressResponse: ","
+        stressResponse: ",",
         mentalEnergy: ""
       }
     };
-    // 处理症状特征 //////     features.symptoms = await this.symptomAnalyzer.processSymptoms(
+    // 处理症状特征 // features.symptoms = await this.symptomAnalyzer.processSymptoms(
       data.symptoms || [],
       nlpResults.extractedSymptoms;
     ;);
-    // 提取体质特征 //////     features.constitution = await this.extractConstitutionalFeatures(data;);
-    // 提取生活方式特征 //////     features.lifestyle = await this.extractLifestyleFeatures(data;);
-    // 提取情绪特征 //////     features.emotional = await this.extractEmotionalFeatures(data, nlpResults;);
+    // 提取体质特征 // features.constitution = await this.extractConstitutionalFeatures(data;);
+    // 提取生活方式特征 // features.lifestyle = await this.extractLifestyleFeatures(data;);
+    // 提取情绪特征 // features.emotional = await this.extractEmotionalFeatures(data, nlpResults;);
     return featur;e;s;
   }
-  //////     执行各项分析  private async performAnalyses(features: InquiryFeatures,
+  // 执行各项分析  private async performAnalyses(features: InquiryFeatures,
     userProfile?: UserProfile;
   ): Promise<AnalysisResults /////    >  {
     const results: AnalysisResults = {};
-    // 症状分析 //////     results.symptomAnalysis = await this.symptomAnalyzer.analyzeSymptoms(
+    // 症状分析 // results.symptomAnalysis = await this.symptomAnalyzer.analyzeSymptoms(
       features.symptoms,
       userProfile;
     ;);
-    // 体质分析 //////     results.constitutionalAnalysis = await this.analyzeConstitution(
+    // 体质分析 // results.constitutionalAnalysis = await this.analyzeConstitution(
       features,
       userProfile;
     ;);
-    // 证候模式识别 //////     results.syndromePatterns = await this.patternRecognizer.identifyPatterns(
+    // 证候模式识别 // results.syndromePatterns = await this.patternRecognizer.identifyPatterns(
       features;
     ;);
     return resul;t;s;
   }
-  //////     整合分析结果  private async integrateResults(features: InquiryFeatures,
+  // 整合分析结果  private async integrateResults(features: InquiryFeatures,
     analyses: AnalysisResults);: Promise<InquiryResult /////    >  {
-    // 计算整体置信度 //////     const confidence = this.calculateOverallConfidence(features, analyses;);
-    // 生成综合分析 //////     const analysis = await this.generateComprehensiveAnalysis(analys;e;s;);
-    return {
-      confidence,
-      features,
-      analysis,
-      symptomAnalysis: analyses.symptomAnalysis,
-      constitutionalAnalysis: analyses.constitutionalAnalysis,
-      syndromePatterns: analyses.syndromePattern;s;
+    // 计算整体置信度 // const confidence = this.calculateOverallConfidence(features, analyses;);
+    // 生成综合分析 // const analysis = await this.generateComprehensiveAnalysis(analys;e;s;);
+    return {confidence,features,analysis,symptomAnalysis: analyses.symptomAnalysis,constitutionalAnalysis: analyses.constitutionalAnalysis,syndromePatterns: analyses.syndromePattern;s;
     ;};
   }
-  //////     计算整体置信度  private calculateOverallConfidence(features: InquiryFeatures,
+  // 计算整体置信度  private calculateOverallConfidence(features: InquiryFeatures,
     analyses: AnalysisResults);: number  {
     let totalWeight = 0;
     let weightedSum = 0;
     // 症状数量和质量权重 // const symptomWeight = Math.min(features.symptoms.length  / 5, 1;);  0.4;/ totalWeight += symptomWeight;////
     weightedSum += symptomWeight * 0.8;
-    // 体质分析权重 //////     if (analyses.constitutionalAnalysis) {
+    // 体质分析权重 // if (analyses.constitutionalAnalysis) {
       totalWeight += 0.3;
       weightedSum += 0.3 * 0.7;
     }
-    // 证候模式权重 //////     if (analyses.syndromePatterns && analyses.syndromePatterns.length > 0) {
+    // 证候模式权重 // if (analyses.syndromePatterns && analyses.syndromePatterns.length > 0) {
       const avgConfidence =;
-        analyses.syndromePatterns.reduce((sum, p;); => sum + p.confidence, 0) //////     analyses.syndromePatterns.length;
+        analyses.syndromePatterns.reduce((sum, p;); => sum + p.confidence, 0) // analyses.syndromePatterns.length;
       totalWeight += 0.3;
       weightedSum += 0.3 * avgConfidence;
     }
     return totalWeight > 0 ? weightedSum / totalWeight : 0;.;5;/////      }
-  //////     生成综合分析  private async generateComprehensiveAnalysis(analyses: AnalysisResults);: Promise<string>  {
+  // 生成综合分析  private async generateComprehensiveAnalysis(analyses: AnalysisResults);: Promise<string>  {
     const analysisTexts: string[] = [];
     if (analyses.symptomAnalysis) {
       const primarySymptoms = analyses.symptomAnalysis.primarySymptoms;
         .map((s) => s.symptom.name)
-        .join("、")
-      analysisTexts.push(`主要症状：${primarySymptoms}`)
+        .join("、");
+      analysisTexts.push(`主要症状：${primarySymptoms}`);
     }
     if (analyses.constitutionalAnalysis) {
       analysisTexts.push(
@@ -362,34 +328,26 @@ export interface UserProfile { age: number,
         ).toFixed(1)}%）`;
       );
     }
-    // 使用知识库生成综合分析 //////     const comprehensiveAnalysis =
+    // 使用知识库生成综合分析 // const comprehensiveAnalysis =
       await this.knowledgeBase.generateCalculationAnalysis({ inquiryAnalysis: anal;y;s;e;s ; });
-    return [...analysisTexts, ", "综合问诊分析：", comprehensiveAnalysis].join("
-      "\n;"
+    return [...analysisTexts, ", "综合问诊分析：", comprehensiveAnalysis].join(\n;"
     ;);
   }
-  // 辅助方法 //////     private normalizeSymptomName(name: string): string  {
-    // 症状名称标准化 //////     return name.trim().toLowerCase;
+  // 辅助方法 // private normalizeSymptomName(name: string): string  {
+    // 症状名称标准化 // return name.trim().toLowerCase;
   }
   private normalizeText(text: string): string  {
-    // 文本标准化 //////     return text.trim;
+    // 文本标准化 // return text.trim;
   }
   private async extractConstitutionalFeatures(data: ProcessedInquiryData): Promise<ConstitutionalFeatures /////    >  {
-    // 从问诊数据中提取体质特征 //////     return {
-      bodyType: "适中",
-      energyLevel: "正常",
-      temperaturePreference: "适中",
-      digestiveStrength: "正常",
-      sleepQuality: data.sleepPattern?.sleepQualit;y? data.sleepPattern.sleepQuality > 7;
+    // 从问诊数据中提取体质特征 // return {bodyType: "适中",energyLevel: "正常",temperaturePreference: "适中",digestiveStrength: "正常",sleepQuality: data.sleepPattern?.sleepQualit;y? data.sleepPattern.sleepQuality > 7;
           ? "良好"
           : "一般"
         : "未知"
     };
   }
   private async extractLifestyleFeatures(data: ProcessedInquiryData;);: Promise<LifestyleFeatures /////    >  {
-    // 从问诊数据中提取生活方式特征 //////     return {
-      activityLevel: data.lifestyle?.exerciseHabits || "未知",
-      stressFactors: data.lifestyle?.stressLeve;l? [`压力水平：${data.lifestyle.stressLevel}`]
+    // 从问诊数据中提取生活方式特征 // return {activityLevel: data.lifestyle?.exerciseHabits || "未知",stressFactors: data.lifestyle?.stressLeve;l? [`压力水平：${data.lifestyle.stressLevel}`]
         : [],
       environmentalFactors: data.lifestyle?.workEnvironment;? [data.lifestyle.workEnvironment]
         : [],
@@ -398,9 +356,7 @@ export interface UserProfile { age: number,
   }
   private async extractEmotionalFeatures(data: ProcessedInquiryData,
     nlpResults: NLPResults;);: Promise<EmotionalFeatures /////    >  {
-    // 从问诊数据和NLP结果中提取情绪特征 //////     return {
-      dominantEmotion: data.emotionalState?.mood || "平和",
-      emotionalStability: data.emotionalState?.stressLeve;l? data.emotionalState.stressLevel < 5;
+    // 从问诊数据和NLP结果中提取情绪特征 // return {dominantEmotion: data.emotionalState?.mood || "平和",emotionalStability: data.emotionalState?.stressLeve;l? data.emotionalState.stressLevel < 5;
           ? "稳定"
           : "不稳定"
         : "未知",
@@ -411,21 +367,15 @@ export interface UserProfile { age: number,
   private async analyzeConstitution(features: InquiryFeatures,
     userProfile?: UserProfile;
   ): Promise<ConstitutionalAnalysis /////    >  {
-    // 体质分析 //////     return {
-      bodyType: features.constitution.bodyType,
-      constitution: "平和质",
-      strengths: ["消化良好", "睡眠正常"],
-      weaknesses: [],
-      tendencies: [],
-      recommendations: ["保持现有生活方式", "适度运动"]
+    // 体质分析 // return {bodyType: features.constitution.bodyType,constitution: "平和质",strengths: ["消化良好", "睡眠正常"],weaknesses: [],tendencies: [],recommendations: ["保持现有生活方式", "适度运动"];
     ;};
   }
-  //////     模拟事件发射  public on(event: string, callback: (data: unknown) => void): void {
-    // 简化的事件处理 //////     }
+  // 模拟事件发射  public on(event: string, callback: (data: unknown) => void): void {
+    // 简化的事件处理 // }
   public emit(event: string, data?: unknown): void  {
-    // 简化的事件发射 //////     }
-  //////     清理资源  public async cleanup(): Promise<void> {
-    // 清理分析器资源 //////     await Promise.all(
+    // 简化的事件发射 // }
+  // 清理资源  public async cleanup(): Promise<void> {
+    // 清理分析器资源 // await Promise.all(
       [
         this.symptomAnalyzer.cleanup?.(),
         this.nlpProcessor.cleanup?.(),
@@ -457,7 +407,7 @@ interface AnalysisResults {
   constructor(private config: unknown, private knowledgeBase: TCMKnowledgeBase) {}
   async processSymptoms(symptoms: SymptomData[],
     extractedSymptoms: string[]);: Promise<ProcessedSymptom[] /////    >  {
-    // 处理症状数据 //////     return symptoms.map((symptom;) => ({
+    // 处理症状数据 // return symptoms.map((symptom;) => ({
       name: symptom.name,
       tcmCategory: "气血",
       severity: symptom.severity,
@@ -469,7 +419,7 @@ interface AnalysisResults {
   async analyzeSymptoms(symptoms: ProcessedSymptom[],
     userProfile?: UserProfile;
   );: Promise<SymptomAnalysis /////    >  {
-    // 症状分析 //////     return {
+    // 症状分析 // return {
       primarySymptoms: symptoms.map((s) => ({
         symptom: s,
         tcmSignificance: "脾胃虚弱",
@@ -483,22 +433,11 @@ interface AnalysisResults {
           symptoms: symptoms.map((s) => s.name),
           confidence: 0.8,
           tcmInterpretation: "脾胃功能失调"
-        }
-      ],
-      organSystemInvolvement: [{
-          system: "脾胃",
-          involvement: 0.8,
-          symptoms: symptoms.map((s) => s.name),
-          dysfunction: "运化失常"
-        }
-      ],
-      pathogenesis: {
-        primaryCause: "饮食不节",
-        secondaryCauses: ["情志不遂"],
-        pathogenicFactors: ["湿邪"],
-        diseaseStage: "初期",
-        prognosis: "良好"
-      }
+        };
+      ],organSystemInvolvement: [{system: "脾胃",involvement: 0.8,symptoms: symptoms.map((s) => s.name),dysfunction: "运化失常";
+        };
+      ],pathogenesis: {primaryCause: "饮食不节",secondaryCauses: ["情志不遂"],pathogenicFactors: ["湿邪"],diseaseStage: "初期",prognosis: "良好";
+      };
     };
   }
   async cleanup(): Promise<void> {}
@@ -506,32 +445,27 @@ interface AnalysisResults {
 class NLPProcessor {
   constructor(private config: unknown, private knowledgeBase: TCMKnowledgeBase) {}
   async extractSymptoms(text: string): Promise<string[]>  {
-    // 从文本中提取症状 //////     return ["乏力", "食欲不振"];
+    // 从文本中提取症状 // return ["乏力", "食欲不振"];
   }
   async extractMedicalEntities(data: ProcessedInquiryData);: Promise<string[]>  {
-    // 提取医学实体 //////     return ["头痛", "失眠"];
+    // 提取医学实体 // return ["头痛", "失眠"];
   }
   async analyzeSentiment(data: ProcessedInquiryData);: Promise<any>  {
-    // 情感分析 //////     return { mood: "neutral", confidence: 0.;7 ;};
+    // 情感分析 // return { mood: "neutral", confidence: 0.;7 ;};
   }
   async extractKeyPhrases(data: ProcessedInquiryData): Promise<string[]>  {
-    // 提取关键短语 //////     return ["睡眠不好", "消化不良"];
+    // 提取关键短语 // return ["睡眠不好", "消化不良"];
   }
   async cleanup(): Promise<void> {}
 }
 class PatternRecognizer {
   constructor(private config: unknown, private knowledgeBase: TCMKnowledgeBase) {}
   async identifyPatterns(features: InquiryFeatures;);: Promise<SyndromePattern[] /////    >  {
-    // 识别证候模式 //////     return [
-      {
-        name: "脾气虚证",
-        confidence: 0.8,
-        supportingSymptoms: features.symptoms.map((s) => s.name),
-        contradictingSymptoms: [],
-        tcmExplanation: "脾气不足，运化失常"
-      }
-    ]
-  }
-  async cleanup(): Promise<void> {}
-}
+    // 识别证候模式 // return [;
+      {name: "脾气虚证",confidence: 0.8,supportingSymptoms: features.symptoms.map((s) => s.name),contradictingSymptoms: [],tcmExplanation: "脾气不足，运化失常";
+      };
+    ];
+  };
+  async cleanup(): Promise<void> {};
+};
 export default InquiryDiagnosisAlgorithm;

@@ -1,8 +1,13 @@
+"""
+message - 索克生活项目模块
+"""
+
+from datetime import datetime
+from typing import Dict, Any, Optional, List, Union
 import json
 import time
 import uuid
-from datetime import datetime
-from typing import Dict, Any, Optional, List, Union
+
 
 class Message:
     """

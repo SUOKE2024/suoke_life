@@ -1,25 +1,30 @@
+"""
+test_service - 索克生活项目模块
+"""
+
+    from xiaoai.api.grpc import xiaoai_pb2
+from pathlib import Path
+from unittest.mock import MagicMock
+from xiaoai.agent.agent_manager import AgentManager
+from xiaoai.delivery.xiaoai_service_impl import XiaoAIServiceImpl
+from xiaoai.orchestrator.diagnosis_coordinator import DiagnosisCoordinator
+import asyncio
+import logging
+import sys
+import unittest
+
 #!/usr/bin/env python3
 """
 小艾服务的基本测试
 """
 
-import asyncio
-import logging
-import sys
-import unittest
-from pathlib import Path
-from unittest.mock import MagicMock
 
 # 添加项目根目录到PYTHONPATH
 project_root = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from xiaoai.agent.agent_manager import AgentManager
-from xiaoai.delivery.xiaoai_service_impl import XiaoAIServiceImpl
-from xiaoai.orchestrator.diagnosis_coordinator import DiagnosisCoordinator
 
 try:
-    from xiaoai.api.grpc import xiaoai_pb2
 except ImportError:
     logging.error("无法导入gRPC生成的代码。请确保先运行 'python -m grpc_tools.protoc' 命令来生成。")
     sys.exit(1)

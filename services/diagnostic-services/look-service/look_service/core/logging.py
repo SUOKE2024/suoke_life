@@ -1,13 +1,19 @@
-"""Logging configuration for look service."""
+"""
+logging - 索克生活项目模块
+"""
 
-import sys
+        import inspect
+from .config import settings
+from loguru import logger
 from pathlib import Path
 from typing import Any
-
 import structlog
-from loguru import logger
+import sys
 
-from .config import settings
+"""Logging configuration for look service."""
+
+
+
 
 
 def configure_structlog() -> None:
@@ -86,7 +92,6 @@ def get_logger(name: str | None = None) -> Any:
     """
     if name is None:
         # Get the calling module name
-        import inspect
 
         frame = inspect.currentframe()
         if frame and frame.f_back:

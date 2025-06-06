@@ -1,38 +1,36 @@
-import React from "react";
-import { performance } from "perf_hooks";
-import AlgorithmConfig from "../AlgorithmConfig";
+import React from 'react';
+import AlgorithmConfig from '../AlgorithmConfig';
 
 beforeEach(() => {
   jest.clearAllMocks();
 });
 
-describe("AlgorithmConfig", () => {
-  it("should work with valid inputs", () => {
+describe('AlgorithmConfig', () => {
+  it('should work with valid inputs', () => {
     // Add test cases
     const config = new AlgorithmConfig();
     expect(config).toBeDefined();
   });
 
-  it("should handle edge cases", () => {
+  it('should handle edge cases', () => {
     // Add test cases
     const config = new AlgorithmConfig({});
     expect(config).toBeDefined();
   });
 
-  it("should handle invalid inputs gracefully", () => {
+  it('should handle invalid inputs gracefully', () => {
     // Add test cases
     expect(() => {
       new AlgorithmConfig({});
     }).not.toThrow();
   });
 
-  it("should return correct output format", () => {
-    // Add test cases
+  it('should return correct output format', () => {// Add test cases;
     const config = new AlgorithmConfig();
-    expect(typeof config).toBe("object");
+    expect(typeof config).toBe('object');
   });
 
-  it("should handle performance requirements", () => {
+  it('should handle performance requirements', () => {
     const start = performance.now();
     const config = new AlgorithmConfig();
     const end = performance.now();
@@ -42,8 +40,8 @@ describe("AlgorithmConfig", () => {
   });
 });
 
-describe("AlgorithmConfig Performance Tests", () => {
-  it("should execute within performance thresholds", () => {
+describe('AlgorithmConfig Performance Tests', () => {
+  it('should execute within performance thresholds', () => {
     const iterations = 10;
     const startTime = performance.now();
     for (let i = 0; i < iterations; i++) {
@@ -56,13 +54,8 @@ describe("AlgorithmConfig Performance Tests", () => {
     expect(averageTime).toBeLessThan(100);
   });
 
-  it("should handle large datasets efficiently", () => {
-    const largeConfig = {
-      looking: { enabled: true },
-      listening: { enabled: true },
-      inquiry: { enabled: true },
-      palpation: { enabled: true },
-      calculation: { enabled: true },
+  it('should handle large datasets efficiently', () => {
+    const largeConfig = {looking: { enabled: true },listening: { enabled: true },inquiry: { enabled: true },palpation: { enabled: true },calculation: { enabled: true };
     };
     const startTime = performance.now();
     // Test with large dataset
@@ -72,7 +65,7 @@ describe("AlgorithmConfig Performance Tests", () => {
     expect(endTime - startTime).toBeLessThan(1000);
   });
 
-  it("should not cause memory leaks", () => {
+  it('should not cause memory leaks', () => {
     const initialMemory = process.memoryUsage().heapUsed;
     // Execute function multiple times
     for (let i = 0; i < 100; i++) {

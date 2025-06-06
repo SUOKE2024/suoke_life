@@ -1,3 +1,22 @@
+"""
+test_performance - 索克生活项目模块
+"""
+
+        from internal.delivery.rest.routes import setup_routes
+    from unittest.mock import MagicMock
+from concurrent.futures import ThreadPoolExecutor
+from fastapi import FastAPI
+from fastapi.testclient import TestClient
+from internal.delivery.rest.routes import setup_routes
+from internal.model.config import GatewayConfig, RouteConfig, CacheConfig, RateLimitConfig
+from internal.service.service_registry import ServiceRegistry
+from typing import List, Dict, Any, Tuple
+import os
+import pytest
+import statistics
+import sys
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,23 +24,11 @@
 API网关性能测试
 """
 
-import os
-import sys
-import time
-import statistics
-from concurrent.futures import ThreadPoolExecutor
-from typing import List, Dict, Any, Tuple
 
-import pytest
-from fastapi import FastAPI
-from fastapi.testclient import TestClient
 
 # 添加项目根目录到Python路径
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from internal.model.config import GatewayConfig, RouteConfig, CacheConfig, RateLimitConfig
-from internal.delivery.rest.routes import setup_routes
-from internal.service.service_registry import ServiceRegistry
 
 class PerformanceTest:
     """性能测试基类"""
@@ -183,14 +190,14 @@ class TestGatewayPerformance:
     @pytest.fixture
     def client(self, app, config, service_registry):
         """创建测试客户端"""
-        from internal.delivery.rest.routes import setup_routes
         
         # 设置路由
         setup_routes(app, config)
         
         # 添加mock服务端点
         @app.get("/api/test/user/{user_id}")
-        def get_user(user_id: str):
+            @cache(timeout=300)  # 5分钟缓存
+def get_user(user_id: str):
             # 模拟服务处理时间
             time.sleep(0.01)  # 10ms
             return {"user_id": user_id, "name": f"User {user_id}"}
@@ -341,7 +348,6 @@ class TestGatewayPerformance:
         assert results_with_cache['throughput'] >= results_no_cache['throughput'], "缓存应提高吞吐量"
 
 if __name__ == "__main__":
-    from unittest.mock import MagicMock
     
     # 设置环境以运行单个性能测试
     app = FastAPI()
@@ -366,7 +372,8 @@ if __name__ == "__main__":
     setup_routes(app, config)
     
     # 添加mock服务端点
-    @app.get("/api/test/user/{user_id}")
+    @app.get    @cache(timeout=300)  # 5分钟缓存
+("/api/test/user/{user_id}")
     def get_user(user_id: str):
         # 模拟服务处理时间
         time.sleep(0.01)  # 10ms

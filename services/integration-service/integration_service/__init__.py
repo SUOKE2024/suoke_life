@@ -1,4 +1,10 @@
 """
+__init__ - 索克生活项目模块
+"""
+
+from .main import create_app
+
+"""
 索克生活第三方健康平台集成服务
 
 提供与各种健康平台的数据集成功能，包括：
@@ -15,6 +21,5 @@ __version__ = "0.1.0"
 __author__ = "Suoke Life Team"
 __email__ = "dev@suokelife.com"
 
-from .main import create_app
 
 __all__ = ["create_app"]

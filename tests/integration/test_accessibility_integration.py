@@ -1,14 +1,20 @@
+"""
+test_accessibility_integration - 索克生活项目模块
+"""
+
+        import traceback
+from internal.integration.accessibility_client import AccessibilityServiceClient, AccessibilityConfig
+import asyncio
+import sys
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 小艾智能体与无障碍服务集成测试
 """
 
-import asyncio
-import sys
 sys.path.append('.')
 
-from internal.integration.accessibility_client import AccessibilityServiceClient, AccessibilityConfig
 
 async def test_integration():
     """测试小艾智能体与无障碍服务的集成"""
@@ -66,7 +72,6 @@ async def test_integration():
 
     except Exception as e:
         print(f"❌ 集成测试失败: {e}")
-        import traceback
         traceback.print_exc()
     finally:
         await client.close()

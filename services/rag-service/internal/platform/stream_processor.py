@@ -1,3 +1,18 @@
+"""
+stream_processor - 索克生活项目模块
+"""
+
+from ..observability.metrics import MetricsCollector
+from ..observability.tracing import trace_operation, SpanKind
+from collections import deque
+from dataclasses import dataclass, field
+from enum import Enum
+from loguru import logger
+from typing import Dict, List, Any, Optional, Callable, AsyncGenerator, Union
+import asyncio
+import time
+import uuid
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,17 +20,7 @@
 实时流处理引擎 - 支持事件驱动的RAG处理和流式查询
 """
 
-import asyncio
-import time
-import uuid
-from typing import Dict, List, Any, Optional, Callable, AsyncGenerator, Union
-from dataclasses import dataclass, field
-from enum import Enum
-from collections import deque
-from loguru import logger
 
-from ..observability.metrics import MetricsCollector
-from ..observability.tracing import trace_operation, SpanKind
 
 class EventType(str, Enum):
     """事件类型"""

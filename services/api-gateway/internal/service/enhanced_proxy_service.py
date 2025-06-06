@@ -1,3 +1,21 @@
+"""
+enhanced_proxy_service - 索克生活项目模块
+"""
+
+from fastapi import Request, Response
+from fastapi.responses import JSONResponse, StreamingResponse
+from internal.model.config import GatewayConfig, RetryConfig, ServiceConfig
+from internal.service.service_registry import ServiceRegistry
+from pkg.utils.circuit_breaker import CircuitBreaker, CircuitBreakerRegistry
+from pkg.utils.connection_pool import (
+from pkg.utils.enhanced_cache import SmartCacheManager, CacheConfig
+from pkg.utils.metrics_collector import MetricsCollector, RequestMetrics
+from pkg.utils.smart_load_balancer import (
+from typing import Any, Dict, List, Optional, Tuple, Union
+import asyncio
+import logging
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,26 +24,13 @@
 集成智能连接池、多级缓存、负载均衡和监控指标
 """
 
-import asyncio
-import logging
-import time
-from typing import Any, Dict, List, Optional, Tuple, Union
 
-from fastapi import Request, Response
-from fastapi.responses import JSONResponse, StreamingResponse
 
-from internal.model.config import GatewayConfig, RetryConfig, ServiceConfig
-from internal.service.service_registry import ServiceRegistry
-from pkg.utils.connection_pool import (
     SmartConnectionPool, ConnectionPoolConfig, connection_pool_manager
 )
-from pkg.utils.enhanced_cache import SmartCacheManager, CacheConfig
-from pkg.utils.smart_load_balancer import (
     SmartLoadBalancer, LoadBalancerConfig, LoadBalancerAlgorithm,
     EndpointConfig, LoadBalancerFactory
 )
-from pkg.utils.metrics_collector import MetricsCollector, RequestMetrics
-from pkg.utils.circuit_breaker import CircuitBreaker, CircuitBreakerRegistry
 
 logger = logging.getLogger(__name__)
 

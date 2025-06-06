@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import {
+import {import { HealthDataManager } from './HealthDataManager';
+import { VitalSignsMonitor } from './VitalSignsMonitor';
+import { TCMDiagnosisPanel } from './TCMDiagnosisPanel';
+import { HealthReportGenerator } from './HealthReportGenerator';
+import { HealthDataImportExport } from './HealthDataImportExport';
+
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  SafeAreaView,
+  SafeAreaView
 } from 'react-native';
-import { HealthDataManager } from './HealthDataManager';
-import { VitalSignsMonitor } from './VitalSignsMonitor';
-import { TCMDiagnosisPanel } from './TCMDiagnosisPanel';
-import { HealthReportGenerator } from './HealthReportGenerator';
-import { HealthDataImportExport } from './HealthDataImportExport';
 
 interface HealthDataDashboardProps {
   userId: string;
@@ -22,18 +22,11 @@ type TabType = 'overview' | 'vitals' | 'tcm' | 'reports' | 'data';
 export const HealthDataDashboard: React.FC<HealthDataDashboardProps> = ({ userId }) => {
   const [activeTab, setActiveTab] = useState<TabType>('overview');
 
-  const tabs = [
-    { key: 'overview', label: '数据管理', icon: '📊' },
-    { key: 'vitals', label: '生命体征', icon: '💓' },
-    { key: 'tcm', label: '中医五诊', icon: '🏥' },
-    { key: 'reports', label: '健康报告', icon: '📋' },
-    { key: 'data', label: '数据管理', icon: '💾' },
+  const tabs = [;
+    { key: 'overview', label: '数据管理', icon: '📊' },{ key: 'vitals', label: '生命体征', icon: '💓' },{ key: 'tcm', label: '中医五诊', icon: '🏥' },{ key: 'reports', label: '健康报告', icon: '📋' },{ key: 'data', label: '数据管理', icon: '💾' };
   ];
 
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case 'overview':
-        return <HealthDataManager userId={userId} />;
+  const renderTabContent = () => {switch (activeTab) {case 'overview':return <HealthDataManager userId={userId} />;
       case 'vitals':
         return <VitalSignsMonitor userId={userId} />;
       case 'tcm':
@@ -58,69 +51,67 @@ export const HealthDataDashboard: React.FC<HealthDataDashboardProps> = ({ userId
           <TouchableOpacity
             key={tab.key}
             style={[
-              styles.tab,
-              activeTab === tab.key && styles.activeTab
-            ]}
-            onPress={() => setActiveTab(tab.key as TabType)}
-          >
-            <Text style={styles.tabIcon}>{tab.icon}</Text>
-            <Text style={[
-              styles.tabLabel,
-              activeTab === tab.key && styles.activeTabLabel
-            ]}>
-              {tab.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-    </View>
+              styles.tab,activeTab === tab.key && styles.activeTab;
+            ]};
+            onPress={() => setActiveTab(tab.key as TabType)};
+          >;
+            <Text style={styles.tabIcon}>{tab.icon}</Text>;
+            <Text style={[;
+              styles.tabLabel,activeTab === tab.key && styles.activeTabLabel;
+            ]}>;
+              {tab.label};
+            </Text>;
+          </TouchableOpacity>;
+        ))};
+      </ScrollView>;
+    </View>;
   );
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>健康数据中心</Text>
-        <Text style={styles.subtitle}>全面管理您的健康信息</Text>
-      </View>
-      
-      {renderTabBar()}
-      
-      <View style={styles.content}>
-        {renderTabContent()}
-      </View>
-    </SafeAreaView>
+  return (;
+    <SafeAreaView style={styles.container}>;
+      <View style={styles.header}>;
+        <Text style={styles.title}>健康数据中心</Text>;
+        <Text style={styles.subtitle}>全面管理您的健康信息</Text>;
+      </View>;
+      ;
+      {renderTabBar()};
+      ;
+      <View style={styles.content}>;
+        {renderTabContent()};
+      </View>;
+    </SafeAreaView>;
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f5f5f5'
   },
   header: {
     backgroundColor: '#fff',
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: '#e0e0e0'
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 4,
+    marginBottom: 4
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
+    color: '#666'
   },
   tabBar: {
     backgroundColor: '#fff',
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: '#e0e0e0'
   },
   tabScrollContent: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 16
   },
   tab: {
     paddingHorizontal: 20,
@@ -129,24 +120,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    minWidth: 80,
+    minWidth: 80
   },
   activeTab: {
-    backgroundColor: '#007AFF',
-  },
-  tabIcon: {
-    fontSize: 20,
-    marginBottom: 4,
-  },
-  tabLabel: {
-    fontSize: 12,
-    color: '#666',
-    fontWeight: '500',
-  },
-  activeTabLabel: {
-    color: '#fff',
-  },
-  content: {
-    flex: 1,
-  },
+    backgroundColor: '#007AFF'
+  },tabIcon: {fontSize: 20,marginBottom: 4;
+  },tabLabel: {fontSize: 12,color: '#666',fontWeight: '500';
+  },activeTabLabel: {color: '#fff';
+  },content: {flex: 1;
+  };
 }); 

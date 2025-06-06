@@ -1,11 +1,16 @@
+"""
+fix_datetime - 索克生活项目模块
+"""
+
+from pathlib import Path
+import os
+import re
+
 #!/usr/bin/env python3
 """
 批量修复 datetime.utcnow() 弃用警告的脚本
 """
 
-import os
-import re
-from pathlib import Path
 
 def fix_datetime_file(file_path):
     """修复单个文件中的 datetime.utcnow() 弃用语法"""

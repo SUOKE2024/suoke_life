@@ -1,12 +1,17 @@
+"""
+generate_proto - 索克生活项目模块
+"""
+
+from pathlib import Path
+import subprocess
+import sys
+
 #!/usr/bin/env python
 """
 生成gRPC代码的脚本
 使用方法: python scripts/generate_proto.py
 """
 
-import subprocess
-import sys
-from pathlib import Path
 
 def main():
     # 确定项目根目录

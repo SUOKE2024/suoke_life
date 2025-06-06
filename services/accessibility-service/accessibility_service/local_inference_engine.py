@@ -1,17 +1,23 @@
 """
+local_inference_engine - 索克生活项目模块
+"""
+
+            import psutil
+from dataclasses import dataclass
+from enum import Enum
+from pathlib import Path
+from typing import Dict, List, Optional, Any, Tuple
+import asyncio
+import logging
+import queue
+import threading
+import time
+
+"""
 本地推理引擎 - 为无障碍服务提供设备端AI推理能力
 支持ONNX模型推理、模型管理和性能优化
 """
 
-import asyncio
-import logging
-import time
-from typing import Dict, List, Optional, Any, Tuple
-from pathlib import Path
-from dataclasses import dataclass
-from enum import Enum
-import threading
-import queue
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -442,7 +448,6 @@ class LocalInferenceEngine:
     def _get_memory_usage(self) -> float:
         """获取内存使用量（MB）"""
         try:
-            import psutil
             process = psutil.Process()
             return process.memory_info().rss / 1024 / 1024
         except ImportError:

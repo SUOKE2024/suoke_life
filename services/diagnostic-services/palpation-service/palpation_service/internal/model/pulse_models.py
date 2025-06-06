@@ -1,13 +1,18 @@
-#!/usr/bin/env python
-
 """
-脉诊数据模型定义
+pulse_models - 索克生活项目模块
 """
 
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
+
+#!/usr/bin/env python
+
+"""
+脉诊数据模型定义
+"""
+
 
 class PulsePosition(Enum):
     """脉诊位置枚举"""

@@ -1,12 +1,17 @@
 """
+cache_service - 索克生活项目模块
+"""
+
+from loguru import logger
+from typing import Any, Dict, Optional, List, Tuple, Union
+import hashlib
+import pickle
+import redis
+import time
+
+"""
 缓存服务模块，实现多级缓存策略
 """
-import time
-import pickle
-import hashlib
-from typing import Any, Dict, Optional, List, Tuple, Union
-import redis
-from loguru import logger
 
 class LocalCache:
     """本地内存缓存实现"""

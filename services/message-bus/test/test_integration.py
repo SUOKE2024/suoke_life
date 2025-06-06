@@ -1,22 +1,42 @@
+"""
+test_integration - 索克生活项目模块
+"""
+
+    from internal.error.error_handler import ErrorHandler
+    from internal.error.error_handler import ErrorHandler, CircuitBreakerError
+    from internal.error.error_handler import ErrorHandler, InfrastructureError
+    from internal.error.error_handler import ErrorHandler, MessageBusError
+    from internal.error.error_handler import ErrorHandler, RateLimitError
+    from internal.error.error_handler import ErrorHandler, TopicError
+    from internal.error.error_handler import ErrorHandler, ValidationError
+    from internal.model.message import Message
+    from internal.model.topic import Topic
+    from internal.performance.optimizer import (
+    from internal.performance.optimizer import MessageBatcher
+    from internal.performance.optimizer import PerformanceOptimizer
+    from internal.performance.optimizer import PerformanceOptimizer, MessageBatcher
+    from internal.reliability.retry_handler import DeadLetterQueue, RetryHandler
+    from internal.reliability.retry_handler import DeadLetterQueue, RetryHandler, RetryableMessage, RetryConfig
+from pkg.client.message_bus_client import MessageBusClient
+from typing import Dict, Any, List, Optional
+from unittest.mock import MagicMock, AsyncMock, patch
+import asyncio
+import json
+import logging
+import os
+import pytest
+import sys
+import time
+import unittest
+
 #!/usr/bin/env python3
 """
 消息总线服务集成测试
 """
-import os
-import sys
-import asyncio
-import logging
-import unittest
-import json
-from typing import Dict, Any, List, Optional
-import pytest
-import time
-from unittest.mock import MagicMock, AsyncMock, patch
 
 # 添加项目根目录到Python路径
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from pkg.client.message_bus_client import MessageBusClient
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -217,10 +237,6 @@ class IntegrationTest(unittest.IsolatedAsyncioTestCase):
 @pytest.mark.asyncio
 async def test_message_flow_integration():
     """测试完整的消息流程集成"""
-    from internal.model.message import Message
-    from internal.error.error_handler import ErrorHandler
-    from internal.performance.optimizer import PerformanceOptimizer
-    from internal.reliability.retry_handler import DeadLetterQueue, RetryHandler
     
     # 创建组件
     error_handler = ErrorHandler()
@@ -260,9 +276,6 @@ async def test_message_flow_integration():
 @pytest.mark.asyncio
 async def test_error_handling_with_retry():
     """测试错误处理与重试机制的集成"""
-    from internal.error.error_handler import ErrorHandler, MessageBusError
-    from internal.reliability.retry_handler import DeadLetterQueue, RetryHandler, RetryableMessage, RetryConfig
-    from internal.model.message import Message
     
     # 创建组件
     error_handler = ErrorHandler()
@@ -306,7 +319,6 @@ async def test_error_handling_with_retry():
 @pytest.mark.asyncio
 async def test_performance_monitoring_integration():
     """测试性能监控集成"""
-    from internal.performance.optimizer import (
         PerformanceOptimizer, MemoryManager, ConnectionPool,
         MessageBatcher, LatencyTracker, ThroughputCounter
     )
@@ -346,7 +358,6 @@ async def test_performance_monitoring_integration():
 @pytest.mark.asyncio
 async def test_message_batching_integration():
     """测试消息批处理集成"""
-    from internal.performance.optimizer import MessageBatcher
     
     processed_batches = []
     
@@ -382,7 +393,6 @@ async def test_message_batching_integration():
 @pytest.mark.asyncio
 async def test_circuit_breaker_integration():
     """测试断路器集成"""
-    from internal.error.error_handler import ErrorHandler, CircuitBreakerError
     
     error_handler = ErrorHandler()
     
@@ -396,7 +406,6 @@ async def test_circuit_breaker_integration():
 @pytest.mark.asyncio
 async def test_rate_limiting_integration():
     """测试限流集成"""
-    from internal.error.error_handler import ErrorHandler, RateLimitError
     
     error_handler = ErrorHandler()
     
@@ -411,8 +420,6 @@ async def test_rate_limiting_integration():
 @pytest.mark.asyncio
 async def test_topic_management_integration():
     """测试主题管理集成"""
-    from internal.model.topic import Topic
-    from internal.error.error_handler import ErrorHandler, TopicError
     
     error_handler = ErrorHandler()
     
@@ -439,8 +446,6 @@ async def test_topic_management_integration():
 @pytest.mark.asyncio
 async def test_message_validation_integration():
     """测试消息验证集成"""
-    from internal.model.message import Message
-    from internal.error.error_handler import ErrorHandler, ValidationError
     
     error_handler = ErrorHandler()
     
@@ -467,8 +472,6 @@ async def test_message_validation_integration():
 @pytest.mark.asyncio
 async def test_infrastructure_monitoring_integration():
     """测试基础设施监控集成"""
-    from internal.error.error_handler import ErrorHandler, InfrastructureError
-    from internal.performance.optimizer import PerformanceOptimizer
     
     error_handler = ErrorHandler()
     optimizer = PerformanceOptimizer()
@@ -489,10 +492,6 @@ async def test_infrastructure_monitoring_integration():
 @pytest.mark.asyncio
 async def test_end_to_end_message_processing():
     """端到端消息处理测试"""
-    from internal.model.message import Message
-    from internal.error.error_handler import ErrorHandler
-    from internal.performance.optimizer import PerformanceOptimizer, MessageBatcher
-    from internal.reliability.retry_handler import DeadLetterQueue, RetryHandler
     
     # 创建所有组件
     error_handler = ErrorHandler()
@@ -558,7 +557,6 @@ async def test_end_to_end_message_processing():
 @pytest.mark.asyncio
 async def test_concurrent_processing():
     """并发处理测试"""
-    from internal.performance.optimizer import PerformanceOptimizer, MessageBatcher
     
     optimizer = PerformanceOptimizer()
     processed_count = 0

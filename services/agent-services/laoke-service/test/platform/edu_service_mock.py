@@ -1,3 +1,19 @@
+"""
+edu_service_mock - 索克生活项目模块
+"""
+
+from fastapi import Depends, FastAPI, Header, HTTPException, Request, status
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from pathlib import Path
+from pydantic import BaseModel
+import json
+import logging
+import os
+import random
+import time
+import uvicorn
+
 #!/usr/bin/env python
 
 """
@@ -5,18 +21,7 @@
 用于本地开发和测试，模拟教育服务API
 """
 
-import json
-import logging
-import os
-import random
-import time
-from pathlib import Path
 
-import uvicorn
-from fastapi import Depends, FastAPI, Header, HTTPException, Request, status
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-from pydantic import BaseModel
 
 # 设置日志
 logging.basicConfig(

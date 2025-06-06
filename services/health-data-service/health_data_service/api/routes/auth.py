@@ -1,11 +1,17 @@
-"""认证API路由"""
+"""
+auth - 索克生活项目模块
+"""
 
-from typing import Dict, Any
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials
-from pydantic import BaseModel, EmailStr, Field
-
+from health_data_service.core.exceptions import ValidationError, DatabaseError
 from health_data_service.core.security import (
+from pydantic import BaseModel, EmailStr, Field
+from typing import Dict, Any
+
+"""认证API路由"""
+
+
     SecurityManager,
     Token,
     TokenData,
@@ -14,7 +20,6 @@ from health_data_service.core.security import (
     get_current_user,
     require_auth,
 )
-from health_data_service.core.exceptions import ValidationError, DatabaseError
 
 
 router = APIRouter(prefix="/auth", tags=["认证"])

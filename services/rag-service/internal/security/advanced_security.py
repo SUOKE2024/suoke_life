@@ -1,3 +1,24 @@
+"""
+advanced_security - 索克生活项目模块
+"""
+
+from ..observability.metrics import MetricsCollector
+from cryptography.fernet import Fernet
+from cryptography.hazmat.primitives import hashes, serialization
+from cryptography.hazmat.primitives.asymmetric import rsa, padding
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+from dataclasses import dataclass, field
+from enum import Enum
+from loguru import logger
+from typing import Dict, List, Any, Optional, Callable, Union
+import base64
+import hashlib
+import hmac
+import jwt
+import secrets
+import time
+import uuid
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,23 +26,7 @@
 高级安全机制 - 认证、授权、加密和审计功能
 """
 
-import time
-import uuid
-import hashlib
-import hmac
-import secrets
-from typing import Dict, List, Any, Optional, Callable, Union
-from dataclasses import dataclass, field
-from enum import Enum
-import jwt
-from cryptography.fernet import Fernet
-from cryptography.hazmat.primitives import hashes, serialization
-from cryptography.hazmat.primitives.asymmetric import rsa, padding
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-import base64
-from loguru import logger
 
-from ..observability.metrics import MetricsCollector
 
 class AuthMethod(str, Enum):
     """认证方法"""

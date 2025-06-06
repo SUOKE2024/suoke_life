@@ -1,16 +1,21 @@
-#!/usr/bin/env python3
+"""
+websocket_client_example - 索克生活项目模块
 """
 
 from logging import logging
+from loguru import logger
 from os import os
 from sys import sys
-from loguru import logger
+from typing import Any
 import asyncio
 import json
 import self.logging
 import time
-from typing import Any
 import websockets
+
+#!/usr/bin/env python3
+"""
+
 
 
 

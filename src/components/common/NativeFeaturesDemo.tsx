@@ -1,13 +1,13 @@
-importIcon from "react-native-vector-icons/MaterialCommunityIcons/import { colors, spacing, fonts  } from "../../placeholder";../../constants/theme";/importnativeModulesManager from ../../utils/nativeModules"/importnotificationManager from "../../utils/notifications//////
-import React, { useState, useEffect    } from "../../placeholder";react";"
-import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/////      View,;"
-  Text,
+import React, { useState, useEffect    } from "../../placeholder";react
+import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/////      View,"
+
+importIcon from "react-native-vector-icons/MaterialCommunityIcons/import { colors, spacing, fonts  } from "../../placeholder";../../constants/theme";/importnativeModulesManager from ../../utils/nativeModules"/importnotificationManager from "../../utils/notifications// Text,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
   Alert,
   Switch,
-  { ActivityIndicator } from "react-native;"
+  { ActivityIndicator } from "react-native;";
 interface FeatureStatus { available: boolean,
   enabled: boolean,
   loading: boolean;
@@ -21,13 +21,9 @@ interface NativeFeaturesState { camera: FeatureStatus,
     location: boolean,
     notifications: boolean}
 }
-const NativeFeaturesDemo: React.FC  = () => {;}
-  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor("NativeFeaturesDemo", {
-    trackRender: true,
-    trackMemory: false,
-    warnThreshold: 100, // ms //////     };);
-  const [features, setFeatures] = useState<NativeFeaturesState />({/////        camera: { available: false, enabled: false, loading: fal;s;e ;},;
-    voice: { available: false, enabled: false, loading: false},
+const NativeFeaturesDemo: React.FC  = () => {}
+  // 性能监控 // const performanceMonitor = usePerformanceMonitor("NativeFeaturesDemo", {trackRender: true,trackMemory: false,warnThreshold: 100, // ms // };);
+  const [features, setFeatures] = useState<NativeFeaturesState />({/////        camera: { available: false, enabled: false, loading: fal;s;e ;},voice: { available: false, enabled: false, loading: false},
     location: { available: false, enabled: false, loading: false},
     notifications: { available: false, enabled: false, loading: false},
     permissions: {
@@ -39,14 +35,14 @@ const NativeFeaturesDemo: React.FC  = () => {;}
   });
   const [isInitializing, setIsInitializing] = useState<boolean>(tru;e;);
   useEffect((); => {}
-    const effectStart = performance.now()
+    const effectStart = performance.now();
     initializeFeatures();
-  }, []) // TODO: 检查依赖项  * // TODO: 检查依赖项  * / TODO: 检查依赖项* * * // TODO: 检查依赖项  * * * // TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项// , TODO: 检查依赖项// , TODO: 检查依赖项// //  //////     初始化所有原生功能  const initializeFeatures = async() => {}
+  }, []) // TODO: 检查依赖项  * // TODO: 检查依赖项  * / TODO: 检查依赖项* * * // TODO: 检查依赖项  * * * // TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项// , TODO: 检查依赖项// , TODO: 检查依赖项// //  // 初始化所有原生功能  const initializeFeatures = async() => {};
     setIsInitializing(tru;e;);
     try {
-      // 检查原生模块状态 //////     const moduleStatus = nativeModulesManager.getModulesStatus;
-      // 检查通知系统状态 //////     const notificationStatus = notificationManager.getNotificationStatus;
-      // 初始化健康功能 //////     const healthFeatures = await nativeModulesManager.initializeHealthFeature;s;
+      // 检查原生模块状态 // const moduleStatus = nativeModulesManager.getModulesStatus;
+      // 检查通知系统状态 // const notificationStatus = notificationManager.getNotificationStatus;
+      // 初始化健康功能 // const healthFeatures = await nativeModulesManager.initializeHealthFeature;s;
       setFeatures(prev => ({
         ...prev,
         camera: {
@@ -73,7 +69,7 @@ const NativeFeaturesDemo: React.FC  = () => {;}
           camera: healthFeatures.permissions.camera.granted,
           microphone: healthFeatures.permissions.microphone.granted,
           location: healthFeatures.permissions.location.granted,
-          notifications: false, // 需要异步检查 //////     }
+          notifications: false, // 需要异步检查 // }
       }))
       } catch (error) {
       Alert.alert("初始化失败, "部分原生功能可能无法正常使用");"
@@ -81,26 +77,24 @@ const NativeFeaturesDemo: React.FC  = () => {;}
       setIsInitializing(false);
     }
   };
-  //////     请求所有健康权限  const requestAllPermissions = async() => {}
+  // 请求所有健康权限  const requestAllPermissions = async() => {};
     setIsInitializing(tru;e;);
     try {
       const success = await nativeModulesManager.requestHealthPermissio;n;s;
       if (success) {
-        // 重新检查权限状态 //////     await initializeFeatures(;)
+        // 重新检查权限状态 // await initializeFeatures(;);
       }
     } catch (error) {
       } finally {
       setIsInitializing(false);
     }
   };
-  //////     测试相机功能  const testCamera = async() => {}
-    setFeatures(prev => ({;
-      ...prev,
+  // 测试相机功能  const testCamera = async() => {};
+    setFeatures(prev => ({...prev,
       camera: { ...prev.camera, loading: tr;u;e ;}
     }););
     try {
-      const photo = await nativeModulesManager.takePhoto({;
-        quality: "high,;"
+      const photo = await nativeModulesManager.takePhoto({quality: "high,",
         cameraPosition: "bac;k"
       ;};);
       if (photo) {
@@ -119,17 +113,16 @@ const NativeFeaturesDemo: React.FC  = () => {;}
       }););
     }
   };
-  //////     测试语音识别功能  const testVoiceRecognition = async() => {}
-    setFeatures(prev => ({;
-      ...prev,
+  // 测试语音识别功能  const testVoiceRecognition = async() => {};
+    setFeatures(prev => ({...prev,
       voice: { ...prev.voice, loading: tr;u;e ;}
     });)
     try {
       await nativeModulesManager.startVoiceRecognition({
-        locale: "zh-CN,"
+        locale: "zh-CN,",
         continuous: false,
         timeout: 5000};);
-      // 模拟5秒后停止 //////     setTimeout(async() => {}
+      // 模拟5秒后停止 // setTimeout(async() => {}
         await nativeModulesManager.stopVoiceRecognition;
         setFeatures(prev => ({
           ...prev,
@@ -144,15 +137,13 @@ const NativeFeaturesDemo: React.FC  = () => {;}
       }););
     }
   };
-  //////     测试位置服务功能  const testLocation = async() => {}
-    setFeatures(prev => ({;
-      ...prev,
+  // 测试位置服务功能  const testLocation = async() => {};
+    setFeatures(prev => ({...prev,
       location: { ...prev.location, loading: tr;u;e ;}
     }););
     try {
-      const location = await nativeModulesManager.getCurrentLocation({;
-        accuracy: high",;"
-        timeout: 100};)
+      const location = await nativeModulesManager.getCurrentLocation({accuracy: high","
+        timeout: 100};);
       if (location) {
         Alert.alert(
           "定位成功,"
@@ -163,7 +154,7 @@ const NativeFeaturesDemo: React.FC  = () => {;}
           location: { ...prev.location, enabled: true, loading: false}
         });)
       } else {
-        throw new Error("定位失败;";)
+        throw new Error("定位失败;";);
       }
     } catch (error) {
       setFeatures(prev => ({
@@ -172,17 +163,13 @@ const NativeFeaturesDemo: React.FC  = () => {;}
       }););
     }
   };
-  //////     测试推送通知功能  const testNotifications = async() => {}
-    setFeatures(prev => ({;
-      ...prev,
+  // 测试推送通知功能  const testNotifications = async() => {};
+    setFeatures(prev => ({...prev,
       notifications: { ...prev.notifications, loading: tr;u;e ;}
     });)
     try {
-      // 创建测试通知 //////     const success = await notificationManager.scheduleLocalNotification({
-        id: "test_notification",
-        title: 测试通知","
-        body: "这是一个测试通知，用于验证推送功能是否正常工作,"
-        date: new Date(Date.n;o;w + 3000), // 3秒后 //////     })
+      // 创建测试通知 // const success = await notificationManager.scheduleLocalNotification({id: "test_notification",title: 测试通知",";
+        body: "这是一个测试通知，用于验证推送功能是否正常工作,",date: new Date(Date.n;o;w + 3000), // 3秒后 // })
       if (success) {
         Alert.alert("通知测试", 测试通知已安排，将在3秒后显示")"
         setFeatures(prev => ({
@@ -199,17 +186,16 @@ const NativeFeaturesDemo: React.FC  = () => {;}
       }););
     }
   };
-  //////     创建健康提醒  const createHealthReminders = async() => {}
-    try {;
-      await notificationManager.createCommonHealthReminde;r;s;(;)
+  // 创建健康提醒  const createHealthReminders = async() => {};
+    try {await notificationManager.createCommonHealthReminde;r;s;(;)
       Alert.alert("健康提醒, "常用健康提醒模板已创建，您可以在设置中启用")"
     } catch (error) {
       Alert.alert("创建失败, "健康提醒创建失败，请稍后重试");"
     }
   };
-  //////     渲染功能状态指示器  const renderStatusIndicator = useCallback(() => {}
-    // TODO: Implement function body //////     const effectEnd = performance.now;
-    performanceMonitor.recordEffect(effectEnd - effectStart)
+  // 渲染功能状态指示器  const renderStatusIndicator = useCallback(() => {;
+    // TODO: Implement function body // const effectEnd = performance.now;
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [])
     if (status.loading) {
       return <ActivityIndicator size="small" color={colors.primary} ;//>/////        }
@@ -220,29 +206,27 @@ const NativeFeaturesDemo: React.FC  = () => {;}
     if (status.available) {
       return <Icon name="circle-outline" size={20} color={colors.textSecondary} ;//>/////        }
     return <Icon name="close-circle" size={20} color={colors.error} ;//>;/////      };
-  //////     渲染权限状态  const renderPermissionStatus = useCallback(() => {}
-    // TODO: Implement function body //////     const effectEnd = performance.now;
-    performanceMonitor.recordEffect(effectEnd - effectStart)
+  // 渲染权限状态  const renderPermissionStatus = useCallback(() => {;
+    // TODO: Implement function body // const effectEnd = performance.now;
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-    // 记录渲染性能 //////
-    performanceMonitor.recordRender()
-    return (
-      <Icon,
-        name={granted ? "shield-check" : "shield-alert"}
+    // 记录渲染性能 // performanceMonitor.recordRender();
+    return (;
+      <Icon,name={granted ? "shield-check" : "shield-alert"};
         size={16};
         color={granted ? colors.success: colors.warni;n;g;} />/////        );
   };
   if (isInitializing) {
-    return (
+    return (;
       <View style={styles.loadingContainer} />/        <ActivityIndicator size="large" color={colors.primary} />/        <Text style={styles.loadingText} />正在初始化原生功能...</Text>/      </View>/////        ;)
   }
-  return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false} />/      <View style={styles.header} />/        <Icon name="cellphone-cog" size={32} color={colors.primary} />/        <Text style={styles.title} />原生功能演示</Text>/        <Text style={styles.subtitle} />测试设备权限和原生模块集成</Text>/      </View>/////
-      {// 权限状态 }/      <View style={styles.section} />/        <Text style={styles.sectionTitle} />权限状态</Text>/        <View style={styles.permissionGrid} />/          <View style={styles.permissionItem} />/////                {renderPermissionStatus(features.permissions.camera)}
-            <Text style={styles.permissionText} />相机</Text>/          </View>/          <View style={styles.permissionItem} />/////                {renderPermissionStatus(features.permissions.microphone)}
-            <Text style={styles.permissionText} />麦克风</Text>/          </View>/          <View style={styles.permissionItem} />/////                {renderPermissionStatus(features.permissions.location)}
-            <Text style={styles.permissionText} />位置</Text>/          </View>/          <View style={styles.permissionItem} />/////                {renderPermissionStatus(features.permissions.notifications)}
-            <Text style={styles.permissionText} />通知</Text>/          </View>/        </View>/////
+  return (;
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false} />/      <View style={styles.header} />/        <Icon name="cellphone-cog" size={32} color={colors.primary} />/        <Text style={styles.title} />原生功能演示</Text>/        <Text style={styles.subtitle} />测试设备权限和原生模块集成</Text>/      </View>/////;
+      {// 权限状态 }/      <View style={styles.section} />/        <Text style={styles.sectionTitle} />权限状态</Text>/        <View style={styles.permissionGrid} />/          <View style={styles.permissionItem} />/////                {renderPermissionStatus(features.permissions.camera)};
+            <Text style={styles.permissionText} />相机</Text>/          </View>/          <View style={styles.permissionItem} />/////                {renderPermissionStatus(features.permissions.microphone)};
+            <Text style={styles.permissionText} />麦克风</Text>/          </View>/          <View style={styles.permissionItem} />/////                {renderPermissionStatus(features.permissions.location)};
+            <Text style={styles.permissionText} />位置</Text>/          </View>/          <View style={styles.permissionItem} />/////                {renderPermissionStatus(features.permissions.notifications)};
+            <Text style={styles.permissionText} />通知</Text>/          </View>/        </View>/////;
         <TouchableOpacity;
 style={styles.permissionButton}
           onPress={requestAllPermissions}
@@ -296,14 +280,13 @@ style={[styles.testButton, styles.halfButton]}
              accessibilityLabel="TODO: 添加无障碍标签" />/              <Text style={styles.testButtonText} />创建提醒</Text>/            </TouchableOpacity>/          </View>/        </View>/      </View>/////
       {// 状态说明 }/      <View style={styles.section} />/        <Text style={styles.sectionTitle} />状态说明</Text>/        <View style={styles.legendContainer} />/          <View style={styles.legendItem} />/            <Icon name="check-circle" size={16} color={colors.success} />/            <Text style={styles.legendText} />功能已启用</Text>/          </View>/          <View style={styles.legendItem} />/            <Icon name="circle-outline" size={16} color={colors.textSecondary} />/            <Text style={styles.legendText} />功能可用</Text>/          </View>/          <View style={styles.legendItem} />/            <Icon name="close-circle" size={16} color={colors.error} />/            <Text style={styles.legendText} />功能不可用</Text>/          </View>/          <View style={styles.legendItem} />/            <Icon name="alert-circle" size={16} color={colors.error} />/            <Text style={styles.legendText} />功能错误</Text>/          </View>/        </View>/      </View>/    </ScrollView>/////      );
 }
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     flex: 1,
     backgroundColor: colors.background;
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: "center,"
+    justifyContent: "center,",
     alignItems: "center",
     backgroundColor: colors.background;
   },
@@ -320,7 +303,7 @@ const styles = StyleSheet.create({;
   },
   title: {
     fontSize: fonts.size.xl,
-    fontWeight: "600,"
+    fontWeight: "600,",
     color: colors.text,
     marginTop: spacing.sm;
   },
@@ -344,13 +327,13 @@ const styles = StyleSheet.create({;
     marginBottom: spacing.md;
   },
   permissionGrid: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     flexWrap: "wrap",
     justifyContent: space-between","
     marginBottom: spacing.md;
   },
   permissionItem: {
-    width: "48%,"
+    width: "48%,",
     flexDirection: "row",
     alignItems: center","
     padding: spacing.sm,
@@ -364,7 +347,7 @@ const styles = StyleSheet.create({;
     color: colors.text;
   },
   permissionButton: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center",
     justifyContent: center","
     backgroundColor: colors.primary,
@@ -374,7 +357,7 @@ const styles = StyleSheet.create({;
   permissionButtonText: {
     marginLeft: spacing.sm,
     fontSize: fonts.size.md,
-    fontWeight: "600,"
+    fontWeight: "600,",
     color: "white"
   },
   featureCard: {
@@ -385,7 +368,7 @@ const styles = StyleSheet.create({;
   },
   featureHeader: {
     flexDirection: row","
-    alignItems: "center,"
+    alignItems: "center,",
     marginBottom: spacing.sm;
   },
   featureName: {
@@ -413,7 +396,7 @@ const styles = StyleSheet.create({;
   },
   testButtonText: {
     fontSize: fonts.size.md,
-    fontWeight: "600,"
+    fontWeight: "600,",
     color: "white"
   },
   buttonRow: {
@@ -423,17 +406,16 @@ const styles = StyleSheet.create({;
   halfButton: { width: "48%"  },
   legendContainer: {
     flexDirection: row","
-    flexWrap: "wrap,"
+    flexWrap: "wrap,",
     justifyContent: "space-between"
   },
   legendItem: {
     flexDirection: row","
-    alignItems: "center,"
+    alignItems: "center,",
     width: "48%',"'
     marginBottom: spacing.sm;
   },
   legendText: {
     marginLeft: spacing.sm,
-    fontSize: fonts.size.sm,;
-    color: colors.textSecondary};};);
+    fontSize: fonts.size.sm,color: colors.textSecondary};};);
 export default React.memo(NativeFeaturesDemo);

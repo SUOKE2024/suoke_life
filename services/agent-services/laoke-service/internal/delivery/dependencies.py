@@ -1,14 +1,8 @@
-#!/usr/bin/env python
-
 """
-老克智能体服务 - 依赖注入模块
-提供FastAPI应用中使用的依赖注入函数
+dependencies - 索克生活项目模块
 """
-
-import logging
 
 from fastapi import Depends, Request
-
 from internal.agent.agent_manager import AgentManager
 from internal.community.community_service import CommunityService
 from internal.knowledge.knowledge_service import KnowledgeService
@@ -17,6 +11,17 @@ from internal.repository.knowledge_repository import KnowledgeRepository
 from internal.repository.session_repository import SessionRepository
 from pkg.utils.config import Config
 from pkg.utils.metrics import MetricsCollector
+import logging
+
+#!/usr/bin/env python
+
+"""
+老克智能体服务 - 依赖注入模块
+提供FastAPI应用中使用的依赖注入函数
+"""
+
+
+
 
 logger = logging.getLogger(__name__)
 

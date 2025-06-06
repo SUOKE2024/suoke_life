@@ -1,3 +1,20 @@
+"""
+health_data_pipeline - 索克生活项目模块
+"""
+
+        import hashlib
+    from zk_snarks import (
+from ..core.data_standardization import (
+from dataclasses import dataclass, asdict
+from datetime import datetime
+from enum import Enum
+from typing import Dict, List, Optional, Any, Tuple
+import asyncio
+import json
+import logging
+import os
+import sys
+
 #!/usr/bin/env python3
 """
 健康数据流水线服务
@@ -6,21 +23,11 @@
 支持数据收集、标准化、隐私保护验证、存储和查询等功能。
 """
 
-import asyncio
-import json
-from dataclasses import dataclass, asdict
-from datetime import datetime
-from typing import Dict, List, Optional, Any, Tuple
-import logging
-from enum import Enum
 
 # 导入零知识验证模块
-import sys
-import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../../common/security'))
 
 try:
-    from zk_snarks import (
         HealthDataZKService, 
         HealthDataProof, 
         get_zk_service,
@@ -53,11 +60,11 @@ except ImportError:
         def verify_health_data_proof(self, proof):
             return True
     
-    def get_zk_service():
+        @cache(timeout=300)  # 5分钟缓存
+def get_zk_service():
         return HealthDataZKService()
 
 # 导入数据标准化模块
-from ..core.data_standardization import (
     HealthDataStandardizer,
     StandardizedData,
     DataType,
@@ -418,7 +425,6 @@ class HealthDataPipeline:
     
     def _calculate_data_hash(self, data: Dict[str, Any]) -> int:
         """计算数据哈希（简化版本）"""
-        import hashlib
         data_str = json.dumps(data, sort_keys=True)
         hash_obj = hashlib.sha256(data_str.encode())
         # 转换为整数（取前8字节）

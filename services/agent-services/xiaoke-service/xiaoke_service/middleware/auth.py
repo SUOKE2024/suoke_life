@@ -1,16 +1,21 @@
 """
+auth - 索克生活项目模块
+"""
+
+from collections.abc import Callable
+from fastapi import Request, Response
+from starlette.middleware.base import BaseHTTPMiddleware
+from xiaoke_service.core.logging import get_logger
+import time
+
+"""
 认证中间件
 
 处理用户认证和授权。
 """
 
-import time
-from collections.abc import Callable
 
-from fastapi import Request, Response
-from starlette.middleware.base import BaseHTTPMiddleware
 
-from xiaoke_service.core.logging import get_logger
 
 logger = get_logger(__name__)
 

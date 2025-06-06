@@ -1,3 +1,13 @@
+"""
+test_simple_server - 索克生活项目模块
+"""
+
+from fastapi import FastAPI
+from pathlib import Path
+import logging
+import sys
+import uvicorn
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -5,15 +15,10 @@
 用于验证基础功能和依赖
 """
 
-import sys
-import logging
-from pathlib import Path
 
 # 添加项目根目录到Python路径
 sys.path.append(str(Path(__file__).parent))
 
-from fastapi import FastAPI
-import uvicorn
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)

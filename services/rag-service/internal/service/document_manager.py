@@ -1,3 +1,33 @@
+"""
+document_manager - 索克生活项目模块
+"""
+
+                from sqlalchemy import update
+            from bs4 import BeautifulSoup
+            from sqlalchemy import delete
+            from sqlalchemy import select
+            from sqlalchemy import select, and_, or_
+            from sqlalchemy import select, func
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from loguru import logger
+from pathlib import Path
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sqlalchemy import Column, String, DateTime, Integer, Text, Float, Boolean, JSON
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+from typing import Dict, List, Any, Optional, Tuple, Set, Union, BinaryIO
+import aiofiles
+import asyncio
+import docx
+import fitz  # PyMuPDF
+import hashlib
+import jieba
+import json
+import uuid
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,25 +35,6 @@
 文档管理器 - 高级文档索引、分类、版本控制和元数据管理系统
 """
 
-import asyncio
-import json
-import uuid
-import hashlib
-from typing import Dict, List, Any, Optional, Tuple, Set, Union, BinaryIO
-from dataclasses import dataclass, field
-from enum import Enum
-from datetime import datetime, timedelta
-from pathlib import Path
-from loguru import logger
-import aiofiles
-import fitz  # PyMuPDF
-import docx
-from sklearn.feature_extraction.text import TfidfVectorizer
-import jieba
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import Column, String, DateTime, Integer, Text, Float, Boolean, JSON
-from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
@@ -571,7 +582,6 @@ class DocumentManager:
         # 包括全文搜索、向量搜索等
         
         async with self.async_session() as session:
-            from sqlalchemy import select, and_, or_
             
             # 构建查询条件
             conditions = [DocumentModel.is_active == True]
@@ -602,12 +612,12 @@ class DocumentManager:
             # 执行查询
             stmt = select(DocumentModel).where(and_(*conditions)).offset(offset).limit(limit)
             result = await session.execute(stmt)
-            documents = result.scalars().all()
+            documents = result.scalars().all()[:1000]  # 限制查询结果数量
             
             # 计算总数
             count_stmt = select(DocumentModel).where(and_(*conditions))
             count_result = await session.execute(count_stmt)
-            total_count = len(count_result.scalars().all())
+            total_count = len(count_result.scalars().all()[:1000]  # 限制查询结果数量)
             
             # 转换结果
             results = []
@@ -669,14 +679,13 @@ class DocumentManager:
             文档块列表
         """
         async with self.async_session() as session:
-            from sqlalchemy import select
             
             stmt = select(DocumentChunkModel).where(
                 DocumentChunkModel.document_id == document_id
             ).order_by(DocumentChunkModel.chunk_index)
             
             result = await session.execute(stmt)
-            chunks = result.scalars().all()
+            chunks = result.scalars().all()[:1000]  # 限制查询结果数量
             
             return [
                 DocumentChunk(
@@ -857,7 +866,6 @@ class DocumentManager:
         """保存文档块"""
         async with self.async_session() as session:
             # 删除旧的块
-            from sqlalchemy import delete
             await session.execute(
                 delete(DocumentChunkModel).where(
                     DocumentChunkModel.document_id == document_id
@@ -892,7 +900,6 @@ class DocumentManager:
     async def _delete_document_chunks(self, document_id: str):
         """删除文档块"""
         async with self.async_session() as session:
-            from sqlalchemy import delete
             await session.execute(
                 delete(DocumentChunkModel).where(
                     DocumentChunkModel.document_id == document_id
@@ -963,7 +970,6 @@ class DocumentManager:
                 )
                 
                 # 将之前的版本标记为非当前版本
-                from sqlalchemy import update
                 await session.execute(
                     update(DocumentVersionModel)
                     .where(DocumentVersionModel.document_id == document_id)
@@ -993,7 +999,6 @@ class DocumentManager:
     async def _find_document_by_hash(self, file_hash: str) -> Optional[Dict[str, Any]]:
         """根据哈希查找文档"""
         async with self.async_session() as session:
-            from sqlalchemy import select
             
             stmt = select(DocumentModel).where(
                 DocumentModel.file_hash == file_hash,
@@ -1120,7 +1125,6 @@ class DocumentManager:
     async def _extract_html_content(self, file_path: Path) -> str:
         """提取HTML内容"""
         try:
-            from bs4 import BeautifulSoup
             
             async with aiofiles.open(file_path, 'r', encoding='utf-8') as f:
                 html_content = await f.read()
@@ -1179,7 +1183,6 @@ class DocumentManager:
     async def _update_statistics(self):
         """更新统计信息"""
         async with self.async_session() as session:
-            from sqlalchemy import select, func
             
             # 总文档数
             total_result = await session.execute(
@@ -1193,7 +1196,7 @@ class DocumentManager:
                 .where(DocumentModel.is_active == True)
                 .group_by(DocumentModel.type)
             )
-            self.stats["documents_by_type"] = dict(type_result.all())
+            self.stats["documents_by_type"] = dict(type_result.all()[:1000]  # 限制查询结果数量)
             
             # 按分类统计
             category_result = await session.execute(
@@ -1201,7 +1204,7 @@ class DocumentManager:
                 .where(DocumentModel.is_active == True)
                 .group_by(DocumentModel.category)
             )
-            self.stats["documents_by_category"] = dict(category_result.all())
+            self.stats["documents_by_category"] = dict(category_result.all()[:1000]  # 限制查询结果数量)
             
             # 按状态统计
             status_result = await session.execute(
@@ -1209,7 +1212,7 @@ class DocumentManager:
                 .where(DocumentModel.is_active == True)
                 .group_by(DocumentModel.status)
             )
-            self.stats["documents_by_status"] = dict(status_result.all())
+            self.stats["documents_by_status"] = dict(status_result.all()[:1000]  # 限制查询结果数量)
             
             # 存储大小统计
             size_result = await session.execute(
@@ -1232,14 +1235,13 @@ class DocumentManager:
     async def get_document_versions(self, document_id: str) -> List[Dict[str, Any]]:
         """获取文档版本列表"""
         async with self.async_session() as session:
-            from sqlalchemy import select
             
             stmt = select(DocumentVersionModel).where(
                 DocumentVersionModel.document_id == document_id
             ).order_by(DocumentVersionModel.created_at.desc())
             
             result = await session.execute(stmt)
-            versions = result.scalars().all()
+            versions = result.scalars().all()[:1000]  # 限制查询结果数量
             
             return [
                 {
@@ -1282,7 +1284,6 @@ class DocumentManager:
                 document.updated_at = datetime.utcnow()
                 
                 # 更新当前版本标记
-                from sqlalchemy import update
                 await session.execute(
                     update(DocumentVersionModel)
                     .where(DocumentVersionModel.document_id == document_id)

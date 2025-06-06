@@ -1,3 +1,23 @@
+"""
+test_e2e - 索克生活项目模块
+"""
+
+from fastapi import FastAPI, Request, Response
+from fastapi.testclient import TestClient
+from internal.delivery.rest.middleware import setup_middlewares
+from internal.delivery.rest.routes import setup_routes
+from internal.model.config import AuthConfig, CacheConfig, GatewayConfig, JwtConfig, MiddlewareConfig, RouteConfig
+from internal.service.service_registry import ServiceRegistry
+from pkg.utils.auth import JWTManager
+from pkg.utils.cache import CacheManager
+from unittest.mock import AsyncMock, MagicMock, Mock, patch
+import asyncio
+import json
+import os
+import pytest
+import sys
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,26 +26,11 @@ API网关端到端测试
 模拟真实环境下的API网关调用场景
 """
 
-import asyncio
-import json
-import os
-import sys
-import time
-from unittest.mock import AsyncMock, MagicMock, Mock, patch
 
-import pytest
-from fastapi import FastAPI, Request, Response
-from fastapi.testclient import TestClient
 
 # 添加项目根目录到Python路径
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from internal.delivery.rest.middleware import setup_middlewares
-from internal.delivery.rest.routes import setup_routes
-from internal.model.config import AuthConfig, CacheConfig, GatewayConfig, JwtConfig, MiddlewareConfig, RouteConfig
-from internal.service.service_registry import ServiceRegistry
-from pkg.utils.auth import JWTManager
-from pkg.utils.cache import CacheManager
 
 # 模拟服务器
 class MockServiceServer:
@@ -40,7 +45,8 @@ class MockServiceServer:
     def setup_routes(self):
         """设置路由"""
         @self.app.get("/users/{user_id}")
-        async def get_user(user_id: str):
+        async     @cache(timeout=300)  # 5分钟缓存
+def get_user(user_id: str):
             return {
                 "id": user_id,
                 "name": f"Test User {user_id}",
@@ -70,7 +76,8 @@ class MockServiceServer:
         @self.app.get("/error")
         async def error_endpoint():
             # 模拟错误
-            return Response(status_code=500, content=json.dumps({"error": "Internal Server Error"}))
+            return Response(status_code=500, content=json.dumps({"error": "In    @cache(timeout=300)  # 5分钟缓存
+ternal Server Error"}))
     
     def get_test_client(self):
         """获取测试客户端"""

@@ -1,6 +1,6 @@
-import React from "react";
 import FiveDiagnosisEngine from "../FiveDiagnosisEngine";
-import { performance } from "perf_hooks";
+
+import React from "react";
 
 describe("FiveDiagnosisEngine", () => {
   beforeEach(() => {
@@ -10,26 +10,25 @@ describe("FiveDiagnosisEngine", () => {
   describe("FiveDiagnosisEngine", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-      const result = FiveDiagnosisEngine(/* valid params */);
+      const result = FiveDiagnosisEngine(// valid params);
       expect(result).toBeDefined();
     });
 
     it("should handle edge cases", () => {
       // Add test cases
-      const result = FiveDiagnosisEngine(/* edge case params */);
+      const result = FiveDiagnosisEngine(// edge case params);
       expect(result).toBeDefined();
     });
 
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
       expect(() => {
-        FiveDiagnosisEngine(/* invalid params */);
+        FiveDiagnosisEngine(// invalid params);
       }).not.toThrow();
     });
 
-    it("should return correct output format", () => {
-      // Add test cases
-      const result = FiveDiagnosisEngine(/* test params */);
+    it("should return correct output format", () => {// Add test cases;
+      const result = FiveDiagnosisEngine(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
@@ -40,7 +39,7 @@ describe("FiveDiagnosisEngine", () => {
       const startTime = performance.now();
       for (let i = 0; i < iterations; i++) {
         // Execute performance-critical functions
-        FiveDiagnosisEngine(/* test params */);
+        FiveDiagnosisEngine(// test params);
       }
       const endTime = performance.now();
       const averageTime = (endTime - startTime) / iterations;
@@ -62,7 +61,7 @@ describe("FiveDiagnosisEngine", () => {
       const initialMemory = process.memoryUsage().heapUsed;
       // Execute function multiple times
       for (let i = 0; i < 1000; i++) {
-        FiveDiagnosisEngine(/* test params */);
+        FiveDiagnosisEngine(// test params);
       }
       // Force garbage collection if available
       if (global.gc) {

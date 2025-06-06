@@ -1,3 +1,14 @@
+"""
+logger - 索克生活项目模块
+"""
+
+from .config import Config
+from datetime import datetime
+import json
+import logging
+import os
+import sys
+
 #!/usr/bin/env python
 
 """
@@ -5,13 +16,7 @@
 配置结构化日志记录和文件输出
 """
 
-import json
-import logging
-import os
-import sys
-from datetime import datetime
 
-from .config import Config
 
 def setup_logger(logger: logging.Logger, level: str = "INFO") -> None:
     """

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import {
+import {import { fiveDiagnosisService, FiveDiagnosisServiceStatus } from '../../services/fiveDiagnosisService';
+
   View,
   Text,
   StyleSheet,
@@ -8,7 +9,6 @@ import {
   Animated,
   Dimensions
 } from 'react-native';
-import { fiveDiagnosisService, FiveDiagnosisServiceStatus } from '../../services/fiveDiagnosisService';
 
 interface DiagnosisStatusMonitorProps {
   onStatusChange?: (status: FiveDiagnosisServiceStatus) => void;
@@ -24,27 +24,16 @@ interface ServiceHealth {
   calculation: boolean;
 }
 
-export default function DiagnosisStatusMonitor({
+export default React.memo(function DiagnosisStatusMonitor({
   onStatusChange,
   showDetails = false,
   refreshInterval = 30000 // 30秒刷新一次
 }: DiagnosisStatusMonitorProps) {
-  const [status, setStatus] = useState<FiveDiagnosisServiceStatus>({
-    isInitialized: false,
-    isProcessing: false,
-    performanceMetrics: {
-      averageResponseTime: 0,
-      successRate: 0,
-      totalSessions: 0
-    }
+  const [status, setStatus] = useState<FiveDiagnosisServiceStatus>({isInitialized: false,isProcessing: false,performanceMetrics: {averageResponseTime: 0,successRate: 0,totalSessions: 0;
+    };
   });
-  
-  const [serviceHealth, setServiceHealth] = useState<ServiceHealth>({
-    inquiry: false,
-    look: false,
-    listen: false,
-    palpation: false,
-    calculation: false
+
+  const [serviceHealth, setServiceHealth] = useState<ServiceHealth>({inquiry: false,look: false,listen: false,palpation: false,calculation: false;
   });
 
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -55,14 +44,12 @@ export default function DiagnosisStatusMonitor({
   const fadeAnimation = React.useRef(new Animated.Value(1)).current;
 
   // 更新状态
-  const updateStatus = useCallback(async () => {
-    try {
-      setIsRefreshing(true);
-      
+  const updateStatus = useCallback(async () => {try {setIsRefreshing(true);
+
       // 获取服务状态
       const serviceStatus = fiveDiagnosisService.getServiceStatus();
       setStatus(serviceStatus);
-      
+
       // 检查各个服务的健康状态
       // 注意：这里需要实际的健康检查API
       // 暂时使用模拟数据
@@ -73,15 +60,15 @@ export default function DiagnosisStatusMonitor({
         palpation: Math.random() > 0.1,
         calculation: Math.random() > 0.1
       };
-      
+
       setServiceHealth(healthStatus);
       setLastUpdateTime(new Date());
-      
+
       // 通知父组件状态变化
       if (onStatusChange) {
         onStatusChange(serviceStatus);
       }
-      
+
     } catch (error) {
       console.error('状态更新失败:', error);
     } finally {
@@ -92,9 +79,9 @@ export default function DiagnosisStatusMonitor({
   // 定期更新状态
   useEffect(() => {
     updateStatus();
-    
+
     const interval = setInterval(updateStatus, refreshInterval);
-    
+
     return () => clearInterval(interval);
   }, [updateStatus, refreshInterval]);
 
@@ -113,7 +100,7 @@ export default function DiagnosisStatusMonitor({
             toValue: 1,
             duration: 1000,
             useNativeDriver: true
-          })
+          });
         ])
       ).start();
     } else {
@@ -122,104 +109,89 @@ export default function DiagnosisStatusMonitor({
   }, [status.isProcessing, pulseAnimation]);
 
   // 获取整体健康状态
-  const getOverallHealth = (): 'healthy' | 'warning' | 'error' => {
-    const healthyServices = Object.values(serviceHealth).filter(Boolean).length;
+  const getOverallHealth = (): 'healthy' | 'warning' | 'error' => {const healthyServices = Object.values(serviceHealth).filter(Boolean).length;
     const totalServices = Object.values(serviceHealth).length;
-    
+
     if (healthyServices === totalServices) return 'healthy';
     if (healthyServices >= totalServices * 0.8) return 'warning';
     return 'error';
   };
 
   // 获取状态颜色
-  const getStatusColor = (health: 'healthy' | 'warning' | 'error'): string => {
-    switch (health) {
-      case 'healthy': return '#28a745';
+  const getStatusColor = (health: 'healthy' | 'warning' | 'error'): string => {switch (health) {case 'healthy': return '#28a745';
       case 'warning': return '#ffc107';
       case 'error': return '#dc3545';
     }
   };
 
   // 获取状态图标
-  const getStatusIcon = (health: 'healthy' | 'warning' | 'error'): string => {
-    switch (health) {
-      case 'healthy': return '✅';
+  const getStatusIcon = (health: 'healthy' | 'warning' | 'error'): string => {switch (health) {case 'healthy': return '✅';
       case 'warning': return '⚠️';
       case 'error': return '❌';
     }
   };
 
   // 渲染服务健康状态
-  const renderServiceHealth = () => {
-    if (!showDetails) return null;
+  const renderServiceHealth = () => {if (!showDetails) return null;
 
     return (
       <View style={styles.serviceHealthContainer}>
         <Text style={styles.sectionTitle}>服务状态</Text>
-        {Object.entries(serviceHealth).map(([service, isHealthy]) => (
-          <View key={service} style={styles.serviceItem}>
-            <Text style={styles.serviceName}>
-              {getServiceDisplayName(service)}
-            </Text>
-            <View style={[
-              styles.serviceStatus,
-              { backgroundColor: isHealthy ? '#28a745' : '#dc3545' }
-            ]}>
-              <Text style={styles.serviceStatusText}>
-                {isHealthy ? '正常' : '异常'}
-              </Text>
-            </View>
-          </View>
-        ))}
-      </View>
+        {Object.entries(serviceHealth).map(([service, isHealthy]) => (;
+          <View key={service} style={styles.serviceItem}>;
+            <Text style={styles.serviceName}>;
+              {getServiceDisplayName(service)};
+            </Text>;
+            <View style={[;
+              styles.serviceStatus,{ backgroundColor: isHealthy ? '#28a745' : '#dc3545' };
+            ]}>;
+              <Text style={styles.serviceStatusText}>;
+                {isHealthy ? '正常' : '异常'};
+              </Text>;
+            </View>;
+          </View>;
+        ))};
+      </View>;
     );
   };
 
   // 渲染性能指标
-  const renderPerformanceMetrics = () => {
-    if (!showDetails) return null;
+  const renderPerformanceMetrics = () => {if (!showDetails) return null;
 
     const { performanceMetrics } = status;
 
     return (
       <View style={styles.metricsContainer}>
         <Text style={styles.sectionTitle}>性能指标</Text>
-        
+
         <View style={styles.metricItem}>
           <Text style={styles.metricLabel}>平均响应时间</Text>
           <Text style={styles.metricValue}>
             {Math.round(performanceMetrics.averageResponseTime)}ms
           </Text>
         </View>
-        
+
         <View style={styles.metricItem}>
-          <Text style={styles.metricLabel}>成功率</Text>
-          <Text style={[
-            styles.metricValue,
-            { color: performanceMetrics.successRate > 0.9 ? '#28a745' : '#ffc107' }
-          ]}>
-            {Math.round(performanceMetrics.successRate * 100)}%
-          </Text>
-        </View>
-        
-        <View style={styles.metricItem}>
-          <Text style={styles.metricLabel}>总会话数</Text>
-          <Text style={styles.metricValue}>
-            {performanceMetrics.totalSessions}
-          </Text>
-        </View>
-      </View>
+          <Text style={styles.metricLabel}>成功率</Text>;
+          <Text style={[;
+            styles.metricValue,{ color: performanceMetrics.successRate > 0.9 ? '#28a745' : '#ffc107' };
+          ]}>;
+            {Math.round(performanceMetrics.successRate * 100)}%;
+          </Text>;
+        </View>;
+        ;
+        <View style={styles.metricItem}>;
+          <Text style={styles.metricLabel}>总会话数</Text>;
+          <Text style={styles.metricValue}>;
+            {performanceMetrics.totalSessions};
+          </Text>;
+        </View>;
+      </View>;
     );
   };
 
   // 获取服务显示名称
-  const getServiceDisplayName = (service: string): string => {
-    const names: Record<string, string> = {
-      inquiry: '问诊服务',
-      look: '望诊服务',
-      listen: '闻诊服务',
-      palpation: '切诊服务',
-      calculation: '算诊服务'
+  const getServiceDisplayName = (service: string): string => {const names: Record<string, string> = {inquiry: '问诊服务',look: '望诊服务',listen: '闻诊服务',palpation: '切诊服务',calculation: '算诊服务';
     };
     return names[service] || service;
   };
@@ -230,7 +202,7 @@ export default function DiagnosisStatusMonitor({
 
   return (
     <View style={styles.container}>
-      {/* 主状态指示器 */}
+      {// 主状态指示器}
       <TouchableOpacity 
         style={styles.mainStatus}
         onPress={updateStatus}
@@ -251,7 +223,7 @@ export default function DiagnosisStatusMonitor({
             <Text style={styles.statusIcon}>{statusIcon}</Text>
           )}
         </Animated.View>
-        
+
         <View style={styles.statusInfo}>
           <Text style={styles.statusTitle}>
             {status.isInitialized ? '服务就绪' : '服务初始化中'}
@@ -259,22 +231,21 @@ export default function DiagnosisStatusMonitor({
           <Text style={styles.statusSubtitle}>
             {status.isProcessing ? '处理中...' : `上次更新: ${lastUpdateTime.toLocaleTimeString()}`}
           </Text>
-        </View>
-      </TouchableOpacity>
-
-      {/* 详细信息 */}
-      {showDetails && (
-        <Animated.View 
-          style={[
-            styles.detailsContainer,
-            { opacity: fadeAnimation }
-          ]}
-        >
-          {renderServiceHealth()}
-          {renderPerformanceMetrics()}
-        </Animated.View>
-      )}
-    </View>
+        </View>;
+      </TouchableOpacity>;
+;
+      {// 详细信息};
+      {showDetails && (;
+        <Animated.View ;
+          style={[;
+            styles.detailsContainer,{ opacity: fadeAnimation };
+          ]};
+        >;
+          {renderServiceHealth()};
+          {renderPerformanceMetrics()};
+        </Animated.View>;
+      )};
+    </View>;
   );
 }
 
@@ -359,20 +330,9 @@ const styles = StyleSheet.create({
   },
   metricsContainer: {
     // 样式已在上面定义
-  },
-  metricItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 6
-  },
-  metricLabel: {
-    fontSize: 14,
-    color: '#6c757d'
-  },
-  metricValue: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#1a1a1a'
-  }
+  },metricItem: {flexDirection: 'row',justifyContent: 'space-between',alignItems: 'center',paddingVertical: 6;
+  },metricLabel: {fontSize: 14,color: '#6c757d';
+  },metricValue: {fontSize: 14,fontWeight: '600',color: '#1a1a1a';
+  };
 }); 
+);

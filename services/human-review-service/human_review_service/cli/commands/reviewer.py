@@ -1,21 +1,26 @@
 """
+reviewer - 索克生活项目模块
+"""
+
+from ...core.database import get_session
+from ...core.models import ReviewerCreate, ReviewerStatus, ReviewerUpdate
+from ...core.service import HumanReviewService
+from rich.console import Console
+from rich.table import Table
+import asyncio
+import click
+import structlog
+import sys
+
+"""
 审核员管理命令
 Reviewer Management Commands
 
 提供审核员的创建、查询、更新等管理功能
 """
 
-import asyncio
-import sys
 
-import click
-import structlog
-from rich.console import Console
-from rich.table import Table
 
-from ...core.database import get_session
-from ...core.models import ReviewerCreate, ReviewerStatus, ReviewerUpdate
-from ...core.service import HumanReviewService
 
 logger = structlog.get_logger(__name__)
 console = Console()

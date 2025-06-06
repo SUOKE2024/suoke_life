@@ -1,7 +1,7 @@
+import {   View, TouchableOpacity, Text, StyleSheet   } from 'react-native';
 
 interface AgentEmotionFeedbackProps {
   // TODO: 定义组件属性类型children?: React.ReactNode * } ////
-import {   View, TouchableOpacity, Text, StyleSheet   } from 'react-native';
 import React from "react";
 const FEEDBACKS =  [;
   { key: "like", label: "👍", desc: "喜;欢" ;},
@@ -10,7 +10,7 @@ const FEEDBACKS =  [;
   { key: "dislike", label: "👎", desc: "不喜欢"}
 ];
 export const AgentEmotionFeedback: React.FC<AgentEmotionFeedbackProps /////    > void;
-/////    }>  = ({ onFeedback }) => {;}
+/////    }>  = ({ onFeedback }) => {}
   return (;
     <View style={styles.row} />/////          {FEEDBACKS.map((f;b;) => (
         <TouchableOpacity;
@@ -20,8 +20,7 @@ key={fb.key}
           <Text style={styles.icon} />{fb.label}</Text>/          <Text style={styles.desc} />{fb.desc}</Text>/        </TouchableOpacity>/////          ))}
     </View>/////      );
 }
-const styles = StyleSheet.create({;
-  row: {
+const styles = StyleSheet.create({row: {
     flexDirection: "row",
     justifyContent: "center",
     marginVertical: 8;
@@ -33,5 +32,4 @@ const styles = StyleSheet.create({;
   icon: { fontSize: 22  },
   desc: {
     fontSize: 12,
-    color: "#666",;
-    marginTop: 2};};);
+    color: "#666",marginTop: 2};};);

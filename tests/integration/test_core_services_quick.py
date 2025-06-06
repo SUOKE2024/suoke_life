@@ -1,3 +1,15 @@
+"""
+test_core_services_quick - 索克生活项目模块
+"""
+
+        from internal.service.coordinators import AccessibilityServiceCoordinator
+        from internal.service.dependency_injection import DIContainer
+        from internal.service.factories import AccessibilityServiceFactory
+        import traceback
+import asyncio
+import os
+import sys
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
@@ -5,9 +17,6 @@
 快速核心服务测试
 """
 
-import asyncio
-import sys
-import os
 
 # 添加当前目录到路径
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -15,9 +24,6 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 async def test_core_services():
     try:
         # 测试核心服务导入
-        from internal.service.dependency_injection import DIContainer
-        from internal.service.factories import AccessibilityServiceFactory
-        from internal.service.coordinators import AccessibilityServiceCoordinator
 
         print('✅ 核心模块导入成功')
 
@@ -48,7 +54,6 @@ async def test_core_services():
 
     except Exception as e:
         print(f'❌ 核心服务测试失败: {str(e)}')
-        import traceback
         traceback.print_exc()
         return False
 

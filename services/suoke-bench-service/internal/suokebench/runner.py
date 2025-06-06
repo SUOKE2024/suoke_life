@@ -1,15 +1,21 @@
 """
-SuokeBench评测运行器
+runner - 索克生活项目模块
 """
 
+        import json
+from internal.suokebench.config import BenchConfig, load_config
+from pathlib import Path
+from typing import Any
 import argparse
 import logging
 import sys
 import time
-from pathlib import Path
-from typing import Any
 
-from internal.suokebench.config import BenchConfig, load_config
+"""
+SuokeBench评测运行器
+"""
+
+
 
 logger = logging.getLogger(__name__)
 
@@ -151,7 +157,6 @@ class SuokeBenchRunner:
             task_id: 任务ID
             result: 任务结果
         """
-        import json
 
         # 保存结果到JSON文件
         result_file = self.output_dir / f"{task_id}_result.json"
@@ -166,7 +171,6 @@ class SuokeBenchRunner:
         Args:
             results: 所有任务的结果
         """
-        import json
 
         # 保存总体结果
         summary_file = self.output_dir / "summary.json"

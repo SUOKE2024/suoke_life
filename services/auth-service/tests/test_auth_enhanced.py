@@ -1,19 +1,28 @@
 """
+test_auth_enhanced - 索克生活项目模块
+"""
+
+        from auth_service.core.oauth import OAuthService
+        import re
+        import time
+        import urllib.parse
+from auth_service.cmd.server.main import create_app
+from auth_service.core.auth import AuthService
+from auth_service.models.auth import LoginResult
+from auth_service.models.user import User, UserStatus, UserSession
+from datetime import datetime, timedelta
+from fastapi.testclient import TestClient
+from sqlalchemy.ext.asyncio import AsyncSession
+from unittest.mock import Mock, patch, AsyncMock
+import asyncio
+import pytest
+
+"""
 Auth Service 增强测试
 专注于提升测试覆盖率，覆盖边界情况和异常处理
 """
 
-import pytest
-import asyncio
-from datetime import datetime, timedelta
-from unittest.mock import Mock, patch, AsyncMock
-from fastapi.testclient import TestClient
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from auth_service.core.auth import AuthService
-from auth_service.models.auth import LoginResult
-from auth_service.models.user import User, UserStatus, UserSession
-from auth_service.cmd.server.main import create_app
 
 
 class TestAuthServiceEnhanced:
@@ -68,7 +77,6 @@ class TestAuthServiceEnhanced:
         secret = auth_service.generate_mfa_secret()
         
         # Base32编码只包含A-Z和2-7
-        import re
         assert re.match(r'^[A-Z2-7]+$', secret)
         assert len(secret) == 32
     
@@ -85,7 +93,6 @@ class TestAuthServiceEnhanced:
         assert f"issuer={auth_service.settings.security.mfa_issuer_name}" in url
         
         # 验证URL编码
-        import urllib.parse
         parsed = urllib.parse.urlparse(url)
         assert parsed.scheme == "otpauth"
         assert parsed.netloc == "totp"
@@ -344,7 +351,6 @@ class TestOAuthEnhanced:
     
     def test_oauth_state_generation(self):
         """测试OAuth状态参数生成"""
-        from auth_service.core.oauth import OAuthService
         
         oauth_service = OAuthService()
         state1 = oauth_service.generate_state()
@@ -356,7 +362,6 @@ class TestOAuthEnhanced:
     
     def test_oauth_authorization_url(self):
         """测试OAuth授权URL生成"""
-        from auth_service.core.oauth import OAuthService
         
         oauth_service = OAuthService()
         
@@ -378,7 +383,6 @@ class TestSecurityEnhanced:
     
     def test_timing_attack_resistance(self, auth_service):
         """测试时序攻击抵抗性"""
-        import time
         
         password = "TestPassword123!"
         correct_hash = auth_service.get_password_hash(password)
@@ -427,7 +431,6 @@ class TestSecurityEnhanced:
         assert payload is not None
         
         # 等待令牌过期
-        import time
         time.sleep(2)
         
         # 过期后验证应该失败

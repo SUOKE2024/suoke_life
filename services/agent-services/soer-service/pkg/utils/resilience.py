@@ -1,7 +1,5 @@
-#!/usr/bin/env python3
 """
-弹性工具
-提供断路器、限流器、重试策略等弹性机制
+resilience - 索克生活项目模块
 """
 
 import asyncio
@@ -9,6 +7,13 @@ import functools
 import logging
 import threading
 import time
+
+#!/usr/bin/env python3
+"""
+弹性工具
+提供断路器、限流器、重试策略等弹性机制
+"""
+
 
 logger = logging.getLogger(__name__)
 

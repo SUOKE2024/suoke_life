@@ -1,3 +1,17 @@
+"""
+intelligent_medication_manager - 索克生活项目模块
+"""
+
+        from datetime import datetime, timedelta
+from ..observability.metrics import MetricsCollector
+from ..observability.tracing import trace_operation, SpanKind
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta, time
+from enum import Enum
+from loguru import logger
+from typing import Dict, List, Any, Optional, Tuple, Union, Set, Callable
+import warnings
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,16 +20,8 @@
 结合现代药物治疗学和中医用药理论，为用户提供安全、有效的个性化用药管理方案
 """
 
-from typing import Dict, List, Any, Optional, Tuple, Union, Set, Callable
-from dataclasses import dataclass, field
-from enum import Enum
-from datetime import datetime, timedelta, time
-from loguru import logger
-import warnings
 warnings.filterwarnings('ignore')
 
-from ..observability.metrics import MetricsCollector
-from ..observability.tracing import trace_operation, SpanKind
 
 class MedicationType(str, Enum):
     """药物类型"""
@@ -1188,7 +1194,6 @@ class MedicationScheduler:
     
     def _adjust_time(self, base_time: str, minutes: int) -> str:
         """调整时间"""
-        from datetime import datetime, timedelta
         
         time_obj = datetime.strptime(base_time, "%H:%M")
         adjusted_time = time_obj + timedelta(minutes=minutes)
@@ -1196,7 +1201,6 @@ class MedicationScheduler:
     
     def _distribute_evenly(self, count: int, wake_time: str, sleep_time: str) -> List[str]:
         """均匀分布时间"""
-        from datetime import datetime, timedelta
         
         wake = datetime.strptime(wake_time, "%H:%M")
         sleep = datetime.strptime(sleep_time, "%H:%M")

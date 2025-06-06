@@ -1,18 +1,25 @@
+"""
+extendedIntegrationTest - 索克生活项目模块
+"""
+
+    import sys
+from datetime import datetime
+from http.server import HTTPServer, BaseHTTPRequestHandler
+from localTest import (
+from threading import Thread
+from urllib.parse import urlparse, parse_qs
+import hashlib
+import json
+import logging
+import time
+import uuid
+
 #!/usr/bin/env python3
 """
 索克生活扩展集成测试脚本
 包含所有微服务的完整集成验证
 """
 
-import json
-import logging
-import time
-from datetime import datetime
-from http.server import HTTPServer, BaseHTTPRequestHandler
-from threading import Thread
-from urllib.parse import urlparse, parse_qs
-import uuid
-import hashlib
 
 # 配置日志
 logging.basicConfig(
@@ -644,13 +651,11 @@ def start_extended_mock_services():
         server.shutdown()
 
 # 导入原有的服务类
-from localTest import (
     AuthService, UserService, AgentService, DiagnosisService,
     ThreadedHTTPServer
 )
 
 if __name__ == "__main__":
-    import sys
 
     if len(sys.argv) > 1 and sys.argv[1] == "test":
         # 启动服务器并运行测试

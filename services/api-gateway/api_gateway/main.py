@@ -1,9 +1,14 @@
 """
+main - 索克生活项目模块
+"""
+
+from api_gateway.api.main import create_app
+import uvicorn
+
+"""
 api-gateway 主入口文件
 """
 
-import uvicorn
-from api_gateway.api.main import create_app
 
 def main():
     """主函数"""

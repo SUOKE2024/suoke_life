@@ -1,15 +1,21 @@
+"""
+metrics - 索克生活项目模块
+"""
+
+            import psutil
+from prometheus_client import Counter, Gauge, Histogram, Summary, start_http_server
+from typing import Any
+import logging
+import threading
+import time
+
 #!/usr/bin/env python
 
 """
 度量收集器模块，负责收集和暴露服务指标
 """
 
-import logging
-import threading
-import time
-from typing import Any
 
-from prometheus_client import Counter, Gauge, Histogram, Summary, start_http_server
 
 logger = logging.getLogger(__name__)
 
@@ -194,7 +200,6 @@ class MetricsCollector:
     def _collect_system_metrics(self):
         """收集系统指标"""
         try:
-            import psutil
         except ImportError:
             logger.warning("未安装psutil，无法收集系统指标")
             return

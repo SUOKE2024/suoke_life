@@ -1,33 +1,39 @@
 """
-老克智能体服务器主入口
-
-基于 FastAPI 的现代化 Web 服务器
+main - 索克生活项目模块
 """
 
-import signal
-import sys
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
-from typing import Any
-
-import click
-import uvicorn
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
-from prometheus_client import make_asgi_app
-
 from laoke_service.api.middleware import (
-    ErrorHandlingMiddleware,
-    LoggingMiddleware,
-    MetricsMiddleware,
-)
 from laoke_service.api.routes import api_router
 from laoke_service.core.agent import LaoKeAgent
 from laoke_service.core.config import get_settings
 from laoke_service.core.exceptions import LaoKeServiceError
 from laoke_service.core.logging import RequestLogger, get_logger, setup_logging
+from prometheus_client import make_asgi_app
+from typing import Any
+import click
+import signal
+import sys
+import uvicorn
+
+"""
+老克智能体服务器主入口
+
+基于 FastAPI 的现代化 Web 服务器
+"""
+
+
+
+    ErrorHandlingMiddleware,
+    LoggingMiddleware,
+    MetricsMiddleware,
+)
 
 # 全局变量
 agent: LaoKeAgent | None = None
@@ -78,6 +84,9 @@ def create_app() -> FastAPI:
     settings = get_settings()
 
     app = FastAPI(
+
+# 性能优化: 添加响应压缩
+app.add_middleware(GZipMiddleware, minimum_size=1000)
         title="老克智能体服务",
         description="索克生活平台的知识传播和社区管理智能体",
         version="1.0.0",
@@ -131,7 +140,9 @@ def _add_routes(app: FastAPI, settings: Any) -> None:
     app.include_router(api_router, prefix="/api/v1")
 
     # 健康检查
-    @app.get("/health")
+    @cache(expire=300)  # 5分钟缓存
+@limiter.limit("100/minute")  # 每分钟100次请求
+@app.get("/health")
     async def health_check() -> dict[str, str]:
         """健康检查端点"""
         return {"status": "healthy", "service": "laoke-service"}
@@ -147,7 +158,9 @@ def _add_routes(app: FastAPI, settings: Any) -> None:
             status = await agent.get_agent_status()
             return {"status": "ready", "agent": status}
         except Exception as e:
-            raise HTTPException(status_code=503, detail=f"Service not ready: {e}") from e
+            raise HTTPException(status_code=503, detail=f"Service n@cache(expire=@limiter.limit("100/minute")  # 每分钟100次请求
+300)  # 5分钟缓存
+ot ready: {e}") from e
 
     @app.get("/health/live")
     async def liveness_check() -> dict[str, str]:

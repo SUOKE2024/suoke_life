@@ -1,29 +1,35 @@
+"""
+test_mid_term_implementation - 索克生活项目模块
+"""
+
+            import json
+from datetime import datetime
+from services.common.hybrid_architecture import (
+from services.common.intelligent_task_scheduler import (
+from services.common.shared_memory_processor import (
+from typing import Dict, Any, List
+import asyncio
+import logging
+import os
+import sys
+import time
+
 #!/usr/bin/env python3
 """
 索克生活 - 中期实施任务集成测试
 测试智能任务调度器、共享内存大数据处理和混合架构设计
 """
 
-import asyncio
-import time
-import logging
-import sys
-import os
-from datetime import datetime
-from typing import Dict, Any, List
 
 # 添加项目路径
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 
 # 导入测试模块
-from services.common.intelligent_task_scheduler import (
     IntelligentTaskScheduler, AgentInfo, AgentType, TaskPriority,
     initialize_scheduler
 )
-from services.common.shared_memory_processor import (
     SharedMemoryDataPipeline, initialize_shared_memory_system
 )
-from services.common.hybrid_architecture import (
     HybridArchitecture, TaskType, ProcessingMode, Priority,
     initialize_hybrid_architecture
 )
@@ -535,7 +541,6 @@ class MidTermImplementationTester:
         report_file = f"mid_term_implementation_test_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
 
         try:
-            import json
             with open(report_file, 'w', encoding='utf-8') as f:
                 json.dump(report, f, indent=2, ensure_ascii=False, default=str)
 

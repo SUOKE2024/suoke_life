@@ -1,22 +1,28 @@
 """
+diagnosis - 索克生活项目模块
+"""
+
+    import uuid
+from app.api.rest.deps import (
+from app.core.logger import get_logger
+from app.services.cache_service import CacheService
+from app.services.knowledge_service import KnowledgeService
+from app.services.metrics_service import MetricsService
+from fastapi import APIRouter, Depends, HTTPException, Query
+from pydantic import BaseModel, Field
+from typing import List, Optional, Dict, Any
+
+"""
 智能诊断助手API
 提供中医辨证论治的高级功能
 """
 
-from typing import List, Optional, Dict, Any
-from fastapi import APIRouter, Depends, HTTPException, Query
-from pydantic import BaseModel, Field
 
-from app.api.rest.deps import (
     get_knowledge_service,
     get_cache_service,
     get_metrics_service,
     optional_auth,
 )
-from app.core.logger import get_logger
-from app.services.knowledge_service import KnowledgeService
-from app.services.cache_service import CacheService
-from app.services.metrics_service import MetricsService
 
 logger = get_logger()
 router = APIRouter(prefix="/diagnosis", tags=["智能诊断"])
@@ -310,7 +316,6 @@ async def _generate_personalized_treatment_plan(
     knowledge_service: KnowledgeService
 ) -> TreatmentPlan:
     """生成个性化治疗方案"""
-    import uuid
     
     plan_id = str(uuid.uuid4())
     

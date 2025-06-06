@@ -1,16 +1,21 @@
-#!/usr/bin/env python3
 """
-健康计划生成器测试
+test_plan_generator - 索克生活项目模块
 """
+
+from internal.lifecycle.plan_generator.plan_generator import PlanGenerator
 import json
 import os
 import sys
 import unittest
 
+#!/usr/bin/env python3
+"""
+健康计划生成器测试
+"""
+
 # 确保能够导入应用代码
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from internal.lifecycle.plan_generator.plan_generator import PlanGenerator
 
 
 class TestPlanGenerator(unittest.TestCase):

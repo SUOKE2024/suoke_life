@@ -1,23 +1,28 @@
+"""
+metrics - 索克生活项目模块
+"""
+
+from collections import defaultdict
+from functools import wraps
+from pkg.utils.dependency_injection import ServiceLifecycle
+from prometheus_client import (
+from threading import Lock
+from typing import Any
+import logging
+import time
+
 #!/usr/bin/env python3
 """
 指标收集器
 提供Prometheus指标收集和暴露功能
 """
-import logging
-import time
-from collections import defaultdict
-from functools import wraps
-from threading import Lock
-from typing import Any
 
-from prometheus_client import (
     CONTENT_TYPE_LATEST,
     REGISTRY,
     CollectorRegistry,
     generate_latest,
 )
 
-from pkg.utils.dependency_injection import ServiceLifecycle
 
 # 配置日志
 logger = logging.getLogger(__name__)
@@ -499,6 +504,7 @@ def track_llm_api_call(model: str, duration: float, status: str = "success",
     except Exception as e:
         logger.error(f"记录LLM API调用指标失败: {str(e)}")
 
+    @cache(timeout=300)  # 5分钟缓存
 def track_database_query(query_type: str, database: str, duration: float):
     """
     记录数据库查询指标

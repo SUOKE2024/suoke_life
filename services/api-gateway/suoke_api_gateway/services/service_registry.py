@@ -1,20 +1,25 @@
 """
+service_registry - 索克生活项目模块
+"""
+
+from ..core.config import ServiceConfig, Settings
+from ..core.logging import get_logger
+from datetime import datetime, timedelta
+from pydantic import BaseModel
+from typing import Dict, List, Optional
+import asyncio
+import httpx
+import random
+import time
+
+"""
 服务注册表
 
 管理后端服务的注册、发现和负载均衡。
 """
 
-import asyncio
-import random
-import time
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional
 
-import httpx
-from pydantic import BaseModel
 
-from ..core.config import ServiceConfig, Settings
-from ..core.logging import get_logger
 
 logger = get_logger(__name__)
 
@@ -31,6 +36,18 @@ class ServiceInstance(BaseModel):
     failure_count: int = 0
     weight: int = 1
     metadata: Dict[str, str] = {}
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'serviceinstance'
+        ordering = ['-created_at']
 
 
 class ServiceRegistry:

@@ -1,16 +1,21 @@
 """
+config - 索克生活项目模块
+"""
+
+from functools import lru_cache
+from pathlib import Path
+from pydantic import Field, validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from typing import Any
+
+"""
 配置管理模块
 
 使用 pydantic-settings 进行类型安全的配置管理,
 支持环境变量、配置文件等多种配置源。
 """
 
-from functools import lru_cache
-from pathlib import Path
-from typing import Any
 
-from pydantic import Field, validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class DatabaseSettings(BaseSettings):

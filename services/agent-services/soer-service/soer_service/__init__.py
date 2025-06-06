@@ -1,4 +1,10 @@
 """
+__init__ - 索克生活项目模块
+"""
+
+from .main import create_app
+
+"""
 索儿智能体服务 (Soer Agent Service)
 
 索克生活平台的营养与生活方式管理智能体，专注于：
@@ -12,6 +18,5 @@ __version__ = "0.1.0"
 __author__ = "Suoke Life Team"
 __email__ = "dev@suokelife.com"
 
-from .main import create_app
 
 __all__ = ["create_app", "__version__"]

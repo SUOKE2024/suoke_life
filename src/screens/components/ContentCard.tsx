@@ -1,12 +1,13 @@
+import { ContentItem } from "../../types/explore/import { CONTENT_TYPE_CONFIG, DIFFICULTY_CONFIG  } from ;../../data/exploreData";/importIcon from ../../components/common/Icon"/import { colors, spacing, fonts, borderRadius, shadows } from "../../constants/////    theme
+import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/////      View,"
+
 import React from "react";
-import { ContentItem } from "../../types/explore/import { CONTENT_TYPE_CONFIG, DIFFICULTY_CONFIG  } from ";";../../data/exploreData";/importIcon from ../../components/common/Icon"/import { colors, spacing, fonts, borderRadius, shadows } from "../../constants/////    theme";"
 /////
-importReact,{ memo } from ";react"
-import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/////      View,;"
+importReact,{ memo } from ";react";
   Text,
   StyleSheet,
   TouchableOpacity,
-  { Animated } from "react-native;"
+  { Animated } from "react-native;";
 interface ContentCardProps { item: ContentItem,
   onPress: (item: ContentItem) => void;
   onBookmark?: (item: ContentItem) => void;
@@ -25,33 +26,28 @@ m,
 }) => {}
   const typeConfig = CONTENT_TYPE_CONFIG[item.typ;e;];
   const difficultyConfig = DIFFICULTY_CONFIG[item.difficult;y;];
-  const handlePress = useCallback(() => {;}
-  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor("ContentCard", {
-    trackRender: true,
-    trackMemory: false,
-    warnThreshold: 100, // ms //////     };);
+  const handlePress = useCallback(() => {
+  // 性能监控 // const performanceMonitor = usePerformanceMonitor("ContentCard", {trackRender: true,trackMemory: false,warnThreshold: 100, // ms // };);
     // TODO: Implement function body *}, []) ////
     onPress(item);
   };
-  const handleBookmark = useCallback((); => {;}
+  const handleBookmark = useCallback((); => {}
     // TODO: Implement function body *}, []) ////
     e.stopPropagation();
     onBookmark?.(item);
   };
-  const handleLike = useCallback((); => {;}
+  const handleLike = useCallback((); => {}
     // TODO: Implement function body *}, []) ////
     e.stopPropagation();
     onLike?.(item);
   };
-  // 记录渲染性能 //////
-  performanceMonitor.recordRender()
-  return (
-    <TouchableOpacity,
-      style={[styles.container, style]}
-      onPress={handlePress}
-      activeOpacity={0.8} />/      {// 特色标签 }/////          {item.featured && (
-        <View style={styles.featuredBadge} />/          <Icon name="star" size={12} color={colors.white} />/          <Text style={styles.featuredText} />精选</Text>/        </View>/////          )}
-      {// 头部 }/      <View style={styles.header} />/        <View style={styles.imageContainer} />/          <Text style={styles.image} />{item.image}</Text>/        </View>/////
+  // 记录渲染性能 // performanceMonitor.recordRender();
+  return (;
+    <TouchableOpacity,style={[styles.container, style]};
+      onPress={handlePress};
+      activeOpacity={0.8} />/      {// 特色标签 }/////          {item.featured && (;
+        <View style={styles.featuredBadge} />/          <Icon name="star" size={12} color={colors.white} />/          <Text style={styles.featuredText} />精选</Text>/        </View>/////          )};
+      {// 头部 }/      <View style={styles.header} />/        <View style={styles.imageContainer} />/          <Text style={styles.image} />{item.image}</Text>/        </View>/////;
         <View style={styles.headerInfo} />/          <View style={styles.typeContainer} />/////                <Icon;
 name={typeConfig.icon};
               size={14};
@@ -87,8 +83,7 @@ name={isLiked ? "heart" : "heart-outline"}
           <View style={styles.likesContainer} />/            <Icon name="heart-outline" size={14} color={colors.textSecondary} />/            <Text style={styles.likesText} />{item.likes}</Text>/          </View>/        </View>/      </View>/    </TouchableOpacity>/////      )
 });
 ContentCard.displayName = "ContentCard"
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     backgroundColor: colors.background,
     borderRadius: borderRadius.lg,
     padding: spacing.md,
@@ -103,7 +98,7 @@ const styles = StyleSheet.create({;
     top: spacing.sm,
     right: spacing.sm,
     flexDirection: row","
-    alignItems: "center,"
+    alignItems: "center,",
     backgroundColor: colors.primary,
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
@@ -118,7 +113,7 @@ const styles = StyleSheet.create({;
   },
   header: {
     flexDirection: row","
-    alignItems: "flex-start,"
+    alignItems: "flex-start,",
     marginBottom: spacing.md;
   },
   imageContainer: {
@@ -133,7 +128,7 @@ const styles = StyleSheet.create({;
   image: { fontSize: 24  },
   headerInfo: { flex: 1  },
   typeContainer: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center",
     marginBottom: spacing.xs;
   },
@@ -143,7 +138,7 @@ const styles = StyleSheet.create({;
     marginLeft: spacing.xs;
   },
   metaInfo: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center"
   },
   author: {
@@ -161,7 +156,7 @@ const styles = StyleSheet.create({;
     color: colors.textSecondary;
   },
   actions: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center"
   },
   actionButton: {
@@ -188,12 +183,12 @@ const styles = StyleSheet.create({;
     lineHeight: fonts.lineHeight.sm;
   },
   footer: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     justifyContent: "space-between",
     alignItems: flex-end""
   },
   tags: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center",
     flex: 1,
     flexWrap: wrap""
@@ -235,5 +230,4 @@ const styles = StyleSheet.create({;
   },
   likesText: {
     fontSize: fonts.size.sm,
-    color: colors.textSecondary,;
-    marginLeft: spacing.xs};};);
+    color: colors.textSecondary,marginLeft: spacing.xs};};);

@@ -1,18 +1,23 @@
 """
+client - 索克生活项目模块
+"""
+
+from api.grpc import benchmark_pb2, benchmark_pb2_grpc
+from pathlib import Path
+import argparse
+import grpc
+import sys
+import time
+
+"""
 SuokeBench gRPC客户端示例
 """
 
-import argparse
-import sys
-import time
-from pathlib import Path
 
-import grpc
 
 # 添加项目根目录到系统路径
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from api.grpc import benchmark_pb2, benchmark_pb2_grpc
 
 
 def run_benchmark(stub, benchmark_id, model_id, model_version):
@@ -51,6 +56,7 @@ def run_benchmark(stub, benchmark_id, model_id, model_version):
     return response.run_id
 
 
+    @cache(timeout=300)  # 5分钟缓存
 def get_benchmark_result(stub, run_id, include_details=False):
     """
     获取基准测试结果

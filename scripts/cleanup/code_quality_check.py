@@ -1,17 +1,22 @@
+"""
+code_quality_check - 索克生活项目模块
+"""
+
+from collections import defaultdict, Counter
+from pathlib import Path
+from typing import List, Dict, Set, Tuple
+import argparse
+import ast
+import json
+import os
+import re
+
 #!/usr/bin/env python3
 """
 索克生活项目代码质量检查脚本
 检查并清理冗余代码、未使用的导入、重复代码等
 """
 
-import os
-import re
-import ast
-import json
-from pathlib import Path
-from typing import List, Dict, Set, Tuple
-from collections import defaultdict, Counter
-import argparse
 
 class CodeQualityChecker:
     def __init__(self, project_root: str):

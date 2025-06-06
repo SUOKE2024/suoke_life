@@ -1,15 +1,20 @@
 """
-Base Adapter for Third-party Health Platforms
+base - 索克生活项目模块
 """
 
-import logging
+from ..model.health_data import ActivityData, HeartRateData, SleepData
+from ..model.user_integration import PlatformType
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import date, datetime
 from typing import Any
+import logging
 
-from ..model.health_data import ActivityData, HeartRateData, SleepData
-from ..model.user_integration import PlatformType
+"""
+Base Adapter for Third-party Health Platforms
+"""
+
+
 
 
 class AdapterError(Exception):

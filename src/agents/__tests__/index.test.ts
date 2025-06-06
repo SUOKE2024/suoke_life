@@ -1,5 +1,4 @@
-import {
-  AGENT_CAPABILITIES,
+import {AGENT_CAPABILITIES,
   AGENT_ROLES,
   AGENT_CHANNELS,
   COLLABORATION_MODES,
@@ -113,22 +112,22 @@ describe("Agent System", () => {
   describe("Performance Tests", () => {
     it("should execute within performance thresholds", () => {
       const startTime = Date.now();
-      
+
       // Execute performance-critical functions
       for (let i = 0; i < 10; i++) {
         // Simulate agent operations
       }
-      
+
       const endTime = Date.now();
       const duration = endTime - startTime;
-      
+
       // Should execute within reasonable time
       expect(duration).toBeLessThan(1000);
     });
 
     it("should handle concurrent operations", () => {
       const promises = [];
-      
+
       for (let i = 0; i < 5; i++) {
         promises.push(
           new Promise(resolve => {
@@ -139,9 +138,8 @@ describe("Agent System", () => {
           })
         );
       }
-      
-      return Promise.all(promises).then(results => {
-        expect(results).toHaveLength(5);
+
+      return Promise.all(promises).then(results => {expect(results).toHaveLength(5);
         results.forEach(result => {
           expect(result).toBe(true);
         });

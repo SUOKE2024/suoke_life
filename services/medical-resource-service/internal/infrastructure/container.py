@@ -1,30 +1,35 @@
 """
+container - 索克生活项目模块
+"""
+
+from ..agent.decision_engine import DecisionEngine
+from ..agent.xiaoke_agent import XiaokeAgent
+from ..service.food_agriculture_service import FoodAgricultureService
+from ..service.medical_resource_coordinator import MedicalResourceCoordinator
+from ..service.quality_control_service import QualityControlService
+from ..service.resource_management_service import ResourceManagementService
+from ..service.resource_scheduling_service import ResourceSchedulingService
+from .cache_manager import SmartCacheManager
+from .config_manager import ConfigManager
+from .performance_monitor import PerformanceMonitor
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from typing import Any, Callable, Dict, List, Optional, Type, TypeVar
+import asyncio
+import inspect
+import structlog
+
+"""
 依赖注入容器
 统一管理所有服务组件的依赖关系和生命周期
 """
 
-import asyncio
-import inspect
-from abc import ABC, abstractmethod
-from dataclasses import dataclass
-from typing import Any, Callable, Dict, List, Optional, Type, TypeVar
 
-import structlog
 
-from ..agent.decision_engine import DecisionEngine
 # LearningModule import removed
-from ..agent.xiaoke_agent import XiaokeAgent
-from ..service.food_agriculture_service import FoodAgricultureService
-from ..service.medical_resource_coordinator import MedicalResourceCoordinator
 # PersonalizedMedicalService import removed
-from ..service.quality_control_service import QualityControlService
-from ..service.resource_management_service import ResourceManagementService
-from ..service.resource_scheduling_service import ResourceSchedulingService
 # TCMKnowledgeService import removed
 # WellnessTourismService import removed
-from .cache_manager import SmartCacheManager
-from .config_manager import ConfigManager
-from .performance_monitor import PerformanceMonitor
 
 logger = structlog.get_logger(__name__)
 

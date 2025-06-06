@@ -1,16 +1,21 @@
+"""
+syntax_error_fixer - 索克生活项目模块
+"""
+
+from pathlib import Path
+from typing import List, Dict, Tuple
+import argparse
+import ast
+import os
+import re
+import subprocess
+
 #!/usr/bin/env python3
 """
 索克生活项目语法错误修复脚本
 专门修复Python和JavaScript/TypeScript的语法错误
 """
 
-import os
-import ast
-import re
-import subprocess
-from pathlib import Path
-from typing import List, Dict, Tuple
-import argparse
 
 class SyntaxErrorFixer:
     def __init__(self, project_root: str):

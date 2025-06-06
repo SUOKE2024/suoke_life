@@ -1,22 +1,27 @@
 """
+logging - 索克生活项目模块
+"""
+
+        from .config import get_settings
+from .config import Settings
+from pathlib import Path
+from typing import Any, Dict, Optional
+import logging
+import structlog
+
+"""
 日志配置模块
 
 使用 structlog 提供结构化日志记录，支持 JSON 格式输出，
 便于日志聚合和分析。
 """
 
-import logging
-from pathlib import Path
-from typing import Any, Dict, Optional
 
-import structlog
 
-from .config import Settings
 
 def setup_logging(settings: Optional[Settings] = None) -> None:
     """设置日志配置"""
     if settings is None:
-        from .config import get_settings
         settings = get_settings()
     
     # 配置标准库日志

@@ -1,3 +1,17 @@
+"""
+health_data_analyzer - 索克生活项目模块
+"""
+
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from loguru import logger
+from sklearn.cluster import KMeans
+from sklearn.ensemble import IsolationForest
+from sklearn.preprocessing import StandardScaler
+from typing import Dict, List, Any, Optional, Tuple, Union
+import statistics
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,15 +19,6 @@
 健康数据分析器 - 提供全面的健康数据分析和个性化建议
 """
 
-from typing import Dict, List, Any, Optional, Tuple, Union
-from dataclasses import dataclass, field
-from enum import Enum
-from datetime import datetime, timedelta
-from loguru import logger
-import statistics
-from sklearn.preprocessing import StandardScaler
-from sklearn.cluster import KMeans
-from sklearn.ensemble import IsolationForest
 
 class HealthDataType(Enum):
     """健康数据类型"""

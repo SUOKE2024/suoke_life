@@ -1,17 +1,22 @@
 """
+tcm_models - 索克生活项目模块
+"""
+
+from datetime import datetime
+from enum import Enum
+from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic.types import PositiveFloat, confloat
+from typing import Any
+import uuid
+
+"""
 中医诊断数据模型
 
 定义中医闻诊相关的数据结构，包括体质分析、情绪识别、脏腑功能评估等。
 基于传统中医理论和现代数据科学方法。
 """
 
-import uuid
-from datetime import datetime
-from enum import Enum
-from typing import Any
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
-from pydantic.types import PositiveFloat, confloat
 
 
 class ConstitutionType(str, Enum):

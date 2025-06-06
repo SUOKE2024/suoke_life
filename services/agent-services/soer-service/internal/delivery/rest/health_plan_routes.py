@@ -1,12 +1,17 @@
-import logging
-from datetime import datetime
-from typing import Any
+"""
+health_plan_routes - 索克生活项目模块
+"""
 
+from datetime import datetime
 from fastapi import APIRouter, BackgroundTasks, HTTPException, status
+from internal.lifecycle.plan_generator.plan_generator import PlanGenerator
 from pydantic import BaseModel, Field
+from typing import Any
+import logging
+
+
 
 # 导入服务层组件
-from internal.lifecycle.plan_generator.plan_generator import PlanGenerator
 
 logger = logging.getLogger(__name__)
 

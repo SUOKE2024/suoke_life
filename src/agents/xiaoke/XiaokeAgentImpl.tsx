@@ -1,9 +1,8 @@
 import { AgentBase } from "../base/AgentBase";
-import {
-  AgentType,
+import {AgentType,
   AgentCapability,
   AgentResponse,
-  AgentContext,
+  AgentContext
 } from "../types";
 
 /**
@@ -27,7 +26,7 @@ export class XiaokeAgentImpl extends AgentBase {
       AgentCapability.THIRD_PARTY_INTEGRATION,
       AgentCapability.SHOP_MANAGEMENT,
       AgentCapability.PAYMENT_PROCESSING,
-      AgentCapability.LOGISTICS_MANAGEMENT,
+      AgentCapability.LOGISTICS_MANAGEMENT
     ];
   }
 
@@ -97,28 +96,13 @@ export class XiaokeAgentImpl extends AgentBase {
 
       const executionTime = Date.now() - startTime;
 
-      return {
-        success: true,
-        response: response.message,
-        data: response.data,
-        context: {
-          ...context,
-          lastInteraction: new Date(),
-          agentType: this.agentType,
-        },
-        metadata: {
-          executionTime,
-          intent: intent.type,
-          confidence: intent.confidence,
-        },
+      return {success: true,response: response.message,data: response.data,context: {...context,lastInteraction: new Date(),agentType: this.agentType;
+        },metadata: {executionTime,intent: intent.type,confidence: intent.confidence;
+        };
       };
     } catch (error) {
       console.error("小克处理消息失败:", error);
-      return {
-        success: false,
-        response: "抱歉，我暂时无法处理您的请求，请稍后再试。",
-        error: error.message,
-        context,
+      return {success: false,response: "抱歉，我暂时无法处理您的请求，请稍后再试。",error: error.message,context;
       };
     }
   }
@@ -159,7 +143,7 @@ export class XiaokeAgentImpl extends AgentBase {
     if (
       keywords.includes("医生") ||
       keywords.includes("预约") ||
-      keywords.includes("看病")
+      keywords.includes("看病");
     ) {
       return { type: "doctor_appointment", confidence: 0.9 };
     }
@@ -171,7 +155,7 @@ export class XiaokeAgentImpl extends AgentBase {
     if (
       keywords.includes("产品") ||
       keywords.includes("农产品") ||
-      keywords.includes("购买")
+      keywords.includes("购买");
     ) {
       return { type: "product_inquiry", confidence: 0.85 };
     }
@@ -183,7 +167,7 @@ export class XiaokeAgentImpl extends AgentBase {
     if (
       keywords.includes("溯源") ||
       keywords.includes("来源") ||
-      keywords.includes("产地")
+      keywords.includes("产地");
     ) {
       return { type: "agricultural_traceability", confidence: 0.9 };
     }
@@ -191,7 +175,7 @@ export class XiaokeAgentImpl extends AgentBase {
     if (
       keywords.includes("支付") ||
       keywords.includes("付款") ||
-      keywords.includes("费用")
+      keywords.includes("费用");
     ) {
       return { type: "payment_processing", confidence: 0.85 };
     }
@@ -206,13 +190,8 @@ export class XiaokeAgentImpl extends AgentBase {
     // 处理医生预约请求
     const recommendations = await this.findMatchingDoctors(context);
 
-    return {
-      message: `我为您推荐了${recommendations.length}位专业医生，他们都很适合您的情况。`,
-      data: {
-        doctors: recommendations,
-        appointmentOptions: this.generateAppointmentOptions(),
-        estimatedWaitTime: "2-3个工作日",
-      },
+    return {message: `我为您推荐了${recommendations.length}位专业医生，他们都很适合您的情况。`,data: {doctors: recommendations,appointmentOptions: this.generateAppointmentOptions(),estimatedWaitTime: "2-3个工作日";
+      };
     };
   }
 
@@ -223,12 +202,8 @@ export class XiaokeAgentImpl extends AgentBase {
     // 处理服务推荐
     const services = await this.getPersonalizedServices(context);
 
-    return {
-      message: "基于您的健康状况和偏好，我为您推荐以下服务：",
-      data: {
-        services,
-        reasons: this.generateRecommendationReasons(services, context),
-      },
+    return {message: "基于您的健康状况和偏好，我为您推荐以下服务：",data: {services,reasons: this.generateRecommendationReasons(services, context);
+      };
     };
   }
 
@@ -239,13 +214,8 @@ export class XiaokeAgentImpl extends AgentBase {
     // 处理产品咨询
     const products = await this.getRecommendedProducts(context);
 
-    return {
-      message: "为您推荐以下优质农产品，都经过严格的质量检测：",
-      data: {
-        products,
-        traceabilityInfo: await this.getTraceabilityInfo(products),
-        qualityCertificates: this.getQualityCertificates(products),
-      },
+    return {message: "为您推荐以下优质农产品，都经过严格的质量检测：",data: {products,traceabilityInfo: await this.getTraceabilityInfo(products),qualityCertificates: this.getQualityCertificates(products);
+      };
     };
   }
 
@@ -256,13 +226,8 @@ export class XiaokeAgentImpl extends AgentBase {
     // 处理订阅管理
     const subscriptions = await this.getUserSubscriptions(context.userId);
 
-    return {
-      message: "您当前的订阅服务如下，我可以帮您管理和优化：",
-      data: {
-        activeSubscriptions: subscriptions.active,
-        recommendations: subscriptions.recommendations,
-        savings: this.calculatePotentialSavings(subscriptions),
-      },
+    return {message: "您当前的订阅服务如下，我可以帮您管理和优化：",data: {activeSubscriptions: subscriptions.active,recommendations: subscriptions.recommendations,savings: this.calculatePotentialSavings(subscriptions);
+      };
     };
   }
 
@@ -271,19 +236,10 @@ export class XiaokeAgentImpl extends AgentBase {
     context: AgentContext
   ): Promise<any> {
     // 处理农产品溯源查询
-    return {
-      message: "我可以为您提供完整的农产品溯源信息，确保食品安全：",
-      data: {
-        traceabilityFeatures: [
-          "种植基地定位",
-          "生长过程记录",
-          "采摘时间追踪",
-          "运输路径监控",
-          "质量检测报告",
-        ],
-        blockchainVerification: true,
-        certificationLevel: "AAA级",
-      },
+    return {message: "我可以为您提供完整的农产品溯源信息，确保食品安全：",data: {traceabilityFeatures: [;
+          "种植基地定位","生长过程记录","采摘时间追踪","运输路径监控","质量检测报告";
+        ],blockchainVerification: true,certificationLevel: "AAA级";
+      };
     };
   }
 
@@ -292,13 +248,8 @@ export class XiaokeAgentImpl extends AgentBase {
     context: AgentContext
   ): Promise<any> {
     // 处理支付相关请求
-    return {
-      message: "我支持多种安全的支付方式，并提供完整的收入周期管理：",
-      data: {
-        paymentMethods: ["支付宝", "微信支付", "银行卡", "索克币"],
-        securityFeatures: ["加密传输", "实名认证", "风险控制"],
-        rcmFeatures: ["自动对账", "发票管理", "退款处理"],
-      },
+    return {message: "我支持多种安全的支付方式，并提供完整的收入周期管理：",data: {paymentMethods: ["支付宝", "微信支付", "银行卡", "索克币"],securityFeatures: ["加密传输", "实名认证", "风险控制"],rcmFeatures: ["自动对账", "发票管理", "退款处理"];
+      };
     };
   }
 
@@ -307,69 +258,34 @@ export class XiaokeAgentImpl extends AgentBase {
     context: AgentContext
   ): Promise<any> {
     // 处理一般性咨询
-    return {
-      message:
-        "我是小克，SUOKE频道的版主。我可以帮您预约医生、推荐服务、管理农产品订购等。请告诉我您需要什么帮助？",
-      data: {
-        availableServices: [
-          "名医预约",
-          "服务推荐",
-          "农产品订购",
-          "订阅管理",
-          "溯源查询",
-          "支付处理",
-        ],
-      },
+    return {message:;
+        "我是小克，SUOKE频道的版主。我可以帮您预约医生、推荐服务、管理农产品订购等。请告诉我您需要什么帮助？",data: {availableServices: [;
+          "名医预约","服务推荐","农产品订购","订阅管理","溯源查询","支付处理";
+        ];
+      };
     };
   }
 
   private async findMatchingDoctors(context: AgentContext): Promise<any[]> {
     // 智能匹配医生
     return [
-      {
-        id: "doc001",
-        name: "张中医",
-        specialty: "中医内科",
-        rating: 4.8,
-        experience: "20年",
-        availableSlots: ["明天上午", "后天下午"],
-      },
-      {
-        id: "doc002",
-        name: "李医师",
-        specialty: "中医养生",
-        rating: 4.9,
-        experience: "15年",
-        availableSlots: ["今天下午", "明天上午"],
-      },
+      {id: "doc001",name: "张中医",specialty: "中医内科",rating: 4.8,experience: "20年",availableSlots: ["明天上午", "后天下午"];
+      },{id: "doc002",name: "李医师",specialty: "中医养生",rating: 4.9,experience: "15年",availableSlots: ["今天下午", "明天上午"];
+      };
     ];
   }
 
   private generateAppointmentOptions(): any {
-    return {
-      timeSlots: ["上午9:00-12:00", "下午14:00-17:00", "晚上19:00-21:00"],
-      consultationTypes: ["线上问诊", "线下面诊", "电话咨询"],
-      urgencyLevels: ["普通", "加急", "紧急"],
+    return {timeSlots: ["上午9:00-12:00", "下午14:00-17:00", "晚上19:00-21:00"],consultationTypes: ["线上问诊", "线下面诊", "电话咨询"],urgencyLevels: ["普通", "加急", "紧急"];
     };
   }
 
   private async getPersonalizedServices(context: AgentContext): Promise<any[]> {
     // 获取个性化服务推荐
-    return [
-      {
-        id: "service001",
-        name: "中医体质调理",
-        description: "基于您的体质特征定制的调理方案",
-        price: "¥299/月",
-        rating: 4.7,
-      },
-      {
-        id: "service002",
-        name: "营养膳食配送",
-        description: "根据节气和体质配制的营养餐",
-        price: "¥199/周",
-        rating: 4.8,
-      },
+    return [;
+      {id: "service001",name: "中医体质调理",description: "基于您的体质特征定制的调理方案",price: "¥299/月",rating: 4.7;
+      },{id: "service002",name: "营养膳食配送",description: "根据节气和体质配制的营养餐",price: "¥199/周",rating: 4.8;
+      };
     ];
   }
 
@@ -377,41 +293,22 @@ export class XiaokeAgentImpl extends AgentBase {
     services: any[],
     context: AgentContext
   ): string[] {
-    return [
-      "基于您的体质特征匹配",
-      "结合当前季节特点",
-      "考虑您的健康目标",
-      "参考用户评价和效果",
+    return [;
+      "基于您的体质特征匹配","结合当前季节特点","考虑您的健康目标","参考用户评价和效果";
     ];
   }
 
   private async getRecommendedProducts(context: AgentContext): Promise<any[]> {
     // 获取推荐农产品
     return [
-      {
-        id: "prod001",
-        name: "有机枸杞",
-        origin: "宁夏中宁",
-        price: "¥89/500g",
-        quality: "AAA级",
-        benefits: ["明目养肝", "补肾益精"],
-      },
-      {
-        id: "prod002",
-        name: "野生黑木耳",
-        origin: "东北长白山",
-        price: "¥45/250g",
-        quality: "AA级",
-        benefits: ["润肺清燥", "补血活血"],
-      },
+      {id: "prod001",name: "有机枸杞",origin: "宁夏中宁",price: "¥89/500g",quality: "AAA级",benefits: ["明目养肝", "补肾益精"];
+      },{id: "prod002",name: "野生黑木耳",origin: "东北长白山",price: "¥45/250g",quality: "AA级",benefits: ["润肺清燥", "补血活血"];
+      };
     ];
   }
 
   private async getTraceabilityInfo(products: any[]): Promise<any> {
-    return {
-      blockchainHash: "0x1234567890abcdef",
-      verificationStatus: "verified",
-      lastUpdated: new Date().toISOString(),
+    return {blockchainHash: "0x1234567890abcdef",verificationStatus: "verified",lastUpdated: new Date().toISOString();
     };
   }
 
@@ -420,22 +317,13 @@ export class XiaokeAgentImpl extends AgentBase {
   }
 
   private async getUserSubscriptions(userId: string): Promise<any> {
-    return {
-      active: [
-        {
-          id: "sub001",
-          name: "健康管理套餐",
-          status: "active",
-          nextBilling: "2024-02-15",
-        },
-      ],
-      recommendations: [
-        {
-          id: "sub002",
-          name: "中医养生包",
-          discount: "首月5折",
-        },
-      ],
+    return {active: [;
+        {id: "sub001",name: "健康管理套餐",status: "active",nextBilling: "2024-02-15";
+        };
+      ],recommendations: [;
+        {id: "sub002",name: "中医养生包",discount: "首月5折";
+        };
+      ];
     };
   }
 
@@ -444,21 +332,9 @@ export class XiaokeAgentImpl extends AgentBase {
   }
 
   async getHealthStatus(): Promise<any> {
-    return {
-      agentType: this.agentType,
-      status: this.isInitialized ? "healthy" : "initializing",
-      load: Math.random() * 0.5,
-      responseTime: Math.random() * 1000,
-      errorRate: Math.random() * 0.1,
-      lastCheck: new Date(),
-      capabilities: this.capabilities,
-      version: "1.0.0",
-      specialFeatures: [
-        "智能医生匹配",
-        "农产品溯源",
-        "多平台API集成",
-        "RCM收入管理",
-      ],
+    return {agentType: this.agentType,status: this.isInitialized ? "healthy" : "initializing",load: Math.random() * 0.5,responseTime: Math.random() * 1000,errorRate: Math.random() * 0.1,lastCheck: new Date(),capabilities: this.capabilities,version: "1.0.0",specialFeatures: [;
+        "智能医生匹配","农产品溯源","多平台API集成","RCM收入管理";
+      ];
     };
   }
 

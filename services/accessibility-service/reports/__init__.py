@@ -1,4 +1,10 @@
 """
+__init__ - 索克生活项目模块
+"""
+
+from .internal.service.app import AccessibilityService
+
+"""
 无障碍服务 (Accessibility Service)
 
 为索克生活项目提供全面的无障碍功能支持，包括：
@@ -18,7 +24,6 @@ __author__ = "索克生活团队"
 __email__ = "support@suokelife.com"
 
 # 导出主要组件
-from .internal.service.app import AccessibilityService
 
 __all__ = [
     "AccessibilityService",

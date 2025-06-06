@@ -1,3 +1,25 @@
+"""
+main - 索克生活项目模块
+"""
+
+from contextlib import asynccontextmanager
+from fastapi import FastAPI, HTTPException, Depends
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
+from laoke_service.agent.laoke_agent import LaokeAgent
+from laoke_service.config.settings import get_settings
+from laoke_service.delivery.api.education import education_router
+from laoke_service.delivery.api.health import health_router
+from laoke_service.delivery.api.knowledge import knowledge_router
+from laoke_service.delivery.api.maze import maze_router
+from laoke_service.delivery.api.museum import museum_router
+from laoke_service.observability.monitoring import setup_monitoring
+from laoke_service.platform.lifecycle import AgentLifecycleManager
+from loguru import logger
+import os
+import sys
+import uvicorn
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
@@ -6,26 +28,10 @@
 探索频道版主，负责知识传播、培训和博物馆导览，兼任玉米迷宫NPC
 """
 
-import uvicorn
-from fastapi import FastAPI, HTTPException, Depends
-from fastapi.middleware.cors import CORSMiddleware
-from contextlib import asynccontextmanager
-from loguru import logger
-import sys
-import os
 
 # 添加项目根目录到Python路径
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from laoke_service.agent.laoke_agent import LaokeAgent
-from laoke_service.config.settings import get_settings
-from laoke_service.delivery.api.health import health_router
-from laoke_service.delivery.api.knowledge import knowledge_router
-from laoke_service.delivery.api.education import education_router
-from laoke_service.delivery.api.museum import museum_router
-from laoke_service.delivery.api.maze import maze_router
-from laoke_service.observability.monitoring import setup_monitoring
-from laoke_service.platform.lifecycle import AgentLifecycleManager
 
 # 全局变量
 laoke_agent: LaokeAgent = None
@@ -75,6 +81,9 @@ def create_app() -> FastAPI:
     settings = get_settings()
     
     app = FastAPI(
+
+# 性能优化: 添加响应压缩
+app.add_middleware(GZipMiddleware, minimum_size=1000)
         title="老克智能体服务",
         description="探索频道版主，负责知识传播、培训和博物馆导览，兼任玉米迷宫NPC",
         version="1.0.0",
@@ -110,6 +119,8 @@ def get_laoke_agent() -> LaokeAgent:
 # 创建应用实例
 app = create_app()
 
+@cache(expire=300)  # 5分钟缓存
+@limiter.limit("100/minute")  # 每分钟100次请求
 @app.get("/")
 async def root():
     """根路径"""
@@ -123,7 +134,9 @@ async def root():
             "学习路径规划",
             "AR/VR沉浸式教学",
             "游戏化学习引导",
-            "传统文化传承"
+          @cache(expire=@limiter.limit("100/minute")  # 每分钟100次请求
+300)  # 5分钟缓存
+  "传统文化传承"
         ]
     }
 
@@ -147,7 +160,8 @@ async def send_message(
         )
         return response
     except Exception as e:
-        logger.error(f"处理消息失败: {e}")
+        logger@limiter.limit("100/minute")  # 每分钟100次请求
+.error(f"处理消息失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/agent/search-knowledge")
@@ -163,7 +177,8 @@ async def search_knowledge(
             filters=request.get("filters", {}),
             user_level=request.get("user_level", "beginner")
         )
-        return results
+        return results@limiter.limit("100/minute")  # 每分钟100次请求
+
     except Exception as e:
         logger.error(f"知识搜索失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -179,7 +194,8 @@ async def create_learning_path(
             user_profile=request.get("user_profile"),
             learning_goals=request.get("learning_goals", []),
             preferences=request.get("preferences", {}),
-            time_constraints=request.get("time_constraints")
+            time_constraints=request.get("time_con@limiter.limit("100/minute")  # 每分钟100次请求
+straints")
         )
         return path
     except Exception as e:

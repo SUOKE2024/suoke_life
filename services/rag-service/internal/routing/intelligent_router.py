@@ -1,3 +1,14 @@
+"""
+intelligent_router - 索克生活项目模块
+"""
+
+from ..observability.metrics import MetricsCollector
+from dataclasses import dataclass, field
+from enum import Enum
+from loguru import logger
+from typing import Dict, List, Any, Optional, Tuple, Union
+import asyncio
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,13 +17,7 @@
 支持四个智能体（小艾、小克、老克、索儿）的协同决策和任务分发
 """
 
-import asyncio
-from typing import Dict, List, Any, Optional, Tuple, Union
-from dataclasses import dataclass, field
-from enum import Enum
-from loguru import logger
 
-from ..observability.metrics import MetricsCollector
 
 class AgentType(str, Enum):
     """智能体类型"""

@@ -1,3 +1,19 @@
+"""
+platform_checker - 索克生活项目模块
+"""
+
+                import psutil
+            import cv2
+            import socket
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any
+import logging
+import os
+import platform
+import subprocess
+import sys
+
 #!/usr/bin/env python
 
 """
@@ -5,14 +21,6 @@
 用于检测和处理不同操作系统和环境的兼容性问题
 """
 
-import logging
-import os
-import platform
-import subprocess
-import sys
-from dataclasses import dataclass
-from enum import Enum
-from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -115,7 +123,6 @@ class PlatformChecker:
                 else:
                     available_memory_gb = 0.0
             elif platform_type == PlatformType.WINDOWS:
-                import psutil
                 available_memory_gb = psutil.virtual_memory().total / 1024 / 1024 / 1024
             else:
                 available_memory_gb = 0.0
@@ -326,7 +333,6 @@ class PlatformChecker:
 
         # 检查摄像头支持
         try:
-            import cv2
             cap = cv2.VideoCapture(0)
             if not cap.isOpened():
                 issues.append(CompatibilityIssue(
@@ -362,7 +368,6 @@ class PlatformChecker:
 
         # 检查基本网络连接
         try:
-            import socket
             socket.create_connection(("8.8.8.8", 53), timeout=3)
         except OSError:
             issues.append(CompatibilityIssue(

@@ -1,6 +1,11 @@
-from datetime import datetime
+"""
+schemas - 索克生活项目模块
+"""
 
+from datetime import datetime
 from pydantic import BaseModel, Field
+
+
 
 
 # 用户模型

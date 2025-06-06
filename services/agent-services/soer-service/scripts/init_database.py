@@ -1,12 +1,17 @@
+"""
+init_database - 索克生活项目模块
+"""
+
+from motor.motor_asyncio import AsyncIOMotorClient
+import asyncio
+import logging
+import redis.asyncio as redis
+
 #!/usr/bin/env python3
 """
 Soer Service 数据库迁移脚本
 """
 
-import asyncio
-import logging
-from motor.motor_asyncio import AsyncIOMotorClient
-import redis.asyncio as redis
 
 logger = logging.getLogger(__name__)
 

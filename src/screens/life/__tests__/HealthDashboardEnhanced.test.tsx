@@ -1,15 +1,13 @@
-import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react-native";
-import { Provider } from "react-redux";";"
 import { configureStore } from "@reduxjs/toolkit";
-import HealthDashboardEnhanced from "../HealthDashboardEnhanced";
+import { performance } from "perf_hooks";
+
+import React from "react";
 // Mock store for testing
-const mockStore = configureStore({;
-  reducer: {
+const mockStore = configureStore({reducer: {
     // Add your reducers here
   });};);
-const renderWithProvider = (component: React.ReactElement) => {;
-  return render(;
+const renderWithProvider = (component: React.ReactElement) => {return render(;
     <Provider store={mockStore}>;
       {component});
     </Provid;e;r;>
@@ -20,16 +18,16 @@ describe("HealthDashboardEnhanced", () => { {
     jest.clearAllMocks();
   });
   it("should render without crashing, () => { {", () => {
-    renderWithProvider(<HealthDashboardEnhanced />)
+    renderWithProvider(<HealthDashboardEnhanced />);
     expect(screen.getByTestId("healthdashboardenhanced");).toBeTruthy();
   });
   it("should display correct initial state", () => {
-    renderWithProvider(<HealthDashboardEnhanced />)
+    renderWithProvider(<HealthDashboardEnhanced />);
     // Add specific assertions for initial state
 expect(screen.getByTestId("healthdashboardenhanced)).toBeTruthy();"
   });
   it("should handle user interactions correctly", async (); => {
-    renderWithProvider(<HealthDashboardEnhanced />)
+    renderWithProvider(<HealthDashboardEnhanced />);
     // Example: Test button press
 const button = screen.getByRole(button";);"
     fireEvent.press(button);
@@ -39,16 +37,15 @@ expect(screen.getByTestId("healthdashboardenhanced)).toBeTruthy();"
     });
   });
   it("should handle props correctly", () => {
-    const testProps =  {;
-      /*  Add test props here *;/
+    const testProps =  {/*  Add test props here *;/
     ;};
-    renderWithProvider(<HealthDashboardEnhanced {...testProps} />)
+    renderWithProvider(<HealthDashboardEnhanced {...testProps} />);
     // Add assertions for prop handling
 expect(screen.getByTestId(healthdashboardenhanced")).toBeTruthy();"
   });
   it("should handle error states gracefully, () => { {", () => {
     // Test error scenarios
-renderWithProvider(<HealthDashboardEnhanced />)
+renderWithProvider(<HealthDashboardEnhanced />);
     // Add error state assertions
 expect(screen.getByTestId("healthdashboardenhanced")).toBeTruthy();
   });
@@ -61,15 +58,13 @@ it("should render efficiently", () => {
     expect(endTime - startTime).toBeLessThan(100);
   });
 });
-import { performance } from "perf_hooks";
-import { HealthDashboardEnhanced } from "../HealthDashboardEnhanced";
-describe(HealthDashboardEnhanced Performance Tests", () => {"
+describe("HealthDashboardEnhanced Performance Tests", () => {
   it("should execute within performance thresholds, () => { {", () => {
     const iterations = 10;
     const startTime = performance.now();
     for (let i = 0; i < iterations; i++) {
       // Execute performance-critical functions
-HealthDashboardEnhanced(/* test params      */)
+HealthDashboardEnhanced(// test params);
     });
     const endTime = performance.now();
     const averageTime = (endTime - startTime) / iterations;
@@ -80,7 +75,7 @@ expect(averageTime).toBeLessThan(1);
     const largeDataset = new Array(10000).fill(0).map((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
-HealthDashboardEnhanced(largeDataset)
+HealthDashboardEnhanced(largeDataset);
     const endTime = performance.now();
     // Should handle large datasets within 100ms
 expect(endTime - startTime).toBeLessThan(100);
@@ -89,7 +84,7 @@ expect(endTime - startTime).toBeLessThan(100);
     const initialMemory = process.memoryUsage().heapUsed;
     // Execute function multiple times
 for (let i = 0; i < 1000; i++) {
-      HealthDashboardEnhanced(/* test params      */);
+      HealthDashboardEnhanced(// test params);
     });
     // Force garbage collection if available
 if (global.gc) {

@@ -1,15 +1,20 @@
+"""
+logging - 索克生活项目模块
+"""
+
+from pathlib import Path
+from pkg.utils.config import get_value
+from typing import Any
+import logging
+import sys
+
 #!/usr/bin/env python3
 
 """
 日志配置工具
 """
 
-import logging
-from pathlib import Path
-import sys
-from typing import Any
 
-from pkg.utils.config import get_value
 
 
 def setup_logging(_config: dict[str, Any] | None = None) -> None:

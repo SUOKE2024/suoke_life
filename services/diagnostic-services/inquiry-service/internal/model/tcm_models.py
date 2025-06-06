@@ -1,10 +1,15 @@
+"""
+tcm_models - 索克生活项目模块
+"""
+
+from dataclasses import dataclass
+
 #!/usr/bin/env python
 
 """
 中医模型定义
 """
 
-from dataclasses import dataclass
 
 
 @dataclass

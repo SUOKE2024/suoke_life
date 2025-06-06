@@ -1,15 +1,21 @@
 """
-简单的API测试，直接使用已初始化的repository
+test_simple_api - 索克生活项目模块
 """
-import asyncio
-import tempfile
-import os
-from fastapi import FastAPI, HTTPException
-from fastapi.testclient import TestClient
 
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.testclient import TestClient
+from internal.model.user import CreateUserRequest
 from internal.repository.sqlite_user_repository import SQLiteUserRepository
 from internal.service.user_service import UserService
-from internal.model.user import CreateUserRequest
+import asyncio
+import os
+import tempfile
+
+"""
+简单的API测试，直接使用已初始化的repository
+"""
+
 
 # 创建临时数据库文件
 temp_db = tempfile.NamedTemporaryFile(delete=False, suffix='.db')
@@ -29,6 +35,11 @@ async def init_services():
 # 创建FastAPI应用
 app = FastAPI()
 
+# 性能优化: 添加响应压缩
+app.add_middleware(GZipMiddleware, minimum_size=1000)
+
+@cache(expire=300)  # 5分钟缓存
+@limiter.limit("100/minute")  # 每分钟100次请求
 @app.get("/health")
 async def health():
     return {"status": "healthy"}
@@ -44,7 +55,7 @@ async def create_user(user_data: CreateUserRequest):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-def test_api():
+async def test_api(
     """测试API"""
     # 初始化服务
     asyncio.run(init_services())

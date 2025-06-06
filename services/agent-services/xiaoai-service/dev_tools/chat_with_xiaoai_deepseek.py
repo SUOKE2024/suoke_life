@@ -1,11 +1,16 @@
-#!/usr/bin/env python3
+"""
+chat_with_xiaoai_deepseek - 索克生活项目模块
 """
 
+        from internal.agent.deepseek_model_factory import get_deepseek_model_factory
 import asyncio
 import os
 import sys
 import traceback
-        from internal.agent.deepseek_model_factory import get_deepseek_model_factory
+
+#!/usr/bin/env python3
+"""
+
 
 
 与小艾智能体对话 - 使用DeepSeek真实模型

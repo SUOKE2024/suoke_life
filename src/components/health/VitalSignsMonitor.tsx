@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
+import {import {View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
   Alert,
   RefreshControl,
-  Dimensions,
+  Dimensions
 } from 'react-native';
-import { 
   healthDataService, 
   VitalSigns, 
   DataSource,
@@ -40,12 +38,10 @@ export const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({ userId }) 
     loadLatestVitalSigns();
   }, [userId, selectedPeriod]);
 
-  const loadVitalSigns = async () => {
-    try {
-      setLoading(true);
+  const loadVitalSigns = async () => {try {setLoading(true);
       const endDate = new Date().toISOString();
       const startDate = new Date();
-      
+
       switch (selectedPeriod) {
         case '24h':
           startDate.setHours(startDate.getHours() - 24);
@@ -58,12 +54,10 @@ export const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({ userId }) 
           break;
       }
 
-      const response = await healthDataService.getVitalSigns(
-        userId,
-        startDate.toISOString(),
-        endDate
+      const response = await healthDataService.getVitalSigns(;
+        userId,startDate.toISOString(),endDate;
       );
-      
+
       if (response.data) {
         setVitalSigns(response.data);
       }
@@ -75,9 +69,7 @@ export const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({ userId }) 
     }
   };
 
-  const loadLatestVitalSigns = async () => {
-    try {
-      const response = await healthDataService.getLatestVitalSigns(userId);
+  const loadLatestVitalSigns = async () => {try {const response = await healthDataService.getLatestVitalSigns(userId);
       if (response.data) {
         setLatestVitalSigns(response.data);
       }
@@ -86,46 +78,26 @@ export const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({ userId }) 
     }
   };
 
-  const onRefresh = async () => {
-    setRefreshing(true);
+  const onRefresh = async () => {setRefreshing(true);
     await Promise.all([loadVitalSigns(), loadLatestVitalSigns()]);
     setRefreshing(false);
   };
 
-  const addVitalSigns = async (type: 'heartRate' | 'bloodPressure' | 'temperature' | 'oxygenSaturation') => {
-    // 这里可以打开一个模态框来输入数据
+  const addVitalSigns = async (type: 'heartRate' | 'bloodPressure' | 'temperature' | 'oxygenSaturation') => {// 这里可以打开一个模态框来输入数据;
     Alert.alert('添加数据', `添加${getVitalSignLabel(type)}数据功能待实现`);
   };
 
-  const getVitalSignLabel = (type: string): string => {
-    const labels: Record<string, string> = {
-      heartRate: '心率',
-      bloodPressure: '血压',
-      temperature: '体温',
-      oxygenSaturation: '血氧饱和度',
-      respiratoryRate: '呼吸频率',
-      weight: '体重',
-      height: '身高',
-      bmi: 'BMI'
+  const getVitalSignLabel = (type: string): string => {const labels: Record<string, string> = {heartRate: '心率',bloodPressure: '血压',temperature: '体温',oxygenSaturation: '血氧饱和度',respiratoryRate: '呼吸频率',weight: '体重',height: '身高',bmi: 'BMI';
     };
     return labels[type] || type;
   };
 
-  const getVitalSignUnit = (type: string): string => {
-    const units: Record<string, string> = {
-      heartRate: 'bpm',
-      temperature: '°C',
-      oxygenSaturation: '%',
-      respiratoryRate: '/min',
-      weight: 'kg',
-      height: 'cm',
-      bmi: ''
+  const getVitalSignUnit = (type: string): string => {const units: Record<string, string> = {heartRate: 'bpm',temperature: '°C',oxygenSaturation: '%',respiratoryRate: '/min',weight: 'kg',height: 'cm',bmi: '';
     };
     return units[type] || '';
   };
 
-  const getVitalSignStatus = (type: string, value: number): 'normal' | 'warning' | 'danger' => {
-    const ranges: Record<string, { normal: [number, number]; warning: [number, number] }> = {
+  const getVitalSignStatus = (type: string, value: number): 'normal' | 'warning' | 'danger' => {const ranges: Record<string, { normal: [number, number]; warning: [number, number] }> = {
       heartRate: { normal: [60, 100], warning: [50, 120] },
       temperature: { normal: [36.1, 37.2], warning: [35.5, 38.0] },
       oxygenSaturation: { normal: [95, 100], warning: [90, 94] },
@@ -144,22 +116,18 @@ export const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({ userId }) 
     }
   };
 
-  const getStatusColor = (status: 'normal' | 'warning' | 'danger'): string => {
-    switch (status) {
-      case 'normal': return '#4CAF50';
+  const getStatusColor = (status: 'normal' | 'warning' | 'danger'): string => {switch (status) {case 'normal': return '#4CAF50';
       case 'warning': return '#FF9800';
       case 'danger': return '#f44336';
       default: return '#666';
     }
   };
 
-  const formatBloodPressure = (systolic?: number, diastolic?: number): string => {
-    if (!systolic || !diastolic) return '--/--';
+  const formatBloodPressure = (systolic?: number, diastolic?: number): string => {if (!systolic || !diastolic) return '--/--';
     return `${systolic}/${diastolic}`;
   };
 
-  const formatDate = (timestamp: string): string => {
-    return new Date(timestamp).toLocaleString('zh-CN');
+  const formatDate = (timestamp: string): string => {return new Date(timestamp).toLocaleString('zh-CN');
   };
 
   const renderVitalSignCard = (
@@ -174,58 +142,56 @@ export const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({ userId }) 
         <Text style={styles.cardTitle}>{title}</Text>
         <TouchableOpacity style={styles.addButton} onPress={onAdd}>
           <Text style={styles.addButtonText}>+</Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={styles.cardContent}>
-        <Text style={[styles.vitalValue, { color: getStatusColor(status) }]}>
-          {value}
-        </Text>
-        <Text style={styles.vitalUnit}>{unit}</Text>
-      </View>
-      
-      <View style={[styles.statusIndicator, { backgroundColor: getStatusColor(status) }]}>
-        <Text style={styles.statusText}>
-          {status === 'normal' ? '正常' : status === 'warning' ? '注意' : '异常'}
-        </Text>
-      </View>
-    </View>
+        </TouchableOpacity>;
+      </View>;
+      ;
+      <View style={styles.cardContent}>;
+        <Text style={[styles.vitalValue, { color: getStatusColor(status) }]}>;
+          {value};
+        </Text>;
+        <Text style={styles.vitalUnit}>{unit}</Text>;
+      </View>;
+      ;
+      <View style={[styles.statusIndicator, { backgroundColor: getStatusColor(status) }]}>;
+        <Text style={styles.statusText}>;
+          {status === 'normal' ? '正常' : status === 'warning' ? '注意' : '异常'};
+        </Text>;
+      </View>;
+    </View>;
   );
 
   const renderPeriodSelector = () => (
     <View style={styles.periodSelector}>
       {(['24h', '7d', '30d'] as const).map((period) => (
         <TouchableOpacity
-          key={period}
-          style={[
-            styles.periodButton,
-            selectedPeriod === period && styles.periodButtonActive
-          ]}
-          onPress={() => setSelectedPeriod(period)}
-        >
-          <Text style={[
-            styles.periodButtonText,
-            selectedPeriod === period && styles.periodButtonTextActive
-          ]}>
-            {period === '24h' ? '24小时' : period === '7d' ? '7天' : '30天'}
-          </Text>
-        </TouchableOpacity>
-      ))}
-    </View>
+          key={period};
+          style={[;
+            styles.periodButton,selectedPeriod === period && styles.periodButtonActive;
+          ]};
+          onPress={() => setSelectedPeriod(period)};
+        >;
+          <Text style={[;
+            styles.periodButtonText,selectedPeriod === period && styles.periodButtonTextActive;
+          ]}>;
+            {period === '24h' ? '24小时' : period === '7d' ? '7天' : '30天'};
+          </Text>;
+        </TouchableOpacity>;
+      ))};
+    </View>;
   );
 
-  const renderTrendChart = () => (
-    <View style={styles.chartContainer}>
-      <Text style={styles.chartTitle}>生命体征趋势</Text>
-      <View style={styles.chartPlaceholder}>
-        <Text style={styles.chartPlaceholderText}>
-          图表功能需要集成图表库
-        </Text>
-        <Text style={styles.chartPlaceholderSubtext}>
-          显示{selectedPeriod}内的数据趋势
-        </Text>
-      </View>
-    </View>
+  const renderTrendChart = () => (;
+    <View style={styles.chartContainer}>;
+      <Text style={styles.chartTitle}>生命体征趋势</Text>;
+      <View style={styles.chartPlaceholder}>;
+        <Text style={styles.chartPlaceholderText}>;
+          图表功能需要集成图表库;
+        </Text>;
+        <Text style={styles.chartPlaceholderSubtext}>;
+          显示{selectedPeriod}内的数据趋势;
+        </Text>;
+      </View>;
+    </View>;
   );
 
   const renderRecentData = () => (
@@ -249,22 +215,22 @@ export const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({ userId }) 
                 <Text style={styles.recentDataValue}>
                   血压: {formatBloodPressure(item.bloodPressure.systolic, item.bloodPressure.diastolic)} mmHg
                 </Text>
-              )}
-              {item.temperature && (
-                <Text style={styles.recentDataValue}>
-                  体温: {item.temperature} °C
-                </Text>
-              )}
-              {item.oxygenSaturation && (
-                <Text style={styles.recentDataValue}>
-                  血氧: {item.oxygenSaturation}%
-                </Text>
-              )}
-            </View>
-          </View>
-        ))
-      )}
-    </View>
+              )};
+              {item.temperature && (;
+                <Text style={styles.recentDataValue}>;
+                  体温: {item.temperature} °C;
+                </Text>;
+              )};
+              {item.oxygenSaturation && (;
+                <Text style={styles.recentDataValue}>;
+                  血氧: {item.oxygenSaturation}%;
+                </Text>;
+              )};
+            </View>;
+          </View>;
+        ));
+      )};
+    </View>;
   );
 
   return (
@@ -274,67 +240,63 @@ export const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({ userId }) 
         <Text style={styles.subtitle}>
           {latestVitalSigns ? `最后更新: ${formatDate(latestVitalSigns.timestamp)}` : '暂无数据'}
         </Text>
-      </View>
-
-      <ScrollView
-        style={styles.scrollView}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
-        {/* 生命体征卡片 */}
-        <View style={styles.vitalSignsGrid}>
-          {renderVitalSignCard(
-            '心率',
-            latestVitalSigns?.heartRate || '--',
-            'bpm',
-            latestVitalSigns?.heartRate 
-              ? getVitalSignStatus('heartRate', latestVitalSigns.heartRate)
+      </View>;
+;
+      <ScrollView;
+        style={styles.scrollView};
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />;
+        };
+      >;
+        {// 生命体征卡片};
+        <View style={styles.vitalSignsGrid}>;
+          {renderVitalSignCard(;
+            '心率',latestVitalSigns?.heartRate || '--','bpm',latestVitalSigns?.heartRate ;
+              ? getVitalSignStatus('heartRate', latestVitalSigns.heartRate);
               : 'normal',
-            () => addVitalSigns('heartRate')
+            () => addVitalSigns('heartRate');
           )}
-          
+
           {renderVitalSignCard(
             '血压',
             latestVitalSigns?.bloodPressure 
-              ? formatBloodPressure(latestVitalSigns.bloodPressure.systolic, latestVitalSigns.bloodPressure.diastolic)
+              ? formatBloodPressure(latestVitalSigns.bloodPressure.systolic, latestVitalSigns.bloodPressure.diastolic);
               : '--/--',
             'mmHg',
             'normal', // 血压状态需要特殊计算
-            () => addVitalSigns('bloodPressure')
+            () => addVitalSigns('bloodPressure');
           )}
-          
+
           {renderVitalSignCard(
             '体温',
             latestVitalSigns?.temperature || '--',
             '°C',
             latestVitalSigns?.temperature 
-              ? getVitalSignStatus('temperature', latestVitalSigns.temperature)
+              ? getVitalSignStatus('temperature', latestVitalSigns.temperature);
               : 'normal',
-            () => addVitalSigns('temperature')
+            () => addVitalSigns('temperature');
           )}
-          
+
           {renderVitalSignCard(
             '血氧饱和度',
             latestVitalSigns?.oxygenSaturation || '--',
             '%',
             latestVitalSigns?.oxygenSaturation 
-              ? getVitalSignStatus('oxygenSaturation', latestVitalSigns.oxygenSaturation)
+              ? getVitalSignStatus('oxygenSaturation', latestVitalSigns.oxygenSaturation);
               : 'normal',
-            () => addVitalSigns('oxygenSaturation')
+            () => addVitalSigns('oxygenSaturation');
           )}
         </View>
 
-        {/* 时间段选择器 */}
+        {// 时间段选择器}
         {renderPeriodSelector()}
 
-        {/* 趋势图表 */}
+        {// 趋势图表}
         {renderTrendChart()}
 
-        {/* 最近数据 */}
+        {// 最近数据}
         {renderRecentData()}
       </ScrollView>
-    </View>
+    </View>;
   );
 };
 
@@ -344,32 +306,32 @@ const cardWidth = (width - 48) / 2; // 2列布局，考虑边距
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f5f5f5'
   },
   header: {
     padding: 16,
     backgroundColor: '#fff',
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: '#e0e0e0'
   },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 4,
+    marginBottom: 4
   },
   subtitle: {
     fontSize: 14,
-    color: '#666',
+    color: '#666'
   },
   scrollView: {
-    flex: 1,
+    flex: 1
   },
   vitalSignsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     padding: 16,
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   vitalSignCard: {
     width: cardWidth,
@@ -381,18 +343,18 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
+    elevation: 3
   },
   cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 12
   },
   cardTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
+    color: '#333'
   },
   addButton: {
     width: 24,
@@ -400,36 +362,36 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: '#007AFF',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   addButtonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   cardContent: {
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 12
   },
   vitalValue: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 4,
+    marginBottom: 4
   },
   vitalUnit: {
     fontSize: 12,
-    color: '#666',
+    color: '#666'
   },
   statusIndicator: {
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
   statusText: {
     color: '#fff',
     fontSize: 12,
-    fontWeight: '500',
+    fontWeight: '500'
   },
   periodSelector: {
     flexDirection: 'row',
@@ -437,24 +399,24 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     backgroundColor: '#fff',
     borderRadius: 8,
-    padding: 4,
+    padding: 4
   },
   periodButton: {
     flex: 1,
     paddingVertical: 8,
     alignItems: 'center',
-    borderRadius: 6,
+    borderRadius: 6
   },
   periodButtonActive: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#007AFF'
   },
   periodButtonText: {
     fontSize: 14,
     color: '#666',
-    fontWeight: '500',
+    fontWeight: '500'
   },
   periodButtonTextActive: {
-    color: '#fff',
+    color: '#fff'
   },
   chartContainer: {
     margin: 16,
@@ -465,13 +427,13 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
+    elevation: 3
   },
   chartTitle: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 16,
+    marginBottom: 16
   },
   chartPlaceholder: {
     height: 200,
@@ -481,16 +443,16 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 2,
     borderColor: '#e9ecef',
-    borderStyle: 'dashed',
+    borderStyle: 'dashed'
   },
   chartPlaceholderText: {
     fontSize: 16,
     color: '#666',
-    marginBottom: 8,
+    marginBottom: 8
   },
   chartPlaceholderSubtext: {
     fontSize: 14,
-    color: '#999',
+    color: '#999'
   },
   recentDataContainer: {
     margin: 16,
@@ -501,38 +463,26 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
+    elevation: 3
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 16,
+    marginBottom: 16
   },
   emptyText: {
     textAlign: 'center',
     color: '#666',
     fontSize: 14,
-    fontStyle: 'italic',
+    fontStyle: 'italic'
   },
   recentDataItem: {
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
-    paddingVertical: 12,
-  },
-  recentDataTime: {
-    fontSize: 12,
-    color: '#666',
-    marginBottom: 8,
-  },
-  recentDataValues: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  recentDataValue: {
-    fontSize: 14,
-    color: '#333',
-    marginRight: 16,
-    marginBottom: 4,
-  },
+    paddingVertical: 12
+  },recentDataTime: {fontSize: 12,color: '#666',marginBottom: 8;
+  },recentDataValues: {flexDirection: 'row',flexWrap: 'wrap';
+  },recentDataValue: {fontSize: 14,color: '#333',marginRight: 16,marginBottom: 4;
+  };
 }); 

@@ -1,8 +1,8 @@
-import React from "react";
-importIcon from "../../../components/common/Icon/import { colors, spacing  } from "../../placeholder";../../../constants/theme";//////
-//////     区块链健康数据管理组件   提供安全的健康数据存储和管理功能
-importReact,{ useState, useEffect } from react""
 import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/////      View,";
+
+import React from "react";
+importIcon from "../../../components/common/Icon/import { colors, spacing  } from "../../placeholder";../../../constants/theme";// // 区块链健康数据管理组件   提供安全的健康数据存储和管理功能
+importReact,{ useState, useEffect } from react""
   Text,
   StyleSheet,
   ScrollView,
@@ -10,7 +10,7 @@ import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/////      
   Modal,
   Alert,
   Switch,
-  { ActivityIndicator } from ";react-native"
+  { ActivityIndicator } from ";react-native";
 interface HealthDataRecord { id: string,
   type: diagnosis" | "medication | "test_result" | vital_signs" | "lifestyle,
   title: string,
@@ -29,11 +29,10 @@ interface DataPermission { id: string,
   active: boolean}
 interface BlockchainHealthManagerProps { visible: boolean,
   onClose: () => void}
-const SAMPLE_RECORDS: HealthDataRecord[] = [{;
-    id: "1,"
+const SAMPLE_RECORDS: HealthDataRecord[] = [{id: "1,",
     type: "diagnosis",
     title: 中医四诊报告","
-    description: "2024年1月健康评估报告，包含望闻问切四诊结果,"
+    description: "2024年1月健康评估报告，包含望闻问切四诊结果,",
     timestamp: new Date("2024-01-15"),
     hash: 0x1a2b3c4d5e6f...","
     verified: true,
@@ -44,10 +43,10 @@ const SAMPLE_RECORDS: HealthDataRecord[] = [{;
   {
     id: "2",
     type: vital_signs","
-    title: "生命体征数据,"
+    title: "生命体征数据,",
     description: "心率、血压、体温等生命体征监测数据",
     timestamp: new Date(2024-01-20"),"
-    hash: "0x2b3c4d5e6f7a...,"
+    hash: "0x2b3c4d5e6f7a...,",
     verified: true,
     encrypted: true,
     shared: true,
@@ -55,7 +54,7 @@ const SAMPLE_RECORDS: HealthDataRecord[] = [{;
   },
   {
     id: 3","
-    type: "medication,"
+    type: "medication,",
     title: "用药记录",
     description: 中药处方和西药用药记录","
     timestamp: new Date("2024-01-25),"
@@ -66,8 +65,7 @@ const SAMPLE_RECORDS: HealthDataRecord[] = [{;
     size: 0.5 MB""
   }
 ];
-const SAMPLE_PERMISSIONS: DataPermission[] = [{;
-    id: "1,"
+const SAMPLE_PERMISSIONS: DataPermission[] = [{id: "1,",
     entity: "北京中医医院",
     type: hospital","
     permissions: ["查看诊断记录, "查看生命体征"],"
@@ -75,7 +73,7 @@ const SAMPLE_PERMISSIONS: DataPermission[] = [{;
     active: true;
   },
   {
-    id: "2,"
+    id: "2,",
     entity: "李医生",
     type: doctor","
     permissions: ["查看所有记录, "添加诊断"],"
@@ -83,7 +81,7 @@ const SAMPLE_PERMISSIONS: DataPermission[] = [{;
     active: true;
   },
   {
-    id: "3,"
+    id: "3,",
     entity: "健康研究院",
     type: researcher","
     permissions: ["匿名数据分析],"
@@ -91,19 +89,19 @@ const SAMPLE_PERMISSIONS: DataPermission[] = [{;
     active: false;
   }
 ]
-export const BlockchainHealthManager: React.FC<BlockchainHealthManagerProps /> = ({/  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor(BlockchainHealthManager", ";
-{; /////
+export const BlockchainHealthManager: React.FC<BlockchainHealthManagerProps /> = ({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor(BlockchainHealthManager", ";
+{/////
     trackRender: true,
     trackMemory: true,
-    warnThreshold: 50, // ms //////     })
+    warnThreshold: 50, // ms // });
   visible,
   onClose;
 }) => {}
   const [activeTab, setActiveTab] = useState<"records | "permissions" | security">("records);"
   const [records, setRecords] = useState<HealthDataRecord[] />(SAMPLE_RECORD;S;);/  const [permissions, setPermissions] = useState<DataPermission[] />(SAMPLE_PERMISSION;S;);/  const [selectedRecord, setSelectedRecord] = useState<HealthDataRecord | null />(nul;l;);/////      const [isLoading, setIsLoading] = useState<boolean>(fals;e;);
-  const getTypeIcon = useCallback => {;}
+  const getTypeIcon = useCallback => {}
     try {
-      // 模拟区块链操作 //////     await new Promise<void>(resolve => setTimeout(() => resolve(), 1000));
+      // 模拟区块链操作 // await new Promise<void>(resolve => setTimeout(() => resolve(), 1000));
       setRecords(prev => prev.map(record => {}
         record.id === recordId;
           ? { ...record, shared: !record.shared}
@@ -116,7 +114,7 @@ export const BlockchainHealthManager: React.FC<BlockchainHealthManagerProps /> =
       setIsLoading(false);
     }
   };
-  const togglePermission = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => async (permissionId: string) => {;}
+  const togglePermission = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => async (permissionId: string) => {}
     setIsLoading(true), []);
     try {
       await new Promise<void>(resolve => setTimeout((); => resolve(), 1000));
@@ -125,7 +123,7 @@ export const BlockchainHealthManager: React.FC<BlockchainHealthManagerProps /> =
           ? { ...permission, active: !permission.active}
           : permission;
       );)
-      Alert.alert(成功", "权限状态已更新)
+      Alert.alert(成功", "权限状态已更新);
     } catch (error) {
       Alert.alert("错误", 更新失败，请重试");"
     } finally {
@@ -202,22 +200,21 @@ value={true}
 value={true}
           trackColor={{ false: colors.gray300, true: colors.primary + "50}}"
           thumbColor={colors.primary} />/      </View>/    </View>/////      ), []);
-  const renderContent = useCallback(() => {;}
+  const renderContent = useCallback(() => {
     switch (activeTab) {
       case "records":
-        // 记录渲染性能 //////
-        performanceMonitor.recordRender();
-        return (
+        // 记录渲染性能 // performanceMonitor.recordRender();
+        return (;
           <ScrollView style={styles.content} showsVerticalScrollIndicator={false} />/            <View style={styles.section} />/              <Text style={styles.sectionTitle} />健康数据记录</Text>/              <Text style={styles.sectionDescription} />/////                    您的所有健康数据都经过加密存储在区块链上，确保数据的安全性和不可篡改性。;
               </Text>/////                  {records.map(renderRecordCard)};
             </View>/          </ScrollView>/////            ;)
       case permissions":"
-        return (
+        return (;
           <ScrollView style={styles.content} showsVerticalScrollIndicator={false} />/            <View style={styles.section} />/              <Text style={styles.sectionTitle} />数据访问权限</Text>/              <Text style={styles.sectionDescription} />/////                    管理谁可以访问您的健康数据，您可以随时撤销或修改权限。;
               </Text>/////                  {permissions.map(renderPermissionCard)};
             </View>/          </ScrollView>/////            ;)
       case "security:"
-        return (
+        return (;
           <ScrollView style={styles.content} showsVerticalScrollIndicator={false} />/            <View style={styles.section} />/              <Text style={styles.sectionTitle} />安全设置</Text>/              <Text style={styles.sectionDescription} />/////                    配置您的数据安全选项，确保只有您本人可以访问和管理健康数据。;
               </Text>/////                  {renderSecuritySettings()};
             </View>/          </ScrollView>/////            ;);
@@ -225,7 +222,7 @@ value={true}
         return nu;l;l;
     }
   }
-  return (
+  return (;
     <Modal;
 visible={visible}
       animationType="slide"
@@ -237,15 +234,14 @@ visible={visible}
           <View style={styles.loadingOverlay} />/            <ActivityIndicator size="large" color={colors.primary} />/            <Text style={styles.loadingText} />处理中...</Text>/          </View>/////            )};
       </View>/    </Modal>/////      ;);
 };
-const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({;
-  container: {
+const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({container: {
     flex: 1,
     backgroundColor: colors.background;
   },
   header: {
     flexDirection: "row",
     alignItems: center","
-    justifyContent: "space-between,"
+    justifyContent: "space-between,",
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
     borderBottomWidth: 1,
@@ -266,7 +262,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   },
   tab: {
     flex: 1,
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center",
     justifyContent: center","
     paddingVertical: spacing.md,
@@ -278,7 +274,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   },
   tabText: {
     fontSize: 14,
-    fontWeight: "500,"
+    fontWeight: "500,",
     color: colors.textSecondary,
     marginLeft: spacing.xs;
   },
@@ -310,7 +306,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   },
   recordHeader: {
     flexDirection: row","
-    alignItems: "flex-start,"
+    alignItems: "flex-start,",
     marginBottom: spacing.md;
   },
   recordIcon: {
@@ -324,7 +320,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   recordInfo: { flex: 1  },
   recordTitle: {
     fontSize: 16,
-    fontWeight: "600,"
+    fontWeight: "600,",
     color: colors.textPrimary,
     marginBottom: spacing.xs;
   },
@@ -341,7 +337,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   recordStatus: { alignItems: "flex-end"  },
   statusBadge: {
     flexDirection: row","
-    alignItems: "center,"
+    alignItems: "center,",
     backgroundColor: colors.gray100,
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
@@ -356,7 +352,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   recordFooter: {
     flexDirection: "row",
     justifyContent: space-between","
-    alignItems: "center,"
+    alignItems: "center,",
     paddingTop: spacing.md,
     borderTopWidth: 1,
     borderTopColor: colors.border;
@@ -406,7 +402,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   permissionInfo: { flex: 1  },
   permissionEntity: {
     fontSize: 16,
-    fontWeight: "600,"
+    fontWeight: "600,",
     color: colors.textPrimary,
     marginBottom: spacing.xs;
   },
@@ -446,7 +442,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   },
   securityHeader: {
     flexDirection: row","
-    alignItems: "center,"
+    alignItems: "center,",
     marginBottom: spacing.md;
   },
   securityTitle: {
@@ -471,7 +467,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   },
   securityButtonText: {
     fontSize: 14,
-    fontWeight: "600,"
+    fontWeight: "600,",
     color: "white"
   },
   loadingOverlay: {
@@ -480,7 +476,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "rgba(0, 0, 0, 0.5),"
+    backgroundColor: "rgba(0, 0, 0, 0.5),",
     justifyContent: "center",
     alignItems: center""
   },

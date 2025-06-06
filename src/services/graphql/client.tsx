@@ -1,11 +1,11 @@
+import { usePerformanceMonitor } from "../../placeholder";../hooks/////    usePerformanceMonitor
+
 import React from "react";
-import { usePerformanceMonitor } from "../../placeholder";../hooks/////    usePerformanceMonitor";"
 interface ApiResponse<T = any /> { data: T;/////    , success: boolean;
   message?: string,
   code?: number}
-importAsyncStorage from "@react-native-async-storage/async-storage";/import { EventEmitter } from "../../utils/eventEmitter";//////
-//////     索克生活 - GraphQL客户端   完整的GraphQL API支持，包含查询、变更、订阅功能
-// GraphQL操作类型 * export type GraphQLOperationType = "query" | "mutation" | "subscriptio;"////
+importAsyncStorage from "@react-native-async-storage/async-storage";/import { EventEmitter } from "../../utils/eventEmitter";// // 索克生活 - GraphQL客户端   完整的GraphQL API支持，包含查询、变更、订阅功能
+// GraphQL操作类型 * export type GraphQLOperationType = "query" | "mutation" | "subscriptio;"////;
 n"; /////    "
 // GraphQL变量类型 * export interface GraphQLVariables {////
  /////
@@ -20,9 +20,7 @@ n"; /////    "
   extensions?: unknown}
 // GraphQL错误接口 * export interface GraphQLError { message: string////
  /////
-  locations?: Array<{;
-    line: number,;
-    column: number}>;
+  locations?: Array<{line: number,column: number}>;
   path?: Array<string | number>;
   extensions?: unknown}
 // 缓存配置接口 * export interface CacheConfig {////  ;
@@ -56,9 +54,7 @@ n"; /////    "
   subscriptionError: { subscription: string, error: GraphQLError},
   connectionStateChange: { connected: boolean   };
 }
-export class GraphQLClient extends EventEmitter  {;
-;
-  private endpoint: string;
+export class GraphQLClient extends EventEmitter   {private endpoint: string;
   private headers: Record<string, string> = {};
   private cache: Map<string, CacheItem> = new Map();
   private subscriptions: Map<string, WebSocket> = new Map();
@@ -71,7 +67,7 @@ export class GraphQLClient extends EventEmitter  {;
     this.headers = { "Content-Type": "application/json", ...defaultHeaders };/////        this.initializeCache();
     this.setupNetworkListener();
   }
-  //////     初始化缓存  private async initializeCache(): Promise<void> {
+  // 初始化缓存  private async initializeCache(): Promise<void> {
     try {
       const cachedData = await AsyncStorage.getItem("@graphql_cach;e;";);
       if (cachedData) {
@@ -85,15 +81,15 @@ export class GraphQLClient extends EventEmitter  {;
     } catch (error) {
       }
   }
-  //////     设置网络监听  private setupNetworkListener(): void {
+  // 设置网络监听  private setupNetworkListener(): void {
     // 这里可以添加网络状态监听 // / 在React Native中可以使用NetInfo* // } * /////
-  //////     设置认证令牌  setAuthToken(token: string): void  {
+  // 设置认证令牌  setAuthToken(token: string): void  {
     this.headers["Authorization"] = `Bearer ${token}`
   }
-  //////     移除认证令牌  removeAuthToken(): void {
+  // 移除认证令牌  removeAuthToken(): void {
     delete this.headers["Authorization"]
   }
-  //////     设置自定义头部  setHeaders(headers: Record<string, string>): void  {
+  // 设置自定义头部  setHeaders(headers: Record<string, string>): void  {
     this.headers = { ...this.headers, ...headers };
   }
   // 执行GraphQL查询  async query<T = any />(/////        query: string,
@@ -110,13 +106,13 @@ export class GraphQLClient extends EventEmitter  {;
       }
       this.emit("cacheMiss", { key: cacheKey});
     }
-    // 执行请求 //////     const startTime = Date.now(;)
+    // 执行请求 // const startTime = Date.now(;);
     this.emit("requestStart", { request, config });
     try {
       const response = await this.executeRequest<T>(request, con;f;i;g;);
       const duration = Date.now - startTime;
       // 缓存响应 // if (response.data && config?.cache?.enabled !== false) { ////
-        this.setCache(cacheKey, response.data, config?.cache?.ttl || 300000) // 默认5分钟 //////     }
+        this.setCache(cacheKey, response.data, config?.cache?.ttl || 300000) // 默认5分钟 // }
       this.emit("requestEnd", { request, response, duration });
       return respon;s;e;
     } catch (error) {
@@ -134,7 +130,7 @@ export class GraphQLClient extends EventEmitter  {;
     try {
       const response = await this.executeRequest<T>(request, con;f;i;g;);
       const duration = Date.now - startTime;
-      // 变更后清除相关缓存 //////     this.invalidateCache(mutation)
+      // 变更后清除相关缓存 // this.invalidateCache(mutation);
       this.emit("requestEnd", { request, response, duration });
       return respon;s;e;
     } catch (error) {
@@ -142,20 +138,19 @@ export class GraphQLClient extends EventEmitter  {;
       throw error;
     }
   }
-  //////     创建GraphQL订阅  subscribe(subscription: string,
+  // 创建GraphQL订阅  subscribe(subscription: string,
     variables?: GraphQLVariables,
     config?: SubscriptionConfig;
   ): () => void  {
-  //////     性能监控
-const performanceMonitor = usePerformanceMonitor(client", {;"
+  // 性能监控
+const performanceMonitor = usePerformanceMonitor(client", {"
     trackRender: true,
     trackMemory: false,
-    warnThreshold: 100, //////     ms };);
+    warnThreshold: 100, // ms };);
     const subscriptionId = this.generateSubscriptionId(subscription, variable;s;);
-    const wsEndpoint = this.endpoint.replace(/^http/, "ws;";) + "/graphql"//////
-    const ws = new WebSocket(wsEndpoint, "graphql-ws;";);
+    const wsEndpoint = this.endpoint.replace(/^http/, "ws;";) + "/graphql"// const ws = new WebSocket(wsEndpoint, "graphql-ws;";);
     ws.onopen = () => {}
-      // 发送连接初始化 //////     ws.send(
+      // 发送连接初始化 // ws.send(
         JSON.stringify({
           type: "connection_init",
           payload: { Authorization: this.headers["Authorization"]   }
@@ -166,7 +161,7 @@ const performanceMonitor = usePerformanceMonitor(client", {;"
       const message = JSON.parse(event.dat;a;);
       switch (message.type) {
         case "connection_ack":
-          // 发送订阅 //////     ws.send(
+          // 发送订阅 // ws.send(
             JSON.stringify({
               id: subscriptionId,
               type: "start",
@@ -202,7 +197,7 @@ case "complete":
       config?.onError?.({ message: "WebSocket连接错误"});
     };
     this.subscriptions.set(subscriptionId, ws);
-    // 返回取消订阅函数 // / 记录渲染性能/////     performanceMonitor.recordRender()
+    // 返回取消订阅函数 // / 记录渲染性能/////     performanceMonitor.recordRender();
         return() => {}
       if (ws.readyState === WebSocket.OPEN) {
         ws.send(
@@ -215,7 +210,7 @@ case "complete":
       this.subscriptions.delete(subscriptionId);
     };
   }
-  //////     执行HTTP请求  private async executeRequest<T>(request: GraphQLRequest,
+  // 执行HTTP请求  private async executeRequest<T>(request: GraphQLRequest,
     config?: RequestConfig;
   ): Promise<GraphQLResponse<T>>  {
     const timeout = config?.timeout || this.defaultTimeo;u;t;
@@ -224,21 +219,20 @@ case "complete":
       try {
         const controller = new AbortController;
         const timeoutId = setTimeout((); => controller.abort(), timeout);
-        const response = await fetch(this.endpoint, {;
-          method: "POST",
+        const response = await fetch(this.endpoint, {method: "POST",
           headers: this.headers,
           body: JSON.stringify(request),
           signal: controller.sign;a;l;
         ;};);
         clearTimeout(timeoutId);
         if (!response.ok) {
-          throw new Error(
+          throw new Error(;
             `HTTP错误: ${response.status} ${response.statusText};`
           ;);
         }
         const result: GraphQLResponse<T> = await response.json;
         if (result.errors && result.errors.length > 0) {
-          throw new Error(
+          throw new Error(;
             `GraphQL错误: ${result.errors.map((e); => e.message).join(", ")}`
           );
         }
@@ -247,14 +241,14 @@ case "complete":
         if (attempt === retries) {
           throw error;
         }
-        // 指数退避重试 //////     await new Promise<void>((resolve) => {}
+        // 指数退避重试 // await new Promise<void>((resolve) => {}
           setTimeout(resolve, Math.pow(2, attempt;); * 1000)
         )
       }
     }
     throw new Error("请求失败，已达到最大重试次数;";);
   }
-  //////     生成缓存键  private generateCacheKey(request: GraphQLRequest,
+  // 生成缓存键  private generateCacheKey(request: GraphQLRequest,
     customKey?: string;
   );: string  {
     if (customKey) return custo;m;K;e;y;
@@ -264,22 +258,22 @@ case "complete":
       : ""
     return `gql_${queryHash}_${variablesHash;};`;
   }
-  //////     生成订阅ID  private generateSubscriptionId(subscription: string,
+  // 生成订阅ID  private generateSubscriptionId(subscription: string,
     variables?: GraphQLVariables;
   );: string  {
     const subHash = this.hashString(subscriptio;n;);
-    const varHash = variables ? this.hashString(JSON.stringify(variable;s;)) : ";"
+    const varHash = variables ? this.hashString(JSON.stringify(variable;s;)) : 
     return `sub_${subHash}_${varHash}_${Date.now();};`;
   }
-  //////     字符串哈希  private hashString(str: string): string  {
+  // 字符串哈希  private hashString(str: string): string  {
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
       const char = str.charCodeAt(i);
       hash = (hash << 5) - hash + char;
-      hash = hash & hash; // 转换为32位整数 //////     }
+      hash = hash & hash; // 转换为32位整数 // }
     return Math.abs(hash).toString(36;);
   }
-  //////     从缓存获取数据  private getFromCache(key: string): unknown | null  {
+  // 从缓存获取数据  private getFromCache(key: string): unknown | null  {
     const item = this.cache.get(key);
     if (!item) return n;u;l;l;
     if (Date.now(); > item.timestamp + item.ttl) {
@@ -288,9 +282,8 @@ case "complete":
     }
     return item.da;t;a;
   }
-  //////     设置缓存  private setCache(key: string, data: unknown, ttl: number): void  {
-    const item: CacheItem = {;
-      data,
+  // 设置缓存  private setCache(key: string, data: unknown, ttl: number): void  {
+    const item: CacheItem = {data,
       timestamp: Date.now(),
       ttl,
       key;
@@ -298,7 +291,7 @@ case "complete":
     this.cache.set(key, item);
     this.persistCache();
   }
-  //////     持久化缓存  private async persistCache(): Promise<void> {
+  // 持久化缓存  private async persistCache(): Promise<void> {
     try {
       const cacheObject: Record<string, CacheItem> = {};
       this.cache.forEach((value, key); => {}
@@ -322,20 +315,19 @@ case "complete":
     }
     this.persistCache();
   }
-  //////     获取缓存统计  getCacheStats(): { size: number, keys: string[]  ; } {
-    return {;
-      size: this.cache.size,
-      keys: Array.from(this.cache.keys)
+  // 获取缓存统计  getCacheStats(): { size: number, keys: string[]  ; } {
+    return {size: this.cache.size,
+      keys: Array.from(this.cache.keys);
     };
   }
-  //////     关闭所有连接  close(): void {
+  // 关闭所有连接  close(): void {
     this.subscriptions.forEach((ws); => {}
       if (ws.readyState === WebSocket.OPEN) {
         ws.close();
       }
     });
     this.subscriptions.clear();
-    this.removeAllListeners()
+    this.removeAllListeners();
   }
 }
 // 创建默认客户端实例 * export const graphqlClient = new GraphQLClient("http: /, localhost: 4000* * graphql"////   ;

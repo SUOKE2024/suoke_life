@@ -1,3 +1,18 @@
+"""
+start_service - 索克生活项目模块
+"""
+
+        from health_data_service.models.health_data import (
+        from health_data_service.services.health_data_service import (
+from health_data_service.api.main import app
+from health_data_service.core.cache import get_cache_manager
+from health_data_service.core.config import get_settings
+from health_data_service.core.database import get_database
+from pathlib import Path
+import asyncio
+import os
+import sys
+
 #!/usr/bin/env python3
 """
 健康数据服务启动脚本
@@ -5,19 +20,11 @@
 用于验证服务可以正常启动和运行
 """
 
-import asyncio
-import sys
-import os
-from pathlib import Path
 
 # 添加项目根目录到Python路径
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from health_data_service.api.main import app
-from health_data_service.core.config import get_settings
-from health_data_service.core.database import get_database
-from health_data_service.core.cache import get_cache_manager
 
 
 async def check_dependencies():
@@ -79,7 +86,6 @@ def check_models():
     print("\n🔍 检查数据模型...")
     
     try:
-        from health_data_service.models.health_data import (
             HealthData, 
             VitalSigns,
             CreateHealthDataRequest, 
@@ -106,7 +112,6 @@ def check_services():
     print("\n🔍 检查业务服务...")
     
     try:
-        from health_data_service.services.health_data_service import (
             HealthDataService, 
             VitalSignsService, 
             TCMDiagnosisService

@@ -1,25 +1,30 @@
-#!/usr/bin/env python
-
 """
-问诊服务实现模块，处理各种RPC请求
+inquiry_service_impl - 索克生活项目模块
 """
-
-import logging
-import time
-from typing import Any
-
-from google.protobuf.json_format import MessageToDict
-import grpc
-
-# 导入生成的gRPC代码
-from api.grpc import inquiry_service_pb2 as pb2
-from api.grpc import inquiry_service_pb2_grpc as pb2_grpc
 
 from ..dialogue.dialogue_manager import DialogueManager
 from ..knowledge.tcm_knowledge_base import TCMKnowledgeBase
 from ..llm.health_risk_assessor import HealthRiskAssessor
 from ..llm.symptom_extractor import SymptomExtractor
 from ..llm.tcm_pattern_mapper import TCMPatternMapper
+from api.grpc import inquiry_service_pb2 as pb2
+from api.grpc import inquiry_service_pb2_grpc as pb2_grpc
+from google.protobuf.json_format import MessageToDict
+from typing import Any
+import grpc
+import logging
+import time
+
+#!/usr/bin/env python
+
+"""
+问诊服务实现模块，处理各种RPC请求
+"""
+
+
+
+# 导入生成的gRPC代码
+
 
 logger = logging.getLogger(__name__)
 

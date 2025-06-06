@@ -1,19 +1,24 @@
 """
-性能监控模块
-提供全面的性能监控、指标收集和分析功能
+performance_monitor - 索克生活项目模块
 """
 
-import asyncio
-import time
 from collections import defaultdict, deque
 from contextlib import asynccontextmanager
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
+from prometheus_client import CollectorRegistry, Counter, Gauge, Histogram
 from typing import Any, Callable, Dict, List, Optional
-
+import asyncio
 import psutil
 import structlog
-from prometheus_client import CollectorRegistry, Counter, Gauge, Histogram
+import time
+
+"""
+性能监控模块
+提供全面的性能监控、指标收集和分析功能
+"""
+
+
 
 logger = structlog.get_logger(__name__)
 

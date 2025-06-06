@@ -1,4 +1,22 @@
 """
+health_monitor - 索克生活项目模块
+"""
+
+from .base import BaseService
+from .cache import CacheManager
+from .exceptions import InquiryServiceError
+from .metrics import MetricsCollector
+from .utils import timer
+from collections.abc import Callable
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any
+import asyncio
+import psutil
+import time
+
+"""
 实时健康监测模块
 
 该模块实现了完整的服务健康监测系统，包括：
@@ -9,21 +27,8 @@
 - 系统资源监控
 """
 
-import asyncio
-from collections.abc import Callable
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-import time
-from typing import Any
 
-import psutil
 
-from .base import BaseService
-from .cache import CacheManager
-from .exceptions import InquiryServiceError
-from .metrics import MetricsCollector
-from .utils import timer
 
 
 class HealthStatus(Enum):

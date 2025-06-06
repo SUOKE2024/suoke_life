@@ -1,12 +1,17 @@
 """
+test_config - 索克生活项目模块
+"""
+
+from internal.suokebench.config import create_default_config, load_config
+from pathlib import Path
+import os
+import unittest
+
+"""
 配置模块测试
 """
 
-import os
-import unittest
-from pathlib import Path
 
-from internal.suokebench.config import create_default_config, load_config
 
 
 class TestConfig(unittest.TestCase):

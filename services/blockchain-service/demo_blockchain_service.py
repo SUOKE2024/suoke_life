@@ -1,3 +1,17 @@
+"""
+demo_blockchain_service - 索克生活项目模块
+"""
+
+from datetime import datetime, timedelta
+from suoke_blockchain_service.config import settings
+from suoke_blockchain_service.database import init_database, close_database
+from suoke_blockchain_service.logging import configure_logging, get_logger
+from suoke_blockchain_service.service import get_blockchain_service
+from typing import Dict, Any
+import asyncio
+import json
+import uuid
+
 #!/usr/bin/env python3
 """
 Blockchain Service 功能演示脚本
@@ -5,17 +19,8 @@ Blockchain Service 功能演示脚本
 演示区块链服务的核心功能，包括数据存储、验证、访问控制等。
 """
 
-import asyncio
-import json
-import uuid
-from datetime import datetime, timedelta
-from typing import Dict, Any
 
 # 导入服务模块
-from suoke_blockchain_service.service import get_blockchain_service
-from suoke_blockchain_service.config import settings
-from suoke_blockchain_service.database import init_database, close_database
-from suoke_blockchain_service.logging import configure_logging, get_logger
 
 logger = get_logger(__name__)
 

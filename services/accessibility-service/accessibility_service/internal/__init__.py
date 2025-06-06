@@ -1,4 +1,11 @@
 """
+__init__ - 索克生活项目模块
+"""
+
+from .delivery.grpc_server import AccessibilityServicer
+from .service.app import AccessibilityApp, AccessibilityService
+
+"""
 内部模块包
 
 包含无障碍服务的核心实现：
@@ -14,8 +21,6 @@
 """
 
 # 导出核心组件
-from .delivery.grpc_server import AccessibilityServicer
-from .service.app import AccessibilityApp, AccessibilityService
 
 __all__ = [
     "AccessibilityService",

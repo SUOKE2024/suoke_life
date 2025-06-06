@@ -1,10 +1,11 @@
+import { performance } from "perf_hooks";
+
 import React from "react";
 describe("enhancedApiClient", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 });
-import { performance } from "perf_hooks";
 describe("enhancedApiClient Performance Tests", () => {
   it("should execute within performance thresholds", () => {
     const iterations = 10;
@@ -30,7 +31,7 @@ expect(endTime - startTime).toBeLessThan(100);
     const initialMemory = process.memoryUsage().heapUsed;
     // Execute function multiple times
 for (let i = 0; i < 1000; i++) {
-      someFunction(/* test params      */);
+      someFunction(// test params);
     });
     // Force garbage collection if available
 if (global.gc) {

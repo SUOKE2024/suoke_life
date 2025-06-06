@@ -1,10 +1,15 @@
-"""应用配置设置"""
+"""
+settings - 索克生活项目模块
+"""
 
 from functools import lru_cache
-from typing import Any, Dict, List, Optional
-
 from pydantic import Field, PostgresDsn, RedisDsn, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from typing import Any, Dict, List, Optional
+
+"""应用配置设置"""
+
+
 
 class DatabaseSettings(BaseSettings):
     """数据库配置"""

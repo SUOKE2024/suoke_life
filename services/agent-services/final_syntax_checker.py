@@ -1,13 +1,18 @@
+"""
+final_syntax_checker - 索克生活项目模块
+"""
+
+from pathlib import Path
+from typing import List, Tuple
+import ast
+import os
+
 #!/usr/bin/env python3
 """
 最终语法检查和修复脚本
 找到并修复xiaoai-service中剩余的语法问题
 """
 
-import ast
-import os
-from pathlib import Path
-from typing import List, Tuple
 
 class FinalSyntaxChecker:
     """最终语法检查器"""

@@ -1,52 +1,47 @@
-import React from "react";
 import { useNavigation } from "@react-navigation/native";/import { colors, spacing, fonts } from "../../constants/theme";/////    import { useDispatch } from "react-redux";
-/import { NativeStackNavigationProp } from "@react-navigation/native-stack";/import { MainStackParamList } from "../../navigation/MainNavigator";/////    importReact from "react";
 import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/////      View,";
+
+import React from "react";
+/import { NativeStackNavigationProp } from "@react-navigation/native-stack";/import { MainStackParamList } from "../../navigation/MainNavigator";/////    importReact from "react";
   Text,
   StyleSheet,
   ScrollView,
   { TouchableOpacity } from ";react-native";
-type SettingsScreenNavigationProp = NativeStackNavigationProp<
-  MainStackParamList,
-  "Setting;s;"
+type SettingsScreenNavigationProp = NativeStackNavigationProp<;
+  MainStackParamList,"Setting;s;"
 ;>;
 export const SettingsScreen: React.FC  = () => {}
-  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor("SettingsScreen', { "'
-    trackRender: true,;
-    trackMemory: true,;
-    warnThreshold: 50, // ms //////     };);
+  // 性能监控 // const performanceMonitor = usePerformanceMonitor("SettingsScreen', { "';
+    trackRender: true,trackMemory: true,warnThreshold: 50, // ms // };);
   const navigation = useNavigation<SettingsScreenNavigationProp />/////      const dispatch = useDispatch;
-  const handleLogout = async() => {;}
-    try {;
-      await dispatch(logo;u;t as any)
+  const handleLogout = async() => {}
+    try {await dispatch(logo;u;t as any);
     } catch (error) {
       }
   };
-  const handleBack = useCallback((); => {;}
+  const handleBack = useCallback((); => {}
     // TODO: Implement function body *}, []) ////
     navigation.goBack();
   };
-  const navigateToServiceStatus = useCallback((); => {;}
+  const navigateToServiceStatus = useCallback((); => {}
     // TODO: Implement function body *}, []) ////
-    navigation.navigate("ServiceStatus")
+    navigation.navigate("ServiceStatus");
   };
-  const navigateToServiceManagement = useCallback((); => {;}
+  const navigateToServiceManagement = useCallback((); => {}
     // TODO: Implement function body *}, []) ////
-    navigation.navigate("ServiceManagement")
+    navigation.navigate("ServiceManagement");
   };
-  const navigateToDeveloperPanel = useCallback((); => {;}
+  const navigateToDeveloperPanel = useCallback((); => {}
     // TODO: Implement function body *}, []) ////
-    navigation.navigate("DeveloperPanel")
+    navigation.navigate("DeveloperPanel");
   };
-  // 记录渲染性能 //////
-  performanceMonitor.recordRender()
-  return (
-    <View style={styles.container} />/      <View style={styles.header} />/        <TouchableOpacity onPress={handleBack} style={styles.backButton} accessibilityLabel="TODO: 添加无障碍标签" />/          <Text style={styles.backButtonText} />返回</Text>/        </TouchableOpacity>/        <Text style={styles.headerTitle} />设置</Text>/        <View style={styles.placeholder} />/      </View>/////
-      <ScrollView style={styles.content} />/        <View style={styles.section} />/          <Text style={styles.sectionTitle} />账户设置</Text>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText} />个人资料</Text>/          </TouchableOpacity>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText} />修改密码</Text>/          </TouchableOpacity>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText} />隐私设置</Text>/          </TouchableOpacity>/        </View>/////
-        <View style={styles.section} />/          <Text style={styles.sectionTitle} />应用设置</Text>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText} />通知</Text>/          </TouchableOpacity>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText} />语言</Text>/          </TouchableOpacity>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText} />显示主题</Text>/          </TouchableOpacity>/        </View>/////
-        <View style={styles.section} />/          <Text style={styles.sectionTitle} />系统与开发</Text>/////              <TouchableOpacity,
-            style={styles.settingItem}
-            onPress={navigateToServiceStatus}
+  // 记录渲染性能 // performanceMonitor.recordRender();
+  return (;
+    <View style={styles.container} />/      <View style={styles.header} />/        <TouchableOpacity onPress={handleBack} style={styles.backButton} accessibilityLabel="TODO: 添加无障碍标签" />/          <Text style={styles.backButtonText} />返回</Text>/        </TouchableOpacity>/        <Text style={styles.headerTitle} />设置</Text>/        <View style={styles.placeholder} />/      </View>/////;
+      <ScrollView style={styles.content} />/        <View style={styles.section} />/          <Text style={styles.sectionTitle} />账户设置</Text>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText} />个人资料</Text>/          </TouchableOpacity>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText} />修改密码</Text>/          </TouchableOpacity>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText} />隐私设置</Text>/          </TouchableOpacity>/        </View>/////;
+        <View style={styles.section} />/          <Text style={styles.sectionTitle} />应用设置</Text>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText} />通知</Text>/          </TouchableOpacity>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText} />语言</Text>/          </TouchableOpacity>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText} />显示主题</Text>/          </TouchableOpacity>/        </View>/////;
+        <View style={styles.section} />/          <Text style={styles.sectionTitle} />系统与开发</Text>/////              <TouchableOpacity,style={styles.settingItem};
+            onPress={navigateToServiceStatus};
            accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText} />服务状态</Text>/          </TouchableOpacity>/////              <TouchableOpacity;
 style={styles.settingItem}
             onPress={navigateToServiceManagement}
@@ -57,8 +52,7 @@ style={styles.settingItem}
         <View style={styles.section} />/          <Text style={styles.sectionTitle} />其他</Text>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText} />关于我们</Text>/          </TouchableOpacity>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText} />帮助与反馈</Text>/          </TouchableOpacity>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText} />服务条款</Text>/          </TouchableOpacity>/        </View>/////
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout} accessibilityLabel="TODO: 添加无障碍标签" />/          <Text style={styles.logoutButtonText} />退出登录</Text>/        </TouchableOpacity>/      </ScrollView>/    </View>/////      ;);
 }
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     flex: 1,
     backgroundColor: colors.background;
   },
@@ -93,8 +87,7 @@ const styles = StyleSheet.create({;
     borderRadius: 8,
     padding: spacing.md,
     ...StyleSheet.flatten({
-      shadowColor: "#000",;
-      shadowOffset: { width: 0, height;: ;2 ;},
+      shadowColor: "#000",shadowOffset: { width: 0, height;: ;2 ;},
       shadowOpacity: 0.1,
       shadowRadius: 4,
       elevation: 2;

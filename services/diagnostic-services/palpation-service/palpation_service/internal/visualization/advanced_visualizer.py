@@ -1,3 +1,22 @@
+"""
+advanced_visualizer - 索克生活项目模块
+"""
+
+                import base64
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from pathlib import Path
+from plotly.subplots import make_subplots
+from scipy import signal
+from scipy.fft import fft, fftfreq
+from typing import Any
+import base64
+import colorsys
+import io
+import logging
+
 #!/usr/bin/env python3
 
 """
@@ -6,20 +25,7 @@
 包含脉象波形、健康趋势、体质分析、风险评估等多种可视化组件
 """
 
-import base64
-import colorsys
-import io
-import logging
-from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-from pathlib import Path
-from typing import Any
 
-from plotly.subplots import make_subplots
-from scipy import signal
-from scipy.fft import fft, fftfreq
 
 # 设置中文字体
 plt.rcParams["font.sans-serif"] = ["SimHei", "Microsoft YaHei", "DejaVu Sans"]
@@ -1374,7 +1380,6 @@ class AdvancedVisualizer:
                     f.write(result.html_content)
 
             elif export_format == "png" and result.base64_image:
-                import base64
 
                 image_data = base64.b64decode(result.base64_image)
                 with open(filepath, "wb") as f:

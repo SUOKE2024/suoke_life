@@ -1,11 +1,16 @@
+"""
+simple_agent_coordinator_fixer - 索克生活项目模块
+"""
+
+from pathlib import Path
+import os
+
 #!/usr/bin/env python3
 """
 索克生活项目简化AgentCoordinator测试文件修复脚本
 创建一个不依赖外部库的简化测试文件
 """
 
-import os
-from pathlib import Path
 
 class SimpleAgentCoordinatorFixer:
     def __init__(self, project_root: str):

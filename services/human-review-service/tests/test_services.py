@@ -1,17 +1,23 @@
 """
+test_services - 索克生活项目模块
+"""
+
+        from human_review_service.core.models import ReviewTaskUpdate
+from datetime import datetime, timezone
+from human_review_service.core.models import (
+from human_review_service.core.service import HumanReviewService
+from unittest.mock import AsyncMock, Mock, patch
+from uuid import uuid4
+import pytest
+
+"""
 服务层测试
 Service Layer Tests
 
 测试业务逻辑服务层的功能
 """
 
-import pytest
-from datetime import datetime, timezone
-from unittest.mock import AsyncMock, Mock, patch
-from uuid import uuid4
 
-from human_review_service.core.service import HumanReviewService
-from human_review_service.core.models import (
     ReviewerCreate,
     ReviewerDB,
     ReviewerUpdate,
@@ -334,7 +340,6 @@ class TestHumanReviewService:
         reviewer_id = "test_reviewer_001"
         
         # 创建ReviewTaskUpdate对象
-        from human_review_service.core.models import ReviewTaskUpdate
         update_data = ReviewTaskUpdate(
             status=ReviewStatus.APPROVED,
             review_comments="诊断合理",

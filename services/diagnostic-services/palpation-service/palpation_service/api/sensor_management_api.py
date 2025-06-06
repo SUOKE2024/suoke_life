@@ -1,19 +1,26 @@
 """
-传感器管理API
-提供传感器连接、数据采集和管理功能
+sensor_management_api - 索克生活项目模块
 """
 
+    import uvicorn
+from ..internal.sensor_interface import (
+from datetime import datetime
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any, Set
 import asyncio
 import json
 import logging
-from datetime import datetime
 import uuid
 
-from ..internal.sensor_interface import (
+"""
+传感器管理API
+提供传感器连接、数据采集和管理功能
+"""
+
+
     SensorManager,
     SensorConfig,
     SensorConnectionType,
@@ -63,6 +70,9 @@ class CalibrationRequest(BaseModel):
 
 # 创建FastAPI应用
 app = FastAPI(
+
+# 性能优化: 添加响应压缩
+app.add_middleware(GZipMiddleware, minimum_size=1000)
     title="传感器管理API",
     description="脉象传感器数据采集和管理系统",
     version="1.0.0"
@@ -98,6 +108,8 @@ async def shutdown_event():
     # 断开所有传感器
     await sensor_manager.disconnect_all()
 
+@cache(expire=300)  # 5分钟缓存
+@limiter.limit("100/minute")  # 每分钟100次请求
 @app.get("/health")
 async def health_check():
     """健康检查"""
@@ -106,7 +118,9 @@ async def health_check():
         "timestamp": datetime.now(),
         "service": "sensor-management-api",
         "version": "1.0.0",
-        "sensors_count": len(sensor_manager.sensors)
+        "sensors_count": len(sen@cache(expire=@limiter.limit("100/minute")  # 每分钟100次请求
+300)  # 5分钟缓存
+sor_manager.sensors)
     }
 
 @app.get("/api/v1/sensors", response_model=List[SensorStatusResponse])
@@ -129,7 +143,8 @@ async def list_sensors():
         return sensors
         
     except Exception as e:
-        logger.error(f"获取传感器列表失败: {e}")
+        logger.error(f"获取传感器列表失败:@limiter.limit("100/minute")  # 每分钟100次请求
+ {e}")
         raise HTTPException(status_code=500, detail=f"获取传感器列表失败: {str(e)}")
 
 @app.post("/api/v1/sensors")
@@ -170,7 +185,8 @@ async def register_sensor(config_request: SensorConfigRequest):
             
     except ValueError as e:
         raise HTTPException(status_code=400, detail=f"无效的连接类型: {str(e)}")
-    except Exception as e:
+    except Exc@limiter.limit("100/minute")  # 每分钟100次请求
+eption as e:
         logger.error(f"注册传感器失败: {e}")
         raise HTTPException(status_code=500, detail=f"注册传感器失败: {str(e)}")
 
@@ -186,7 +202,8 @@ async def unregister_sensor(device_id: str):
                 "message": f"传感器 {device_id} 注销成功"
             }
         else:
-            raise HTTPException(status_code=404, detail="传感器不存在")
+            raise HTTPException(status_code=404, de@limiter.limit("100/minute")  # 每分钟100次请求
+tail="传感器不存在")
             
     except Exception as e:
         logger.error(f"注销传感器失败: {e}")
@@ -209,7 +226,8 @@ async def connect_sensor(device_id: str):
                 "sensor_status": sensor.status.value
             }
         else:
-            raise HTTPException(status_code=400, detail="传感器连接失败")
+          @limiter.limit("100/minute")  # 每分钟100次请求
+  raise HTTPException(status_code=400, detail="传感器连接失败")
             
     except Exception as e:
         logger.error(f"连接传感器失败: {e}")
@@ -230,7 +248,8 @@ async def disconnect_sensor(device_id: str):
                 "status": "success",
                 "message": f"传感器 {device_id} 断开连接成功",
                 "sensor_status": sensor.status.value
-            }
+  @limiter.limit("100/minute")  # 每分钟100次请求
+          }
         else:
             raise HTTPException(status_code=400, detail="传感器断开连接失败")
             
@@ -249,7 +268,8 @@ async def connect_all_sensors():
             "results": results,
             "summary": {
                 "total": len(results),
-                "successful": sum(1 for success in results.values() if success),
+                "successful": sum(1 for succ@limiter.limit("100/minute")  # 每分钟100次请求
+ess in results.values() if success),
                 "failed": sum(1 for success in results.values() if not success)
             }
         }
@@ -269,7 +289,8 @@ async def disconnect_all_sensors():
             "results": results,
             "summary": {
                 "total": len(results),
-                "successful": sum(1 for success in results.values() if success),
+      @limiter.limit("100/minute")  # 每分钟100次请求
+          "successful": sum(1 for success in results.values() if success),
                 "failed": sum(1 for success in results.values() if not success)
             }
         }
@@ -296,7 +317,8 @@ async def calibrate_sensor(device_id: str, request: CalibrationRequest):
         if success:
             return {
                 "status": "success",
-                "message": f"传感器 {device_id} 校准成功",
+                "message": f"传感器 {dev@limiter.limit("100/minute")  # 每分钟100次请求
+ice_id} 校准成功",
                 "calibration_type": request.calibration_type,
                 "sensor_status": sensor.status.value
             }
@@ -331,7 +353,8 @@ async def start_data_stream(config: DataStreamConfig, background_tasks: Backgrou
         }
         
         data_streams[stream_id] = stream_config
-        
+    @limiter.limit("100/minute")  # 每分钟100次请求
+    
         # 启动数据流
         background_tasks.add_task(manage_data_stream, stream_id, config)
         
@@ -366,7 +389,8 @@ async def stop_data_stream(stream_id: str):
         stream_config["end_time"] = datetime.now()
         
         return {
-            "status": "success",
+            "status": "succ@limiter.limit("100/minute")  # 每分钟100次请求
+ess",
             "stream_id": stream_id,
             "message": "数据流已停止",
             "summary": {
@@ -377,10 +401,11 @@ async def stop_data_stream(stream_id: str):
         
     except Exception as e:
         logger.error(f"停止数据流失败: {e}")
-        raise HTTPException(status_code=500, detail=f"停止数据流失败: {str(e)}")
+        raise HTTPE@cache(expire=300)  # 5分钟缓存
+xception(status_code=500, detail=f"停止数据流失败: {str(e)}")
 
 @app.get("/api/v1/data-stream/{stream_id}/status")
-async def get_data_stream_status(stream_id: str):
+async async def get_data_stream_status(
     """获取数据流状态"""
     try:
         if stream_id not in data_streams:
@@ -395,7 +420,8 @@ async def get_data_stream_status(stream_id: str):
             runtime = (stream_config.get("end_time", datetime.now()) - stream_config["start_time"]).total_seconds()
         
         return {
-            "stream_id": stream_id,
+            "stream_id"@limiter.limit("100/minute")  # 每分钟100次请求
+: stream_id,
             "status": stream_config["status"],
             "runtime_seconds": runtime,
             "data_count": stream_config["data_count"],
@@ -405,18 +431,20 @@ async def get_data_stream_status(stream_id: str):
         }
         
     except Exception as e:
-        logger.error(f"获取数据流状态失败: {e}")
+        logger.error(f"获取数据流状态失败:@cache(expire=300)  # 5分钟缓存
+ {e}")
         raise HTTPException(status_code=500, detail=f"获取数据流状态失败: {str(e)}")
 
 @app.get("/api/v1/predefined-configs")
-async def get_predefined_configs():
+async async def get_predefined_configs(
     """获取预定义的传感器配置"""
     try:
         configs = {}
         for config_id, config in PREDEFINED_SENSOR_CONFIGS.items():
             configs[config_id] = {
                 "device_id": config.device_id,
-                "device_name": config.device_name,
+                "device_name": co@limiter.limit("100/minute")  # 每分钟100次请求
+nfig.device_name,
                 "connection_type": config.connection_type.value,
                 "sampling_rate": config.sampling_rate,
                 "data_format": config.data_format,
@@ -544,5 +572,4 @@ def broadcast_sensor_data(reading):
         logger.error(f"广播传感器数据失败: {e}")
 
 if __name__ == "__main__":
-    import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001) 

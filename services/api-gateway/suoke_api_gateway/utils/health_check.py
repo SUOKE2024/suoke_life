@@ -1,20 +1,27 @@
 """
+health_check - 索克生活项目模块
+"""
+
+            import psutil
+            import shutil
+from ..core.config import Settings
+from ..core.logging import get_logger
+from abc import ABC, abstractmethod
+from enum import Enum
+from pydantic import BaseModel
+from typing import Any, Dict, List, Optional
+import aiohttp
+import asyncio
+import time
+
+"""
 健康检查模块
 
 实现各种健康检查器和健康状态管理。
 """
 
-import asyncio
-import time
-from abc import ABC, abstractmethod
-from enum import Enum
-from typing import Any, Dict, List, Optional
 
-import aiohttp
-from pydantic import BaseModel
 
-from ..core.config import Settings
-from ..core.logging import get_logger
 
 logger = get_logger(__name__)
 
@@ -33,6 +40,18 @@ class HealthCheckResult(BaseModel):
     duration: float
     timestamp: float
     details: Optional[Dict[str, Any]] = None
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'healthcheckresult'
+        ordering = ['-created_at']
+
 
 class HealthSummary(BaseModel):
     """健康状态摘要"""
@@ -232,7 +251,6 @@ class DiskSpaceHealthChecker(HealthChecker):
         start_time = time.time()
         
         try:
-            import shutil
             
             total, used, free = shutil.disk_usage(self.path)
             usage_ratio = used / total
@@ -294,7 +312,6 @@ class MemoryHealthChecker(HealthChecker):
         start_time = time.time()
         
         try:
-            import psutil
             
             memory = psutil.virtual_memory()
             usage_ratio = memory.percent / 100

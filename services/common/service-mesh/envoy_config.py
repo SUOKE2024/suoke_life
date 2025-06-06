@@ -1,15 +1,20 @@
+"""
+envoy_config - 索克生活项目模块
+"""
+
+from dataclasses import dataclass, field
+from typing import Any
+import json
+import logging
+import yaml
+
 #!/usr/bin/env python3
 """
 Envoy配置管理器
 提供对Envoy代理的配置管理支持
 """
 
-from dataclasses import dataclass, field
-import json
-import logging
-from typing import Any
 
-import yaml
 
 logger = logging.getLogger(__name__)
 

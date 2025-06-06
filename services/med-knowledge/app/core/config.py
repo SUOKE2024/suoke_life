@@ -1,10 +1,16 @@
-from functools import lru_cache
-import os
-from typing import Any
+"""
+config - 索克生活项目模块
+"""
 
+            import json
+from functools import lru_cache
 from pydantic import Field, validator
 from pydantic_settings import BaseSettings
+from typing import Any
+import os
 import yaml
+
+
 
 
 class ServerSettings(BaseSettings):
@@ -205,7 +211,6 @@ def load_config_from_file(config_path: str) -> dict[str, Any]:
         if config_path.endswith((".yaml", ".yml")):
             return yaml.safe_load(f) or {}
         elif config_path.endswith(".json"):
-            import json
 
             return json.load(f)
 

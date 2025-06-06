@@ -1,3 +1,17 @@
+"""
+load_test - 索克生活项目模块
+"""
+
+from dataclasses import dataclass
+from loguru import logger
+from typing import Dict, List, Any, Optional
+import aiohttp
+import argparse
+import asyncio
+import random
+import statistics
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -8,16 +22,7 @@ RAG服务负载测试脚本
     python load_test.py --url http://localhost:8000 --users 10 --time 30
 """
 
-import argparse
-import asyncio
-import random
-import time
-from dataclasses import dataclass
-from typing import Dict, List, Any, Optional
-import statistics
 
-import aiohttp
-from loguru import logger
 
 @dataclass
 class TestResult:

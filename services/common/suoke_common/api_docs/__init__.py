@@ -1,11 +1,17 @@
+"""
+__init__ - 索克生活项目模块
+"""
+
+from .doc_decorators import api_doc, api_parameter, api_response
+from .openapi_generator import (
+from .swagger_ui import SwaggerUIServer
+
 #!/usr/bin/env python3
 """
 API文档生成模块
 提供自动生成OpenAPI/Swagger文档的功能
 """
 
-from .doc_decorators import api_doc, api_parameter, api_response
-from .openapi_generator import (
     APIEndpoint,
     APIParameter,
     APIResponse,
@@ -13,7 +19,6 @@ from .openapi_generator import (
     OpenAPIGenerator,
     get_openapi_generator,
 )
-from .swagger_ui import SwaggerUIServer
 
 __all__ = [
     "APIEndpoint",

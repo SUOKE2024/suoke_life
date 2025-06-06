@@ -1,3 +1,22 @@
+"""
+model_manager - 索克生活项目模块
+"""
+
+        import random
+from ..observability.metrics import MetricsCollector
+from ..observability.tracing import trace_operation, SpanKind
+from .ab_testing import ABTestingFramework, Experiment
+from dataclasses import dataclass, field
+from enum import Enum
+from loguru import logger
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Callable, Union, Tuple
+import asyncio
+import hashlib
+import json
+import threading
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,20 +24,7 @@
 智能模型管理器 - 支持模型版本控制、热更新、A/B测试等功能
 """
 
-import asyncio
-import time
-import json
-import hashlib
-from typing import Dict, List, Any, Optional, Callable, Union, Tuple
-from dataclasses import dataclass, field
-from enum import Enum
-from pathlib import Path
-import threading
-from loguru import logger
 
-from ..observability.metrics import MetricsCollector
-from ..observability.tracing import trace_operation, SpanKind
-from .ab_testing import ABTestingFramework, Experiment
 
 class ModelType(str, Enum):
     """模型类型"""
@@ -543,7 +549,6 @@ class ModelManager:
     
     def _select_version_by_traffic(self, name: str) -> str:
         """根据流量权重选择版本"""
-        import random
         
         weights = self.traffic_routing[name]
         versions = list(weights.keys())

@@ -1,6 +1,11 @@
-"""Time utilities for look service."""
+"""
+time_utils - 索克生活项目模块
+"""
 
 from datetime import UTC, datetime
+
+"""Time utilities for look service."""
+
 
 
 def get_current_timestamp() -> str:

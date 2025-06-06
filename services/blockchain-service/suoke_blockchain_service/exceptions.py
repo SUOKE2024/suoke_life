@@ -1,10 +1,17 @@
 """
+exceptions - 索克生活项目模块
+"""
+
+    import functools
+    import logging
+from typing import Optional, Dict, Any
+
+"""
 区块链服务异常定义
 
 定义服务中使用的各种异常类型。
 """
 
-from typing import Optional, Dict, Any
 
 
 class BlockchainServiceError(Exception):
@@ -278,8 +285,6 @@ class TimeoutError(BlockchainServiceError):
 
 def handle_exception(func):
     """异常处理装饰器"""
-    import functools
-    import logging
     
     @functools.wraps(func)
     async def wrapper(*args, **kwargs):

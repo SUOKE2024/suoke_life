@@ -1,21 +1,26 @@
 """
+monitoring - 索克生活项目模块
+"""
+
+from .cache_simple import get_cache_manager
+from .config import get_settings
+from .database import get_database
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from loguru import logger
+from prometheus_client import Counter, Histogram, Gauge, Info, CollectorRegistry, generate_latest
+from typing import Dict, Any, Optional, List
+import asyncio
+import psutil
+import time
+
+"""
 监控和指标模块
 
 提供应用程序的监控指标、健康检查、性能监控等功能。
 """
 
-import time
-import psutil
-import asyncio
-from typing import Dict, Any, Optional, List
-from datetime import datetime, timedelta
-from dataclasses import dataclass, field
-from prometheus_client import Counter, Histogram, Gauge, Info, CollectorRegistry, generate_latest
-from loguru import logger
 
-from .config import get_settings
-from .database import get_database
-from .cache_simple import get_cache_manager
 
 
 # Prometheus 指标注册表
@@ -330,7 +335,8 @@ class MetricsCollector:
         if len(self._response_times) > 1000:
             self._response_times = self._response_times[-1000:]
     
-    def record_db_query(self, operation: str, table: str, duration: float, success: bool):
+        @cache(timeout=300)  # 5分钟缓存
+def record_db_query(self, operation: str, table: str, duration: float, success: bool):
         """记录数据库查询指标"""
         status = "success" if success else "error"
         

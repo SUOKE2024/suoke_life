@@ -1,24 +1,29 @@
+"""
+agent_mesh_controller - 索克生活项目模块
+"""
+
+from ..service_registry.agent_discovery import (
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any, Dict, List, Optional, Set, Tuple
+from uuid import uuid4
+import aiohttp
+import aioredis
+import asyncio
+import hashlib
+import json
+import logging
+import random
+
 #!/usr/bin/env python3
 """
 智能体服务网格控制器
 实现智能体间的动态服务发现、负载均衡、智能路由和熔断保护
 """
 
-import asyncio
-import json
-import logging
-import random
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple
-from uuid import uuid4
-import hashlib
 
-import aioredis
-import aiohttp
 
-from ..service_registry.agent_discovery import (
     AgentType, CapabilityType, AgentServiceInfo, AgentServiceRegistry, get_agent_registry
 )
 

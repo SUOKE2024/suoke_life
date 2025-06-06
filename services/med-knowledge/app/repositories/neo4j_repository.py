@@ -1,11 +1,16 @@
-from typing import Any
-
-from neo4j import AsyncDriver, AsyncGraphDatabase
-from neo4j.exceptions import Neo4jError, ServiceUnavailable
+"""
+neo4j_repository - 索克生活项目模块
+"""
 
 from app.core.config import DatabaseSettings
 from app.core.logger import get_logger
 from app.models.entities import (
+from neo4j import AsyncDriver, AsyncGraphDatabase
+from neo4j.exceptions import Neo4jError, ServiceUnavailable
+from typing import Any
+
+
+
     Constitution,
     ConstitutionListResponse,
     Recommendation,
@@ -33,7 +38,8 @@ class Neo4jRepository:
             await self.driver.close()
             logger.info("Neo4j数据库连接已关闭")
 
-    async def _execute_query(self, query, params=None, database=None):
+    async     @cache(timeout=300)  # 5分钟缓存
+def _execute_query(self, query, params=None, database=None):
         """执行Cypher查询"""
         if self.driver is None:
             raise RuntimeError("数据库连接未初始化")
@@ -46,6 +52,7 @@ class Neo4jRepository:
                 return records
             except Neo4jError as e:
                 logger.error(f"查询执行失败: {e}")
+    @cache(timeout=300)  # 5分钟缓存
                 raise
 
     async def _execute_single_result_query(self, query, params=None, database=None):

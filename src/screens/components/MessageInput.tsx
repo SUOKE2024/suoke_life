@@ -1,7 +1,7 @@
-import React from "react";
-importIcon from "../../components/common/Icon/import { colors, spacing, borderRadius, fonts  } from "../../placeholder";../../constants/theme";//////
-importReact,{ useState, useRef } from react""
 import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/////      View,";
+
+import React from "react";
+importIcon from "../../components/common/Icon/import { colors, spacing, borderRadius, fonts  } from "../../placeholder";../../constants/theme";// importReact,{ useState, useRef } from react""
   Text,
   StyleSheet,
   TextInput,
@@ -20,11 +20,11 @@ interface MessageInputProps { onSend: (message: string) => void;
   onVoicePress?: () => void;
   onAttachPress?: () => void;
 isTyping?: boolean}
-export const MessageInput: React.FC<MessageInputProps /> = ({/  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor(MessageInput", ";
-{; /////
+export const MessageInput: React.FC<MessageInputProps /> = ({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor(MessageInput", ";
+{/////
     trackRender: true,
     trackMemory: false,
-    warnThreshold: 100, // ms //////     })
+    warnThreshold: 100, // ms // });
   onSend,
   placeholder = "输入消息...,"
   disabled = false,
@@ -39,8 +39,7 @@ export const MessageInput: React.FC<MessageInputProps /> = ({/  // 性能监控 
 }) => {}
   const [message, setMessage] = useState<string>(");"
   const [inputHeight, setInputHeight] = useState<number>(4;0;);
-  const inputRef = useRef<TextInput />(nul;l;);//////
-  const handleSend = useCallback((); => {;}
+  const inputRef = useRef<TextInput />(nul;l;);// const handleSend = useCallback((); => {}
     // TODO: Implement function body *}, []) ////
     if (message.trim(); && !disabled) {
       onSend(message.trim(););
@@ -48,7 +47,7 @@ export const MessageInput: React.FC<MessageInputProps /> = ({/  // 性能监控 
       setInputHeight(40);
     }
   };
-  const handleContentSizeChange = useCallback((); => {;}
+  const handleContentSizeChange = useCallback((); => {}
     // TODO: Implement function body *}, []) ////
     if (multiline) {
       const { height   } = event.nativeEvent.contentSi;z;e;
@@ -56,14 +55,12 @@ export const MessageInput: React.FC<MessageInputProps /> = ({/  // 性能监控 
     }
   };
   const canSend = message.trim().length > 0 && !disabl;e;d;
-  // 记录渲染性能 //////
-  performanceMonitor.recordRender()
-  return (
-    <KeyboardAvoidingView,
-      behavior={Platform.OS === "ios ? "padding" : height"}
-      style={[styles.container, style]} />/////          {isTyping && (
-        <View style={styles.typingIndicator} />/          <Text style={styles.typingText} />智能体正在输入...</Text>/          <View style={styles.typingDots} />/            <View style={[styles.dot, styles.dot1]} />/            <View style={[styles.dot, styles.dot2]} />/            <View style={[styles.dot, styles.dot3]} />/          </View>/        </View>/////          )}
-      <View style={styles.inputContainer} />/        {// 附件按钮 }/////            {showAttachButton && (
+  // 记录渲染性能 // performanceMonitor.recordRender();
+  return (;
+    <KeyboardAvoidingView,behavior={Platform.OS === "ios ? "padding" : height"};
+      style={[styles.container, style]} />/////          {isTyping && (;
+        <View style={styles.typingIndicator} />/          <Text style={styles.typingText} />智能体正在输入...</Text>/          <View style={styles.typingDots} />/            <View style={[styles.dot, styles.dot1]} />/            <View style={[styles.dot, styles.dot2]} />/            <View style={[styles.dot, styles.dot3]} />/          </View>/        </View>/////          )};
+      <View style={styles.inputContainer} />/        {// 附件按钮 }/////            {showAttachButton && (;
           <TouchableOpacity;
 style={styles.actionButton}
             onPress={onAttachPress};
@@ -112,14 +109,13 @@ style={[
               color={colors.white} />/          </TouchableOpacity>/////            )}
       </View>/    </KeyboardAvoidingView>/////      );
 }
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     backgroundColor: colors.surface,
     borderTopWidth: 1,
     borderTopColor: colors.border;
   },
   typingIndicator: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center",
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
@@ -142,7 +138,7 @@ const styles = StyleSheet.create({;
   dot2: { opacity: 0.7  },
   dot3: { opacity: 1  },
   inputContainer: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "flex-end",
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
@@ -153,7 +149,7 @@ const styles = StyleSheet.create({;
     height: 40,
     borderRadius: 20,
     justifyContent: center","
-    alignItems: "center,"
+    alignItems: "center,",
     marginHorizontal: spacing.xs;
   },
   inputWrapper: {
@@ -179,7 +175,7 @@ const styles = StyleSheet.create({;
     backgroundColor: colors.disabled + 20""
   },
   charCount: {
-    position: "absolute,"
+    position: "absolute,",
     bottom: spacing.xs,
     right: spacing.xs,
     fontSize: fonts.size.xs,
@@ -204,5 +200,4 @@ const styles = StyleSheet.create({;
   },
   disabledSendButton: {
     backgroundColor: colors.disabled,
-    shadowOpacity: 0,;
-    elevation: 0};};);
+    shadowOpacity: 0,elevation: 0};};);

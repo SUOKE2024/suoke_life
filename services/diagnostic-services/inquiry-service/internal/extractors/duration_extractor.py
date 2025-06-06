@@ -1,14 +1,20 @@
+"""
+duration_extractor - 索克生活项目模块
+"""
+
+            from ..common.utils import calculate_confidence
+from ..common.base import BaseService
+from ..common.utils import sanitize_text
+from typing import Any
+import re
+
 #!/usr/bin/env python
 
 """
 持续时间提取器
 """
 
-import re
-from typing import Any
 
-from ..common.base import BaseService
-from ..common.utils import sanitize_text
 
 
 class DurationExtractor(BaseService):
@@ -198,7 +204,6 @@ class DurationExtractor(BaseService):
             if analysis["is_ongoing"] or analysis["is_intermittent"]:
                 confidence_factors.append(0.6)
 
-            from ..common.utils import calculate_confidence
 
             analysis["confidence"] = (
                 calculate_confidence(confidence_factors) if confidence_factors else 0.0

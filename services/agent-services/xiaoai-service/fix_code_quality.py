@@ -1,11 +1,16 @@
-#!/usr/bin/env python3
+"""
+fix_code_quality - 索克生活项目模块
 """
 
+from pathlib import Path
 import json
 import os
 import re
 import sys
-from pathlib import Path
+
+#!/usr/bin/env python3
+"""
+
 
 
 自动修复 xiaoai-self.service 代码质量问题

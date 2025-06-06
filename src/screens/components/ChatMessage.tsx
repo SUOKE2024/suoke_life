@@ -1,15 +1,15 @@
+import { colors, spacing, borderRadius, fonts } from "../../constants/theme/import { AgentType, AGENTS } from ;./////    AgentCard";
+import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/////      View,";
+
 import React from "react";
-import { colors, spacing, borderRadius, fonts } from "../../constants/theme/import { AgentType, AGENTS } from ";";./////    AgentCard";
 /////
 importReact,{ memo } from react""
-import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/////      View,";
   Text,
   StyleSheet,
   TouchableOpacity,
-  { ViewStyle } from ";react-native"
+  { ViewStyle } from ";react-native";
 export interface Message { id: string,
-  text: string,;
-  sender: user" | AgentType,";
+  text: string,sender: user" | AgentType,";
   timestamp: Date;
 type?: "text | "image" | voice"
   status?: "sending | "sent" | delivered" | "read | "failed"}"
@@ -19,11 +19,11 @@ interface ChatMessageProps { message: Message;
   style?: ViewStyle;
   showTimestamp?: boolean;
 showAvatar?: boolean}
-export const ChatMessage: React.FC<ChatMessageProps /> = memo(({/  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor(ChatMessage", ";
-{; /////
+export const ChatMessage: React.FC<ChatMessageProps /> = memo(({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor(ChatMessage", ";
+{/////
     trackRender: true,
     trackMemory: false,
-    warnThreshold: 100, // ms //////     })
+    warnThreshold: 100, // ms // });
   message,
   onPress,
   onLongPress,
@@ -33,43 +33,38 @@ export const ChatMessage: React.FC<ChatMessageProps /> = memo(({/  // 性能监�
 }) => {}
   const isUser = message.sender === "user;"
   const agent = isUser ? null : AGENTS[message.sender as AgentTyp;e;];
-  const handlePress = useCallback((); => {;}
+  const handlePress = useCallback((); => {}
     // TODO: Implement function body *}, []) ////
     onPress?.(message);
   };
-  const handleLongPress = useCallback((); => {;}
+  const handleLongPress = useCallback((); => {}
     // TODO: Implement function body *}, []) ////
     onLongPress?.(message);
   };
-  const formatTimestamp = useCallback((); => {;}
+  const formatTimestamp = useCallback((); => {}
     // TODO: Implement function body *}, []) ////
-    return timestamp.toLocaleTimeString("zh-CN", {
-      hour: 2-digit","
+    return timestamp.toLocaleTimeString("zh-CN", {hour: 2-digit",";
       minute: "2-digit});"
   };
-  const getStatusIcon = useCallback((); => {;}
+  const getStatusIcon = useCallback((); => {}
     // TODO: Implement function body *}, []) ////
     switch (message.status) {
       case "sending":
-        return ⏳";"
+        return ⏳
       case "sent:"
         return ";✓";
       case delivered":"
         return "✓;✓;"
       case "read":
-        return ✓;✓";"
+        return ✓;✓
       case "failed:"
         return ";❌";
-      default: return "}"
+      default: return "}";
   };
-  // 记录渲染性能 //////
-  performanceMonitor.recordRender()
-  return (
-    <View,
-      style={[
-        styles.container,
-        isUser ? styles.userContainer : styles.agentContainer,
-        style;
+  // 记录渲染性能 // performanceMonitor.recordRender();
+  return (;
+    <View,style={[;
+        styles.container,isUser ? styles.userContainer : styles.agentContainer,style;
       ]} />/      {// 智能体信息 }/////          {!isUser && showAvatar && (
         <View style={styles.agentInfo} />/          <View style={[styles.agentAvatar, { backgroundColor: agent?.color + "2;0  ; }]} />/            <Text style={styles.agentAvatarText} />{agent?.avatar}</Text>/          </View>/          <Text style={styles.agentName} />{agent?.name}</Text>/        </View>/////          )}"
       {// 消息气泡 }/////          <TouchableOpacity;
@@ -99,15 +94,14 @@ style={[
       </TouchableOpacity>/    </View>/////      )
 });
 ChatMessage.displayName = "ChatMessage"
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     marginVertical: spacing.xs,
     paddingHorizontal: spacing.md;
   },
   userContainer: { alignItems: "flex-end"  },
   agentContainer: { alignItems: flex-start"  },"
   agentInfo: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center",
     marginBottom: spacing.xs,
     marginLeft: spacing.sm;
@@ -117,7 +111,7 @@ const styles = StyleSheet.create({;
     height: 24,
     borderRadius: 12,
     justifyContent: center","
-    alignItems: "center,"
+    alignItems: "center,",
     marginRight: spacing.xs;
   },
   agentAvatarText: { fontSize: 12  },
@@ -156,7 +150,7 @@ const styles = StyleSheet.create({;
   userText: { color: colors.white  },
   agentText: { color: colors.text  },
   messageFooter: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     justifyContent: "space-between",
     alignItems: center","
     marginTop: spacing.xs;
@@ -171,5 +165,4 @@ const styles = StyleSheet.create({;
     color: colors.textSecondary,
     marginLeft: spacing.xs;
   },
-  readStatus: { color: colors.primary  },;
-  failedStatus: { color: colors.error  };};);
+  readStatus: { color: colors.primary  },failedStatus: { color: colors.error  };};);

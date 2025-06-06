@@ -1,18 +1,24 @@
+"""
+benchmark_uv_vs_pip - 索克生活项目模块
+"""
+
+    import argparse
+from pathlib import Path
+from typing import Dict, List, Tuple
+import json
+import os
+import shutil
+import statistics
+import subprocess
+import tempfile
+import time
+
 #!/usr/bin/env python3
 """
 uv vs pip 性能对比测试脚本
 用于测试和比较uv与pip在索克生活项目中的性能表现
 """
 
-import time
-import subprocess
-import tempfile
-import shutil
-import os
-from pathlib import Path
-from typing import Dict, List, Tuple
-import json
-import statistics
 
 class PerformanceBenchmark:
     """性能基准测试类"""
@@ -289,7 +295,6 @@ requires-python = ">=3.11"
 
 
 def main():
-    import argparse
 
     parser = argparse.ArgumentParser(description="uv vs pip 性能对比测试")
     parser.add_argument("--iterations", type=int, default=3, help="测试迭代次数")

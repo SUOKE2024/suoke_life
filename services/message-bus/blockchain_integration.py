@@ -1,27 +1,32 @@
+"""
+blockchain_integration - 索克生活项目模块
+"""
+
+from cryptography.fernet import Fernet
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any, Dict, List, Optional, Set, Union
+from uuid import uuid4
+import aiohttp
+import aioredis
+import asyncio
+import base64
+import hashlib
+import hmac
+import json
+import logging
+import os
+
 #!/usr/bin/env python3
 """
 区块链消息总线深度集成
 实现端到端加密、数字签名、区块链存储和IPFS分布式存储
 """
 
-import asyncio
-import hashlib
-import hmac
-import json
-import logging
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Union
-from uuid import uuid4
-import base64
-import os
 
-import aioredis
-import aiohttp
-from cryptography.fernet import Fernet
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 logger = logging.getLogger(__name__)
 

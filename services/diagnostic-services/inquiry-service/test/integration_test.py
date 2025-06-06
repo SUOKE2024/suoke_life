@@ -1,14 +1,19 @@
+"""
+integration_test - 索克生活项目模块
+"""
+
+import asyncio
+import grpc
+import os
+import sys
+
 #!/usr/bin/env python
 
 """
 问诊服务功能测试脚本
 """
 
-import asyncio
-import os
-import sys
 
-import grpc
 
 # 添加项目路径
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), ".")))

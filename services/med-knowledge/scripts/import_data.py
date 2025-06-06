@@ -1,3 +1,17 @@
+"""
+import_data - 索克生活项目模块
+"""
+
+from datetime import datetime
+from dotenv import load_dotenv
+from neo4j import GraphDatabase
+from pathlib import Path
+import argparse
+import json
+import logging
+import os
+import sys
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
@@ -6,16 +20,7 @@ Med Knowledge Service数据导入脚本
 用于将JSON数据文件导入Neo4j数据库，构建知识图谱
 """
 
-import os
-import sys
-import json
-import logging
-from datetime import datetime
-import argparse
-from pathlib import Path
 
-from neo4j import GraphDatabase
-from dotenv import load_dotenv
 
 # 设置日志
 logging.basicConfig(

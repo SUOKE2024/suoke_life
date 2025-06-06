@@ -1,14 +1,19 @@
 """
+health_data - 索克生活项目模块
+"""
+
+from .base import BaseModel
+from enum import Enum
+from sqlalchemy import Enum as SQLEnum
+from sqlalchemy import JSON, Column, Float, ForeignKey, String
+from sqlalchemy.orm import relationship
+
+"""
 健康数据模型
 """
 
-from enum import Enum
 
-from sqlalchemy import JSON, Column, Float, ForeignKey, String
-from sqlalchemy import Enum as SQLEnum
-from sqlalchemy.orm import relationship
 
-from .base import BaseModel
 
 
 class HealthDataType(str, Enum):
@@ -46,3 +51,15 @@ class HealthData(BaseModel):
 
     def __repr__(self) -> str:
         return f"<HealthData(user_id={self.user_id}, type={self.data_type}, value={self.value})>"
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'healthdata'
+        ordering = ['-created_at']
+

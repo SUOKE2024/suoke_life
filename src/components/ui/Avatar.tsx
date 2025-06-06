@@ -1,9 +1,9 @@
-import React from "react";
 import {   View, Image, StyleSheet, ViewStyle, ImageStyle   } from "react-native";
-import { colors, borderRadius  } from "../../placeholder";../../constants/theme";/importText from "./Text";/////    importReact from "react";"
 import { usePerformanceMonitor } from "../hooks/////    usePerformanceMonitor";
-//////
- * 索克生活 - Avatar组件;
+
+import React from "react";
+import { colors, borderRadius  } from "../../placeholder";../../constants/theme";/importText from "./Text";/////    importReact from "react
+// * 索克生活 - Avatar组件;
  * 通用头像组件
 export interface AvatarProps  {
   // 头像源 // source?:  { uri: string} | number ////
@@ -14,10 +14,8 @@ export interface AvatarProps  {
   imageStyle?: ImageStyle;
   // 其他属性 // testID?: string ////
 }
-const Avatar: React.FC<AvatarProps /> = ({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor(Avatar", { /////    "
-    trackRender: true,
-    trackMemory: false,
-    warnThreshold: 100, // ms //////     };)
+const Avatar: React.FC<AvatarProps /> = ({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor(Avatar", { /////    ";
+    trackRender: true,trackMemory: false,warnThreshold: 100, // ms // };);
   source,
   name,
   size = "medium",
@@ -26,15 +24,14 @@ const Avatar: React.FC<AvatarProps /> = ({/  // 性能监控 // const performanc
   imageStyle,
   testID;
 }) => {}
-  const getSize = useCallback => {;}
-  const avatarStyle: ViewStyle[] = [styles.base,;
-    {
+  const getSize = useCallback => {}
+  const avatarStyle: ViewStyle[] = [styles.base,{
       width: avatarSize,
       height: avatarSize,
       borderRadius: shape === "circle" ? avatarSize / 2 : borderRadius.md,/////        },
     style;
   ].filter(Boolean);
-  const getInitials = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => (name: string): string => {;}
+  const getInitials = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => (name: string): string => {}
     return name;
       .split(" ");
       .map((wor;d;); => word.charAt(0))
@@ -42,7 +39,7 @@ const Avatar: React.FC<AvatarProps /> = ({/  // 性能监控 // const performanc
       .toUpperCase();
       .slice(0, 2), []);
   };
-  const getBackgroundColor = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => (name: string): string => {;}
+  const getBackgroundColor = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => (name: string): string => {}
     const colors = [;
       "#FF6B6B",
       "#4ECDC4",
@@ -60,9 +57,8 @@ const Avatar: React.FC<AvatarProps /> = ({/  // 性能监控 // const performanc
     return colors[Math.abs(has;h;); % colors.length];
   };
   if (source) {
-    // 记录渲染性能 //////
-    performanceMonitor.recordRender()
-    return (
+    // 记录渲染性能 // performanceMonitor.recordRender();
+    return (;
       <View style={avatarStyle} testID={testID} />/////            <Image;
 source={source}
           style={[
@@ -77,7 +73,7 @@ source={source}
         / accessibilityLabel="TODO: 添加图片描述" />/      </View>/////        ;);
   }
   if (name) {
-    return (
+    return (;
       <View;
 style={[avatarStyle, { backgroundColor: getBackgroundColor(name)   }]};
         testID={testID} />/////            <Text;
@@ -92,13 +88,12 @@ style={[avatarStyle, { backgroundColor: getBackgroundColor(name)   }]};
         color="gray400" />/        ?////
       </Text>/    </View>/////    );
 };
-const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({;
-  base: {
+const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({base: {
     alignItems: "center",
     justifyContent: "center",
     overflow: "hidden"},
   image: {
-    // 图片样式在组件中动态设置 //////     },
+    // 图片样式在组件中动态设置 // },
   text: {
     fontWeight: "600",
     textAlign: "center"},

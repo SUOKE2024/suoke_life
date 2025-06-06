@@ -1,3 +1,21 @@
+"""
+intelligent_engine_manager - 索克生活项目模块
+"""
+
+from ..cache.advanced_cache import AdvancedCacheManager
+from ..observability.metrics import MetricsCollector
+from ..observability.tracing import trace_operation, SpanKind
+from ..resilience.circuit_breaker import CircuitBreaker
+from collections import defaultdict, deque
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Dict, List, Optional, Any, Type, Callable, Union
+import asyncio
+import logging
+import threading
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -13,20 +31,7 @@
 - 统一配置管理
 """
 
-import asyncio
-import logging
-from datetime import datetime, timedelta
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Dict, List, Optional, Any, Type, Callable, Union
-from collections import defaultdict, deque
-import threading
-from concurrent.futures import ThreadPoolExecutor, as_completed
 
-from ..observability.metrics import MetricsCollector
-from ..observability.tracing import trace_operation, SpanKind
-from ..cache.advanced_cache import AdvancedCacheManager
-from ..resilience.circuit_breaker import CircuitBreaker
 
 class EngineStatus(str, Enum):
     """引擎状态"""

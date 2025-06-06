@@ -1,3 +1,20 @@
+"""
+multimodal_processor - 索克生活项目模块
+"""
+
+        import re
+from ..common.base import BaseService
+from ..common.cache import cached
+from ..common.exceptions import InquiryServiceError
+from ..common.metrics import counter, memory_optimized, timer
+from PIL import Image
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from loguru import logger
+from typing import Any
+import io
+
 #!/usr/bin/env python3
 
 """
@@ -7,19 +24,8 @@
 统一处理和特征提取，为问诊服务提供更丰富的输入支持。
 """
 
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
-import io
-from typing import Any
 
-from loguru import logger
-from PIL import Image
 
-from ..common.base import BaseService
-from ..common.cache import cached
-from ..common.exceptions import InquiryServiceError
-from ..common.metrics import counter, memory_optimized, timer
 
 class InputType(Enum):
     """输入类型"""
@@ -361,7 +367,6 @@ class MultimodalProcessor(BaseService):
         cleaned = " ".join(text.split())
 
         # 去除特殊字符（保留中文、英文、数字、基本标点）
-        import re
 
         cleaned = re.sub(
             r"[^\u4e00-\u9fa5a-zA-Z0-9\s\.,;:!?()（）。，；：！？]", "", cleaned

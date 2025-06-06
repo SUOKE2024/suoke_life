@@ -1,16 +1,21 @@
 """
+retry - 索克生活项目模块
+"""
+
+from ..core.logging import get_logger
+from abc import ABC, abstractmethod
+from typing import Any, Callable, List, Optional, Type, Union
+import asyncio
+import random
+import time
+
+"""
 重试机制模块
 
 实现各种重试策略和重试管理器。
 """
 
-import asyncio
-import random
-import time
-from abc import ABC, abstractmethod
-from typing import Any, Callable, List, Optional, Type, Union
 
-from ..core.logging import get_logger
 
 logger = get_logger(__name__)
 

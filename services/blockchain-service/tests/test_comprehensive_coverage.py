@@ -1,27 +1,33 @@
 """
+test_comprehensive_coverage - 索克生活项目模块
+"""
+
+        import asyncio
+from datetime import datetime, timedelta
+from sqlalchemy.exc import SQLAlchemyError, IntegrityError
+from suoke_blockchain_service.blockchain_client import get_blockchain_client
+from suoke_blockchain_service.encryption import EncryptionService
+from suoke_blockchain_service.exceptions import (
+from suoke_blockchain_service.ipfs_client import IPFSClient
+from suoke_blockchain_service.models import DataType, AccessLevel, TransactionStatus
+from suoke_blockchain_service.service import BlockchainService
+from suoke_blockchain_service.zk_integration import ZKProofGenerator, ZKProofVerifier
+from unittest.mock import AsyncMock, MagicMock, patch, call
+import hashlib
+import json
+import pytest
+import uuid
+
+"""
 全面测试覆盖率提升
 
 补充边界条件、异常情况和未测试代码路径的测试用例。
 """
 
-import pytest
-import json
-import uuid
-import hashlib
-from datetime import datetime, timedelta
-from unittest.mock import AsyncMock, MagicMock, patch, call
-from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
-from suoke_blockchain_service.service import BlockchainService
-from suoke_blockchain_service.models import DataType, AccessLevel, TransactionStatus
-from suoke_blockchain_service.exceptions import (
     ValidationError, NotFoundError, BlockchainServiceError, 
     PermissionError, IntegrationError
 )
-from suoke_blockchain_service.encryption import EncryptionService
-from suoke_blockchain_service.zk_integration import ZKProofGenerator, ZKProofVerifier
-from suoke_blockchain_service.ipfs_client import IPFSClient
-from suoke_blockchain_service.blockchain_client import get_blockchain_client
 
 
 @pytest.fixture
@@ -389,7 +395,8 @@ class TestBlockchainServiceEdgeCases:
                 )
 
     @pytest.mark.asyncio
-    async def test_get_health_records_with_data_type_filter(self, blockchain_service):
+    async     @cache(timeout=300)  # 5分钟缓存
+def test_get_health_records_with_data_type_filter(self, blockchain_service):
         """测试按数据类型过滤获取健康记录"""
         user_id = str(uuid.uuid4())
         
@@ -425,7 +432,8 @@ class TestBlockchainServiceEdgeCases:
             assert len(result["records"]) == 1
             assert result["records"][0]["data_type"] == "heart_rate"
 
-    @pytest.mark.asyncio
+      @cache(timeout=300)  # 5分钟缓存
+  @pytest.mark.asyncio
     async def test_get_health_records_pagination(self, blockchain_service):
         """测试健康记录分页功能"""
         user_id = str(uuid.uuid4())
@@ -462,7 +470,8 @@ class TestBlockchainServiceEdgeCases:
             assert len(result["records"]) == 5
             assert result["limit"] == 3
             assert result["offset"] == 2
-            assert result["has_more"] is True
+            asse    @cache(timeout=300)  # 5分钟缓存
+rt result["has_more"] is True
 
     @pytest.mark.asyncio
     async def test_get_access_grants_as_grantee(self, blockchain_service):
@@ -694,7 +703,6 @@ class TestBlockchainServicePerformance:
     @pytest.mark.asyncio
     async def test_concurrent_store_operations(self, blockchain_service):
         """测试并发存储操作"""
-        import asyncio
         
         blockchain_service.encryption_service.encrypt_data.return_value = (b"encrypted", "key")
         blockchain_service.ipfs_client.upload_data.return_value = "QmHash"

@@ -1,3 +1,11 @@
+"""
+test_imports - 索克生活项目模块
+"""
+
+        import traceback
+import os
+import sys
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
@@ -5,8 +13,6 @@
 测试相对导入问题
 """
 
-import sys
-import os
 
 # 添加当前目录到路径
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -33,7 +39,6 @@ def test_relative_imports():
 
     except ImportError as e:
         print(f'❌ 相对导入失败: {e}')
-        import traceback
         traceback.print_exc()
         return False
 

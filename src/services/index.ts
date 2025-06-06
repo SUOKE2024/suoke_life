@@ -1,17 +1,19 @@
-//////     services 统一导出文件   索克生活APP - 架构优化
-//////     基础服务导出
-export { default as agentService } from "./agentService";
-export { default as authService } from "./authService";
-export { default as enhancedApiClient } from "./enhancedApiClient";
-export { default as realTimeSync } from "./realTimeSync";
-export { ragService } from "./ragService";
-export { messageBusService } from "./messageBusService";
-export { cornMazeService, CornMazeService, createCornMazeService } from "./cornMazeService";
-export { benchmarkService, BenchmarkService } from "./benchmarkService";
-export { benchmarkStreamingService, BenchmarkStreamingService } from "./benchmarkStreamingService";
+// services 统一导出文件   索克生活APP - 架构优化
+// 基础服务导出
+export { default as agentService } from './agentService';
+export { default as authService } from './authService';
+export { default as enhancedApiClient } from './enhancedApiClient';
+export { default as realTimeSync } from './realTimeSync';
+export { unifiedApiService } from './unifiedApiService';
+export { ragService } from './ragService';
+export { messageBusService } from './messageBusService';
+export { cornMazeService, CornMazeService, createCornMazeService } from './cornMazeService';
+export { benchmarkService, BenchmarkService } from './benchmarkService';
+export { benchmarkStreamingService, BenchmarkStreamingService } from './benchmarkStreamingService';
 
 // UI * UX优化服务完整导出 ////
-export { UIUXOptimizationService,
+export {
+  UIUXOptimizationService,
   AnimationManager,
   PerformanceOptimizer,
   InteractionEnhancer,
@@ -21,10 +23,12 @@ export { UIUXOptimizationService,
   defaultPerformanceConfig,
   defaultVisualEffectConfig,
   defaultResponsiveConfig,
-  defaultThemeConfig } from "./uiUxOptimizationService";
+  defaultThemeConfig,
+} from './uiUxOptimizationService';
 
 // UI * UX优化服务类型导出 ////
-export type { AnimationConfig,
+export type {
+  AnimationConfig,
   AdvancedAnimationType,
   PerformanceConfig,
   PerformanceMetrics,
@@ -32,7 +36,8 @@ export type { AnimationConfig,
   InteractionFeedback,
   VisualEffectConfig,
   ResponsiveConfig,
-  ThemeConfig } from "./uiUxOptimizationService";
+  ThemeConfig,
+} from './uiUxOptimizationService';
 
 // RAG服务相关类型导出
 export type {
@@ -43,8 +48,8 @@ export type {
   TCMAnalysisResponse,
   HerbRecommendationRequest,
   HerbRecommendationResponse,
-  DocumentIndexRequest
-} from "./ragService";
+  DocumentIndexRequest,
+} from './ragService';
 
 // 消息总线服务相关类型导出
 export type {
@@ -55,8 +60,8 @@ export type {
   CreateTopicRequest,
   CreateTopicResponse,
   Subscription,
-  MessageBusConfig
-} from "./messageBusService";
+  MessageBusConfig,
+} from './messageBusService';
 
 // 基准测试服务相关类型导出
 export type {
@@ -67,12 +72,26 @@ export type {
   ModelConfig,
   Plugin,
   BenchmarkStatus,
-  HealthStatus
-} from "./benchmarkService";
+  HealthStatus,
+} from './benchmarkService';
 
 // 基准测试流式服务相关类型导出
-export type {
-  StreamEvent,
-  StreamConfig,
-  EventListener
-} from "./benchmarkStreamingService";
+export type { StreamEvent, StreamConfig, EventListener } from './benchmarkStreamingService';
+
+// 导出所有服务
+export { apiClient } from './apiClient';
+export { healthDataService } from './healthDataService';
+export { fiveDiagnosisService } from './fiveDiagnosisService';
+
+// 导出类型
+export type { 
+  FiveDiagnosisInput,
+  FiveDiagnosisResult,
+  FiveDiagnosisError,
+  DiagnosisResult,
+  LookDiagnosisData,
+  ListenDiagnosisData,
+  InquiryDiagnosisData,
+  PalpationDiagnosisData,
+  CalculationDiagnosisData,
+} from './fiveDiagnosisService';

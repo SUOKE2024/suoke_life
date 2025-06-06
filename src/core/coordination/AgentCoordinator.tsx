@@ -1,9 +1,7 @@
-import React from "react";
-import { usePerformanceMonitor } from "../../hooks/usePerformanceMonitor";
 import { errorHandler, ErrorType } from "../error/ErrorHandler";
-import {
+import {import React from "react";
   performanceMonitor,
-  PerformanceCategory,
+  PerformanceCategory
 } from "../monitoring/PerformanceMonitor";
 
 /**
@@ -25,7 +23,7 @@ export enum TaskType {
   EMERGENCY_RESPONSE = "EMERGENCY_RESPONSE",
   DATA_ANALYSIS = "DATA_ANALYSIS",
   USER_INTERACTION = "USER_INTERACTION",
-  KNOWLEDGE_SHARING = "KNOWLEDGE_SHARING",
+  KNOWLEDGE_SHARING = "KNOWLEDGE_SHARING"
 }
 
 export enum TaskPriority {
@@ -33,7 +31,7 @@ export enum TaskPriority {
   MEDIUM = 2,
   HIGH = 3,
   URGENT = 4,
-  EMERGENCY = 5,
+  EMERGENCY = 5
 }
 
 export enum TaskStatus {
@@ -42,7 +40,7 @@ export enum TaskStatus {
   IN_PROGRESS = "IN_PROGRESS",
   COMPLETED = "COMPLETED",
   FAILED = "FAILED",
-  CANCELLED = "CANCELLED",
+  CANCELLED = "CANCELLED"
 }
 
 export interface AgentCapability {
@@ -180,10 +178,10 @@ export class AgentCoordinator {
       data,
       metadata: {
         createdAt: Date.now(),
-        estimatedDuration: options.estimatedDuration,
+        estimatedDuration: options.estimatedDuration
       },
       dependencies: options.dependencies,
-      collaborators: options.collaborators,
+      collaborators: options.collaborators
     };
 
     this.tasks.set(taskId, task);
@@ -242,7 +240,7 @@ export class AgentCoordinator {
     this.updateAgentStatus(agentType, {
       ...status,
       lastHeartbeat: Date.now(),
-      isOnline: true,
+      isOnline: true
     });
   }
 
@@ -317,7 +315,7 @@ export class AgentCoordinator {
       requestType,
       data,
       timestamp: Date.now(),
-      status: "PENDING",
+      status: "PENDING"
     };
 
     this.collaborationRequests.set(requestId, request);
@@ -366,9 +364,9 @@ export class AgentCoordinator {
   }
 
   private async processTaskQueue(): Promise<void> {
-    const availableTasks = this.taskQueue.filter(
-      (task) =>
-        task.status === TaskStatus.PENDING && this.areDependenciesMet(task)
+    const availableTasks = this.taskQueue.filter(;
+      (task) =>;
+        task.status === TaskStatus.PENDING && this.areDependenciesMet(task);
     );
 
     for (const task of availableTasks) {
@@ -405,8 +403,8 @@ export class AgentCoordinator {
   }
 
   private defaultTaskAssignment(task: Task): AgentType | null {
-    const availableAgents = Array.from(this.agents.entries())
-      .filter(([_, agent]) => this.isAgentAvailable(agent.type))
+    const availableAgents = Array.from(this.agents.entries());
+      .filter(([_, agent]) => this.isAgentAvailable(agent.type));
       .map(([type, agent]) => ({ type, agent }));
 
     if (availableAgents.length === 0) {
@@ -414,24 +412,23 @@ export class AgentCoordinator {
     }
 
     // 根据任务类型和智能体能力进行匹配
-    const suitableAgents = availableAgents.filter(({ agent }) =>
-      agent.capabilities.some((cap) => cap.type === task.type)
+    const suitableAgents = availableAgents.filter(({ agent }) =>;
+      agent.capabilities.some((cap) => cap.type === task.type);
     );
 
     if (suitableAgents.length === 0) {
       // 如果没有完全匹配的，选择负载最低的
-      return availableAgents.reduce((min, current) =>
-        current.agent.currentLoad < min.agent.currentLoad ? current : min
+      return availableAgents.reduce((min, current) =>;
+        current.agent.currentLoad < min.agent.currentLoad ? current : min;
       ).type;
     }
 
     // 选择最适合的智能体（考虑熟练度和当前负载）
-    return suitableAgents.reduce((best, current) => {
-      const currentCapability = current.agent.capabilities.find(
-        (cap) => cap.type === task.type
+    return suitableAgents.reduce((best, current) => {const currentCapability = current.agent.capabilities.find(;
+        (cap) => cap.type === task.type;
       )!;
-      const bestCapability = best.agent.capabilities.find(
-        (cap) => cap.type === task.type
+      const bestCapability = best.agent.capabilities.find(;
+        (cap) => cap.type === task.type;
       )!;
 
       const currentScore =
@@ -450,8 +447,8 @@ export class AgentCoordinator {
     }
 
     // 检查是否超过最大并发任务数
-    const maxTasks = Math.max(
-      ...agent.capabilities.map((cap) => cap.maxConcurrentTasks)
+    const maxTasks = Math.max(;
+      ...agent.capabilities.map((cap) => cap.maxConcurrentTasks);
     );
     return agent.activeTasks.length < maxTasks;
   }
@@ -461,8 +458,7 @@ export class AgentCoordinator {
       return true;
     }
 
-    return task.dependencies.every((depId) => {
-      const depTask = this.tasks.get(depId);
+    return task.dependencies.every((depId) => {const depTask = this.tasks.get(depId);
       return depTask && depTask.status === TaskStatus.COMPLETED;
     });
   }
@@ -485,11 +481,11 @@ export class AgentCoordinator {
   }
 
   private reassignAgentTasks(agentType: AgentType): void {
-    const tasksToReassign = Array.from(this.tasks.values()).filter(
-      (task) =>
-        task.assignedAgent === agentType &&
-        (task.status === TaskStatus.ASSIGNED ||
-          task.status === TaskStatus.IN_PROGRESS)
+    const tasksToReassign = Array.from(this.tasks.values()).filter(;
+      (task) =>;
+        task.assignedAgent === agentType &&;
+        (task.status === TaskStatus.ASSIGNED ||;
+          task.status === TaskStatus.IN_PROGRESS);
     );
 
     for (const task of tasksToReassign) {
@@ -503,8 +499,8 @@ export class AgentCoordinator {
 
   private optimizeTaskDistribution(): void {
     // 检查负载均衡
-    const agents = Array.from(this.agents.values()).filter(
-      (agent) => agent.isOnline
+    const agents = Array.from(this.agents.values()).filter(;
+      (agent) => agent.isOnline;
     );
     if (agents.length < 2) {return;}
 
@@ -524,9 +520,9 @@ export class AgentCoordinator {
     const overloadedAgent = this.agents.get(overloadedAgentType);
     if (!overloadedAgent) {return;}
 
-    const tasksToRedistribute = overloadedAgent.activeTasks
-      .map((taskId) => this.tasks.get(taskId))
-      .filter((task) => task && task.status === TaskStatus.ASSIGNED)
+    const tasksToRedistribute = overloadedAgent.activeTasks;
+      .map((taskId) => this.tasks.get(taskId));
+      .filter((task) => task && task.status === TaskStatus.ASSIGNED);
       .slice(0, Math.ceil(overloadedAgent.activeTasks.length * 0.2)); // 重分配20%的任务
 
     for (const task of tasksToRedistribute) {
@@ -566,10 +562,10 @@ export class AgentCoordinator {
   }
 
   private checkDependentTasks(completedTaskId: string): void {
-    const dependentTasks = Array.from(this.tasks.values()).filter(
-      (task) =>
-        task.dependencies?.includes(completedTaskId) &&
-        task.status === TaskStatus.PENDING
+    const dependentTasks = Array.from(this.tasks.values()).filter(;
+      (task) =>;
+        task.dependencies?.includes(completedTaskId) &&;
+        task.status === TaskStatus.PENDING;
     );
 
     for (const task of dependentTasks) {
@@ -589,7 +585,7 @@ export class AgentCoordinator {
     errorHandler.logError(ErrorType.TASK_EXECUTION_ERROR, {
       taskId: task.id,
       agentType: task.assignedAgent,
-      error: task.error,
+      error: task.error
     });
 
     // 如果是关键任务，尝试重新分配
@@ -640,7 +636,7 @@ export class AgentCoordinator {
       name: "紧急任务分配给小艾",
       condition: (task) => task.priority === TaskPriority.EMERGENCY,
       action: () => AgentType.XIAOAI,
-      priority: 100,
+      priority: 100
     });
 
     // 诊断任务优先分配给小克
@@ -649,7 +645,7 @@ export class AgentCoordinator {
       name: "诊断任务分配给小克",
       condition: (task) => task.type === TaskType.DIAGNOSIS,
       action: () => AgentType.XIAOKE,
-      priority: 90,
+      priority: 90
     });
 
     // 健康咨询分配给老克
@@ -658,7 +654,7 @@ export class AgentCoordinator {
       name: "健康咨询分配给老克",
       condition: (task) => task.type === TaskType.HEALTH_CONSULTATION,
       action: () => AgentType.LAOKE,
-      priority: 80,
+      priority: 80
     });
 
     // 生活指导分配给索儿
@@ -667,7 +663,7 @@ export class AgentCoordinator {
       name: "生活指导分配给索儿",
       condition: (task) => task.type === TaskType.LIFESTYLE_GUIDANCE,
       action: () => AgentType.SOER,
-      priority: 80,
+      priority: 80
     });
   }
 
@@ -682,16 +678,16 @@ export class AgentCoordinator {
             proficiency: 0.95,
             maxConcurrentTasks: 10,
             averageProcessingTime: 1000,
-            specializations: ["语音交互", "无障碍服务"],
+            specializations: ["语音交互", "无障碍服务"]
           },
           {
             type: TaskType.EMERGENCY_RESPONSE,
             proficiency: 0.9,
             maxConcurrentTasks: 5,
             averageProcessingTime: 500,
-            specializations: ["紧急响应"],
-          },
-        ],
+            specializations: ["紧急响应"]
+          }
+        ]
       },
       {
         type: AgentType.XIAOKE,
@@ -701,16 +697,16 @@ export class AgentCoordinator {
             proficiency: 0.92,
             maxConcurrentTasks: 8,
             averageProcessingTime: 3000,
-            specializations: ["中医诊断", "四诊合参"],
+            specializations: ["中医诊断", "四诊合参"]
           },
           {
             type: TaskType.DATA_ANALYSIS,
             proficiency: 0.88,
             maxConcurrentTasks: 6,
             averageProcessingTime: 2000,
-            specializations: ["健康数据分析"],
-          },
-        ],
+            specializations: ["健康数据分析"]
+          }
+        ]
       },
       {
         type: AgentType.LAOKE,
@@ -720,36 +716,25 @@ export class AgentCoordinator {
             proficiency: 0.94,
             maxConcurrentTasks: 12,
             averageProcessingTime: 2500,
-            specializations: ["健康咨询", "康复指导"],
+            specializations: ["健康咨询", "康复指导"]
           },
           {
             type: TaskType.KNOWLEDGE_SHARING,
             proficiency: 0.91,
             maxConcurrentTasks: 8,
             averageProcessingTime: 1500,
-            specializations: ["健康教育"],
-          },
-        ],
+            specializations: ["健康教育"]
+          }
+        ]
       },
       {
         type: AgentType.SOER,
         capabilities: [
-          {
-            type: TaskType.LIFESTYLE_GUIDANCE,
-            proficiency: 0.89,
-            maxConcurrentTasks: 10,
-            averageProcessingTime: 2000,
-            specializations: ["生活方式指导", "运动健康"],
-          },
-          {
-            type: TaskType.DATA_ANALYSIS,
-            proficiency: 0.85,
-            maxConcurrentTasks: 6,
-            averageProcessingTime: 1800,
-            specializations: ["生活数据分析"],
-          },
-        ],
-      },
+          {type: TaskType.LIFESTYLE_GUIDANCE,proficiency: 0.89,maxConcurrentTasks: 10,averageProcessingTime: 2000,specializations: ["生活方式指导", "运动健康"];
+          },{type: TaskType.DATA_ANALYSIS,proficiency: 0.85,maxConcurrentTasks: 6,averageProcessingTime: 1800,specializations: ["生活数据分析"];
+          };
+        ];
+      };
     ];
 
     for (const config of agentConfigs) {
@@ -764,8 +749,8 @@ export class AgentCoordinator {
         performance: {
           successRate: 0.95,
           averageResponseTime: 2000,
-          totalTasksCompleted: 0,
-        },
+          totalTasksCompleted: 0
+        }
       };
 
       this.agents.set(config.type, agentStatus);
@@ -776,23 +761,17 @@ export class AgentCoordinator {
   public getSystemStatus() {
     return {
       isRunning: this.isRunning,
-      totalAgents: this.agents.size,
-      onlineAgents: Array.from(this.agents.values()).filter(
-        (agent) => agent.isOnline
-      ).length,
-      totalTasks: this.tasks.size,
-      queuedTasks: this.taskQueue.length,
-      activeTasks: Array.from(this.tasks.values()).filter(
-        (task) =>
-          task.status === TaskStatus.IN_PROGRESS ||
-          task.status === TaskStatus.ASSIGNED
-      ).length,
-      completedTasks: Array.from(this.tasks.values()).filter(
-        (task) => task.status === TaskStatus.COMPLETED
-      ).length,
-      pendingCollaborations: Array.from(
-        this.collaborationRequests.values()
-      ).filter((req) => req.status === "PENDING").length,
+      totalAgents: this.agents.size,onlineAgents: Array.from(this.agents.values()).filter(;
+        (agent) => agent.isOnline;
+      ).length,totalTasks: this.tasks.size,queuedTasks: this.taskQueue.length,activeTasks: Array.from(this.tasks.values()).filter(;
+        (task) =>;
+          task.status === TaskStatus.IN_PROGRESS ||;
+          task.status === TaskStatus.ASSIGNED;
+      ).length,completedTasks: Array.from(this.tasks.values()).filter(;
+        (task) => task.status === TaskStatus.COMPLETED;
+      ).length,pendingCollaborations: Array.from(;
+        this.collaborationRequests.values();
+      ).filter((req) => req.status === "PENDING").length;
     };
   }
 }

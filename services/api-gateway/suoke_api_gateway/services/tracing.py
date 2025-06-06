@@ -1,3 +1,26 @@
+"""
+tracing - 索克生活项目模块
+"""
+
+from ..core.config import get_settings
+from ..core.logging import get_logger
+from contextlib import contextmanager
+from dataclasses import dataclass, asdict
+from enum import Enum
+from opentelemetry import trace
+from opentelemetry.exporter.jaeger.thrift import JaegerExporter
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+from opentelemetry.instrumentation.redis import RedisInstrumentor
+from opentelemetry.instrumentation.requests import RequestsInstrumentor
+from opentelemetry.propagate import inject, extract
+from opentelemetry.sdk.resources import Resource
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.trace.status import Status, StatusCode
+from typing import Dict, Any, Optional, List, Callable
+import time
+import uuid
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -7,26 +30,8 @@
 集成 Jaeger 和 OpenTelemetry，提供分布式追踪功能。
 """
 
-import time
-import uuid
-from typing import Dict, Any, Optional, List, Callable
-from contextlib import contextmanager
-from dataclasses import dataclass, asdict
-from enum import Enum
 
-from opentelemetry import trace
-from opentelemetry.exporter.jaeger.thrift import JaegerExporter
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.sdk.resources import Resource
-from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
-from opentelemetry.instrumentation.requests import RequestsInstrumentor
-from opentelemetry.instrumentation.redis import RedisInstrumentor
-from opentelemetry.propagate import inject, extract
-from opentelemetry.trace.status import Status, StatusCode
 
-from ..core.logging import get_logger
-from ..core.config import get_settings
 
 logger = get_logger(__name__)
 settings = get_settings()

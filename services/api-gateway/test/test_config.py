@@ -1,3 +1,17 @@
+"""
+test_config - 索克生活项目模块
+"""
+
+from internal.model.config import (
+from pkg.utils.config import load_config
+from suoke_api_gateway.core.config import Settings, get_settings
+from unittest.mock import patch, mock_open
+import os
+import pytest
+import sys
+import tempfile
+import yaml
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,23 +19,14 @@
 配置加载和验证测试
 """
 
-import os
-import sys
-import tempfile
-import yaml
-from unittest.mock import patch, mock_open
 
-import pytest
 
 # 添加项目根目录到Python路径
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from pkg.utils.config import load_config
-from internal.model.config import (
     GatewayConfig, RouteConfig, ServiceDiscoveryConfig, 
     MiddlewareConfig, CacheConfig, AuthConfig, JwtConfig
 )
-from suoke_api_gateway.core.config import Settings, get_settings
 
 class TestConfig:
     """配置测试类"""
@@ -332,7 +337,8 @@ SERVER_PORT=8080
         url = settings.get_database_url()
         assert url == "postgresql://testuser:testpass@localhost:5432/testdb"
     
-    def test_get_settings_singleton(self):
+        @cache(timeout=300)  # 5分钟缓存
+def test_get_settings_singleton(self):
         """测试设置单例模式"""
         settings1 = get_settings()
         settings2 = get_settings()

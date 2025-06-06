@@ -1,17 +1,22 @@
+"""
+cache_manager - 索克生活项目模块
+"""
+
+from cachetools import LRUCache, TTLCache
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any
+import aioredis
+import json
+import logging
+
 #!/usr/bin/env python3
 """
 缓存管理器
 提供统一的缓存接口，支持Redis和内存缓存，包含缓存策略和过期管理
 """
 
-import json
-import logging
-from dataclasses import dataclass
-from enum import Enum
-from typing import Any
 
-import aioredis
-from cachetools import LRUCache, TTLCache
 
 logger = logging.getLogger(__name__)
 

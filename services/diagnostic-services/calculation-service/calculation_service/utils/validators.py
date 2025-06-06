@@ -1,14 +1,19 @@
 """
+validators - 索克生活项目模块
+"""
+
+from ..exceptions import InvalidBirthInfoError, InvalidTimeError, ValidationError
+from datetime import datetime, date
+from typing import Dict, Any, Optional
+import re
+
+"""
 数据验证工具
 
 提供各种数据验证功能
 """
 
-import re
-from datetime import datetime, date
-from typing import Dict, Any, Optional
 
-from ..exceptions import InvalidBirthInfoError, InvalidTimeError, ValidationError
 
 
 def validate_birth_info(birth_info: Dict[str, Any]) -> bool:

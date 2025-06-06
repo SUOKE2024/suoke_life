@@ -1,29 +1,34 @@
+"""
+optimized_agent_base - 索克生活项目模块
+"""
+
+from abc import ABC, abstractmethod
+from aiohttp import web, ClientSession
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+from dataclasses import dataclass, asdict
+from datetime import datetime
+from functools import wraps, lru_cache
+from numba import jit
+from typing import Dict, List, Any, Optional, Union, Callable
+import aioredis
+import asyncio
+import asyncpg
+import hashlib
+import json
+import logging
+import multiprocessing
+import pickle
+import psutil
+import threading
+import time
+import uuid
+
 #!/usr/bin/env python3
 """
 索克生活 - 优化后的智能体服务基础类
 为四个智能体（小艾、小克、老克、索儿）提供统一的优化基础架构
 """
 
-import asyncio
-import time
-import multiprocessing
-import logging
-from abc import ABC, abstractmethod
-from typing import Dict, List, Any, Optional, Union, Callable
-from dataclasses import dataclass, asdict
-from datetime import datetime
-import json
-import uuid
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
-import aioredis
-import asyncpg
-from aiohttp import web, ClientSession
-import psutil
-from numba import jit
-import threading
-from functools import wraps, lru_cache
-import pickle
-import hashlib
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)

@@ -1,3 +1,26 @@
+"""
+real_time_monitor - 索克生活项目模块
+"""
+
+            import psutil
+        from sklearn.ensemble import IsolationForest
+        from sklearn.svm import OneClassSVM
+from collections import deque, defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from enum import Enum
+from loguru import logger
+from prometheus_client import Counter, Histogram, Gauge, CollectorRegistry
+from typing import Dict, List, Any, Optional, Callable, Set, Tuple
+import asyncio
+import json
+import smtplib
+import time
+import uuid
+import websockets
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,21 +28,6 @@
 实时监控和预警系统 - 提供全面的健康数据监控、系统性能监控和智能预警
 """
 
-import asyncio
-import json
-import time
-import uuid
-from typing import Dict, List, Any, Optional, Callable, Set, Tuple
-from dataclasses import dataclass, field
-from enum import Enum
-from datetime import datetime, timedelta
-from loguru import logger
-from collections import deque, defaultdict
-from prometheus_client import Counter, Histogram, Gauge, CollectorRegistry
-import websockets
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 
 class AlertLevel(Enum):
     """预警级别"""
@@ -298,8 +306,6 @@ class RealTimeMonitor:
     
     async def _init_anomaly_detectors(self):
         """初始化异常检测器"""
-        from sklearn.ensemble import IsolationForest
-        from sklearn.svm import OneClassSVM
         
         # 为每个指标创建异常检测器
         metrics = [
@@ -967,7 +973,6 @@ class RealTimeMonitor:
         """监控系统性能"""
         try:
             # 监控内存使用
-            import psutil
             memory_usage = psutil.virtual_memory().percent
             
             if memory_usage > 90:

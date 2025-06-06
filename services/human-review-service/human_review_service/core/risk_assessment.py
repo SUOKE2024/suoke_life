@@ -1,13 +1,18 @@
 """
+risk_assessment - 索克生活项目模块
+"""
+
+from typing import Any, Dict, Optional
+import structlog
+
+"""
 风险评估引擎
 Risk Assessment Engine
 
 用于评估医疗建议的风险等级
 """
 
-from typing import Any, Dict, Optional
 
-import structlog
 
 logger = structlog.get_logger(__name__)
 

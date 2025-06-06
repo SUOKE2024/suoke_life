@@ -1,17 +1,23 @@
 """
+logging - 索克生活项目模块
+"""
+
+        from inquiry_service.core.config import get_settings
+from inquiry_service.core.config import LoggingSettings
+from loguru import logger
+from pathlib import Path
+from typing import Any
+import structlog
+import sys
+
+"""
 日志配置模块
 
 使用 Loguru 和 Structlog 提供结构化日志记录功能。
 """
 
-from pathlib import Path
-import sys
-from typing import Any
 
-from loguru import logger
-import structlog
 
-from inquiry_service.core.config import LoggingSettings
 
 
 def setup_logging(
@@ -26,7 +32,6 @@ def setup_logging(
         log_dir: 日志目录
     """
     if settings is None:
-        from inquiry_service.core.config import get_settings
 
         settings = get_settings().logging
 

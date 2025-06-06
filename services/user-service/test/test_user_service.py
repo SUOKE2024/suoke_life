@@ -1,19 +1,30 @@
 """
+test_user_service - 索克生活项目模块
+"""
+
+    from internal.model.user import BindDeviceRequest, CreateUserRequest
+    from internal.model.user import CreateUserRequest
+    from internal.model.user import CreateUserRequest, UpdateUserPreferencesRequest
+    from internal.model.user import CreateUserRequest, UpdateUserRequest
+    from internal.model.user import UpdateUserRequest
+    from pydantic import SecretStr
+from datetime import datetime, timedelta
+from internal.model.user import (DeviceInfo, User, UserHealthSummary, UserResponse,
+from internal.repository.sqlite_user_repository import (DeviceAlreadyBoundError,
+from internal.service.user_service import UserService
+from typing import Any, Dict, List, Optional
+import pytest
+import uuid
+
+"""
 用户服务单元测试模块
 """
-import uuid
-from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
 
-import pytest
 
-from internal.model.user import (DeviceInfo, User, UserHealthSummary, UserResponse,
                           UserRole, UserStatus, VerifyUserResponse)
-from internal.repository.sqlite_user_repository import (DeviceAlreadyBoundError,
                                                  DeviceNotFoundError,
                                                  UserAlreadyExistsError,
                                                  UserNotFoundError)
-from internal.service.user_service import UserService
 
 class MockUserRepository:
     """用户仓库模拟实现"""
@@ -197,8 +208,6 @@ def user_service(mock_user_repository):
 async def test_create_user(user_service, mock_user_repository):
     """测试创建用户"""
     # 构建请求
-    from internal.model.user import CreateUserRequest
-    from pydantic import SecretStr
     
     request = CreateUserRequest(
         username="testuser",
@@ -229,8 +238,6 @@ async def test_create_user(user_service, mock_user_repository):
 async def test_create_user_already_exists(user_service, mock_user_repository):
     """测试创建已存在的用户"""
     # 先创建一个用户
-    from internal.model.user import CreateUserRequest
-    from pydantic import SecretStr
     
     request = CreateUserRequest(
         username="testuser",
@@ -248,8 +255,6 @@ async def test_create_user_already_exists(user_service, mock_user_repository):
 async def test_get_user(user_service, mock_user_repository):
     """测试获取用户"""
     # 先创建一个用户
-    from internal.model.user import CreateUserRequest
-    from pydantic import SecretStr
     
     request = CreateUserRequest(
         username="testuser",
@@ -277,8 +282,6 @@ async def test_get_user_not_found(user_service):
 async def test_update_user(user_service, mock_user_repository):
     """测试更新用户"""
     # 先创建一个用户
-    from internal.model.user import CreateUserRequest, UpdateUserRequest
-    from pydantic import SecretStr
     
     create_request = CreateUserRequest(
         username="testuser",
@@ -310,7 +313,6 @@ async def test_update_user(user_service, mock_user_repository):
 @pytest.mark.asyncio
 async def test_update_user_not_found(user_service):
     """测试更新不存在的用户"""
-    from internal.model.user import UpdateUserRequest
     
     update_request = UpdateUserRequest(
         username="updateduser"
@@ -323,8 +325,6 @@ async def test_update_user_not_found(user_service):
 async def test_delete_user(user_service, mock_user_repository):
     """测试删除用户"""
     # 先创建一个用户
-    from internal.model.user import CreateUserRequest
-    from pydantic import SecretStr
     
     request = CreateUserRequest(
         username="testuser",
@@ -351,8 +351,6 @@ async def test_delete_user_not_found(user_service):
 async def test_update_user_preferences(user_service, mock_user_repository):
     """测试更新用户偏好设置"""
     # 先创建一个用户
-    from internal.model.user import CreateUserRequest, UpdateUserPreferencesRequest
-    from pydantic import SecretStr
     
     create_request = CreateUserRequest(
         username="testuser",
@@ -379,8 +377,6 @@ async def test_update_user_preferences(user_service, mock_user_repository):
 async def test_bind_device(user_service, mock_user_repository):
     """测试绑定设备"""
     # 先创建一个用户
-    from internal.model.user import BindDeviceRequest, CreateUserRequest
-    from pydantic import SecretStr
     
     create_request = CreateUserRequest(
         username="testuser",
@@ -416,8 +412,6 @@ async def test_bind_device(user_service, mock_user_repository):
 async def test_unbind_device(user_service, mock_user_repository):
     """测试解绑设备"""
     # 先创建用户和绑定设备
-    from internal.model.user import BindDeviceRequest, CreateUserRequest
-    from pydantic import SecretStr
     
     create_request = CreateUserRequest(
         username="testuser",
@@ -448,8 +442,6 @@ async def test_unbind_device(user_service, mock_user_repository):
 async def test_get_user_health_summary(user_service, mock_user_repository):
     """测试获取用户健康摘要"""
     # 先创建一个用户
-    from internal.model.user import CreateUserRequest
-    from pydantic import SecretStr
     
     create_request = CreateUserRequest(
         username="testuser",

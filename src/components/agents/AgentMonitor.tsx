@@ -1,5 +1,9 @@
+import {import { AgentType, AgentStatus, AgentHealthStatus } from "../../types/agents";
+import {import { AgentMetrics } from "../../agents/AgentManager";
+import { agentService } from '../../services/agentService';
+import { agentCoordinationService, AgentInfo } from '../../services/agentCoordinationService';
+
 import React, { useState, useEffect, useCallback } from "react";
-import {
   View,
   Text,
   StyleSheet,
@@ -7,17 +11,12 @@ import {
   RefreshControl,
   TouchableOpacity,
   Alert,
-  Dimensions,
+  Dimensions
 } from "react-native";
-import { AgentType, AgentStatus, AgentHealthStatus } from "../../types/agents";
-import {
   getAgentStatus,
   getAgentMetrics,
-  AgentSystemUtils,
+  AgentSystemUtils
 } from "../../agents";
-import { AgentMetrics } from "../../agents/AgentManager";
-import { agentService } from '../../services/agentService';
-import { agentCoordinationService, AgentInfo } from '../../services/agentCoordinationService';
 
 /**
  * 智能体监控属性
@@ -45,14 +44,11 @@ const StatusCard: React.FC<StatusCardProps> = ({
   agentType,
   status,
   metrics,
-  onRestart,
+  onRestart
 }) => {
   const agentRole = AgentSystemUtils.getAgentRole(agentType);
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "healthy":
-        return "#4CAF50";
+  const getStatusColor = (status: string) => {switch (status) {case "healthy":return "#4CAF50";
       case "degraded":
         return "#FF9800";
       case "unhealthy":
@@ -64,10 +60,7 @@ const StatusCard: React.FC<StatusCardProps> = ({
     }
   };
 
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case "healthy":
-        return "健康";
+  const getStatusText = (status: string) => {switch (status) {case "healthy":return "健康";
       case "degraded":
         return "降级";
       case "unhealthy":
@@ -89,7 +82,7 @@ const StatusCard: React.FC<StatusCardProps> = ({
         <View
           style={[
             styles.statusIndicator,
-            { backgroundColor: getStatusColor(status.status) },
+            { backgroundColor: getStatusColor(status.status) }
           ]}
         >
           <Text style={styles.statusText}>{getStatusText(status.status)}</Text>
@@ -145,22 +138,22 @@ const StatusCard: React.FC<StatusCardProps> = ({
           ))}
           {status.capabilities.length > 3 && (
             <Text style={styles.capabilityTag}>
-              +{status.capabilities.length - 3}
-            </Text>
-          )}
-        </View>
-      </View>
-
-      {status.status === "unhealthy" && onRestart && (
-        <TouchableOpacity style={styles.restartButton} onPress={onRestart}>
-          <Text style={styles.restartButtonText}>重启</Text>
-        </TouchableOpacity>
-      )}
-
-      <Text style={styles.lastCheck}>
-        最后检查: {status.lastCheck.toLocaleTimeString()}
-      </Text>
-    </View>
+              +{status.capabilities.length - 3};
+            </Text>;
+          )};
+        </View>;
+      </View>;
+;
+      {status.status === "unhealthy" && onRestart && (;
+        <TouchableOpacity style={styles.restartButton} onPress={onRestart}>;
+          <Text style={styles.restartButtonText}>重启</Text>;
+        </TouchableOpacity>;
+      )};
+;
+      <Text style={styles.lastCheck}>;
+        最后检查: {status.lastCheck.toLocaleTimeString()};
+      </Text>;
+    </View>;
   );
 };
 
@@ -185,20 +178,10 @@ interface AgentMonitorState {
 export const AgentMonitor: React.FC<AgentMonitorProps> = ({
   refreshInterval = 30000,
   onAgentError,
-  style,
+  style
 }) => {
-  const [state, setState] = useState<AgentMonitorState>({
-    agents: [],
-    metrics: new Map(),
-    collaborationStats: {
-      total: 0,
-      active: 0,
-      completed: 0,
-      failed: 0,
-      averageDuration: 0,
-    },
-    isLoading: true,
-    lastUpdate: new Date(),
+  const [state, setState] = useState<AgentMonitorState>({agents: [],metrics: new Map(),collaborationStats: {total: 0,active: 0,completed: 0,failed: 0,averageDuration: 0;
+    },isLoading: true,lastUpdate: new Date();
   });
 
   const [refreshing, setRefreshing] = useState(false);
@@ -206,19 +189,17 @@ export const AgentMonitor: React.FC<AgentMonitorProps> = ({
   /**
    * 加载智能体数据
    */
-  const loadAgentData = useCallback(async () => {
-    try {
-      setState(prev => ({ ...prev, isLoading: true }));
+  const loadAgentData = useCallback(async () => {try {setState(prev => ({ ...prev, isLoading: true }));
 
       // 获取智能体列表
       const agents = agentCoordinationService.getAgents();
-      
+
       // 获取协作统计
       const collaborationStats = agentCoordinationService.getCollaborationStats();
 
       // 获取每个智能体的性能指标
       const metricsMap = new Map<string, AgentMetrics>();
-      
+
       for (const agent of agents) {
         try {
           const metrics = await agentService.getAgentMetrics(agent.id);
@@ -227,7 +208,7 @@ export const AgentMonitor: React.FC<AgentMonitorProps> = ({
             successRate: metrics.successRate,
             activeConnections: metrics.activeConnections,
             load: agent.load,
-            uptime: Date.now() - agent.lastHeartbeat.getTime(),
+            uptime: Date.now() - agent.lastHeartbeat.getTime();
           });
         } catch (error) {
           // 如果获取指标失败，使用默认值
@@ -236,7 +217,7 @@ export const AgentMonitor: React.FC<AgentMonitorProps> = ({
             successRate: 0,
             activeConnections: 0,
             load: agent.load,
-            uptime: 0,
+            uptime: 0
           });
         }
       }
@@ -247,7 +228,7 @@ export const AgentMonitor: React.FC<AgentMonitorProps> = ({
         metrics: metricsMap,
         collaborationStats,
         isLoading: false,
-        lastUpdate: new Date(),
+        lastUpdate: new Date();
       }));
 
     } catch (error: any) {
@@ -260,8 +241,7 @@ export const AgentMonitor: React.FC<AgentMonitorProps> = ({
   /**
    * 刷新数据
    */
-  const onRefresh = useCallback(async () => {
-    setRefreshing(true);
+  const onRefresh = useCallback(async () => {setRefreshing(true);
     await loadAgentData();
     setRefreshing(false);
   }, [loadAgentData]);
@@ -269,10 +249,7 @@ export const AgentMonitor: React.FC<AgentMonitorProps> = ({
   /**
    * 获取状态颜色
    */
-  const getStatusColor = (status: string): string => {
-    switch (status) {
-      case 'active':
-        return '#4CAF50';
+  const getStatusColor = (status: string): string => {switch (status) {case 'active':return '#4CAF50';
       case 'busy':
         return '#FF9800';
       case 'inactive':
@@ -287,8 +264,7 @@ export const AgentMonitor: React.FC<AgentMonitorProps> = ({
   /**
    * 获取健康状态颜色
    */
-  const getHealthColor = (load: number): string => {
-    if (load < 0.3) return '#4CAF50'; // 绿色 - 健康
+  const getHealthColor = (load: number): string => {if (load < 0.3) return '#4CAF50'; // 绿色 - 健康
     if (load < 0.7) return '#FF9800'; // 橙色 - 警告
     return '#F44336'; // 红色 - 危险
   };
@@ -296,11 +272,10 @@ export const AgentMonitor: React.FC<AgentMonitorProps> = ({
   /**
    * 格式化时间
    */
-  const formatDuration = (ms: number): string => {
-    const seconds = Math.floor(ms / 1000);
+  const formatDuration = (ms: number): string => {const seconds = Math.floor(ms / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
-    
+
     if (hours > 0) {
       return `${hours}h ${minutes % 60}m`;
     } else if (minutes > 0) {
@@ -313,36 +288,31 @@ export const AgentMonitor: React.FC<AgentMonitorProps> = ({
   /**
    * 格式化百分比
    */
-  const formatPercentage = (value: number): string => {
-    return `${(value * 100).toFixed(1)}%`;
+  const formatPercentage = (value: number): string => {return `${(value * 100).toFixed(1)}%`;
   };
 
   /**
    * 渲染智能体卡片
    */
-  const renderAgentCard = (agent: AgentInfo) => {
-    const metrics = state.metrics.get(agent.id);
-    
+  const renderAgentCard = (agent: AgentInfo) => {const metrics = state.metrics.get(agent.id);
+
     return (
       <View key={agent.id} style={styles.agentCard}>
         <View style={styles.agentHeader}>
           <View style={styles.agentInfo}>
-            <Text style={styles.agentName}>{agent.name}</Text>
-            <Text style={styles.agentType}>{agent.type}</Text>
-          </View>
-          <View style={[styles.statusIndicator, { backgroundColor: getStatusColor(agent.status) }]} />
-        </View>
-
-        <View style={styles.metricsContainer}>
-          <View style={styles.metricRow}>
-            <Text style={styles.metricLabel}>负载:</Text>
-            <View style={styles.loadBar}>
-              <View 
-                style={[
-                  styles.loadFill, 
-                  { 
-                    width: `${agent.load * 100}%`,
-                    backgroundColor: getHealthColor(agent.load)
+            <Text style={styles.agentName}>{agent.name}</Text>;
+            <Text style={styles.agentType}>{agent.type}</Text>;
+          </View>;
+          <View style={[styles.statusIndicator, { backgroundColor: getStatusColor(agent.status) }]} />;
+        </View>;
+;
+        <View style={styles.metricsContainer}>;
+          <View style={styles.metricRow}>;
+            <Text style={styles.metricLabel}>负载:</Text>;
+            <View style={styles.loadBar}>;
+              <View ;
+                style={[;
+                  styles.loadFill,{width: `${agent.load * 100}%`,backgroundColor: getHealthColor(agent.load);
                   }
                 ]} 
               />
@@ -388,16 +358,15 @@ export const AgentMonitor: React.FC<AgentMonitorProps> = ({
             )}
           </View>
         </View>
-      </View>
+      </View>;
     );
   };
 
   /**
    * 渲染协作统计
    */
-  const renderCollaborationStats = () => {
-    const { collaborationStats } = state;
-    
+  const renderCollaborationStats = () => {const { collaborationStats } = state;
+
     return (
       <View style={styles.statsContainer}>
         <Text style={styles.statsTitle}>协作统计</Text>
@@ -408,32 +377,32 @@ export const AgentMonitor: React.FC<AgentMonitorProps> = ({
           </View>
           <View style={styles.statItem}>
             <Text style={[styles.statValue, { color: '#4CAF50' }]}>{collaborationStats.active}</Text>
-            <Text style={styles.statLabel}>活跃</Text>
-          </View>
-          <View style={styles.statItem}>
-            <Text style={[styles.statValue, { color: '#2196F3' }]}>{collaborationStats.completed}</Text>
-            <Text style={styles.statLabel}>完成</Text>
-          </View>
-          <View style={styles.statItem}>
-            <Text style={[styles.statValue, { color: '#F44336' }]}>{collaborationStats.failed}</Text>
-            <Text style={styles.statLabel}>失败</Text>
-          </View>
-        </View>
-        <View style={styles.averageDuration}>
-          <Text style={styles.statLabel}>平均协作时长: </Text>
-          <Text style={styles.statValue}>{formatDuration(collaborationStats.averageDuration)}</Text>
-        </View>
-      </View>
+            <Text style={styles.statLabel}>活跃</Text>;
+          </View>;
+          <View style={styles.statItem}>;
+            <Text style={[styles.statValue, { color: '#2196F3' }]}>{collaborationStats.completed}</Text>;
+            <Text style={styles.statLabel}>完成</Text>;
+          </View>;
+          <View style={styles.statItem}>;
+            <Text style={[styles.statValue, { color: '#F44336' }]}>{collaborationStats.failed}</Text>;
+            <Text style={styles.statLabel}>失败</Text>;
+          </View>;
+        </View>;
+        <View style={styles.averageDuration}>;
+          <Text style={styles.statLabel}>平均协作时长: </Text>;
+          <Text style={styles.statValue}>{formatDuration(collaborationStats.averageDuration)}</Text>;
+        </View>;
+      </View>;
     );
   };
 
   // 组件挂载时加载数据
   useEffect(() => {
     loadAgentData();
-    
+
     // 设置定时刷新
     const interval = setInterval(loadAgentData, 30000); // 30秒刷新一次
-    
+
     return () => clearInterval(interval);
   }, [loadAgentData]);
 
@@ -443,25 +412,25 @@ export const AgentMonitor: React.FC<AgentMonitorProps> = ({
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
-    >
-      <View style={styles.header}>
-        <Text style={styles.title}>智能体监控</Text>
-        <Text style={styles.lastUpdate}>
-          最后更新: {state.lastUpdate.toLocaleTimeString()}
-        </Text>
-      </View>
-
-      {renderCollaborationStats()}
-
-      <View style={styles.agentsContainer}>
-        <Text style={styles.sectionTitle}>智能体状态</Text>
-        {state.isLoading ? (
-          <Text style={styles.loadingText}>加载中...</Text>
-        ) : (
-          state.agents.map(renderAgentCard)
+    >;
+      <View style={styles.header}>;
+        <Text style={styles.title}>智能体监控</Text>;
+        <Text style={styles.lastUpdate}>;
+          最后更新: {state.lastUpdate.toLocaleTimeString()};
+        </Text>;
+      </View>;
+;
+      {renderCollaborationStats()};
+;
+      <View style={styles.agentsContainer}>;
+        <Text style={styles.sectionTitle}>智能体状态</Text>;
+        {state.isLoading ? (;
+          <Text style={styles.loadingText}>加载中...</Text>;
+        ) : (;
+          state.agents.map(renderAgentCard);
         )}
       </View>
-    </ScrollView>
+    </ScrollView>;
   );
 };
 
@@ -470,54 +439,54 @@ const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#f5f5f5"
   },
   header: {
     padding: 16,
     backgroundColor: '#fff',
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: '#e0e0e0'
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#333",
+    color: "#333"
   },
   lastUpdate: {
     fontSize: 12,
     color: "#666",
-    marginTop: 4,
+    marginTop: 4
   },
   statsContainer: {
     margin: 16,
     padding: 16,
     backgroundColor: "#fff",
     borderRadius: 8,
-    elevation: 2,
+    elevation: 2
   },
   statsTitle: {
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 12,
-    color: "#333",
+    color: "#333"
   },
   statsGrid: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginBottom: 12,
+    marginBottom: 12
   },
   statItem: {
-    alignItems: "center",
+    alignItems: "center"
   },
   statValue: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#333",
+    color: "#333"
   },
   statLabel: {
     fontSize: 12,
     color: "#666",
-    marginTop: 4,
+    marginTop: 4
   },
   averageDuration: {
     flexDirection: "row",
@@ -525,66 +494,66 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: "#e0e0e0",
+    borderTopColor: "#e0e0e0"
   },
   agentsContainer: {
-    margin: 16,
+    margin: 16
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 12,
-    color: "#333",
+    color: "#333"
   },
   agentCard: {
     backgroundColor: "#fff",
     borderRadius: 8,
     padding: 16,
     marginBottom: 12,
-    elevation: 2,
+    elevation: 2
   },
   agentHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 12,
+    marginBottom: 12
   },
   agentInfo: {
-    flex: 1,
+    flex: 1
   },
   agentName: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#333",
+    color: "#333"
   },
   agentType: {
     fontSize: 12,
     color: "#666",
-    marginTop: 2,
+    marginTop: 2
   },
   statusIndicator: {
     width: 12,
     height: 12,
-    borderRadius: 6,
+    borderRadius: 6
   },
   metricsContainer: {
-    marginBottom: 12,
+    marginBottom: 12
   },
   metricRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 8,
+    marginBottom: 8
   },
   metricLabel: {
     fontSize: 14,
     color: "#666",
-    flex: 1,
+    flex: 1
   },
   metricValue: {
     fontSize: 14,
     fontWeight: "500",
-    color: "#333",
+    color: "#333"
   },
   loadBar: {
     flex: 2,
@@ -592,27 +561,27 @@ const styles = StyleSheet.create({
     backgroundColor: "#e0e0e0",
     borderRadius: 4,
     marginHorizontal: 8,
-    overflow: "hidden",
+    overflow: "hidden"
   },
   loadFill: {
     height: "100%",
-    borderRadius: 4,
+    borderRadius: 4
   },
   capabilitiesContainer: {
     borderTopWidth: 1,
     borderTopColor: "#e0e0e0",
-    paddingTop: 12,
+    paddingTop: 12
   },
   capabilitiesTitle: {
     fontSize: 14,
     fontWeight: "500",
     color: "#333",
-    marginBottom: 8,
+    marginBottom: 8
   },
   capabilitiesList: {
     flexDirection: "row",
     flexWrap: "wrap",
-    alignItems: "center",
+    alignItems: "center"
   },
   capabilityTag: {
     backgroundColor: "#e3f2fd",
@@ -620,23 +589,11 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 12,
     marginRight: 8,
-    marginBottom: 4,
-  },
-  capabilityText: {
-    fontSize: 12,
-    color: "#1976d2",
-  },
-  moreCapabilities: {
-    fontSize: 12,
-    color: "#666",
-    fontStyle: "italic",
-  },
-  loadingText: {
-    textAlign: "center",
-    color: "#666",
-    fontSize: 16,
-    marginTop: 20,
-  },
+    marginBottom: 4
+  },capabilityText: {fontSize: 12,color: "#1976d2";
+  },moreCapabilities: {fontSize: 12,color: "#666",fontStyle: "italic";
+  },loadingText: {textAlign: "center",color: "#666",fontSize: 16,marginTop: 20;
+  };
 });
 
 export default AgentMonitor;

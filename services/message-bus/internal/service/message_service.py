@@ -1,12 +1,17 @@
-import asyncio
-import logging
-import uuid
-from typing import Dict, Any, List, Optional, Callable, Awaitable, Union
+"""
+message_service - 索克生活项目模块
+"""
 
 from internal.model.message import Message
 from internal.model.topic import Topic
-from internal.repository.topic_repository import TopicRepository
 from internal.repository.message_repository import MessageRepository
+from internal.repository.topic_repository import TopicRepository
+from typing import Dict, Any, List, Optional, Callable, Awaitable, Union
+import asyncio
+import logging
+import uuid
+
+
 
 logger = logging.getLogger(__name__)
 

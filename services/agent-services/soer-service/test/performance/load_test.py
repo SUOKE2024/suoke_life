@@ -1,7 +1,10 @@
-#!/usr/bin/env python3
 """
-索儿服务负载测试
+load_test - 索克生活项目模块
 """
+
+from datetime import datetime
+from tqdm.asyncio import tqdm_asyncio
+import aiohttp
 import argparse
 import asyncio
 import json
@@ -10,10 +13,12 @@ import random
 import sys
 import time
 import uuid
-from datetime import datetime
 
-import aiohttp
-from tqdm.asyncio import tqdm_asyncio
+#!/usr/bin/env python3
+"""
+索儿服务负载测试
+"""
+
 
 # 确保能够导入应用代码
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))

@@ -1,18 +1,24 @@
+"""
+test_framework - 索克生活项目模块
+"""
+
+            import re
+from collections.abc import Callable
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any
+import asyncio
+import logging
+import time
+import traceback
+
 #!/usr/bin/env python3
 """
 测试框架核心
 提供统一的测试执行和管理功能
 """
 
-import asyncio
-from collections.abc import Callable
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
-import logging
-import time
-import traceback
-from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -178,7 +184,6 @@ class TestSuite:
             filtered = [t for t in filtered if any(tag in t.tags for tag in tags)]
 
         if name_pattern:
-            import re
 
             pattern = re.compile(name_pattern)
             filtered = [t for t in filtered if pattern.search(t.name)]

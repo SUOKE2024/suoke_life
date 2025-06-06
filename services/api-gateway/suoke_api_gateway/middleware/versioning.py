@@ -1,3 +1,15 @@
+"""
+versioning - 索克生活项目模块
+"""
+
+from ..core.logging import get_logger
+from enum import Enum
+from fastapi import Request, Response
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import JSONResponse
+from typing import Dict, List, Optional, Tuple
+import re
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -7,15 +19,8 @@ API 版本管理中间件
 支持多种 API 版本控制策略，包括 URL 路径、查询参数、请求头等方式。
 """
 
-import re
-from enum import Enum
-from typing import Dict, List, Optional, Tuple
 
-from fastapi import Request, Response
-from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.responses import JSONResponse
 
-from ..core.logging import get_logger
 
 logger = get_logger(__name__)
 

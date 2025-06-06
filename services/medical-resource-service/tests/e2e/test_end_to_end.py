@@ -1,18 +1,23 @@
 """
+test_end_to_end - 索克生活项目模块
+"""
+
+from datetime import datetime, timedelta
+from internal.enhanced_medical_resource_service import EnhancedMedicalResourceService
+from internal.service.enhanced_food_agriculture_service import EnhancedFoodAgricultureService, ConstitutionType
+from internal.service.famous_doctor_service import FamousDoctorService, DoctorSearchCriteria, FamousDoctorLevel
+from internal.service.intelligent_appointment_service import IntelligentAppointmentService, AppointmentType, PriorityLevel
+from internal.service.wellness_tourism_service import WellnessTourismService, WellnessRequest, WellnessType
+import asyncio
+import pytest
+import uuid
+
+"""
 端到端测试
 测试完整的用户场景和业务流程
 """
 
-import pytest
-import asyncio
-from datetime import datetime, timedelta
-import uuid
 
-from internal.enhanced_medical_resource_service import EnhancedMedicalResourceService
-from internal.service.wellness_tourism_service import WellnessTourismService, WellnessRequest, WellnessType
-from internal.service.enhanced_food_agriculture_service import EnhancedFoodAgricultureService, ConstitutionType
-from internal.service.famous_doctor_service import FamousDoctorService, DoctorSearchCriteria, FamousDoctorLevel
-from internal.service.intelligent_appointment_service import IntelligentAppointmentService, AppointmentType, PriorityLevel
 
 
 class TestEndToEndScenarios:

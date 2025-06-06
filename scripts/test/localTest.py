@@ -1,18 +1,26 @@
+"""
+localTest - 索克生活项目模块
+"""
+
+    import requests
+    import sys
+    import time
+from datetime import datetime
+from http.server import HTTPServer, BaseHTTPRequestHandler
+from socketserver import ThreadingMixIn
+from threading import Thread
+from urllib.parse import urlparse, parse_qs
+import json
+import logging
+import time
+import uuid
+
 #!/usr/bin/env python3
 """
 索克生活本地集成测试脚本
 模拟后端微服务，验证前后端集成功能
 """
 
-import json
-import logging
-import time
-from datetime import datetime
-from http.server import HTTPServer, BaseHTTPRequestHandler
-from socketserver import ThreadingMixIn
-from threading import Thread
-from urllib.parse import urlparse, parse_qs
-import uuid
 
 # 配置日志
 logging.basicConfig(
@@ -344,8 +352,6 @@ def start_mock_services():
 
 def run_integration_tests():
     """运行集成测试"""
-    import requests
-    import time
 
     base_url = "http://localhost:8080"
 
@@ -437,7 +443,6 @@ def run_integration_tests():
     return results
 
 if __name__ == "__main__":
-    import sys
 
     if len(sys.argv) > 1 and sys.argv[1] == "test":
         # 启动服务器并运行测试

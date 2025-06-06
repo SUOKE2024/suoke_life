@@ -1,5 +1,11 @@
-import time
+"""
+topic - 索克生活项目模块
+"""
+
+        import re
 from typing import Dict, Any, Optional, List
+import time
+
 
 class Topic:
     """
@@ -93,7 +99,6 @@ class Topic:
             return False
             
         # 主题名称只能包含字母、数字、连字符和点
-        import re
         if not re.match(r'^[a-zA-Z0-9\-\.]+$', topic_name):
             return False
             

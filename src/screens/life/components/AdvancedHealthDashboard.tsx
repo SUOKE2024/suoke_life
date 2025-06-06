@@ -1,9 +1,10 @@
-import React from "react";
 import { LineChart, BarChart, PieChart, ProgressChart } from "react-native-chart-kit";
-importIcon from ";../../../components/common/Icon"/import { colors, spacing } from ../../../constants/theme"//////    "
-//////     高级健康仪表板组件   提供增强的健康数据可视化功能
-importReact,{ useState, useEffect } from "react;"
-import { usePerformanceMonitor  } from "../../placeholder";../hooks/usePerformanceMonitor";/////      View,;"
+import { usePerformanceMonitor  } from "../../placeholder";../hooks/usePerformanceMonitor";/////      View,"
+
+import React from "react";
+importIcon from ";../../../components/common/Icon"/import { colors, spacing } from ../../../constants/theme"// ";
+// 高级健康仪表板组件   提供增强的健康数据可视化功能
+importReact,{ useState, useEffect } from "react;";
   Text,
   StyleSheet,
   ScrollView,
@@ -27,21 +28,20 @@ interface ChartData { labels: string[],
 }
 interface AdvancedHealthDashboardProps { visible: boolean,
   onClose: () => void}
-const HEALTH_METRICS: HealthMetric[] = [{;
-    id: heart_rate","
-    name: "心率,"
+const HEALTH_METRICS: HealthMetric[] = [{id: heart_rate","
+    name: "心率,",
     value: 72,
     unit: "bpm",
     trend: stable","
-    status: "good,"
+    status: "good,",
     icon: "heart-pulse",
     color: #E74C3C"},"
   {
-    id: "blood_pressure,"
+    id: "blood_pressure,",
     name: "血压",
     value: 120,
     unit: mmHg","
-    trend: "down,"
+    trend: "down,",
     status: "excellent",
     icon: gauge","
     color: "#3498DB},"
@@ -49,26 +49,26 @@ const HEALTH_METRICS: HealthMetric[] = [{;
     id: "sleep_quality",
     name: 睡眠质量","
     value: 85,
-    unit: "%,"
+    unit: "%,",
     trend: "up",
     status: good","
-    icon: "sleep,"
+    icon: "sleep,",
     color: "#9B59B6"},
   {
     id: stress_level","
-    name: "压力水平,"
+    name: "压力水平,",
     value: 35,
     unit: "%",
     trend: down","
-    status: "good,"
+    status: "good,",
     icon: "brain",
     color: #F39C12"},"
   {
-    id: "activity_level,"
+    id: "activity_level,",
     name: "活动量",
     value: 8500,
     unit: 步","
-    trend: "up,"
+    trend: "up,",
     status: "excellent",
     icon: walk","
     color: "#27AE60},"
@@ -76,23 +76,22 @@ const HEALTH_METRICS: HealthMetric[] = [{;
     id: "hydration",
     name: 水分摄入","
     value: 2.1,
-    unit: "L,"
+    unit: "L,",
     trend: "stable",
     status: good","
-    icon: "water,"
+    icon: "water,",
     color: "#3498DB"}
 ]
-export const AdvancedHealthDashboard: React.FC<AdvancedHealthDashboardProps /> = ({/  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor(AdvancedHealthDashboard", ";
-{; /////
+export const AdvancedHealthDashboard: React.FC<AdvancedHealthDashboardProps /> = ({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor(AdvancedHealthDashboard", ";
+{/////
     trackRender: true,
     trackMemory: true,
-    warnThreshold: 50, // ms //////     })
+    warnThreshold: 50, // ms // });
   visible,
   onClose;
 }) => {}
   const [selectedPeriod, setSelectedPeriod] = useState<"day | "week" | month" | "year>("week");"
-  const [selectedMetric, setSelectedMetric] = useState<HealthMetric | null />(nul;l;);//////
-  // 模拟图表数据 //////     const heartRateData: ChartData = {
+  const [selectedMetric, setSelectedMetric] = useState<HealthMetric | null />(nul;l;);// // 模拟图表数据 // const heartRateData: ChartData = {
     labels: [周一", "周二, "周三", 周四", "周五, "周六", 周日"],"
     datasets: [{
         data: [68, 72, 75, 70, 74, 69, 71],
@@ -100,26 +99,24 @@ export const AdvancedHealthDashboard: React.FC<AdvancedHealthDashboardProps /> =
         strokeWidth: 2}
     ]
   }
-  const sleepData: ChartData = {;
-    labels: ["深睡, "浅睡", REM", "清醒],"
+  const sleepData: ChartData = {labels: ["深睡, "浅睡", REM", "清醒],"
     datasets: [;{
         data: [4.5, 2.8, 1.2, 0.5]
       }
     ]
   }
-  const activityData: ChartData = {;
-    labels: ["周一", 周二", "周三, "周四", 周五", "周六, "周日"],
+  const activityData: ChartData = {labels: ["周一", 周二", "周三, "周四", 周五", "周六, "周日"],
     datasets: [{
         data: [8200, 9500, 7800, 10200, 8500, 12000, 6500],
         color: (opacity = 1) => `rgba(39, 174, 96, ${opacity});`
       }
     ]
   };
-  const progressData = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => {;}
-    // TODO: Implement memo body //////     return nul;l;
-      const effectEnd = performance.now()
+  const progressData = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => {}
+    // TODO: Implement memo body // return nul;l;
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, []); // TODO: 检查依赖项  * // TODO: 检查依赖项  * / TODO: 检查依赖项* * * // TODO: 检查依赖项  * * * // TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项//, TODO: 检查依赖项//, TODO: 检查依赖项, []), []), [])// //////     const chartConfig = useMemo(() => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => {}
+  }, []); // TODO: 检查依赖项  * // TODO: 检查依赖项  * / TODO: 检查依赖项* * * // TODO: 检查依赖项  * * * // TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项//, TODO: 检查依赖项//, TODO: 检查依赖项, []), []), [])// // const chartConfig = useMemo(() => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => {
     backgroundColor: colors.background,
     backgroundGradientFrom: colors.background,
     backgroundGradientTo: colors.background,
@@ -129,12 +126,12 @@ export const AdvancedHealthDashboard: React.FC<AdvancedHealthDashboardProps /> =
     style: { borderRadius: 16  },
     propsForDots: {
       r: 4","
-      strokeWidth: "2,"
+      strokeWidth: "2,",
       stroke: colors.primary},
-      const effectEnd = performance.now()
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  const getStatusColor = useCallback(() => {;}
+  const getStatusColor = useCallback(() => {
     switch (status) {
       case "excellent": return colors.health.excelle;n;t;
 case good": return colors.health.go;o;d;"
@@ -143,12 +140,12 @@ case "poor": return colors.health.po;o;r;
       default: return colors.textSeconda;r;y;
     }
   };
-  const getTrendIcon = useCallback(() => {;}
+  const getTrendIcon = useCallback(() => {
     switch (trend) {
       case up": return "trending-u;p;
-      case "down": return trending-dow;n";"
-      case "stable: return "trending-neutra;l";"
-      default: return minu;s";"
+      case "down": return trending-dow;n
+      case "stable: return "trending-neutra;l
+      default: return minu;s
     }
   };
   // TODO: 将内联组件移到组件外部 * const renderPeriodSelector = useMemo(() => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => () => ( ////
@@ -215,11 +212,10 @@ data={progressData}
           chartConfig={chartConfig}
           hideLegend={false}
           style={styles.chart} />/      </View>/    </View>/////    ), []);
-  const renderMetricDetail = useCallback((); => {;}
+  const renderMetricDetail = useCallback((); => {}
     if (!selectedMetric) {return nu;l;l;}
-    // 记录渲染性能 //////
-    performanceMonitor.recordRender()
-    return (
+    // 记录渲染性能 // performanceMonitor.recordRender();
+    return (;
       <Modal;
 visible={!!selectedMetric}
         animationType="slide"
@@ -244,7 +240,7 @@ style={styles.chart} />/            </View>/////
                 </Text>/              </View>/              <View style={styles.insightItem} />/                <Icon name="target" size={20} color={colors.primary} />/                <Text style={styles.insightText} />/////                      建议目标：保持当前水平，适当增加有氧运动。
                 </Text>/              </View>/            </View>/          </ScrollView>/        </View>/      </Modal>/////        );
   }
-  return (
+  return (;
     <Modal;
 visible={visible}
       animationType="slide"
@@ -254,18 +250,16 @@ visible={visible}
             <View style={styles.metricsGrid} />/////                  {HEALTH_METRICS.map(renderMetricCard)}
             </View>/          </View>/////
           <View style={styles.chartsSection} />/            <Text style={styles.sectionTitle} />数据分析</Text>/////                {renderOverviewCharts()}
-          </View>/        </ScrollView>//////
-        {renderMetricDetail()};
+          </View>/        </ScrollView>// {renderMetricDetail()};
       </View>/    </Modal>/////      ;);
 };
-const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({;
-  container: {
+const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({container: {
     flex: 1,
     backgroundColor: colors.background},
   header: {
     flexDirection: "row",
     alignItems: center","
-    justifyContent: "space-between,"
+    justifyContent: "space-between,",
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
     borderBottomWidth: 1,
@@ -286,7 +280,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     color: colors.textPrimary,
     marginBottom: spacing.md},
   periodSelector: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     backgroundColor: colors.gray100,
     borderRadius: 12,
     padding: spacing.xs,
@@ -311,14 +305,14 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     borderRadius: 12,
     padding: spacing.md,
     margin: spacing.xs,
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center"},
   metricIcon: {
     width: 40,
     height: 40,
     borderRadius: 20,
     justifyContent: center","
-    alignItems: "center,"
+    alignItems: "center,",
     marginRight: spacing.sm},
   metricInfo: { flex: 1 },
   metricName: {
@@ -328,7 +322,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   metricValueContainer: {
     flexDirection: "row",
     alignItems: center","
-    justifyContent: "space-between},"
+    justifyContent: "space-between},",
   metricValue: {
     fontSize: 16,
     fontWeight: "bold",
@@ -351,7 +345,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     padding: spacing.md},
   chartTitle: {
     fontSize: 16,
-    fontWeight: "600,"
+    fontWeight: "600,",
     color: colors.textPrimary,
     marginBottom: spacing.md},
   chart: { borderRadius: 8  },
@@ -361,7 +355,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   detailHeader: {
     flexDirection: "row",
     alignItems: center","
-    justifyContent: "space-between,"
+    justifyContent: "space-between,",
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
     borderBottomWidth: 1,
@@ -384,7 +378,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     width: 60,
     height: 60,
     borderRadius: 30,
-    justifyContent: "center,"
+    justifyContent: "center,",
     alignItems: "center",
     marginBottom: spacing.md},
   detailMetricValue: {
@@ -394,7 +388,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     marginBottom: spacing.sm},
   detailMetricStatus: {
     fontSize: 16,
-    fontWeight: "600},"
+    fontWeight: "600},",
   detailChart: {
     backgroundColor: colors.surface,
     borderRadius: 12,
@@ -416,7 +410,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     color: colors.textPrimary,
     marginBottom: spacing.md},
   insightItem: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "flex-start',"'
     marginBottom: spacing.md},
   insightText: {

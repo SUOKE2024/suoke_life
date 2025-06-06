@@ -1,10 +1,15 @@
+"""
+event_handlers - 索克生活项目模块
+"""
+
+from .health_data_service import HealthDataIntegrationService
+from services.common.messaging.event_bus import EventBus
+
 # -*- coding: utf-8 -*-
 """
 集成服务事件处理器示例
 订阅外部健康数据同步事件并进行格式转换与合规校验
 """
-from services.common.messaging.event_bus import EventBus
-from .health_data_service import HealthDataIntegrationService
 
 def handle_external_health_data(event: dict):
     print(f"[IntegrationService] 收到外部健康数据事件: {event}")

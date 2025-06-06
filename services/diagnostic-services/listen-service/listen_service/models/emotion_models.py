@@ -1,13 +1,18 @@
 """
-情绪分析相关的数据模型
-
-包含情绪状态、情绪评分、心境状态等数据结构定义。
+emotion_models - 索克生活项目模块
 """
 
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Dict, List
+
+"""
+情绪分析相关的数据模型
+
+包含情绪状态、情绪评分、心境状态等数据结构定义。
+"""
+
 
 
 class EmotionType(Enum):

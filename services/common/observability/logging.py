@@ -1,32 +1,37 @@
+"""
+logging - 索克生活项目模块
+"""
+
+    from fluent import sender
+    import logstash
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from enum import Enum
+from pythonjsonlogger import jsonlogger
+from typing import Any
+import json
+import logging
+import os
+import structlog
+import sys
+import traceback
+
 #!/usr/bin/env python3
 """
 日志聚合模块
 提供统一的日志收集、格式化、路由和存储功能
 """
 
-from dataclasses import asdict, dataclass
-from datetime import datetime
-from enum import Enum
-import json
-import logging
-import os
-import sys
-import traceback
-from typing import Any
 
-from pythonjsonlogger import jsonlogger
-import structlog
 
 # 尝试导入可选的日志后端
 try:
-    import logstash
 
     HAS_LOGSTASH = True
 except ImportError:
     HAS_LOGSTASH = False
 
 try:
-    from fluent import sender
 
     HAS_FLUENT = True
 except ImportError:

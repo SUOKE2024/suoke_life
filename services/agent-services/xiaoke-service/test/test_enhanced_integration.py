@@ -1,24 +1,29 @@
+"""
+test_enhanced_integration - 索克生活项目模块
+"""
+
+from services.agent_services.xiaoke_service.internal.service.enhanced_resource_service import (
+from services.common.governance.rate_limiter import RateLimitExceeded
+from unittest.mock import patch
+import asyncio
+import contextlib
+import pytest
+import time
+
 #!/usr/bin/env python3
 """
 xiaoke-service 增强版集成测试套件
 测试所有核心功能和优化组件
 """
 
-import asyncio
-import contextlib
-import time
-from unittest.mock import patch
 
-import pytest
 
 # 导入被测试的组件
-from services.agent_services.xiaoke_service.internal.service.enhanced_resource_service import (
     ConstitutionType,
     ProductRequest,
     ResourceRequest,
     get_resource_service,
 )
-from services.common.governance.rate_limiter import RateLimitExceeded
 
 # 常量定义
 CONCURRENT_REQUESTS = 5

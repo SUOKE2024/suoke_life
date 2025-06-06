@@ -1,14 +1,19 @@
 """
+health_service - 索克生活项目模块
+"""
+
+from ..models.health import HealthAnalysis, HealthRecommendation
+from .base_service import BaseService
+from datetime import datetime
+from typing import Any
+
+"""
 健康服务
 
 提供健康数据分析、健康建议等功能
 """
 
-from datetime import datetime
-from typing import Any
 
-from ..models.health import HealthAnalysis, HealthRecommendation
-from .base_service import BaseService
 
 
 class HealthService(BaseService):

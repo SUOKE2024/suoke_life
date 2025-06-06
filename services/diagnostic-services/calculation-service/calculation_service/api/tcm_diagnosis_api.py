@@ -1,18 +1,26 @@
 """
-中医诊断API接口
-整合舌脉象分析和知识图谱推理功能
+tcm_diagnosis_api - 索克生活项目模块
 """
 
+            import base64
+    import uvicorn
+from ..core.algorithms.tongue_pulse_analysis import (
+from datetime import datetime
 from fastapi import FastAPI, HTTPException, UploadFile, File, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any, Union
 import cv2
 import json
 import logging
-from datetime import datetime
 
-from ..core.algorithms.tongue_pulse_analysis import (
+"""
+中医诊断API接口
+整合舌脉象分析和知识图谱推理功能
+"""
+
+
     TonguePulseCalculationEngine,
     TongueImageAnalyzer,
     PulseWaveformAnalyzer
@@ -25,11 +33,83 @@ class SymptomInput(BaseModel):
     """症状输入模型"""
     symptoms: List[str] = Field(..., description="症状列表")
     severity: Optional[Dict[str, int]] = Field(None, description="症状严重程度(1-10)")
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'symptominput'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'pulseanalysisinput'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'patientinfo'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'diagnosisrequest'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'diagnosisresponse'
+        ordering = ['-created_at']
+
 
 class TongueAnalysisInput(BaseModel):
     """舌诊输入模型"""
     image_base64: Optional[str] = Field(None, description="舌象图片的base64编码")
     manual_observation: Optional[Dict[str, Any]] = Field(None, description="人工观察结果")
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'analysisstatus'
+        ordering = ['-created_at']
+
 
 class PulseAnalysisInput(BaseModel):
     """脉诊输入模型"""
@@ -78,6 +158,9 @@ class AnalysisStatus(BaseModel):
 
 # 创建FastAPI应用
 app = FastAPI(
+
+# 性能优化: 添加响应压缩
+app.add_middleware(GZipMiddleware, minimum_size=1000)
     title="中医诊断API",
     description="基于舌脉象分析和知识图谱推理的中医诊断系统",
     version="1.0.0"
@@ -106,13 +189,16 @@ async def shutdown_event():
     """应用关闭事件"""
     logger.info("中医诊断API服务关闭")
 
+@cache(expire=300)  # 5分钟缓存
+@limiter.limit("100/minute")  # 每分钟100次请求
 @app.get("/health")
 async def health_check():
     """健康检查"""
     return {
         "status": "healthy",
         "timestamp": datetime.now(),
-        "service": "tcm-diagnosis-api",
+        "service": "tcm-diagnosi@limiter.limit("100/minute")  # 每分钟100次请求
+s-api",
         "version": "1.0.0"
     }
 
@@ -155,10 +241,13 @@ async def create_diagnosis(
         
     except Exception as e:
         logger.error(f"创建诊断失败: {e}")
-        raise HTTPException(status_code=500, detail=f"诊断创建失败: {str(e)}")
+        raise HTTP@limiter.limit("100/minute")  # 每分钟100次请求
+Exception(status_code=500, d@cache(expire=300)  # 5分钟缓存
+etail=f"诊断创建失败: {str(e)}")
 
 @app.get("/api/v1/diagnosis/{diagnosis_id}/status", response_model=AnalysisStatus)
-async def get_diagnosis_status(diagnosis_id: str):
+async     @cache(timeout=300)  # 5分钟缓存
+async def get_diagnosis_status(
     """
     获取诊断状态
     """
@@ -171,19 +260,23 @@ async def get_diagnosis_status(diagnosis_id: str):
         diagnosis_id=diagnosis_id,
         status=task_info["status"],
         progress=task_info["progress"],
-        message=task_info["message"],
-        estimated_completion=task_info.get("estimated_completion")
+        messag@limiter.limit("100/minute")  # 每分钟100次请求
+e=task_info["message"],
+        estimated_@cache(expire=300)  # 5分钟缓存
+completion=task_info.get("estimated_completion")
     )
 
-@app.get("/api/v1/diagnosis/{diagnosis_id}/result")
-async def get_diagnosis_result(diagnosis_id: str):
+@app.get("/api/v1/diagnos    @cache(timeout=300)  # 5分钟缓存
+is/{diagnosis_id}/result")
+async async def get_diagnosis_result(
     """
     获取诊断结果
     """
     if diagnosis_id not in analysis_tasks:
         raise HTTPException(status_code=404, detail="诊断ID不存在")
     
-    task_info = analysis_tasks[diagnosis_id]
+    task_info = analysis_tasks[d@limiter.limit("100/minute")  # 每分钟100次请求
+iagnosis_id]
     
     if task_info["status"] != "completed":
         raise HTTPException(status_code=202, detail="诊断尚未完成")
@@ -236,7 +329,8 @@ async def analyze_tongue_image(
         
         return {
             "status": "success",
-            "analysis_result": analysis_result,
+            "analysis_result": anal@limiter.limit("100/minute")  # 每分钟100次请求
+ysis_result,
             "processing_time": "实时分析完成"
         }
         
@@ -279,7 +373,8 @@ async def analyze_pulse_waveform(request: PulseAnalysisInput):
             analysis_result["fusion_result"] = fuse_pulse_observations(analysis_result, request.manual_observation)
         
         return {
-            "status": "success",
+            "status": "suc@limiter.limit("100/minute")  # 每分钟100次请求
+cess",
             "analysis_result": analysis_result,
             "processing_time": "实时分析完成"
         }
@@ -373,7 +468,6 @@ async def process_diagnosis_async(diagnosis_id: str, request: DiagnosisRequest):
         tongue_result = None
         if request.tongue_analysis and request.tongue_analysis.image_base64:
             # 解码base64图像
-            import base64
             image_data = base64.b64decode(request.tongue_analysis.image_base64)
             image_array = np.frombuffer(image_data, np.uint8)
             image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
@@ -560,5 +654,4 @@ def generate_differential_diagnosis(result: Dict) -> List[Dict]:
     return differential
 
 if __name__ == "__main__":
-    import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000) 

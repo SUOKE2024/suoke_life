@@ -1,14 +1,19 @@
+"""
+test_community_manager - 索克生活项目模块
+"""
+
+from datetime import datetime, timedelta
+from unittest.mock import Mock, patch, AsyncMock
+import asyncio
+import json
+import pytest
+
 #!/usr/bin/env python3
 """
 社区管理测试
 测试老克智能体的社区管理功能
 """
 
-import pytest
-import asyncio
-from unittest.mock import Mock, patch, AsyncMock
-from datetime import datetime, timedelta
-import json
 
 class TestCommunityManager:
     """社区管理测试类"""

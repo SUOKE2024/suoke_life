@@ -1,3 +1,18 @@
+"""
+smart_device_manager - 索克生活项目模块
+"""
+
+from collections.abc import Callable
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum, auto
+from internal.model.pulse_models import SensorCalibrationData
+from internal.signal.device_adapter import BaseDeviceAdapter, DeviceAdapterFactory
+from typing import Any
+import asyncio
+import logging
+
 #!/usr/bin/env python3
 
 """
@@ -6,17 +21,7 @@
 支持多设备并发管理和负载均衡
 """
 
-import asyncio
-import logging
-from collections.abc import Callable
-from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum, auto
-from typing import Any
 
-from internal.model.pulse_models import SensorCalibrationData
-from internal.signal.device_adapter import BaseDeviceAdapter, DeviceAdapterFactory
 
 logger = logging.getLogger(__name__)
 

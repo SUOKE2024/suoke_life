@@ -1,17 +1,22 @@
+"""
+message_queue - 索克生活项目模块
+"""
+
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
+from typing import Any
+import asyncio
+import json
+import logging
+
 #!/usr/bin/env python3
 """
 消息队列抽象基类
 提供统一的消息队列接口
 """
 
-from abc import ABC, abstractmethod
-import asyncio
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
-import json
-import logging
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

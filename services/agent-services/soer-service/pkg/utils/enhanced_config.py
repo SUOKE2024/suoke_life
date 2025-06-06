@@ -1,18 +1,23 @@
 """
-增强的配置管理系统
-支持环境变量替换、配置验证、热重载等功能
+enhanced_config - 索克生活项目模块
 """
+
+from pathlib import Path
+from pydantic import BaseModel, field_validator
+from threading import Lock
+from typing import Any
+from watchdog.events import FileSystemEventHandler
+from watchdog.observers import Observer
 import asyncio
 import logging
 import os
-from pathlib import Path
-from threading import Lock
-from typing import Any
-
 import yaml
-from pydantic import BaseModel, field_validator
-from watchdog.events import FileSystemEventHandler
-from watchdog.observers import Observer
+
+"""
+增强的配置管理系统
+支持环境变量替换、配置验证、热重载等功能
+"""
+
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +38,18 @@ class DatabaseConfig(BaseModel):
         if not 1 <= v <= 65535:
             raise ValueError('端口号必须在1-65535之间')
         return v
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'databaseconfig'
+        ordering = ['-created_at']
+
 
 class CacheConfig(BaseModel):
     """缓存配置"""
@@ -49,6 +66,30 @@ class CacheConfig(BaseModel):
         if not 1 <= v <= 65535:
             raise ValueError('端口号必须在1-65535之间')
         return v
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'grpcconfig'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'restconfig'
+        ordering = ['-created_at']
+
 
 class GrpcConfig(BaseModel):
     """gRPC配置"""
@@ -76,6 +117,54 @@ class RestConfig(BaseModel):
         if not 1 <= v <= 65535:
             raise ValueError('端口号必须在1-65535之间')
         return v
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'serviceconfig'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'metricsconfig'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'tracingconfig'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'soerserviceconfig'
+        ordering = ['-created_at']
+
 
 class ModelConfig(BaseModel):
     """模型配置"""

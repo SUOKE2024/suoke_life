@@ -345,7 +345,5 @@
   activePlans: 3,
   completedPlans: 8,
   currentStreak: 15,
-  longestStreak: 32,;
-  averageScore: 78.5,;
-  improvementRate: 12.3;
+  longestStreak: 32,averageScore: 78.5,improvementRate: 12.3;
 };

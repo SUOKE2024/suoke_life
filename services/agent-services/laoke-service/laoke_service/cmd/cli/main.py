@@ -1,23 +1,31 @@
 """
+main - 索克生活项目模块
+"""
+
+            from laoke_service.core.agent import AgentMessage
+        import os
+    from laoke_service import __description__, __version__
+from laoke_service.core.agent import LaoKeAgent
+from laoke_service.core.config import Settings, get_settings
+from laoke_service.core.logging import setup_logging
+from pathlib import Path
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
+from typing import Any
+import asyncio
+import click
+import sys
+import yaml
+
+"""
 老克智能体服务 CLI 工具
 
 提供数据库管理、配置验证、数据导入导出等功能
 """
 
-import asyncio
-import sys
-from pathlib import Path
-from typing import Any
 
-import click
-import yaml
-from rich.console import Console
-from rich.panel import Panel
-from rich.table import Table
 
-from laoke_service.core.agent import LaoKeAgent
-from laoke_service.core.config import Settings, get_settings
-from laoke_service.core.logging import setup_logging
 
 console = Console()
 
@@ -32,7 +40,6 @@ def cli(ctx: click.Context, config: str, verbose: bool) -> None:
 
     # 设置配置文件路径
     if config:
-        import os
         os.environ["LAOKE_CONFIG_PATH"] = config
 
     # 获取设置
@@ -223,7 +230,6 @@ def test(ctx: click.Context, message: str, type: str) -> None:
 
     async def test_agent() -> None:
         try:
-            from laoke_service.core.agent import AgentMessage
 
             agent = LaoKeAgent(settings)
             await agent.initialize()
@@ -327,7 +333,6 @@ def serve(ctx: click.Context, host: str, port: int, reload: bool) -> None:
 @cli.command()
 def version() -> None:
     """显示版本信息"""
-    from laoke_service import __description__, __version__
 
     console.print(Panel.fit(
         f"[bold blue]老克智能体服务[/bold blue]\n"

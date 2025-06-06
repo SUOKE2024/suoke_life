@@ -1,12 +1,25 @@
+"""
+test_simple - 索克生活项目模块
+"""
+
+        from integration_service import config
+        from integration_service.api.routes import auth, platforms, health_data as hd_routes, integration
+        from integration_service.core import database, security
+        from integration_service.models import base, user, platform, health_data
+        from integration_service.services import base_service, user_service, platform_service, health_data_service
+        import traceback
+from fastapi.testclient import TestClient
+from integration_service.main import create_app
+from pathlib import Path
+import asyncio
+import os
+import sys
+
 #!/usr/bin/env python3
 """
 简单的集成服务测试脚本
 """
 
-import os
-import sys
-import asyncio
-from pathlib import Path
 
 # 添加项目根目录到Python路径
 project_root = Path(__file__).parent
@@ -17,8 +30,6 @@ os.environ["DATABASE_URL"] = "sqlite:///./test.db"
 os.environ["DEBUG"] = "true"
 os.environ["SECRET_KEY"] = "test-secret-key"
 
-from fastapi.testclient import TestClient
-from integration_service.main import create_app
 
 
 def test_basic_functionality():
@@ -97,7 +108,6 @@ def test_basic_functionality():
         
     except Exception as e:
         print(f"❌ 测试过程中发生错误: {e}")
-        import traceback
         traceback.print_exc()
         return False
 
@@ -108,19 +118,14 @@ def test_import_modules():
     
     try:
         # 测试核心模块
-        from integration_service import config
         print("✅ 配置模块导入成功")
         
-        from integration_service.core import database, security
         print("✅ 核心模块导入成功")
         
-        from integration_service.models import base, user, platform, health_data
         print("✅ 模型模块导入成功")
         
-        from integration_service.services import base_service, user_service, platform_service, health_data_service
         print("✅ 服务模块导入成功")
         
-        from integration_service.api.routes import auth, platforms, health_data as hd_routes, integration
         print("✅ API路由模块导入成功")
         
         print("🎉 所有模块导入测试完成！")
@@ -128,7 +133,6 @@ def test_import_modules():
         
     except Exception as e:
         print(f"❌ 模块导入失败: {e}")
-        import traceback
         traceback.print_exc()
         return False
 

@@ -1,3 +1,25 @@
+"""
+main - 索克生活项目模块
+"""
+
+from contextlib import asynccontextmanager
+from fastapi import FastAPI, HTTPException, Depends
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
+from loguru import logger
+from soer_service.agent.soer_agent import SoerAgent
+from soer_service.config.settings import get_settings
+from soer_service.delivery.api.analytics import analytics_router
+from soer_service.delivery.api.companion import companion_router
+from soer_service.delivery.api.devices import devices_router
+from soer_service.delivery.api.health import health_router
+from soer_service.delivery.api.lifestyle import lifestyle_router
+from soer_service.observability.monitoring import setup_monitoring
+from soer_service.platform.lifecycle import AgentLifecycleManager
+import os
+import sys
+import uvicorn
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
@@ -6,26 +28,10 @@
 LIFE频道版主，提供生活健康管理、陪伴服务和数据整合分析
 """
 
-import uvicorn
-from fastapi import FastAPI, HTTPException, Depends
-from fastapi.middleware.cors import CORSMiddleware
-from contextlib import asynccontextmanager
-from loguru import logger
-import sys
-import os
 
 # 添加项目根目录到Python路径
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from soer_service.agent.soer_agent import SoerAgent
-from soer_service.config.settings import get_settings
-from soer_service.delivery.api.health import health_router
-from soer_service.delivery.api.lifestyle import lifestyle_router
-from soer_service.delivery.api.companion import companion_router
-from soer_service.delivery.api.analytics import analytics_router
-from soer_service.delivery.api.devices import devices_router
-from soer_service.observability.monitoring import setup_monitoring
-from soer_service.platform.lifecycle import AgentLifecycleManager
 
 # 全局变量
 soer_agent: SoerAgent = None
@@ -75,6 +81,9 @@ def create_app() -> FastAPI:
     settings = get_settings()
     
     app = FastAPI(
+
+# 性能优化: 添加响应压缩
+app.add_middleware(GZipMiddleware, minimum_size=1000)
         title="索儿智能体服务",
         description="LIFE频道版主，提供生活健康管理、陪伴服务和数据整合分析",
         version="1.0.0",
@@ -110,6 +119,8 @@ def get_soer_agent() -> SoerAgent:
 # 创建应用实例
 app = create_app()
 
+@cache(expire=300)  # 5分钟缓存
+@limiter.limit("100/minute")  # 每分钟100次请求
 @app.get("/")
 async def root():
     """根路径"""
@@ -123,7 +134,9 @@ async def root():
             "生活陪伴与情感支持",
             "多源数据整合分析",
             "智能设备协调",
-            "生活方式优化建议"
+            @cache(expire=@limiter.limit("100/minute")  # 每分钟100次请求
+300)  # 5分钟缓存
+"生活方式优化建议"
         ]
     }
 
@@ -147,7 +160,8 @@ async def send_message(
         )
         return response
     except Exception as e:
-        logger.error(f"处理消息失败: {e}")
+        logger@limiter.limit("100/minute")  # 每分钟100次请求
+.error(f"处理消息失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/agent/analyze-health-data")
@@ -164,7 +178,8 @@ async def analyze_health_data(
             analysis_type=request.get("analysis_type", "comprehensive")
         )
         return analysis
-    except Exception as e:
+ @limiter.limit("100/minute")  # 每分钟100次请求
+   except Exception as e:
         logger.error(f"健康数据分析失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -179,7 +194,8 @@ async def create_lifestyle_plan(
             user_profile=request.get("user_profile"),
             health_goals=request.get("health_goals", []),
             constraints=request.get("constraints", {}),
-            preferences=request.get("preferences", {})
+            preferences=request.get("preferenc@limiter.limit("100/minute")  # 每分钟100次请求
+es", {})
         )
         return plan
     except Exception as e:
@@ -196,7 +212,8 @@ async def companion_chat(
         response = await agent.companion_chat(
             user_id=request.get("user_id"),
             message=request.get("message", ""),
-            mood=request.get("mood"),
+            mood=request.get("mood@limiter.limit("100/minute")  # 每分钟100次请求
+"),
             context=request.get("context", {})
         )
         return response

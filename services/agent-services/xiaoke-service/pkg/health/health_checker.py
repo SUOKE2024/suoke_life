@@ -1,22 +1,27 @@
-#!/usr/bin/env python3
 """
-健康检查和服务发现
-提供多层次健康检查、自动故障检测和恢复、健康状态聚合和报告功能
+health_checker - 索克生活项目模块
 """
 
-import asyncio
-import logging
-import time
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
-
 import aiohttp
 import aioredis
+import asyncio
 import asyncpg
+import logging
+import time
+
+#!/usr/bin/env python3
+"""
+健康检查和服务发现
+提供多层次健康检查、自动故障检测和恢复、健康状态聚合和报告功能
+"""
+
+
 
 logger = logging.getLogger(__name__)
 

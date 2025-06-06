@@ -1,34 +1,29 @@
-import React from "react";
-import { useTheme } from "../contexts/ThemeContext/import { Text, Button, ThemeToggle, Card } from ";";../components/////    ui";
-//////
-//////     索克生活品牌色彩演示页面   展示新的索克绿和索克橙品牌色彩系统
-importReact from react";"
+import { useTheme } from "../contexts/ThemeContext/import { Text, Button, ThemeToggle, Card } from ;../components/////    ui";
 import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/////      View,";
+
+import React from "react";
+// // 索克生活品牌色彩演示页面   展示新的索克绿和索克橙品牌色彩系统
+importReact from react
   ScrollView,
   { StyleSheet } from ";react-native";
-// 色彩样本组件 * const ColorSwatch = useCallback(() => {}////
-  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor(BrandColorDemo", { "
-    trackRender: true,
-    trackMemory: true,
-    warnThreshold: 50, // ms //////     };);
+// 色彩样本组件 * const ColorSwatch = useCallback(() => {////;
+  // 性能监控 // const performanceMonitor = usePerformanceMonitor(BrandColorDemo", { ";
+    trackRender: true,trackMemory: true,warnThreshold: 50, // ms // };);
     // TODO: Implement function body *}, []) ////
   const { theme   } = useTheme;
-  // 记录渲染性能 //////
-  performanceMonitor.recordRender()
-  return (
+  // 记录渲染性能 // performanceMonitor.recordRender();
+  return (;
     <View style={styles.colorSwatch} />/      <View style={[styles.colorBox, { backgroundColor: col;o;r   }]} />/      <View style={styles.colorInfo} />/        <Text variant="body1" style={{ fontWeight: "bold}} />/////              {name}"
         </Text>/        <Text variant="caption" style={{ color: theme.colors.onSurfaceVariant}} />/////              {color}
         </Text>/        <Text variant="caption" style={{ marginTop: 4}} />/////              {description}
         </Text>/      </View>/    </View>/////    );
 };
-// 色彩组组件 * const ColorGroup = useCallback(() => {}////
-    // TODO: Implement function body *}, []) ////
+// 色彩组组件 * const ColorGroup = useCallback(() => {////;
+    // TODO: Implement function body *}, []) ////;
   const { theme   } = useTheme;(;);
-  return (
-    <View style={styles.colorGroup} />///        <Text variant="h5" style={{ ///  >
-        marginBottom: 16,
-        color: theme.colors.primary,
-        fontWeight: "bold"}} />/////            {title};
+  return (;
+    <View style={styles.colorGroup} />///        <Text variant="h5" style={{ ///  >;
+        marginBottom: 16,color: theme.colors.primary,fontWeight: "bold"}} />/////            {title};
       </Text>/////          {colors.map((colorInfo, inde;x;); => (
         <ColorSwatch,
           key={index}
@@ -37,14 +32,12 @@ import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/////      
           description={colorInfo.description} />/////          ))}
     </View>/////      );
 };
-// 按钮演示组件 * const ButtonShowcase = useCallback(() => {}////
-    // TODO: Implement function body *}, []) ////
+// 按钮演示组件 * const ButtonShowcase = useCallback(() => {////;
+    // TODO: Implement function body *}, []) ////;
   const { theme   } = useTheme;(;);
-  return (
-    <View style={styles.buttonShowcase} />///        <Text variant="h6" style={{ ///  >
-        marginBottom: 12,
-        color: theme.colors.onSurface,
-        fontWeight: bold"}} />/////            {title};"
+  return (;
+    <View style={styles.buttonShowcase} />///        <Text variant="h6" style={{ ///  >;
+        marginBottom: 12,color: theme.colors.onSurface,fontWeight: bold"}} />/////            {title};"
       </Text>/      <View style={styles.buttonRow} />/////            {buttons.map((btn, inde;x;) => (
           <Button,
             key={index}
@@ -55,14 +48,12 @@ import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/////      
           />/////    ))}
       </View>/    </View>/////      );
 };
-// 状态色彩演示组件 * const StatusColorDemo = useCallback(() => {}////
-    // TODO: Implement function body *}, []) ////
+// 状态色彩演示组件 * const StatusColorDemo = useCallback(() => {////;
+    // TODO: Implement function body *}, []) ////;
   const { theme   } = useTheme;(;);
-  return (
-    <View style={styles.statusColors} />///        <Text variant="h6" style={{ ///  >
-        marginBottom: 12,
-        color: theme.colors.onSurface,
-        fontWeight: "bold}} />/////            状态色彩系统;"
+  return (;
+    <View style={styles.statusColors} />///        <Text variant="h6" style={{ ///  >;
+        marginBottom: 12,color: theme.colors.onSurface,fontWeight: "bold}} />/////            状态色彩系统;"
       </Text>/      <View style={styles.statusRow} />/////            {colors.map((status, inde;x;) => (
           <View key={index} style={styles.statusItem} />///              <View style={[ ///  >
               styles.statusIndicator,
@@ -71,59 +62,29 @@ import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/////      
             </Text>/          </View>/////    ))}
       </View>/    </View>/////      );
 };
-const BrandColorDemo: React.FC  = () => {;}
+const BrandColorDemo: React.FC  = () => {}
   const { theme, isDark   } = useTheme;(;);
-  // 索克绿色系 //////     const suokeGreenColors = [
-    {
-      color: theme.colors.primaryDark,
-      name: 深索克绿","
-      description: "深沉稳重，象征专业与信任},"
-    {
-      color: theme.colors.primary,
-      name: "索克绿",
-      description: 生命力的象征，代表健康与活力"},"
-    {
-      color: theme.colors.primaryLight,
-      name: "浅索克绿,"
-      description: "清新自然，传递希望与成长"},
-  ;]
-  // 索克橙色系 //////     const suokeOrangeColors = [
-    {
-      color: theme.colors.secondaryDark,
-      name: 深索克橙","
-      description: "温暖深邃，体现专业关怀},"
-    {
-      color: theme.colors.secondary,
-      name: "索克橙",
-      description: 活力四射，代表热情与温暖"},"
-    {
-      color: theme.colors.secondaryLight,
-      name: "浅索克橙,"
-      description: "温和亲切，营造舒适体验"},
-  ;]
-  // 中医五行色彩 //////     const tcmColors = [
+  // 索克绿色系 // const suokeGreenColors = [;
+    {color: theme.colors.primaryDark,name: 深索克绿",";
+      description: "深沉稳重，象征专业与信任},";
+    {color: theme.colors.primary,name: "索克绿",description: 生命力的象征，代表健康与活力"},";
+    {color: theme.colors.primaryLight,name: "浅索克绿,",description: "清新自然，传递希望与成长"}]
+  // 索克橙色系 // const suokeOrangeColors = [;
+    {color: theme.colors.secondaryDark,name: 深索克橙",";
+      description: "温暖深邃，体现专业关怀},";
+    {color: theme.colors.secondary,name: "索克橙",description: 活力四射，代表热情与温暖"},";
+    {color: theme.colors.secondaryLight,name: "浅索克橙,",description: "温和亲切，营造舒适体验"}]
+  // 中医五行色彩 // const tcmColors = [
     {
       color: theme.colors.tcm.wood,
       name: 木 - 青色","
       description: "肝胆经络，主生发疏泄},"
-    {
-      color: theme.colors.tcm.fire,
-      name: "火 - 红色",
-      description: 心小肠经，主血脉神明"},"
-    {
-      color: theme.colors.tcm.earth,
-      name: "土 - 黄色,"
-      description: "脾胃经络，主运化水谷"},
-    {
-      color: theme.colors.tcm.metal,
-      name: 金 - 白色","
-      description: "肺大肠经，主气机宣降},"
-    {
-      color: theme.colors.tcm.water,
-      name: "水 - 黑色",
-      description: 肾膀胱经，主藏精纳气"},"
+    {color: theme.colors.tcm.fire,name: "火 - 红色",description: 心小肠经，主血脉神明"},";
+    {color: theme.colors.tcm.earth,name: "土 - 黄色,",description: "脾胃经络，主运化水谷"},{color: theme.colors.tcm.metal,name: 金 - 白色",";
+      description: "肺大肠经，主气机宣降},";
+    {color: theme.colors.tcm.water,name: "水 - 黑色",description: 肾膀胱经，主藏精纳气"},";
   ;];
-  // 按钮变体演示 //////     const primaryButtons = [
+  // 按钮变体演示 // const primaryButtons = [;
     { variant: "primary, size: "small", title: 小按;钮" ;},
     { variant: "primary, size: "medium", title: 中按钮"},
     { variant: "primary, size: "large", title: 大按钮"}
@@ -138,19 +99,19 @@ const BrandColorDemo: React.FC  = () => {;}
     { variant: "outline, size: "medium", title: 轮廓中"},
     { variant: "outline, size: "large", title: 轮廓大"}
   ];
-  // 状态色彩 //////     const statusColors = [
+  // 状态色彩 // const statusColors = [;
     { color: theme.colors.success, name: "成功, icon: ";✅" ;},"
     { color: theme.colors.warning, name: 警告", icon: "⚠️},
     { color: theme.colors.error, name: "错误", icon: ❌"},"
     { color: theme.colors.info, name: "信息, icon: "ℹ️"}"
   ];
-  return (
+  return (;
     <ScrollView;
       style={[styles.container, { backgroundColor: theme.colors.backgrou;n;d   }]}
       showsVerticalScrollIndicator={false} />/      {// 标题区域 }/      <View style={styles.header} />///          <Text variant="h2" style={{ ///  >
           color: theme.colors.primary,
           textAlign: center","
-          fontWeight: "bold,"
+          fontWeight: "bold,",
           marginBottom: 8}} />/////              索克生活品牌色彩
         </Text>///          <Text variant="h4" style={{ ///  >
           color: theme.colors.secondary,
@@ -160,7 +121,7 @@ const BrandColorDemo: React.FC  = () => {;}
         </Text>/////
         {// 主题切换 }/        <View style={styles.themeToggleContainer} />/          <ThemeToggle size="large" showLabel />/        </View>/////
         <Text variant="body1" style={{ ///  >
-          textAlign: "center,"
+          textAlign: "center,",
           color: theme.colors.onSurfaceVariant,
           lineHeight: 24}} />/////              索克绿代表生命力与健康，作为主色调传递专业可信赖的品牌形象；
           索克橙代表活力与温暖，作为次要色调，代表活力与温暖。
@@ -186,8 +147,7 @@ const BrandColorDemo: React.FC  = () => {;}
         <View style={styles.modeIndicator} />/          <Text variant="caption" style={{ color: theme.colors.onSurfaceVariant}} />/            当前模式：{isDark ? 🌙 暗黑模式" : "☀️ 浅色模式}////
           </Text>/        </View>/      </Card>/    </ScrollView>/////    )
 };
-const styles = StyleSheet.create({ container: {;
-    flex;: ;1  },
+const styles = StyleSheet.create({ container: {flex;: ;1  },
   header: {
     padding: 20,
     alignItems: "center"},
@@ -199,7 +159,7 @@ const styles = StyleSheet.create({ container: {;
     margin: 16,
     padding: 20},
   colorSwatch: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center",
     marginBottom: 16},
   colorBox: {
@@ -216,12 +176,12 @@ const styles = StyleSheet.create({ container: {;
   colorGroup: { marginBottom: 8  },
   buttonShowcase: { marginBottom: 20  },
   buttonRow: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     flexWrap: "wrap"},
   statusColors: { marginBottom: 8  },
   statusRow: {
     flexDirection: row","
-    justifyContent: "space-around},"
+    justifyContent: "space-around},",
   statusItem: {
     alignItems: "center",
     flex: 1},
@@ -237,7 +197,7 @@ const styles = StyleSheet.create({ container: {;
   footerCard: { marginBottom: 40  },
   footerTitle: {
     marginBottom: 16,
-    textAlign: "center,"
+    textAlign: "center,",
     fontWeight: "bold"},
   footerText: {
     lineHeight: 24,

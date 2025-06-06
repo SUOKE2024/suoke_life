@@ -1,14 +1,19 @@
-"""认证中间件"""
+"""
+auth - 索克生活项目模块
+"""
 
-import logging
-from typing import Optional
 from fastapi import Request, Response
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from starlette.middleware.base import BaseHTTPMiddleware
-import jwt
-
+from typing import Optional
 from user_service.config import get_settings
 from user_service.core.exceptions import AuthenticationError
+import jwt
+import logging
+
+"""认证中间件"""
+
+
 
 logger = logging.getLogger(__name__)
 security = HTTPBearer(auto_error=False)

@@ -1,11 +1,16 @@
 """
+formatters - 索克生活项目模块
+"""
+
+from datetime import datetime
+from typing import Dict, Any, List, Optional
+
+"""
 数据格式化工具
 
 提供各种数据格式化功能
 """
 
-from datetime import datetime
-from typing import Dict, Any, List, Optional
 
 
 def format_analysis_result(result: Dict[str, Any]) -> Dict[str, Any]:

@@ -1,3 +1,8 @@
+"""
+tcm_diagnosis - 索克生活项目模块
+"""
+
+
 class TCMFiveDiagnosisTask(BaseTask):
     """中医五诊诊断任务"""
     

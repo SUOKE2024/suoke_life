@@ -1,20 +1,25 @@
 """
+test_service_integration - 索克生活项目模块
+"""
+
+from listen_service.core.audio_analyzer import AudioAnalyzer
+from listen_service.core.tcm_analyzer import TCMFeatureExtractor
+from listen_service.delivery.grpc_server import ListenServiceGRPCServer
+from listen_service.utils.cache import AudioCache, MemoryCache
+import grpc
+import numpy as np
+import os
+import pytest
+import soundfile as sf
+import tempfile
+
+"""
 闻诊服务集成测试
 
 整合了原有的服务级别测试，使用现代化的 pytest 框架。
 """
 
-import pytest
-import grpc
-import tempfile
-import os
-import numpy as np
-import soundfile as sf
 
-from listen_service.delivery.grpc_server import ListenServiceGRPCServer
-from listen_service.core.audio_analyzer import AudioAnalyzer
-from listen_service.core.tcm_analyzer import TCMFeatureExtractor
-from listen_service.utils.cache import AudioCache, MemoryCache
 
 class TestListenServiceIntegration:
     """闻诊服务集成测试"""

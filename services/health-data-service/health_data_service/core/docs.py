@@ -1,16 +1,21 @@
 """
+docs - 索克生活项目模块
+"""
+
+from .config import get_settings
+from fastapi import FastAPI
+from fastapi.openapi.docs import get_swagger_ui_html, get_redoc_html
+from fastapi.openapi.utils import get_openapi
+from fastapi.responses import HTMLResponse
+from typing import Dict, Any, List, Optional
+
+"""
 API文档生成器
 
 提供完整的API文档生成和管理功能。
 """
 
-from typing import Dict, Any, List, Optional
-from fastapi import FastAPI
-from fastapi.openapi.utils import get_openapi
-from fastapi.openapi.docs import get_swagger_ui_html, get_redoc_html
-from fastapi.responses import HTMLResponse
 
-from .config import get_settings
 
 
 def custom_openapi(app: FastAPI) -> Dict[str, Any]:

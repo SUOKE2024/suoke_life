@@ -19,8 +19,7 @@ export interface AgentManagerConfig {
 /**
  * 智能体状态
  */
-export type AgentStatus =
-  | "initializing"
+export type AgentStatus  = | "initializing"
   | "active"
   | "inactive"
   | "error"
@@ -62,7 +61,7 @@ export class AgentManager {
         memory: 512, // MB
         cpu: 80, // 百分比
       },
-      ...config,
+      ...config
     };
 
     this.coordinator = new AgentCoordinator();
@@ -134,17 +133,9 @@ export class AgentManager {
     const allStatus = await this.coordinator.getAllAgentStatus();
 
     if (agentType) {
-      return (
-        allStatus.get(agentType) || {
-          agentType,
-          status: "error",
-          load: 0,
-          responseTime: 0,
-          errorRate: 1,
-          lastCheck: new Date(),
-          capabilities: [],
-          version: "0.0.0",
-        }
+      return (;
+        allStatus.get(agentType) || {agentType,status: "error",load: 0,responseTime: 0,errorRate: 1,lastCheck: new Date(),capabilities: [],version: "0.0.0";
+        };
       );
     }
 
@@ -183,28 +174,17 @@ export class AgentManager {
    * 获取系统概览
    */
   getSystemOverview(): any {
-    const totalTasks = Array.from(this.metrics.values()).reduce(
-      (sum, m) => sum + m.tasksProcessed,
-      0
+    const totalTasks = Array.from(this.metrics.values()).reduce(;
+      (sum, m) => sum + m.tasksProcessed,0;
     );
-    const totalErrors = Array.from(this.metrics.values()).reduce(
-      (sum, m) => sum + m.errorCount,
-      0
+    const totalErrors = Array.from(this.metrics.values()).reduce(;
+      (sum, m) => sum + m.errorCount,0;
     );
     const avgResponseTime = this.calculateAverageResponseTime();
     const systemUptime = this.getSystemUptime();
 
-    return {
-      totalAgents: this.metrics.size,
-      totalTasksProcessed: totalTasks,
-      totalErrors,
-      overallSuccessRate:
-        totalTasks > 0 ? (totalTasks - totalErrors) / totalTasks : 0,
-      averageResponseTime: avgResponseTime,
-      systemUptime,
-      isHealthy: this.isSystemHealthy(),
-      config: this.config,
-      lastUpdate: new Date(),
+    return {totalAgents: this.metrics.size,totalTasksProcessed: totalTasks,totalErrors,overallSuccessRate:;
+        totalTasks > 0 ? (totalTasks - totalErrors) / totalTasks : 0,averageResponseTime: avgResponseTime,systemUptime,isHealthy: this.isSystemHealthy(),config: this.config,lastUpdate: new Date();
     };
   }
 
@@ -232,11 +212,8 @@ export class AgentManager {
    * 初始化性能指标
    */
   private initializeMetrics(): void {
-    const agentTypes = [
-      AgentType.XIAOAI,
-      AgentType.XIAOKE,
-      AgentType.LAOKE,
-      AgentType.SOER,
+    const agentTypes = [;
+      AgentType.XIAOAI,AgentType.XIAOKE,AgentType.LAOKE,AgentType.SOER;
     ];
 
     agentTypes.forEach((agentType) => {
@@ -248,7 +225,7 @@ export class AgentManager {
         lastActive: new Date(),
         memoryUsage: 0,
         cpuUsage: 0,
-        uptime: 0,
+        uptime: 0
       });
     });
   }
@@ -317,7 +294,7 @@ export class AgentManager {
 
       // 更新平均响应时间
       const totalTime =
-        metrics.averageResponseTime * (metrics.tasksProcessed - 1) +
+        metrics.averageResponseTime * (metrics.tasksProcessed - 1) +;
         executionTime;
       metrics.averageResponseTime = totalTime / metrics.tasksProcessed;
 
@@ -363,9 +340,8 @@ export class AgentManager {
     const metrics = Array.from(this.metrics.values());
     if (metrics.length === 0) {return 0;}
 
-    const totalTime = metrics.reduce(
-      (sum, m) => sum + m.averageResponseTime,
-      0
+    const totalTime = metrics.reduce(;
+      (sum, m) => sum + m.averageResponseTime,0;
     );
     return totalTime / metrics.length;
   }
@@ -384,8 +360,8 @@ export class AgentManager {
    */
   private isSystemHealthy(): boolean {
     const metrics = Array.from(this.metrics.values());
-    return metrics.every(
-      (m) => m.successRate > 0.8 && m.averageResponseTime < 5000
+    return metrics.every(;
+      (m) => m.successRate > 0.8 && m.averageResponseTime < 5000;
     );
   }
 

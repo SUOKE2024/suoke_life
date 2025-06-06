@@ -1,3 +1,16 @@
+"""
+intelligent_nutrition_engine - 索克生活项目模块
+"""
+
+from ..observability.metrics import MetricsCollector
+from ..observability.tracing import trace_operation, SpanKind
+from collections import defaultdict, Counter
+from dataclasses import dataclass, field
+from datetime import datetime, date, time, timedelta
+from enum import Enum
+from typing import Dict, List, Optional, Any, Tuple, Union
+import logging
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -12,15 +25,7 @@
 - 特殊人群营养管理
 """
 
-import logging
-from datetime import datetime, date, time, timedelta
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Dict, List, Optional, Any, Tuple, Union
-from collections import defaultdict, Counter
 
-from ..observability.metrics import MetricsCollector
-from ..observability.tracing import trace_operation, SpanKind
 
 class NutrientType(str, Enum):
     """营养素类型"""

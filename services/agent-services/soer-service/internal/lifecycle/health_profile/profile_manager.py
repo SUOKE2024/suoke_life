@@ -1,14 +1,19 @@
+"""
+profile_manager - 索克生活项目模块
+"""
+
+from datetime import datetime
+from typing import Any
+import json
+import logging
+import os
+import uuid
+
 #!/usr/bin/env python3
 """
 健康档案管理器
 负责用户健康档案的存储、更新和检索
 """
-import json
-import logging
-import os
-import uuid
-from datetime import datetime
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

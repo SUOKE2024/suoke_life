@@ -1,13 +1,12 @@
-import { QualityController } from "../QualityController";
-import { performance } from "perf_hooks";
+import { QualityController } from '../QualityController';
 
-describe("QualityController", () => {
+describe('QualityController', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  describe("QualityController", () => {
-    it("should work with valid inputs", () => {
+  describe('QualityController', () => {
+    it('should work with valid inputs', () => {
       // Add test cases
       const config = {
         thresholds: {
@@ -25,7 +24,7 @@ describe("QualityController", () => {
       expect(controller).toBeDefined();
     });
 
-    it("should handle edge cases", () => {
+    it('should handle edge cases', () => {
       // Add test cases
       const config = {
         thresholds: {
@@ -38,7 +37,7 @@ describe("QualityController", () => {
       expect(controller).toBeDefined();
     });
 
-    it("should handle invalid inputs gracefully", () => {
+    it('should handle invalid inputs gracefully', () => {
       // Add test cases
       const config = {
         thresholds: {
@@ -54,8 +53,8 @@ describe("QualityController", () => {
       }).not.toThrow();
     });
 
-    it("should return correct output format", () => {
-      // Add test cases
+    it('should return correct output format', () => {
+      // Add test cases;
       const config = {
         thresholds: {
           minConfidence: 0.7,
@@ -66,12 +65,12 @@ describe("QualityController", () => {
         },
       };
       const controller = new QualityController(config);
-      expect(typeof controller).toBe("object");
+      expect(typeof controller).toBe('object');
     });
   });
 
-  describe("QualityController Performance Tests", () => {
-    it("should execute within performance thresholds", () => {
+  describe('QualityController Performance Tests', () => {
+    it('should execute within performance thresholds', () => {
       const config = {
         thresholds: {
           minConfidence: 0.7,
@@ -81,7 +80,7 @@ describe("QualityController", () => {
           data_completeness: true,
         },
       };
-      
+
       const iterations = 10;
       const startTime = performance.now();
       for (let i = 0; i < iterations; i++) {
@@ -94,7 +93,7 @@ describe("QualityController", () => {
       expect(averageTime).toBeLessThan(10);
     });
 
-    it("should handle large datasets efficiently", () => {
+    it('should handle large datasets efficiently', () => {
       const config = {
         thresholds: {
           minConfidence: 0.7,
@@ -104,7 +103,7 @@ describe("QualityController", () => {
           data_completeness: true,
         },
       };
-      
+
       const startTime = performance.now();
       // Test with controller creation
       new QualityController(config);
@@ -113,7 +112,7 @@ describe("QualityController", () => {
       expect(endTime - startTime).toBeLessThan(100);
     });
 
-    it("should not cause memory leaks", () => {
+    it('should not cause memory leaks', () => {
       const config = {
         thresholds: {
           minConfidence: 0.7,
@@ -123,7 +122,7 @@ describe("QualityController", () => {
           data_completeness: true,
         },
       };
-      
+
       const initialMemory = process.memoryUsage().heapUsed;
       // Execute function multiple times
       for (let i = 0; i < 1000; i++) {

@@ -1,14 +1,21 @@
 """
+test_enhanced_medical_service - 索克生活项目模块
+"""
+
+        import time
+from datetime import datetime, timedelta
+from internal.domain.models import (
+from internal.enhanced_medical_resource_service import (
+from unittest.mock import AsyncMock, MagicMock, patch
+import asyncio
+import pytest
+import uuid
+
+"""
 增强医疗资源服务单元测试
 """
 
-import pytest
-import asyncio
-from unittest.mock import AsyncMock, MagicMock, patch
-from datetime import datetime, timedelta
-import uuid
 
-from internal.enhanced_medical_resource_service import (
     EnhancedMedicalResourceService,
     ResourceRequest,
     ResourceMatch,
@@ -18,7 +25,6 @@ from internal.enhanced_medical_resource_service import (
     Equipment,
     Medicine
 )
-from internal.domain.models import (
     ResourceType,
     SpecialtyType,
     ResourceStatus,
@@ -257,7 +263,6 @@ class TestEnhancedMedicalResourceService:
         )
         
         # 测试响应时间
-        import time
         start_time = time.time()
         
         result = await service.find_resources(

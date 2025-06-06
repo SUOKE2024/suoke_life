@@ -1,25 +1,30 @@
+"""
+advanced_monitoring - 索克生活项目模块
+"""
+
+    import GPUtil
+from collections import defaultdict, deque
+from dataclasses import dataclass, asdict
+from datetime import datetime, timedelta
+from internal.suokebench.config import BenchConfig
+from prometheus_client import Counter, Histogram, Gauge, Summary, Info
+from typing import Dict, List, Any, Optional
+import asyncio
+import numpy as np
+import psutil
+import time
+
 """高级监控模块
 
 提供系统指标收集、基准测试监控、模型性能监控等功能
 """
 
-import asyncio
-import time
-import psutil
-from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional
-from dataclasses import dataclass, asdict
-from collections import defaultdict, deque
-import numpy as np
-from prometheus_client import Counter, Histogram, Gauge, Summary, Info
 
 try:
-    import GPUtil
     GPU_AVAILABLE = True
 except ImportError:
     GPU_AVAILABLE = False
 
-from internal.suokebench.config import BenchConfig
 
 
 @dataclass

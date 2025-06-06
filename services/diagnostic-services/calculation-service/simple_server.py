@@ -1,3 +1,19 @@
+"""
+simple_server - 索克生活项目模块
+"""
+
+    from fastapi import FastAPI, HTTPException
+    from pydantic import BaseModel
+    import uvicorn
+from calculation_service.core.algorithms.wuyun_liuqi.calculator import WuyunLiuqiCalculator
+from calculation_service.utils.bagua_calculator import BaguaCalculator
+from calculation_service.utils.bazi_calculator import BaziCalculator
+from calculation_service.utils.ziwu_calculator import ZiwuCalculator
+from datetime import date
+from typing import Optional
+import os
+import sys
+
 #!/usr/bin/env python3
 """
 简化的算诊微服务服务器
@@ -5,26 +21,15 @@
 用于测试基本API功能
 """
 
-import sys
-import os
-from datetime import date
-from typing import Optional
 
 # 添加项目路径
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 try:
-    from fastapi import FastAPI, HTTPException
-    from pydantic import BaseModel
-    import uvicorn
 except ImportError:
     print("请安装FastAPI和uvicorn: pip install fastapi uvicorn")
     sys.exit(1)
 
-from calculation_service.core.algorithms.wuyun_liuqi.calculator import WuyunLiuqiCalculator
-from calculation_service.utils.bazi_calculator import BaziCalculator
-from calculation_service.utils.bagua_calculator import BaguaCalculator
-from calculation_service.utils.ziwu_calculator import ZiwuCalculator
 
 # 创建FastAPI应用
 app = FastAPI(

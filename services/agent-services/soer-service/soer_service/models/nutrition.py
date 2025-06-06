@@ -1,13 +1,18 @@
 """
+nutrition - 索克生活项目模块
+"""
+
+from datetime import datetime
+from pydantic import BaseModel, Field
+from typing import Any
+
+"""
 营养相关数据模型
 
 定义食物、营养分析、膳食计划等数据结构
 """
 
-from datetime import datetime
-from typing import Any
 
-from pydantic import BaseModel, Field
 
 
 class NutrientInfo(BaseModel):

@@ -1,3 +1,22 @@
+"""
+enhanced_security - 索克生活项目模块
+"""
+
+        import re
+from collections import defaultdict, deque
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from fastapi import HTTPException, Request
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_429_TOO_MANY_REQUESTS
+from typing import Any, Dict, List, Optional, Set, Tuple
+import asyncio
+import hashlib
+import hmac
+import jwt
+import logging
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,20 +25,7 @@
 包含JWT安全验证、智能限流、请求签名验证和DDoS防护
 """
 
-import asyncio
-import hashlib
-import hmac
-import logging
-import time
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Set, Tuple
-from collections import defaultdict, deque
-from datetime import datetime, timedelta
 
-import jwt
-from fastapi import HTTPException, Request
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_429_TOO_MANY_REQUESTS
 
 logger = logging.getLogger(__name__)
 
@@ -342,7 +348,6 @@ class SmartRateLimiter:
     
     def _match_pattern(self, path: str, pattern: str) -> bool:
         """匹配路径模式"""
-        import re
         try:
             return bool(re.match(pattern, path))
         except re.error:

@@ -1,16 +1,21 @@
+"""
+test_mid_term_simple - 索克生活项目模块
+"""
+
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+from datetime import datetime
+from numba import jit
+from typing import Dict, Any, List
+import asyncio
+import logging
+import time
+
 #!/usr/bin/env python3
 """
 索克生活 - 中期实施任务简化测试
 测试智能任务调度器、共享内存大数据处理和混合架构设计（无Redis依赖）
 """
 
-import asyncio
-import time
-import logging
-from datetime import datetime
-from typing import Dict, Any, List
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
-from numba import jit
 
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')

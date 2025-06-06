@@ -1,13 +1,24 @@
-"""用户服务监控API端点"""
+"""
+monitoring - 索克生活项目模块
+"""
 
-from typing import Dict, Any, Optional
+        from datetime import datetime
+        import platform
+        import psutil
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import PlainTextResponse
 from sqlalchemy.ext.asyncio import AsyncSession
-
-from user_service.database import get_db
+from typing import Dict, Any, Optional
 from user_service.auth import get_current_user, require_superuser
+from user_service.cache import get_cache_manager
+from user_service.database import get_db
+from user_service.models.user import User
 from user_service.monitoring import (
+from user_service.performance import (
+
+"""用户服务监控API端点"""
+
+
     get_metrics_collector,
     get_health_checker,
     metrics_endpoint,
@@ -15,14 +26,11 @@ from user_service.monitoring import (
     readiness_endpoint,
     liveness_endpoint
 )
-from user_service.performance import (
     get_performance_monitor,
     get_query_optimizer,
     get_connection_pool_manager,
     get_memory_optimizer
 )
-from user_service.cache import get_cache_manager
-from user_service.models.user import User
 
 router = APIRouter()
 
@@ -240,9 +248,6 @@ async def get_system_info(
 ):
     """获取系统信息（管理员功能）"""
     try:
-        import psutil
-        import platform
-        from datetime import datetime
         
         # 获取系统基本信息
         system_info = {
@@ -340,7 +345,6 @@ async def get_system_alerts(
                 })
         
         # 检查内存使用
-        import psutil
         memory_percent = psutil.virtual_memory().percent
         if memory_percent > 90:
             alerts.append({
@@ -396,7 +400,6 @@ async def get_monitoring_dashboard(
 ):
     """获取监控仪表板数据（管理员功能）"""
     try:
-        from datetime import datetime
         
         # 获取各种监控数据
         monitor = get_performance_monitor()
@@ -412,7 +415,6 @@ async def get_monitoring_dashboard(
         memory_stats = memory_optimizer.get_memory_stats()
         
         # 获取系统资源使用情况
-        import psutil
         system_resources = {
             "cpu_percent": psutil.cpu_percent(interval=1),
             "memory_percent": psutil.virtual_memory().percent,

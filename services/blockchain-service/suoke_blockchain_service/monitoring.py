@@ -1,28 +1,35 @@
 """
+monitoring - 索克生活项目模块
+"""
+
+            from opentelemetry.exporter.jaeger.thrift import JaegerExporter
+            from opentelemetry.sdk.trace.export import BatchSpanProcessor
+    from collections.abc import Awaitable, Callable
+from .config import settings
+from .logging import get_logger
+from fastapi import FastAPI, Request, Response
+from opentelemetry import trace
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+from opentelemetry.instrumentation.grpc import (
+from opentelemetry.instrumentation.sqlalchemy import SQLAlchemyInstrumentor
+from opentelemetry.sdk.trace import TracerProvider
+from prometheus_client import CONTENT_TYPE_LATEST, Counter, Histogram, generate_latest
+from typing import TYPE_CHECKING, Any, Callable
+import time
+
+"""
 监控和指标收集模块
 
 提供 Prometheus 指标、OpenTelemetry 追踪和健康检查功能。
 """
 
-import time
-from typing import TYPE_CHECKING, Any, Callable
 
-from fastapi import FastAPI, Request, Response
-from opentelemetry import trace
-from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
-from opentelemetry.instrumentation.grpc import (
     GrpcInstrumentorClient,
     GrpcInstrumentorServer,
 )
-from opentelemetry.instrumentation.sqlalchemy import SQLAlchemyInstrumentor
-from opentelemetry.sdk.trace import TracerProvider
-from prometheus_client import CONTENT_TYPE_LATEST, Counter, Histogram, generate_latest
 
-from .config import settings
-from .logging import get_logger
 
 if TYPE_CHECKING:
-    from collections.abc import Awaitable, Callable
 
 logger = get_logger(__name__)
 
@@ -72,8 +79,6 @@ def setup_tracing() -> None:
     if settings.monitoring.jaeger_endpoint:
         try:
             # 尝试导入和配置 Jaeger 导出器
-            from opentelemetry.exporter.jaeger.thrift import JaegerExporter
-            from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
             jaeger_exporter = JaegerExporter(
                 agent_host_name="localhost",

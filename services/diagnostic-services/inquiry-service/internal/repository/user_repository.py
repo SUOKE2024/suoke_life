@@ -1,15 +1,20 @@
+"""
+user_repository - 索克生活项目模块
+"""
+
+from typing import Any
+import asyncio
+import logging
+import pymongo
+import time
+
 #!/usr/bin/env python
 
 """
 用户存储库模块，负责用户数据的存储和查询
 """
 
-import asyncio
-import logging
-import time
-from typing import Any
 
-import pymongo
 
 logger = logging.getLogger(__name__)
 

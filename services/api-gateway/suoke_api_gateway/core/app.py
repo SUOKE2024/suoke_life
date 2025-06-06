@@ -1,20 +1,8 @@
 """
-应用程序工厂模块
-
-创建和配置 FastAPI 应用程序实例，集成中间件、路由、
-异常处理等组件。
+app - 索克生活项目模块
 """
 
-from contextlib import asynccontextmanager
-from typing import AsyncGenerator
-
-from fastapi import FastAPI, Request, Response
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.gzip import GZipMiddleware
-from fastapi.middleware.trustedhost import TrustedHostMiddleware
-from fastapi.responses import JSONResponse
-from prometheus_client import make_asgi_app
-
+    from .config import Settings
 from ..api.routes import api_router
 from ..middleware.auth import AuthMiddleware
 from ..middleware.logging import LoggingMiddleware
@@ -26,6 +14,24 @@ from ..services.metrics import MetricsService
 from ..services.service_registry import ServiceRegistry
 from .config import Settings, get_settings
 from .logging import get_logger, setup_logging
+from contextlib import asynccontextmanager
+from fastapi import FastAPI, Request, Response
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
+from fastapi.responses import JSONResponse
+from prometheus_client import make_asgi_app
+from typing import AsyncGenerator
+
+"""
+应用程序工厂模块
+
+创建和配置 FastAPI 应用程序实例，集成中间件、路由、
+异常处理等组件。
+"""
+
+
+
 
 logger = get_logger(__name__)
 
@@ -246,7 +252,6 @@ def setup_exception_handlers(app: FastAPI) -> None:
 # 用于开发的便捷函数
 def create_dev_app() -> FastAPI:
     """创建开发环境应用"""
-    from .config import Settings
     
     settings = Settings(
         debug=True,

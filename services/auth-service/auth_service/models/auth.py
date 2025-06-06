@@ -1,16 +1,21 @@
-"""认证相关数据模型"""
-
-import uuid
-from datetime import datetime
-from enum import Enum
-from typing import List, Optional
-
-from sqlalchemy import Boolean, DateTime, Enum as SQLEnum, String, Text, func
-from sqlalchemy.dialects.postgresql import JSONB, UUID
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import Table, Column, ForeignKey
+"""
+auth - 索克生活项目模块
+"""
 
 from auth_service.models.base import BaseModel
+from datetime import datetime
+from enum import Enum
+from sqlalchemy import Boolean, DateTime, Enum as SQLEnum, String, Text, func
+from sqlalchemy import Table, Column, ForeignKey
+from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from typing import List, Optional
+import uuid
+
+"""认证相关数据模型"""
+
+
+
 
 
 class LoginResult(str, Enum):
@@ -107,6 +112,18 @@ class LoginAttempt(BaseModel):
         comment="额外元数据"
     )
 
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'loginattempt'
+        ordering = ['-created_at']
+
 
 class MFADevice(BaseModel):
     """MFA设备模型"""
@@ -171,6 +188,18 @@ class MFADevice(BaseModel):
         JSONB,
         comment="设备元数据"
     )
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'oauthaccount'
+        ordering = ['-created_at']
 
 
 class OAuthAccount(BaseModel):
@@ -242,6 +271,18 @@ class OAuthAccount(BaseModel):
         JSONB,
         comment="OAuth元数据"
     )
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'refreshtoken'
+        ordering = ['-created_at']
 
 
 class RefreshToken(BaseModel):
@@ -317,6 +358,18 @@ class RefreshToken(BaseModel):
     def is_valid(self) -> bool:
         """检查令牌是否有效"""
         return not self.is_revoked and not self.is_expired()
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'userrole'
+        ordering = ['-created_at']
 
 
 class UserRole(BaseModel):

@@ -1,14 +1,27 @@
 """
-额外的测试用例来提升代码覆盖率
+test_additional_coverage - 索克生活项目模块
 """
 
-import pytest
-from unittest.mock import patch, MagicMock
-
+        from suoke_blockchain_service.blockchain_client import BlockchainClient
+        from suoke_blockchain_service.database import get_db_session
+        from suoke_blockchain_service.encryption import EncryptionService
+        from suoke_blockchain_service.grpc_server import BlockchainServicer
+        from suoke_blockchain_service.ipfs_client import IPFSClient
+        from suoke_blockchain_service.service import BlockchainService
+        from suoke_blockchain_service.zk_integration import ZKProofGenerator, ZKProofVerifier
+        import os
 from suoke_blockchain_service.config import Settings
 from suoke_blockchain_service.exceptions import ValidationError, NotFoundError, BlockchainServiceError
 from suoke_blockchain_service.logging import setup_logging, get_logger
 from suoke_blockchain_service.monitoring import record_operation_metrics, get_metrics_summary
+from unittest.mock import patch, MagicMock
+import pytest
+
+"""
+额外的测试用例来提升代码覆盖率
+"""
+
+
 
 
 class TestAdditionalCoverage:
@@ -63,7 +76,6 @@ class TestAdditionalCoverage:
     @pytest.mark.asyncio
     async def test_database_connection_error(self):
         """测试数据库连接错误处理"""
-        from suoke_blockchain_service.database import get_db_session
         
         with patch('suoke_blockchain_service.database.async_sessionmaker') as mock_sessionmaker:
             # 模拟数据库连接错误
@@ -77,7 +89,6 @@ class TestAdditionalCoverage:
 
     def test_config_environment_variables(self):
         """测试环境变量配置"""
-        import os
         
         # 保存原始环境变量
         original_env = os.environ.copy()
@@ -103,7 +114,6 @@ class TestAdditionalCoverage:
 
     def test_blockchain_client_initialization(self):
         """测试区块链客户端初始化"""
-        from suoke_blockchain_service.blockchain_client import BlockchainClient
         
         # 测试客户端初始化
         client = BlockchainClient()
@@ -115,7 +125,6 @@ class TestAdditionalCoverage:
 
     def test_encryption_service_initialization(self):
         """测试加密服务初始化"""
-        from suoke_blockchain_service.encryption import EncryptionService
         
         # 测试加密服务初始化
         service = EncryptionService()
@@ -123,7 +132,6 @@ class TestAdditionalCoverage:
 
     def test_ipfs_client_initialization(self):
         """测试IPFS客户端初始化"""
-        from suoke_blockchain_service.ipfs_client import IPFSClient
         
         # 测试IPFS客户端初始化
         client = IPFSClient()
@@ -131,7 +139,6 @@ class TestAdditionalCoverage:
 
     def test_zk_integration_initialization(self):
         """测试零知识证明集成初始化"""
-        from suoke_blockchain_service.zk_integration import ZKProofGenerator, ZKProofVerifier
         
         # 测试ZK证明生成器初始化
         generator = ZKProofGenerator()
@@ -143,7 +150,6 @@ class TestAdditionalCoverage:
 
     def test_grpc_server_initialization(self):
         """测试gRPC服务器初始化"""
-        from suoke_blockchain_service.grpc_server import BlockchainServicer
         
         # 测试gRPC服务器初始化
         servicer = BlockchainServicer()
@@ -152,7 +158,6 @@ class TestAdditionalCoverage:
     @pytest.mark.asyncio
     async def test_service_error_handling(self):
         """测试服务错误处理"""
-        from suoke_blockchain_service.service import BlockchainService
         
         service = BlockchainService()
         

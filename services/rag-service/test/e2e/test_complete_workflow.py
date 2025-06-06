@@ -1,3 +1,17 @@
+"""
+test_complete_workflow - 索克生活项目模块
+"""
+
+from pathlib import Path
+from typing import Dict, List, Any
+import asyncio
+import httpx
+import json
+import os
+import pytest
+import tempfile
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,15 +20,6 @@ RAG服务端到端测试
 测试完整的工作流程，包括文档管理、检索、生成等功能
 """
 
-import asyncio
-import pytest
-import httpx
-import json
-import time
-from typing import Dict, List, Any
-from pathlib import Path
-import tempfile
-import os
 
 class TestRAGServiceE2E:
     """RAG服务端到端测试类"""
@@ -149,7 +154,8 @@ class TestRAGServiceE2E:
             assert "metadata" in doc
     
     @pytest.mark.asyncio
-    async def test_basic_query_workflow(self, client, headers):
+    async     @cache(timeout=300)  # 5分钟缓存
+def test_basic_query_workflow(self, client, headers):
         """测试基础查询工作流程"""
         
         # 基础查询
@@ -184,7 +190,8 @@ class TestRAGServiceE2E:
             assert "title" in ref
             assert "source" in ref
     
-    @pytest.mark.asyncio
+      @cache(timeout=300)  # 5分钟缓存
+  @pytest.mark.asyncio
     async def test_stream_query_workflow(self, client, headers):
         """测试流式查询工作流程"""
         
@@ -226,7 +233,8 @@ class TestRAGServiceE2E:
                     break
             
             assert final_chunk is not None
-            assert "references" in final_chunk
+            assert "r    @cache(timeout=300)  # 5分钟缓存
+eferences" in final_chunk
     
     @pytest.mark.asyncio
     async def test_multimodal_query_workflow(self, client, api_key):
@@ -307,7 +315,8 @@ class TestRAGServiceE2E:
         
         if response.status_code == 200:
             result = response.json()
-            assert "herbs" in result or "formula" in result
+     @cache(timeout=300)  # 5分钟缓存
+           assert "herbs" in result or "formula" in result
     
     @pytest.mark.asyncio
     async def test_batch_query_workflow(self, client, headers):
@@ -401,7 +410,8 @@ class TestRAGServiceE2E:
         if "retrieval_latency_ms" in result:
             assert result["retrieval_latency_ms"] < 1000  # 检索应在1秒内
     
-    @pytest.mark.asyncio
+      @cache(timeout=300)  # 5分钟缓存
+  @pytest.mark.asyncio
     async def test_concurrent_requests(self, client, headers):
         """测试并发请求处理"""
         
@@ -504,7 +514,8 @@ class TestRAGServiceE2E:
             assert response.status_code in [200, 404]
 
 class TestRAGServiceStress:
-    """RAG服务压力测试"""
+    """RAG服务压    @cache(timeout=300)  # 5分钟缓存
+力测试"""
     
     @pytest.mark.asyncio
     @pytest.mark.slow

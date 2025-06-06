@@ -1,6 +1,6 @@
 import { ServiceItem, CategoryConfig, ServiceCategory } from "../types/////    suoke";
-//////
-// 分类配置 * export const SERVICE_CATEGORIES: CategoryConfig[] = [{ key: "all", label: "全部", icon: "view-grid", color: "#007AFF"}, ////
+
+// // 分类配置 * export const SERVICE_CATEGORIES: CategoryConfig[] = [{ key: "all", label: "全部", icon: "view-grid", color: "#007AFF"}, ////
   { key: "diagnosis", label: "五诊", icon: "stethoscope", color: "#34C759"},
   { key: "eco", label: "生态服务", icon: "leaf", color: "#32D74B"},
   { key: "product", label: "产品", icon: "package-variant", color: "#8E44AD"},
@@ -261,8 +261,7 @@ import { ServiceItem, CategoryConfig, ServiceCategory } from "../types/////    s
 ];
 // 所有服务 * export const ALL_SERVICES: ServiceItem[] = [////  ;
 ...DIAGNOSIS_SERVICES, /////    ;
-  ...ECO_SERVICES,;
-  ...OTHER_SERVICES;
+  ...ECO_SERVICES,...OTHER_SERVICES;
 ];
 // 推荐服务（基于用户行为和评分） * export const RECOMMENDED_SERVICES = ALL_SERVICES.filte////   ;
 r;(; /////

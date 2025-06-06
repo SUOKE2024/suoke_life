@@ -1,15 +1,20 @@
 """
+logger - 索克生活项目模块
+"""
+
+from datetime import datetime
+from pathlib import Path
+from typing import Dict, Any, Optional
+import json
+import logging
+import sys
+import time
+import traceback
+
+"""
 优化的日志工具模块
 支持结构化日志、性能监控、中医特色日志记录
 """
-import sys
-import json
-import time
-import logging
-from typing import Dict, Any, Optional
-from pathlib import Path
-from datetime import datetime
-import traceback
 
 class TCMLogFormatter(logging.Formatter):
     """中医特色日志格式化器"""

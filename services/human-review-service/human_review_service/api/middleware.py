@@ -1,18 +1,23 @@
 """
+middleware - 索克生活项目模块
+"""
+
+from fastapi import Request, Response
+from prometheus_client import Counter, Gauge, Histogram
+from starlette.middleware.base import BaseHTTPMiddleware
+from typing import Callable
+import structlog
+import time
+import uuid
+
+"""
 中间件
 Middleware
 
 提供请求处理中间件，包括日志、指标、安全等功能
 """
 
-import time
-import uuid
-from typing import Callable
 
-import structlog
-from fastapi import Request, Response
-from prometheus_client import Counter, Gauge, Histogram
-from starlette.middleware.base import BaseHTTPMiddleware
 
 logger = structlog.get_logger(__name__)
 

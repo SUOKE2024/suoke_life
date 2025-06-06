@@ -1,21 +1,26 @@
 """
+ci_cd_pipeline - 索克生活项目模块
+"""
+
+from dataclasses import dataclass
+from datetime import datetime
+from kubernetes import client, config
+from pathlib import Path
+from typing import Dict, List, Any, Optional
+import asyncio
+import docker
+import json
+import kubernetes
+import logging
+import subprocess
+import time
+import yaml
+
+"""
 CI/CD自动化流水线 - 五诊系统运维自动化
 包含自动化测试、部署、监控和故障恢复
 """
 
-import asyncio
-import logging
-import yaml
-import json
-import subprocess
-import time
-from typing import Dict, List, Any, Optional
-from dataclasses import dataclass
-from pathlib import Path
-from datetime import datetime
-import docker
-import kubernetes
-from kubernetes import client, config
 
 logger = logging.getLogger(__name__)
 

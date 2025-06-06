@@ -1,4 +1,11 @@
 """
+__init__ - 索克生活项目模块
+"""
+
+from .agent_adapter import AgentAdapter
+from .agent_coordination import AgentCoordination
+
+"""
 集成适配层
 
 负责与外部系统和智能体的集成：
@@ -7,8 +14,6 @@
 - 外部API集成
 """
 
-from .agent_adapter import AgentAdapter
-from .agent_coordination import AgentCoordination
 
 __all__ = [
     "AgentAdapter",

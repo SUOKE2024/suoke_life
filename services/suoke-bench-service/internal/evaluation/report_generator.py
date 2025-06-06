@@ -1,16 +1,22 @@
 """
+report_generator - 索克生活项目模块
+"""
+
+                from weasyprint import HTML
+from datetime import datetime
+from typing import Any
+import jinja2
+import json
+import logging
+import os
+
+"""
 评测报告生成器
 
 用于生成详细、美观的评测报告。
 """
 
-import json
-import logging
-import os
-from datetime import datetime
-from typing import Any
 
-import jinja2
 
 logger = logging.getLogger(__name__)
 
@@ -411,7 +417,6 @@ class ReportGenerator:
 
             try:
                 # 使用weasyprint转换HTML为PDF
-                from weasyprint import HTML
 
                 HTML(html_path).write_pdf(pdf_path)
 

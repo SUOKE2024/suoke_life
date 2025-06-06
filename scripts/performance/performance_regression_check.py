@@ -1,18 +1,23 @@
+"""
+performance_regression_check - 索克生活项目模块
+"""
+
+from datetime import datetime
+from pathlib import Path
+from typing import Dict, List, Optional
+import json
+import matplotlib.pyplot as plt
+import os
+import pandas as pd
+import subprocess
+import sys
+
 #!/usr/bin/env python3
 """
 性能回归检测脚本
 用于CI/CD中自动检测性能回归问题
 """
 
-import json
-import os
-import sys
-import subprocess
-from pathlib import Path
-from typing import Dict, List, Optional
-import pandas as pd
-import matplotlib.pyplot as plt
-from datetime import datetime
 
 
 class PerformanceRegressionChecker:

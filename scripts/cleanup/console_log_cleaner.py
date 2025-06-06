@@ -1,13 +1,18 @@
+"""
+console_log_cleaner - 索克生活项目模块
+"""
+
+from pathlib import Path
+from typing import List, Dict, Tuple
+import os
+import re
+
 #!/usr/bin/env python3
 """
 索克生活项目Console.log语句清理脚本
 清理所有开发调试用的console.log语句
 """
 
-import os
-import re
-from pathlib import Path
-from typing import List, Dict, Tuple
 
 class ConsoleLogCleaner:
     def __init__(self, project_root: str):

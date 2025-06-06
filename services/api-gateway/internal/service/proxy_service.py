@@ -1,3 +1,21 @@
+"""
+proxy_service - 索克生活项目模块
+"""
+
+        from fastapi.responses import Response as RawResponse
+        import random
+from fastapi import Request, Response
+from fastapi.responses import JSONResponse, StreamingResponse
+from internal.model.config import GatewayConfig, RetryConfig, ServiceConfig
+from internal.service.service_registry import ServiceRegistry
+from pkg.utils.cache import Cache, CacheManager
+from pkg.utils.circuit_breaker import CircuitBreaker, CircuitBreakerRegistry
+from typing import Any, Dict, List, Optional, Tuple, Union
+import aiohttp
+import asyncio
+import json
+import logging
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,19 +23,8 @@
 代理服务，负责转发请求到后端微服务
 """
 
-import asyncio
-import json
-import logging
-from typing import Any, Dict, List, Optional, Tuple, Union
 
-import aiohttp
-from fastapi import Request, Response
-from fastapi.responses import JSONResponse, StreamingResponse
 
-from internal.model.config import GatewayConfig, RetryConfig, ServiceConfig
-from internal.service.service_registry import ServiceRegistry
-from pkg.utils.cache import Cache, CacheManager
-from pkg.utils.circuit_breaker import CircuitBreaker, CircuitBreakerRegistry
 
 logger = logging.getLogger(__name__)
 
@@ -252,7 +259,6 @@ class ProxyService:
         
         # 根据负载均衡策略选择端点
         # 这里简单实现随机选择，实际应根据配置的负载均衡策略
-        import random
         return random.choice(endpoints)
     
     async def _create_response(
@@ -294,7 +300,6 @@ class ProxyService:
                 pass
         
         # 对于非JSON或解析失败的情况，返回原始响应
-        from fastapi.responses import Response as RawResponse
         return RawResponse(
             content=content,
             status_code=status_code,

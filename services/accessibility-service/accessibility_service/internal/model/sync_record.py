@@ -1,15 +1,20 @@
 """
-同步记录模型
-
-用于跟踪数据同步状态和记录
+sync_record - 索克生活项目模块
 """
 
+from .base import BaseDBModel
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
 
-from .base import BaseDBModel
+"""
+同步记录模型
+
+用于跟踪数据同步状态和记录
+"""
+
+
 
 
 class SyncStatus(Enum):

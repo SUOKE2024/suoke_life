@@ -1,5 +1,5 @@
-import { EventEmitter } from "events";
-import { ModalityType, Embedding } from "./MultimodalEmbeddingFusion";
+import { EventEmitter } from 'events';
+import { ModalityType, Embedding } from './MultimodalEmbeddingFusion';
 
 /**
  * 编码器配置接口
@@ -9,8 +9,8 @@ export interface EncoderConfig {
   dimension: number;
   batchSize?: number;
   maxLength?: number;
-  device?: "cpu" | "gpu";
-  precision?: "float32" | "float16";
+  device?: 'cpu' | 'gpu';
+  precision?: 'float32' | 'float16';
 }
 
 /**
@@ -88,10 +88,8 @@ abstract class BaseEncoder {
   }
 
   protected normalizeVector(vector: number[]): number[] {
-    const magnitude = Math.sqrt(
-      vector.reduce((sum, val) => sum + val * val, 0)
-    );
-    return magnitude > 0 ? vector.map((val) => val / magnitude) : vector;
+    const magnitude = Math.sqrt(vector.reduce((sum, val) => sum + val * val, 0));
+    return magnitude > 0 ? vector.map(val => val / magnitude) : vector;
   }
 }
 
@@ -107,13 +105,15 @@ export class TextEncoder extends BaseEncoder {
   }
 
   async initialize(): Promise<void> {
-    if (this.isInitialized) {return;}
+    if (this.isInitialized) {
+      return;
+    }
 
     try {
       // 这里应该加载实际的文本编码模型
       // 例如：BERT、RoBERTa、或中文医疗领域的预训练模型
       // 模拟初始化过程
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 1000));
       this.isInitialized = true;
     } catch (error) {
       throw new Error(`Failed to initialize text encoder: ${error}`);
@@ -125,8 +125,8 @@ export class TextEncoder extends BaseEncoder {
       await this.initialize();
     }
 
-    if (!this.validateInput(text) || typeof text !== "string") {
-      throw new Error("Invalid text input");
+    if (!this.validateInput(text) || typeof text !== 'string') {
+      throw new Error('Invalid text input');
     }
 
     try {
@@ -148,11 +148,7 @@ export class TextEncoder extends BaseEncoder {
   private generateTextEmbedding(tokens: string[]): number[] {
     // 模拟生成文本嵌入向量
     const embedding = new Array(this.config.dimension).fill(0);
-    for (
-      let i = 0;
-      i < tokens.length && i < (this.config.maxLength || 512);
-      i++
-    ) {
+    for (let i = 0; i < tokens.length && i < (this.config.maxLength || 512); i++) {
       const token = tokens[i];
       const hash = this.simpleHash(token);
       for (let j = 0; j < this.config.dimension; j++) {
@@ -191,12 +187,14 @@ export class TongueEncoder extends BaseEncoder {
   }
 
   async initialize(): Promise<void> {
-    if (this.isInitialized) {return;}
+    if (this.isInitialized) {
+      return;
+    }
 
     try {
       // 加载舌象特征提取模型
       // 实际实现中应该加载训练好的CNN模型
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      await new Promise(resolve => setTimeout(resolve, 1500));
       this.isInitialized = true;
     } catch (error) {
       throw new Error(`Failed to initialize tongue encoder: ${error}`);
@@ -209,7 +207,7 @@ export class TongueEncoder extends BaseEncoder {
     }
 
     if (!this.validateInput(imageData)) {
-      throw new Error("Invalid image input");
+      throw new Error('Invalid image input');
     }
 
     try {
@@ -223,9 +221,7 @@ export class TongueEncoder extends BaseEncoder {
     }
   }
 
-  private async extractTongueFeatures(
-    imageData: ImageData | string
-  ): Promise<TongueFeatures> {
+  private async extractTongueFeatures(imageData: ImageData | string): Promise<TongueFeatures> {
     // 模拟舌象特征提取
     // 实际实现中应该使用计算机视觉算法分析舌象图像
     return {
@@ -233,25 +229,11 @@ export class TongueEncoder extends BaseEncoder {
         red: Math.random() * 0.3 + 0.2,
         pink: Math.random() * 0.4 + 0.3,
         pale: Math.random() * 0.2 + 0.1,
-        purple: Math.random() * 0.1,
-      },
-      coating: {
-        thickness: Math.random() * 0.5 + 0.1,
-        color: ["white", "yellow", "gray"][Math.floor(Math.random() * 3)],
-        distribution: Math.random() * 0.8 + 0.2,
-      },
-      texture: {
-        cracks: Math.random() * 0.3,
-        spots: Math.random() * 0.2,
-        smoothness: Math.random() * 0.8 + 0.2,
-      },
-      shape: {
-        size: Math.random() * 0.4 + 0.6,
-        edges: ["smooth", "serrated", "scalloped"][
-          Math.floor(Math.random() * 3)
-        ],
-        tip: ["pointed", "round", "split"][Math.floor(Math.random() * 3)],
-      },
+        purple: Math.random() * 0.1
+      },coating: {thickness: Math.random() * 0.5 + 0.1,color: ['white', 'yellow', 'gray'][Math.floor(Math.random() * 3)],distribution: Math.random() * 0.8 + 0.2;
+      },texture: {cracks: Math.random() * 0.3,spots: Math.random() * 0.2,smoothness: Math.random() * 0.8 + 0.2;
+      },shape: {size: Math.random() * 0.4 + 0.6,edges: ['smooth', 'serrated', 'scalloped'][Math.floor(Math.random() * 3)],tip: ['pointed', 'round', 'split'][Math.floor(Math.random() * 3)];
+      };
     };
   }
 
@@ -304,12 +286,14 @@ export class PulseEncoder extends BaseEncoder {
   }
 
   async initialize(): Promise<void> {
-    if (this.isInitialized) {return;}
+    if (this.isInitialized) {
+      return;
+    }
 
     try {
       // 加载脉象信号处理模型
       // 实际实现中应该加载训练好的RNN/LSTM模型
-      await new Promise((resolve) => setTimeout(resolve, 1200));
+      await new Promise(resolve => setTimeout(resolve, 1200));
       this.isInitialized = true;
     } catch (error) {
       throw new Error(`Failed to initialize pulse encoder: ${error}`);
@@ -322,7 +306,7 @@ export class PulseEncoder extends BaseEncoder {
     }
 
     if (!this.validateInput(pulseSignal) || !Array.isArray(pulseSignal)) {
-      throw new Error("Invalid pulse signal input");
+      throw new Error('Invalid pulse signal input');
     }
 
     try {
@@ -342,15 +326,11 @@ export class PulseEncoder extends BaseEncoder {
     const valleys = this.findValleys(signal);
     const heartRate = this.calculateHeartRate(signal);
 
-    return {
-      rate: heartRate,
-      rhythm: {
-        regularity: this.calculateRhythmRegularity(peaks),
-        pattern: this.classifyRhythmPattern(peaks),
+    return {rate: heartRate,rhythm: {regularity: this.calculateRhythmRegularity(peaks),pattern: this.classifyRhythmPattern(peaks);
       },
       strength: {
         amplitude: this.calculateAmplitude(signal),
-        force: this.calculateForce(signal),
+        force: this.calculateForce(signal);
       },
       quality: {
         floating: Math.random() * 0.5,
@@ -358,13 +338,13 @@ export class PulseEncoder extends BaseEncoder {
         slow: heartRate < 60 ? 1 : 0,
         rapid: heartRate > 100 ? 1 : 0,
         weak: Math.random() * 0.3,
-        strong: Math.random() * 0.7 + 0.3,
+        strong: Math.random() * 0.7 + 0.3
       },
       waveform: {
         peaks,
         valleys,
-        duration: signal.length,
-      },
+        duration: signal.length
+      };
     };
   }
 
@@ -372,9 +352,7 @@ export class PulseEncoder extends BaseEncoder {
     // 简化的心率计算
     const peaks = this.findPeaks(signal);
     const avgInterval =
-      peaks.length > 1
-        ? (peaks[peaks.length - 1] - peaks[0]) / (peaks.length - 1)
-        : 60;
+      peaks.length > 1 ? (peaks[peaks.length - 1] - peaks[0]) / (peaks.length - 1) : 60;
     return Math.round(60000 / avgInterval); // 假设采样率为1000Hz
   }
 
@@ -399,27 +377,31 @@ export class PulseEncoder extends BaseEncoder {
   }
 
   private calculateRhythmRegularity(peaks: number[]): number {
-    if (peaks.length < 3) {return 1;}
+    if (peaks.length < 3) {
+      return 1;
+    }
 
     const intervals = [];
     for (let i = 1; i < peaks.length; i++) {
       intervals.push(peaks[i] - peaks[i - 1]);
     }
 
-    const avgInterval =
-      intervals.reduce((sum, val) => sum + val, 0) / intervals.length;
+    const avgInterval = intervals.reduce((sum, val) => sum + val, 0) / intervals.length;
     const variance =
-      intervals.reduce((sum, val) => sum + Math.pow(val - avgInterval, 2), 0) /
-      intervals.length;
+      intervals.reduce((sum, val) => sum + Math.pow(val - avgInterval, 2), 0) / intervals.length;
 
     return Math.max(0, 1 - variance / (avgInterval * avgInterval));
   }
 
   private classifyRhythmPattern(peaks: number[]): string {
     const regularity = this.calculateRhythmRegularity(peaks);
-    if (regularity > 0.9) {return "regular";}
-    if (regularity > 0.7) {return "slightly_irregular";}
-    return "irregular";
+    if (regularity > 0.9) {
+      return 'regular';
+    }
+    if (regularity > 0.7) {
+      return 'slightly_irregular';
+    }
+    return 'irregular';
   }
 
   private calculateAmplitude(signal: number[]): number {
@@ -489,41 +471,35 @@ export class MultimodalEncoder extends EventEmitter {
           dimension: 768,
           batchSize: 32,
           maxLength: 512,
-          device: "cpu",
-          precision: "float32",
-        },
+          device: 'cpu',
+          precision: 'float32'
+        }
       ],
       [
         ModalityType.TONGUE_IMAGE,
         {
           dimension: 512,
           batchSize: 16,
-          device: "cpu",
-          precision: "float32",
-        },
+          device: 'cpu',
+          precision: 'float32'
+        }
       ],
       [
         ModalityType.PULSE_SIGNAL,
         {
           dimension: 256,
           batchSize: 64,
-          device: "cpu",
-          precision: "float32",
-        },
-      ],
+          device: 'cpu',
+          precision: 'float32'
+        }
+      ]
     ]);
   }
 
   private createEncoders(): void {
-    this.textEncoder = new TextEncoder(
-      this.encoderConfigs.get(ModalityType.TEXT)!
-    );
-    this.tongueEncoder = new TongueEncoder(
-      this.encoderConfigs.get(ModalityType.TONGUE_IMAGE)!
-    );
-    this.pulseEncoder = new PulseEncoder(
-      this.encoderConfigs.get(ModalityType.PULSE_SIGNAL)!
-    );
+    this.textEncoder = new TextEncoder(this.encoderConfigs.get(ModalityType.TEXT)!);
+    this.tongueEncoder = new TongueEncoder(this.encoderConfigs.get(ModalityType.TONGUE_IMAGE)!);
+    this.pulseEncoder = new PulseEncoder(this.encoderConfigs.get(ModalityType.PULSE_SIGNAL)!);
   }
 
   /**
@@ -534,12 +510,12 @@ export class MultimodalEncoder extends EventEmitter {
       await Promise.all([
         this.textEncoder.initialize(),
         this.tongueEncoder.initialize(),
-        this.pulseEncoder.initialize(),
+        this.pulseEncoder.initialize();
       ]);
 
-      this.emit("initialized");
+      this.emit('initialized');
     } catch (error) {
-      this.emit("error", error);
+      this.emit('error', error);
       throw new Error(`Failed to initialize multimodal encoder: ${error}`);
     }
   }
@@ -576,14 +552,14 @@ export class MultimodalEncoder extends EventEmitter {
         metadata: {
           ...metadata,
           timestamp: Date.now(),
-          dimension: vector.length,
-        },
+          dimension: vector.length
+        }
       };
 
-      this.emit("encoded", embedding);
+      this.emit('encoded', embedding);
       return embedding;
     } catch (error) {
-      this.emit("error", error);
+      this.emit('error', error);
       throw new Error(`Failed to encode ${modality}: ${error}`);
     }
   }
@@ -599,15 +575,15 @@ export class MultimodalEncoder extends EventEmitter {
     }>
   ): Promise<Embedding[]> {
     try {
-      const encodingPromises = inputs.map((input) =>
-        this.encodeModality(input.data, input.modality, input.metadata)
+      const encodingPromises = inputs.map(input =>;
+        this.encodeModality(input.data, input.modality, input.metadata);
       );
 
       const embeddings = await Promise.all(encodingPromises);
-      this.emit("batch_encoded", embeddings);
+      this.emit('batch_encoded', embeddings);
       return embeddings;
     } catch (error) {
-      this.emit("error", error);
+      this.emit('error', error);
       throw new Error(`Failed to encode multimodal batch: ${error}`);
     }
   }
@@ -639,12 +615,12 @@ export class MultimodalEncoder extends EventEmitter {
       await Promise.all([
         this.textEncoder.cleanup(),
         this.tongueEncoder.cleanup(),
-        this.pulseEncoder.cleanup(),
+        this.pulseEncoder.cleanup();
       ]);
 
-      this.emit("cleaned_up");
+      this.emit('cleaned_up');
     } catch (error) {
-      this.emit("error", error);
+      this.emit('error', error);
       throw new Error(`Failed to cleanup multimodal encoder: ${error}`);
     }
   }

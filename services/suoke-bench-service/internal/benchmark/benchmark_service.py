@@ -1,29 +1,36 @@
 """
-基准测试服务
-
-提供完整的基准测试执行、结果分析和报告生成功能
+benchmark_service - 索克生活项目模块
 """
 
+            from internal.benchmark.model_interface import LocalModel
+        from internal.suokebench.config import load_config
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
+from internal.benchmark.model_cache import get_global_cache
+from internal.benchmark.model_interface import ModelInterface, ModelPrediction
+from internal.observability.metrics import get_global_metrics
+from internal.resilience.retry import (
+from internal.suokebench.config import BenchConfig
+from typing import Any
 import asyncio
 import logging
 import os
 import time
 import uuid
-from concurrent.futures import ThreadPoolExecutor
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
-from typing import Any
 
-from internal.benchmark.model_cache import get_global_cache
-from internal.benchmark.model_interface import ModelInterface, ModelPrediction
-from internal.observability.metrics import get_global_metrics
-from internal.resilience.retry import (
+"""
+基准测试服务
+
+提供完整的基准测试执行、结果分析和报告生成功能
+"""
+
+
     CircuitBreakerConfig,
     RetryConfig,
     circuit_breaker,
     retry,
 )
-from internal.suokebench.config import BenchConfig
 
 logger = logging.getLogger(__name__)
 
@@ -271,7 +278,6 @@ class BenchmarkExecutor:
         def model_factory():
             # 这里应该根据model_id和model_version创建具体的模型实例
             # 简化实现，返回一个模拟模型
-            from internal.benchmark.model_interface import LocalModel
 
             return LocalModel(model_id, model_version, None)
 
@@ -617,7 +623,6 @@ def get_global_executor() -> BenchmarkExecutor:
     """获取全局基准测试执行器"""
     global _global_executor
     if _global_executor is None:
-        from internal.suokebench.config import load_config
 
         config = load_config("config/config.yaml")
         _global_executor = BenchmarkExecutor(config)

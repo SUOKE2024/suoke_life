@@ -1,8 +1,9 @@
-import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-importIcon from ";../../../components/common/Icon"/import { colors, spacing } from ../../../constants/theme"//////    "
-importReact,{ useState } from "react"
-import { usePerformanceMonitor  } from "../../placeholder";../hooks/usePerformanceMonitor";/////      View,;"
+import { usePerformanceMonitor  } from "../../placeholder";../hooks/usePerformanceMonitor";/////      View,"
+
+import React from "react";
+importIcon from ";../../../components/common/Icon"/import { colors, spacing } from ../../../constants/theme"// ";
+importReact,{ useState } from "react";
   Text,
   StyleSheet,
   ScrollView,
@@ -29,11 +30,11 @@ interface DataSharingRequest { id: string,
   status: pending" | "approved | "denied"}
 interface BlockchainHealthDataProps { visible: boolean,
   onClose: () => void}
-export const BlockchainHealthData: React.FC<BlockchainHealthDataProps /> = ({/  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor(BlockchainHealthData", ";
-{; /////
+export const BlockchainHealthData: React.FC<BlockchainHealthDataProps /> = ({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor(BlockchainHealthData", ";
+{/////
     trackRender: true,
     trackMemory: true,
-    warnThreshold: 50, // ms //////     })
+    warnThreshold: 50, // ms // });
   visible,
   onClose;
 }) => {}
@@ -42,13 +43,11 @@ export const BlockchainHealthData: React.FC<BlockchainHealthDataProps /> = ({/  
   const [encryptionEnabled, setEncryptionEnabled] = useState<boolean>(tru;e;);
   const [autoBackup, setAutoBackup] = useState<boolean>(tru;e;);
   const [dataRetention] = useState<string>(5年";);"
-  // 模拟健康数据记录 // const [healthRecords] = useState<HealthDataRecord[]  / >([ * { ////
-      id: "record_1,"
-      type: "diagnosis",
-      title: 五诊检查结果","
+  // 模拟健康数据记录 // const [healthRecords] = useState<HealthDataRecord[]  / >([ * { ////;
+      id: "record_1,",type: "diagnosis",title: 五诊检查结果",";
       data: { constitution: "平和质, symptoms: ["轻微疲劳"] ;},"
       timestamp: 2024-01-15T10:30:00Z","
-      hash: "0x1a2b3c4d5e6f...,"
+      hash: "0x1a2b3c4d5e6f...,",
       encrypted: true,
       shared: false,
       permissions: []
@@ -56,57 +55,48 @@ export const BlockchainHealthData: React.FC<BlockchainHealthDataProps /> = ({/  
     {
       id: "record_2",
       type: vitals","
-      title: "生命体征监测,"
+      title: "生命体征监测,",
       data: { heartRate: 72, bloodPressure: "120/80", temperature: 36.5},/////          timestamp: 2024-01-15T08:00:00Z","
-      hash: "0x2b3c4d5e6f7a...,"
+      hash: "0x2b3c4d5e6f7a...,",
       encrypted: true,
       shared: true,
       permissions: ["doctor_zhang", clinic_abc"]"
     },
     {
-      id: "record_3,"
+      id: "record_3,",
       type: "medication",
       title: 用药记录","
       data: { medication: "维生素D, dosage: "1000IU", frequency: 每日一次"},
-      timestamp: "2024-01-14T20:00:00Z,"
+      timestamp: "2024-01-14T20:00:00Z,",
       hash: "0x3c4d5e6f7a8b...",
       encrypted: true,
       shared: false,
       permissions: []
     }
   ])
-  // 模拟数据共享请求 // const [sharingRequests] = useState<DataSharingRequest[]  / >([ * { ////
-      id: req_1","
-      requester: "张医生 - 中医科,"
-      dataTypes: ["五诊结果", 生命体征"],"
-      purpose: "制定个性化治疗方案,"
-      duration: "3个月",
-      status: pending""
-    },
-    {
-      id: "req_2,"
-      requester: "健康研究院",
-      dataTypes: [运动数据", "饮食记录],
-      purpose: "健康生活方式研究",
-      duration: 1年","
-      status: "pending},"
+  // 模拟数据共享请求 // const [sharingRequests] = useState<DataSharingRequest[]  / >([ * { ////;
+      id: req_1",";
+      requester: "张医生 - 中医科,",dataTypes: ["五诊结果", 生命体征"],";
+      purpose: "制定个性化治疗方案,",duration: "3个月",status: pending"";
+    },{id: "req_2,",requester: "健康研究院",dataTypes: [运动数据", "饮食记录],purpose: "健康生活方式研究",duration: 1年",";
+      status: "pending},";
   ];);
-  const encryptData = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => async() => {;}
-    // 模拟数据加密 //////     setLoading(true), [])
+  const encryptData = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => async() => {}
+    // 模拟数据加密 // setLoading(true), [])
     await new Promise<void>(resolve => setTimeout((); => resolve(), 800));
-    setLoading(false)
+    setLoading(false);
     Alert.alert("加密完成", 数据已使用AES-256加密算法保护");"
   };
-  const shareData = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => async() => {;}
+  const shareData = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => async() => {}
     setLoading(true), []);
     await new Promise<void>(resolve => setTimeout((); => resolve(), 1000));
-    setLoading(false)
+    setLoading(false);
     Alert.alert("共享成功, "数据已安全共享给授权方");"
   };
-  const backupToBlockchain = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => async() => {;}
+  const backupToBlockchain = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => async() => {}
     setLoading(true), []);
     await new Promise<void>(resolve => setTimeout((); => resolve(), 2000));
-    setLoading(false)
+    setLoading(false);
     Alert.alert(备份完成", "健康数据已备份到区块链网络);
   };
   // TODO: 将内联组件移到组件外部 * const renderDataRecords = useMemo(() => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => () => ( ////
@@ -171,23 +161,22 @@ style={styles.backupButton}
         </TouchableOpacity>/      </View>/////
       <View style={styles.restoreSection} />/        <Text style={styles.restoreTitle} />从备份恢复</Text>/        <Text style={styles.restoreDesc} />/////              如果您更换设备或重新安装应用，可以从区块链备份中恢复您的健康数据
         </Text>/        <TouchableOpacity style={styles.restoreButton} accessibilityLabel="TODO: 添加无障碍标签" />/          <Icon name="download" size={20} color={colors.primary} />/          <Text style={styles.restoreButtonText} />恢复数据</Text>/        </TouchableOpacity>/      </View>/    </ScrollView>/////      ), []);
-  const getRecordIcon = useCallback(() => {;}
-    switch (type) {;
-      case "diagnosis": return stethoscop;e";"
-      case "vitals: return "heart-puls;e";"
+  const getRecordIcon = useCallback(() => {
+    switch (type) {case "diagnosis": return stethoscop;e
+      case "vitals: return "heart-puls;e
       case medication": return "pil;l;
-      case "exercise": return ru;n";"
-      case "diet: return "foo;d";"
-      default: return file-documen;t";"
+      case "exercise": return ru;n
+      case "diet: return "foo;d
+      default: return file-documen;t
     }
   };
-  const getRecordColor = useCallback((); => {;}
+  const getRecordColor = useCallback((); => {}
     switch (type) {
       case "diagnosis: return colors.prima;r;y;"
 case "vitals": return colors.error;
 case medication": return colors.succe;s;s;"
 case "exercise: return colors.warni;n;g;"
-case "diet": return #8E44A;D";"
+case "diet": return #8E44A;D
       default: return colors.textSeconda;r;y;
     }
   };
@@ -211,25 +200,22 @@ name={tab.icon}
           ]} />/////                {tab.label}
           </Text>/        </TouchableOpacity>/////          ))}
     </View>/////      ), []);
-  const renderContent = useCallback(() => {;}
-    switch (activeTab) {;
-      case "records: return renderDataRecords;(;)"
+  const renderContent = useCallback(() => {
+    switch (activeTab) {case "records: return renderDataRecords;(;)"
       case "sharing": return renderDataSharing;(;)
       case privacy": return renderPrivacySettings;(;)"
-      case "backup: return renderBackupRestore"
+      case "backup: return renderBackupRestore";
       default: return renderDataRecords;
     }
   };
-  // 记录渲染性能 //////
-  performanceMonitor.recordRender()
-  return (
-    <Modal visible={visible} animationType="slide" presentationStyle="pageSheet" />/      <SafeAreaView style={styles.container} />/        {// 头部 }/        <View style={styles.header} />/          <TouchableOpacity onPress={onClose} style={styles.closeButton} accessibilityLabel="TODO: 添加无障碍标签" />/            <Icon name="close" size={24} color={colors.text} />/          </TouchableOpacity>/          <View style={styles.headerContent} />/            <Text style={styles.title} />区块链健康数据</Text>/            <Text style={styles.subtitle} />安全、透明、不可篡改</Text>/          </View>/          <View style={styles.blockchainStatus} />/            <View style={styles.statusDot} />/            <Text style={styles.statusText} />已连接</Text>/          </View>/        </View>/////
-        {// 标签栏 }/////            {renderTabBar()}
-        {// 内容区域 }/////            {renderContent()}
+  // 记录渲染性能 // performanceMonitor.recordRender();
+  return (;
+    <Modal visible={visible} animationType="slide" presentationStyle="pageSheet" />/      <SafeAreaView style={styles.container} />/        {// 头部 }/        <View style={styles.header} />/          <TouchableOpacity onPress={onClose} style={styles.closeButton} accessibilityLabel="TODO: 添加无障碍标签" />/            <Icon name="close" size={24} color={colors.text} />/          </TouchableOpacity>/          <View style={styles.headerContent} />/            <Text style={styles.title} />区块链健康数据</Text>/            <Text style={styles.subtitle} />安全、透明、不可篡改</Text>/          </View>/          <View style={styles.blockchainStatus} />/            <View style={styles.statusDot} />/            <Text style={styles.statusText} />已连接</Text>/          </View>/        </View>/////;
+        {// 标签栏 }/////            {renderTabBar()};
+        {// 内容区域 }/////            {renderContent()};
       </SafeAreaView>/    </Modal>/////      ;);
 };
-const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({;
-  container: {
+const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({container: {
     flex: 1,
     backgroundColor: colors.background;
   },
@@ -248,7 +234,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   },
   title: {
     fontSize: 20,
-    fontWeight: "bold,"
+    fontWeight: "bold,",
     color: colors.text;
   },
   subtitle: {
@@ -303,7 +289,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   sectionHeader: {
     flexDirection: "row",
     justifyContent: space-between","
-    alignItems: "center,"
+    alignItems: "center,",
     marginBottom: spacing.lg;
   },
   sectionTitle: {
@@ -321,13 +307,13 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   },
   recordHeader: {
     flexDirection: row","
-    justifyContent: "space-between,"
+    justifyContent: "space-between,",
     alignItems: "center",
     marginBottom: spacing.sm;
   },
   recordInfo: {
     flexDirection: row","
-    alignItems: "center,"
+    alignItems: "center,",
     flex: 1;
   },
   recordDetails: {
@@ -353,7 +339,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   },
   dataHash: {
     fontSize: 12,
-    fontFamily: "monospace,"
+    fontFamily: "monospace,",
     color: colors.text,
     backgroundColor: colors.background,
     padding: spacing.xs,
@@ -362,7 +348,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   recordActions: { flexDirection: "row"  },
   actionButton: {
     flexDirection: row","
-    alignItems: "center,"
+    alignItems: "center,",
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
     borderRadius: 8,
@@ -383,7 +369,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   requestHeader: {
     flexDirection: "row",
     justifyContent: space-between","
-    alignItems: "center,"
+    alignItems: "center,",
     marginBottom: spacing.md;
   },
   requesterName: {
@@ -438,7 +424,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     marginBottom: spacing.lg;
   },
   settingItem: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     justifyContent: "space-between",
     alignItems: center","
     paddingVertical: spacing.md,
@@ -451,7 +437,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   },
   settingTitle: {
     fontSize: 16,
-    fontWeight: "600,"
+    fontWeight: "600,",
     color: colors.text,
     marginBottom: 2;
   },
@@ -473,7 +459,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     marginRight: spacing.sm;
   },
   privacyInfo: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     backgroundColor: colors.primary + "10",
     padding: spacing.md,
     borderRadius: 12,
@@ -490,7 +476,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     backgroundColor: colors.surface,
     borderRadius: 12,
     padding: spacing.lg,
-    alignItems: "center,"
+    alignItems: "center,",
     marginBottom: spacing.lg;
   },
   backupInfo: {
@@ -514,7 +500,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     marginTop: spacing.xs;
   },
   backupButton: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center",
     backgroundColor: colors.primary,
     paddingHorizontal: spacing.lg,
@@ -524,7 +510,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   backupButtonText: {
     color: white","
     fontSize: 16,
-    fontWeight: "600,"
+    fontWeight: "600,",
     marginLeft: spacing.sm;
   },
   restoreSection: {
@@ -546,7 +532,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   },
   restoreButton: {
     flexDirection: row","
-    alignItems: "center,"
+    alignItems: "center,",
     justifyContent: "center",
     borderWidth: 1,
     borderColor: colors.primary,

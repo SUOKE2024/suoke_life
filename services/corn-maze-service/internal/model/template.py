@@ -1,12 +1,17 @@
+"""
+template - 索克生活项目模块
+"""
+
+from dataclasses import dataclass, field
+from datetime import datetime
+from typing import Any
+
 #!/usr/bin/env python3
 
 """
 迷宫模板模型定义
 """
 
-from dataclasses import dataclass, field
-from datetime import datetime
-from typing import Any
 
 
 @dataclass

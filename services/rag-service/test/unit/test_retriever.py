@@ -1,3 +1,13 @@
+"""
+test_retriever - 索克生活项目模块
+"""
+
+from services.rag_service.internal.model.document import Document
+from services.rag_service.internal.retriever.hybrid_retriever import HybridRetriever
+from unittest.mock import AsyncMock, MagicMock, patch
+import pytest
+import unittest
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,12 +15,7 @@
 混合检索器单元测试
 """
 
-import unittest
-from unittest.mock import AsyncMock, MagicMock, patch
-import pytest
 
-from services.rag_service.internal.retriever.hybrid_retriever import HybridRetriever
-from services.rag_service.internal.model.document import Document
 
 class TestHybridRetriever(unittest.TestCase):
     """混合检索器单元测试类"""

@@ -1,20 +1,25 @@
 """
-SQLite用户仓库实现模块
-
-该模块实现了基于SQLite的用户数据存储，作为前端本地存储方案。
+sqlite_user_repository - 索克生活项目模块
 """
+
+from datetime import datetime, timezone
+from internal.model.user import (User, UserHealthSummary, DeviceInfo, UserStatus,
+from internal.repository.exceptions import (UserNotFoundError, UserAlreadyExistsError, 
+from typing import Dict, List, Optional, Tuple, Any
+from uuid import UUID
 import json
 import logging
 import os
 import sqlite3
 import uuid
-from datetime import datetime, timezone
-from typing import Dict, List, Optional, Tuple, Any
-from uuid import UUID
 
-from internal.model.user import (User, UserHealthSummary, DeviceInfo, UserStatus,
+"""
+SQLite用户仓库实现模块
+
+该模块实现了基于SQLite的用户数据存储，作为前端本地存储方案。
+"""
+
                           UserRole, ConstitutionType, HealthMetric)
-from internal.repository.exceptions import (UserNotFoundError, UserAlreadyExistsError, 
                                      DeviceNotFoundError, DeviceAlreadyBoundError,
                                      DatabaseError)
 

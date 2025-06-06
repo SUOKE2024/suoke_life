@@ -1,9 +1,14 @@
 """
+main - 索克生活项目模块
+"""
+
+from suoke_bench_service.api.main import create_app
+import uvicorn
+
+"""
 suoke-bench-service 主入口文件
 """
 
-import uvicorn
-from suoke_bench_service.api.main import create_app
 
 def main():
     """主函数"""

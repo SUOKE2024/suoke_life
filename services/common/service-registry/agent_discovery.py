@@ -1,18 +1,23 @@
+"""
+agent_discovery - 索克生活项目模块
+"""
+
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any, Dict, List, Optional, Set
+import asyncio
+import hashlib
+import json
+import logging
+import time
+
 #!/usr/bin/env python3
 """
 智能体服务注册发现机制
 为四智能体（小艾、小克、老克、索儿）提供动态服务发现和能力匹配
 """
 
-import asyncio
-import json
-import logging
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Set
-from datetime import datetime, timedelta
-import hashlib
 
 logger = logging.getLogger(__name__)
 

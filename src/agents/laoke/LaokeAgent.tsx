@@ -1,5 +1,6 @@
+import { apiClient } from ../../services/////    apiClient
+
 import React from "react";
-import { apiClient } from ../../services/////    apiClient";"
 /////
   LaokeAgent,
   KnowledgeSearchResult,
@@ -10,38 +11,34 @@ import { apiClient } from ../../services/////    apiClient";"
   UserProfile,
   { LearningContext } from "./types;// * 老克智能体主类"////
  * 探索频道版主，负责知识传播、培训和博物馆导览，兼任玉米迷宫NPC;
- export class LaokeAgentImpl implements LaokeAgent {;
-  private personality: unknown = {;
-    style: ";"
+ export class LaokeAgentImpl implements LaokeAgent {private personality: unknown = {style: 
 scholarly",      // 学者型 // tone: wise",            / 睿智的语调* // expertise: "knowledge,  * // 知识专业* // approach: "educational",  * // 教育导向* // } * /////    "
   private serviceEndpoint = /api/agents/laoke"/////    "
   constructor() {
-    // 初始化老克智能体 //////     }
-  //////     核心消息处理功能  async processMessage(message: string,
+    // 初始化老克智能体 // }
+  // 核心消息处理功能  async processMessage(message: string,
     context: LearningContext,
     userId?: string,
     sessionId?: string;
   ): Promise<any>  {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/message`, {/////            text: message,;
-        context,
+      const response = await apiClient.post(`${this.serviceEndpoint}/message`, {/////            text: message,context,
         user_id: userId,
         session_id: session;I;d;
       ;};);
-      // 应用个性化风格 //////     response.data.text = this.applyPersonalityToResponse(response.data.text, context)
+      // 应用个性化风格 // response.data.text = this.applyPersonalityToResponse(response.data.text, context);
       return response.da;t;a;
     } catch (error) {
-      return this.generateFallbackResponse(message, contex;t;)
+      return this.generateFallbackResponse(message, contex;t;);
     }
   }
-  //////     搜索知识  async searchKnowledge(query: string,
+  // 搜索知识  async searchKnowledge(query: string,
     category?: string,
     filters?: unknown,
     userLevel?: "beginner" | intermediate" | "advanced;
   ): Promise<KnowledgeSearchResult[] /////    >  {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/search-knowledge`, {/////            query,;
-        category,
+      const response = await apiClient.post(`${this.serviceEndpoint}/search-knowledge`, {/////            query,category,
         filters,
         user_level: userLev;e;l;
       ;};);
@@ -65,24 +62,17 @@ scholarly",      // 学者型 // tone: wise",            / 睿智的语调* // e
       return [;];
     }
   }
-  //////     创建学习路径  async createLearningPath(userProfile: UserProfile,
+  // 创建学习路径  async createLearningPath(userProfile: UserProfile,
     learningGoals: string[],
     preferences?: unknown,
     timeConstraints?: string;
   ): Promise<LearningPath | null /////    >  {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/create-learning-path`, {/////            user_profile: userProfile,;
-        learning_goals: learningGoals,
+      const response = await apiClient.post(`${this.serviceEndpoint}/create-learning-path`, {/////            user_profile: userProfile,learning_goals: learningGoals,
         preferences,
         time_constraints: timeConstrain;t;s;
       ;};);
-      return {
-        id: response.data.id,
-        title: response.data.title,
-        description: response.data.description,
-        difficulty: response.data.difficulty,
-        estimatedDuration: response.data.estimated_duration,
-        modules: response.data.modules.map((module: unknow;n;); => ({
+      return {id: response.data.id,title: response.data.title,description: response.data.description,difficulty: response.data.difficulty,estimatedDuration: response.data.estimated_duration,modules: response.data.modules.map((module: unknow;n;); => ({
           id: module.id,
           title: module.title,
           description: module.description,
@@ -109,7 +99,7 @@ scholarly",      // 学者型 // tone: wise",            / 睿智的语调* // e
       return nu;l;l;
     }
   }
-  //////     获取教育内容  async getEducationContent(contentId: string,
+  // 获取教育内容  async getEducationContent(contentId: string,
     userLevel?: "beginner | "intermediate" | advanced"
   ): Promise<EducationContent | null /////    >  {
     try {
@@ -117,23 +107,7 @@ scholarly",      // 学者型 // tone: wise",            / 睿智的语调* // e
       return {
         id: response.data.id,
         title: response.data.title,
-        description: response.data.description,
-        content: response.data.content,
-        type: response.data.type,
-        difficulty: response.data.difficulty,
-        category: response.data.category,
-        tags: response.data.tags || [],
-        multimedia: response.data.multimedia || [],
-        interactiveElements: response.data.interactive_elements || [],
-        assessments: response.data.assessments || [],
-        prerequisites: response.data.prerequisites || [],
-        learningObjectives: response.data.learning_objectives || [],
-        estimatedTime: response.data.estimated_time,
-        author: response.data.author,
-        publishDate: new Date(response.data.publish_date),
-        lastUpdated: new Date(response.data.last_updated),
-        rating: response.data.rating,
-        reviews: response.data.reviews || [;]
+        description: response.data.description,content: response.data.content,type: response.data.type,difficulty: response.data.difficulty,category: response.data.category,tags: response.data.tags || [],multimedia: response.data.multimedia || [],interactiveElements: response.data.interactive_elements || [],assessments: response.data.assessments || [],prerequisites: response.data.prerequisites || [],learningObjectives: response.data.learning_objectives || [],estimatedTime: response.data.estimated_time,author: response.data.author,publishDate: new Date(response.data.publish_date),lastUpdated: new Date(response.data.last_updated),rating: response.data.rating,reviews: response.data.reviews || [;]
       ;}
     } catch (error) {
       return nu;l;l;
@@ -141,15 +115,7 @@ scholarly",      // 学者型 // tone: wise",            / 睿智的语调* // e
   }
   // 博物馆导览  async getMuseumExhibit(exhibitId: string): Promise<MuseumExhibit | null /////    >  {
     try {
-      const response = await apiClient.get(`${this.serviceEndpoint}/museum/${exhibitId;};`;);//////
-      return {
-        id: response.data.id,
-        name: response.data.name,
-        description: response.data.description,
-        category: response.data.category,
-        period: response.data.period,
-        location: response.data.location,
-        artifacts: response.data.artifacts.map((artifact: unknow;n;); => ({
+      const response = await apiClient.get(`${this.serviceEndpoint}/museum/${exhibitId;};`;);// return {id: response.data.id,name: response.data.name,description: response.data.description,category: response.data.category,period: response.data.period,location: response.data.location,artifacts: response.data.artifacts.map((artifact: unknow;n;); => ({
           id: artifact.id,
           name: artifact.name,
           description: artifact.description,
@@ -172,42 +138,20 @@ scholarly",      // 学者型 // tone: wise",            / 睿智的语调* // e
       return nu;l;l;
     }
   }
-  //////     玉米迷宫NPC交互  async mazeNpcInteraction(playerId: string,
+  // 玉米迷宫NPC交互  async mazeNpcInteraction(playerId: string,
     action: string,
     location: { x: number, y: number},
     context?: unknown;
   ): Promise<MazeInteraction /////    >  {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/maze-interaction`, {/////            player_id: playerId,;
-        action,
+      const response = await apiClient.post(`${this.serviceEndpoint}/maze-interaction`, {/////            player_id: playerId,action,
         location,
         conte;x;t;
       ;};);
-      return {
-        id: response.data.id,
-        playerId: response.data.player_id,
-        npcResponse: response.data.npc_response,
-        action: response.data.action,
-        location: response.data.location,
-        rewards: response.data.rewards || [],
-        hints: response.data.hints || [],
-        challenges: response.data.challenges || [],
-        storyProgression: response.data.story_progression,
-        nextActions: response.data.next_actions || [],
-        timestamp: new Date(response.data.timestamp;);}
+      return {id: response.data.id,playerId: response.data.player_id,npcResponse: response.data.npc_response,action: response.data.action,location: response.data.location,rewards: response.data.rewards || [],hints: response.data.hints || [],challenges: response.data.challenges || [],storyProgression: response.data.story_progression,nextActions: response.data.next_actions || [],timestamp: new Date(response.data.timestamp;);}
     } catch (error) {
-      return {
-        id: "error,"
-        playerId,
-        npcResponse: "抱歉，我暂时无法回应。请稍后再试。",
-        action,
-        location,
-        rewards: [],
-        hints: [],
-        challenges: [],
-        storyProgression: 0,
-        nextActions: [继续探索", "查看地图],
-        timestamp: new Date(;);};
+      return {id: "error,";
+        playerId,npcResponse: "抱歉，我暂时无法回应。请稍后再试。",action,location,rewards: [],hints: [],challenges: [],storyProgression: 0,nextActions: [继续探索", "查看地图],timestamp: new Date(;);};
     }
   }
   // 获取学习进度  async getLearningProgress(userId: string, pathId?: string): Promise<any>  {////
@@ -215,17 +159,11 @@ scholarly",      // 学者型 // tone: wise",            / 睿智的语调* // e
       const response = await apiClient.get(`${this.serviceEndpoint}/progress/${userId}`, { params: { path_id: pathId   },/////          };);
       return response.da;t;a;
     } catch (error) {
-      return {
-        totalProgress: 0,
-        completedModules: 0,
-        totalModules: 0,
-        achievements: [],
-        timeSpent: 0,
-        lastActivity: nul;l;
+      return {totalProgress: 0,completedModules: 0,totalModules: 0,achievements: [],timeSpent: 0,lastActivity: nul;l;
       ;};
     }
   }
-  //////     提交学习评估  async submitAssessment(userId: string,
+  // 提交学习评估  async submitAssessment(userId: string,
     assessmentId: string,
     answers: unknown[]);: Promise< { score: number,
     passed: boolean,
@@ -233,68 +171,50 @@ scholarly",      // 学者型 // tone: wise",            / 睿智的语调* // e
     recommendations: string[]
     }> {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/assessment/submit`, {/////            user_id: userId,;
-        assessment_id: assessmentId,;
-        answe;r;s;
+      const response = await apiClient.post(`${this.serviceEndpoint}/assessment/submit`, {/////            user_id: userId,assessment_id: assessmentId,answe;r;s;
       ;};);
-      return {
-        score: response.data.score,
-        passed: response.data.passed,
-        feedback: response.data.feedback || [],
-        recommendations: response.data.recommendations || [;]
+      return {score: response.data.score,passed: response.data.passed,feedback: response.data.feedback || [],recommendations: response.data.recommendations || [;]
       ;}
     } catch (error) {
-      return {
-        score: 0,
-        passed: false,
-        feedback: ["评估提交失败，请重试],"
+      return {score: 0,passed: false,feedback: ["评估提交失败，请重试],";
         recommendations: [;]
       ;};
     }
   }
-  //////     获取智能体状态  async getStatus(): Promise<any> {
+  // 获取智能体状态  async getStatus(): Promise<any> {
     try {
       const response = await apiClient.get(`${this.serviceEndpoint}/statu;s;`;);/////          return response.da;t;a;
     } catch (error) {
-      return {
-        status: offline","
-        capabilities: [],
-        performance: {
-          accuracy: 0,
-          responseTime: 0,
-          userSatisfaction: 0}
+      return {status: offline",";
+        capabilities: [],performance: {accuracy: 0,responseTime: 0,userSatisfaction: 0};
       ;};
     }
   }
-  //////     设置个性化特征  setPersonality(traits: unknown): void  {
+  // 设置个性化特征  setPersonality(traits: unknown): void  {
     this.personality = { ...this.personality, ...traits };
   }
-  //////     应用个性化风格到响应  private applyPersonalityToResponse(text: string, context: LearningContext): string  {
-    // 根据老克的博学睿智风格调整响应 //////     let styledText = tex;t;
-    // 添加学者风格的开头 //////     if (context.type === "knowledge_inquiry) { "
+  // 应用个性化风格到响应  private applyPersonalityToResponse(text: string, context: LearningContext): string  {
+    // 根据老克的博学睿智风格调整响应 // let styledText = tex;t;
+    // 添加学者风格的开头 // if (context.type === "knowledge_inquiry) { "
       styledText = `根据古籍记载和现代研究，${styledText}`
     } else if (context.type === "learning_guidance") {
       styledText = `在学习的道路上，${styledText}`
     }
-    // 添加引导性的结尾 //////     if (!styledText.includes(您还想")) { "
+    // 添加引导性的结尾 // if (!styledText.includes(您还想")) { "
       styledText += " 您还想了解哪些相关知识呢？我很乐意为您深入解答。"
     }
     return styledTe;x;t;
   }
-  //////     生成备用响应  private generateFallbackResponse(message: string, context: LearningContext): unknown  {
-    return {
-      text: "学而时习之，不亦说乎？虽然我暂时无法回答您的问题，但求知的精神值得赞赏。让我们换个角度来探讨这个话题吧。",
-      type: fallback","
-      suggestions: ;["浏览知识库,"
-        "查看学习路径",
-        参观虚拟博物馆","
-        "进入玉米迷宫"
+  // 生成备用响应  private generateFallbackResponse(message: string, context: LearningContext): unknown  {
+    return {text: "学而时习之，不亦说乎？虽然我暂时无法回答您的问题，但求知的精神值得赞赏。让我们换个角度来探讨这个话题吧。",type: fallback",";
+      suggestions: ;["浏览知识库,查看学习路径",
+        参观虚拟博物馆",进入玉米迷宫"
       ],
       timestamp: Date.now()};
   }
-  //////     清理资源  async cleanup(userId: string): Promise<void>  {
+  // 清理资源  async cleanup(userId: string): Promise<void>  {
     try {
-      // 清理用户相关的学习数据和缓存 //////     } catch (error) {
+      // 清理用户相关的学习数据和缓存 // } catch (error) {
       }
   }
 }

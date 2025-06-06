@@ -1,11 +1,11 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 """
-智能缓存管理器
-支持多级缓存、智能预热、压缩和缓存规则引擎
+smart_cache_manager - 索克生活项目模块
 """
 
+from collections import OrderedDict
+from dataclasses import dataclass, field
+from redis.asyncio import Redis
+from typing import Any, Dict, List, Optional, Pattern, Set, Tuple, Union
 import asyncio
 import gzip
 import hashlib
@@ -14,11 +14,16 @@ import logging
 import pickle
 import re
 import time
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Pattern, Set, Tuple, Union
-from collections import OrderedDict
 
-from redis.asyncio import Redis
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
+智能缓存管理器
+支持多级缓存、智能预热、压缩和缓存规则引擎
+"""
+
+
 
 logger = logging.getLogger(__name__)
 

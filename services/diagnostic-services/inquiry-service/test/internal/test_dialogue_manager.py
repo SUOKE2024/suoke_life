@@ -1,18 +1,24 @@
+"""
+test_dialogue_manager - 索克生活项目模块
+"""
+
+from internal.dialogue.dialogue_manager import DialogueManager
+from internal.llm.llm_client import LLMClient
+from internal.repository.session_repository import SessionRepository
+from internal.repository.user_repository import UserRepository
+from unittest.mock import AsyncMock
+import json
+import pytest
+import time
+
 #!/usr/bin/env python
 
 """
 对话管理器测试
 """
 
-import time
-from unittest.mock import AsyncMock
 
-import pytest
 
-from internal.dialogue.dialogue_manager import DialogueManager
-from internal.llm.llm_client import LLMClient
-from internal.repository.session_repository import SessionRepository
-from internal.repository.user_repository import UserRepository
 
 
 class TestDialogueManager:
@@ -277,7 +283,6 @@ class TestDialogueManager:
 
 
 # 引入json用于LLM模拟响应
-import json
 
 if __name__ == "__main__":
     pytest.main(["-xvs", __file__])

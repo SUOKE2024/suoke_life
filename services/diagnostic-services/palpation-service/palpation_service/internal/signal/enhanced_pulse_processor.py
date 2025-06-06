@@ -1,3 +1,20 @@
+"""
+enhanced_pulse_processor - 索克生活项目模块
+"""
+
+            import psutil
+from collections import deque
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass
+from scipy import signal, stats
+from scipy.fft import fft, fftfreq
+from typing import Any
+import asyncio
+import logging
+import pywt
+import time
+import warnings
+
 #!/usr/bin/env python
 
 """
@@ -5,18 +22,7 @@
 提供高性能、实时的脉搏波形处理、分析和AI增强特征提取
 """
 
-import asyncio
-import logging
-import time
-import warnings
-from collections import deque
-from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass
-from typing import Any
 
-import pywt
-from scipy import signal, stats
-from scipy.fft import fft, fftfreq
 
 logger = logging.getLogger(__name__)
 
@@ -771,7 +777,6 @@ class EnhancedPulseProcessor:
     def _get_memory_usage(self) -> float:
         """获取内存使用情况"""
         try:
-            import psutil
 
             process = psutil.Process()
             return process.memory_info().rss / 1024 / 1024  # MB

@@ -1,17 +1,22 @@
 """
+test_sqlite_repository - 索克生活项目模块
+"""
+
+from datetime import datetime
+from internal.model.user import User, UserStatus, UserRole, DeviceInfo, UserHealthSummary, ConstitutionType
+from internal.repository.sqlite_user_repository import SQLiteUserRepository, UserNotFoundError, DeviceAlreadyBoundError
+from pathlib import Path
+import pytest
+import sys
+import uuid
+
+"""
 SQLite用户仓库单元测试
 """
-import pytest
-import uuid
-from datetime import datetime
 
 # 添加项目根目录到Python路径
-import sys
-from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
-from internal.repository.sqlite_user_repository import SQLiteUserRepository, UserNotFoundError, DeviceAlreadyBoundError
-from internal.model.user import User, UserStatus, UserRole, DeviceInfo, UserHealthSummary, ConstitutionType
 
 # 测试数据
 TEST_USER_DATA = {

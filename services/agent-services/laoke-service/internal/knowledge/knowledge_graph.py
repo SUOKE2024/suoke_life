@@ -1,8 +1,13 @@
-import logging
-from typing import Any
+"""
+knowledge_graph - 索克生活项目模块
+"""
 
 from neo4j import GraphDatabase
 from py2neo import Graph
+from typing import Any
+import logging
+
+
 
 logger = logging.getLogger(__name__)
 

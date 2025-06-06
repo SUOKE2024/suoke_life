@@ -1,15 +1,23 @@
-"""认证服务监控模块"""
+"""
+monitoring - 索克生活项目模块
+"""
 
-import time
-import psutil
+            from auth_service.core.database import get_db
+            from auth_service.core.redis import get_redis
+        import re
+from auth_service.config.settings import get_settings
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Any
-from prometheus_client import Counter, Histogram, Gauge, generate_latest, CONTENT_TYPE_LATEST
 from fastapi import Request, Response
 from fastapi.responses import PlainTextResponse
+from prometheus_client import Counter, Histogram, Gauge, generate_latest, CONTENT_TYPE_LATEST
+from typing import Dict, List, Optional, Any
+import psutil
 import structlog
+import time
 
-from auth_service.config.settings import get_settings
+"""认证服务监控模块"""
+
+
 
 logger = structlog.get_logger()
 
@@ -277,7 +285,6 @@ class HealthChecker:
     async def check_database(self) -> Dict[str, Any]:
         """检查数据库连接"""
         try:
-            from auth_service.core.database import get_db
             
             start_time = time.time()
             # 这里应该实际检查数据库连接
@@ -299,7 +306,6 @@ class HealthChecker:
     async def check_redis(self) -> Dict[str, Any]:
         """检查Redis连接"""
         try:
-            from auth_service.core.redis import get_redis
             
             redis = get_redis()
             start_time = time.time()
@@ -459,7 +465,6 @@ class RequestMetricsMiddleware:
             path = path.split("?")[0]
         
         # 替换UUID和数字ID为占位符
-        import re
         path = re.sub(r'/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}', '/{id}', path)
         path = re.sub(r'/\d+', '/{id}', path)
         

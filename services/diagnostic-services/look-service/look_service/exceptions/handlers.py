@@ -1,14 +1,19 @@
-"""Exception handlers for FastAPI application."""
-
-import traceback
-from typing import Any
-
-from fastapi import FastAPI, Request, status
-from fastapi.responses import JSONResponse
-from pydantic import ValidationError as PydanticValidationError
+"""
+handlers - 索克生活项目模块
+"""
 
 from ..core.logging import get_logger, log_error
 from .base import (
+from fastapi import FastAPI, Request, status
+from fastapi.responses import JSONResponse
+from pydantic import ValidationError as PydanticValidationError
+from typing import Any
+import traceback
+
+"""Exception handlers for FastAPI application."""
+
+
+
     AuthenticationError,
     AuthorizationError,
     DatabaseError,

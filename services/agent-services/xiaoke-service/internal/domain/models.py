@@ -1,3 +1,12 @@
+"""
+models - 索克生活项目模块
+"""
+
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
+from typing import Any
+
 #!/usr/bin/env python
 
 """
@@ -5,10 +14,6 @@
 定义服务中使用的领域模型和枚举
 """
 
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
-from typing import Any
 
 
 class MedicalResourceType(str, Enum):

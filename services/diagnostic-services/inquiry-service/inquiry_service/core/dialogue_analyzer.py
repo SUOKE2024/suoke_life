@@ -1,19 +1,24 @@
 """
+dialogue_analyzer - 索克生活项目模块
+"""
+
+from collections import defaultdict, Counter
+from dataclasses import dataclass
+from enum import Enum
+from typing import Dict, List, Tuple, Optional, Any, Set
+import asyncio
+import jieba
+import jieba.posseg as pseg
+import logging
+import re
+
+"""
 问诊智能对话分析器
 
 基于自然语言处理和中医知识图谱，实现智能问诊对话分析功能。
 包括症状提取、病情分析、证候辨识等核心功能。
 """
 
-import asyncio
-import re
-import logging
-from typing import Dict, List, Tuple, Optional, Any, Set
-from dataclasses import dataclass
-from enum import Enum
-import jieba
-import jieba.posseg as pseg
-from collections import defaultdict, Counter
 
 logger = logging.getLogger(__name__)
 

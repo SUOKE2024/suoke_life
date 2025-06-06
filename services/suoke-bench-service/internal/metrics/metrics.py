@@ -1,11 +1,16 @@
 """
+metrics - 索克生活项目模块
+"""
+
+from sklearn.metrics import accuracy_score, f1_score
+from typing import Any
+import logging
+
+"""
 评测指标实现
 """
 
-import logging
-from typing import Any
 
-from sklearn.metrics import accuracy_score, f1_score
 
 logger = logging.getLogger(__name__)
 

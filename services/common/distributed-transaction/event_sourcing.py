@@ -1,17 +1,22 @@
+"""
+event_sourcing - 索克生活项目模块
+"""
+
+from abc import ABC, abstractmethod
+from collections.abc import Callable
+from dataclasses import dataclass, field
+from datetime import datetime
+from typing import Any
+import asyncio
+import logging
+import uuid
+
 #!/usr/bin/env python3
 """
 事件溯源（Event Sourcing）实现
 提供基于事件的最终一致性解决方案
 """
 
-from abc import ABC, abstractmethod
-import asyncio
-from collections.abc import Callable
-from dataclasses import dataclass, field
-from datetime import datetime
-import logging
-from typing import Any
-import uuid
 
 logger = logging.getLogger(__name__)
 

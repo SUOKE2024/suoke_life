@@ -1,18 +1,23 @@
+"""
+test_performance_optimization - 索克生活项目模块
+"""
+
+from pathlib import Path
+from typing import Any
+import aiohttp
+import asyncio
+import json
+import logging
+import sys
+import time
+
 #!/usr/bin/env python3
 """
 小艾智能体性能优化测试脚本
 验证优化后的性能提升
 """
 
-import asyncio
-import json
-import logging
-import sys
-import time
-from pathlib import Path
-from typing import Any
 
-import aiohttp
 
 # 添加项目路径
 sys.path.insert(0, Path().resolve())

@@ -1,3 +1,24 @@
+"""
+intelligent_coordinator - 索克生活项目模块
+"""
+
+from collections.abc import Callable
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum, auto
+from internal.model.ai_tcm_analyzer import AITCMAnalyzer
+from internal.model.pulse_models import PulseDataPacket
+from internal.signal.abdominal_analyzer import AbdominalAnalyzer
+from internal.signal.enhanced_pulse_processor import EnhancedPulseProcessor
+from internal.signal.skin_analyzer import SkinAnalyzer
+from internal.signal.smart_device_manager import SmartDeviceManager
+from typing import Any
+import asyncio
+import logging
+import psutil
+import time
+
 #!/usr/bin/env python3
 
 """
@@ -5,23 +26,7 @@
 作为触诊服务的核心控制器，统一管理所有子系统，提供智能调度、负载均衡和故障恢复功能
 """
 
-import asyncio
-import logging
-import time
-from collections.abc import Callable
-from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum, auto
-from typing import Any
 
-import psutil
-from internal.model.ai_tcm_analyzer import AITCMAnalyzer
-from internal.model.pulse_models import PulseDataPacket
-from internal.signal.abdominal_analyzer import AbdominalAnalyzer
-from internal.signal.enhanced_pulse_processor import EnhancedPulseProcessor
-from internal.signal.skin_analyzer import SkinAnalyzer
-from internal.signal.smart_device_manager import SmartDeviceManager
 
 logger = logging.getLogger(__name__)
 

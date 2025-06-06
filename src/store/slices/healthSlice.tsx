@@ -1,5 +1,6 @@
-import React from "react";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";/import { apiClient } from "../../services/////    apiClient";
+
+import React from "react";
 /////
   HealthState,
   HealthData,
@@ -83,10 +84,9 @@ k;<;
   { dataIds: string[]   },
   { rejectValue: string}
 >("health/analyzeData", async ({ dataIds }, { rejectWithValue }) => {/////      try {}
-    const response: ApiResponse<HealthSummary /> = await apiClient.post(/      "/health/analyze",/////          {;
-        dataIds;
+    const response: ApiResponse<HealthSummary /> = await apiClient.post(/      "/health/analyze",/////          {dataIds;
       ;}
-    ;)
+    ;);
     if (!response.success) {
       throw new Error(response.error?.message || "分析健康数据失败;";);
     }
@@ -113,11 +113,8 @@ k;<
       return rejectWithValue(error.message || "生成健康报告失败;";);
     }
   });
-// 创建slice * const healthSlice = createSlice({ ////
-  name: "health",
-  initialState,
-  reducers: {
-    addHealthDataLocal: (state, action: PayloadAction<HealthData //>;); => {/////          state.data.unshift(action.payload);}
+// 创建slice * const healthSlice = createSlice({ ////;
+  name: "health",initialState,reducers: {addHealthDataLocal: (state, action: PayloadAction<HealthData //>;); => {/////          state.data.unshift(action.payload);}
     },
     updateHealthDataLocal: (state, action: PayloadAction<HealthData />) => {/////          const index = state.data.findIndex(;}
         (ite;m;); => item.id === action.payload.id;
@@ -144,7 +141,7 @@ k;<
       // 这里可以添加过滤逻辑 // / 暂时只是存储过滤器状态，实际过滤在组件中处理* // } * /////
   },
   extraReducers: (builder) => {}
-    // 获取健康概况 //////     builder;
+    // 获取健康概况 // builder;
       .addCase(fetchHealthSummary.pending, (state) => {}
         state.loading = true;
         state.error = undefined;
@@ -158,7 +155,7 @@ k;<
         state.loading = false;
         state.error = action.payload;
       });
-    // 获取健康趋势 //////     builder;
+    // 获取健康趋势 // builder;
       .addCase(fetchHealthTrends.pending, (state) => {}
         state.loading = true;
         state.error = undefined;
@@ -172,14 +169,14 @@ k;<
         state.loading = false;
         state.error = action.payload;
       });
-    // 同步健康数据 //////     builder;
+    // 同步健康数据 // builder;
       .addCase(syncHealthData.pending, (state) => {}
         state.loading = true;
         state.error = undefined;
       });
       .addCase(syncHealthData.fulfilled, (state, action); => {}
         state.loading = false;
-        // 合并新数据，避免重复 //////     const existingIds = new Set(state.data.map((item;); => item.id));
+        // 合并新数据，避免重复 // const existingIds = new Set(state.data.map((item;); => item.id));
         const newData = action.payload.filter(;
           (ite;m;); => !existingIds.has(item.id);
         );
@@ -190,7 +187,7 @@ k;<
         state.loading = false;
         state.error = action.payload;
       });
-    // 分析健康数据 //////     builder;
+    // 分析健康数据 // builder;
       .addCase(analyzeHealthData.pending, (state) => {}
         state.loading = true;
         state.error = undefined;
@@ -204,7 +201,7 @@ k;<
         state.loading = false;
         state.error = action.payload;
       });
-    // 生成健康报告 //////     builder;
+    // 生成健康报告 // builder;
       .addCase(generateHealthReport.pending, (state) => {}
         state.loading = true;
         state.error = undefined;
@@ -224,9 +221,7 @@ k;<
   addHealthDataLocal,
   updateHealthDataLocal,
   removeHealthDataLocal,
-  updateSummary,;
-  clearError,;
-  setHealthDataFilter;
+  updateSummary,clearError,setHealthDataFilter;
   } = healthSlice.actio;n;s;
 // 选择器 * export const selectHealth = (state: { health: HealthState }) => state.heal////   ;
 t;h; /////

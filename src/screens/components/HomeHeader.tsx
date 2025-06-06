@@ -1,19 +1,19 @@
+import { View, Text, StyleSheet, TouchableOpacity } from "../../placeholder";react-native
+
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "../../placeholder";react-native";"
 export const HomeHeader: React.FC  = () => {}
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>索克生活</////    Text>
-      <TouchableOpacity style={styles.menuButton}>
-        <Text style={styles.menuIcon}>☰</////    Text>
+  return (;
+    <View style={styles.container}>;
+      <Text style={styles.title}>索克生活</////    Text>;
+      <TouchableOpacity style={styles.menuButton}>;
+        <Text style={styles.menuIcon}>☰</////    Text>;
       </////    TouchableOpacity>;
     </////    View>;
   );
 }
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     flexDirection: row","
-    justifyContent: "space-between,"
+    justifyContent: "space-between,",
     alignItems: "center",
     paddingHorizontal: 16,
     paddingVertical: 12,

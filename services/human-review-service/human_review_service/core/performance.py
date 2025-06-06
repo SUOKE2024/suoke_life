@@ -1,32 +1,37 @@
 """
+performance - 索克生活项目模块
+"""
+
+        import aioredis
+    import redis.asyncio as aioredis
+from .config import settings
+from .models import ReviewTaskDB, ReviewerDB
+from datetime import datetime, timedelta, timezone
+from functools import wraps
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+import asyncio
+import hashlib
+import json
+import structlog
+import time
+
+"""
 性能优化模块
 Performance Optimization Module
 
 提供缓存策略、查询优化、性能监控等功能
 """
 
-import asyncio
-import hashlib
-import json
-import time
-from datetime import datetime, timedelta, timezone
-from functools import wraps
-from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 try:
-    import redis.asyncio as aioredis
 except ImportError:
     try:
-        import aioredis
     except ImportError:
         aioredis = None
-import structlog
-from sqlalchemy import text
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
 
-from .config import settings
-from .models import ReviewTaskDB, ReviewerDB
 
 logger = structlog.get_logger(__name__)
 
@@ -354,7 +359,8 @@ class PerformanceMonitor:
         self.metrics = {}
         self.slow_query_threshold = 1.0  # 慢查询阈值（秒）
 
-    def record_query_time(self, query_type: str, duration: float):
+        @cache(timeout=300)  # 5分钟缓存
+def record_query_time(self, query_type: str, duration: float):
         """记录查询时间"""
         if query_type not in self.metrics:
             self.metrics[query_type] = {

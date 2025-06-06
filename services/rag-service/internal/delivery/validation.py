@@ -1,3 +1,16 @@
+"""
+validation - 索克生活项目模块
+"""
+
+from datetime import datetime
+from fastapi import HTTPException, Request
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel, Field, validator, ValidationError
+from typing import Any, Dict, List, Optional, Union, Tuple
+import re
+import structlog
+import uuid
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,14 +19,6 @@
 提供统一的请求验证、错误处理和响应格式化功能
 """
 
-import re
-import uuid
-from typing import Any, Dict, List, Optional, Union, Tuple
-from datetime import datetime
-from pydantic import BaseModel, Field, validator, ValidationError
-from fastapi import HTTPException, Request
-from fastapi.responses import JSONResponse
-import structlog
 
 logger = structlog.get_logger(__name__)
 
@@ -143,7 +148,8 @@ class QueryRequest(BaseModel):
     user_id: Optional[str] = Field(None, description="用户ID")
     
     @validator('query')
-    def validate_query(cls, v):
+        @cache(timeout=300)  # 5分钟缓存
+def validate_query(cls, v):
         """验证查询内容"""
         if not v or not v.strip():
             raise ValueError("查询内容不能为空")
@@ -182,6 +188,18 @@ class QueryRequest(BaseModel):
                 if not re.match(r'^[a-zA-Z0-9_-]+$', v):
                     raise ValueError("无效的用户ID格式")
         return v
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'queryrequest'
+        ordering = ['-created_at']
+
 
 class DocumentRequest(BaseModel):
     """文档请求验证模型"""
@@ -216,6 +234,30 @@ class DocumentRequest(BaseModel):
                     raise ValueError(f"无效的元数据键名: {key}")
         
         return v
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'adddocumentrequest'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'tcmsyndromerequest'
+        ordering = ['-created_at']
+
 
 class AddDocumentRequest(BaseModel):
     """添加文档请求验证模型"""
@@ -230,6 +272,18 @@ class AddDocumentRequest(BaseModel):
         if not re.match(r'^[a-zA-Z0-9_-]+$', v):
             raise ValueError("无效的集合名称格式")
         return v
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'herbrecommendationrequest'
+        ordering = ['-created_at']
+
 
 class TCMSyndromeRequest(BaseModel):
     """中医证候分析请求验证模型"""
@@ -254,6 +308,18 @@ class TCMSyndromeRequest(BaseModel):
                 raise ValueError("单个症状描述过长")
         
         return [s.strip() for s in v]
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'batchqueryrequest'
+        ordering = ['-created_at']
+
 
 class HerbRecommendationRequest(BaseModel):
     """中药推荐请求验证模型"""

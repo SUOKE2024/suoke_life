@@ -1,3 +1,19 @@
+"""
+erp_client - 索克生活项目模块
+"""
+
+from internal.observability.metrics import metrics
+from requests.adapters import HTTPAdapter
+from typing import Any
+from urllib3.util.retry import Retry
+import backoff
+import json
+import logging
+import os
+import requests
+import time
+import uuid
+
 #!/usr/bin/env python
 
 """
@@ -5,19 +21,8 @@ ERP系统集成客户端
 提供与医院ERP系统的对接接口
 """
 
-import json
-import logging
-import os
-import time
-import uuid
-from typing import Any
 
-import backoff
-import requests
-from requests.adapters import HTTPAdapter
-from urllib3.util.retry import Retry
 
-from internal.observability.metrics import metrics
 
 logger = logging.getLogger(__name__)
 

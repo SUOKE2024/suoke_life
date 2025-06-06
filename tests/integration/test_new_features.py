@@ -1,3 +1,20 @@
+"""
+test_new_features - 索克生活项目模块
+"""
+
+        from services.common.api_docs.openapi_generator import APIEndpoint, APIParameter
+        from services.common.api_docs.openapi_generator import OpenAPIGenerator
+        from services.common.service_mesh.envoy_config import (
+        from services.common.service_mesh.envoy_config import EnvoyConfigManager
+        from services.common.service_mesh.istio_client import IstioClient, VirtualService
+        from services.common.service_mesh.istio_client import VirtualService
+        from services.common.testing.test_framework import TestFramework, TestCase, TestType
+        from services.common.testing.test_framework import get_test_framework, TestType
+from pathlib import Path
+import asyncio
+import os
+import sys
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -5,10 +22,6 @@
 验证图数据库、API文档生成、服务网格、测试框架等功能
 """
 
-import asyncio
-import sys
-import os
-from pathlib import Path
 
 # 添加项目路径到Python路径
 project_root = Path(__file__).parent
@@ -27,16 +40,12 @@ def test_imports():
         print("✅ 数据库组件已移除，各微服务自行管理数据库连接")
 
         # 测试API文档生成模块
-        from services.common.api_docs.openapi_generator import OpenAPIGenerator
         print("✅ API文档生成模块导入成功")
 
         # 测试服务网格模块
-        from services.common.service_mesh.istio_client import IstioClient, VirtualService
-        from services.common.service_mesh.envoy_config import EnvoyConfigManager
         print("✅ 服务网格模块导入成功")
 
         # 测试测试框架模块
-        from services.common.testing.test_framework import TestFramework, TestCase, TestType
         print("✅ 测试框架模块导入成功")
 
         return True
@@ -72,7 +81,6 @@ def test_data_structures():
         print("✅ 数据库组件已移除，各微服务自行管理数据库")
 
         # 测试API文档数据结构
-        from services.common.api_docs.openapi_generator import APIEndpoint, APIParameter
 
         endpoint = APIEndpoint(
             path="/api/v1/health/assessment",
@@ -83,7 +91,6 @@ def test_data_structures():
         print(f"✅ 创建API端点: {endpoint.method} {endpoint.path}")
 
         # 测试服务网格数据结构
-        from services.common.service_mesh.istio_client import VirtualService
 
         vs = VirtualService(
             name="xiaoai-service",
@@ -103,7 +110,6 @@ def test_openapi_generation():
     print("\n📚 测试OpenAPI文档生成...")
 
     try:
-        from services.common.api_docs.openapi_generator import OpenAPIGenerator
 
         generator = OpenAPIGenerator(
             title="索克生活健康管理平台API",
@@ -144,7 +150,6 @@ def test_envoy_config():
     print("\n⚙️ 测试Envoy配置生成...")
 
     try:
-        from services.common.service_mesh.envoy_config import (
             EnvoyConfigManager, ClusterConfig, ListenerConfig
         )
 
@@ -188,7 +193,6 @@ async def test_async_functionality():
     print("\n🔄 测试异步功能...")
 
     try:
-        from services.common.testing.test_framework import get_test_framework, TestType
 
         # 获取测试框架
         test_framework = get_test_framework()
@@ -224,7 +228,6 @@ def test_health_specific_features():
     print("\n🏥 测试健康管理专用功能...")
 
     try:
-        from services.common.api_docs.openapi_generator import OpenAPIGenerator
 
         generator = OpenAPIGenerator(
             title="索克生活健康管理平台API",

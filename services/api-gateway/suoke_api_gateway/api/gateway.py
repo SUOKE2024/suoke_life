@@ -1,16 +1,21 @@
 """
+gateway - 索克生活项目模块
+"""
+
+from ..core.logging import get_logger
+from ..services.service_registry import ServiceRegistry
+from fastapi import APIRouter, HTTPException, Request, Response, status
+import httpx
+import time
+
+"""
 网关路由处理器
 
 处理请求转发、负载均衡等核心网关功能。
 """
 
-import time
 
-import httpx
-from fastapi import APIRouter, HTTPException, Request, Response, status
 
-from ..core.logging import get_logger
-from ..services.service_registry import ServiceRegistry
 
 logger = get_logger(__name__)
 

@@ -1,8 +1,8 @@
-import React from "react";
-import { colors, spacing, fonts } from "../../constants/theme/import { AgentCard, AgentType } from ";";./////    AgentCard";
-//////
-importReact from react";"
+import { colors, spacing, fonts } from "../../constants/theme/import { AgentCard, AgentType } from ;./////    AgentCard";
 import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/////      View,";
+
+import React from "react";
+// importReact from react
   Text,
   StyleSheet,
   ScrollView,
@@ -14,11 +14,11 @@ interface AgentSelectorProps { selectedAgent: AgentType,
   horizontal?: boolean;
   showSpecialty?: boolean,
   size?: small" | "medium | "large"}
-export const AgentSelector: React.FC<AgentSelectorProps /> = ({/  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor(AgentSelector", ";
-{; /////
+export const AgentSelector: React.FC<AgentSelectorProps /> = ({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor(AgentSelector", ";
+{/////
     trackRender: true,
     trackMemory: false,
-    warnThreshold: 50, // ms //////     })
+    warnThreshold: 50, // ms // });
   selectedAgent,
   onAgentSelect,
   style,
@@ -28,7 +28,7 @@ export const AgentSelector: React.FC<AgentSelectorProps /> = ({/  // 性能监�
   size = "medium"
 }) => {}
   const agents: AgentType[] = [xiaoai", "xiaoke, "laoke", soer"];"
-  const renderAgentCards = useCallback((); => {;}
+  const renderAgentCards = useCallback((); => {}
     // TODO: Implement function body *}, []) ////
     return agents.map((agen;t;); => (
       <AgentCard,
@@ -41,25 +41,23 @@ export const AgentSelector: React.FC<AgentSelectorProps /> = ({/  // 性能监�
         style={horizontal ? styles.horizontalCard: undefined} />/////    ));
   };
   if (horizontal) {
-    // 记录渲染性能 //////
-    performanceMonitor.recordRender()
-    return (
-      <View style={[styles.container, style]} />/////            {title && (
-          <Text style={styles.title} />{title}</Text>/////            )}
+    // 记录渲染性能 // performanceMonitor.recordRender();
+    return (;
+      <View style={[styles.container, style]} />/////            {title && (;
+          <Text style={styles.title} />{title}</Text>/////            )};
         <ScrollView;
 horizontal;
           showsHorizontalScrollIndicator={false};
           contentContainerStyle={styles.horizontalContainer} />/////              {renderAgentCards()};
         </ScrollView>/      </View>/////        ;);
   }
-  return (
-    <View style={[styles.container, style]} />/////          {title && (
+  return (;
+    <View style={[styles.container, style]} />/////          {title && (;
         <Text style={styles.title} />{title}</Text>/////          )};
       <View style={styles.verticalContainer} />/////            {renderAgentCards()};
       </View>/    </View>/////      ;);
 };
-const styles = StyleSheet.create({ container: {;
-    marginVertical: spacing.;s;m  },
+const styles = StyleSheet.create({ container: {marginVertical: spacing.;s;m  },
   title: {
     fontSize: fonts.size.md,
     fontWeight: 'bold',

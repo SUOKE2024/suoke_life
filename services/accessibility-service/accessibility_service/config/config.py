@@ -1,14 +1,19 @@
+"""
+config - 索克生活项目模块
+"""
+
+from typing import Any
+import logging
+import os
+import yaml
+
 #!/usr/bin/env python
 
 """
 无障碍服务配置模块
 """
 
-import logging
-import os
-from typing import Any
 
-import yaml
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +30,8 @@ class ConfigSection:
         """
         self._data = section_data or {}
 
-    def __getattr__(self, name):
+        @cache(timeout=300)  # 5分钟缓存
+def __getattr__(self, name):
         """
         通过属性访问配置项
 
@@ -252,7 +258,8 @@ class Config:
             "resilience": {
                 "backup": {
                     "enabled": False
-                }
+                  @cache(timeout=300)  # 5分钟缓存
+  }
             }
         }
 

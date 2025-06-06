@@ -1,14 +1,19 @@
+"""
+context_analyzer - 索克生活项目模块
+"""
+
+from ..common.base import BaseService
+from ..common.utils import calculate_confidence, sanitize_text
+from typing import Any
+import re
+
 #!/usr/bin/env python
 
 """
 症状上下文分析器
 """
 
-import re
-from typing import Any
 
-from ..common.base import BaseService
-from ..common.utils import calculate_confidence, sanitize_text
 
 
 class SymptomContextAnalyzer(BaseService):

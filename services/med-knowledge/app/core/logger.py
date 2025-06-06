@@ -1,9 +1,15 @@
+"""
+logger - 索克生活项目模块
+"""
+
+    from app.core.config import get_settings
+from app.core.config import LoggingSettings
+from loguru import logger
 import os
 import sys
 
-from loguru import logger
 
-from app.core.config import LoggingSettings
+
 
 # 全局 logger 实例
 _logger_instance = None
@@ -59,7 +65,6 @@ def get_logger():
     if _logger_instance is not None:
         return _logger_instance
 
-    from app.core.config import get_settings
 
     settings = get_settings()
     return setup_logger(settings.logging)

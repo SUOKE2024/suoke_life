@@ -1,18 +1,27 @@
-"""邮件服务核心模块"""
+"""
+email - 索克生活项目模块
+"""
 
-import asyncio
-import smtplib
+                    import re
+            import boto3
+            import httpx
+        import time
 from abc import ABC, abstractmethod
+from auth_service.config.settings import EmailSettings
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from jinja2 import Environment, FileSystemLoader, Template
 from pathlib import Path
 from typing import Dict, List, Optional, Union
 import aiofiles
 import aiosmtplib
-from jinja2 import Environment, FileSystemLoader, Template
+import asyncio
+import smtplib
 import structlog
 
-from auth_service.config.settings import EmailSettings
+"""邮件服务核心模块"""
+
+
 
 logger = structlog.get_logger()
 
@@ -134,7 +143,6 @@ class SendGridProvider(EmailProvider):
     ) -> bool:
         """通过SendGrid发送邮件"""
         try:
-            import httpx
             
             # 准备收件人列表
             if isinstance(to_email, str):
@@ -231,7 +239,6 @@ class AWSProvider(EmailProvider):
     ) -> bool:
         """通过AWS SES发送邮件"""
         try:
-            import boto3
             
             # 创建SES客户端
             ses_client = boto3.client(
@@ -329,7 +336,6 @@ class EmailTemplateManager:
                     text_content = text_template.render(**context)
                 except:
                     # 如果没有文本模板，从HTML中提取文本
-                    import re
                     text_content = re.sub(r'<[^>]+>', '', html_content)
                     text_content = re.sub(r'\s+', ' ', text_content).strip()
             
@@ -461,7 +467,6 @@ class EmailService:
         """检查速率限制"""
         # 这里实现简单的速率限制逻辑
         # 在生产环境中应该使用Redis等外部存储
-        import time
         
         current_time = time.time()
         hour_key = int(current_time // 3600)

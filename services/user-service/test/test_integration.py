@@ -1,20 +1,27 @@
 """
-用户服务集成测试
-测试REST API和gRPC接口的完整功能
+test_integration - 索克生活项目模块
 """
+
+    from internal.delivery.grpc.user_server import UserServicer
+    from test_app import get_user_service
+from fastapi.testclient import TestClient
+from internal.service.user_service import UserService
+from pathlib import Path
+from test_app import app, init_repositories
+import grpc
 import os
 import pytest
 import pytest_asyncio
-import grpc
-from fastapi.testclient import TestClient
+import sys
+
+"""
+用户服务集成测试
+测试REST API和gRPC接口的完整功能
+"""
 
 # 添加项目根目录到Python路径
-import sys
-from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from test_app import app, init_repositories
-from internal.service.user_service import UserService
 # from protobuf.suoke.user.v1 import user_pb2, user_pb2_grpc
 
 # 测试数据
@@ -57,7 +64,6 @@ async def client():
         return UserService(repo)
     
     # 覆盖依赖
-    from test_app import get_user_service
     app.dependency_overrides[get_user_service] = get_test_user_service
     
     # 使用TestClient进行同步测试
@@ -80,7 +86,6 @@ async def grpc_channel():
     user_service = UserService(repo)
     
     # 添加服务到服务器
-    from internal.delivery.grpc.user_server import UserServicer
     # user_pb2_grpc.add_UserServiceServicer_to_server(
     #     UserServicer(user_service), server
     # )

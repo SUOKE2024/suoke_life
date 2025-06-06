@@ -1,11 +1,16 @@
+"""
+test_native_features - 索克生活项目模块
+"""
+
+import json
+import os
+
 #!/usr/bin/env python3
 """
 索克生活原生功能配置验证脚本
 验证权限管理、原生模块集成和推送通知系统
 """
 
-import os
-import json
 
 def test_native_features_configuration():
     """测试原生功能配置"""

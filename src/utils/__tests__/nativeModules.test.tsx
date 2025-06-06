@@ -1,42 +1,39 @@
-import React from "react";
 import { nativeModulesManager } from "../nativeModules";
+import React from "react";
 describe("nativeModules", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  describe(nativeModulesManager", () => {"
+  describe("nativeModulesManager", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = nativeModulesManager(/* valid params   */);
+const result = nativeModulesManager(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = nativeModulesManager(/* edge case params   */);
+const result = nativeModulesManager(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        nativeModulesManager(/* invalid params     */)
-      }).not.toThrow()
+        nativeModulesManager(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = nativeModulesManager(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = nativeModulesManager(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
 });
-import { performance } from "perf_hooks";
-import { nativeModulesManager } from "../nativeModules";
 describe("nativeModules Performance Tests", () => {
   it("should execute within performance thresholds", () => {
     const iterations = 10;
     const startTime = performance.now();
     for (let i = 0; i < iterations; i++) {
       // Execute performance-critical functions
-nativeModulesManager(/* test params      */)
+nativeModulesManager(// test params);
     });
     const endTime = performance.now();
     const averageTime = (endTime - startTime) / iterations;
@@ -47,7 +44,7 @@ expect(averageTime).toBeLessThan(1);
     const largeDataset = new Array(10000).fill(0).map((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
-nativeModulesManager(largeDataset)
+nativeModulesManager(largeDataset);
     const endTime = performance.now();
     // Should handle large datasets within 100ms
 expect(endTime - startTime).toBeLessThan(100);
@@ -56,7 +53,7 @@ expect(endTime - startTime).toBeLessThan(100);
     const initialMemory = process.memoryUsage().heapUsed;
     // Execute function multiple times
 for (let i = 0; i < 1000; i++) {
-      nativeModulesManager(/* test params      */);
+      nativeModulesManager(// test params);
     });
     // Force garbage collection if available
 if (global.gc) {

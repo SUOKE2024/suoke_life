@@ -1,3 +1,17 @@
+"""
+run_comprehensive_tests - 索克生活项目模块
+"""
+
+from datetime import datetime
+from pathlib import Path
+from typing import Dict, List, Any
+import argparse
+import asyncio
+import json
+import pytest
+import sys
+import time
+
 #!/usr/bin/env python3
 """
 索克生活综合测试运行脚本
@@ -9,14 +23,6 @@
 4. 生成综合测试报告
 """
 
-import asyncio
-import sys
-import json
-import time
-from datetime import datetime
-from pathlib import Path
-from typing import Dict, List, Any
-import argparse
 
 # 添加项目根目录到Python路径
 project_root = Path(__file__).parent.parent.parent
@@ -184,10 +190,6 @@ class ComprehensiveTestRunner:
     async def create_ai_inference_test_script(self, test_file: Path):
         """创建AI推理测试脚本"""
         test_content = '''
-import pytest
-import asyncio
-import sys
-from pathlib import Path
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent.parent.parent

@@ -1,3 +1,18 @@
+"""
+routes - 索克生活项目模块
+"""
+
+from fastapi import APIRouter, Depends, FastAPI, Header, HTTPException, Request, Response
+from fastapi.responses import JSONResponse, StreamingResponse
+from internal.model.config import GatewayConfig, RouteConfig
+from internal.service.service_registry import ServiceRegistry
+from pkg.utils.cache import CacheKey, CacheManager
+from pkg.utils.rewrite import PathRewriter, create_path_rewriter
+from prometheus_client import Counter
+import httpx
+import logging
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,18 +21,8 @@ REST API路由模块
 设置API网关的路由
 """
 
-import logging
-import time
 
-import httpx
-from fastapi import APIRouter, Depends, FastAPI, Header, HTTPException, Request, Response
-from fastapi.responses import JSONResponse, StreamingResponse
-from prometheus_client import Counter
 
-from internal.model.config import GatewayConfig, RouteConfig
-from internal.service.service_registry import ServiceRegistry
-from pkg.utils.cache import CacheKey, CacheManager
-from pkg.utils.rewrite import PathRewriter, create_path_rewriter
 
 logger = logging.getLogger(__name__)
 

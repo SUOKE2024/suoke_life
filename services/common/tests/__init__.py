@@ -1,3 +1,13 @@
+"""
+__init__ - 索克生活项目模块
+"""
+
+    from unittest.mock import AsyncMock, MagicMock
+from collections.abc import Generator
+from typing import Any
+import asyncio
+import pytest
+
 #!/usr/bin/env python3
 """
 索克生活平台通用组件库测试包
@@ -8,11 +18,7 @@
 - e2e: 端到端测试
 """
 
-import asyncio
-from collections.abc import Generator
-from typing import Any
 
-import pytest
 
 
 @pytest.fixture(scope="session")
@@ -51,7 +57,6 @@ async def test_config() -> dict[str, Any]:
 @pytest.fixture
 async def mock_components():
     """提供模拟的组件实例"""
-    from unittest.mock import AsyncMock, MagicMock
 
     components = {
         "config": {

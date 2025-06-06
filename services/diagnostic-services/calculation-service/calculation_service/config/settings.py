@@ -1,10 +1,15 @@
 """
+settings - 索克生活项目模块
+"""
+
+from functools import lru_cache
+from pydantic_settings import BaseSettings
+from typing import List
+
+"""
 算诊服务配置设置
 """
 
-from typing import List
-from functools import lru_cache
-from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     """应用配置"""

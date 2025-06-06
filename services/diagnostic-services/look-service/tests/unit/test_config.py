@@ -1,8 +1,13 @@
-"""Tests for configuration module."""
-
-import pytest
+"""
+test_config - 索克生活项目模块
+"""
 
 from look_service.core.config import ServiceSettings, Settings, get_settings
+import pytest
+
+"""Tests for configuration module."""
+
+
 
 
 def test_settings_creation():

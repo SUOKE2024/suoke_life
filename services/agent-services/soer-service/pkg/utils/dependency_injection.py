@@ -1,12 +1,17 @@
 """
-依赖注入容器
-提供统一的依赖管理和生命周期控制
+dependency_injection - 索克生活项目模块
 """
-import logging
+
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from contextlib import asynccontextmanager
 from typing import Any, TypeVar
+import logging
+
+"""
+依赖注入容器
+提供统一的依赖管理和生命周期控制
+"""
 
 logger = logging.getLogger(__name__)
 

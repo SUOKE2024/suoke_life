@@ -1,5 +1,4 @@
-import {
-  StoreHealthDataRequest,
+import {StoreHealthDataRequest,
   StoreHealthDataResponse,
   VerifyHealthDataRequest,
   VerifyHealthDataResponse,
@@ -41,23 +40,11 @@ export class BlockchainServiceClient {
    */
   async storeHealthData(request: StoreHealthDataRequest): Promise<StoreHealthDataResponse> {
     try {
-      const response = await this.makeRequest('/api/v1/blockchain/health-data', {
-        method: 'POST',
-        body: {
-          user_id: request.userId,
-          data_type: request.dataType,
-          data_hash: Array.from(request.dataHash),
-          encrypted_data: Array.from(request.encryptedData),
-          metadata: request.metadata,
-          timestamp: request.timestamp
-        }
+      const response = await this.makeRequest('/api/v1/blockchain/health-data', {method: 'POST',body: {user_id: request.userId,data_type: request.dataType,data_hash: Array.from(request.dataHash),encrypted_data: Array.from(request.encryptedData),metadata: request.metadata,timestamp: request.timestamp;
+        };
       });
 
-      return {
-        transactionId: response.transaction_id,
-        blockHash: response.block_hash,
-        success: response.success,
-        message: response.message
+      return {transactionId: response.transaction_id,blockHash: response.block_hash,success: response.success,message: response.message;
       };
     } catch (error) {
       throw this.handleError(error, '存储健康数据失败');
@@ -69,18 +56,11 @@ export class BlockchainServiceClient {
    */
   async verifyHealthData(request: VerifyHealthDataRequest): Promise<VerifyHealthDataResponse> {
     try {
-      const response = await this.makeRequest('/api/v1/blockchain/verify', {
-        method: 'POST',
-        body: {
-          transaction_id: request.transactionId,
-          data_hash: Array.from(request.dataHash)
-        }
+      const response = await this.makeRequest('/api/v1/blockchain/verify', {method: 'POST',body: {transaction_id: request.transactionId,data_hash: Array.from(request.dataHash);
+        };
       });
 
-      return {
-        valid: response.valid,
-        message: response.message,
-        verificationTimestamp: response.verification_timestamp
+      return {valid: response.valid,message: response.message,verificationTimestamp: response.verification_timestamp;
       };
     } catch (error) {
       throw this.handleError(error, '验证健康数据失败');
@@ -92,21 +72,11 @@ export class BlockchainServiceClient {
    */
   async verifyWithZKP(request: VerifyWithZKPRequest): Promise<VerifyWithZKPResponse> {
     try {
-      const response = await this.makeRequest('/api/v1/blockchain/verify-zkp', {
-        method: 'POST',
-        body: {
-          user_id: request.userId,
-          verifier_id: request.verifierId,
-          data_type: request.dataType,
-          proof: Array.from(request.proof),
-          public_inputs: Array.from(request.publicInputs)
-        }
+      const response = await this.makeRequest('/api/v1/blockchain/verify-zkp', {method: 'POST',body: {user_id: request.userId,verifier_id: request.verifierId,data_type: request.dataType,proof: Array.from(request.proof),public_inputs: Array.from(request.publicInputs);
+        };
       });
 
-      return {
-        valid: response.valid,
-        message: response.message,
-        verificationDetails: response.verification_details
+      return {valid: response.valid,message: response.message,verificationDetails: response.verification_details;
       };
     } catch (error) {
       throw this.handleError(error, '零知识证明验证失败');
@@ -118,32 +88,18 @@ export class BlockchainServiceClient {
    */
   async getHealthDataRecords(request: GetHealthDataRecordsRequest): Promise<GetHealthDataRecordsResponse> {
     try {
-      const params = new URLSearchParams({
-        user_id: request.userId,
-        page: request.page.toString(),
-        page_size: request.pageSize.toString()
+      const params = new URLSearchParams({user_id: request.userId,page: request.page.toString(),page_size: request.pageSize.toString();
       });
 
       if (request.dataType) params.append('data_type', request.dataType);
       if (request.startTime) params.append('start_time', request.startTime.toString());
       if (request.endTime) params.append('end_time', request.endTime.toString());
 
-      const response = await this.makeRequest(`/api/v1/blockchain/health-records?${params}`, {
-        method: 'GET'
+      const response = await this.makeRequest(`/api/v1/blockchain/health-records?${params}`, {method: 'GET';
       });
 
-      return {
-        records: response.records.map((record: any) => ({
-          transactionId: record.transaction_id,
-          dataType: record.data_type,
-          dataHash: new Uint8Array(record.data_hash),
-          metadata: record.metadata,
-          timestamp: record.timestamp,
-          blockHash: record.block_hash
-        })),
-        totalCount: response.total_count,
-        page: response.page,
-        pageSize: response.page_size
+      return {records: response.records.map((record: any) => ({transactionId: record.transaction_id,dataType: record.data_type,dataHash: new Uint8Array(record.data_hash),metadata: record.metadata,timestamp: record.timestamp,blockHash: record.block_hash;
+        })),totalCount: response.total_count,page: response.page,pageSize: response.page_size;
       };
     } catch (error) {
       throw this.handleError(error, '获取健康数据记录失败');
@@ -155,21 +111,11 @@ export class BlockchainServiceClient {
    */
   async authorizeAccess(request: AuthorizeAccessRequest): Promise<AuthorizeAccessResponse> {
     try {
-      const response = await this.makeRequest('/api/v1/blockchain/authorize', {
-        method: 'POST',
-        body: {
-          user_id: request.userId,
-          authorized_id: request.authorizedId,
-          data_types: request.dataTypes,
-          expiration_time: request.expirationTime,
-          access_policies: request.accessPolicies
-        }
+      const response = await this.makeRequest('/api/v1/blockchain/authorize', {method: 'POST',body: {user_id: request.userId,authorized_id: request.authorizedId,data_types: request.dataTypes,expiration_time: request.expirationTime,access_policies: request.accessPolicies;
+        };
       });
 
-      return {
-        authorizationId: response.authorization_id,
-        success: response.success,
-        message: response.message
+      return {authorizationId: response.authorization_id,success: response.success,message: response.message;
       };
     } catch (error) {
       throw this.handleError(error, '授权访问失败');
@@ -181,19 +127,11 @@ export class BlockchainServiceClient {
    */
   async revokeAccess(request: RevokeAccessRequest): Promise<RevokeAccessResponse> {
     try {
-      const response = await this.makeRequest('/api/v1/blockchain/revoke', {
-        method: 'POST',
-        body: {
-          authorization_id: request.authorizationId,
-          user_id: request.userId,
-          revocation_reason: request.revocationReason
-        }
+      const response = await this.makeRequest('/api/v1/blockchain/revoke', {method: 'POST',body: {authorization_id: request.authorizationId,user_id: request.userId,revocation_reason: request.revocationReason;
+        };
       });
 
-      return {
-        success: response.success,
-        message: response.message,
-        revocationTimestamp: response.revocation_timestamp
+      return {success: response.success,message: response.message,revocationTimestamp: response.revocation_timestamp;
       };
     } catch (error) {
       throw this.handleError(error, '撤销访问授权失败');
@@ -205,21 +143,13 @@ export class BlockchainServiceClient {
    */
   async getBlockchainStatus(request: GetBlockchainStatusRequest): Promise<GetBlockchainStatusResponse> {
     try {
-      const params = new URLSearchParams({
-        include_node_info: request.includeNodeInfo.toString()
+      const params = new URLSearchParams({include_node_info: request.includeNodeInfo.toString();
       });
 
-      const response = await this.makeRequest(`/api/v1/blockchain/status?${params}`, {
-        method: 'GET'
+      const response = await this.makeRequest(`/api/v1/blockchain/status?${params}`, {method: 'GET';
       });
 
-      return {
-        currentBlockHeight: response.current_block_height,
-        connectedNodes: response.connected_nodes,
-        consensusStatus: response.consensus_status,
-        syncPercentage: response.sync_percentage,
-        nodeInfo: response.node_info,
-        lastBlockTimestamp: response.last_block_timestamp
+      return {currentBlockHeight: response.current_block_height,connectedNodes: response.connected_nodes,consensusStatus: response.consensus_status,syncPercentage: response.sync_percentage,nodeInfo: response.node_info,lastBlockTimestamp: response.last_block_timestamp;
       };
     } catch (error) {
       throw this.handleError(error, '获取区块链状态失败');
@@ -236,21 +166,11 @@ export class BlockchainServiceClient {
     circuitType: string
   ): Promise<ZKProof> {
     try {
-      const response = await this.makeRequest('/api/v1/blockchain/generate-proof', {
-        method: 'POST',
-        body: {
-          user_id: userId,
-          data_type: dataType,
-          private_inputs: privateInputs,
-          circuit_type: circuitType
-        }
+      const response = await this.makeRequest('/api/v1/blockchain/generate-proof', {method: 'POST',body: {user_id: userId,data_type: dataType,private_inputs: privateInputs,circuit_type: circuitType;
+        };
       });
 
-      return {
-        proof: new Uint8Array(response.proof),
-        publicInputs: new Uint8Array(response.public_inputs),
-        verificationKey: response.verification_key,
-        circuitType: response.circuit_type
+      return {proof: new Uint8Array(response.proof),publicInputs: new Uint8Array(response.public_inputs),verificationKey: response.verification_key,circuitType: response.circuit_type;
       };
     } catch (error) {
       throw this.handleError(error, '生成零知识证明失败');
@@ -262,19 +182,10 @@ export class BlockchainServiceClient {
    */
   async getAccessGrants(userId: string): Promise<AccessGrant[]> {
     try {
-      const response = await this.makeRequest(`/api/v1/blockchain/access-grants/${userId}`, {
-        method: 'GET'
+      const response = await this.makeRequest(`/api/v1/blockchain/access-grants/${userId}`, {method: 'GET';
       });
 
-      return response.grants.map((grant: any) => ({
-        id: grant.id,
-        userId: grant.user_id,
-        authorizedId: grant.authorized_id,
-        dataTypes: grant.data_types,
-        permissions: grant.permissions,
-        expirationTime: grant.expiration_time,
-        createdAt: grant.created_at,
-        status: grant.status
+      return response.grants.map((grant: any) => ({id: grant.id,userId: grant.user_id,authorizedId: grant.authorized_id,dataTypes: grant.data_types,permissions: grant.permissions,expirationTime: grant.expiration_time,createdAt: grant.created_at,status: grant.status;
       }));
     } catch (error) {
       throw this.handleError(error, '获取访问授权列表失败');
@@ -286,19 +197,10 @@ export class BlockchainServiceClient {
    */
   async getNetworkStats(): Promise<BlockchainStatus> {
     try {
-      const response = await this.makeRequest('/api/v1/blockchain/network-stats', {
-        method: 'GET'
+      const response = await this.makeRequest('/api/v1/blockchain/network-stats', {method: 'GET';
       });
 
-      return {
-        isConnected: response.is_connected,
-        currentBlockHeight: response.current_block_height,
-        networkId: response.network_id,
-        consensusStatus: response.consensus_status,
-        syncPercentage: response.sync_percentage,
-        lastBlockTimestamp: response.last_block_timestamp,
-        nodeCount: response.node_count,
-        transactionPoolSize: response.transaction_pool_size
+      return {isConnected: response.is_connected,currentBlockHeight: response.current_block_height,networkId: response.network_id,consensusStatus: response.consensus_status,syncPercentage: response.sync_percentage,lastBlockTimestamp: response.last_block_timestamp,nodeCount: response.node_count,transactionPoolSize: response.transaction_pool_size;
       };
     } catch (error) {
       throw this.handleError(error, '获取网络统计信息失败');
@@ -310,25 +212,12 @@ export class BlockchainServiceClient {
    */
   async batchStoreHealthData(requests: StoreHealthDataRequest[]): Promise<StoreHealthDataResponse[]> {
     try {
-      const response = await this.makeRequest('/api/v1/blockchain/batch-store', {
-        method: 'POST',
-        body: {
-          requests: requests.map(req => ({
-            user_id: req.userId,
-            data_type: req.dataType,
-            data_hash: Array.from(req.dataHash),
-            encrypted_data: Array.from(req.encryptedData),
-            metadata: req.metadata,
-            timestamp: req.timestamp
-          }))
-        }
+      const response = await this.makeRequest('/api/v1/blockchain/batch-store', {method: 'POST',body: {requests: requests.map(req => ({user_id: req.userId,data_type: req.dataType,data_hash: Array.from(req.dataHash),encrypted_data: Array.from(req.encryptedData),metadata: req.metadata,timestamp: req.timestamp;
+          }));
+        };
       });
 
-      return response.results.map((result: any) => ({
-        transactionId: result.transaction_id,
-        blockHash: result.block_hash,
-        success: result.success,
-        message: result.message
+      return response.results.map((result: any) => ({transactionId: result.transaction_id,blockHash: result.block_hash,success: result.success,message: result.message;
       }));
     } catch (error) {
       throw this.handleError(error, '批量存储健康数据失败');
@@ -344,48 +233,39 @@ export class BlockchainServiceClient {
     headers?: Record<string, string>;
   }): Promise<any> {
     const url = `${this.baseUrl}${endpoint}`;
-    const headers = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      ...options.headers
+    const headers = {'Content-Type': 'application/json','Accept': 'application/json',...options.headers;
     };
 
     let lastError: Error;
-    
+
     for (let attempt = 0; attempt <= this.retries; attempt++) {
       try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
-        const response = await fetch(url, {
-          method: options.method,
-          headers,
-          body: options.body ? JSON.stringify(options.body) : undefined,
-          signal: controller.signal
+        const response = await fetch(url, {method: options.method,headers,body: options.body ? JSON.stringify(options.body) : undefined,signal: controller.signal;
         });
 
         clearTimeout(timeoutId);
 
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({}));
-          throw new BlockchainError(
-            errorData.message || `HTTP ${response.status}: ${response.statusText}`,
-            this.mapHttpStatusToErrorCode(response.status),
-            errorData
+          throw new BlockchainError(;
+            errorData.message || `HTTP ${response.status}: ${response.statusText}`,this.mapHttpStatusToErrorCode(response.status),errorData;
           );
         }
 
         return await response.json();
       } catch (error) {
         lastError = error as Error;
-        
+
         if (attempt < this.retries && this.isRetryableError(error)) {
           // 指数退避重试
           const delay = Math.min(1000 * Math.pow(2, attempt), 10000);
           await new Promise(resolve => setTimeout(resolve, delay));
           continue;
         }
-        
+
         throw error;
       }
     }
@@ -402,25 +282,19 @@ export class BlockchainServiceClient {
     }
 
     if (error.name === 'AbortError') {
-      return new BlockchainError(
-        `${context}: 请求超时`,
-        BlockchainErrorCode.NETWORK_ERROR,
-        { timeout: this.timeout }
+      return new BlockchainError(;
+        `${context}: 请求超时`,BlockchainErrorCode.NETWORK_ERROR,{ timeout: this.timeout };
       );
     }
 
     if (error.name === 'TypeError' && error.message.includes('fetch')) {
-      return new BlockchainError(
-        `${context}: 网络连接失败`,
-        BlockchainErrorCode.NETWORK_ERROR,
-        error
+      return new BlockchainError(;
+        `${context}: 网络连接失败`,BlockchainErrorCode.NETWORK_ERROR,error;
       );
     }
 
-    return new BlockchainError(
-      `${context}: ${error.message}`,
-      BlockchainErrorCode.UNKNOWN,
-      error
+    return new BlockchainError(;
+      `${context}: ${error.message}`,BlockchainErrorCode.UNKNOWN,error;
     );
   }
 
@@ -450,12 +324,12 @@ export class BlockchainServiceClient {
    */
   private isRetryableError(error: any): boolean {
     if (error instanceof BlockchainError) {
-      return error.code === BlockchainErrorCode.NETWORK_ERROR ||
+      return error.code === BlockchainErrorCode.NETWORK_ERROR ||;
              error.code === BlockchainErrorCode.BLOCKCHAIN_ERROR;
     }
 
-    return error.name === 'TypeError' || 
-           error.name === 'AbortError' ||
+    return error.name === 'TypeError' || ;
+           error.name === 'AbortError' ||;
            (error.status >= 500 && error.status < 600);
   }
 }

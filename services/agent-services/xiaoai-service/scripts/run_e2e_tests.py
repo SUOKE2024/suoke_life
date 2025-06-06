@@ -1,9 +1,12 @@
-#!/usr/bin/env python3
 """
-小艾智能体端到端测试运行脚本
-提供便捷的测试执行和管理功能
+run_e2e_tests - 索克生活项目模块
 """
 
+            import yaml
+        from test_end_to_end import EndToEndTestSuite
+        import aiohttp
+from pathlib import Path
+from typing import Any
 import argparse
 import asyncio
 import json
@@ -12,8 +15,13 @@ import signal
 import subprocess
 import sys
 import time
-from pathlib import Path
-from typing import Any
+
+#!/usr/bin/env python3
+"""
+小艾智能体端到端测试运行脚本
+提供便捷的测试执行和管理功能
+"""
+
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent
@@ -39,7 +47,6 @@ class E2ETestRunner:
     def load_config(self):
         """加载测试配置"""
         try:
-            import yaml
             config_path = project_root / self.config_file
 
             if not config_path.exists():
@@ -201,7 +208,6 @@ class E2ETestRunner:
         """等待服务就绪"""
         logger.info("等待服务就绪...")
 
-        import aiohttp
 
         http_url = self.config["environment"]["http_server"]["base_url"]
         timeout = self.config["environment"]["timeouts"]["connection_timeout"]
@@ -225,7 +231,6 @@ class E2ETestRunner:
         logger.info("开始执行端到端测试")
 
         # 导入测试模块
-        from test_end_to_end import EndToEndTestSuite
 
         http_url = self.config["environment"]["http_server"]["base_url"]
         ws_url = self.config["environment"]["websocket_server"]["base_url"]

@@ -1,23 +1,28 @@
 """
+main - 索克生活项目模块
+"""
+
+from ..core.config import settings
+from ..core.database import close_database, init_database
+from .commands import database, reviewer, server
+from rich.console import Console
+from rich.table import Table
+from typing import Optional
+import asyncio
+import click
+import structlog
+import sys
+import uvicorn
+
+"""
 CLI 主入口
 CLI Main Entry
 
 提供命令行工具的主要功能
 """
 
-import asyncio
-import sys
-from typing import Optional
 
-import click
-import structlog
-import uvicorn
-from rich.console import Console
-from rich.table import Table
 
-from ..core.config import settings
-from ..core.database import close_database, init_database
-from .commands import database, reviewer, server
 
 logger = structlog.get_logger(__name__)
 console = Console()

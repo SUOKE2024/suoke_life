@@ -1,12 +1,11 @@
 import React from "react";
-//////     核心类型定义   索克生活APP - 架构优化
+// 核心类型定义   索克生活APP - 架构优化
 // 基础类型 * export interface BaseEntity {
 //
 }
  id: string, ////
 }
-  createdAt: Date,;
-  updatedAt: Date};
+  createdAt: Date,updatedAt: Date};
 // API响应类型 * export interface ApiResponse<T = any  /////     > { success: boolean;
  * data?: T;
   message?: string;
@@ -31,9 +30,7 @@ export interface PaginatedResponse<T> { items: T[],
 }
  id: string, ////
 }
-  name: string,;
-  enabled: boolean,;
-  model: string;
+  name: string,enabled: boolean,model: string;
   maxTokens?: number;
   temperature?: number}
 // 健康数据类型 * export interface HealthMetric {
@@ -71,9 +68,7 @@ export interface UserPreferences {
 export interface HealthProfile {
 }
  age: number}
-  gender: "male" | "female" | "other",;
-  height: number,;
-  weight: number;
+  gender: "male" | "female" | "other",height: number,weight: number;
   bloodType?: string;
   allergies: string[],
   medications: string[],
@@ -90,8 +85,7 @@ export interface AccessibilitySettings {
 }
  name: string, ////
 };
-  status: "online" | "offline" | "error",;
-  lastCheck: Date;
+  status: "online" | "offline" | "error",lastCheck: Date;
   responseTime?: number;
   error?: string}
 // 缓存类型 * export interface CacheConfig {
@@ -108,9 +102,7 @@ export interface AccessibilitySettings {
 }
  /////
   name: string,
-  value: number,;
-  unit: string,;
-  timestamp: Date;
+  value: number,unit: string,timestamp: Date;
   tags?: Record<string, string>;
 }
 // 错误类型 * export interface ErrorInfo {
@@ -119,8 +111,7 @@ export interface AccessibilitySettings {
 ////
 }
  /////  ;
-  type: string,;
-  message: string;
+  type: string,message: string;
   stack?: string;
   context?: Record<string, any>;
   timestamp: Date}

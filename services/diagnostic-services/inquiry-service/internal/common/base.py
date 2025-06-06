@@ -1,17 +1,22 @@
+"""
+base - 索克生活项目模块
+"""
+
+from .exceptions import InquiryServiceError, ValidationError
+from .metrics import MetricsCollector
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Any
+import abc
+import logging
+
 #!/usr/bin/env python
 
 """
 基础类和接口定义
 """
 
-import abc
-from dataclasses import dataclass
-from datetime import datetime
-import logging
-from typing import Any
 
-from .exceptions import InquiryServiceError, ValidationError
-from .metrics import MetricsCollector
 
 
 @dataclass

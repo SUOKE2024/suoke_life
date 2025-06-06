@@ -1,15 +1,20 @@
 """
-API 路由定义
-
-定义网关的主要 API 端点。
+routes - 索克生活项目模块
 """
-
-from fastapi import APIRouter, Depends, HTTPException, Request, status
 
 from ..core.config import get_settings
 from ..core.logging import get_logger
 from .gateway import gateway_router
 from .management import management_router
+from fastapi import APIRouter, Depends, HTTPException, Request, status
+
+"""
+API 路由定义
+
+定义网关的主要 API 端点。
+"""
+
+
 
 logger = get_logger(__name__)
 

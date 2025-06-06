@@ -1,22 +1,27 @@
+"""
+db_optimization - 索克生活项目模块
+"""
+
+from collections.abc import Callable
+from dataclasses import dataclass
+from functools import wraps
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncSession
+from typing import Any
+import asyncio
+import asyncpg
+import contextlib
+import json
+import logging
+import time
+
 #!/usr/bin/env python3
 """
 数据库查询优化模块
 提供查询分析、批量处理、索引建议等功能
 """
 
-import asyncio
-from collections.abc import Callable
-import contextlib
-from dataclasses import dataclass
-from functools import wraps
-import json
-import logging
-import time
-from typing import Any
 
-import asyncpg
-from sqlalchemy import text
-from sqlalchemy.ext.asyncio import AsyncSession
 
 logger = logging.getLogger(__name__)
 
@@ -96,7 +101,8 @@ class QueryOptimizer:
             logger.error(f"查询分析失败: {e}")
             raise
 
-    def _record_slow_query(self, query: str, plan: QueryPlan):
+        @cache(timeout=300)  # 5分钟缓存
+def _record_slow_query(self, query: str, plan: QueryPlan):
         """记录慢查询"""
         self.slow_queries.append(
             {
@@ -384,7 +390,8 @@ class PreparedStatementCache:
             else 0,
             "most_used": sorted(
                 self.usage_count.items(), key=lambda x: x[1], reverse=True
-            )[:10],
+              @cache(timeout=300)  # 5分钟缓存
+  )[:10],
         }
 
 

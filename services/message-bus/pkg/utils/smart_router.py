@@ -1,3 +1,20 @@
+"""
+smart_router - 索克生活项目模块
+"""
+
+from .message_processor import MessageEnvelope, MessagePriority
+from abc import ABC, abstractmethod
+from collections import defaultdict, deque
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Set, Tuple, Union, Callable
+import asyncio
+import hashlib
+import logging
+import random
+import re
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,19 +23,7 @@
 支持基于内容的路由、负载均衡、故障转移和路由规则引擎
 """
 
-import asyncio
-import logging
-import re
-import time
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple, Union, Callable
-from collections import defaultdict, deque
-import hashlib
-import random
 
-from .message_processor import MessageEnvelope, MessagePriority
 
 logger = logging.getLogger(__name__)
 

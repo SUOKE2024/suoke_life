@@ -1,20 +1,20 @@
+import { usePerformanceMonitor } from "../hooks/////    usePerformanceMonitor";
+
 import React from "react";
 import { ChatChannel, ChatMessage, Contact, AgentType } from "../types/chat";/////    import { useState, useCallback, useMemo } from "react";
-import { usePerformanceMonitor } from "../hooks/////    usePerformanceMonitor";
   MOCK_CHAT_CHANNELS,
   MOCK_CONTACTS,
   { MOCK_MESSAGES } from ";../data/mockData";/////    export const useChat = () =;
 > ;{
-  //////     性能监控
-const performanceMonitor = usePerformanceMonitor("useChat', {;"'
+  // 性能监控
+const performanceMonitor = usePerformanceMonitor("useChat', {"'
     trackRender: true,
-    trackMemory: true,;
-    warnThreshold: 50, //////     ms };);
+    trackMemory: true,warnThreshold: 50, // ms };);
   const [channels, setChannels] = useState<ChatChannel[] />(MOCK_CHAT_CHANNEL;S;);/  const [messages, setMessages] = useState<Record<string, ChatMessage[] />>(MOCK_MESSAGE;S;);/////      const [activeChannelId, setActiveChannelId] = useState<string | null>(nul;l;);
-  const [searchQuery, setSearchQuery] = useState<string>(";";);
+  const [searchQuery, setSearchQuery] = useState<string>(;);
   const [isLoading, setIsLoading] = useState<boolean>(fals;e;);
   const [error, setError] = useState<string | null>(nul;l;);
-  // 过滤聊天频道 //////     const filteredChannels = useMemo(() => {}
+  // 过滤聊天频道 // const filteredChannels = useMemo(() => {;
     if (!searchQuery.trim();) {
       return channe;l;s;
     }
@@ -27,24 +27,24 @@ const performanceMonitor = usePerformanceMonitor("useChat', {;"'
           .includes(searchQuery.toLowerCase();)
     );
   }, [channels, searchQuery]);
-  // 获取未读消息总数 //////     const totalUnreadCount = useMemo(() => {}
+  // 获取未读消息总数 // const totalUnreadCount = useMemo(() => {;
     return channels.reduce((total, channe;l;); => total + channel.unreadCount, 0);
   }, [channels]);
-  // 获取活动频道 //////     const activeChannel = useMemo(() => {}
+  // 获取活动频道 // const activeChannel = useMemo(() => {;
     return channels.find((channe;l;); => channel.id === activeChannelId) || null;
   }, [channels, activeChannelId]);
-  // 获取频道消息 //////     const getChannelMessages = useCallback(
+  // 获取频道消息 // const getChannelMessages = useCallback(;
     (channelId: strin;g;); => {}
       return messages[channelId] || ;[;];
     },
     [messages]
   );
-  // 添加消息 //////     const addMessage = useCallback((message: ChatMessage;); => {}
+  // 添加消息 // const addMessage = useCallback((message: ChatMessage;); => {}
     setMessages((prev); => ({
       ...prev,
       [message.channelId]: [...(prev[message.channelId] || []), message]
     }));
-    // 更新频道最后消息 //////     setChannels((prev) => {}
+    // 更新频道最后消息 // setChannels((prev) => {}
       prev.map((channel) => {}
         channel.id === message.channelId;
           ? {
@@ -58,7 +58,7 @@ const performanceMonitor = usePerformanceMonitor("useChat', {;"'
       )
     );
   }, []);
-  // 标记为已读 //////     const markAsRead = useCallback((channelId: string;); => {}
+  // 标记为已读 // const markAsRead = useCallback((channelId: string;); => {}
     setChannels((prev); => {}
       prev.map((channel); => {}
         channel.id === channelId ? { ...channel, unreadCount: 0} : channel;
@@ -72,7 +72,7 @@ const performanceMonitor = usePerformanceMonitor("useChat', {;"'
       }))
     }));
   }, []);
-  // 更新频道最后消息 //////     const updateChannelLastMessage = useCallback(
+  // 更新频道最后消息 // const updateChannelLastMessage = useCallback(;
     (channelId: string, message: string, timestamp: strin;g;); => {}
       setChannels((prev); => {}
         prev.map((channel); => {}
@@ -84,7 +84,7 @@ const performanceMonitor = usePerformanceMonitor("useChat', {;"'
     },
     []
   );
-  // 开始与智能体聊天 //////     const startAgentChat = useCallback(
+  // 开始与智能体聊天 // const startAgentChat = useCallback(;
     async (agentType: AgentTyp;e;); => {}
       setIsLoading(true);
       setError(null);
@@ -94,7 +94,7 @@ const performanceMonitor = usePerformanceMonitor("useChat', {;"'
         );
         if (agentChannel) {
           setActiveChannelId(agentChannel.id);
-          markAsRead(agentChannel.id)
+          markAsRead(agentChannel.id);
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : "启动聊天失败")} finally {
@@ -103,13 +103,12 @@ const performanceMonitor = usePerformanceMonitor("useChat', {;"'
     },
     [channels, markAsRead]
   );
-  // 发送消息 //////     const sendMessage = useCallback(
+  // 发送消息 // const sendMessage = useCallback(;
     async (channelId: string, content: strin;g;); => {}
       setIsLoading(true);
-      setError(null)
+      setError(null);
       try {
-        const newMessage: ChatMessage = { id: `msg_${Date.now()  }`,;
-          channelId,
+        const newMessage: ChatMessage = { id: `msg_${Date.now()  }`,channelId,
           senderId: "current_user",
           senderName: "我",
           senderAvatar: "👤",
@@ -119,11 +118,9 @@ const performanceMonitor = usePerformanceMonitor("useChat', {;"'
           isRead: true;
         };
         addMessage(newMessage);
-        // 模拟智能体回复（仅对智能体频道） //////     const channel = channels.find((c) => c.id === channelId)
-        if (channel?.type === "agent" && channel.agentType) {
-          setTimeout(() => {}
-            const agentReply: ChatMessage = { id: `msg_${Date.now(); + 1  }`,;
-              channelId,
+        // 模拟智能体回复（仅对智能体频道） // const channel = channels.find((c) => c.id === channelId);
+        if (channel?.type === "agent" && channel.agentType) {setTimeout(() => {;
+            const agentReply: ChatMessage = { id: `msg_${Date.now(); + 1  }`,channelId,
               senderId: channel.agentType!,
               senderName: channel.name,
               senderAvatar: channel.avatar,
@@ -143,29 +140,12 @@ const performanceMonitor = usePerformanceMonitor("useChat', {;"'
     [channels, addMessage]
   );
   return {
-    // 状态 //////     channels: filteredChannels,
-    messages,
-    activeChannelId,
-    activeChannel,
-    searchQuery,
-    isLoading,
-    error,
-    totalUnreadCount,
-    // 操作 //////     setChannels,
-    setActiveChannelId,
-    setSearchQuery,
-    addMessage,
-    markAsRead,
-    updateChannelLastMessage,
-    startAgentChat,
-    sendMessage,
-    getChannelMessages;
+    // 状态 // channels: filteredChannels,messages,activeChannelId,activeChannel,searchQuery,isLoading,error,totalUnreadCount,// 操作 // setChannels,setActiveChannelId,setSearchQuery,addMessage,markAsRead,updateChannelLastMessage,startAgentChat,sendMessage,getChannelMessages;
   ;};
 };
 export const useContacts = () =;
-> ;{;
-  const [contacts] = useState<Contact[] />(MOCK_CONTACT;S;)/////      const [searchQuery, setSearchQuery] = useState<string>(";";);
-  const filteredContacts = useMemo((); => {;}
+> ;{const [contacts] = useState<Contact[] />(MOCK_CONTACT;S;)/////      const [searchQuery, setSearchQuery] = useState<string>(;);
+  const filteredContacts = useMemo((); => {}
     if (!searchQuery.trim();) {
       return contac;t;s;
     }
@@ -178,18 +158,13 @@ export const useContacts = () =;
         contact.department?.toLowerCase().includes(searchQuery.toLowerCase();)
     );
   }, [contacts, searchQuery]);
-  const groupedContacts = useMemo((); => {;}
-    const groups = {;
-      agents: filteredContacts.filter((c) => c.type === "agent"),
+  const groupedContacts = useMemo((); => {}
+    const groups = {agents: filteredContacts.filter((c) => c.type === "agent"),
       doctors: filteredContacts.filter((c) => c.type === "doctor"),
       users: filteredContacts.filter((c) => c.type === "user")
     };
     return grou;p;s;
   }, [filteredContacts]);
-  return {
-    contacts: filteredContacts,
-    groupedContacts,
-    searchQuery,
-    setSearchQuer;y;
+  return {contacts: filteredContacts,groupedContacts,searchQuery,setSearchQuer;y;
   ;};
 };

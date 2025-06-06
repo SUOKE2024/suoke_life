@@ -1,17 +1,24 @@
 """
-速率限制中间件
-基于令牌桶算法实现的API访问速率限制
+rate_limit - 索克生活项目模块
 """
+
+                from jose import jwt
+                from pkg.middleware.rbac import JWT_SECRET_KEY, JWT_ALGORITHM
+from fastapi import FastAPI, Request, Response, HTTPException
+from internal.observability.metrics import prometheus_metrics
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.types import ASGIApp
+from typing import Dict, Optional, List, Tuple, Any, Union
 import asyncio
 import logging
 import time
-from typing import Dict, Optional, List, Tuple, Any, Union
 
-from fastapi import FastAPI, Request, Response, HTTPException
-from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.types import ASGIApp
+"""
+速率限制中间件
+基于令牌桶算法实现的API访问速率限制
+"""
 
-from internal.observability.metrics import prometheus_metrics
+
 
 # 日志记录器
 logger = logging.getLogger(__name__)
@@ -309,10 +316,8 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             # 从认证头中获取用户ID
             auth_header = request.headers.get("Authorization")
             if auth_header and auth_header.startswith("Bearer "):
-                from jose import jwt
                 token = auth_header.split(" ")[1]
                 # JWT密钥应该从配置中获取
-                from pkg.middleware.rbac import JWT_SECRET_KEY, JWT_ALGORITHM
                 payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[JWT_ALGORITHM])
                 user_id = payload.get("sub")
         except Exception as e:

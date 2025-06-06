@@ -1,19 +1,24 @@
 """
+settings - 索克生活项目模块
+"""
+
+    from pydantic import BaseModel, Field, validator
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Union
+import json
+import logging
+import os
+import yaml
+
+"""
 消息总线服务配置模块
 
 提供配置加载、验证和访问功能
 """
 
-import os
-import json
-import logging
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
-import yaml
 
 # 尝试导入pydantic，如果没有则使用基本的字典配置
 try:
-    from pydantic import BaseModel, Field, validator
     PYDANTIC_AVAILABLE = True
 except ImportError:
     PYDANTIC_AVAILABLE = False
@@ -85,7 +90,19 @@ if PYDANTIC_AVAILABLE:
             allowed = ["development", "testing", "staging", "production"]
             if v not in allowed:
                 raise ValueError(f"环境必须是以下之一: {', '.join(allowed)}")
-            return v
+            return 
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'loggingconfig'
+        ordering = ['-created_at']
+v
 else:
     # 非Pydantic备用配置类
     class Settings:
@@ -117,7 +134,8 @@ else:
             for key, value in data.items():
                 setattr(self, key, value)
                 
-        def get(self, key, default=None):
+            @cache(timeout=300)  # 5分钟缓存
+def get(self, key, default=None):
             """获取键值，如果不存在则返回默认值"""
             return self._data.get(key, default)
 

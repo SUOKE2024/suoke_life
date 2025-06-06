@@ -1,8 +1,13 @@
 """
-用户服务主模块测试
+test_main - 索克生活项目模块
 """
 
 from user_service.main import main
+
+"""
+用户服务主模块测试
+"""
+
 
 def test_main_function_exists():
     """测试主函数是否存在"""

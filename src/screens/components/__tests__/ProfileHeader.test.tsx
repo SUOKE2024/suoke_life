@@ -1,15 +1,12 @@
-import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react-native";
-import { Provider } from "react-redux";";"
 import { configureStore } from "@reduxjs/toolkit";
-import ProfileHeader from "../ProfileHeader";
+
+import React from "react";
 // Mock store for testing
-const mockStore = configureStore({;
-  reducer: {
+const mockStore = configureStore({reducer: {
     // Add your reducers here
   });};);
-const renderWithProvider = (component: React.ReactElement) => {;
-  return render(;
+const renderWithProvider = (component: React.ReactElement) => {return render(;
     <Provider store={mockStore}>;
       {component});
     </Provid;e;r;>
@@ -20,16 +17,16 @@ describe("ProfileHeader", () => { {
     jest.clearAllMocks();
   });
   it("should render without crashing, () => { {", () => {
-    renderWithProvider(<ProfileHeader />)
+    renderWithProvider(<ProfileHeader />);
     expect(screen.getByTestId("profileheader");).toBeTruthy();
   });
   it("should display correct initial state", () => {
-    renderWithProvider(<ProfileHeader />)
+    renderWithProvider(<ProfileHeader />);
     // Add specific assertions for initial state
 expect(screen.getByTestId("profileheader)).toBeTruthy();"
   });
   it("should handle user interactions correctly", async (); => {
-    renderWithProvider(<ProfileHeader />)
+    renderWithProvider(<ProfileHeader />);
     // Example: Test button press
 const button = screen.getByRole(button";);"
     fireEvent.press(button);
@@ -39,16 +36,15 @@ expect(screen.getByTestId("profileheader)).toBeTruthy();"
     });
   });
   it("should handle props correctly", () => {
-    const testProps =  {;
-      /*  Add test props here *;/
+    const testProps =  {/*  Add test props here *;/
     ;};
-    renderWithProvider(<ProfileHeader {...testProps} />)
+    renderWithProvider(<ProfileHeader {...testProps} />);
     // Add assertions for prop handling
 expect(screen.getByTestId(profileheader")).toBeTruthy();"
   });
   it("should handle error states gracefully, () => { {", () => {
     // Test error scenarios
-renderWithProvider(<ProfileHeader />)
+renderWithProvider(<ProfileHeader />);
     // Add error state assertions
 expect(screen.getByTestId("profileheader")).toBeTruthy();
   });

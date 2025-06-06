@@ -1,3 +1,17 @@
+"""
+xiaoai_client - 索克生活项目模块
+"""
+
+from .xiaoai_pb2_grpc import XiaoaiServiceStub
+from tenacity import (
+from typing import Any
+import asyncio
+import grpc
+import logging
+import os
+import pybreaker
+import time
+
 #!/usr/bin/env python
 
 """
@@ -6,15 +20,7 @@
 提供重试机制、断路器和监控指标
 """
 
-import asyncio
-import logging
-import os
-import time
-from typing import Any
 
-import grpc
-import pybreaker
-from tenacity import (
     retry,
     retry_if_exception_type,
     stop_after_attempt,
@@ -22,7 +28,6 @@ from tenacity import (
 )
 
 # 导入生成的gRPC代码
-from .xiaoai_pb2_grpc import XiaoaiServiceStub
 
 logger = logging.getLogger(__name__)
 

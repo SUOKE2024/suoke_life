@@ -1,23 +1,28 @@
+"""
+rabbitmq_client - 索克生活项目模块
+"""
+
+    from aio_pika import Message as RabbitMessage
+    import aio_pika
+from .message_queue import (
+import asyncio
+import contextlib
+import logging
+
 #!/usr/bin/env python3
 """
 RabbitMQ消息队列客户端
 实现MessageQueue接口的RabbitMQ版本
 """
 
-import asyncio
-import logging
 
 try:
-    import aio_pika
-    from aio_pika import Message as RabbitMessage
 
     HAS_RABBITMQ = True
 except ImportError:
     HAS_RABBITMQ = False
 
-import contextlib
 
-from .message_queue import (
     ConsumerConfig,
     Message,
     MessageFormat,

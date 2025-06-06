@@ -1,11 +1,16 @@
+"""
+validators - 索克生活项目模块
+"""
+
+from typing import Any, Dict, List, Union, Optional
+import re
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 数据验证工具函数
 """
 
-import re
-from typing import Any, Dict, List, Union, Optional
 
 def validate_user_id(user_id: str) -> bool:
     """

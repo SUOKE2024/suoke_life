@@ -51,13 +51,13 @@ class PerformanceOptimizer {
     try {
       // 初始化各种缓存
       await this.initializeCaches();
-      
+
       // 设置性能监控
       this.setupPerformanceMonitoring();
-      
+
       // 优化内存管理
       this.optimizeMemoryManagement();
-      
+
       this.isInitialized = true;
       console.log('性能优化器初始化成功');
     } catch (error) {
@@ -94,10 +94,10 @@ class PerformanceOptimizer {
   private setupPerformanceMonitoring(): void {
     // 监控渲染性能
     this.monitorRenderPerformance();
-    
+
     // 监控内存使用
     this.monitorMemoryUsage();
-    
+
     // 监控网络性能
     this.monitorNetworkPerformance();
   }
@@ -106,12 +106,12 @@ class PerformanceOptimizer {
   private monitorRenderPerformance(): void {
     const originalRender = React.Component.prototype.render;
     const self = this;
-    
-    React.Component.prototype.render = function() {
+
+    React.Component.prototype.render = function () {
       const startTime = performance.now();
       const result = originalRender.call(this);
       const endTime = performance.now();
-      
+
       self.metrics.renderTime = endTime - startTime;
       return result;
     };
@@ -131,13 +131,13 @@ class PerformanceOptimizer {
   private monitorNetworkPerformance(): void {
     const originalFetch = global.fetch;
     const self = this;
-    
-    global.fetch = async function(...args) {
+
+    global.fetch = async function (...args) {
       const startTime = performance.now();
       try {
         const response = await originalFetch.apply(this, args);
         const endTime = performance.now();
-        
+
         self.metrics.networkLatency = endTime - startTime;
         return response;
       } catch (error) {
@@ -164,9 +164,7 @@ class PerformanceOptimizer {
   // 设置内存警告监听
   private setupMemoryWarningListener(): void {
     // 模拟内存警告处理
-    const checkMemoryUsage = () => {
-      if (this.metrics.memoryUsage > 0.8) {
-        console.warn('内存使用率过高，开始清理缓存');
+    const checkMemoryUsage = () => {if (this.metrics.memoryUsage > 0.8) {console.warn('内存使用率过高，开始清理缓存');
         this.cleanupCaches();
       }
     };
@@ -209,7 +207,7 @@ class PerformanceOptimizer {
 
   // 图像优化
   async optimizeImage(
-    imageUri: string, 
+    imageUri: string,
     config: Partial<ImageOptimizationConfig> = {}
   ): Promise<string> {
     const defaultConfig: ImageOptimizationConfig = {
@@ -232,29 +230,19 @@ class PerformanceOptimizer {
       // 获取设备像素比
       const pixelRatio = PixelRatio.get();
       const screenData = Dimensions.get('window');
-      
+
       // 计算优化后的尺寸
-      const optimizedWidth = Math.min(
-        finalConfig.maxWidth,
-        screenData.width * pixelRatio
-      );
-      const optimizedHeight = Math.min(
-        finalConfig.maxHeight,
-        screenData.height * pixelRatio
-      );
+      const optimizedWidth = Math.min(finalConfig.maxWidth, screenData.width * pixelRatio);
+      const optimizedHeight = Math.min(finalConfig.maxHeight, screenData.height * pixelRatio);
 
       // 模拟图像压缩处理
-      const optimizedUri = await this.compressImage(
-        imageUri,
-        optimizedWidth,
-        optimizedHeight,
-        finalConfig.quality,
-        finalConfig.format
+      const optimizedUri = await this.compressImage(;
+        imageUri,optimizedWidth,optimizedHeight,finalConfig.quality,finalConfig.format;
       );
 
       // 缓存优化后的图像
       this.imageCache.set(cacheKey, optimizedUri);
-      
+
       // 持久化缓存
       await this.persistImageCache();
 
@@ -275,15 +263,15 @@ class PerformanceOptimizer {
   ): Promise<string> {
     // 模拟图像压缩逻辑
     // 在实际应用中，这里会调用原生图像处理库
-    
+
     const compressionRatio = quality;
     const sizeReduction = 1 - compressionRatio;
-    
+
     // 生成优化后的URI（模拟）
     const optimizedUri = `${uri}?w=${width}&h=${height}&q=${Math.round(quality * 100)}&f=${format}`;
-    
+
     console.log(`图像压缩完成: 尺寸减少 ${(sizeReduction * 100).toFixed(1)}%`);
-    
+
     return optimizedUri;
   }
 
@@ -319,9 +307,7 @@ class PerformanceOptimizer {
       const cachedResponse = this.networkCache.get(cacheKey);
       if (this.isCacheValid(cachedResponse)) {
         this.metrics.cacheHitRate += 0.01;
-        return new Response(JSON.stringify(cachedResponse.data), {
-          status: 200,
-          headers: cachedResponse.headers
+        return new Response(JSON.stringify(cachedResponse.data), {status: 200,headers: cachedResponse.headers;
         });
       }
     }
@@ -341,19 +327,19 @@ class PerformanceOptimizer {
     optimizedOptions.signal = controller.signal;
 
     let lastError: Error | null = null;
-    
+
     // 重试机制
     for (let attempt = 0; attempt < finalConfig.retryAttempts; attempt++) {
       try {
         const startTime = performance.now();
         const response = await fetch(url, optimizedOptions);
         const endTime = performance.now();
-        
+
         clearTimeout(timeoutId);
-        
+
         // 更新性能指标
         this.metrics.networkLatency = endTime - startTime;
-        
+
         if (response.ok) {
           // 缓存成功响应
           if (finalConfig.enableCaching) {
@@ -362,13 +348,13 @@ class PerformanceOptimizer {
               data: responseData,
               headers: Object.fromEntries(response.headers.entries()),
               timestamp: Date.now(),
-              ttl: 300000 // 5分钟TTL
+              ttl: 300000, // 5分钟TTL
             });
-            
+
             // 持久化网络缓存
             await this.persistNetworkCache();
           }
-          
+
           return response;
         } else {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -376,7 +362,7 @@ class PerformanceOptimizer {
       } catch (error) {
         lastError = error as Error;
         console.warn(`网络请求失败 (尝试 ${attempt + 1}/${finalConfig.retryAttempts}):`, error);
-        
+
         // 指数退避
         if (attempt < finalConfig.retryAttempts - 1) {
           await this.delay(Math.pow(2, attempt) * 1000);
@@ -394,7 +380,7 @@ class PerformanceOptimizer {
     if (!cachedItem || !cachedItem.timestamp || !cachedItem.ttl) {
       return false;
     }
-    
+
     return Date.now() - cachedItem.timestamp < cachedItem.ttl;
   }
 
@@ -419,33 +405,32 @@ class PerformanceOptimizer {
     fallback?: React.ComponentType
   ): React.ComponentType {
     const cacheKey = importFunction.toString();
-    
+
     // 检查组件缓存
     if (this.componentCache.has(cacheKey)) {
       return this.componentCache.get(cacheKey);
     }
 
     const LazyComponent = React.lazy(importFunction);
-    
-    const WrappedComponent = (props: any) => 
-      React.createElement(
-        React.Suspense,
-        { fallback: fallback ? React.createElement(fallback) : React.createElement('div', null, 'Loading...') },
-        React.createElement(LazyComponent, props)
+
+    const WrappedComponent = (props: any) =>;
+      React.createElement(;
+        React.Suspense,{fallback: fallback;
+            ? React.createElement(fallback);
+            : React.createElement('div', null, 'Loading...');
+        },
+        React.createElement(LazyComponent, props);
       );
 
     // 缓存组件
     this.componentCache.set(cacheKey, WrappedComponent);
-    
+
     return WrappedComponent;
   }
 
   // 预加载关键资源
   async preloadCriticalResources(resources: string[]): Promise<void> {
-    const preloadPromises = resources.map(async (resource) => {
-      try {
-        if (resource.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
-          // 预加载图像
+    const preloadPromises = resources.map(async resource => {try {if (resource.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {// 预加载图像;
           await this.preloadImage(resource);
         } else if (resource.match(/\.(js|ts)$/i)) {
           // 预加载脚本
@@ -465,8 +450,7 @@ class PerformanceOptimizer {
 
   // 预加载图像
   private async preloadImage(src: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
+    return new Promise((resolve, reject) => {const img = new Image();
       img.onload = () => resolve();
       img.onerror = reject;
       img.src = src;
@@ -475,8 +459,7 @@ class PerformanceOptimizer {
 
   // 预加载脚本
   private async preloadScript(src: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
+    return new Promise((resolve, reject) => {const script = document.createElement('script');
       script.onload = () => resolve();
       script.onerror = reject;
       script.src = src;
@@ -491,15 +474,8 @@ class PerformanceOptimizer {
 
   // 生成性能报告
   generatePerformanceReport(): string {
-    const report = {
-      timestamp: new Date().toISOString(),
-      metrics: this.metrics,
-      cacheStats: {
-        imageCache: this.imageCache.size,
-        componentCache: this.componentCache.size,
-        networkCache: this.networkCache.size
-      },
-      recommendations: this.generateOptimizationRecommendations()
+    const report = {timestamp: new Date().toISOString(),metrics: this.metrics,cacheStats: {imageCache: this.imageCache.size,componentCache: this.componentCache.size,networkCache: this.networkCache.size;
+      },recommendations: this.generateOptimizationRecommendations();
     };
 
     return JSON.stringify(report, null, 2);
@@ -548,7 +524,7 @@ class PerformanceOptimizer {
     this.imageCache.clear();
     this.componentCache.clear();
     this.networkCache.clear();
-    
+
     await AsyncStorage.multiRemove(['optimized_images', 'network_cache']);
     console.log('所有缓存已清理');
   }
@@ -556,4 +532,4 @@ class PerformanceOptimizer {
 
 // 导出单例实例
 export const performanceOptimizer = new PerformanceOptimizer();
-export default performanceOptimizer; 
+export default performanceOptimizer;

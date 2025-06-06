@@ -1,15 +1,13 @@
-import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react-native";
-import { Provider } from "react-redux";";"
 import { configureStore } from "@reduxjs/toolkit";
-import WellnessExperience from "../WellnessExperience";
+import { performance } from "perf_hooks";
+
+import React from "react";
 // Mock store for testing
-const mockStore = configureStore({;
-  reducer: {
+const mockStore = configureStore({reducer: {
     // Add your reducers here
   });};);
-const renderWithProvider = (component: React.ReactElement) => {;
-  return render(;
+const renderWithProvider = (component: React.ReactElement) => {return render(;
     <Provider store={mockStore}>;
       {component});
     </Provid;e;r;>
@@ -20,16 +18,16 @@ describe("WellnessExperience", () => { {
     jest.clearAllMocks();
   });
   it("should render without crashing, () => { {", () => {
-    renderWithProvider(<WellnessExperience />)
+    renderWithProvider(<WellnessExperience />);
     expect(screen.getByTestId("wellnessexperience");).toBeTruthy();
   });
   it("should display correct initial state", () => {
-    renderWithProvider(<WellnessExperience />)
+    renderWithProvider(<WellnessExperience />);
     // Add specific assertions for initial state
 expect(screen.getByTestId("wellnessexperience)).toBeTruthy();"
   });
   it("should handle user interactions correctly", async (); => {
-    renderWithProvider(<WellnessExperience />)
+    renderWithProvider(<WellnessExperience />);
     // Example: Test button press
 const button = screen.getByRole(button";);"
     fireEvent.press(button);
@@ -39,16 +37,15 @@ expect(screen.getByTestId("wellnessexperience)).toBeTruthy();"
     });
   });
   it("should handle props correctly", () => {
-    const testProps =  {;
-      /*  Add test props here *;/
+    const testProps =  {/*  Add test props here *;/
     ;};
-    renderWithProvider(<WellnessExperience {...testProps} />)
+    renderWithProvider(<WellnessExperience {...testProps} />);
     // Add assertions for prop handling
 expect(screen.getByTestId(wellnessexperience")).toBeTruthy();"
   });
   it("should handle error states gracefully, () => { {", () => {
     // Test error scenarios
-renderWithProvider(<WellnessExperience />)
+renderWithProvider(<WellnessExperience />);
     // Add error state assertions
 expect(screen.getByTestId("wellnessexperience")).toBeTruthy();
   });
@@ -61,8 +58,7 @@ it("should render efficiently", () => {
     expect(endTime - startTime).toBeLessThan(100);
   });
 });
-import { performance } from "perf_hooks";
-describe(WellnessExperience Performance Tests", () => {"
+describe("WellnessExperience Performance Tests", () => {
   it("should execute within performance thresholds, () => { {", () => {
     const iterations = 10;
     const startTime = performance.now();
@@ -87,7 +83,7 @@ expect(endTime - startTime).toBeLessThan(100);
     const initialMemory = process.memoryUsage().heapUsed;
     // Execute function multiple times
 for (let i = 0; i < 1000; i++) {
-      someFunction(/* test params      */);
+      someFunction(// test params);
     });
     // Force garbage collection if available
 if (global.gc) {

@@ -1,13 +1,18 @@
 """
+calculator - 索克生活项目模块
+"""
+
+from .data import (
+from datetime import datetime, date
+from typing import Dict, List, Optional, Tuple
+
+"""
 八卦配属计算器
 
 实现八卦与人体脏腑对应的分析功能
 """
 
-from datetime import datetime, date
-from typing import Dict, List, Optional, Tuple
 
-from .data import (
     BAGUA_DATA,
     BAGUA_ORGAN_MAP,
     JIUGONG_BAGUA_MAP,

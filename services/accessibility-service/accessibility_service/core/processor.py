@@ -1,12 +1,17 @@
 """
-Accessibility data processor.
+processor - 索克生活项目模块
 """
-
-import logging
-from typing import Any
 
 from ..config.settings import get_settings
 from ..models.accessibility import AccessibilityRequest, AccessibilityType
+from typing import Any
+import logging
+
+"""
+Accessibility data processor.
+"""
+
+
 
 logger = logging.getLogger(__name__)
 

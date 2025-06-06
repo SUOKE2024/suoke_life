@@ -1,3 +1,24 @@
+"""
+enhanced_message_bus_service - 索克生活项目模块
+"""
+
+            import psutil
+from ...pkg.utils.distributed_storage import (
+from ...pkg.utils.enhanced_metrics import (
+from ...pkg.utils.message_processor import (
+from ...pkg.utils.security_manager import (
+from ...pkg.utils.smart_router import (
+from collections import defaultdict
+from contextlib import asynccontextmanager
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Set, Callable, Union
+import asyncio
+import json
+import logging
+import time
+import uuid
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,30 +27,15 @@
 集成所有优化组件，提供完整的消息总线功能
 """
 
-import asyncio
-import json
-import logging
-import time
-import uuid
-from contextlib import asynccontextmanager
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Callable, Union
-from collections import defaultdict
 
-from ...pkg.utils.message_processor import (
     MessageProcessorFactory, ProcessorConfig, MessageEnvelope, MessagePriority, CompressionType
 )
-from ...pkg.utils.smart_router import (
     RouterFactory, RoutingConfig, RoutingStrategy, RouteEndpoint
 )
-from ...pkg.utils.distributed_storage import (
     StorageManagerFactory, StorageConfig
 )
-from ...pkg.utils.enhanced_metrics import (
     MetricsFactory, MetricConfig
 )
-from ...pkg.utils.security_manager import (
     SecurityManagerFactory, SecurityConfig, User
 )
 
@@ -396,7 +402,6 @@ class HealthChecker:
     async def _collect_health_metrics(self) -> Dict[str, Any]:
         """收集健康指标"""
         try:
-            import psutil
             
             return {
                 'cpu_percent': psutil.cpu_percent(),

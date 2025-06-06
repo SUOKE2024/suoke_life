@@ -1,23 +1,28 @@
 """
+ai_service - 索克生活项目模块
+"""
+
+from app.core.logger import get_logger
+from app.models.entities import (
+from app.services.cache_service import CacheService, CacheKeys
+from app.services.knowledge_graph_service import KnowledgeGraphService
+from app.services.knowledge_service import KnowledgeService
+from app.services.metrics_service import MetricsService, monitor_performance
+from datetime import datetime
+from typing import Any, Dict, List, Optional, Union
+import asyncio
+import hashlib
+import json
+
+"""
 AI服务
 提供智能推理、多模态数据处理和知识增强功能
 """
 
-import asyncio
-import json
-from typing import Any, Dict, List, Optional, Union
-from datetime import datetime
-import hashlib
 
-from app.core.logger import get_logger
-from app.models.entities import (
     Constitution, Symptom, Syndrome, Herb, Acupoint,
     RecommendationListResponse, SearchResponse
 )
-from app.services.cache_service import CacheService, CacheKeys
-from app.services.knowledge_service import KnowledgeService
-from app.services.knowledge_graph_service import KnowledgeGraphService
-from app.services.metrics_service import MetricsService, monitor_performance
 
 logger = get_logger()
 

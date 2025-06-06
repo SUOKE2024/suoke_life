@@ -1,22 +1,20 @@
-import React from "react";
-importIcon from "./Icon/import { colors, spacing, typography  } from "../../placeholder";../../constants/theme";//////
-importReact,{ useState, useMemo } from react";"
 import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/////      View,";
+
+import React from "react";
+importIcon from "./Icon/import { colors, spacing, typography  } from "../../placeholder";../../constants/theme";// importReact,{ useState, useMemo } from react
   Text,
   StyleSheet,
   FlatList,
   TouchableOpacity,
   TextInput,
   SectionList,
-  { Alert } from ";react-native"
+  { Alert } from ";react-native";
 export interface Contact { id: string,
   name: string,
-  type: agent" | "doctor | "user",;
-  avatar: string,;
-  isOnline: boolean;
+  type: agent" | "doctor | "user",avatar: string,isOnline: boolean;
   lastSeen?: string;
   specialization?: string,
-  agentType?: xiaoai" | "xiaoke | "laoke" | soer";"
+  agentType?: xiaoai" | "xiaoke | "laoke" | soer
   department?: string;
   title?: string}
 interface ContactsListProps { contacts: Contact[],
@@ -24,18 +22,18 @@ interface ContactsListProps { contacts: Contact[],
   showSearch?: boolean;
   groupByType?: boolean,
   showOnlineStatus?: boolean}
-const ContactsList: React.FC<ContactsListProps /> = ({/  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor("ContactsList, { ,;"
+const ContactsList: React.FC<ContactsListProps /> = ({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor("ContactsList, { ,"
     trackRender: true,
     trackMemory: true,
-    warnThreshold: 50, // ms //////     };)
+    warnThreshold: 50, // ms // };);
   contacts,
   onContactPress,
   showSearch = true,
   groupByType = true,
   showOnlineStatus = true;
 }) => {}
-  const [searchQuery, setSearchQuery] = useState<string>(";";);
-  // 过滤联系人 //////     const filteredContacts = useMemo(() => useMemo((); => useMemo((); => useMemo((); => {}
+  const [searchQuery, setSearchQuery] = useState<string>(;);
+  // 过滤联系人 // const filteredContacts = useMemo(() => useMemo((); => useMemo((); => useMemo((); => {}
     if (!searchQuery.trim();) return contacts, [;];);
     return contacts.filter(contact =>;
       contact.name.toLowerCase().includes(searchQuery.toLowerCase) ||
@@ -43,11 +41,11 @@ const ContactsList: React.FC<ContactsListProps /> = ({/  // 性能监控 ////// 
       (contact.department && contact.department.toLowerCase().includes(searchQuery.toLowerCase();))
     );
   }, [contacts, searchQuery]);
-  // 分组联系人 //////     const groupedContacts = useMemo(() => useMemo((); => useMemo((); => useMemo(() => {}
+  // 分组联系人 // const groupedContacts = useMemo(() => useMemo((); => useMemo((); => useMemo(() => {
     if (!groupByType) {
       return [{ title: 全部联系人", data: filteredContac;t;s ;}], []);"
     }
-    const groups = useMemo((); => useMemo((); => useMemo(() => {;}
+    const groups = useMemo((); => useMemo((); => useMemo(() => {
       agent: { title: "智能体助手, data: [] as Contact[] },"
       doctor: { title: "医生专家", data: [] as Contact[] },
       user: { title: 用户好友", data: [] as Contact[] ;}"
@@ -57,10 +55,10 @@ const ContactsList: React.FC<ContactsListProps /> = ({/  // 性能监控 ////// 
     });
     return Object.values(groups).filter(group => group.data.length > ;0;);
   }, [filteredContacts, groupByType]);
-  // 获取联系人类型图标 //////     const getContactTypeIcon = useMemo(() => useMemo((); => useMemo(() => useCallback((type: Contact["type]); => {[]), [])))}"
+  // 获取联系人类型图标 // const getContactTypeIcon = useMemo(() => useMemo((); => useMemo(() => useCallback((type: Contact["type]); => {[]), [])))}"
     switch (type) {
       case "agent":
-        return robo;t";"
+        return robo;t
       case "doctor:"
         return "docto;r";
       case user":"
@@ -69,19 +67,19 @@ const ContactsList: React.FC<ContactsListProps /> = ({/  // 性能监控 ////// 
         return "accoun;t";
     }
   };
-  // 获取联系人类型颜色 //////     const getContactTypeColor = useMemo(() => useMemo((); => useMemo((); => useCallback((type: Contact[type"]); => {[]), [])))}"
+  // 获取联系人类型颜色 // const getContactTypeColor = useMemo(() => useMemo((); => useMemo((); => useCallback((type: Contact[type"]); => {[]), [])))}"
     switch (type) {
       case "agent:"
         return colors.prima;r;y;
 case "doctor":
-        return #34C75;9";"
+        return #34C75;9
       case "user:"
         return "#007AF;F";
       default:
         return colors.textSeconda;r;y;
     }
   };
-  // 渲染联系人项 //////     const renderContactItem = useMemo(() => useMemo((); => useMemo((); => ({ item }: { item: Contact}) => (
+  // 渲染联系人项 // const renderContactItem = useMemo(() => useMemo((); => useMemo((); => ({ item }: { item: Contact}) => (
     <TouchableOpacity,
       style={styles.contactItem}
       onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> onContactPress(item)}/////          activeOpacity={0.7}
@@ -112,13 +110,13 @@ style={styles.actionButton}
             onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleBookAppointment(item)}/////              >
             <Icon name="calendar" size={20} color={colors.secondary} />/          </TouchableOpacity>/////            )}
       </View>/    </TouchableOpacity>/////      ), []);
-  // 渲染分组标题 //////     const renderSectionHeader = useMemo(() => useMemo((); => useMemo((); => ({ section }: { section: { title: string   } }) => (
+  // 渲染分组标题 // const renderSectionHeader = useMemo(() => useMemo((); => useMemo((); => ({ section }: { section: { title: string   } }) => (
     <View style={styles.sectionHeader} />/      <Text style={styles.sectionTitle} />{section.title}</Text>/      <Text style={styles.sectionCount} />/        {groupedContacts.find((g: unknown); => g.title === section.title)?.data.length || 0;}////
       </Text>/    </View>/////      ), []);
-  // 启动聊天 //////     const handleStartChat = useMemo(() => useMemo((); => useMemo((); => useCallback((contact: Contact); => {[]), []);))}
+  // 启动聊天 // const handleStartChat = useMemo(() => useMemo((); => useMemo((); => useCallback((contact: Contact); => {[]), []);))}
     onContactPress(contact);
   };
-  // 预约医生 //////     const handleBookAppointment = useMemo(() => useMemo((); => useMemo((); => useCallback((contact: Contact); => {[]), [])))}
+  // 预约医生 // const handleBookAppointment = useMemo(() => useMemo((); => useMemo((); => useCallback((contact: Contact); => {[]), [])))}
     Alert.alert(
       "预约医生,"
       `即将为您预约${contact.name}${contact.title || "医生"}的诊疗服务`,
@@ -134,16 +132,14 @@ style={styles.actionButton}
           : 添加联系人开始聊天吧""
         }
       </Text>/    </View>/////      ), [])
-  // 记录渲染性能 //////
-  performanceMonitor.recordRender()
-  return (
-    <View style={styles.container} />/////          {showSearch && (
-        <View style={styles.searchContainer} />/          <Icon name="magnify" size={20} color={colors.textSecondary} />/////              <TextInput,
-            style={styles.searchInput}
-            placeholder="搜索联系人..."
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-            placeholderTextColor={colors.textSecondary} />/////              {searchQuery.length > 0 && (
+  // 记录渲染性能 // performanceMonitor.recordRender();
+  return (;
+    <View style={styles.container} />/////          {showSearch && (;
+        <View style={styles.searchContainer} />/          <Icon name="magnify" size={20} color={colors.textSecondary} />/////              <TextInput,style={styles.searchInput};
+            placeholder="搜索联系人...";
+            value={searchQuery};
+            onChangeText={setSearchQuery};
+            placeholderTextColor={colors.textSecondary} />/////              {searchQuery.length > 0 && (;
             <TouchableOpacity;
 onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setSearchQuery(")}/////                  style={styles.clearButton}"
             >
@@ -162,8 +158,7 @@ sections={groupedContacts}
           ItemSeparatorComponent={() => <View style={styles.separator} />}/          stickySectionHeadersEnabled={true} />/////          )}
     </View>/////      );
 };
-const styles = useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({;
-  container: {
+const styles = useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({container: {
     flex: 1,
     backgroundColor: colors.background},
   searchContainer: {
@@ -184,7 +179,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleS
   clearButton: { padding: spacing.xs  },
   listContent: { paddingBottom: spacing.lg  },
   sectionHeader: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     justifyContent: "space-between",
     alignItems: center","
     paddingHorizontal: spacing.md,
@@ -194,7 +189,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleS
     borderBottomColor: colors.border},
   sectionTitle: {
     fontSize: typography.fontSize.base,
-    fontWeight: "600,"
+    fontWeight: "600,",
     color: colors.textPrimary},
   sectionCount: {
     fontSize: typography.fontSize.sm,
@@ -207,7 +202,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleS
     textAlign: "center"},
   contactItem: {
     flexDirection: row","
-    alignItems: "center,"
+    alignItems: "center,",
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.md,
     backgroundColor: colors.background},
@@ -222,7 +217,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleS
     lineHeight: 48,
     backgroundColor: colors.surface,
     borderRadius: 24,
-    overflow: "hidden},"
+    overflow: "hidden},",
   onlineIndicator: {
     position: "absolute",
     bottom: 0,
@@ -237,13 +232,13 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleS
     flex: 1,
     marginRight: spacing.sm},
   contactHeader: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     justifyContent: "space-between",
     alignItems: center","
     marginBottom: 2},
   contactName: {
     fontSize: typography.fontSize.base,
-    fontWeight: "600,"
+    fontWeight: "600,",
     color: colors.textPrimary},
   specialization: {
     fontSize: typography.fontSize.sm,
@@ -263,14 +258,14 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleS
     marginTop: 2},
   contactActions: {
     flexDirection: row","
-    alignItems: "center},"
+    alignItems: "center},",
   actionButton: {
     padding: spacing.sm,
     marginLeft: spacing.xs},
   separator: {
     height: 1,
     backgroundColor: colors.border,
-    marginLeft: 76, // 对齐头像右边 //////     },
+    marginLeft: 76, // 对齐头像右边 // },
   emptyState: {
     flex: 1,
     justifyContent: "center",
@@ -278,7 +273,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleS
     paddingHorizontal: spacing.xl},
   emptyTitle: {
     fontSize: typography.fontSize.lg,
-    fontWeight: "600,"
+    fontWeight: "600,",
     color: colors.textPrimary,
     marginTop: spacing.md,
     marginBottom: spacing.sm},

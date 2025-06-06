@@ -1,22 +1,27 @@
 """
+nlp_models - 索克生活项目模块
+"""
+
+from collections import defaultdict, Counter
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Dict, List, Tuple, Optional, Any, Set
+import asyncio
+import jieba
+import jieba.posseg as pseg
+import json
+import logging
+import numpy as np
+import re
+
+"""
 问诊服务NLP模型
 
 基于深度学习和自然语言处理技术，实现智能问诊对话、症状识别、
 语义理解、情感分析等核心NLP功能。
 """
 
-import asyncio
-import re
-import logging
-from typing import Dict, List, Tuple, Optional, Any, Set
-from dataclasses import dataclass, field
-from enum import Enum
-import numpy as np
-import jieba
-import jieba.posseg as pseg
-from collections import defaultdict, Counter
-import json
-from datetime import datetime
 
 logger = logging.getLogger(__name__)
 

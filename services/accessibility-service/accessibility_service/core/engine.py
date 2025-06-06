@@ -1,24 +1,29 @@
 """
-Accessibility analysis engine.
+engine - 索克生活项目模块
 """
-
-import asyncio
-import logging
-from datetime import datetime
-from typing import Any
 
 from ..config.settings import get_settings
 from ..models.accessibility import (
+from ..services.audio import AudioAccessibilityService
+from ..services.cognitive import CognitiveAccessibilityService
+from ..services.motor import MotorAccessibilityService
+from ..services.visual import VisualAccessibilityService
+from datetime import datetime
+from typing import Any
+import asyncio
+import logging
+
+"""
+Accessibility analysis engine.
+"""
+
+
     AccessibilityAnalysis,
     AccessibilityRecommendation,
     AccessibilityRequest,
     AccessibilityResponse,
     AccessibilityType,
 )
-from ..services.audio import AudioAccessibilityService
-from ..services.cognitive import CognitiveAccessibilityService
-from ..services.motor import MotorAccessibilityService
-from ..services.visual import VisualAccessibilityService
 
 logger = logging.getLogger(__name__)
 

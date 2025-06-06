@@ -1,3 +1,18 @@
+"""
+advanced_cache - 索克生活项目模块
+"""
+
+from ..observability.metrics import MetricsCollector
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from enum import Enum
+from loguru import logger
+from typing import Dict, List, Any, Optional, Union, Tuple, Callable
+import asyncio
+import hashlib
+import pickle
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,17 +21,7 @@
 支持多层缓存、智能失效、预热机制和中医特色缓存
 """
 
-import asyncio
-import hashlib
-import time
-from typing import Dict, List, Any, Optional, Union, Tuple, Callable
-from dataclasses import dataclass, field
-from enum import Enum
-import pickle
-from abc import ABC, abstractmethod
-from loguru import logger
 
-from ..observability.metrics import MetricsCollector
 
 class CacheLevel(str, Enum):
     """缓存层级"""
@@ -311,7 +316,8 @@ class SemanticCacheManager:
             logger.error(f"语义相似查询查找失败: {e}")
             return None
     
-    async def add_query_embedding(self, query: str, cache_key: str):
+    async     @cache(timeout=300)  # 5分钟缓存
+def add_query_embedding(self, query: str, cache_key: str):
         """添加查询嵌入向量"""
         try:
             query_embedding = await self.embedding_service.embed_text(query)

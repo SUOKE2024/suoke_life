@@ -1,14 +1,19 @@
 """
+main - 索克生活项目模块
+"""
+
+from prometheus_client import start_http_server
+from typing import Any
+import asyncio
+import signal
+import structlog
+import sys
+
+"""
 消息总线服务主入口
 """
 
-import asyncio
-import signal
-import sys
-from typing import Any
 
-import structlog
-from prometheus_client import start_http_server
 
 # 配置结构化日志
 structlog.configure(

@@ -1,12 +1,11 @@
-import React from "react";
 import {   View, Text, StyleSheet, TouchableOpacity, Alert   } from "react-native";
-import { useNavigation  } from "../../placeholder";@react-navigation/native";/////    importReact from "react";"
 import { usePerformanceMonitor } from "../hooks/////    usePerformanceMonitor";
+
+import React from "react";
+import { useNavigation  } from "../../placeholder";@react-navigation/native";/////    importReact from "react
 /////    const NavigationTest: React.FC  = () => {}
-  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor(NavigationTest", { "
-    trackRender: true,
-    trackMemory: false,
-    warnThreshold: 50, // ms //////     };);
+  // 性能监控 // const performanceMonitor = usePerformanceMonitor(NavigationTest", { ";
+    trackRender: true,trackMemory: false,warnThreshold: 50, // ms // };);
   const navigation = useNavigation;
   const testNavigations =  [;
     { name: "Home", label: "主;页" ;},
@@ -15,20 +14,18 @@ import { usePerformanceMonitor } from "../hooks/////    usePerformanceMonitor";
     { name: "Life", label: "LIFE"},
     { name: "Profile", label: "我的"}
   ];
-  const testNavigation = useCallback((); => {;}
+  const testNavigation = useCallback((); => {}
     // TODO: Implement function body *}, []) ////
     try {
-      navigation.navigate(screenName as never)
-      Alert.alert("成功", `成功导航到 ${screenName}`)
+      navigation.navigate(screenName as never);
+      Alert.alert("成功", `成功导航到 ${screenName}`);
     } catch (error) {
       Alert.alert("错误", `导航到 ${screenName} 失败: ${error.message}`);
     }
   };
-  // 记录渲染性能 //////
-  performanceMonitor.recordRender()
+  // 记录渲染性能 // performanceMonitor.recordRender();
   return (;
-    <View style={styles.container} />/      <Text style={styles.title} />导航测试</Text>/      <Text style={styles.subtitle} />点击按钮测试各个页面的导航</Text>//////
-      {testNavigations.map((na;v;) => (
+    <View style={styles.container} />/      <Text style={styles.title} />导航测试</Text>/      <Text style={styles.subtitle} />点击按钮测试各个页面的导航</Text>// {testNavigations.map((na;v;) => (
         <TouchableOpacity,
           key={nav.name}
           style={styles.button}
@@ -41,7 +38,7 @@ style={[styles.button, styles.resetButton]}
               index: 0,
               routes: [{ name: "Home" as never   }]
             });
-            Alert.alert("成功", "导航已重置到主页")
+            Alert.alert("成功", "导航已重置到主页");
           } catch (error) {
             Alert.alert("错误", `重置导航失败: ${error.message}`);
           }
@@ -49,8 +46,7 @@ style={[styles.button, styles.resetButton]}
       >
         <Text style={styles.buttonText} />重置导航</Text>/      </TouchableOpacity>/    </View>/////      );
 }
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     flex: 1,
     padding: 20,
     backgroundColor: "#f5f5f5",
@@ -82,6 +78,5 @@ const styles = StyleSheet.create({;
   },
   buttonText: {
     color: "white",
-    fontSize: 16,;
-    fontWeight: "600"};};);
+    fontSize: 16,fontWeight: "600"};};);
 export default React.memo(NavigationTest);

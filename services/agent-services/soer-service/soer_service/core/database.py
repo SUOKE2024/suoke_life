@@ -1,15 +1,20 @@
 """
+database - 索克生活项目模块
+"""
+
+from ..config.settings import get_settings
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from typing import Optional
+import logging
+
+"""
 数据库连接管理模块
 
 提供 MongoDB、Redis 和 PostgreSQL 连接管理
 """
 
-import logging
-from typing import Optional
 
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
-from ..config.settings import get_settings
 
 logger = logging.getLogger(__name__)
 

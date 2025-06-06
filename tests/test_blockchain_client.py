@@ -1,15 +1,20 @@
 """
+test_blockchain_client - 索克生活项目模块
+"""
+
+from suoke_blockchain_service.blockchain_client import BlockchainClient
+from suoke_blockchain_service.exceptions import BlockchainError
+from unittest.mock import AsyncMock, MagicMock, patch
+from web3.exceptions import Web3Exception
+import pytest
+
+"""
 区块链客户端测试模块
 
 测试区块链客户端的Web3集成功能。
 """
 
-import pytest
-from unittest.mock import AsyncMock, MagicMock, patch
-from web3.exceptions import Web3Exception
 
-from suoke_blockchain_service.blockchain_client import BlockchainClient
-from suoke_blockchain_service.exceptions import BlockchainError
 
 
 class TestBlockchainClient:

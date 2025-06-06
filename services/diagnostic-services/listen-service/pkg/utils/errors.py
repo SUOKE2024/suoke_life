@@ -1,10 +1,15 @@
 """
-错误处理模块，定义各种服务错误类型和处理函数
+errors - 索克生活项目模块
 """
-import grpc
-import logging
+
 from enum import Enum
 from typing import Any, Dict, Optional, Union
+import grpc
+import logging
+
+"""
+错误处理模块，定义各种服务错误类型和处理函数
+"""
 
 logger = logging.getLogger(__name__)
 

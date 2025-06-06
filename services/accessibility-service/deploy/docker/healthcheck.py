@@ -1,3 +1,13 @@
+"""
+healthcheck - 索克生活项目模块
+"""
+
+            import psutil
+import asyncio
+import logging
+import socket
+import sys
+
 #!/usr/bin/env python
 
 """
@@ -5,10 +15,6 @@ Docker健康检查脚本
 检查服务的健康状态，包括gRPC服务、数据库连接等
 """
 
-import asyncio
-import logging
-import socket
-import sys
 
 # 配置日志
 logging.basicConfig(level=logging.WARNING)
@@ -69,7 +75,6 @@ class HealthChecker:
     async def check_memory_usage(self) -> bool:
         """检查内存使用情况"""
         try:
-            import psutil
 
             memory = psutil.virtual_memory()
             usage_percent = memory.percent
@@ -93,7 +98,6 @@ class HealthChecker:
     async def check_disk_space(self) -> bool:
         """检查磁盘空间"""
         try:
-            import psutil
 
             disk = psutil.disk_usage('/')
             usage_percent = disk.percent

@@ -1,12 +1,17 @@
+"""
+health_repository - 索克生活项目模块
+"""
+
+from internal.repository.database import get_database
+from typing import Any
+import json
+import logging
+
 #!/usr/bin/env python3
 """
 健康数据仓库
 """
-import json
-import logging
-from typing import Any
 
-from internal.repository.database import get_database
 
 logger = logging.getLogger(__name__)
 

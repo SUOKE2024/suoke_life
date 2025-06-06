@@ -1,19 +1,24 @@
+"""
+saga_orchestrator - 索克生活项目模块
+"""
+
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any
+import aioredis
+import asyncio
+import json
+import logging
+import uuid
+
 #!/usr/bin/env python3
 """
 Saga分布式事务管理器
 实现分布式事务的编排、补偿和状态管理
 """
 
-import asyncio
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
-from enum import Enum
-import json
-import logging
-from typing import Any
-import uuid
 
-import aioredis
 
 logger = logging.getLogger(__name__)
 

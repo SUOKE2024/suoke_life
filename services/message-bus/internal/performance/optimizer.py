@@ -1,18 +1,23 @@
 """
+optimizer - 索克生活项目模块
+"""
+
+from collections import defaultdict, deque
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass
+from internal.observability.metrics import MetricsService
+from typing import Dict, Any, Optional, Callable, List
+import asyncio
+import gc
+import psutil
+import threading
+import time
+
+"""
 性能优化模块
 """
 
-import asyncio
-import time
-import threading
-from typing import Dict, Any, Optional, Callable, List
-from dataclasses import dataclass
-from collections import defaultdict, deque
-import psutil
-import gc
-from concurrent.futures import ThreadPoolExecutor
 
-from internal.observability.metrics import MetricsService
 
 
 @dataclass

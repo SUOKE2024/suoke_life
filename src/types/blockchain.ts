@@ -115,15 +115,11 @@ export enum BlockchainErrorCode {
   BLOCKCHAIN_ERROR = 'BLOCKCHAIN_ERROR',
   NETWORK_ERROR = 'NETWORK_ERROR',
   ENCRYPTION_ERROR = 'ENCRYPTION_ERROR',
-  VERIFICATION_FAILED = 'VERIFICATION_FAILED'
+  VERIFICATION_FAILED = 'VERIFICATION_FAILED',
 }
 
 export class BlockchainError extends Error {
-  constructor(
-    message: string,
-    public code: BlockchainErrorCode,
-    public details?: any
-  ) {
+  constructor(message: string, public code: BlockchainErrorCode, public details?: any) {
     super(message);
     this.name = 'BlockchainError';
   }
@@ -160,14 +156,14 @@ export enum AccessPermission {
   READ = 'READ',
   WRITE = 'WRITE',
   SHARE = 'SHARE',
-  DELETE = 'DELETE'
+  DELETE = 'DELETE',
 }
 
 export enum AccessGrantStatus {
   ACTIVE = 'ACTIVE',
   EXPIRED = 'EXPIRED',
   REVOKED = 'REVOKED',
-  PENDING = 'PENDING'
+  PENDING = 'PENDING',
 }
 
 // 区块链状态类型
@@ -202,4 +198,4 @@ export interface EncryptedHealthData {
     salt: Uint8Array;
     iterations: number;
   };
-} 
+}

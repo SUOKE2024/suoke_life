@@ -1,16 +1,21 @@
 """
-数据库管理服务
-
-管理PostgreSQL、MongoDB、Redis等数据库连接。
+database - 索克生活项目模块
 """
 
 from motor.motor_asyncio import AsyncIOMotorClient
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
-
 from xiaoke_service.core.config import settings
 from xiaoke_service.core.exceptions import DatabaseError
 from xiaoke_service.core.logging import get_logger
+
+"""
+数据库管理服务
+
+管理PostgreSQL、MongoDB、Redis等数据库连接。
+"""
+
+
 
 logger = get_logger(__name__)
 

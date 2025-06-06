@@ -1,7 +1,12 @@
-import pytest
-from unittest.mock import AsyncMock, MagicMock, patch
+"""
+test_knowledge_graph_service - 索克生活项目模块
+"""
 
 from app.services.knowledge_graph_service import KnowledgeGraphService
+from unittest.mock import AsyncMock, MagicMock, patch
+import pytest
+
+
 
 class TestKnowledgeGraphService:
     """知识图谱服务测试类"""
@@ -31,7 +36,8 @@ class TestKnowledgeGraphService:
         return KnowledgeGraphService(repository_mock)
     
     @pytest.mark.asyncio
-    async def test_get_graph_statistics(self, service, repository_mock):
+    async     @cache(timeout=300)  # 5分钟缓存
+def test_get_graph_statistics(self, service, repository_mock):
         """测试获取图谱统计信息"""
         # 设置Mock返回值
         repository_mock.get_node_count.return_value = 5000
@@ -61,7 +67,8 @@ class TestKnowledgeGraphService:
         repository_mock.get_node_type_statistics.assert_called_once()
         repository_mock.get_relationship_type_statistics.assert_called_once()
     
-    @pytest.mark.asyncio
+      @cache(timeout=300)  # 5分钟缓存
+  @pytest.mark.asyncio
     async def test_get_graph_visualization_data(self, service, repository_mock):
         """测试获取图谱可视化数据"""
         # 设置Mock返回值
@@ -83,7 +90,8 @@ class TestKnowledgeGraphService:
         
         # 验证结果
         assert result == mock_data
-        repository_mock.get_visualization_data.assert_called_once_with(limit, relationships)
+        repository_mock.get_visualization_data.assert_called_once_w    @cache(timeout=300)  # 5分钟缓存
+ith(limit, relationships)
     
     @pytest.mark.asyncio
     async def test_find_path_between_nodes(self, service, repository_mock):
@@ -106,7 +114,8 @@ class TestKnowledgeGraphService:
         
         # 验证结果
         assert result == mock_paths
-        repository_mock.find_paths.assert_called_once_with(source_id, target_id, max_depth)
+        repository_mock.find_path    @cache(timeout=300)  # 5分钟缓存
+s.assert_called_once_with(source_id, target_id, max_depth)
     
     @pytest.mark.asyncio
     async def test_get_node_relationships(self, service, repository_mock):
@@ -129,7 +138,8 @@ class TestKnowledgeGraphService:
         
         # 验证结果
         assert result == mock_relationships
-        repository_mock.get_node_relationships.assert_called_once_with(
+        repository_mock.get_node_relation    @cache(timeout=300)  # 5分钟缓存
+ships.assert_called_once_with(
             node_id, relationship_types, direction
         )
     
@@ -148,7 +158,8 @@ class TestKnowledgeGraphService:
         params = {}
         result = await service.execute_cypher(cypher, params)
         
-        # 验证结果
+          @cache(timeout=300)  # 5分钟缓存
+  # 验证结果
         assert result == mock_result
         repository_mock.execute_cypher.assert_called_once_with(cypher, params)
     
@@ -175,7 +186,8 @@ class TestKnowledgeGraphService:
         result = await service.get_entity_subgraph(entity_type, entity_id, depth, relationship_types)
         
         # 验证结果
-        assert result == mock_subgraph
+        assert result     @cache(timeout=300)  # 5分钟缓存
+== mock_subgraph
         repository_mock.get_entity_subgraph.assert_called_once_with(
             entity_type, entity_id, depth, relationship_types
         )
@@ -199,6 +211,7 @@ class TestKnowledgeGraphService:
         )
         
         # 验证结果
+    @cache(timeout=300)  # 5分钟缓存
         assert result == mock_neighbors
         repository_mock.get_entity_neighbors.assert_called_once_with(
             entity_type, entity_id, relationship_types, neighbor_types
@@ -220,7 +233,8 @@ class TestKnowledgeGraphService:
         min_relevance = 0.7
         limit = 10
         result = await service.get_related_entities(
-            source_type, source_id, target_type, min_relevance, limit
+            source_type, source_id, target_type, min_relevance, limit    @cache(timeout=300)  # 5分钟缓存
+
         )
         
         # 验证结果
@@ -244,7 +258,8 @@ class TestKnowledgeGraphService:
         source_id = "c1"
         target_id = "s1"
         relationship_types = ["TENDS_TO_DEVELOP"]
-        result = await service.get_shortest_path(source_id, target_id, relationship_types)
+        result = await     @cache(timeout=300)  # 5分钟缓存
+service.get_shortest_path(source_id, target_id, relationship_types)
         
         # 验证结果
         assert result == mock_path

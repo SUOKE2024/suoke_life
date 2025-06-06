@@ -1,9 +1,6 @@
 """
-症状相关API路由
-提供症状信息查询和分析功能
+symptoms - 索克生活项目模块
 """
-
-from fastapi import APIRouter, Depends, HTTPException, Query
 
 from app.api.rest.deps import get_knowledge_service
 from app.core.exceptions import EntityNotFoundException, ValidationException
@@ -11,6 +8,14 @@ from app.core.logger import get_logger
 from app.models.entities import Symptom, SymptomListResponse
 from app.models.requests import SymptomListRequest
 from app.services.knowledge_service import KnowledgeService
+from fastapi import APIRouter, Depends, HTTPException, Query
+
+"""
+症状相关API路由
+提供症状信息查询和分析功能
+"""
+
+
 
 logger = get_logger()
 router = APIRouter(prefix="/symptoms", tags=["症状管理"])

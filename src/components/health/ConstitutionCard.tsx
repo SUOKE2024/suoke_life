@@ -13,17 +13,7 @@ export const ConstitutionCard: React.FC<ConstitutionCardProps> = ({
   onPress,
   showDetails = false
 }) => {
-  const getConstitutionColor = (type: string) => {
-    const colors: Record<string, string> = {
-      '平和质': '#4CAF50',
-      '气虚质': '#FFC107',
-      '阳虚质': '#FF9800',
-      '阴虚质': '#F44336',
-      '痰湿质': '#9C27B0',
-      '湿热质': '#E91E63',
-      '血瘀质': '#3F51B5',
-      '气郁质': '#009688',
-      '特禀质': '#795548'
+  const getConstitutionColor = (type: string) => {const colors: Record<string, string> = {'平和质': '#4CAF50','气虚质': '#FFC107','阳虚质': '#FF9800','阴虚质': '#F44336','痰湿质': '#9C27B0','湿热质': '#E91E63','血瘀质': '#3F51B5','气郁质': '#009688','特禀质': '#795548';
     };
     return colors[type] || '#757575';
   };
@@ -47,7 +37,7 @@ export const ConstitutionCard: React.FC<ConstitutionCardProps> = ({
 
       {showDetails && (
         <View style={styles.detailsContainer}>
-          {/* 特征 */}
+          {// 特征}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>主要特征</Text>
             <View style={styles.tagContainer}>
@@ -59,7 +49,7 @@ export const ConstitutionCard: React.FC<ConstitutionCardProps> = ({
             </View>
           </View>
 
-          {/* 症状 */}
+          {// 症状}
           {constitution.symptoms.length > 0 && (
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>常见症状</Text>
@@ -73,7 +63,7 @@ export const ConstitutionCard: React.FC<ConstitutionCardProps> = ({
             </View>
           )}
 
-          {/* 生活建议 */}
+          {// 生活建议}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>生活建议</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -93,22 +83,22 @@ export const ConstitutionCard: React.FC<ConstitutionCardProps> = ({
                       {constitution.lifestyle.exercise.slice(0, 2).join('、')}
                     </Text>
                   </View>
-                )}
-              </View>
-            </ScrollView>
-          </View>
-        </View>
-      )}
-
-      <View style={styles.footer}>
-        <Text style={styles.timestamp}>
-          更新时间: {new Date(constitution.updated_at).toLocaleDateString()}
-        </Text>
-        {!showDetails && (
-          <Text style={styles.viewMore}>点击查看详情</Text>
-        )}
-      </View>
-    </TouchableOpacity>
+                )};
+              </View>;
+            </ScrollView>;
+          </View>;
+        </View>;
+      )};
+;
+      <View style={styles.footer}>;
+        <Text style={styles.timestamp}>;
+          更新时间: {new Date(constitution.updated_at).toLocaleDateString()};
+        </Text>;
+        {!showDetails && (;
+          <Text style={styles.viewMore}>点击查看详情</Text>;
+        )};
+      </View>;
+    </TouchableOpacity>;
   );
 };
 
@@ -123,56 +113,56 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 2
     },
     shadowOpacity: 0.1,
     shadowRadius: 3.84,
-    elevation: 5,
+    elevation: 5
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 12
   },
   name: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#333333',
-    flex: 1,
+    flex: 1
   },
   typeBadge: {
     paddingHorizontal: 12,
     paddingVertical: 4,
-    borderRadius: 16,
+    borderRadius: 16
   },
   typeText: {
     color: '#FFFFFF',
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   description: {
     fontSize: 14,
     color: '#666666',
     lineHeight: 20,
-    marginBottom: 12,
+    marginBottom: 12
   },
   detailsContainer: {
-    marginTop: 8,
+    marginTop: 8
   },
   section: {
-    marginBottom: 16,
+    marginBottom: 16
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#333333',
-    marginBottom: 8,
+    marginBottom: 8
   },
   tagContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
+    gap: 8
   },
   tag: {
     backgroundColor: '#F5F5F5',
@@ -180,52 +170,40 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 16,
     marginRight: 8,
-    marginBottom: 4,
+    marginBottom: 4
   },
   symptomTag: {
-    backgroundColor: '#FFF3E0',
+    backgroundColor: '#FFF3E0'
   },
   tagText: {
     fontSize: 12,
-    color: '#666666',
+    color: '#666666'
   },
   lifestyleContainer: {
     flexDirection: 'row',
-    gap: 16,
+    gap: 16
   },
   lifestyleItem: {
     backgroundColor: '#F8F9FA',
     padding: 12,
     borderRadius: 8,
-    minWidth: 120,
+    minWidth: 120
   },
   lifestyleLabel: {
     fontSize: 12,
     fontWeight: '600',
     color: '#333333',
-    marginBottom: 4,
+    marginBottom: 4
   },
   lifestyleText: {
     fontSize: 12,
     color: '#666666',
-    lineHeight: 16,
+    lineHeight: 16
   },
   footer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 12,
-    paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: '#F0F0F0',
-  },
-  timestamp: {
-    fontSize: 12,
-    color: '#999999',
-  },
-  viewMore: {
-    fontSize: 12,
-    color: '#007AFF',
-    fontWeight: '500',
-  },
+    justifyContent: 'space-between',alignItems: 'center',marginTop: 12,paddingTop: 12,borderTopWidth: 1,borderTopColor: '#F0F0F0';
+  },timestamp: {fontSize: 12,color: '#999999';
+  },viewMore: {fontSize: 12,color: '#007AFF',fontWeight: '500';
+  };
 }); 

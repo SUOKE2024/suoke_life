@@ -1,3 +1,11 @@
+"""
+tcm_pattern_mapper - 索克生活项目模块
+"""
+
+from dataclasses import dataclass
+from typing import Any
+import logging
+
 #!/usr/bin/env python
 
 """
@@ -5,9 +13,6 @@
 负责将各种诊断结果映射到中医证型
 """
 
-import logging
-from dataclasses import dataclass
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

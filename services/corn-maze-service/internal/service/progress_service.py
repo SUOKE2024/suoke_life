@@ -1,3 +1,18 @@
+"""
+progress_service - 索克生活项目模块
+"""
+
+from corn_maze_service.internal.model.maze import Maze
+from corn_maze_service.pkg.utils.cache import CacheManager
+from datetime import datetime
+from internal.model.progress import UserProgress
+from internal.repository.maze_repository import MazeRepository
+from internal.repository.progress_repository import ProgressRepository
+from typing import Any
+import logging
+import time
+import uuid
+
 #!/usr/bin/env python3
 
 """
@@ -6,17 +21,7 @@
 管理用户在迷宫中的进度和状态
 """
 
-from datetime import datetime
-import logging
-import time
-from typing import Any
-import uuid
 
-from corn_maze_service.internal.model.maze import Maze
-from corn_maze_service.pkg.utils.cache import CacheManager
-from internal.model.progress import UserProgress
-from internal.repository.maze_repository import MazeRepository
-from internal.repository.progress_repository import ProgressRepository
 
 logger = logging.getLogger(__name__)
 

@@ -1,5 +1,7 @@
+import {import { AgentType, AgentContext, AgentResponse } from "../../agents/types";
+import { executeAgentTask, AgentSystemUtils } from "../../agents";
+
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import {
   View,
   Text,
   TextInput,
@@ -9,10 +11,8 @@ import {
   Alert,
   ActivityIndicator,
   Animated,
-  Dimensions,
+  Dimensions
 } from "react-native";
-import { AgentType, AgentContext, AgentResponse } from "../../agents/types";
-import { executeAgentTask, AgentSystemUtils } from "../../agents";
 
 /**
  * 智能体界面属性
@@ -48,13 +48,13 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
   userId,
   onResponse,
   onError,
-  style,
+  style
 }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [currentAgent, setCurrentAgent] = useState<AgentType>(
-    agentType || AgentSystemUtils.getAgentByChannel(currentChannel)
+  const [currentAgent, setCurrentAgent] = useState<AgentType>(;
+    agentType || AgentSystemUtils.getAgentByChannel(currentChannel);
   );
   const [sessionId] = useState(`session_${Date.now()}`);
 
@@ -66,7 +66,7 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 500,
-      useNativeDriver: true,
+      useNativeDriver: true
     }).start();
 
     // 添加欢迎消息
@@ -84,14 +84,13 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
   /**
    * 添加欢迎消息
    */
-  const addWelcomeMessage = useCallback(() => {
-    const agentRole = AgentSystemUtils.getAgentRole(currentAgent);
+  const addWelcomeMessage = useCallback(() => {const agentRole = AgentSystemUtils.getAgentRole(currentAgent);
     const welcomeMessage: Message = {
       id: `welcome_${Date.now()}`,
       type: "agent",
       content: `你好！我是${agentRole.name}，${agentRole.description}。有什么可以帮助您的吗？`,
       timestamp: new Date(),
-      agentType: currentAgent,
+      agentType: currentAgent
     };
     setMessages([welcomeMessage]);
   }, [currentAgent]);
@@ -99,14 +98,13 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
   /**
    * 发送消息
    */
-  const sendMessage = useCallback(async () => {
-    if (!inputText.trim() || isLoading) {return;}
+  const sendMessage = useCallback(async () => {if (!inputText.trim() || isLoading) {return;}
 
     const userMessage: Message = {
       id: `user_${Date.now()}`,
       type: "user",
       content: inputText.trim(),
-      timestamp: new Date(),
+      timestamp: new Date();
     };
 
     setMessages((prev) => [...prev, userMessage]);
@@ -130,7 +128,7 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
         content: response.response,
         timestamp: new Date(),
         agentType: currentAgent,
-        metadata: response.metadata,
+        metadata: response.metadata
       };
 
       setMessages((prev) => [...prev, agentMessage]);
@@ -144,7 +142,7 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
         type: "agent",
         content: "抱歉，处理您的请求时出现了问题。请稍后再试。",
         timestamp: new Date(),
-        agentType: currentAgent,
+        agentType: currentAgent
       };
 
       setMessages((prev) => [...prev, errorMessage]);
@@ -164,14 +162,13 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
     messages,
     currentAgent,
     onResponse,
-    onError,
+    onError
   ]);
 
   /**
    * 切换智能体
    */
-  const switchAgent = useCallback((newAgentType: AgentType) => {
-    setCurrentAgent(newAgentType);
+  const switchAgent = useCallback((newAgentType: AgentType) => {setCurrentAgent(newAgentType);
 
     const agentRole = AgentSystemUtils.getAgentRole(newAgentType);
     const switchMessage: Message = {
@@ -179,7 +176,7 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
       type: "agent",
       content: `已切换到${agentRole.name}。${agentRole.description}`,
       timestamp: new Date(),
-      agentType: newAgentType,
+      agentType: newAgentType
     };
 
     setMessages((prev) => [...prev, switchMessage]);
@@ -188,26 +185,20 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
   /**
    * 清空对话
    */
-  const clearMessages = useCallback(() => {
-    Alert.alert("清空对话", "确定要清空当前对话吗？", [
-      { text: "取消", style: "cancel" },
-      {
-        text: "确定",
-        onPress: () => {
-          setMessages([]);
+  const clearMessages = useCallback(() => {Alert.alert("清空对话", "确定要清空当前对话吗？", [;
+      { text: "取消", style: "cancel" },{text: "确定",onPress: () => {setMessages([]);
           addWelcomeMessage();
-        },
-      },
+        }
+      }
     ]);
   }, [addWelcomeMessage]);
 
   /**
    * 渲染消息
    */
-  const renderMessage = useCallback((message: Message) => {
-    const isUser = message.type === "user";
-    const agentRole = message.agentType
-      ? AgentSystemUtils.getAgentRole(message.agentType)
+  const renderMessage = useCallback((message: Message) => {const isUser = message.type === "user";
+    const agentRole = message.agentType;
+      ? AgentSystemUtils.getAgentRole(message.agentType);
       : null;
 
     return (
@@ -215,83 +206,75 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
         key={message.id}
         style={[
           styles.messageContainer,
-          isUser ? styles.userMessage : styles.agentMessage,
+          isUser ? styles.userMessage : styles.agentMessage
         ]}
-      >
-        {!isUser && agentRole && (
-          <Text style={styles.agentName}>{agentRole.name}</Text>
-        )}
-        <Text
-          style={[
-            styles.messageText,
-            isUser ? styles.userMessageText : styles.agentMessageText,
-          ]}
-        >
-          {message.content}
-        </Text>
-        <Text style={styles.timestamp}>
-          {message.timestamp.toLocaleTimeString()}
-        </Text>
-      </View>
+      >;
+        {!isUser && agentRole && (;
+          <Text style={styles.agentName}>{agentRole.name}</Text>;
+        )};
+        <Text;
+          style={[;
+            styles.messageText,isUser ? styles.userMessageText : styles.agentMessageText;
+          ]};
+        >;
+          {message.content};
+        </Text>;
+        <Text style={styles.timestamp}>;
+          {message.timestamp.toLocaleTimeString()};
+        </Text>;
+      </View>;
     );
   }, []);
 
   /**
    * 渲染智能体选择器
    */
-  const renderAgentSelector = useCallback(() => {
-    const agents = [
-      AgentType.XIAOAI,
-      AgentType.XIAOKE,
-      AgentType.LAOKE,
-      AgentType.SOER,
+  const renderAgentSelector = useCallback(() => {const agents = [;
+      AgentType.XIAOAI,AgentType.XIAOKE,AgentType.LAOKE,AgentType.SOER;
     ];
 
-    return (
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.agentSelector}
-      >
-        {agents.map((agent) => {
-          const role = AgentSystemUtils.getAgentRole(agent);
+    return (;
+      <ScrollView;
+        horizontal;
+        showsHorizontalScrollIndicator={false};
+        style={styles.agentSelector};
+      >;
+        {agents.map((agent) => {const role = AgentSystemUtils.getAgentRole(agent);
           const isSelected = agent === currentAgent;
 
           return (
             <TouchableOpacity
-              key={agent}
-              style={[
-                styles.agentButton,
-                isSelected && styles.selectedAgentButton,
-              ]}
-              onPress={() => switchAgent(agent)}
-            >
-              <Text
-                style={[
-                  styles.agentButtonText,
-                  isSelected && styles.selectedAgentButtonText,
-                ]}
-              >
-                {role.name}
-              </Text>
-            </TouchableOpacity>
+              key={agent};
+              style={[;
+                styles.agentButton,isSelected && styles.selectedAgentButton;
+              ]};
+              onPress={() => switchAgent(agent)};
+            >;
+              <Text;
+                style={[;
+                  styles.agentButtonText,isSelected && styles.selectedAgentButtonText;
+                ]};
+              >;
+                {role.name};
+              </Text>;
+            </TouchableOpacity>;
           );
         })}
       </ScrollView>
     );
   }, [currentAgent, switchAgent]);
 
-  return (
-    <Animated.View style={[styles.container, { opacity: fadeAnim }, style]}>
-      {/* 智能体选择器 */}
-      {renderAgentSelector()}
-
-      {/* 消息列表 */}
-      <ScrollView
-        ref={scrollViewRef}
-        style={styles.messagesContainer}
-        onContentSizeChange={() =>
-          scrollViewRef.current?.scrollToEnd({ animated: true })
+  return (;
+    <Animated.View style={[styles.container, { opacity: fadeAnim }, style]}>;
+      {// 智能体选择器};
+      {renderAgentSelector()};
+;
+      {// 消息列表};
+      <ScrollView;
+        ref={scrollViewRef};
+        style={styles.messagesContainer};
+        onContentSizeChange={() =>;
+          scrollViewRef.current?.scrollToEnd({ animated: true });
         }
       >
         {messages.map(renderMessage)}
@@ -303,7 +286,7 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
         )}
       </ScrollView>
 
-      {/* 输入区域 */}
+      {// 输入区域}
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.textInput}
@@ -317,7 +300,7 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
         <TouchableOpacity
           style={[
             styles.sendButton,
-            (!inputText.trim() || isLoading) && styles.disabledButton,
+            (!inputText.trim() || isLoading) && styles.disabledButton
           ]}
           onPress={sendMessage}
           disabled={!inputText.trim() || isLoading}
@@ -328,7 +311,7 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
           <Text style={styles.clearButtonText}>清空</Text>
         </TouchableOpacity>
       </View>
-    </Animated.View>
+    </Animated.View>;
   );
 };
 
@@ -337,14 +320,14 @@ const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#f5f5f5"
   },
   agentSelector: {
     backgroundColor: "#fff",
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderBottomWidth: 1,
-    borderBottomColor: "#e0e0e0",
+    borderBottomColor: "#e0e0e0"
   },
   agentButton: {
     paddingHorizontal: 15,
@@ -353,72 +336,72 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f0f0",
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: "#d0d0d0",
+    borderColor: "#d0d0d0"
   },
   selectedAgentButton: {
     backgroundColor: "#007AFF",
-    borderColor: "#007AFF",
+    borderColor: "#007AFF"
   },
   agentButtonText: {
     fontSize: 14,
     color: "#333",
-    fontWeight: "500",
+    fontWeight: "500"
   },
   selectedAgentButtonText: {
-    color: "#fff",
+    color: "#fff"
   },
   messagesContainer: {
     flex: 1,
-    padding: 15,
+    padding: 15
   },
   messageContainer: {
     marginBottom: 15,
-    maxWidth: width * 0.8,
+    maxWidth: width * 0.8
   },
   userMessage: {
-    alignSelf: "flex-end",
+    alignSelf: "flex-end"
   },
   agentMessage: {
-    alignSelf: "flex-start",
+    alignSelf: "flex-start"
   },
   agentName: {
     fontSize: 12,
     color: "#666",
     marginBottom: 5,
-    fontWeight: "600",
+    fontWeight: "600"
   },
   messageText: {
     fontSize: 16,
     lineHeight: 22,
     padding: 12,
-    borderRadius: 18,
+    borderRadius: 18
   },
   userMessageText: {
     backgroundColor: "#007AFF",
-    color: "#fff",
+    color: "#fff"
   },
   agentMessageText: {
     backgroundColor: "#fff",
     color: "#333",
     borderWidth: 1,
-    borderColor: "#e0e0e0",
+    borderColor: "#e0e0e0"
   },
   timestamp: {
     fontSize: 11,
     color: "#999",
     marginTop: 5,
-    textAlign: "center",
+    textAlign: "center"
   },
   loadingContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    padding: 15,
+    padding: 15
   },
   loadingText: {
     marginLeft: 10,
     fontSize: 14,
-    color: "#666",
+    color: "#666"
   },
   inputContainer: {
     flexDirection: "row",
@@ -426,7 +409,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderTopWidth: 1,
     borderTopColor: "#e0e0e0",
-    alignItems: "flex-end",
+    alignItems: "flex-end"
   },
   textInput: {
     flex: 1,
@@ -437,34 +420,22 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     fontSize: 16,
     maxHeight: 100,
-    marginRight: 10,
+    marginRight: 10
   },
   sendButton: {
     backgroundColor: "#007AFF",
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 20,
-    marginRight: 5,
+    marginRight: 5
   },
   disabledButton: {
-    backgroundColor: "#ccc",
+    backgroundColor: "#ccc"
   },
-  sendButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  clearButton: {
-    backgroundColor: "#ff3b30",
-    paddingHorizontal: 15,
-    paddingVertical: 12,
-    borderRadius: 20,
-  },
-  clearButtonText: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "600",
-  },
+  sendButtonText: {color: "#fff",fontSize: 16,fontWeight: "600";
+  },clearButton: {backgroundColor: "#ff3b30",paddingHorizontal: 15,paddingVertical: 12,borderRadius: 20;
+  },clearButtonText: {color: "#fff",fontSize: 14,fontWeight: "600";
+  };
 });
 
 export default AgentInterface;

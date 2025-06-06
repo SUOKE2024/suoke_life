@@ -1,3 +1,24 @@
+"""
+test_performance_enhanced - 索克生活项目模块
+"""
+
+from suoke_api_gateway.core.app import create_app
+from suoke_api_gateway.core.config import Settings
+from suoke_api_gateway.middleware.rate_limit import RateLimitMiddleware
+from suoke_api_gateway.services.service_registry import ServiceRegistry
+from suoke_api_gateway.utils.cache import CacheManager
+from typing import List, Dict, Any
+from unittest.mock import AsyncMock, Mock, patch
+import asyncio
+import gc
+import httpx
+import os
+import psutil
+import pytest
+import statistics
+import sys
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,26 +27,10 @@ API网关增强性能测试
 测试高并发、大负载、长时间运行等场景
 """
 
-import asyncio
-import time
-import statistics
-import psutil
-import gc
-from typing import List, Dict, Any
-from unittest.mock import AsyncMock, Mock, patch
-import pytest
-import httpx
 
 # 添加项目根目录到Python路径
-import os
-import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from suoke_api_gateway.core.app import create_app
-from suoke_api_gateway.core.config import Settings
-from suoke_api_gateway.services.service_registry import ServiceRegistry
-from suoke_api_gateway.utils.cache import CacheManager
-from suoke_api_gateway.middleware.rate_limit import RateLimitMiddleware
 
 
 class PerformanceMetrics:

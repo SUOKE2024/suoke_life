@@ -1,18 +1,23 @@
+"""
+progress_repository - 索克生活项目模块
+"""
+
+from datetime import datetime
+from internal.model.progress import UserProgress
+from pathlib import Path
+import aiosqlite
+import json
+import logging
+import os
+
 #!/usr/bin/env python3
 
 """
 进度存储库 - 负责用户迷宫进度的存储和检索
 """
 
-from datetime import datetime
-import json
-import logging
-import os
-from pathlib import Path
 
-import aiosqlite
 
-from internal.model.progress import UserProgress
 
 logger = logging.getLogger(__name__)
 

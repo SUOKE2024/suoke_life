@@ -1,13 +1,18 @@
 """
+runner - 索克生活项目模块
+"""
+
+from datetime import datetime
+from internal.suokebench.config import BenchConfig, TaskConfig
+from typing import Any
+import logging
+import time
+
+"""
 基准测试运行器
 """
 
-import logging
-import time
-from datetime import datetime
-from typing import Any
 
-from internal.suokebench.config import BenchConfig, TaskConfig
 
 logger = logging.getLogger(__name__)
 

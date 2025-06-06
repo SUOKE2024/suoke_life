@@ -1,17 +1,23 @@
 """
-数据库连接和会话管理
+database - 索克生活项目模块
 """
 
-import logging
-from typing import AsyncGenerator
-
+            from sqlalchemy import text
+from ..config import settings
+from ..models.base import Base
 from sqlalchemy import create_engine, event
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
+from typing import AsyncGenerator
+import logging
 
-from ..config import settings
-from ..models.base import Base
+"""
+数据库连接和会话管理
+"""
+
+
+
 
 logger = logging.getLogger(__name__)
 
@@ -206,7 +212,6 @@ def check_database_health() -> bool:
             db_manager.initialize()
             
         with db_manager.get_session() as session:
-            from sqlalchemy import text
             session.execute(text("SELECT 1"))
             return True
     except Exception as e:

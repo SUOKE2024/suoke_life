@@ -1,14 +1,19 @@
+"""
+final_syntax_fixer - 索克生活项目模块
+"""
+
+from pathlib import Path
+from typing import List, Dict, Tuple
+import argparse
+import os
+import re
+
 #!/usr/bin/env python3
 """
 索克生活项目最终语法错误修复脚本
 处理最后剩余的复杂语法错误
 """
 
-import os
-import re
-from pathlib import Path
-from typing import List, Dict, Tuple
-import argparse
 
 class FinalSyntaxFixer:
     def __init__(self, project_root: str):

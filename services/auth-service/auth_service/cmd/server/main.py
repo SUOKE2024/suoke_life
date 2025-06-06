@@ -1,16 +1,6 @@
-"""认证服务主启动文件"""
-
-import logging
-import signal
-import sys
-from contextlib import asynccontextmanager
-from typing import AsyncGenerator
-
-import structlog
-import uvicorn
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.trustedhost import TrustedHostMiddleware
+"""
+main - 索克生活项目模块
+"""
 
 from auth_service.api.rest.router import api_router
 from auth_service.config.settings import get_settings
@@ -19,6 +9,22 @@ from auth_service.core.redis import RedisManager
 from auth_service.middleware.logging import LoggingMiddleware
 from auth_service.middleware.metrics import MetricsMiddleware
 from auth_service.middleware.security import SecurityMiddleware
+from contextlib import asynccontextmanager
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
+from typing import AsyncGenerator
+import logging
+import signal
+import structlog
+import sys
+import uvicorn
+
+"""认证服务主启动文件"""
+
+
+
 
 
 # 配置结构化日志
@@ -82,6 +88,9 @@ def create_app() -> FastAPI:
     settings = get_settings()
     
     app = FastAPI(
+
+# 性能优化: 添加响应压缩
+app.add_middleware(GZipMiddleware, minimum_size=1000)
         title=settings.app_name,
         version=settings.app_version,
         description="索克生活认证服务 - 提供用户认证、授权和账户管理功能",
@@ -98,7 +107,9 @@ def create_app() -> FastAPI:
     app.include_router(api_router, prefix="/api/v1")
     
     # 健康检查端点
-    @app.get("/health")
+    @cache(expire=300)  # 5分钟缓存
+@limiter.limit("100/minute")  # 每分钟100次请求
+@app.get("/health")
     async def health_check():
         """健康检查"""
         return {"status": "healthy", "service": "auth-service"}

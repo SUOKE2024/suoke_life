@@ -1,4 +1,4 @@
-//////     智能体基础类型定义   所有智能体共用的基础接口和类型
+// 智能体基础类型定义   所有智能体共用的基础接口和类型
 // 基础智能体接口 * export interface Agent {////  ;
  /////    ;
   getId(): string;
@@ -11,13 +11,13 @@
   shutdown(): Promise<void>;
   processTask(task: AgentTask): Promise<any>;
 }
-// 智能体状态 * export type AgentStatus = | "idl;"////
+// 智能体状态 * export type AgentStatus = | "idl;"////;
 e"; /////    "
   | "processing"
   | "error"
   | "offline"
   | "maintenance"
-// 智能体能力 * export type AgentCapability = / 小艾能力* //////     | "health_monitorin;"
+// 智能体能力 * export type AgentCapability = / 小艾能力* // | "health_monitorin;";
 g;"; * /////     | "tcm_diagnosis""
   | "symptom_analysis"
   | "health_assessment"
@@ -28,7 +28,7 @@ g;"; * /////     | "tcm_diagnosis""
   | "preventive_care"
   | "emergency_detection"
   | "health_coaching"
-  // 小克能力 //////     | "service_recommendation"
+  // 小克能力 // | "service_recommendation"
   | "doctor_matching"
   | "product_management"
   | "supply_chain"
@@ -39,7 +39,7 @@ g;"; * /////     | "tcm_diagnosis""
   | "shop_management"
   | "payment_processing"
   | "logistics_management"
-  // 老克能力 //////     | "knowledge_management"
+  // 老克能力 // | "knowledge_management"
   | "education"
   | "content_curation"
   | "game_npc"
@@ -50,7 +50,7 @@ g;"; * /////     | "tcm_diagnosis""
   | "certification_system"
   | "content_quality_assurance"
   | "maze_game_guidance"
-  // 索儿能力 //////     | "lifestyle_management"
+  // 索儿能力 // | "lifestyle_management"
   | "emotional_support"
   | "habit_tracking"
   | "environmental_sensing"
@@ -106,9 +106,7 @@ g;"; * /////     | "tcm_diagnosis""
   province?: string,
   country?: string;
 }
-export interface ContactInfo  {
-;
-  phone?: string,
+export interface ContactInfo  {phone?: string,
   email?: string,
   wechat?: string,
   emergencyContact?: EmergencyContact;
@@ -121,9 +119,7 @@ export interface EmergencyContact { name: string,
 // 时间相关类型 * export interface TimeRange { start: Date, ////
   end: Date;
 }
-export interface Schedule  {
-;
-  [day: string]: string[];
+export interface Schedule  {[day: string]: string[];
 }
 // 评分和反馈 * export interface Rating { score: number, ////  ;
   maxScore: number,
@@ -156,7 +152,7 @@ export interface Feedback { id: string,
   agentId: string,
   taskId?: string;
 }
-// 健康相关基础类型 * export type ConstitutionType = | "balance;"////
+// 健康相关基础类型 * export type ConstitutionType = | "balance;"////;
 d;
 "
   | "qi_deficiency"
@@ -200,7 +196,7 @@ export interface Medication { name: string,
 export interface PricingInfo { amount: number,
   currency: string,
   unit?: string,
-  discounts?: Discount[],
+  discounts?: Discount[]
 }
 export interface Discount { type: string,
   value: number,
@@ -264,9 +260,7 @@ export interface AppointmentAction { type: "book" | "reschedule" | "cancel" | "c
  / export * from "./xiaoke/////    types";
 /export * from "./laoke/////    types";
 /export * from "./soer/////    types";
-//////
-
-/**
+// /**
  * 智能体类型枚举
  */
 export enum AgentType {
@@ -291,7 +285,7 @@ export enum AgentCapability {
   SIGN_LANGUAGE = 'sign_language',
   VOICE_GUIDANCE = 'voice_guidance',
   HEALTH_RECORD_MANAGEMENT = 'health_record_management',
-  
+
   // 小克的能力
   SERVICE_RECOMMENDATION = 'service_recommendation',
   DOCTOR_MATCHING = 'doctor_matching',
@@ -304,7 +298,7 @@ export enum AgentCapability {
   SHOP_MANAGEMENT = 'shop_management',
   PAYMENT_PROCESSING = 'payment_processing',
   LOGISTICS_MANAGEMENT = 'logistics_management',
-  
+
   // 老克的能力
   KNOWLEDGE_RETRIEVAL = 'knowledge_retrieval',
   LEARNING_PATH = 'learning_path',
@@ -316,7 +310,7 @@ export enum AgentCapability {
   RAG_SYSTEM = 'rag_system',
   AR_VR_INTERACTION = 'ar_vr_interaction',
   CONTENT_MODERATION = 'content_moderation',
-  
+
   // 索儿的能力
   LIFESTYLE_MANAGEMENT = 'lifestyle_management',
   HEALTH_MONITORING = 'health_monitoring',
@@ -674,4 +668,4 @@ export interface AgentDecisionResult {
   recommendedActions?: string[];
   metadata?: any;
 }
-//////
+// 

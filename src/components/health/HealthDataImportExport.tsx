@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
-import {
-  View,
+import {import {View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
   Alert,
   Modal,
-  ActivityIndicator,
+  ActivityIndicator
 } from 'react-native';
-import { 
   healthDataService, 
   ExportFormat,
   ImportFormat 
@@ -25,33 +23,22 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
   const [modalType, setModalType] = useState<'export' | 'import'>('export');
   const [selectedFormat, setSelectedFormat] = useState<ExportFormat | ImportFormat>(ExportFormat.JSON);
 
-  const exportFormats = [
-    { value: ExportFormat.JSON, label: 'JSON', description: '标准JSON格式，适合程序处理' },
-    { value: ExportFormat.CSV, label: 'CSV', description: 'Excel兼容格式，适合数据分析' },
-    { value: ExportFormat.PDF, label: 'PDF', description: '便于打印和分享的报告格式' },
-    { value: ExportFormat.XML, label: 'XML', description: '结构化数据格式' }
+  const exportFormats = [;
+    { value: ExportFormat.JSON, label: 'JSON', description: '标准JSON格式，适合程序处理' },{ value: ExportFormat.CSV, label: 'CSV', description: 'Excel兼容格式，适合数据分析' },{ value: ExportFormat.PDF, label: 'PDF', description: '便于打印和分享的报告格式' },{ value: ExportFormat.XML, label: 'XML', description: '结构化数据格式' };
   ];
 
-  const importFormats = [
-    { value: ImportFormat.JSON, label: 'JSON', description: '从JSON文件导入数据' },
-    { value: ImportFormat.CSV, label: 'CSV', description: '从CSV文件导入数据' },
-    { value: ImportFormat.APPLE_HEALTH, label: 'Apple Health', description: '从Apple Health导入' },
-    { value: ImportFormat.GOOGLE_FIT, label: 'Google Fit', description: '从Google Fit导入' }
+  const importFormats = [;
+    { value: ImportFormat.JSON, label: 'JSON', description: '从JSON文件导入数据' },{ value: ImportFormat.CSV, label: 'CSV', description: '从CSV文件导入数据' },{ value: ImportFormat.APPLE_HEALTH, label: 'Apple Health', description: '从Apple Health导入' },{ value: ImportFormat.GOOGLE_FIT, label: 'Google Fit', description: '从Google Fit导入' };
   ];
 
-  const handleExport = async (format: ExportFormat) => {
-    try {
-      setLoading(true);
-      
+  const handleExport = async (format: ExportFormat) => {try {setLoading(true);
+
       const endDate = new Date().toISOString();
       const startDate = new Date();
       startDate.setFullYear(startDate.getFullYear() - 1); // 导出一年的数据
-      
-      const response = await healthDataService.exportHealthData(
-        userId,
-        format,
-        startDate.toISOString(),
-        endDate
+
+      const response = await healthDataService.exportHealthData(;
+        userId,format,startDate.toISOString(),endDate;
       );
 
       if (response.data) {
@@ -67,16 +54,14 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
     }
   };
 
-  const handleImport = async (format: ImportFormat) => {
-    try {
-      setLoading(true);
-      
+  const handleImport = async (format: ImportFormat) => {try {setLoading(true);
+
       // 这里应该打开文件选择器
       Alert.alert('功能提示', '文件选择功能需要集成文件选择器组件');
-      
+
       // 模拟导入过程
       // const response = await healthDataService.importHealthData(userId, format, fileData);
-      
+
     } catch (error) {
       console.error('导入健康数据失败:', error);
       Alert.alert('导入失败', '导入健康数据时发生错误');
@@ -86,14 +71,12 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
     }
   };
 
-  const openExportModal = () => {
-    setModalType('export');
+  const openExportModal = () => {setModalType('export');
     setSelectedFormat(ExportFormat.JSON);
     setModalVisible(true);
   };
 
-  const openImportModal = () => {
-    setModalType('import');
+  const openImportModal = () => {setModalType('import');
     setSelectedFormat(ImportFormat.JSON);
     setModalVisible(true);
   };
@@ -112,22 +95,20 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
           styles.formatLabel,
           selectedFormat === format && styles.formatLabelSelected
         ]}>
-          {label}
-        </Text>
-        <Text style={[
-          styles.formatDescription,
-          selectedFormat === format && styles.formatDescriptionSelected
-        ]}>
-          {description}
-        </Text>
-      </View>
-      <View style={[
-        styles.radioButton,
-        selectedFormat === format && styles.radioButtonSelected
-      ]}>
-        {selectedFormat === format && <View style={styles.radioButtonInner} />}
-      </View>
-    </TouchableOpacity>
+          {label};
+        </Text>;
+        <Text style={[;
+          styles.formatDescription,selectedFormat === format && styles.formatDescriptionSelected;
+        ]}>;
+          {description};
+        </Text>;
+      </View>;
+      <View style={[;
+        styles.radioButton,selectedFormat === format && styles.radioButtonSelected;
+      ]}>;
+        {selectedFormat === format && <View style={styles.radioButtonInner} />};
+      </View>;
+    </TouchableOpacity>;
   );
 
   const renderModal = () => (
@@ -141,25 +122,25 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
         <View style={styles.modalContent}>
           <View style={styles.modalHeader}>
             <Text style={styles.modalTitle}>
-              {modalType === 'export' ? '导出健康数据' : '导入健康数据'}
-            </Text>
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setModalVisible(false)}
-            >
-              <Text style={styles.closeButtonText}>×</Text>
-            </TouchableOpacity>
-          </View>
-
-          <ScrollView style={styles.modalScrollView}>
-            <Text style={styles.sectionTitle}>选择格式</Text>
-            
-            {modalType === 'export' 
-              ? exportFormats.map(format => 
-                  renderFormatOption(format.value, format.label, format.description)
+              {modalType === 'export' ? '导出健康数据' : '导入健康数据'};
+            </Text>;
+            <TouchableOpacity;
+              style={styles.closeButton};
+              onPress={() => setModalVisible(false)};
+            >;
+              <Text style={styles.closeButtonText}>×</Text>;
+            </TouchableOpacity>;
+          </View>;
+;
+          <ScrollView style={styles.modalScrollView}>;
+            <Text style={styles.sectionTitle}>选择格式</Text>;
+            ;
+            {modalType === 'export' ;
+              ? exportFormats.map(format => ;
+                  renderFormatOption(format.value, format.label, format.description);
                 )
               : importFormats.map(format => 
-                  renderFormatOption(format.value, format.label, format.description)
+                  renderFormatOption(format.value, format.label, format.description);
                 )
             }
 
@@ -200,8 +181,7 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
             <TouchableOpacity
               style={[styles.modalButton, styles.confirmButton]}
               onPress={() => {
-                if (modalType === 'export') {
-                  handleExport(selectedFormat as ExportFormat);
+                if (modalType === 'export') {handleExport(selectedFormat as ExportFormat);
                 } else {
                   handleImport(selectedFormat as ImportFormat);
                 }
@@ -225,7 +205,7 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
   const renderQuickActions = () => (
     <View style={styles.quickActionsSection}>
       <Text style={styles.sectionTitle}>快速操作</Text>
-      
+
       <View style={styles.quickActionsGrid}>
         <TouchableOpacity style={styles.quickActionCard} onPress={openExportModal}>
           <View style={[styles.quickActionIcon, { backgroundColor: '#4CAF50' }]}>
@@ -250,106 +230,106 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
           <View style={[styles.quickActionIcon, { backgroundColor: '#FF9800' }]}>
             <Text style={styles.quickActionIconText}>⟲</Text>
           </View>
-          <Text style={styles.quickActionTitle}>同步数据</Text>
-          <Text style={styles.quickActionDescription}>与云端同步</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity 
-          style={styles.quickActionCard}
-          onPress={() => Alert.alert('功能提示', '分享功能正在开发中')}
-        >
-          <View style={[styles.quickActionIcon, { backgroundColor: '#9C27B0' }]}>
-            <Text style={styles.quickActionIconText}>⤴</Text>
-          </View>
-          <Text style={styles.quickActionTitle}>分享报告</Text>
-          <Text style={styles.quickActionDescription}>分享健康报告</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+          <Text style={styles.quickActionTitle}>同步数据</Text>;
+          <Text style={styles.quickActionDescription}>与云端同步</Text>;
+        </TouchableOpacity>;
+;
+        <TouchableOpacity ;
+          style={styles.quickActionCard};
+          onPress={() => Alert.alert('功能提示', '分享功能正在开发中')};
+        >;
+          <View style={[styles.quickActionIcon, { backgroundColor: '#9C27B0' }]}>;
+            <Text style={styles.quickActionIconText}>⤴</Text>;
+          </View>;
+          <Text style={styles.quickActionTitle}>分享报告</Text>;
+          <Text style={styles.quickActionDescription}>分享健康报告</Text>;
+        </TouchableOpacity>;
+      </View>;
+    </View>;
   );
 
   const renderDataStats = () => (
     <View style={styles.dataStatsSection}>
       <Text style={styles.sectionTitle}>数据统计</Text>
-      
+
       <View style={styles.statsGrid}>
         <View style={styles.statCard}>
           <Text style={styles.statNumber}>1,234</Text>
           <Text style={styles.statLabel}>健康记录</Text>
         </View>
-        
-        <View style={styles.statCard}>
-          <Text style={styles.statNumber}>56</Text>
-          <Text style={styles.statLabel}>生命体征</Text>
-        </View>
-        
-        <View style={styles.statCard}>
-          <Text style={styles.statNumber}>12</Text>
-          <Text style={styles.statLabel}>中医诊断</Text>
-        </View>
-        
-        <View style={styles.statCard}>
-          <Text style={styles.statNumber}>8</Text>
-          <Text style={styles.statLabel}>健康报告</Text>
-        </View>
-      </View>
-    </View>
+
+        <View style={styles.statCard}>;
+          <Text style={styles.statNumber}>56</Text>;
+          <Text style={styles.statLabel}>生命体征</Text>;
+        </View>;
+        ;
+        <View style={styles.statCard}>;
+          <Text style={styles.statNumber}>12</Text>;
+          <Text style={styles.statLabel}>中医诊断</Text>;
+        </View>;
+        ;
+        <View style={styles.statCard}>;
+          <Text style={styles.statNumber}>8</Text>;
+          <Text style={styles.statLabel}>健康报告</Text>;
+        </View>;
+      </View>;
+    </View>;
   );
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>数据管理</Text>
-        <Text style={styles.subtitle}>导入、导出和管理您的健康数据</Text>
-      </View>
-
-      <ScrollView style={styles.scrollView}>
-        {renderQuickActions()}
-        {renderDataStats()}
-      </ScrollView>
-
-      {renderModal()}
-    </View>
+  return (;
+    <View style={styles.container}>;
+      <View style={styles.header}>;
+        <Text style={styles.title}>数据管理</Text>;
+        <Text style={styles.subtitle}>导入、导出和管理您的健康数据</Text>;
+      </View>;
+;
+      <ScrollView style={styles.scrollView}>;
+        {renderQuickActions()};
+        {renderDataStats()};
+      </ScrollView>;
+;
+      {renderModal()};
+    </View>;
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f5f5f5'
   },
   header: {
     padding: 16,
     backgroundColor: '#fff',
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: '#e0e0e0'
   },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 4,
+    marginBottom: 4
   },
   subtitle: {
     fontSize: 14,
-    color: '#666',
+    color: '#666'
   },
   scrollView: {
-    flex: 1,
+    flex: 1
   },
   quickActionsSection: {
-    padding: 16,
+    padding: 16
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 16,
+    marginBottom: 16
   },
   quickActionsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   quickActionCard: {
     width: '48%',
@@ -362,7 +342,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
+    elevation: 3
   },
   quickActionIcon: {
     width: 48,
@@ -370,32 +350,32 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 12
   },
   quickActionIconText: {
     color: '#fff',
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   quickActionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
     marginBottom: 4,
-    textAlign: 'center',
+    textAlign: 'center'
   },
   quickActionDescription: {
     fontSize: 12,
     color: '#666',
-    textAlign: 'center',
+    textAlign: 'center'
   },
   dataStatsSection: {
     padding: 16,
-    paddingTop: 0,
+    paddingTop: 0
   },
   statsGrid: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   statCard: {
     flex: 1,
@@ -408,30 +388,30 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
+    elevation: 3
   },
   statNumber: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#007AFF',
-    marginBottom: 4,
+    marginBottom: 4
   },
   statLabel: {
     fontSize: 12,
     color: '#666',
-    textAlign: 'center',
+    textAlign: 'center'
   },
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   modalContent: {
     backgroundColor: '#fff',
     borderRadius: 12,
     width: '90%',
-    maxHeight: '80%',
+    maxHeight: '80%'
   },
   modalHeader: {
     flexDirection: 'row',
@@ -439,12 +419,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: '#f0f0f0'
   },
   modalTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#333'
   },
   closeButton: {
     width: 30,
@@ -452,15 +432,15 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     backgroundColor: '#f0f0f0',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   closeButtonText: {
     fontSize: 20,
-    color: '#666',
+    color: '#666'
   },
   modalScrollView: {
     maxHeight: '70%',
-    padding: 20,
+    padding: 20
   },
   formatOption: {
     flexDirection: 'row',
@@ -470,30 +450,30 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#e0e0e0',
     marginBottom: 12,
-    backgroundColor: '#fff',
+    backgroundColor: '#fff'
   },
   formatOptionSelected: {
     borderColor: '#007AFF',
-    backgroundColor: '#f0f8ff',
+    backgroundColor: '#f0f8ff'
   },
   formatOptionContent: {
-    flex: 1,
+    flex: 1
   },
   formatLabel: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 4,
+    marginBottom: 4
   },
   formatLabelSelected: {
-    color: '#007AFF',
+    color: '#007AFF'
   },
   formatDescription: {
     fontSize: 14,
-    color: '#666',
+    color: '#666'
   },
   formatDescriptionSelected: {
-    color: '#0066cc',
+    color: '#0066cc'
   },
   radioButton: {
     width: 20,
@@ -502,19 +482,19 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#e0e0e0',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   radioButtonSelected: {
-    borderColor: '#007AFF',
+    borderColor: '#007AFF'
   },
   radioButtonInner: {
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: '#007AFF',
+    backgroundColor: '#007AFF'
   },
   exportOptions: {
-    marginTop: 20,
+    marginTop: 20
   },
   optionItem: {
     flexDirection: 'row',
@@ -522,18 +502,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: '#f0f0f0'
   },
   optionLabel: {
     fontSize: 14,
-    color: '#333',
+    color: '#333'
   },
   optionValue: {
     fontSize: 14,
-    color: '#666',
+    color: '#666'
   },
   importOptions: {
-    marginTop: 20,
+    marginTop: 20
   },
   importNote: {
     fontSize: 14,
@@ -541,32 +521,21 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     backgroundColor: '#f8f9fa',
     padding: 16,
-    borderRadius: 8,
+    borderRadius: 8
   },
   modalButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 20,
     borderTopWidth: 1,
-    borderTopColor: '#f0f0f0',
+    borderTopColor: '#f0f0f0'
   },
   modalButton: {
     flex: 1,
     paddingVertical: 12,
-    borderRadius: 8,
-    marginHorizontal: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  cancelButton: {
-    backgroundColor: '#666',
-  },
-  confirmButton: {
-    backgroundColor: '#007AFF',
-  },
-  modalButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '500',
-  },
+    borderRadius: 8,marginHorizontal: 8,justifyContent: 'center',alignItems: 'center';
+  },cancelButton: {backgroundColor: '#666';
+  },confirmButton: {backgroundColor: '#007AFF';
+  },modalButtonText: {color: '#fff',fontSize: 16,fontWeight: '500';
+  };
 }); 

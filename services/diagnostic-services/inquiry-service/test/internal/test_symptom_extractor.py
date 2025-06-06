@@ -1,15 +1,20 @@
+"""
+test_symptom_extractor - 索克生活项目模块
+"""
+
+from internal.llm.symptom_extractor import SymptomExtractor
+from unittest.mock import patch
+import json
+import pytest
+
 #!/usr/bin/env python
 
 """
 症状提取器测试
 """
 
-import json
-from unittest.mock import patch
 
-import pytest
 
-from internal.llm.symptom_extractor import SymptomExtractor
 
 # 测试数据
 TEST_TEXT = """

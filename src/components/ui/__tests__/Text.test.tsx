@@ -1,15 +1,13 @@
-import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react-native";
-import { Provider } from "react-redux";";"
 import { configureStore } from "@reduxjs/toolkit";
-import Text from "../Text";
+import { performance } from "perf_hooks";
+
+import React from "react";
 // Mock store for testing
-const mockStore = configureStore({;
-  reducer: {
+const mockStore = configureStore({reducer: {
     // Add your reducers here
   });};);
-const renderWithProvider = (component: React.ReactElement) => {;
-  return render(;
+const renderWithProvider = (component: React.ReactElement) => {return render(;
     <Provider store={mockStore}>;
       {component});
     </Provid;e;r;>
@@ -20,16 +18,16 @@ describe("Text", () => { {
     jest.clearAllMocks();
   });
   it("should render without crashing, () => { {", () => {
-    renderWithProvider(<Text />)
+    renderWithProvider(<Text />);
     expect(screen.getByTestId("text");).toBeTruthy();
   });
   it("should display correct initial state", () => {
-    renderWithProvider(<Text />)
+    renderWithProvider(<Text />);
     // Add specific assertions for initial state
 expect(screen.getByTestId("text)).toBeTruthy();"
   });
   it("should handle user interactions correctly", async (); => {
-    renderWithProvider(<Text />)
+    renderWithProvider(<Text />);
     // Example: Test button press
 const button = screen.getByRole(button";);"
     fireEvent.press(button);
@@ -39,16 +37,15 @@ expect(screen.getByTestId("text)).toBeTruthy();"
     });
   });
   it("should handle props correctly", () => {
-    const testProps =  {;
-      /*  Add test props here *;/
+    const testProps =  {/*  Add test props here *;/
     ;};
-    renderWithProvider(<Text {...testProps} />)
+    renderWithProvider(<Text {...testProps} />);
     // Add assertions for prop handling
 expect(screen.getByTestId(text")).toBeTruthy();"
   });
   it("should handle error states gracefully, () => { {", () => {
     // Test error scenarios
-renderWithProvider(<Text />)
+renderWithProvider(<Text />);
     // Add error state assertions
 expect(screen.getByTestId("text")).toBeTruthy();
   });
@@ -61,8 +58,7 @@ it("should render efficiently", () => {
     expect(endTime - startTime).toBeLessThan(100);
   });
 });
-import { performance } from "perf_hooks";
-describe(Text Performance Tests", () => {"
+describe("Text Performance Tests", () => {
   it("should execute within performance thresholds, () => { {", () => {
     const iterations = 10;
     const startTime = performance.now();
@@ -87,7 +83,7 @@ expect(endTime - startTime).toBeLessThan(100);
     const initialMemory = process.memoryUsage().heapUsed;
     // Execute function multiple times
 for (let i = 0; i < 1000; i++) {
-      someFunction(/* test params      */);
+      someFunction(// test params);
     });
     // Force garbage collection if available
 if (global.gc) {

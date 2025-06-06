@@ -1,3 +1,21 @@
+"""
+test_cache_enhanced - 索克生活项目模块
+"""
+
+from datetime import datetime, timedelta
+from fastapi import Request, Response
+from internal.model.config import CacheConfig
+from pkg.utils.cache import CacheKey, CacheItem, CacheManager
+from starlette.datastructures import Headers, QueryParams
+from unittest.mock import AsyncMock, MagicMock, Mock, patch, call
+import asyncio
+import json
+import os
+import pickle
+import pytest
+import sys
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,24 +24,11 @@
 专门针对边缘情况和错误处理，提升测试覆盖率至90%+
 """
 
-import asyncio
-import json
-import os
-import sys
-import time
-from unittest.mock import AsyncMock, MagicMock, Mock, patch, call
-from datetime import datetime, timedelta
-import pickle
 
-import pytest
-from fastapi import Request, Response
-from starlette.datastructures import Headers, QueryParams
 
 # 添加项目根目录到Python路径
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from internal.model.config import CacheConfig
-from pkg.utils.cache import CacheKey, CacheItem, CacheManager
 
 
 class TestCacheEdgeCases:
@@ -188,7 +193,8 @@ class TestCacheEdgeCases:
             await cache_manager.set(key, cache_item)
             return index
         
-        async def get_cache_item(index):
+        async     @cache(timeout=300)  # 5分钟缓存
+def get_cache_item(index):
             key = CacheKey(path=f"/api/item/{index}", method="GET")
             return await cache_manager.get(key)
         
@@ -274,7 +280,8 @@ class TestCacheEdgeCases:
         # 创建不可序列化的对象
         class UnserializableObject:
             def __init__(self):
-                self.data = "test"
+                self.data =    @cache(timeout=300)  # 5分钟缓存
+ "test"
             
             def __getstate__(self):
                 raise Exception("Cannot serialize this object")

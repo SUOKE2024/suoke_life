@@ -1,15 +1,22 @@
+"""
+cache - 索克生活项目模块
+"""
+
+        import fnmatch
+from .exceptions import ConfigurationError, ServiceUnavailableError
+from dataclasses import dataclass
+from datetime import datetime, timedelta
+from typing import Any
+import asyncio
+import json
+import logging
+
 #!/usr/bin/env python
 
 """
 缓存管理模块
 """
 
-import asyncio
-from dataclasses import dataclass
-from datetime import datetime, timedelta
-import json
-import logging
-from typing import Any
 
 try:
 
@@ -17,7 +24,6 @@ try:
 except ImportError:
     REDIS_AVAILABLE = False
 
-from .exceptions import ConfigurationError, ServiceUnavailableError
 
 @dataclass
 class CacheEntry:
@@ -109,7 +115,6 @@ class MemoryCache:
         if pattern == "*":
             return list(self._cache.keys())
 
-        import fnmatch
 
         return [key for key in self._cache.keys() if fnmatch.fnmatch(key, pattern)]
 

@@ -1,25 +1,30 @@
 """
+face_analysis - 索克生活项目模块
+"""
+
+from PIL import Image
+from dataclasses import dataclass
+from pathlib import Path
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.preprocessing import StandardScaler
+from typing import Dict, List, Any, Optional, Tuple, Union
+import asyncio
+import cv2
+import dlib
+import joblib
+import logging
+import mediapipe as mp
+import numpy as np
+import torch
+import torch.nn as nn
+import torchvision.transforms as transforms
+
+"""
 面部分析机器学习模型
 
 基于深度学习的中医面诊特征识别和分析
 """
 
-import cv2
-import numpy as np
-import logging
-import asyncio
-from typing import Dict, List, Any, Optional, Tuple, Union
-from dataclasses import dataclass
-from pathlib import Path
-import torch
-import torch.nn as nn
-import torchvision.transforms as transforms
-from PIL import Image
-import mediapipe as mp
-import dlib
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.preprocessing import StandardScaler
-import joblib
 
 logger = logging.getLogger(__name__)
 

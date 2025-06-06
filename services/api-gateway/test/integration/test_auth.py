@@ -1,3 +1,20 @@
+"""
+test_auth - 索克生活项目模块
+"""
+
+from datetime import datetime, timedelta, UTC
+from fastapi import Depends, FastAPI, HTTPException, Security, status, Request
+from fastapi.testclient import TestClient
+from internal.delivery.rest.middleware import AuthMiddleware, setup_middlewares
+from internal.model.config import AuthConfig, JwtConfig, MiddlewareConfig
+from pkg.utils.auth import JWTManager, TokenPayload
+from typing import Dict, List, Optional, Tuple
+import jwt
+import os
+import pytest
+import sys
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,23 +22,11 @@
 认证中间件集成测试
 """
 
-import os
-import sys
-import time
-from datetime import datetime, timedelta, UTC
-from typing import Dict, List, Optional, Tuple
 
-import jwt
-import pytest
-from fastapi import Depends, FastAPI, HTTPException, Security, status, Request
-from fastapi.testclient import TestClient
 
 # 添加项目根目录到Python路径
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-from internal.delivery.rest.middleware import AuthMiddleware, setup_middlewares
-from internal.model.config import AuthConfig, JwtConfig, MiddlewareConfig
-from pkg.utils.auth import JWTManager, TokenPayload
 
 # 测试密钥
 TEST_SECRET_KEY = "test_secret_key_for_auth_integration_tests"

@@ -1,3 +1,18 @@
+"""
+conversation_manager - 索克生活项目模块
+"""
+
+from ..common.base import BaseService
+from ..common.cache import cached
+from ..common.exceptions import InquiryServiceError
+from ..common.metrics import counter, memory_optimized, timer
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from loguru import logger
+from typing import Any
+import uuid
+
 #!/usr/bin/env python3
 
 """
@@ -7,18 +22,8 @@
 个性化回复生成和对话策略优化，提供更自然的问诊对话体验。
 """
 
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
-from typing import Any
-import uuid
 
-from loguru import logger
 
-from ..common.base import BaseService
-from ..common.cache import cached
-from ..common.exceptions import InquiryServiceError
-from ..common.metrics import counter, memory_optimized, timer
 
 
 class ConversationState(Enum):

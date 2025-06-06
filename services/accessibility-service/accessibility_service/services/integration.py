@@ -1,14 +1,19 @@
 """
-Integration service for combining accessibility analysis results.
+integration - 索克生活项目模块
 """
-
-import asyncio
-import logging
-from datetime import datetime
-from typing import Any
 
 from ..config.settings import get_settings
 from ..models.accessibility import AccessibilityRequest, AccessibilityResponse
+from datetime import datetime
+from typing import Any
+import asyncio
+import logging
+
+"""
+Integration service for combining accessibility analysis results.
+"""
+
+
 
 logger = logging.getLogger(__name__)
 

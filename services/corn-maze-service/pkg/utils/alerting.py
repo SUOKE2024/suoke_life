@@ -1,3 +1,20 @@
+"""
+alerting - 索克生活项目模块
+"""
+
+from abc import ABC, abstractmethod
+from collections import deque
+from collections.abc import Callable
+from corn_maze_service.constants import HTTP_BAD_REQUEST, HTTP_OK
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any
+import aiohttp
+import asyncio
+import contextlib
+import logging
+import time
+
 #!/usr/bin/env python3
 
 """
@@ -6,20 +23,8 @@
 提供告警规则定义、告警触发、告警通知等功能
 """
 
-from abc import ABC, abstractmethod
-import asyncio
-from collections import deque
-from collections.abc import Callable
-import contextlib
-from dataclasses import dataclass, field
-from enum import Enum
-import logging
-import time
-from typing import Any
 
-import aiohttp
 
-from corn_maze_service.constants import HTTP_BAD_REQUEST, HTTP_OK
 
 logger = logging.getLogger(__name__)
 

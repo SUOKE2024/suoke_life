@@ -1,3 +1,18 @@
+"""
+websocket_manager - 索克生活项目模块
+"""
+
+from ..core.logging import get_logger
+from collections import defaultdict
+from dataclasses import dataclass
+from enum import Enum
+from fastapi import WebSocket, WebSocketDisconnect
+from starlette.websockets import WebSocketState
+from typing import Dict, List, Set, Optional, Any, Callable
+import asyncio
+import json
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -7,18 +22,8 @@ WebSocket 连接管理器
 管理 WebSocket 连接、消息路由、房间管理等功能。
 """
 
-import asyncio
-import json
-import time
-from typing import Dict, List, Set, Optional, Any, Callable
-from dataclasses import dataclass
-from enum import Enum
-from collections import defaultdict
 
-from fastapi import WebSocket, WebSocketDisconnect
-from starlette.websockets import WebSocketState
 
-from ..core.logging import get_logger
 
 logger = get_logger(__name__)
 

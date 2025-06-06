@@ -1,17 +1,22 @@
 """
-健康数据服务模块
+health_data_service - 索克生活项目模块
 """
-
-import logging
-from datetime import datetime, date, timedelta
-from typing import Optional, List, Dict, Any
-
-from sqlalchemy.orm import Session
-from sqlalchemy import and_, func
 
 from ..models.health_data import HealthData, HealthDataType
 from ..models.platform import Platform
 from .base_service import BaseService
+from datetime import datetime, date, timedelta
+from sqlalchemy import and_, func
+from sqlalchemy.orm import Session
+from typing import Optional, List, Dict, Any
+import logging
+
+"""
+健康数据服务模块
+"""
+
+
+
 
 logger = logging.getLogger(__name__)
 
@@ -62,7 +67,7 @@ class HealthDataService(BaseService[HealthData]):
             query = query.order_by(HealthData.created_at.desc())
             query = query.offset(skip).limit(limit)
             
-            return query.all()
+            return query.all()[:1000]  # 限制查询结果数量
             
         except Exception as e:
             logger.error(f"获取用户健康数据失败: {e}")
@@ -235,7 +240,7 @@ class HealthDataService(BaseService[HealthData]):
             
             data_type_counts = {
                 item.data_type.value: item.count 
-                for item in data_type_stats.group_by(HealthData.data_type).all()
+                for item in data_type_stats.group_by(HealthData.data_type).all()[:1000]  # 限制查询结果数量
             }
             
             # 按平台统计
@@ -253,7 +258,7 @@ class HealthDataService(BaseService[HealthData]):
             
             platform_counts = {
                 item.platform_id: item.count 
-                for item in platform_stats.group_by(HealthData.platform_id).all()
+                for item in platform_stats.group_by(HealthData.platform_id).all()[:1000]  # 限制查询结果数量
             }
             
             # 日期范围
@@ -382,7 +387,7 @@ class HealthDataService(BaseService[HealthData]):
             if platform_id:
                 query = query.filter(HealthData.platform_id == platform_id)
             
-            data_list = query.order_by(HealthData.created_at.asc()).all()
+            data_list = query.order_by(HealthData.created_at.asc()).all()[:1000]  # 限制查询结果数量
             
             return [
                 {

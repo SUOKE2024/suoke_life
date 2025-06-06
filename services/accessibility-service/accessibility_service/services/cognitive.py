@@ -1,15 +1,20 @@
 """
-Cognitive accessibility service implementation.
+cognitive - 索克生活项目模块
 """
-
-import asyncio
-import logging
-from datetime import datetime
-from typing import Any
 
 from ..config.settings import get_settings
 from ..models.accessibility import AccessibilityRequest
 from ..models.analysis import AnalysisStatus, CognitiveAnalysis
+from datetime import datetime
+from typing import Any
+import asyncio
+import logging
+
+"""
+Cognitive accessibility service implementation.
+"""
+
+
 
 logger = logging.getLogger(__name__)
 

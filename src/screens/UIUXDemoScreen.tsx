@@ -1,9 +1,10 @@
+import { Ionicons } from "@expo/vector-icons/import { createUIUXOptimizationService  } from ;../services/uiUxOptimizationService";/importPerformanceMonitor from ../components/ui/////    PerformanceMonitor
+import { usePerformanceMonitor  } from "../../placeholder";../hooks/usePerformanceMonitor";/////      View,"
+
 import React from "react";
-import { Ionicons } from "@expo/vector-icons/import { createUIUXOptimizationService  } from ";";../services/uiUxOptimizationService";/importPerformanceMonitor from ../components/ui/////    PerformanceMonitor";"
 /////
 // 索克生活 - UI/UX优化功能演示页面/////      展示动画效果、性能优化和响应速度提升功能
-importReact,{ useState, useRef, useEffect } from "react"
-import { usePerformanceMonitor  } from "../../placeholder";../hooks/usePerformanceMonitor";/////      View,;"
+importReact,{ useState, useRef, useEffect } from "react";
   Text,
   StyleSheet,
   ScrollView,
@@ -11,76 +12,73 @@ import { usePerformanceMonitor  } from "../../placeholder";../hooks/usePerforman
   Animated,
   SafeAreaView,
   Alert,
-  { Switch } from react-native";"
+  { Switch } from react-native
 // 创建UI * UX优化服务实例 /////     const uiuxService = createUIUXOptimizationService;
 export const UIUXDemoScreen: React.FC  = () => {}
-  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor("UIUXDemoScreen, { "
-    trackRender: true,;
-    trackMemory: true,;
-    warnThreshold: 50, // ms //////     };);
-  // 状态管理 //////     const [showPerformanceMonitor, setShowPerformanceMonitor] = useState<boolean>(false;);
+  // 性能监控 // const performanceMonitor = usePerformanceMonitor("UIUXDemoScreen, { ";
+    trackRender: true,trackMemory: true,warnThreshold: 50, // ms // };);
+  // 状态管理 // const [showPerformanceMonitor, setShowPerformanceMonitor] = useState<boolean>(false;);
   const [enableAnimations, setEnableAnimations] = useState<boolean>(tru;e;);
   const [enableHaptics, setEnableHaptics] = useState<boolean>(tru;e;);
   const [performanceLevel, setPerformanceLevel] = useState<"high" | medium" | "low>("high";);
   const [animationCount, setAnimationCount] = useState<number>(0);
-  // 动画值 //////     const fadeAnim = useRef(new Animated.Value(1)).current;
+  // 动画值 // const fadeAnim = useRef(new Animated.Value(1)).current;
   const scaleAnim = useRef(new Animated.Value(1);).current;
   const rotateAnim = useRef(new Animated.Value(0);).current;
   const slideAnim = useRef(new Animated.Value(0);).current;
   const pulseAnim = useRef(new Animated.Value(1);).current;
-  // 获取管理器 //////     const animationManager = uiuxService.getAnimationManager;
+  // 获取管理器 // const animationManager = uiuxService.getAnimationManager;
   const performanceOptimizer = uiuxService.getPerformanceOptimizer;
   const interactionEnhancer = uiuxService.getInteractionEnhancer;
   const visualEffectManager = uiuxService.getVisualEffectManager;
   const responsiveManager = uiuxService.getResponsiveManager;
   const theme = uiuxService.getTheme;
-  // 初始化脉冲动画 //////     useEffect(() => {}
-    const effectStart = performance.now()
-    if (enableAnimations) {
-      animationManager.breathingPulse(pulseAnim, 0.95, 1.05, 2000);
+  // 初始化脉冲动画 // useEffect(() => {
+    const effectStart = performance.now();
+    if (enableAnimations) {animationManager.breathingPulse(pulseAnim, 0.95, 1.05, 2000);
     } else {
       pulseAnim.stopAnimation();
       pulseAnim.setValue(1);
     }
-      const effectEnd = performance.now()
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [enableAnimations, animationManager, pulseAnim]);
-  // 性能级别变化时调整视觉效果 //////     useEffect(() => {}
-    const effectStart = performance.now()
+  // 性能级别变化时调整视觉效果 // useEffect(() => {
+    const effectStart = performance.now();
     visualEffectManager.adjustEffectsForPerformance(performanceLevel);
-      const effectEnd = performance.now()
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [performanceLevel, visualEffectManager]);
-  // 演示弹簧反弹动画 //////     const demoSpringBounce = async() => {}
+  // 演示弹簧反弹动画 // const demoSpringBounce = async() => {};
     if (!enableAnimations) re;t;u;r;n;
     setAnimationCount(prev => prev + 1);
     if (enableHaptics) {
       await interactionEnhancer.triggerFeedback(button_press";);"
     }
     await animationManager.springBounce(scaleAnim, 1.;2;);
-    await animationManager.springBounce(scaleAnim, ;1;);
+    await animationManager.springBounce(scaleAnim,1;);
   };
-  // 演示弹性缩放动画 //////     const demoElasticScale = async() => {}
+  // 演示弹性缩放动画 // const demoElasticScale = async() => {};
     if (!enableAnimations) re;t;u;r;n;
     setAnimationCount(prev => prev + 1);
     if (enableHaptics) {
       await interactionEnhancer.triggerFeedback("success_action;);"
     }
     await animationManager.elasticScale(scaleAnim, 0.8, 1.;1;);
-    await animationManager.elasticScale(scaleAnim, 1.1, ;1;);
+    await animationManager.elasticScale(scaleAnim, 1.1,1;);
   };
-  // 演示涟漪效果 //////     const demoRippleEffect = async() => {}
+  // 演示涟漪效果 // const demoRippleEffect = async() => {};
     if (!enableAnimations) re;t;u;r;n;
     setAnimationCount(prev => prev + 1);
     if (enableHaptics) {
       await interactionEnhancer.triggerFeedback("button_press", {
         haptic: medium","
-        visual: "ripple,"
+        visual: "ripple,",
         duration: 300};);
     }
     await animationManager.rippleEffect(fadeAni;m;);
   };
-  // 演示旋转动画 //////     const demoRotateAnimation = () => {}
+  // 演示旋转动画 // const demoRotateAnimation = () => {};
     if (!enableAnimations) re;t;u;r;n;
     setAnimationCount(prev => prev + 1);
     Animated.timing(rotateAnim, {
@@ -91,7 +89,7 @@ export const UIUXDemoScreen: React.FC  = () => {}
       rotateAnim.setValue(0);
     });
   };
-  // 演示滑动动画 //////     const demoSlideAnimation = () => {}
+  // 演示滑动动画 // const demoSlideAnimation = () => {};
     if (!enableAnimations) re;t;u;r;n;
     setAnimationCount(prev => prev + 1);
     Animated.sequence([
@@ -107,7 +105,7 @@ export const UIUXDemoScreen: React.FC  = () => {}
       });
     ]).start();
   };
-  // 演示淡入淡出动画 //////     const demoFadeAnimation = () => {}
+  // 演示淡入淡出动画 // const demoFadeAnimation = () => {};
     if (!enableAnimations) re;t;u;r;n;
     setAnimationCount(prev => prev + 1);
     Animated.sequence([
@@ -123,14 +121,12 @@ export const UIUXDemoScreen: React.FC  = () => {}
       });
     ]).start();
   };
-  // 性能优化演示 //////     const demoPerformanceOptimization = async() => {}
-    try {;
-      // 监控内存使用 //////     const memoryInfo = await performanceOptimizer.monitorMemoryUsag;e;
-      // 优化图片加载 //////     const optimizedUri = performanceOptimizer.optimizeImageLoading(
-        "https:// example.com * large-image.jpg", /////     300,
-        20;0;
+  // 性能优化演示 // const demoPerformanceOptimization = async() => {};
+    try {// 监控内存使用 // const memoryInfo = await performanceOptimizer.monitorMemoryUsag;e;
+      // 优化图片加载 // const optimizedUri = performanceOptimizer.optimizeImageLoading(;
+        "https:// example.com * large-image.jpg", /////     300,20;0;
       ;);
-      // 延迟执行任务 //////     await performanceOptimizer.deferExecution(() => {}
+      // 延迟执行任务 // await performanceOptimizer.deferExecution(() => {
         }, high")"
       Alert.alert(
         "性能优化完成,"
@@ -139,10 +135,10 @@ export const UIUXDemoScreen: React.FC  = () => {}
         [{ text: "确定"}]
       )
     } catch (error) {
-      Alert.alert(优化失败", "性能优化过程中出现错误)
+      Alert.alert(优化失败", "性能优化过程中出现错误);
     }
   };
-  // 清理所有动画 //////     const clearAllAnimations = () => {}
+  // 清理所有动画 // const clearAllAnimations = () => {};
     animationManager.stopAllAnimations;
     fadeAnim.setValue(1);
     scaleAnim.setValue(1);
@@ -150,18 +146,15 @@ export const UIUXDemoScreen: React.FC  = () => {}
     slideAnim.setValue(0);
     setAnimationCount(0);
   };
-  // 获取响应式样式 //////     const getResponsiveStyle = (baseStyle: unknown) => {}
+  // 获取响应式样式 // const getResponsiveStyle = (baseStyle: unknown) => {};
     return uiuxService.generateResponsiveStyle(baseSt;y;l;e;);
   }
-  // 旋转插值 //////     const rotateInterpolate = rotateAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: ["0deg", 360deg"];};);"
-  // 记录渲染性能 //////
-  performanceMonitor.recordRender()
-  return (
-    <SafeAreaView style={styles.container} />/      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false} />/        {// 标题 }/        <View style={styles.header} />/          <Text style={getResponsiveStyle(styles.title)} />UI/UX优化演示</Text>/          <Text style={getResponsiveStyle(styles.subtitle)} />/////                体验流畅的动画效果和性能优化
-          </Text>/        </View>/////
-        {// 控制面板 }/        <View style={[styles.section, visualEffectManager.generateShadowStyle()]} />/          <Text style={styles.sectionTitle} />控制面板</Text>/////
+  // 旋转插值 // const rotateInterpolate = rotateAnim.interpolate({inputRange: [0, 1],outputRange: ["0deg", 360deg"];};);"
+  // 记录渲染性能 // performanceMonitor.recordRender();
+  return (;
+    <SafeAreaView style={styles.container} />/      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false} />/        {// 标题 }/        <View style={styles.header} />/          <Text style={getResponsiveStyle(styles.title)} />UI/UX优化演示</Text>/          <Text style={getResponsiveStyle(styles.subtitle)} />/////                体验流畅的动画效果和性能优化;
+          </Text>/        </View>/////;
+        {// 控制面板 }/        <View style={[styles.section, visualEffectManager.generateShadowStyle()]} />/          <Text style={styles.sectionTitle} />控制面板</Text>/////;
           <View style={styles.controlRow} />/            <Text style={styles.controlLabel} />启用动画</Text>/////                <Switch;
 value={enableAnimations};
               onValueChange={setEnableAnimations}
@@ -203,7 +196,7 @@ style={[
                   ],
                   opacity: fadeAnim;
                 },
-                visualEffectManager.generateShadowStyle()
+                visualEffectManager.generateShadowStyle();
               ]} />/              <Ionicons name="heart" size={40} color={theme.colors.primary} />/            </Animated.View>/          </View>/////
           <View style={styles.animationStats} />/            <Text style={styles.statsText} />动画执行次数: {animationCount}</Text>/          </View>/        </View>/////
         {// 动画控制按钮 }/        <View style={[styles.section, visualEffectManager.generateShadowStyle()]} />/          <Text style={styles.sectionTitle} />动画控制</Text>/////
@@ -261,21 +254,11 @@ visible={showPerformanceMonitor}
         autoOptimize={performanceLevel === low"}"
         showDetailedMetrics={true} />/    </SafeAreaView>/////      );
 }
-// 样式定义 * const styles = StyleSheet.create({ ////
-  container: {
-    flex: 1,
-    backgroundColor: "#f8f9fa"
-  },
-  scrollView: { flex: 1  },
-  header: {
-    padding: 20,
-    alignItems: "center"
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 700","
-    color: "#2d3748,"
-    marginBottom: 8;
+// 样式定义 * const styles = StyleSheet.create({ ////;
+  container: {flex: 1,backgroundColor: "#f8f9fa";
+  },scrollView: { flex: 1  },header: {padding: 20,alignItems: "center";
+  },title: {fontSize: 24,fontWeight: 700",";
+    color: "#2d3748,",marginBottom: 8;
   },
   subtitle: {
     fontSize: 16,
@@ -285,7 +268,7 @@ visible={showPerformanceMonitor}
   section: {
     margin: 16,
     padding: 20,
-    backgroundColor: "#ffffff,"
+    backgroundColor: "#ffffff,",
     borderRadius: 12;
   },
   sectionTitle: {
@@ -295,7 +278,7 @@ visible={showPerformanceMonitor}
     marginBottom: 16;
   },
   controlRow: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     justifyContent: "space-between",
     alignItems: center","
     marginBottom: 12;
@@ -328,7 +311,7 @@ visible={showPerformanceMonitor}
   animationContainer: {
     height: 120,
     justifyContent: center","
-    alignItems: "center,"
+    alignItems: "center,",
     backgroundColor: "#f7fafc",
     borderRadius: 8,
     marginBottom: 16;
@@ -338,7 +321,7 @@ visible={showPerformanceMonitor}
     height: 80,
     backgroundColor: #ffffff","
     borderRadius: 12,
-    justifyContent: "center,"
+    justifyContent: "center,",
     alignItems: "center"
   },
   animationStats: { alignItems: center"  },"
@@ -354,7 +337,7 @@ visible={showPerformanceMonitor}
   demoButton: {
     width: "48%",
     flexDirection: row","
-    alignItems: "center,"
+    alignItems: "center,",
     justifyContent: "center",
     paddingVertical: 12,
     paddingHorizontal: 16,
@@ -364,7 +347,7 @@ visible={showPerformanceMonitor}
   buttonText: {
     color: #ffffff","
     fontSize: 14,
-    fontWeight: "500,"
+    fontWeight: "500,",
     marginLeft: 8;
   },
   primaryButton: { backgroundColor: "#667eea"  },
@@ -382,7 +365,7 @@ visible={showPerformanceMonitor}
     flex: 1,
     flexDirection: "row",
     alignItems: center","
-    justifyContent: "center,"
+    justifyContent: "center,",
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 8,
@@ -392,7 +375,7 @@ visible={showPerformanceMonitor}
   responsiveText: {
     fontSize: 16,
     color: #4a5568","
-    textAlign: "center,"
+    textAlign: "center,",
     marginBottom: 16;
   },
   responsiveBox: {
@@ -403,7 +386,7 @@ visible={showPerformanceMonitor}
   },
   responsiveBoxText: {
     fontSize: 14,
-    color: "#2d3748,"
+    color: "#2d3748,",
     fontWeight: "500"
   },
   visualEffectsDemo: {

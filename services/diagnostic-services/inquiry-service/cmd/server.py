@@ -1,22 +1,40 @@
+"""
+server - 索克生活项目模块
+"""
+
+                    from api.grpc import inquiry_service_pb2
+                from grpc_reflection.v1alpha import reflection
+from concurrent import futures
+from dotenv import load_dotenv
+from internal.delivery.inquiry_service_impl import InquiryServiceServicer
+from internal.dialogue.dialogue_manager import DialogueManager
+from internal.knowledge.tcm_knowledge_base import TCMKnowledgeBase
+from internal.llm.health_risk_assessor import HealthRiskAssessor
+from internal.llm.llm_client import LLMClient
+from internal.llm.symptom_extractor import SymptomExtractor
+from internal.llm.tcm_pattern_mapper import TCMPatternMapper
+from internal.observability.health_check import HealthChecker
+from internal.observability.tracing import TracingManager
+from internal.repository.session_repository import SessionRepository
+from internal.repository.user_repository import UserRepository
+from pkg.utils.config_loader import ConfigLoader
+from pkg.utils.metrics import MetricsCollector
+from typing import Any
+import asyncio
+import grpc
+import logging
+import os
+import sys
+
 #!/usr/bin/env python
 
 """
 问诊服务入口程序
 """
 
-import asyncio
-from concurrent import futures
-import logging
-import os
-import sys
-from typing import Any
 
-from dotenv import load_dotenv
-import grpc
 
 # 导入服务可观测性组件
-from internal.observability.health_check import HealthChecker
-from internal.observability.tracing import TracingManager
 
 # 加载环境变量
 load_dotenv()
@@ -27,17 +45,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 # 导入生成的gRPC代码
 # 需要先生成proto文件的Python代码
 # python -m grpc_tools.protoc -I./api/grpc --python_out=. --grpc_python_out=. ./api/grpc/inquiry_service.proto
-from internal.delivery.inquiry_service_impl import InquiryServiceServicer
-from internal.dialogue.dialogue_manager import DialogueManager
-from internal.knowledge.tcm_knowledge_base import TCMKnowledgeBase
-from internal.llm.health_risk_assessor import HealthRiskAssessor
-from internal.llm.llm_client import LLMClient
-from internal.llm.symptom_extractor import SymptomExtractor
-from internal.llm.tcm_pattern_mapper import TCMPatternMapper
-from internal.repository.session_repository import SessionRepository
-from internal.repository.user_repository import UserRepository
-from pkg.utils.config_loader import ConfigLoader
-from pkg.utils.metrics import MetricsCollector
 
 # 配置日志
 def setup_logging(config: dict):
@@ -310,11 +317,9 @@ async def run_server():
         # 添加服务器反射（用于调试）
         if server_config.get("enable_reflection", True):
             try:
-                from grpc_reflection.v1alpha import reflection
 
                 # 处理可能的导入错误，使用try/except
                 try:
-                    from api.grpc import inquiry_service_pb2
 
                     SERVICE_NAMES = (
                         inquiry_service_pb2.DESCRIPTOR.services_by_name[

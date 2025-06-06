@@ -1,430 +1,222 @@
+"""
+config_manager - 索克生活项目模块
+"""
+
+from dataclasses import dataclass
+from typing import Any
+import json
+import os
+import threading
+import time
+import yaml
+
 #!/usr/bin/env python3
 
-""""""
-
-""""""
-
-
-from logging import logging
-from json import json
-from os import os
-from time import time
-from typing import List
-from typing import Dict
-from typing import Any
-from dataclasses import dataclass
-from loguru import logger
-import self.logging
-
-
-
-self.logger = self.logging.getLogger(__name__)
-
-
-# @dataclass
-    pass
-#     """""""""
-
-#     type: str  # 'file', 'env', 'default'
-
-
-    pass
-#     """""""""
-
-    pass
-#         ):
-    pass
-#         """"""
-
-
-#         Args: config_dir:
-    pass
-#             env:  (development, staging, production), ENV
-#             watch_interval: ()
-#         """"""
-
-
-
-#         self.start_watching()
-
-
-    pass
-#         """"""
-
-
-#         Args:
-    pass
-#             self.reload:
-    pass
-#         Returns:
-    pass
-#             Dict[str, Any]:
-    pass
-#         """"""
-    pass
-#             self._load_default_config()
-#             self._load_common_config()
-#             self._load_env_config()
-#             self._load_env_vars()
-#             self._track_file_changes()
-
-
-    pass
-#         """"""
-
-#         ,  "database.host"
-
-#         Args:
-    pass
-#             key:
-    pass
-#             default: ,
-
-#         Returns:
-    pass
-#             Any:
-    pass
-#         """"""
-    pass
-# ,
-    pass
-    pass
-    pass
-#                 else:
-    pass
-
-
-    pass
-#         """"""
-
-
-#         Args:
-    pass
-#             section:
-    pass
-#             default: ,
-
-#         Returns:
-    pass
-#             Any:
-    pass
-#         """"""
-
-    pass
-#         """"""
-
-
-#         Args:
-    pass
-#             key:
-    pass
-#             value:
-    pass
-#             source:
-    pass
-#         """"""
-# ,
-    pass
-
-    pass
-    pass
-
-
-    pass
-
-#         else:
-    pass
-
-    pass
-
-    pass
-#         """""""""
-#             "app": {"name": "xiaoai-self.service", "version": "1.0.0"},
-#             "paths": {
-#         "prompts": "self.config/prompts",
-#         "rules": "self.config/rules",
-#         "logs": "logs",
-#             },
-#             "server": {"host": "0.0.0.0", "port": 50051, "workers": 4},
-#             "self.logging": {
-#         "level": "INFO",
-#         "self.format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-#             },
-#             "diagnostic_services": {
-#         "look_service": {"host": "localhost", "port": 50052},
-#         "listen_service": {"host": "localhost", "port": 50053},
-#         "inquiry_service": {"host": "localhost", "port": 50054},
-#         "palpation_service": {"host": "localhost", "port": 50055},
-#             },
-#             "llm": {
-#         "default_model": "gpt-4o",
-#         "openai_api_key": "",
-#         "timeout": 15000,
-#         "max_retries": 3,
-#         "temperature": 0.3,
-#             },
-#             "feature_extraction": {
-#         "min_confidence": 0.6,
-#         "max_features_per_category": 10,
-#         "use_advanced_extraction": True,
-#             },
-#             "fusion": {
-#         "algorithm": "weighted",
-#         "min_confidence_threshold": 0.5,
-#         "use_early_fusion": True,
-#             },
-#             "differentiation": {
-#         "rules_version": "v2",
-#         "confidence_threshold": 0.7,
-#         "evidence_requirements": "moderate",
-#         "methods": ["eight_principles", "zang_fu", "qi_blood_fluid"],
-#             },
-#             "recommendations": {
-#         "max_recommendations": 10,
-#         "min_confidence": 0.6,
-#         "category_limits": {
-#         "diet": 3,
-#         "lifestyle": 2,
-#         "exercise": 2,
-#         "emotion": 2,
-#         "acupoint": 1,
-#         "prevention": 1,
-#         "medical": 1,
-#         },
-#             },
-#             "resilience": {
-#         "circuit_breaker": {
-#         "failure_threshold": 5,
-#         "success_threshold": 2,
-#         "timeout_seconds": 30,
-#         },
-#         "retry": {
-#         "max_retries": 3,
-#         "initial_delay": 0.5,
-#         "backoff_factor": 2.0,
-#         },
-#             },
-#         }
-
-#         self._merge_config(defaultconfig)
-
-    pass
-
-    pass
-#         """""""""
-#         self._load_yaml_config(commonfile, "common")
-
-    pass
-#         """""""""
-#         self._load_yaml_config(envfile, self.env)
-
-    pass
-#         """"""
-#         YAML
-
-#         Args: file_path:
-    pass
-#             label: ,
-#         """"""
-    pass
-#             return
-
-    pass
-#             with open(filepath, encoding="utf-8") as file:
-    pass
-
-    pass
-#                     return
-
-#                     self._merge_config(configdata)
-
-    pass
-#                         type="file",
-#                         path=filepath,
-#                     )
-
-
-
-#         except Exception as e:
-    pass
-
-    pass
-#         """""""""
-
-    pass
-    pass
-# ,
-
-
-
-#                 self.set(configkey, parsedvalue, ConfigSource(type="env", key=key))
-
-#                     f": {key} -> {config_key}={parsed_value}"
-#                 )
-
-    pass
-#         """"""
-
-
-#         Args:
-    pass
-#             value:
-    pass
-#         Returns:
-    pass
-#             Any:
-    pass
-#         """"""
-# ,
-    pass
-
-# JSON
-    pass
-#         except json.JSONDecodeError:
-    pass
-#             pass
-
-    pass
-    pass
-
-    pass
-#         except ValueError:
-    pass
-#             pass
-
-    pass
-#         except ValueError:
-    pass
-#             pass
-
-
-    pass
-#         """"""
-
-
-#         Args: new_config:
-    pass
-#         """"""
-
-    pass
-#         self, base: dict[str, Any], override: dict[str, Any]
-#         ) -> dict[str, Any]:
-    pass
-#         """"""
-
-
-#         Args:
-    pass
-#             base:
-    pass
-#             override:
-    pass
-#         Returns:
-    pass
-#             Dict[str, Any]:
-    pass
-#         """"""
-
-    pass
-# ,
-    pass
-#                 key in result
-#                 and isinstance(result[key], dict)
-#                 and isinstance(value, dict)
-#                 ):
-    pass
-#             else:
-    pass
-
-
-    pass
-#         """"""
-
-
-#         Args:
-    pass
-#             d:
-    pass
-#             parent_key:
-    pass
-#         Returns:
-    pass
-#             List[str]:
-    pass
-#         """"""
-
-    pass
-:
-    pass
-#             else:
-    pass
-
-
-    pass
-#         """""""""
-#         os.path.join(self.configdir, f"self.config.{self.env}.yaml")
-
-    pass
-    pass
-
-    pass
-#         """""""""
-    pass
-#             return
-
-#             self.watch_thread.self.start()
-
-
-    pass
-#         """""""""
-
-    pass
-
-
-    pass
-#         """""""""
-    pass
-    pass
-    pass
-    pass
-#                         os.path.getmtime(filepath)
-
-    pass
-    pass
-
-#             except Exception as e:
-    pass
-
-#                 time.sleep(self.watchinterval)
-
-
-#
-
-
-    pass
-#     """"""
-
-
-#     Returns:
-    pass
-#         ConfigManager:
-    pass
-#     """"""
-#     global _config_manager
-    pass
-
-#         ConfigManager(config_dir =configdir, env=env)
-#         _config_manager.load_config()
-
-
-
-    pass
-#     """"""
-
-#     API
-
-#     Returns:
-    pass
-#         ConfigManager:
-    pass
-#     """"""
+"""
+配置管理模块 - 提供统一的配置管理功能
+"""
+
+
+
+
+@dataclass
+class ConfigSource:
+    """配置来源信息"""
+    type: str  # "file", "env", "default"
+    path: str | None = None
+    key: str | None = None
+
+
+class ConfigManager:
+    """配置管理器"""
+
+    def __init__(self, config_dir: str = "config", env: str = "development"):
+        self.config_dir = config_dir
+        self.env = env
+        self.config = {}
+        self.sources = {}
+        self.watch_interval = 5.0
+        self.watch_thread = None
+        self.file_timestamps = {}
+        self._lock = threading.RLock()
+
+    def load_config(self):
+        """加载配置"""
+        with self._lock:
+            self._load_default_config()
+            self._load_file_config()
+            self._load_env_config()
+
+    def get(self, key: str, default: Any = None) -> Any:
+        """获取配置值"""
+        with self._lock:
+            keys = key.split('.')
+            value = self.config
+
+            for k in keys:
+                if isinstance(value, dict) and k in value:
+                    value = value[k]
+                else:
+                    return default
+
+            return value
+
+    def set(self, key: str, value: Any, source: ConfigSource | None = None):
+        """设置配置值"""
+        with self._lock:
+            keys = key.split('.')
+            config = self.config
+
+            for k in keys[:-1]:
+                if k not in config:
+                    config[k] = {}
+                config = config[k]
+
+            config[keys[-1]] = value
+
+            if source:
+                self.sources[key] = source
+
+    def _load_default_config(self):
+        """加载默认配置"""
+        default_config = {
+            "service": {
+                "name": "xiaoai-service",
+                "version": "1.0.0",
+                "port": 8001,
+                "host": "0.0.0.0"
+            },
+            "database": {
+                "url": "postgresql://localhost:5432/xiaoai",
+                "pool_size": 10,
+                "max_overflow": 20
+            },
+            "ai": {
+                "model": "gpt-4",
+                "temperature": 0.7,
+                "max_tokens": 2000
+            },
+            "logging": {
+                "level": "INFO",
+                "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+            }
+        }
+
+        self._merge_config(default_config)
+
+    def _load_file_config(self):
+        """加载文件配置"""
+        common_file = os.path.join(self.config_dir, "common.yaml")
+        env_file = os.path.join(self.config_dir, f"{self.env}.yaml")
+
+        for file_path in [common_file, env_file]:
+            if os.path.exists(file_path):
+                self._load_yaml_config(file_path)
+
+    def _load_yaml_config(self, file_path: str):
+        """加载YAML配置文件"""
+        try:
+            with open(file_path, encoding='utf-8') as f:
+                config_data = yaml.safe_load(f)
+
+            if config_data:
+                self._merge_config(config_data)
+                self.file_timestamps[file_path] = os.path.getmtime(file_path)
+
+        except Exception as e:
+            print(f"Failed to load config file {file_path}: {e}")
+
+    def _load_env_config(self):
+        """加载环境变量配置"""
+        prefix = "XIAOAI_"
+
+        for key, value in os.environ.items():
+            if key.startswith(prefix):
+                config_key = key[len(prefix):].lower().replace('_', '.')
+                parsed_value = self._parse_env_value(value)
+
+                self.set(config_key, parsed_value, ConfigSource(type="env", key=key))
+
+    def _parse_env_value(self, value: str) -> Any:
+        """解析环境变量值"""
+        # 尝试解析为JSON
+        try:
+            return json.loads(value)
+        except json.JSONDecodeError:
+            pass
+
+        # 尝试解析为布尔值
+        if value.lower() in ('true', 'false'):
+            return value.lower() == 'true'
+
+        # 尝试解析为数字
+        try:
+            if '.' in value:
+                return float(value)
+            return int(value)
+        except ValueError:
+            pass
+
+        # 返回字符串
+        return value
+
+    def _merge_config(self, new_config: dict[str, Any]):
+        """合并配置"""
+        def merge_dict(target: dict[str, Any], source: dict[str, Any]):
+            for key, value in source.items():
+                if key in target and isinstance(target[key], dict) and isinstance(value, dict):
+                    merge_dict(target[key], value)
+                else:
+                    target[key] = value
+
+        merge_dict(self.config, new_config)
+
+    def start_watching(self):
+        """开始监控配置文件变化"""
+        if self.watch_thread is None or not self.watch_thread.is_alive():
+            self.watch_thread = threading.Thread(target=self._watch_files, daemon=True)
+            self.watch_thread.start()
+
+    def _watch_files(self):
+        """监控文件变化"""
+        while True:
+            try:
+                for file_path, last_mtime in self.file_timestamps.items():
+                    if os.path.exists(file_path):
+                        current_mtime = os.path.getmtime(file_path)
+                        if current_mtime > last_mtime:
+                            print(f"Config file {file_path} changed, reloading...")
+                            self._load_yaml_config(file_path)
+
+                time.sleep(self.watch_interval)
+
+            except Exception as e:
+                print(f"Error watching config files: {e}")
+                time.sleep(self.watch_interval)
+
+
+# 全局配置管理器实例
+_config_manager: ConfigManager | None = None
+_config_lock = threading.Lock()
+
+
+def get_config_manager(config_dir: str = "config", env: str = "development") -> ConfigManager:
+    """获取配置管理器实例"""
+    global _config_manager
+
+    with _config_lock:
+        if _config_manager is None:
+            _config_manager = ConfigManager(config_dir=config_dir, env=env)
+            _config_manager.load_config()
+
+        return _config_manager
+
+
+def get_config(key: str, default: Any = None) -> Any:
+    """获取配置值的便捷函数"""
+    return get_config_manager().get(key, default)
+
+
+def set_config(key: str, value: Any):
+    """设置配置值的便捷函数"""
+    get_config_manager().set(key, value)

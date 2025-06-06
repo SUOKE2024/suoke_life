@@ -1,29 +1,16 @@
-#!/usr/bin/env python3
 """
-分布式追踪系统
-基于OpenTelemetry实现的分布式链路追踪
-支持Jaeger、Zipkin等后端，提供自动仪表化和手动追踪功能
+tracing - 索克生活项目模块
 """
 
-import asyncio
+        from opentelemetry.propagators import extract
+        from opentelemetry.propagators import inject
 from contextlib import contextmanager
 from dataclasses import dataclass
-import functools
-import logging
-import os
-import socket
-import time
-from typing import Any
-
-# OpenTelemetry imports
 from opentelemetry import trace
 from opentelemetry.exporter.jaeger.thrift import JaegerExporter
 from opentelemetry.exporter.zipkin.json import ZipkinExporter
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.instrumentation.grpc import (
-    GrpcInstrumentorClient,
-    GrpcInstrumentorServer,
-)
 from opentelemetry.instrumentation.psycopg2 import Psycopg2Instrumentor
 from opentelemetry.instrumentation.redis import RedisInstrumentor
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
@@ -34,6 +21,26 @@ from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor, ConsoleSpanExporter
 from opentelemetry.trace import Status, StatusCode
 from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapPropagator
+from typing import Any
+import asyncio
+import functools
+import logging
+import os
+import socket
+import time
+
+#!/usr/bin/env python3
+"""
+分布式追踪系统
+基于OpenTelemetry实现的分布式链路追踪
+支持Jaeger、Zipkin等后端，提供自动仪表化和手动追踪功能
+"""
+
+
+# OpenTelemetry imports
+    GrpcInstrumentorClient,
+    GrpcInstrumentorServer,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -349,7 +356,6 @@ class TracingManager:
         if not self._initialized:
             return headers
 
-        from opentelemetry.propagators import inject
 
         inject(headers)
         return headers
@@ -359,7 +365,6 @@ class TracingManager:
         if not self._initialized:
             return None
 
-        from opentelemetry.propagators import extract
 
         return extract(headers)
 

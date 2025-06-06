@@ -1,31 +1,16 @@
 import { renderHook, act } from '@testing-library/react-native';
-import { useBlockchainService } from '../useBlockchainService';
+import { getBlockchainServiceClient } from '../../services/blockchain/BlockchainServiceClient';
 
 // Mock the entire BlockchainServiceClient module
 jest.mock('../../services/blockchain/BlockchainServiceClient', () => {
-  const mockClient = {
-    storeHealthData: jest.fn(),
-    verifyHealthData: jest.fn(),
-    verifyWithZKP: jest.fn(),
-    getHealthDataRecords: jest.fn(),
-    authorizeAccess: jest.fn(),
-    revokeAccess: jest.fn(),
-    getBlockchainStatus: jest.fn(),
-    generateZKProof: jest.fn(),
-    getAccessGrants: jest.fn(),
-    getNetworkStats: jest.fn(),
-    batchStoreHealthData: jest.fn()
+  const mockClient = {storeHealthData: jest.fn(),verifyHealthData: jest.fn(),verifyWithZKP: jest.fn(),getHealthDataRecords: jest.fn(),authorizeAccess: jest.fn(),revokeAccess: jest.fn(),getBlockchainStatus: jest.fn(),generateZKProof: jest.fn(),getAccessGrants: jest.fn(),getNetworkStats: jest.fn(),batchStoreHealthData: jest.fn();
   };
 
-  return {
-    getBlockchainServiceClient: () => mockClient,
-    createBlockchainServiceClient: () => mockClient,
-    BlockchainServiceClient: jest.fn().mockImplementation(() => mockClient)
+  return {getBlockchainServiceClient: () => mockClient,createBlockchainServiceClient: () => mockClient,BlockchainServiceClient: jest.fn().mockImplementation(() => mockClient);
   };
 });
 
 // Import after mocking
-import { getBlockchainServiceClient } from '../../services/blockchain/BlockchainServiceClient';
 
 describe('useBlockchainService', () => {
   let mockClient: any;
@@ -50,11 +35,7 @@ describe('useBlockchainService', () => {
 
   describe('storeHealthData', () => {
     it('should store health data successfully', async () => {
-      const mockResponse = {
-        transactionId: 'tx-123',
-        blockHash: '0xblock123',
-        success: true,
-        message: 'Data stored successfully'
+      const mockResponse = {transactionId: 'tx-123',blockHash: '0xblock123',success: true,message: 'Data stored successfully';
       };
 
       mockClient.storeHealthData.mockResolvedValueOnce(mockResponse);
@@ -62,13 +43,7 @@ describe('useBlockchainService', () => {
       const { result } = renderHook(() => useBlockchainService());
 
       await act(async () => {
-        const response = await result.current.storeHealthData({
-          userId: 'user-123',
-          dataType: 'blood_pressure',
-          dataHash: new Uint8Array([1, 2, 3]),
-          encryptedData: new Uint8Array([4, 5, 6]),
-          metadata: { device: 'smartwatch' },
-          timestamp: 1701432000
+        const response = await result.current.storeHealthData({userId: 'user-123',dataType: 'blood_pressure',dataHash: new Uint8Array([1, 2, 3]),encryptedData: new Uint8Array([4, 5, 6]),metadata: { device: 'smartwatch' },timestamp: 1701432000;
         });
 
         expect(response).toEqual(mockResponse);
@@ -111,10 +86,7 @@ describe('useBlockchainService', () => {
 
   describe('basic functionality', () => {
     it('should verify health data successfully', async () => {
-      const mockResponse = {
-        valid: true,
-        message: 'Data verified successfully',
-        verificationTimestamp: 1701432000
+      const mockResponse = {valid: true,message: 'Data verified successfully',verificationTimestamp: 1701432000;
       };
 
       mockClient.verifyHealthData.mockResolvedValueOnce(mockResponse);
@@ -122,9 +94,7 @@ describe('useBlockchainService', () => {
       const { result } = renderHook(() => useBlockchainService());
 
       await act(async () => {
-        const response = await result.current.verifyHealthData({
-          transactionId: 'tx-123',
-          dataHash: new Uint8Array([1, 2, 3])
+        const response = await result.current.verifyHealthData({transactionId: 'tx-123',dataHash: new Uint8Array([1, 2, 3]);
         });
 
         expect(response).toEqual(mockResponse);
@@ -149,13 +119,7 @@ describe('useBlockchainService', () => {
     });
 
     it('should get blockchain status successfully', async () => {
-      const mockResponse = {
-        currentBlockHeight: 12345,
-        connectedNodes: 5,
-        consensusStatus: 'SYNCED',
-        syncPercentage: 100,
-        nodeInfo: { version: '1.0.0' },
-        lastBlockTimestamp: 1701432000
+      const mockResponse = {currentBlockHeight: 12345,connectedNodes: 5,consensusStatus: 'SYNCED',syncPercentage: 100,nodeInfo: { version: '1.0.0' },lastBlockTimestamp: 1701432000;
       };
 
       mockClient.getBlockchainStatus.mockResolvedValueOnce(mockResponse);
@@ -163,8 +127,7 @@ describe('useBlockchainService', () => {
       const { result } = renderHook(() => useBlockchainService());
 
       await act(async () => {
-        const response = await result.current.getBlockchainStatus({
-          includeNodeInfo: true
+        const response = await result.current.getBlockchainStatus({includeNodeInfo: true;
         });
 
         expect(response).toEqual(mockResponse);
@@ -182,4 +145,4 @@ describe('useBlockchainService', () => {
       });
     });
   });
-}); 
+});

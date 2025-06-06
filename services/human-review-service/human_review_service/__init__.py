@@ -1,4 +1,12 @@
 """
+__init__ - 索克生活项目模块
+"""
+
+from .api.main import create_app
+from .core.models import Reviewer, ReviewPriority, ReviewStatus, ReviewTask, ReviewType
+from .core.service import HumanReviewService
+
+"""
 索克生活人工审核微服务
 Suoke Life Human Review Service
 
@@ -10,9 +18,6 @@ __author__ = "Suoke Life Team"
 __email__ = "dev@suokelife.com"
 __description__ = "索克生活人工审核微服务 - 确保医疗健康建议的安全性和准确性"
 
-from .api.main import create_app
-from .core.models import Reviewer, ReviewPriority, ReviewStatus, ReviewTask, ReviewType
-from .core.service import HumanReviewService
 
 __all__ = [
     "ReviewTask",

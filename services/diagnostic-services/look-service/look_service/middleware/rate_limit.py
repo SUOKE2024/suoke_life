@@ -1,14 +1,19 @@
-"""Rate limiting middleware."""
+"""
+rate_limit - 索克生活项目模块
+"""
 
-import time
+from ..core.logging import get_logger
 from collections.abc import Awaitable, Callable
-from typing import Any
-
 from fastapi import Request, Response, status
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
+from typing import Any
+import time
 
-from ..core.logging import get_logger
+"""Rate limiting middleware."""
+
+
+
 
 logger = get_logger(__name__)
 

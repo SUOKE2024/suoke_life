@@ -1,26 +1,31 @@
 """
+audio_model - 索克生活项目模块
+"""
+
+from ..config.settings import get_settings
+from ..models.accessibility import AudioAnalysis
+from datasets import load_dataset
+from transformers import (
+from typing import Dict, List, Optional, Tuple, Any, Union
+import asyncio
+import io
+import librosa
+import logging
+import numpy as np
+import torch
+import torchaudio
+import wave
+
+"""
 Audio AI model for accessibility analysis.
 Provides speech recognition, synthesis, and audio processing capabilities.
 """
 
-import asyncio
-import logging
-import numpy as np
-from typing import Dict, List, Optional, Tuple, Any, Union
-import io
-import wave
-import librosa
-import torch
-import torchaudio
-from transformers import (
     WhisperProcessor, WhisperForConditionalGeneration,
     SpeechT5Processor, SpeechT5ForTextToSpeech, SpeechT5HifiGan,
     pipeline
 )
-from datasets import load_dataset
 
-from ..config.settings import get_settings
-from ..models.accessibility import AudioAnalysis
 
 logger = logging.getLogger(__name__)
 

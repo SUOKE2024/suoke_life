@@ -1,10 +1,15 @@
+"""
+__init__ - 索克生活项目模块
+"""
+
+from .c_algorithms import (
+
 #!/usr/bin/env python3
 """
 索克生活 - C扩展模块
 提供高性能C实现的核心算法接口
 """
 
-from .c_algorithms import (
     CAlgorithmExtension,
     CExtensionConfig,
     AlgorithmType,

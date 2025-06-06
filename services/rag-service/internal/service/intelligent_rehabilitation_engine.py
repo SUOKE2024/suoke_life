@@ -1,3 +1,16 @@
+"""
+intelligent_rehabilitation_engine - 索克生活项目模块
+"""
+
+from ..observability.metrics import MetricsCollector
+from ..observability.tracing import trace_operation, SpanKind
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from loguru import logger
+from typing import Dict, List, Any, Optional, Tuple, Union, Set, Callable
+import warnings
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,16 +19,8 @@
 结合中医康复理念和现代康复医学，为用户制定科学的康复训练计划
 """
 
-from typing import Dict, List, Any, Optional, Tuple, Union, Set, Callable
-from dataclasses import dataclass, field
-from enum import Enum
-from datetime import datetime, timedelta
-from loguru import logger
-import warnings
 warnings.filterwarnings('ignore')
 
-from ..observability.metrics import MetricsCollector
-from ..observability.tracing import trace_operation, SpanKind
 
 class RehabilitationType(str, Enum):
     """康复类型"""

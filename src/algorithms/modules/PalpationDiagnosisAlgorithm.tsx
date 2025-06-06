@@ -1,10 +1,8 @@
+import { PalpationConfig } from "../../placeholder";../config/AlgorithmConfig";/import { TCMKnowledgeBase } from "../knowledge/////    TCMKnowledgeBase
+
 import React from "react";
-import { PalpationConfig } from "../../placeholder";../config/AlgorithmConfig";/import { TCMKnowledgeBase } from "../knowledge/////    TCMKnowledgeBase";"
-//////
-//////     切诊算法模块     实现中医切诊功能，包括脉象分析、触诊分析、温度感知     @author 索克生活技术团队   @version 1.0.0;
-export interface PalpationData  {;
-;
-  pulseData?: PulseData;
+// // 切诊算法模块     实现中医切诊功能，包括脉象分析、触诊分析、温度感知     @author 索克生活技术团队   @version 1.0.0;
+export interface PalpationData   {pulseData?: PulseData;
   touchData?: TouchData;
   temperatureData?: TemperatureData;
   pressureData?: PressureData;
@@ -12,88 +10,66 @@ export interface PalpationData  {;
 }
 export interface PulseData { waveform: number[];
  // 脉搏波形数据 // duration: number  / 采集时长（秒）* // sampleRate: number  * / 采样率* // , positions: PulsePosition[]  * / 寸关尺三部位数据* // , timestamp: number * /////     }
-export interface PulsePosition { position: "cun" | "guan" | "chi" // 寸、关、尺 //////     , side: "left" | "right"
+export interface PulsePosition { position: "cun" | "guan" | "chi" // 寸、关、尺 // , side: "left" | "right"
   / 左右手* // , waveform: number[], * /////
-  pressure: "light" | "medium" | "heavy" // 浮、中、沉 //////     }
-export interface TouchData {;
-;
-  skinTexture?: SkinTextureData;
+  pressure: "light" | "medium" | "heavy" // 浮、中、沉 // }
+export interface TouchData  {skinTexture?: SkinTextureData;
   muscleElasticity?: MuscleElasticityData;
   jointMobility?: JointMobilityData;
   abdominalPalpation?: AbdominalPalpationData}
-export interface SkinTextureData  {;
-;
-  moisture: number; // 0-1, 干燥到湿润 // temperature: number  / 相对温度* // , elasticity: number  * / 0-1, 弹性* // thickness: number  * / 厚薄* // , smoothness: number  * / 0-1, 光滑度* * } * /////
-export interface MuscleElasticityData {;
-;
-  firmness: number; // 0-1, 肌肉紧实度 // elasticity: number  / 0-1, 弹性* // tension: number  * / 0-1, 紧张度* // symmetry: number  * / 0-1, 对称性* * } * /////
-export interface JointMobilityData {;
-;
-  range: number; // 活动度 // , stiffness: number  / 0-1, 僵硬度* // pain: number  * / 0-10, 疼痛程度* // swelling: number  * / 0-1, 肿胀程度* * } * /////
+export interface SkinTextureData   {moisture: number; // 0-1, 干燥到湿润 // temperature: number  / 相对温度* // , elasticity: number  * / 0-1, 弹性* // thickness: number  * / 厚薄* // , smoothness: number  * / 0-1, 光滑度* * } * /////
+export interface MuscleElasticityData  {firmness: number; // 0-1, 肌肉紧实度 // elasticity: number  / 0-1, 弹性* // tension: number  * / 0-1, 紧张度* // symmetry: number  * / 0-1, 对称性* * } * /////
+export interface JointMobilityData  {range: number; // 活动度 // , stiffness: number  / 0-1, 僵硬度* // pain: number  * / 0-10, 疼痛程度* // swelling: number  * / 0-1, 肿胀程度* * } * /////
 export interface AbdominalPalpationData {
   tenderness: TendernessData[],
-  masses: MassData[],;
-  organSize: OrganSizeData,;
-  muscleGuarding: number; // 0-1, 肌紧张 * } ////
-export interface TendernessData { location: string,;
-  intensity: number // 0-10 //////     , type: "superficial" | "deep", ;
-  rebound: boolean;
- // 反跳痛 //////     }
+  masses: MassData[],organSize: OrganSizeData,muscleGuarding: number; // 0-1, 肌紧张 * } ////
+export interface TendernessData { location: string,intensity: number // 0-10 // , type: "superficial" | "deep",rebound: boolean;
+ // 反跳痛 // }
 export interface MassData { location: string,
-  size: number // cm //////     , consistency: "soft" | "firm" | "hard",
-  mobility: "mobile" | "fixed",;
-  pulsatile: boolean};
+  size: number // cm // , consistency: "soft" | "firm" | "hard",
+  mobility: "mobile" | "fixed",pulsatile: boolean};
 export interface OrganSizeData { liver: number;
  // 肝脏大小（cm） // , spleen: number  / 脾脏大小（cm）* // , kidney: number  * / 肾脏大小（cm）* // } * /////
 export interface TemperatureData { bodyTemperature: number;
- // 体温 //////     , localTemperatures: LocalTemperatureData[],
+ // 体温 // , localTemperatures: LocalTemperatureData[],
   temperatureDistribution: TemperatureDistributionData}
 export interface LocalTemperatureData { location: string,
   temperature: number,
   comparison: "warmer" | "cooler" | "normal"
- // 与正常体温比较 //////     }
+ // 与正常体温比较 // }
 export interface TemperatureDistributionData { head: number,
   chest: number,
   abdomen: number,
-  limbs: number,;
-  extremities: number};
+  limbs: number,extremities: number};
 export interface PressureData { systolic: number;
  // 收缩压 // diastolic: number  / 舒张压* // , pulseRate: number  * // 脉率* // , pulseRhythm: "regular" | "irregular"  * / 脉律* // } * /////
-export interface PalpationResult { confidence: number,;
-  features: PalpationFeatures,;
-  analysis: string;
+export interface PalpationResult { confidence: number,features: PalpationFeatures,analysis: string;
   pulseAnalysis?: PulseAnalysis;
   touchAnalysis?: TouchAnalysis;
   temperatureAnalysis?: TemperatureAnalysis}
 export interface PalpationFeatures { pulse: PulseFeatures,
   touch: TouchFeatures,
-  temperature: TemperatureFeatures,;
-  pressure: PressureFeatures};
+  temperature: TemperatureFeatures,pressure: PressureFeatures};
 export interface PulseFeatures { rate: number;
  // 脉率 // rhythm: string  / 脉律* // strength: string  * / 脉力* // depth: string  * / 脉位（浮沉）* // width: string  * / 脉形（细洪）* // length: string  * / 脉长* // , tension: string  * / 脉势* // , smoothness: string  * / 脉流利度* // } * /////
 export interface TouchFeatures { skinCondition: string,
   muscleCondition: string,
   jointCondition: string,
   abdominalCondition: string}
-export interface TemperatureFeatures { overallTemperature: string,;
-  temperaturePattern: string,;
-  localVariations: string[];
+export interface TemperatureFeatures { overallTemperature: string,temperaturePattern: string,localVariations: string[];
   }
 export interface PressureFeatures { bloodPressure: string,
   pulseCharacteristics: string}
 export interface PulseAnalysis { pulseType: PulseType,
   pulseCharacteristics: PulseCharacteristics,
   organCorrelation: OrganCorrelation,
-  syndromeIndications: string[],;
-  pathologicalSignificance: string};
+  syndromeIndications: string[],pathologicalSignificance: string};
 export interface PulseType { primary: string;
  // 主要脉象 // , secondary: string[]  / 兼见脉象* // , confidence: number, * /////
   description: string}
 export interface PulseCharacteristics { rate: { value: number, interpretation: string},
   rhythm: { value: string, interpretation: string},
-  strength: { value: string, interpretation: string},;
-  depth: { value: string, interpretation: string},;
-  width: { value: string, interpretation: string};
+  strength: { value: string, interpretation: string},depth: { value: string, interpretation: string},width: { value: string, interpretation: string};
 }
 export interface OrganCorrelation { heart: string,
   liver: string,
@@ -138,9 +114,7 @@ export interface PathologicalFinding { type: string,
   significance: string,
   recommendation: string}
 export interface TemperatureAnalysis { thermalPattern: ThermalPattern,
-  organThermalStates: OrganThermalState[],;
-  constitutionalImplications: string[],;
-  syndromeIndications: string[];
+  organThermalStates: OrganThermalState[],constitutionalImplications: string[],syndromeIndications: string[];
   }
 export interface ThermalPattern { overall: string;
  // 整体热象 // distribution: string  / 分布特点* // , variations: string[]  * / 局部变化* // , tcmInterpretation: string * /////     }
@@ -156,9 +130,7 @@ export interface UserProfile { age: number,
   allergies: string[],
   medications: string[]
   }
-//////     切诊算法类export class PalpationDiagnosisAlgorithm {;
-;
-  private config: PalpationConfig;
+// 切诊算法类export class PalpationDiagnosisAlgorithm  {private config: PalpationConfig;
   private knowledgeBase: TCMKnowledgeBase;
   private pulseAnalyzer!: PulseAnalyzer;
   private touchAnalyzer!: TouchAnalyzer;
@@ -168,7 +140,7 @@ export interface UserProfile { age: number,
     this.knowledgeBase = knowledgeBase;
     this.initializeAnalyzers();
   }
-  //////     初始化分析器  private initializeAnalyzers(): void {
+  // 初始化分析器  private initializeAnalyzers(): void {
     this.pulseAnalyzer = new PulseAnalyzer(
       this.config.models.pulseAnalysis,
       this.knowledgeBase;
@@ -182,32 +154,32 @@ export interface UserProfile { age: number,
       this.knowledgeBase;
     );
   }
-  //////     执行切诊分析  public async analyze(data: PalpationData,
+  // 执行切诊分析  public async analyze(data: PalpationData,
     userProfile?: UserProfile;
   ): Promise<PalpationResult /////    >  {
     if (!this.config.enabled) {
-      throw new Error("切诊功能未启用";)
+      throw new Error("切诊功能未启用";);
     }
     try {
       this.emit("algorithm:progress", {
         stage: "preprocessing",
         progress: 0.1;
       });
-      // 数据预处理 //////     const processedData = await this.preprocessData(da;t;a;)
+      // 数据预处理 // const processedData = await this.preprocessData(da;t;a;);
       this.emit("algorithm:progress", {
         stage: "signal_processing",
         progress: 0.3;
       });
-      // 信号处理 //////     const processedSignals = await this.processSignals(processedDa;t;a;)
+      // 信号处理 // const processedSignals = await this.processSignals(processedDa;t;a;);
       this.emit("algorithm:progress", {
         stage: "feature_extraction",
         progress: 0.5;
       });
-      // 特征提取 //////     const features = await this.extractFeatures(processedSigna;l;s;)
+      // 特征提取 // const features = await this.extractFeatures(processedSigna;l;s;);
       this.emit("algorithm:progress", { stage: "analysis", progress: 0.7});
-      // 执行各项分析 //////     const analyses = await this.performAnalyses(features, userProfi;l;e;)
+      // 执行各项分析 // const analyses = await this.performAnalyses(features, userProfi;l;e;);
       this.emit("algorithm:progress", { stage: "integration", progress: 0.9});
-      // 整合分析结果 //////     const result = await this.integrateResults(features, analys;e;s;)
+      // 整合分析结果 // const result = await this.integrateResults(features, analys;e;s;);
       this.emit("algorithm:progress", { stage: "completed", progress: 1.0});
       return resu;l;t;
     } catch (error) {
@@ -217,18 +189,18 @@ export interface UserProfile { age: number,
   }
   // 数据预处理  private async preprocessData(data: PalpationData);: Promise<ProcessedPalpationData /////    >  {
     const processed: ProcessedPalpationData = {};
-    // 处理脉象数据 //////     if (data.pulseData) {
+    // 处理脉象数据 // if (data.pulseData) {
       processed.pulseData = await this.preprocessPulseData(data.pulseData;);
     }
-    // 处理触诊数据 //////     if (data.touchData) {
+    // 处理触诊数据 // if (data.touchData) {
       processed.touchData = await this.preprocessTouchData(data.touchData;);
     }
-    // 处理温度数据 //////     if (data.temperatureData) {
+    // 处理温度数据 // if (data.temperatureData) {
       processed.temperatureData = await this.preprocessTemperatureData(
         data.temperatureData;
       ;);
     }
-    // 处理压力数据 //////     if (data.pressureData) {
+    // 处理压力数据 // if (data.pressureData) {
       processed.pressureData = await this.preprocessPressureData(
         data.pressureData;
       ;);
@@ -237,13 +209,13 @@ export interface UserProfile { age: number,
   }
   // 信号处理  private async processSignals(data: ProcessedPalpationData);: Promise<ProcessedSignalData /////    >  {
     const signals: ProcessedSignalData = {};
-    // 脉象信号处理 //////     if (data.pulseData) {
+    // 脉象信号处理 // if (data.pulseData) {
       signals.pulseSignals = await this.processPulseSignals(data.pulseData;);
     }
-    // 触诊信号处理 //////     if (data.touchData) {
+    // 触诊信号处理 // if (data.touchData) {
       signals.touchSignals = await this.processTouchSignals(data.touchData;);
     }
-    // 温度信号处理 //////     if (data.temperatureData) {
+    // 温度信号处理 // if (data.temperatureData) {
       signals.temperatureSignals = await this.processTemperatureSignals(
         data.temperatureData;
       ;);
@@ -251,67 +223,66 @@ export interface UserProfile { age: number,
     return signa;l;s;
   }
   // 特征提取  private async extractFeatures(signals: ProcessedSignalData): Promise<PalpationFeatures /////    >  {
-    const features: PalpationFeatures = {;
-      pulse: {
+    const features: PalpationFeatures = {pulse: {
         rate: 0,
-        rhythm: ","
+        rhythm: ",",
         strength: ","
-        depth: ","
+        depth: ",",
         width: ","
-        length: ","
+        length: ",",
         tension: ","
         smoothness: ""
       },
       touch: {
-        skinCondition: ","
+        skinCondition: ",",
         muscleCondition: ","
-        jointCondition: ","
+        jointCondition: ",",
         abdominalCondition: ""
       },
       temperature: {
-        overallTemperature: ","
+        overallTemperature: ",",
         temperaturePattern: ","
         localVariations: []
       },
       pressure: {
-        bloodPressure: ","
+        bloodPressure: ",",
         pulseCharacteristics: ""
       }
     };
-    // 提取脉象特征 //////     if (signals.pulseSignals) {
+    // 提取脉象特征 // if (signals.pulseSignals) {
       features.pulse = await this.pulseAnalyzer.extractFeatures(
         signals.pulseSignals;
       ;);
     }
-    // 提取触诊特征 //////     if (signals.touchSignals) {
+    // 提取触诊特征 // if (signals.touchSignals) {
       features.touch = await this.touchAnalyzer.extractFeatures(
         signals.touchSignals;
       ;);
     }
-    // 提取温度特征 //////     if (signals.temperatureSignals) {
+    // 提取温度特征 // if (signals.temperatureSignals) {
       features.temperature = await this.temperatureAnalyzer.extractFeatures(
         signals.temperatureSignals;
       ;);
     }
     return featur;e;s;
   }
-  //////     执行各项分析  private async performAnalyses(features: PalpationFeatures,
+  // 执行各项分析  private async performAnalyses(features: PalpationFeatures,
     userProfile?: UserProfile;
   ): Promise<AnalysisResults /////    >  {
     const results: AnalysisResults = {};
-    // 脉象分析 //////     if (features.pulse.rate > 0) {
+    // 脉象分析 // if (features.pulse.rate > 0) {
       results.pulseAnalysis = await this.pulseAnalyzer.analyze(
         features.pulse,
         userProfile;
       ;);
     }
-    // 触诊分析 //////     if (features.touch.skinCondition) {
+    // 触诊分析 // if (features.touch.skinCondition) {
       results.touchAnalysis = await this.touchAnalyzer.analyze(
         features.touch,
         userProfile;
       ;);
     }
-    // 温度分析 //////     if (features.temperature.overallTemperature) {
+    // 温度分析 // if (features.temperature.overallTemperature) {
       results.temperatureAnalysis = await this.temperatureAnalyzer.analyze(
         features.temperature,
         userProfile;
@@ -319,57 +290,49 @@ export interface UserProfile { age: number,
     }
     return resul;t;s;
   }
-  //////     整合分析结果  private async integrateResults(features: PalpationFeatures,
+  // 整合分析结果  private async integrateResults(features: PalpationFeatures,
     analyses: AnalysisResults);: Promise<PalpationResult /////    >  {
-    // 计算整体置信度 //////     const confidence = this.calculateOverallConfidence(analyses;);
-    // 生成综合分析 //////     const analysis = await this.generateComprehensiveAnalysis(analys;e;s;);
-    return {
-      confidence,
-      features,
-      analysis,
-      pulseAnalysis: analyses.pulseAnalysis,
-      touchAnalysis: analyses.touchAnalysis,
-      temperatureAnalysis: analyses.temperatureAnalysi;s;
+    // 计算整体置信度 // const confidence = this.calculateOverallConfidence(analyses;);
+    // 生成综合分析 // const analysis = await this.generateComprehensiveAnalysis(analys;e;s;);
+    return {confidence,features,analysis,pulseAnalysis: analyses.pulseAnalysis,touchAnalysis: analyses.touchAnalysis,temperatureAnalysis: analyses.temperatureAnalysi;s;
     ;};
   }
-  //////     计算整体置信度  private calculateOverallConfidence(analyses: AnalysisResults): number  {
+  // 计算整体置信度  private calculateOverallConfidence(analyses: AnalysisResults): number  {
     const confidences: number[] = [];
-    // 基于各项分析的完整性和一致性计算置信度 //////     if (analyses.pulseAnalysis) {
-      confidences.push(0.9)
-    } // 脉象分析权重最高 //////     if (analyses.touchAnalysis) {
-      confidences.push(0.7)
-    } // 触诊分析权重 //////     if (analyses.temperatureAnalysis) {
-      confidences.push(0.6)
-    } // 温度分析权重 //////
-    if (confidences.length === 0) {
+    // 基于各项分析的完整性和一致性计算置信度 // if (analyses.pulseAnalysis) {
+      confidences.push(0.9);
+    } // 脉象分析权重最高 // if (analyses.touchAnalysis) {
+      confidences.push(0.7);
+    } // 触诊分析权重 // if (analyses.temperatureAnalysis) {
+      confidences.push(0.6);
+    } // 温度分析权重 // if (confidences.length === 0) {
       return 0.;5;
     }
-    //////     记录渲染性能
+    // 记录渲染性能
 performanceMonitor.recordRender();
     return (;
       confidences.reduce((sum, con;f;); => sum + conf, 0) / confidences.length/////        );
   }
-  //////     生成综合分析  private async generateComprehensiveAnalysis(analyses: AnalysisResults);: Promise<string>  {
+  // 生成综合分析  private async generateComprehensiveAnalysis(analyses: AnalysisResults);: Promise<string>  {
     const analysisTexts: string[] = [];
     if (analyses.pulseAnalysis) {
       analysisTexts.push(
         `脉象分析：${analyses.pulseAnalysis.pulseType.primary}，${analyses.pulseAnalysis.pathologicalSignificance}`
-      )
+      );
     }
     if (analyses.touchAnalysis) {
       analysisTexts.push(
         `触诊分析：${analyses.touchAnalysis.overallAssessment}`
-      )
+      );
     }
     if (analyses.temperatureAnalysis) {
       analysisTexts.push(
         `温度分析：${analyses.temperatureAnalysis.thermalPattern.overall}，${analyses.temperatureAnalysis.thermalPattern.tcmInterpretation}`
       );
     }
-    // 使用知识库生成综合分析 //////     const comprehensiveAnalysis =
+    // 使用知识库生成综合分析 // const comprehensiveAnalysis =
       await this.knowledgeBase.generateCalculationAnalysis({ palpationAnalysis: anal;y;s;e;s ; });
-    return [...analysisTexts, ", "综合切诊分析：", comprehensiveAnalysis].join("
-      "\n;"
+    return [...analysisTexts, ", "综合切诊分析：", comprehensiveAnalysis].join(\n;"
     ;);
   }
   // 数据预处理方法（简化实现） // private async preprocessPulseData(data: PulseData): Promise<PulseData  /////     >  {
@@ -380,18 +343,18 @@ performanceMonitor.recordRender();
     // 温度数据预处理 // return dat;a;  / 占位符* // } * /////
   private async preprocessPressureData(data: PressureData);: Promise<PressureData /////    >  {
     // 压力数据预处理 // return dat;a;  / 占位符* // } * /////
-  // 信号处理方法（简化实现） //////     private async processPulseSignals(data: PulseData): Promise<any>  {
+  // 信号处理方法（简化实现） // private async processPulseSignals(data: PulseData): Promise<any>  {
     // 脉象信号处理 // return dat;a;  / 占位符* // } * /////
   private async processTouchSignals(data: TouchData): Promise<any>  {
     // 触诊信号处理 // return dat;a;  / 占位符* // } * /////
   private async processTemperatureSignals(data: TemperatureData): Promise<any>  {
     // 温度信号处理 // return dat;a;  / 占位符* // } * /////
-  //////     模拟事件发射  public on(event: string, callback: (data: unknown) => void): void {
-    // 简化的事件处理 //////     }
+  // 模拟事件发射  public on(event: string, callback: (data: unknown) => void): void {
+    // 简化的事件处理 // }
   public emit(event: string, data?: unknown): void  {
-    // 简化的事件发射 //////     }
-  //////     清理资源  public async cleanup(): Promise<void> {
-    // 清理分析器资源 //////     await Promise.all(
+    // 简化的事件发射 // }
+  // 清理资源  public async cleanup(): Promise<void> {
+    // 清理分析器资源 // await Promise.all(
       [
         this.pulseAnalyzer.cleanup?.(),
         this.touchAnalyzer.cleanup?.(),
@@ -416,27 +379,12 @@ interface AnalysisResults {
 // 分析器类（简化实现） * class PulseAnalyzer { ////
   constructor(private config: unknown, private knowledgeBase: TCMKnowledgeBase) {}
   async extractFeatures(signals: unknown): Promise<PulseFeatures /////    >  {
-    // 提取脉象特征 //////     return {
-      rate: 72, // 次 * 分 /////     rhythm: "规律",
-      strength: "有力",
-      depth: "中",
-      width: "适中",
-      length: "正常",
-      tension: "适中",
-      smoothness: "流利"}
-  }
-  async analyze(features: PulseFeatures,
-    userProfile?: UserProfile;
+    // 提取脉象特征 // return {rate: 72, // 次 * 分 /////     rhythm: "规律",strength: "有力",depth: "中",width: "适中",length: "正常",tension: "适中",smoothness: "流利"};
+  };
+  async analyze(features: PulseFeatures,userProfile?: UserProfile;
   );: Promise<PulseAnalysis /////    >  {
-    // 脉象分析 //////     return {
-      pulseType: {
-        primary: "平脉",
-        secondary: [],
-        confidence: 0.9,
-        description: "脉象平和，节律规整"
-      },
-      pulseCharacteristics: {
-        rate: { value: features.rate, interpretation: "脉率正常" ;},
+    // 脉象分析 // return {pulseType: {primary: "平脉",secondary: [],confidence: 0.9,description: "脉象平和，节律规整";
+      },pulseCharacteristics: {rate: { value: features.rate, interpretation: "脉率正常" ;},
         rhythm: { value: features.rhythm, interpretation: "节律规整"},
         strength: { value: features.strength, interpretation: "脉力充足"},
         depth: { value: features.depth, interpretation: "脉位适中"},
@@ -465,18 +413,11 @@ interface AnalysisResults {
 class TouchAnalyzer {
   constructor(private config: unknown, private knowledgeBase: TCMKnowledgeBase) {}
   async extractFeatures(signals: unknown): Promise<TouchFeatures /////    >  {
-    // 提取触诊特征 //////     return {
-      skinCondition: "润泽",
-      muscleCondition: "有力",
-      jointCondition: "灵活",
-      abdominalCondition: "柔软"}
-  }
-  async analyze(features: TouchFeatures,
-    userProfile?: UserProfile;
+    // 提取触诊特征 // return {skinCondition: "润泽",muscleCondition: "有力",jointCondition: "灵活",abdominalCondition: "柔软"};
+  };
+  async analyze(features: TouchFeatures,userProfile?: UserProfile;
   );: Promise<TouchAnalysis /////    >  {
-    // 触诊分析 //////     return {
-      skinAnalysis: {
-        moisture: { value: "润泽", significance: "津液充;足" ;},
+    // 触诊分析 // return {skinAnalysis: {moisture: { value: "润泽", significance: "津液充;足" ;},
         temperature: { value: "温和", significance: "阳气正常"},
         elasticity: { value: "良好", significance: "气血充足"},
         texture: { value: "光滑", significance: "营养良好"},
@@ -513,22 +454,13 @@ class TouchAnalyzer {
 class TemperatureAnalyzer {
   constructor(private config: unknown, private knowledgeBase: TCMKnowledgeBase) {}
   async extractFeatures(signals: unknown): Promise<TemperatureFeatures /////    >  {
-    // 提取温度特征 //////     return {
-      overallTemperature: "正常",
-      temperaturePattern: "均匀",
-      localVariations: []
+    // 提取温度特征 // return {overallTemperature: "正常",temperaturePattern: "均匀",localVariations: [];
     ;};
   }
   async analyze(features: TemperatureFeatures,
     userProfile?: UserProfile;
   ): Promise<TemperatureAnalysis /////    >  {
-    // 温度分析 //////     return {
-      thermalPattern: {
-        overall: "温和",
-        distribution: "均匀",
-        variations: [],
-        tcmInterpretation: "体温正常，阳气充足而不亢盛"},
-      organThermalStates: ;[{ organ: "心", thermalState: "正常", significance: "心阳充足"},
+    // 温度分析 // return {thermalPattern: {overall: "温和",distribution: "均匀",variations: [],tcmInterpretation: "体温正常，阳气充足而不亢盛"},organThermalStates: ;[{ organ: "心", thermalState: "正常", significance: "心阳充足"},
         { organ: "肝", thermalState: "正常", significance: "肝气调达"},
         { organ: "脾", thermalState: "正常", significance: "脾阳健运"},
         { organ: "肺", thermalState: "正常", significance: "肺气宣发"},

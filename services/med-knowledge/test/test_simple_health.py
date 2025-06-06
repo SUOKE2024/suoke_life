@@ -1,13 +1,21 @@
 """
-简单的健康检查测试
+test_simple_health - 索克生活项目模块
 """
-from unittest.mock import Mock, patch, AsyncMock
+
+    from app.api.rest.health import health_check
+    from app.api.rest.health import liveness_check
+    from app.api.rest.health import router as health_router
+    import asyncio
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
+from unittest.mock import Mock, patch, AsyncMock
+
+"""
+简单的健康检查测试
+"""
 
 def test_health_check_simple():
     """测试简单的健康检查"""
-    from app.api.rest.health import router as health_router
     
     # 创建一个简单的FastAPI应用
     app = FastAPI()
@@ -31,8 +39,6 @@ def test_health_check_simple():
 
 def test_health_check_direct():
     """直接测试健康检查函数"""
-    from app.api.rest.health import health_check
-    import asyncio
     
     # 直接调用健康检查函数
     result = asyncio.run(health_check())
@@ -43,8 +49,6 @@ def test_health_check_direct():
 
 def test_liveness_check_direct():
     """直接测试存活检查函数"""
-    from app.api.rest.health import liveness_check
-    import asyncio
     
     # 直接调用存活检查函数
     result = asyncio.run(liveness_check())

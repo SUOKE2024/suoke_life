@@ -1,10 +1,11 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import {import { messageBusService, Topic } from '../../services/messageBusService';
+
 /**
  * 主题管理组件
  * 支持主题的创建、删除、查看和选择
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
-import {
   View,
   Text,
   StyleSheet,
@@ -15,9 +16,8 @@ import {
   Modal,
   ActivityIndicator,
   RefreshControl,
-  ViewStyle,
+  ViewStyle
 } from 'react-native';
-import { messageBusService, Topic } from '../../services/messageBusService';
 
 interface TopicManagerProps {
   onTopicSelect?: (topic: Topic) => void;
@@ -35,20 +35,13 @@ const TopicItem: React.FC<TopicItemProps> = ({
   topic,
   onSelect,
   onDelete,
-  onViewDetails,
+  onViewDetails
 }) => {
-  const handleDelete = () => {
-    Alert.alert(
-      '确认删除',
-      `确定要删除主题 "${topic.name}" 吗？`,
-      [
-        { text: '取消', style: 'cancel' },
-        {
-          text: '删除',
-          style: 'destructive',
-          onPress: () => onDelete(topic.name),
-        },
-      ]
+  const handleDelete = () => {Alert.alert(;
+      '确认删除',`确定要删除主题 "${topic.name}" 吗？`,[;
+        { text: '取消', style: 'cancel' },{text: '删除',style: 'destructive',onPress: () => onDelete(topic.name);
+        }
+      ];
     );
   };
 
@@ -63,7 +56,7 @@ const TopicItem: React.FC<TopicItemProps> = ({
           创建时间: {new Date(topic.creationTime).toLocaleString()}
         </Text>
       </View>
-      
+
       <View style={styles.topicActions}>
         <TouchableOpacity
           style={[styles.actionButton, styles.selectButton]}
@@ -71,28 +64,28 @@ const TopicItem: React.FC<TopicItemProps> = ({
         >
           <Text style={styles.selectButtonText}>选择</Text>
         </TouchableOpacity>
-        
-        <TouchableOpacity
-          style={[styles.actionButton, styles.detailButton]}
-          onPress={() => onViewDetails(topic)}
-        >
-          <Text style={styles.detailButtonText}>详情</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity
-          style={[styles.actionButton, styles.deleteButton]}
-          onPress={handleDelete}
-        >
-          <Text style={styles.deleteButtonText}>删除</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+        ;
+        <TouchableOpacity;
+          style={[styles.actionButton, styles.detailButton]};
+          onPress={() => onViewDetails(topic)};
+        >;
+          <Text style={styles.detailButtonText}>详情</Text>;
+        </TouchableOpacity>;
+        ;
+        <TouchableOpacity;
+          style={[styles.actionButton, styles.deleteButton]};
+          onPress={handleDelete};
+        >;
+          <Text style={styles.deleteButtonText}>删除</Text>;
+        </TouchableOpacity>;
+      </View>;
+    </View>;
   );
 };
 
 const TopicManager: React.FC<TopicManagerProps> = ({
   onTopicSelect,
-  style,
+  style
 }) => {
   const [topics, setTopics] = useState<Topic[]>([]);
   const [loading, setLoading] = useState(false);
@@ -104,9 +97,7 @@ const TopicManager: React.FC<TopicManagerProps> = ({
   const [newTopicDescription, setNewTopicDescription] = useState('');
   const [creating, setCreating] = useState(false);
 
-  const loadTopics = useCallback(async () => {
-    try {
-      setLoading(true);
+  const loadTopics = useCallback(async () => {try {setLoading(true);
       const response = await messageBusService.listTopics();
       setTopics(response.topics);
     } catch (error) {
@@ -117,15 +108,12 @@ const TopicManager: React.FC<TopicManagerProps> = ({
     }
   }, []);
 
-  const handleRefresh = useCallback(async () => {
-    setRefreshing(true);
+  const handleRefresh = useCallback(async () => {setRefreshing(true);
     await loadTopics();
     setRefreshing(false);
   }, [loadTopics]);
 
-  const handleCreateTopic = useCallback(async () => {
-    if (!newTopicName.trim()) {
-      Alert.alert('错误', '请输入主题名称');
+  const handleCreateTopic = useCallback(async () => {if (!newTopicName.trim()) {Alert.alert('错误', '请输入主题名称');
       return;
     }
 
@@ -135,12 +123,12 @@ const TopicManager: React.FC<TopicManagerProps> = ({
         name: newTopicName.trim(),
         description: newTopicDescription.trim() || undefined
       });
-      
+
       setNewTopicName('');
       setNewTopicDescription('');
       setShowCreateModal(false);
       await loadTopics();
-      
+
       Alert.alert('成功', '主题创建成功');
     } catch (error) {
       console.error('Failed to create topic:', error);
@@ -150,9 +138,7 @@ const TopicManager: React.FC<TopicManagerProps> = ({
     }
   }, [newTopicName, newTopicDescription, loadTopics]);
 
-  const handleDeleteTopic = useCallback(async (topicName: string) => {
-    try {
-      await messageBusService.deleteTopic(topicName);
+  const handleDeleteTopic = useCallback(async (topicName: string) => {try {await messageBusService.deleteTopic(topicName);
       await loadTopics();
       Alert.alert('成功', '主题删除成功');
     } catch (error) {
@@ -161,13 +147,10 @@ const TopicManager: React.FC<TopicManagerProps> = ({
     }
   }, [loadTopics]);
 
-  const handleTopicSelect = useCallback((topic: Topic) => {
-    onTopicSelect?.(topic);
+  const handleTopicSelect = useCallback((topic: Topic) => {onTopicSelect?.(topic);
   }, [onTopicSelect]);
 
-  const handleViewDetails = useCallback(async (topic: Topic) => {
-    try {
-      const detailTopic = await messageBusService.getTopic(topic.name);
+  const handleViewDetails = useCallback(async (topic: Topic) => {try {const detailTopic = await messageBusService.getTopic(topic.name);
       setSelectedTopic(detailTopic);
       setShowDetailModal(true);
     } catch (error) {
@@ -180,18 +163,18 @@ const TopicManager: React.FC<TopicManagerProps> = ({
     loadTopics();
   }, [loadTopics]);
 
-  const renderTopicItem = ({ item }: { item: Topic }) => (
-    <TopicItem
-      topic={item}
-      onSelect={handleTopicSelect}
-      onDelete={handleDeleteTopic}
-      onViewDetails={handleViewDetails}
-    />
+  const renderTopicItem = ({ item }: { item: Topic }) => (;
+    <TopicItem;
+      topic={item};
+      onSelect={handleTopicSelect};
+      onDelete={handleDeleteTopic};
+      onViewDetails={handleViewDetails};
+    />;
   );
 
   return (
     <View style={[styles.container, style]}>
-      {/* 头部操作栏 */}
+      {// 头部操作栏}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>主题列表</Text>
         <TouchableOpacity
@@ -202,7 +185,7 @@ const TopicManager: React.FC<TopicManagerProps> = ({
         </TouchableOpacity>
       </View>
 
-      {/* 主题列表 */}
+      {// 主题列表}
       {loading && topics.length === 0 ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#007bff" />
@@ -236,7 +219,7 @@ const TopicManager: React.FC<TopicManagerProps> = ({
         />
       )}
 
-      {/* 创建主题模态框 */}
+      {// 创建主题模态框}
       <Modal
         visible={showCreateModal}
         animationType="slide"
@@ -246,7 +229,7 @@ const TopicManager: React.FC<TopicManagerProps> = ({
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>创建新主题</Text>
-            
+
             <TextInput
               style={styles.input}
               placeholder="主题名称 (必填)"
@@ -254,7 +237,7 @@ const TopicManager: React.FC<TopicManagerProps> = ({
               onChangeText={setNewTopicName}
               autoFocus
             />
-            
+
             <TextInput
               style={[styles.input, styles.textArea]}
               placeholder="主题描述 (可选)"
@@ -263,7 +246,7 @@ const TopicManager: React.FC<TopicManagerProps> = ({
               multiline
               numberOfLines={3}
             />
-            
+
             <View style={styles.modalActions}>
               <TouchableOpacity
                 style={[styles.modalButton, styles.cancelButton]}
@@ -272,7 +255,7 @@ const TopicManager: React.FC<TopicManagerProps> = ({
               >
                 <Text style={styles.cancelButtonText}>取消</Text>
               </TouchableOpacity>
-              
+
               <TouchableOpacity
                 style={[styles.modalButton, styles.confirmButton]}
                 onPress={handleCreateTopic}
@@ -289,7 +272,7 @@ const TopicManager: React.FC<TopicManagerProps> = ({
         </View>
       </Modal>
 
-      {/* 主题详情模态框 */}
+      {// 主题详情模态框}
       <Modal
         visible={showDetailModal}
         animationType="slide"
@@ -299,63 +282,63 @@ const TopicManager: React.FC<TopicManagerProps> = ({
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>主题详情</Text>
-            
+
             {selectedTopic && (
               <View style={styles.detailContent}>
                 <View style={styles.detailRow}>
                   <Text style={styles.detailLabel}>名称:</Text>
                   <Text style={styles.detailValue}>{selectedTopic.name}</Text>
                 </View>
-                
+
                 <View style={styles.detailRow}>
                   <Text style={styles.detailLabel}>描述:</Text>
                   <Text style={styles.detailValue}>
                     {selectedTopic.description || '无描述'}
                   </Text>
                 </View>
-                
+
                                  <View style={styles.detailRow}>
                    <Text style={styles.detailLabel}>创建时间:</Text>
                    <Text style={styles.detailValue}>
                      {new Date(selectedTopic.creationTime).toLocaleString()}
                    </Text>
                  </View>
-                 
+
                  <View style={styles.detailRow}>
                    <Text style={styles.detailLabel}>分区数:</Text>
                    <Text style={styles.detailValue}>
                      {selectedTopic.partitionCount}
                    </Text>
                  </View>
-                 
+
                  <View style={styles.detailRow}>
                    <Text style={styles.detailLabel}>保留时间:</Text>
                    <Text style={styles.detailValue}>
                      {selectedTopic.retentionHours} 小时
                    </Text>
-                 </View>
-              </View>
-            )}
-            
-            <View style={styles.modalActions}>
-              <TouchableOpacity
-                style={[styles.modalButton, styles.confirmButton]}
-                onPress={() => setShowDetailModal(false)}
-              >
-                <Text style={styles.confirmButtonText}>关闭</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
-    </View>
+                 </View>;
+              </View>;
+            )};
+            ;
+            <View style={styles.modalActions}>;
+              <TouchableOpacity;
+                style={[styles.modalButton, styles.confirmButton]};
+                onPress={() => setShowDetailModal(false)};
+              >;
+                <Text style={styles.confirmButtonText}>关闭</Text>;
+              </TouchableOpacity>;
+            </View>;
+          </View>;
+        </View>;
+      </Modal>;
+    </View>;
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f5f5f5'
   },
   header: {
     flexDirection: 'row',
@@ -364,29 +347,29 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#fff',
     borderBottomWidth: 1,
-    borderBottomColor: '#e9ecef',
+    borderBottomColor: '#e9ecef'
   },
   headerTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#333'
   },
   createButton: {
     backgroundColor: '#007bff',
     paddingHorizontal: 16,
     paddingVertical: 8,
-    borderRadius: 6,
+    borderRadius: 6
   },
   createButtonText: {
     color: '#fff',
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   list: {
-    flex: 1,
+    flex: 1
   },
   listContent: {
-    padding: 16,
+    padding: 16
   },
   topicItem: {
     backgroundColor: '#fff',
@@ -397,111 +380,111 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
-    elevation: 2,
+    elevation: 2
   },
   topicInfo: {
-    marginBottom: 12,
+    marginBottom: 12
   },
   topicName: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 4,
+    marginBottom: 4
   },
   topicDescription: {
     fontSize: 14,
     color: '#6c757d',
-    marginBottom: 8,
+    marginBottom: 8
   },
   topicMeta: {
     fontSize: 12,
-    color: '#adb5bd',
+    color: '#adb5bd'
   },
   topicActions: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-end'
   },
   actionButton: {
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 4,
-    marginLeft: 8,
+    marginLeft: 8
   },
   selectButton: {
-    backgroundColor: '#28a745',
+    backgroundColor: '#28a745'
   },
   selectButtonText: {
     color: '#fff',
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   detailButton: {
-    backgroundColor: '#17a2b8',
+    backgroundColor: '#17a2b8'
   },
   detailButtonText: {
     color: '#fff',
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   deleteButton: {
-    backgroundColor: '#dc3545',
+    backgroundColor: '#dc3545'
   },
   deleteButtonText: {
     color: '#fff',
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   loadingText: {
     marginTop: 12,
     fontSize: 16,
-    color: '#6c757d',
+    color: '#6c757d'
   },
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 64,
+    paddingVertical: 64
   },
   emptyText: {
     fontSize: 16,
     color: '#6c757d',
-    marginBottom: 24,
+    marginBottom: 24
   },
   createFirstButton: {
     backgroundColor: '#007bff',
     paddingHorizontal: 24,
     paddingVertical: 12,
-    borderRadius: 8,
+    borderRadius: 8
   },
   createFirstButtonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   modalContent: {
     backgroundColor: '#fff',
     borderRadius: 12,
     padding: 24,
     width: '90%',
-    maxWidth: 400,
+    maxWidth: 400
   },
   modalTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
     marginBottom: 20,
-    textAlign: 'center',
+    textAlign: 'center'
   },
   input: {
     borderWidth: 1,
@@ -509,59 +492,47 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     padding: 12,
     fontSize: 16,
-    marginBottom: 16,
+    marginBottom: 16
   },
   textArea: {
     height: 80,
-    textAlignVertical: 'top',
+    textAlignVertical: 'top'
   },
   modalActions: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 20,
+    marginTop: 20
   },
   modalButton: {
     flex: 1,
     paddingVertical: 12,
     borderRadius: 6,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   cancelButton: {
     backgroundColor: '#6c757d',
-    marginRight: 8,
+    marginRight: 8
   },
   cancelButtonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   confirmButton: {
     backgroundColor: '#007bff',
-    marginLeft: 8,
+    marginLeft: 8
   },
   confirmButtonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   detailContent: {
-    marginBottom: 20,
-  },
-  detailRow: {
-    flexDirection: 'row',
-    marginBottom: 12,
-  },
-  detailLabel: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#495057',
-    width: 80,
-  },
-  detailValue: {
-    fontSize: 14,
-    color: '#6c757d',
-    flex: 1,
-  },
+    marginBottom: 20
+  },detailRow: {flexDirection: 'row',marginBottom: 12;
+  },detailLabel: {fontSize: 14,fontWeight: '600',color: '#495057',width: 80;
+  },detailValue: {fontSize: 14,color: '#6c757d',flex: 1;
+  };
 });
 
 export default TopicManager;

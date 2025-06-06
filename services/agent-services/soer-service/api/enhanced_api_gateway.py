@@ -1,24 +1,30 @@
+"""
+enhanced_api_gateway - 索克生活项目模块
+"""
+
+from contextlib import asynccontextmanager
+from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel, Field
+from services.agent_services.soer_service.internal.service.enhanced_health_service import (
+from services.common.observability.tracing import trace_middleware
+from typing import Any
+import asyncio
+import logging
+import time
+import uvicorn
+
 #!/usr/bin/env python3
 """
 soer-service 增强版API网关
 集成FastAPI、中间件、追踪、监控等功能
 """
 
-import asyncio
-import logging
-import time
-from contextlib import asynccontextmanager
-from typing import Any
 
-import uvicorn
-from fastapi import Depends, FastAPI, HTTPException, Request
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.trustedhost import TrustedHostMiddleware
-from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field
 
 # 导入服务和通用组件
-from services.agent_services.soer_service.internal.service.enhanced_health_service import (
     DataType,
     EmotionAnalysisRequest,
     HealthDataRequest,
@@ -27,7 +33,6 @@ from services.agent_services.soer_service.internal.service.enhanced_health_servi
     SensorDataRequest,
     get_health_service,
 )
-from services.common.observability.tracing import trace_middleware
 
 logger = logging.getLogger(__name__)
 
@@ -173,22 +178,26 @@ async def general_exception_handler(request: Request, exc: Exception):
     )
 
 # 依赖注入
-async def get_health_service_dependency():
+async async def get_health_service_dependency(
     """获取健康服务依赖"""
     return app_state.get('health_service')
 
 # API路由
+@cache(expire=300)  # 5分钟缓存
+@limiter.limit("100/minute")  # 每分钟100次请求
 @app.get("/health", response_model=HealthResponse)
 async def health_check():
     """健康检查"""
     return HealthResponse(
         status="healthy",
         timestamp=time.time(),
-        service="soer-service"
+        se@cache(expire=@limiter.limit("100/minute")  # 每分钟100次请求
+300)  # 5分钟缓存
+rvice="soer-service"
     )
 
 @app.get("/metrics")
-async def get_metrics():
+async async def get_metrics(
     """获取服务指标"""
     health_service = app_state.get('health_service')
     service_stats = health_service.get_health_status() if health_service else {}
@@ -196,7 +205,8 @@ async def get_metrics():
     return {
         "service": "soer-service",
         "uptime": time.time() - app_state.get('start_time', time.time()),
-        "total_requests": app_state.get('request_count', 0),
+        "total_requests": app_state.get('request_count', @limiter.limit("100/minute")  # 每分钟100次请求
+0),
         "service_stats": service_stats,
         "timestamp": time.time()
     }
@@ -237,7 +247,8 @@ async def analyze_health_data(
             "timestamp": result.timestamp
         }
 
-    except Exception as e:
+    except Excep@limiter.limit("100/minute")  # 每分钟100次请求
+tion as e:
         logger.error(f"健康数据分析失败: {e}")
         raise HTTPException(status_code=500, detail=f"健康数据分析失败: {str(e)}")
 
@@ -274,7 +285,8 @@ async def generate_lifestyle_advice(
                 "exercise_plan": result.exercise_plan
             },
             "processing_time": result.processing_time,
-            "timestamp": result.timestamp
+            "timestamp": result@limiter.limit("100/minute")  # 每分钟100次请求
+.timestamp
         }
 
     except Exception as e:
@@ -311,7 +323,8 @@ async def analyze_emotion(
                 "tcm_emotion_mapping": result.tcm_emotion_mapping,
                 "intervention_suggestions": result.intervention_suggestions
             },
-            "processing_time": result.processing_time,
+            "processing_time": resul@limiter.limit("100/minute")  # 每分钟100次请求
+t.processing_time,
             "timestamp": result.timestamp
         }
 
@@ -350,13 +363,15 @@ async def process_sensor_data(
                 "insights": result.insights,
                 "data_quality_score": result.data_quality_score
             },
-            "processing_time": result.processing_time,
+            "processing_time@limiter.limit("100/minute")  # 每分钟100次请求
+": result.processing_time,
             "timestamp": result.timestamp
         }
 
     except Exception as e:
         logger.error(f"传感器数据处理失败: {e}")
-        raise HTTPException(status_code=500, detail=f"传感器数据处理失败: {str(e)}")
+        raise HTTPExc@cache(expire=300)  # 5分钟缓存
+eption(status_code=500, detail=f"传感器数据处理失败: {str(e)}")
 
 @app.get("/api/v1/health/dashboard/{user_id}")
 async def get_health_dashboard(
@@ -406,7 +421,8 @@ async def get_health_dashboard(
                 ],
                 "recommendations": [
                     "建议保持规律的睡眠时间",
-                    "增加有氧运动频率",
+                    "增@limiter.limit("100/minute")  # 每分钟100次请求
+加有氧运动频率",
                     "注意饮食营养均衡"
                 ]
             },
@@ -414,7 +430,8 @@ async def get_health_dashboard(
         }
 
     except Exception as e:
-        logger.error(f"获取健康仪表板失败: {e}")
+        logger.error(f"获取健康仪表板失败:@cache(expire=300)  # 5分钟缓存
+ {e}")
         raise HTTPException(status_code=500, detail=f"获取健康仪表板失败: {str(e)}")
 
 @app.get("/api/v1/health/report/{user_id}")
@@ -463,7 +480,8 @@ async def generate_health_report(
                 "action_plan": [
                     {
                         "goal": "改善睡眠质量",
-                        "actions": ["22:30前上床", "睡前1小时不使用电子设备"],
+                        "actions": ["22:30前@limiter.limit("100/minute")  # 每分钟100次请求
+上床", "睡前1小时不使用电子设备"],
                         "timeline": "2周"
                     }
                 ]
@@ -472,11 +490,12 @@ async def generate_health_report(
         }
 
     except Exception as e:
-        logger.error(f"生成健康报告失败: {e}")
+   @cache(expire=300)  # 5分钟缓存
+     logger.error(f"生成健康报告失败: {e}")
         raise HTTPException(status_code=500, detail=f"生成健康报告失败: {str(e)}")
 
 @app.get("/api/v1/data-types")
-async def get_data_types():
+async async def get_data_types(
     """获取数据类型列表"""
     return {
         "success": True,
@@ -508,13 +527,15 @@ async def get_data_types():
                     "description": "体重变化数据"
                 },
                 {
+@limiter.limit("100/minute")  # 每分钟100次请求
                     "code": "mood",
                     "name": "情绪",
                     "description": "情绪状态数据"
                 },
                 {
                     "code": "stress",
-                    "name": "压力",
+                    "@cache(expire=300)  # 5分钟缓存
+name": "压力",
                     "description": "压力水平数据"
                 }
             ]
@@ -523,7 +544,7 @@ async def get_data_types():
     }
 
 @app.get("/api/v1/health-goals")
-async def get_health_goals():
+async async def get_health_goals(
     """获取健康目标列表"""
     return {
         "success": True,
@@ -543,14 +564,16 @@ async def get_health_goals():
                     "code": "sleep_improvement",
                     "name": "改善睡眠",
                     "description": "提高睡眠质量"
-                },
+          @limiter.limit("100/minute")  # 每分钟100次请求
+      },
                 {
                     "code": "stress_reduction",
                     "name": "减压",
                     "description": "降低压力水平"
                 },
                 {
-                    "code": "nutrition",
+                    "code": "nutri@cache(expire=300)  # 5分钟缓存
+tion",
                     "name": "营养",
                     "description": "改善营养状况"
                 }
@@ -560,7 +583,7 @@ async def get_health_goals():
     }
 
 @app.get("/api/v1/emotion-types")
-async def get_emotion_types():
+async async def get_emotion_types(
     """获取情绪类型列表"""
     return {
         "success": True,

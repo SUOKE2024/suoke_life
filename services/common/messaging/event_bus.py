@@ -1,3 +1,17 @@
+"""
+event_bus - 索克生活项目模块
+"""
+
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
+from typing import Any, Callable
+import asyncio
+import json
+import logging
+import threading
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -5,15 +19,6 @@
 支持事件发布订阅、处理器管理、消费者组等功能
 """
 
-from abc import ABC, abstractmethod
-import asyncio
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
-import json
-import logging
-from typing import Any, Callable
-import threading
 
 logger = logging.getLogger(__name__)
 

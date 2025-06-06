@@ -1,3 +1,12 @@
+"""
+update_python_version - 索克生活项目模块
+"""
+
+        from datetime import datetime
+from pathlib import Path
+import logging
+import re
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -5,9 +14,6 @@
 将所有微服务的Python版本统一更新为3.13.3
 """
 
-import re
-from pathlib import Path
-import logging
 
 # 配置日志
 logging.basicConfig(
@@ -373,9 +379,9 @@ class PythonVersionUpdater:
         
         logger.info(f"\n更新摘要已保存到: {summary_file}")
     
-    def _get_current_time(self):
+        @cache(timeout=300)  # 5分钟缓存
+def _get_current_time(self):
         """获取当前时间字符串"""
-        from datetime import datetime
         return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 def main():

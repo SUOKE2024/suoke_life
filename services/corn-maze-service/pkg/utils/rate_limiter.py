@@ -1,18 +1,24 @@
+"""
+rate_limiter - 索克生活项目模块
+"""
+
+                from fastapi import HTTPException
+from collections import deque
+from functools import wraps
+from pkg.utils.cache import CacheManager
+from pkg.utils.metrics import errors_total
+from typing import Any
+import asyncio
+import logging
+import time
+
 #!/usr/bin/env python3
 
 """
 API限流器 - 防止恶意请求和系统过载
 """
 
-import asyncio
-from collections import deque
-from functools import wraps
-import logging
-import time
-from typing import Any
 
-from pkg.utils.cache import CacheManager
-from pkg.utils.metrics import errors_total
 
 logger = logging.getLogger(__name__)
 
@@ -514,7 +520,6 @@ def rate_limit(
             )
 
             if not allowed:
-                from fastapi import HTTPException
                 raise HTTPException(
                     status_code=429,
                     detail={

@@ -1,29 +1,34 @@
 """
+notification - 索克生活项目模块
+"""
+
+        import aioredis
+    import redis.asyncio as aioredis
+from .config import settings
+from .models import ReviewStatus, ReviewTask, Reviewer
+from abc import ABC, abstractmethod
+from datetime import datetime, timezone
+from enum import Enum
+from pydantic import BaseModel, EmailStr
+from typing import Any, Dict, List, Optional, Union
+import asyncio
+import json
+import structlog
+
+"""
 通知服务
 Notification Service
 
 处理审核系统的各种通知需求，包括邮件、短信、WebSocket推送等
 """
 
-import asyncio
-import json
-from abc import ABC, abstractmethod
-from datetime import datetime, timezone
-from enum import Enum
-from typing import Any, Dict, List, Optional, Union
 
 try:
-    import redis.asyncio as aioredis
 except ImportError:
     try:
-        import aioredis
     except ImportError:
         aioredis = None
-import structlog
-from pydantic import BaseModel, EmailStr
 
-from .config import settings
-from .models import ReviewStatus, ReviewTask, Reviewer
 
 logger = structlog.get_logger(__name__)
 

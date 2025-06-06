@@ -1,3 +1,12 @@
+"""
+logger - 索克生活项目模块
+"""
+
+from pathlib import Path
+import json
+import logging
+import sys
+
 #!/usr/bin/env python3
 
 """
@@ -5,10 +14,6 @@
 提供统一的日志配置和管理
 """
 
-import json
-import logging
-import sys
-from pathlib import Path
 
 def setup_logger(
     name: str,

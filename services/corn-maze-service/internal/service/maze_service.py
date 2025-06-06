@@ -1,11 +1,6 @@
-#!/usr/bin/env python3
-
 """
-迷宫服务 - 负责迷宫的生成和管理 - 优化版本
+maze_service - 索克生活项目模块
 """
-
-import logging
-from typing import Any, ClassVar
 
 from internal.maze.generator import MazeGenerator
 from internal.repository.maze_repository import MazeRepository
@@ -14,6 +9,16 @@ from internal.service.knowledge_service import KnowledgeService
 from internal.service.progress_service import ProgressService
 from pkg.utils.cache import CacheManager
 from pkg.utils.metrics import record_maze_error, record_maze_operation
+from typing import Any, ClassVar
+import logging
+
+#!/usr/bin/env python3
+
+"""
+迷宫服务 - 负责迷宫的生成和管理 - 优化版本
+"""
+
+
 
 logger = logging.getLogger(__name__)
 

@@ -1,3 +1,19 @@
+"""
+enhanced_health_service - 索克生活项目模块
+"""
+
+        import datetime
+from dataclasses import dataclass
+from enum import Enum
+from services.common.governance.circuit_breaker import (
+from services.common.governance.rate_limiter import (
+from services.common.observability.tracing import SpanKind, get_tracer, trace
+from typing import Any
+import asyncio
+import hashlib
+import logging
+import time
+
 #!/usr/bin/env python3
 """
 增强版健康分析服务
@@ -5,25 +21,15 @@
 专注于健康数据分析、生活习惯培养和情绪智能感知
 """
 
-import asyncio
-import hashlib
-import logging
-import time
-from dataclasses import dataclass
-from enum import Enum
-from typing import Any
 
 # 导入通用组件
-from services.common.governance.circuit_breaker import (
     CircuitBreakerConfig,
     get_circuit_breaker,
 )
-from services.common.governance.rate_limiter import (
     RateLimitConfig,
     get_rate_limiter,
     rate_limit,
 )
-from services.common.observability.tracing import SpanKind, get_tracer, trace
 
 logger = logging.getLogger(__name__)
 
@@ -552,7 +558,6 @@ class EnhancedHealthService:
 
     def _calculate_next_check_date(self) -> str:
         """计算下次检查日期"""
-        import datetime
         next_date = datetime.datetime.now() + datetime.timedelta(days=7)
         return next_date.strftime('%Y-%m-%d')
 

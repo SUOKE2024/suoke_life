@@ -1,6 +1,6 @@
-import React from "react";
-import { CalculationConfig } from "../config/AlgorithmConfig";
-import { TCMKnowledgeBase } from "../knowledge/TCMKnowledgeBase";
+import React from 'react';
+import { CalculationConfig } from '../config/AlgorithmConfig';
+import { TCMKnowledgeBase } from '../knowledge/TCMKnowledgeBase';
 
 /**
  * 中医算诊算法模块
@@ -93,7 +93,7 @@ export interface ElementInteraction {
   from: string;
   to: string;
   strength: number;
-  type: "generation" | "restriction" | "overacting" | "insulting";
+  type: 'generation' | 'restriction' | 'overacting' | 'insulting';
   description: string;
 }
 
@@ -109,7 +109,7 @@ export interface YinYangAnalysis {
     balance: number;
   };
   dynamicBalance: {
-    trend: "increasing_yin" | "increasing_yang" | "stable" | "fluctuating";
+    trend: 'increasing_yin' | 'increasing_yang' | 'stable' | 'fluctuating';
     stability: number;
     harmony: number;
   };
@@ -127,7 +127,7 @@ export interface QiFlowAnalysis {
   meridianFlow: {
     [meridian: string]: {
       strength: number;
-      direction: "forward" | "reverse" | "stagnant";
+      direction: 'forward' | 'reverse' | 'stagnant';
       blockages: string[];
       openness: number;
     };
@@ -216,7 +216,7 @@ export interface TimeInfluence {
 
 export interface UserProfile {
   age: number;
-  gender: "male" | "female" | "other";
+  gender: 'male' | 'female' | 'other';
   height: number;
   weight: number;
   occupation: string;
@@ -260,10 +260,7 @@ export class CalculationDiagnosisAlgorithm {
       const lunarData = await this.calculateLunarData(processedData);
 
       // 五行分析
-      const fiveElements = await this.analyzeFiveElements(
-        lunarData,
-        userProfile
-      );
+      const fiveElements = await this.analyzeFiveElements(lunarData, userProfile);
 
       // 阴阳分析
       const yinYang = await this.analyzeYinYang(lunarData, userProfile);
@@ -272,10 +269,7 @@ export class CalculationDiagnosisAlgorithm {
       const qiFlow = await this.analyzeQiFlow(lunarData, userProfile);
 
       // 体质计算
-      const constitution = await this.calculateConstitution(
-        lunarData,
-        userProfile
-      );
+      const constitution = await this.calculateConstitution(lunarData, userProfile);
 
       // 季节影响分析
       const seasonalInfluence = await this.analyzeSeasonalInfluence(lunarData);
@@ -284,91 +278,39 @@ export class CalculationDiagnosisAlgorithm {
       const timeInfluence = await this.analyzeTimeInfluence(lunarData);
 
       // 综合分析
-      const analysis = await this.generateAnalysis({
-        fiveElements,
-        yinYang,
-        qiFlow,
-        constitution,
-        seasonalInfluence,
-        timeInfluence,
+      const analysis = await this.generateAnalysis({fiveElements,yinYang,qiFlow,constitution,seasonalInfluence,timeInfluence;
       });
 
       // 生成建议
-      const recommendations = await this.generateRecommendations({
-        fiveElements,
-        yinYang,
-        qiFlow,
-        constitution,
-        seasonalInfluence,
-        timeInfluence,
+      const recommendations = await this.generateRecommendations({fiveElements,yinYang,qiFlow,constitution,seasonalInfluence,timeInfluence;
       });
 
       // 生成警告
-      const warnings = await this.generateWarnings({
-        fiveElements,
-        yinYang,
-        qiFlow,
-        constitution,
+      const warnings = await this.generateWarnings({fiveElements,yinYang,qiFlow,constitution;
       });
 
       // 计算置信度
-      const confidence = this.calculateConfidence({
-        fiveElements,
-        yinYang,
-        qiFlow,
-        constitution,
+      const confidence = this.calculateConfidence({fiveElements,yinYang,qiFlow,constitution;
       });
 
       const processingTime = Date.now() - startTime;
 
-      return {
-        confidence,
-        fiveElements,
-        yinYang,
-        qiFlow,
-        constitution,
-        seasonalInfluence,
-        timeInfluence,
-        analysis,
-        recommendations,
-        warnings,
-        processingTime,
+      return {confidence,fiveElements,yinYang,qiFlow,constitution,seasonalInfluence,timeInfluence,analysis,recommendations,warnings,processingTime;
       };
     } catch (error) {
       throw new Error(`算诊分析失败: ${error}`);
     }
   }
 
-  private async preprocessData(
-    data: CalculationData
-  ): Promise<CalculationData> {
+  private async preprocessData(data: CalculationData): Promise<CalculationData> {
     // 数据预处理逻辑
-    return {
-      ...data,
-      birthDate: this.validateDate(data.birthDate),
-      birthTime: this.validateTime(data.birthTime),
-      currentDate: this.validateDate(data.currentDate),
-      currentTime: this.validateTime(data.currentTime),
+    return {...data,birthDate: this.validateDate(data.birthDate),birthTime: this.validateTime(data.birthTime),currentDate: this.validateDate(data.currentDate),currentTime: this.validateTime(data.currentTime);
     };
   }
 
   private async calculateLunarData(data: CalculationData): Promise<LunarData> {
     // 农历计算逻辑
-    return {
-      year: "2024",
-      month: "1",
-      day: "1",
-      hour: "子",
-      yearStem: "甲",
-      yearBranch: "辰",
-      monthStem: "丙",
-      monthBranch: "寅",
-      dayStem: "戊",
-      dayBranch: "午",
-      hourStem: "壬",
-      hourBranch: "子",
-      zodiac: "龙",
-      solarTerm: "立春",
+    return {year: '2024',month: '1',day: '1',hour: '子',yearStem: '甲',yearBranch: '辰',monthStem: '丙',monthBranch: '寅',dayStem: '戊',dayBranch: '午',hourStem: '壬',hourBranch: '子',zodiac: '龙',solarTerm: '立春';
     };
   }
 
@@ -383,34 +325,22 @@ export class CalculationDiagnosisAlgorithm {
         fire: 0.3,
         earth: 0.2,
         metal: 0.15,
-        water: 0.15,
+        water: 0.15
       },
       currentElements: {
         wood: 0.25,
         fire: 0.25,
         earth: 0.2,
         metal: 0.15,
-        water: 0.15,
+        water: 0.15
       },
       balance: {
         overall: 0.8,
-        deficiency: ["金"],
-        excess: ["火"],
-        harmony: 0.7,
-      },
-      interactions: {
-        generation: [],
-        restriction: [],
-        overacting: [],
-        insulting: [],
-      },
-      organCorrelation: {
-        liver: 0.8,
-        heart: 0.9,
-        spleen: 0.7,
-        lung: 0.6,
-        kidney: 0.7,
-      },
+        deficiency: ['金'],
+        excess: ['火'],harmony: 0.7;
+      },interactions: {generation: [],restriction: [],overacting: [],insulting: [];
+      },organCorrelation: {liver: 0.8,heart: 0.9,spleen: 0.7,lung: 0.6,kidney: 0.7;
+      };
     };
   }
 
@@ -423,26 +353,14 @@ export class CalculationDiagnosisAlgorithm {
       birthYinYang: {
         yin: 0.4,
         yang: 0.6,
-        balance: 0.8,
+        balance: 0.8
       },
       currentYinYang: {
         yin: 0.45,
-        yang: 0.55,
-        balance: 0.85,
-      },
-      dynamicBalance: {
-        trend: "stable",
-        stability: 0.8,
-        harmony: 0.85,
-      },
-      organYinYang: {
-        liver: { yin: 0.5, yang: 0.5 },
-        heart: { yin: 0.4, yang: 0.6 },
-        spleen: { yin: 0.6, yang: 0.4 },
-        lung: { yin: 0.5, yang: 0.5 },
-        kidney: { yin: 0.7, yang: 0.3 },
-      },
-      recommendations: ["保持阴阳平衡", "适度运动"],
+        yang: 0.55,balance: 0.85;
+      },dynamicBalance: {trend: 'stable',stability: 0.8,harmony: 0.85;
+      },organYinYang: {liver: { yin: 0.5, yang: 0.5 },heart: { yin: 0.4, yang: 0.6 },spleen: { yin: 0.6, yang: 0.4 },lung: { yin: 0.5, yang: 0.5 },kidney: { yin: 0.7, yang: 0.3 };
+      },recommendations: ['保持阴阳平衡', '适度运动'];
     };
   }
 
@@ -451,21 +369,9 @@ export class CalculationDiagnosisAlgorithm {
     userProfile?: UserProfile
   ): Promise<QiFlowAnalysis> {
     // 气血流动分析逻辑
-    return {
-      meridianFlow: {},
-      dailyRhythm: {},
-      seasonalFlow: {
-        currentSeason: "春",
-        qiDirection: "升发",
-        strength: 0.8,
-        adaptability: 0.7,
-      },
-      overallFlow: {
-        circulation: 0.8,
-        vitality: 0.7,
-        balance: 0.75,
-        blockages: [],
-      },
+    return {meridianFlow: {},dailyRhythm: {},seasonalFlow: {currentSeason: '春',qiDirection: '升发',strength: 0.8,adaptability: 0.7;
+      },overallFlow: {circulation: 0.8,vitality: 0.7,balance: 0.75,blockages: [];
+      };
     };
   }
 
@@ -475,82 +381,43 @@ export class CalculationDiagnosisAlgorithm {
   ): Promise<ConstitutionCalculation> {
     // 体质计算逻辑
     return {
-      primaryConstitution: "平和质",
-      constitutionStrength: 0.8,
-      adaptability: 0.7,
-      vulnerabilities: [],
-      strengths: ["气血充足"],
-      seasonalVariations: {
-        spring: 0.8,
-        summer: 0.7,
-        autumn: 0.75,
-        winter: 0.6,
-      },
-      lifeStageInfluence: {
-        current: "青年",
-        characteristics: ["精力充沛"],
-        recommendations: ["保持运动"],
-      },
+      primaryConstitution: '平和质',constitutionStrength: 0.8,adaptability: 0.7,vulnerabilities: [],strengths: ['气血充足'],seasonalVariations: {spring: 0.8,summer: 0.7,autumn: 0.75,winter: 0.6;
+      },lifeStageInfluence: {current: '青年',characteristics: ['精力充沛'],recommendations: ['保持运动'];
+      };
     };
   }
 
-  private async analyzeSeasonalInfluence(
-    lunarData: LunarData
-  ): Promise<SeasonalInfluence> {
+  private async analyzeSeasonalInfluence(lunarData: LunarData): Promise<SeasonalInfluence> {
     // 季节影响分析逻辑
     return {
-      currentSeason: "春",
+      currentSeason: '春',
       seasonalQi: {
-        dominant: "木",
+        dominant: '木',
         strength: 0.8,
-        direction: "升发",
+        direction: '升发'
       },
       solarTerm: {
-        current: "立春",
-        influence: "阳气初生",
-        recommendations: ["养肝护肝"],
-      },
-      climaticFactors: {
-        wind: 0.6,
-        cold: 0.3,
-        heat: 0.2,
-        dampness: 0.4,
-        dryness: 0.2,
-        fire: 0.1,
-      },
-      adaptation: {
-        required: ["调节作息"],
-        difficulty: 0.3,
-        support: ["适度运动"],
-      },
+        current: '立春',
+        influence: '阳气初生',recommendations: ['养肝护肝'];
+      },climaticFactors: {wind: 0.6,cold: 0.3,heat: 0.2,dampness: 0.4,dryness: 0.2,fire: 0.1;
+      },adaptation: {required: ['调节作息'],difficulty: 0.3,support: ['适度运动'];
+      };
     };
   }
 
-  private async analyzeTimeInfluence(
-    lunarData: LunarData
-  ): Promise<TimeInfluence> {
+  private async analyzeTimeInfluence(lunarData: LunarData): Promise<TimeInfluence> {
     // 时辰影响分析逻辑
-    return {
-      currentHour: "子时",
-      dominantMeridian: "胆经",
-      qiActivity: {
-        level: 0.8,
-        direction: "内收",
-        quality: "静",
-      },
-      optimalActivities: ["休息", "冥想"],
-      avoidActivities: ["剧烈运动"],
-      healthFocus: ["养肝胆"],
-      energyLevel: 0.3,
+    return {currentHour: '子时',dominantMeridian: '胆经',qiActivity: {level: 0.8,direction: '内收',quality: '静';
+      },optimalActivities: ['休息', '冥想'],avoidActivities: ['剧烈运动'],healthFocus: ['养肝胆'],energyLevel: 0.3;
     };
   }
 
   private async generateAnalysis(data: any): Promise<string> {
-    return "基于算诊分析，您的体质状况良好。";
+    return '基于算诊分析，您的体质状况良好。';
   }
 
   private async generateRecommendations(data: any): Promise<string[]> {
-    return ["保持规律作息", "适度运动", "均衡饮食"];
+    return ['保持规律作息', '适度运动', '均衡饮食'];
   }
 
   private async generateWarnings(data: any): Promise<string[]> {

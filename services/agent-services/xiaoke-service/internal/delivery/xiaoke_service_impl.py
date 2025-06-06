@@ -1,20 +1,25 @@
+"""
+xiaoke_service_impl - 索克生活项目模块
+"""
+
+from api.grpc import xiaoke_service_pb2, xiaoke_service_pb2_grpc
+from datetime import datetime
+from google.protobuf.timestamp_pb2 import Timestamp
+from internal.inventory.product_manager import ProductManager
+from internal.observability.metrics import measure_time, metrics
+from internal.repository.subscription_repository import SubscriptionRepository
+from internal.scheduler.resource_manager import ResourceManager
+import grpc
+import logging
+
 #!/usr/bin/env python
 
 """
 小克服务(XiaoKeService)的gRPC实现
 """
 
-import logging
-from datetime import datetime
 
-import grpc
-from google.protobuf.timestamp_pb2 import Timestamp
 
-from api.grpc import xiaoke_service_pb2, xiaoke_service_pb2_grpc
-from internal.inventory.product_manager import ProductManager
-from internal.observability.metrics import measure_time, metrics
-from internal.repository.subscription_repository import SubscriptionRepository
-from internal.scheduler.resource_manager import ResourceManager
 
 logger = logging.getLogger(__name__)
 

@@ -1,10 +1,15 @@
+"""
+setup - 索克生活项目模块
+"""
+
+from setuptools import setup, Extension
+import platform
+
 #!/usr/bin/env python3
 """
 索克生活 - C扩展编译配置
 """
 
-from setuptools import setup, Extension
-import platform
 
 # 获取NumPy头文件路径
 numpy_include = np.get_include()

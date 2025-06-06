@@ -1,3 +1,14 @@
+"""
+kg_integration_service - 索克生活项目模块
+"""
+
+from ..model.document import Document, Metadata
+from datetime import datetime
+from loguru import logger
+from typing import Dict, List, Any, Optional
+import aiohttp
+import asyncio
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,13 +16,7 @@
 知识图谱集成服务，用于同步Neo4j知识图谱数据到RAG系统
 """
 
-import asyncio
-import aiohttp
-from typing import Dict, List, Any, Optional
-from datetime import datetime
-from loguru import logger
 
-from ..model.document import Document, Metadata
 
 
 class KnowledgeGraphIntegrationService:

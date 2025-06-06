@@ -1,10 +1,12 @@
 """
-性能测试模块 - 提供用于基准测试和性能优化的工具
-
-该模块实现了全面的性能测试框架，用于评估API网关和各微服务的响应时间、
-吞吐量和资源利用率，以及识别系统瓶颈。
+performance_test - 索克生活项目模块
 """
 
+from collections.abc import Callable
+from datetime import datetime
+from enum import Enum
+from typing import Any
+import aiohttp
 import asyncio
 import json
 import logging
@@ -13,12 +15,15 @@ import random
 import statistics
 import time
 import uuid
-from collections.abc import Callable
-from datetime import datetime
-from enum import Enum
-from typing import Any
 
-import aiohttp
+"""
+性能测试模块 - 提供用于基准测试和性能优化的工具
+
+该模块实现了全面的性能测试框架，用于评估API网关和各微服务的响应时间、
+吞吐量和资源利用率，以及识别系统瓶颈。
+"""
+
+
 
 # 设置日志记录
 logging.basicConfig(

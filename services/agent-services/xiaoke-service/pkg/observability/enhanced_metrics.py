@@ -1,20 +1,25 @@
+"""
+enhanced_metrics - 索克生活项目模块
+"""
+
+from collections import defaultdict, deque
+from contextlib import asynccontextmanager, suppress
+from dataclasses import dataclass
+from datetime import datetime
+from prometheus_client import (
+from typing import Any
+import asyncio
+import logging
+import psutil
+import time
+
 #!/usr/bin/env python3
 """
 增强的监控和指标收集器
 提供详细的性能监控、业务指标和健康检查功能
 """
 
-import asyncio
-import logging
-import time
-from collections import defaultdict, deque
-from contextlib import asynccontextmanager, suppress
-from dataclasses import dataclass
-from datetime import datetime
-from typing import Any
 
-import psutil
-from prometheus_client import (
     CollectorRegistry,
     Counter,
     Gauge,

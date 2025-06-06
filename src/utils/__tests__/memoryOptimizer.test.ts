@@ -1,233 +1,224 @@
 import { MemoryOptimizer, memoryOptimizer, registerComponent, unregisterComponent, registerListener, unregisterListener, getMemoryStats, takeMemorySnapshot, detectMemoryLeaks } from "../memoryOptimizer";
+import { MemoryOptimizer, memoryOptimizer, registerComponent, unregisterComponent, registerListener, unregisterListener, getMemoryStats, takeMemorySnapshot, detectMemoryLeaks } from "../memoryOptimizer";
+
 describe("memoryOptimizer", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  describe(MemoryOptimizer", () => {"
+  describe("MemoryOptimizer", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = MemoryOptimizer(/* valid params   */);
+const result = MemoryOptimizer(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = MemoryOptimizer(/* edge case params   */);
+const result = MemoryOptimizer(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        MemoryOptimizer(/* invalid params     */)
-      }).not.toThrow()
+        MemoryOptimizer(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = MemoryOptimizer(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = MemoryOptimizer(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(memoryOptimizer", () => {"
+  describe("memoryOptimizer", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = memoryOptimizer(/* valid params   */);
+const result = memoryOptimizer(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = memoryOptimizer(/* edge case params   */);
+const result = memoryOptimizer(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        memoryOptimizer(/* invalid params     */)
-      }).not.toThrow()
+        memoryOptimizer(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = memoryOptimizer(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = memoryOptimizer(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(registerComponent", () => {"
+  describe("registerComponent", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = registerComponent(/* valid params   */);
+const result = registerComponent(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = registerComponent(/* edge case params   */);
+const result = registerComponent(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        registerComponent(/* invalid params     */)
-      }).not.toThrow()
+        registerComponent(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = registerComponent(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = registerComponent(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(unregisterComponent", () => {"
+  describe("unregisterComponent", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = unregisterComponent(/* valid params   */);
+const result = unregisterComponent(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = unregisterComponent(/* edge case params   */);
+const result = unregisterComponent(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        unregisterComponent(/* invalid params     */)
-      }).not.toThrow()
+        unregisterComponent(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = unregisterComponent(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = unregisterComponent(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(registerListener", () => {"
+  describe("registerListener", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = registerListener(/* valid params   */);
+const result = registerListener(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = registerListener(/* edge case params   */);
+const result = registerListener(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        registerListener(/* invalid params     */)
-      }).not.toThrow()
+        registerListener(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = registerListener(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = registerListener(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(unregisterListener", () => {"
+  describe("unregisterListener", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = unregisterListener(/* valid params   */);
+const result = unregisterListener(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = unregisterListener(/* edge case params   */);
+const result = unregisterListener(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        unregisterListener(/* invalid params     */)
-      }).not.toThrow()
+        unregisterListener(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = unregisterListener(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = unregisterListener(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(getMemoryStats", () => {"
+  describe("getMemoryStats", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = getMemoryStats(/* valid params   */);
+const result = getMemoryStats(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = getMemoryStats(/* edge case params   */);
+const result = getMemoryStats(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        getMemoryStats(/* invalid params     */)
-      }).not.toThrow()
+        getMemoryStats(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = getMemoryStats(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = getMemoryStats(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(takeMemorySnapshot", () => {"
+  describe("takeMemorySnapshot", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = takeMemorySnapshot(/* valid params   */);
+const result = takeMemorySnapshot(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = takeMemorySnapshot(/* edge case params   */);
+const result = takeMemorySnapshot(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        takeMemorySnapshot(/* invalid params     */)
-      }).not.toThrow()
+        takeMemorySnapshot(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = takeMemorySnapshot(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = takeMemorySnapshot(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(detectMemoryLeaks", () => {"
+  describe("detectMemoryLeaks", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = detectMemoryLeaks(/* valid params   */);
+const result = detectMemoryLeaks(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = detectMemoryLeaks(/* edge case params   */);
+const result = detectMemoryLeaks(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        detectMemoryLeaks(/* invalid params     */)
-      }).not.toThrow()
+        detectMemoryLeaks(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = detectMemoryLeaks(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = detectMemoryLeaks(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
 });
-import { performance } from "perf_hooks";
-import { MemoryOptimizer, memoryOptimizer, registerComponent, unregisterComponent, registerListener, unregisterListener, getMemoryStats, takeMemorySnapshot, detectMemoryLeaks } from "../memoryOptimizer";
 describe("memoryOptimizer Performance Tests", () => {
   it("should execute within performance thresholds", () => {
     const iterations = 10;
     const startTime = performance.now();
     for (let i = 0; i < iterations; i++) {
       // Execute performance-critical functions
-MemoryOptimizer(/* test params      */)
-      memoryOptimizer(/* test params      */);
-      registerComponent(/* test params      */);
-      unregisterComponent(/* test params      */);
-      registerListener(/* test params      */);
-      unregisterListener(/* test params      */);
-      getMemoryStats(/* test params      */);
-      takeMemorySnapshot(/* test params      */);
-      detectMemoryLeaks(/* test params      */);
+MemoryOptimizer(// test params);
+      memoryOptimizer(// test params);
+      registerComponent(// test params);
+      unregisterComponent(// test params);
+      registerListener(// test params);
+      unregisterListener(// test params);
+      getMemoryStats(// test params);
+      takeMemorySnapshot(// test params);
+      detectMemoryLeaks(// test params);
     });
     const endTime = performance.now();
     const averageTime = (endTime - startTime) / iterations;
@@ -238,7 +229,7 @@ expect(averageTime).toBeLessThan(1);
     const largeDataset = new Array(10000).fill(0).map((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
-MemoryOptimizer(largeDataset)
+MemoryOptimizer(largeDataset);
     const endTime = performance.now();
     // Should handle large datasets within 100ms
 expect(endTime - startTime).toBeLessThan(100);
@@ -247,7 +238,7 @@ expect(endTime - startTime).toBeLessThan(100);
     const initialMemory = process.memoryUsage().heapUsed;
     // Execute function multiple times
 for (let i = 0; i < 1000; i++) {
-      MemoryOptimizer(/* test params      */);
+      MemoryOptimizer(// test params);
     });
     // Force garbage collection if available
 if (global.gc) {

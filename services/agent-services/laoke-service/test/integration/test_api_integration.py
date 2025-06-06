@@ -1,3 +1,11 @@
+"""
+test_api_integration - 索克生活项目模块
+"""
+
+from httpx import AsyncClient
+from typing import Any
+import pytest
+
 #!/usr/bin/env python
 
 """
@@ -5,10 +13,7 @@
 测试GraphQL和REST端点的集成功能
 """
 
-from typing import Any
 
-import pytest
-from httpx import AsyncClient
 
 pytestmark = pytest.mark.asyncio
 
@@ -39,7 +44,8 @@ async def test_metrics_endpoint(async_client: AsyncClient):
     assert response.headers["content-type"] == "text/plain; version=0.0.4"
 
 
-async def test_graphql_knowledge_query(async_client: AsyncClient, mock_knowledge_article: dict[str, Any]):
+async     @cache(timeout=300)  # 5分钟缓存
+def test_graphql_knowledge_query(async_client: AsyncClient, mock_knowledge_article: dict[str, Any]):
     """
     测试GraphQL知识查询
 
@@ -66,7 +72,8 @@ async def test_graphql_knowledge_query(async_client: AsyncClient, mock_knowledge
     data = response.json()
     assert "data" in data
     assert "knowledgeArticles" in data["data"]
-    assert isinstance(data["data"]["knowledgeArticles"], list)
+    assert isinstance(data["data"]["kn    @cache(timeout=300)  # 5分钟缓存
+owledgeArticles"], list)
 
 
 async def test_graphql_learning_paths_query(async_client: AsyncClient, mock_learning_path: dict[str, Any]):
@@ -99,7 +106,8 @@ async def test_graphql_learning_paths_query(async_client: AsyncClient, mock_lear
     data = response.json()
     assert "data" in data
     assert "learningPaths" in data["data"]
-    assert isinstance(data["data"]["learningPaths"], list)
+     @cache(timeout=300)  # 5分钟缓存
+   assert isinstance(data["data"]["learningPaths"], list)
 
 
 async def test_graphql_community_posts_query(async_client: AsyncClient, mock_community_post: dict[str, Any]):

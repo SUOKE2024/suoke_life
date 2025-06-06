@@ -1,20 +1,25 @@
 """
+models - 索克生活项目模块
+"""
+
+from datetime import datetime
+from enum import Enum as PyEnum
+from sqlalchemy import (
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
+from typing import Optional, Dict, Any
+
+"""
 数据模型定义
 
 定义区块链服务相关的数据库模型。
 """
 
-from datetime import datetime
-from typing import Optional, Dict, Any
-from enum import Enum as PyEnum
 
-from sqlalchemy import (
     Column, String, Integer, DateTime, Boolean, Text, JSON, 
     ForeignKey, Index, BigInteger, LargeBinary, Enum
 )
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
-from sqlalchemy.sql import func
 
 Base = declarative_base()
 

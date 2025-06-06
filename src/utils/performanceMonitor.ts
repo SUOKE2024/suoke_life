@@ -70,8 +70,8 @@ class PerformanceMonitor {
       success,
       tags: {
         endpoint: this.extractEndpoint(url),
-        status: success ? 'success' : 'error',
-      },
+        status: success ? 'success' : 'error'
+      }
     };
 
     this.apiMetrics.push(metric);
@@ -90,11 +90,7 @@ class PerformanceMonitor {
   }
 
   // 记录用户交互性能
-  recordUserInteraction(
-    screen: string,
-    action: string,
-    duration: number
-  ): void {
+  recordUserInteraction(screen: string, action: string, duration: number): void {
     if (!this.isEnabled) return;
 
     const metric: UserInteractionMetric = {
@@ -106,8 +102,8 @@ class PerformanceMonitor {
       duration,
       tags: {
         screen,
-        action,
-      },
+        action
+      }
     };
 
     this.userInteractionMetrics.push(metric);
@@ -143,8 +139,8 @@ class PerformanceMonitor {
         totalJSHeapSize: memory.totalJSHeapSize,
         jsHeapSizeLimit: memory.jsHeapSizeLimit,
         tags: {
-          type: 'heap',
-        },
+          type: 'heap'
+        }
       };
 
       this.memoryMetrics.push(metric);
@@ -173,12 +169,7 @@ class PerformanceMonitor {
     errorRate: number;
   } {
     if (this.apiMetrics.length === 0) {
-      return {
-        averageResponseTime: 0,
-        successRate: 0,
-        slowRequestsCount: 0,
-        totalRequests: 0,
-        errorRate: 0,
+      return {averageResponseTime: 0,successRate: 0,slowRequestsCount: 0,totalRequests: 0,errorRate: 0;
       };
     }
 
@@ -186,12 +177,7 @@ class PerformanceMonitor {
     const successfulRequests = this.apiMetrics.filter(metric => metric.success).length;
     const slowRequests = this.apiMetrics.filter(metric => metric.duration > 3000).length;
 
-    return {
-      averageResponseTime: totalDuration / this.apiMetrics.length,
-      successRate: (successfulRequests / this.apiMetrics.length) * 100,
-      slowRequestsCount: slowRequests,
-      totalRequests: this.apiMetrics.length,
-      errorRate: ((this.apiMetrics.length - successfulRequests) / this.apiMetrics.length) * 100,
+    return {averageResponseTime: totalDuration / this.apiMetrics.length,successRate: (successfulRequests / this.apiMetrics.length) * 100,slowRequestsCount: slowRequests,totalRequests: this.apiMetrics.length,errorRate: ((this.apiMetrics.length - successfulRequests) / this.apiMetrics.length) * 100;
     };
   }
 
@@ -203,16 +189,16 @@ class PerformanceMonitor {
     screenStats: Record<string, { count: number; averageTime: number }>;
   } {
     if (this.userInteractionMetrics.length === 0) {
-      return {
-        averageInteractionTime: 0,
-        slowInteractionsCount: 0,
-        totalInteractions: 0,
-        screenStats: {},
+      return {averageInteractionTime: 0,slowInteractionsCount: 0,totalInteractions: 0,screenStats: {};
       };
     }
 
-    const totalDuration = this.userInteractionMetrics.reduce((sum, metric) => sum + metric.duration, 0);
-    const slowInteractions = this.userInteractionMetrics.filter(metric => metric.duration > 1000).length;
+    const totalDuration = this.userInteractionMetrics.reduce(;
+      (sum, metric) => sum + metric.duration,0;
+    );
+    const slowInteractions = this.userInteractionMetrics.filter(;
+      metric => metric.duration > 1000;
+    ).length;
 
     // 按屏幕统计
     const screenStats: Record<string, { count: number; averageTime: number }> = {};
@@ -230,11 +216,7 @@ class PerformanceMonitor {
       screenStats[screen].averageTime = screenTotalTime / screenMetrics.length;
     });
 
-    return {
-      averageInteractionTime: totalDuration / this.userInteractionMetrics.length,
-      slowInteractionsCount: slowInteractions,
-      totalInteractions: this.userInteractionMetrics.length,
-      screenStats,
+    return {averageInteractionTime: totalDuration / this.userInteractionMetrics.length,slowInteractionsCount: slowInteractions,totalInteractions: this.userInteractionMetrics.length,screenStats;
     };
   }
 
@@ -246,11 +228,7 @@ class PerformanceMonitor {
     usagePercent: number;
   } {
     if (this.memoryMetrics.length === 0) {
-      return {
-        currentUsage: 0,
-        averageUsage: 0,
-        peakUsage: 0,
-        usagePercent: 0,
+      return {currentUsage: 0,averageUsage: 0,peakUsage: 0,usagePercent: 0;
       };
     }
 
@@ -258,11 +236,7 @@ class PerformanceMonitor {
     const totalUsage = this.memoryMetrics.reduce((sum, metric) => sum + metric.usedJSHeapSize, 0);
     const peakUsage = Math.max(...this.memoryMetrics.map(metric => metric.usedJSHeapSize));
 
-    return {
-      currentUsage: latest.usedJSHeapSize,
-      averageUsage: totalUsage / this.memoryMetrics.length,
-      peakUsage,
-      usagePercent: (latest.usedJSHeapSize / latest.jsHeapSizeLimit) * 100,
+    return {currentUsage: latest.usedJSHeapSize,averageUsage: totalUsage / this.memoryMetrics.length,peakUsage,usagePercent: (latest.usedJSHeapSize / latest.jsHeapSizeLimit) * 100;
     };
   }
 
@@ -297,12 +271,7 @@ class PerformanceMonitor {
       recommendations.push('内存使用率较高，建议检查内存泄漏和优化内存使用');
     }
 
-    return {
-      timestamp: Date.now(),
-      api: apiStats,
-      userInteraction: interactionStats,
-      memory: memoryStats,
-      recommendations,
+    return {timestamp: Date.now(),api: apiStats,userInteraction: interactionStats,memory: memoryStats,recommendations;
     };
   }
 
@@ -339,15 +308,14 @@ class PerformanceMonitor {
 export const performanceMonitor = new PerformanceMonitor();
 
 // 导出类型
-export type {
-  PerformanceMetric,
-  ApiPerformanceMetric,
-  UserInteractionMetric,
-  MemoryMetric,
-};
+export type { PerformanceMetric, ApiPerformanceMetric, UserInteractionMetric, MemoryMetric };
 
 // 导出性能监控装饰器
-export function measurePerformance(target: any, propertyName: string, descriptor: PropertyDescriptor) {
+export function measurePerformance(
+  target: any,
+  propertyName: string,
+  descriptor: PropertyDescriptor
+) {
   const method = descriptor.value;
 
   descriptor.value = async function (...args: any[]) {
@@ -355,11 +323,7 @@ export function measurePerformance(target: any, propertyName: string, descriptor
     try {
       const result = await method.apply(this, args);
       const duration = Date.now() - startTime;
-      performanceMonitor.recordUserInteraction(
-        target.constructor.name,
-        propertyName,
-        duration
-      );
+      performanceMonitor.recordUserInteraction(target.constructor.name, propertyName, duration);
       return result;
     } catch (error) {
       const duration = Date.now() - startTime;

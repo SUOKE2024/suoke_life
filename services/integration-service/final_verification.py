@@ -1,12 +1,17 @@
+"""
+final_verification - 索克生活项目模块
+"""
+
+from pathlib import Path
+import os
+import subprocess
+import sys
+
 #!/usr/bin/env python3
 """
 集成服务最终验证脚本
 """
 
-import os
-import sys
-import subprocess
-from pathlib import Path
 
 def print_header(title):
     """打印标题"""

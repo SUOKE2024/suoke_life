@@ -1,3 +1,18 @@
+"""
+resource_manager - 索克生活项目模块
+"""
+
+from datetime import datetime
+from internal.domain.models import AppointmentStatus
+from internal.repository.appointment_repository import AppointmentRepository
+from internal.repository.resource_repository import ResourceRepository
+from pkg.utils.config_loader import get_config
+from pkg.utils.metrics import get_metrics_collector
+from typing import Any
+import logging
+import time
+import uuid
+
 #!/usr/bin/env python
 
 """
@@ -5,17 +20,7 @@
 负责医疗资源的调度、预约管理和资源分配
 """
 
-import logging
-import time
-import uuid
-from datetime import datetime
-from typing import Any
 
-from internal.domain.models import AppointmentStatus
-from internal.repository.appointment_repository import AppointmentRepository
-from internal.repository.resource_repository import ResourceRepository
-from pkg.utils.config_loader import get_config
-from pkg.utils.metrics import get_metrics_collector
 
 logger = logging.getLogger(__name__)
 

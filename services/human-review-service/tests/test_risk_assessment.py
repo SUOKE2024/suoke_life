@@ -1,11 +1,16 @@
 """
+test_risk_assessment - 索克生活项目模块
+"""
+
+from human_review_service.core.risk_assessment import RiskAssessmentEngine
+from unittest.mock import Mock, patch
+import pytest
+
+"""
 风险评估引擎测试
 """
 
-import pytest
-from unittest.mock import Mock, patch
 
-from human_review_service.core.risk_assessment import RiskAssessmentEngine
 
 
 class TestRiskAssessmentEngine:

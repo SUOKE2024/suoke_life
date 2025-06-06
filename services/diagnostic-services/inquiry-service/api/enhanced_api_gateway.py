@@ -1,30 +1,35 @@
+"""
+enhanced_api_gateway - 索克生活项目模块
+"""
+
+from fastapi import (
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
+from services.common.observability.tracing import SpanKind, get_tracer
+from services.diagnostic_services.inquiry_service.internal.enhanced_inquiry_service import (
+from typing import Any, Optional
+import logging
+import uvicorn
+
 #!/usr/bin/env python3
 """
 问诊服务增强版API网关
 提供RESTful API接口，支持智能问诊、会话管理、批量分析和实时交互
 """
 
-import logging
-from typing import Any, Optional
 
-from fastapi import (
     Depends,
     FastAPI,
     HTTPException,
     WebSocket,
     WebSocketDisconnect,
 )
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field
 
 # 导入通用组件
-from services.common.observability.tracing import SpanKind, get_tracer
 
 # 导入服务
-from services.diagnostic_services.inquiry_service.internal.enhanced_inquiry_service import (
     EnhancedInquiryService,
 )
-import uvicorn
 
 logger = logging.getLogger(__name__)
 
@@ -76,6 +81,66 @@ class StartSessionRequest(BaseModel):
     patient_id: str = Field(..., description="患者ID")
     chief_complaint: str = Field(..., description="主诉")
     metadata: dict[str, Any] | None = Field(None, description="元数据")
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'startsessionrequest'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'batchanalyzerequest'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'sessionresponse'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'analysisresponse'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'servicestats'
+        ordering = ['-created_at']
 
 
 class SubmitAnswerRequest(BaseModel):
@@ -176,6 +241,7 @@ async def get_inquiry_service() -> EnhancedInquiryService:
 
 
 # API端点
+@limiter.limit("100/minute")  # 每分钟100次请求
 @app.post("/api/v1/inquiry/sessions", response_model=SessionResponse)
 async def start_session(
     request: StartSessionRequest,
@@ -217,7 +283,8 @@ async def start_session(
 
     except Exception as e:
         logger.error(f"开始会话失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPEx@limiter.limit("100/minute")  # 每分钟100次请求
+ception(status_code=500, detail=str(e))
 
 
 @app.post("/api/v1/inquiry/answers", response_model=Optional[QuestionResponse])
@@ -254,9 +321,11 @@ async def submit_answer(
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
         logger.error(f"提交答案失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+      @limiter.limit("100/minute")  # 每分钟100次请求
+  raise HTTPException(status_code=500, detail=str(e))
 
 
+@cache(expire=300)  # 5分钟缓存
 @app.get("/api/v1/inquiry/sessions/{session_id}")
 async def get_session(
     session_id: str, service: EnhancedInquiryService = Depends(get_inquiry_service)
@@ -300,6 +369,7 @@ async def get_session(
 
     except HTTPException:
         raise
+@limiter.limit("100/minute")  # 每分钟100次请求
     except Exception as e:
         logger.error(f"获取会话失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -330,7 +400,8 @@ async def analyze_session(
         )
 
     except ValueError as e:
-        raise HTTPException(status_code=404, detail=str(e))
+        raise HTTP@limiter.limit("100/minute")  # 每分钟100次请求
+Exception(status_code=404, detail=str(e))
     except Exception as e:
         logger.error(f"分析会话失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -455,11 +526,13 @@ async def websocket_inquiry(
                     break
 
     except WebSocketDisconnect:
-        manager.disconnect(session_id)
+        manager.dis@limiter.limit("100/minute")  # 每分钟100次请求
+connect(session_id)
         logger.info(f"WebSocket断开连接: {session_id}")
     except Exception as e:
         logger.error(f"WebSocket错误: {e}")
-        manager.disconnect(session_id)
+        manag@cache(expire=300)  # 5分钟缓存
+er.disconnect(session_id)
 
 
 @app.get("/api/v1/inquiry/stats", response_model=ServiceStats)
@@ -478,13 +551,15 @@ async def get_stats(service: EnhancedInquiryService = Depends(get_inquiry_servic
             active_sessions=stats["active_sessions"],
             cache_hit_rate=stats["cache_hit_rate"],
             average_questions_per_session=stats["average_questions_per_session"],
-            average_processing_time_ms=stats["average_processing_time_ms"],
+            average_processing_time_ms=stats[@limiter.limit("100/minute")  # 每分钟100次请求
+"average_processing_time_ms"],
             batch_processed=stats["batch_processed"],
         )
 
     except Exception as e:
         logger.error(f"获取统计信息失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+      @cache(expire=300)  # 5分钟缓存
+  raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.get("/api/v1/inquiry/metrics")
@@ -530,13 +605,15 @@ async def get_metrics(service: EnhancedInquiryService = Depends(get_inquiry_serv
         )
         metrics.append("# TYPE inquiry_average_questions_per_session gauge")
         metrics.append(
-            f"inquiry_average_questions_per_session {stats['average_questions_per_session']}"
+         @limiter.limit("100/minute")  # 每分钟100次请求
+   f"inquiry_average_questions_per_session {stats['average_questions_per_session']}"
         )
 
         return "\n".join(metrics)
 
     except Exception as e:
-        logger.error(f"获取指标失败: {e}")
+        logger.error(f"获@cache(expire=300)  # 5分钟缓存
+取指标失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 

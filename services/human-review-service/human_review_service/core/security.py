@@ -1,26 +1,38 @@
 """
+security - 索克生活项目模块
+"""
+
+                import json
+            import base64
+            import json
+        import hashlib
+        import ipaddress
+        import json
+        import string
+from .config import settings
+from cryptography.fernet import Fernet
+from datetime import datetime, timedelta, timezone
+from enum import Enum
+from functools import wraps
+from pydantic import BaseModel, EmailStr
+from typing import Any, Dict, List, Optional, Set, Union
+import bcrypt
+import hashlib
+import hmac
+import jwt
+import secrets
+import structlog
+import time
+
+"""
 安全加固模块
 Security Enhancement Module
 
 提供认证授权、数据加密、审计日志、安全策略等功能
 """
 
-import hashlib
-import hmac
-import secrets
-import time
-from datetime import datetime, timedelta, timezone
-from enum import Enum
-from functools import wraps
-from typing import Any, Dict, List, Optional, Set, Union
 
-import bcrypt
-import jwt
-import structlog
-from cryptography.fernet import Fernet
-from pydantic import BaseModel, EmailStr
 
-from .config import settings
 
 logger = structlog.get_logger(__name__)
 
@@ -104,6 +116,18 @@ class User(BaseModel):
     last_login: Optional[datetime] = None
     created_at: datetime
     updated_at: datetime
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'user'
+        ordering = ['-created_at']
 
 
 class AuditLog(BaseModel):
@@ -231,7 +255,6 @@ class PasswordManager:
 
     def generate_secure_password(self, length: int = 12) -> str:
         """生成安全密码"""
-        import string
         
         # 确保包含所有必需的字符类型
         chars = ""
@@ -534,7 +557,6 @@ class DataEncryption:
             key = Fernet.generate_key()
         elif isinstance(key, str):
             # 如果传入字符串，转换为有效的Fernet密钥
-            import base64
             key_bytes = key.encode('utf-8')
             # 确保密钥长度为32字节
             if len(key_bytes) < 32:
@@ -551,7 +573,6 @@ class DataEncryption:
         try:
             # 如果是字典，先转换为JSON字符串
             if isinstance(data, dict):
-                import json
                 data_str = json.dumps(data, ensure_ascii=False)
             else:
                 data_str = data
@@ -570,7 +591,6 @@ class DataEncryption:
             
             # 尝试解析为JSON，如果成功则返回字典，否则返回字符串
             try:
-                import json
                 return json.loads(decrypted_str)
             except (json.JSONDecodeError, ValueError):
                 return decrypted_str
@@ -580,14 +600,12 @@ class DataEncryption:
 
     def encrypt_dict(self, data: Dict[str, Any]) -> str:
         """加密字典数据"""
-        import json
         json_str = json.dumps(data, ensure_ascii=False)
         return self.encrypt(json_str)
 
     def decrypt_dict(self, encrypted_data: str) -> Dict[str, Any]:
         """解密字典数据"""
         try:
-            import json
             json_str = self.decrypt(encrypted_data)
             return json.loads(json_str)
         except Exception as e:
@@ -596,7 +614,6 @@ class DataEncryption:
 
     def hash_data(self, data: str) -> str:
         """哈希数据"""
-        import hashlib
         return hashlib.sha256(data.encode('utf-8')).hexdigest()
 
 
@@ -837,7 +854,6 @@ class SecurityValidator:
 
     def validate_ip_address(self, ip_address: str, allowed_ips: Optional[List[str]] = None) -> bool:
         """验证IP地址"""
-        import ipaddress
         
         try:
             # 验证IP地址格式

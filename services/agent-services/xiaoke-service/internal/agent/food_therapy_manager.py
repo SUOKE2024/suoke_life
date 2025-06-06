@@ -1,22 +1,28 @@
+"""
+food_therapy_manager - 索克生活项目模块
+"""
+
+            import re
+from .model_factory import ModelFactory
+from datetime import UTC, datetime
+from internal.repository.food_repository import FoodRepository
+from pkg.utils.config_loader import get_config
+from pkg.utils.metrics import get_metrics_collector, track_llm_metrics
+from typing import Any
+import logging
+import os
+import time
+import uuid
+
 #!/usr/bin/env python3
 """
 食疗服务管理器
 负责小克智能体的食疗相关功能，包括食疗方案生成、食药配伍分析、时令食谱推荐等
 """
 
-import logging
-import os
-import time
-import uuid
-from datetime import UTC, datetime
-from typing import Any
 
-from internal.repository.food_repository import FoodRepository
-from pkg.utils.config_loader import get_config
-from pkg.utils.metrics import get_metrics_collector, track_llm_metrics
 
 # 导入项目依赖
-from .model_factory import ModelFactory
 
 # 初始化日志
 logger = logging.getLogger(__name__)
@@ -855,7 +861,6 @@ class FoodTherapyManager:
 
         try:
             # 简单正则表达式匹配评分
-            import re
 
             # 匹配"评分：X"模式
             balanced_match = re.search(r"平和质\s*评分：\s*(\d)", rating_text)
@@ -1407,6 +1412,7 @@ class FoodTherapyManager:
 _food_therapy_manager = None
 
 
+    @cache(timeout=300)  # 5分钟缓存
 def get_food_therapy_manager():
     """获取食疗服务管理器单例"""
     global _food_therapy_manager

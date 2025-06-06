@@ -1,21 +1,26 @@
+"""
+shared_memory_processor - 索克生活项目模块
+"""
+
+from concurrent.futures import ProcessPoolExecutor
+from contextlib import contextmanager
+from dataclasses import dataclass, asdict
+from datetime import datetime
+from multiprocessing import shared_memory, Lock, Value, Array
+from numba import jit, cuda
+from typing import Dict, List, Any, Optional, Union, Callable, Tuple
+import asyncio
+import logging
+import multiprocessing
+import threading
+import uuid
+
 #!/usr/bin/env python3
 """
 索克生活 - 共享内存大数据处理器
 实现跨进程的高效数据共享和大数据处理
 """
 
-import asyncio
-import multiprocessing
-import logging
-import uuid
-from typing import Dict, List, Any, Optional, Union, Callable, Tuple
-from dataclasses import dataclass, asdict
-from datetime import datetime
-from concurrent.futures import ProcessPoolExecutor
-from multiprocessing import shared_memory, Lock, Value, Array
-from numba import jit, cuda
-import threading
-from contextlib import contextmanager
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)

@@ -1,3 +1,12 @@
+"""
+validators - 索克生活项目模块
+"""
+
+from datetime import datetime
+from typing import Any
+import json
+import re
+
 #!/usr/bin/env python
 
 """
@@ -5,10 +14,6 @@
 提供各种数据验证和转换函数
 """
 
-import json
-import re
-from datetime import datetime
-from typing import Any
 
 
 def validate_email(email: str) -> bool:

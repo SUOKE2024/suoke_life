@@ -1,23 +1,28 @@
 """
+security_audit - 索克生活项目模块
+"""
+
+from collections import defaultdict, deque
+from dataclasses import dataclass, asdict
+from datetime import datetime, timedelta
+from enum import Enum
+from fastapi import Request, Response
+from starlette.middleware.base import BaseHTTPMiddleware
+from typing import Dict, List, Optional, Any, Set
+import asyncio
+import hashlib
+import json
+import logging
+import re
+import redis.asyncio as redis
+import time
+
+"""
 用户服务安全审计日志中间件
 实现全面的安全事件记录、威胁检测和实时监控
 """
 
-import asyncio
-import json
-import time
-import hashlib
-import re
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Any, Set
-from collections import defaultdict, deque
-from dataclasses import dataclass, asdict
-from enum import Enum
-import logging
 
-from fastapi import Request, Response
-from starlette.middleware.base import BaseHTTPMiddleware
-import redis.asyncio as redis
 
 logger = logging.getLogger(__name__)
 

@@ -1,16 +1,22 @@
+"""
+test_client - 索克生活项目模块
+"""
+
+    from api import corn_maze_pb2, corn_maze_pb2_grpc
+from pathlib import Path
+import argparse
+import grpc
+import logging
+import sys
+import uuid
+
 #!/usr/bin/env python3
 
 """
 Corn Maze Service 测试客户端
 """
 
-import argparse
-import logging
-from pathlib import Path
-import sys
-import uuid
 
-import grpc
 
 # 添加项目根目录到Python路径
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.resolve()))
@@ -24,7 +30,6 @@ logger = logging.getLogger(__name__)
 
 try:
     # 导入自动生成的gRPC代码
-    from api import corn_maze_pb2, corn_maze_pb2_grpc
 except ImportError:
     logger.error("无法导入gRPC生成的代码, 请先运行生成脚本")
     sys.exit(1)

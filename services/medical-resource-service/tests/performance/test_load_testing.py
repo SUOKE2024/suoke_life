@@ -1,22 +1,27 @@
 """
+test_load_testing - 索克生活项目模块
+"""
+
+from datetime import datetime, timedelta
+from internal.enhanced_medical_resource_service import EnhancedMedicalResourceService
+from internal.service.enhanced_food_agriculture_service import EnhancedFoodAgricultureService, ConstitutionType
+from internal.service.famous_doctor_service import FamousDoctorService, DoctorSearchCriteria
+from internal.service.intelligent_appointment_service import IntelligentAppointmentService, AppointmentType, PriorityLevel
+from internal.service.wellness_tourism_service import WellnessTourismService, WellnessRequest, WellnessType
+import asyncio
+import gc
+import psutil
+import pytest
+import statistics
+import time
+import uuid
+
+"""
 性能和负载测试
 测试系统在高并发和大数据量下的表现
 """
 
-import pytest
-import asyncio
-import time
-import statistics
-from datetime import datetime, timedelta
-import uuid
-import psutil
-import gc
 
-from internal.enhanced_medical_resource_service import EnhancedMedicalResourceService
-from internal.service.wellness_tourism_service import WellnessTourismService, WellnessRequest, WellnessType
-from internal.service.enhanced_food_agriculture_service import EnhancedFoodAgricultureService, ConstitutionType
-from internal.service.famous_doctor_service import FamousDoctorService, DoctorSearchCriteria
-from internal.service.intelligent_appointment_service import IntelligentAppointmentService, AppointmentType, PriorityLevel
 
 
 class TestPerformanceAndLoad:

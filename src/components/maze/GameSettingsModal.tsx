@@ -1,10 +1,12 @@
+import React, { useState, useEffect } from 'react';
+import {import Icon from 'react-native-vector-icons/MaterialIcons';
+import { GameSettings, MazeDifficulty } from '../../types/maze';
+
 /**
  * 游戏设置模态框组件
  * Game Settings Modal Component
  */
 
-import React, { useState, useEffect } from 'react';
-import {
   View,
   Text,
   StyleSheet,
@@ -14,8 +16,6 @@ import {
   Switch,
   Alert
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import { GameSettings, MazeDifficulty } from '../../types/maze';
 
 interface GameSettingsModalProps {
   visible: boolean;
@@ -30,15 +30,7 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
   onClose,
   onSave
 }) => {
-  const [localSettings, setLocalSettings] = useState<GameSettings>({
-    soundEnabled: true,
-    musicEnabled: true,
-    vibrationEnabled: true,
-    autoSave: true,
-    difficulty: MazeDifficulty.NORMAL,
-    showHints: true,
-    animationSpeed: 'normal',
-    colorScheme: 'auto'
+  const [localSettings, setLocalSettings] = useState<GameSettings>({soundEnabled: true,musicEnabled: true,vibrationEnabled: true,autoSave: true,difficulty: MazeDifficulty.NORMAL,showHints: true,animationSpeed: 'normal',colorScheme: 'auto';
   });
 
   /**
@@ -53,21 +45,16 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
   /**
    * 更新设置项
    */
-  const updateSetting = <K extends keyof GameSettings>(
-    key: K,
-    value: GameSettings[K]
-  ) => {
-    setLocalSettings(prev => ({
-      ...prev,
-      [key]: value
+  const updateSetting = <K extends keyof GameSettings>(;
+    key: K,value: GameSettings[K];
+  ) => {setLocalSettings(prev => ({...prev,[key]: value;
     }));
   };
 
   /**
    * 保存设置
    */
-  const handleSave = () => {
-    onSave(localSettings);
+  const handleSave = () => {onSave(localSettings);
     onClose();
   };
 
@@ -76,22 +63,8 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
    */
   const handleReset = () => {
     Alert.alert(
-      '重置设置',
-      '确定要重置为默认设置吗？',
-      [
-        { text: '取消', style: 'cancel' },
-        {
-          text: '确定',
-          onPress: () => {
-            setLocalSettings({
-              soundEnabled: true,
-              musicEnabled: true,
-              vibrationEnabled: true,
-              autoSave: true,
-              difficulty: MazeDifficulty.NORMAL,
-              showHints: true,
-              animationSpeed: 'normal',
-              colorScheme: 'auto'
+      '重置设置','确定要重置为默认设置吗？',[;
+        { text: '取消', style: 'cancel' },{text: '确定',onPress: () => {setLocalSettings({soundEnabled: true,musicEnabled: true,vibrationEnabled: true,autoSave: true,difficulty: MazeDifficulty.NORMAL,showHints: true,animationSpeed: 'normal',colorScheme: 'auto';
             });
           }
         }
@@ -109,32 +82,29 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
     onValueChange: (value: boolean) => void,
     iconName: string,
     iconColor: string = '#4CAF50'
-  ) => (
-    <View style={styles.settingItem}>
-      <View style={styles.settingLeft}>
-        <Icon name={iconName} size={24} color={iconColor} />
-        <View style={styles.settingText}>
-          <Text style={styles.settingTitle}>{title}</Text>
-          <Text style={styles.settingDescription}>{description}</Text>
-        </View>
-      </View>
-      <Switch
-        value={value}
-        onValueChange={onValueChange}
-        trackColor={{ false: '#E0E0E0', true: '#C8E6C9' }}
-        thumbColor={value ? '#4CAF50' : '#F5F5F5'}
-      />
-    </View>
+  ) => (;
+    <View style={styles.settingItem}>;
+      <View style={styles.settingLeft}>;
+        <Icon name={iconName} size={24} color={iconColor} />;
+        <View style={styles.settingText}>;
+          <Text style={styles.settingTitle}>{title}</Text>;
+          <Text style={styles.settingDescription}>{description}</Text>;
+        </View>;
+      </View>;
+      <Switch;
+        value={value};
+        onValueChange={onValueChange};
+        trackColor={{ false: '#E0E0E0', true: '#C8E6C9' }};
+        thumbColor={value ? '#4CAF50' : '#F5F5F5'};
+      />;
+    </View>;
   );
 
   /**
    * 渲染选择设置项
    */
-  const renderSelectSetting = (
-    title: string,
-    description: string,
-    value: string,
-    options: { label: string; value: string }[],
+  const renderSelectSetting = (;
+    title: string,description: string,value: string,options: { label: string; value: string }[],
     onValueChange: (value: string) => void,
     iconName: string,
     iconColor: string = '#4CAF50'
@@ -177,7 +147,7 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
       onRequestClose={onClose}
     >
       <View style={styles.container}>
-        {/* 头部 */}
+        {// 头部}
         <View style={styles.header}>
           <View style={styles.headerLeft}>
             <Icon name="settings" size={24} color="#4CAF50" />
@@ -188,12 +158,12 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
           </TouchableOpacity>
         </View>
 
-        {/* 内容区域 */}
+        {// 内容区域}
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-          {/* 音频设置 */}
+          {// 音频设置}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>音频设置</Text>
-            
+
             {renderSwitchSetting(
               '音效',
               '开启游戏音效',
@@ -222,7 +192,7 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
             )}
           </View>
 
-          {/* 游戏设置 */}
+          {// 游戏设置}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>游戏设置</Text>
 
@@ -260,7 +230,7 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
             )}
           </View>
 
-          {/* 界面设置 */}
+          {// 界面设置}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>界面设置</Text>
 
@@ -293,11 +263,11 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
             )}
           </View>
 
-          {/* 底部间距 */}
+          {// 底部间距}
           <View style={styles.bottomSpacing} />
         </ScrollView>
 
-        {/* 底部操作栏 */}
+        {// 底部操作栏}
         <View style={styles.footer}>
           <TouchableOpacity
             style={styles.resetButton}
@@ -310,29 +280,29 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
           <View style={styles.actionButtons}>
             <TouchableOpacity
               style={styles.cancelButton}
-              onPress={onClose}
-            >
-              <Text style={styles.cancelButtonText}>取消</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.saveButton}
-              onPress={handleSave}
-            >
-              <Icon name="check" size={20} color="#FFFFFF" />
-              <Text style={styles.saveButtonText}>保存</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-    </Modal>
+              onPress={onClose};
+            >;
+              <Text style={styles.cancelButtonText}>取消</Text>;
+            </TouchableOpacity>;
+;
+            <TouchableOpacity;
+              style={styles.saveButton};
+              onPress={handleSave};
+            >;
+              <Icon name="check" size={20} color="#FFFFFF" />;
+              <Text style={styles.saveButtonText}>保存</Text>;
+            </TouchableOpacity>;
+          </View>;
+        </View>;
+      </View>;
+    </Modal>;
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFFFF'
   },
   header: {
     flexDirection: 'row',
@@ -342,34 +312,34 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: '#E0E0E0',
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#F8F9FA'
   },
   headerLeft: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   headerTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#4CAF50',
-    marginLeft: 8,
+    marginLeft: 8
   },
   closeButton: {
-    padding: 8,
+    padding: 8
   },
   content: {
     flex: 1,
-    paddingHorizontal: 16,
+    paddingHorizontal: 16
   },
   section: {
-    marginVertical: 16,
+    marginVertical: 16
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#2E7D32',
     marginBottom: 12,
-    paddingLeft: 4,
+    paddingLeft: 4
   },
   settingItem: {
     flexDirection: 'row',
@@ -379,51 +349,51 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: '#F8F9FA',
     borderRadius: 12,
-    marginBottom: 8,
+    marginBottom: 8
   },
   settingLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
+    flex: 1
   },
   settingText: {
     marginLeft: 12,
-    flex: 1,
+    flex: 1
   },
   settingTitle: {
     fontSize: 16,
     fontWeight: '500',
     color: '#333',
-    marginBottom: 2,
+    marginBottom: 2
   },
   settingDescription: {
     fontSize: 14,
-    color: '#666',
+    color: '#666'
   },
   selectContainer: {
     flexDirection: 'row',
-    marginLeft: 12,
+    marginLeft: 12
   },
   selectOption: {
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
     backgroundColor: '#E0E0E0',
-    marginLeft: 4,
+    marginLeft: 4
   },
   selectedOption: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#4CAF50'
   },
   selectOptionText: {
     fontSize: 12,
     color: '#666',
-    fontWeight: '500',
+    fontWeight: '500'
   },
   selectedOptionText: {
-    color: '#FFFFFF',
+    color: '#FFFFFF'
   },
   bottomSpacing: {
-    height: 20,
+    height: 20
   },
   footer: {
     flexDirection: 'row',
@@ -433,7 +403,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderTopWidth: 1,
     borderTopColor: '#E0E0E0',
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#F8F9FA'
   },
   resetButton: {
     flexDirection: 'row',
@@ -442,42 +412,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#FF5722',
+    borderColor: '#FF5722'
   },
   resetButtonText: {
     fontSize: 14,
     color: '#FF5722',
     marginLeft: 4,
-    fontWeight: '500',
+    fontWeight: '500'
   },
   actionButtons: {
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   cancelButton: {
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 8,
-    marginRight: 8,
+    marginRight: 8
   },
   cancelButtonText: {
     fontSize: 16,
     color: '#666',
-    fontWeight: '500',
-  },
-  saveButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    backgroundColor: '#4CAF50',
-  },
-  saveButtonText: {
-    fontSize: 16,
-    color: '#FFFFFF',
-    marginLeft: 4,
-    fontWeight: '500',
-  },
+    fontWeight: '500';
+  },saveButton: {flexDirection: 'row',alignItems: 'center',paddingVertical: 12,paddingHorizontal: 20,borderRadius: 8,backgroundColor: '#4CAF50';
+  },saveButtonText: {fontSize: 16,color: '#FFFFFF',marginLeft: 4,fontWeight: '500';
+  };
 });
 
 export default GameSettingsModal; 

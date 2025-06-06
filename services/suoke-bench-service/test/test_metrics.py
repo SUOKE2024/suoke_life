@@ -1,27 +1,32 @@
-"""评测指标测试。"""
-
-import unittest
+"""
+test_metrics - 索克生活项目模块
+"""
 
 from internal.metrics.agent_metrics import (
+from internal.metrics.edge_metrics import (
+from internal.metrics.privacy_metrics import (
+from internal.metrics.tcm_metrics import (
+import unittest
+
+"""评测指标测试。"""
+
+
     AgentCollaborationMetric,
     DialogueTurn,
     TaskCompletion,
 )
-from internal.metrics.edge_metrics import (
     DeviceInfo,
     EdgePerformanceMetric,
     InferenceMetrics,
     ModelInfo,
     PerformanceMetrics,
 )
-from internal.metrics.privacy_metrics import (
     PrivacyTestCase,
     PrivacyTestResult,
     PrivacyVerificationMetric,
     ZKPTestCase,
     ZKPTestResult,
 )
-from internal.metrics.tcm_metrics import (
     ConstitutionClassificationMetric,
     FaceFeature,
     FaceRecognitionMetric,

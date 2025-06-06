@@ -1,3 +1,14 @@
+"""
+knowledge_repository - 索克生活项目模块
+"""
+
+from pkg.utils.connection_pool import (
+from pkg.utils.dependency_injection import ServiceLifecycle
+from pkg.utils.error_handling import DatabaseException, RetryConfig, retry_async
+from pkg.utils.metrics import get_metrics_collector
+from typing import Any
+import logging
+
 #!/usr/bin/env python
 
 """
@@ -5,17 +16,11 @@
 提供健康知识、生活方式和个性化建议的存储和检索
 """
 
-import logging
-from typing import Any
 
-from pkg.utils.connection_pool import (
     DatabaseConnectionPool,
     RedisConnectionPool,
     get_pool_manager,
 )
-from pkg.utils.dependency_injection import ServiceLifecycle
-from pkg.utils.error_handling import DatabaseException, RetryConfig, retry_async
-from pkg.utils.metrics import get_metrics_collector
 
 logger = logging.getLogger(__name__)
 metrics = get_metrics_collector()

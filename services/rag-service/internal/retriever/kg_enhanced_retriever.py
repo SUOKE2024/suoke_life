@@ -1,3 +1,14 @@
+"""
+kg_enhanced_retriever - 索克生活项目模块
+"""
+
+from ..model.document import Document, RetrieveResult
+from ..repository.milvus_repository import MilvusRepository
+from ..service.kg_integration_service import KnowledgeGraphIntegrationService
+from .hybrid_retriever import HybridRetriever
+from loguru import logger
+from typing import Dict, List, Any, Optional, Tuple
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,13 +16,7 @@
 知识图谱增强的检索器，结合Neo4j知识图谱查询和向量检索
 """
 
-from typing import Dict, List, Any, Optional, Tuple
-from loguru import logger
 
-from ..model.document import Document, RetrieveResult
-from ..repository.milvus_repository import MilvusRepository
-from ..service.kg_integration_service import KnowledgeGraphIntegrationService
-from .hybrid_retriever import HybridRetriever
 
 
 class KGEnhancedRetriever(HybridRetriever):

@@ -1,11 +1,9 @@
-import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react-native";
-import { NavigationContainer } from @react-navigation/native";"
 import { Alert } from "react-native";
-import HomeScreen from "../HomeScreen";
+
+import React from "react";
 // Mock navigation
-const mockNavigation = {;
-  navigate: jest.fn(),
+const mockNavigation = {navigate: jest.fn(),
   goBack: jest.fn(),
   reset: jest.fn(),
   setParams: jest.fn(),
@@ -14,11 +12,9 @@ const mockNavigation = {;
   isFocused: jest.fn(),
   canGoBack: jest.fn(),
   getId: jest.fn(),
-  getParent: jest.fn(),;
-  getState: jest.fn()};
-const mockRoute = {;
-  key: test",;"
-  name: "Home as const,;"
+  getParent: jest.fn(),getState: jest.fn()};
+const mockRoute = {key: test","
+  name: "Home as const,",
   params: undefined};
 jest.mock("@react-navigation/native", () => ({
   ...jest.requireActual(@react-navigation/native"),"
@@ -26,8 +22,7 @@ jest.mock("@react-navigation/native", () => ({
   useRoute: () => mockRoute}));
 // Mock Alert
 jest.spyOn(Alert, "alert)"
-const renderWithNavigation = (component: React.ReactElement) => {;
-  return render(;
+const renderWithNavigation = (component: React.ReactElement) => {return render(;
     <NavigationContainer>;
       {component});
     </NavigationContainer>
@@ -37,11 +32,11 @@ describe("HomeScreen 聊天频道测试", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  describe(基础渲染测试", () => {"
+  describe("基础渲染测试", () => {
     it("应该正确渲染聊天频道主屏幕, () => {", () => {
       const { getByPlaceholderText, getByText } = renderWithNavigation(<HomeScreen />);
       // 检查搜索框
-expect(getByPlaceholderText("搜索联系人、专业、服务...")).toBeTruthy()
+expect(getByPlaceholderText("搜索联系人、专业、服务...")).toBeTruthy();
       // 检查四大智能体分组
 expect(getByText(四大智能体")).toBeTruthy()"
       expect(getByText("小艾)).toBeTruthy();"
@@ -63,7 +58,7 @@ expect(getByText(四大智能体")).toBeTruthy()"
 expect(getByText(健康管理·AI助手")).toBeTruthy()"
       expect(getByText("中医诊断·辨证论治)).toBeTruthy();"
       // 检查医生信息
-expect(getByText("张明华")).toBeTruthy()
+expect(getByText("张明华")).toBeTruthy();
       expect(getByText(中医内科·主任医师")).toBeTruthy();"
     });
   });
@@ -125,11 +120,11 @@ const groupHeader = getByText("四大智能体);"
       fireEvent.press(groupHeader);
       await waitFor(() => {
         // 联系人应该被隐藏
-expect(queryByText("小艾")).toBeFalsy()
+expect(queryByText("小艾")).toBeFalsy();
         expect(queryByText(小克")).toBeFalsy();"
       });
       // 再次点击展开
-fireEvent.press(groupHeader)
+fireEvent.press(groupHeader);
       await waitFor(() => {
         // 联系人应该重新显示
 expect(getByText("小艾)).toBeTruthy()"
@@ -137,7 +132,7 @@ expect(getByText("小艾)).toBeTruthy()"
       });
     });
   });
-  describe(联系人交互测试", () => {"
+  describe("联系人交互测试", () => {
     it("应该能够点击联系人开始聊天, async () => {", () => {
       const { getByText } = renderWithNavigation(<HomeScreen />);
       // 点击小艾
@@ -173,7 +168,7 @@ expect(getByText(张明华")).toBeTruthy()"
       // 模拟下拉刷新
       // 注意：这里需要根据实际的ScrollView testID进行调整
       // 由于RefreshControl的测试比较复杂，这里主要测试组件是否正确渲染
-expect(getByTestId || (() => ({ toBeTruthy: () => true }))).toBeTruthy()
+expect(getByTestId || (() => ({ toBeTruthy: () => true }))).toBeTruthy();
     });
   });
   describe("无障碍性测试, () => {", () => {
@@ -192,7 +187,7 @@ expect(getByTestId || (() => ({ toBeTruthy: () => true }))).toBeTruthy()
 expect(endTime - startTime).toBeLessThan(100);
     });
   });
-  describe(错误处理测试", () => {"
+  describe("错误处理测试", () => {
     it("应该处理网络错误, async () => {", () => {
       // 这里可以添加网络错误的模拟测试
 const { getByText } = renderWithNavigation(<HomeScreen />);

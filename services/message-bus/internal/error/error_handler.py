@@ -1,13 +1,18 @@
 """
+error_handler - 索克生活项目模块
+"""
+
+from enum import Enum
+from prometheus_client import Counter
+from typing import Dict, Any, Optional, Type
+import grpc
+import logging
+import traceback
+
+"""
 统一错误处理机制
 """
 
-import logging
-import traceback
-from typing import Dict, Any, Optional, Type
-from enum import Enum
-import grpc
-from prometheus_client import Counter
 
 logger = logging.getLogger(__name__)
 

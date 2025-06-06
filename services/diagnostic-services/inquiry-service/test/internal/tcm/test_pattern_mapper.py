@@ -1,15 +1,20 @@
+"""
+test_pattern_mapper - 索克生活项目模块
+"""
+
+from internal.tcm import pattern_mapper
+import json
+import os
+import pytest
+
 #!/usr/bin/env python
 
 """
 证型映射器单元测试
 """
 
-import json
-import os
 
-import pytest
 
-from internal.tcm import pattern_mapper
 
 
 # 测试配置

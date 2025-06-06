@@ -1,4 +1,4 @@
-//////     生活建议类型
+// 生活建议类型
 export interface LifeSuggestion {
 }
  id: string}
@@ -7,13 +7,11 @@ export interface LifeSuggestion {
   category: "diet" | "exercise" | "sleep" | "mental" | "social" | "work",
   priority: "high" | "medium" | "low",
   icon: string,
-  color: string,;
-  completed: boolean,;
-  timeEstimate: string;
+  color: string,completed: boolean,timeEstimate: string;
   benefits?: string[];
   steps?: string[]
   }
-//////     健康指标类型
+// 健康指标类型
 export interface HealthMetric {
 }
  id: string}
@@ -22,17 +20,15 @@ export interface HealthMetric {
   unit: string,
   target: number,
   icon: string,
-  color: string,;
-  trend: "up" | "down" | "stable",;
-  suggestion: string;
+  color: string,trend: "up" | "down" | "stable",suggestion: string;
   history?: HealthMetricHistory[];
   }
-//////     健康指标历史记录
+// 健康指标历史记录
 export interface HealthMetricHistory {
 }
  date: string}
   value: number}
-//////     生活计划类型
+// 生活计划类型
 export interface LifePlan {
 }
  id: string}
@@ -43,22 +39,18 @@ export interface LifePlan {
   category: string,
   icon: string,
   color: string,
-  nextAction: string,;
-  startDate: string,;
-  endDate: string;
+  nextAction: string,startDate: string,endDate: string;
   milestones?: PlanMilestone[];
   rewards?: string[];
   }
-//////     计划里程碑
+// 计划里程碑
 export interface PlanMilestone {
 }
  id: string}
   title: string,
-  description: string,;
-  targetDate: string,;
-  completed: boolean;
+  description: string,targetDate: string,completed: boolean;
 completedDate?: string}
-//////     生活习惯类型
+// 生活习惯类型
 export interface LifeHabit {
 }
  id: string}
@@ -67,19 +59,17 @@ export interface LifeHabit {
   category: "health" | "productivity" | "wellness" | "social",
   frequency: "daily" | "weekly" | "monthly",
   streak: number,
-  bestStreak: number,;
-  icon: string,;
-  color: string;
+  bestStreak: number,icon: string,color: string;
   reminder?: HabitReminder}
-//////     习惯提醒
+// 习惯提醒
 export interface HabitReminder {
 }
 }
   enabled: boolean,
   time: string,
-  days: number[] //////     0-6, 0为周日
+  days: number[] // 0-6, 0为周日
 message: string}
-//////     生活目标类型
+// 生活目标类型
 export interface LifeGoal {
 }
  id: string}
@@ -87,19 +77,16 @@ export interface LifeGoal {
   description: string,
   category: "health" | "career" | "relationship" | "personal",
   priority: "high" | "medium" | "low",
-  progress: number,;
-  targetDate: string,;
-  status: "active" | "completed" | "paused" | "cancelled";
+  progress: number,targetDate: string,status: "active" | "completed" | "paused" | "cancelled";
   subGoals?: SubGoal[];
   }
-//////     子目标
+// 子目标
 export interface SubGoal {
 }
  id: string};
-  title: string,;
-  completed: boolean;
+  title: string,completed: boolean;
   completedDate?: string}
-//////     生活评估类型
+// 生活评估类型
 export interface LifeAssessment {
 }
  id: string}
@@ -107,21 +94,18 @@ export interface LifeAssessment {
   overallScore: number,
   categories: {health: number,
     work: number,
-    relationships: number,;
-    personal: number,;
-    financial: number};
+    relationships: number,personal: number,financial: number};
   notes?: string;
   improvements?: string[];
 }
-//////     生活建议配置
+// 生活建议配置
 export interface SuggestionConfig {
 }
  categories: string[]};
-  priorities: string[],;
-  timePreferences: string[];
+  priorities: string[],timePreferences: string[];
   excludedCategories?: string[];
   }
-//////     生活数据统计
+// 生活数据统计
 export interface LifeStats {
 }
  totalSuggestions: number}
@@ -130,5 +114,4 @@ export interface LifeStats {
   completedPlans: number,
   currentStreak: number,
   longestStreak: number,
-  averageScore: number,;
-  improvementRate: number};
+  averageScore: number,improvementRate: number};

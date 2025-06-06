@@ -1,28 +1,28 @@
-import React from "react";
 import {   Alert   } from "react-native";
-import { useState, useCallback, useMemo } from "../../placeholder";react";"
-import { usePerformanceMonitor } from ../hooks/////    usePerformanceMonitor";"
+import { useState, useCallback, useMemo } from "../../placeholder";react
+import { usePerformanceMonitor } from ../hooks/////    usePerformanceMonitor
+
+import React from "react";
   LifeSuggestion,
   HealthMetric,
   LifePlan,
   LifeHabit,
   LifeGoal,
-  { LifeStats } from "../types/life/////      SOER_SUGGESTIONS,"
+  { LifeStats } from "../types/life/////      SOER_SUGGESTIONS,";
   HEALTH_METRICS,
   LIFE_PLANS,
   LIFE_HABITS,
   LIFE_GOALS,
   { LIFE_STATS } from ";../data/lifeData";/////    export const useLife = () =;
 > ;{
-  //////     性能监控
-const performanceMonitor = usePerformanceMonitor(useLife", {;"
+  // 性能监控
+const performanceMonitor = usePerformanceMonitor(useLife", {"
     trackRender: true,
-    trackMemory: true,;
-    warnThreshold: 50, //////     ms };);
+    trackMemory: true,warnThreshold: 50, // ms };);
   const [suggestions, setSuggestions] = useState<LifeSuggestion[] />(SOER_SUGGESTION;S;);/  const [healthMetrics, setHealthMetrics] = useState<HealthMetric[] />(HEALTH_METRIC;S;);/  const [lifePlans, setLifePlans] = useState<LifePlan[] />(LIFE_PLAN;S;);/  const [habits, setHabits] = useState<LifeHabit[] />(LIFE_HABIT;S;);/  const [goals, setGoals] = useState<LifeGoal[] />(LIFE_GOAL;S;);/  const [stats, setStats] = useState<LifeStats />(LIFE_STAT;S;)/////      const [activeTab, setActiveTab] = useState<"suggestions | "metrics" | plans">("suggestions;);"
   const [loading, setLoading] = useState<boolean>(fals;e;);
   const [refreshing, setRefreshing] = useState<boolean>(fals;e;);
-  // 完成建议 //////     const completeSuggestion = useCallback((suggestion: LifeSuggestion;); => {}
+  // 完成建议 // const completeSuggestion = useCallback((suggestion: LifeSuggestion;); => {}
     setSuggestions(prev => {}
       prev.map(item => {}
         item.id === suggestion.id;
@@ -30,7 +30,7 @@ const performanceMonitor = usePerformanceMonitor(useLife", {;"
           : item;
       );
     );
-    // 更新统计数据 //////     setStats(prev => ({
+    // 更新统计数据 // setStats(prev => ({
       ...prev,
       completedSuggestions: prev.completedSuggestions + 1;
     }));
@@ -40,7 +40,7 @@ const performanceMonitor = usePerformanceMonitor(useLife", {;"
       [{ text: 太棒了！"}]"
     );
   }, []);
-  // 查看建议详情 //////     const viewSuggestionDetail = useCallback((suggestion: LifeSuggestion;) => {}
+  // 查看建议详情 // const viewSuggestionDetail = useCallback((suggestion: LifeSuggestion;) => {}
     const benefitsText = suggestion.benefits?.join("、;) || ";
     const stepsText = suggestion.steps?.join(\n;";) || ";
     Alert.alert(
@@ -57,7 +57,7 @@ const performanceMonitor = usePerformanceMonitor(useLife", {;"
       ]
     );
   }, [completeSuggestion]);
-  // 查看计划详情 //////     const viewPlanDetail = useCallback((plan: LifePlan;); => {}
+  // 查看计划详情 // const viewPlanDetail = useCallback((plan: LifePlan;); => {}
     const milestonesText = plan.milestones;
       ?.map(m => `${m.completed ? "✅ : "⏳"} ${m.title}`);"
       .join(\n;";) || "
@@ -70,7 +70,7 @@ const performanceMonitor = usePerformanceMonitor(useLife", {;"
       ]
     );
   }, []);
-  // 执行计划行动 //////     const executePlanAction = useCallback((plan: LifePlan;) => {}
+  // 执行计划行动 // const executePlanAction = useCallback((plan: LifePlan;) => {}
     Alert.alert(
       "执行行动",
       `即将执行：${plan.nextAction}`,
@@ -79,59 +79,54 @@ const performanceMonitor = usePerformanceMonitor(useLife", {;"
         {
           text: "开始",
           onPress: (); => {}
-            // 更新计划进度 //////     setLifePlans(prev => {}
+            // 更新计划进度 // setLifePlans(prev => {}
               prev.map(item => {}
                 item.id === plan.id;
                   ? { ...item, progress: Math.min(item.progress + 5, 100) }
                   : item;
               )
             )
-            Alert.alert(行动已开始", "继续保持，你做得很棒！)
+            Alert.alert(行动已开始", "继续保持，你做得很棒！);
           }
         }
       ]
     );
   }, []);
-  // 获取分类文本 //////     const getCategoryText = useCallback((category: string;) => {}
-    const categoryMap: Record<string, string> = {;
-      diet: "饮食",
+  // 获取分类文本 // const getCategoryText = useCallback((category: string;) => {}
+    const categoryMap: Record<string, string> = {diet: "饮食",
       exercise: 运动","
-      sleep: "睡眠,"
+      sleep: "睡眠,",
       mental: "心理",
       social: 社交","
       work: "工作"
     };
     return categoryMap[category] || catego;r;y;
   }, []);
-  // 获取优先级文本 //////     const getPriorityText = useCallback((priority: string;) => {}
-    const priorityMap: Record<string, string> = {;
-      high: "高",
+  // 获取优先级文本 // const getPriorityText = useCallback((priority: string;) => {}
+    const priorityMap: Record<string, string> = {high: "高",
       medium: 中","
       low: "低"
     };
     return priorityMap[priority] || priori;t;y;
   }, []);
-  // 获取优先级颜色 //////     const getPriorityColor = useCallback((priority: string;) => {}
-    const colorMap: Record<string, string> = {;
-      high: "#FF3B30",
+  // 获取优先级颜色 // const getPriorityColor = useCallback((priority: string;) => {}
+    const colorMap: Record<string, string> = {high: "#FF3B30",
       medium: #FF9500","
       low: "#34C759"
     }
     return colorMap[priority] || "#8E8E9;3;";
   }, []);
-  // 获取趋势图标 //////     const getTrendIcon = useCallback((trend: string;) => {}
-    const iconMap: Record<string, string> = {;
-      up: trending-up","
-      down: "trending-down,"
+  // 获取趋势图标 // const getTrendIcon = useCallback((trend: string;) => {}
+    const iconMap: Record<string, string> = {up: trending-up","
+      down: "trending-down,",
       stable: "trending-neutral"
     }
-    return iconMap[trend] || trending-neutra;l;";"
+    return iconMap[trend] || trending-neutra;l;
   }, []);
-  // 刷新数据 //////     const refreshData = useCallback(async  => {}
-    setRefreshing(true)
-    try {
-      // 模拟API调用 //////     await new Promise<void>(resolve => setTimeout(resolve, 1500;););
-      // 更新健康指标（模拟数据变化） //////     setHealthMetrics(prev => {}
+  // 刷新数据 // const refreshData = useCallback(async  => {};
+    setRefreshing(true);
+    try {// 模拟API调用 // await new Promise<void>(resolve => setTimeout(resolve, 1500;););
+      // 更新健康指标（模拟数据变化） // setHealthMetrics(prev => {}
         prev.map(metric => ({
           ...metric,
           value: Math.max(0, Math.min(100, metric.value + (Math.random() - 0.5) * 10))
@@ -144,60 +139,51 @@ const performanceMonitor = usePerformanceMonitor(useLife", {;"
       setRefreshing(false);
     }
   }, []);
-  // 过滤建议 //////     const filterSuggestions = useCallback((
-    category?: string,
-    priority?: string,
-    completed?: boolea;n;
+  // 过滤建议 // const filterSuggestions = useCallback((;
+    category?: string,priority?: string,completed?: boolea;n;
   ;); => {}
-    return suggestions.filter(suggestion => {;}
+    return suggestions.filter(suggestion => {}
       if (category && suggestion.category !== category) {return fal;s;e;}
       if (priority && suggestion.priority !== priority) {return fal;s;e;}
       if (completed !== undefined && suggestion.completed !== completed) {return fal;s;e;}
       return tr;u;e;
     });
   }, [suggestions]);
-  // 计算统计数据 //////     const calculatedStats = useMemo(() => {}
+  // 计算统计数据 // const calculatedStats = useMemo(() => {;
     const completedSuggestions = suggestions.filter(s => s.completed).leng;t;h;
     const totalSuggestions = suggestions.leng;t;h;
     const activePlans = lifePlans.filter(p => p.progress < 100).leng;t;h;
     const completedPlans = lifePlans.filter(p => p.progress >= 100).leng;t;h;
-    const averageProgress = lifePlans.reduce((sum, ;p;); => sum + p.progress, 0) / lifePlans.length;/////        const activeHabits = habits.filter(h => h.streak > 0).leng;t;h;
-    return {
-      completedSuggestions,
-      totalSuggestions,
-      completionRate: (completedSuggestions / totalSuggestions) * 100,/////          activePlans,
-      completedPlans,
-      averageProgress,
-      activeHabits,
-      totalHabits: habits.lengt;h;
+    const averageProgress = lifePlans.reduce((sum,p;); => sum + p.progress, 0) / lifePlans.length;/////        const activeHabits = habits.filter(h => h.streak > 0).leng;t;h;
+    return {completedSuggestions,totalSuggestions,completionRate: (completedSuggestions / totalSuggestions) * 100,/////          activePlans,completedPlans,averageProgress,activeHabits,totalHabits: habits.lengt;h;
     ;};
   }, [suggestions, lifePlans, habits]);
-  // 获取今日建议 //////     const getTodaySuggestions = useCallback(() => {}
+  // 获取今日建议 // const getTodaySuggestions = useCallback(() => {;
     return suggestions;
       .filter(s => !s.completed && s.priority === "high");
-      .slice(0, ;3;);
+      .slice(0,3;);
   }, [suggestions]);
-  // 获取推荐行动 //////     const getRecommendedActions = useCallback(() => {}
+  // 获取推荐行动 // const getRecommendedActions = useCallback(() => {;
     const actions = ;[;];
-    // 未完成的高优先级建议 //////     const urgentSuggestions = suggestions.filter(s => !s.completed && s.priority === high";) "
+    // 未完成的高优先级建议 // const urgentSuggestions = suggestions.filter(s => !s.completed && s.priority === high";) "
     if (urgentSuggestions.length > 0) {
       actions.push({
-        type: "suggestion,"
+        type: "suggestion,",
         title: "完成重要建议",
         description: `有${urgentSuggestions.length}个重要建议待完成`,
         action: () => setActiveTab(suggestions")});"
     }
-    // 进度较低的计划 //////     const lowProgressPlans = lifePlans.filter(p => p.progress < 30;)
+    // 进度较低的计划 // const lowProgressPlans = lifePlans.filter(p => p.progress < 30;);
     if (lowProgressPlans.length > 0) {
       actions.push({
-        type: "plan,"
+        type: "plan,",
         title: "推进生活计划",
         description: `有${lowProgressPlans.length}个计划需要关注`,
         action: () => setActiveTab(plans")});"
     }
     return actio;n;s;
   }, [suggestions, lifePlans]);
-  // 更新健康指标 //////     const updateHealthMetric = useCallback((metricId: string, value: number;) => {}
+  // 更新健康指标 // const updateHealthMetric = useCallback((metricId: string, value: number;) => {}
     setHealthMetrics(prev => {}
       prev.map(metric => {}
         metric.id === metricId;
@@ -211,28 +197,12 @@ const performanceMonitor = usePerformanceMonitor(useLife", {;"
     );
   }, []);
   return {
-    // 状态 //////     suggestions,
+    // 状态 // suggestions,
     healthMetrics,
     lifePlans,
     habits,
     goals,
     stats: calculatedStats,
-    activeTab,
-    loading,
-    refreshing,
-    // 操作 //////     setActiveTab,
-    completeSuggestion,
-    viewSuggestionDetail,
-    viewPlanDetail,
-    executePlanAction,
-    refreshData,
-    updateHealthMetric,
-    // 过滤和查询 //////     filterSuggestions,
-    getTodaySuggestions,
-    getRecommendedActions,
-    // 工具函数 //////     getCategoryText,
-    getPriorityText,
-    getPriorityColor,
-    getTrendIcon;
+    activeTab,loading,refreshing,// 操作 // setActiveTab,completeSuggestion,viewSuggestionDetail,viewPlanDetail,executePlanAction,refreshData,updateHealthMetric,// 过滤和查询 // filterSuggestions,getTodaySuggestions,getRecommendedActions,// 工具函数 // getCategoryText,getPriorityText,getPriorityColor,getTrendIcon;
   ;};
 };

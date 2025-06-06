@@ -1,14 +1,19 @@
+"""
+test_maze_generator - 索克生活项目模块
+"""
+
+from internal.maze.generator import MazeGenerator
+import pytest
+import unittest
+
 #!/usr/bin/env python3
 
 """
 迷宫生成器单元测试
 """
 
-import unittest
 
-import pytest
 
-from internal.maze.generator import MazeGenerator
 
 
 class TestMazeGenerator(unittest.TestCase):

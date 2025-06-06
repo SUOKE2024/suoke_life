@@ -1,11 +1,16 @@
 """
+evaluator - 索克生活项目模块
+"""
+
+from internal.metrics.metrics import METRIC_REGISTRY
+from typing import Any
+import logging
+
+"""
 评估器实现
 """
 
-import logging
-from typing import Any
 
-from internal.metrics.metrics import METRIC_REGISTRY
 
 logger = logging.getLogger(__name__)
 

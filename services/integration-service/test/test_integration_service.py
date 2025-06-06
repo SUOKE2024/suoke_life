@@ -1,10 +1,15 @@
 """
-Integration Service Basic Tests
+test_integration_service - 索克生活项目模块
 """
 
 import asyncio
-import pytest
 import httpx
+import pytest
+
+"""
+Integration Service Basic Tests
+"""
+
 
 # 测试配置
 BASE_URL = "http://localhost:8003"

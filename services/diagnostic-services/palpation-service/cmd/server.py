@@ -1,3 +1,24 @@
+"""
+server - 索克生活项目模块
+"""
+
+from api.grpc import palpation_service_pb2_grpc
+from concurrent import futures
+from internal.delivery.palpation_service_impl import PalpationServiceServicer
+from internal.repository.session_repository import SessionRepository
+from internal.repository.user_repository import UserRepository
+from internal.signal.abdominal_analyzer import AbdominalAnalyzer
+from internal.signal.pulse_processor import PulseProcessor
+from internal.signal.skin_analyzer import SkinAnalyzer
+from pathlib import Path
+import argparse
+import grpc
+import logging
+import os
+import sys
+import time
+import yaml
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,26 +26,10 @@
 切诊服务入口程序
 """
 
-import os
-import sys
-import argparse
-import yaml
-import logging
-import grpc
-import time
-from concurrent import futures
-from pathlib import Path
 
 # 添加项目根目录到Python路径，确保能够正确导入模块
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from api.grpc import palpation_service_pb2_grpc
-from internal.delivery.palpation_service_impl import PalpationServiceServicer
-from internal.repository.session_repository import SessionRepository
-from internal.repository.user_repository import UserRepository
-from internal.signal.pulse_processor import PulseProcessor
-from internal.signal.abdominal_analyzer import AbdominalAnalyzer
-from internal.signal.skin_analyzer import SkinAnalyzer
 
 def load_config(config_path=None):
     """加载配置文件"""

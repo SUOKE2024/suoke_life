@@ -1,20 +1,25 @@
+"""
+xiaoke_service_optimized - 索克生活项目模块
+"""
+
+from aiohttp import web
+from datetime import datetime, timedelta
+from optimized_agent_base import OptimizedAgentBase, AgentRequest, cpu_intensive_task, cached_result
+from typing import Dict, Any, List
+import asyncio
+import os
+import sys
+
 #!/usr/bin/env python3
 """
 索克生活 - 小克智能体优化服务
 基于OptimizedAgentBase实现的健康监测智能体
 """
 
-import asyncio
-import os
-import sys
-from typing import Dict, Any, List
-from datetime import datetime, timedelta
 
 # 添加项目路径
 sys.path.append(os.path.join(os.path.dirname(__file__), '../'))
 
-from optimized_agent_base import OptimizedAgentBase, AgentRequest, cpu_intensive_task, cached_result
-from aiohttp import web
 
 class XiaokeOptimizedService(OptimizedAgentBase):
     """小克智能体优化服务 - 健康监测专家"""

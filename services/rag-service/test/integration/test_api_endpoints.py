@@ -1,3 +1,14 @@
+"""
+test_api_endpoints - 索克生活项目模块
+"""
+
+from aiohttp.test_utils import TestClient, TestServer
+from services.rag_service.cmd.server import create_app
+from services.rag_service.internal.model.document import Document
+from unittest.mock import patch, MagicMock
+import os
+import pytest
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,15 +16,9 @@
 RAG服务API集成测试
 """
 
-import os
-import pytest
-from unittest.mock import patch, MagicMock
 
-from aiohttp.test_utils import TestClient, TestServer
 
 # 导入应用创建模块（需要根据实际项目结构调整）
-from services.rag_service.cmd.server import create_app
-from services.rag_service.internal.model.document import Document
 
 @pytest.fixture
 async def test_client() -> TestClient:

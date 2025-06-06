@@ -1,17 +1,22 @@
 """
-消息服务单元测试
+test_message_service - 索克生活项目模块
 """
 
-import json
-import logging
-import pytest
 from datetime import datetime, timedelta
-from unittest.mock import AsyncMock, MagicMock, patch
-
 from internal.model.message import Message
 from internal.model.topic import Topic
 from internal.repository.message_repository import MessageRepository
 from internal.service.message_service import MessageService
+from unittest.mock import AsyncMock, MagicMock, patch
+import json
+import logging
+import pytest
+
+"""
+消息服务单元测试
+"""
+
+
 
 # 禁用日志输出
 logging.disable(logging.CRITICAL)

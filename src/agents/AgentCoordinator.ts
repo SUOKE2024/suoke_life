@@ -1,15 +1,15 @@
-import {
+import {import { XiaoaiAgentImpl } from "./xiaoai/XiaoaiAgentImpl";
+import { XiaokeAgentImpl } from "./xiaoke/XiaokeAgentImpl";
+import { LaokeAgentImpl } from "./laoke/LaokeAgentImpl";
+import { SoerAgentImpl } from "./soer/SoerAgentImpl";
+
   AgentType,
   AgentCapability,
   AgentResponse,
   AgentContext,
   AgentCollaborationMessage,
-  AgentDecisionResult,
+  AgentDecisionResult
 } from "./types";
-import { XiaoaiAgentImpl } from "./xiaoai/XiaoaiAgentImpl";
-import { XiaokeAgentImpl } from "./xiaoke/XiaokeAgentImpl";
-import { LaokeAgentImpl } from "./laoke/LaokeAgentImpl";
-import { SoerAgentImpl } from "./soer/SoerAgentImpl";
 
 /**
  * 智能体协调器
@@ -42,7 +42,7 @@ export class AgentCoordinator {
         xiaoai.initialize(),
         xiaoke.initialize(),
         laoke.initialize(),
-        soer.initialize(),
+        soer.initialize();
       ]);
 
       // 注册智能体
@@ -77,28 +77,20 @@ export class AgentCoordinator {
       // 根据任务类型选择协作模式
       switch (taskAnalysis.collaborationMode) {
         case "single":
-          return await this.handleSingleAgentTask(
-            taskAnalysis,
-            message,
-            context
+          return await this.handleSingleAgentTask(;
+            taskAnalysis,message,context;
           );
         case "sequential":
-          return await this.handleSequentialCollaboration(
-            taskAnalysis,
-            message,
-            context
+          return await this.handleSequentialCollaboration(;
+            taskAnalysis,message,context;
           );
         case "parallel":
-          return await this.handleParallelCollaboration(
-            taskAnalysis,
-            message,
-            context
+          return await this.handleParallelCollaboration(;
+            taskAnalysis,message,context;
           );
         case "consensus":
-          return await this.handleConsensusCollaboration(
-            taskAnalysis,
-            message,
-            context
+          return await this.handleConsensusCollaboration(;
+            taskAnalysis,message,context;
           );
         default:
           return await this.handleDefaultTask(message, context);
@@ -122,14 +114,9 @@ export class AgentCoordinator {
     if (
       keywords.includes("诊断") ||
       keywords.includes("症状") ||
-      keywords.includes("健康分析")
+      keywords.includes("健康分析");
     ) {
-      return {
-        type: "health_diagnosis",
-        primaryAgent: AgentType.XIAOAI,
-        supportingAgents: [AgentType.XIAOKE, AgentType.LAOKE, AgentType.SOER],
-        collaborationMode: "sequential",
-        priority: "high",
+      return {type: "health_diagnosis",primaryAgent: AgentType.XIAOAI,supportingAgents: [AgentType.XIAOKE, AgentType.LAOKE, AgentType.SOER],collaborationMode: "sequential",priority: "high";
       };
     }
 
@@ -137,14 +124,9 @@ export class AgentCoordinator {
     if (
       keywords.includes("生活方式") ||
       keywords.includes("习惯") ||
-      keywords.includes("改善")
+      keywords.includes("改善");
     ) {
-      return {
-        type: "lifestyle_optimization",
-        primaryAgent: AgentType.SOER,
-        supportingAgents: [AgentType.XIAOAI, AgentType.LAOKE],
-        collaborationMode: "sequential",
-        priority: "medium",
+      return {type: "lifestyle_optimization",primaryAgent: AgentType.SOER,supportingAgents: [AgentType.XIAOAI, AgentType.LAOKE],collaborationMode: "sequential",priority: "medium";
       };
     }
 
@@ -152,14 +134,9 @@ export class AgentCoordinator {
     if (
       keywords.includes("学习") ||
       keywords.includes("知识") ||
-      keywords.includes("教育")
+      keywords.includes("教育");
     ) {
-      return {
-        type: "knowledge_learning",
-        primaryAgent: AgentType.LAOKE,
-        supportingAgents: [AgentType.XIAOAI],
-        collaborationMode: "single",
-        priority: "medium",
+      return {type: "knowledge_learning",primaryAgent: AgentType.LAOKE,supportingAgents: [AgentType.XIAOAI],collaborationMode: "single",priority: "medium";
       };
     }
 
@@ -167,14 +144,9 @@ export class AgentCoordinator {
     if (
       keywords.includes("推荐") ||
       keywords.includes("服务") ||
-      keywords.includes("预约")
+      keywords.includes("预约");
     ) {
-      return {
-        type: "service_recommendation",
-        primaryAgent: AgentType.XIAOKE,
-        supportingAgents: [AgentType.XIAOAI, AgentType.SOER],
-        collaborationMode: "sequential",
-        priority: "medium",
+      return {type: "service_recommendation",primaryAgent: AgentType.XIAOKE,supportingAgents: [AgentType.XIAOAI, AgentType.SOER],collaborationMode: "sequential",priority: "medium";
       };
     }
 
@@ -182,24 +154,14 @@ export class AgentCoordinator {
     if (
       keywords.includes("紧急") ||
       keywords.includes("急救") ||
-      keywords.includes("危险")
+      keywords.includes("危险");
     ) {
-      return {
-        type: "emergency",
-        primaryAgent: AgentType.XIAOAI,
-        supportingAgents: [AgentType.XIAOKE, AgentType.LAOKE, AgentType.SOER],
-        collaborationMode: "parallel",
-        priority: "critical",
+      return {type: "emergency",primaryAgent: AgentType.XIAOAI,supportingAgents: [AgentType.XIAOKE, AgentType.LAOKE, AgentType.SOER],collaborationMode: "parallel",priority: "critical";
       };
     }
 
     // 默认单智能体处理
-    return {
-      type: "general",
-      primaryAgent: this.selectPrimaryAgent(context),
-      supportingAgents: [],
-      collaborationMode: "single",
-      priority: "low",
+    return {type: "general",primaryAgent: this.selectPrimaryAgent(context),supportingAgents: [],collaborationMode: "single",priority: "low";
     };
   }
 
@@ -238,15 +200,11 @@ export class AgentCoordinator {
     for (const agentType of taskAnalysis.supportingAgents) {
       const agent = this.agents.get(agentType);
       if (agent) {
-        const supportContext = {
-          ...context,
-          previousResults: results,
-          collaborationMode: "supporting",
+        const supportContext = {...context,previousResults: results,collaborationMode: "supporting";
         };
 
-        const supportResult = await agent.processMessage(
-          `协作支持: ${message}`,
-          supportContext
+        const supportResult = await agent.processMessage(;
+          `协作支持: ${message}`,supportContext;
         );
         results.push(supportResult);
       }
@@ -274,12 +232,10 @@ export class AgentCoordinator {
     for (const agentType of taskAnalysis.supportingAgents) {
       const agent = this.agents.get(agentType);
       if (agent) {
-        const supportContext = {
-          ...context,
-          collaborationMode: "parallel_supporting",
+        const supportContext = {...context,collaborationMode: "parallel_supporting";
         };
         agentPromises.push(
-          agent.processMessage(`并行协作: ${message}`, supportContext)
+          agent.processMessage(`并行协作: ${message}`, supportContext);
         );
       }
     }
@@ -302,9 +258,8 @@ export class AgentCoordinator {
     const decisions: AgentDecisionResult[] = [];
 
     // 所有相关智能体提供决策意见
-    const allAgents = [
-      taskAnalysis.primaryAgent,
-      ...taskAnalysis.supportingAgents,
+    const allAgents = [;
+      taskAnalysis.primaryAgent,...taskAnalysis.supportingAgents;
     ];
 
     for (const agentType of allAgents) {
@@ -318,21 +273,9 @@ export class AgentCoordinator {
     // 基于共识算法整合决策
     const consensusResult = this.buildConsensus(decisions);
 
-    return {
-      success: true,
-      response: consensusResult.decision,
-      data: {
-        consensusConfidence: consensusResult.confidence,
-        participatingAgents: allAgents,
-        individualDecisions: decisions,
-        reasoning: consensusResult.reasoning,
-      },
-      context,
-      metadata: {
-        collaborationType: "consensus",
-        agentCount: allAgents.length,
-        timestamp: new Date().toISOString(),
-      },
+    return {success: true,response: consensusResult.decision,data: {consensusConfidence: consensusResult.confidence,participatingAgents: allAgents,individualDecisions: decisions,reasoning: consensusResult.reasoning;
+      },context,metadata: {collaborationType: "consensus",agentCount: allAgents.length,timestamp: new Date().toISOString();
+      };
     };
   }
 
@@ -387,22 +330,13 @@ export class AgentCoordinator {
         primaryResult: primaryResult.data,
         supportingResults: supportingResults.map((r) => r.data),
         collaborationSummary: this.generateCollaborationSummary(results),
-        taskType: taskAnalysis.type,
-        collaborationMode: taskAnalysis.collaborationMode,
-      },
-      context: primaryResult.context,
-      metadata: {
-        ...primaryResult.metadata,
-        collaborationType: taskAnalysis.collaborationMode,
-        participatingAgents: [
-          taskAnalysis.primaryAgent,
-          ...taskAnalysis.supportingAgents,
-        ],
-        totalExecutionTime: results.reduce(
-          (sum, r) => sum + (r.metadata?.executionTime || 0),
-          0
-        ),
-      },
+        taskType: taskAnalysis.type,collaborationMode: taskAnalysis.collaborationMode;
+      },context: primaryResult.context,metadata: {...primaryResult.metadata,collaborationType: taskAnalysis.collaborationMode,participatingAgents: [;
+          taskAnalysis.primaryAgent,...taskAnalysis.supportingAgents;
+        ],totalExecutionTime: results.reduce(;
+          (sum, r) => sum + (r.metadata?.executionTime || 0),0;
+        );
+      };
     };
   }
 
@@ -414,21 +348,12 @@ export class AgentCoordinator {
     message: string,
     context: AgentContext
   ): Promise<AgentDecisionResult> {
-    const response = await agent.processMessage(
-      `决策请求: ${message}`,
-      context
+    const response = await agent.processMessage(;
+      `决策请求: ${message}`,context;
     );
 
-    return {
-      decision: response.response,
-      confidence: response.metadata?.confidence || 0.5,
-      reasoning: [response.response],
-      alternatives: [],
-      recommendedActions: [],
-      metadata: {
-        agentType: agent.getAgentType(),
-        executionTime: response.metadata?.executionTime,
-      },
+    return {decision: response.response,confidence: response.metadata?.confidence || 0.5,reasoning: [response.response],alternatives: [],recommendedActions: [],metadata: {agentType: agent.getAgentType(),executionTime: response.metadata?.executionTime;
+      };
     };
   }
 
@@ -438,15 +363,12 @@ export class AgentCoordinator {
   private buildConsensus(decisions: AgentDecisionResult[]): any {
     // 简单的共识算法：基于置信度加权
     const totalWeight = decisions.reduce((sum, d) => sum + d.confidence, 0);
-    const weightedDecision = decisions.reduce((acc, d) => {
-      const weight = d.confidence / totalWeight;
+    const weightedDecision = decisions.reduce((acc, d) => {const weight = d.confidence / totalWeight;
       return acc + weight;
     }, 0);
 
-    return {
-      decision: decisions[0].decision, // 简化：选择第一个决策
-      confidence: weightedDecision,
-      reasoning: decisions.flatMap((d) => d.reasoning),
+    return {decision: decisions[0].decision, // 简化：选择第一个决策;
+      confidence: weightedDecision,reasoning: decisions.flatMap((d) => d.reasoning);
     };
   }
 
@@ -471,7 +393,7 @@ export class AgentCoordinator {
       } catch (error) {
         statusMap.set(agentType, {
           status: "error",
-          error: error instanceof Error ? error.message : String(error),
+          error: error instanceof Error ? error.message : String(error);
         });
       }
     }
@@ -486,8 +408,8 @@ export class AgentCoordinator {
     this.log("info", "智能体协调器正在关闭...");
 
     // 关闭所有智能体
-    const shutdownPromises = Array.from(this.agents.values()).map((agent) =>
-      agent.shutdown()
+    const shutdownPromises = Array.from(this.agents.values()).map((agent) =>;
+      agent.shutdown();
     );
     await Promise.all(shutdownPromises);
 

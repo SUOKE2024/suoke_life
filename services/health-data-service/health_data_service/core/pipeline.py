@@ -1,3 +1,23 @@
+"""
+pipeline - 索克生活项目模块
+"""
+
+                        import re
+from ..models.health_data import DataType, DataSource
+from .cache import cache_manager, cached
+from .config import get_settings
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, asdict
+from datetime import datetime, timedelta
+from enum import Enum
+from loguru import logger
+from typing import Any, Dict, List, Optional, Tuple, Union, Callable
+import asyncio
+import json
+import logging
+import numpy as np
+import pandas as pd
+
 #!/usr/bin/env python3
 """
 数据处理管道模块
@@ -5,22 +25,8 @@
 提供健康数据的验证、清洗、标准化、异常检测等处理功能。
 """
 
-import asyncio
-import json
-import logging
-from abc import ABC, abstractmethod
-from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional, Tuple, Union, Callable
-from dataclasses import dataclass, asdict
-from enum import Enum
 
-import numpy as np
-import pandas as pd
-from loguru import logger
 
-from .config import get_settings
-from .cache import cache_manager, cached
-from ..models.health_data import DataType, DataSource
 
 settings = get_settings()
 
@@ -241,7 +247,6 @@ class CleaningStage(ProcessingStageBase):
                     
                     # 移除特殊字符
                     if cleaning_config.get("remove_special_chars", False):
-                        import re
                         cleaned_data[field] = re.sub(r'[^\w\s-]', '', cleaned_data[field])
                     
                     if cleaned_data[field] != original_value:

@@ -1,9 +1,9 @@
-import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Ionicons  } from "../../placeholder";@expo/vector-icons";/import { Card, Button, Loading, Input } from ../ui"/import { colors, spacing, typography } from "../../constants/theme/import { useAppSelector, useAppDispatch } from ";";../../////    store";
-//////
-importReact,{ useState, useEffect, useCallback } from react";"
+import { Ionicons  } from "../../placeholder";@expo/vector-icons";/import { Card, Button, Loading, Input } from ../ui"/import { colors, spacing, typography } from "../../constants/theme/import { useAppSelector, useAppDispatch } from ;../../////    store";
 import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/////      View,";
+
+import React from "react";
+// importReact,{ useState, useEffect, useCallback } from react
   Text,
   StyleSheet,
   ScrollView,
@@ -12,7 +12,7 @@ import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/////      
   Animated,
   RefreshControl,
   Alert,
-  { Modal } from ";react-native"
+  { Modal } from ";react-native";
 const { width   } = Dimensions.get(window;";);"
 interface BlockchainRecord { id: string,
   hash: string,
@@ -37,11 +37,11 @@ interface DataUploadRequest { dataType: "health" | diagnosis" | "prescription | 
 interface BlockchainDataManagerProps {
   onRecordPress?: (record: BlockchainRecord) => void,
   onUploadComplete?: (record: BlockchainRecord) => void}
-export const BlockchainDataManager: React.FC<BlockchainDataManagerProps /> = ({/  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor(BlockchainDataManager", ";
-{; /////
+export const BlockchainDataManager: React.FC<BlockchainDataManagerProps /> = ({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor(BlockchainDataManager", ";
+{/////
     trackRender: true,
     trackMemory: true,
-    warnThreshold: 50, // ms //////     })
+    warnThreshold: 50, // ms // });
   onRecordPress,
   onUploadComplete;
 }) => {}
@@ -53,29 +53,29 @@ export const BlockchainDataManager: React.FC<BlockchainDataManagerProps /> = ({/
   const [verifyModalVisible, setVerifyModalVisible] = useState<boolean>(fals;e;);
   const [selectedTab, setSelectedTab] = useState<"all | "health" | diagnosis" | "prescription | "report">(all";);
   const [animatedValue] = useState<any>(new Animated.Value(0););
-  // 模拟区块链记录数据 //////     const mockRecords: BlockchainRecord[] = [{
-      id: "1,"
+  // 模拟区块链记录数据 // const mockRecords: BlockchainRecord[] = [{
+      id: "1,",
       hash: "0x1a2b3c4d5e6f7890abcdef1234567890abcdef12",
       timestamp: new Date(),
       dataType: health","
-      title: "健康体检报告,"
+      title: "健康体检报告,",
       description: "2024年度全面健康体检数据",
       size: 2.5,
       status: confirmed","
       confirmations: 12,
       gasUsed: 21000,
-      txHash: "0xabcdef1234567890abcdef1234567890abcdef12,"
+      txHash: "0xabcdef1234567890abcdef1234567890abcdef12,",
       encrypted: true,
       shared: false},
     {
       id: "2",
       hash: 0x2b3c4d5e6f7890abcdef1234567890abcdef123a","
       timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-      dataType: "diagnosis,"
+      dataType: "diagnosis,",
       title: "中医辨证诊断",
       description: 气虚质体质辨识及调理方案","
       size: 1.8,
-      status: "confirmed,"
+      status: "confirmed,",
       confirmations: 8,
       gasUsed: 18500,
       txHash: "0xbcdef1234567890abcdef1234567890abcdef123",
@@ -83,11 +83,11 @@ export const BlockchainDataManager: React.FC<BlockchainDataManagerProps /> = ({/
       shared: true},
     {
       id: 3","
-      hash: "0x3c4d5e6f7890abcdef1234567890abcdef123ab2,"
+      hash: "0x3c4d5e6f7890abcdef1234567890abcdef123ab2,",
       timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000),
       dataType: "prescription",
       title: 个性化营养方案","
-      description: "AI生成的个性化营养补充建议,"
+      description: "AI生成的个性化营养补充建议,",
       size: 0.9,
       status: "pending",
       confirmations: 0,
@@ -95,59 +95,58 @@ export const BlockchainDataManager: React.FC<BlockchainDataManagerProps /> = ({/
       shared: false}
   ];
   useEffect((); => {}
-    const effectStart = performance.now()
+    const effectStart = performance.now();
     setRecords(mockRecords);
-    // 启动动画 //////     Animated.timing(animatedValue, {
+    // 启动动画 // Animated.timing(animatedValue, {
       toValue: 1,
       duration: 800,
-      useNativeDriver: true}).start()
-      const effectEnd = performance.now()
+      useNativeDriver: true}).start();
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  const onRefresh = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useCallback(const async =  => {;}
+  const onRefresh = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useCallback(const async =  => {}
   // TODO: Implement function *} ////
-  const handleUploadData = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useCallback(async (request: DataUploadRequest); => {;}
+  const handleUploadData = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useCallback(async (request: DataUploadRequest); => {}
     setLoading(true), []);
     try {
-      // 模拟上链过程 //////     await new Promise<void>(resolve => setTimeout(() => resolve(), 2000))
-      const newRecord: BlockchainRecord = {;
-        id: Date.now().toString(),
+      // 模拟上链过程 // await new Promise<void>(resolve => setTimeout(() => resolve(), 2000))
+      const newRecord: BlockchainRecord = {id: Date.now().toString(),
         hash: 0x" + Math.random().toString(16).substr(2, 40),"
         timestamp: new Date(),
         dataType: request.dataType,
         title: request.title,
         description: request.description,
         size: Math.random() * 3 + 0.5,
-        status: "pending,"
+        status: "pending,",
         confirmations: 0,
         encrypted: request.encrypt,
         shared: request.shareWith.length > 0};
       setRecords(prev => [newRecord, ...prev]);
       onUploadComplete?.(newRecord);
-      setUploadModalVisible(false)
+      setUploadModalVisible(false);
       Alert.alert("上链成功", 数据已成功提交到区块链网络")"
     } catch (error) {
       Alert.alert("上链失败, "数据上链过程中发生错误");"
     } finally {
       setLoading(false);
     }
-      const effectEnd = performance.now()
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [onUploadComplete]);
-  const handleVerifyData = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useCallback(async (hash: string); => {;}
+  const handleVerifyData = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useCallback(async (hash: string); => {}
     setLoading(true), []);
     try {
-      // 模拟验证过程 //////     await new Promise<void>(resolve => setTimeout(() => resolve(), 1000))
-      Alert.alert(验证成功", "数据完整性验证通过，未发现篡改)
+      // 模拟验证过程 // await new Promise<void>(resolve => setTimeout(() => resolve(), 1000))
+      Alert.alert(验证成功", "数据完整性验证通过，未发现篡改);
     } catch (error) {
       Alert.alert("验证失败", 数据验证过程中发生错误");"
     } finally {
       setLoading(false);
     }
-      const effectEnd = performance.now()
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  const getStatusColor = useCallback => {;}
+  const getStatusColor = useCallback => {}
   // TODO: 将内联组件移到组件外部 * const renderTabSelector = useMemo(() => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => () => ( ////
     <View style={styles.tabSelector} />/////          {(["all, "health", diagnosis", "prescription, "report"] as const).map((tab) => ("
         <TouchableOpacity,
@@ -164,13 +163,12 @@ style={[
             ]} />/            {tab === all" ? "全部 : getDataTypeLabel(tab)}////
           </Text>/        </TouchableOpacity>/////          ))}
     </View>/////      ), []);
-  const renderStatsCards = useCallback => {;}
+  const renderStatsCards = useCallback => {}
     const confirmedRecords = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => records.filter(r => r.status === "confirmed").length, []);)))));
     const encryptedRecords = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => records.filter(r => r.encrypted).length, []);)))));
     const sharedRecords = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => records.filter(r => r.shared).length, []);)))));
-    // 记录渲染性能 //////
-    performanceMonitor.recordRender()
-    return (
+    // 记录渲染性能 // performanceMonitor.recordRender();
+    return (;
       <View style={styles.statsContainer} />/        <View style={styles.statsCard} />/          <Text style={styles.statsValue} />{totalRecords}</Text>/          <Text style={styles.statsLabel} />总记录数</Text>/        </View>/        <View style={styles.statsCard} />/          <Text style={styles.statsValue} />{confirmedRecords}</Text>/          <Text style={styles.statsLabel} />已确认</Text>/        </View>/        <View style={styles.statsCard} />/          <Text style={styles.statsValue} />{encryptedRecords}</Text>/          <Text style={styles.statsLabel} />已加密</Text>/        </View>/        <View style={styles.statsCard} />/          <Text style={styles.statsValue} />{sharedRecords}</Text>/          <Text style={styles.statsLabel} />已共享</Text>/        </View>/      </View>/////        );
   };
   const renderRecordCard = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => (record: BlockchainRecord, index: number) => (;
@@ -236,8 +234,8 @@ title="取消"
             variant="outline"
             onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setUploadModalVisible(false)}/            style={styles.modalButton} />/////              <Button;
 title="上传"
-            onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> {/              // 模拟上传 //////     handleUploadData({
-                dataType: "health,"
+            onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> {/              // 模拟上传 // handleUploadData({
+                dataType: "health,",
                 title: "新健康数据",
                 description: 用户上传的健康数据","
                 data: {},
@@ -246,7 +244,7 @@ title="上传"
               }), [])
             }}
             style={styles.modalButton} />/        </View>/      </SafeAreaView>/    </Modal>/////      )
-  return (
+  return (;
     <SafeAreaView style={styles.container} />/////          <ScrollView;
 style={styles.scrollView}
         refreshControl={
@@ -270,13 +268,12 @@ style={styles.uploadButton}
         <View style={styles.loadingOverlay} />/          <Loading />/        </View>/////          )}
     </SafeAreaView>/////      )
 };
-const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({;
-  container: {
+const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({container: {
     flex: 1,
     backgroundColor: colors.background},
   scrollView: { flex: 1  },
   header: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     justifyContent: "space-between",
     alignItems: center","
     paddingHorizontal: spacing.lg,
@@ -289,7 +286,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     flexDirection: row","
     gap: spacing.sm},
   uploadButton: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center",
     backgroundColor: colors.primary,
     paddingHorizontal: spacing.md,
@@ -301,7 +298,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     fontSize: typography.fontSize.sm,
     fontWeight: 600"},"
   statsContainer: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     paddingHorizontal: spacing.lg,
     marginBottom: spacing.lg,
     gap: spacing.sm},
@@ -319,7 +316,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   statsLabel: {
     fontSize: typography.fontSize.xs,
     color: colors.textSecondary,
-    textAlign: "center},"
+    textAlign: "center},",
   tabSelector: {
     flexDirection: "row",
     marginHorizontal: spacing.lg,
@@ -336,7 +333,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   tabButtonText: {
     fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
-    fontWeight: "500},"
+    fontWeight: "500},",
   tabButtonTextActive: {
     color: colors.white,
     fontWeight: "600"},
@@ -348,7 +345,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     overflow: hidden"},"
   recordCardContent: { padding: spacing.lg  },
   recordHeader: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "flex-start",
     marginBottom: spacing.md},
   recordIcon: {
@@ -356,7 +353,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     height: 48,
     borderRadius: 24,
     backgroundColor: colors.primary + 20","
-    justifyContent: "center,"
+    justifyContent: "center,",
     alignItems: "center",
     marginRight: spacing.md},
   recordInfo: { flex: 1  },
@@ -375,12 +372,12 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   statusText: {
     fontSize: typography.fontSize.xs,
     color: colors.white,
-    fontWeight: "600},"
+    fontWeight: "600},",
   recordDetails: { marginBottom: spacing.md  },
   detailRow: {
     flexDirection: "row",
     justifyContent: space-between","
-    alignItems: "center,"
+    alignItems: "center,",
     marginBottom: spacing.xs},
   detailLabel: {
     fontSize: typography.fontSize.sm,
@@ -393,11 +390,11 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     textAlign: right","
     marginLeft: spacing.sm},
   recordActions: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     justifyContent: "space-between",
     alignItems: center"},"
   recordTags: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     gap: spacing.xs},
   tag: {
     flexDirection: "row",
@@ -410,7 +407,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   tagText: {
     fontSize: typography.fontSize.xs,
     color: colors.textSecondary,
-    fontWeight: "500},"
+    fontWeight: "500},",
   verifyButton: {
     flexDirection: "row",
     alignItems: center","
@@ -428,7 +425,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     backgroundColor: colors.background},
   modalHeader: {
     flexDirection: row","
-    justifyContent: "space-between,"
+    justifyContent: "space-between,",
     alignItems: "center",
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
@@ -451,14 +448,14 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   formLabel: {
     fontSize: typography.fontSize.base,
     color: colors.textPrimary,
-    fontWeight: "600,"
+    fontWeight: "600,",
     marginBottom: spacing.sm},
   typeSelector: {
     flexDirection: "row",
     flexWrap: wrap","
     gap: spacing.sm},
   typeOption: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center",
     backgroundColor: colors.surfaceSecondary,
     paddingHorizontal: spacing.md,
@@ -470,7 +467,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     color: colors.textPrimary,
     fontWeight: 500"},"
   modalActions: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
     gap: spacing.sm,
@@ -484,12 +481,12 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     right: 0,
     bottom: 0,
     backgroundColor: rgba(0, 0, 0, 0.5)","
-    justifyContent: "center,"
+    justifyContent: "center,",
     alignItems: "center"}
 }), []);
 // 导出类型 * export type { BlockchainRecord, DataUploadRequest, BlockchainDataManagerProps }////  ;
  ;
 export type DataType = health" | "diagnosis | "prescription" | repo;r;
-t";"
-export type BlockchainStatus = "pending | "confirmed" | fail;e;"
-d";"
+t
+export type BlockchainStatus = "pending | "confirmed" | fail;e;";
+d

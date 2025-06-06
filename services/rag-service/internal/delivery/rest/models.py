@@ -1,3 +1,10 @@
+"""
+models - 索克生活项目模块
+"""
+
+from pydantic import BaseModel, Field
+from typing import Dict, List, Any, Optional
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,8 +12,6 @@
 REST API 数据模型
 """
 
-from typing import Dict, List, Any, Optional
-from pydantic import BaseModel, Field
 
 class DocumentReference(BaseModel):
     """文档引用"""

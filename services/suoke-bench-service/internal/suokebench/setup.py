@@ -1,13 +1,20 @@
 """
-SuokeBench 评测环境设置
+setup - 索克生活项目模块
 """
 
+            import subprocess
+            import torch
+from internal.suokebench.config import load_config
+from pathlib import Path
 import argparse
 import logging
 import sys
-from pathlib import Path
 
-from internal.suokebench.config import load_config
+"""
+SuokeBench 评测环境设置
+"""
+
+
 
 logger = logging.getLogger(__name__)
 
@@ -90,7 +97,6 @@ class BenchSetup:
         """
         # 尝试使用PyTorch检测GPU
         try:
-            import torch
 
             if torch.cuda.is_available():
                 return [
@@ -111,7 +117,6 @@ class BenchSetup:
 
         # 尝试使用系统命令检测GPU
         try:
-            import subprocess
 
             # NVIDIA GPU
             try:

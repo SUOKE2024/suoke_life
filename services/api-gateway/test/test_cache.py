@@ -1,3 +1,18 @@
+"""
+test_cache - 索克生活项目模块
+"""
+
+from fastapi import Request, Response
+from internal.model.config import CacheConfig
+from pkg.utils.cache import CacheKey, CacheItem, CacheManager
+from starlette.datastructures import Headers, QueryParams
+from unittest.mock import AsyncMock, MagicMock, Mock, patch
+import asyncio
+import os
+import pytest
+import sys
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,21 +21,11 @@
 增强测试覆盖率，包括内存缓存和Redis缓存
 """
 
-import asyncio
-import os
-import sys
-import time
-from unittest.mock import AsyncMock, MagicMock, Mock, patch
 
-import pytest
-from fastapi import Request, Response
-from starlette.datastructures import Headers, QueryParams
 
 # 添加项目根目录到Python路径
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from internal.model.config import CacheConfig
-from pkg.utils.cache import CacheKey, CacheItem, CacheManager
 
 
 @pytest.fixture
@@ -277,7 +282,8 @@ class TestCacheManager:
         assert now + 59 < item2.expires_at < now + 61  # 考虑时间误差
     
     @pytest.mark.asyncio
-    async def test_memory_cache_set_get(self, memory_cache_config, mock_request, mock_response):
+    async     @cache(timeout=300)  # 5分钟缓存
+def test_memory_cache_set_get(self, memory_cache_config, mock_request, mock_response):
         """测试内存缓存的存取"""
         manager = CacheManager(memory_cache_config)
         

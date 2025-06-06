@@ -1,11 +1,16 @@
 """
+constants - 索克生活项目模块
+"""
+
+from enum import Enum
+from typing import Final
+
+"""
 Corn Maze Service 常量定义
 
 定义服务中使用的各种常量。
 """
 
-from enum import Enum
-from typing import Final
 
 # 迷宫相关常量
 MAZE_MIN_SIZE: Final[int] = 5

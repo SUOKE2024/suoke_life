@@ -1,19 +1,26 @@
+"""
+metrics - 索克生活项目模块
+"""
+
+        import os
+        import psutil
+    from prometheus_client import (
+from collections import defaultdict, deque
+from collections.abc import Callable
+from datetime import datetime
+from typing import Any
+import functools
+import logging
+import time
+
 #!/usr/bin/env python3
 
 """
 监控指标模块 - 增强版本
 """
 
-from collections import defaultdict, deque
-from collections.abc import Callable
-from datetime import datetime
-import functools
-import logging
-import time
-from typing import Any
 
 try:
-    from prometheus_client import (
         Counter,
         Gauge,
         Histogram,
@@ -604,9 +611,7 @@ def monitor_performance(component: str):
 def _get_memory_usage() -> int:
     """获取当前内存使用量（字节）"""
     try:
-        import os
 
-        import psutil
         process = psutil.Process(os.getpid())
         return process.memory_info().rss
     except Exception:

@@ -1,12 +1,17 @@
-"""Image processing utilities."""
-
-from io import BytesIO
-
-from PIL import Image
+"""
+image_utils - 索克生活项目模块
+"""
 
 from ..core.config import settings
 from ..core.logging import get_logger
 from ..exceptions import ImageProcessingError, ValidationError
+from PIL import Image
+from io import BytesIO
+
+"""Image processing utilities."""
+
+
+
 
 logger = get_logger(__name__)
 

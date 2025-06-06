@@ -1,13 +1,18 @@
 """
-通用工具函数
+common - 索克生活项目模块
 """
 
+from pathlib import Path
+from typing import Any
 import json
 import logging
 import os
 import time
-from pathlib import Path
-from typing import Any
+
+"""
+通用工具函数
+"""
+
 
 logger = logging.getLogger(__name__)
 

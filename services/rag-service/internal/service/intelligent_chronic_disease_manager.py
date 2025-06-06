@@ -1,3 +1,16 @@
+"""
+intelligent_chronic_disease_manager - 索克生活项目模块
+"""
+
+from ..observability.metrics import MetricsCollector
+from ..observability.tracing import trace_operation, SpanKind
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta, date
+from enum import Enum
+from loguru import logger
+from typing import Dict, List, Any, Optional, Tuple, Union, Set, Callable
+import warnings
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,16 +19,8 @@
 结合现代慢病管理理念和中医"治未病"思想，为慢性疾病患者提供个性化的综合管理方案
 """
 
-from typing import Dict, List, Any, Optional, Tuple, Union, Set, Callable
-from dataclasses import dataclass, field
-from enum import Enum
-from datetime import datetime, timedelta, date
-from loguru import logger
-import warnings
 warnings.filterwarnings('ignore')
 
-from ..observability.metrics import MetricsCollector
-from ..observability.tracing import trace_operation, SpanKind
 
 class ChronicDiseaseType(str, Enum):
     """慢性疾病类型"""

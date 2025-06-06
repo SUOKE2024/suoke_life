@@ -1,8 +1,22 @@
 """
-通用模块，包含基础类、异常、缓存、指标等
+__init__ - 索克生活项目模块
 """
 
 from .base import (
+from .cache import CacheManager
+from .config import ConfigManager
+from .exceptions import (
+from .logging import get_logger, setup_logging
+from .metrics import MetricsCollector, counter, timer
+from .middleware import (
+from .middleware import CircuitBreaker as MiddlewareCircuitBreaker
+from .optimizer import (
+from .utils import (
+
+"""
+通用模块，包含基础类、异常、缓存、指标等
+"""
+
     BaseExtractor,
     BaseMapper,
     BaseService,
@@ -11,9 +25,6 @@ from .base import (
     SymptomInfo,
     TCMPattern,
 )
-from .cache import CacheManager
-from .config import ConfigManager
-from .exceptions import (
     AuthenticationError,
     AuthorizationError,
     CacheError,
@@ -24,9 +35,6 @@ from .exceptions import (
     RateLimitError,
     ValidationError,
 )
-from .logging import get_logger, setup_logging
-from .metrics import MetricsCollector, counter, timer
-from .middleware import (
     CacheMiddleware,
     RateLimiter,
     RequestTracker,
@@ -38,8 +46,6 @@ from .middleware import (
     track_request,
     validate_schema,
 )
-from .middleware import CircuitBreaker as MiddlewareCircuitBreaker
-from .optimizer import (
     BatchProcessor,
     CacheOptimizer,
     MemoryOptimizer,
@@ -50,7 +56,6 @@ from .optimizer import (
     parallel_process,
     query_optimized,
 )
-from .utils import (
     CircuitBreaker,
     calculate_confidence,
     parse_time_expression,

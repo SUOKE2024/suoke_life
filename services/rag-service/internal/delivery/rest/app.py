@@ -1,3 +1,17 @@
+"""
+app - 索克生活项目模块
+"""
+
+        from ...model.document import Document
+from ...service.rag_service import RagService
+from fastapi import FastAPI, HTTPException, Depends, Query, Body, Path, BackgroundTasks
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
+from loguru import logger
+from pydantic import BaseModel, Field
+from typing import Dict, List, Any, Optional
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,15 +19,7 @@
 REST API 应用
 """
 
-import time
-from typing import Dict, List, Any, Optional
-from fastapi import FastAPI, HTTPException, Depends, Query, Body, Path, BackgroundTasks
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.gzip import GZipMiddleware
-from pydantic import BaseModel, Field
-from loguru import logger
 
-from ...service.rag_service import RagService
 
 # 请求和响应模型
 class DocumentModel(BaseModel):
@@ -23,6 +29,30 @@ class DocumentModel(BaseModel):
     metadata: Dict[str, Any] = Field(default_factory=dict, description="元数据")
     score: float = Field(0.0, description="相关性分数")
     source: Optional[str] = Field(None, description="文档来源")
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'documentmodel'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'searchrequest'
+        ordering = ['-created_at']
+
 
 class DocumentReferenceModel(BaseModel):
     """文档引用模型"""
@@ -31,6 +61,18 @@ class DocumentReferenceModel(BaseModel):
     source: str = Field(..., description="文档来源")
     url: Optional[str] = Field(None, description="文档URL")
     snippet: str = Field(..., description="引用片段")
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'searchresponse'
+        ordering = ['-created_at']
+
 
 class SearchRequest(BaseModel):
     """搜索请求"""
@@ -41,11 +83,71 @@ class SearchRequest(BaseModel):
     score_threshold: float = Field(0.7, description="相关性分数阈值")
     rerank: bool = Field(False, description="是否重排序")
     user_id: Optional[str] = Field(None, description="用户ID")
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'generateresponse'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'queryresponse'
+        ordering = ['-created_at']
+
 
 class SearchResponse(BaseModel):
     """搜索响应"""
     documents: List[DocumentModel] = Field(..., description="检索到的文档")
     latency_ms: float = Field(..., description="延迟(毫秒)")
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'adddocumentrequest'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'adddocumentresponse'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'deletedocumentresponse'
+        ordering = ['-created_at']
+
 
 class GenerateRequest(BaseModel):
     """生成请求"""
@@ -354,7 +456,6 @@ def create_app(config: Dict[str, Any]) -> FastAPI:
     # 辅助函数：从API模型转换到内部模型
     def from_document_model(doc_model: DocumentModel):
         """将API文档模型转换为内部文档模型"""
-        from ...model.document import Document
         
         return Document(
             id=doc_model.id or "",

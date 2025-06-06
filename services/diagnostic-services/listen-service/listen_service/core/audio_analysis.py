@@ -1,26 +1,31 @@
 """
+audio_analysis - 索克生活项目模块
+"""
+
+from dataclasses import dataclass
+from scipy import signal
+from sklearn.preprocessing import StandardScaler
+from typing import Dict, List, Any, Optional, Tuple, Union
+import asyncio
+import joblib
+import librosa
+import logging
+import numpy as np
+import pyaudio
+import queue
+import soundfile as sf
+import threading
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import wave
+
+"""
 音频分析核心模块
 
 基于深度学习的中医闻诊音频特征识别和分析
 """
 
-import librosa
-import numpy as np
-import logging
-import asyncio
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-from typing import Dict, List, Any, Optional, Tuple, Union
-from dataclasses import dataclass
-import soundfile as sf
-from scipy import signal
-from sklearn.preprocessing import StandardScaler
-import joblib
-import threading
-import queue
-import pyaudio
-import wave
 
 logger = logging.getLogger(__name__)
 

@@ -1,3 +1,18 @@
+"""
+diagnostic_reasoning_engine - 索克生活项目模块
+"""
+
+from ..common.base import BaseService
+from ..common.cache import cached
+from ..common.exceptions import InquiryServiceError
+from ..common.metrics import counter, memory_optimized, timer
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from loguru import logger
+from typing import Any
+import uuid
+
 #!/usr/bin/env python3
 
 """
@@ -7,18 +22,8 @@
 诊断建议生成、风险评估和治疗建议，为问诊服务提供专业的诊断支持。
 """
 
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
-from typing import Any
-import uuid
 
-from loguru import logger
 
-from ..common.base import BaseService
-from ..common.cache import cached
-from ..common.exceptions import InquiryServiceError
-from ..common.metrics import counter, memory_optimized, timer
 
 
 class DiagnosisConfidence(Enum):

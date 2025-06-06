@@ -1,13 +1,18 @@
-"""Redis核心模块"""
+"""
+redis - 索克生活项目模块
+"""
 
-import json
-import pickle
+from auth_service.config.settings import RedisSettings, get_settings
 from datetime import timedelta
 from typing import Any, Dict, List, Optional, Union
+import json
+import pickle
 import redis.asyncio as redis
 import structlog
 
-from auth_service.config.settings import RedisSettings, get_settings
+"""Redis核心模块"""
+
+
 
 logger = structlog.get_logger()
 

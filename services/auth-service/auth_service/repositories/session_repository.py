@@ -1,13 +1,18 @@
-"""会话数据仓库"""
-
-import uuid
-from datetime import datetime, timedelta
-from typing import List, Optional
-
-from sqlalchemy import and_, select, update, delete
-from sqlalchemy.ext.asyncio import AsyncSession
+"""
+session_repository - 索克生活项目模块
+"""
 
 from auth_service.models.user import UserSession
+from datetime import datetime, timedelta
+from sqlalchemy import and_, select, update, delete
+from sqlalchemy.ext.asyncio import AsyncSession
+from typing import List, Optional
+import uuid
+
+"""会话数据仓库"""
+
+
+
 
 
 class SessionRepository:
@@ -83,7 +88,7 @@ class SessionRepository:
         
         stmt = stmt.order_by(UserSession.created_at.desc())
         result = await self.db.execute(stmt)
-        return list(result.scalars().all())
+        return list(result.scalars().all()[:1000]  # 限制查询结果数量)
     
     async def update_session_activity(
         self,

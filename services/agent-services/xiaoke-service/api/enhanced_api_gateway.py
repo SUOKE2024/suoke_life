@@ -1,30 +1,35 @@
+"""
+enhanced_api_gateway - 索克生活项目模块
+"""
+
+from contextlib import asynccontextmanager
+from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel, Field
+from services.agent_services.xiaoke_service.internal.service.enhanced_resource_service import (
+from services.common.observability.tracing import trace_middleware
+from typing import Any
+import asyncio
+import logging
+import time
+import uvicorn
+
 #!/usr/bin/env python3
 """
 xiaoke-service 增强版API网关
 集成FastAPI、中间件、追踪、监控等功能
 """
 
-import asyncio
-import logging
-import time
-from contextlib import asynccontextmanager
-from typing import Any
 
-import uvicorn
-from fastapi import Depends, FastAPI, HTTPException, Request
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.trustedhost import TrustedHostMiddleware
-from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field
 
 # 导入服务和通用组件
-from services.agent_services.xiaoke_service.internal.service.enhanced_resource_service import (
     ConstitutionType,
     ProductRequest,
     ResourceRequest,
     get_resource_service,
 )
-from services.common.observability.tracing import trace_middleware
 
 logger = logging.getLogger(__name__)
 
@@ -174,22 +179,26 @@ async def general_exception_handler(request: Request, exc: Exception):
 
 
 # 依赖注入
-async def get_resource_service_dependency():
+async async def get_resource_service_dependency(
     """获取资源服务依赖"""
     return app_state.get("resource_service")
 
 
 # API路由
+@cache(expire=300)  # 5分钟缓存
+@limiter.limit("100/minute")  # 每分钟100次请求
 @app.get("/health", response_model=HealthResponse)
 async def health_check():
     """健康检查"""
     return HealthResponse(
-        status="healthy", timestamp=time.time(), service="xiaoke-service"
+        status="healthy", timestamp=time.time(), servi@cache(expire=@limiter.limit("100/minute")  # 每分钟100次请求
+300)  # 5分钟缓存
+ce="xiaoke-service"
     )
 
 
 @app.get("/metrics")
-async def get_metrics():
+async async def get_metrics(
     """获取服务指标"""
     resource_service = app_state.get("resource_service")
     service_stats = resource_service.get_health_status() if resource_service else {}
@@ -197,7 +206,8 @@ async def get_metrics():
     return {
         "service": "xiaoke-service",
         "uptime": time.time() - app_state.get("start_time", time.time()),
-        "total_requests": app_state.get("request_count", 0),
+        "total_requests": app_state.get("request_count", 0)@limiter.limit("100/minute")  # 每分钟100次请求
+,
         "service_stats": service_stats,
         "timestamp": time.time(),
     }
@@ -240,7 +250,8 @@ async def search_resources(
             "timestamp": result.timestamp,
         }
 
-    except Exception as e:
+    except@limiter.limit("100/minute")  # 每分钟100次请求
+ Exception as e:
         logger.error(f"资源搜索失败: {e}")
         raise HTTPException(status_code=500, detail=f"资源搜索失败: {e!s}")
 
@@ -280,11 +291,13 @@ async def recommend_products(
             },
             "processing_time": result.processing_time,
             "timestamp": result.timestamp,
-        }
+       @limiter.limit("100/minute")  # 每分钟100次请求
+ }
 
     except Exception as e:
         logger.error(f"产品推荐失败: {e}")
-        raise HTTPException(status_code=500, detail=f"产品推荐失败: {e!s}")
+        raise HT@cache(expire=300)  # 5分钟缓存
+TPException(status_code=500, detail=f"产品推荐失败: {e!s}")
 
 
 @app.get("/api/v1/resources/{resource_id}")
@@ -315,7 +328,8 @@ async def get_resource_details(
                 "availability": {
                     "today": True,
                     "next_available": "2024-12-20T09:00:00Z",
-                },
+             @limiter.limit("100/minute")  # 每分钟100次请求
+   },
             },
             "timestamp": time.time(),
         }
@@ -350,18 +364,20 @@ async def create_booking(
                 "appointment_time": booking_data.get("appointment_time"),
                 "confirmation_code": f"CONF{booking_id[-6:].upper()}",
                 "payment_required": True,
-                "payment_amount": 200.0,
+                "@limiter.limit("100/minute")  # 每分钟100次请求
+payment_amount": 200.0,
             },
             "timestamp": time.time(),
         }
 
     except Exception as e:
-        logger.error(f"创建预订失败: {e}")
+        logger.error(f"创建@cache(expire=300)  # 5分钟缓存
+预订失败: {e}")
         raise HTTPException(status_code=500, detail=f"创建预订失败: {e!s}")
 
 
 @app.get("/api/v1/constitution-types")
-async def get_constitution_types():
+async async def get_constitution_types(
     """获取体质类型列表"""
     return {
         "success": True,
@@ -405,12 +421,14 @@ async def get_constitution_types():
                 {
                     "code": "qi_yu",
                     "name": "气郁质",
-                    "description": "气机郁滞，情志不畅",
+                    "descri@limiter.limit("100/minute")  # 每分钟100次请求
+ption": "气机郁滞，情志不畅",
                 },
                 {
                     "code": "te_bing",
                     "name": "特禀质",
-                    "description": "先天失常，过敏体质",
+                    "d@cache(expire=300)  # 5分钟缓存
+escription": "先天失常，过敏体质",
                 },
             ]
         },
@@ -419,7 +437,7 @@ async def get_constitution_types():
 
 
 @app.get("/api/v1/product-categories")
-async def get_product_categories():
+async async def get_product_categories(
     """获取产品类别列表"""
     return {
         "success": True,

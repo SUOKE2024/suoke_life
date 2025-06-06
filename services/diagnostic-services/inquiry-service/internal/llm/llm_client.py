@@ -1,18 +1,27 @@
+"""
+llm_client - 索克生活项目模块
+"""
+
+                    from transformers import AutoModel, AutoTokenizer
+                    from transformers import AutoModelForCausalLM, AutoTokenizer
+                    import torch
+            import random
+    import aiohttp
+from typing import Any
+import json
+import logging
+import os
+import time
+
 #!/usr/bin/env python
 
 """
 LLM客户端模块，负责与大语言模型交互，生成问诊响应
 """
 
-import json
-import logging
-import os
-import time
-from typing import Any
 
 # 条件导入aiohttp和httpx
 try:
-    import aiohttp
 
     EXTERNAL_LIBS_AVAILABLE = True
 except ImportError:
@@ -127,7 +136,6 @@ class LLMClient:
             if self.model_type == "llama3":
                 # 使用transformers库加载模型
                 try:
-                    from transformers import AutoModelForCausalLM, AutoTokenizer
 
                     logger.info(f"正在加载本地模型: {self.local_model_path}")
                     self.tokenizer = AutoTokenizer.from_pretrained(
@@ -150,7 +158,6 @@ class LLMClient:
             elif self.model_type == "glm":
                 # ChatGLM模型加载
                 try:
-                    from transformers import AutoModel, AutoTokenizer
 
                     logger.info(f"正在加载ChatGLM模型: {self.local_model_path}")
                     self.tokenizer = AutoTokenizer.from_pretrained(
@@ -322,7 +329,6 @@ class LLMClient:
 
             if self.model_type == "llama3":
                 try:
-                    import torch
 
                     # 编码输入
                     inputs = self.tokenizer.encode(prompt, return_tensors="pt").to(
@@ -639,7 +645,6 @@ class LLMClient:
             ]
 
             # 随机选择1-2个通用问题
-            import random
 
             num_questions = min(2, len(general_questions))
             return random.sample(general_questions, num_questions)

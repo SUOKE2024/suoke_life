@@ -1,14 +1,19 @@
+"""
+fix_all_syntax_errors - 索克生活项目模块
+"""
+
+from pathlib import Path
+from typing import List, Dict, Tuple
+import argparse
+import os
+import re
+
 #!/usr/bin/env python3
 """
 索克生活项目全面语法错误修复脚本
 专门修复测试文件和其他文件的各种语法问题
 """
 
-import os
-import re
-from pathlib import Path
-from typing import List, Dict, Tuple
-import argparse
 
 class ComprehensiveSyntaxFixer:
     def __init__(self, project_root: str):

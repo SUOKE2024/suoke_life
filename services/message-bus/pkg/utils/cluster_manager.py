@@ -1,3 +1,21 @@
+"""
+cluster_manager - 索克生活项目模块
+"""
+
+            import consul
+            import redis
+        import random
+from collections import defaultdict
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Set, Callable, Union
+import asyncio
+import hashlib
+import json
+import logging
+import time
+import uuid
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,16 +24,6 @@
 支持多节点协同、服务发现、负载均衡和故障转移
 """
 
-import asyncio
-import json
-import logging
-import time
-import uuid
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Callable, Union
-from collections import defaultdict
-import hashlib
 
 logger = logging.getLogger(__name__)
 
@@ -173,7 +181,6 @@ class ConsulServiceDiscovery(ServiceDiscovery):
     def _init_consul_client(self):
         """初始化Consul客户端"""
         try:
-            import consul
             host, port = self.endpoints[0].split(':')
             self.consul_client = consul.Consul(host=host, port=int(port))
         except ImportError:
@@ -281,7 +288,6 @@ class RedisServiceDiscovery(ServiceDiscovery):
     def _init_redis_client(self):
         """初始化Redis客户端"""
         try:
-            import redis
             host, port = self.endpoints[0].split(':')
             self.redis_client = redis.Redis(host=host, port=int(port), decode_responses=True)
         except ImportError:
@@ -415,7 +421,6 @@ class LoadBalancer:
         if total_weight == 0:
             return nodes[0]
         
-        import random
         weight = random.uniform(0, total_weight)
         current_weight = 0
         

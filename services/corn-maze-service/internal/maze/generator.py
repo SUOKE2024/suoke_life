@@ -1,18 +1,23 @@
+"""
+generator - 索克生活项目模块
+"""
+
+from datetime import datetime
+from internal.model.maze import Cell, Challenge, KnowledgeNode, Maze
+from pkg.utils.cache import CacheManager
+from pkg.utils.metrics import maze_generation_time, record_maze_generation_error
+from typing import Any, ClassVar
+import logging
+import random
+import uuid
+
 #!/usr/bin/env python3
 
 """
 迷宫生成模块 - 优化版本
 """
 
-from datetime import datetime
-import logging
-import random
-from typing import Any, ClassVar
-import uuid
 
-from internal.model.maze import Cell, Challenge, KnowledgeNode, Maze
-from pkg.utils.cache import CacheManager
-from pkg.utils.metrics import maze_generation_time, record_maze_generation_error
 
 logger = logging.getLogger(__name__)
 

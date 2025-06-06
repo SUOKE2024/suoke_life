@@ -1,13 +1,18 @@
 """
+calculator - 索克生活项目模块
+"""
+
+from .data import (
+from datetime import datetime, date, timedelta
+from typing import Dict, List, Optional, Tuple
+
+"""
 五运六气计算器
 
 实现五运六气运气学说的核心算法
 """
 
-from datetime import datetime, date, timedelta
-from typing import Dict, List, Optional, Tuple
 
-from .data import (
     WUYUN_DATA,
     LIUQI_DATA,
     JIAZI_NAYIN,

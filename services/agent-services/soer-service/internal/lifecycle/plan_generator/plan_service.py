@@ -1,13 +1,18 @@
 """
-健康计划生成服务 - 基于体质和健康目标创建个性化健康计划
+plan_service - 索克生活项目模块
 """
-import logging
-import uuid
-from datetime import datetime, time, timedelta
-from typing import Any
 
+from datetime import datetime, time, timedelta
 from internal.lifecycle.health_profile.profile_service import HealthProfileService
 from internal.repository.models.health_plan import (
+from typing import Any
+import logging
+import uuid
+
+"""
+健康计划生成服务 - 基于体质和健康目标创建个性化健康计划
+"""
+
     DailySchedule,
     DietRecommendation,
     EnvironmentalSuggestion,

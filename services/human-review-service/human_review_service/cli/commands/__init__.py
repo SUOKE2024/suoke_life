@@ -1,4 +1,10 @@
 """
+__init__ - 索克生活项目模块
+"""
+
+from . import database, reviewer, server
+
+"""
 CLI 命令
 CLI Commands
 
@@ -6,6 +12,5 @@ CLI Commands
 """
 
 # 导入所有命令模块，确保它们被注册
-from . import database, reviewer, server
 
 __all__ = ["database", "reviewer", "server"]

@@ -1,17 +1,25 @@
 """
+test_performance - 索克生活项目模块
+"""
+
+            import random
+        import os
+        import psutil
+from concurrent.futures import ThreadPoolExecutor
+from suoke_blockchain_service.service import BlockchainService
+from unittest.mock import AsyncMock, MagicMock, patch
+import asyncio
+import pytest
+import time
+import uuid
+
+"""
 性能测试和基准测试
 
 测试区块链服务的性能指标和基准。
 """
 
-import pytest
-import asyncio
-import time
-import uuid
-from unittest.mock import AsyncMock, MagicMock, patch
-from concurrent.futures import ThreadPoolExecutor
 
-from suoke_blockchain_service.service import BlockchainService
 
 
 @pytest.fixture
@@ -195,8 +203,6 @@ class TestPerformanceBenchmarks:
     @pytest.mark.asyncio
     async def test_memory_usage_performance(self, blockchain_service):
         """测试内存使用性能"""
-        import psutil
-        import os
         
         process = psutil.Process(os.getpid())
         initial_memory = process.memory_info().rss / 1024 / 1024  # MB
@@ -401,8 +407,6 @@ class TestStressTests:
     @pytest.mark.stress
     async def test_resource_exhaustion_stress(self, blockchain_service):
         """资源耗尽压力测试"""
-        import psutil
-        import os
         
         process = psutil.Process(os.getpid())
         initial_memory = process.memory_info().rss / 1024 / 1024  # MB
@@ -551,7 +555,6 @@ class TestLoadTests:
                 operations.append(op)
             
             # 随机打乱操作顺序
-            import random
             random.shuffle(operations)
             
             # 执行混合工作负载

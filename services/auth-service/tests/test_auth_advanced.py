@@ -1,18 +1,25 @@
 """
-Auth-Service 高级认证功能测试
+test_auth_advanced - 索克生活项目模块
 """
-import pytest
-import asyncio
+
+        import threading
+        import time
+from auth_service.core.auth import AuthService
+from auth_service.core.database import get_db
+from auth_service.main import app
+from auth_service.repositories.session_repository import SessionRepository
+from auth_service.repositories.user_repository import UserRepository
 from datetime import datetime, timedelta
 from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import AsyncSession
+import asyncio
+import pytest
 import uuid
 
-from auth_service.main import app
-from auth_service.core.auth import AuthService
-from auth_service.core.database import get_db
-from auth_service.repositories.user_repository import UserRepository
-from auth_service.repositories.session_repository import SessionRepository
+"""
+Auth-Service 高级认证功能测试
+"""
+
 
 
 class TestAuthAdvanced:
@@ -331,8 +338,6 @@ class TestAuthAdvanced:
     
     def test_concurrent_login_attempts(self, client, created_user, test_user_data):
         """测试并发登录尝试"""
-        import threading
-        import time
         
         results = []
         

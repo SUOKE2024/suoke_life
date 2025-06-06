@@ -1,16 +1,21 @@
+"""
+test_resource_manager - 索克生活项目模块
+"""
+
+from datetime import datetime
+from internal.domain.models import AppointmentStatus, MedicalResourceType
+from internal.scheduler.resource_manager import ResourceManager
+from unittest.mock import AsyncMock, patch
+import pytest
+
 #!/usr/bin/env python
 
 """
 测试资源管理器
 """
 
-from datetime import datetime
-from unittest.mock import AsyncMock, patch
 
-import pytest
 
-from internal.domain.models import AppointmentStatus, MedicalResourceType
-from internal.scheduler.resource_manager import ResourceManager
 
 
 class TestResourceManager:

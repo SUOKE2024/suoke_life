@@ -1,12 +1,17 @@
 """
+routes - 索克生活项目模块
+"""
+
+from fastapi import APIRouter
+from xiaoke_service.api.v1 import chat, health, knowledge
+
+"""
 API 路由模块
 
 定义所有的 REST API 端点和路由。
 """
 
-from fastapi import APIRouter
 
-from xiaoke_service.api.v1 import chat, health, knowledge
 
 # 创建主路由器
 api_router = APIRouter()

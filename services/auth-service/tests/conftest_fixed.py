@@ -1,15 +1,26 @@
 """
-修复的测试配置文件 - 解决数据库初始化问题
+conftest_fixed - 索克生活项目模块
 """
 
-import os
-import asyncio
-import tempfile
-import pytest
-import pytest_asyncio
+    from auth_service.core.auth import get_password_hash
+    from auth_service.core.database import get_db
+    from auth_service.repositories.user_repository import UserRepository
+from auth_service.cmd.server.main import create_app
+from auth_service.config.settings import DatabaseSettings
+from auth_service.core.database import DatabaseManager, set_db_manager, BaseModel
 from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.pool import StaticPool
+import asyncio
+import os
+import pytest
+import pytest_asyncio
+import tempfile
+
+"""
+修复的测试配置文件 - 解决数据库初始化问题
+"""
+
 
 # 在模块级别设置环境变量，确保在任何导入之前就设置好
 os.environ.update({
@@ -43,9 +54,6 @@ os.environ.update({
 })
 
 # 导入应用模块
-from auth_service.core.database import DatabaseManager, set_db_manager, BaseModel
-from auth_service.config.settings import DatabaseSettings
-from auth_service.cmd.server.main import create_app
 
 
 class TestDatabaseManager:
@@ -158,7 +166,6 @@ def client(test_db_manager):
     app = create_app()
     
     # 重写数据库依赖
-    from auth_service.core.database import get_db
     
     async def override_get_db():
         async for session in test_db_manager.get_async_session():
@@ -174,8 +181,6 @@ def client(test_db_manager):
 async def authenticated_client(client, db_session):
     """认证客户端fixture"""
     # 创建测试用户
-    from auth_service.repositories.user_repository import UserRepository
-    from auth_service.core.auth import get_password_hash
     
     user_repo = UserRepository(db_session)
     
@@ -218,8 +223,6 @@ def performance_config():
 @pytest_asyncio.fixture
 async def load_test_users(db_session):
     """负载测试用户数据"""
-    from auth_service.repositories.user_repository import UserRepository
-    from auth_service.core.auth import get_password_hash
     
     user_repo = UserRepository(db_session)
     users = []

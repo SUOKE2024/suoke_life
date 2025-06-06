@@ -1,30 +1,36 @@
 """
+grpc_server - 索克生活项目模块
+"""
+
+        import hashlib
+from ..config.settings import get_settings
+from ..core.audio_analyzer import AudioAnalyzer
+from ..core.tcm_analyzer import TCMFeatureExtractor
+from ..models.audio_models import (
+from ..models.tcm_models import TCMAnalysisResponse
+from ..utils.cache import AudioCache
+from ..utils.logging import audit_logger, security_logger
+from ..utils.performance import async_timer
+from grpc import aio
+from typing import Any
+import grpc
+import structlog
+import time
+import uuid
+
+"""
 gRPC服务器实现
 
 提供音频分析和中医诊断的gRPC接口服务。
 """
 
-import time
-import uuid
-from typing import Any
 
-import grpc
-import structlog
-from grpc import aio
 
-from ..config.settings import get_settings
-from ..core.audio_analyzer import AudioAnalyzer
-from ..core.tcm_analyzer import TCMFeatureExtractor
-from ..models.audio_models import (
     AnalysisRequest,
     AudioAnalysisResponse,
     AudioFormat,
     AudioMetadata,
 )
-from ..models.tcm_models import TCMAnalysisResponse
-from ..utils.cache import AudioCache
-from ..utils.logging import audit_logger, security_logger
-from ..utils.performance import async_timer
 
 logger = structlog.get_logger(__name__)
 
@@ -396,7 +402,6 @@ class ListenServiceGRPCServer:
 
     def _hash_audio_data(self, audio_data: bytes) -> str:
         """计算音频数据哈希"""
-        import hashlib
 
         return hashlib.sha256(audio_data).hexdigest()[:16]
 

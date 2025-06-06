@@ -1,15 +1,21 @@
 """
-缓存抽象层
-提供统一的缓存接口，支持Redis和内存缓存
+cache - 索克生活项目模块
 """
-import asyncio
-import json
-import logging
-import pickle
+
+            import fnmatch
 from abc import ABC, abstractmethod
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional, Union
+import asyncio
 import hashlib
+import json
+import logging
+import pickle
+
+"""
+缓存抽象层
+提供统一的缓存接口，支持Redis和内存缓存
+"""
 
 logger = logging.getLogger(__name__)
 
@@ -112,7 +118,6 @@ class MemoryCache(CacheBackend):
                 return count
             
             # 简单的模式匹配（支持*通配符）
-            import fnmatch
             keys_to_delete = [key for key in self._cache.keys() 
                             if fnmatch.fnmatch(key, pattern)]
             

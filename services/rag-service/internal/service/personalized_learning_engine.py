@@ -1,3 +1,17 @@
+"""
+personalized_learning_engine - 索克生活项目模块
+"""
+
+from ..observability.metrics import MetricsCollector
+from ..observability.tracing import trace_operation, SpanKind
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from loguru import logger
+from sklearn.feature_extraction.text import TfidfVectorizer
+from typing import Dict, List, Any, Optional, Tuple, Union, Set
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,16 +19,7 @@
 个性化学习引擎 - 提供自适应学习、知识图谱构建、学习路径规划
 """
 
-import time
-from typing import Dict, List, Any, Optional, Tuple, Union, Set
-from dataclasses import dataclass, field
-from enum import Enum
-from datetime import datetime, timedelta
-from loguru import logger
-from sklearn.feature_extraction.text import TfidfVectorizer
 
-from ..observability.metrics import MetricsCollector
-from ..observability.tracing import trace_operation, SpanKind
 
 class LearningObjectiveType(str, Enum):
     """学习目标类型"""

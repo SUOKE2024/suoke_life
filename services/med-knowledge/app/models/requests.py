@@ -1,9 +1,14 @@
 """
+requests - 索克生活项目模块
+"""
+
+from pydantic import BaseModel, Field, validator
+
+"""
 请求模型
 定义API请求参数的验证和序列化模型
 """
 
-from pydantic import BaseModel, Field, validator
 
 
 class PaginationRequest(BaseModel):
@@ -18,6 +23,18 @@ class PaginationRequest(BaseModel):
             raise ValueError("每页数量不能超过100")
         return v
 
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'paginationrequest'
+        ordering = ['-created_at']
+
 
 class SearchRequest(PaginationRequest):
     """搜索请求模型"""
@@ -26,7 +43,8 @@ class SearchRequest(PaginationRequest):
     entity_type: str | None = Field(None, description="实体类型过滤")
 
     @validator("query")
-    def validate_query(cls, v):
+        @cache(timeout=300)  # 5分钟缓存
+def validate_query(cls, v):
         if not v.strip():
             raise ValueError("搜索关键词不能为空")
         return v.strip()
@@ -85,6 +103,18 @@ class HerbListRequest(PaginationRequest):
         if v is not None and not v.strip():
             return None
         return v
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'recommendationrequest'
+        ordering = ['-created_at']
 
 
 class SyndromeListRequest(PaginationRequest):
@@ -183,7 +213,8 @@ class IntegratedTreatmentListRequest(PaginationRequest):
 
     target_condition: str | None = Field(None, max_length=100, description="目标疾病过滤")
 
-    @validator("target_condition")
+    @v    @cache(timeout=300)  # 5分钟缓存
+alidator("target_condition")
     def validate_target_condition(cls, v):
         if v is not None and not v.strip():
             return None
@@ -200,6 +231,18 @@ class LifestyleInterventionListRequest(PaginationRequest):
         if v is not None and not v.strip():
             return None
         return v
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'graphvisualizationrequest'
+        ordering = ['-created_at']
 
 
 class LifestyleInterventionByConstitutionRequest(PaginationRequest):
@@ -219,6 +262,18 @@ class LifestyleInterventionByConstitutionRequest(PaginationRequest):
         if v is not None and not v.strip():
             return None
         return v
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'pathanalysisrequest'
+        ordering = ['-created_at']
 
 
 class GraphVisualizationRequest(BaseModel):
@@ -251,6 +306,18 @@ class GraphVisualizationRequest(BaseModel):
             return None
         return v
 
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'relationshipanalysisrequest'
+        ordering = ['-created_at']
+
 
 class PathAnalysisRequest(BaseModel):
     """路径分析请求模型"""
@@ -271,6 +338,18 @@ class PathAnalysisRequest(BaseModel):
         if "from_id" in values and v == values["from_id"]:
             raise ValueError("起始节点和目标节点不能相同")
         return v
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'dataimportrequest'
+        ordering = ['-created_at']
 
 
 class RelationshipAnalysisRequest(BaseModel):

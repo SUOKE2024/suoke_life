@@ -1,17 +1,22 @@
 """
+config - 索克生活项目模块
+"""
+
+    from pydantic import BaseSettings
+    from pydantic_settings import BaseSettings
+from functools import lru_cache
+from typing import Any
+import os
+import yaml
+
+"""
 Configuration Management
 """
 
-import os
-from functools import lru_cache
-from typing import Any
 
-import yaml
 
 try:
-    from pydantic_settings import BaseSettings
 except ImportError:
-    from pydantic import BaseSettings
 
 
 class AppConfig(BaseSettings):

@@ -1,11 +1,16 @@
+"""
+fix_pydantic - 索克生活项目模块
+"""
+
+from pathlib import Path
+import os
+import re
+
 #!/usr/bin/env python3
 """
 批量修复 Pydantic v2 弃用语法的脚本
 """
 
-import os
-import re
-from pathlib import Path
 
 def fix_pydantic_file(file_path):
     """修复单个文件中的 Pydantic 弃用语法"""

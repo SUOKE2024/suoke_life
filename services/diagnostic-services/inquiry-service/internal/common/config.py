@@ -1,17 +1,22 @@
+"""
+config - 索克生活项目模块
+"""
+
+from .exceptions import ConfigurationError
+from dataclasses import dataclass, field
+from typing import Any
+import logging
+import os
+import yaml
+
 #!/usr/bin/env python
 
 """
 配置管理模块
 """
 
-from dataclasses import dataclass, field
-import logging
-import os
-from typing import Any
 
-import yaml
 
-from .exceptions import ConfigurationError
 
 
 @dataclass

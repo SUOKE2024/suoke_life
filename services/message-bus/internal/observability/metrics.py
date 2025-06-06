@@ -1,13 +1,19 @@
 """
+metrics - 索克生活项目模块
+"""
+
+            import psutil
+from config.settings import Settings
+from prometheus_client import Counter, Histogram, Gauge, Summary, start_http_server, REGISTRY, Info
+from typing import Dict, Callable, Any, Optional
+import asyncio
+import logging
+import threading
+
+"""
 指标收集模块，提供Prometheus指标采集功能
 """
-import logging
-import asyncio
-import threading
-from typing import Dict, Callable, Any, Optional
-from prometheus_client import Counter, Histogram, Gauge, Summary, start_http_server, REGISTRY, Info
 
-from config.settings import Settings
 
 logger = logging.getLogger(__name__)
 
@@ -380,7 +386,6 @@ class MetricsService:
             return
         
         try:
-            import psutil
             
             while self.running:
                 try:

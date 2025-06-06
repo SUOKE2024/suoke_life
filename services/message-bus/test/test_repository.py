@@ -1,22 +1,27 @@
 """
+test_repository - 索克生活项目模块
+"""
+
+    from aiokafka.errors import KafkaError
+from config.settings import Settings
+from internal.model.message import Message
+from internal.model.topic import Topic
+from internal.repository.message_repository import KafkaMessageRepository
+from internal.repository.topic_repository import TopicRepository
+from unittest.mock import AsyncMock, MagicMock, patch
+import asyncio
+import pytest
+
+"""
 存储库层单元测试
 """
 
-import pytest
-import asyncio
-from unittest.mock import AsyncMock, MagicMock, patch
 try:
-    from aiokafka.errors import KafkaError
 except ImportError:
     # 模拟KafkaError用于测试
     class KafkaError(Exception):
         pass
 
-from internal.repository.message_repository import KafkaMessageRepository
-from internal.repository.topic_repository import TopicRepository
-from internal.model.message import Message
-from internal.model.topic import Topic
-from config.settings import Settings
 
 
 @pytest.fixture

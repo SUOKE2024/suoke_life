@@ -1,13 +1,18 @@
-"""基准测试引擎单元测试"""
+"""
+test_benchmark_service - 索克生活项目模块
+"""
 
-import asyncio
-import pytest
-from unittest.mock import Mock, patch, AsyncMock
 from datetime import datetime
-
 from internal.benchmark.benchmark_service import BenchmarkExecutor, BenchmarkTask, BenchmarkResult
 from internal.benchmark.model_interface import ModelInterface, ModelPrediction
 from internal.suokebench.config import BenchConfig
+from unittest.mock import Mock, patch, AsyncMock
+import asyncio
+import pytest
+
+"""基准测试引擎单元测试"""
+
+
 
 
 @pytest.fixture

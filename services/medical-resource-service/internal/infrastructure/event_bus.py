@@ -1,18 +1,23 @@
 """
-事件总线模块
-支持异步事件发布订阅、事件持久化、重试机制等功能
+event_bus - 索克生活项目模块
 """
 
-import asyncio
-import json
-import uuid
 from abc import ABC, abstractmethod
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, Union
-
+import asyncio
+import json
 import structlog
+import uuid
+
+"""
+事件总线模块
+支持异步事件发布订阅、事件持久化、重试机制等功能
+"""
+
+
 
 logger = structlog.get_logger(__name__)
 

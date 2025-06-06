@@ -1,6 +1,6 @@
-import React from "react";
 import { SoerAgentImpl, soerAgent } from "../SoerAgent";
-import { performance } from "perf_hooks";
+
+import React from "react";
 
 describe("SoerAgent", () => {
   beforeEach(() => {
@@ -10,26 +10,25 @@ describe("SoerAgent", () => {
   describe("SoerAgentImpl", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-      const result = SoerAgentImpl(/* valid params */);
+      const result = SoerAgentImpl(// valid params);
       expect(result).toBeDefined();
     });
 
     it("should handle edge cases", () => {
       // Add test cases
-      const result = SoerAgentImpl(/* edge case params */);
+      const result = SoerAgentImpl(// edge case params);
       expect(result).toBeDefined();
     });
 
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
       expect(() => {
-        SoerAgentImpl(/* invalid params */);
+        SoerAgentImpl(// invalid params);
       }).not.toThrow();
     });
 
-    it("should return correct output format", () => {
-      // Add test cases
-      const result = SoerAgentImpl(/* test params */);
+    it("should return correct output format", () => {// Add test cases;
+      const result = SoerAgentImpl(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
@@ -37,26 +36,25 @@ describe("SoerAgent", () => {
   describe("soerAgent", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-      const result = soerAgent(/* valid params */);
+      const result = soerAgent(// valid params);
       expect(result).toBeDefined();
     });
 
     it("should handle edge cases", () => {
       // Add test cases
-      const result = soerAgent(/* edge case params */);
+      const result = soerAgent(// edge case params);
       expect(result).toBeDefined();
     });
 
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
       expect(() => {
-        soerAgent(/* invalid params */);
+        soerAgent(// invalid params);
       }).not.toThrow();
     });
 
-    it("should return correct output format", () => {
-      // Add test cases
-      const result = soerAgent(/* test params */);
+    it("should return correct output format", () => {// Add test cases;
+      const result = soerAgent(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
@@ -68,8 +66,8 @@ describe("SoerAgent Performance Tests", () => {
     const startTime = performance.now();
     for (let i = 0; i < iterations; i++) {
       // Execute performance-critical functions
-      SoerAgentImpl(/* test params */);
-      soerAgent(/* test params */);
+      SoerAgentImpl(// test params);
+      soerAgent(// test params);
     }
     const endTime = performance.now();
     const averageTime = (endTime - startTime) / iterations;
@@ -91,7 +89,7 @@ describe("SoerAgent Performance Tests", () => {
     const initialMemory = process.memoryUsage().heapUsed;
     // Execute function multiple times
     for (let i = 0; i < 1000; i++) {
-      SoerAgentImpl(/* test params */);
+      SoerAgentImpl(// test params);
     }
     // Force garbage collection if available
     if (global.gc) {

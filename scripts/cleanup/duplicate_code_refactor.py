@@ -1,16 +1,21 @@
+"""
+duplicate_code_refactor - 索克生活项目模块
+"""
+
+from collections import defaultdict
+from pathlib import Path
+from typing import List, Dict, Set, Tuple
+import difflib
+import hashlib
+import os
+import re
+
 #!/usr/bin/env python3
 """
 索克生活项目重复代码检测和重构脚本
 检测并重构重复代码，提取公共函数和组件
 """
 
-import os
-import re
-import hashlib
-from pathlib import Path
-from typing import List, Dict, Set, Tuple
-from collections import defaultdict
-import difflib
 
 class DuplicateCodeRefactor:
     def __init__(self, project_root: str):

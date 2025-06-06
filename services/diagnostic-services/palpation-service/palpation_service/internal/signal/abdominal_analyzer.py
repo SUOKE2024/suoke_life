@@ -1,3 +1,11 @@
+"""
+abdominal_analyzer - 索克生活项目模块
+"""
+
+from internal.model.palpation_models import (
+from typing import Any
+import logging
+
 #!/usr/bin/env python
 
 """
@@ -5,10 +13,7 @@
 负责分析腹部触诊数据，评估腹部各区域状态
 """
 
-import logging
-from typing import Any
 
-from internal.model.palpation_models import (
     AbdominalFinding,
     AbdominalRegion,
     AbdominalRegionData,

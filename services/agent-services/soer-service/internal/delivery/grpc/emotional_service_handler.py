@@ -1,18 +1,24 @@
+"""
+emotional_service_handler - 索克生活项目模块
+"""
+
+        from api.grpc import soer_service_pb2
+from datetime import datetime
+from google.protobuf.timestamp_pb2 import Timestamp
+from internal.lifecycle.emotional_analyzer.emotional_service import EmotionalService
+from typing import Any
+import logging
+import time
+import uuid
+
 #!/usr/bin/env python3
 """
 情绪分析服务gRPC处理器
 处理情绪分析相关的gRPC请求
 """
 
-import logging
-import time
-import uuid
-from datetime import datetime
-from typing import Any
 
-from google.protobuf.timestamp_pb2 import Timestamp
 
-from internal.lifecycle.emotional_analyzer.emotional_service import EmotionalService
 
 logger = logging.getLogger(__name__)
 
@@ -164,7 +170,6 @@ class EmotionalServiceHandler:
 
     def _create_emotional_state_response(self, user_id: str, analysis_result: dict[str, Any]):
         """创建情绪状态响应"""
-        from api.grpc import soer_service_pb2
 
         response = soer_service_pb2.EmotionalStateResponse()
         response.user_id = user_id
@@ -207,7 +212,6 @@ class EmotionalServiceHandler:
     def _create_mock_emotional_history_response(self, user_id: str, start_date: datetime,
                                               end_date: datetime, emotion_type: str):
         """创建模拟情绪历史响应"""
-        from api.grpc import soer_service_pb2
 
         response = soer_service_pb2.EmotionalHistoryResponse()
         response.user_id = user_id
@@ -254,7 +258,6 @@ class EmotionalServiceHandler:
 
     def _create_mock_emotional_insights_response(self, user_id: str, lookback_days: int):
         """创建模拟情绪洞察响应"""
-        from api.grpc import soer_service_pb2
 
         response = soer_service_pb2.EmotionalInsightsResponse()
         response.user_id = user_id

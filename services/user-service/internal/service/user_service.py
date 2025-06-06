@@ -1,23 +1,29 @@
 """
+user_service - 索克生活项目模块
+"""
+
+from datetime import datetime, timezone
+from internal.model.user import (BindDeviceRequest, BindDeviceResponse,
+from internal.repository.exceptions import (DatabaseError, DeviceAlreadyBoundError,
+from passlib.hash import pbkdf2_sha256
+from typing import Any, Dict, List, Optional, Tuple
+from typing import Protocol, Union, TypeVar
+from uuid import UUID
+import logging
+
+"""
 用户服务实现模块
 
 该模块实现了用户服务的核心业务逻辑。
 """
-import logging
-from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional, Tuple
-from uuid import UUID
 
-from passlib.hash import pbkdf2_sha256
 
-from internal.model.user import (BindDeviceRequest, BindDeviceResponse,
                           ConstitutionType, CreateUserRequest, DeviceInfo,
                           HealthMetric, UpdateUserPreferencesRequest,
                           UpdateUserRequest, User, UserDevicesResponse,
                           UserHealthSummary, UserHealthSummaryResponse,
                           UserResponse, UserRole, UserStatus, VerifyUserRequest,
                           VerifyUserResponse)
-from internal.repository.exceptions import (DatabaseError, DeviceAlreadyBoundError,
                                      DeviceNotFoundError,
                                      UserAlreadyExistsError,
                                      UserNotFoundError)
@@ -25,7 +31,6 @@ from internal.repository.exceptions import (DatabaseError, DeviceAlreadyBoundErr
 logger = logging.getLogger(__name__)
 
 # 定义用户仓库接口协议
-from typing import Protocol, Union, TypeVar
 
 class UserRepositoryProtocol(Protocol):
     """用户数据仓库协议，定义了用户仓库必须实现的方法"""

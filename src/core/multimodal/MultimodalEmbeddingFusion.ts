@@ -1,14 +1,14 @@
-import { EventEmitter } from "events";
+import { EventEmitter } from 'events';
 
 /**
  * 模态类型枚举
  */
 export enum ModalityType {
-  TEXT = "text",
-  TONGUE_IMAGE = "tongue_image",
-  PULSE_SIGNAL = "pulse_signal",
-  AUDIO = "audio",
-  IMAGE = "image",
+  TEXT = 'text',
+  TONGUE_IMAGE = 'tongue_image',
+  PULSE_SIGNAL = 'pulse_signal',
+  AUDIO = 'audio',
+  IMAGE = 'image'
 }
 
 /**
@@ -27,11 +27,7 @@ export interface Embedding {
 export interface FusionStrategy {
   name: string;
   weights: Record<ModalityType, number>;
-  method:
-    | "concatenation"
-    | "attention"
-    | "weighted_sum"
-    | "cross_modal_attention";
+  method: 'concatenation' | 'attention' | 'weighted_sum' | 'cross_modal_attention';
   parameters?: Record<string, any>;
 }
 
@@ -69,7 +65,7 @@ class CrossModalAttention {
     values: number[][]
   ): { weights: number[]; output: number[] } {
     // 计算注意力分数
-    const scores = keys.map((key) => this.dotProduct(query, key));
+    const scores = keys.map(key => this.dotProduct(query, key));
     // Softmax归一化
     const weights = this.softmax(scores);
     // 加权求和
@@ -83,9 +79,9 @@ class CrossModalAttention {
 
   private softmax(scores: number[]): number[] {
     const maxScore = Math.max(...scores);
-    const expScores = scores.map((score) => Math.exp(score - maxScore));
+    const expScores = scores.map(score => Math.exp(score - maxScore));
     const sumExp = expScores.reduce((sum, exp) => sum + exp, 0);
-    return expScores.map((exp) => exp / sumExp);
+    return expScores.map(exp => exp / sumExp);
   }
 
   private weightedSum(vectors: number[][], weights: number[]): number[] {
@@ -124,45 +120,45 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
   private initializeDefaultStrategies(): void {
     // 中医诊断策略：重视舌象和脉象
     this.addStrategy({
-      name: "tcm_diagnosis",
+      name: 'tcm_diagnosis',
       weights: {
         [ModalityType.TEXT]: 0.3,
         [ModalityType.TONGUE_IMAGE]: 0.35,
         [ModalityType.PULSE_SIGNAL]: 0.35,
         [ModalityType.AUDIO]: 0.0,
-        [ModalityType.IMAGE]: 0.0,
+        [ModalityType.IMAGE]: 0.0
       },
-      method: "cross_modal_attention",
+      method: 'cross_modal_attention',
       parameters: {
         temperature: 0.1,
-        dropout: 0.1,
-      },
+        dropout: 0.1
+      }
     });
 
     // 综合诊断策略：平衡各模态
     this.addStrategy({
-      name: "comprehensive_diagnosis",
+      name: 'comprehensive_diagnosis',
       weights: {
         [ModalityType.TEXT]: 0.4,
         [ModalityType.TONGUE_IMAGE]: 0.2,
         [ModalityType.PULSE_SIGNAL]: 0.2,
         [ModalityType.AUDIO]: 0.1,
-        [ModalityType.IMAGE]: 0.1,
+        [ModalityType.IMAGE]: 0.1
       },
-      method: "weighted_sum",
+      method: 'weighted_sum'
     });
 
     // 文本主导策略：主要基于文本描述
     this.addStrategy({
-      name: "text_dominant",
+      name: 'text_dominant',
       weights: {
         [ModalityType.TEXT]: 0.7,
         [ModalityType.TONGUE_IMAGE]: 0.15,
         [ModalityType.PULSE_SIGNAL]: 0.15,
         [ModalityType.AUDIO]: 0.0,
-        [ModalityType.IMAGE]: 0.0,
+        [ModalityType.IMAGE]: 0.0
       },
-      method: "concatenation",
+      method: 'concatenation'
     });
   }
 
@@ -171,7 +167,7 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
    */
   addStrategy(strategy: FusionStrategy): void {
     this.strategies.set(strategy.name, strategy);
-    this.emit("strategyAdded", strategy);
+    this.emit('strategyAdded', strategy);
   }
 
   /**
@@ -179,7 +175,7 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
    */
   async fuseEmbeddings(
     embeddings: Embedding[],
-    strategyName: string = "tcm_diagnosis"
+    strategyName: string = 'tcm_diagnosis'
   ): Promise<FusionResult> {
     const cacheKey = this.generateCacheKey(embeddings, strategyName);
 
@@ -199,29 +195,26 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
       [ModalityType.TONGUE_IMAGE]: 0,
       [ModalityType.PULSE_SIGNAL]: 0,
       [ModalityType.AUDIO]: 0,
-      [ModalityType.IMAGE]: 0,
+      [ModalityType.IMAGE]: 0
     };
 
     // 根据策略选择融合方法
     switch (strategy.method) {
-      case "concatenation":
+      case 'concatenation':
         fusedEmbedding = this.concatenationFusion(embeddings, strategy);
         modalityWeights = strategy.weights;
         break;
-      case "weighted_sum":
+      case 'weighted_sum':
         fusedEmbedding = this.weightedSumFusion(embeddings, strategy);
         modalityWeights = strategy.weights;
         break;
-      case "attention":
+      case 'attention':
         const attentionResult = this.attentionFusion(embeddings, strategy);
         fusedEmbedding = attentionResult.embedding;
         modalityWeights = attentionResult.weights;
         break;
-      case "cross_modal_attention":
-        const crossModalResult = this.crossModalAttentionFusion(
-          embeddings,
-          strategy
-        );
+      case 'cross_modal_attention':
+        const crossModalResult = this.crossModalAttentionFusion(embeddings, strategy);
         fusedEmbedding = crossModalResult.embedding;
         modalityWeights = crossModalResult.weights;
         break;
@@ -230,10 +223,7 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
     }
 
     // 计算融合置信度
-    const confidence = this.calculateFusionConfidence(
-      embeddings,
-      modalityWeights
-    );
+    const confidence = this.calculateFusionConfidence(embeddings, modalityWeights);
 
     const result: FusionResult = {
       fusedEmbedding,
@@ -241,15 +231,15 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
       confidence,
       strategy: strategyName,
       metadata: {
-        inputModalities: embeddings.map((e) => e.modality),
+        inputModalities: embeddings.map(e => e.modality),
         fusionMethod: strategy.method,
-        timestamp: Date.now(),
-      },
+        timestamp: Date.now();
+      }
     };
 
     // 缓存结果
     this.fusionCache.set(cacheKey, result);
-    this.emit("fusionCompleted", result);
+    this.emit('fusionCompleted', result);
 
     return result;
   }
@@ -257,21 +247,17 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
   /**
    * 拼接融合
    */
-  private concatenationFusion(
-    embeddings: Embedding[],
-    strategy: FusionStrategy
-  ): number[] {
-    return embeddings.flatMap((embedding) => embedding.vector);
+  private concatenationFusion(embeddings: Embedding[], strategy: FusionStrategy): number[] {
+    return embeddings.flatMap(embedding => embedding.vector);
   }
 
   /**
    * 加权求和融合
    */
-  private weightedSumFusion(
-    embeddings: Embedding[],
-    strategy: FusionStrategy
-  ): number[] {
-    if (embeddings.length === 0) {return [];}
+  private weightedSumFusion(embeddings: Embedding[], strategy: FusionStrategy): number[] {
+    if (embeddings.length === 0) {
+      return [];
+    }
 
     const dimension = embeddings[0].vector.length;
     const result = new Array(dimension).fill(0);
@@ -294,28 +280,17 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
     strategy: FusionStrategy
   ): { embedding: number[]; weights: Record<ModalityType, number> } {
     if (embeddings.length === 0) {
-      return {
-        embedding: [],
-        weights: {
-          [ModalityType.TEXT]: 0,
-          [ModalityType.TONGUE_IMAGE]: 0,
-          [ModalityType.PULSE_SIGNAL]: 0,
-          [ModalityType.AUDIO]: 0,
-          [ModalityType.IMAGE]: 0,
-        },
+      return {embedding: [],weights: {[ModalityType.TEXT]: 0,[ModalityType.TONGUE_IMAGE]: 0,[ModalityType.PULSE_SIGNAL]: 0,[ModalityType.AUDIO]: 0,[ModalityType.IMAGE]: 0;
+        };
       };
     }
 
     // 使用第一个嵌入作为查询
     const query = embeddings[0].vector;
-    const keys = embeddings.map((e) => e.vector);
-    const values = embeddings.map((e) => e.vector);
+    const keys = embeddings.map(e => e.vector);
+    const values = embeddings.map(e => e.vector);
 
-    const { weights, output } = this.crossModalAttention.computeAttention(
-      query,
-      keys,
-      values
-    );
+    const { weights, output } = this.crossModalAttention.computeAttention(query, keys, values);
 
     const modalityWeights: Record<ModalityType, number> = {};
     embeddings.forEach((embedding, index) => {
@@ -343,7 +318,9 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
     embeddings: Embedding[],
     modalityWeights: Record<ModalityType, number>
   ): number {
-    if (embeddings.length === 0) {return 0;}
+    if (embeddings.length === 0) {
+      return 0;
+    }
 
     // 基于模态权重和嵌入向量的统计特性计算置信度
     let totalWeight = 0;
@@ -351,9 +328,7 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
 
     for (const embedding of embeddings) {
       const weight = modalityWeights[embedding.modality] || 0;
-      const vectorMagnitude = Math.sqrt(
-        embedding.vector.reduce((sum, val) => sum + val * val, 0)
-      );
+      const vectorMagnitude = Math.sqrt(embedding.vector.reduce((sum, val) => sum + val * val, 0));
       const normalizedMagnitude = Math.min(vectorMagnitude / 10, 1);
 
       totalWeight += weight;
@@ -366,14 +341,11 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
   /**
    * 生成缓存键
    */
-  private generateCacheKey(
-    embeddings: Embedding[],
-    strategyName: string
-  ): string {
-    const embeddingIds = embeddings
-      .map((e) => e.id)
-      .sort()
-      .join(",");
+  private generateCacheKey(embeddings: Embedding[], strategyName: string): string {
+    const embeddingIds = embeddings;
+      .map(e => e.id);
+      .sort();
+      .join(',');
     return `${strategyName}_${embeddingIds}`;
   }
 
@@ -383,7 +355,7 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
   clearCache(): void {
     this.embeddingCache.clear();
     this.fusionCache.clear();
-    this.emit("cacheCleared");
+    this.emit('cacheCleared');
   }
 
   /**

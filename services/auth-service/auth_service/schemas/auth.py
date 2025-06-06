@@ -1,9 +1,14 @@
-"""认证相关的API数据传输对象"""
+"""
+auth - 索克生活项目模块
+"""
 
 from datetime import datetime
+from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
 
-from pydantic import BaseModel, EmailStr, Field
+"""认证相关的API数据传输对象"""
+
+
 
 
 class LoginRequest(BaseModel):

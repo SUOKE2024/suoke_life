@@ -1,11 +1,16 @@
-"""Security middleware for HTTP security headers."""
+"""
+security - 索克生活项目模块
+"""
 
+from ..core.logging import get_logger
 from collections.abc import Awaitable, Callable
-
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from ..core.logging import get_logger
+"""Security middleware for HTTP security headers."""
+
+
+
 
 logger = get_logger(__name__)
 

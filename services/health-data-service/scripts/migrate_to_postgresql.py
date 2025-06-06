@@ -1,3 +1,19 @@
+"""
+migrate_to_postgresql - 索克生活项目模块
+"""
+
+        from ..internal.model.database import Base
+    import argparse
+from loguru import logger
+from psycopg2.extras import RealDictCursor
+from sqlalchemy.ext.asyncio import create_async_engine
+import asyncio
+import os
+import psycopg2
+import sqlite3
+import sys
+import yaml
+
 #!/usr/bin/env python
 
 """
@@ -5,16 +21,7 @@
 用于将健康数据服务的数据从SQLite数据库迁移到PostgreSQL数据库
 """
 
-import asyncio
-import os
-import sqlite3
-import sys
 
-import psycopg2
-import yaml
-from loguru import logger
-from psycopg2.extras import RealDictCursor
-from sqlalchemy.ext.asyncio import create_async_engine
 
 
 class DatabaseMigrator:
@@ -116,7 +123,6 @@ class DatabaseMigrator:
         logger.info("创建PostgreSQL表结构...")
 
         # 使用SQLAlchemy创建表
-        from ..internal.model.database import Base
 
         pg_url = f"postgresql+asyncpg://{self.pg_config['user']}:{self.pg_config['password']}@{self.pg_config['host']}:{self.pg_config['port']}/{self.pg_config['database']}"
 
@@ -371,7 +377,6 @@ class DatabaseMigrator:
 
 async def main():
     """主函数"""
-    import argparse
 
     parser = argparse.ArgumentParser(description="健康数据服务数据库迁移工具")
     parser.add_argument(

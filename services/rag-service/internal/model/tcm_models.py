@@ -1,3 +1,12 @@
+"""
+tcm_models - 索克生活项目模块
+"""
+
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import List, Dict, Any, Optional
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,10 +14,6 @@
 中医数据模型 - 定义中医相关的数据结构
 """
 
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import List, Dict, Any, Optional
-from datetime import datetime
 
 
 class ConstitutionType(Enum):

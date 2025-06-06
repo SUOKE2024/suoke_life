@@ -1,15 +1,20 @@
+"""
+deploy_check - 索克生活项目模块
+"""
+
+from datetime import datetime
+from pathlib import Path
+import asyncio
+import importlib.util
+import json
+import sys
+
 #!/usr/bin/env python3
 """
 部署验证脚本
 验证医疗资源服务的部署状态和功能完整性
 """
 
-import asyncio
-import sys
-import json
-from pathlib import Path
-from datetime import datetime
-import importlib.util
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent

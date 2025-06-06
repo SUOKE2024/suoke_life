@@ -1,3 +1,17 @@
+"""
+settings - 索克生活项目模块
+"""
+
+                    import json
+    import json
+from loguru import logger
+from pathlib import Path
+from pydantic import BaseSettings, Field, validator
+from pydantic.env_settings import SettingsSourceCallable
+from typing import Dict, Any, Optional, List, Union
+import os
+import yaml
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,13 +20,6 @@ RAG服务配置管理
 支持多环境配置、动态配置更新和配置验证
 """
 
-import os
-import yaml
-from pathlib import Path
-from typing import Dict, Any, Optional, List, Union
-from pydantic import BaseSettings, Field, validator
-from pydantic.env_settings import SettingsSourceCallable
-from loguru import logger
 
 
 class DatabaseConfig(BaseSettings):
@@ -273,7 +280,6 @@ class Settings(BaseSettings):
                 if config_path.suffix.lower() in ['.yml', '.yaml']:
                     config_data = yaml.safe_load(f)
                 else:
-                    import json
                     config_data = json.load(f)
             
             # 更新配置
@@ -305,7 +311,6 @@ class Settings(BaseSettings):
                 if config_path.suffix.lower() in ['.yml', '.yaml']:
                     yaml.dump(config_data, f, default_flow_style=False, allow_unicode=True)
                 else:
-                    import json
                     json.dump(config_data, f, indent=2, ensure_ascii=False)
             
             logger.info(f"配置已保存到: {config_file}")
@@ -435,5 +440,4 @@ if __name__ == "__main__":
     # 测试配置
     settings = get_settings()
     print("配置摘要:")
-    import json
     print(json.dumps(settings.get_config_summary(), indent=2, ensure_ascii=False)) 

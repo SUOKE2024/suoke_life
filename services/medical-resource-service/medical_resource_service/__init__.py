@@ -1,3 +1,4 @@
+
 """
 medical-resource-service - 索克生活平台微服务
 """

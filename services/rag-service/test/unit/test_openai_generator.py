@@ -1,3 +1,14 @@
+"""
+test_openai_generator - 索克生活项目模块
+"""
+
+from services.rag_service.internal.generator.openai_generator import OpenAIGenerator
+from services.rag_service.internal.model.document import Document, DocumentReference, GenerateResult
+from unittest.mock import AsyncMock, MagicMock, patch
+import json
+import pytest
+import unittest
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,13 +16,7 @@
 OpenAI生成器单元测试
 """
 
-import unittest
-from unittest.mock import AsyncMock, MagicMock, patch
-import pytest
-import json
 
-from services.rag_service.internal.generator.openai_generator import OpenAIGenerator
-from services.rag_service.internal.model.document import Document, DocumentReference, GenerateResult
 
 
 class TestOpenAIGenerator(unittest.TestCase):

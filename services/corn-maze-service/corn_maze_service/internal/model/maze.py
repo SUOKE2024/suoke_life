@@ -1,15 +1,20 @@
 """
+maze - 索克生活项目模块
+"""
+
+from datetime import UTC, datetime
+from enum import Enum
+from pydantic import BaseModel, Field, field_validator
+from typing import Any
+from uuid import UUID, uuid4
+
+"""
 迷宫数据模型
 
 定义迷宫相关的数据结构和业务模型。
 """
 
-from datetime import UTC, datetime
-from enum import Enum
-from typing import Any
-from uuid import UUID, uuid4
 
-from pydantic import BaseModel, Field, field_validator
 
 
 class MazeTheme(str, Enum):

@@ -1,17 +1,22 @@
 """
-数据库连接管理器
-支持PostgreSQL、Redis和MongoDB的统一连接管理
+database - 索克生活项目模块
 """
 
-import logging
 from contextlib import asynccontextmanager
-from typing import Any, Dict, Optional
-
-import aioredis
 from motor.motor_asyncio import AsyncIOMotorClient
 from sqlalchemy import MetaData
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import declarative_base
+from typing import Any, Dict, Optional
+import aioredis
+import logging
+
+"""
+数据库连接管理器
+支持PostgreSQL、Redis和MongoDB的统一连接管理
+"""
+
+
 
 logger = logging.getLogger(__name__)
 
@@ -156,7 +161,8 @@ class DatabaseManager:
             raise
 
     @asynccontextmanager
-    async def get_pg_session(self):
+    async     @cache(timeout=300)  # 5分钟缓存
+def get_pg_session(self):
         """获取PostgreSQL会话"""
         if not self.pg_session_factory:
             raise RuntimeError("PostgreSQL未初始化")
@@ -171,7 +177,8 @@ class DatabaseManager:
             finally:
                 await session.close()
 
-    @asynccontextmanager
+      @cache(timeout=300)  # 5分钟缓存
+  @asynccontextmanager
     async def get_redis(self):
         """获取Redis连接"""
         if not self.redis_pool:
@@ -179,7 +186,8 @@ class DatabaseManager:
 
         redis = aioredis.Redis(connection_pool=self.redis_pool)
         try:
-            yield redis
+                @cache(timeout=300)  # 5分钟缓存
+yield redis
         finally:
             await redis.close()
 

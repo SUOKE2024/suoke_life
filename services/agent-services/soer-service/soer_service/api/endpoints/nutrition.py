@@ -1,17 +1,22 @@
 """
+nutrition - 索克生活项目模块
+"""
+
+from ...core.monitoring import record_nutrition_analysis
+from ...models.nutrition import DietPlan, FoodItem, NutritionAnalysis
+from ...services.nutrition_service import NutritionService
+from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel
+from typing import Any
+
+"""
 营养分析 API 端点
 
 提供食物营养分析、膳食建议等功能
 """
 
-from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel
 
-from ...core.monitoring import record_nutrition_analysis
-from ...models.nutrition import DietPlan, FoodItem, NutritionAnalysis
-from ...services.nutrition_service import NutritionService
 
 router = APIRouter()
 

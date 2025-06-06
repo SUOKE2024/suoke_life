@@ -1,5 +1,5 @@
 """
-医疗资源微服务领域模型定义
+models - 索克生活项目模块
 """
 
 from dataclasses import dataclass, field
@@ -7,6 +7,11 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
 from uuid import uuid4
+
+"""
+医疗资源微服务领域模型定义
+"""
+
 
 
 class ResourceType(Enum):

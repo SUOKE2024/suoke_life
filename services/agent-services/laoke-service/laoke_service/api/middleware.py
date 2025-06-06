@@ -1,18 +1,24 @@
 """
+middleware - 索克生活项目模块
+"""
+
+            from fastapi import HTTPException
+from collections.abc import Awaitable, Callable
+from fastapi import Request, Response
+from laoke_service.core.logging import get_logger
+from prometheus_client import Counter, Gauge, Histogram
+from starlette.middleware.base import BaseHTTPMiddleware
+from typing import Any
+import time
+
+"""
 API 中间件模块
 
 提供日志记录、指标收集、错误处理等中间件
 """
 
-import time
-from collections.abc import Awaitable, Callable
-from typing import Any
 
-from fastapi import Request, Response
-from prometheus_client import Counter, Gauge, Histogram
-from starlette.middleware.base import BaseHTTPMiddleware
 
-from laoke_service.core.logging import get_logger
 
 # Prometheus 指标
 REQUEST_COUNT = Counter(
@@ -219,7 +225,6 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
                 current_count=current_count
             )
 
-            from fastapi import HTTPException
             raise HTTPException(
                 status_code=429,
                 detail="Rate limit exceeded. Please try again later."

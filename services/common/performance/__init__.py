@@ -1,17 +1,23 @@
+"""
+__init__ - 索克生活项目模块
+"""
+
+from .async_optimization import (
+from .cache_optimization import (
+from .db_optimization import (
+
 #!/usr/bin/env python3
 """
 性能优化模块
 提供异步处理、缓存、数据库查询等性能优化功能
 """
 
-from .async_optimization import (
     AsyncBatcher,
     ConnectionPoolConfig,
     ConnectionPoolManager,
     batch_process,
     get_pool_manager,
 )
-from .cache_optimization import (
     CacheInvalidator,
     CacheStats,
     CacheStrategy,
@@ -21,7 +27,6 @@ from .cache_optimization import (
     cached,
     get_cache,
 )
-from .db_optimization import (
     PreparedStatementCache,
     QueryBatcher,
     QueryOptimizer,

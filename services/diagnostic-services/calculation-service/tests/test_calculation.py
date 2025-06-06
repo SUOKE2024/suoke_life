@@ -1,14 +1,19 @@
 """
+test_calculation - 索克生活项目模块
+"""
+
+from calculation_service.core.algorithms.bagua.calculator import BaguaCalculator
+from calculation_service.core.algorithms.comprehensive_calculator import ComprehensiveCalculator
+from calculation_service.core.algorithms.constitution.calculator import ConstitutionCalculator
+from calculation_service.core.algorithms.wuyun_liuqi.calculator import WuyunLiuqiCalculator
+from calculation_service.core.algorithms.ziwu_liuzhu.calculator import ZiwuLiuzhuCalculator
+from datetime import datetime
+import pytest
+
+"""
 算诊功能测试
 """
 
-import pytest
-from datetime import datetime
-from calculation_service.core.algorithms.ziwu_liuzhu.calculator import ZiwuLiuzhuCalculator
-from calculation_service.core.algorithms.constitution.calculator import ConstitutionCalculator
-from calculation_service.core.algorithms.bagua.calculator import BaguaCalculator
-from calculation_service.core.algorithms.wuyun_liuqi.calculator import WuyunLiuqiCalculator
-from calculation_service.core.algorithms.comprehensive_calculator import ComprehensiveCalculator
 
 
 class TestZiwuLiuzhu:

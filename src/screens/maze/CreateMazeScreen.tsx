@@ -1,24 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
+import {import { SafeAreaView } from 'react-native-safe-area-context';
+const Icon = React.lazy(() => import('../../components/common/Icon'));
+import { colors } from '../../constants/theme';
+import { cornMazeService } from '../../services/cornMazeService';
+import {View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
   TextInput,
   Alert,
-  Switch,
+  Switch
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
-import Icon from '../../components/common/Icon';
-import { colors } from '../../constants/theme';
-import { cornMazeService } from '../../services/cornMazeService';
-import {
   MazeTheme,
   MazeDifficulty,
   MazeTemplate,
-  CreateMazeRequest,
+  CreateMazeRequest
 } from '../../types/maze';
 
 interface CreateMazeScreenProps {
@@ -42,40 +39,22 @@ const CreateMazeScreen: React.FC<CreateMazeScreenProps> = ({ navigation }) => {
       name: '健康之路',
       color: '#4CAF50',
       icon: 'heart-pulse',
-      description: '探索基础健康知识',
+      description: '探索基础健康知识'
     },
     [MazeTheme.NUTRITION_GARDEN]: {
       name: '营养花园',
-      color: '#FF9800',
-      icon: 'food-apple',
-      description: '学习营养学知识',
-    },
-    [MazeTheme.TCM_JOURNEY]: {
-      name: '中医之旅',
-      color: '#9C27B0',
-      icon: 'leaf',
-      description: '传统中医智慧',
-    },
-    [MazeTheme.BALANCED_LIFE]: {
-      name: '平衡生活',
-      color: '#2196F3',
-      icon: 'scale-balance',
-      description: '生活方式平衡',
-    },
+      color: '#FF9800',icon: 'food-apple',description: '学习营养学知识';
+    },[MazeTheme.TCM_JOURNEY]: {name: '中医之旅',color: '#9C27B0',icon: 'leaf',description: '传统中医智慧';
+    },[MazeTheme.BALANCED_LIFE]: {name: '平衡生活',color: '#2196F3',icon: 'scale-balance',description: '生活方式平衡';
+    };
   };
 
-  const difficultyConfig = {
-    [MazeDifficulty.EASY]: { name: '简单', color: '#4CAF50', description: '适合初学者' },
-    [MazeDifficulty.NORMAL]: { name: '普通', color: '#FF9800', description: '中等难度' },
-    [MazeDifficulty.HARD]: { name: '困难', color: '#F44336', description: '具有挑战性' },
-    [MazeDifficulty.EXPERT]: { name: '专家', color: '#9C27B0', description: '极具挑战性' },
+  const difficultyConfig = {[MazeDifficulty.EASY]: { name: '简单', color: '#4CAF50', description: '适合初学者' },[MazeDifficulty.NORMAL]: { name: '普通', color: '#FF9800', description: '中等难度' },[MazeDifficulty.HARD]: { name: '困难', color: '#F44336', description: '具有挑战性' },[MazeDifficulty.EXPERT]: { name: '专家', color: '#9C27B0', description: '极具挑战性' };
   };
 
   // 加载模板
   useEffect(() => {
-    const loadTemplates = async () => {
-      try {
-        const response = await cornMazeService.listMazeTemplates(undefined, undefined, 1, 50);
+    const loadTemplates = async () => {try {const response = await cornMazeService.listMazeTemplates(undefined, undefined, 1, 50);
         setTemplates(response.templates);
       } catch (error) {
         console.error('加载模板失败:', error);
@@ -88,9 +67,7 @@ const CreateMazeScreen: React.FC<CreateMazeScreenProps> = ({ navigation }) => {
   }, [useTemplate]);
 
   // 创建迷宫
-  const createMaze = async () => {
-    if (!name.trim()) {
-      Alert.alert('错误', '请输入迷宫名称');
+  const createMaze = async () => {if (!name.trim()) {Alert.alert('错误', '请输入迷宫名称');
       return;
     }
 
@@ -101,7 +78,7 @@ const CreateMazeScreen: React.FC<CreateMazeScreenProps> = ({ navigation }) => {
 
     try {
       setLoading(true);
-      
+
       const request: CreateMazeRequest = {
         name: name.trim(),
         description: description.trim() || undefined,
@@ -109,11 +86,11 @@ const CreateMazeScreen: React.FC<CreateMazeScreenProps> = ({ navigation }) => {
         difficulty,
         size: useTemplate ? undefined : size,
         useTemplate,
-        templateId: selectedTemplate?.templateId,
+        templateId: selectedTemplate?.templateId
       };
 
       const maze = await cornMazeService.createMaze(request);
-      
+
       Alert.alert(
         '创建成功',
         '迷宫已创建完成！',
@@ -124,8 +101,8 @@ const CreateMazeScreen: React.FC<CreateMazeScreenProps> = ({ navigation }) => {
             onPress: () => navigation.navigate('MazeGame', { 
               mazeId: maze.id, 
               userId: 'current-user' 
-            })
-          },
+            });
+          }
         ]
       );
     } catch (error) {
@@ -141,22 +118,21 @@ const CreateMazeScreen: React.FC<CreateMazeScreenProps> = ({ navigation }) => {
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>选择主题</Text>
       <View style={styles.optionGrid}>
-        {Object.entries(themeConfig).map(([key, config]) => (
-          <TouchableOpacity
-            key={key}
-            style={[
-              styles.optionCard,
-              theme === key && { borderColor: config.color, borderWidth: 2 }
-            ]}
-            onPress={() => setTheme(key as MazeTheme)}
-          >
-            <Icon name={config.icon} size={24} color={config.color} />
-            <Text style={styles.optionName}>{config.name}</Text>
-            <Text style={styles.optionDescription}>{config.description}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-    </View>
+        {Object.entries(themeConfig).map(([key, config]) => (;
+          <TouchableOpacity;
+            key={key};
+            style={[;
+              styles.optionCard,theme === key && { borderColor: config.color, borderWidth: 2 };
+            ]};
+            onPress={() => setTheme(key as MazeTheme)};
+          >;
+            <Icon name={config.icon} size={24} color={config.color} />;
+            <Text style={styles.optionName}>{config.name}</Text>;
+            <Text style={styles.optionDescription}>{config.description}</Text>;
+          </TouchableOpacity>;
+        ))};
+      </View>;
+    </View>;
   );
 
   // 渲染难度选择
@@ -164,27 +140,25 @@ const CreateMazeScreen: React.FC<CreateMazeScreenProps> = ({ navigation }) => {
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>选择难度</Text>
       <View style={styles.optionGrid}>
-        {Object.entries(difficultyConfig).map(([key, config]) => (
-          <TouchableOpacity
-            key={key}
-            style={[
-              styles.difficultyCard,
-              difficulty === key && { borderColor: config.color, borderWidth: 2 }
-            ]}
-            onPress={() => setDifficulty(key as MazeDifficulty)}
-          >
-            <View style={[styles.difficultyIndicator, { backgroundColor: config.color }]} />
-            <Text style={styles.difficultyName}>{config.name}</Text>
-            <Text style={styles.difficultyDescription}>{config.description}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-    </View>
+        {Object.entries(difficultyConfig).map(([key, config]) => (;
+          <TouchableOpacity;
+            key={key};
+            style={[;
+              styles.difficultyCard,difficulty === key && { borderColor: config.color, borderWidth: 2 };
+            ]};
+            onPress={() => setDifficulty(key as MazeDifficulty)};
+          >;
+            <View style={[styles.difficultyIndicator, { backgroundColor: config.color }]} />;
+            <Text style={styles.difficultyName}>{config.name}</Text>;
+            <Text style={styles.difficultyDescription}>{config.description}</Text>;
+          </TouchableOpacity>;
+        ))};
+      </View>;
+    </View>;
   );
 
   // 渲染模板选择
-  const renderTemplateSelector = () => {
-    if (!useTemplate) return null;
+  const renderTemplateSelector = () => {if (!useTemplate) return null;
 
     const filteredTemplates = templates.filter(t => t.mazeType === theme);
 
@@ -204,22 +178,22 @@ const CreateMazeScreen: React.FC<CreateMazeScreenProps> = ({ navigation }) => {
               >
                 <Text style={styles.templateName}>{template.name}</Text>
                 <Text style={styles.templateDescription}>{template.description}</Text>
-                <View style={styles.templateStats}>
-                  <Text style={styles.templateStat}>{template.sizeX}×{template.sizeY}</Text>
-                  <Text style={styles.templateStat}>{template.knowledgeNodeCount}知识点</Text>
-                </View>
-                {template.isPopular && (
-                  <View style={styles.popularBadge}>
-                    <Text style={styles.popularText}>热门</Text>
-                  </View>
-                )}
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        ) : (
-          <Text style={styles.noTemplatesText}>该主题暂无可用模板</Text>
-        )}
-      </View>
+                <View style={styles.templateStats}>;
+                  <Text style={styles.templateStat}>{template.sizeX}×{template.sizeY}</Text>;
+                  <Text style={styles.templateStat}>{template.knowledgeNodeCount}知识点</Text>;
+                </View>;
+                {template.isPopular && (;
+                  <View style={styles.popularBadge}>;
+                    <Text style={styles.popularText}>热门</Text>;
+                  </View>;
+                )};
+              </TouchableOpacity>;
+            ))};
+          </ScrollView>;
+        ) : (;
+          <Text style={styles.noTemplatesText}>该主题暂无可用模板</Text>;
+        )};
+      </View>;
     );
   };
 
@@ -234,10 +208,10 @@ const CreateMazeScreen: React.FC<CreateMazeScreenProps> = ({ navigation }) => {
       </View>
 
       <ScrollView style={styles.content}>
-        {/* 基本信息 */}
+        {// 基本信息}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>基本信息</Text>
-          
+
           <View style={styles.inputGroup}>
             <Text style={styles.inputLabel}>迷宫名称 *</Text>
             <TextInput
@@ -263,7 +237,7 @@ const CreateMazeScreen: React.FC<CreateMazeScreenProps> = ({ navigation }) => {
           </View>
         </View>
 
-        {/* 使用模板开关 */}
+        {// 使用模板开关}
         <View style={styles.section}>
           <View style={styles.switchRow}>
             <View>
@@ -281,16 +255,16 @@ const CreateMazeScreen: React.FC<CreateMazeScreenProps> = ({ navigation }) => {
           </View>
         </View>
 
-        {/* 主题选择 */}
+        {// 主题选择}
         {renderThemeSelector()}
 
-        {/* 难度选择 */}
+        {// 难度选择}
         {renderDifficultySelector()}
 
-        {/* 模板选择 */}
+        {// 模板选择}
         {renderTemplateSelector()}
 
-        {/* 自定义大小 */}
+        {// 自定义大小}
         {!useTemplate && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>迷宫大小</Text>
@@ -314,29 +288,29 @@ const CreateMazeScreen: React.FC<CreateMazeScreenProps> = ({ navigation }) => {
               ))}
             </View>
           </View>
-        )}
-      </ScrollView>
-
-      {/* 创建按钮 */}
-      <View style={styles.footer}>
-        <TouchableOpacity
-          style={[styles.createButton, loading && styles.disabledButton]}
-          onPress={createMaze}
-          disabled={loading}
-        >
-          <Text style={styles.createButtonText}>
-            {loading ? '创建中...' : '创建迷宫'}
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+        )};
+      </ScrollView>;
+;
+      {// 创建按钮};
+      <View style={styles.footer}>;
+        <TouchableOpacity;
+          style={[styles.createButton, loading && styles.disabledButton]};
+          onPress={createMaze};
+          disabled={loading};
+        >;
+          <Text style={styles.createButtonText}>;
+            {loading ? '创建中...' : '创建迷宫'};
+          </Text>;
+        </TouchableOpacity>;
+      </View>;
+    </SafeAreaView>;
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: colors.background
   },
   header: {
     flexDirection: 'row',
@@ -345,34 +319,34 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.border
   },
   title: {
     fontSize: 18,
     fontWeight: '600',
-    color: colors.text,
+    color: colors.text
   },
   content: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 20
   },
   section: {
-    marginVertical: 16,
+    marginVertical: 16
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: colors.text,
-    marginBottom: 12,
+    marginBottom: 12
   },
   inputGroup: {
-    marginBottom: 16,
+    marginBottom: 16
   },
   inputLabel: {
     fontSize: 14,
     fontWeight: '500',
     color: colors.text,
-    marginBottom: 8,
+    marginBottom: 8
   },
   textInput: {
     borderWidth: 1,
@@ -382,32 +356,32 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     fontSize: 16,
     color: colors.text,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.surface
   },
   textArea: {
     height: 80,
-    textAlignVertical: 'top',
+    textAlignVertical: 'top'
   },
   switchRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 8,
+    paddingVertical: 8
   },
   switchLabel: {
     fontSize: 16,
     fontWeight: '500',
-    color: colors.text,
+    color: colors.text
   },
   switchDescription: {
     fontSize: 14,
     color: colors.textSecondary,
-    marginTop: 2,
+    marginTop: 2
   },
   optionGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   optionCard: {
     width: '48%',
@@ -417,20 +391,20 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.border
   },
   optionName: {
     fontSize: 14,
     fontWeight: '600',
     color: colors.text,
     marginTop: 8,
-    textAlign: 'center',
+    textAlign: 'center'
   },
   optionDescription: {
     fontSize: 12,
     color: colors.textSecondary,
     marginTop: 4,
-    textAlign: 'center',
+    textAlign: 'center'
   },
   difficultyCard: {
     width: '48%',
@@ -439,23 +413,23 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.border
   },
   difficultyIndicator: {
     width: 20,
     height: 4,
     borderRadius: 2,
-    marginBottom: 8,
+    marginBottom: 8
   },
   difficultyName: {
     fontSize: 14,
     fontWeight: '600',
-    color: colors.text,
+    color: colors.text
   },
   difficultyDescription: {
     fontSize: 12,
     color: colors.textSecondary,
-    marginTop: 4,
+    marginTop: 4
   },
   templateCard: {
     width: 200,
@@ -464,30 +438,30 @@ const styles = StyleSheet.create({
     padding: 16,
     marginRight: 12,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.border
   },
   selectedTemplate: {
     borderColor: colors.primary,
-    borderWidth: 2,
+    borderWidth: 2
   },
   templateName: {
     fontSize: 14,
     fontWeight: '600',
-    color: colors.text,
+    color: colors.text
   },
   templateDescription: {
     fontSize: 12,
     color: colors.textSecondary,
     marginTop: 4,
-    lineHeight: 16,
+    lineHeight: 16
   },
   templateStats: {
-    marginTop: 8,
+    marginTop: 8
   },
   templateStat: {
     fontSize: 11,
     color: colors.textSecondary,
-    marginTop: 2,
+    marginTop: 2
   },
   popularBadge: {
     position: 'absolute',
@@ -496,22 +470,22 @@ const styles = StyleSheet.create({
     backgroundColor: colors.warning,
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: 8,
+    borderRadius: 8
   },
   popularText: {
     fontSize: 10,
     fontWeight: '600',
-    color: colors.white,
+    color: colors.white
   },
   noTemplatesText: {
     fontSize: 14,
     color: colors.textSecondary,
     textAlign: 'center',
-    paddingVertical: 20,
+    paddingVertical: 20
   },
   sizeSelector: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   sizeOption: {
     flex: 1,
@@ -521,41 +495,30 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.border
   },
   selectedSize: {
     borderColor: colors.primary,
-    backgroundColor: colors.primary + '20',
+    backgroundColor: colors.primary + '20'
   },
   sizeText: {
     fontSize: 14,
     fontWeight: '500',
-    color: colors.text,
+    color: colors.text
   },
   selectedSizeText: {
     color: colors.primary,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   footer: {
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderTopWidth: 1,
-    borderTopColor: colors.border,
-  },
-  createButton: {
-    backgroundColor: colors.primary,
-    borderRadius: 12,
-    paddingVertical: 16,
-    alignItems: 'center',
-  },
-  disabledButton: {
-    opacity: 0.6,
-  },
-  createButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.white,
-  },
+    borderTopColor: colors.border;
+  },createButton: {backgroundColor: colors.primary,borderRadius: 12,paddingVertical: 16,alignItems: 'center';
+  },disabledButton: {opacity: 0.6;
+  },createButtonText: {fontSize: 16,fontWeight: '600',color: colors.white;
+  };
 });
 
 export default CreateMazeScreen; 

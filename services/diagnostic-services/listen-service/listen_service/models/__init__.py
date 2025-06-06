@@ -1,22 +1,27 @@
 """
+__init__ - 索克生活项目模块
+"""
+
+from .audio_models import (
+from .emotion_models import (
+from .tcm_models import (
+
+"""
 数据模型定义
 
 包含音频分析请求/响应、特征数据结构、中医诊断模型等。
 """
 
-from .audio_models import (
     AudioAnalysisRequest,
     AudioAnalysisResponse,
     AudioMetadata,
     SoundFeatures,
     VoiceFeatures,
 )
-from .emotion_models import (
     EmotionAnalysis,
     EmotionScore,
     MoodState,
 )
-from .tcm_models import (
     ConstitutionType,
     EmotionState,
     OrganSoundMapping,

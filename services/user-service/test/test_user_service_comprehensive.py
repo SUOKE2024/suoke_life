@@ -1,21 +1,31 @@
 """
+test_user_service_comprehensive - 索克生活项目模块
+"""
+
+        from user_service.internal.service.device_service import DeviceService
+        from user_service.internal.service.health_service import HealthService
+        from user_service.internal.service.user_service import UserService
+        from user_service.schemas.health import HealthDataRequest
+        from user_service.schemas.user import UserCreateRequest
+from datetime import datetime, timedelta
+from fastapi.testclient import TestClient
+from sqlalchemy.ext.asyncio import AsyncSession
+from unittest.mock import Mock, patch, AsyncMock
+from user_service.internal.repository.user_repository import UserRepository
+from user_service.internal.service.user_service import UserService
+from user_service.main import app
+from user_service.models.device import UserDevice, DeviceType, DeviceStatus
+from user_service.models.health import HealthData, HealthMetrics, TCMConstitution
+from user_service.models.user import User, UserProfile, UserStatus
+import asyncio
+import pytest
+
+"""
 User Service 全面测试
 建立完整的测试覆盖率体系，覆盖用户管理、健康数据、设备管理等功能
 """
 
-import pytest
-import asyncio
-from datetime import datetime, timedelta
-from unittest.mock import Mock, patch, AsyncMock
-from fastapi.testclient import TestClient
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from user_service.main import app
-from user_service.models.user import User, UserProfile, UserStatus
-from user_service.models.health import HealthData, HealthMetrics, TCMConstitution
-from user_service.models.device import UserDevice, DeviceType, DeviceStatus
-from user_service.internal.service.user_service import UserService
-from user_service.internal.repository.user_repository import UserRepository
 
 
 class TestUserService:
@@ -229,7 +239,6 @@ class TestHealthDataService:
     
     @pytest.fixture
     def health_service(self):
-        from user_service.internal.service.health_service import HealthService
         return HealthService()
     
     @pytest.fixture
@@ -355,7 +364,6 @@ class TestDeviceManagement:
     
     @pytest.fixture
     def device_service(self):
-        from user_service.internal.service.device_service import DeviceService
         return DeviceService()
     
     @pytest.fixture
@@ -616,7 +624,6 @@ class TestDataValidation:
     
     def test_user_data_validation(self):
         """测试用户数据验证"""
-        from user_service.schemas.user import UserCreateRequest
         
         # 有效数据
         valid_data = {
@@ -650,7 +657,6 @@ class TestDataValidation:
     
     def test_health_data_validation(self):
         """测试健康数据验证"""
-        from user_service.schemas.health import HealthDataRequest
         
         # 有效血压数据
         valid_bp_data = {
@@ -680,7 +686,6 @@ class TestPerformanceAndConcurrency:
     @pytest.mark.asyncio
     async def test_concurrent_user_creation(self):
         """测试并发用户创建"""
-        from user_service.internal.service.user_service import UserService
         
         user_service = UserService()
         mock_db = AsyncMock()
@@ -716,7 +721,6 @@ class TestPerformanceAndConcurrency:
     @pytest.mark.asyncio
     async def test_bulk_health_data_processing(self):
         """测试批量健康数据处理"""
-        from user_service.internal.service.health_service import HealthService
         
         health_service = HealthService()
         mock_db = AsyncMock()

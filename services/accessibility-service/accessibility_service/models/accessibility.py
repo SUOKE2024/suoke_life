@@ -1,12 +1,17 @@
 """
-Accessibility-related data models.
+accessibility - 索克生活项目模块
 """
 
 from datetime import datetime, timezone
 from enum import Enum
+from pydantic import BaseModel, Field, field_validator
 from typing import Any
 
-from pydantic import BaseModel, Field, field_validator
+"""
+Accessibility-related data models.
+"""
+
+
 
 
 class AccessibilityType(str, Enum):

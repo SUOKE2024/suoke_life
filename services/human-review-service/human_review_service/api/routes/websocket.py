@@ -1,16 +1,21 @@
 """
+websocket - 索克生活项目模块
+"""
+
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect
+from fastapi.websockets import WebSocketState
+from typing import Dict, List
+import json
+import structlog
+
+"""
 WebSocket 路由
 WebSocket Routes
 
 提供实时通信功能，包括审核状态更新、通知等
 """
 
-import json
-from typing import Dict, List
 
-import structlog
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect
-from fastapi.websockets import WebSocketState
 
 logger = structlog.get_logger(__name__)
 

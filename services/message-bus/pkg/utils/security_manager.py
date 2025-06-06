@@ -1,3 +1,23 @@
+"""
+security_manager - 索克生活项目模块
+"""
+
+    from cryptography.fernet import Fernet
+    from cryptography.hazmat.backends import default_backend
+    from cryptography.hazmat.primitives import hashes, serialization
+    from cryptography.hazmat.primitives.asymmetric import rsa, padding
+    import jwt
+from collections import defaultdict, deque
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Set, Tuple, Union, Callable
+import asyncio
+import base64
+import logging
+import threading
+import time
+import uuid
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,29 +26,14 @@
 支持端到端加密、访问控制、审计日志和身份验证
 """
 
-import asyncio
-import base64
-import logging
-import time
-import uuid
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple, Union, Callable
-from collections import defaultdict, deque
-import threading
 
 try:
-    from cryptography.fernet import Fernet
-    from cryptography.hazmat.primitives import hashes, serialization
-    from cryptography.hazmat.primitives.asymmetric import rsa, padding
-    from cryptography.hazmat.backends import default_backend
     CRYPTOGRAPHY_AVAILABLE = True
 except ImportError:
     CRYPTOGRAPHY_AVAILABLE = False
     logger.warning("Cryptography library not available, encryption features will be disabled")
 
 try:
-    import jwt
     JWT_AVAILABLE = True
 except ImportError:
     JWT_AVAILABLE = False

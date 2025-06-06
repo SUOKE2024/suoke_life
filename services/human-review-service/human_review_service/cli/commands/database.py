@@ -1,21 +1,29 @@
 """
+database - 索克生活项目模块
+"""
+
+            from ...core.database import get_session
+            from ...core.models import ReviewerCreate, ReviewType
+            from ...core.service import HumanReviewService
+from ...core.database import close_database, get_engine, init_database
+from datetime import datetime
+from rich.console import Console
+from rich.progress import Progress, SpinnerColumn, TextColumn
+from sqlalchemy import text
+import asyncio
+import click
+import structlog
+import sys
+
+"""
 数据库管理命令
 Database Management Commands
 
 提供数据库初始化、迁移、备份等功能
 """
 
-import asyncio
-import sys
-from datetime import datetime
 
-import click
-import structlog
-from rich.console import Console
-from rich.progress import Progress, SpinnerColumn, TextColumn
-from sqlalchemy import text
 
-from ...core.database import close_database, get_engine, init_database
 
 logger = structlog.get_logger(__name__)
 console = Console()
@@ -182,9 +190,6 @@ def seed():
 
     async def run_seed():
         try:
-            from ...core.database import get_session
-            from ...core.models import ReviewerCreate, ReviewType
-            from ...core.service import HumanReviewService
 
             async with get_session() as session:
                 service = HumanReviewService(session)

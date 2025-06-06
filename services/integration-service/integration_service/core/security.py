@@ -1,18 +1,23 @@
 """
-安全认证模块
+security - 索克生活项目模块
 """
 
-import logging
+from ..config import settings
 from datetime import datetime, timedelta
-from typing import Any, Dict, Optional, Union
-
-import jwt
 from fastapi import HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from passlib.context import CryptContext
 from pydantic import BaseModel
+from typing import Any, Dict, Optional, Union
+import jwt
+import logging
 
-from ..config import settings
+"""
+安全认证模块
+"""
+
+
+
 
 logger = logging.getLogger(__name__)
 

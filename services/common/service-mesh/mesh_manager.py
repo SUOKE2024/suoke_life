@@ -1,17 +1,22 @@
+"""
+mesh_manager - 索克生活项目模块
+"""
+
+from .envoy_config import EnvoyConfigManager
+from .istio_client import DestinationRule, Gateway, IstioClient, VirtualService
+from .linkerd_client import LinkerdClient, TrafficSplit
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any
+import logging
+
 #!/usr/bin/env python3
 """
 服务网格管理器
 提供统一的服务网格管理接口
 """
 
-from dataclasses import dataclass, field
-from enum import Enum
-import logging
-from typing import Any
 
-from .envoy_config import EnvoyConfigManager
-from .istio_client import DestinationRule, Gateway, IstioClient, VirtualService
-from .linkerd_client import LinkerdClient, TrafficSplit
 
 logger = logging.getLogger(__name__)
 

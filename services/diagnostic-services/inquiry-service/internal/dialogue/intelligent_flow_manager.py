@@ -1,3 +1,17 @@
+"""
+intelligent_flow_manager - 索克生活项目模块
+"""
+
+from ..common.base import BaseService
+from ..common.cache import cached
+from ..common.exceptions import InquiryServiceError
+from ..common.metrics import counter, memory_optimized, timer
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from loguru import logger
+from typing import Any
+
 #!/usr/bin/env python3
 
 """
@@ -7,17 +21,8 @@
 智能决策树和个性化问诊策略。
 """
 
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
-from typing import Any
 
-from loguru import logger
 
-from ..common.base import BaseService
-from ..common.cache import cached
-from ..common.exceptions import InquiryServiceError
-from ..common.metrics import counter, memory_optimized, timer
 
 class FlowStage(Enum):
     """问诊流程阶段"""

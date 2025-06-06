@@ -1,3 +1,26 @@
+"""
+enhanced_medical_resource_service - 索克生活项目模块
+"""
+
+    from enum import Enum
+    from functools import wraps
+    from services.common.governance.circuit_breaker import (
+    from services.common.governance.rate_limiter import (
+    from services.common.observability.tracing import SpanKind, get_tracer, trace
+from collections import defaultdict, deque
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from geopy.distance import geodesic
+from loguru import logger
+from typing import Any, Dict, List, Optional, Set, Tuple
+import asyncio
+import hashlib
+import heapq
+import json
+import time
+import uuid
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
@@ -8,38 +31,20 @@
 提供高效的医疗资源管理和调度服务。
 """
 
-import asyncio
-import hashlib
-import heapq
-import json
-import time
-import uuid
-from collections import defaultdict, deque
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple
 
-from geopy.distance import geodesic
-from loguru import logger
 
 # 导入通用组件 - 临时模拟实现
 try:
-    from services.common.governance.circuit_breaker import (
         CircuitBreaker,
         CircuitBreakerConfig,
         get_circuit_breaker,
     )
-    from services.common.governance.rate_limiter import (
         RateLimitConfig,
         get_rate_limiter,
         rate_limit,
     )
-    from services.common.observability.tracing import SpanKind, get_tracer, trace
 except ImportError:
     # 模拟实现，用于独立运行
-    from functools import wraps
-    from enum import Enum
     
     class SpanKind(Enum):
         SERVER = "server"

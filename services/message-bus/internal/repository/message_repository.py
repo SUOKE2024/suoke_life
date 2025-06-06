@@ -1,17 +1,22 @@
+"""
+message_repository - 索克生活项目模块
+"""
+
 from abc import ABC, abstractmethod
+from aiokafka import AIOKafkaProducer, AIOKafkaConsumer
+from aiokafka.errors import KafkaError
+from config.settings import Settings
+from confluent_kafka import Producer, Consumer, KafkaError, KafkaException
+from internal.model.message import Message
+from internal.observability.metrics import message_publish_latency, message_publish_failures, message_consume_latency
+from prometheus_client import Counter, Histogram, Gauge
 from typing import List, Optional, Dict, Any
+import asyncio
 import json
 import logging
 import time
-from confluent_kafka import Producer, Consumer, KafkaError, KafkaException
-import asyncio
-from aiokafka import AIOKafkaProducer, AIOKafkaConsumer
-from aiokafka.errors import KafkaError
-from prometheus_client import Counter, Histogram, Gauge
 
-from internal.model.message import Message
-from config.settings import Settings
-from internal.observability.metrics import message_publish_latency, message_publish_failures, message_consume_latency
+
 
 logger = logging.getLogger(__name__)
 

@@ -1,27 +1,32 @@
 """
+user_handler - 索克生活项目模块
+"""
+
+from datetime import datetime
+from fastapi import APIRouter, Depends, HTTPException, Path, Query, status
+from internal.model.user import (BindDeviceRequest, CreateUserRequest,
+from internal.repository.operation_log_repository import AuditLogRepository
+from internal.repository.sqlite_user_repository import (DeviceAlreadyBoundError,
+from internal.service.user_service import UserService
+from pydantic import BaseModel, EmailStr, Field
+from typing import Dict, List, Optional
+from uuid import UUID
+import logging
+import uuid
+
+"""
 用户服务REST API处理器
 
 该模块实现了用户服务的REST API接口。
 """
-import logging
-from typing import Dict, List, Optional
-from uuid import UUID
-from datetime import datetime
-import uuid
 
-from fastapi import APIRouter, Depends, HTTPException, Path, Query, status
-from pydantic import BaseModel, EmailStr, Field
 
-from internal.model.user import (BindDeviceRequest, CreateUserRequest,
                           DeviceInfo, UpdateUserPreferencesRequest,
                           UpdateUserRequest, UserResponse, UserRole,
                           VerifyUserRequest, UserAuditLog as UserAuditLogModel)
-from internal.repository.sqlite_user_repository import (DeviceAlreadyBoundError,
                                                  DeviceNotFoundError,
                                                  UserAlreadyExistsError,
                                                  UserNotFoundError)
-from internal.repository.operation_log_repository import AuditLogRepository
-from internal.service.user_service import UserService
 
 logger = logging.getLogger(__name__)
 

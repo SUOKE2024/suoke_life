@@ -1,20 +1,25 @@
-import asyncio
-import os
-import sys
-from logging.config import fileConfig
+"""
+env - 索克生活项目模块
+"""
 
+from alembic import context
+from health_data_service.core.config import get_settings
+from health_data_service.models import Base
+from logging.config import fileConfig
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import AsyncEngine
+import asyncio
+import os
+import sys
 
-from alembic import context
+
+
 
 # 添加项目路径到sys.path
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 # 导入模型
-from health_data_service.models import Base
-from health_data_service.core.config import get_settings
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -38,6 +43,7 @@ target_metadata = Base.metadata
 settings = get_settings()
 
 
+    @cache(timeout=300)  # 5分钟缓存
 def get_url():
     """获取数据库URL"""
     return settings.database.url

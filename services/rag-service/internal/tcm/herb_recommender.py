@@ -1,3 +1,15 @@
+"""
+herb_recommender - 索克生活项目模块
+"""
+
+from ..observability.metrics import MetricsCollector
+from .tcm_models import (
+from dataclasses import dataclass, field
+from enum import Enum
+from loguru import logger
+from typing import Dict, List, Any, Optional, Tuple, Set
+import asyncio
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,17 +18,10 @@
 支持方剂推荐、单味药推荐、安全性检查和个性化调整
 """
 
-import asyncio
-from typing import Dict, List, Any, Optional, Tuple, Set
-from dataclasses import dataclass, field
-from enum import Enum
-from loguru import logger
 
-from .tcm_models import (
     ConstitutionType, SyndromeType, TreatmentPrinciple,
     HerbalFormula, SingleHerb, PatientProfile
 )
-from ..observability.metrics import MetricsCollector
 
 class RecommendationType(str, Enum):
     """推荐类型"""

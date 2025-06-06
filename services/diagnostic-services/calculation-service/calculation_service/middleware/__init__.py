@@ -1,10 +1,15 @@
 """
+__init__ - 索克生活项目模块
+"""
+
+from .error_handler import ErrorHandlerMiddleware
+from .logging_middleware import LoggingMiddleware
+from .rate_limiter import RateLimiterMiddleware
+
+"""
 算诊服务中间件模块
 """
 
-from .logging_middleware import LoggingMiddleware
-from .error_handler import ErrorHandlerMiddleware
-from .rate_limiter import RateLimiterMiddleware
 
 __all__ = [
     "LoggingMiddleware",

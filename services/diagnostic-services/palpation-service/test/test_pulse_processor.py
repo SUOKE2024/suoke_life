@@ -1,19 +1,24 @@
+"""
+test_pulse_processor - 索克生活项目模块
+"""
+
+from internal.signal.pulse_processor import PulseProcessor
+from pathlib import Path
+from unittest.mock import MagicMock, patch
+import pytest
+import sys
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 脉诊处理器单元测试
 """
 
-import pytest
-from unittest.mock import MagicMock, patch
 
-import sys
-from pathlib import Path
 
 # 添加项目根目录到Python路径
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from internal.signal.pulse_processor import PulseProcessor
 
 # 测试数据
 SAMPLE_RATE = 1000

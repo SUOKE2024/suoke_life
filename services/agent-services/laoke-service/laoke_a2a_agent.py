@@ -1,3 +1,12 @@
+"""
+laoke_a2a_agent - 索克生活项目模块
+"""
+
+from python_a2a import A2AServer, AgentCard, TaskState, TaskStatus, agent, skill
+from typing import Any
+import json
+import logging
+
 #!/usr/bin/env python3
 """
 老克智能体 A2A 协议适配器
@@ -6,11 +15,7 @@ LaoKe Agent A2A Protocol Adapter
 将老克智能体服务包装为符合 A2A 协议的智能体
 """
 
-import json
-import logging
-from typing import Any
 
-from python_a2a import A2AServer, AgentCard, TaskState, TaskStatus, agent, skill
 
 logger = logging.getLogger(__name__)
 

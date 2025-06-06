@@ -1,16 +1,23 @@
 """
-遗留路由模块
-保持与原有API的兼容性,逐步迁移到新的模块化结构
+legacy_routes - 索克生活项目模块
 """
-
-from typing import Any
-
-from fastapi import APIRouter, Depends, HTTPException, Path, Query
-from pydantic import BaseModel
 
 from app.api.rest.deps import get_knowledge_graph_service, get_knowledge_service
 from app.core.logger import get_logger
 from app.models.entities import (
+from app.services.knowledge_graph_service import KnowledgeGraphService
+from app.services.knowledge_service import KnowledgeService
+from fastapi import APIRouter, Depends, HTTPException, Path, Query
+from pydantic import BaseModel
+from typing import Any
+
+"""
+遗留路由模块
+保持与原有API的兼容性,逐步迁移到新的模块化结构
+"""
+
+
+
     Acupoint,
     AcupointListResponse,
     Biomarker,
@@ -30,8 +37,6 @@ from app.models.entities import (
     WesternDisease,
     WesternDiseaseListResponse,
 )
-from app.services.knowledge_graph_service import KnowledgeGraphService
-from app.services.knowledge_service import KnowledgeService
 
 logger = get_logger()
 router = APIRouter()
@@ -404,6 +409,18 @@ class GraphStatisticsResponse(BaseModel):
     relationship_count: int
     node_types: list[dict[str, Any]]
     relationship_types: list[dict[str, Any]]
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'graphstatisticsresponse'
+        ordering = ['-created_at']
 
 
 class CypherQueryRequest(BaseModel):

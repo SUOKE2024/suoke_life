@@ -1,12 +1,20 @@
 """
+test_grpc_service - 索克生活项目模块
+"""
+
+        from accessibility_service.api.grpc.accessibility_pb2_grpc import AccessibilityServiceStub
+        from accessibility_service.api.grpc.accessibility_pb2_grpc import add_AccessibilityServiceServicer_to_server
+from accessibility_service.api.grpc.accessibility_pb2 import (
+from accessibility_service.api.grpc.accessibility_pb2_grpc import AccessibilityServiceServicer
+from unittest.mock import MagicMock
+import grpc.aio as aio
+import pytest
+
+"""
 Test cases for AccessibilityService gRPC implementation.
 """
 
-import pytest
-from unittest.mock import MagicMock
-import grpc.aio as aio
 
-from accessibility_service.api.grpc.accessibility_pb2 import (
     BlindAssistanceRequest,
     BlindAssistanceResponse,
     SignLanguageRequest,
@@ -20,7 +28,6 @@ from accessibility_service.api.grpc.accessibility_pb2 import (
     SettingsRequest,
     SettingsResponse
 )
-from accessibility_service.api.grpc.accessibility_pb2_grpc import AccessibilityServiceServicer
 
 
 class MockAccessibilityServicer(AccessibilityServiceServicer):
@@ -82,7 +89,6 @@ class TestAccessibilityGRPCService:
         servicer = MockAccessibilityServicer()
         
         # Add the servicer to the server
-        from accessibility_service.api.grpc.accessibility_pb2_grpc import add_AccessibilityServiceServicer_to_server
         add_AccessibilityServiceServicer_to_server(servicer, server)
         
         # Start server on a random port
@@ -110,7 +116,6 @@ class TestAccessibilityGRPCService:
         """Test blind assistance gRPC method."""
         channel, servicer = grpc_channel
         
-        from accessibility_service.api.grpc.accessibility_pb2_grpc import AccessibilityServiceStub
         stub = AccessibilityServiceStub(channel)
         
         request = BlindAssistanceRequest()

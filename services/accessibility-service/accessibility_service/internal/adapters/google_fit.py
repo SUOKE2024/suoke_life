@@ -1,16 +1,21 @@
 """
-Google Fit Platform Adapter
+google_fit - 索克生活项目模块
 """
-
-from datetime import date, datetime, timedelta
-from typing import Any
-from urllib.parse import urlencode
-
-import httpx
 
 from ..model.health_data import ActivityData, DataSource, HeartRateData, SleepData
 from ..model.user_integration import PlatformType
 from .base import AuthenticationError, AuthResult, BaseAdapter, SyncResult
+from datetime import date, datetime, timedelta
+from typing import Any
+from urllib.parse import urlencode
+import httpx
+
+"""
+Google Fit Platform Adapter
+"""
+
+
+
 
 
 class GoogleFitAdapter(BaseAdapter):

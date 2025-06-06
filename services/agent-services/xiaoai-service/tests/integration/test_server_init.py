@@ -1,10 +1,19 @@
+"""
+test_server_init - 索克生活项目模块
+"""
+
+        from internal.delivery.xiaoai_service_impl import XiaoAIServiceImpl
+        from pkg.utils.config_loader import get_config
+        from pkg.utils.metrics import get_metrics_collector
+        import traceback
+from pathlib import Path
+import sys
+
 #!/usr/bin/env python3
 """
 测试服务器初始化过程
 """
 
-import sys
-from pathlib import Path
 
 # 添加项目根目录到PYTHONPATH
 sys.path.insert(0, Path().resolve())
@@ -16,8 +25,6 @@ def test_server_init():
     try:
         # 1. 导入必要的模块
         print("1. 导入模块...")
-        from pkg.utils.config_loader import get_config
-        from pkg.utils.metrics import get_metrics_collector
         print("✓ 模块导入成功")
 
         # 2. 模拟 XiaoAIServer.__init__ 过程
@@ -57,7 +64,6 @@ def test_server_init():
 
     except Exception as e:
         print(f"❌ 服务器初始化测试失败: {e}")
-        import traceback
         traceback.print_exc()
         return False
 
@@ -66,7 +72,6 @@ def test_xiaoai_service_impl():
     print("\n🔍 测试 XiaoAIServiceImpl 初始化...\n")
 
     try:
-        from internal.delivery.xiaoai_service_impl import XiaoAIServiceImpl
 
         print("正在创建 XiaoAIServiceImpl 实例...")
         service_impl = XiaoAIServiceImpl()
@@ -76,7 +81,6 @@ def test_xiaoai_service_impl():
 
     except Exception as e:
         print(f"❌ XiaoAIServiceImpl 初始化失败: {e}")
-        import traceback
         traceback.print_exc()
         return False
 

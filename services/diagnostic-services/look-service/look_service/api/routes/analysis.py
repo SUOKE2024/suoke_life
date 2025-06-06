@@ -1,20 +1,25 @@
 """
+analysis - 索克生活项目模块
+"""
+
+from ...core.vision_analyzer import (
+from PIL import Image
+from fastapi import APIRouter, UploadFile, File, HTTPException, Depends
+from fastapi.responses import JSONResponse
+from typing import Dict, Any, Optional
+import asyncio
+import cv2
+import io
+import logging
+import numpy as np
+
+"""
 望诊分析API路由
 
 提供面诊、舌诊、眼诊的智能分析接口
 """
 
-import asyncio
-import cv2
-import numpy as np
-import logging
-from fastapi import APIRouter, UploadFile, File, HTTPException, Depends
-from fastapi.responses import JSONResponse
-from typing import Dict, Any, Optional
-import io
-from PIL import Image
 
-from ...core.vision_analyzer import (
     VisionAnalyzer, 
     FaceAnalysisResult, 
     TongueAnalysisResult, 

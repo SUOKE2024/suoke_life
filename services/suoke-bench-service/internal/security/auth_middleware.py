@@ -1,18 +1,23 @@
+"""
+auth_middleware - 索克生活项目模块
+"""
+
+from collections import defaultdict, deque
+from datetime import datetime, timedelta
+from fastapi import HTTPException, Request, Response
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from starlette.middleware.base import BaseHTTPMiddleware
+from typing import Dict, List, Optional, Callable
+import hashlib
+import hmac
+import jwt
+import time
+
 """安全认证中间件
 
 提供API认证、授权、限流等安全功能
 """
 
-import time
-import hashlib
-import hmac
-from typing import Dict, List, Optional, Callable
-from datetime import datetime, timedelta
-from fastapi import HTTPException, Request, Response
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from starlette.middleware.base import BaseHTTPMiddleware
-import jwt
-from collections import defaultdict, deque
 
 
 class RateLimiter:

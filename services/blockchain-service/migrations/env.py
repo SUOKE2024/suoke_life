@@ -1,24 +1,29 @@
 """
+env - 索克生活项目模块
+"""
+
+    from sqlalchemy.engine import Connection
+from __future__ import annotations
+from alembic import context
+from logging.config import fileConfig
+from sqlalchemy import pool
+from sqlalchemy.ext.asyncio import async_engine_from_config
+from suoke_blockchain_service.config import settings
+from suoke_blockchain_service.database import Base
+from typing import TYPE_CHECKING
+import asyncio
+
+"""
 Alembic 环境配置
 
 配置数据库迁移环境。
 """
 
-from __future__ import annotations
 
-import asyncio
-from logging.config import fileConfig
-from typing import TYPE_CHECKING
 
-from alembic import context
-from sqlalchemy import pool
-from sqlalchemy.ext.asyncio import async_engine_from_config
 
 if TYPE_CHECKING:
-    from sqlalchemy.engine import Connection
 
-from suoke_blockchain_service.config import settings
-from suoke_blockchain_service.database import Base
 
 # Alembic Config 对象
 config = context.config

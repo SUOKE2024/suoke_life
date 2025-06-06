@@ -1,13 +1,18 @@
+"""
+test_init - 索克生活项目模块
+"""
+
+from suoke_common import (
+from unittest.mock import patch
+import pytest
+
 #!/usr/bin/env python3
 """
 测试 suoke_common 包的基本功能
 """
 
-from unittest.mock import patch
 
-import pytest
 
-from suoke_common import (
     SuokeCommonComponents,
     __version__,
     get_components,

@@ -1,3 +1,20 @@
+"""
+intelligent_health_monitor - 索克生活项目模块
+"""
+
+from ..observability.metrics import MetricsCollector
+from ..observability.tracing import trace_operation, SpanKind
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from loguru import logger
+from scipy import stats
+from sklearn.ensemble import IsolationForest, RandomForestClassifier
+from typing import Dict, List, Any, Optional, Tuple, Union, Set, Callable
+import asyncio
+import time
+import warnings
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,20 +22,8 @@
 智能健康监测引擎 - 提供实时健康数据监测、异常检测、预警系统、趋势分析
 """
 
-import asyncio
-import time
-from typing import Dict, List, Any, Optional, Tuple, Union, Set, Callable
-from dataclasses import dataclass, field
-from enum import Enum
-from datetime import datetime, timedelta
-from loguru import logger
-from sklearn.ensemble import IsolationForest, RandomForestClassifier
-from scipy import stats
-import warnings
 warnings.filterwarnings('ignore')
 
-from ..observability.metrics import MetricsCollector
-from ..observability.tracing import trace_operation, SpanKind
 
 class HealthMetricType(str, Enum):
     """健康指标类型"""

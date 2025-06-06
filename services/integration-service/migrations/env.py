@@ -1,22 +1,27 @@
 """
+env - 索克生活项目模块
+"""
+
+from alembic import context
+from integration_service.config import settings
+from integration_service.models.base import Base
+from logging.config import fileConfig
+from sqlalchemy import engine_from_config, pool
+from sqlalchemy.ext.asyncio import AsyncEngine
+import asyncio
+import os
+import sys
+
+"""
 Alembic 环境配置
 
 该模块为Alembic数据库迁移工具提供环境配置。
 """
 
-import asyncio
-from logging.config import fileConfig
-from sqlalchemy import engine_from_config, pool
-from sqlalchemy.ext.asyncio import AsyncEngine
-from alembic import context
-import os
-import sys
 
 # 添加项目根目录到 Python 路径
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-from integration_service.models.base import Base
-from integration_service.config import settings
 
 # Alembic Config对象
 config = context.config

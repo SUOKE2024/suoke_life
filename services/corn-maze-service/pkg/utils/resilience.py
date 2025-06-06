@@ -1,3 +1,15 @@
+"""
+resilience - 索克生活项目模块
+"""
+
+from collections.abc import Callable
+from typing import Any, TypeVar, cast
+import asyncio
+import functools
+import logging
+import random
+import time
+
 #!/usr/bin/env python3
 
 """
@@ -6,13 +18,6 @@
 提供函数重试和断路器模式的装饰器和工具类
 """
 
-import asyncio
-from collections.abc import Callable
-import functools
-import logging
-import random
-import time
-from typing import Any, TypeVar, cast
 
 # 初始化日志
 logger = logging.getLogger(__name__)

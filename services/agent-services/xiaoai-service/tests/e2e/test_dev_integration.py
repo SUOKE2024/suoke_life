@@ -1,13 +1,22 @@
+"""
+test_dev_integration - 索克生活项目模块
+"""
+
+        from internal.agent.agent_manager import AgentManager
+        from internal.agent.mock_model_factory import get_mock_model_factory
+        from internal.repository.file_session_repository import FileSessionRepository
+        from pkg.utils.config_loader import get_config
+from pathlib import Path
+import asyncio
+import sys
+import traceback
+
 #!/usr/bin/env python3
 """
 小艾服务开发环境集成测试
 专门用于开发环境的测试,使用模拟服务和文件存储
 """
 
-import asyncio
-import sys
-import traceback
-from pathlib import Path
 
 # 添加项目路径
 sys.path.append('.')
@@ -50,7 +59,6 @@ async def test_mock_model_factory():
     print("\n🔍 测试模拟模型工厂功能...")
 
     try:
-        from internal.agent.mock_model_factory import get_mock_model_factory
 
         # 获取模拟模型工厂实例
         factory = await get_mock_model_factory()
@@ -87,7 +95,6 @@ async def test_file_session_repository():
     print("\n🔍 测试文件会话存储库功能...")
 
     try:
-        from internal.repository.file_session_repository import FileSessionRepository
 
         repo = FileSessionRepository()
         print("  ✓ 文件会话存储库实例创建成功")
@@ -133,7 +140,6 @@ async def test_agent_manager():
     print("\n🔍 测试智能体管理器功能...")
 
     try:
-        from internal.agent.agent_manager import AgentManager
 
         agent_manager = AgentManager()
         print("  ✓ 智能体管理器实例创建成功")
@@ -168,7 +174,6 @@ def test_config_loading():
     print("\n🔍 测试配置加载功能...")
 
     try:
-        from pkg.utils.config_loader import get_config
 
         # 获取配置实例
         config = get_config()

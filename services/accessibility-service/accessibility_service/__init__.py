@@ -1,4 +1,12 @@
 """
+__init__ - 索克生活项目模块
+"""
+
+from .core import AccessibilityService
+from .models import *
+from .services import *
+
+"""
 Accessibility Service Package
 
 AI-powered accessibility service for Suoke Life platform.
@@ -15,9 +23,6 @@ __author__ = "Suoke Life Team"
 __email__ = "dev@suokelife.com"
 
 # Import main components
-from .core import AccessibilityService
-from .models import *
-from .services import *
 
 __all__ = [
     "AccessibilityService",

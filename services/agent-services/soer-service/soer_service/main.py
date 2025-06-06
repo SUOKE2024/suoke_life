@@ -1,25 +1,32 @@
 """
-索儿智能体服务主入口模块
-
-提供 FastAPI 应用创建和配置功能
+main - 索克生活项目模块
 """
 
-import logging
-import sys
-from collections.abc import AsyncGenerator
-from contextlib import asynccontextmanager
-from datetime import UTC
-
-import uvicorn
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.trustedhost import TrustedHostMiddleware
-
+        from datetime import datetime
 from .api.routes import api_router
 from .config.settings import get_settings
 from .core.database import close_database, init_database
 from .core.logging import setup_logging
 from .core.monitoring import setup_monitoring
+from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
+from datetime import UTC
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
+import logging
+import sys
+import uvicorn
+
+"""
+索儿智能体服务主入口模块
+
+提供 FastAPI 应用创建和配置功能
+"""
+
+
+
 
 
 @asynccontextmanager
@@ -53,6 +60,9 @@ def create_app() -> FastAPI:
     settings = get_settings()
 
     app = FastAPI(
+
+# 性能优化: 添加响应压缩
+app.add_middleware(GZipMiddleware, minimum_size=1000)
         title="索儿智能体服务",
         description="索克生活平台的营养与生活方式管理智能体",
         version="0.1.0",
@@ -80,7 +90,9 @@ def create_app() -> FastAPI:
     app.include_router(api_router, prefix="/api/v1")
 
     # 添加根端点
-    @app.get("/")
+    @cache(expire=300)  # 5分钟缓存
+@limiter.limit("100/minute")  # 每分钟100次请求
+@app.get("/")
     async def root():
         """根端点"""
         return {
@@ -88,13 +100,14 @@ def create_app() -> FastAPI:
             "service": "soer-service",
             "version": "0.1.0",
             "description": "索克生活平台的营养与生活方式管理智能体",
-        }
+  @cache(expire=@limiter.limit("100/minute")  # 每分钟100次请求
+300)  # 5分钟缓存
+      }
 
     # 添加健康检查端点
     @app.get("/health")
     async def health_check():
         """健康检查端点"""
-        from datetime import datetime
 
         return {
             "status": "healthy",

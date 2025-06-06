@@ -1,11 +1,16 @@
+"""
+simple_syntax_fixer - 索克生活项目模块
+"""
+
+from pathlib import Path
+import os
+
 #!/usr/bin/env python3
 """
 索克生活项目简化语法错误修复脚本
 专门处理测试文件的基本语法错误
 """
 
-import os
-from pathlib import Path
 
 class SimpleSyntaxFixer:
     def __init__(self, project_root: str):

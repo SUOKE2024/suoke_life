@@ -1,18 +1,23 @@
+"""
+tcc_coordinator - 索克生活项目模块
+"""
+
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any
+import asyncio
+import logging
+import time
+import uuid
+
 #!/usr/bin/env python3
 """
 TCC（Try-Confirm-Cancel）模式分布式事务协调器
 提供两阶段提交的优化实现
 """
 
-from abc import ABC, abstractmethod
-import asyncio
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
-import logging
-import time
-from typing import Any
-import uuid
 
 logger = logging.getLogger(__name__)
 

@@ -1,16 +1,21 @@
 """
+ipfs_client - 索克生活项目模块
+"""
+
+from .config import settings
+from .exceptions import IPFSError
+from .logging import get_logger
+from typing import Any, Dict, Optional
+import aiohttp
+import json
+
+"""
 IPFS客户端模块
 
 提供与IPFS网络的集成功能。
 """
 
-import aiohttp
-import json
-from typing import Any, Dict, Optional
 
-from .config import settings
-from .exceptions import IPFSError
-from .logging import get_logger
 
 logger = get_logger(__name__)
 

@@ -1,20 +1,25 @@
+"""
+realtime_benchmark - 索克生活项目模块
+"""
+
+from collections import deque
+from dataclasses import dataclass, asdict
+from datetime import datetime
+from enum import Enum
+from fastapi import WebSocket, WebSocketDisconnect
+from typing import Dict, List, Any, Optional, AsyncGenerator, Callable
+import asyncio
+import json
+import logging
+import time
+import uuid
+import websockets
+
 """实时流式评测模块
 
 支持实时数据流处理和流式基准测试
 """
 
-import asyncio
-import json
-import time
-from typing import Dict, List, Any, Optional, AsyncGenerator, Callable
-from dataclasses import dataclass, asdict
-from datetime import datetime
-from enum import Enum
-import uuid
-from collections import deque
-import websockets
-from fastapi import WebSocket, WebSocketDisconnect
-import logging
 
 logger = logging.getLogger(__name__)
 

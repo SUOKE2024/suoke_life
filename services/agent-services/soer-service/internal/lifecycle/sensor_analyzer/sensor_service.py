@@ -1,9 +1,14 @@
 """
-传感器数据分析服务
+sensor_service - 索克生活项目模块
 """
-import logging
+
 from datetime import datetime, timedelta
 from typing import Any
+import logging
+
+"""
+传感器数据分析服务
+"""
 
 logger = logging.getLogger(__name__)
 

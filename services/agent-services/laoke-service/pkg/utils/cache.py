@@ -1,3 +1,19 @@
+"""
+cache - 索克生活项目模块
+"""
+
+    import aioredis  # type: ignore
+from abc import ABC, abstractmethod
+from collections.abc import Callable
+from dataclasses import dataclass
+from functools import wraps
+from typing import Any, TypeVar
+import asyncio
+import hashlib
+import json
+import logging
+import time
+
 #!/usr/bin/env python3
 
 """
@@ -5,19 +21,8 @@
 提供高效的缓存功能，支持Redis和内存缓存
 """
 
-import asyncio
-import hashlib
-import json
-import logging
-import time
-from abc import ABC, abstractmethod
-from collections.abc import Callable
-from dataclasses import dataclass
-from functools import wraps
-from typing import Any, TypeVar
 
 try:
-    import aioredis  # type: ignore
     REDIS_AVAILABLE = True
 except ImportError:
     REDIS_AVAILABLE = False

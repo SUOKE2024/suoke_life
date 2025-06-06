@@ -1,3 +1,16 @@
+"""
+openai_generator - 索克生活项目模块
+"""
+
+from ..model.document import Document, DocumentReference
+from .base import BaseGenerator
+from loguru import logger
+from tenacity import retry, stop_after_attempt, wait_exponential
+from typing import List, Dict, Any, Optional, AsyncGenerator, Tuple
+import openai
+import os
+import re
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,15 +18,7 @@
 OpenAI 生成器实现
 """
 
-import os
-import re
-from typing import List, Dict, Any, Optional, AsyncGenerator, Tuple
-import openai
-from loguru import logger
-from tenacity import retry, stop_after_attempt, wait_exponential
 
-from ..model.document import Document, DocumentReference
-from .base import BaseGenerator
 
 
 class OpenAIGenerator(BaseGenerator):

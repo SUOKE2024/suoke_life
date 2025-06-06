@@ -1,12 +1,18 @@
+"""
+quick_chat_test - 索克生活项目模块
+"""
+
+        from internal.agent.agent_manager import AgentManager
+import asyncio
+import os
+import sys
+import traceback
+
 #!/usr/bin/env python3
 """
 快速测试小艾对话功能
 """
 
-import asyncio
-import os
-import sys
-import traceback
 
 # 添加项目路径
 sys.path.append('.')
@@ -19,7 +25,6 @@ async def quick_chat_test():
     print("="*40)
 
     try:
-        from internal.agent.agent_manager import AgentManager
 
         print("🤖 正在初始化小艾...")
         agent_manager = AgentManager()

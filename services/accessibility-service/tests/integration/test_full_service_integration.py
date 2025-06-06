@@ -1,18 +1,29 @@
 """
+test_full_service_integration - 索克生活项目模块
+"""
+
+        import time
+from accessibility_service.ai_models.audio_model import AudioModel
+from accessibility_service.ai_models.vision_model import VisionModel
+from accessibility_service.api.grpc.accessibility_pb2 import (
+from accessibility_service.api.grpc.accessibility_pb2_grpc import AccessibilityServiceStub
+from accessibility_service.api.grpc.accessibility_service import AccessibilityServiceImpl
+from accessibility_service.core.service import AccessibilityService
+from grpc import aio
+from unittest.mock import AsyncMock, MagicMock, patch
+import asyncio
+import grpc
+import io
+import numpy as np
+import pytest
+import wave
+
+"""
 Comprehensive integration tests for the accessibility service.
 Tests all major functionality and integration points.
 """
 
-import asyncio
-import pytest
-import grpc
-from grpc import aio
-import numpy as np
-from unittest.mock import AsyncMock, MagicMock, patch
-import io
-import wave
 
-from accessibility_service.api.grpc.accessibility_pb2 import (
     BlindAssistanceRequest, BlindAssistanceResponse,
     SignLanguageRequest, SignLanguageResponse,
     ScreenReadingRequest, ScreenReadingResponse,
@@ -23,11 +34,6 @@ from accessibility_service.api.grpc.accessibility_pb2 import (
     HealthAlertRequest, HealthAlertResponse,
     SpeechTranslationRequest, SpeechTranslationResponse
 )
-from accessibility_service.api.grpc.accessibility_pb2_grpc import AccessibilityServiceStub
-from accessibility_service.api.grpc.accessibility_service import AccessibilityServiceImpl
-from accessibility_service.core.service import AccessibilityService
-from accessibility_service.ai_models.vision_model import VisionModel
-from accessibility_service.ai_models.audio_model import AudioModel
 
 
 class TestAccessibilityServiceIntegration:
@@ -643,7 +649,6 @@ class TestAccessibilityServicePerformance:
     @pytest.mark.asyncio
     async def test_response_time_blind_assistance(self, service_impl):
         """Test response time for blind assistance requests."""
-        import time
         
         request = BlindAssistanceRequest(
             user_id="perf_test_user",
@@ -667,7 +672,6 @@ class TestAccessibilityServicePerformance:
     @pytest.mark.asyncio
     async def test_throughput_multiple_requests(self, service_impl):
         """Test service throughput with multiple concurrent requests."""
-        import time
         
         num_requests = 10
         requests = []

@@ -1,13 +1,18 @@
 """
+routes - 索克生活项目模块
+"""
+
+from .endpoints import agent, health, lifestyle, nutrition
+from fastapi import APIRouter, Request, Body
+from soer_service.services.agent_service import FourDiagnosisAggregator
+
+"""
 API 路由模块
 
 定义所有的 API 端点
 """
 
-from fastapi import APIRouter, Request, Body
 
-from .endpoints import agent, health, lifestyle, nutrition
-from soer_service.services.agent_service import FourDiagnosisAggregator
 
 # 创建主路由器
 api_router = APIRouter()

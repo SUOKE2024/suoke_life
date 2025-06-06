@@ -1,12 +1,17 @@
-"""健康数据模型"""
+"""
+health - 索克生活项目模块
+"""
 
-from typing import Dict, Any, Optional
 from datetime import datetime
 from sqlalchemy import Column, String, DateTime, Float, JSON, ForeignKey
 from sqlalchemy.orm import relationship
+from typing import Dict, Any, Optional
+from user_service.database import Base
 import uuid
 
-from user_service.database import Base
+"""健康数据模型"""
+
+
 
 
 class HealthSummary(Base):

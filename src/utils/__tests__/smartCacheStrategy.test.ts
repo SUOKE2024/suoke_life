@@ -1,89 +1,86 @@
 import { SmartCacheStrategy, smartCache, smartCacheUtils } from "../smartCacheStrategy";
+import { SmartCacheStrategy, smartCache, smartCacheUtils } from "../smartCacheStrategy";
+
 describe("smartCacheStrategy", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  describe(SmartCacheStrategy", () => {"
+  describe("SmartCacheStrategy", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = SmartCacheStrategy(/* valid params   */);
+const result = SmartCacheStrategy(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = SmartCacheStrategy(/* edge case params   */);
+const result = SmartCacheStrategy(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        SmartCacheStrategy(/* invalid params     */)
-      }).not.toThrow()
+        SmartCacheStrategy(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = SmartCacheStrategy(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = SmartCacheStrategy(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(smartCache", () => {"
+  describe("smartCache", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = smartCache(/* valid params   */);
+const result = smartCache(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = smartCache(/* edge case params   */);
+const result = smartCache(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        smartCache(/* invalid params     */)
-      }).not.toThrow()
+        smartCache(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = smartCache(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = smartCache(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(smartCacheUtils", () => {"
+  describe("smartCacheUtils", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = smartCacheUtils(/* valid params   */);
+const result = smartCacheUtils(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = smartCacheUtils(/* edge case params   */);
+const result = smartCacheUtils(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        smartCacheUtils(/* invalid params     */)
-      }).not.toThrow()
+        smartCacheUtils(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = smartCacheUtils(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = smartCacheUtils(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
 });
-import { performance } from "perf_hooks";
-import { SmartCacheStrategy, smartCache, smartCacheUtils } from "../smartCacheStrategy";
 describe("smartCacheStrategy Performance Tests", () => {
   it("should execute within performance thresholds", () => {
     const iterations = 10;
     const startTime = performance.now();
     for (let i = 0; i < iterations; i++) {
       // Execute performance-critical functions
-SmartCacheStrategy(/* test params      */)
-      smartCache(/* test params      */);
-      smartCacheUtils(/* test params      */);
+SmartCacheStrategy(// test params);
+      smartCache(// test params);
+      smartCacheUtils(// test params);
     });
     const endTime = performance.now();
     const averageTime = (endTime - startTime) / iterations;
@@ -94,7 +91,7 @@ expect(averageTime).toBeLessThan(1);
     const largeDataset = new Array(10000).fill(0).map((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
-SmartCacheStrategy(largeDataset)
+SmartCacheStrategy(largeDataset);
     const endTime = performance.now();
     // Should handle large datasets within 100ms
 expect(endTime - startTime).toBeLessThan(100);
@@ -103,7 +100,7 @@ expect(endTime - startTime).toBeLessThan(100);
     const initialMemory = process.memoryUsage().heapUsed;
     // Execute function multiple times
 for (let i = 0; i < 1000; i++) {
-      SmartCacheStrategy(/* test params      */);
+      SmartCacheStrategy(// test params);
     });
     // Force garbage collection if available
 if (global.gc) {

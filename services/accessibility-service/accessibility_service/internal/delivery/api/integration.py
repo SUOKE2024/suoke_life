@@ -1,21 +1,26 @@
 """
-Integration Management API Routes
+integration - 索克生活项目模块
 """
-
-from datetime import date
-
-from fastapi import APIRouter, Depends, HTTPException, Path, Query
 
 from ...model.base import BaseResponse, PaginationParams
 from ...model.user_integration import (
+from ...service.dependencies import get_current_user, get_integration_service
+from ...service.integration_service import IntegrationService
+from datetime import date
+from fastapi import APIRouter, Depends, HTTPException, Path, Query
+
+"""
+Integration Management API Routes
+"""
+
+
+
     IntegrationRequest,
     IntegrationResponse,
     IntegrationStatus,
     PlatformType,
     UserIntegration,
 )
-from ...service.dependencies import get_current_user, get_integration_service
-from ...service.integration_service import IntegrationService
 
 router = APIRouter()
 

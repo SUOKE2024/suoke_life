@@ -1,22 +1,27 @@
 """
-医疗资源服务协调器
-统一协调和管理所有医疗资源相关的服务模块
+medical_resource_coordinator - 索克生活项目模块
 """
 
-import asyncio
-import logging
-import uuid
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
-
 from ..agent.xiaoke_agent import XiaokeAgent
-# ConstitutionType import removed
 from .personalized_medical_service import PersonalizedMedicalService
 from .quality_control_service import QualityControlService
 from .resource_management_service import ResourceManagementService
 from .resource_scheduling_service import ResourceSchedulingService
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
+import asyncio
+import logging
+import uuid
+
+"""
+医疗资源服务协调器
+统一协调和管理所有医疗资源相关的服务模块
+"""
+
+
+# ConstitutionType import removed
 
 logger = logging.getLogger(__name__)
 

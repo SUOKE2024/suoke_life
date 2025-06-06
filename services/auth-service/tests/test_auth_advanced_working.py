@@ -1,16 +1,21 @@
 """
+test_auth_advanced_working - 索克生活项目模块
+"""
+
+from concurrent.futures import ThreadPoolExecutor
+from typing import List, Dict, Any
+from uuid import uuid4
+import asyncio
+import pytest
+import pytest_asyncio
+import statistics
+import time
+
+"""
 Auth-Service 工作的高级功能测试
 使用测试数据库管理器解决数据库初始化问题
 """
 
-import pytest
-import pytest_asyncio
-import asyncio
-import time
-import statistics
-from concurrent.futures import ThreadPoolExecutor
-from uuid import uuid4
-from typing import List, Dict, Any
 
 # 使用工作的测试配置
 pytest_plugins = ["conftest_working"]

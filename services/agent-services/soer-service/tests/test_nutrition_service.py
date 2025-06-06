@@ -1,10 +1,15 @@
+"""
+test_nutrition_service - 索克生活项目模块
+"""
+
+from unittest.mock import Mock, patch
+import pytest
+
 #!/usr/bin/env python3
 """
 nutrition_service 测试
 """
 
-import pytest
-from unittest.mock import Mock, patch
 
 class TestNutritionService:
     """测试类"""

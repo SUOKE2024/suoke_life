@@ -1,8 +1,13 @@
-# -*- coding: utf-8 -*-
+"""
+event_handlers - 索克生活项目模块
 """
 
 from os import os
 from services.common.messaging.event_bus import EventBus
+
+# -*- coding: utf-8 -*-
+"""
+
 
 
 

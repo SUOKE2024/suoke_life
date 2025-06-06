@@ -1,15 +1,20 @@
+"""
+implement_communication_matrix - 索克生活项目模块
+"""
+
+from pathlib import Path
+import json
+import subprocess
+import sys
+import time
+import yaml
+
 #!/usr/bin/env python3
 """
 索克生活APP通信矩阵实施自动化脚本
 基于 services/COMMUNICATION_MATRIX_IMPLEMENTATION_PLAN.md
 """
 
-import sys
-import yaml
-import json
-import subprocess
-import time
-from pathlib import Path
 
 class CommunicationMatrixImplementer:
     """通信矩阵实施器"""

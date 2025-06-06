@@ -1,15 +1,20 @@
+"""
+final_completion_validator - 索克生活项目模块
+"""
+
+from pathlib import Path
+from typing import Dict, List, Tuple
+import ast
+import json
+import os
+import subprocess
+
 #!/usr/bin/env python3
 """
 最终完成度验证脚本
 验证所有服务是否达到100%完成度
 """
 
-import os
-import subprocess
-import ast
-from pathlib import Path
-from typing import Dict, List, Tuple
-import json
 
 class FinalCompletionValidator:
     """最终完成度验证器"""

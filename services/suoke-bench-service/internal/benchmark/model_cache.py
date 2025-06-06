@@ -1,21 +1,26 @@
 """
+model_cache - 索克生活项目模块
+"""
+
+from collections.abc import Callable
+from dataclasses import dataclass
+from internal.benchmark.model_interface import (
+from threading import RLock
+from typing import Any
+import asyncio
+import gc
+import logging
+import psutil
+import time
+
+"""
 模型缓存管理器
 
 提供高效的模型加载、缓存和内存管理功能
 """
 
-import asyncio
-import gc
-import logging
-import time
-from collections.abc import Callable
-from dataclasses import dataclass
-from threading import RLock
-from typing import Any
 
-import psutil
 
-from internal.benchmark.model_interface import (
     ModelInterface,
 )
 

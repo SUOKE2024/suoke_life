@@ -1,10 +1,15 @@
 """
+exceptions - 索克生活项目模块
+"""
+
+from typing import Any
+
+"""
 自定义异常类
 
 定义小克服务的各种异常类型, 提供详细的错误信息和错误码。
 """
 
-from typing import Any
 
 
 class XiaokeServiceError(Exception):

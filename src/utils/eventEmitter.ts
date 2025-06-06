@@ -69,4 +69,4 @@ export class EventEmitter {
   eventNames(): string[] {
     return Array.from(this.events.keys());
   }
-} 
+}

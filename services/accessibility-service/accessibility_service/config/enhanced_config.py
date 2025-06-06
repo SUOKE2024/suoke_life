@@ -1,3 +1,17 @@
+"""
+enhanced_config - 索克生活项目模块
+"""
+
+from pydantic import BaseModel, Field, ValidationError
+from typing import Any
+from watchdog.events import FileSystemEventHandler
+from watchdog.observers import Observer
+import asyncio
+import json
+import logging
+import os
+import yaml
+
 #!/usr/bin/env python
 
 """
@@ -5,16 +19,7 @@
 支持配置验证、热重载、环境变量管理和类型检查
 """
 
-import asyncio
-import json
-import logging
-import os
-from typing import Any
 
-import yaml
-from pydantic import BaseModel, Field, ValidationError
-from watchdog.events import FileSystemEventHandler
-from watchdog.observers import Observer
 
 logger = logging.getLogger(__name__)
 
@@ -27,6 +32,42 @@ class ServiceConfig(BaseModel):
     port: int = Field(default=50051, ge=1, le=65535, description="服务端口")
     data_root: str = Field(..., description="数据根目录")
 
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'serviceconfig'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'loggingconfig'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'databaseconfig'
+        ordering = ['-created_at']
+
 
 class ModelConfig(BaseModel):
     """模型配置模型"""
@@ -34,6 +75,66 @@ class ModelConfig(BaseModel):
     sign_language_model: str = Field(..., description="手语识别模型")
     speech_model: dict[str, str] = Field(..., description="语音模型配置")
     conversion_model: str = Field(..., description="内容转换模型")
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'featureconfig'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'cacheconfig'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'modelmanagerconfig'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'securityconfig'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'accessibilityconfig'
+        ordering = ['-created_at']
 
 
 class LoggingConfig(BaseModel):

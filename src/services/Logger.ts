@@ -1,11 +1,11 @@
-//////     日志服务   简化版本，用于基本的日志记录
-type LogLevel = "debug" | "info" | "warn" | "error";
+// 日志服务   简化版本，用于基本的日志记录
+type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
 class Logger {
   private isDevelopment: boolean;
 
   constructor() {
-    this.isDevelopment = process.env.NODE_ENV === "development";
+    this.isDevelopment = process.env.NODE_ENV === 'development';
   }
 
   debug(message: string, ...args: any[]): void {
@@ -28,16 +28,16 @@ class Logger {
 
   log(level: LogLevel, message: string, ...args: any[]): void {
     switch (level) {
-      case "debug":
+      case 'debug':
         this.debug(message, ...args);
         break;
-      case "info":
+      case 'info':
         this.info(message, ...args);
         break;
-      case "warn":
+      case 'warn':
         this.warn(message, ...args);
         break;
-      case "error":
+      case 'error':
         this.error(message, ...args);
         break;
     }

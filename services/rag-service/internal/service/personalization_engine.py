@@ -1,17 +1,22 @@
 """
+personalization_engine - 索克生活项目模块
+"""
+
+from collections import defaultdict, Counter
+from dataclasses import dataclass, asdict
+from datetime import datetime, timedelta
+from enum import Enum
+from loguru import logger
+from sklearn.feature_extraction.text import TfidfVectorizer
+from typing import Dict, List, Optional, Any, Tuple, Set
+
+"""
 个性化推荐引擎
 
 基于用户画像、健康数据、行为模式和中医体质理论提供个性化健康建议
 """
 
-from datetime import datetime, timedelta
-from enum import Enum
-from typing import Dict, List, Optional, Any, Tuple, Set
-from dataclasses import dataclass, asdict
-from collections import defaultdict, Counter
 
-from sklearn.feature_extraction.text import TfidfVectorizer
-from loguru import logger
 
 class RecommendationType(Enum):
     """推荐类型"""

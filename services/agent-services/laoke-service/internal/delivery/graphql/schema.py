@@ -1,3 +1,12 @@
+"""
+schema - 索克生活项目模块
+"""
+
+from enum import Enum
+from internal.delivery.dependencies import (
+from internal.delivery.exceptions import ResourceNotFoundException, ValidationException
+import strawberry
+
 #!/usr/bin/env python
 
 """
@@ -5,16 +14,12 @@
 使用Strawberry库实现GraphQL API
 """
 
-from enum import Enum
 
-import strawberry
 
-from internal.delivery.dependencies import (
     get_agent_manager,
     get_community_service,
     get_knowledge_service,
 )
-from internal.delivery.exceptions import ResourceNotFoundException, ValidationException
 
 
 # 枚举类型

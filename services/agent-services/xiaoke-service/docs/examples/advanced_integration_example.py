@@ -1,33 +1,38 @@
+"""
+advanced_integration_example - 索克生活项目模块
+"""
+
+from datetime import datetime
+from pkg.cache.cache_manager import CacheStrategy, get_cache_manager
+from pkg.config.dynamic_config import ConfigFormat, get_config_manager
+from pkg.distributed.lock_manager import LockConfig, LockType, get_lock_manager
+from pkg.health.health_checker import (
+from pkg.messaging.queue_manager import (
+from pkg.observability.enhanced_metrics import get_metrics_collector
+from pkg.resilience.retry_manager import (
+from typing import Any
+import asyncio
+import json
+import logging
+
 #!/usr/bin/env python3
 """
 小克服务高级集成示例
 展示如何使用所有新增的优化组件：消息队列、分布式锁、健康检查、动态配置等
 """
 
-import asyncio
-import json
-import logging
-from datetime import datetime
-from typing import Any
 
-from pkg.cache.cache_manager import CacheStrategy, get_cache_manager
-from pkg.config.dynamic_config import ConfigFormat, get_config_manager
-from pkg.distributed.lock_manager import LockConfig, LockType, get_lock_manager
-from pkg.health.health_checker import (
     HealthCheckConfig,
     get_health_check_manager,
 )
 
 # 导入优化组件
-from pkg.messaging.queue_manager import (
     QueueType,
     TaskConfig,
     TaskPriority,
     async_task,
     get_queue_manager,
 )
-from pkg.observability.enhanced_metrics import get_metrics_collector
-from pkg.resilience.retry_manager import (
     CircuitBreakerConfig,
     RetryConfig,
     get_retry_manager,

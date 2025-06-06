@@ -1,14 +1,19 @@
+"""
+unused_imports_cleaner - 索克生活项目模块
+"""
+
+from pathlib import Path
+from typing import List, Dict, Set, Tuple
+import ast
+import os
+import re
+
 #!/usr/bin/env python3
 """
 索克生活项目未使用导入清理脚本
 清理所有未使用的import语句
 """
 
-import os
-import re
-import ast
-from pathlib import Path
-from typing import List, Dict, Set, Tuple
 
 class UnusedImportsCleaner:
     def __init__(self, project_root: str):

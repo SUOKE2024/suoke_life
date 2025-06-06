@@ -1,3 +1,19 @@
+"""
+device_adapter - 索克生活项目模块
+"""
+
+                    from scipy import signal as sp_signal
+            from scipy import signal as sp_signal
+            import time
+        from scipy import signal as sp_signal
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum, auto
+from internal.model.pulse_models import (
+from typing import Any
+import logging
+
 #!/usr/bin/env python3
 
 """
@@ -8,14 +24,7 @@
 校准功能，确保数据质量和兼容性。
 """
 
-import logging
-from abc import ABC, abstractmethod
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum, auto
-from typing import Any
 
-from internal.model.pulse_models import (
     DeviceInfo,
     PulseDataPacket,
     PulsePosition,
@@ -162,7 +171,6 @@ class SignalProcessor:
     def _remove_baseline(self, signal: np.ndarray, sample_rate: int) -> np.ndarray:
         """去除基线漂移"""
         # 简单实现，使用高通滤波器
-        from scipy import signal as sp_signal
 
         # 设计高通滤波器，截止频率0.5Hz
         b, a = sp_signal.butter(4, 0.5 / (sample_rate / 2), "high")
@@ -172,7 +180,6 @@ class SignalProcessor:
 
     def _apply_bandpass(self, signal: np.ndarray, sample_rate: int) -> np.ndarray:
         """应用带通滤波"""
-        from scipy import signal as sp_signal
 
         # 设计带通滤波器
         nyq = 0.5 * sample_rate
@@ -204,13 +211,11 @@ class SignalProcessor:
             if window_size < 3:
                 window_size = 3
 
-            from scipy import signal as sp_signal
 
             return sp_signal.savgol_filter(signal, window_size, 2)
 
     def _detect_peaks(self, signal: np.ndarray, sample_rate: int) -> np.ndarray:
         """检测脉搏波峰"""
-        from scipy import signal as sp_signal
 
         # 设置最小峰值间距为0.5秒
         min_distance = int(sample_rate * 0.4)
@@ -255,7 +260,6 @@ class SignalProcessor:
                 if end > start:
                     cycle = signal[start:end]
                     # 重采样到固定长度以便比较
-                    from scipy import signal as sp_signal
 
                     cycle_resampled = sp_signal.resample(cycle, 100)
                     cycles.append(cycle_resampled)
@@ -313,7 +317,6 @@ class SignalProcessor:
             return -1
 
         # 使用简单的峰值检测
-        from scipy import signal as sp_signal
 
         valleys, _ = sp_signal.find_peaks(-search_region)
 
@@ -476,7 +479,6 @@ class SuokeWP100Adapter(BaseDeviceAdapter):
             self.logger.info(f"正在连接{self.device_name}...")
 
             # 模拟连接过程
-            import time
 
             time.sleep(0.5)
 
@@ -674,7 +676,6 @@ class TCMPulseWaveProAdapter(BaseDeviceAdapter):
         try:
             self.logger.info(f"正在连接{self.device_name}...")
             # TODO: 实际的设备连接代码
-            import time
 
             time.sleep(0.5)
             self.is_connected = True
@@ -827,7 +828,6 @@ class MedSensePR2000Adapter(BaseDeviceAdapter):
         try:
             self.logger.info(f"正在通过蓝牙连接{self.device_name}...")
             # TODO: 实际的蓝牙连接代码
-            import time
 
             time.sleep(0.8)  # 无线连接需要更长时间
             self.is_connected = True

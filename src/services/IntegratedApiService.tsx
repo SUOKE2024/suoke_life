@@ -1,654 +1,496 @@
-import React from "react";
-import { usePerformanceMonitor } from "../../placeholder";../hooks/////    usePerformanceMonitor";"
-import { apiClient } from "./apiClient";/import { authService } from "./authService";/import { AgentCoordinationService } from "./agentCoordinationService";/import { FiveDiagnosisService } from "./fiveDiagnosisService";/import { AccessibilityService } from "./accessibilityService";/import { ecoServicesAPI } from "./ecoServicesApi";/import { MLTrainingService } from "./mlTrainingService";/importrealTimeSync from "./realTimeSync";/import { EventEmitter } from "../utils/////    eventEmitter";
-//////
-// API服务接口 * interface ApiServiceConfig { baseURL: string, ////
-  timeout: number,
-  retries: number,
-  enableCache: boolean,
-  enableRealTime: boolean}
-// 健康数据接口 * interface HealthData { id: string, ////
-  userId: string,
-  metrics: {heartRate: number,
-    bloodPressure: { systolic: number, diastolic: number},
-    sleepQuality: number,
-    stressLevel: number,
-    activityLevel: number,
-    nutritionScore: number}
-  constitution: { type: string,
-    percentage: number,
-    description: string}[]
-  timestamp: string}
-// 智能体状态接口 * interface AgentStatus { id: string, ////
-  name: string,
-  status: "online" | "offline" | "busy",
-  workload: number,
-  performance: {accuracy: number,
-    responseTime: number,
-    userSatisfaction: number}
-  currentTask?: string,
-  lastUpdate: string}
-// 诊断结果接口 * interface DiagnosisResult { id: string, ////
-  userId: string,
-  type: "look" | "listen" | "inquiry" | "palpation" | "comprehensive",
-  results: {symptoms: string[],
-    constitution: string,
-    recommendations: string[],
-    confidence: number}
-  timestamp: string}
-// 用户设置接口 * interface UserSettings { accessibility: {screenReader: boolean, ////
-    highContrast: boolean,
-    largeText: boolean,
-    reduceMotion: boolean,
-    voiceOver: boolean,
-    hapticFeedback: boolean}
-  personalization: { theme: "light" | "dark" | "auto",
-    language: "zh" | "en",
-    fontSize: number,
-    animationSpeed: number,
-    notifications: {
-      health: boolean,
-      agents: boolean,
-      system: boolean}
+import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { apiClient, ApiResponse, ServiceStatus } from './apiClient';
+import { 
+  API_GATEWAY_CONFIG, 
+  buildAgentUrl, 
+  buildDiagnosisUrl,
+  buildApiUrl,
+  GATEWAY_FEATURES,
+  SERVICE_DISCOVERY_CONFIG
+} from '../constants/config';
+
+// 服务接口定义
+export interface AuthService {
+  login(credentials: { email: string; password: string }): Promise<ApiResponse<any>>;
+  logout(): Promise<ApiResponse<any>>;
+  register(userData: any): Promise<ApiResponse<any>>;
+  refreshToken(): Promise<ApiResponse<any>>;
+  getProfile(): Promise<ApiResponse<any>>;
+  updateProfile(data: any): Promise<ApiResponse<any>>;
+}
+
+export interface UserService {
+  getProfile(): Promise<ApiResponse<any>>;
+  updateProfile(data: any): Promise<ApiResponse<any>>;
+  getSettings(): Promise<ApiResponse<any>>;
+  updateSettings(settings: any): Promise<ApiResponse<any>>;
+  getHealthProfile(): Promise<ApiResponse<any>>;
+  updateHealthProfile(data: any): Promise<ApiResponse<any>>;
+}
+
+export interface HealthDataService {
+  getData(params?: any): Promise<ApiResponse<any>>;
+  addData(data: any): Promise<ApiResponse<any>>;
+  updateData(id: string, data: any): Promise<ApiResponse<any>>;
+  deleteData(id: string): Promise<ApiResponse<any>>;
+  getMetrics(timeRange?: string): Promise<ApiResponse<any>>;
+  exportData(format: string): Promise<ApiResponse<any>>;
+  getAnalysis(dataId: string): Promise<ApiResponse<any>>;
+}
+
+export interface AgentService {
+  getStatus(): Promise<ApiResponse<any>>;
+  chat(message: string, agentType?: string): Promise<ApiResponse<any>>;
+  streamChat(message: string, agentType?: string): Promise<ReadableStream>;
+  getPerformance(): Promise<ApiResponse<any>>;
+  getSettings(): Promise<ApiResponse<any>>;
+  updateSettings(settings: any): Promise<ApiResponse<any>>;
+}
+
+export interface DiagnosisService {
+  performLookDiagnosis(data: any): Promise<ApiResponse<any>>;
+  performListenDiagnosis(data: any): Promise<ApiResponse<any>>;
+  performInquiryDiagnosis(data: any): Promise<ApiResponse<any>>;
+  performPalpationDiagnosis(data: any): Promise<ApiResponse<any>>;
+  getComprehensiveDiagnosis(data: any): Promise<ApiResponse<any>>;
+}
+
+export interface RAGService {
+  query(question: string, context?: any): Promise<ApiResponse<any>>;
+  streamQuery(question: string, context?: any): Promise<ReadableStream>;
+  multimodalQuery(data: any): Promise<ApiResponse<any>>;
+  tcmAnalysis(symptoms: string[]): Promise<ApiResponse<any>>;
+  getHerbRecommendation(constitution: string): Promise<ApiResponse<any>>;
+  getSyndromeAnalysis(symptoms: any): Promise<ApiResponse<any>>;
+  getConstitutionAnalysis(data: any): Promise<ApiResponse<any>>;
+}
+
+export interface BlockchainService {
+  getRecords(userId?: string): Promise<ApiResponse<any>>;
+  addRecord(data: any): Promise<ApiResponse<any>>;
+  verifyRecord(recordId: string): Promise<ApiResponse<any>>;
+  mintToken(data: any): Promise<ApiResponse<any>>;
+  transferToken(data: any): Promise<ApiResponse<any>>;
+}
+
+// 服务状态接口
+export interface ServiceHealth {
+  services: ServiceStatus[];
+  overallHealth: 'healthy' | 'degraded' | 'unhealthy';
+  lastCheck: string;
+}
+
+// 集成API服务实现
+export class IntegratedApiService {
+  // 认证服务
+  auth: AuthService = {
+    login: async (credentials) => {
+      return apiClient.login(credentials);
+    },
+
+    logout: async () => {
+      return apiClient.logout();
+    },
+
+    register: async (userData) => {
+      return apiClient.post('AUTH', '/auth/register', userData);
+    },
+
+    refreshToken: async () => {
+      return apiClient.post('AUTH', '/auth/refresh');
+    },
+
+    getProfile: async () => {
+      return apiClient.get('AUTH', '/auth/profile');
+    },
+
+    updateProfile: async (data) => {
+      return apiClient.put('AUTH', '/auth/profile', data);
+    },
   };
-  privacy: { dataSharing: boolean,
-    analytics: boolean,
-    locationTracking: boolean};
-}
-// 区块链健康记录接口 * interface BlockchainHealthRecord { id: string, ////
-  userId: string,
-  dataHash: string,
-  timestamp: string,
-  signature: string,
-  verified: boolean,
-  metadata: {dataType: string,
-    source: string,
-    version: string}
-}
-// 医疗资源接口 * interface MedicalResource { id: string, ////
-  type: "hospital" | "clinic" | "pharmacy" | "specialist",
-  name: string,
-  location: {address: string,
-    coordinates: { lat: number, lng: number}
+
+  // 用户服务
+  user: UserService = {
+    getProfile: async () => {
+      return apiClient.get('USER', '/users/profile');
+    },
+
+    updateProfile: async (data) => {
+      return apiClient.put('USER', '/users/profile', data);
+    },
+
+    getSettings: async () => {
+      return apiClient.get('USER', '/users/settings');
+    },
+
+    updateSettings: async (settings) => {
+      return apiClient.put('USER', '/users/settings', settings);
+    },
+
+    getHealthProfile: async () => {
+      return apiClient.get('USER', '/users/health-profile');
+    },
+
+    updateHealthProfile: async (data) => {
+      return apiClient.put('USER', '/users/health-profile', data);
+    },
   };
-  services: string[],
-  rating: number,
-  availability: { isOpen: boolean,
-    hours: string,
-    nextAvailable: string};
-  contact: { phone: string;
-    website?: string;
-    email?: string}
-}
-// 知识库查询接口 * interface KnowledgeQuery { query: string, ////
-  type: "symptom" | "treatment" | "medicine" | "general"
-  context?:  {
-    userId?: string;
-    symptoms?: string[];
-    constitution?: string};
-}
-interface KnowledgeResult { id: string,
-  title: string,
-  content: string,
-  relevance: number,
-  source: string,
-  category: string,
-  tags: string[],
-  lastUpdated: string}
-export class IntegratedApiService  {;
-;
-  private apiClient: typeof apiClient;
-  private authService: typeof authService;
-  private agentService: AgentCoordinationService;
-  private diagnosisService: FiveDiagnosisService;
-  private accessibilityService: AccessibilityService;
-  private ecoService: typeof ecoServicesAPI;
-  private mlService: MLTrainingService;
-  private realTimeSync: typeof realTimeSync;
-  private eventEmitter: EventEmitter;
-  private config: ApiServiceConfig;
-constructor(config: Partial<ApiServiceConfig /> = {}) {/////        this.config = {
-      baseURL: "http:// , localhost: 8000", //////     timeout: 30000,
-      retries: 3,
-      enableCache: true,
-      enableRealTime: true,
-      ...config;
-    }
-    this.eventEmitter = new EventEmitter();
-    // 初始化所有服务 //////     this.apiClient = apiClient;
-    this.authService = authService;
-    this.agentService = new AgentCoordinationService();
-    this.diagnosisService = new FiveDiagnosisService();
-    this.accessibilityService = new AccessibilityService();
-    this.ecoService = ecoServicesAPI;
-    this.mlService = new MLTrainingService();
-    this.realTimeSync = realTimeSync;
-    // 设置事件监听 //////     this.setupEventListeners()
-  }
-  private setupEventListeners() {
-    // 实时数据同步事件 //////     if (this.config.enableRealTime && this.realTimeSync) {
-      // 注意：这里需要根据实际的realTimeSync实现来调整 // / this.realTimeSync.on(health: update", (data) => {* // * // this.eventEmitter.emit("health: realtime, data)* // * / })* // * // this.realTimeSync.on("agent: status", (status) => {* // * // this.eventEmitter.emit(agent: status", status)* // * / })* // } * /////     }"
-  // ==================== 认证相关 API ==================== //////
-  async login(credentials: { username: string, password: string}) {
-    try {
-      const response = await this.authService.login({;
-        email: credentials.username,
-        password: credentials.passwo;r;d;
-      ;};)
-      this.eventEmitter.emit("api: login:success", response);
-      return respon;s;e;
-    } catch (error) {
-      this.eventEmitter.emit("api: login:error", error);
-      throw error;
-    }
-  }
-  async logout() {
-    try {
-      const response = await this.authService.logo;u;t;(;);
-      this.eventEmitter.emit("api: logout:success");
-      return respon;s;e;
-    } catch (error) {
-      this.eventEmitter.emit("api: logout:error", error);
-      throw error;
-    }
-  }
-  async refreshToken() {
-    return await this.authService.refreshAccessTok;e;n;
-  }
-  async getCurrentUser() {
-    return await this.authService.getCurrentUs;e;r;
-  }
-  // ==================== 健康数据 API ==================== //////
-  async getHealthData(userId: string,
-    timeRange?:  { start: string, end: string}): Promise<HealthData[] /////    >  {
-    try {
-      const response = await this.apiClient.get("/health-data", {/////            userId,;
-        ...timeRan;g;e;
-      ;};);
-      return response.da;t;a;
-    } catch (error) {
-      throw err;o;r;
-    }
-  }
-  async saveHealthData(data: Omit<HealthData, "id" | "timestamp" />/  ): Promise<HealthData /////    >  {
-    try {
-      const response = await this.apiClient.post("/health-data", {/////            ...data,;
-        timestamp: new Date().toISOString};)
-      this.eventEmitter.emit("health: data:saved", response.data);
-      return response.da;t;a;
-    } catch (error) {
-      throw err;o;r;
-    }
-  }
-  async getHealthMetrics(userId: string, metric: string, period: string) {
-    try {
-      const response = await this.apiClient.get(;
-        `/health-data/metrics/${metric}`,/////            {;
-          userId,
-          peri;o;d;
-        ;}
-      ;);
-      return response.da;t;a;
-    } catch (error) {
-      throw err;o;r;
-    }
-  }
-  async exportHealthData(
-    userId: string,
-    format: "json" | "csv" | "pdf" = "json") {
-    try {
-      const response = await this.apiClient.get(`/health-data/export`, {/////            userId,;
-        form;a;t;
-      ;};);
-      return response.da;t;a;
-    } catch (error) {
-      throw error;
-    }
-  }
-  // ==================== 智能体相关 API ==================== //////
-  async getAgentStatus(): Promise<AgentStatus[] /////    > {
-    try {
-      const response = await this.agentService.getAgentStat;u;s;
-      return respon;s;e;
-    } catch (error) {
-      throw error;
-    }
-  }
-  async startAgentChat(agentId: string, message: string) {
-    try {
-      const response = await this.agentService.startChat(agentId, mess;a;g;e;);
-      this.eventEmitter.emit("agent: chat:started", { agentId, response });
-      return respon;s;e;
-    } catch (error) {
-      throw error;
-    }
-  }
-  async sendMessageToAgent(agentId: string, message: string, context?: unknown) {
-    try {
-      const response = await this.agentService.sendMessage(;
-        agentId,
-        message,
-        cont;e;x;t;
-      ;)
-      this.eventEmitter.emit("agent: message:sent", {
-        agentId,
-        message,
-        response;
+
+  // 健康数据服务
+  healthData: HealthDataService = {
+    getData: async (params) => {
+      const queryString = params ? `?${new URLSearchParams(params).toString()}` : '';
+      return apiClient.get('HEALTH_DATA', `/health-data${queryString}`);
+    },
+
+    addData: async (data) => {
+      return apiClient.post('HEALTH_DATA', '/health-data', data);
+    },
+
+    updateData: async (id, data) => {
+      return apiClient.put('HEALTH_DATA', `/health-data/${id}`, data);
+    },
+
+    deleteData: async (id) => {
+      return apiClient.delete('HEALTH_DATA', `/health-data/${id}`);
+    },
+
+    getMetrics: async (timeRange) => {
+      const params = timeRange ? `?timeRange=${timeRange}` : '';
+      return apiClient.get('HEALTH_DATA', `/health-data/metrics${params}`);
+    },
+
+    exportData: async (format) => {
+      return apiClient.get('HEALTH_DATA', `/health-data/export?format=${format}`);
+    },
+
+    getAnalysis: async (dataId) => {
+      return apiClient.get('HEALTH_DATA', `/health-data/${dataId}/analysis`);
+    },
+  };
+
+  // 智能体服务
+  agents: AgentService = {
+    getStatus: async () => {
+      return apiClient.get('AGENTS', '/agents/status');
+    },
+
+    chat: async (message, agentType = 'xiaoai') => {
+      return apiClient.post('AGENTS', `/agents/${agentType}/chat`, { message });
+    },
+
+    streamChat: async (message, agentType = 'xiaoai') => {
+      const url = buildAgentUrl(agentType.toUpperCase(), '/chat/stream');
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'text/event-stream',
+        },
+        body: JSON.stringify({ message }),
       });
-      return respon;s;e;
-    } catch (error) {
-      throw error;
-    }
-  }
-  async getAgentPerformance(
-    agentId: string,
-    timeRange?:  { start: string, end: string}) {
-    try {
-      const response = await this.apiClient.get(;
-        `/agents/${agentId}/performance`,/////            timeRa;n;g;e;
-      ;);
-      return response.da;t;a;
-    } catch (error) {
-      throw error;
-    }
-  }
-  async updateAgentSettings(agentId: string, settings: unknown) {
-    try {
-      const response = await this.apiClient.put(;
-        `/agents/${agentId}/settings`,/////            setti;n;g;s;
-      ;)
-      this.eventEmitter.emit("agent: settings:updated", { agentId, settings });
-      return response.da;t;a;
-    } catch (error) {
-      throw err;o;r;
-    }
-  }
-  // ==================== 四诊相关 API ==================== //////
-  async startDiagnosis(type: "look" | "listen" | "inquiry" | "palpation",
-    data: unknown);: Promise<DiagnosisResult /////    >  {
-    try {
-      const response = await this.diagnosisService.startDiagnosis(type, d;a;t;a;);
-      this.eventEmitter.emit("diagnosis: started", { type, response });
-      return respon;s;e;
-    } catch (error) {
-      throw error;
-    }
-  }
-  async getDiagnosisHistory(userId: string,
-    limit: number = 10;): Promise<DiagnosisResult[] /////    >  {
-    try {
-      const response = await this.apiClient.get("/diagnosis/history", {/////            userId,;
-        lim;i;t;
-      ;};);
-      return response.da;t;a;
-    } catch (error) {
-      throw error;
-    }
-  }
-  async getComprehensiveDiagnosis(userId: string,
-    symptoms: string[];): Promise<DiagnosisResult /////    >  {
-    try {
-      const response = await this.apiClient.post("/diagnosis/comprehensive", {/////            userId,;
-        sympto;m;s;
-      ;};)
-      this.eventEmitter.emit(
-        "diagnosis: comprehensive:completed",
-        response.data;
-      );
-      return response.da;t;a;
-    } catch (error) {
-      throw error;
-    }
-  }
-  // ==================== 用户设置 API ==================== //////
-  async getUserSettings(userId: string): Promise<UserSettings /////    >  {
-    try {
-      const response = await this.apiClient.get(`/users/${userId}/setting;s;`;);/////          return response.da;t;a;
-    } catch (error) {
-      throw error;
-    }
-  }
-  async updateUserSettings(userId: string,
-    settings: Partial<UserSettings />/);: Promise<UserSettings /////    >  {
-    try {
-      const response = await this.apiClient.put(;
-        `/users/${userId}/settings`,/////            setti;n;g;s;
-      ;)
-      this.eventEmitter.emit("user: settings:updated", {
-        userId,
-        settings: response.data});
-      return response.da;t;a;
-    } catch (error) {
-      throw error;
-    }
-  }
-  async resetUserSettings(userId: string);: Promise<UserSettings /////    >  {
-    try {
-      const response = await this.apiClient.post(;
-        `/users/${userId}/settings/////    rese;t;`);
-      this.eventEmitter.emit("user: settings:reset", { userId });
-      return response.da;t;a;
-    } catch (error) {
-      throw error;
-    }
-  }
-  // ==================== 区块链健康记录 API ==================== //////
-  async saveHealthRecordToBlockchain(userId: string,
-    healthData: unknown): Promise<BlockchainHealthRecord /////    >  {
-    try {
-      const response = await this.apiClient.post("/blockchain/health-records", {/////            userId,;
-        data: healthDa;t;a;
-      ;};)
-      this.eventEmitter.emit("blockchain: record:saved", response.data);
-      return response.da;t;a;
-    } catch (error) {
-      throw error;
-    }
-  }
-  async getBlockchainHealthRecords(userId: string;);: Promise<BlockchainHealthRecord[] /////    >  {
-    try {
-      const response = await this.apiClient.get(;
-        `/blockchain/health-records/////    ${userId;};`);
-      return response.da;t;a;
-    } catch (error) {
-      throw error;
-    }
-  }
-  async verifyHealthRecord(recordId: string;);: Promise< { verified: boolean, details: unknown}> {
-    try {
-      const response = await this.apiClient.post(;
-        `/blockchain/verify/////    ${recordId;};`);
-      return response.da;t;a;
-    } catch (error) {
-      throw error;
-    }
-  }
-  // ==================== 医疗资源 API ==================== //////
-  async searchMedicalResources(query: {
-    type?: string;
-    location?:  { lat: number, lng: number, radius: number};
-    services?: string[];
-  });: Promise<MedicalResource[] /////    >  {
-    try {
-      const response = await this.apiClient.get(;
-        "/medical-resources/search",/////            qu;e;r;y;
-      ;);
-      return response.da;t;a;
-    } catch (error) {
-      throw error;
-    }
-  }
-  async getMedicalResourceDetails(resourceId: string;);: Promise<MedicalResource /////    >  {
-    try {
-      const response = await this.apiClient.get(;
-        `/medical-resources/////    ${resourceId;};`);
-      return response.da;t;a;
-    } catch (error) {
-      throw error;
-    }
-  }
-  async bookMedicalAppointment(
-    resourceId: string,
-    appointmentData: { userId: string,
-      serviceType: string,
-      preferredTime: string;
-      notes?: string}) {
-    try {
-      const response = await this.apiClient.post(;
-        `/medical-resources/${resourceId}/appointments`,/////            appointmentD;a;t;a;
-      ;)
-      this.eventEmitter.emit("appointment: booked", response.data);
-      return response.da;t;a;
-    } catch (error) {
-      throw error;
-    }
-  }
-  // ==================== 知识库 API ==================== //////
-  async searchKnowledge(query: KnowledgeQuery): Promise<KnowledgeResult[] /////    >  {
-    try {
-      const response = await this.apiClient.post("/knowledge/search", que;r;y;);/////          return response.da;t;a;
-    } catch (error) {
-      throw error;
-    }
-  }
-  async getKnowledgeDetails(knowledgeId: string): Promise<KnowledgeResult /////    >  {
-    try {
-      const response = await this.apiClient.get(`/knowledge/${knowledgeI;d;};`;);/////          return response.da;t;a;
-    } catch (error) {
-      throw error;
-    }
-  }
-  async getRecommendedKnowledge(userId: string,
-    context?: unknown;
-  );: Promise<KnowledgeResult[] /////    >  {
-    try {
-      const response = await this.apiClient.get(;
-        `/knowledge/recommendations/${userId}`,/////            { conte;x;t ;}
-      ;);
-      return response.da;t;a;
-    } catch (error) {
-      throw error;
-    }
-  }
-  // ==================== 机器学习 API ==================== //////
-  async trainPersonalModel(userId: string, trainingData: unknown) {
-    try {
-      const response = await this.mlService.trainModel(userId, trainingDa;t;a;);
-      this.eventEmitter.emit("ml: training:started", { userId, response });
-      return respon;s;e;
-    } catch (error) {
-      throw error;
-    }
-  }
-  async getModelPrediction(userId: string, inputData: unknown) {
-    try {
-      const response = await this.mlService.predict(userId, inputD;a;t;a;);
-      return respon;s;e;
-    } catch (error) {
-      throw error;
-    }
-  }
-  async getModelPerformance(userId: string) {
-    try {
-      const response = await this.apiClient.get(;
-        `/ml/models/${userId}/////    performanc;e;`);
-      return response.da;t;a;
-    } catch (error) {
-      throw error;
-    }
-  }
-  // ==================== 无障碍服务 API ==================== //////
-  async getAccessibilitySettings(userId: string) {
-    try {
-      const response = await this.accessibilityService.getSettings(user;I;d;);
-      return respon;s;e;
-    } catch (error) {
-      throw error;
-    }
-  }
-  async updateAccessibilitySettings(userId: string, settings: unknown) {
-    try {
-      const response = await this.accessibilityService.updateSettings(;
-        userId,
-        setti;n;g;s;
-      ;)
-      this.eventEmitter.emit("accessibility: settings:updated", {
-        userId,
-        settings;
+
+      if (!response.ok) {
+        throw new Error(`Stream chat failed: ${response.statusText}`);
+      }
+
+      return response.body!;
+    },
+
+    getPerformance: async () => {
+      return apiClient.get('AGENTS', '/agents/performance');
+    },
+
+    getSettings: async () => {
+      return apiClient.get('AGENTS', '/agents/settings');
+    },
+
+    updateSettings: async (settings) => {
+      return apiClient.put('AGENTS', '/agents/settings', settings);
+    },
+  };
+
+  // 四诊服务
+  diagnosis: DiagnosisService = {
+    performLookDiagnosis: async (data) => {
+      return apiClient.post('DIAGNOSIS', '/diagnosis/look', data);
+    },
+
+    performListenDiagnosis: async (data) => {
+      return apiClient.post('DIAGNOSIS', '/diagnosis/listen', data);
+    },
+
+    performInquiryDiagnosis: async (data) => {
+      return apiClient.post('DIAGNOSIS', '/diagnosis/inquiry', data);
+    },
+
+    performPalpationDiagnosis: async (data) => {
+      return apiClient.post('DIAGNOSIS', '/diagnosis/palpation', data);
+    },
+
+    getComprehensiveDiagnosis: async (data) => {
+      return apiClient.post('DIAGNOSIS', '/diagnosis/comprehensive', data);
+    },
+  };
+
+  // RAG服务
+  rag: RAGService = {
+    query: async (question, context) => {
+      return apiClient.post('RAG', '/rag/query', { question, context });
+    },
+
+    streamQuery: async (question, context) => {
+      const url = buildApiUrl('RAG', '/rag/stream-query');
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'text/event-stream',
+        },
+        body: JSON.stringify({ question, context }),
       });
-      return respon;s;e;
-    } catch (error) {
-      throw error;
-    }
-  }
-  async generateAccessibilityReport(userId: string) {
+
+      if (!response.ok) {
+        throw new Error(`Stream query failed: ${response.statusText}`);
+      }
+
+      return response.body!;
+    },
+
+    multimodalQuery: async (data) => {
+      return apiClient.post('RAG', '/rag/multimodal-query', data);
+    },
+
+    tcmAnalysis: async (symptoms) => {
+      return apiClient.post('RAG', '/rag/tcm/analysis', { symptoms });
+    },
+
+    getHerbRecommendation: async (constitution) => {
+      return apiClient.post('RAG', '/rag/tcm/herbs', { constitution });
+    },
+
+    getSyndromeAnalysis: async (symptoms) => {
+      return apiClient.post('RAG', '/rag/tcm/syndrome', { symptoms });
+    },
+
+    getConstitutionAnalysis: async (data) => {
+      return apiClient.post('RAG', '/rag/tcm/constitution', data);
+    },
+  };
+
+  // 区块链服务
+  blockchain: BlockchainService = {
+    getRecords: async (userId) => {
+      const params = userId ? `?userId=${userId}` : '';
+      return apiClient.get('BLOCKCHAIN', `/blockchain/records${params}`);
+    },
+
+    addRecord: async (data) => {
+      return apiClient.post('BLOCKCHAIN', '/blockchain/records', data);
+    },
+
+    verifyRecord: async (recordId) => {
+      return apiClient.get('BLOCKCHAIN', `/blockchain/verify/${recordId}`);
+    },
+
+    mintToken: async (data) => {
+      return apiClient.post('BLOCKCHAIN', '/blockchain/mint', data);
+    },
+
+    transferToken: async (data) => {
+      return apiClient.post('BLOCKCHAIN', '/blockchain/transfer', data);
+    },
+  };
+
+  // 服务发现和健康检查
+  async getServiceHealth(): Promise<ServiceHealth> {
     try {
-      const response = await this.apiClient.get(;
-        `/accessibility/report/////    ${userId;};`);
-      return response.da;t;a;
+      const response = await apiClient.getServices();
+      const services = response.data as ServiceStatus[];
+      
+      const healthyCount = services.filter(s => s.status === 'healthy').length;
+      const totalCount = services.length;
+      
+      let overallHealth: 'healthy' | 'degraded' | 'unhealthy';
+      if (healthyCount === totalCount) {
+        overallHealth = 'healthy';
+      } else if (healthyCount > totalCount / 2) {
+        overallHealth = 'degraded';
+      } else {
+        overallHealth = 'unhealthy';
+      }
+
+      return {
+        services,
+        overallHealth,
+        lastCheck: new Date().toISOString(),
+      };
     } catch (error) {
-      throw error;
+      return {
+        services: [],
+        overallHealth: 'unhealthy',
+        lastCheck: new Date().toISOString(),
+      };
     }
   }
-  // ==================== 生态服务 API ==================== //////
-  async getEcoServices() {
+
+  // 检查特定服务健康状态
+  async checkServiceHealth(serviceName: string): Promise<ServiceStatus> {
     try {
-      const response = await this.ecoService.getService;s;
-      return respon;s;e;
+      const response = await apiClient.getServiceHealth(serviceName);
+      return response.data;
     } catch (error) {
-      throw error;
+      return {
+        name: serviceName,
+        status: 'unhealthy',
+        instances: 0,
+        lastCheck: new Date().toISOString(),
+      };
     }
   }
-  async subscribeToEcoService(userId: string, serviceId: string, plan: string) {
+
+  // 获取网关状态
+  async getGatewayStatus() {
     try {
-      const response = await this.ecoService.subscribe(userId, serviceId, p;l;a;n;);
-      this.eventEmitter.emit("eco: service:subscribed", {
-        userId,
-        serviceId,
-        plan;
-      });
-      return respon;s;e;
+      const isHealthy = await apiClient.healthCheck();
+      const cacheStats = apiClient.getCacheStats();
+      const circuitBreakerState = apiClient.getCircuitBreakerState();
+
+      return {
+        healthy: isHealthy,
+        cache: cacheStats,
+        circuitBreaker: circuitBreakerState,
+        features: GATEWAY_FEATURES,
+        timestamp: new Date().toISOString(),
+      };
     } catch (error) {
-      throw error;
+      return {
+        healthy: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+        timestamp: new Date().toISOString(),
+      };
     }
   }
-  async getEcoServiceUsage(userId: string, serviceId: string) {
-    try {
-      const response = await this.apiClient.get(;
-        `/eco-services/${serviceId}/usage/////    ${userId;};`);
-      return response.da;t;a;
-    } catch (error) {
-      throw err;o;r;
-    }
-  }
-  // ==================== 反馈和支持 API ==================== //////
-  async submitFeedback(feedback: { userId: string,
-    type: "bug" | "feature" | "improvement" | "general",
-    rating: number,
-    message: string,
-    metadata?: unknown}) {
-    try {
-      const response = await this.apiClient.post("/feedback", {/////            ...feedback,;
-        timestamp: new Date().toISOString};)
-      this.eventEmitter.emit("feedback: submitted", response.data);
-      return response.da;t;a;
-    } catch (error) {
-      throw err;o;r;
-    }
-  }
-  async getFeedbackHistory(userId: string) {
-    try {
-      const response = await this.apiClient.get(`/feedback/history/${userI;d;};`;);/////          return response.da;t;a;
-    } catch (error) {
-      throw err;o;r;
-    }
-  }
-  async getSupportTickets(userId: string) {
-    try {
-      const response = await this.apiClient.get(`/support/tickets/${userI;d;};`;);/////          return response.da;t;a;
-    } catch (error) {
-      throw err;o;r;
-    }
-  }
-  async createSupportTicket(ticket: { userId: string,
-    subject: string,
-    description: string,
-    priority: "low" | "medium" | "high" | "urgent",
-    category: string}) {
-    try {
-      const response = await this.apiClient.post("/support/tickets", tic;k;e;t;)/////          this.eventEmitter.emit("support: ticket:created", response.data);
-      return response.da;t;a;
-    } catch (error) {
-      throw err;o;r;
-    }
-  }
-  // ==================== 系统监控 API ==================== //////
-  async getSystemHealth() {
-    try {
-      const response = await this.apiClient.get("/system/healt;h;";);/////          return response.da;t;a;
-    } catch (error) {
-      throw err;o;r;
-    }
-  }
-  async getSystemMetrics() {
-    try {
-      const response = await this.apiClient.get("/system/metri;c;s;";);/////          return response.da;t;a;
-    } catch (error) {
-      throw err;o;r;
-    }
-  }
-  async reportPerformanceMetrics(metrics: { userId: string,
-    renderTime: number,
-    memoryUsage: number,
-    networkLatency: number,
-    errorCount: number,
-    userSatisfaction: number}) {
-    try {
-      const response = await this.apiClient.post("/system/performance", {/////            ...metrics,;
-        timestamp: new Date().toISOString};);
-      return response.da;t;a;
-    } catch (error) {
-      throw error;
-    }
-  }
-  // ==================== 实用工具方法 ==================== //////
-  //////     批量API请求  async batchRequest(
-    requests: Array<{ name: string, request: () => Promise<any>   }>
-  ) {
-  //////     性能监控
-const performanceMonitor = usePerformanceMonitor('IntegratedApiService', {;
-    trackRender: true,
-    trackMemory: false,
-    warnThreshold: 100, //////     ms };);
-    try {
-      const results = await Promise.allSettled(;
-        requests.map(async ({ name, reque;s;t ;};); => {}
-          try {
-            const result = await reque;s;t;
-            return { name, success: true, data: resu;l;t ;};
-          } catch (error) {
-            return { name, success: false, erro;r ;};
-          }
-        });
-      );
-      return results.map((result, inde;x;) => {}
-        if (result.status === "fulfilled") {
-          return result.val;u;e;
-        } else {
-          return {
-            name: requests[index].name,
-            success: false,
-            error: result.reaso;n;
-          ;};
-        }
-      });
-    } catch (error) {
-      throw error;
-    }
-  }
-  //////     健康检查  async healthCheck(): Promise<boolean> {
-    try {
-      const response = await this.apiClient.get("/healt;h;";);/////          return response.succe;s;s;
-    } catch (error) {
-      return fal;s;e;
-    }
-  }
-  //////     获取API版本信息  async getApiVersion() {
-    try {
-      const response = await this.apiClient.get("/versio;n;";);/////          return response.da;t;a;
-    } catch (error) {
-      throw error;
-    }
-  }
-  //////     事件监听  on(event: string, listener: (...args: unknown[]) => void) {
-    this.eventEmitter.on(event, listener);
-  }
-  //////     移除事件监听  off(event: string, listener: (...args: unknown[]) => void) {
-    this.eventEmitter.off(event, listener);
-  }
-  //////     销毁服务  destroy() {
-    this.eventEmitter.removeAllListeners()
-    this.realTimeSync.disconnect();
+
+  // 清除缓存
+  clearCache(): void {
+    apiClient.clearCache();
   }
 }
-// 创建单例实例 * export const integratedApiService = new IntegratedApiService ////   ;
+
+// 创建服务实例
+export const integratedApiService = new IntegratedApiService();
+
+// React Context
+interface ApiServiceContextType {
+  apiService: IntegratedApiService;
+  serviceHealth: ServiceHealth | null;
+  isLoading: boolean;
+  error: string | null;
+  refreshHealth: () => Promise<void>;
+}
+
+const ApiServiceContext = createContext<ApiServiceContextType | undefined>(undefined);
+
+// Provider组件
+interface ApiServiceProviderProps {
+  children: ReactNode;
+}
+
+export const ApiServiceProvider: React.FC<ApiServiceProviderProps> = ({ children }) => {
+  const [serviceHealth, setServiceHealth] = useState<ServiceHealth | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const refreshHealth = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const health = await integratedApiService.getServiceHealth();
+      setServiceHealth(health);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : '获取服务健康状态失败');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    // 初始化时检查服务健康状态
+    refreshHealth();
+
+    // 如果启用了服务发现，定期检查健康状态
+    if (SERVICE_DISCOVERY_CONFIG.ENABLED) {
+      const interval = setInterval(refreshHealth, SERVICE_DISCOVERY_CONFIG.HEALTH_CHECK_INTERVAL);
+      return () => clearInterval(interval);
+    }
+  }, []);
+
+  const value: ApiServiceContextType = {
+    apiService: integratedApiService,
+    serviceHealth,
+    isLoading,
+    error,
+    refreshHealth,
+  };
+
+  return (
+    <ApiServiceContext.Provider value={value}>
+      {children}
+    </ApiServiceContext.Provider>
+  );
+};
+
+// Hook
+export const useApiService = (): ApiServiceContextType => {
+  const context = useContext(ApiServiceContext);
+  if (!context) {
+    throw new Error('useApiService must be used within an ApiServiceProvider');
+  }
+  return context;
+};
+
+// 便捷的服务访问hooks
+export const useAuth = () => {
+  const { apiService } = useApiService();
+  return apiService.auth;
+};
+
+export const useUser = () => {
+  const { apiService } = useApiService();
+  return apiService.user;
+};
+
+export const useHealthData = () => {
+  const { apiService } = useApiService();
+  return apiService.healthData;
+};
+
+export const useAgents = () => {
+  const { apiService } = useApiService();
+  return apiService.agents;
+};
+
+export const useDiagnosis = () => {
+  const { apiService } = useApiService();
+  return apiService.diagnosis;
+};
+
+export const useRAG = () => {
+  const { apiService } = useApiService();
+  return apiService.rag;
+};
+
+export const useBlockchain = () => {
+  const { apiService } = useApiService();
+  return apiService.blockchain;
+};
+
+// 服务健康监控Hook
+export const useServiceHealth = () => {
+  const { serviceHealth, isLoading, error, refreshHealth } = useApiService();
+  return { serviceHealth, isLoading, error, refreshHealth };
+};
+
+// 导出默认实例
+export default integratedApiService;

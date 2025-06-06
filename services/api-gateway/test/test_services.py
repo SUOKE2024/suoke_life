@@ -1,3 +1,16 @@
+"""
+test_services - 索克生活项目模块
+"""
+
+from suoke_api_gateway.core.config import Settings
+from suoke_api_gateway.models.gateway import ServiceInstance
+from suoke_api_gateway.services.load_balancer import (
+from suoke_api_gateway.services.proxy import ProxyService
+from suoke_api_gateway.services.service_registry import ServiceRegistry
+from unittest.mock import AsyncMock, MagicMock, patch
+import asyncio
+import pytest
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,19 +18,11 @@
 服务模块测试
 """
 
-import asyncio
-from unittest.mock import AsyncMock, MagicMock, patch
 
-import pytest
 
-from suoke_api_gateway.core.config import Settings
-from suoke_api_gateway.models.gateway import ServiceInstance
-from suoke_api_gateway.services.load_balancer import (
     LoadBalancer, RoundRobinStrategy, WeightedRoundRobinStrategy,
     LeastConnectionsStrategy, RandomStrategy
 )
-from suoke_api_gateway.services.proxy import ProxyService
-from suoke_api_gateway.services.service_registry import ServiceRegistry
 
 class TestServiceRegistry:
     """服务注册中心测试"""

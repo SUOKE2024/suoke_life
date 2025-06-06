@@ -1,23 +1,28 @@
 """
+learning_system - 索克生活项目模块
+"""
+
+from collections import defaultdict, deque
+from dataclasses import dataclass, asdict
+from datetime import datetime, timedelta
+from enum import Enum
+from loguru import logger
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.model_selection import train_test_split
+from typing import Dict, List, Optional, Any, Tuple, Set
+import json
+import pickle
+
+"""
 实时学习系统
 
 从用户反馈、交互数据和系统性能中持续学习，优化RAG系统
 """
 
-import json
-import pickle
-from datetime import datetime, timedelta
-from enum import Enum
-from typing import Dict, List, Optional, Any, Tuple, Set
-from dataclasses import dataclass, asdict
-from collections import defaultdict, deque
 
-from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
-from sklearn.linear_model import LogisticRegression
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-from sklearn.model_selection import train_test_split
-from loguru import logger
 
 class FeedbackType(Enum):
     """反馈类型"""

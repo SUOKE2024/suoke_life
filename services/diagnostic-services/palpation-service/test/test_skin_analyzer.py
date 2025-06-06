@@ -1,3 +1,12 @@
+"""
+test_skin_analyzer - 索克生活项目模块
+"""
+
+from internal.signal.skin_analyzer import SkinAnalyzer
+from pathlib import Path
+import sys
+import unittest
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,14 +14,10 @@
 皮肤分析器测试
 """
 
-import unittest
-import sys
-from pathlib import Path
 
 # 添加项目根目录到Python路径
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from internal.signal.skin_analyzer import SkinAnalyzer
 
 class TestSkinAnalyzer(unittest.TestCase):
     """测试皮肤分析器"""

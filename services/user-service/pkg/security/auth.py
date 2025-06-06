@@ -1,16 +1,23 @@
 """
+auth - 索克生活项目模块
+"""
+
+        import html
+        import re
+from datetime import datetime, timedelta
+from passlib.context import CryptContext
+from typing import Any, Dict, List, Optional, Set, Union
+import hashlib
+import hmac
+import jwt
+import logging
+import secrets
+import time
+
+"""
 认证和安全工具包
 提供JWT令牌管理、密码加密、权限验证等功能
 """
-import hashlib
-import hmac
-import secrets
-import time
-from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional, Set, Union
-import jwt
-from passlib.context import CryptContext
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -272,14 +279,12 @@ class SecurityUtils:
     @staticmethod
     def validate_email(email: str) -> bool:
         """验证邮箱格式"""
-        import re
         pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
         return re.match(pattern, email) is not None
     
     @staticmethod
     def validate_phone(phone: str) -> bool:
         """验证手机号格式"""
-        import re
         # 简单的中国手机号验证
         pattern = r'^1[3-9]\d{9}$'
         return re.match(pattern, phone) is not None
@@ -287,7 +292,6 @@ class SecurityUtils:
     @staticmethod
     def sanitize_input(text: str) -> str:
         """清理输入文本"""
-        import html
         # HTML转义
         text = html.escape(text)
         # 移除潜在的SQL注入字符

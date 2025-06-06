@@ -1,14 +1,19 @@
 """
+test_zk_integration - 索克生活项目模块
+"""
+
+from suoke_blockchain_service.exceptions import ZKProofError
+from suoke_blockchain_service.zk_integration import ZKProofGenerator, ZKProofVerifier
+from unittest.mock import AsyncMock, MagicMock, patch
+import pytest
+
+"""
 零知识证明集成测试模块
 
 测试零知识证明生成和验证功能。
 """
 
-import pytest
-from unittest.mock import AsyncMock, MagicMock, patch
 
-from suoke_blockchain_service.zk_integration import ZKProofGenerator, ZKProofVerifier
-from suoke_blockchain_service.exceptions import ZKProofError
 
 
 class TestZKProofGenerator:

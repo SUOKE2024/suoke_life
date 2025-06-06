@@ -1,3 +1,19 @@
+"""
+intelligent_generator - 索克生活项目模块
+"""
+
+        import jieba
+from ..model.document import Document
+from ..observability.metrics import MetricsCollector
+from ..resilience.circuit_breaker import CircuitBreakerService
+from dataclasses import dataclass
+from enum import Enum
+from loguru import logger
+from typing import Dict, List, Any, Optional, Tuple
+import asyncio
+import json
+import re
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,17 +21,7 @@
 智能生成器 - 支持多种生成策略和中医特色功能
 """
 
-import asyncio
-import re
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass
-from enum import Enum
-import json
-from loguru import logger
 
-from ..model.document import Document
-from ..observability.metrics import MetricsCollector
-from ..resilience.circuit_breaker import CircuitBreakerService
 
 
 class GenerationStrategy(str, Enum):
@@ -606,7 +612,6 @@ class QualityAssessor:
     def _assess_relevance(self, content: str, query: str) -> float:
         """评估相关性"""
         # 简化的相关性评估
-        import jieba
         query_words = set(jieba.lcut(query))
         content_words = set(jieba.lcut(content))
         

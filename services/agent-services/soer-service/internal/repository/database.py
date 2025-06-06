@@ -1,15 +1,20 @@
+"""
+database - 索克生活项目模块
+"""
+
+from pkg.utils.config_loader import get_config
+from typing import Any
+import aiosqlite
+import asyncpg
+import logging
+import os
+
 #!/usr/bin/env python3
 """
 数据库连接工具
 """
-import logging
-import os
-from typing import Any
 
-import aiosqlite
-import asyncpg
 
-from pkg.utils.config_loader import get_config
 
 logger = logging.getLogger(__name__)
 

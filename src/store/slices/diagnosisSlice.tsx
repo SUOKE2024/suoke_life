@@ -1,13 +1,12 @@
-import React from "react";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";/import { apiClient } from "../../services/////    apiClient";
-//////
-  DiagnosisState,
+
+import React from "react";
+// DiagnosisState,
   DiagnosisSession,
   DiagnosisData,
   DiagnosisResult,
   DiagnosisType,
-{ ApiResponse } from "../../types";// // //////
-// 初始状态 * const initialState: DiagnosisState = { ////
+{ ApiResponse } from "../../types";// // // // 初始状态 * const initialState: DiagnosisState = { ////
   currentSession: undefined,
   sessions:  [],
   results:  [],
@@ -41,7 +40,7 @@ k;<;
           type,
           data;
         }
-      ;)
+      ;);
       if (!response.success) {
         throw new Error(response.error?.message || "提交诊断数据失败;";);
       }
@@ -98,7 +97,7 @@ k;<;
     try {
       const response: ApiResponse<{ imageUrl: string, analysis: unknown}> = await apiClient.uploadFile(;
           "/diagnosis/look/upload-tongue-image",/////              imageFil;e;
-        ;)
+        ;);
       if (!response.success) {
         throw new Error(response.error?.message || "上传舌象图片失败;";);
       }
@@ -126,11 +125,8 @@ k;<;
       return rejectWithValue(error.message || "录制语音失败;";);
     }
   });
-// 创建slice * const diagnosisSlice = createSlice({ ////
-  name: "diagnosis",
-  initialState,
-  reducers: {
-    setCurrentSession: (state, action: PayloadAction<string | undefined;>;); => {}
+// 创建slice * const diagnosisSlice = createSlice({ ////;
+  name: "diagnosis",initialState,reducers: {setCurrentSession: (state, action: PayloadAction<string | undefined;>;); => {}
       state.currentSession = action.payload;
     },
     updateSessionData: (,
@@ -161,7 +157,7 @@ k;<;
     }
   },
   extraReducers: (builder) => {}
-    // 开始诊断会话 //////     builder;
+    // 开始诊断会话 // builder;
       .addCase(startDiagnosisSession.pending, (state) => {}
         state.loading = true;
         state.error = undefined;
@@ -176,7 +172,7 @@ k;<;
         state.loading = false;
         state.error = action.payload;
       });
-    // 提交诊断数据 //////     builder;
+    // 提交诊断数据 // builder;
       .addCase(submitDiagnosisData.pending, (state) => {}
         state.loading = true;
         state.error = undefined;
@@ -195,7 +191,7 @@ k;<;
         state.loading = false;
         state.error = action.payload;
       });
-    // 完成诊断会话 //////     builder;
+    // 完成诊断会话 // builder;
       .addCase(completeDiagnosisSession.pending, (state) => {}
         state.loading = true;
         state.error = undefined;
@@ -219,7 +215,7 @@ k;<;
         state.loading = false;
         state.error = action.payload;
       });
-    // 获取诊断历史 //////     builder;
+    // 获取诊断历史 // builder;
       .addCase(fetchDiagnosisHistory.pending, (state) => {}
         state.loading = true;
         state.error = undefined;
@@ -233,7 +229,7 @@ k;<;
         state.loading = false;
         state.error = action.payload;
       });
-    // 上传舌象图片 //////     builder;
+    // 上传舌象图片 // builder;
       .addCase(uploadTongueImage.pending, (state) => {}
         state.loading = true;
         state.error = undefined;
@@ -246,7 +242,7 @@ k;<;
         state.loading = false;
         state.error = action.payload;
       });
-    // 录制语音 //////     builder;
+    // 录制语音 // builder;
       .addCase(recordVoiceData.pending, (state) => {}
         state.loading = true;
         state.error = undefined;
@@ -264,9 +260,7 @@ k;<;
 // 导出actions * export const { ////
  /////
   setCurrentSession,
-  updateSessionData,;
-  clearError,;
-  cancelSession;
+  updateSessionData,clearError,cancelSession;
   } = diagnosisSlice.actio;n;s;
 // 选择器 * export const selectDiagnosis = (state: { diagnosis: DiagnosisState });////
 =;>; /////

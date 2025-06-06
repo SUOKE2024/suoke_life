@@ -1,17 +1,23 @@
 """
-依赖注入模块
-提供FastAPI路由的依赖注入
+deps - 索克生活项目模块
 """
 
-from fastapi import Depends, HTTPException, status
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-
+        import time
 from app.core.container import get_container
 from app.core.logger import get_logger
 from app.services.cache_service import CacheService
 from app.services.knowledge_graph_service import KnowledgeGraphService
 from app.services.knowledge_service import KnowledgeService
 from app.services.performance_service import PerformanceService
+from fastapi import Depends, HTTPException, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+
+"""
+依赖注入模块
+提供FastAPI路由的依赖注入
+"""
+
+
 
 logger = get_logger()
 security = HTTPBearer(auto_error=False)
@@ -130,7 +136,6 @@ class RateLimiter:
 
     async def __call__(self, request_id: str | None = None) -> bool:
         """检查是否超过限流"""
-        import time
 
         current_time = time.time()
         window_start = current_time - self.window_seconds

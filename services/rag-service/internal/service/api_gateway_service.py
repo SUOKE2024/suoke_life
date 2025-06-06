@@ -1,3 +1,24 @@
+"""
+api_gateway_service - 索克生活项目模块
+"""
+
+                import base64
+from cryptography.fernet import Fernet
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from loguru import logger
+from prometheus_client import Counter, Histogram, Gauge
+from typing import Dict, List, Any, Optional, Tuple, Union, Callable
+import aiohttp
+import asyncio
+import grpc
+import json
+import jwt
+import time
+import uuid
+import websockets
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,21 +26,6 @@
 API网关集成服务 - 与其他微服务进行通信和数据交换
 """
 
-import asyncio
-import json
-import uuid
-import time
-from typing import Dict, List, Any, Optional, Tuple, Union, Callable
-from dataclasses import dataclass, field
-from enum import Enum
-from datetime import datetime, timedelta
-from loguru import logger
-import aiohttp
-import grpc
-import websockets
-from prometheus_client import Counter, Histogram, Gauge
-import jwt
-from cryptography.fernet import Fernet
 
 class ServiceType(Enum):
     """服务类型"""
@@ -596,7 +602,6 @@ class APIGatewayService:
             username = endpoint_config.auth_config.get('username')
             password = endpoint_config.auth_config.get('password')
             if username and password:
-                import base64
                 credentials = base64.b64encode(f"{username}:{password}".encode()).decode()
                 headers['Authorization'] = f'Basic {credentials}'
         

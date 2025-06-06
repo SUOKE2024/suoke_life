@@ -1,15 +1,20 @@
+"""
+complexity_refactor - 索克生活项目模块
+"""
+
+from pathlib import Path
+from typing import List, Dict, Tuple, Optional
+import argparse
+import ast
+import os
+import re
+
 #!/usr/bin/env python3
 """
 索克生活项目复杂度重构脚本
 专门重构高复杂度函数，提升代码质量
 """
 
-import os
-import ast
-import re
-from pathlib import Path
-from typing import List, Dict, Tuple, Optional
-import argparse
 
 class ComplexityRefactor:
     def __init__(self, project_root: str):

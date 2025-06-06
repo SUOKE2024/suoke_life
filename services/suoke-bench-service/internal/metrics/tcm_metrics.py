@@ -1,12 +1,17 @@
-"""中医特色评测指标实现。"""
-
-from dataclasses import dataclass
-from typing import Any
-
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
+"""
+tcm_metrics - 索克生活项目模块
+"""
 
 from .agent_metrics import MetricResult
 from .metrics import Metric
+from dataclasses import dataclass
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
+from typing import Any
+
+"""中医特色评测指标实现。"""
+
+
+
 
 @dataclass
 class TongueFeature:

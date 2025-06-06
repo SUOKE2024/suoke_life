@@ -1,11 +1,16 @@
+"""
+fix_pydantic_env - 索克生活项目模块
+"""
+
+from pathlib import Path
+import os
+import re
+
 #!/usr/bin/env python3
 """
 批量修复 Pydantic Field env 参数警告的脚本
 """
 
-import os
-import re
-from pathlib import Path
 
 def fix_field_env_warnings(file_path):
     """修复单个文件中的 Field env 参数警告"""

@@ -1,9 +1,14 @@
 """
-基础数据模型
+base - 索克生活项目模块
 """
 
 from sqlalchemy import Column, DateTime, Integer, func
 from sqlalchemy.ext.declarative import declarative_base
+
+"""
+基础数据模型
+"""
+
 
 Base = declarative_base()
 

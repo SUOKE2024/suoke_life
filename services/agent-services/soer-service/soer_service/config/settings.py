@@ -1,14 +1,19 @@
 """
+settings - 索克生活项目模块
+"""
+
+from functools import lru_cache
+from pydantic import Field, field_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
+import os
+
+"""
 应用配置设置模块
 
 使用 Pydantic Settings 进行类型安全的配置管理
 """
 
-import os
-from functools import lru_cache
 
-from pydantic import Field, field_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):

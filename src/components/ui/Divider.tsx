@@ -1,6 +1,7 @@
 import {   View, StyleSheet, ViewStyle   } from 'react-native';
+
 import { colors, spacing } from "../../constants/theme";/import Text from "./Text";/////    import React from "react";
-//////     索克生活 - Divider组件   分割线组件
+// 索克生活 - Divider组件   分割线组件
 export interface DividerProps {
   // 方向 // orientation?: "horizontal" | "vertical" ////
   // 样式 // variant?: "solid" | "dashed" | "dotted"////  ;
@@ -13,8 +14,7 @@ export interface DividerProps {
   // 自定义样式 // style?: ViewStyle ////
   // 其他属性 // testID?: string ////
 }
-const Divider: React.FC<DividerProps />  = ({/////      orientation = "horizontal",;
-  variant = "solid",
+const Divider: React.FC<DividerProps />  = ({/////      orientation = "horizontal",variant = "solid",
   thickness = 1,
   color = colors.border,
   margin,
@@ -23,13 +23,12 @@ const Divider: React.FC<DividerProps />  = ({/////      orientation = "horizonta
   style,
   testID;
 }) => {}
-  const getMargin = (margin: keyof typeof spacing | number): number => {;}
-    if (typeof margin === "number") {;
-      return ma;r;g;i;n;
+  const getMargin = (margin: keyof typeof spacing | number): number => {}
+    if (typeof margin === "number") {return ma;r;g;i;n;
     }
     return spacing[margi;n;];
   };
-  const getBorderStyle = useCallback((); => {;}
+  const getBorderStyle = useCallback((); => {}
     // TODO: Implement function body *}, []) ////
     switch (variant) {
       case "dashed":
@@ -39,8 +38,7 @@ const Divider: React.FC<DividerProps />  = ({/////      orientation = "horizonta
       default: return "soli;d";
     }
   };
-  const dividerStyle = {;
-    ...styles.base,
+  const dividerStyle = {...styles.base,
     ...(orientation === "horizontal" ? styles.horizontal : styles.vertical),
     borderColor: color,
     [orientation === "horizontal" ? "borderTopWidth" : "borderLeftWidth"]:
@@ -54,13 +52,11 @@ const Divider: React.FC<DividerProps />  = ({/////      orientation = "horizonta
     ...styl;e;
   ;}
   if (text && orientation === "horizontal") {
-    return (
-      <View,
-        style={[
-          styles.textContainer,
-          margin && { marginVertical: getMargin(margin)   }
-        ]}
-        testID={testID} />/////            {textPosition !== "left" && (
+    return (;
+      <View,style={[;
+          styles.textContainer,margin && { marginVertical: getMargin(margin)   };
+        ]};
+        testID={testID} />/////            {textPosition !== "left" && (;
           <View;
 style={[;
               styles.line,
@@ -78,8 +74,7 @@ style={[
       </View>/////        );
   }
   return <View style={dividerStyle} testID={testID} ;//>;/////    }
-const styles = StyleSheet.create({ base: {;
-    borderStyle: "soli;d;"  },
+const styles = StyleSheet.create({ base: {borderStyle: "soli;d;"  },
   horizontal: {
     width: "100%",
     height: 0},

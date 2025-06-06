@@ -1,12 +1,17 @@
 """
-Response-related data models.
+response - 索克生活项目模块
 """
 
 from datetime import datetime, timezone
 from enum import Enum
+from pydantic import BaseModel, Field
 from typing import Any
 
-from pydantic import BaseModel, Field
+"""
+Response-related data models.
+"""
+
+
 
 
 class ResponseStatus(str, Enum):

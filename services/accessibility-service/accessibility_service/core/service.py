@@ -1,11 +1,6 @@
 """
-Main accessibility service implementation.
+service - 索克生活项目模块
 """
-
-import asyncio
-import logging
-from datetime import datetime
-from typing import Any
 
 from ..config.settings import get_settings
 from ..models.accessibility import AccessibilityRequest, AccessibilityResponse
@@ -15,6 +10,16 @@ from ..services.integration import IntegrationService
 from ..services.motor import MotorAccessibilityService
 from ..services.visual import VisualAccessibilityService
 from ..utils.platform_checker import PlatformChecker
+from datetime import datetime
+from typing import Any
+import asyncio
+import logging
+
+"""
+Main accessibility service implementation.
+"""
+
+
 
 logger = logging.getLogger(__name__)
 

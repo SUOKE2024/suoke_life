@@ -1,19 +1,24 @@
 """
+analysis - 索克生活项目模块
+"""
+
+from ...core.dialogue_analyzer import (
+from datetime import datetime
+from fastapi import APIRouter, HTTPException, Depends, Body
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel, Field
+from typing import Dict, Any, Optional, List
+import asyncio
+import json
+import logging
+
+"""
 问诊分析API路由
 
 提供智能对话分析、症状提取、中医问诊的接口
 """
 
-import asyncio
-import logging
-import json
-from datetime import datetime
-from fastapi import APIRouter, HTTPException, Depends, Body
-from fastapi.responses import JSONResponse
-from typing import Dict, Any, Optional, List
-from pydantic import BaseModel, Field
 
-from ...core.dialogue_analyzer import (
     DialogueAnalyzer,
     DialogueAnalysisResult,
     SymptomExtractionResult,
@@ -35,6 +40,18 @@ class DialogueMessage(BaseModel):
     content: str = Field(..., description="消息内容")
     timestamp: Optional[datetime] = Field(default_factory=datetime.now, description="时间戳")
     metadata: Optional[Dict[str, Any]] = Field(default_factory=dict, description="元数据")
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'dialoguemessage'
+        ordering = ['-created_at']
+
 
 class DialogueRequest(BaseModel):
     """对话分析请求模型"""
@@ -43,6 +60,18 @@ class DialogueRequest(BaseModel):
     dialogue_history: List[DialogueMessage] = Field(..., description="对话历史")
     analysis_type: str = Field(default="comprehensive", description="分析类型")
     context: Optional[Dict[str, Any]] = Field(default_factory=dict, description="上下文信息")
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'symptomextractionrequest'
+        ordering = ['-created_at']
+
 
 class SymptomExtractionRequest(BaseModel):
     """症状提取请求模型"""

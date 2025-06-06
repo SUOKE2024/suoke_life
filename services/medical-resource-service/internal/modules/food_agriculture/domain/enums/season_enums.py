@@ -1,8 +1,13 @@
 """
-季节相关枚举定义
+season_enums - 索克生活项目模块
 """
 
 from enum import Enum
+
+"""
+季节相关枚举定义
+"""
+
 
 
 class SeasonType(Enum):

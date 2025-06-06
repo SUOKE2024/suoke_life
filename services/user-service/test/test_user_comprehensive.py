@@ -1,18 +1,23 @@
 """
+test_user_comprehensive - 索克生活项目模块
+"""
+
+from datetime import datetime, timedelta
+from fastapi.testclient import TestClient
+from sqlalchemy.ext.asyncio import AsyncSession
+from unittest.mock import Mock, patch, AsyncMock
+from user_service.internal.service.user_service import UserService
+from user_service.main import app
+from user_service.models.user import User, UserProfile, UserStatus
+import asyncio
+import pytest
+
+"""
 User Service 全面测试
 建立完整的测试覆盖率体系，覆盖用户管理、健康数据、设备管理等功能
 """
 
-import pytest
-import asyncio
-from datetime import datetime, timedelta
-from unittest.mock import Mock, patch, AsyncMock
-from fastapi.testclient import TestClient
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from user_service.main import app
-from user_service.models.user import User, UserProfile, UserStatus
-from user_service.internal.service.user_service import UserService
 
 
 class TestUserService:

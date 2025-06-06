@@ -1,14 +1,19 @@
+"""
+test_food_therapy_manager - 索克生活项目模块
+"""
+
+from internal.agent.food_therapy_manager import FoodTherapyManager
+from unittest.mock import AsyncMock, patch
+import pytest
+
 #!/usr/bin/env python
 
 """
 测试食疗管理器
 """
 
-from unittest.mock import AsyncMock, patch
 
-import pytest
 
-from internal.agent.food_therapy_manager import FoodTherapyManager
 
 
 class TestFoodTherapyManager:

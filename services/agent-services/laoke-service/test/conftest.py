@@ -1,3 +1,18 @@
+"""
+conftest - 索克生活项目模块
+"""
+
+    from internal.delivery import dependencies
+from collections.abc import AsyncGenerator, Generator
+from fastapi.testclient import TestClient
+from httpx import AsyncClient
+from pkg.utils.config import Config
+from typing import Any
+import asyncio
+import os
+import pytest
+import sys
+
 #!/usr/bin/env python
 
 """
@@ -5,19 +20,10 @@
 提供测试夹具和共享资源
 """
 
-import asyncio
-import os
-import sys
-from collections.abc import AsyncGenerator, Generator
-from typing import Any
 
-import pytest
-from fastapi.testclient import TestClient
-from httpx import AsyncClient
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from pkg.utils.config import Config
 
 # 测试环境变量
 os.environ["LAOKE_ENV"] = "test"
@@ -132,7 +138,6 @@ def setup_and_teardown():
     # 测试后的清理
 
     # 重置单例实例
-    from internal.delivery import dependencies
     dependencies._agent_manager = None
     dependencies._knowledge_service = None
     dependencies._community_service = None

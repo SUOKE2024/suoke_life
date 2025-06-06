@@ -1,18 +1,23 @@
 """
-平台管理相关的API路由
+platforms - 索克生活项目模块
 """
-
-import logging
-from typing import Any, Dict, List, Optional
-
-from fastapi import APIRouter, Depends, HTTPException, status, Query
-from pydantic import BaseModel
-from sqlalchemy.orm import Session
 
 from ...core.database import get_db
 from ...core.security import verify_token, TokenData
 from ...models.platform import Platform, PlatformConfig
 from ...services.platform_service import PlatformService
+from fastapi import APIRouter, Depends, HTTPException, status, Query
+from pydantic import BaseModel
+from sqlalchemy.orm import Session
+from typing import Any, Dict, List, Optional
+import logging
+
+"""
+平台管理相关的API路由
+"""
+
+
+
 
 logger = logging.getLogger(__name__)
 

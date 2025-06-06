@@ -1,3 +1,18 @@
+"""
+demo_mock_mode - 索克生活项目模块
+"""
+
+            from suoke_blockchain_service.models import HealthDataRecord, BlockchainTransaction, DataType
+from datetime import datetime, timedelta
+from suoke_blockchain_service.config import settings
+from suoke_blockchain_service.logging import configure_logging, get_logger
+from suoke_blockchain_service.service import BlockchainService
+from typing import Dict, Any
+from unittest.mock import AsyncMock, MagicMock, patch
+import asyncio
+import json
+import uuid
+
 #!/usr/bin/env python3
 """
 Blockchain Service 模拟模式演示脚本
@@ -5,17 +20,8 @@ Blockchain Service 模拟模式演示脚本
 在模拟模式下演示区块链服务的核心功能，不依赖外部服务。
 """
 
-import asyncio
-import json
-import uuid
-from datetime import datetime, timedelta
-from typing import Dict, Any
-from unittest.mock import AsyncMock, MagicMock, patch
 
 # 导入服务模块
-from suoke_blockchain_service.service import BlockchainService
-from suoke_blockchain_service.config import settings
-from suoke_blockchain_service.logging import configure_logging, get_logger
 
 logger = get_logger(__name__)
 
@@ -143,7 +149,6 @@ class MockBlockchainServiceDemo:
              patch('suoke_blockchain_service.service.get_blockchain_client') as mock_blockchain:
             
             # 模拟数据库记录
-            from suoke_blockchain_service.models import HealthDataRecord, BlockchainTransaction, DataType
             
             mock_record = MagicMock()
             mock_record.id = self.mock_record_id

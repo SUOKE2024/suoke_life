@@ -1,13 +1,18 @@
 """
-API Delivery Layer
+__init__ - 索克生活项目模块
 """
-
-from fastapi import APIRouter
 
 from .auth import router as auth_router
 from .health_data import router as health_data_router
 from .integration import router as integration_router
 from .platforms import router as platforms_router
+from fastapi import APIRouter
+
+"""
+API Delivery Layer
+"""
+
+
 
 # 创建主路由
 router = APIRouter()

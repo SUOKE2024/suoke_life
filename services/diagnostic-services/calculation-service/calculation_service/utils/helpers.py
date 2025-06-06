@@ -1,10 +1,15 @@
 """
+helpers - 索克生活项目模块
+"""
+
+from datetime import datetime, date
+
+"""
 辅助工具函数
 
 提供各种辅助计算和工具函数
 """
 
-from datetime import datetime, date
 
 def calculate_age(birth_year: int, birth_month: int, birth_day: int, 
                  reference_date: datetime = None) -> int:

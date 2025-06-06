@@ -1,17 +1,22 @@
-#!/usr/bin/env python3
 """
-情绪分析服务测试
+test_emotional_service - 索克生活项目模块
 """
+
+from datetime import datetime
+from internal.lifecycle.emotional_analyzer.emotional_service import EmotionalService
 import asyncio
 import os
 import sys
 import unittest
-from datetime import datetime
+
+#!/usr/bin/env python3
+"""
+情绪分析服务测试
+"""
 
 # 确保能够导入应用代码
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from internal.lifecycle.emotional_analyzer.emotional_service import EmotionalService
 
 
 class TestEmotionalService(unittest.TestCase):

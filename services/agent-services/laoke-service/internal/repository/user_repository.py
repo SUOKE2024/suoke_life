@@ -1,3 +1,12 @@
+"""
+user_repository - 索克生活项目模块
+"""
+
+from pkg.utils.logger import get_logger
+from typing import Any
+import datetime
+import uuid
+
 #!/usr/bin/env python
 
 """
@@ -5,11 +14,7 @@
 处理用户数据的存储和检索
 """
 
-import datetime
-import uuid
-from typing import Any
 
-from pkg.utils.logger import get_logger
 
 logger = get_logger("user-repository")
 

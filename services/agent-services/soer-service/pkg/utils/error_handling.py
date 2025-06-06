@@ -1,17 +1,22 @@
 """
-统一的错误处理和重试机制
-提供结构化的异常处理、重试策略和错误恢复机制
+error_handling - 索克生活项目模块
 """
-import asyncio
-import logging
-import random
-import time
-import traceback
+
 from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
 from functools import wraps
 from typing import Any
+import asyncio
+import logging
+import random
+import time
+import traceback
+
+"""
+统一的错误处理和重试机制
+提供结构化的异常处理、重试策略和错误恢复机制
+"""
 
 logger = logging.getLogger(__name__)
 

@@ -1,24 +1,29 @@
 """
+graph - 索克生活项目模块
+"""
+
+from app.api.rest.deps import get_knowledge_service
+from app.core.exceptions import (
+from app.core.logger import get_logger
+from app.models.requests import (
+from app.services.knowledge_service import KnowledgeService
+from fastapi import APIRouter, Depends, HTTPException, Query
+
+"""
 知识图谱分析API路由
 提供图谱可视化、路径分析、关系发现等功能
 """
 
-from fastapi import APIRouter, Depends, HTTPException, Query
 
-from app.api.rest.deps import get_knowledge_service
-from app.core.exceptions import (
     EntityNotFoundException,
     GraphException,
     PathNotFoundException,
     ValidationException,
 )
-from app.core.logger import get_logger
-from app.models.requests import (
     GraphVisualizationRequest,
     PathAnalysisRequest,
     RelationshipAnalysisRequest,
 )
-from app.services.knowledge_service import KnowledgeService
 
 logger = get_logger()
 router = APIRouter(prefix="/graph", tags=["知识图谱分析"])

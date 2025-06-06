@@ -1,23 +1,28 @@
-#!/usr/bin/env python3
 """
-消息发布功能测试
+test_publish - 索克生活项目模块
 """
+
+from internal.model.message import Message
+from internal.model.topic import Topic
+from internal.repository.message_repository import MessageRepository
+from internal.repository.topic_repository import TopicRepository
+from internal.service.message_service import MessageService
+from typing import Dict, Any, List
 import asyncio
 import json
 import logging
 import os
 import sys
 import unittest
-from typing import Dict, Any, List
+
+#!/usr/bin/env python3
+"""
+消息发布功能测试
+"""
 
 # 添加项目根目录到Python路径
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from internal.model.message import Message
-from internal.model.topic import Topic
-from internal.service.message_service import MessageService
-from internal.repository.message_repository import MessageRepository
-from internal.repository.topic_repository import TopicRepository
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)

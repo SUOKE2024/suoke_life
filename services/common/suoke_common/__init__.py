@@ -1,3 +1,13 @@
+"""
+__init__ - 索克生活项目模块
+"""
+
+    from suoke_common import get_components, shutdown_components
+from pathlib import Path
+from typing import Any, Optional
+import asyncio
+import logging
+
 #!/usr/bin/env python3
 """
 索克生活平台通用组件库
@@ -17,7 +27,6 @@
 - 服务网格集成
 
 使用示例:
-    from suoke_common import get_components, shutdown_components
     
     # 获取组件管理器
     components = await get_components()
@@ -26,10 +35,6 @@
     encryption = components.get_component("security", "encryption")
 """
 
-import asyncio
-import logging
-from pathlib import Path
-from typing import Any, Optional
 
 # 版本信息
 __version__ = "1.0.0"

@@ -1,19 +1,24 @@
 """
+rate_limiter - 索克生活项目模块
+"""
+
+from collections import defaultdict, deque
+from fastapi import Request, Response, HTTPException
+from fastapi.responses import JSONResponse
+from starlette.middleware.base import BaseHTTPMiddleware
+from typing import Dict, Optional, Tuple, Any
+import asyncio
+import json
+import logging
+import redis.asyncio as redis
+import time
+
+"""
 用户服务API限流中间件
 实现基于IP和用户的多维度限流保护
 """
 
-import asyncio
-import time
-from typing import Dict, Optional, Tuple, Any
-from collections import defaultdict, deque
-import json
-import logging
 
-from fastapi import Request, Response, HTTPException
-from fastapi.responses import JSONResponse
-from starlette.middleware.base import BaseHTTPMiddleware
-import redis.asyncio as redis
 
 logger = logging.getLogger(__name__)
 

@@ -1,30 +1,35 @@
+"""
+microservice_governance - 索克生活项目模块
+"""
+
+from ...agent_services.collaborative_decision_bus import (
+from ...message_bus.blockchain_integration import (
+from ..service_mesh.agent_mesh_controller import (
+from ..service_registry.agent_discovery import (
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any, Dict, List, Optional, Set, Callable
+from uuid import uuid4
+import aioredis
+import asyncio
+import json
+import logging
+
 #!/usr/bin/env python3
 """
 微服务治理体系统一配置和监控
 整合服务注册发现、协同决策总线、区块链消息总线和服务网格
 """
 
-import asyncio
-import json
-import logging
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Callable
-from uuid import uuid4
 
-import aioredis
 
-from ..service_registry.agent_discovery import (
     AgentType, AgentServiceRegistry, get_agent_registry
 )
-from ...agent_services.collaborative_decision_bus import (
     CollaborativeDecisionBus, get_decision_bus
 )
-from ...message_bus.blockchain_integration import (
     BlockchainMessageBus, get_blockchain_message_bus
 )
-from ..service_mesh.agent_mesh_controller import (
     AgentMeshController, get_agent_mesh_controller
 )
 

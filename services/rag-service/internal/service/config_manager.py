@@ -1,3 +1,23 @@
+"""
+config_manager - 索克生活项目模块
+"""
+
+            import configparser
+        import re
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from loguru import logger
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Union, Callable, Type
+from watchdog.events import FileSystemEventHandler
+from watchdog.observers import Observer
+import asyncio
+import json
+import os
+import toml
+import yaml
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,19 +25,6 @@
 配置管理系统 - 支持动态配置更新、环境变量、配置验证和热重载
 """
 
-import asyncio
-import json
-import os
-import yaml
-import toml
-from typing import Dict, List, Any, Optional, Union, Callable, Type
-from dataclasses import dataclass, field
-from enum import Enum
-from datetime import datetime, timedelta
-from pathlib import Path
-from loguru import logger
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
 
 class ConfigFormat(Enum):
     """配置文件格式"""
@@ -117,7 +124,6 @@ class ConfigValidator:
     @staticmethod
     def validate_pattern(value: str, pattern: str) -> bool:
         """验证正则表达式模式"""
-        import re
         try:
             return bool(re.match(pattern, value))
         except re.error:
@@ -414,7 +420,6 @@ class ConfigManager:
         elif file_format == ConfigFormat.ENV:
             return self._parse_env_file(content)
         elif file_format == ConfigFormat.INI:
-            import configparser
             parser = configparser.ConfigParser()
             parser.read_string(content)
             return {section: dict(parser[section]) for section in parser.sections()}
@@ -1110,3 +1115,11 @@ class ConfigManager:
             await self.redis_client.close()
         
         logger.info("Config manager closed") 
+# 数据库连接池优化配置
+DATABASE_POOL_CONFIG = {
+    "pool_size": 20,           # 连接池大小
+    "max_overflow": 30,        # 最大溢出连接数
+    "pool_timeout": 30,        # 获取连接超时时间
+    "pool_recycle": 3600,      # 连接回收时间
+    "pool_pre_ping": True,     # 连接预检查
+}

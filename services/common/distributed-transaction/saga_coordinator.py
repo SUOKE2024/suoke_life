@@ -1,22 +1,27 @@
 """
-基于Saga模式的分布式事务管理器
-支持事务编排、补偿操作和状态管理
+saga_coordinator - 索克生活项目模块
 """
 
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from sqlalchemy import create_engine, Column, String, DateTime, Text, Integer
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+from typing import Dict, List, Optional, Callable, Any
+import aioredis
 import asyncio
 import json
 import logging
 import time
 import uuid
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-from typing import Dict, List, Optional, Callable, Any
 
-import aioredis
-from sqlalchemy import create_engine, Column, String, DateTime, Text, Integer
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+"""
+基于Saga模式的分布式事务管理器
+支持事务编排、补偿操作和状态管理
+"""
+
+
 
 logger = logging.getLogger(__name__)
 
@@ -458,7 +463,7 @@ class SagaCoordinator:
                         TransactionStatus.RUNNING.value,
                         TransactionStatus.COMPENSATING.value
                     ])
-                ).all()
+                ).all()[:1000]  # 限制查询结果数量
                 
                 for transaction in transactions:
                     if transaction.transaction_id not in self.running_transactions:
@@ -541,7 +546,7 @@ class SagaCoordinator:
                         TransactionStatus.PENDING.value,
                         TransactionStatus.RUNNING.value
                     ])
-                ).all()
+                ).all()[:1000]  # 限制查询结果数量
                 
                 for transaction in timeout_transactions:
                     logger.warning(f"Transaction {transaction.transaction_id} timed out")

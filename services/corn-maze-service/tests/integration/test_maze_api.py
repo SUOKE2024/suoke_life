@@ -1,29 +1,34 @@
-#!/usr/bin/env python3
-
 """
-迷宫服务API集成测试
+test_maze_api - 索克生活项目模块
 """
 
 from concurrent import futures
-import logging
-import os
-from pathlib import Path
-import sys
-import unittest
-import uuid
-
-import grpc
-import pytest
-
-# 添加项目根目录到路径以便导入模块
-sys.path.insert(0, str(Path(__file__).parent.parent.parent.resolve()))
-
 from internal.delivery.grpc.server import setup_grpc_server
 from internal.maze.generator import MazeGenerator
 from internal.repository.maze_repository import MazeRepository
 from internal.service.knowledge_service import KnowledgeService
 from internal.service.maze_service import MazeService
 from internal.service.progress_service import ProgressService
+from pathlib import Path
+import grpc
+import logging
+import os
+import pytest
+import sys
+import unittest
+import uuid
+
+#!/usr/bin/env python3
+
+"""
+迷宫服务API集成测试
+"""
+
+
+
+# 添加项目根目录到路径以便导入模块
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.resolve()))
+
 
 logger = logging.getLogger(__name__)
 

@@ -1,35 +1,43 @@
 """
+main - 索克生活项目模块
+"""
+
+        from internal.benchmark.model_cache import get_global_cache
+    import time
+from api.grpc import benchmark_pb2_grpc
+from cmd.server.grpc_service import SuokeBenchGrpcService
+from concurrent import futures
+from datetime import datetime
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.responses import FileResponse, Response
+from fastapi.staticfiles import StaticFiles
+from internal.benchmark.model_cache import init_global_cache
+from internal.observability.metrics import (
+from internal.resilience.retry import retry
+from internal.suokebench.config import BenchConfig, load_config
+import argparse
+import grpc
+import logging
+import os
+import signal
+import sys
+import uvicorn
+
+"""
 SuokeBench 服务入口
 
 同时启动FastAPI和gRPC服务，集成缓存、监控和错误处理功能
 """
 
-import argparse
-import logging
-import os
-import signal
-import sys
-from cmd.server.grpc_service import SuokeBenchGrpcService
-from concurrent import futures
-from datetime import datetime
 
-import grpc
-import uvicorn
-from fastapi import FastAPI, HTTPException, Request
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, Response
-from fastapi.staticfiles import StaticFiles
 
-from api.grpc import benchmark_pb2_grpc
-from internal.benchmark.model_cache import init_global_cache
-from internal.observability.metrics import (
     get_global_metrics,
     init_monitoring,
     start_global_monitoring,
     stop_global_monitoring,
 )
-from internal.resilience.retry import retry
-from internal.suokebench.config import BenchConfig, load_config
 
 # 配置日志
 logging.basicConfig(
@@ -49,6 +57,9 @@ config: BenchConfig | None = None
 
 # 创建FastAPI应用
 app = FastAPI(
+
+# 性能优化: 添加响应压缩
+app.add_middleware(GZipMiddleware, minimum_size=1000)
     title="SuokeBench API",
     description="索克生活APP评测系统API - 优化版",
     version="1.1.0",
@@ -109,6 +120,8 @@ app.mount("/static", StaticFiles(directory="internal/evaluation/static"), name="
 app.mount("/reports", StaticFiles(directory="data/reports"), name="reports")
 
 # Web界面路由
+@cache(expire=300)  # 5分钟缓存
+@limiter.limit("100/minute")  # 每分钟100次请求
 @app.get("/", tags=["UI"])
 async def root():
     """
@@ -120,7 +133,9 @@ async def root():
         "docs": "/docs",
         "ui": "/ui",
         "metrics": "/metrics",
-        "health": "/health"
+       @cache(expire=@limiter.limit("100/minute")  # 每分钟100次请求
+300)  # 5分钟缓存
+ "health": "/health"
     }
 
 @app.get("/ui", tags=["UI"])
@@ -151,7 +166,9 @@ async def health_check():
         }
     except Exception as e:
         logger.error(f"健康检查失败: {e}")
-        raise HTTPException(status_code=503, detail="服务不健康") from e
+        raise@limiter.limit("100/minute")  # 每分钟100次请求
+@cache(expire=300)  # 5分钟缓存
+ HTTPException(status_code=503, detail="服务不健康") from e
 
 @app.get("/metrics", tags=["监控"])
 async def metrics_endpoint():
@@ -163,7 +180,9 @@ async def metrics_endpoint():
         content = metrics.export_metrics()
         return Response(content=content, media_type="text/plain")
     except Exception as e:
-        logger.error(f"指标导出失败: {e}")
+  @limiter.limit("100/minute")  # 每分钟100次请求
+      logger.e@cache(expire=300)  # 5分钟缓存
+rror(f"指标导出失败: {e}")
         raise HTTPException(status_code=500, detail="指标导出失败")
 
 @app.get("/cache/stats", tags=["缓存"])
@@ -172,9 +191,9 @@ async def cache_stats():
     缓存统计接口
     """
     try:
-        from internal.benchmark.model_cache import get_global_cache
         cache = get_global_cache()
-        return cache.get_cache_stats()
+  @limiter.limit("100/minute")  # 每分钟100次请求
+      return cache.get_cache_stats()
     except Exception as e:
         logger.error(f"获取缓存统计失败: {e}")
         raise HTTPException(status_code=500, detail="获取缓存统计失败")
@@ -185,7 +204,6 @@ async def clear_cache():
     清空缓存接口
     """
     try:
-        from internal.benchmark.model_cache import get_global_cache
         cache = get_global_cache()
         cache.clear_cache()
         return {"message": "缓存已清空"}
@@ -279,7 +297,6 @@ def signal_handler(signum, frame):
 
     # 清理缓存
     try:
-        from internal.benchmark.model_cache import get_global_cache
         cache = get_global_cache()
         cache.clear_cache()
         logger.info("缓存已清理")
@@ -345,5 +362,4 @@ def main():
         sys.exit(1)
 
 if __name__ == "__main__":
-    import time
     main()

@@ -1,15 +1,21 @@
 """
+metrics - 索克生活项目模块
+"""
+
+        import re
+from ..core.config import Settings
+from ..core.logging import get_logger
+from prometheus_client import Counter, Gauge, Histogram, Info
+from typing import Dict, Optional
+
+"""
 指标监控服务
 
 收集和暴露 Prometheus 指标。
 """
 
-from typing import Dict, Optional
 
-from prometheus_client import Counter, Gauge, Histogram, Info
 
-from ..core.config import Settings
-from ..core.logging import get_logger
 
 logger = get_logger(__name__)
 
@@ -265,7 +271,6 @@ class MetricsService:
             path = path.split('?')[0]
         
         # 替换常见的动态路径参数
-        import re
         
         # UUID 模式
         path = re.sub(r'/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}', '/{uuid}', path)

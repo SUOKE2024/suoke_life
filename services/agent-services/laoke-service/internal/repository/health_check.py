@@ -1,16 +1,21 @@
+"""
+health_check - 索克生活项目模块
+"""
+
+from pkg.utils.config import Config
+from pkg.utils.db_client import get_db_client
+from pkg.utils.redis_client import get_redis_client
+import asyncio
+import logging
+import time
+
 #!/usr/bin/env python
 
 """
 健康检查存储库
 """
 
-import asyncio
-import logging
-import time
 
-from pkg.utils.config import Config
-from pkg.utils.db_client import get_db_client
-from pkg.utils.redis_client import get_redis_client
 
 # 服务启动时间
 START_TIME = time.time()

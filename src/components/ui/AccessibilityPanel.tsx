@@ -1,60 +1,55 @@
+import { useTheme } from "../../contexts/ThemeContext/import { useAccessibility  } from ;../../contexts/AccessibilityContext";/import { responsive, touchTarget } from ../../utils/responsive"/importButton from "./////    Button;
+import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/////      View,"
+
 import React from "react";
-import { useTheme } from "../../contexts/ThemeContext/import { useAccessibility  } from ";";../../contexts/AccessibilityContext";/import { responsive, touchTarget } from ../../utils/responsive"/importButton from "./////    Button;
-//////
-//////     索克生活 - 无障碍设置面板   提供完整的无障碍功能配置界面
+// // 索克生活 - 无障碍设置面板   提供完整的无障碍功能配置界面
 importReact from ";react";
-import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/////      View,;"
   Text,
   StyleSheet,
   ScrollView,
   Switch,
-  { TouchableOpacity } from "react-native;"
+  { TouchableOpacity } from "react-native;";
 interface AccessibilityPanelProps {
   style?: unknown,
   onClose?: () => void}
-export const AccessibilityPanel: React.FC<AccessibilityPanelProps /> = ({/  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor("";
-AccessibilityPanel", ;{; /////    "
+export const AccessibilityPanel: React.FC<AccessibilityPanelProps /> = ({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor("";
+AccessibilityPanel",{/////    "
     trackRender: true,
     trackMemory: false,
-    warnThreshold: 100, // ms //////     })
+    warnThreshold: 100, // ms // });
   style,
   onClose;
 }) => {}
   const { theme   } = useTheme;
   const { config, updateConfig, resetConfig, triggerHapticFeedback, announceForAccessibility   } = useAccessibility;
-  // 处理配置更新 //////     const handleConfigUpdate = useCallback(() => {}
-    // TODO: Implement function body *}, []) ////
+  // 处理配置更新 // const handleConfigUpdate = useCallback(() => {;
+    // TODO: Implement function body *}, []) ////;
     updateConfig({ [key]: value });
-    // 触觉反馈 //////     if (config.hapticFeedbackEnabled) {
+    // 触觉反馈 // if (config.hapticFeedbackEnabled) {
       triggerHapticFeedback(light")"
     }
     // 无障碍公告 // announceForAccessibility(`${getSettingLabel(key)}已${value ? "启用 : "禁用"}`) "////
   }
-  // 获取设置标签 //////     const getSettingLabel = (key: string): string => {}
-    const labels: Record<string, string> = {;
-      highContrastEnabled: 高对比度模式","
-      largeFontEnabled: "大字体模式,"
+  // 获取设置标签 // const getSettingLabel = (key: string): string => {};
+    const labels: Record<string, string> = {highContrastEnabled: 高对比度模式","
+      largeFontEnabled: "大字体模式,",
       reduceMotionEnabled: "减少动画",
       voiceNavigationEnabled: 语音导航","
-      hapticFeedbackEnabled: "触觉反馈,"
+      hapticFeedbackEnabled: "触觉反馈,",
       focusIndicatorEnabled: "焦点指示器"};
     return labels[key] || key;
   };
-  // 获取设置描述 //////     const getSettingDescription = (key: string): string => {}
-    const descriptions: Record<string, string> = {;
-      highContrastEnabled: 提高界面元素的对比度，便于视觉障碍用户使用","
-      largeFontEnabled: "增大字体尺寸，提高文本可读性,"
+  // 获取设置描述 // const getSettingDescription = (key: string): string => {};
+    const descriptions: Record<string, string> = {highContrastEnabled: 提高界面元素的对比度，便于视觉障碍用户使用","
+      largeFontEnabled: "增大字体尺寸，提高文本可读性,",
       reduceMotionEnabled: "减少界面动画效果，避免眩晕",
       voiceNavigationEnabled: 启用语音播报和导航功能","
-      hapticFeedbackEnabled: "在交互时提供触觉反馈,"
+      hapticFeedbackEnabled: "在交互时提供触觉反馈,",
       focusIndicatorEnabled: "显示焦点指示器，便于键盘导航"};
-    return descriptions[key] || ";"
+    return descriptions[key] || 
   };
-  // 渲染设置项 //////     const renderSettingItem = (
-    key: string,
-    value: boolean,
-    label: string,
-    description: string;) => (
+  // 渲染设置项 // const renderSettingItem = (;
+    key: string,value: boolean,label: string,description: string;) => (
     <View key={key} style={[styles.settingItem, { borderBottomColor: theme.colors.outline}]} />/      <View style={styles.settingContent} />/        <Text style={[styles.settingLabel, { color: theme.colors.onSurface}]} />/////              {label}
         </Text>/        <Text style={[styles.settingDescription, { color: theme.colors.onSurfaceVariant}]} />/////              {description}
         </Text>/      </View>/////
@@ -69,21 +64,15 @@ AccessibilityPanel", ;{; /////    "
         accessibilityHint={`当前${value ? "已启用 : "已禁用"}，双击切换`}"
         accessibilityRole="switch"
       />/    </View>/////    );
-  // 渲染滑块设置项 //////     const renderSliderItem = (
-    key: string,
-    value: number,
-    label: string,
-    description: string,
-    min: number,
-    max: number,
-    step: number = 0.1) => (
-    <View key={key} style={[styles.settingItem, { borderBottomColor: theme.colors.outline}]} />/      <View style={styles.settingContent} />/        <Text style={[styles.settingLabel, { color: theme.colors.onSurface}]} />/////              {label}: {value.toFixed(1)}
-        </Text>/        <Text style={[styles.settingDescription, { color: theme.colors.onSurfaceVariant}]} />/////              {description}
-        </Text>/      </View>/////
+  // 渲染滑块设置项 // const renderSliderItem = (;
+    key: string,value: number,label: string,description: string,min: number,max: number,step: number = 0.1) => (;
+    <View key={key} style={[styles.settingItem, { borderBottomColor: theme.colors.outline}]} />/      <View style={styles.settingContent} />/        <Text style={[styles.settingLabel, { color: theme.colors.onSurface}]} />/////              {label}: {value.toFixed(1)};
+        </Text>/        <Text style={[styles.settingDescription, { color: theme.colors.onSurfaceVariant}]} />/////              {description};
+        </Text>/      </View>/////;
       <View style={styles.sliderContainer} />/////            <TouchableOpacity;
 style={[styles.sliderButton, { backgroundColor: theme.colors.outline}]}
           onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> {/////                const newValue = Math.max(min, value - step);
-            handleConfigUpdate(key, newValue)
+            handleConfigUpdate(key, newValue);
           }}
           accessible={true}
           accessibilityLabel={`减少${label}`}
@@ -95,18 +84,17 @@ style={[styles.sliderButton, { backgroundColor: theme.colors.outline}]}
         <TouchableOpacity;
 style={[styles.sliderButton, { backgroundColor: theme.colors.outline}]}
           onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> {/            const newValue = Math.min(max, value + step);////
-            handleConfigUpdate(key, newValue)
+            handleConfigUpdate(key, newValue);
           }}
           accessible={true}
           accessibilityLabel={`增加${label}`}
           accessibilityRole="button"
         >
           <Text style={[styles.sliderButtonText, { color: theme.colors.onSurface}]} />+</Text>/        </TouchableOpacity>/      </View>/    </View>/////    );
-  // 记录渲染性能 //////
-  performanceMonitor.recordRender()
-  return (
-    <View style={[styles.container, { backgroundColor: theme.colors.surface   }, style]} />/      <View style={[styles.header, { borderBottomColor: theme.colors.outline}]} />/        <Text style={[styles.title, { color: theme.colors.onSurface}]} />/////              无障碍设置
-        </Text>/////            {onClose && (
+  // 记录渲染性能 // performanceMonitor.recordRender();
+  return (;
+    <View style={[styles.container, { backgroundColor: theme.colors.surface   }, style]} />/      <View style={[styles.header, { borderBottomColor: theme.colors.outline}]} />/        <Text style={[styles.title, { color: theme.colors.onSurface}]} />/////              无障碍设置;
+        </Text>/////            {onClose && (;
           <Button;
 title="关闭"
             variant="ghost"
@@ -119,20 +107,17 @@ title="关闭"
           {renderSettingItem(
             highContrastEnabled","
             config.highContrastEnabled,
-            "高对比度模式,"
-            "提高界面元素的对比度，便于视觉障碍用户使用"
+            "高对比度模式,提高界面元素的对比度，便于视觉障碍用户使用"
           )}
           {renderSettingItem(
             largeFontEnabled","
             config.largeFontEnabled,
-            "大字体模式,"
-            "增大字体尺寸，提高文本可读性"
+            "大字体模式,增大字体尺寸，提高文本可读性"
           )}
           {renderSliderItem(
             fontScale","
             config.fontScale,
-            "字体缩放,"
-            "调整字体大小比例",
+            "字体缩放,调整字体大小比例",
             0.8,
             2.0,
             0.1;
@@ -143,14 +128,12 @@ title="关闭"
           {renderSettingItem(
             reduceMotionEnabled","
             config.reduceMotionEnabled,
-            "减少动画,"
-            "减少界面动画效果，避免眩晕"
+            "减少动画,减少界面动画效果，避免眩晕"
           )}
           {renderSettingItem(
             hapticFeedbackEnabled","
             config.hapticFeedbackEnabled,
-            "触觉反馈,"
-            "在交互时提供触觉反馈"
+            "触觉反馈,在交互时提供触觉反馈"
           )}
         </View>/////
         <View style={styles.section} />/          <Text style={[styles.sectionTitle, { color: theme.colors.primary}]} />/////                导航辅助
@@ -158,20 +141,17 @@ title="关闭"
           {renderSettingItem(
             voiceNavigationEnabled","
             config.voiceNavigationEnabled,
-            "语音导航,"
-            "启用语音播报和导航功能"
+            "语音导航,启用语音播报和导航功能"
           )}
           {renderSettingItem(
             focusIndicatorEnabled","
             config.focusIndicatorEnabled,
-            "焦点指示器,"
-            "显示焦点指示器，便于键盘导航"
+            "焦点指示器,显示焦点指示器，便于键盘导航"
           )}
           {renderSliderItem(
             speechRate","
             config.speechRate,
-            "语音速度,"
-            "调整语音播报的速度",
+            "语音速度,调整语音播报的速度",
             0.5,
             2.0,
             0.1;
@@ -182,8 +162,7 @@ title="关闭"
           {renderSliderItem(
             minimumTouchTargetSize","
             config.minimumTouchTargetSize,
-            "最小触摸目标,"
-            "设置触摸目标的最小尺寸（像素）",
+            "最小触摸目标,设置触摸目标的最小尺寸（像素）",
             32,
             64,
             4;
@@ -192,20 +171,19 @@ title="关闭"
         <View style={styles.actions} />/////              <Button;
 title="重置为默认设置"
             variant="outline"
-            onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> {/////                  resetConfig()
+            onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> {/////                  resetConfig();
               announceForAccessibility(无障碍设置已重置为默认值");"
             }}
             style={styles.resetButton} />/        </View>/      </ScrollView>/    </View>/////      );
 }
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     flex: 1,
     borderRadius: responsive.width(12),
-    overflow: "hidden},"
+    overflow: "hidden},",
   header: {
     flexDirection: "row",
     justifyContent: space-between","
-    alignItems: "center,"
+    alignItems: "center,",
     padding: responsive.width(16),
     borderBottomWidth: 1},
   title: {
@@ -218,7 +196,7 @@ const styles = StyleSheet.create({;
     fontWeight: 600","
     marginBottom: responsive.height(12)},
   settingItem: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center",
     paddingVertical: responsive.height(12),
     borderBottomWidth: 1,
@@ -234,7 +212,7 @@ const styles = StyleSheet.create({;
     fontSize: responsive.fontSize(14),
     lineHeight: responsive.fontSize(20)},
   sliderContainer: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center",
     gap: responsive.width(8)},
   sliderButton: {
@@ -242,7 +220,7 @@ const styles = StyleSheet.create({;
     height: touchTarget.MIN_SIZE,
     borderRadius: responsive.width(6),
     justifyContent: center","
-    alignItems: "center},"
+    alignItems: "center},",
   sliderButtonText: {
     fontSize: responsive.fontSize(18),
     fontWeight: "600"},
@@ -257,6 +235,5 @@ const styles = StyleSheet.create({;
     fontWeight: '500'},
   actions: {
     padding: responsive.width(16),
-    paddingTop: responsive.height(24)},;
-  resetButton: { marginTop: responsive.height(8)  };};);
+    paddingTop: responsive.height(24)},resetButton: { marginTop: responsive.height(8)  };};);
 export default React.memo(AccessibilityPanel);

@@ -1,22 +1,27 @@
 """
+test_comprehensive - 索克生活项目模块
+"""
+
+from calculation_service.core.algorithms.bagua.calculator import BaguaCalculator
+from calculation_service.core.algorithms.comprehensive_calculator import ComprehensiveCalculator
+from calculation_service.core.algorithms.constitution.calculator import ConstitutionCalculator
+from calculation_service.core.algorithms.wuyun_liuqi.calculator import WuyunLiuqiCalculator
+from calculation_service.core.algorithms.ziwu_liuzhu.calculator import ZiwuLiuzhuCalculator
+from calculation_service.main import app
+from calculation_service.utils.cache import cache_manager
+from calculation_service.utils.formatters import format_analysis_result
+from calculation_service.utils.validators import validate_birth_info
+from datetime import datetime
+from fastapi.testclient import TestClient
+import pytest
+
+"""
 算诊服务综合测试
 
 测试所有算诊功能的集成测试
 """
 
-import pytest
-from datetime import datetime
-from fastapi.testclient import TestClient
 
-from calculation_service.main import app
-from calculation_service.core.algorithms.comprehensive_calculator import ComprehensiveCalculator
-from calculation_service.core.algorithms.ziwu_liuzhu.calculator import ZiwuLiuzhuCalculator
-from calculation_service.core.algorithms.constitution.calculator import ConstitutionCalculator
-from calculation_service.core.algorithms.bagua.calculator import BaguaCalculator
-from calculation_service.core.algorithms.wuyun_liuqi.calculator import WuyunLiuqiCalculator
-from calculation_service.utils.validators import validate_birth_info
-from calculation_service.utils.formatters import format_analysis_result
-from calculation_service.utils.cache import cache_manager
 
 class TestCalculationService:
     """算诊服务综合测试类"""

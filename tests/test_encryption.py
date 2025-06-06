@@ -1,14 +1,19 @@
 """
+test_encryption - 索克生活项目模块
+"""
+
+from suoke_blockchain_service.encryption import EncryptionService
+from suoke_blockchain_service.exceptions import EncryptionError
+from unittest.mock import patch, MagicMock
+import pytest
+
+"""
 加密服务测试模块
 
 测试数据加密和解密功能。
 """
 
-import pytest
-from unittest.mock import patch, MagicMock
 
-from suoke_blockchain_service.encryption import EncryptionService
-from suoke_blockchain_service.exceptions import EncryptionError
 
 
 class TestEncryptionService:

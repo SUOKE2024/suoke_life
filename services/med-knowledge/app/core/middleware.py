@@ -1,13 +1,12 @@
 """
-中间件模块
-提供认证、限流、监控、错误处理等中间件功能
+middleware - 索克生活项目模块
 """
 
+from app.core.config import get_settings
+from app.core.container import get_container
+from app.core.logger import get_logger
 from collections.abc import Callable
 from datetime import datetime
-import time
-from typing import Any
-
 from fastapi import HTTPException, Request, Response, status
 from fastapi.responses import JSONResponse
 from jose import JWTError, jwt
@@ -16,10 +15,16 @@ from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.types import ASGIApp
+from typing import Any
+import time
 
-from app.core.config import get_settings
-from app.core.container import get_container
-from app.core.logger import get_logger
+"""
+中间件模块
+提供认证、限流、监控、错误处理等中间件功能
+"""
+
+
+
 
 
 class MetricsMiddleware(BaseHTTPMiddleware):

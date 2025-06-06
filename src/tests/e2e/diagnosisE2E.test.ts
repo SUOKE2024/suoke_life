@@ -1,3 +1,4 @@
+import React from 'react';
 // E2E测试框架类型定义
 interface DetoxElement {
   tap(): Promise<void>;
@@ -26,14 +27,11 @@ const by: DetoxBy = {
 const device: DetoxDevice = {
   launchApp: async () => console.log('App launched'),
   reloadReactNative: async () => console.log('React Native reloaded'),
-  setURLBlacklist: async (urls: string[]) => console.log('URL blacklist set:', urls)
+  setURLBlacklist: async (urls: string[]) => console.log('URL blacklist set:', urls);
 };
 
-const element = (selector: any): DetoxElement => ({
-  tap: async () => console.log('Element tapped:', selector),
-  typeText: async (text: string) => console.log('Text typed:', text),
-  toBeVisible: async () => console.log('Element visible check'),
-  toHaveAccessibilityLabel: async (label: string) => console.log('Accessibility label check:', label)
+const element = (selector: any): DetoxElement => ({tap: async () => console.log('Element tapped:', selector),typeText: async (text: string) => console.log('Text typed:', text),toBeVisible: async () => console.log('Element visible check'),toHaveAccessibilityLabel: async (label: string) =>;
+    console.log('Accessibility label check:', label);
 });
 
 const expectElement = (element: DetoxElement) => element;
@@ -52,14 +50,14 @@ describe('诊断服务端到端测试', () => {
       // 1. 导航到五诊页面
       await element(by.id('diagnosis-tab')).tap();
       await element(by.id('five-diagnosis-button')).tap();
-      
+
       // 验证页面加载
       await expect(element(by.id('five-diagnosis-screen'))).toBeVisible();
       await expect(element(by.text('五诊综合分析'))).toBeVisible();
 
       // 2. 开始诊断流程
       await element(by.id('start-diagnosis-button')).tap();
-      
+
       // 验证进入第一步
       await expect(element(by.text('第1步: 基本信息'))).toBeVisible();
 
@@ -73,58 +71,58 @@ describe('诊断服务端到端测试', () => {
       // 4. 望诊步骤
       await expect(element(by.text('第2步: 望诊'))).toBeVisible();
       await element(by.id('face-photo-button')).tap();
-      
+
       // 模拟拍照
       await element(by.id('camera-capture')).tap();
       await element(by.id('photo-confirm')).tap();
-      
+
       await element(by.id('tongue-photo-button')).tap();
       await element(by.id('camera-capture')).tap();
       await element(by.id('photo-confirm')).tap();
-      
+
       await element(by.id('next-step-button')).tap();
 
       // 5. 闻诊步骤
       await expect(element(by.text('第3步: 闻诊'))).toBeVisible();
       await element(by.id('voice-record-button')).tap();
-      
+
       // 等待录音完成
       await waitFor(element(by.id('voice-analysis-result')))
-        .toBeVisible()
+        .toBeVisible();
         .withTimeout(10000);
-      
+
       await element(by.id('next-step-button')).tap();
 
       // 6. 问诊步骤
       await expect(element(by.text('第4步: 问诊'))).toBeVisible();
-      
+
       // 回答问诊问题
       await element(by.id('symptom-headache')).tap();
       await element(by.id('symptom-fatigue')).tap();
       await element(by.id('sleep-quality-poor')).tap();
       await element(by.id('appetite-normal')).tap();
-      
+
       await element(by.id('next-step-button')).tap();
 
       // 7. 切诊步骤
       await expect(element(by.text('第5步: 切诊'))).toBeVisible();
       await element(by.id('pulse-measurement-start')).tap();
-      
+
       // 等待脉象测量完成
       await waitFor(element(by.id('pulse-result')))
-        .toBeVisible()
+        .toBeVisible();
         .withTimeout(15000);
-      
+
       await element(by.id('next-step-button')).tap();
 
       // 8. 算诊步骤
       await expect(element(by.text('第6步: 算诊'))).toBeVisible();
-      
+
       // 等待AI分析完成
       await waitFor(element(by.id('ai-analysis-complete')))
-        .toBeVisible()
+        .toBeVisible();
         .withTimeout(20000);
-      
+
       await element(by.id('next-step-button')).tap();
 
       // 9. 验证结果页面
@@ -184,7 +182,7 @@ describe('诊断服务端到端测试', () => {
 
       // 恢复网络
       await device.setURLBlacklist([]);
-      
+
       // 重试
       await element(by.id('retry-button')).tap();
       await expect(element(by.text('第2步: 望诊'))).toBeVisible();
@@ -201,7 +199,7 @@ describe('诊断服务端到端测试', () => {
 
     it('应该显示完整的诊断结果', async () => {
       await expect(element(by.id('diagnosis-detail-screen'))).toBeVisible();
-      
+
       // 验证概览标签页
       await expect(element(by.text('概览'))).toBeVisible();
       await expect(element(by.id('constitution-chart'))).toBeVisible();
@@ -221,7 +219,7 @@ describe('诊断服务端到端测试', () => {
     it('应该支持分享功能', async () => {
       await element(by.id('share-button')).tap();
       await expect(element(by.text('分享诊断结果'))).toBeVisible();
-      
+
       await element(by.id('share-wechat')).tap();
       // 验证分享成功（模拟）
       await expect(element(by.text('分享成功'))).toBeVisible();
@@ -230,12 +228,12 @@ describe('诊断服务端到端测试', () => {
     it('应该支持预约咨询', async () => {
       await element(by.text('建议')).tap();
       await element(by.id('book-consultation')).tap();
-      
+
       await expect(element(by.text('预约专家咨询'))).toBeVisible();
       await element(by.id('expert-doctor-1')).tap();
       await element(by.id('time-slot-morning')).tap();
       await element(by.id('confirm-booking')).tap();
-      
+
       await expect(element(by.text('预约成功'))).toBeVisible();
     });
   });
@@ -243,7 +241,7 @@ describe('诊断服务端到端测试', () => {
   describe('性能测试', () => {
     it('应该在合理时间内完成诊断', async () => {
       const startTime = Date.now();
-      
+
       await element(by.id('diagnosis-tab')).tap();
       await element(by.id('five-diagnosis-button')).tap();
       await element(by.id('start-diagnosis-button')).tap();
@@ -265,12 +263,12 @@ describe('诊断服务端到端测试', () => {
 
       // 等待算诊完成
       await waitFor(element(by.id('ai-analysis-complete')))
-        .toBeVisible()
+        .toBeVisible();
         .withTimeout(10000);
 
       const endTime = Date.now();
       const duration = endTime - startTime;
-      
+
       // 验证性能要求（应在30秒内完成）
       expect(duration).toBeLessThan(30000);
     });
@@ -278,15 +276,13 @@ describe('诊断服务端到端测试', () => {
     it('应该处理大量并发请求', async () => {
       // 模拟多个并发诊断请求
       const promises = [];
-      
+
       for (let i = 0; i < 5; i++) {
-        promises.push(
-          element(by.id('quick-diagnosis-button')).tap()
-        );
+        promises.push(element(by.id('quick-diagnosis-button')).tap());
       }
-      
+
       await Promise.all(promises);
-      
+
       // 验证所有请求都得到处理
       await expect(element(by.text('诊断完成'))).toBeVisible();
     });
@@ -296,26 +292,26 @@ describe('诊断服务端到端测试', () => {
     it('应该在离线状态下工作', async () => {
       // 断开网络
       await device.setURLBlacklist(['*']);
-      
+
       await element(by.id('diagnosis-tab')).tap();
       await element(by.id('five-diagnosis-button')).tap();
-      
+
       // 验证离线提示
       await expect(element(by.text('离线模式'))).toBeVisible();
-      
+
       await element(by.id('start-diagnosis-button')).tap();
-      
+
       // 基本信息应该可以填写
       await element(by.id('age-input')).typeText('30');
       await element(by.id('gender-male')).tap();
       await element(by.id('next-step-button')).tap();
-      
+
       // 验证本地功能可用
       await expect(element(by.text('第2步: 望诊'))).toBeVisible();
-      
+
       // 恢复网络
       await device.setURLBlacklist([]);
-      
+
       // 验证数据同步
       await expect(element(by.text('数据已同步'))).toBeVisible();
     });
@@ -324,26 +320,28 @@ describe('诊断服务端到端测试', () => {
   describe('无障碍功能测试', () => {
     it('应该支持屏幕阅读器', async () => {
       await element(by.id('diagnosis-tab')).tap();
-      
+
       // 验证无障碍标签
-      await expect(element(by.id('five-diagnosis-button')))
-        .toHaveAccessibilityLabel('开始五诊综合分析');
-      
+      await expect(element(by.id('five-diagnosis-button'))).toHaveAccessibilityLabel(
+        '开始五诊综合分析'
+      );
+
       await element(by.id('five-diagnosis-button')).tap();
-      
-      await expect(element(by.id('start-diagnosis-button')))
-        .toHaveAccessibilityLabel('开始诊断流程');
+
+      await expect(element(by.id('start-diagnosis-button'))).toHaveAccessibilityLabel(
+        '开始诊断流程'
+      );
     });
 
     it('应该支持语音导航', async () => {
       await element(by.id('diagnosis-tab')).tap();
       await element(by.id('five-diagnosis-button')).tap();
-      
+
       // 启用语音导航
       await element(by.id('voice-navigation-toggle')).tap();
-      
+
       await element(by.id('start-diagnosis-button')).tap();
-      
+
       // 验证语音提示
       await expect(element(by.text('请填写您的基本信息'))).toBeVisible();
     });
@@ -355,9 +353,9 @@ describe('诊断服务端到端测试', () => {
       await element(by.id('settings-tab')).tap();
       await element(by.id('language-settings')).tap();
       await element(by.id('language-english')).tap();
-      
+
       await element(by.id('diagnosis-tab')).tap();
-      
+
       // 验证英文界面
       await expect(element(by.text('Five Diagnosis'))).toBeVisible();
       await expect(element(by.text('Start Diagnosis'))).toBeVisible();
@@ -367,9 +365,9 @@ describe('诊断服务端到端测试', () => {
       await element(by.id('settings-tab')).tap();
       await element(by.id('language-settings')).tap();
       await element(by.id('language-traditional-chinese')).tap();
-      
+
       await element(by.id('diagnosis-tab')).tap();
-      
+
       // 验证繁体中文界面
       await expect(element(by.text('五診綜合分析'))).toBeVisible();
     });
@@ -384,7 +382,7 @@ describe('诊断服务端到端测试', () => {
       // 填写敏感信息
       await element(by.id('age-input')).typeText('30');
       await element(by.id('medical-history-input')).typeText('高血压');
-      
+
       // 验证数据加密存储
       // 这里需要检查本地存储的数据是否已加密
       // 实际实现中会调用原生模块验证
@@ -393,11 +391,11 @@ describe('诊断服务端到端测试', () => {
     it('应该支持数据导出', async () => {
       await element(by.id('diagnosis-tab')).tap();
       await element(by.id('diagnosis-history')).tap();
-      
+
       await element(by.id('export-data-button')).tap();
       await element(by.id('export-format-pdf')).tap();
       await element(by.id('confirm-export')).tap();
-      
+
       await expect(element(by.text('数据导出成功'))).toBeVisible();
     });
   });
@@ -405,10 +403,7 @@ describe('诊断服务端到端测试', () => {
 
 // 辅助函数
 async function waitFor(element: any) {
-  return {
-    toBeVisible: () => ({
-      withTimeout: (timeout: number) => 
-        new Promise(resolve => setTimeout(resolve, timeout))
-    })
+  return {toBeVisible: () => ({withTimeout: (timeout: number) => new Promise(resolve => setTimeout(resolve, timeout));
+    });
   };
-} 
+}

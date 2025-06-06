@@ -1,17 +1,22 @@
 """
+vision_analyzer - 索克生活项目模块
+"""
+
+from dataclasses import dataclass
+from enum import Enum
+from typing import Dict, List, Tuple, Optional, Any
+import asyncio
+import cv2
+import logging
+import numpy as np
+
+"""
 望诊计算机视觉分析器
 
 基于深度学习和传统图像处理技术，实现中医望诊的智能分析功能。
 包括面诊、舌诊、眼诊等核心功能。
 """
 
-import asyncio
-import cv2
-import numpy as np
-import logging
-from typing import Dict, List, Tuple, Optional, Any
-from dataclasses import dataclass
-from enum import Enum
 
 logger = logging.getLogger(__name__)
 

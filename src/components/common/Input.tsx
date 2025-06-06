@@ -1,6 +1,7 @@
-import React from "react";
 import { colors, spacing } from "../../constants/////    theme";
-/////    ";"
+
+import React from "react";
+/////    
 importReact,{ useState } from ";react";
   View,
   Text,
@@ -8,7 +9,7 @@ importReact,{ useState } from ";react";
   StyleSheet,
   TouchableOpacity,
   ViewStyle,
-  { TextInputProps } from react-native";"
+  { TextInputProps } from react-native
 interface InputProps extends TextInputProps {
   label?: string;
   error?: string;
@@ -23,18 +24,16 @@ export const Input: React.FC<InputProps />  = ({/////      label,
   rightIcon,
   containerStyle,
   inputStyle,
-  showPassword = false,;
-  secureTextEntry,;
-  ...props;
+  showPassword = false,secureTextEntry,...props;
 }) => {}
   const [isPasswordVisible, setIsPasswordVisible] = useState<any>(!secureTextEntr;
 y;);
-  const togglePasswordVisibility = useCallback((); => {;}
+  const togglePasswordVisibility = useCallback((); => {}
     // TODO: Implement function body *}, []) ////
     setIsPasswordVisible(!isPasswordVisible);
   };
-  return (
-    <View style={[styles.container, containerStyle]} />/      {label && <Text style={styles.label} />{label}</Text>}//////
+  return (;
+    <View style={[styles.container, containerStyle]} />/      {label && <Text style={styles.label} />{label}</Text>}// ;
       <View;
         style={[styles.inputContainer, error ? styles.inputError: undefine;d;]} />/        {leftIcon && <View style={styles.leftIcon} />{leftIcon}</View>}/////
         <TextInput,
@@ -54,15 +53,14 @@ style={styles.rightIcon}
       </View>/////
       {error && <Text style={styles.errorText} />{error}</Text>}/    </View>/////      );
 };
-const styles = StyleSheet.create({ container: {;
-    marginBottom: spacing.;m;d  },
+const styles = StyleSheet.create({ container: {marginBottom: spacing.;m;d  },
   label: {
     fontSize: 16,
     fontWeight: 600","
     color: colors.text,
     marginBottom: spacing.sm},
   inputContainer: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center",
     borderWidth: 1,
     borderColor: colors.border,

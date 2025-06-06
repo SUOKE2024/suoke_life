@@ -1,3 +1,19 @@
+"""
+intelligent_report_generator - 索克生活项目模块
+"""
+
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from jinja2 import Environment, FileSystemLoader, Template
+from pathlib import Path
+from typing import Any
+import base64
+import io
+import json
+import logging
+
 #!/usr/bin/env python3
 
 """
@@ -6,18 +22,7 @@
 提供可视化图表和趋势分析，支持多语言和多格式输出
 """
 
-import base64
-import io
-import json
-import logging
-from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-from pathlib import Path
-from typing import Any
 
-from jinja2 import Environment, FileSystemLoader, Template
 
 logger = logging.getLogger(__name__)
 

@@ -1,16 +1,21 @@
 """
-User Integration Models
+user_integration - 索克生活项目模块
 """
 
+from .base import BaseDBModel, BaseModel
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any
-
 from pydantic import Field
 from sqlalchemy import JSON, Boolean, Column, String, Text, UniqueConstraint
+from typing import Any
 
-from .base import BaseDBModel, BaseModel
+"""
+User Integration Models
+"""
+
+
+
 
 
 class PlatformType(Enum):
@@ -60,6 +65,18 @@ class UserIntegrationDB(BaseDBModel):
         UniqueConstraint('user_id', 'platform', name='uk_user_platform'),
     )
 
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'userintegrationdb'
+        ordering = ['-created_at']
+
 
 class PlatformAuthDB(BaseDBModel):
     """平台认证信息数据库模型"""
@@ -88,6 +105,18 @@ class PlatformAuthDB(BaseDBModel):
     __table_args__ = (
         UniqueConstraint('user_id', 'platform', name='uk_user_platform_auth'),
     )
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'platformauth'
+        ordering = ['-created_at']
 
 
 # Pydantic Models
@@ -121,6 +150,18 @@ class PlatformAuth(BaseDBModel):
             self.token_expires_at = expires_at
         self.status = AuthStatus.ACTIVE
         self.update_timestamp()
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'userintegration'
+        ordering = ['-created_at']
 
 
 @dataclass
@@ -181,6 +222,42 @@ class UserIntegration(BaseDBModel):
             PlatformType.HUAWEI_HEALTH: "华为健康"
         }
         return platform_names.get(self.platform, self.platform.value)
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'platformauth'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'integrationresponse'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'authcallbackrequest'
+        ordering = ['-created_at']
 
 
 class PlatformAuth(BaseModel):

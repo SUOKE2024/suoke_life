@@ -1,3 +1,28 @@
+"""
+main - 索克生活项目模块
+"""
+
+from config.settings import Settings
+from contextlib import asynccontextmanager
+from fastapi import FastAPI, HTTPException, Depends
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
+from internal.container import Container
+from internal.delivery.grpc_server import create_grpc_server
+from internal.delivery.rest_handler import create_rest_handler
+from internal.integration.api_gateway import APIGateway
+from internal.observability.metrics import MetricsCollector
+from internal.resilience.circuit_breaker import CircuitBreakerService
+from internal.routing.intelligent_router import IntelligentRouter
+from loguru import logger
+from pathlib import Path
+from typing import Optional
+import asyncio
+import os
+import signal
+import sys
+import uvicorn
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,31 +31,11 @@ RAG服务主入口
 整合所有组件并启动服务
 """
 
-import asyncio
-import signal
-import sys
-import os
-from pathlib import Path
-from typing import Optional
-import uvicorn
-from fastapi import FastAPI, HTTPException, Depends
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.gzip import GZipMiddleware
-from contextlib import asynccontextmanager
-from loguru import logger
 
 # 添加项目根目录到Python路径
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from internal.container import Container
-from internal.delivery.rest_handler import create_rest_handler
-from internal.delivery.grpc_server import create_grpc_server
-from internal.observability.metrics import MetricsCollector
-from internal.resilience.circuit_breaker import CircuitBreakerService
-from internal.routing.intelligent_router import IntelligentRouter
-from internal.integration.api_gateway import APIGateway
-from config.settings import Settings
 
 
 class RAGService:
@@ -122,7 +127,9 @@ class RAGService:
         app.include_router(rest_handler, prefix="/api/v1")
         
         # 健康检查端点
-        @app.get("/health")
+        @cache(expire=300)  # 5分钟缓存
+@limiter.limit("100/minute")  # 每分钟100次请求
+@app.get("/health")
         async def health_check():
             """健康检查"""
             try:
@@ -157,10 +164,12 @@ class RAGService:
             except Exception as e:
                 logger.error(f"健康检查失败: {e}")
                 raise HTTPException(status_code=503, detail="服务不健康")
-        
+    @cache(expire=@limiter.limit("100/minute")  # 每分钟100次请求
+300)  # 5分钟缓存
+    
         # 指标端点
         @app.get("/metrics")
-        async def get_metrics():
+        async async def get_metrics(
             """获取Prometheus格式的指标"""
             try:
                 if self.metrics_collector:
@@ -169,11 +178,13 @@ class RAGService:
                     return {"error": "指标收集器未初始化"}
             except Exception as e:
                 logger.error(f"获取指标失败: {e}")
-                raise HTTPException(status_code=500, detail="获取指标失败")
+                raise HTTPException(status_code=@limiter.limit("100/minute")  # 每分钟100次请求
+@cache(expire=300)  # 5分钟缓存
+500, detail="获取指标失败")
         
         # 服务状态端点
         @app.get("/status")
-        async def get_service_status():
+        async async def get_service_status(
             """获取详细的服务状态"""
             try:
                 status = {

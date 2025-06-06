@@ -1,18 +1,23 @@
 """
+logging - 索克生活项目模块
+"""
+
+from datetime import datetime
+from pathlib import Path
+from structlog.types import FilteringBoundLogger
+import json
+import logging
+import structlog
+import sys
+import time
+
+"""
 结构化日志配置工具
 
 提供基于structlog的现代化日志配置，支持JSON格式、彩色输出、性能监控等功能。
 """
 
-import json
-import logging
-import sys
-import time
-from datetime import datetime
-from pathlib import Path
 
-import structlog
-from structlog.types import FilteringBoundLogger
 
 def setup_logging(
     level: str = "INFO",

@@ -1,27 +1,32 @@
+"""
+main - 索克生活项目模块
+"""
+
+from config.settings import load_settings
+from internal.delivery.grpc_server import GrpcServer
+from internal.delivery.health_check import HealthCheck 
+from internal.observability.metrics import MetricsService, service_info
+from internal.repository.message_repository import KafkaMessageRepository
+from internal.security.auth import AuthInterceptor
+from internal.service.message_service import MessageService
+from pathlib import Path
+import asyncio
+import logging
+import os
+import signal
+import sys
+
 #!/usr/bin/env python3
 """
 Message Bus服务主入口
 提供可靠的消息发布/订阅功能
 """
 
-import asyncio
-import logging
-import os
-import signal
-import sys
-from pathlib import Path
 
 # 添加项目根目录到Python路径
 project_root = Path(__file__).parent.parent.parent
 sys.path.append(str(project_root))
 
-from config.settings import load_settings
-from internal.delivery.grpc_server import GrpcServer
-from internal.delivery.health_check import HealthCheck 
-from internal.repository.message_repository import KafkaMessageRepository
-from internal.service.message_service import MessageService
-from internal.observability.metrics import MetricsService, service_info
-from internal.security.auth import AuthInterceptor
 
 # 配置日志
 logging.basicConfig(

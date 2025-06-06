@@ -1,19 +1,24 @@
+"""
+test_session - 索克生活项目模块
+"""
+
+from internal.model.session import InquirySession, Message, MessageRole, SessionStatus
+import os
+import sys
+import time
+import unittest
+
 #!/usr/bin/env python
 
 """
 会话模型单元测试
 """
 
-import os
-import sys
-import time
-import unittest
 
 sys.path.insert(
     0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../"))
 )
 
-from internal.model.session import InquirySession, Message, MessageRole, SessionStatus
 
 
 class TestMessage(unittest.TestCase):
@@ -84,7 +89,8 @@ class TestInquirySession(unittest.TestCase):
         self.assertEqual(self.session.messages[1].content, "助手回复")
         self.assertEqual(assistant_message.metadata["confidence"], 0.95)
 
-    def test_get_conversation_history(self):
+        @cache(timeout=300)  # 5分钟缓存
+def test_get_conversation_history(self):
         """测试获取对话历史"""
         # 添加多条消息
         self.session.add_message(MessageRole.SYSTEM, "系统指令")

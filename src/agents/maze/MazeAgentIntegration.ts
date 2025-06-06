@@ -1,9 +1,8 @@
-/**
+import {/**
  * 智能体迷宫集成模块
  * Agent Maze Integration Module
  */
 
-import {
   MazeInteraction,
   GameReward,
   Challenge,
@@ -58,20 +57,7 @@ export abstract class MazeAgentBase {
     input: string,
     context: MazeContext
   ): Promise<MazeInteraction> {
-    return {
-      id: `maze_${this.agentType}_${Date.now()}`,
-      playerId: 'current_user',
-      npcResponse: this.generateContextualResponse(input, context),
-      action: this.determineAction(input),
-      location: context.currentPosition,
-      rewards: this.generateRewards(context),
-      hints: this.generateHints(input, context),
-      challenges: this.generateChallenges(context),
-      storyProgression: this.calculateStoryProgression(context),
-      nextActions: this.suggestNextActions(context),
-      timestamp: new Date(),
-      agentType: this.agentType,
-      contextualAdvice: this.generateContextualAdvice(input, context)
+    return {id: `maze_${this.agentType}_${Date.now()}`,playerId: 'current_user',npcResponse: this.generateContextualResponse(input, context),action: this.determineAction(input),location: context.currentPosition,rewards: this.generateRewards(context),hints: this.generateHints(input, context),challenges: this.generateChallenges(context),storyProgression: this.calculateStoryProgression(context),nextActions: this.suggestNextActions(context),timestamp: new Date(),agentType: this.agentType,contextualAdvice: this.generateContextualAdvice(input, context);
     };
   }
 
@@ -85,7 +71,7 @@ export abstract class MazeAgentBase {
    */
   protected determineAction(input: string): string {
     const lowerInput = input.toLowerCase();
-    
+
     if (lowerInput.includes('帮助') || lowerInput.includes('指导')) {
       return 'provide_guidance';
     } else if (lowerInput.includes('知识') || lowerInput.includes('学习')) {
@@ -104,7 +90,7 @@ export abstract class MazeAgentBase {
    */
   protected generateRewards(context: MazeContext): GameReward[] {
     const rewards: GameReward[] = [];
-    
+
     // 基于进度和表现生成奖励
     if (context.score > 80) {
       rewards.push({
@@ -138,7 +124,7 @@ export abstract class MazeAgentBase {
    */
   protected generateHints(input: string, context: MazeContext): string[] {
     const hints: string[] = [];
-    
+
     // 基于主题生成相关提示
     switch (context.mazeTheme) {
       case MazeTheme.HEALTH_PATH:
@@ -174,7 +160,7 @@ export abstract class MazeAgentBase {
    */
   protected generateChallenges(context: MazeContext): Challenge[] {
     const challenges: Challenge[] = [];
-    
+
     // 基于主题和难度生成挑战
     if (context.acquiredKnowledge.length >= 3) {
       challenges.push({
@@ -205,7 +191,7 @@ export abstract class MazeAgentBase {
     const baseProgress = (context.visitedNodes.length / 50) * 100; // 假设50个节点为满分
     const knowledgeBonus = context.acquiredKnowledge.length * 5;
     const challengeBonus = context.completedChallenges.length * 10;
-    
+
     return Math.min(100, Math.floor(baseProgress + knowledgeBonus + challengeBonus));
   }
 
@@ -214,22 +200,22 @@ export abstract class MazeAgentBase {
    */
   protected suggestNextActions(context: MazeContext): string[] {
     const actions: string[] = [];
-    
+
     if (context.acquiredKnowledge.length < 3) {
       actions.push('寻找知识节点');
     }
-    
+
     if (context.completedChallenges.length < 2) {
       actions.push('接受健康挑战');
     }
-    
+
     if (context.stepsCount > 100) {
       actions.push('休息一下');
     }
-    
+
     actions.push('继续探索');
     actions.push('查看地图');
-    
+
     return actions.slice(0, 4); // 最多返回4个建议
   }
 
@@ -266,35 +252,23 @@ export class XiaoaiMazeAgent extends MazeAgentBase {
   }
 
   protected getDefaultPersonality(): Record<string, any> {
-    return {
-      style: 'friendly',
-      enthusiasm: 'high',
-      supportiveness: 'high',
-      encouragement: 'frequent'
+    return {style: 'friendly',enthusiasm: 'high',supportiveness: 'high',encouragement: 'frequent';
     };
   }
 
   protected generateContextualResponse(input: string, context: MazeContext): string {
-    const responses = [
-      `太棒了！你已经在${this.getThemeDisplayName(context.mazeTheme)}中探索了${context.visitedNodes.length}个节点！`,
-      `我看到你获得了${context.score}分，继续加油！每一步都让你更健康！`,
-      `在这个${this.getThemeDisplayName(context.mazeTheme)}迷宫中，还有很多有趣的知识等着你发现呢！`,
-      `你的探索精神真让人佩服！让我们一起学习更多健康知识吧！`
+    const responses = [;
+      `太棒了！你已经在${this.getThemeDisplayName(context.mazeTheme)}中探索了${context.visitedNodes.length}个节点！`,`我看到你获得了${context.score}分，继续加油！每一步都让你更健康！`,`在这个${this.getThemeDisplayName(context.mazeTheme)}迷宫中，还有很多有趣的知识等着你发现呢！`,`你的探索精神真让人佩服！让我们一起学习更多健康知识吧！`;
     ];
-    
+
     return responses[Math.floor(Math.random() * responses.length)];
   }
 
   protected generateQuestions(context: MazeContext): any[] {
     // 小艾生成的问题偏向基础和实用
-    return [
-      {
-        questionId: 'xiaoai_q1',
-        question: '每天应该喝多少水？',
-        options: ['1-2杯', '4-6杯', '8-10杯', '12杯以上'],
-        correctAnswer: '2',
-        explanation: '成年人每天应该喝8-10杯水，约2升左右。'
-      }
+    return [;
+      {questionId: 'xiaoai_q1',question: '每天应该喝多少水？',options: ['1-2杯', '4-6杯', '8-10杯', '12杯以上'],correctAnswer: '2',explanation: '成年人每天应该喝8-10杯水，约2升左右。';
+      };
     ];
   }
 
@@ -312,35 +286,23 @@ export class XiaokeMazeAgent extends MazeAgentBase {
   }
 
   protected getDefaultPersonality(): Record<string, any> {
-    return {
-      style: 'scientific',
-      precision: 'high',
-      analytical: 'high',
-      methodology: 'systematic'
+    return {style: 'scientific',precision: 'high',analytical: 'high',methodology: 'systematic';
     };
   }
 
   protected generateContextualResponse(input: string, context: MazeContext): string {
-    const responses = [
-      `根据你的探索数据分析，你在${context.timeSpent}分钟内完成了${context.stepsCount}步，效率很高！`,
-      `从科学角度来看，你在${this.getThemeDisplayName(context.mazeTheme)}领域的学习进度达到了${this.calculateStoryProgression(context)}%。`,
-      `数据显示你已经掌握了${context.acquiredKnowledge.length}个知识点，建议继续深入学习相关内容。`,
-      `基于你的表现模式，我推荐你接下来关注营养学和运动科学的结合。`
+    const responses = [;
+      `根据你的探索数据分析，你在${context.timeSpent}分钟内完成了${context.stepsCount}步，效率很高！`,`从科学角度来看，你在${this.getThemeDisplayName(context.mazeTheme)}领域的学习进度达到了${this.calculateStoryProgression(context)}%。`,`数据显示你已经掌握了${context.acquiredKnowledge.length}个知识点，建议继续深入学习相关内容。`,`基于你的表现模式，我推荐你接下来关注营养学和运动科学的结合。`;
     ];
-    
+
     return responses[Math.floor(Math.random() * responses.length)];
   }
 
   protected generateQuestions(context: MazeContext): any[] {
     // 小克生成的问题偏向科学和深度
-    return [
-      {
-        questionId: 'xiaoke_q1',
-        question: '人体基础代谢率主要受哪些因素影响？',
-        options: ['年龄和性别', '体重和身高', '肌肉量和甲状腺功能', '以上都是'],
-        correctAnswer: '3',
-        explanation: '基础代谢率受多种因素影响，包括年龄、性别、体重、身高、肌肉量和甲状腺功能等。'
-      }
+    return [;
+      {questionId: 'xiaoke_q1',question: '人体基础代谢率主要受哪些因素影响？',options: ['年龄和性别', '体重和身高', '肌肉量和甲状腺功能', '以上都是'],correctAnswer: '3',explanation: '基础代谢率受多种因素影响，包括年龄、性别、体重、身高、肌肉量和甲状腺功能等。';
+      };
     ];
   }
 
@@ -358,35 +320,23 @@ export class LaokeMazeAgent extends MazeAgentBase {
   }
 
   protected getDefaultPersonality(): Record<string, any> {
-    return {
-      style: 'wise',
-      knowledge: 'deep',
-      patience: 'high',
-      guidance: 'philosophical'
+    return {style: 'wise',knowledge: 'deep',patience: 'high',guidance: 'philosophical';
     };
   }
 
   protected generateContextualResponse(input: string, context: MazeContext): string {
-    const responses = [
-      `古人云："上医治未病"，你在${this.getThemeDisplayName(context.mazeTheme)}中的探索正体现了这种智慧。`,
-      `从中医的角度来看，你的学习态度很好地体现了"学而时习之"的精神。`,
-      `根据古籍记载和现代研究，你现在掌握的${context.acquiredKnowledge.length}个知识点都很有价值。`,
-      `在养生的道路上，你已经走了${context.stepsCount}步，每一步都是向健康迈进。`
+    const responses = [;
+      `古人云："上医治未病"，你在${this.getThemeDisplayName(context.mazeTheme)}中的探索正体现了这种智慧。`,`从中医的角度来看，你的学习态度很好地体现了"学而时习之"的精神。`,`根据古籍记载和现代研究，你现在掌握的${context.acquiredKnowledge.length}个知识点都很有价值。`,`在养生的道路上，你已经走了${context.stepsCount}步，每一步都是向健康迈进。`;
     ];
-    
+
     return responses[Math.floor(Math.random() * responses.length)];
   }
 
   protected generateQuestions(context: MazeContext): any[] {
     // 老克生成的问题偏向传统医学和哲学
-    return [
-      {
-        questionId: 'laoke_q1',
-        question: '中医理论中，"春夏养阳，秋冬养阴"的含义是什么？',
-        options: ['春夏多运动，秋冬多休息', '顺应自然规律调养身体', '春夏吃热食，秋冬吃凉食', '春夏早起，秋冬晚起'],
-        correctAnswer: '1',
-        explanation: '这是中医顺应自然规律的养生理念，春夏阳气生发时要养护阳气，秋冬阴气收藏时要滋养阴精。'
-      }
+    return [;
+      {questionId: 'laoke_q1',question: '中医理论中，"春夏养阳，秋冬养阴"的含义是什么？',options: ['春夏多运动，秋冬多休息', '顺应自然规律调养身体', '春夏吃热食，秋冬吃凉食', '春夏早起，秋冬晚起'],correctAnswer: '1',explanation: '这是中医顺应自然规律的养生理念，春夏阳气生发时要养护阳气，秋冬阴气收藏时要滋养阴精。';
+      };
     ];
   }
 
@@ -404,35 +354,23 @@ export class SoerMazeAgent extends MazeAgentBase {
   }
 
   protected getDefaultPersonality(): Record<string, any> {
-    return {
-      style: 'innovative',
-      creativity: 'high',
-      adaptability: 'high',
-      exploration: 'adventurous'
+    return {style: 'innovative',creativity: 'high',adaptability: 'high',exploration: 'adventurous';
     };
   }
 
   protected generateContextualResponse(input: string, context: MazeContext): string {
-    const responses = [
-      `哇！你在${this.getThemeDisplayName(context.mazeTheme)}中的探索真是太有创意了！`,
-      `我发现了一个有趣的模式：你的探索路径很独特，这种创新思维很棒！`,
-      `让我们尝试一种全新的方法来理解这些健康知识，你觉得怎么样？`,
-      `你的学习方式给了我很多启发，我们可以一起创造更多有趣的学习体验！`
+    const responses = [;
+      `哇！你在${this.getThemeDisplayName(context.mazeTheme)}中的探索真是太有创意了！`,`我发现了一个有趣的模式：你的探索路径很独特，这种创新思维很棒！`,`让我们尝试一种全新的方法来理解这些健康知识，你觉得怎么样？`,`你的学习方式给了我很多启发，我们可以一起创造更多有趣的学习体验！`;
     ];
-    
+
     return responses[Math.floor(Math.random() * responses.length)];
   }
 
   protected generateQuestions(context: MazeContext): any[] {
     // 索儿生成的问题偏向创新和实践
-    return [
-      {
-        questionId: 'soer_q1',
-        question: '如果要设计一个创新的健康生活方案，你会优先考虑什么？',
-        options: ['个性化定制', '科技辅助', '社交互动', '以上都重要'],
-        correctAnswer: '3',
-        explanation: '现代健康管理需要综合考虑个性化、科技手段和社交因素，形成全方位的解决方案。'
-      }
+    return [;
+      {questionId: 'soer_q1',question: '如果要设计一个创新的健康生活方案，你会优先考虑什么？',options: ['个性化定制', '科技辅助', '社交互动', '以上都重要'],correctAnswer: '3',explanation: '现代健康管理需要综合考虑个性化、科技手段和社交因素，形成全方位的解决方案。';
+      };
     ];
   }
 
@@ -466,16 +404,13 @@ export class MazeAgentFactory {
           throw new Error(`Unknown agent type: ${agentType}`);
       }
     }
-    
+
     return this.agents.get(agentType)!;
   }
 
   static getAllAgents(): MazeAgentBase[] {
-    return [
-      this.getAgent('xiaoai'),
-      this.getAgent('xiaoke'),
-      this.getAgent('laoke'),
-      this.getAgent('soer')
+    return [;
+      this.getAgent('xiaoai'),this.getAgent('xiaoke'),this.getAgent('laoke'),this.getAgent('soer');
     ];
   }
 }

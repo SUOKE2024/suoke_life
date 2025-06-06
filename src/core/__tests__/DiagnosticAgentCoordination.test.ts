@@ -1,9 +1,8 @@
 import { describe, test, expect, beforeEach, afterEach, jest } from "@jest/globals";
-import DiagnosticAgentCoordinator, {
+
   DiagnosticResult,
   AgentResponse,
   { CoordinationSession  } from "../coordination/DiagnosticAgentCoordinator";
-import EdgeAIInferenceFramework from ../ai/EdgeAIInferenceFramework";"
 describe("诊断服务与智能体协同验证集成测试, () => {", () => {
   let coordinator: DiagnosticAgentCoordinator;
   let aiFramework: EdgeAIInferenceFramework;
@@ -15,14 +14,14 @@ describe("诊断服务与智能体协同验证集成测试, () => {", () => {
     testUserId = "test_user_12345";
     testSessionId = await coordinator.startCoordinationSession(testUserId);
     // 初始化AI推理框架
-await aiFramework.initialize()
+await aiFramework.initialize();
   });
   afterEach(async () => {
     if (testSessionId) {
       await coordinator.endSession(testSessionId);
     });
   });
-  describe(1. 基础协同功能测试", () => {"
+  describe("1. 基础协同功能测试", () => {
     test("应该能够启动协同会话, async () => {"
       const sessionId = await coordinator.startCoordinationSession(testUserId);
       expect(sessionId).toBeDefined();
@@ -33,8 +32,7 @@ await aiFramework.initialize()
       expect(session?.status).toBe("active");
     });
     test(应该能够接收诊断结果", async () => {"
-      const diagnosticResult: DiagnosticResult = {;
-        serviceType: "calculation,"
+      const diagnosticResult: DiagnosticResult = {serviceType: "calculation,",
         timestamp: Date.now(),
         data: {
           ziwu_analysis: {
@@ -55,11 +53,10 @@ await aiFramework.initialize()
       expect(session?.diagnosticResults[0].serviceType).toBe("calculation);"
     });
     test("应该能够接收智能体响应", async () => {
-      const agentResponse: AgentResponse = {;
-        agentType: xiaoai","
+      const agentResponse: AgentResponse = {agentType: xiaoai","
         timestamp: Date.now(),
         analysis: {
-          syndrome: "qi_deficiency,"
+          syndrome: "qi_deficiency,",
           severity: "moderate"
         },
         recommendations: [深呼吸练习", "适量运动],
@@ -90,7 +87,7 @@ await aiFramework.initialize()
           metadata: { sessionId: testSessionId, userId: testUserId, version: 1.0.0" });"
         },
         {
-          serviceType: "look,"
+          serviceType: "look,",
           timestamp: Date.now(),
           data: {
             face_analysis: { complexion: "pale", confidence: 0.88 },
@@ -131,7 +128,7 @@ await aiFramework.initialize()
       ];
       // 依次接收所有诊断结果
 for (const result of diagnosticResults) {
-        await coordinator.receiveDiagnosticResult(testSessionId, result)
+        await coordinator.receiveDiagnosticResult(testSessionId, result);
       });
       const session = coordinator.getSessionStatus(testSessionId);
       expect(session?.diagnosticResults).toHaveLength(5);
@@ -162,7 +159,7 @@ const serviceTypes = session?.diagnosticResults.map(r => r.serviceType);
       });
       expect(mockTriggerHandler).toHaveBeenCalledWith({
         sessionId: testSessionId,
-        diagnosticResults: expect.any(Array)
+        diagnosticResults: expect.any(Array);
       });
     });
   });
@@ -170,7 +167,7 @@ const serviceTypes = session?.diagnosticResults.map(r => r.serviceType);
     test(应该能够处理四个智能体的响应", async () => {"
       const agentResponses: AgentResponse[] = [;
         {
-          agentType: "xiaoai,"
+          agentType: "xiaoai,",
           timestamp: Date.now(),
           analysis: { syndrome: "qi_deficiency", confidence: 0.89 },
           recommendations: [补气养血"],"
@@ -194,7 +191,7 @@ const serviceTypes = session?.diagnosticResults.map(r => r.serviceType);
           metadata: { sessionId: testSessionId, userId: testUserId, version: 1.0.0" });"
         },
         {
-          agentType: "soer,"
+          agentType: "soer,",
           timestamp: Date.now(),
           analysis: { emotional_support: ["stress_reduction"], confidence: 0.85 },
           recommendations: [冥想放松"],"
@@ -225,7 +222,7 @@ const agentTypes = session?.agentResponses.map(r => r.agentType);
           confidence: 0.89
         },
         {
-          agentType: "xiaoke as const,"
+          agentType: "xiaoke as const,",
           analysis: { syndrome: "qi_deficiency", score: 0.85 },
           confidence: 0.87
         });
@@ -241,7 +238,7 @@ const agentTypes = session?.agentResponses.map(r => r.agentType);
       expect(mockConsensusHandler).toHaveBeenCalledWith({
         sessionId: testSessionId,
         consensus: expect.any(Object),
-        confidence: expect.any(Number)
+        confidence: expect.any(Number);
       });
     });
   });
@@ -278,14 +275,14 @@ data: { test: "data2 },"
       // 添加时间跨度过大的诊断结果
 const inconsistentResults: DiagnosticResult[] = [;
         {
-          serviceType: "calculation,"
+          serviceType: "calculation,",
           timestamp: baseTime,
           data: { test: "data1" },
           confidence: 0.90,
           metadata: { sessionId: testSessionId, userId: testUserId, version: 1.0.0" });"
         },
         {
-          serviceType: "look,"
+          serviceType: "look,",
           timestamp: baseTime + 35 * 60 * 1000, // 35分钟后
 data: { test: "data2" },
           confidence: 0.88,
@@ -329,29 +326,27 @@ metadata: { sessionId: testSessionId, userId: testUserId, version: "1.0.0" });
   describe("5. 边缘AI推理集成测试, () => {", () => {
     test("应该能够与边缘AI推理框架集成", async () => {
       // 模拟加载诊断模型
-const modelConfig = {;
-        modelId: tcm_diagnosis_model","
-        modelType: "onnx as const,"
+const modelConfig = {modelId: tcm_diagnosis_model","
+        modelType: "onnx as const,",
         modelPath: "/models/tcm_diagnosis.onnx",
         inputShape: [1, 128],
         outputShape: [1, 10],
         precision: fp32" as const,"
-        deviceType: "cpu as const,"
+        deviceType: "cpu as const,",
         maxBatchSize: 8,
         warmupIterations: 3;
       };
       await aiFramework.loadModel(modelConfig);
       // 执行推理请求
-const inferenceRequest = {;
-        requestId: "test_inference_001",
-        modelId: tcm_diagnosis_model",;"
+const inferenceRequest = {requestId: "test_inference_001",
+        modelId: tcm_diagnosis_model","
         inputData: [0.1, 0.2, 0.3], // 模拟诊断特征
-priority: "normal as const,"
+priority: "normal as const,",
         timeout: 5000,
         metadata: {
           userId: testUserId,
           sessionId: testSessionId,
-          timestamp: Date.now()
+          timestamp: Date.now();
         });
       };
       const result = await aiFramework.inference(inferenceRequest);
@@ -360,24 +355,21 @@ priority: "normal as const,"
       expect(result.latency).toBeGreaterThan(0);
     });
     test(应该能够处理批量推理请求", async () => {"
-      const modelConfig = {;
-        modelId: "batch_diagnosis_model,"
+      const modelConfig = {modelId: "batch_diagnosis_model,",
         modelType: "onnx" as const,
         modelPath: /models/batch_diagnosis.onnx","
         inputShape: [1, 64],
         outputShape: [1, 5],
-        precision: "fp32 as const,"
+        precision: "fp32 as const,",
         deviceType: "cpu" as const,
-        maxBatchSize: 4,;
-        warmupIterations: 2;
+        maxBatchSize: 4,warmupIterations: 2;
       };
       await aiFramework.loadModel(modelConfig);
       // 创建批量推理请求
-const batchRequests = Array.from({ length: 6 }, (_, i) => ({;
-        requestId: `batch_request_${i}`,
+const batchRequests = Array.from({ length: 6 }, (_, i) => ({requestId: `batch_request_${i}`,
         modelId: batch_diagnosis_model","
         inputData: Array.from({ length: 64 }, () => Math.random()),
-        priority: "normal as const,"
+        priority: "normal as const,",
         timeout: 5000,
         metadata: {
           userId: testUserId,
@@ -396,11 +388,9 @@ const batchRequests = Array.from({ length: 6 }, (_, i) => ({;
   describe("6. 性能和可靠性测试", () => {
     test(应该能够处理高并发协同请求", async () => {"
       const concurrentSessions = 10;
-      const sessionPromises = Array.from({ length: concurrentSessions }, async (_, i) => {;
-        const sessionId = await coordinator.startCoordinationSession(`user_${i}`);
+      const sessionPromises = Array.from({ length: concurrentSessions }, async (_, i) => {const sessionId = await coordinator.startCoordinationSession(`user_${i}`);
         // 并发添加诊断结果
-const diagnosticResult: DiagnosticResult = {;
-          serviceType: "calculation,"
+const diagnosticResult: DiagnosticResult = {serviceType: "calculation,",
           timestamp: Date.now(),
           data: { test: `data_${i}` },
           confidence: 0.9,
@@ -422,7 +412,7 @@ const session1 = await coordinator.startCoordinationSession("user1);"
       expect(stats.activeSessions).toBeGreaterThanOrEqual(2);
       expect(stats.totalSessions).toBeGreaterThanOrEqual(2);
       // 清理
-await coordinator.endSession(session1)
+await coordinator.endSession(session1);
       await coordinator.endSession(session2);
     });
     test(应该能够处理错误情况", async () => {"
@@ -439,12 +429,12 @@ await expect(
       // 测试无效的模型加载
 await expect(
         aiFramework.loadModel({
-          modelId: "invalid_model,"
+          modelId: "invalid_model,",
           modelType: "invalid" as any,
           modelPath: /invalid/path","
           inputShape: [],
           outputShape: [],
-          precision: "fp32,"
+          precision: "fp32,",
           deviceType: "cpu",
           maxBatchSize: 1,
           warmupIterations: 1
@@ -452,7 +442,7 @@ await expect(
       ).rejects.toThrow();
     });
   });
-  describe(7. 端到端工作流测试", () => {"
+  describe("7. 端到端工作流测试", () => {
     test("应该能够完成完整的诊断-智能体协同工作流, async () => {"
       const workflowResults: any = {};
       // 1. 收集五诊数据
@@ -494,7 +484,7 @@ const agentResponses: AgentResponse[] = [;
           metadata: { sessionId: testSessionId, userId: testUserId, version: 1.0.0" });"
         },
         {
-          agentType: "xiaoke,"
+          agentType: "xiaoke,",
           timestamp: Date.now(),
           analysis: { treatment: "tonify_qi" },
           recommendations: [中药"],"

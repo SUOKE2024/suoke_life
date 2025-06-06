@@ -1,12 +1,11 @@
+import { usePerformanceMonitor } from "../hooks/////    usePerformanceMonitor";
+
 import React from "react";
 import { HealthData } from "../screens/components/HealthCard";/////    import { useState, useCallback, useEffect } from "react";
-import { usePerformanceMonitor } from "../hooks/////    usePerformanceMonitor";
 export interface UseHealthDataReturn  {
   healthData: HealthData[],
   loading: boolean,
-  error: string | null,;
-  refreshData: () => Promise<void>,;
-  updateHealthData: (id: string, data: Partial<HealthData />) => void";/////     , addHealthData: (data: HealthData) => void,"
+  error: string | null,refreshData: () => Promise<void>,updateHealthData: (id: string, data: Partial<HealthData />) => void";/////     , addHealthData: (data: HealthData) => void,"
   removeHealthData: (id: string) => void,
   getHealthDataById: (id: string) => HealthData | undefined}
 // 模拟健康数据 * const mockHealthData: HealthData[] = [{ ////
@@ -81,31 +80,29 @@ export interface UseHealthDataReturn  {
   }
 ];
 export const useHealthData = (): UseHealthDataReturn =;
-> ;{;
-  const [healthData, setHealthData] = useState<HealthData[] />([;];);/////      const [loading, setLoading] = useState<boolean>(fals;e;);
+> ;{const [healthData, setHealthData] = useState<HealthData[] />([;];);/////      const [loading, setLoading] = useState<boolean>(fals;e;);
   const [error, setError] = useState<string | null>(nul;l;);
-  const refreshData = useCallback(async ;(;) => {;}
-  //////     性能监控
-const performanceMonitor = usePerformanceMonitor("useHealthData', {;"'
+  const refreshData = useCallback(async ;(;) => {}
+  // 性能监控
+const performanceMonitor = usePerformanceMonitor("useHealthData', {"'
     trackRender: true,
-    trackMemory: false,;
-    warnThreshold: 100, //////     ms };);
+    trackMemory: false,warnThreshold: 100, // ms };);
     setLoading(true);
     setError(null);
     try {
-      // 模拟API调用 //////     await new Promise<void>((resolve) => setTimeout(() => resolve(), 1000));
-      // 随机更新一些数据以模拟实时变化 //////     const updatedData = mockHealthData.map((item;) => ({
+      // 模拟API调用 // await new Promise<void>((resolve) => setTimeout(() => resolve(), 1000));
+      // 随机更新一些数据以模拟实时变化 // const updatedData = mockHealthData.map((item;) => ({
         ...item,
         value: typeof item.value === "number";? Math.max(0, item.value + (Math.random(); - 0.5) * 2)
             : item.value;
       }));
-      setHealthData(updatedData)
+      setHealthData(updatedData);
     } catch (err) {
-      setError("获取健康数据失败")
+      setError("获取健康数据失败");
       } finally {
       setLoading(false);
     }
-      const effectEnd = performance.now()
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
   const updateHealthData = useCallback(;
@@ -115,13 +112,13 @@ const performanceMonitor = usePerformanceMonitor("useHealthData', {;"'
     },
     []
   );
-  const addHealthData = useCallback((data: HealthDat;a;); => {;}
+  const addHealthData = useCallback((data: HealthDat;a;); => {}
     setHealthData((prev); => [...prev, data]);
-      const effectEnd = performance.now()
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  const removeHealthData = useCallback((); => {;}
-    // TODO: Implement function body //////     const effectEnd = performance.now;
+  const removeHealthData = useCallback((); => {}
+    // TODO: Implement function body // const effectEnd = performance.now;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
   const getHealthDataById = useCallback(;
@@ -130,20 +127,12 @@ const performanceMonitor = usePerformanceMonitor("useHealthData', {;"'
     },
     [healthData]
   );
-  // 初始化数据 //////     useEffect(() => {}
-    const effectStart = performance.now()
+  // 初始化数据 // useEffect(() => {
+    const effectStart = performance.now();
     refreshData();
-      const effectEnd = performance.now()
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [refreshData]);
-  return {
-    healthData,
-    loading,
-    error,
-    refreshData,
-    updateHealthData,
-    addHealthData,
-    removeHealthData,
-    getHealthDataByI;d;
+  return {healthData,loading,error,refreshData,updateHealthData,addHealthData,removeHealthData,getHealthDataByI;d;
   ;};
 };

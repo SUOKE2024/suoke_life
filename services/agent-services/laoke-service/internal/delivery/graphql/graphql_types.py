@@ -1,3 +1,10 @@
+"""
+graphql_types - 索克生活项目模块
+"""
+
+from internal.delivery.graphql.pagination import Connection, Edge
+import strawberry
+
 #!/usr/bin/env python
 
 """
@@ -6,9 +13,7 @@
 """
 
 
-import strawberry
 
-from internal.delivery.graphql.pagination import Connection, Edge
 
 
 # 基本类型

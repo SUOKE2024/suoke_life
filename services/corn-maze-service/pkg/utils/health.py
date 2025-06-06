@@ -1,18 +1,23 @@
+"""
+health - 索克生活项目模块
+"""
+
+from collections.abc import Callable
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from pkg.utils.config import get_value
+from typing import Any
+import json
+import logging
+import threading
+import time
+
 #!/usr/bin/env python3
 
 """
 健康检查服务
 """
 
-from collections.abc import Callable
-from http.server import BaseHTTPRequestHandler, HTTPServer
-import json
-import logging
-import threading
-import time
-from typing import Any
 
-from pkg.utils.config import get_value
 
 # 初始化日志
 logger = logging.getLogger(__name__)

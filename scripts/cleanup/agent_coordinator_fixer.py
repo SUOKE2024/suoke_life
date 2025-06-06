@@ -1,11 +1,18 @@
+"""
+agent_coordinator_fixer - 索克生活项目模块
+"""
+
+from pathlib import Path
+import os
+import { AgentCoordinator } from "../AgentCoordinator";
+import { render, screen } from "@testing-library/react";
+
 #!/usr/bin/env python3
 """
 索克生活项目AgentCoordinator测试文件修复脚本
 专门修复AgentCoordinator.test.tsx文件的语法错误
 """
 
-import os
-from pathlib import Path
 
 class AgentCoordinatorFixer:
     def __init__(self, project_root: str):
@@ -21,8 +28,6 @@ class AgentCoordinatorFixer:
         
         # 重新构建整个文件内容
         fixed_content = '''import React from "react";
-import { render, screen } from "@testing-library/react";
-import { AgentCoordinator } from "../AgentCoordinator";
 
 describe("AgentCoordinator", () => {
   beforeEach(() => {

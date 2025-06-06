@@ -1,14 +1,19 @@
-from abc import ABC, abstractmethod
-import os
-import json
-import base64
-import logging
-from typing import List, Dict, Any, Optional, Tuple
+"""
+topic_repository - 索克生活项目模块
+"""
 
+from abc import ABC, abstractmethod
+from config.settings import Settings
+from internal.model.topic import Topic
+from typing import List, Dict, Any, Optional, Tuple
+import base64
+import json
+import logging
+import os
 import redis
 
-from internal.model.topic import Topic
-from config.settings import Settings
+
+
 
 logger = logging.getLogger(__name__)
 

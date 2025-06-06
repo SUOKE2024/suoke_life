@@ -1,20 +1,25 @@
-#!/usr/bin/env python3
+"""
+__init__ - 索克生活项目模块
 """
 
-from logging import logging
-from os import os
-from loguru import logger
-from __future__ import annotations
-import self.logging
-from typing import TYPE_CHECKING, Any, Optional
-from .agent.agent_manager import AgentManager as _AgentManager
-from .delivery.xiaoai_service_impl import XiaoAIServiceImpl as _XiaoAIServiceImpl
-from .self.service.xiaoai_service_impl import XiaoaiServiceImpl as _XiaoaiServiceImpl
-    from .four_diagnosis.self.coordinator.self.coordinator import (
             from .agent.agent_manager import AgentManager
             from .delivery.xiaoai_service_impl import XiaoAIServiceImpl
             from .four_diagnosis.self.coordinator.self.coordinator import FourDiagnosisCoordinator
             from .self.service.xiaoai_service_impl import XiaoaiServiceImpl
+    from .four_diagnosis.self.coordinator.self.coordinator import (
+from .agent.agent_manager import AgentManager as _AgentManager
+from .delivery.xiaoai_service_impl import XiaoAIServiceImpl as _XiaoAIServiceImpl
+from .self.service.xiaoai_service_impl import XiaoaiServiceImpl as _XiaoaiServiceImpl
+from __future__ import annotations
+from logging import logging
+from loguru import logger
+from os import os
+from typing import TYPE_CHECKING, Any, Optional
+import self.logging
+
+#!/usr/bin/env python3
+"""
+
 
 
 

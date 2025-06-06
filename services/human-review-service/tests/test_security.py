@@ -1,17 +1,22 @@
 """
+test_security - 索克生活项目模块
+"""
+
+from datetime import datetime, timedelta
+from human_review_service.core.security import (
+from unittest.mock import Mock, patch, AsyncMock
+import hashlib
+import jwt
+import pytest
+
+"""
 安全模块测试
 Security Module Tests
 
 测试安全相关功能
 """
 
-import pytest
-import hashlib
-import jwt
-from datetime import datetime, timedelta
-from unittest.mock import Mock, patch, AsyncMock
 
-from human_review_service.core.security import (
     PasswordManager,
     TokenManager,
     PermissionManager,

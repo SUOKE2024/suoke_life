@@ -1,20 +1,25 @@
+"""
+enhanced_resource_service - 索克生活项目模块
+"""
+
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any
+from xiaoke_service.core.logging import get_logger
+from xiaoke_service.pkg.observability.tracing import SpanKind, trace
+from xiaoke_service.pkg.resilience.circuit_breaker import CircuitBreaker
+from xiaoke_service.pkg.resilience.rate_limiter import RateLimiter
+import asyncio
+import hashlib
+import time
+
 #!/usr/bin/env python3
 """
 增强资源管理服务
 提供智能资源调度、产品推荐和区块链溯源功能
 """
 
-import asyncio
-import hashlib
-import time
-from dataclasses import dataclass
-from enum import Enum
-from typing import Any
 
-from xiaoke_service.core.logging import get_logger
-from xiaoke_service.pkg.observability.tracing import SpanKind, trace
-from xiaoke_service.pkg.resilience.circuit_breaker import CircuitBreaker
-from xiaoke_service.pkg.resilience.rate_limiter import RateLimiter
 
 logger = get_logger(__name__)
 

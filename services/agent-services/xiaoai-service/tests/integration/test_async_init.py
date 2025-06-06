@@ -1,11 +1,19 @@
+"""
+test_async_init - 索克生活项目模块
+"""
+
+        from cmd.server import XiaoAIServer
+        from internal.delivery.xiaoai_service_impl import XiaoAIServiceImpl
+        import traceback
+from pathlib import Path
+import asyncio
+import sys
+
 #!/usr/bin/env python3
 """
 异步测试脚本
 """
 
-import asyncio
-import sys
-from pathlib import Path
 
 # 添加项目根目录到PYTHONPATH
 sys.path.insert(0, Path().resolve())
@@ -15,7 +23,6 @@ async def test_xiaoai_service_impl_async():
     print("🔍 异步测试 XiaoAIServiceImpl 初始化...\n")
 
     try:
-        from internal.delivery.xiaoai_service_impl import XiaoAIServiceImpl
 
         print("正在创建 XiaoAIServiceImpl 实例...")
         service_impl = XiaoAIServiceImpl()
@@ -30,7 +37,6 @@ async def test_xiaoai_service_impl_async():
 
     except Exception as e:
         print(f"❌ XiaoAIServiceImpl 初始化失败: {e}")
-        import traceback
         traceback.print_exc()
         return False
 
@@ -39,7 +45,6 @@ async def test_server_startup():
     print("\n🔍 测试服务器启动过程...\n")
 
     try:
-        from cmd.server import XiaoAIServer
 
         print("正在创建 XiaoAIServer 实例...")
         server = XiaoAIServer("config/dev.yaml")
@@ -53,7 +58,6 @@ async def test_server_startup():
 
     except Exception as e:
         print(f"❌ 服务器启动测试失败: {e}")
-        import traceback
         traceback.print_exc()
         return False
 

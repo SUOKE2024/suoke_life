@@ -1,13 +1,18 @@
 """
+calculator - 索克生活项目模块
+"""
+
+from .data import (
+from datetime import datetime, date
+from typing import Dict, List, Optional, Tuple
+
+"""
 八字体质分析计算器
 
 实现基于出生时间的体质分析核心算法
 """
 
-from datetime import datetime, date
-from typing import Dict, List, Optional, Tuple
 
-from .data import (
     CONSTITUTION_DATA,
     TIANGAN_WUXING,
     DIZHI_WUXING,

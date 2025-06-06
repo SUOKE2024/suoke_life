@@ -1,20 +1,26 @@
+"""
+utils - 索克生活项目模块
+"""
+
+        from difflib import SequenceMatcher
+from .exceptions import ValidationError
+from collections.abc import Callable
+from datetime import timedelta
+from typing import Any
+import asyncio
+import hashlib
+import json
+import re
+import time
+import uuid
+
 #!/usr/bin/env python
 
 """
 通用工具函数模块
 """
 
-import asyncio
-from collections.abc import Callable
-from datetime import timedelta
-import hashlib
-import json
-import re
-import time
-from typing import Any
-import uuid
 
-from .exceptions import ValidationError
 
 
 def validate_input(data: Any, schema: dict[str, Any]) -> bool:
@@ -146,7 +152,6 @@ def fuzzy_match(
 ) -> list[tuple]:
     """模糊匹配"""
     try:
-        from difflib import SequenceMatcher
     except ImportError:
         # 简单的包含匹配作为后备
         results = []

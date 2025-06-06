@@ -1,15 +1,23 @@
-"""用户服务监控模块"""
+"""
+monitoring - 索克生活项目模块
+"""
 
-import time
-import psutil
+            from user_service.cache import get_cache_manager
+            import httpx
+        import re
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Any
-from prometheus_client import Counter, Histogram, Gauge, generate_latest, CONTENT_TYPE_LATEST
 from fastapi import Request, Response
 from fastapi.responses import PlainTextResponse
-import structlog
-
+from prometheus_client import Counter, Histogram, Gauge, generate_latest, CONTENT_TYPE_LATEST
+from typing import Dict, List, Optional, Any
 from user_service.config import get_settings
+import psutil
+import structlog
+import time
+
+"""用户服务监控模块"""
+
+
 
 logger = structlog.get_logger()
 
@@ -179,7 +187,6 @@ class HealthChecker:
     async def check_cache(self) -> Dict[str, Any]:
         """检查缓存连接"""
         try:
-            from user_service.cache import get_cache_manager
             cache_manager = get_cache_manager()
             
             if not cache_manager:
@@ -207,7 +214,6 @@ class HealthChecker:
     async def check_auth_service(self) -> Dict[str, Any]:
         """检查认证服务连接"""
         try:
-            import httpx
             
             start_time = time.time()
             async with httpx.AsyncClient() as client:
@@ -361,7 +367,6 @@ class RequestMetricsMiddleware:
             path = path.split("?")[0]
         
         # 替换UUID和数字ID为占位符
-        import re
         path = re.sub(r'/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}', '/{id}', path)
         path = re.sub(r'/\d+', '/{id}', path)
         

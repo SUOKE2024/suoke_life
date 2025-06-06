@@ -1,17 +1,23 @@
 """
-管理路由处理器
-
-提供网关管理功能，如服务注册、配置管理等。
+management - 索克生活项目模块
 """
 
-from fastapi import APIRouter, HTTPException, Request, status
-from pydantic import BaseModel
-
+    from ..core.config import get_settings
 from ..core.config import ServiceConfig
 from ..core.logging import get_logger
 from ..services.health import HealthService
 from ..services.metrics import MetricsService
 from ..services.service_registry import ServiceRegistry
+from fastapi import APIRouter, HTTPException, Request, status
+from pydantic import BaseModel
+
+"""
+管理路由处理器
+
+提供网关管理功能，如服务注册、配置管理等。
+"""
+
+
 
 logger = get_logger(__name__)
 
@@ -255,7 +261,6 @@ async def trigger_health_check(service_name: str, request: Request):
 @management_router.get("/config")
 async def get_gateway_config(request: Request):
     """获取网关配置信息"""
-    from ..core.config import get_settings
     
     settings = get_settings()
     

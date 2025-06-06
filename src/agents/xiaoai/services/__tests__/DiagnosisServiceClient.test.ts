@@ -1,65 +1,63 @@
 import { DiagnosisServiceClientImpl, diagnosisServiceClient } from "../DiagnosisServiceClient";
+import { DiagnosisServiceClientImpl, diagnosisServiceClient } from "../DiagnosisServiceClient";
+
 describe("DiagnosisServiceClient", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  describe(DiagnosisServiceClientImpl", () => {"
+  describe("DiagnosisServiceClientImpl", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = DiagnosisServiceClientImpl(/* valid params   */);
+const result = DiagnosisServiceClientImpl(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = DiagnosisServiceClientImpl(/* edge case params   */);
+const result = DiagnosisServiceClientImpl(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        DiagnosisServiceClientImpl(/* invalid params     */)
-      }).not.toThrow()
+        DiagnosisServiceClientImpl(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = DiagnosisServiceClientImpl(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = DiagnosisServiceClientImpl(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(diagnosisServiceClient", () => {"
+  describe("diagnosisServiceClient", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = diagnosisServiceClient(/* valid params   */);
+const result = diagnosisServiceClient(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = diagnosisServiceClient(/* edge case params   */);
+const result = diagnosisServiceClient(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        diagnosisServiceClient(/* invalid params     */)
-      }).not.toThrow()
+        diagnosisServiceClient(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = diagnosisServiceClient(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = diagnosisServiceClient(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
 });
-import { performance } from "perf_hooks";
-import { DiagnosisServiceClientImpl, diagnosisServiceClient } from "../DiagnosisServiceClient";
 describe("DiagnosisServiceClient Performance Tests", () => {
   it("should execute within performance thresholds", () => {
     const iterations = 10;
     const startTime = performance.now();
     for (let i = 0; i < iterations; i++) {
       // Execute performance-critical functions
-DiagnosisServiceClientImpl(/* test params      */)
-      diagnosisServiceClient(/* test params      */);
+DiagnosisServiceClientImpl(// test params);
+      diagnosisServiceClient(// test params);
     });
     const endTime = performance.now();
     const averageTime = (endTime - startTime) / iterations;
@@ -70,7 +68,7 @@ expect(averageTime).toBeLessThan(1);
     const largeDataset = new Array(10000).fill(0).map((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
-DiagnosisServiceClientImpl(largeDataset)
+DiagnosisServiceClientImpl(largeDataset);
     const endTime = performance.now();
     // Should handle large datasets within 100ms
 expect(endTime - startTime).toBeLessThan(100);
@@ -79,7 +77,7 @@ expect(endTime - startTime).toBeLessThan(100);
     const initialMemory = process.memoryUsage().heapUsed;
     // Execute function multiple times
 for (let i = 0; i < 1000; i++) {
-      DiagnosisServiceClientImpl(/* test params      */);
+      DiagnosisServiceClientImpl(// test params);
     });
     // Force garbage collection if available
 if (global.gc) {

@@ -1,14 +1,19 @@
 """
+logging_middleware - 索克生活项目模块
+"""
+
+from fastapi import Request, Response
+from starlette.middleware.base import BaseHTTPMiddleware
+from typing import Callable
+import logging
+import time
+
+"""
 日志中间件
 
 记录请求和响应信息
 """
 
-import time
-import logging
-from typing import Callable
-from fastapi import Request, Response
-from starlette.middleware.base import BaseHTTPMiddleware
 
 logger = logging.getLogger(__name__)
 

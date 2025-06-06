@@ -1,11 +1,17 @@
 """
+test_models - 索克生活项目模块
+"""
+
+from accessibility_service.models.accessibility import (
+from datetime import datetime
+from pydantic import ValidationError
+import pytest
+
+"""
 Unit tests for accessibility service models.
 """
 
-from datetime import datetime
 
-import pytest
-from accessibility_service.models.accessibility import (
     AccessibilityAnalysis,
     AccessibilityIssue,
     AccessibilityRequest,
@@ -13,7 +19,6 @@ from accessibility_service.models.accessibility import (
     AccessibilityType,
     SeverityLevel,
 )
-from pydantic import ValidationError
 
 
 class TestAccessibilityRequest:

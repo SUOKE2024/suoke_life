@@ -1,3 +1,14 @@
+"""
+community_service - 索克生活项目模块
+"""
+
+from datetime import datetime
+from internal.repository.community_repository import CommunityRepository
+from loguru import logger
+from pkg.utils.metrics import get_metrics_collector
+from typing import Any
+import uuid
+
 #!/usr/bin/env python
 
 """
@@ -5,14 +16,8 @@
 提供社区内容管理功能
 """
 
-import uuid
-from datetime import datetime
-from typing import Any
 
-from loguru import logger
 
-from internal.repository.community_repository import CommunityRepository
-from pkg.utils.metrics import get_metrics_collector
 
 metrics = get_metrics_collector()
 

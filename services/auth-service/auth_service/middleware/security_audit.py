@@ -1,21 +1,28 @@
 """
-安全审计日志中间件
-记录所有安全相关的事件，包括登录、认证失败、权限变更等
+security_audit - 索克生活项目模块
 """
 
-import json
-import time
-import asyncio
-from typing import Dict, Any, Optional, List
+            from auth_service.models.audit import SecurityAuditLog
+        import uuid
+from auth_service.config.settings import get_settings
+from dataclasses import dataclass, asdict
 from datetime import datetime
 from enum import Enum
 from fastapi import Request, Response
 from fastapi.responses import JSONResponse
-import logging
-from dataclasses import dataclass, asdict
 from sqlalchemy.ext.asyncio import AsyncSession
+from typing import Dict, Any, Optional, List
+import asyncio
+import json
+import logging
+import time
 
-from auth_service.config.settings import get_settings
+"""
+安全审计日志中间件
+记录所有安全相关的事件，包括登录、认证失败、权限变更等
+"""
+
+
 
 
 class SecurityEventType(Enum):
@@ -150,7 +157,6 @@ class SecurityAuditLogger:
     async def _log_to_database(self, event: SecurityEvent, db: AsyncSession):
         """记录到数据库"""
         try:
-            from auth_service.models.audit import SecurityAuditLog
             
             audit_log = SecurityAuditLog(
                 event_type=event.event_type.value,
@@ -417,7 +423,6 @@ class SecurityAuditMiddleware:
     
     def _generate_request_id(self) -> str:
         """生成请求ID"""
-        import uuid
         return str(uuid.uuid4())
     
     def _add_security_headers(self, response: Response):

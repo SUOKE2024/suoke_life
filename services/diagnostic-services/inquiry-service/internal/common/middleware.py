@@ -1,18 +1,29 @@
+"""
+middleware - 索克生活项目模块
+"""
+
+                    import re
+            import uuid
+        import hashlib
+        import html
+        import json
+        import re
+from .exceptions import InquiryServiceError, RateLimitError
+from .logging import get_logger
+from collections import defaultdict, deque
+from collections.abc import Callable
+from functools import wraps
+from typing import Any
+import asyncio
+import time
+
 #!/usr/bin/env python
 
 """
 中间件模块
 """
 
-import asyncio
-from collections import defaultdict, deque
-from collections.abc import Callable
-from functools import wraps
-import time
-from typing import Any
 
-from .exceptions import InquiryServiceError, RateLimitError
-from .logging import get_logger
 
 
 class RateLimiter:
@@ -202,8 +213,6 @@ class CacheMiddleware:
 
     def cache_key(self, func_name: str, args: tuple, kwargs: dict) -> str:
         """生成缓存键"""
-        import hashlib
-        import json
 
         # 创建参数的哈希
         params_str = json.dumps(
@@ -213,7 +222,8 @@ class CacheMiddleware:
         params_hash = hashlib.md5(params_str.encode()).hexdigest()
         return f"{func_name}:{params_hash}"
 
-    async def get_or_set(
+    async     @cache(timeout=300)  # 5分钟缓存
+def get_or_set(
         self, key: str, func: Callable, *args, ttl: int = None, **kwargs
     ):
         """获取缓存或设置缓存"""
@@ -287,7 +297,6 @@ class ValidationMiddleware:
 
                 # 正则验证
                 if "pattern" in rules:
-                    import re
 
                     if not re.match(rules["pattern"], str(value)):
                         errors.append(f"字段 '{field}' 格式不正确")
@@ -316,8 +325,6 @@ class SecurityMiddleware:
 
     async def sanitize_input(self, text: str) -> str:
         """清理输入文本"""
-        import html
-        import re
 
         # HTML转义
         sanitized = html.escape(text)
@@ -395,7 +402,6 @@ def track_request(tracker: RequestTracker):
     def decorator(func):
         @wraps(func)
         async def wrapper(*args, **kwargs):
-            import uuid
 
             request_id = str(uuid.uuid4())
 

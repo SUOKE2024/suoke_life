@@ -1,16 +1,21 @@
 """
+logging - 索克生活项目模块
+"""
+
+from ..core.logging import get_logger, log_request_response
+from fastapi import Request, Response
+from starlette.middleware.base import BaseHTTPMiddleware
+import time
+import uuid
+
+"""
 日志记录中间件
 
 记录请求响应信息、性能指标等。
 """
 
-import time
-import uuid
 
-from fastapi import Request, Response
-from starlette.middleware.base import BaseHTTPMiddleware
 
-from ..core.logging import get_logger, log_request_response
 
 logger = get_logger(__name__)
 

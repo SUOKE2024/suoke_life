@@ -1,3 +1,15 @@
+"""
+session_repository - 索克生活项目模块
+"""
+
+from datetime import UTC, datetime, timedelta
+from pkg.utils.config import Config
+from pkg.utils.metrics import get_metrics_collector
+from pymongo.errors import PyMongoError
+from typing import Any
+import logging
+import uuid
+
 #!/usr/bin/env python
 
 """
@@ -5,15 +17,8 @@
 提供用户与智能体的会话管理和持久化
 """
 
-import logging
-import uuid
-from datetime import UTC, datetime, timedelta
-from typing import Any
 
-from pymongo.errors import PyMongoError
 
-from pkg.utils.config import Config
-from pkg.utils.metrics import get_metrics_collector
 
 logger = logging.getLogger(__name__)
 metrics = get_metrics_collector()

@@ -1,9 +1,10 @@
-import React from "react";
 import {   View, Text, StyleSheet, TouchableOpacity, Image   } from "react-native";
-importIcon from ";../../components/common/////    Icon"
 import { UserProfile } from "../../types/////    profile";
-importReact from "react";
 import { usePerformanceMonitor } from "../hooks/////    usePerformanceMonitor";
+
+import React from "react";
+importIcon from ";../../components/common/////    Icon";
+importReact from "react";
   colors,
   spacing,
   typography,
@@ -12,40 +13,38 @@ interface ProfileHeaderProps { userProfile: UserProfile,
   onEditPress: () => void,
   getHealthScoreColor: (score: number) => string,
   getMemberLevelText: (level: string) => string}
-const ProfileHeader: React.FC<ProfileHeaderProps /////    > = ({;
-  //////     性能监控
-const performanceMonitor = usePerformanceMonitor(ProfileHeader", {;"
+const ProfileHeader: React.FC<ProfileHeaderProps /////    > = ({// 性能监控
+const performanceMonitor = usePerformanceMonitor(ProfileHeader", {"
     trackRender: true,
-    trackMemory: false,;
-    warnThreshold: 50, //////     ms };);
+    trackMemory: false,warnThreshold: 50, // ms };);
   userProfile,
   onEditPress,
   getHealthScoreColor,
   getMemberLevelText;
 }) => {}
-  //////     记录渲染性能
-performanceMonitor.recordRender()
+  // 记录渲染性能
+performanceMonitor.recordRender();
   return (
     <View style={styles.container} /////    >
       <View style={styles.header} /////    >
         <View style={styles.avatarContainer} /////    >
           <Text style={styles.avatar} />{userProfile.avatar}</////    Text>
-        </////    View>
-        <View style={styles.userInfo} /////    >
-          <View style={styles.nameRow} /////    >
-            <Text style={styles.name} />{userProfile.name}</////    Text>
-            <TouchableOpacity onPress={onEditPress} style={styles.editButton} accessibilityLabel="TODO: 添加无障碍标签" /////    >
-              <Icon name="pencil" size={16} color={colors.primary} /////    >
-            </////    TouchableOpacity>
-          </////    View>
-          <Text style={styles.memberLevel} /////    >
-            {getMemberLevelText(userProfile.memberLevel)}
-          </////    Text>
-          <Text style={styles.joinDate} />加入时间：{userProfile.joinDate}</////    Text>
-        </////    View>
-      </////    View>
-      <View style={styles.statsContainer} /////    >
-        <View style={styles.statItem} /////    >
+        </////    View>;
+        <View style={styles.userInfo} /////    >;
+          <View style={styles.nameRow} /////    >;
+            <Text style={styles.name} />{userProfile.name}</////    Text>;
+            <TouchableOpacity onPress={onEditPress} style={styles.editButton} accessibilityLabel="TODO: 添加无障碍标签" /////    >;
+              <Icon name="pencil" size={16} color={colors.primary} /////    >;
+            </////    TouchableOpacity>;
+          </////    View>;
+          <Text style={styles.memberLevel} /////    >;
+            {getMemberLevelText(userProfile.memberLevel)};
+          </////    Text>;
+          <Text style={styles.joinDate} />加入时间：{userProfile.joinDate}</////    Text>;
+        </////    View>;
+      </////    View>;
+      <View style={styles.statsContainer} /////    >;
+        <View style={styles.statItem} /////    >;
           <Text;
 style={[
               styles.statValue,
@@ -71,8 +70,7 @@ style={[
     </////    View;>
   ;);
 }
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     backgroundColor: colors.white,
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.xl,
@@ -132,6 +130,5 @@ const styles = StyleSheet.create({;
     marginBottom: spacing.xs;
   },
   statLabel: {
-    fontSize: typography.fontSize.sm,;
-    color: colors.textSecondary};};);
+    fontSize: typography.fontSize.sm,color: colors.textSecondary};};);
 export default React.memo(ProfileHeader);

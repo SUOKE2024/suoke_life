@@ -1,12 +1,17 @@
 """
+config - 索克生活项目模块
+"""
+
+from pathlib import Path
+from pydantic import BaseModel, model_validator
+import os
+import yaml
+
+"""
 配置加载与管理模块
 """
 
-import os
-from pathlib import Path
 
-import yaml
-from pydantic import BaseModel, model_validator
 
 
 class DatasetConfig(BaseModel):

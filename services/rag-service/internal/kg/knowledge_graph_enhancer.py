@@ -1,3 +1,15 @@
+"""
+knowledge_graph_enhancer - 索克生活项目模块
+"""
+
+from ..observability.metrics import MetricsCollector
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from loguru import logger
+from typing import Dict, List, Any, Optional, Tuple, Set, Union, Literal
+import asyncio
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,14 +18,7 @@
 支持中医知识图谱的构建、查询、推理和动态更新
 """
 
-import asyncio
-from typing import Dict, List, Any, Optional, Tuple, Set, Union, Literal
-from dataclasses import dataclass, field
-from enum import Enum
-from loguru import logger
-from datetime import datetime
 
-from ..observability.metrics import MetricsCollector
     ConstitutionType, SyndromeType, TreatmentPrinciple,
     HerbalFormula, SingleHerb
 )

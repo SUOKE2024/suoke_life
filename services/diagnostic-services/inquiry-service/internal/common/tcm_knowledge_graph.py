@@ -1,4 +1,18 @@
 """
+tcm_knowledge_graph - 索克生活项目模块
+"""
+
+from .base import BaseService
+from .cache import CacheManager
+from .exceptions import InquiryServiceError
+from .metrics import MetricsCollector
+from .utils import cached, timer
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any
+
+"""
 中医知识图谱集成模块
 
 该模块实现了中医知识图谱的集成和应用，包括：
@@ -9,16 +23,7 @@
 - 患者适应性评估
 """
 
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
-from typing import Any
 
-from .base import BaseService
-from .cache import CacheManager
-from .exceptions import InquiryServiceError
-from .metrics import MetricsCollector
-from .utils import cached, timer
 
 
 class EntityType(Enum):

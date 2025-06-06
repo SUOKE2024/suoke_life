@@ -1,10 +1,15 @@
 """
+exceptions - 索克生活项目模块
+"""
+
+from typing import Any
+
+"""
 自定义异常模块
 
 定义服务特定的异常类，提供更好的错误处理和调试信息
 """
 
-from typing import Any
 
 
 class LaoKeServiceError(Exception):

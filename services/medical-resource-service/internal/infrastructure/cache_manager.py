@@ -1,19 +1,24 @@
 """
-高级缓存管理模块
-提供多层缓存、智能失效、性能优化等功能
+cache_manager - 索克生活项目模块
 """
 
-import asyncio
-import hashlib
-import pickle
-import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Callable, Dict, Generic, List, Optional, TypeVar, Union
-
+import asyncio
+import hashlib
+import pickle
 import structlog
+import time
+
+"""
+高级缓存管理模块
+提供多层缓存、智能失效、性能优化等功能
+"""
+
+
 
 logger = structlog.get_logger(__name__)
 

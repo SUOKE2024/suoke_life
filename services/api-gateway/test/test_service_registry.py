@@ -1,3 +1,15 @@
+"""
+test_service_registry - 索克生活项目模块
+"""
+
+from internal.model.config import GatewayConfig, ServiceConfig, ServiceEndpointConfig, ServiceDiscoveryConfig
+from internal.service.service_registry import ServiceRegistry, ConsulServiceRegistry, KubernetesServiceRegistry
+from unittest.mock import AsyncMock, MagicMock, Mock, patch
+import os
+import pytest
+import sys
+import unittest
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,18 +17,11 @@
 服务注册表单元测试
 """
 
-import os
-import sys
-import unittest
-from unittest.mock import AsyncMock, MagicMock, Mock, patch
 
-import pytest
 
 # 添加项目根目录到Python路径
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from internal.model.config import GatewayConfig, ServiceConfig, ServiceEndpointConfig, ServiceDiscoveryConfig
-from internal.service.service_registry import ServiceRegistry, ConsulServiceRegistry, KubernetesServiceRegistry
 
 class TestServiceRegistry:
     """服务注册表测试类"""
@@ -79,7 +84,8 @@ class TestServiceRegistry:
         assert test_service.endpoints[0].host == "localhost"
         assert test_service.endpoints[0].port == 8001
     
-    def test_get_endpoint_round_robin(self, static_config):
+        @cache(timeout=300)  # 5分钟缓存
+def test_get_endpoint_round_robin(self, static_config):
         """测试轮询负载均衡获取端点"""
         registry = ServiceRegistry(static_config)
         
@@ -93,14 +99,16 @@ class TestServiceRegistry:
         
         # 第三次调用应该回到第一个端点
         endpoint3 = registry.get_endpoint("test-service")
-        assert endpoint3 == ("localhost", 8001)
+        assert endpoint3    @cache(timeout=300)  # 5分钟缓存
+ == ("localhost", 8001)
     
     def test_get_endpoint_unknown_service(self, static_config):
         """测试获取未知服务的端点"""
         registry = ServiceRegistry(static_config)
         
         # 尝试获取不存在的服务
-        endpoint = registry.get_endpoint("unknown-service")
+        endpoint = registry.get_end    @cache(timeout=300)  # 5分钟缓存
+point("unknown-service")
         assert endpoint is None
     
     def test_get_all_services(self, static_config):
@@ -108,7 +116,8 @@ class TestServiceRegistry:
         registry = ServiceRegistry(static_config)
         
         services = registry.get_all_services()
-        assert len(services) == 2
+        assert len(services)    @cache(timeout=300)  # 5分钟缓存
+ == 2
         assert "test-service" in services
         assert "auth-service" in services
     

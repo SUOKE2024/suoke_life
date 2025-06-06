@@ -1,11 +1,16 @@
 """
+metrics - 索克生活项目模块
+"""
+
+from prometheus_client import Counter, Gauge, Histogram, Info
+from typing import Dict, Optional, Any, List
+import time
+
+"""
 指标收集模块
 使用Prometheus客户端库收集和暴露服务指标
 """
-import time
-from typing import Dict, Optional, Any, List
 
-from prometheus_client import Counter, Gauge, Histogram, Info
 
 
 class PrometheusMetrics:

@@ -1,5 +1,4 @@
-import {
-  BlockchainStatus,
+import {BlockchainStatus,
   HealthDataRecord,
   StoreHealthDataRequest,
   StoreHealthDataResponse,
@@ -112,7 +111,7 @@ describe('Blockchain Types', () => {
         verifierId: 'verifier-456',
         dataType: 'age_verification',
         proof: new Uint8Array([1, 2, 3]),
-        publicInputs: new Uint8Array([4, 5, 6])
+        publicInputs: new Uint8Array([4, 5, 6]);
       };
 
       expect(request.userId).toBe('user-123');
@@ -124,10 +123,8 @@ describe('Blockchain Types', () => {
 
   describe('Error Types', () => {
     it('should validate BlockchainError', () => {
-      const error = new BlockchainError(
-        'Network connection failed',
-        BlockchainErrorCode.NETWORK_ERROR,
-        { endpoint: 'http://localhost:8545' }
+      const error = new BlockchainError(;
+        'Network connection failed',BlockchainErrorCode.NETWORK_ERROR,{ endpoint: 'http://localhost:8545' };
       );
 
       expect(error.code).toBe(BlockchainErrorCode.NETWORK_ERROR);

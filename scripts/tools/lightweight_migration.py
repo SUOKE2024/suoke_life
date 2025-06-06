@@ -1,12 +1,17 @@
+"""
+lightweight_migration - 索克生活项目模块
+"""
+
+from pathlib import Path
+from typing import List, Dict
+import subprocess
+
 #!/usr/bin/env python3
 """
 索克生活项目 - 轻量级uv迁移脚本
 专门处理包含大型AI/ML依赖的服务，采用分阶段安装策略
 """
 
-import subprocess
-from pathlib import Path
-from typing import List, Dict
 
 class LightweightMigrator:
     """轻量级迁移器"""

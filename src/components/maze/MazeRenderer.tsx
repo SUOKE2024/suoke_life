@@ -1,10 +1,9 @@
-/**
+import React, { useMemo, useRef, useEffect } from 'react';
+import {import Svg, {import {/**
  * 迷宫渲染器组件
  * Maze Renderer Component
  */
 
-import React, { useMemo, useRef, useEffect } from 'react';
-import {
   View,
   StyleSheet,
   Dimensions,
@@ -13,7 +12,6 @@ import {
   GestureResponderEvent,
   PanResponderGestureState
 } from 'react-native';
-import Svg, {
   Rect,
   Circle,
   Path,
@@ -25,7 +23,6 @@ import Svg, {
   Pattern,
   Image as SvgImage
 } from 'react-native-svg';
-import {
   Maze,
   MazeProgress,
   GameSettings,
@@ -61,51 +58,36 @@ const MazeRenderer: React.FC<MazeRendererProps> = ({
   onMove
 }) => {
   // 动画值
-  const playerPosition = useRef(new Animated.ValueXY({
-    x: progress.currentPosition.x,
-    y: progress.currentPosition.y
+  const playerPosition = useRef(new Animated.ValueXY({x: progress.currentPosition.x,y: progress.currentPosition.y;
   })).current;
-  
+
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const rotationAnim = useRef(new Animated.Value(0)).current;
 
   // 计算渲染参数
-  const renderParams = useMemo(() => {
-    const cellSize = MAX_MAZE_SIZE / maze.size;
+  const renderParams = useMemo(() => {const cellSize = MAX_MAZE_SIZE / maze.size;
     const mazeWidth = maze.size * cellSize;
     const mazeHeight = maze.size * cellSize;
-    
-    return {
-      cellSize,
-      mazeWidth,
-      mazeHeight,
-      offsetX: (screenWidth - mazeWidth) / 2,
-      offsetY: MAZE_PADDING
+
+    return {cellSize,mazeWidth,mazeHeight,offsetX: (screenWidth - mazeWidth) / 2,offsetY: MAZE_PADDING;
     };
   }, [maze.size]);
 
   // 手势处理器
-  const panResponder = useMemo(() => PanResponder.create({
-    onStartShouldSetPanResponder: () => !isPaused && !isMoving,
-    onMoveShouldSetPanResponder: () => !isPaused && !isMoving,
-    
-    onPanResponderGrant: () => {
-      // 开始手势时的反馈
-      Animated.spring(scaleAnim, {
-        toValue: 1.1,
-        useNativeDriver: true,
+  const panResponder = useMemo(() => PanResponder.create({onStartShouldSetPanResponder: () => !isPaused && !isMoving,onMoveShouldSetPanResponder: () => !isPaused && !isMoving,onPanResponderGrant: () => {// 开始手势时的反馈;
+      Animated.spring(scaleAnim, {toValue: 1.1,useNativeDriver: true;
       }).start();
     },
-    
+
     onPanResponderMove: (evt: GestureResponderEvent, gestureState: PanResponderGestureState) => {
       // 可以在这里添加实时预览移动方向的逻辑
     },
-    
+
     onPanResponderRelease: (evt: GestureResponderEvent, gestureState: PanResponderGestureState) => {
       // 恢复缩放
       Animated.spring(scaleAnim, {
         toValue: 1,
-        useNativeDriver: true,
+        useNativeDriver: true
       }).start();
 
       // 根据手势方向确定移动方向
@@ -125,7 +107,7 @@ const MazeRenderer: React.FC<MazeRendererProps> = ({
           onMove?.(direction);
         }
       }
-    },
+    }
   }), [isPaused, isMoving, onMove, scaleAnim]);
 
   // 更新玩家位置动画
@@ -137,7 +119,7 @@ const MazeRenderer: React.FC<MazeRendererProps> = ({
       },
       duration: gameSettings?.animationSpeed === 'fast' ? 200 : 
                 gameSettings?.animationSpeed === 'slow' ? 600 : 400,
-      useNativeDriver: false,
+      useNativeDriver: false
     }).start();
   }, [progress.currentPosition, renderParams, gameSettings]);
 
@@ -148,8 +130,8 @@ const MazeRenderer: React.FC<MazeRendererProps> = ({
         Animated.timing(rotationAnim, {
           toValue: 1,
           duration: 2000,
-          useNativeDriver: true,
-        })
+          useNativeDriver: true
+        });
       ).start();
     } else {
       rotationAnim.stopAnimation();
@@ -160,39 +142,38 @@ const MazeRenderer: React.FC<MazeRendererProps> = ({
   /**
    * 渲染迷宫节点
    */
-  const renderMazeNode = (node: MazeNode, x: number, y: number) => {
-    const { cellSize } = renderParams;
+  const renderMazeNode = (node: MazeNode, x: number, y: number) => {const { cellSize } = renderParams;
     const isVisited = progress.visitedNodes.some(pos => pos.x === x && pos.y === y);
     const isCurrentPosition = progress.currentPosition.x === x && progress.currentPosition.y === y;
 
     switch (node.nodeType) {
       case NodeType.WALL:
-        return (
-          <Rect
-            key={`wall-${x}-${y}`}
-            x={x * cellSize}
-            y={y * cellSize}
-            width={cellSize}
-            height={cellSize}
-            fill="#2E7D32"
-            stroke="#1B5E20"
-            strokeWidth={1}
-          />
+        return (;
+          <Rect;
+            key={`wall-${x}-${y}`};
+            x={x * cellSize};
+            y={y * cellSize};
+            width={cellSize};
+            height={cellSize};
+            fill="#2E7D32";
+            stroke="#1B5E20";
+            strokeWidth={1};
+          />;
         );
 
       case NodeType.PATH:
-        return (
-          <Rect
-            key={`path-${x}-${y}`}
-            x={x * cellSize}
-            y={y * cellSize}
-            width={cellSize}
-            height={cellSize}
-            fill={isVisited ? "#C8E6C9" : "#E8F5E8"}
-            stroke="#A5D6A7"
-            strokeWidth={0.5}
-            opacity={isVisited ? 1 : 0.7}
-          />
+        return (;
+          <Rect;
+            key={`path-${x}-${y}`};
+            x={x * cellSize};
+            y={y * cellSize};
+            width={cellSize};
+            height={cellSize};
+            fill={isVisited ? "#C8E6C9" : "#E8F5E8"};
+            stroke="#A5D6A7";
+            strokeWidth={0.5};
+            opacity={isVisited ? 1 : 0.7};
+          />;
         );
 
       case NodeType.START:
@@ -202,22 +183,22 @@ const MazeRenderer: React.FC<MazeRendererProps> = ({
               x={x * cellSize}
               y={y * cellSize}
               width={cellSize}
-              height={cellSize}
-              fill="#4CAF50"
-              stroke="#2E7D32"
-              strokeWidth={2}
-            />
-            <SvgText
-              x={x * cellSize + cellSize / 2}
-              y={y * cellSize + cellSize / 2}
-              fontSize={cellSize * 0.3}
-              fill="#FFFFFF"
-              textAnchor="middle"
-              alignmentBaseline="middle"
-            >
-              起
-            </SvgText>
-          </G>
+              height={cellSize};
+              fill="#4CAF50";
+              stroke="#2E7D32";
+              strokeWidth={2};
+            />;
+            <SvgText;
+              x={x * cellSize + cellSize / 2};
+              y={y * cellSize + cellSize / 2};
+              fontSize={cellSize * 0.3};
+              fill="#FFFFFF";
+              textAnchor="middle";
+              alignmentBaseline="middle";
+            >;
+              起;
+            </SvgText>;
+          </G>;
         );
 
       case NodeType.END:
@@ -227,22 +208,22 @@ const MazeRenderer: React.FC<MazeRendererProps> = ({
               x={x * cellSize}
               y={y * cellSize}
               width={cellSize}
-              height={cellSize}
-              fill="#FF9800"
-              stroke="#F57C00"
-              strokeWidth={2}
-            />
-            <SvgText
-              x={x * cellSize + cellSize / 2}
-              y={y * cellSize + cellSize / 2}
-              fontSize={cellSize * 0.3}
-              fill="#FFFFFF"
-              textAnchor="middle"
-              alignmentBaseline="middle"
-            >
-              终
-            </SvgText>
-          </G>
+              height={cellSize};
+              fill="#FF9800";
+              stroke="#F57C00";
+              strokeWidth={2};
+            />;
+            <SvgText;
+              x={x * cellSize + cellSize / 2};
+              y={y * cellSize + cellSize / 2};
+              fontSize={cellSize * 0.3};
+              fill="#FFFFFF";
+              textAnchor="middle";
+              alignmentBaseline="middle";
+            >;
+              终;
+            </SvgText>;
+          </G>;
         );
 
       case NodeType.KNOWLEDGE:
@@ -260,22 +241,22 @@ const MazeRenderer: React.FC<MazeRendererProps> = ({
             <Circle
               cx={x * cellSize + cellSize / 2}
               cy={y * cellSize + cellSize / 2}
-              r={cellSize * 0.3}
-              fill={isVisited ? "#81C784" : "#2196F3"}
-              stroke="#FFFFFF"
-              strokeWidth={2}
-            />
-            <SvgText
-              x={x * cellSize + cellSize / 2}
-              y={y * cellSize + cellSize / 2}
-              fontSize={cellSize * 0.2}
-              fill="#FFFFFF"
-              textAnchor="middle"
-              alignmentBaseline="middle"
-            >
-              知
-            </SvgText>
-          </G>
+              r={cellSize * 0.3};
+              fill={isVisited ? "#81C784" : "#2196F3"};
+              stroke="#FFFFFF";
+              strokeWidth={2};
+            />;
+            <SvgText;
+              x={x * cellSize + cellSize / 2};
+              y={y * cellSize + cellSize / 2};
+              fontSize={cellSize * 0.2};
+              fill="#FFFFFF";
+              textAnchor="middle";
+              alignmentBaseline="middle";
+            >;
+              知;
+            </SvgText>;
+          </G>;
         );
 
       case NodeType.CHALLENGE:
@@ -295,22 +276,22 @@ const MazeRenderer: React.FC<MazeRendererProps> = ({
               y={y * cellSize + cellSize * 0.2}
               width={cellSize * 0.6}
               height={cellSize * 0.6}
-              fill={isVisited ? "#FFA726" : "#FF5722"}
-              stroke="#FFFFFF"
-              strokeWidth={2}
-              rx={cellSize * 0.1}
-            />
-            <SvgText
-              x={x * cellSize + cellSize / 2}
-              y={y * cellSize + cellSize / 2}
-              fontSize={cellSize * 0.2}
-              fill="#FFFFFF"
-              textAnchor="middle"
-              alignmentBaseline="middle"
-            >
-              战
-            </SvgText>
-          </G>
+              fill={isVisited ? "#FFA726" : "#FF5722"};
+              stroke="#FFFFFF";
+              strokeWidth={2};
+              rx={cellSize * 0.1};
+            />;
+            <SvgText;
+              x={x * cellSize + cellSize / 2};
+              y={y * cellSize + cellSize / 2};
+              fontSize={cellSize * 0.2};
+              fill="#FFFFFF";
+              textAnchor="middle";
+              alignmentBaseline="middle";
+            >;
+              战;
+            </SvgText>;
+          </G>;
         );
 
       case NodeType.REWARD:
@@ -328,36 +309,36 @@ const MazeRenderer: React.FC<MazeRendererProps> = ({
             <Circle
               cx={x * cellSize + cellSize / 2}
               cy={y * cellSize + cellSize / 2}
-              r={cellSize * 0.25}
-              fill={isVisited ? "#FFD54F" : "#FFC107"}
-              stroke="#FFFFFF"
-              strokeWidth={2}
-            />
-            <SvgText
-              x={x * cellSize + cellSize / 2}
-              y={y * cellSize + cellSize / 2}
-              fontSize={cellSize * 0.15}
-              fill="#FFFFFF"
-              textAnchor="middle"
-              alignmentBaseline="middle"
-            >
-              奖
-            </SvgText>
-          </G>
+              r={cellSize * 0.25};
+              fill={isVisited ? "#FFD54F" : "#FFC107"};
+              stroke="#FFFFFF";
+              strokeWidth={2};
+            />;
+            <SvgText;
+              x={x * cellSize + cellSize / 2};
+              y={y * cellSize + cellSize / 2};
+              fontSize={cellSize * 0.15};
+              fill="#FFFFFF";
+              textAnchor="middle";
+              alignmentBaseline="middle";
+            >;
+              奖;
+            </SvgText>;
+          </G>;
         );
 
       default:
-        return (
-          <Rect
-            key={`empty-${x}-${y}`}
-            x={x * cellSize}
-            y={y * cellSize}
-            width={cellSize}
-            height={cellSize}
-            fill="#F1F8E9"
-            stroke="#DCEDC8"
-            strokeWidth={0.5}
-          />
+        return (;
+          <Rect;
+            key={`empty-${x}-${y}`};
+            x={x * cellSize};
+            y={y * cellSize};
+            width={cellSize};
+            height={cellSize};
+            fill="#F1F8E9";
+            stroke="#DCEDC8";
+            strokeWidth={0.5};
+          />;
         );
     }
   };
@@ -365,24 +346,15 @@ const MazeRenderer: React.FC<MazeRendererProps> = ({
   /**
    * 渲染玩家
    */
-  const renderPlayer = () => {
-    const { cellSize } = renderParams;
+  const renderPlayer = () => {const { cellSize } = renderParams;
     const playerRadius = cellSize * 0.35;
 
-    return (
-      <Animated.View
-        style={[
-          styles.playerContainer,
-          {
-            transform: [
-              { translateX: playerPosition.x },
-              { translateY: playerPosition.y },
-              { scale: scaleAnim },
-              {
-                rotate: rotationAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: ['0deg', '360deg'],
-                })
+    return (;
+      <Animated.View;
+        style={[;
+          styles.playerContainer,{transform: [;
+              { translateX: playerPosition.x },{ translateY: playerPosition.y },{ scale: scaleAnim },{rotate: rotationAnim.interpolate({inputRange: [0, 1],outputRange: ['0deg', '360deg'];
+                });
               }
             ]
           }
@@ -423,34 +395,32 @@ const MazeRenderer: React.FC<MazeRendererProps> = ({
             fill="none"
           />
         </Svg>
-      </Animated.View>
+      </Animated.View>;
     );
   };
 
   /**
    * 渲染访问路径
    */
-  const renderVisitedPath = () => {
-    if (progress.visitedNodes.length < 2) return null;
+  const renderVisitedPath = () => {if (progress.visitedNodes.length < 2) return null;
 
     const { cellSize } = renderParams;
-    const pathData = progress.visitedNodes
-      .map((pos, index) => {
-        const x = pos.x * cellSize + cellSize / 2;
+    const pathData = progress.visitedNodes;
+      .map((pos, index) => {const x = pos.x * cellSize + cellSize / 2;
         const y = pos.y * cellSize + cellSize / 2;
         return index === 0 ? `M ${x} ${y}` : `L ${x} ${y}`;
       })
       .join(' ');
 
-    return (
-      <Path
-        d={pathData}
-        stroke="#E91E63"
-        strokeWidth={3}
-        strokeOpacity={0.6}
-        fill="none"
-        strokeDasharray="5,5"
-      />
+    return (;
+      <Path;
+        d={pathData};
+        stroke="#E91E63";
+        strokeWidth={3};
+        strokeOpacity={0.6};
+        fill="none";
+        strokeDasharray="5,5";
+      />;
     );
   };
 
@@ -474,42 +444,42 @@ const MazeRenderer: React.FC<MazeRendererProps> = ({
             </LinearGradient>
           </Defs>
 
-          {/* 背景 */}
+          {// 背景}
           <Rect
             width={renderParams.mazeWidth}
             height={renderParams.mazeHeight}
             fill="url(#backgroundGradient)"
           />
 
-          {/* 渲染迷宫节点 */}
+          {// 渲染迷宫节点}
           {maze.nodes.map((row, y) =>
             row.map((node, x) => renderMazeNode(node, x, y))
           )}
 
-          {/* 渲染访问路径 */}
+          {// 渲染访问路径}
           {renderVisitedPath()}
         </Svg>
 
-        {/* 渲染玩家 */}
+        {// 渲染玩家}
         {renderPlayer()}
 
-        {/* 暂停遮罩 */}
-        {isPaused && (
-          <View style={styles.pauseOverlay}>
-            <SvgText
-              x="50%"
-              y="50%"
-              fontSize={24}
-              fill="#FFFFFF"
-              textAnchor="middle"
-              alignmentBaseline="middle"
-            >
-              游戏暂停
-            </SvgText>
-          </View>
-        )}
-      </View>
-    </View>
+        {// 暂停遮罩}
+        {isPaused && (;
+          <View style={styles.pauseOverlay}>;
+            <SvgText;
+              x="50%";
+              y="50%";
+              fontSize={24};
+              fill="#FFFFFF";
+              textAnchor="middle";
+              alignmentBaseline="middle";
+            >;
+              游戏暂停;
+            </SvgText>;
+          </View>;
+        )};
+      </View>;
+    </View>;
   );
 };
 
@@ -517,7 +487,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   mazeContainer: {
     position: 'relative',
@@ -527,28 +497,15 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    shadowRadius: 3.84
   },
   mazeSvg: {
     position: 'absolute',
     top: 0,
-    left: 0,
-  },
-  playerContainer: {
-    position: 'absolute',
-    zIndex: 10,
-  },
-  pauseOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 20,
-  },
+    left: 0
+  },playerContainer: {position: 'absolute',zIndex: 10;
+  },pauseOverlay: {position: 'absolute',top: 0,left: 0,right: 0,bottom: 0,backgroundColor: 'rgba(0, 0, 0, 0.5)',justifyContent: 'center',alignItems: 'center',zIndex: 20;
+  };
 });
 
 export default MazeRenderer; 

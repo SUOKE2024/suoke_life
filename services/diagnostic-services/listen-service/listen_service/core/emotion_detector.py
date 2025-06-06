@@ -1,19 +1,24 @@
 """
+emotion_detector - 索克生活项目模块
+"""
+
+from ..models.audio_models import AudioFeature, SoundFeatures
+from ..models.emotion_models import (
+from ..utils.performance import async_timer
+from typing import Dict, List, Optional, Tuple
+import asyncio
+import numpy as np
+import structlog
+
+"""
 情绪检测器
 
 基于音频特征进行情绪识别和分析。
 """
 
-import asyncio
-import numpy as np
-from typing import Dict, List, Optional, Tuple
-import structlog
 
-from ..models.emotion_models import (
     EmotionType, EmotionScore, EmotionAnalysis, MoodState, MoodLevel
 )
-from ..models.audio_models import AudioFeature, SoundFeatures
-from ..utils.performance import async_timer
 
 logger = structlog.get_logger(__name__)
 

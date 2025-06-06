@@ -1,18 +1,25 @@
 """
+rate_limiter - 索克生活项目模块
+"""
+
+            from auth_service.core.auth import AuthService
+        from auth_service.core.auth import AuthService
+from auth_service.config.settings import get_settings
+from collections import defaultdict, deque
+from datetime import datetime, timedelta
+from fastapi import Request, HTTPException, status
+from fastapi.responses import JSONResponse
+from typing import Dict, Optional, Tuple
+import asyncio
+import redis.asyncio as redis
+import time
+
+"""
 API 限流中间件
 实现基于IP和用户的请求频率限制，防止暴力攻击和滥用
 """
 
-import time
-import asyncio
-from typing import Dict, Optional, Tuple
-from collections import defaultdict, deque
-from fastapi import Request, HTTPException, status
-from fastapi.responses import JSONResponse
-import redis.asyncio as redis
-from datetime import datetime, timedelta
 
-from auth_service.config.settings import get_settings
 
 
 class RateLimiter:
@@ -287,7 +294,6 @@ class RateLimitMiddleware:
             
             # 这里应该调用认证服务来验证令牌
             # 为了简化，我们假设有一个验证函数
-            from auth_service.core.auth import AuthService
             auth_service = AuthService()
             payload = auth_service.verify_token(token)
             
@@ -382,7 +388,6 @@ async def _get_user_id_from_request(request: Request) -> Optional[str]:
         
         token = auth_header.split(" ")[1]
         
-        from auth_service.core.auth import AuthService
         auth_service = AuthService()
         payload = auth_service.verify_token(token)
         

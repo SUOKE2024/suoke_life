@@ -1,16 +1,23 @@
+"""
+cache - 索克生活项目模块
+"""
+
+            import redis
+            import sys
+from datetime import datetime, timedelta
+from typing import Any
+import asyncio
+import json
+import logging
+import os
+import re
+
 #!/usr/bin/env python3
 
 """
 缓存管理器 - 支持Redis和内存缓存 - 增强版本
 """
 
-import asyncio
-from datetime import datetime, timedelta
-import json
-import logging
-import os
-import re
-from typing import Any
 
 try:
     REDIS_AVAILABLE = True
@@ -160,7 +167,6 @@ class MemoryCache:
     def _estimate_memory_usage(self) -> float:
         """估算内存使用量（MB）"""
         try:
-            import sys
             total_size = 0
             for key, item in self.cache.items():
                 total_size += sys.getsizeof(key)
@@ -376,7 +382,6 @@ class CacheManager:
     def _test_redis_connection(self) -> bool:
         """测试Redis连接"""
         try:
-            import redis
             r = redis.from_url(self.redis_url, socket_timeout=2, socket_connect_timeout=2)
             r.ping()
             r.close()

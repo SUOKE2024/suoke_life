@@ -1,18 +1,24 @@
 """
+report - 索克生活项目模块
+"""
+
+            import weasyprint
+from datetime import datetime
+from internal.suokebench.config import load_config
+from pathlib import Path
+from plotly.subplots import make_subplots
+from typing import Any
+import argparse
+import jinja2
+import json
+import logging
+
+"""
 SuokeBench评测报告生成
 """
 
-import argparse
-import json
-import logging
-from datetime import datetime
-from pathlib import Path
-from typing import Any
 
-import jinja2
-from plotly.subplots import make_subplots
 
-from internal.suokebench.config import load_config
 
 logger = logging.getLogger(__name__)
 
@@ -336,7 +342,6 @@ class ReportGenerator:
         # 需要安装额外依赖
         # pip install weasyprint 或 使用其他HTML到PDF的转换库
         try:
-            import weasyprint
         except ImportError:
             logger.error("生成PDF报告需要安装weasyprint库")
             raise

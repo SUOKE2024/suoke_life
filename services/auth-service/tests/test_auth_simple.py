@@ -1,8 +1,14 @@
 """
+test_auth_simple - 索克生活项目模块
+"""
+
+        from auth_service.cmd.server.main import create_app
+from fastapi.testclient import TestClient
+import pytest
+
+"""
 Auth-Service 简化测试
 """
-import pytest
-from fastapi.testclient import TestClient
 
 
 class TestAuthServiceSimple:
@@ -11,7 +17,6 @@ class TestAuthServiceSimple:
     @pytest.fixture
     def client(self):
         """测试客户端"""
-        from auth_service.cmd.server.main import create_app
         app = create_app()
         return TestClient(app)
     

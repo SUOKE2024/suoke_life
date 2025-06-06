@@ -1,21 +1,15 @@
 """
-小克智能体服务主入口
-
-基于 FastAPI 构建的现代化微服务, 提供中医辨证论治和健康管理功能。
+main - 索克生活项目模块
 """
 
-import signal
-import sys
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
-
-import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
 from prometheus_client import make_asgi_app
-
 from xiaoke_service.api.routes import api_router
 from xiaoke_service.core.config import settings
 from xiaoke_service.core.exceptions import XiaokeServiceError
@@ -25,6 +19,18 @@ from xiaoke_service.middleware.logging import LoggingMiddleware
 from xiaoke_service.middleware.rate_limit import RateLimitMiddleware
 from xiaoke_service.services.database import DatabaseManager
 from xiaoke_service.services.health import HealthChecker
+import signal
+import sys
+import uvicorn
+
+"""
+小克智能体服务主入口
+
+基于 FastAPI 构建的现代化微服务, 提供中医辨证论治和健康管理功能。
+"""
+
+
+
 
 logger = get_logger(__name__)
 request_logger = get_request_logger(__name__)
@@ -72,6 +78,9 @@ def create_app() -> FastAPI:
     """创建 FastAPI 应用实例"""
 
     app = FastAPI(
+
+# 性能优化: 添加响应压缩
+app.add_middleware(GZipMiddleware, minimum_size=1000)
         title="小克智能体服务",
         description="索克生活健康管理平台的核心AI智能体, 专注于中医辨证论治和个性化健康管理",
         version=settings.service.service_version,
@@ -133,12 +142,16 @@ def setup_routes(app: FastAPI) -> None:
     )
 
     # 健康检查路由
-    @app.get("/health")
+    @cache(expire=300)  # 5分钟缓存
+@limiter.limit("100/minute")  # 每分钟100次请求
+@app.get("/health")
     async def health_check() -> dict:
         """健康检查端点"""
         if hasattr(app.state, "health_checker"):
             return await app.state.health_checker.check_health()
-        return {"status": "ok"}
+        r@cache(expire=@limiter.limit("100/minute")  # 每分钟100次请求
+300)  # 5分钟缓存
+eturn {"status": "ok"}
 
     @app.get("/ready")
     async def readiness_check() -> dict:

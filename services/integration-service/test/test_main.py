@@ -1,10 +1,15 @@
 """
+test_main - 索克生活项目模块
+"""
+
+from fastapi.testclient import TestClient
+from integration_service.main import create_app
+import pytest
+
+"""
 主应用测试
 """
 
-import pytest
-from fastapi.testclient import TestClient
-from integration_service.main import create_app
 
 
 @pytest.fixture

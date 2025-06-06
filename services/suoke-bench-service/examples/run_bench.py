@@ -1,15 +1,20 @@
 """
+run_bench - 索克生活项目模块
+"""
+
+from internal.suokebench.runner import SuokeBenchRunner
+from pathlib import Path
+import logging
+import sys
+
+"""
 SuokeBench评测示例
 """
 
-import logging
-import sys
-from pathlib import Path
 
 # 添加项目根目录到系统路径
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from internal.suokebench.runner import SuokeBenchRunner
 
 
 def main():

@@ -1,11 +1,16 @@
 """
+bagua_calculator - 索克生活项目模块
+"""
+
+from datetime import date
+from typing import Dict, Optional, List
+
+"""
 八卦计算器
 
 用于八卦体质分析和卦象推演
 """
 
-from typing import Dict, Optional, List
-from datetime import date
 
 
 class BaguaCalculator:

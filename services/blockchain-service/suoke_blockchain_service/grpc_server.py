@@ -1,20 +1,25 @@
 """
+grpc_server - 索克生活项目模块
+"""
+
+from .config import settings
+from .exceptions import BlockchainServiceError, ValidationError, NotFoundError
+from .logging import get_logger
+from .monitoring import record_grpc_request
+from .service import get_blockchain_service
+from datetime import datetime
+from grpc import aio, StatusCode
+from grpc_health.v1 import health, health_pb2, health_pb2_grpc
+from grpc_reflection.v1alpha import reflection
+import json
+
+"""
 gRPC 服务器模块
 
 提供区块链服务的 gRPC 接口实现。
 """
 
-import json
-from datetime import datetime
-from grpc import aio, StatusCode
-from grpc_health.v1 import health, health_pb2, health_pb2_grpc
-from grpc_reflection.v1alpha import reflection
 
-from .config import settings
-from .logging import get_logger
-from .monitoring import record_grpc_request
-from .service import get_blockchain_service
-from .exceptions import BlockchainServiceError, ValidationError, NotFoundError
 
 logger = get_logger(__name__)
 

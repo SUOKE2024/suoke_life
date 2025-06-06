@@ -1,51 +1,48 @@
-import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Ionicons } from "../../placeholder";@expo/////    vector-icons";"
-//////
-importReact,{ useState, useEffect } from react";"
+import { Ionicons } from "../../placeholder";@expo/////    vector-icons
 import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/////      View,";
+
+import React from "react";
+// importReact,{ useState, useEffect } from react
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
   RefreshControl,
   Alert,
-  { Dimensions } from ";react-native"
+  { Dimensions } from ";react-native";
   AgentCoordinationService,
   AgentType,
   AgentStatus,
-  { CollaborationTask } from ../services/AgentCoordinationService"/////    const { width   } = Dimensions.get("window;)
+  { CollaborationTask } from ../services/AgentCoordinationService"/////    const { width   } = Dimensions.get("window;);
 interface AgentCardProps { agentId: AgentType,
   status: AgentStatus,
   onPress: () => void}
-const AgentCard: React.FC<AgentCardProps /> = ({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor("AgentManagementScreen", { /////
-    trackRender: true,
-    trackMemory: true,
-    warnThreshold: 50, // ms //////     };);
+const AgentCard: React.FC<AgentCardProps /> = ({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor("AgentManagementScreen", { /////;
+    trackRender: true,trackMemory: true,warnThreshold: 50, // ms // };);
  agentId, status, onPress }) => {}
-  const getAgentInfo = useCallback((); => {;}
-    // TODO: Implement function body //////     const effectEnd = performance.now;
-    performanceMonitor.recordEffect(effectEnd - effectStart)
+  const getAgentInfo = useCallback((); => {}
+    // TODO: Implement function body // const effectEnd = performance.now;
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [])
-    const agentInfo = {;
-      xiaoai: {
+    const agentInfo = {xiaoai: {
         name: 小艾","
-        icon: "chatbubble-ellipses,"
+        icon: "chatbubble-ellipses,",
         color: "#4CAF50",
         description: 健康助手 & 首页聊天频道版主"},"
       xiaoke: {
-        name: "小克,"
+        name: "小克,",
         icon: "storefront",
         color: #2196F3","
-        description: "SUOKE频道版主 & 服务订阅专家},"
+        description: "SUOKE频道版主 & 服务订阅专家},",
       laoke: {
         name: "老克",
         icon: library","
-        color: "#FF9800,"
+        color: "#FF9800,",
         description: "探索频道版主 & 知识传播者"},
       soer: {
         name: 索儿","
-        icon: "heart,"
+        icon: "heart,",
         color: "#E91E63",
         description: LIFE频道版主 & 生活陪伴者"}"
     ;};
@@ -53,9 +50,8 @@ const AgentCard: React.FC<AgentCardProps /> = ({/  // 性能监控 // const perf
   };
   const info = getAgentInfo(agentI;d;);
   const isOnline = status.isOnli;n;e;
-  // 记录渲染性能 //////
-  performanceMonitor.recordRender()
-  return (
+  // 记录渲染性能 // performanceMonitor.recordRender();
+  return (;
     <TouchableOpacity style={styles.agentCard} onPress={onPress} accessibilityLabel="TODO: 添加无障碍标签" />/      <View style={styles.agentHeader} />/        <View style={[styles.agentIcon, { backgroundColor: info.col;o;r   }]} />/          <Ionicons name={info.icon as any} size={24} color="white" />/        </View>/        <View style={styles.agentInfo} />/          <Text style={styles.agentName} />{info.name}</Text>/          <Text style={styles.agentDescription} />{info.description}</Text>/        </View>/        <View style={[styles.statusIndicator, { backgroundColor: isOnline ? "#4CAF50 : "#F44336"}]} />/      </View>/////    "
       <View style={styles.agentMetrics} />/        <View style={styles.metric} />/          <Text style={styles.metricLabel} />工作负载</Text>/          <View style={styles.progressBar} />/////                <View,
               style={[
@@ -69,38 +65,36 @@ const AgentCard: React.FC<AgentCardProps /> = ({/  // 性能监控 // const perf
         <View style={styles.currentTask} />/          <Text style={styles.currentTaskLabel} />当前任务:</Text>/          <Text style={styles.currentTaskText} />{status.currentTask}</Text>/        </View>/////          )}
     </TouchableOpacity>/////      );
 };
-const AgentManagementScreen: React.FC  = () => {;}
+const AgentManagementScreen: React.FC  = () => {}
   const [agentStatuses, setAgentStatuses] = useState<AgentStatus[] />([;];);/  const [activeTasks, setActiveTasks] = useState<CollaborationTask[] />([;];);/////      const [serviceStatus, setServiceStatus] = useState<any>(nul;l;);
   const [refreshing, setRefreshing] = useState<boolean>(fals;e;);
   const [coordinationService] = useState<any>(() => new AgentCoordinationService);
   useEffect((); => {}
-    const effectStart = performance.now()
+    const effectStart = performance.now();
     initializeService();
-  }, []) // TODO: 检查依赖项  * // TODO: 检查依赖项  * / TODO: 检查依赖项* * * // TODO: 检查依赖项  * * * // TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项//, TODO: 检查依赖项//, TODO: 检查依赖项// //////     const initializeService = async() => {}
-    try {;
-      await coordinationService.initiali;z;e;
+  }, []) // TODO: 检查依赖项  * // TODO: 检查依赖项  * / TODO: 检查依赖项* * * // TODO: 检查依赖项  * * * // TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项//, TODO: 检查依赖项//, TODO: 检查依赖项// // const initializeService = async() => {};
+    try {await coordinationService.initiali;z;e;
       await loadData;(;)
     } catch (error) {
       Alert.alert("错误, "智能体协调服务初始化失败");"
     }
   };
-  const loadData = async() => {;}
-    try {;
-      // 获取智能体状态 //////     const statuses = await coordinationService.getAgentStatu;s as AgentStatus[];
+  const loadData = async() => {}
+    try {// 获取智能体状态 // const statuses = await coordinationService.getAgentStatu;s as AgentStatus[];
       setAgentStatuses(statuses);
-      // 获取服务状态 //////     const status = coordinationService.getServiceStatus;
-      setServiceStatus(status)
+      // 获取服务状态 // const status = coordinationService.getServiceStatus;
+      setServiceStatus(status);
       // 这里可以添加获取活跃任务的逻辑 // / const tasks = await coordinationService.getActiveTask;s* // * / setActiveTasks(tasks)* // } catch (error) { * /////
       }
   };
-  const onRefresh = async() => {;}
+  const onRefresh = async() => {}
     setRefreshing(tru;e;);
     await loadData;
     setRefreshing(false);
   };
-  const handleAgentPress = useCallback((); => {;}
-    // TODO: Implement function body //////     const effectEnd = performance.now;
-    performanceMonitor.recordEffect(effectEnd - effectStart)
+  const handleAgentPress = useCallback((); => {}
+    // TODO: Implement function body // const effectEnd = performance.now;
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [])
     Alert.alert(
       `智能体 ${agentId}`,
@@ -112,7 +106,7 @@ const AgentManagementScreen: React.FC  = () => {;}
         { text: "取消", style: cancel"}"
       ]);
   }
-  const sendTestMessage = async (agentId: AgentType) => {;}
+  const sendTestMessage = async (agentId: AgentType) => {}
     try {
       const response = await coordinationService.sendMessageToAgent(;
         agentId,
@@ -121,14 +115,14 @@ const AgentManagementScreen: React.FC  = () => {;}
       Alert.alert(
         "测试响应,"
         `${agentId} 回复: ${response.content.text}`,
-        [{ text: "确定"}])
+        [{ text: "确定"}]);
     } catch (error) {
       Alert.alert(错误", `发送测试消息失败: ${error}`);"
     }
   };
-  const showAgentDetails = useCallback((); => {;}
-    // TODO: Implement function body //////     const effectEnd = performance.now;
-    performanceMonitor.recordEffect(effectEnd - effectStart)
+  const showAgentDetails = useCallback((); => {}
+    // TODO: Implement function body // const effectEnd = performance.now;
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
     const status = agentStatuses.find(s => s.id === agentI;d;);
     if (!status) {return}
@@ -143,9 +137,9 @@ const AgentManagementScreen: React.FC  = () => {;}
     `;
     Alert.alert(`${agentId} 详细状态`, details);
   };
-  const restartAgent = useCallback((); => {;}
-    // TODO: Implement function body //////     const effectEnd = performance.now;
-    performanceMonitor.recordEffect(effectEnd - effectStart)
+  const restartAgent = useCallback((); => {}
+    // TODO: Implement function body // const effectEnd = performance.now;
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [])
     Alert.alert(
       "重启智能体,"
@@ -153,22 +147,21 @@ const AgentManagementScreen: React.FC  = () => {;}
       [
         { text: "取消", style: cancel"},"
         {
-          text: "确定,"
+          text: "确定,",
           style: "destructive",
           onPress: () => {}
-            // 这里可以添加重启智能体的逻辑 //////     Alert.alert(提示", `${agentId} 重启请求已发送`) "
+            // 这里可以添加重启智能体的逻辑 // Alert.alert(提示", `${agentId} 重启请求已发送`) "
           }
         }
       ]
     );
   };
-  const startCollaborativeTask = useCallback((); => {;}
-    // TODO: Implement function body //////     const effectEnd = performance.now;
-    performanceMonitor.recordEffect(effectEnd - effectStart)
+  const startCollaborativeTask = useCallback((); => {}
+    // TODO: Implement function body // const effectEnd = performance.now;
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [])
     Alert.alert(
-      "创建协作任务,"
-      "选择任务类型",
+      "创建协作任务,选择任务类型",
       [
         { text: 诊断任务", onPress: () => createTask("diagnosis) },
         { text: "治疗任务", onPress: () => createTask(treatment") },"
@@ -177,7 +170,7 @@ const AgentManagementScreen: React.FC  = () => {;}
         { text: "取消", style: cancel"}"
       ]);
   }
-  const createTask = async (type: CollaborationTask["type]) => {;}"
+  const createTask = async (type: CollaborationTask["type]) => {}"
     try {
       const taskId = await coordinationService.createCollaborationTask(;
         type,
@@ -187,18 +180,16 @@ const AgentManagementScreen: React.FC  = () => {;}
         medi;u;m""
       ;);
       Alert.alert("成功, `协作任务已创建: ${taskId}`);"
-      await loadData;(;) // 刷新数据 //////     } catch (error) {
-      Alert.alert("错误", `创建任务失败: ${error}`)
+      await loadData;(;) // 刷新数据 // } catch (error) {
+      Alert.alert("错误", `创建任务失败: ${error}`);
     }
   }
-  return (
-    <SafeAreaView style={styles.container} />/      <View style={styles.header} />/        <Text style={styles.title} />智能体管理中心</Text>/        <TouchableOpacity style={styles.addButton} onPress={startCollaborativeTask} accessibilityLabel="TODO: 添加无障碍标签" />/          <Ionicons name="add" size={24} color="white" />/        </TouchableOpacity>/      </View>/////
-      {serviceStatus && (
-        <View style={styles.serviceStatus} />/          <Text style={styles.serviceStatusTitle} />服务状态</Text>/          <View style={styles.statusRow} />/            <Text style={styles.statusItem} />在线智能体: {serviceStatus.activeAgents}/4</Text>/            <Text style={styles.statusItem} />活跃任务: {serviceStatus.activeTasks}</Text>/            <Text style={styles.statusItem} />队列任务: {serviceStatus.queuedTasks}</Text>/          </View>/        </View>/////    )}
-      <ScrollView,
-        style={styles.scrollView}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />/////            };
+  return (;
+    <SafeAreaView style={styles.container} />/      <View style={styles.header} />/        <Text style={styles.title} />智能体管理中心</Text>/        <TouchableOpacity style={styles.addButton} onPress={startCollaborativeTask} accessibilityLabel="TODO: 添加无障碍标签" />/          <Ionicons name="add" size={24} color="white" />/        </TouchableOpacity>/      </View>/////;
+      {serviceStatus && (;
+        <View style={styles.serviceStatus} />/          <Text style={styles.serviceStatusTitle} />服务状态</Text>/          <View style={styles.statusRow} />/            <Text style={styles.statusItem} />在线智能体: {serviceStatus.activeAgents}/4</Text>/            <Text style={styles.statusItem} />活跃任务: {serviceStatus.activeTasks}</Text>/            <Text style={styles.statusItem} />队列任务: {serviceStatus.queuedTasks}</Text>/          </View>/        </View>/////    )};
+      <ScrollView,style={styles.scrollView};
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />/////            };
       >;
         <View style={styles.agentsGrid} />/////              {agentStatuses.map((statu;s;); => (
             <AgentCard;
@@ -213,30 +204,29 @@ key={status.id}
           </View>/////            )}
       </ScrollView>/    </SafeAreaView>/////      );
 }
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     flex: 1,
     backgroundColor: #f5f5f5"},"
   header: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     justifyContent: "space-between",
     alignItems: center","
     paddingHorizontal: 20,
     paddingVertical: 15,
-    backgroundColor: "white,"
+    backgroundColor: "white,",
     borderBottomWidth: 1,
     borderBottomColor: "#e0e0e0"},
   title: {
     fontSize: 24,
     fontWeight: bold","
-    color: "#333},"
+    color: "#333},",
   addButton: {
     backgroundColor: "#2196F3",
     borderRadius: 20,
     width: 40,
     height: 40,
     justifyContent: center","
-    alignItems: "center},"
+    alignItems: "center},",
   serviceStatus: {
     backgroundColor: "white",
     margin: 15,
@@ -249,12 +239,12 @@ const styles = StyleSheet.create({;
     shadowRadius: 4},
   serviceStatusTitle: {
     fontSize: 16,
-    fontWeight: "bold,"
+    fontWeight: "bold,",
     marginBottom: 10,
     color: "#333"},
   statusRow: {
     flexDirection: row","
-    justifyContent: "space-between},"
+    justifyContent: "space-between},",
   statusItem: {
     fontSize: 14,
     color: "#666"},
@@ -266,7 +256,7 @@ const styles = StyleSheet.create({;
     padding: 15,
     marginBottom: 15,
     elevation: 2,
-    shadowColor: "#000,"
+    shadowColor: "#000,",
     shadowOffset: { width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 4},
@@ -278,14 +268,14 @@ const styles = StyleSheet.create({;
     width: 50,
     height: 50,
     borderRadius: 25,
-    justifyContent: "center,"
+    justifyContent: "center,",
     alignItems: "center",
     marginRight: 15},
   agentInfo: { flex: 1  },
   agentName: {
     fontSize: 18,
     fontWeight: bold","
-    color: "#333},"
+    color: "#333},",
   agentDescription: {
     fontSize: 14,
     color: "#666",
@@ -302,7 +292,7 @@ const styles = StyleSheet.create({;
     marginBottom: 5},
   progressBar: {
     height: 6,
-    backgroundColor: "#e0e0e0,"
+    backgroundColor: "#e0e0e0,",
     borderRadius: 3,
     marginBottom: 5},
   progressFill: {
@@ -311,13 +301,13 @@ const styles = StyleSheet.create({;
   metricValue: {
     fontSize: 12,
     color: #666","
-    textAlign: "right},"
+    textAlign: "right},",
   metricsRow: {
     flexDirection: "row",
     justifyContent: space-between"},"
   smallMetric: {
     flex: 1,
-    alignItems: "center},"
+    alignItems: "center},",
   smallMetricLabel: {
     fontSize: 12,
     color: "#666",
@@ -325,7 +315,7 @@ const styles = StyleSheet.create({;
   smallMetricValue: {
     fontSize: 14,
     fontWeight: bold","
-    color: "#333},"
+    color: "#333},",
   currentTask: {
     backgroundColor: "#f0f0f0",
     padding: 10,
@@ -337,7 +327,7 @@ const styles = StyleSheet.create({;
     marginBottom: 2},
   currentTaskText: {
     fontSize: 14,
-    color: "#333},"
+    color: "#333},",
   tasksSection: { padding: 15  },
   sectionTitle: {
     fontSize: 18,
@@ -345,7 +335,7 @@ const styles = StyleSheet.create({;
     color: #333","
     marginBottom: 15},
   taskCard: {
-    backgroundColor: "white,"
+    backgroundColor: "white,",
     borderRadius: 8,
     padding: 15,
     marginBottom: 10,
@@ -357,7 +347,7 @@ const styles = StyleSheet.create({;
   taskType: {
     fontSize: 16,
     fontWeight: bold","
-    color: "#2196F3,"
+    color: "#2196F3,",
     marginBottom: 5},
   taskDescription: {
     fontSize: 14,

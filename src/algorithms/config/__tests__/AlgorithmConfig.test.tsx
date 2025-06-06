@@ -1,43 +1,42 @@
-import React from "react";
-import { performance } from "perf_hooks";
-import AlgorithmConfig from "../AlgorithmConfig";
+import React from 'react';
+import AlgorithmConfig from '../AlgorithmConfig';
 
-describe("AlgorithmConfig", () => {
+describe('AlgorithmConfig', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  describe("AlgorithmConfig", () => {
-    it("should work with valid inputs", () => {
+  describe('AlgorithmConfig', () => {
+    it('should work with valid inputs', () => {
       // Add test cases
       const config = new AlgorithmConfig();
       expect(config).toBeDefined();
     });
 
-    it("should handle edge cases", () => {
+    it('should handle edge cases', () => {
       // Add test cases
       const config = new AlgorithmConfig({});
       expect(config).toBeDefined();
     });
 
-    it("should handle invalid inputs gracefully", () => {
+    it('should handle invalid inputs gracefully', () => {
       // Add test cases
       expect(() => {
         new AlgorithmConfig({});
       }).not.toThrow();
     });
 
-    it("should return correct output format", () => {
-      // Add test cases
+    it('should return correct output format', () => {
+      // Add test cases;
       const config = new AlgorithmConfig();
-      expect(typeof config).toBe("object");
+      expect(typeof config).toBe('object');
       expect(config.validate()).toBe(true);
     });
   });
 });
 
-describe("AlgorithmConfig Performance Tests", () => {
-  it("should execute within performance thresholds", () => {
+describe('AlgorithmConfig Performance Tests', () => {
+  it('should execute within performance thresholds', () => {
     const iterations = 10;
     const startTime = performance.now();
 
@@ -53,7 +52,7 @@ describe("AlgorithmConfig Performance Tests", () => {
     expect(averageTime).toBeLessThan(10);
   });
 
-  it("should handle large datasets efficiently", () => {
+  it('should handle large datasets efficiently', () => {
     const startTime = performance.now();
 
     // Test with configuration
@@ -65,7 +64,7 @@ describe("AlgorithmConfig Performance Tests", () => {
     expect(endTime - startTime).toBeLessThan(100);
   });
 
-  it("should not cause memory leaks", () => {
+  it('should not cause memory leaks', () => {
     const initialMemory = process.memoryUsage().heapUsed;
 
     // Execute function multiple times

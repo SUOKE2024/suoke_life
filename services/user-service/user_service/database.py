@@ -1,15 +1,20 @@
-"""用户服务数据库模块"""
+"""
+database - 索克生活项目模块
+"""
 
-import asyncio
 from contextlib import asynccontextmanager
-from typing import AsyncGenerator, Optional
 from sqlalchemy import create_engine, MetaData, text
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy.pool import QueuePool
+from typing import AsyncGenerator, Optional
+from user_service.config import get_settings
+import asyncio
 import structlog
 
-from user_service.config import get_settings
+"""用户服务数据库模块"""
+
+
 
 logger = structlog.get_logger()
 
@@ -94,6 +99,7 @@ async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
             await session.close()
 
 
+    @cache(timeout=300)  # 5分钟缓存
 def get_sync_session():
     """获取同步数据库会话"""
     if not _sync_session_factory:

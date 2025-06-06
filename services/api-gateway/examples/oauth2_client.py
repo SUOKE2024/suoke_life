@@ -1,3 +1,14 @@
+"""
+oauth2_client - 索克生活项目模块
+"""
+
+from typing import Dict, Any, Optional
+import asyncio
+import base64
+import hashlib
+import httpx
+import secrets
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -7,13 +18,7 @@ OAuth2 客户端示例
 展示如何使用 API 网关的 OAuth2 认证功能。
 """
 
-import asyncio
-import base64
-import hashlib
-import secrets
-from typing import Dict, Any, Optional
 
-import httpx
 
 class OAuth2Client:
     """OAuth2 客户端"""

@@ -1,9 +1,14 @@
-"""智能体协作评测指标实现。"""
+"""
+agent_metrics - 索克生活项目模块
+"""
 
+from .metrics import Metric
 from dataclasses import dataclass
 from typing import Any
 
-from .metrics import Metric
+"""智能体协作评测指标实现。"""
+
+
 
 @dataclass
 class MetricResult:

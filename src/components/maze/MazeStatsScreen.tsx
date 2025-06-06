@@ -1,22 +1,20 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import {
-  View,
+import {import { SafeAreaView } from 'react-native-safe-area-context';
+import Icon from '../common/Icon';
+import { colors } from '../../constants/theme';
+import { cornMazeService } from '../../services/cornMazeService';
+import {View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
   RefreshControl,
-  Dimensions,
+  Dimensions
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Icon from '../common/Icon';
-import { colors } from '../../constants/theme';
-import { cornMazeService } from '../../services/cornMazeService';
-import {
   MazeStats,
   LeaderboardEntry,
   MazeTheme,
-  MazeDifficulty,
+  MazeDifficulty
 } from '../../types/maze';
 
 const { width } = Dimensions.get('window');
@@ -38,32 +36,17 @@ const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId })
     [MazeTheme.HEALTH_PATH]: {
       name: '健康之路',
       color: '#4CAF50',
-      icon: 'heart-pulse',
-    },
-    [MazeTheme.NUTRITION_GARDEN]: {
-      name: '营养花园',
-      color: '#FF9800',
-      icon: 'food-apple',
-    },
-    [MazeTheme.TCM_JOURNEY]: {
-      name: '中医之旅',
-      color: '#9C27B0',
-      icon: 'leaf',
-    },
-    [MazeTheme.BALANCED_LIFE]: {
-      name: '平衡生活',
-      color: '#2196F3',
-      icon: 'scale-balance',
-    },
+      icon: 'heart-pulse'
+    },[MazeTheme.NUTRITION_GARDEN]: {name: '营养花园',color: '#FF9800',icon: 'food-apple';
+    },[MazeTheme.TCM_JOURNEY]: {name: '中医之旅',color: '#9C27B0',icon: 'leaf';
+    },[MazeTheme.BALANCED_LIFE]: {name: '平衡生活',color: '#2196F3',icon: 'scale-balance';
+    };
   };
 
   // 加载数据
-  const loadData = useCallback(async () => {
-    try {
-      setLoading(true);
-      const [userStats, globalLeaderboard] = await Promise.all([
-        cornMazeService.getUserStats(userId),
-        cornMazeService.getLeaderboard(undefined, 20),
+  const loadData = useCallback(async () => {try {setLoading(true);
+      const [userStats, globalLeaderboard] = await Promise.all([;
+        cornMazeService.getUserStats(userId),cornMazeService.getLeaderboard(undefined, 20);
       ]);
 
       setStats(userStats);
@@ -76,8 +59,7 @@ const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId })
   }, [userId]);
 
   // 刷新数据
-  const onRefresh = useCallback(async () => {
-    setRefreshing(true);
+  const onRefresh = useCallback(async () => {setRefreshing(true);
     await loadData();
     setRefreshing(false);
   }, [loadData]);
@@ -87,37 +69,36 @@ const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId })
   }, [loadData]);
 
   // 渲染统计卡片
-  const renderStatsCard = (title: string, value: string | number, icon: string, color: string) => (
-    <View style={[styles.statsCard, { borderLeftColor: color }]}>
-      <View style={styles.statsIcon}>
-        <Icon name={icon} size={24} color={color} />
-      </View>
-      <View style={styles.statsContent}>
-        <Text style={styles.statsValue}>{value}</Text>
-        <Text style={styles.statsTitle}>{title}</Text>
-      </View>
-    </View>
+  const renderStatsCard = (title: string, value: string | number, icon: string, color: string) => (;
+    <View style={[styles.statsCard, { borderLeftColor: color }]}>;
+      <View style={styles.statsIcon}>;
+        <Icon name={icon} size={24} color={color} />;
+      </View>;
+      <View style={styles.statsContent}>;
+        <Text style={styles.statsValue}>{value}</Text>;
+        <Text style={styles.statsTitle}>{title}</Text>;
+      </View>;
+    </View>;
   );
 
   // 渲染成就徽章
-  const renderAchievementBadge = (achievement: string) => (
-    <View key={achievement} style={styles.achievementBadge}>
-      <Icon name="trophy" size={16} color={colors.warning} />
-      <Text style={styles.achievementText}>{achievement}</Text>
-    </View>
+  const renderAchievementBadge = (achievement: string) => (;
+    <View key={achievement} style={styles.achievementBadge}>;
+      <Icon name="trophy" size={16} color={colors.warning} />;
+      <Text style={styles.achievementText}>{achievement}</Text>;
+    </View>;
   );
 
   // 渲染排行榜条目
-  const renderLeaderboardEntry = (entry: LeaderboardEntry, index: number) => {
-    const isCurrentUser = entry.userId === userId;
+  const renderLeaderboardEntry = (entry: LeaderboardEntry, index: number) => {const isCurrentUser = entry.userId === userId;
     const rankColor = index < 3 ? ['#FFD700', '#C0C0C0', '#CD7F32'][index] : colors.textSecondary;
-    
+
     return (
       <View
         key={entry.userId}
         style={[
           styles.leaderboardEntry,
-          isCurrentUser && styles.currentUserEntry,
+          isCurrentUser && styles.currentUserEntry
         ]}
       >
         <View style={styles.rankContainer}>
@@ -134,29 +115,27 @@ const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId })
         </View>
 
         <View style={styles.userInfo}>
-          <Text style={[styles.username, isCurrentUser && styles.currentUserText]}>
-            {entry.username}
-            {isCurrentUser && ' (你)'}
-          </Text>
-          <Text style={styles.mazeName}>{entry.mazeName}</Text>
-        </View>
-
-        <View style={styles.scoreContainer}>
-          <Text style={[styles.score, isCurrentUser && styles.currentUserText]}>
-            {entry.score}分
-          </Text>
-          <Text style={styles.completionTime}>
-            {Math.floor(entry.completionTime / 60)}:{(entry.completionTime % 60).toString().padStart(2, '0')}
-          </Text>
-        </View>
-      </View>
+          <Text style={[styles.username, isCurrentUser && styles.currentUserText]}>;
+            {entry.username};
+            {isCurrentUser && ' (你)'};
+          </Text>;
+          <Text style={styles.mazeName}>{entry.mazeName}</Text>;
+        </View>;
+;
+        <View style={styles.scoreContainer}>;
+          <Text style={[styles.score, isCurrentUser && styles.currentUserText]}>;
+            {entry.score}分;
+          </Text>;
+          <Text style={styles.completionTime}>;
+            {Math.floor(entry.completionTime / 60)}:{(entry.completionTime % 60).toString().padStart(2, '0')};
+          </Text>;
+        </View>;
+      </View>;
     );
   };
 
   // 格式化游戏时间
-  const formatPlayTime = (minutes: number): string => {
-    if (minutes < 60) {
-      return `${minutes}分钟`;
+  const formatPlayTime = (minutes: number): string => {if (minutes < 60) {return `${minutes}分钟`;
     }
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
@@ -200,7 +179,7 @@ const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId })
       >
         {selectedTab === 'stats' && stats && (
           <View style={styles.statsSection}>
-            {/* 基础统计 */}
+            {// 基础统计}
             <View style={styles.statsGrid}>
               {renderStatsCard('完成迷宫', stats.completedMazes, 'check-circle', colors.success)}
               {renderStatsCard('总迷宫数', stats.totalMazes, 'grid', colors.primary)}
@@ -208,7 +187,7 @@ const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId })
               {renderStatsCard('游戏时间', formatPlayTime(stats.totalPlayTime), 'clock', colors.info)}
             </View>
 
-            {/* 等级和排名 */}
+            {// 等级和排名}
             {(stats.level || stats.rank) && (
               <View style={styles.levelSection}>
                 <Text style={styles.sectionTitle}>等级信息</Text>
@@ -235,7 +214,7 @@ const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId })
               </View>
             )}
 
-            {/* 喜爱主题 */}
+            {// 喜爱主题}
             <View style={styles.favoriteSection}>
               <Text style={styles.sectionTitle}>喜爱主题</Text>
               <View style={styles.favoriteCard}>
@@ -255,7 +234,7 @@ const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId })
               </View>
             </View>
 
-            {/* 成就 */}
+            {// 成就}
             {stats.achievements.length > 0 && (
               <View style={styles.achievementsSection}>
                 <Text style={styles.sectionTitle}>获得成就</Text>
@@ -269,29 +248,29 @@ const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId })
 
         {selectedTab === 'leaderboard' && (
           <View style={styles.leaderboardSection}>
-            <Text style={styles.sectionTitle}>全球排行榜</Text>
-            {leaderboard.length > 0 ? (
-              <View style={styles.leaderboardList}>
-                {leaderboard.map(renderLeaderboardEntry)}
-              </View>
-            ) : (
-              <View style={styles.emptyState}>
-                <Icon name="trophy" size={64} color={colors.textSecondary} />
-                <Text style={styles.emptyText}>暂无排行榜数据</Text>
-                <Text style={styles.emptySubtext}>完成更多迷宫来上榜吧</Text>
-              </View>
-            )}
-          </View>
-        )}
-      </ScrollView>
-    </SafeAreaView>
+            <Text style={styles.sectionTitle}>全球排行榜</Text>;
+            {leaderboard.length > 0 ? (;
+              <View style={styles.leaderboardList}>;
+                {leaderboard.map(renderLeaderboardEntry)};
+              </View>;
+            ) : (;
+              <View style={styles.emptyState}>;
+                <Icon name="trophy" size={64} color={colors.textSecondary} />;
+                <Text style={styles.emptyText}>暂无排行榜数据</Text>;
+                <Text style={styles.emptySubtext}>完成更多迷宫来上榜吧</Text>;
+              </View>;
+            )};
+          </View>;
+        )};
+      </ScrollView>;
+    </SafeAreaView>;
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: colors.background
   },
   header: {
     flexDirection: 'row',
@@ -300,12 +279,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.border
   },
   title: {
     fontSize: 18,
     fontWeight: '600',
-    color: colors.text,
+    color: colors.text
   },
   tabContainer: {
     flexDirection: 'row',
@@ -313,37 +292,37 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginTop: 16,
     borderRadius: 12,
-    padding: 4,
+    padding: 4
   },
   tab: {
     flex: 1,
     paddingVertical: 12,
     alignItems: 'center',
-    borderRadius: 8,
+    borderRadius: 8
   },
   activeTab: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.primary
   },
   tabText: {
     fontSize: 14,
     fontWeight: '600',
-    color: colors.textSecondary,
+    color: colors.textSecondary
   },
   activeTabText: {
-    color: colors.white,
+    color: colors.white
   },
   content: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 20
   },
   statsSection: {
-    paddingVertical: 16,
+    paddingVertical: 16
   },
   statsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    marginBottom: 24,
+    marginBottom: 24
   },
   statsCard: {
     width: '48%',
@@ -358,32 +337,32 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowRadius: 4
   },
   statsIcon: {
-    marginRight: 12,
+    marginRight: 12
   },
   statsContent: {
-    flex: 1,
+    flex: 1
   },
   statsValue: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: colors.text,
+    color: colors.text
   },
   statsTitle: {
     fontSize: 12,
     color: colors.textSecondary,
-    marginTop: 2,
+    marginTop: 2
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: colors.text,
-    marginBottom: 12,
+    marginBottom: 12
   },
   levelSection: {
-    marginBottom: 24,
+    marginBottom: 24
   },
   levelCard: {
     backgroundColor: colors.surface,
@@ -393,47 +372,47 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowRadius: 4
   },
   levelInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 16
   },
   levelText: {
     marginLeft: 16,
-    flex: 1,
+    flex: 1
   },
   levelNumber: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: colors.text,
+    color: colors.text
   },
   levelDescription: {
     fontSize: 14,
     color: colors.textSecondary,
-    marginTop: 2,
+    marginTop: 2
   },
   rankInfo: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   rankText: {
     marginLeft: 16,
-    flex: 1,
+    flex: 1
   },
   rankNumber: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: colors.text,
+    color: colors.text
   },
   rankDescription: {
     fontSize: 14,
     color: colors.textSecondary,
-    marginTop: 2,
+    marginTop: 2
   },
   favoriteSection: {
-    marginBottom: 24,
+    marginBottom: 24
   },
   favoriteCard: {
     backgroundColor: colors.surface,
@@ -445,28 +424,28 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowRadius: 4
   },
   favoriteText: {
     marginLeft: 16,
-    flex: 1,
+    flex: 1
   },
   favoriteName: {
     fontSize: 16,
     fontWeight: '600',
-    color: colors.text,
+    color: colors.text
   },
   favoriteDescription: {
     fontSize: 14,
     color: colors.textSecondary,
-    marginTop: 2,
+    marginTop: 2
   },
   achievementsSection: {
-    marginBottom: 24,
+    marginBottom: 24
   },
   achievementsList: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexWrap: 'wrap'
   },
   achievementBadge: {
     flexDirection: 'row',
@@ -481,16 +460,16 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
-    shadowRadius: 2,
+    shadowRadius: 2
   },
   achievementText: {
     fontSize: 12,
     fontWeight: '500',
     color: colors.text,
-    marginLeft: 4,
+    marginLeft: 4
   },
   leaderboardSection: {
-    paddingVertical: 16,
+    paddingVertical: 16
   },
   leaderboardList: {
     backgroundColor: colors.surface,
@@ -500,7 +479,7 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowRadius: 4
   },
   leaderboardEntry: {
     flexDirection: 'row',
@@ -508,62 +487,50 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.border
   },
   currentUserEntry: {
-    backgroundColor: colors.primary + '10',
+    backgroundColor: colors.primary + '10'
   },
   rankContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: 60,
+    width: 60
   },
   userInfo: {
     flex: 1,
-    marginLeft: 12,
+    marginLeft: 12
   },
   username: {
     fontSize: 16,
     fontWeight: '600',
-    color: colors.text,
+    color: colors.text
   },
   currentUserText: {
-    color: colors.primary,
+    color: colors.primary
   },
   mazeName: {
     fontSize: 12,
     color: colors.textSecondary,
-    marginTop: 2,
+    marginTop: 2
   },
   scoreContainer: {
-    alignItems: 'flex-end',
+    alignItems: 'flex-end'
   },
   score: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: colors.text,
+    color: colors.text
   },
   completionTime: {
     fontSize: 12,
     color: colors.textSecondary,
-    marginTop: 2,
+    marginTop: 2
   },
-  emptyState: {
-    alignItems: 'center',
-    paddingVertical: 60,
-  },
-  emptyText: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: colors.textSecondary,
-    marginTop: 16,
-  },
-  emptySubtext: {
-    fontSize: 14,
-    color: colors.textSecondary,
-    marginTop: 8,
-    textAlign: 'center',
-  },
+  emptyState: {alignItems: 'center',paddingVertical: 60;
+  },emptyText: {fontSize: 18,fontWeight: '600',color: colors.textSecondary,marginTop: 16;
+  },emptySubtext: {fontSize: 14,color: colors.textSecondary,marginTop: 8,textAlign: 'center';
+  };
 });
 
 export default MazeStatsScreen; 

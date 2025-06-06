@@ -1,28 +1,33 @@
+"""
+main - 索克生活项目模块
+"""
+
+from api.rest.handlers import router
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.responses import JSONResponse
+from internal.infrastructure.container import get_container, init_container
+from pathlib import Path
+from typing import Any, Dict
+import asyncio
+import logging
+import signal
+import sys
+import uvicorn
+import yaml
+
 #!/usr/bin/env python3
 """
 医疗资源微服务主启动文件
 """
 
-import asyncio
-import logging
-import signal
-import sys
-from pathlib import Path
-from typing import Any, Dict
 
-import uvicorn
-import yaml
-from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.gzip import GZipMiddleware
-from fastapi.responses import JSONResponse
 
 # 添加项目根目录到Python路径
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from api.rest.handlers import router
-from internal.infrastructure.container import get_container, init_container
 
 # 配置日志
 def setup_logging(config: Dict[str, Any]):
@@ -236,14 +241,18 @@ class MedicalResourceService:
         app.include_router(router, prefix="/api/v1")
 
         # 根路径
-        @app.get("/")
+        @cache(expire=300)  # 5分钟缓存
+@limiter.limit("100/minute")  # 每分钟100次请求
+@app.get("/")
         async def root():
             return {
                 "service": "medical-resource-service",
                 "version": self.config.get("service", {}).get("version", "1.0.0"),
                 "status": "running",
                 "description": "索克生活平台医疗资源管理服务",
-            }
+            @cache(expire=@limiter.limit("100/minute")  # 每分钟100次请求
+300)  # 5分钟缓存
+}
 
         # 健康检查端点
         @app.get("/health")
@@ -272,7 +281,9 @@ class MedicalResourceService:
                 return {
                     "status": "unhealthy",
                     "service": "medical-resource-service",
-                    "error": str(e),
+                    "erro@limiter.limit("100/minute")  # 每分钟100次请求
+@cache(expire=300)  # 5分钟缓存
+r": str(e),
                 }
 
         # 服务信息端点

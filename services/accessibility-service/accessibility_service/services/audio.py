@@ -1,15 +1,20 @@
 """
-Audio accessibility service implementation.
+audio - 索克生活项目模块
 """
-
-import asyncio
-import logging
-from datetime import datetime
-from typing import Any
 
 from ..config.settings import get_settings
 from ..models.accessibility import AccessibilityRequest
 from ..models.analysis import AnalysisStatus, AudioAnalysis
+from datetime import datetime
+from typing import Any
+import asyncio
+import logging
+
+"""
+Audio accessibility service implementation.
+"""
+
+
 
 logger = logging.getLogger(__name__)
 

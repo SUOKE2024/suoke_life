@@ -1,10 +1,17 @@
+"""
+__init__ - 索克生活项目模块
+"""
+
+from .event_sourcing import (
+from .saga_manager import (
+from .tcc_coordinator import (
+
 #!/usr/bin/env python3
 """
 分布式事务管理模块
 提供Saga、TCC、事件溯源等分布式事务解决方案
 """
 
-from .event_sourcing import (
     AggregateRoot,
     Event,
     EventBus,
@@ -16,7 +23,6 @@ from .event_sourcing import (
     get_event_bus,
     get_event_store,
 )
-from .saga_manager import (
     SagaContext,
     SagaManager,
     SagaOrchestrator,
@@ -24,7 +30,6 @@ from .saga_manager import (
     SagaStep,
     get_orchestrator,
 )
-from .tcc_coordinator import (
     TCCCoordinator,
     TCCOperation,
     TCCResource,

@@ -1,9 +1,14 @@
 """
+exceptions - 索克生活项目模块
+"""
+
+from enum import Enum
+from typing import Any, Dict, Optional
+
+"""
 统一异常处理系统
 定义应用中使用的所有异常类型
 """
-from typing import Any, Dict, Optional
-from enum import Enum
 
 
 class ErrorCode(str, Enum):

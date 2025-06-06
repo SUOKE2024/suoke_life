@@ -1,3 +1,13 @@
+"""
+logging - 索克生活项目模块
+"""
+
+from loguru import logger
+from typing import Dict, Any
+import logging
+import os
+import sys
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,11 +15,6 @@
 日志配置工具
 """
 
-import os
-import sys
-import logging
-from typing import Dict, Any
-from loguru import logger
 
 
 class InterceptHandler(logging.Handler):

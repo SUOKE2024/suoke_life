@@ -1,12 +1,17 @@
 """
-配置管理模块
+config - 索克生活项目模块
 """
 
 from pathlib import Path
-
-import yaml
-from pydantic_settings import BaseSettings
 from pydantic import Field
+from pydantic_settings import BaseSettings
+import yaml
+
+"""
+配置管理模块
+"""
+
+
 
 
 class Settings(BaseSettings):
@@ -56,3 +61,12 @@ def load_config_from_yaml(config_path: str = "config/config.yaml") -> dict:
 
 # 全局配置实例
 settings = Settings()
+
+# 数据库连接池优化配置
+DATABASE_POOL_CONFIG = {
+    "pool_size": 20,           # 连接池大小
+    "max_overflow": 30,        # 最大溢出连接数
+    "pool_timeout": 30,        # 获取连接超时时间
+    "pool_recycle": 3600,      # 连接回收时间
+    "pool_pre_ping": True,     # 连接预检查
+}

@@ -1,17 +1,23 @@
-"""OAuth第三方登录API端点"""
+"""
+oauth - 索克生活项目模块
+"""
 
-from typing import Dict, Any, Optional
+    from auth_service.models.user import User
+from auth_service.core.auth import AuthManager
+from auth_service.core.oauth import OAuthManager, OAuthProvider
+from auth_service.database import get_db
+from auth_service.models.user import User
+from auth_service.schemas.auth import TokenResponse
 from datetime import datetime, timedelta
 from fastapi import APIRouter, Depends, HTTPException, status, Query, Request
 from fastapi.responses import RedirectResponse
-from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import BaseModel, Field
+from sqlalchemy.ext.asyncio import AsyncSession
+from typing import Dict, Any, Optional
 
-from auth_service.database import get_db
-from auth_service.core.oauth import OAuthManager, OAuthProvider
-from auth_service.core.auth import AuthManager
-from auth_service.models.user import User
-from auth_service.schemas.auth import TokenResponse
+"""OAuth第三方登录API端点"""
+
+
 
 router = APIRouter()
 
@@ -293,7 +299,6 @@ async def find_or_create_oauth_user(db: AsyncSession, provider: str, user_info: 
     """查找或创建OAuth用户"""
     # 这里应该实现实际的用户查找和创建逻辑
     # 模拟实现
-    from auth_service.models.user import User
     
     # 尝试通过邮箱查找现有用户
     email = user_info.get("email")

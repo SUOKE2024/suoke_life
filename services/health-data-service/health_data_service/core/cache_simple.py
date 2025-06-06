@@ -1,3 +1,17 @@
+"""
+cache_simple - 索克生活项目模块
+"""
+
+            import fnmatch
+from .config import get_settings
+from contextlib import asynccontextmanager
+from datetime import datetime, timedelta
+from loguru import logger
+from typing import Any, Dict, List, Optional, Union, Callable
+import asyncio
+import json
+import time
+
 #!/usr/bin/env python3
 """
 简化缓存管理模块
@@ -5,16 +19,8 @@
 提供内存缓存操作，避免Redis依赖问题。
 """
 
-import asyncio
-import json
-import time
-from typing import Any, Dict, List, Optional, Union, Callable
-from datetime import datetime, timedelta
-from contextlib import asynccontextmanager
 
-from loguru import logger
 
-from .config import get_settings
 
 settings = get_settings()
 
@@ -186,7 +192,6 @@ class SimpleCacheManager:
                 return list(self._cache.keys())
             
             # 简单的模式匹配
-            import fnmatch
             return [key for key in self._cache.keys() if fnmatch.fnmatch(key, pattern)]
         except Exception as e:
             logger.error(f"获取缓存键列表失败 pattern={pattern}: {e}")

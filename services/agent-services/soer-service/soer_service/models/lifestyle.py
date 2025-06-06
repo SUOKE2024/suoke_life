@@ -1,14 +1,19 @@
 """
+lifestyle - 索克生活项目模块
+"""
+
+from datetime import datetime, time
+from enum import Enum
+from pydantic import BaseModel, Field
+from typing import Any
+
+"""
 生活方式相关数据模型
 
 定义运动计划、睡眠分析、压力评估等数据结构
 """
 
-from datetime import datetime, time
-from enum import Enum
-from typing import Any
 
-from pydantic import BaseModel, Field
 
 
 class ExerciseType(str, Enum):
@@ -48,6 +53,18 @@ class Exercise(BaseModel):
     equipment_needed: list[str] = Field(default_factory=list, description="所需器材")
     muscle_groups: list[str] = Field(default_factory=list, description="锻炼肌群")
 
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'exercise'
+        ordering = ['-created_at']
+
 
 class ExercisePlan(BaseModel):
     """运动计划模型"""
@@ -82,6 +99,18 @@ class ExercisePlan(BaseModel):
         default_factory=dict, description="中医运动原则"
     )
 
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'workoutsession'
+        ordering = ['-created_at']
+
 
 class WorkoutSession(BaseModel):
     """锻炼记录模型"""
@@ -105,6 +134,18 @@ class WorkoutSession(BaseModel):
     # 备注
     notes: str | None = Field(None, description="备注")
     achievements: list[str] = Field(default_factory=list, description="成就")
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'sleepdata'
+        ordering = ['-created_at']
 
 
 class SleepStage(str, Enum):
@@ -150,6 +191,18 @@ class SleepData(BaseModel):
     noise_level: str | None = Field(None, description="噪音水平")
     light_exposure: str | None = Field(None, description="光照情况")
 
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'sleepanalysis'
+        ordering = ['-created_at']
+
 
 class SleepAnalysis(BaseModel):
     """睡眠分析模型"""
@@ -183,6 +236,18 @@ class SleepAnalysis(BaseModel):
     tcm_sleep_analysis: dict[str, Any] = Field(
         default_factory=dict, description="中医睡眠分析"
     )
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'stressassessment'
+        ordering = ['-created_at']
 
 
 class StressLevel(str, Enum):
@@ -256,6 +321,18 @@ class StressAssessment(BaseModel):
     tcm_emotional_regulation: dict[str, Any] = Field(
         default_factory=dict, description="中医情志调节"
     )
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'lifestylegoal'
+        ordering = ['-created_at']
 
 
 class LifestyleGoal(BaseModel):

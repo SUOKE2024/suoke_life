@@ -1,33 +1,38 @@
 """
+service - 索克生活项目模块
+"""
+
+from .blockchain_client import get_blockchain_client, TransactionReceipt
+from .config import settings
+from .database import get_database_session as get_db_session
+from .encryption import EncryptionService
+from .exceptions import (
+from .ipfs_client import IPFSClient
+from .logging import get_logger
+from .models import (
+from .monitoring import record_operation_metrics
+from .zk_integration import ZKProofGenerator, ZKProofVerifier
+from datetime import datetime, timedelta
+from sqlalchemy import select, and_, or_, desc
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
+from typing import Any, Dict, List, Optional, Tuple
+import hashlib
+import json
+import uuid
+
+"""
 区块链服务实现
 
 实现区块链相关的业务逻辑，包括健康数据存储、验证、访问控制等功能。
 """
 
-import uuid
-import hashlib
-import json
-from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional, Tuple
 
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, and_, or_, desc
-from sqlalchemy.orm import selectinload
 
-from .models import (
     BlockchainTransaction, HealthDataRecord, AccessGrant, 
     ZKProofRegistry, SmartContract, AuditLog,
     TransactionStatus, DataType, AccessLevel
 )
-from .database import get_database_session as get_db_session
-from .blockchain_client import get_blockchain_client, TransactionReceipt
-from .zk_integration import ZKProofGenerator, ZKProofVerifier
-from .encryption import EncryptionService
-from .ipfs_client import IPFSClient
-from .config import settings
-from .logging import get_logger
-from .monitoring import record_operation_metrics
-from .exceptions import (
     BlockchainServiceError, ValidationError, 
     NotFoundError, PermissionError, IntegrationError
 )
@@ -551,7 +556,7 @@ class BlockchainService:
                 stmt = stmt.options(selectinload(HealthDataRecord.transaction))
                 
                 result = await session.execute(stmt)
-                records = result.scalars().all()
+                records = result.scalars().all()[:1000]  # 限制查询结果数量
                 
                 # 获取总数
                 count_stmt = select(HealthDataRecord).where(
@@ -561,7 +566,7 @@ class BlockchainService:
                     count_stmt = count_stmt.where(HealthDataRecord.data_type == DataType(data_type))
                 
                 count_result = await session.execute(count_stmt)
-                total_count = len(count_result.scalars().all())
+                total_count = len(count_result.scalars().all()[:1000]  # 限制查询结果数量)
                 
                 # 格式化返回数据
                 records_data = []
@@ -623,7 +628,7 @@ class BlockchainService:
                 )
                 
                 result = await session.execute(stmt)
-                grants = result.scalars().all()
+                grants = result.scalars().all()[:1000]  # 限制查询结果数量
                 
                 # 格式化返回数据
                 grants_data = []

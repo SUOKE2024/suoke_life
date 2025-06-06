@@ -1,24 +1,29 @@
 """
-PostgreSQL用户仓库实现模块
-
-该模块实现了基于PostgreSQL的用户数据仓库，作为服务端主数据源。
+postgres_user_repository - 索克生活项目模块
 """
-import logging
-from datetime import datetime
-from typing import Dict, List, Optional, Tuple, Any, Union
-from uuid import UUID
 
+from datetime import datetime
+from internal.model.user import (User, UserHealthSummary, DeviceInfo, UserStatus,
+from internal.repository.exceptions import (UserNotFoundError, UserAlreadyExistsError, 
+from internal.repository.models import Base, User as UserModel, HealthSummary as HealthSummaryModel, Device as DeviceModel
 from sqlalchemy import create_engine, and_, or_, select, update, delete, insert, func
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID, JSONB
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.orm import sessionmaker, Session
+from typing import Dict, List, Optional, Tuple, Any, Union
+from uuid import UUID
+import logging
 
-from internal.model.user import (User, UserHealthSummary, DeviceInfo, UserStatus,
+"""
+PostgreSQL用户仓库实现模块
+
+该模块实现了基于PostgreSQL的用户数据仓库，作为服务端主数据源。
+"""
+
+
                           UserRole, ConstitutionType, HealthMetric)
-from internal.repository.exceptions import (UserNotFoundError, UserAlreadyExistsError, 
                                      DeviceNotFoundError, DeviceAlreadyBoundError,
                                      DatabaseError)
-from internal.repository.models import Base, User as UserModel, HealthSummary as HealthSummaryModel, Device as DeviceModel
 
 class PostgresUserRepository:
     """PostgreSQL用户仓库实现"""
@@ -389,7 +394,7 @@ class PostgresUserRepository:
             
             # 查询分页数据
             query = query.offset(offset).limit(limit)
-            result = db.execute(query).scalars().all()
+            result = db.execute(query).scalars().all()[:1000]  # 限制查询结果数量
             
             # 转换为领域模型
             users_list = [self._model_to_domain_user(user) for user in result]
@@ -748,7 +753,7 @@ class PostgresUserRepository:
             
             # 查询设备列表
             query = select(DeviceModel).where(DeviceModel.user_id == user_id)
-            result = db.execute(query).scalars().all()
+            result = db.execute(query).scalars().all()[:1000]  # 限制查询结果数量
             
             # 转换为领域模型
             devices_list = [self._model_to_domain_device(device) for device in result]

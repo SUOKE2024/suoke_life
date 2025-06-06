@@ -1,25 +1,30 @@
+"""
+agent_manager - 索克生活项目模块
+"""
+
+from .model_factory import ModelFactory
+from pkg.cache.cache_manager import CacheStrategy, get_cache_manager
+from pkg.observability.enhanced_metrics import (
+from pkg.resilience.retry_manager import RetryStrategy, retry
+from pkg.utils.config_loader import get_config
+from pkg.utils.metrics import get_metrics_collector, track_llm_metrics
+from typing import Any
+import asyncio
+import json
+import logging
+import time
+import uuid
+
 #!/usr/bin/env python3
 """
 智能体管理器
 负责小克智能体的核心逻辑，包括医疗资源调度、治疗计划生成和用药管理
 """
 
-import asyncio
-import json
-import logging
-import time
-import uuid
-from typing import Any
 
-from pkg.cache.cache_manager import CacheStrategy, get_cache_manager
-from pkg.observability.enhanced_metrics import (
     get_metrics_collector as get_enhanced_metrics,
 )
-from pkg.resilience.retry_manager import RetryStrategy, retry
-from pkg.utils.config_loader import get_config
-from pkg.utils.metrics import get_metrics_collector, track_llm_metrics
 
-from .model_factory import ModelFactory
 
 logger = logging.getLogger(__name__)
 

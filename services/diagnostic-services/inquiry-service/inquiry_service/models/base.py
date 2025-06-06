@@ -1,19 +1,24 @@
 """
-基础模型类
-
-定义所有数据模型的基础类和通用字段。
+base - 索克生活项目模块
 """
 
 from datetime import datetime
-from typing import Any
-from uuid import UUID, uuid4
-
 from pydantic import BaseModel as PydanticBaseModel
 from pydantic import Field
 from sqlalchemy import Column, DateTime
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
+from typing import Any
+from uuid import UUID, uuid4
+
+"""
+基础模型类
+
+定义所有数据模型的基础类和通用字段。
+"""
+
+
 
 # SQLAlchemy 基础类
 SQLAlchemyBase = declarative_base()
@@ -36,6 +41,18 @@ class BaseModel(PydanticBaseModel):
             datetime: lambda v: v.isoformat(),
             UUID: lambda v: str(v),
         }
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'basemodel'
+        ordering = ['-created_at']
 
 
 class TimestampMixin:
@@ -79,6 +96,18 @@ class BaseEntity(SQLAlchemyBase, TimestampMixin, UUIDMixin):
             if hasattr(self, key):
                 setattr(self, key, value)
 
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'paginationparams'
+        ordering = ['-created_at']
+
 
 class PaginationParams(BaseModel):
     """分页参数"""
@@ -119,6 +148,18 @@ class PaginationResult(BaseModel):
             has_next=page < pages,
             has_prev=page > 1,
         )
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'apiresponse'
+        ordering = ['-created_at']
 
 
 class APIResponse(BaseModel):

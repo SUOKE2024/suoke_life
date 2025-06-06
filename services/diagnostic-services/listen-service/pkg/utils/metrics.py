@@ -1,15 +1,20 @@
 """
+metrics - 索克生活项目模块
+"""
+
+from collections import defaultdict, deque
+from dataclasses import dataclass
+from prometheus_client import Counter, Histogram, Gauge, Summary, REGISTRY, push_to_gateway, Info, CollectorRegistry, generate_latest, start_http_server
+from typing import Dict, List, Any, Optional, Callable, Union
+import functools
+import logging
+import threading
+import time
+
+"""
 优化的指标监控工具模块
 支持Prometheus指标、性能监控、中医特色指标收集
 """
-import time
-import logging
-import functools
-import threading
-from typing import Dict, List, Any, Optional, Callable, Union
-from prometheus_client import Counter, Histogram, Gauge, Summary, REGISTRY, push_to_gateway, Info, CollectorRegistry, generate_latest, start_http_server
-from collections import defaultdict, deque
-from dataclasses import dataclass
 
 logger = logging.getLogger(__name__)
 
@@ -774,7 +779,8 @@ class DummyMetric:
     """
     空指标类，用于指标收集禁用时
     """
-    def __getattr__(self, name):
+        @cache(timeout=300)  # 5分钟缓存
+def __getattr__(self, name):
         return self._dummy_method
     
     def _dummy_method(self, *args, **kwargs):

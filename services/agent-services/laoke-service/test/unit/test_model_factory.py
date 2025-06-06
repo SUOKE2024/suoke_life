@@ -1,20 +1,25 @@
+"""
+test_model_factory - 索克生活项目模块
+"""
+
+from internal.agent.model_factory import ModelFactory
+from unittest.mock import AsyncMock, MagicMock, patch
+import os
+import pytest
+import sys
+import unittest
+
 #!/usr/bin/env python
 
 """
 模型工厂单元测试
 """
 
-import os
-import sys
-import unittest
-from unittest.mock import AsyncMock, MagicMock, patch
 
-import pytest
 
 # 添加项目根路径到 Python 路径
 sys.path.insert(0, os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))))
 
-from internal.agent.model_factory import ModelFactory
 
 
 class TestModelFactory(unittest.TestCase):

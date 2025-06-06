@@ -1,26 +1,31 @@
 """
-消息总线客户端SDK
+message_bus_client - 索克生活项目模块
 """
+
+        import message_bus_pb2 as pb
+        import message_bus_pb2_grpc as pb_grpc
+    from ...api.grpc import message_bus_pb2 as pb
+    from ...api.grpc import message_bus_pb2_grpc as pb_grpc
+from grpc_health.v1 import health_pb2
+from grpc_health.v1 import health_pb2_grpc
+from typing import Dict, Any, List, Optional, Callable, Awaitable, Union
 import asyncio
+import grpc
 import json
 import logging
 import time
 import uuid
-from typing import Dict, Any, List, Optional, Callable, Awaitable, Union
 
-import grpc
-from grpc_health.v1 import health_pb2
-from grpc_health.v1 import health_pb2_grpc
+"""
+消息总线客户端SDK
+"""
+
 
 # 导入生成的gRPC代码
 try:
-    from ...api.grpc import message_bus_pb2 as pb
-    from ...api.grpc import message_bus_pb2_grpc as pb_grpc
 except ImportError:
     # 假设客户端在外部项目中使用
     try:
-        import message_bus_pb2 as pb
-        import message_bus_pb2_grpc as pb_grpc
     except ImportError:
         raise ImportError("无法导入message_bus gRPC生成的代码，请确保已安装并可访问")
 

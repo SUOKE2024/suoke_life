@@ -1,15 +1,20 @@
 """
+monitoring - 索克生活项目模块
+"""
+
+from fastapi import FastAPI, Request, Response
+from prometheus_client import (
+from typing import Any
+import psutil
+import time
+
+"""
 监控和指标收集模块
 
 提供 Prometheus 指标和健康检查功能
 """
 
-import time
-from typing import Any
 
-import psutil
-from fastapi import FastAPI, Request, Response
-from prometheus_client import (
     CONTENT_TYPE_LATEST,
     Counter,
     Gauge,

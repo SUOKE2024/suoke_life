@@ -1,4 +1,13 @@
 """
+__init__ - 索克生活项目模块
+"""
+
+from .base import BaseModel
+from .health_data import ActivityData, HealthData, HeartRateData, SleepData
+from .sync_record import SyncRecord, SyncStatus
+from .user_integration import PlatformAuth, UserIntegration
+
+"""
 数据模型层
 
 定义无障碍服务的数据模型和结构：
@@ -11,10 +20,6 @@
 # from .user_config import UserConfig
 # from .service_request import ServiceRequest
 
-from .base import BaseModel
-from .health_data import ActivityData, HealthData, HeartRateData, SleepData
-from .sync_record import SyncRecord, SyncStatus
-from .user_integration import PlatformAuth, UserIntegration
 
 __all__ = [
     # "UserConfig",

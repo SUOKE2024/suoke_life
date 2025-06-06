@@ -1,19 +1,24 @@
+"""
+__init__ - 索克生活项目模块
+"""
+
+from .envoy_config import ClusterConfig, EnvoyConfigManager, ListenerConfig, RouteConfig
+from .istio_client import (
+from .linkerd_client import LinkerdClient, ServiceProfile, TrafficSplit
+from .mesh_manager import (
+
 #!/usr/bin/env python3
 """
 服务网格支持模块
 提供Istio、Linkerd等服务网格的集成支持
 """
 
-from .envoy_config import ClusterConfig, EnvoyConfigManager, ListenerConfig, RouteConfig
-from .istio_client import (
     DestinationRule,
     Gateway,
     IstioClient,
     ServiceEntry,
     VirtualService,
 )
-from .linkerd_client import LinkerdClient, ServiceProfile, TrafficSplit
-from .mesh_manager import (
     MeshConfig,
     SecurityPolicy,
     ServiceMeshManager,

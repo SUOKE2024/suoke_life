@@ -1,5 +1,11 @@
+import {import { SafeAreaView } from "react-native-safe-area-context;"
+import { useNavigation } from "@react-navigation/////    native";
+import { NativeStackNavigationProp } from "../../placeholder";@react-navigation/////    native-stack
+import { Button } from ../../components/ui/////    Button
+import { Input } from "../../components/////    ui";
+import { colors, typography, spacing, borderRadius, shadows } from "../../placeholder";../../constants/////    theme
+
 import React, { useState } from "react";
-import {
   View,
   Text,
   StyleSheet,
@@ -9,82 +15,72 @@ import {
   KeyboardAvoidingView,
   Platform,
   Keyboard,
-  Animated} from "../../placeholder";react-native";"
-import { SafeAreaView } from "react-native-safe-area-context";";"
-import { useNavigation } from "@react-navigation/////    native";
-import { NativeStackNavigationProp } from "../../placeholder";@react-navigation/////    native-stack";"
-import { Button } from ../../components/ui/////    Button";"
-import { Input } from "../../components/////    ui";
-import { colors, typography, spacing, borderRadius, shadows } from "../../placeholder";../../constants/////    theme";"
-type AuthStackParamList = {
-  Welcome: undefine;d;
+  Animated} from "../../placeholder";react-native
+type AuthStackParamList = {Welcome: undefine;d;
   Login: undefined;
   Register: undefined;
   ForgotPassword: undefined;
 };
 type RegisterScreenNavigationProp = NativeStackNavigationProp<AuthStackParamList, Register";>;"
-const RegisterScreen: React.FC  = () => {;}
+const RegisterScreen: React.FC  = () => {}
   const navigation = useNavigation<RegisterScreenNavigationProp>();
-  const [formData, setFormData] = useState({;
-    username: ","
+  const [formData, setFormData] = useState({username: ",",
     email: ","
-    phone: ","
+    phone: ",",
     password: ","
     confirmPassword: "});"
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{[key: string]: string}>({});
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const buttonScale = new Animated.Value(1);
-  const handleInputChange = (field: string, value: string) => {;}
+  const handleInputChange = (field: string, value: string) => {}
     setFormData(prev => ({ ...prev, [field]: value }));
-    //////     清除对应字段的错误
+    // 清除对应字段的错误
 if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: " }));"
     }
   };
-  const validateForm = () => {;}
+  const validateForm = () => {}
     const newErrors: {[key: string]: string} = {};
-    //////     用户名验证
+    // 用户名验证
 if (!formData.username.trim()) {
       newErrors.username = "请输入用户名;"
     } else if (formData.username.length < 2) {
       newErrors.username = "用户名至少需要2个字符";
     } else if (formData.username.length > 20) {
-      newErrors.username = 用户名不能超过20个字符";"
+      newErrors.username = 用户名不能超过20个字符
     }
-    //////     邮箱验证
+    // 邮箱验证
 if (!formData.email.trim()) {
       newErrors.email = "请输入邮箱地址;"
     } else {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$//////
-      if (!emailRegex.test(formData.email)) {
-        newErrors.email = "请输入有效的邮箱地址";
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$// ;
+      if (!emailRegex.test(formData.email)) {newErrors.email = "请输入有效的邮箱地址";
       }
     }
-    //////     手机号验证
+    // 手机号验证
 if (!formData.phone.trim()) {
-      newErrors.phone = 请输入手机号";"
+      newErrors.phone = 请输入手机号
     } else {
-      const phoneRegex = /^1[3-9]\d{9}$//////
-      if (!phoneRegex.test(formData.phone)) {
-        newErrors.phone = "请输入有效的手机号;"
+      const phoneRegex = /^1[3-9]\d{9}$// ;
+      if (!phoneRegex.test(formData.phone)) {newErrors.phone = "请输入有效的手机号;"
       }
     }
-    //////     密码验证
+    // 密码验证
 if (!formData.password.trim()) {
       newErrors.password = "请输入密码";
     } else if (formData.password.length < 8) {
-      newErrors.password = 密码至少需要8位字符";"
+      newErrors.password = 密码至少需要8位字符
     } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/////    .test(formData.password)) {
       newErrors.password = "密码需要包含大小写字母和数字;"
     }
-    //////     确认密码验证
+    // 确认密码验证
 if (!formData.confirmPassword.trim()) {
       newErrors.confirmPassword = "请确认密码";
     } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 两次输入的密码不一致";"
+      newErrors.confirmPassword = 两次输入的密码不一致
     }
-    //////     服务条款验证
+    // 服务条款验证
 if (!agreedToTerms) {
       Alert.alert("提示, "请阅读并同意服务条款和隐私政策");"
       return false;
@@ -92,13 +88,12 @@ if (!agreedToTerms) {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  const handleRegister = async() => {;}
-    if (!validateForm()) {;
-      return;
+  const handleRegister = async() => {}
+    if (!validateForm()) {return;
     }
     Keyboard.dismiss();
     setLoading(true);
-    //////     按钮动画
+    // 按钮动画
 Animated.sequence([
       Animated.timing(buttonScale, {
         toValue: 0.95,
@@ -110,9 +105,9 @@ Animated.sequence([
         useNativeDriver: true});
     ]).start();
     try {
-      //////     TODO: 实现实际的注册逻辑
-      //////     这里应该调用用户服务
-await new Promise(resolve => setTimeout(resolve, 1500)); //////     模拟网络请求
+      // TODO: 实现实际的注册逻辑
+      // 这里应该调用用户服务
+await new Promise(resolve => setTimeout(resolve, 1500)); // 模拟网络请求
 Alert.alert(注册成功", "欢迎加入索克生活！请查收邮箱验证邮件。, [
         { text: "确定", onPress: () => {}
           navigation.navigate(Login");"
@@ -124,24 +119,23 @@ Alert.alert(注册成功", "欢迎加入索克生活！请查收邮箱验证邮�
       setLoading(false);
     }
   };
-  const handleLogin = () => {;}
+  const handleLogin = () => {}
     navigation.navigate(Login");"
   };
-  const handleBack = () => {;}
+  const handleBack = () => {}
     navigation.goBack();
   };
-  const toggleTermsAgreement = () => {;}
+  const toggleTermsAgreement = () => {}
     setAgreedToTerms(!agreedToTerms);
   };
-  const showTermsAndConditions = () => {;}
+  const showTermsAndConditions = () => {}
     Alert.alert(
-      "服务条款与隐私政策,"
-      "索克生活平台尊重并保护所有用户的个人隐私权。为了给您提供更准确、更有针对性的服务，本平台会按照本隐私权政策的规定使用和披露您的个人信息。本平台将以高度的勤勉、审慎义务对待这些信息。除本隐私权政策另有规定外，在未征得您事先许可的情况下，本平台不会将这些信息对外披露或向第三方提供。",
+      "服务条款与隐私政策,索克生活平台尊重并保护所有用户的个人隐私权。为了给您提供更准确、更有针对性的服务，本平台会按照本隐私权政策的规定使用和披露您的个人信息。本平台将以高度的勤勉、审慎义务对待这些信息。除本隐私权政策另有规定外，在未征得您事先许可的情况下，本平台不会将这些信息对外披露或向第三方提供。",
       [{ text: 我知道了", style: "default }];
     );
   };
-  return (
-    <SafeAreaView style={styles.container}>
+  return (;
+    <SafeAreaView style={styles.container}>;
       <KeyboardAvoidingView;
 style={styles.keyboardAvoid}
         behavior={Platform.OS === "ios" ? padding" : "height}
@@ -291,8 +285,7 @@ loading={loading}
     </////    SafeAreaView>
   );
 };
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     flex: 1,
     backgroundColor: colors.background},
   keyboardAvoid: {
@@ -302,9 +295,7 @@ const styles = StyleSheet.create({;
   scrollContent: {
     flexGrow: 1,
     paddingHorizontal: spacing.lg,
-    paddingBottom: spacing.xl},
-;
-  //////     头部区域
+    paddingBottom: spacing.xl},// 头部区域
 header: {
     alignItems: "center",
     paddingTop: spacing.lg,
@@ -317,7 +308,7 @@ header: {
     height: 40,
     borderRadius: 20,
     backgroundColor: colors.gray100,
-    justifyContent: "center,"
+    justifyContent: "center,",
     alignItems: "center"},
   backButtonText: {
     fontSize: typography.fontSize.xl,
@@ -339,7 +330,7 @@ header: {
     fontFamily: typography.fontFamily.bold},
   title: {
     fontSize: typography.fontSize[2xl"],"
-    fontWeight: "700,"
+    fontWeight: "700,",
     color: colors.textPrimary,
     marginBottom: spacing.sm,
     fontFamily: typography.fontFamily.bold},
@@ -348,14 +339,14 @@ header: {
     color: colors.textSecondary,
     textAlign: "center",
     fontFamily: typography.fontFamily.regular},
-  //////     表单区域
+  // 表单区域
 formSection: {
     paddingVertical: spacing.md},
   inputContainer: {
     marginBottom: spacing.md},
   termsContainer: {
     flexDirection: row","
-    alignItems: "center,"
+    alignItems: "center,",
     marginVertical: spacing.lg},
   checkbox: {
     padding: spacing.xs,
@@ -374,7 +365,7 @@ formSection: {
   checkboxText: {
     color: colors.white,
     fontSize: 14,
-    fontWeight: "bold},"
+    fontWeight: "bold},",
   termsText: {
     flex: 1,
     fontSize: typography.fontSize.sm,
@@ -386,7 +377,7 @@ formSection: {
     fontFamily: typography.fontFamily.medium},
   registerButton: {
     marginTop: spacing.md},
-  //////     已有账户提示
+  // 已有账户提示
 loginSection: {
     alignItems: center","
     paddingVertical: spacing.lg},
@@ -396,9 +387,9 @@ loginSection: {
     fontFamily: typography.fontFamily.regular},
   loginLink: {
     color: colors.primary,
-    fontWeight: "600,"
+    fontWeight: "600,",
     fontFamily: typography.fontFamily.medium},
-  //////     健康承诺
+  // 健康承诺
 promiseSection: {
     paddingTop: spacing.xl},
   promiseTitle: {
@@ -409,11 +400,11 @@ promiseSection: {
     textAlign: center","
     fontFamily: typography.fontFamily.medium},
   promiseList: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     flexWrap: "wrap",
     justifyContent: space-between"},"
   promiseItem: {
-    width: "48%,"
+    width: "48%,",
     backgroundColor: colors.surface,
     padding: spacing.md,
     borderRadius: borderRadius.md,
@@ -427,5 +418,5 @@ promiseSection: {
     fontSize: typography.fontSize.sm,
     color: colors.textPrimary, */
     fontFamily: typography.fontFamily.medium}}); *///
-export default RegisterScreen; *///
+export default RegisterScreen; *///;
   */////

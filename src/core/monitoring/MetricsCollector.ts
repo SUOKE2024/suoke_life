@@ -11,11 +11,7 @@ export class MetricsCollector {
     const key = this.buildKey(name, labels);
     this.gauges.set(key, value);
   }
-  recordHistogram(
-    name: string,
-    value: number,
-    labels?: Record<string, string>
-  ): void {
+  recordHistogram(name: string, value: number, labels?: Record<string, string>): void {
     const key = this.buildKey(name, labels);
     const values = this.histograms.get(key) || [];
     values.push(value);
@@ -34,10 +30,12 @@ export class MetricsCollector {
     return this.histograms.get(key) || [];
   }
   private buildKey(name: string, labels?: Record<string, string>): string {
-    if (!labels) {return name;}
-    const labelStr = Object.entries(labels)
-      .map(([k, v]) => `${k}=${v}`)
-      .join(",");
+    if (!labels) {
+      return name;
+    }
+    const labelStr = Object.entries(labels);
+      .map(([k, v]) => `${k}=${v}`);
+      .join(',');
     return `${name}{${labelStr}}`;
   }
   reset(): void {

@@ -1,25 +1,32 @@
+"""
+kafka_client - 索克生活项目模块
+"""
+
+                from kafka import TopicPartition
+            from kafka import TopicPartition
+    from kafka import KafkaAdminClient, KafkaConsumer, KafkaProducer
+    from kafka.admin import ConfigResource, ConfigResourceType, NewTopic
+from .message_queue import (
+from datetime import datetime
+from typing import Any
+import asyncio
+import contextlib
+import logging
+
 #!/usr/bin/env python3
 """
 Kafka消息队列客户端
 实现MessageQueue接口的Kafka版本
 """
 
-import asyncio
-from datetime import datetime
-import logging
-from typing import Any
 
 try:
-    from kafka import KafkaAdminClient, KafkaConsumer, KafkaProducer
-    from kafka.admin import ConfigResource, ConfigResourceType, NewTopic
 
     HAS_KAFKA = True
 except ImportError:
     HAS_KAFKA = False
 
-import contextlib
 
-from .message_queue import (
     ConsumerConfig,
     Message,
     MessageHandler,
@@ -414,7 +421,6 @@ class KafkaMessageQueue(MessageQueue):
         try:
             if message:
                 # 提交特定消息的偏移量
-                from kafka import TopicPartition
 
                 tp = TopicPartition(message.topic, message.partition)
                 offsets = {tp: message.offset + 1}
@@ -437,7 +443,6 @@ class KafkaMessageQueue(MessageQueue):
             raise RuntimeError("消费者未初始化")
 
         try:
-            from kafka import TopicPartition
 
             tp = TopicPartition(topic, partition)
 

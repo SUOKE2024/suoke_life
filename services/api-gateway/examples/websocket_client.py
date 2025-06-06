@@ -1,3 +1,14 @@
+"""
+websocket_client - 索克生活项目模块
+"""
+
+from typing import Dict, Any
+from websockets.exceptions import ConnectionClosed
+import asyncio
+import json
+import uuid
+import websockets
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -7,13 +18,7 @@ WebSocket 客户端示例
 展示如何使用 API 网关的 WebSocket 功能。
 """
 
-import asyncio
-import json
-import uuid
-from typing import Dict, Any
 
-import websockets
-from websockets.exceptions import ConnectionClosed
 
 
 class WebSocketClient:

@@ -1,16 +1,21 @@
 """
+famous_doctor_service - 索克生活项目模块
+"""
+
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Dict, List, Optional, Any, Tuple
+import asyncio
+import json
+import logging
+import uuid
+
+"""
 名医资源管理服务
 提供名医认证、资源管理、专长分析等功能
 """
 
-import asyncio
-import logging
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Any, Tuple
-from dataclasses import dataclass, field
-from enum import Enum
-import uuid
-import json
 
 logger = logging.getLogger(__name__)
 

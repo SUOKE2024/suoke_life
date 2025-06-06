@@ -1,3 +1,23 @@
+"""
+test_four_diagnosis - 索克生活项目模块
+"""
+
+from pathlib import Path
+from unittest.mock import AsyncMock, MagicMock
+from xiaoai_service.integration.inquiry_service.client import InquiryServiceClient
+from xiaoai_service.integration.listen_service.client import ListenServiceClient
+from xiaoai_service.integration.look_service.client import LookServiceClient
+from xiaoai_service.integration.palpation_service.client import PalpationServiceClient
+from xiaoai_service.internal.four_diagnosis.coordinator.coordinator import (
+from xiaoai_service.internal.four_diagnosis.fusion.engine import MultimodalFusionEngine
+from xiaoai_service.internal.four_diagnosis.reasoning.engine import TCMReasoningEngine
+from xiaoai_service.internal.four_diagnosis.validation.validator import (
+import grpc
+import pytest
+import sys
+import tempfile
+import uuid
+
 #!/usr/bin/env python3
 
 """
@@ -5,30 +25,16 @@
 测试四诊服务的协调与融合功能
 """
 
-import sys
-import tempfile
-import uuid
-from pathlib import Path
-from unittest.mock import AsyncMock, MagicMock
 
-import grpc
-import pytest
 
 # 将项目根目录添加到路径
 sys.path.insert(0, Path(__file__).resolve().parent.parent.parent)
 
-from xiaoai_service.integration.inquiry_service.client import InquiryServiceClient
-from xiaoai_service.integration.listen_service.client import ListenServiceClient
-from xiaoai_service.integration.look_service.client import LookServiceClient
-from xiaoai_service.integration.palpation_service.client import PalpationServiceClient
-from xiaoai_service.internal.four_diagnosis.coordinator.coordinator import (
     FourDiagnosisCoordinator,
 )
-from xiaoai_service.internal.four_diagnosis.fusion.engine import MultimodalFusionEngine
-from xiaoai_service.internal.four_diagnosis.reasoning.engine import TCMReasoningEngine
-from xiaoai_service.internal.four_diagnosis.validation.validator import (
     DiagnosticValidator,
 )
+
 
 @pytest.mark.asyncio
 class TestFourDiagnosisCoordinator:

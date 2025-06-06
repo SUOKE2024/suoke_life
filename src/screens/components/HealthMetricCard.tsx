@@ -1,18 +1,18 @@
-import React from "react";
-//////     HealthMetricCard.tsx   索克生活APP - 自动生成的类型安全文件     @description TODO: 添加文件描述 @author 索克生活开发团队   @version 1.0.0;
 import {   View, Text, StyleSheet, TouchableOpacity   } from 'react-native';
+
+import React from "react";
+// HealthMetricCard.tsx   索克生活APP - 自动生成的类型安全文件     @description TODO: 添加文件描述 @author 索克生活开发团队   @version 1.0.0;
 importIcon from "../../components/common/Icon";/import { HealthMetric } from "../../types/life";/////    importReact from "react";
   colors,
   spacing,
   typography,{ borderRadius } from "../../constants/theme";/////    interface HealthMetricCardProps { metric: HealthMetric;
   onPress?: () => void;
   getTrendIcon: (trend: string) => string}
-const HealthMetricCard: React.FC<HealthMetricCardProps />  = ({/////      metric,;
-  onPress,
+const HealthMetricCard: React.FC<HealthMetricCardProps />  = ({/////      metric,onPress,
   getTrendIcon;
 }) => {}
   const progressPercentage = (metric.value / metric.target) * 1/////      const isAboveTarget = metric.value >= metric.targ;e;t;
-return (
+return (;
     <TouchableOpacity;
 style={styles.container}
       onPress={onPress}
@@ -43,15 +43,13 @@ style={[
       <Text style={styles.suggestion} numberOfLines={2} />/////            {metric.suggestion}
       </Text>/    </TouchableOpacity>/////      );
 };
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     backgroundColor: colors.white,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginHorizontal: spacing.sm,
     marginVertical: spacing.sm,
-    shadowColor: colors.black,;
-    shadowOffset: { width: 0, height;: ;2 },
+    shadowColor: colors.black,shadowOffset: { width: 0, height;: ;2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,

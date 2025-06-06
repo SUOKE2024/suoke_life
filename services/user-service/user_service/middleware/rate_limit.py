@@ -1,11 +1,16 @@
-"""限流中间件"""
+"""
+rate_limit - 索克生活项目模块
+"""
 
-import time
-import logging
-from typing import Dict, Tuple
+from collections import defaultdict, deque
 from fastapi import Request, Response, HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
-from collections import defaultdict, deque
+from typing import Dict, Tuple
+import logging
+import time
+
+"""限流中间件"""
+
 
 logger = logging.getLogger(__name__)
 

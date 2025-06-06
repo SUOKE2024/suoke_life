@@ -1,12 +1,11 @@
+import React from 'react';
 import { authService } from '../../services/authService';
-import { userService } from '../../services/userService';
 import { apiClient } from '../../services/apiClient';
-import { clearAuthTokens, isLoggedIn } from '../../utils/authUtils';
 
 // Mock React Native modules
 jest.mock('react-native', () => ({
   Platform: { OS: 'ios' },
-  Alert: { alert: jest.fn() },
+  Alert: { alert: jest.fn() }
 }));
 
 jest.mock('@react-native-async-storage/async-storage', () => ({
@@ -15,14 +14,14 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
   removeItem: jest.fn(),
   multiSet: jest.fn(),
   multiGet: jest.fn(),
-  clear: jest.fn(),
+  clear: jest.fn();
 }));
 
 jest.mock('react-native-device-info', () => ({
   getUniqueId: jest.fn(() => Promise.resolve('test-device-id')),
   getSystemName: jest.fn(() => 'iOS'),
   getSystemVersion: jest.fn(() => '15.0'),
-  getModel: jest.fn(() => 'iPhone 13'),
+  getModel: jest.fn(() => 'iPhone 13')
 }));
 
 describe('End-to-End User Authentication Flow', () => {
@@ -34,53 +33,25 @@ describe('End-to-End User Authentication Flow', () => {
   describe('Complete User Journey', () => {
     it('should handle complete user registration and login flow', async () => {
       // Mock API responses for registration
-      const mockRegisterResponse = {
-        success: true,
-        data: {
-          user: {
-            id: 'user-123',
-            username: 'newuser',
-            email: 'newuser@example.com',
-            createdAt: new Date().toISOString(),
+      const mockRegisterResponse = {success: true,data: {user: {id: 'user-123',username: 'newuser',email: 'newuser@example.com',createdAt: new Date().toISOString();
           },
           accessToken: 'register-access-token',
           refreshToken: 'register-refresh-token',
-          expiresIn: 3600,
-        },
+          expiresIn: 3600
+        };
       };
 
       // Mock API responses for login
-      const mockLoginResponse = {
-        success: true,
-        data: {
-          user: {
-            id: 'user-123',
-            username: 'newuser',
-            email: 'newuser@example.com',
-          },
-          accessToken: 'login-access-token',
-          refreshToken: 'login-refresh-token',
-          expiresIn: 3600,
-        },
+      const mockLoginResponse = {success: true,data: {user: {id: 'user-123',username: 'newuser',email: 'newuser@example.com';
+          },accessToken: 'login-access-token',refreshToken: 'login-refresh-token',expiresIn: 3600;
+        };
       };
 
       // Mock user profile response
-      const mockUserProfileResponse = {
-        success: true,
-        data: {
-          id: 'user-123',
-          username: 'newuser',
-          email: 'newuser@example.com',
-          profile: {
-            name: 'New User',
-            age: 25,
-            gender: 'male',
-          },
-          preferences: {
-            language: 'zh-CN',
-            timezone: 'Asia/Shanghai',
-          },
-        },
+      const mockUserProfileResponse = {success: true,data: {id: 'user-123',username: 'newuser',email: 'newuser@example.com',profile: {name: 'New User',age: 25,gender: 'male';
+          },preferences: {language: 'zh-CN',timezone: 'Asia/Shanghai';
+          };
+        };
       };
 
       // Setup API mocks
@@ -93,11 +64,7 @@ describe('End-to-End User Authentication Flow', () => {
         .mockResolvedValueOnce({ success: true }); // Logout
 
       // Step 1: User Registration
-      const registerResult = await authService.register({
-        username: 'newuser',
-        email: 'newuser@example.com',
-        password: 'password123',
-        phone: '+86 138 0013 8000',
+      const registerResult = await authService.register({username: 'newuser',email: 'newuser@example.com',password: 'password123',phone: '+86 138 0013 8000';
       });
 
       expect(registerResult).toEqual(mockRegisterResponse.data);
@@ -108,15 +75,12 @@ describe('End-to-End User Authentication Flow', () => {
           username: 'newuser',
           email: 'newuser@example.com',
           password: 'password123',
-          phone: '+86 138 0013 8000',
-        }),
+          phone: '+86 138 0013 8000'
+        });
       });
 
       // Step 2: User Login
-      const loginResult = await authService.login({
-        email: 'newuser@example.com',
-        password: 'password123',
-        rememberMe: true,
+      const loginResult = await authService.login({email: 'newuser@example.com',password: 'password123',rememberMe: true;
       });
 
       expect(loginResult).toEqual(mockLoginResponse.data);
@@ -126,8 +90,8 @@ describe('End-to-End User Authentication Flow', () => {
         data: expect.objectContaining({
           email: 'newuser@example.com',
           password: 'password123',
-          rememberMe: true,
-        }),
+          rememberMe: true
+        });
       });
 
       // Step 3: Get User Profile
@@ -138,7 +102,7 @@ describe('End-to-End User Authentication Flow', () => {
       await userService.updateLastActive();
       expect(mockRequest).toHaveBeenCalledWith({
         url: '/users/me/last-active',
-        method: 'PUT',
+        method: 'PUT'
       });
 
       // Step 5: Check Authentication Status
@@ -149,60 +113,29 @@ describe('End-to-End User Authentication Flow', () => {
       await authService.logout();
       expect(mockRequest).toHaveBeenCalledWith({
         url: '/auth/logout',
-        method: 'POST',
+        method: 'POST'
       });
     });
 
     it('should handle user profile management flow', async () => {
       // Mock login first
-      const mockLoginResponse = {
-        success: true,
-        data: {
-          user: { id: 'user-123', username: 'testuser', email: 'test@example.com' },
-          accessToken: 'access-token',
-          refreshToken: 'refresh-token',
-          expiresIn: 3600,
-        },
+      const mockLoginResponse = {success: true,data: {user: { id: 'user-123', username: 'testuser', email: 'test@example.com' },accessToken: 'access-token',refreshToken: 'refresh-token',expiresIn: 3600;
+        };
       };
 
       // Mock profile update responses
-      const mockUpdateProfileResponse = {
-        success: true,
-        data: {
-          id: 'user-123',
-          username: 'updateduser',
-          email: 'test@example.com',
-          phone: '+86 138 0013 8000',
-          profile: {
-            name: 'Updated User',
-            age: 30,
-            gender: 'female',
-          },
-        },
+      const mockUpdateProfileResponse = {success: true,data: {id: 'user-123',username: 'updateduser',email: 'test@example.com',phone: '+86 138 0013 8000',profile: {name: 'Updated User',age: 30,gender: 'female';
+          };
+        };
       };
 
-      const mockPreferencesResponse = {
-        success: true,
-        data: {
-          language: 'en-US',
-          timezone: 'America/New_York',
-          notifications: {
-            push: true,
-            email: false,
-            sms: true,
-          },
-        },
+      const mockPreferencesResponse = {success: true,data: {language: 'en-US',timezone: 'America/New_York',notifications: {push: true,email: false,sms: true;
+          };
+        };
       };
 
-      const mockHealthDataResponse = {
-        success: true,
-        data: {
-          id: 'health-record-123',
-          heartRate: 75,
-          bloodPressure: { systolic: 120, diastolic: 80 },
-          steps: 10000,
-          timestamp: new Date().toISOString(),
-        },
+      const mockHealthDataResponse = {success: true,data: {id: 'health-record-123',heartRate: 75,bloodPressure: { systolic: 120, diastolic: 80 },steps: 10000,timestamp: new Date().toISOString();
+        };
       };
 
       const mockRequest = jest.spyOn(apiClient, 'request');
@@ -215,18 +148,12 @@ describe('End-to-End User Authentication Flow', () => {
       // Step 1: Login
       await authService.login({
         email: 'test@example.com',
-        password: 'password123',
+        password: 'password123'
       });
 
       // Step 2: Update Profile
-      const updatedProfile = await userService.updateUser({
-        username: 'updateduser',
-        phone: '+86 138 0013 8000',
-        profile: {
-          name: 'Updated User',
-          age: 30,
-          gender: 'female',
-        },
+      const updatedProfile = await userService.updateUser({username: 'updateduser',phone: '+86 138 0013 8000',profile: {name: 'Updated User',age: 30,gender: 'female';
+        };
       });
 
       expect(updatedProfile).toEqual(mockUpdateProfileResponse.data);
@@ -235,28 +162,19 @@ describe('End-to-End User Authentication Flow', () => {
         method: 'PUT',
         data: expect.objectContaining({
           username: 'updateduser',
-          phone: '+86 138 0013 8000',
-        }),
+          phone: '+86 138 0013 8000'
+        });
       });
 
       // Step 3: Update Preferences
-      const preferences = await userService.updateUserPreferences({
-        language: 'en-US',
-        timezone: 'America/New_York',
-        notifications: {
-          push: true,
-          email: false,
-          sms: true,
-        },
+      const preferences = await userService.updateUserPreferences({language: 'en-US',timezone: 'America/New_York',notifications: {push: true,email: false,sms: true;
+        };
       });
 
       expect(preferences).toEqual(mockPreferencesResponse.data);
 
       // Step 4: Sync Health Data
-      const healthData = await userService.syncHealthData({
-        heartRate: 75,
-        bloodPressure: { systolic: 120, diastolic: 80 },
-        steps: 10000,
+      const healthData = await userService.syncHealthData({heartRate: 75,bloodPressure: { systolic: 120, diastolic: 80 },steps: 10000;
       });
 
       expect(healthData).toEqual(mockHealthDataResponse.data);
@@ -270,15 +188,15 @@ describe('End-to-End User Authentication Flow', () => {
         success: false,
         error: {
           code: 'INVALID_CREDENTIALS',
-          message: '邮箱或密码错误',
-        },
+          message: '邮箱或密码错误'
+        }
       });
 
       await expect(
         authService.login({
           email: 'wrong@example.com',
-          password: 'wrongpassword',
-        })
+          password: 'wrongpassword'
+        });
       ).rejects.toThrow('邮箱或密码错误');
 
       // Test network error
@@ -287,8 +205,8 @@ describe('End-to-End User Authentication Flow', () => {
       await expect(
         authService.login({
           email: 'test@example.com',
-          password: 'password123',
-        })
+          password: 'password123'
+        });
       ).rejects.toThrow('Network Error');
 
       // Test unauthorized error
@@ -296,37 +214,27 @@ describe('End-to-End User Authentication Flow', () => {
         success: false,
         error: {
           code: 'UNAUTHORIZED',
-          message: '认证已过期，请重新登录',
-        },
+          message: '认证已过期，请重新登录'
+        }
       });
 
       await expect(userService.getCurrentUser()).rejects.toThrow('认证已过期，请重新登录');
     });
 
     it('should handle token refresh flow', async () => {
-      const mockRefreshResponse = {
-        success: true,
-        data: {
-          accessToken: 'new-access-token',
-          refreshToken: 'new-refresh-token',
-          expiresIn: 3600,
-        },
+      const mockRefreshResponse = {success: true,data: {accessToken: 'new-access-token',refreshToken: 'new-refresh-token',expiresIn: 3600;
+        };
       };
 
-      const mockUserResponse = {
-        success: true,
-        data: {
-          id: 'user-123',
-          username: 'testuser',
-          email: 'test@example.com',
-        },
+      const mockUserResponse = {success: true,data: {id: 'user-123',username: 'testuser',email: 'test@example.com';
+        };
       };
 
       const mockRequest = jest.spyOn(apiClient, 'request');
       mockRequest
         .mockResolvedValueOnce({
           success: false,
-          error: { code: 'TOKEN_EXPIRED', message: 'Token expired' },
+          error: { code: 'TOKEN_EXPIRED', message: 'Token expired' }
         }) // First request fails
         .mockResolvedValueOnce(mockRefreshResponse) // Refresh token
         .mockResolvedValueOnce(mockUserResponse); // Retry original request
@@ -338,39 +246,22 @@ describe('End-to-End User Authentication Flow', () => {
       // Verify refresh token was called
       expect(mockRequest).toHaveBeenCalledWith({
         url: '/auth/refresh',
-        method: 'POST',
+        method: 'POST'
       });
     });
   });
 
   describe('Device Management Flow', () => {
     it('should handle device registration and management', async () => {
-      const mockLoginResponse = {
-        success: true,
-        data: {
-          user: { id: 'user-123', username: 'testuser', email: 'test@example.com' },
-          accessToken: 'access-token',
-          refreshToken: 'refresh-token',
-          expiresIn: 3600,
-        },
+      const mockLoginResponse = {success: true,data: {user: { id: 'user-123', username: 'testuser', email: 'test@example.com' },accessToken: 'access-token',refreshToken: 'refresh-token',expiresIn: 3600;
+        };
       };
 
-      const mockDeviceResponse = {
-        success: true,
-        data: {
-          id: 'device-123',
-          name: 'iPhone 13',
-          type: 'mobile',
-          os: 'iOS',
-          version: '15.0',
-          isActive: true,
-          lastSeen: new Date().toISOString(),
-        },
+      const mockDeviceResponse = {success: true,data: {id: 'device-123',name: 'iPhone 13',type: 'mobile',os: 'iOS',version: '15.0',isActive: true,lastSeen: new Date().toISOString();
+        };
       };
 
-      const mockDevicesListResponse = {
-        success: true,
-        data: [mockDeviceResponse.data],
+      const mockDevicesListResponse = {success: true,data: [mockDeviceResponse.data];
       };
 
       const mockRequest = jest.spyOn(apiClient, 'request');
@@ -383,15 +274,11 @@ describe('End-to-End User Authentication Flow', () => {
       // Login first
       await authService.login({
         email: 'test@example.com',
-        password: 'password123',
+        password: 'password123'
       });
 
       // Add device
-      const device = await userService.addDevice({
-        name: 'iPhone 13',
-        type: 'mobile',
-        os: 'iOS',
-        version: '15.0',
+      const device = await userService.addDevice({name: 'iPhone 13',type: 'mobile',os: 'iOS',version: '15.0';
       });
 
       expect(device).toEqual(mockDeviceResponse.data);
@@ -404,8 +291,8 @@ describe('End-to-End User Authentication Flow', () => {
       await userService.removeDevice('device-123');
       expect(mockRequest).toHaveBeenCalledWith({
         url: '/users/me/devices/device-123',
-        method: 'DELETE',
+        method: 'DELETE'
       });
     });
   });
-}); 
+});

@@ -1,15 +1,20 @@
+"""
+test_performance - 索克生活项目模块
+"""
+
+from datetime import datetime, timedelta
+from unittest.mock import Mock, patch, AsyncMock
+import asyncio
+import json
+import pytest
+import time
+
 #!/usr/bin/env python3
 """
 性能测试
 测试老克智能体的性能指标
 """
 
-import pytest
-import asyncio
-import time
-from unittest.mock import Mock, patch, AsyncMock
-from datetime import datetime, timedelta
-import json
 
 class TestPerformance:
     """性能测试类"""

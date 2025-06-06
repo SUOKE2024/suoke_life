@@ -17,7 +17,7 @@ export interface MonitoringConfig {
   reporting: {
     interval: number;
     destination: string;
-    format: "json" | "csv" | "prometheus";
+    format: 'json' | 'csv' | 'prometheus';
   };
 }
 
@@ -79,31 +79,20 @@ export class PerformanceMonitor {
         average: 0,
         p50: 0,
         p95: 0,
-        p99: 0,
+        p99: 0
       },
       throughput: {
         requestsPerSecond: 0,
-        requestsPerMinute: 0,
+        requestsPerMinute: 0
       },
       accuracy: {
         overallAccuracy: 0,
         diagnosisAccuracy: {
-          looking: 0,
-          listening: 0,
-          inquiry: 0,
-          palpation: 0,
-          calculation: 0,
-        },
-      },
-      resourceUsage: {
-        cpuUsage: 0,
-        memoryUsage: 0,
-        diskUsage: 0,
-      },
-      errorRate: {
-        total: 0,
-        byType: {},
-      },
+          looking: 0,listening: 0,inquiry: 0,palpation: 0,calculation: 0;
+        };
+      },resourceUsage: {cpuUsage: 0,memoryUsage: 0,diskUsage: 0;
+      },errorRate: {total: 0,byType: {};
+      };
     };
   }
 
@@ -115,9 +104,9 @@ export class PerformanceMonitor {
 
     this.events.push({
       timestamp: Date.now(),
-      type: "response_time",
+      type: 'response_time',
       value: duration,
-      metadata: { operation },
+      metadata: { operation }
     });
 
     this.updateResponseTimeMetrics();
@@ -131,9 +120,9 @@ export class PerformanceMonitor {
 
     this.events.push({
       timestamp: Date.now(),
-      type: "accuracy",
+      type: 'accuracy',
       value: accuracy,
-      metadata: { diagnosisType },
+      metadata: { diagnosisType }
     });
 
     this.updateAccuracyMetrics();
@@ -147,9 +136,9 @@ export class PerformanceMonitor {
 
     this.events.push({
       timestamp: Date.now(),
-      type: "error",
+      type: 'error',
       value: 1,
-      metadata: { errorType, details },
+      metadata: { errorType, details }
     });
 
     this.updateErrorMetrics();
@@ -164,7 +153,7 @@ export class PerformanceMonitor {
     this.metrics.resourceUsage = {
       cpuUsage: cpu,
       memoryUsage: memory,
-      diskUsage: disk,
+      diskUsage: disk
     };
   }
 
@@ -176,18 +165,8 @@ export class PerformanceMonitor {
   // 获取指标报告
   public generateReport(): object {
     const uptime = Date.now() - this.startTime;
-    return {
-      timestamp: Date.now(),
-      uptime,
-      metrics: this.metrics,
-      eventCount: this.events.length,
-      summary: {
-        totalRequests: this.events.filter((e) => e.type === "response_time")
-          .length,
-        totalErrors: this.events.filter((e) => e.type === "error").length,
-        averageResponseTime: this.metrics.responseTime.average,
-        overallAccuracy: this.metrics.accuracy.overallAccuracy,
-      },
+    return {timestamp: Date.now(),uptime,metrics: this.metrics,eventCount: this.events.length,summary: {totalRequests: this.events.filter(e => e.type === 'response_time').length,totalErrors: this.events.filter(e => e.type === 'error').length,averageResponseTime: this.metrics.responseTime.average,overallAccuracy: this.metrics.accuracy.overallAccuracy;
+      };
     };
   }
 
@@ -195,7 +174,7 @@ export class PerformanceMonitor {
   public cleanup(maxAge: number = 3600000): void {
     // 默认1小时
     const cutoff = Date.now() - maxAge;
-    this.events = this.events.filter((event) => event.timestamp > cutoff);
+    this.events = this.events.filter(event => event.timestamp > cutoff);
   }
 
   // 重置指标
@@ -207,9 +186,9 @@ export class PerformanceMonitor {
 
   // 私有方法
   private updateResponseTimeMetrics(): void {
-    const responseTimes = this.events
-      .filter((e) => e.type === "response_time")
-      .map((e) => e.value)
+    const responseTimes = this.events;
+      .filter(e => e.type === 'response_time');
+      .map(e => e.value);
       .sort((a, b) => a - b);
 
     if (responseTimes.length === 0) {
@@ -224,62 +203,53 @@ export class PerformanceMonitor {
     this.metrics.responseTime.p99 = this.percentile(responseTimes, 0.99);
 
     // 计算吞吐量
-    const recentEvents = this.events.filter(
-      (e) => e.type === "response_time" && e.timestamp > Date.now() - 60000 // 最近1分钟
+    const recentEvents = this.events.filter(;
+      e => e.type === 'response_time' && e.timestamp > Date.now() - 60000 // 最近1分钟;
     );
     this.metrics.throughput.requestsPerMinute = recentEvents.length;
     this.metrics.throughput.requestsPerSecond = recentEvents.length / 60;
   }
 
   private updateAccuracyMetrics(): void {
-    const accuracyEvents = this.events.filter((e) => e.type === "accuracy");
+    const accuracyEvents = this.events.filter(e => e.type === 'accuracy');
     if (accuracyEvents.length === 0) {
       return;
     }
 
     // 计算总体准确率
     this.metrics.accuracy.overallAccuracy =
-      accuracyEvents.reduce((sum, event) => sum + event.value, 0) /
-      accuracyEvents.length;
+      accuracyEvents.reduce((sum, event) => sum + event.value, 0) / accuracyEvents.length;
 
     // 计算各诊法准确率
-    const diagnosisTypes = [
-      "looking",
-      "listening",
-      "inquiry",
-      "palpation",
-      "calculation",
-    ];
+    const diagnosisTypes = ['looking', 'listening', 'inquiry', 'palpation', 'calculation'];
 
     for (const type of diagnosisTypes) {
-      const typeEvents = accuracyEvents.filter(
-        (e) => e.metadata?.diagnosisType === type
-      );
+      const typeEvents = accuracyEvents.filter(e => e.metadata?.diagnosisType === type);
       if (typeEvents.length > 0) {
         this.metrics.accuracy.diagnosisAccuracy[
           type as keyof typeof this.metrics.accuracy.diagnosisAccuracy
-        ] =
-          typeEvents.reduce((sum, event) => sum + event.value, 0) /
-          typeEvents.length;
+        ] = typeEvents.reduce((sum, event) => sum + event.value, 0) / typeEvents.length;
       }
     }
   }
 
   private updateErrorMetrics(): void {
-    const errorEvents = this.events.filter((e) => e.type === "error");
+    const errorEvents = this.events.filter(e => e.type === 'error');
     this.metrics.errorRate.total = errorEvents.length;
 
     // 按错误类型统计
     const errorByType: Record<string, number> = {};
     for (const event of errorEvents) {
-      const errorType = event.metadata?.errorType || "unknown";
+      const errorType = event.metadata?.errorType || 'unknown';
       errorByType[errorType] = (errorByType[errorType] || 0) + 1;
     }
     this.metrics.errorRate.byType = errorByType;
   }
 
   private percentile(values: number[], p: number): number {
-    if (values.length === 0) {return 0;}
+    if (values.length === 0) {
+      return 0;
+    }
     const index = Math.ceil(values.length * p) - 1;
     return values[Math.max(0, index)];
   }

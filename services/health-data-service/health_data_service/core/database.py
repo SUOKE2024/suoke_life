@@ -1,3 +1,19 @@
+"""
+database - 索克生活项目模块
+"""
+
+from .config import get_settings
+from datetime import datetime
+from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, DateTime, JSON, Float, Boolean, Text
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
+from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.pool import QueuePool, NullPool
+from typing import AsyncGenerator, Optional, Any, Dict, List
+import asyncio
+import contextlib
+import logging
+
 #!/usr/bin/env python3
 """
 数据库连接和操作模块
@@ -5,18 +21,7 @@
 提供数据库连接池、会话管理、事务处理等功能。
 """
 
-import asyncio
-import contextlib
-from typing import AsyncGenerator, Optional, Any, Dict, List
-from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, DateTime, JSON, Float, Boolean, Text
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-from sqlalchemy.orm import declarative_base
-from sqlalchemy.orm import sessionmaker, Session
-from sqlalchemy.pool import QueuePool, NullPool
-from datetime import datetime
-import logging
 
-from .config import get_settings
 
 logger = logging.getLogger(__name__)
 
@@ -199,7 +204,8 @@ class DatabaseManager:
                 await session.close()
     
     @contextlib.contextmanager
-    def get_sync_session(self):
+        @cache(timeout=300)  # 5分钟缓存
+def get_sync_session(self):
         """获取同步数据库会话"""
         if not self._sync_session_factory:
             # 同步初始化

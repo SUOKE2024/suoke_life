@@ -1,23 +1,29 @@
 """
+conftest - 索克生活项目模块
+"""
+
+    from human_review_service.core.database import get_session_dependency
+from fastapi.testclient import TestClient
+from human_review_service.api.main import create_app
+from human_review_service.core.config import settings
+from human_review_service.core.models import Base
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import sessionmaker
+from typing import AsyncGenerator
+import asyncio
+import os
+import pytest
+import pytest_asyncio
+
+"""
 pytest配置文件
 Pytest Configuration
 
 定义全局测试fixtures和配置
 """
 
-import asyncio
-import os
-from typing import AsyncGenerator
 
-import pytest
-import pytest_asyncio
-from fastapi.testclient import TestClient
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker
 
-from human_review_service.api.main import create_app
-from human_review_service.core.config import settings
-from human_review_service.core.models import Base
 
 
 @pytest.fixture(scope="session")
@@ -82,7 +88,6 @@ def test_client(test_session_factory):
                 await session.close()
 
     # 导入正确的依赖函数
-    from human_review_service.core.database import get_session_dependency
 
     app.dependency_overrides[get_session_dependency] = override_get_session_dependency
 

@@ -1,20 +1,25 @@
 """
+nutrition_service - 索克生活项目模块
+"""
+
+from ..models.nutrition import (
+from .base_service import BaseService
+from datetime import datetime
+from typing import Any
+
+"""
 营养服务
 
 提供营养分析、膳食建议等功能
 """
 
-from datetime import datetime
-from typing import Any
 
-from ..models.nutrition import (
     DietPlan,
     FoodItem,
     MacroNutrients,
     MicroNutrients,
     NutritionAnalysis,
 )
-from .base_service import BaseService
 
 
 class NutritionService(BaseService):

@@ -1,22 +1,27 @@
+"""
+maze_repository - 索克生活项目模块
+"""
+
+    import aiosqlite
+from datetime import datetime, timedelta
+from internal.model.maze import Maze
+from pathlib import Path
+from pkg.utils.metrics import record_db_operation
+import logging
+import os
+
 #!/usr/bin/env python3
 
 """
 迷宫存储库 - 数据库优化版本
 """
 
-from datetime import datetime, timedelta
-import logging
-import os
-from pathlib import Path
 
 try:
-    import aiosqlite
     SQLITE_AVAILABLE = True
 except ImportError:
     SQLITE_AVAILABLE = False
 
-from internal.model.maze import Maze
-from pkg.utils.metrics import record_db_operation
 
 logger = logging.getLogger(__name__)
 
@@ -120,7 +125,8 @@ class MazeRepository:
             # 回退到内存存储
             self._mazes = {}
 
-    async def _get_db(self):
+    async     @cache(timeout=300)  # 5分钟缓存
+def _get_db(self):
         """获取数据库连接"""
         # 确保数据库目录存在
         Path(self.db_path).parent.mkdir(parents=True, exist_ok=True)

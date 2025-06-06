@@ -1,13 +1,23 @@
 """
+test_unit_simple - 索克生活项目模块
+"""
+
+    from app.core.config import get_settings
+    from app.core.logger import get_logger
+    from app.services.cache_service import CacheService
+    from app.services.knowledge_service import KnowledgeService
+    from app.services.metrics_service import MetricsService
+from app.services.cache_service import CacheService
+from app.services.knowledge_service import KnowledgeService
+from app.services.metrics_service import MetricsService
+from unittest.mock import Mock, AsyncMock
+import pytest
+
+"""
 简单的单元测试
 测试核心功能而不依赖复杂的应用启动
 """
-import pytest
-from unittest.mock import Mock, AsyncMock
 
-from app.services.knowledge_service import KnowledgeService
-from app.services.cache_service import CacheService
-from app.services.metrics_service import MetricsService
 
 def test_knowledge_service_init():
     """测试知识服务初始化"""
@@ -80,13 +90,8 @@ async def test_cache_service_basic_operations():
 def test_import_statements():
     """测试重要模块的导入"""
     # 测试核心模块导入
-    from app.core.config import get_settings
-    from app.core.logger import get_logger
     
     # 测试服务模块导入
-    from app.services.knowledge_service import KnowledgeService
-    from app.services.cache_service import CacheService
-    from app.services.metrics_service import MetricsService
     
     # 测试API模块导入
     
@@ -95,7 +100,6 @@ def test_import_statements():
 
 def test_config_loading():
     """测试配置加载"""
-    from app.core.config import get_settings
     
     settings = get_settings()
     
@@ -107,7 +111,6 @@ def test_config_loading():
 
 def test_logger_creation():
     """测试日志器创建"""
-    from app.core.logger import get_logger
     
     logger = get_logger()
     

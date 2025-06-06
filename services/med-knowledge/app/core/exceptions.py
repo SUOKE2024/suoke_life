@@ -1,9 +1,14 @@
 """
+exceptions - 索克生活项目模块
+"""
+
+from typing import Any
+
+"""
 自定义异常类
 提供医学知识服务的专用异常处理
 """
 
-from typing import Any
 
 
 class MedKnowledgeException(Exception):

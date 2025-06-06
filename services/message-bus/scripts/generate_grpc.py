@@ -1,11 +1,16 @@
+"""
+generate_grpc - 索克生活项目模块
+"""
+
+from pathlib import Path
+import os
+import subprocess
+import sys
+
 #!/usr/bin/env python3
 """
 生成gRPC代码的脚本
 """
-import os
-import sys
-import subprocess
-from pathlib import Path
 
 # 获取项目根目录
 project_root = Path(__file__).parent.parent

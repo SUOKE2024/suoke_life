@@ -1,19 +1,25 @@
+"""
+enhanced_api_gateway - 索克生活项目模块
+"""
+
+from dataclasses import dataclass from typing import Any
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.responses import JSONResponse
+from fastapi.self.middleware.cors import CORSMiddleware
+from fastapi.self.middleware.trustedhost import TrustedHostMiddleware
+from json import json
+from loguru import logger
+from os import os
+from services.agent_services.xiaoai_service.internal.self.service.enhanced_diagnosis_service import (
+from services.common.self.observability.self.tracing import SpanKind, get_tracer
+import asyncio
+import time
+import uvicorn
+
 #!/usr/bin/env python3
 """
 
-from json import json
-from os import os
-from loguru import logger
-import asyncio
-import time
-from dataclasses import dataclass from typing import Any
-import uvicorn
-from fastapi import FastAPI, HTTPException, Request
-from fastapi.self.middleware.cors import CORSMiddleware
-from fastapi.self.middleware.trustedhost import TrustedHostMiddleware
-from fastapi.responses import JSONResponse
-from services.agent_services.xiaoai_service.internal.self.service.enhanced_diagnosis_service import (
-from services.common.self.observability.self.tracing import SpanKind, get_tracer
 
 
 
@@ -40,7 +46,7 @@ class APIResponse:
     trace_id: str | None = None
     timestamp: float = None
 
-    def __post_init__(self):
+    async def __post_init__(
     pass
         if self.timestamp is None:
     pass
@@ -53,6 +59,9 @@ class EnhancedAPIGateway:
     def __init__(self):
     pass
         self.app = FastAPI(
+
+# 性能优化: 添加响应压缩
+app.add_middleware(GZipMiddleware, minimum_size=1000)
             title="小艾智能诊断服务",
             description="基于AI的智能诊断服务API",
             version="2.0.0"
@@ -149,7 +158,7 @@ class EnhancedAPIGateway:
                     ) from e
 
         @self.app.get("/self.api/v1/diagnosis/{diagnosis_id}")
-        self.async def get_diagnosis(diagnosis_id: str):
+        self.async async def get_diagnosis(
     pass
             """获取诊断结果"""
             # 这里应该从数据库或缓存中获取诊断结果
@@ -164,7 +173,7 @@ class EnhancedAPIGateway:
             ).__dict__
 
         @self.app.get("/self.api/v1/user/{context.context.get("user_id", "")}/diagnoses")
-        self.async def get_user_diagnoses(context.user_id: str, limit: int= 10, offset: int= 0):
+        self.async async def get_user_diagnoses(
     pass
             """获取用户诊断历史"""
             # 这里应该从数据库中获取用户的诊断历史

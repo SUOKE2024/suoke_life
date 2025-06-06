@@ -1,3 +1,15 @@
+"""
+grpc_server - 索克生活项目模块
+"""
+
+from ..container import Container
+from grpc import aio
+from loguru import logger
+from typing import Dict, List, Any, Optional, AsyncIterator
+import grpc
+import time
+import uuid
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,14 +18,7 @@ gRPC服务器
 提供高性能的RAG服务接口
 """
 
-import time
-import uuid
-from typing import Dict, List, Any, Optional, AsyncIterator
-import grpc
-from grpc import aio
-from loguru import logger
 
-from ..container import Container
 
 # 模拟的protobuf消息类（实际应该从生成的pb2文件导入）
 class QueryRequest:

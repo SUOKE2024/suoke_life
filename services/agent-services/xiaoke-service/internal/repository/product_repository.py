@@ -1,3 +1,15 @@
+"""
+product_repository - 索克生活项目模块
+"""
+
+from datetime import datetime
+from pkg.utils.config_loader import get_config
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import sessionmaker
+from typing import Any
+import logging
+import uuid
+
 #!/usr/bin/env python
 
 """
@@ -5,15 +17,8 @@
 负责农产品、食品和健康产品数据的存储和检索
 """
 
-import logging
-import uuid
-from datetime import datetime
-from typing import Any
 
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker
 
-from pkg.utils.config_loader import get_config
 
 logger = logging.getLogger(__name__)
 

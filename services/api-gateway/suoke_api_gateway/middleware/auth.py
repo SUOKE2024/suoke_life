@@ -1,18 +1,23 @@
 """
+auth - 索克生活项目模块
+"""
+
+from ..core.config import get_settings
+from ..core.logging import get_logger
+from fastapi import HTTPException, Request, Response, status
+from jose import JWTError, jwt
+from starlette.middleware.base import BaseHTTPMiddleware
+from typing import Optional
+import time
+
+"""
 认证中间件
 
 处理 JWT 令牌验证、用户身份认证等功能。
 """
 
-import time
-from typing import Optional
 
-from fastapi import HTTPException, Request, Response, status
-from jose import JWTError, jwt
-from starlette.middleware.base import BaseHTTPMiddleware
 
-from ..core.config import get_settings
-from ..core.logging import get_logger
 
 logger = get_logger(__name__)
 

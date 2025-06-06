@@ -1,16 +1,21 @@
-"""Server startup script for look service."""
-
-import asyncio
-import signal
-import sys
-from typing import Any
-
-import uvicorn
-from uvicorn.config import LOGGING_CONFIG
+"""
+server - 索克生活项目模块
+"""
 
 from ..api.app import create_app
 from ..core.config import settings
 from ..core.logging import get_logger
+from typing import Any
+from uvicorn.config import LOGGING_CONFIG
+import asyncio
+import signal
+import sys
+import uvicorn
+
+"""Server startup script for look service."""
+
+
+
 
 logger = get_logger(__name__)
 

@@ -1,3 +1,16 @@
+"""
+intelligent_mental_health_engine - 索克生活项目模块
+"""
+
+from ..observability.metrics import MetricsCollector
+from ..observability.tracing import trace_operation, SpanKind
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from loguru import logger
+from typing import Dict, List, Any, Optional, Tuple, Union, Set, Callable
+import warnings
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,16 +19,8 @@
 结合现代心理学理论和中医情志理论，为用户提供个性化的心理健康评估、情绪管理和心理干预建议
 """
 
-from typing import Dict, List, Any, Optional, Tuple, Union, Set, Callable
-from dataclasses import dataclass, field
-from enum import Enum
-from datetime import datetime, timedelta
-from loguru import logger
-import warnings
 warnings.filterwarnings('ignore')
 
-from ..observability.metrics import MetricsCollector
-from ..observability.tracing import trace_operation, SpanKind
 
 class MentalHealthCondition(str, Enum):
     """心理健康状况"""

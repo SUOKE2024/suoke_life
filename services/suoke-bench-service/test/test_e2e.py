@@ -1,13 +1,18 @@
-"""端到端测试"""
+"""
+test_e2e - 索克生活项目模块
+"""
 
+from cmd.server.main import app
+from fastapi.testclient import TestClient
+from unittest.mock import patch, Mock
 import asyncio
 import json
 import pytest
 import time
-from fastapi.testclient import TestClient
-from unittest.mock import patch, Mock
 
-from cmd.server.main import app
+"""端到端测试"""
+
+
 
 
 @pytest.fixture

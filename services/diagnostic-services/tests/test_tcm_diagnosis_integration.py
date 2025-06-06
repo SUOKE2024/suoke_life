@@ -1,19 +1,27 @@
 """
+test_tcm_diagnosis_integration - 索克生活项目模块
+"""
+
+        from palpation_service.internal.sensor_interface import PREDEFINED_SENSOR_CONFIGS
+        import time
+from calculation_service.core.algorithms.tongue_pulse_analysis import (
+from datetime import datetime
+from palpation_service.internal.sensor_interface import (
+import asyncio
+import cv2
+import os
+import pytest
+import sys
+
+"""
 中医诊断系统集成测试
 验证舌脉象分析、传感器接口和知识图谱推理的整合功能
 """
 
-import pytest
-import cv2
-import asyncio
-from datetime import datetime
-import os
 
 # 导入测试模块
-import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from calculation_service.core.algorithms.tongue_pulse_analysis import (
     TonguePulseCalculationEngine,
     TongueImageAnalyzer,
     PulseWaveformAnalyzer,
@@ -22,7 +30,6 @@ from calculation_service.core.algorithms.tongue_pulse_analysis import (
     PulseType
 )
 
-from palpation_service.internal.sensor_interface import (
     SensorManager,
     SensorConfig,
     SensorConnectionType,
@@ -331,7 +338,6 @@ class TestTCMDiagnosisIntegration:
         calculation_engine = env['calculation_engine']
         test_data = env['test_data']
         
-        import time
         
         # 舌象分析性能测试
         start_time = time.time()
@@ -374,7 +380,6 @@ class TestTCMDiagnosisIntegration:
         sensor_manager = env['sensor_manager']
         
         # 测试预定义配置
-        from palpation_service.internal.sensor_interface import PREDEFINED_SENSOR_CONFIGS
         
         assert len(PREDEFINED_SENSOR_CONFIGS) > 0
         

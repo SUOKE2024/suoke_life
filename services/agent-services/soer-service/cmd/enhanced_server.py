@@ -1,29 +1,12 @@
-#!/usr/bin/env python3
 """
-增强的索儿服务启动器
-集成依赖注入、配置管理、连接池等优化功能
+enhanced_server - 索克生活项目模块
 """
-import argparse
-import asyncio
-import logging
-import os
-import signal
-import sys
+
+            from grpc_reflection.v1alpha import reflection
+from api.grpc import soer_service_pb2_grpc
 from concurrent import futures
 from contextlib import asynccontextmanager
-
-import grpc
-import uvicorn
 from fastapi import FastAPI
-
-# 确保Python能够找到模块
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-# 导入基础设施组件
-# 导入API层
-from api.grpc import soer_service_pb2_grpc
-
-# 导入业务组件
 from internal.agent.enhanced_agent_manager import EnhancedAgentManager
 from internal.agent.model_factory import ModelFactory
 from internal.delivery.grpc.enhanced_soer_service_impl import EnhancedSoerServiceImpl
@@ -32,17 +15,40 @@ from internal.repository.knowledge_repository import KnowledgeRepository
 from internal.repository.session_repository import SessionRepository
 from pkg.middleware.middleware import create_middleware_stack
 from pkg.utils.connection_pool import (
+from pkg.utils.dependency_injection import (
+from pkg.utils.enhanced_config import get_config, setup_config_manager
+from pkg.utils.error_handling import ErrorHandler, setup_error_handler
+import argparse
+import asyncio
+import grpc
+import logging
+import os
+import signal
+import sys
+import uvicorn
+
+#!/usr/bin/env python3
+"""
+增强的索儿服务启动器
+集成依赖注入、配置管理、连接池等优化功能
+"""
+
+
+# 确保Python能够找到模块
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+# 导入基础设施组件
+# 导入API层
+
+# 导入业务组件
     ConnectionPoolManager,
     DatabaseConnectionPool,
     RedisConnectionPool,
     setup_pool_manager,
 )
-from pkg.utils.dependency_injection import (
     DependencyContainer,
     setup_container,
 )
-from pkg.utils.enhanced_config import get_config, setup_config_manager
-from pkg.utils.error_handling import ErrorHandler, setup_error_handler
 
 logger = logging.getLogger(__name__)
 
@@ -209,7 +215,6 @@ class SoerServiceBootstrap:
 
         # 启用反射（开发环境）
         if grpc_config.enable_reflection:
-            from grpc_reflection.v1alpha import reflection
             reflection.enable_server_reflection(
                 soer_service_pb2_grpc.DESCRIPTOR.services_by_name.keys(),
                 self.grpc_server

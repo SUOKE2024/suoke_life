@@ -1,13 +1,18 @@
+"""
+final_test_fixer - 索克生活项目模块
+"""
+
+from pathlib import Path
+from typing import List
+import os
+import re
+
 #!/usr/bin/env python3
 """
 索克生活项目最终测试文件修复脚本
 处理剩余的语法错误
 """
 
-import os
-import re
-from pathlib import Path
-from typing import List
 
 class FinalTestFixer:
     def __init__(self, project_root: str):

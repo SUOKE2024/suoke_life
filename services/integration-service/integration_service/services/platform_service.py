@@ -1,12 +1,17 @@
 """
+platform_service - 索克生活项目模块
+"""
+
+from ..models.platform import Platform, PlatformConfig
+from .base_service import BaseService
+from sqlalchemy.orm import Session
+
+"""
 平台服务
 """
 
 
-from sqlalchemy.orm import Session
 
-from ..models.platform import Platform, PlatformConfig
-from .base_service import BaseService
 
 
 class PlatformService(BaseService[Platform]):
@@ -21,7 +26,7 @@ class PlatformService(BaseService[Platform]):
 
     async def get_enabled_platforms(self) -> list[Platform]:
         """获取启用的平台列表"""
-        return self.db.query(self.model).filter(self.model.is_enabled).all()
+        return self.db.query(self.model).filter(self.model.is_enabled).prefetch_related().all()[:1000]  # 限制查询结果数量
 
     async def get_platform_config(self, platform_id: str, config_key: str) -> PlatformConfig | None:
         """获取平台配置"""

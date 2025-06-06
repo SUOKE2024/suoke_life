@@ -1,5 +1,7 @@
+import {import { AgentType } from "../../types/agents";
+import { agentApiService } from "../../services/api/agentApiService";
+
 import React, { useState, useEffect } from "react";
-import {
   View,
   Text,
   StyleSheet,
@@ -10,8 +12,6 @@ import {
   Alert,
   Modal
 } from "react-native";
-import { AgentType } from "../../types/agents";
-import { agentApiService } from "../../services/api/agentApiService";
 
 interface AgentConfigProps {
   agentType?: AgentType;
@@ -128,26 +128,17 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
   const [editingPrompt, setEditingPrompt] = useState("");
   const [editingIndex, setEditingIndex] = useState(-1);
 
-  const agentNames = {
-    [AgentType.XIAOAI]: "小艾",
-    [AgentType.XIAOKE]: "小克",
-    [AgentType.LAOKE]: "老克",
-    [AgentType.SOER]: "索儿"
+  const agentNames = {[AgentType.XIAOAI]: "小艾",[AgentType.XIAOKE]: "小克",[AgentType.LAOKE]: "老克",[AgentType.SOER]: "索儿";
   };
 
-  const privacyLevels = {
-    low: "低 - 基础隐私保护",
-    medium: "中 - 标准隐私保护",
-    high: "高 - 严格隐私保护"
+  const privacyLevels = {low: "低 - 基础隐私保护",medium: "中 - 标准隐私保护",high: "高 - 严格隐私保护";
   };
 
   useEffect(() => {
     loadConfigurations();
-  }, []);
+  }, [])  // 检查是否需要添加依赖项;
 
-  const loadConfigurations = async () => {
-    try {
-      // 这里应该从API加载配置
+  const loadConfigurations = async () => {try {// 这里应该从API加载配置;
       // const response = await agentApiService.getConfigurations();
       // setConfigs(response.data);
     } catch (error) {
@@ -155,9 +146,7 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
     }
   };
 
-  const saveConfiguration = async (config: AgentConfiguration) => {
-    try {
-      await agentApiService.updateAgentConfig(config.agentType, config);
+  const saveConfiguration = async (config: AgentConfiguration) => {try {await agentApiService.updateAgentConfig(config.agentType, config);
       setConfigs(prev => ({
         ...prev,
         [config.agentType]: config
@@ -169,10 +158,7 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
     }
   };
 
-  const updateConfig = (field: keyof AgentConfiguration, value: any) => {
-    const updatedConfig = {
-      ...configs[selectedAgent],
-      [field]: value
+  const updateConfig = (field: keyof AgentConfiguration, value: any) => {const updatedConfig = {...configs[selectedAgent],[field]: value;
     };
     setConfigs(prev => ({
       ...prev,
@@ -180,20 +166,17 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
     }));
   };
 
-  const addCustomPrompt = () => {
-    setEditingPrompt("");
+  const addCustomPrompt = () => {setEditingPrompt("");
     setEditingIndex(-1);
     setModalVisible(true);
   };
 
-  const editCustomPrompt = (index: number) => {
-    setEditingPrompt(configs[selectedAgent].customPrompts[index]);
+  const editCustomPrompt = (index: number) => {setEditingPrompt(configs[selectedAgent].customPrompts[index]);
     setEditingIndex(index);
     setModalVisible(true);
   };
 
-  const saveCustomPrompt = () => {
-    if (!editingPrompt.trim()) return;
+  const saveCustomPrompt = () => {if (!editingPrompt.trim()) return;
 
     const prompts = [...configs[selectedAgent].customPrompts];
     if (editingIndex >= 0) {
@@ -206,17 +189,9 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
     setModalVisible(false);
   };
 
-  const deleteCustomPrompt = (index: number) => {
-    Alert.alert(
-      "确认删除",
-      "确定要删除这个自定义提示吗？",
-      [
-        { text: "取消", style: "cancel" },
-        {
-          text: "删除",
-          style: "destructive",
-          onPress: () => {
-            const prompts = configs[selectedAgent].customPrompts.filter((_, i) => i !== index);
+  const deleteCustomPrompt = (index: number) => {Alert.alert(;
+      "确认删除","确定要删除这个自定义提示吗？",[;
+        { text: "取消", style: "cancel" },{text: "删除",style: "destructive",onPress: () => {const prompts = configs[selectedAgent].customPrompts.filter((_, i) => i !== index);
             updateConfig("customPrompts", prompts);
           }
         }
@@ -231,31 +206,28 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
         {Object.values(AgentType).map((type) => (
           <TouchableOpacity
             key={type}
-            style={[
-              styles.agentButton,
-              selectedAgent === type && styles.selectedAgentButton
-            ]}
-            onPress={() => setSelectedAgent(type)}
-          >
-            <Text style={[
-              styles.agentButtonText,
-              selectedAgent === type && styles.selectedAgentButtonText
-            ]}>
-              {agentNames[type]}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-    </View>
+            style={[;
+              styles.agentButton,selectedAgent === type && styles.selectedAgentButton;
+            ]};
+            onPress={() => setSelectedAgent(type)};
+          >;
+            <Text style={[;
+              styles.agentButtonText,selectedAgent === type && styles.selectedAgentButtonText;
+            ]}>;
+              {agentNames[type]};
+            </Text>;
+          </TouchableOpacity>;
+        ))};
+      </View>;
+    </View>;
   );
 
-  const renderBasicSettings = () => {
-    const config = configs[selectedAgent];
-    
+  const renderBasicSettings = () => {const config = configs[selectedAgent];
+
     return (
       <View style={styles.settingsSection}>
         <Text style={styles.sectionTitle}>基础设置</Text>
-        
+
         <View style={styles.settingItem}>
           <Text style={styles.settingLabel}>启用智能体</Text>
           <Switch
@@ -270,23 +242,22 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
             value={config.autoResponse}
             onValueChange={(value) => updateConfig("autoResponse", value)}
           />
-        </View>
-
-        <View style={styles.settingItem}>
-          <Text style={styles.settingLabel}>学习模式</Text>
-          <Switch
-            value={config.learningMode}
-            onValueChange={(value) => updateConfig("learningMode", value)}
-          />
-        </View>
-
-        <View style={styles.settingItem}>
-          <Text style={styles.settingLabel}>回复延迟 (ms)</Text>
-          <TextInput
-            style={styles.numberInput}
-            value={config.responseDelay.toString()}
-            onChangeText={(value) => {
-              const num = parseInt(value) || 500;
+        </View>;
+;
+        <View style={styles.settingItem}>;
+          <Text style={styles.settingLabel}>学习模式</Text>;
+          <Switch;
+            value={config.learningMode};
+            onValueChange={(value) => updateConfig("learningMode", value)};
+          />;
+        </View>;
+;
+        <View style={styles.settingItem}>;
+          <Text style={styles.settingLabel}>回复延迟 (ms)</Text>;
+          <TextInput;
+            style={styles.numberInput};
+            value={config.responseDelay.toString()};
+            onChangeText={(value) => {const num = parseInt(value) || 500;
               updateConfig("responseDelay", Math.max(500, Math.min(5000, num)));
             }}
             keyboardType="numeric"
@@ -311,39 +282,35 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
     );
   };
 
-  const renderPrivacySettings = () => {
-    const config = configs[selectedAgent];
-    
+  const renderPrivacySettings = () => {const config = configs[selectedAgent];
+
     return (
       <View style={styles.settingsSection}>
         <Text style={styles.sectionTitle}>隐私设置</Text>
-        
+
         <View style={styles.privacyOptions}>
           {Object.entries(privacyLevels).map(([level, description]) => (
             <TouchableOpacity
               key={level}
-              style={[
-                styles.privacyOption,
-                config.privacyLevel === level && styles.selectedPrivacyOption
-              ]}
-              onPress={() => updateConfig("privacyLevel", level)}
-            >
-              <Text style={[
-                styles.privacyOptionText,
-                config.privacyLevel === level && styles.selectedPrivacyOptionText
-              ]}>
-                {description}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
+              style={[;
+                styles.privacyOption,config.privacyLevel === level && styles.selectedPrivacyOption;
+              ]};
+              onPress={() => updateConfig("privacyLevel", level)};
+            >;
+              <Text style={[;
+                styles.privacyOptionText,config.privacyLevel === level && styles.selectedPrivacyOptionText;
+              ]}>;
+                {description};
+              </Text>;
+            </TouchableOpacity>;
+          ))};
+        </View>;
+      </View>;
     );
   };
 
-  const renderCustomPrompts = () => {
-    const config = configs[selectedAgent];
-    
+  const renderCustomPrompts = () => {const config = configs[selectedAgent];
+
     return (
       <View style={styles.settingsSection}>
         <View style={styles.sectionHeader}>
@@ -352,39 +319,38 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
             <Text style={styles.addButtonText}>+ 添加</Text>
           </TouchableOpacity>
         </View>
-        
+
         {config.customPrompts.map((prompt, index) => (
           <View key={index} style={styles.promptItem}>
             <Text style={styles.promptText} numberOfLines={2}>
               {prompt}
             </Text>
             <View style={styles.promptActions}>
-              <TouchableOpacity
-                style={styles.editButton}
-                onPress={() => editCustomPrompt(index)}
-              >
-                <Text style={styles.editButtonText}>编辑</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.deleteButton}
-                onPress={() => deleteCustomPrompt(index)}
-              >
-                <Text style={styles.deleteButtonText}>删除</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        ))}
-      </View>
+              <TouchableOpacity;
+                style={styles.editButton};
+                onPress={() => editCustomPrompt(index)};
+              >;
+                <Text style={styles.editButtonText}>编辑</Text>;
+              </TouchableOpacity>;
+              <TouchableOpacity;
+                style={styles.deleteButton};
+                onPress={() => deleteCustomPrompt(index)};
+              >;
+                <Text style={styles.deleteButtonText}>删除</Text>;
+              </TouchableOpacity>;
+            </View>;
+          </View>;
+        ))};
+      </View>;
     );
   };
 
-  const renderWorkingHours = () => {
-    const config = configs[selectedAgent];
-    
+  const renderWorkingHours = () => {const config = configs[selectedAgent];
+
     return (
       <View style={styles.settingsSection}>
         <Text style={styles.sectionTitle}>工作时间</Text>
-        
+
         <View style={styles.timeInputContainer}>
           <View style={styles.timeInput}>
             <Text style={styles.timeLabel}>开始时间</Text>
@@ -397,22 +363,20 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
               })}
               placeholder="HH:MM"
             />
-          </View>
-          
-          <View style={styles.timeInput}>
-            <Text style={styles.timeLabel}>结束时间</Text>
-            <TextInput
-              style={styles.timeField}
-              value={config.workingHours.end}
-              onChangeText={(value) => updateConfig("workingHours", {
-                ...config.workingHours,
-                end: value
-              })}
-              placeholder="HH:MM"
-            />
-          </View>
-        </View>
-      </View>
+          </View>;
+          ;
+          <View style={styles.timeInput}>;
+            <Text style={styles.timeLabel}>结束时间</Text>;
+            <TextInput;
+              style={styles.timeField};
+              value={config.workingHours.end};
+              onChangeText={(value) => updateConfig("workingHours", {...config.workingHours,end: value;
+              })};
+              placeholder="HH:MM";
+            />;
+          </View>;
+        </View>;
+      </View>;
     );
   };
 
@@ -424,7 +388,7 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
         {renderPrivacySettings()}
         {renderCustomPrompts()}
         {renderWorkingHours()}
-        
+
         <TouchableOpacity
           style={styles.saveButton}
           onPress={() => saveConfiguration(configs[selectedAgent])}
@@ -444,7 +408,7 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
             <Text style={styles.modalTitle}>
               {editingIndex >= 0 ? "编辑提示" : "添加提示"}
             </Text>
-            
+
             <TextInput
               style={styles.promptInput}
               value={editingPrompt}
@@ -453,54 +417,54 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
               multiline
               numberOfLines={4}
             />
-            
+
             <View style={styles.modalActions}>
               <TouchableOpacity
                 style={styles.cancelButton}
-                onPress={() => setModalVisible(false)}
-              >
-                <Text style={styles.cancelButtonText}>取消</Text>
-              </TouchableOpacity>
-              
-              <TouchableOpacity
-                style={styles.confirmButton}
-                onPress={saveCustomPrompt}
-              >
-                <Text style={styles.confirmButtonText}>保存</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
-    </View>
+                onPress={() => setModalVisible(false)};
+              >;
+                <Text style={styles.cancelButtonText}>取消</Text>;
+              </TouchableOpacity>;
+              ;
+              <TouchableOpacity;
+                style={styles.confirmButton};
+                onPress={saveCustomPrompt};
+              >;
+                <Text style={styles.confirmButtonText}>保存</Text>;
+              </TouchableOpacity>;
+            </View>;
+          </View>;
+        </View>;
+      </Modal>;
+    </View>;
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#f5f5f5"
   },
   scrollView: {
     flex: 1,
-    padding: 16,
+    padding: 16
   },
   selectorContainer: {
     backgroundColor: "#fff",
     padding: 16,
     borderRadius: 12,
-    marginBottom: 16,
+    marginBottom: 16
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "bold",
     color: "#333",
-    marginBottom: 12,
+    marginBottom: 12
   },
   agentButtons: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 8,
+    gap: 8
   },
   agentButton: {
     paddingHorizontal: 16,
@@ -508,24 +472,24 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: "#f0f0f0",
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#ddd"
   },
   selectedAgentButton: {
     backgroundColor: "#007AFF",
-    borderColor: "#007AFF",
+    borderColor: "#007AFF"
   },
   agentButtonText: {
     fontSize: 14,
-    color: "#666",
+    color: "#666"
   },
   selectedAgentButtonText: {
-    color: "#fff",
+    color: "#fff"
   },
   settingsSection: {
     backgroundColor: "#fff",
     padding: 16,
     borderRadius: 12,
-    marginBottom: 16,
+    marginBottom: 16
   },
   settingItem: {
     flexDirection: "row",
@@ -533,12 +497,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: "#f0f0f0",
+    borderBottomColor: "#f0f0f0"
   },
   settingLabel: {
     fontSize: 16,
     color: "#333",
-    flex: 1,
+    flex: 1
   },
   numberInput: {
     borderWidth: 1,
@@ -547,46 +511,46 @@ const styles = StyleSheet.create({
     padding: 8,
     fontSize: 16,
     width: 80,
-    textAlign: "center",
+    textAlign: "center"
   },
   privacyOptions: {
-    gap: 8,
+    gap: 8
   },
   privacyOption: {
     padding: 12,
     borderRadius: 8,
     backgroundColor: "#f8f9fa",
     borderWidth: 1,
-    borderColor: "#e9ecef",
+    borderColor: "#e9ecef"
   },
   selectedPrivacyOption: {
     backgroundColor: "#e3f2fd",
-    borderColor: "#2196f3",
+    borderColor: "#2196f3"
   },
   privacyOptionText: {
     fontSize: 14,
-    color: "#666",
+    color: "#666"
   },
   selectedPrivacyOptionText: {
     color: "#2196f3",
-    fontWeight: "600",
+    fontWeight: "600"
   },
   sectionHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 12,
+    marginBottom: 12
   },
   addButton: {
     paddingHorizontal: 12,
     paddingVertical: 6,
     backgroundColor: "#007AFF",
-    borderRadius: 6,
+    borderRadius: 6
   },
   addButtonText: {
     color: "#fff",
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: "600"
   },
   promptItem: {
     flexDirection: "row",
@@ -595,56 +559,56 @@ const styles = StyleSheet.create({
     padding: 12,
     backgroundColor: "#f8f9fa",
     borderRadius: 8,
-    marginBottom: 8,
+    marginBottom: 8
   },
   promptText: {
     flex: 1,
     fontSize: 14,
     color: "#333",
-    marginRight: 12,
+    marginRight: 12
   },
   promptActions: {
     flexDirection: "row",
-    gap: 8,
+    gap: 8
   },
   editButton: {
     paddingHorizontal: 8,
     paddingVertical: 4,
     backgroundColor: "#28a745",
-    borderRadius: 4,
+    borderRadius: 4
   },
   editButtonText: {
     color: "#fff",
-    fontSize: 12,
+    fontSize: 12
   },
   deleteButton: {
     paddingHorizontal: 8,
     paddingVertical: 4,
     backgroundColor: "#dc3545",
-    borderRadius: 4,
+    borderRadius: 4
   },
   deleteButtonText: {
     color: "#fff",
-    fontSize: 12,
+    fontSize: 12
   },
   timeInputContainer: {
     flexDirection: "row",
-    gap: 16,
+    gap: 16
   },
   timeInput: {
-    flex: 1,
+    flex: 1
   },
   timeLabel: {
     fontSize: 14,
     color: "#666",
-    marginBottom: 4,
+    marginBottom: 4
   },
   timeField: {
     borderWidth: 1,
     borderColor: "#ddd",
     borderRadius: 8,
     padding: 12,
-    fontSize: 16,
+    fontSize: 16
   },
   saveButton: {
     backgroundColor: "#007AFF",
@@ -652,32 +616,32 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: "center",
     marginTop: 16,
-    marginBottom: 32,
+    marginBottom: 32
   },
   saveButtonText: {
     color: "#fff",
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: "bold"
   },
   modalOverlay: {
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   modalContent: {
     backgroundColor: "#fff",
     margin: 20,
     padding: 20,
     borderRadius: 12,
-    width: "90%",
+    width: "90%"
   },
   modalTitle: {
     fontSize: 18,
     fontWeight: "bold",
     color: "#333",
     marginBottom: 16,
-    textAlign: "center",
+    textAlign: "center"
   },
   promptInput: {
     borderWidth: 1,
@@ -687,37 +651,25 @@ const styles = StyleSheet.create({
     fontSize: 16,
     minHeight: 100,
     textAlignVertical: "top",
-    marginBottom: 16,
+    marginBottom: 16
   },
   modalActions: {
     flexDirection: "row",
     justifyContent: "space-between",
-    gap: 12,
+    gap: 12
   },
   cancelButton: {
     flex: 1,
     padding: 12,
     backgroundColor: "#6c757d",
     borderRadius: 8,
-    alignItems: "center",
+    alignItems: "center"
   },
   cancelButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  confirmButton: {
-    flex: 1,
-    padding: 12,
-    backgroundColor: "#007AFF",
-    borderRadius: 8,
-    alignItems: "center",
-  },
-  confirmButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "600",
-  },
+    color: "#fff",fontSize: 16,fontWeight: "600";
+  },confirmButton: {flex: 1,padding: 12,backgroundColor: "#007AFF",borderRadius: 8,alignItems: "center";
+  },confirmButtonText: {color: "#fff",fontSize: 16,fontWeight: "600";
+  };
 });
 
 export default AgentConfig; 

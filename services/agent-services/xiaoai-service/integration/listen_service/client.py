@@ -1,3 +1,12 @@
+"""
+client - 索克生活项目模块
+"""
+
+from loguru import logger
+from time import time
+from typing import List
+import grpc
+
 #!/usr/bin/env python3
 
 """闻诊服务客户端集成"""
@@ -5,10 +14,6 @@
 
 # 使用loguru self.logger
 
-from time import time
-from typing import List
-from loguru import logger
-import grpc
 
 
 

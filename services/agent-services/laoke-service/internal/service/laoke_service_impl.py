@@ -1,3 +1,12 @@
+"""
+laoke_service_impl - 索克生活项目模块
+"""
+
+from typing import Any
+import asyncio
+import logging
+import time
+
 #!/usr/bin/env python3
 
 """
@@ -5,10 +14,6 @@
 集成无障碍服务，支持知识内容和学习材料的无障碍功能
 """
 
-import asyncio
-import logging
-import time
-from typing import Any
 
 
 # 导入无障碍客户端

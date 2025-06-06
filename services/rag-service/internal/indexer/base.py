@@ -1,3 +1,11 @@
+"""
+base - 索克生活项目模块
+"""
+
+from ..model.document import Document, Chunk
+from typing import List, Dict, Any, Optional
+import abc
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,9 +13,6 @@
 索引器基类定义
 """
 
-import abc
-from typing import List, Dict, Any, Optional
-from ..model.document import Document, Chunk
 
 
 class BaseIndexer(abc.ABC):

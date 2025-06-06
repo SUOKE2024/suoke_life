@@ -1,18 +1,23 @@
+"""
+saga_manager - 索克生活项目模块
+"""
+
+from collections.abc import Callable
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any
+import asyncio
+import logging
+import time
+import uuid
+
 #!/usr/bin/env python3
 """
 Saga模式分布式事务管理器
 提供长事务的协调和补偿机制
 """
 
-import asyncio
-from collections.abc import Callable
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
-import logging
-import time
-from typing import Any
-import uuid
 
 logger = logging.getLogger(__name__)
 

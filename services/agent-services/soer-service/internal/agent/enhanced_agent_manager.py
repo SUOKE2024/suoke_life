@@ -1,17 +1,10 @@
-#!/usr/bin/env python3
 """
-增强的索尔智能体管理器
-集成依赖注入、错误处理、缓存等优化功能
+enhanced_agent_manager - 索克生活项目模块
 """
-import asyncio
-import json
-import logging
-import os
-import uuid
+
+        import hashlib
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Any
-
 from internal.agent.model_factory import ModelFactory
 from internal.repository.knowledge_repository import KnowledgeRepository
 from internal.repository.session_repository import SessionRepository
@@ -19,6 +12,20 @@ from pkg.utils.connection_pool import RedisConnectionPool, get_pool_manager
 from pkg.utils.dependency_injection import ServiceLifecycle, get_container
 from pkg.utils.enhanced_config import get_config, get_config_section
 from pkg.utils.error_handling import (
+from pkg.utils.metrics import get_metrics_collector
+from typing import Any
+import asyncio
+import json
+import logging
+import os
+import uuid
+
+#!/usr/bin/env python3
+"""
+增强的索尔智能体管理器
+集成依赖注入、错误处理、缓存等优化功能
+"""
+
     BusinessLogicException,
     ErrorContext,
     RetryConfig,
@@ -26,7 +33,6 @@ from pkg.utils.error_handling import (
     get_error_handler,
     retry_async,
 )
-from pkg.utils.metrics import get_metrics_collector
 
 logger = logging.getLogger(__name__)
 
@@ -372,7 +378,6 @@ class EnhancedAgentManager(ServiceLifecycle):
         message_type = input_data.get("type", "text")
 
         # 使用消息内容的哈希作为缓存键的一部分
-        import hashlib
         message_hash = hashlib.md5(message.encode()).hexdigest()
 
         return f"soer:response:{user_id}:{message_type}:{message_hash}"

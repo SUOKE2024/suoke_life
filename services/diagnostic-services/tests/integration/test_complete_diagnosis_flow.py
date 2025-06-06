@@ -1,16 +1,21 @@
 """
+test_complete_diagnosis_flow - 索克生活项目模块
+"""
+
+from datetime import datetime
+from typing import Dict, Any, List
+import asyncio
+import httpx
+import json
+import numpy as np
+import pytest
+
+"""
 五诊服务完整集成测试
 
 测试望、闻、问、切、算五诊服务的完整诊断流程
 """
 
-import asyncio
-import pytest
-import httpx
-import json
-from datetime import datetime
-from typing import Dict, Any, List
-import numpy as np
 
 # 测试配置
 TEST_CONFIG = {

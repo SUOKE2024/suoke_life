@@ -1,3 +1,14 @@
+"""
+tracing - 索克生活项目模块
+"""
+
+from ..core.logging import get_logger
+from ..services.tracing import get_tracing_service, TracingService, SpanData
+from datetime import datetime, timedelta
+from fastapi import APIRouter, HTTPException, Depends, Query
+from pydantic import BaseModel, Field
+from typing import Dict, Any, Optional, List
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -7,14 +18,8 @@
 提供追踪查询和管理功能。
 """
 
-from typing import Dict, Any, Optional, List
-from datetime import datetime, timedelta
 
-from fastapi import APIRouter, HTTPException, Depends, Query
-from pydantic import BaseModel, Field
 
-from ..services.tracing import get_tracing_service, TracingService, SpanData
-from ..core.logging import get_logger
 
 logger = get_logger(__name__)
 

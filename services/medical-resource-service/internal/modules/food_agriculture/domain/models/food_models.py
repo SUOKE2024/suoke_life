@@ -1,13 +1,19 @@
 """
-食物相关数据模型
-从原始的food_agriculture_service.py中提取的数据类
+food_models - 索克生活项目模块
 """
 
+from ..enums.food_enums import (
+from ..enums.season_enums import SeasonType
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Dict, List, Optional
 
-from ..enums.food_enums import (
+"""
+食物相关数据模型
+从原始的food_agriculture_service.py中提取的数据类
+"""
+
+
     Contraindication,
     FoodCategory,
     FoodNature,
@@ -16,7 +22,6 @@ from ..enums.food_enums import (
     PreparationMethod,
     StorageMethod,
 )
-from ..enums.season_enums import SeasonType
 
 
 @dataclass

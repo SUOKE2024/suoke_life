@@ -1,25 +1,30 @@
+"""
+test_erp_integration - 索克生活项目模块
+"""
+
+from datetime import datetime, timedelta
+from integration.erp.erp_client import ERPClient, ERPError
+from pathlib import Path
+from unittest.mock import patch
+import json
+import os
+import pytest
+import requests
+import sys
+import uuid
+
 #!/usr/bin/env python3
 
 """
 ERP系统集成测试
 """
 
-import json
-import os
-import sys
-import uuid
-from datetime import datetime, timedelta
-from pathlib import Path
-from unittest.mock import patch
 
-import pytest
-import requests
 
 # 添加项目根目录到Python路径
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from integration.erp.erp_client import ERPClient, ERPError
 
 # 常量
 TEST_API_URL = os.getenv("TEST_ERP_API_URL", "https://erp-api-test.suoke.life")

@@ -1,3 +1,12 @@
+"""
+user_repository - 索克生活项目模块
+"""
+
+from pymongo import MongoClient
+from typing import Any
+import logging
+import time
+
 #!/usr/bin/env python
 
 """
@@ -5,11 +14,7 @@
 负责管理用户数据的存储与检索
 """
 
-import logging
-import time
-from typing import Any
 
-from pymongo import MongoClient
 
 logger = logging.getLogger(__name__)
 

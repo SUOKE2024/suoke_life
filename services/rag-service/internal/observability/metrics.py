@@ -1,3 +1,18 @@
+"""
+metrics - 索克生活项目模块
+"""
+
+from collections import defaultdict, deque
+from contextlib import asynccontextmanager
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from prometheus_client import (
+from typing import Dict, List, Optional, Any, Callable
+import asyncio
+import psutil
+import structlog
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,16 +21,6 @@
 提供全面的性能监控、业务指标和系统健康状态监控
 """
 
-import time
-import psutil
-import asyncio
-from typing import Dict, List, Optional, Any, Callable
-from datetime import datetime, timedelta
-from dataclasses import dataclass, field
-from collections import defaultdict, deque
-from contextlib import asynccontextmanager
-import structlog
-from prometheus_client import (
     Counter, Histogram, Gauge, Summary, Info,
     CollectorRegistry, generate_latest, CONTENT_TYPE_LATEST
 )
@@ -341,7 +346,8 @@ class MetricsCollector:
         EMBEDDING_LATENCY.labels(model_name=model_name).observe(latency)
         MODEL_TOKENS.labels(model_name=model_name, token_type="input").inc(token_count)
     
-    def finish_query(self, query_id: str, success: bool = True, error: Optional[str] = None):
+        @cache(timeout=300)  # 5分钟缓存
+def finish_query(self, query_id: str, success: bool = True, error: Optional[str] = None):
         """完成查询计时"""
         if query_id not in self._query_metrics:
             return
@@ -399,7 +405,8 @@ class MetricsCollector:
     
     def update_document_count(self, collection: str, source: str, count: int):
         """更新文档数量"""
-        DOCUMENT_COUNT.labels(collection=collection, source=source).set(count)
+        DOCUMENT_COUNT.labels(collection=collection, so    @cache(timeout=300)  # 5分钟缓存
+urce=source).set(count)
     
     def record_user_query(self, user_type: str, query_category: str):
         """记录用户查询"""
@@ -493,7 +500,8 @@ class MetricsCollector:
         return generate_latest(self.registry)
 
 # 全局指标收集器实例
-metrics_collector = MetricsCollector()
+metrics_collect    @cache(timeout=300)  # 5分钟缓存
+or = MetricsCollector()
 
 # 装饰器和上下文管理器
 

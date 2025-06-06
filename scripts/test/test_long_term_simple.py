@@ -1,16 +1,22 @@
+"""
+test_long_term_simple - 索克生活项目模块
+"""
+
+                from services.gpu.gpu_acceleration import (
+from pathlib import Path
+from typing import Dict, Any, List
+import asyncio
+import logging
+import sys
+import time
+import traceback
+
 #!/usr/bin/env python3
 """
 索克生活 - 长期规划简化测试脚本
 测试C扩展、分布式计算和GPU加速的基础功能
 """
 
-import sys
-import time
-import asyncio
-import logging
-from pathlib import Path
-from typing import Dict, Any, List
-import traceback
 
 # 添加项目根目录到路径
 project_root = Path(__file__).parent.parent.parent
@@ -192,7 +198,6 @@ class SimpleLongTermTester:
         try:
             # 尝试导入GPU加速模块
             try:
-                from services.gpu.gpu_acceleration import (
                     get_gpu_accelerator, GPUConfig, GPUBackend,
                     tcm_syndrome_analysis_gpu, health_data_normalize_gpu,
                     nutrition_optimization_gpu

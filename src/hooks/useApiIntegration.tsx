@@ -1,9 +1,9 @@
 import React from "react";
 import { apiIntegrationService } from "../services/ApiIntegrationService";/////    import { useState, useEffect, useCallback, useRef } from "react";
-useApiIntegration', {;'
+useApiIntegration', {'
     trackRender: true,
     trackMemory: false,
-    warnThreshold: 100, //////     ms };);
+    warnThreshold: 100, // ms };);
     setState({
       data: null,
       loading: false,
@@ -11,30 +11,30 @@ useApiIntegration', {;'
       success: false;
     });
     retryCountRef.current = 0;
-      const effectEnd = performance.now()
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  // 设置加载状态 //////     const setLoading = useCallback((loading: boolean;); => {}
+  // 设置加载状态 // const setLoading = useCallback((loading: boolean;); => {}
     setState((prev); => ({ ...prev, loading }));
-      const effectEnd = performance.now()
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  // 设置错误状态 //////     const setError = useCallback((error: string | null;); => {}
+  // 设置错误状态 // const setError = useCallback((error: string | null;); => {}
     setState((prev); => ({ ...prev, error, loading: false, success: false}));
-      const effectEnd = performance.now()
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  // 设置成功状态 //////     const setSuccess = useCallback((data: T;); => {}
+  // 设置成功状态 // const setSuccess = useCallback((data: T;); => {}
     setState({
       data,
       loading: false,
       error: null,
       success: true;
     });
-      const effectEnd = performance.now()
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  // 缓存管理 //////     const getCachedData = useCallback(
+  // 缓存管理 // const getCachedData = useCallback(;
     (key: strin;g;); => {}
       const cached = cacheRef.current.get(key);
       if (cached && Date.now(); - cached.timestamp < cacheTime) {
@@ -44,19 +44,18 @@ useApiIntegration', {;'
     },
     [cacheTime]
   );
-  const setCachedData = useCallback((key: string, data: unknow;n;); => {;}
+  const setCachedData = useCallback((key: string, data: unknow;n;); => {}
     cacheRef.current.set(key, {
       data,
       timestamp: Date.now()});
-      const effectEnd = performance.now()
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  // 通用API请求方法 //////     const executeRequest = useCallback(
-    async <R = T />(/      requestFn:  => Promise<R /////    >,
-      cacheKey?: string;
+  // 通用API请求方法 // const executeRequest = useCallback(;
+    async <R = T />(/      requestFn:  => Promise<R /////    >,cacheKey?: string;
     ): Promise<R | null /////    > => {}
       try {
-        // 检查缓存 //////     if (cacheKey) {
+        // 检查缓存 // if (cacheKey) {
           const cachedData = getCachedData(cacheKey;);
           if (cachedData) {
             setSuccess(cachedData);
@@ -66,14 +65,14 @@ useApiIntegration', {;'
         setLoading(true);
         setError(null);
         const result = await request;F;n;
-        // 缓存结果 //////     if (cacheKey) {
-          setCachedData(cacheKey, result)
+        // 缓存结果 // if (cacheKey) {
+          setCachedData(cacheKey, result);
         }
         setSuccess(result as T);
         retryCountRef.current = 0;
         return resu;l;t;
       } catch (error: unknown) {
-        // 重试逻辑 //////     if (retryCountRef.current < retryCount) {
+        // 重试逻辑 // if (retryCountRef.current < retryCount) {
           retryCountRef.current++
           setTimeout((); => {}
             executeRequest(requestFn, cacheKey);
@@ -94,32 +93,29 @@ useApiIntegration', {;'
       setSuccess;
     ]
   );
-  // ==================== 认证相关方法 ==================== //////
-  const login = useCallback(;
+  // ==================== 认证相关方法 ==================== // const login = useCallback(;
     async (credentials: { username: stri;n;g, password: string}); => {}
       return executeRequest((); => apiIntegrationService.login(credentials););
     },
     [executeRequest]
   );
-  const logout = useCallback(async  => {;}
+  const logout = useCallback(async  => {}
     return executeRequest((); => apiIntegrationService.logout(););
-      const effectEnd = performance.now()
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [executeRequest]);
-  const getCurrentUser = useCallback(async  => {;}
-    return executeRequest(() => apiIntegrationService.getCurrentUser(),
-      "current-user"
+  const getCurrentUser = useCallback(async  => {}
+    return executeRequest(() => apiIntegrationService.getCurrentUser(),"current-user";
     );
-      const effectEnd = performance.now()
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [executeRequest]);
-  const refreshToken = useCallback(async  => {;}
+  const refreshToken = useCallback(async  => {}
     return executeRequest((); => apiIntegrationService.refreshToken(););
-      const effectEnd = performance.now()
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [executeRequest]);
-  // ==================== 健康数据相关方法 ==================== //////
-  const getHealthData = useCallback(;
+  // ==================== 健康数据相关方法 ==================== // const getHealthData = useCallback(;
     async (userId: string, timeRange?: { start: stri;n;g, end: string}) => {}
       const cacheKey = `health-data-${userId}-${JSON.stringify(timeRange);};`;
       return executeRequest((); => apiIntegrationService.getHealthData(userId, timeRange),
@@ -151,12 +147,10 @@ useApiIntegration', {;'
     },
     [executeRequest]
   );
-  // ==================== 智能体相关方法 ==================== //////
-  const getAgentStatus = useCallback(async  => {;}
-    return executeRequest(() => apiIntegrationService.getAgentStatus(),
-      "agent-status"
+  // ==================== 智能体相关方法 ==================== // const getAgentStatus = useCallback(async  => {}
+    return executeRequest(() => apiIntegrationService.getAgentStatus(),"agent-status";
     );
-      const effectEnd = performance.now()
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [executeRequest]);
   const startAgentChat = useCallback(;
@@ -193,8 +187,7 @@ useApiIntegration', {;'
     },
     [executeRequest]
   );
-  // ==================== 四诊相关方法 ==================== //////
-  const startDiagnosis = useCallback(;
+  // ==================== 四诊相关方法 ==================== // const startDiagnosis = useCallback(;
     async (type: "look" | "listen" | "inquiry" | "palpation", data: unknow;n;); => {}
       return executeRequest((); => {}
         apiIntegrationService.startDiagnosis(type, data);
@@ -219,8 +212,7 @@ useApiIntegration', {;'
     },
     [executeRequest]
   );
-  // ==================== 用户设置相关方法 ==================== //////
-  const getUserSettings = useCallback(;
+  // ==================== 用户设置相关方法 ==================== // const getUserSettings = useCallback(;
     async (userId: strin;g;) => {}
       const cacheKey = `user-settings-${userId;};`;
       return executeRequest((); => apiIntegrationService.getUserSettings(userId),
@@ -245,8 +237,7 @@ useApiIntegration', {;'
     },
     [executeRequest]
   );
-  // ==================== 区块链相关方法 ==================== //////
-  const saveHealthRecordToBlockchain = useCallback(;
+  // ==================== 区块链相关方法 ==================== // const saveHealthRecordToBlockchain = useCallback(;
     async (userId: string, healthData: unknow;n;); => {}
       return executeRequest((); => {}
         apiIntegrationService.saveHealthRecordToBlockchain(userId, healthData);
@@ -271,8 +262,7 @@ useApiIntegration', {;'
     },
     [executeRequest]
   );
-  // ==================== 医疗资源相关方法 ==================== //////
-  const searchMedicalResources = useCallback(;
+  // ==================== 医疗资源相关方法 ==================== // const searchMedicalResources = useCallback(;
     async (query: unknow;n;) => {}
       const cacheKey = `medical-resources-${JSON.stringify(query);};`;
       return executeRequest((); => apiIntegrationService.searchMedicalResources(query),
@@ -301,8 +291,7 @@ useApiIntegration', {;'
     },
     [executeRequest]
   );
-  // ==================== 知识库相关方法 ==================== //////
-  const searchKnowledge = useCallback(;
+  // ==================== 知识库相关方法 ==================== // const searchKnowledge = useCallback(;
     async (query: unknow;n;) => {}
       const cacheKey = `knowledge-search-${JSON.stringify(query);};`;
       return executeRequest((); => apiIntegrationService.searchKnowledge(query),
@@ -330,8 +319,7 @@ useApiIntegration', {;'
     },
     [executeRequest]
   );
-  // ==================== 机器学习相关方法 ==================== //////
-  const trainPersonalModel = useCallback(;
+  // ==================== 机器学习相关方法 ==================== // const trainPersonalModel = useCallback(;
     async (userId: string, trainingData: unknow;n;); => {}
       return executeRequest((); => {}
         apiIntegrationService.trainPersonalModel(userId, trainingData);
@@ -356,8 +344,7 @@ useApiIntegration', {;'
     },
     [executeRequest]
   );
-  // ==================== 无障碍相关方法 ==================== //////
-  const getAccessibilitySettings = useCallback(;
+  // ==================== 无障碍相关方法 ==================== // const getAccessibilitySettings = useCallback(;
     async (userId: strin;g;) => {}
       const cacheKey = `accessibility-settings-${userId;};`;
       return executeRequest((); => apiIntegrationService.getAccessibilitySettings(userId),
@@ -382,12 +369,10 @@ useApiIntegration', {;'
     },
     [executeRequest]
   );
-  // ==================== 生态服务相关方法 ==================== //////
-  const getEcoServices = useCallback(async  => {;}
-    return executeRequest(() => apiIntegrationService.getEcoServices(),
-      "eco-services"
-    )
-      const effectEnd = performance.now()
+  // ==================== 生态服务相关方法 ==================== // const getEcoServices = useCallback(async  => {}
+    return executeRequest(() => apiIntegrationService.getEcoServices(),"eco-services";
+    );
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [executeRequest]);
   const subscribeToEcoService = useCallback(;
@@ -407,8 +392,7 @@ useApiIntegration', {;'
     },
     [executeRequest]
   );
-  // ==================== 反馈和支持相关方法 ==================== //////
-  const submitFeedback = useCallback(;
+  // ==================== 反馈和支持相关方法 ==================== // const submitFeedback = useCallback(;
     async (feedback: unknow;n;); => {}
       return executeRequest((); => {}
         apiIntegrationService.submitFeedback(feedback);
@@ -442,19 +426,16 @@ useApiIntegration', {;'
     },
     [executeRequest]
   );
-  // ==================== 系统监控相关方法 ==================== //////
-  const getSystemHealth = useCallback(async  => {;}
-    return executeRequest(() => apiIntegrationService.getSystemHealth(),
-      "system-health"
-    )
-      const effectEnd = performance.now()
+  // ==================== 系统监控相关方法 ==================== // const getSystemHealth = useCallback(async  => {}
+    return executeRequest(() => apiIntegrationService.getSystemHealth(),"system-health";
+    );
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [executeRequest]);
-  const getSystemMetrics = useCallback(async  => {;}
-    return executeRequest(() => apiIntegrationService.getSystemMetrics(),
-      "system-metrics"
+  const getSystemMetrics = useCallback(async  => {}
+    return executeRequest(() => apiIntegrationService.getSystemMetrics(),"system-metrics";
     );
-      const effectEnd = performance.now()
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [executeRequest]);
   const reportPerformanceMetrics = useCallback(;
@@ -465,32 +446,29 @@ useApiIntegration', {;'
     },
     [executeRequest]
   );
-  // ==================== 实用工具方法 ==================== //////
-  const batchRequest = useCallback(;
+  // ==================== 实用工具方法 ==================== // const batchRequest = useCallback(;
     async (requests: Array<{ name: stri;n;g, request: (); => Promise<any>   }>) => {}
       return executeRequest((); => apiIntegrationService.batchRequest(requests););
     },
     [executeRequest]
   );
-  const healthCheck = useCallback(async  => {;}
-    return executeRequest(() => apiIntegrationService.healthCheck(),
-      "health-check"
+  const healthCheck = useCallback(async  => {}
+    return executeRequest(() => apiIntegrationService.healthCheck(),"health-check";
     );
-      const effectEnd = performance.now()
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [executeRequest]);
-  const getApiVersion = useCallback(async  => {;}
-    return executeRequest(() => apiIntegrationService.getApiVersion(),
-      "api-version"
+  const getApiVersion = useCallback(async  => {}
+    return executeRequest(() => apiIntegrationService.getApiVersion(),"api-version";
     );
-      const effectEnd = performance.now()
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [executeRequest]);
-  // 清除缓存 //////     const clearCache = useCallback(() => {}
-    // TODO: Implement function body //////     const effectEnd = performance.now;
+  // 清除缓存 // const clearCache = useCallback(() => {;
+    // TODO: Implement function body // const effectEnd = performance.now;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  // 事件监听 //////     const addEventListener = useCallback(
+  // 事件监听 // const addEventListener = useCallback(;
     (event: string, listener: (...args: unknown[;];); => void) => {}
       apiIntegrationService.on(event, listener);
     },
@@ -502,69 +480,53 @@ useApiIntegration', {;'
     },
     []
   );
-  // 清理函数 //////     useEffect(() => {}
-    const effectStart = performance.now()
-    //////     记录渲染性能
+  // 清理函数 // useEffect(() => {
+    const effectStart = performance.now();
+    // 记录渲染性能;
 performanceMonitor.recordRender();
-    return() => {;}
-      // 组件卸载时清理缓存 //////     cacheRef.current.clear;
+    return() => {}
+      // 组件卸载时清理缓存 // cacheRef.current.clear;
     }
-      const effectEnd = performance.now()
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
   return {
-    // 状态 //////     ...state,
-    // 基础方法 //////     resetState,
+    // 状态 // ...state,
+    // 基础方法 // resetState,
     clearCache,
     executeRequest,
-    // 认证相关 //////     login,
+    // 认证相关 // login,
     logout,
     getCurrentUser,
     refreshToken,
-    // 健康数据相关 //////     getHealthData,
+    // 健康数据相关 // getHealthData,
     saveHealthData,
     getHealthMetrics,
     exportHealthData,
-    // 智能体相关 //////     getAgentStatus,
+    // 智能体相关 // getAgentStatus,
     startAgentChat,
     sendMessageToAgent,
     getAgentPerformance,
     updateAgentSettings,
-    // 四诊相关 //////     startDiagnosis,
+    // 四诊相关 // startDiagnosis,
     getDiagnosisHistory,
     getComprehensiveDiagnosis,
-    // 用户设置相关 //////     getUserSettings,
+    // 用户设置相关 // getUserSettings,
     updateUserSettings,
     resetUserSettings,
-    // 区块链相关 //////     saveHealthRecordToBlockchain,
+    // 区块链相关 // saveHealthRecordToBlockchain,
     getBlockchainHealthRecords,
     verifyHealthRecord,
-    // 医疗资源相关 //////     searchMedicalResources,
+    // 医疗资源相关 // searchMedicalResources,
     getMedicalResourceDetails,
     bookMedicalAppointment,
-    // 知识库相关 //////     searchKnowledge,
+    // 知识库相关 // searchKnowledge,
     getKnowledgeDetails,
     getRecommendedKnowledge,
-    // 机器学习相关 //////     trainPersonalModel,
+    // 机器学习相关 // trainPersonalModel,
     getModelPrediction,
     getModelPerformance,
-    // 无障碍相关 //////     getAccessibilitySettings,
-    updateAccessibilitySettings,
-    generateAccessibilityReport,
-    // 生态服务相关 //////     getEcoServices,
-    subscribeToEcoService,
-    getEcoServiceUsage,
-    // 反馈和支持相关 //////     submitFeedback,
-    getFeedbackHistory,
-    getSupportTickets,
-    createSupportTicket,
-    // 系统监控相关 //////     getSystemHealth,
-    getSystemMetrics,
-    reportPerformanceMetrics,
-    // 实用工具 //////     batchRequest,
-    healthCheck,
-    getApiVersion,
-    // 事件监听 //////     addEventListener,
-    removeEventListene;r;
+    // 无障碍相关 // getAccessibilitySettings,
+    updateAccessibilitySettings,generateAccessibilityReport,// 生态服务相关 // getEcoServices,subscribeToEcoService,getEcoServiceUsage,// 反馈和支持相关 // submitFeedback,getFeedbackHistory,getSupportTickets,createSupportTicket,// 系统监控相关 // getSystemHealth,getSystemMetrics,reportPerformanceMetrics,// 实用工具 // batchRequest,healthCheck,getApiVersion,// 事件监听 // addEventListener,removeEventListene;r;
   ;};
 };

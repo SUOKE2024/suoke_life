@@ -1,14 +1,19 @@
-"""API接口集成测试"""
+"""
+test_api - 索克生活项目模块
+"""
 
+from cmd.server.main import app
+from fastapi.testclient import TestClient
+from internal.benchmark.benchmark_service import BenchmarkService
+from internal.suokebench.config import BenchConfig
+from unittest.mock import Mock, patch
 import asyncio
 import json
 import pytest
-from fastapi.testclient import TestClient
-from unittest.mock import Mock, patch
 
-from cmd.server.main import app
-from internal.benchmark.benchmark_service import BenchmarkService
-from internal.suokebench.config import BenchConfig
+"""API接口集成测试"""
+
+
 
 
 @pytest.fixture

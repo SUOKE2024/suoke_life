@@ -1,14 +1,19 @@
-"""增强的错误处理模块"""
+"""
+error_handler - 索克生活项目模块
+"""
 
-import logging
-import traceback
+from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, Optional, Type, Union
-from dataclasses import dataclass
-
 from fastapi import HTTPException, Request
 from fastapi.responses import JSONResponse
+from typing import Any, Dict, Optional, Type, Union
+import logging
+import traceback
+
+"""增强的错误处理模块"""
+
+
 
 
 class ErrorCode(str, Enum):

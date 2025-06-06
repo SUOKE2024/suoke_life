@@ -1,18 +1,23 @@
+"""
+dialogue_manager - 索克生活项目模块
+"""
+
+from ..llm.llm_client import LLMClient
+from ..repository.session_repository import SessionRepository
+from ..repository.user_repository import UserRepository
+from datetime import datetime
+from typing import Any
+import logging
+import time
+import uuid
+
 #!/usr/bin/env python
 
 """
 对话管理器模块，负责管理问诊会话、保存会话历史、维护对话上下文等
 """
 
-from datetime import datetime
-import logging
-import time
-from typing import Any
-import uuid
 
-from ..llm.llm_client import LLMClient
-from ..repository.session_repository import SessionRepository
-from ..repository.user_repository import UserRepository
 
 logger = logging.getLogger(__name__)
 

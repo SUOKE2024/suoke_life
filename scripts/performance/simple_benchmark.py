@@ -1,19 +1,24 @@
+"""
+simple_benchmark - 索克生活项目模块
+"""
+
+from concurrent.futures import ProcessPoolExecutor
+from dataclasses import dataclass
+from datetime import datetime
+from numba import jit
+from typing import Dict, List, Any
+import json
+import logging
+import multiprocessing
+import psutil
+import time
+
 #!/usr/bin/env python3
 """
 索克生活 - 简化性能基准测试
 验证基础优化效果
 """
 
-import time
-import multiprocessing
-import json
-import logging
-from typing import Dict, List, Any
-from dataclasses import dataclass
-from datetime import datetime
-from concurrent.futures import ProcessPoolExecutor
-import psutil
-from numba import jit
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)

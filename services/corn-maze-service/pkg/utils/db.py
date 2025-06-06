@@ -1,3 +1,14 @@
+"""
+db - 索克生活项目模块
+"""
+
+from corn_maze_service.constants import DEFAULT_POOL_SIZE
+from pathlib import Path
+from typing import Any
+import aiosqlite
+import asyncio
+import logging
+
 #!/usr/bin/env python3
 
 """
@@ -6,14 +17,8 @@
 提供SQLite数据库连接池功能，支持异步操作
 """
 
-import asyncio
-import logging
-from pathlib import Path
-from typing import Any
 
-import aiosqlite
 
-from corn_maze_service.constants import DEFAULT_POOL_SIZE
 
 logger = logging.getLogger(__name__)
 

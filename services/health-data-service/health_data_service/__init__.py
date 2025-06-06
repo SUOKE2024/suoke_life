@@ -1,4 +1,10 @@
 """
+__init__ - 索克生活项目模块
+"""
+
+from health_data_service.core.config import settings
+
+"""
 索克生活健康数据服务
 
 基于AI的健康数据管理和分析服务，提供：
@@ -14,7 +20,6 @@ __author__ = "Song Xu"
 __email__ = "song.xu@icloud.com"
 
 # 导出主要组件
-from health_data_service.core.config import settings
 
 __all__ = [
     "settings",

@@ -1,3 +1,16 @@
+"""
+api_test - 索克生活项目模块
+"""
+
+from calculation_service.core.algorithms.wuyun_liuqi.calculator import WuyunLiuqiCalculator
+from calculation_service.utils.bagua_calculator import BaguaCalculator
+from calculation_service.utils.bazi_calculator import BaziCalculator
+from calculation_service.utils.ziwu_calculator import ZiwuCalculator
+from datetime import date
+import json
+import os
+import sys
+
 #!/usr/bin/env python3
 """
 API功能测试脚本
@@ -5,18 +18,10 @@ API功能测试脚本
 模拟API调用，测试算诊微服务的核心功能
 """
 
-import sys
-import os
-import json
-from datetime import date
 
 # 添加项目路径
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from calculation_service.core.algorithms.wuyun_liuqi.calculator import WuyunLiuqiCalculator
-from calculation_service.utils.bazi_calculator import BaziCalculator
-from calculation_service.utils.bagua_calculator import BaguaCalculator
-from calculation_service.utils.ziwu_calculator import ZiwuCalculator
 
 def test_wuyun_api():
     """测试五运六气API"""

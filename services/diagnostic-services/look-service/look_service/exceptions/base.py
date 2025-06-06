@@ -1,6 +1,11 @@
-"""Base exception classes for look service."""
+"""
+base - 索克生活项目模块
+"""
 
 from typing import Any
+
+"""Base exception classes for look service."""
+
 
 
 class LookServiceError(Exception):

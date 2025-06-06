@@ -1,21 +1,27 @@
 """
-智能资源调度服务
-实现基于用户体质和病症的资源匹配、实时监控、智能预约排程和负载均衡
+resource_scheduling_service - 索克生活项目模块
 """
 
-import asyncio
-import heapq
-import logging
-import uuid
+            import random
+from ..domain.models import ResourceType, UrgencyLevel
+from .resource_management_service import (
 from collections import defaultdict, deque
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
+import asyncio
+import heapq
+import logging
+import uuid
 
-from ..domain.models import ResourceType, UrgencyLevel
-from .resource_management_service import (
+"""
+智能资源调度服务
+实现基于用户体质和病症的资源匹配、实时监控、智能预约排程和负载均衡
+"""
+
+
     AvailabilityStatus,
     DoctorLevel,
     EquipmentType,
@@ -863,7 +869,6 @@ class ResourceSchedulingService:
             if total_weight == 0:
                 return resources[0]
 
-            import random
 
             r = random.uniform(0, total_weight)
             cumulative = 0

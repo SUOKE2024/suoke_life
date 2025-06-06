@@ -1,3 +1,18 @@
+"""
+migrate_to_postgresql - 索克生活项目模块
+"""
+
+                            import json
+            import json
+from pathlib import Path
+from psycopg2 import sql
+from typing import Any, Dict, List, Tuple
+import argparse
+import logging
+import psycopg2
+import sqlite3
+import sys
+
 #!/usr/bin/env python3
 """
 SQLite到PostgreSQL数据迁移脚本
@@ -6,15 +21,7 @@ SQLite到PostgreSQL数据迁移脚本
 支持表结构创建、数据迁移、序列重置等功能。
 """
 
-import argparse
-import logging
-import sqlite3
-import sys
-from pathlib import Path
-from typing import Any, Dict, List, Tuple
 
-import psycopg2
-from psycopg2 import sql
 
 class DatabaseMigrator:
     """数据库迁移器"""
@@ -50,7 +57,6 @@ class DatabaseMigrator:
     def _load_config(self, config_path: str) -> None:
         """加载配置文件"""
         try:
-            import json
             with open(config_path, 'r', encoding='utf-8') as f:
                 user_config = json.load(f)
                 self.config.update(user_config)
@@ -208,7 +214,6 @@ class DatabaseMigrator:
                     if isinstance(value, str) and value.startswith('{') and value.endswith('}'):
                         # 可能是JSON字符串
                         try:
-                            import json
                             json.loads(value)
                             converted_row.append(value)
                         except json.JSONDecodeError:

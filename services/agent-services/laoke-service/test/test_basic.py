@@ -1,15 +1,20 @@
 """
+test_basic - 索克生活项目模块
+"""
+
+from laoke_service.core.agent import AgentMessage, AgentResponse, LaoKeAgent
+from laoke_service.core.config import DatabaseConfig, ServerConfig, Settings
+from laoke_service.core.exceptions import LaoKeServiceError, ValidationError
+import pytest
+
+"""
 基础测试模块
 
 测试老克智能体服务的核心功能
 """
 
 
-import pytest
 
-from laoke_service.core.agent import AgentMessage, AgentResponse, LaoKeAgent
-from laoke_service.core.config import DatabaseConfig, ServerConfig, Settings
-from laoke_service.core.exceptions import LaoKeServiceError, ValidationError
 
 
 class TestConfig:

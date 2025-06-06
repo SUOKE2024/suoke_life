@@ -1,17 +1,22 @@
 """
+test_api_endpoints - 索克生活项目模块
+"""
+
+from fastapi.testclient import TestClient
+from integration_service.main import create_app
+import os
+import pytest
+
+"""
 API端点测试
 """
 
-import os
-import pytest
-from fastapi.testclient import TestClient
 
 # 设置测试环境变量
 os.environ["DATABASE_URL"] = "sqlite:///./test.db"
 os.environ["DEBUG"] = "true"
 os.environ["SECRET_KEY"] = "test-secret-key"
 
-from integration_service.main import create_app
 
 
 @pytest.fixture

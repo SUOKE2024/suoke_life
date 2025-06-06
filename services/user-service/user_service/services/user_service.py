@@ -1,15 +1,20 @@
-"""用户服务核心业务逻辑"""
+"""
+user_service - 索克生活项目模块
+"""
 
-from typing import List, Optional, Dict, Any
 from datetime import datetime, timedelta
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update, delete
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
-
-from user_service.models.user import User, UserStatus, UserRole
+from typing import List, Optional, Dict, Any
+from user_service.core.exceptions import UserNotFoundError, UserAlreadyExistsError, DeviceNotFoundError
 from user_service.models.device import UserDevice
 from user_service.models.health import HealthSummary
-from user_service.core.exceptions import UserNotFoundError, UserAlreadyExistsError, DeviceNotFoundError
+from user_service.models.user import User, UserStatus, UserRole
+
+"""用户服务核心业务逻辑"""
+
+
 
 
 class UserService:
@@ -159,7 +164,7 @@ class UserService:
         query = query.offset(skip).limit(limit).order_by(User.created_at.desc())
         
         result = await self.db.execute(query)
-        return result.scalars().all()
+        return result.scalars().all()[:1000]  # 限制查询结果数量
     
     # 设备管理方法
     async def bind_device(
@@ -211,7 +216,7 @@ class UserService:
                 (UserDevice.is_active == True)
             ).order_by(UserDevice.binding_time.desc())
         )
-        return result.scalars().all()
+        return result.scalars().all()[:1000]  # 限制查询结果数量
     
     async def unbind_device(self, user_id: str, device_id: str) -> bool:
         """解绑设备"""
@@ -304,13 +309,13 @@ class UserService:
         total_users_result = await self.db.execute(
             select(User).where(User.status != UserStatus.DELETED)
         )
-        total_users = len(total_users_result.scalars().all())
+        total_users = len(total_users_result.scalars().all()[:1000]  # 限制查询结果数量)
         
         # 活跃用户数
         active_users_result = await self.db.execute(
             select(User).where(User.status == UserStatus.ACTIVE)
         )
-        active_users = len(active_users_result.scalars().all())
+        active_users = len(active_users_result.scalars().all()[:1000]  # 限制查询结果数量)
         
         # 今日新增用户
         today = datetime.utcnow().date()
@@ -320,7 +325,7 @@ class UserService:
                 (User.status != UserStatus.DELETED)
             )
         )
-        new_users_today = len(new_users_today_result.scalars().all())
+        new_users_today = len(new_users_today_result.scalars().all()[:1000]  # 限制查询结果数量)
         
         return {
             "total_users": total_users,

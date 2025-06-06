@@ -1,3 +1,12 @@
+"""
+health_handler - 索克生活项目模块
+"""
+
+from aiohttp import web
+from services.rag_service.internal.observability.telemetry import trace_method
+from services.rag_service.internal.service.health_check import HealthCheckService, HealthStatus
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,12 +14,8 @@
 健康检查API处理器
 """
 
-import time
 
-from aiohttp import web
 
-from services.rag_service.internal.service.health_check import HealthCheckService, HealthStatus
-from services.rag_service.internal.observability.telemetry import trace_method
 
 class HealthHandler:
     """健康检查API处理器"""

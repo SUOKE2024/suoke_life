@@ -1,17 +1,22 @@
 """
+settings - 索克生活项目模块
+"""
+
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Optional, Dict, Any, List
+import json
+import logging
+import os
+import yaml
+
+"""
 配置管理系统
 
 支持环境变量、配置文件、动态配置等多种配置方式，
 提供类型安全的配置访问和验证。
 """
 
-import os
-import json
-import yaml
-from typing import Optional, Dict, Any, List
-from dataclasses import dataclass, field
-from pathlib import Path
-import logging
 
 logger = logging.getLogger(__name__)
 

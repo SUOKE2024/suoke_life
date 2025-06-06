@@ -1,3 +1,13 @@
+"""
+batch_analyzer - 索克生活项目模块
+"""
+
+        import json
+from datetime import datetime, timedelta
+import grpc
+import logging
+import time
+
 #!/usr/bin/env python
 
 """
@@ -5,11 +15,7 @@
 实现批量脉诊分析和比较功能
 """
 
-import logging
-import time
-from datetime import datetime, timedelta
 
-import grpc
 
 # 导入生成的gRPC代码
 
@@ -326,7 +332,8 @@ class BatchAnalysisHandler:
             end_time = time.time()
             self.metrics.record_histogram("report_generation_latency", end_time - start_time)
 
-    def _get_sessions_by_timeframe(self, user_id, timeframe):
+        @cache(timeout=300)  # 5分钟缓存
+def _get_sessions_by_timeframe(self, user_id, timeframe):
         """根据时间范围获取会话ID"""
         now = datetime.now()
         start_timestamp = timeframe.start_timestamp
@@ -555,7 +562,6 @@ class BatchAnalysisHandler:
         # 此处应该实现实际的报告生成逻辑
         # 为简化示例，我们返回一个简单的JSON字符串和空URL
 
-        import json
 
         report_data = json.dumps(analysis_result, ensure_ascii=False).encode("utf-8")
         report_url = ""

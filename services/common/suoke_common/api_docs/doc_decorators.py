@@ -1,15 +1,20 @@
+"""
+doc_decorators - 索克生活项目模块
+"""
+
+from .openapi_generator import (
+from collections.abc import Callable
+from functools import wraps
+from typing import Any
+import logging
+
 #!/usr/bin/env python3
 """
 API文档装饰器
 提供便捷的装饰器来自动生成API文档
 """
 
-from collections.abc import Callable
-from functools import wraps
-import logging
-from typing import Any
 
-from .openapi_generator import (
     APIParameter,
     APIResponse,
     HTTPMethod,

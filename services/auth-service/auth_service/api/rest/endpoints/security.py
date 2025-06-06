@@ -1,22 +1,29 @@
-"""安全相关API端点"""
+"""
+security - 索克生活项目模块
+"""
 
-import uuid
-import secrets
-from typing import Optional
-from datetime import datetime, timedelta
-
-from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from sqlalchemy.ext.asyncio import AsyncSession
-
+            import structlog
+        import structlog
+from auth_service.config.settings import get_settings
 from auth_service.core.auth import AuthService
 from auth_service.core.database import get_db
 from auth_service.core.email import EmailService
 from auth_service.core.redis import get_redis
-from auth_service.config.settings import get_settings
-from auth_service.repositories.user_repository import UserRepository
 from auth_service.repositories.session_repository import SessionRepository
+from auth_service.repositories.user_repository import UserRepository
 from auth_service.schemas.auth import (
+from datetime import datetime, timedelta
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from sqlalchemy.ext.asyncio import AsyncSession
+from typing import Optional
+import secrets
+import uuid
+
+"""安全相关API端点"""
+
+
+
     PasswordResetRequest,
     PasswordResetConfirmRequest,
     EmailVerificationRequest,
@@ -76,7 +83,6 @@ async def request_password_reset(
         
     except Exception as e:
         # 记录错误但不暴露给用户
-        import structlog
         logger = structlog.get_logger()
         logger.error("Failed to send password reset email", error=str(e), email=request.email)
         return {"message": "如果邮箱存在，重置链接已发送"}
@@ -136,7 +142,6 @@ async def confirm_password_reset(
     except HTTPException:
         raise
     except Exception as e:
-        import structlog
         logger = structlog.get_logger()
         logger.error("Failed to reset password", error=str(e), token=request.token)
         raise HTTPException(
@@ -191,7 +196,6 @@ async def request_email_verification(
         
     except Exception as e:
         # 记录错误但不暴露给用户
-        import structlog
         logger = structlog.get_logger()
         logger.error("Failed to send verification email", error=str(e), email=request.email)
         raise HTTPException(
@@ -250,7 +254,6 @@ async def confirm_email_verification(
             )
         except Exception as e:
             # 欢迎邮件发送失败不影响验证流程
-            import structlog
             logger = structlog.get_logger()
             logger.warning("Failed to send welcome email", error=str(e), user_id=str(user.id))
         
@@ -259,7 +262,6 @@ async def confirm_email_verification(
     except HTTPException:
         raise
     except Exception as e:
-        import structlog
         logger = structlog.get_logger()
         logger.error("Failed to verify email", error=str(e), token=request.token)
         raise HTTPException(

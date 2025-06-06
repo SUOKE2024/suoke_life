@@ -1,18 +1,23 @@
+"""
+retry_manager - 索克生活项目模块
+"""
+
+from collections.abc import Callable
+from dataclasses import dataclass
+from enum import Enum
+from functools import wraps
+from typing import Any
+import asyncio
+import logging
+import random
+import time
+
 #!/usr/bin/env python3
 """
 重试和弹性管理器
 提供智能重试、熔断器模式和错误恢复机制
 """
 
-import asyncio
-import logging
-import random
-import time
-from collections.abc import Callable
-from dataclasses import dataclass
-from enum import Enum
-from functools import wraps
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

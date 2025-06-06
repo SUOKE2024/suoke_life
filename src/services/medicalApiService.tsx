@@ -1,10 +1,11 @@
+import { usePerformanceMonitor } from "../../placeholder";../hooks/////    usePerformanceMonitor
+
 import React from "react";
-import { usePerformanceMonitor } from "../../placeholder";../hooks/////    usePerformanceMonitor";"
 interface ApiResponse<T = any /> { data: T;/////    , success: boolean;
   message?: string,
   code?: number}
-//////     第三方医疗API集成服务   索克生活APP - 医疗数据API集成管理
-// 医疗API提供商类型 * export type MedicalApiProvider = | "fhir"  / FHIR标准医疗数据* // | "epic"  * // Epic医疗系统* // | "cerner"  * // Cerner医疗系统* // | "allscripts"  * // Allscripts医疗系统* // | "athenahealth"  * // athenahealth医疗系统* // | "veracross"  * // Veracross医疗系统* // | "meditech"  * // MEDITECH医疗系统* // | "nextgen"  * // NextGen医疗系统* // | "eclinicalworks"  * // eClinicalWorks医疗系统* //////     | "practice_fusio;"
+// 第三方医疗API集成服务   索克生活APP - 医疗数据API集成管理
+// 医疗API提供商类型 * export type MedicalApiProvider = | "fhir"  / FHIR标准医疗数据* // | "epic"  * // Epic医疗系统* // | "cerner"  * // Cerner医疗系统* // | "allscripts"  * // Allscripts医疗系统* // | "athenahealth"  * // athenahealth医疗系统* // | "veracross"  * // Veracross医疗系统* // | "meditech"  * // MEDITECH医疗系统* // | "nextgen"  * // NextGen医疗系统* // | "eclinicalworks"  * // eClinicalWorks医疗系统* // | "practice_fusio;";
 n";  * / Practice Fusion医疗系统* // * /////     "
 // 医疗数据类型 * export interface MedicalRecord { id: string, ////
   patientId: string,
@@ -25,9 +26,7 @@ n";  * / Practice Fusion医疗系统* // * /////     "
 }
 // 患者信息 * export interface PatientInfo { id: string, ////
   name: string,
-  dateOfBirth: string,;
-  gender: "male" | "female" | "other",;
-  contactInfo: {phone?: string;
+  dateOfBirth: string,gender: "male" | "female" | "other",contactInfo: {phone?: string;
     email?: string;
     address?: string};
   insuranceInfo?:  { provider: string,
@@ -49,15 +48,12 @@ n";  * / Practice Fusion医疗系统* // * /////     "
     | "completed"
     | "cancelled"
     | "no_show";
-  location: {facility: string,;
-    address: string;
+  location: {facility: string,address: string;
     room?: string};
   notes?: string;
   telehealth?: boolean}
 // 处方信息 * export interface Prescription { id: string, ////
-  patientId: string,;
-  clinicianId: string,;
-  medication: {name: string;
+  patientId: string,clinicianId: string,medication: {name: string;
     genericName?: string;
     dosage: string,
     frequency: string,
@@ -72,9 +68,7 @@ n";  * / Practice Fusion医疗系统* // * /////     "
 }
 // 实验室结果 * export interface LabResult { id: string, ////
   patientId: string,
-  testName: string,;
-  testCode: string,;
-  result: {value: string | number;
+  testName: string,testCode: string,result: {value: string | number;
     unit?: string;
     referenceRange?: string,
     status: "normal" | "abnormal" | "critical" | "pending"};
@@ -89,7 +83,7 @@ n";  * / Practice Fusion医疗系统* // * /////     "
   timeout: number,
   retryAttempts: number,
   rateLimit: {requests: number,
-    window: number // 毫秒 //////     }
+    window: number // 毫秒 // }
 }
 // 医疗API服务类 * class MedicalApiService { ////
   private configs: Map<MedicalApiProvider, ApiConfig /> = new Map()/  private rateLimiters: Map<MedicalApiProvider, any /> = new Map();/////
@@ -97,30 +91,30 @@ n";  * / Practice Fusion医疗系统* // * /////     "
     this.initializeConfigs();
     this.setupRateLimiters();
   }
-  //////     初始化API配置  private initializeConfigs(): void {
-    // FHIR标准配置 //////     this.configs.set("fhir", {
+  // 初始化API配置  private initializeConfigs(): void {
+    // FHIR标准配置 // this.configs.set("fhir", {
       baseUrl: process.env.FHIR_API_BASE_URL || "https:// api.fhir.org * R4", /////     apiKey: process.env.FHIR_API_KEY || ","
       version: "R4",
       timeout: 30000,
       retryAttempts: 3,
       rateLimit: { requests: 100, window: 60000}
     });
-    // Epic配置 //////     this.configs.set("epic", {
+    // Epic配置 // this.configs.set("epic", {
       baseUrl: process.env.EPIC_API_BASE_URL ||"https:// fhir.epic.com * interconnect-fhir-oauth", /////     apiKey: process.env.EPIC_API_KEY || ","
       version: "R4",
       timeout: 30000,
       retryAttempts: 3,
       rateLimit: { requests: 50, window: 60000}
     });
-    // Cerner配置 //////     this.configs.set("cerner", {
+    // Cerner配置 // this.configs.set("cerner", {
       baseUrl: process.env.CERNER_API_BASE_URL || "https:// fhir-open.cerner.com * r4", /////     apiKey: process.env.CERNER_API_KEY || ","
       version: "R4",
       timeout: 30000,
       retryAttempts: 3,
       rateLimit: { requests: 60, window: 60000}
     });
-    // 其他提供商的配置... //////     }
-  //////     设置速率限制器  private setupRateLimiters(): void {
+    // 其他提供商的配置... // }
+  // 设置速率限制器  private setupRateLimiters(): void {
     this.configs.forEach((config, provider); => {}
       this.rateLimiters.set(provider, {
         requests:  [],
@@ -128,7 +122,7 @@ n";  * / Practice Fusion医疗系统* // * /////     "
         window: config.rateLimit.window});
     });
   }
-  //////     检查速率限制  private checkRateLimit(provider: MedicalApiProvider): boolean  {
+  // 检查速率限制  private checkRateLimit(provider: MedicalApiProvider): boolean  {
     const limiter = this.rateLimiters.get(provide;r;);
     if (!limiter) return t;r;u;e;
     const now = Date.now;
@@ -140,7 +134,7 @@ n";  * / Practice Fusion医疗系统* // * /////     "
     limiter.requests.push(now);
     return tr;u;e;
   }
-  //////     通用API请求方法  private async makeApiRequest(provider: MedicalApiProvider,
+  // 通用API请求方法  private async makeApiRequest(provider: MedicalApiProvider,
     endpoint: string,
     method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
     data?: unknown,
@@ -151,18 +145,16 @@ n";  * / Practice Fusion医疗系统* // * /////     "
     }
     const config = this.configs.get(provide;r;);
     if (!config) {
-      throw new Error(`Configuration not found for provider: ${provider};`;)
+      throw new Error(`Configuration not found for provider: ${provider};`;);
     }
     const url = `${config.baseUrl}${endpoint;};`;
-    const requestHeaders = { Authorization: `Bearer ${config.apiKey  }`,;
-      "Content-Type": "application/fhir+json",/      Accept: "application/fhir+json",/////          ...header;s;
+    const requestHeaders = { Authorization: `Bearer ${config.apiKey  }`,"Content-Type": "application/fhir+json",/      Accept: "application/fhir+json",/////          ...header;s;
     ;};
     try {
       const controller = new AbortController;
       const timeoutId = setTimeout((); => controller.abort(), config.timeout);
-      const response = await fetch(url, {;
-  //////     性能监控
-const performanceMonitor = usePerformanceMonitor(medicalApiService", {;"
+      const response = await fetch(url, {// 性能监控
+const performanceMonitor = usePerformanceMonitor(medicalApiService", {"
     trackRender: true,
     trackMemory: false,
     warnThreshold: 100, // ms /////
@@ -173,7 +165,7 @@ const performanceMonitor = usePerformanceMonitor(medicalApiService", {;"
         signal: controller.signal});
       clearTimeout(timeoutId);
       if (!response.ok)  {
-        throw new Error(
+        throw new Error(;
           `API request failed: ${response.status} ${response.statusText};`
         ;);
       }
@@ -182,26 +174,24 @@ const performanceMonitor = usePerformanceMonitor(medicalApiService", {;"
       throw error;
     }
   }
-  //////     获取患者信息  async getPatientInfo(provider: MedicalApiProvider,
+  // 获取患者信息  async getPatientInfo(provider: MedicalApiProvider,
     patientId: string);: Promise<PatientInfo /////    >  {
     try {
       const response = await this.makeApiRequest(;
         provider,
         `/Patient/////    ${patientId;};`);
-      return this.transformPatientData(response, provide;r;)
+      return this.transformPatientData(response, provide;r;);
     } catch (error) {
       throw error;
     }
   }
-  //////     获取医疗记录  async getMedicalRecords(provider: MedicalApiProvider,
+  // 获取医疗记录  async getMedicalRecords(provider: MedicalApiProvider,
     patientId: string,
     recordType?: string,
     dateRange?:  { start: string, end: string}): Promise<MedicalRecord[] /////    >  {
     try {
-      let endpoint = `/Patient/${patientId}//`//////
-      switch (recordType) {
-        case "diagnosis":
-          endpoint += "Condition";
+      let endpoint = `/Patient/${patientId}//`// ;
+      switch (recordType) {case "diagnosis":endpoint += "Condition";
           break;
 case "prescription":
           endpoint += "MedicationRequest";
@@ -218,26 +208,25 @@ default: endpoint += "everything"}
         endpoint += `${separator}date=ge${dateRange.start}&date=le${dateRange.end}`;
       }
       const response = await this.makeApiRequest(provider, endpo;i;n;t;);
-      return this.transformMedicalRecords(response, provide;r;)
+      return this.transformMedicalRecords(response, provide;r;);
     } catch (error) {
       throw error;
     }
   }
-  //////     获取预约信息  async getAppointments(provider: MedicalApiProvider,
+  // 获取预约信息  async getAppointments(provider: MedicalApiProvider,
     patientId: string,
     status?: string;
   ): Promise<MedicalAppointment[] /////    >  {
     try {
-      let endpoint = `/Appointment?patient=${patientId;};`/////          if (status) {;
-        endpoint += `&status=${status}`;
+      let endpoint = `/Appointment?patient=${patientId;};`/////          if (status) {endpoint += `&status=${status}`;
       }
       const response = await this.makeApiRequest(provider, endpo;i;n;t;);
-      return this.transformAppointments(response, provide;r;)
+      return this.transformAppointments(response, provide;r;);
     } catch (error) {
       throw err;o;r;
     }
   }
-  //////     创建预约  async createAppointment(provider: MedicalApiProvider,
+  // 创建预约  async createAppointment(provider: MedicalApiProvider,
     appointment: Omit<MedicalAppointment, "id" />/  ): Promise<MedicalAppointment /////    >  {
     try {
       const fhirAppointment = this.transformToFhirAppointment(appointmen;t;);
@@ -246,40 +235,37 @@ default: endpoint += "everything"}
         "/Appointment",/////            "POST",
         fhirAppointm;e;n;t;
       ;);
-      return this.transformAppointments([response], provider)[0]
-    } catch (error) {
-      throw error;
+      return this.transformAppointments([response], provider)[0];
+    } catch (error) {throw error;
     }
   }
-  //////     获取处方信息  async getPrescriptions(provider: MedicalApiProvider,
+  // 获取处方信息  async getPrescriptions(provider: MedicalApiProvider,
     patientId: string,
     status?: string;
   ): Promise<Prescription[] /////    >  {
     try {
-      let endpoint = `/MedicationRequest?patient=${patientId;};`/////          if (status) {;
-        endpoint += `&status=${status}`;
+      let endpoint = `/MedicationRequest?patient=${patientId;};`/////          if (status) {endpoint += `&status=${status}`;
       }
       const response = await this.makeApiRequest(provider, endpo;i;n;t;);
-      return this.transformPrescriptions(response, provide;r;)
+      return this.transformPrescriptions(response, provide;r;);
     } catch (error) {
       throw error;
     }
   }
-  //////     获取实验室结果  async getLabResults(provider: MedicalApiProvider,
+  // 获取实验室结果  async getLabResults(provider: MedicalApiProvider,
     patientId: string,
     testType?: string;
   ): Promise<LabResult[] /////    >  {
     try {
-      let endpoint = `/Observation?patient=${patientId}&category=laborator;y;`/////          if (testType) {;
-        endpoint += `&code=${testType}`;
+      let endpoint = `/Observation?patient=${patientId}&category=laborator;y;`/////          if (testType) {endpoint += `&code=${testType}`;
       }
       const response = await this.makeApiRequest(provider, endpo;i;n;t;);
-      return this.transformLabResults(response, provide;r;)
+      return this.transformLabResults(response, provide;r;);
     } catch (error) {
       throw error;
     }
   }
-  //////     同步多个提供商的数据  async syncMultipleProviders(providers: MedicalApiProvider[],
+  // 同步多个提供商的数据  async syncMultipleProviders(providers: MedicalApiProvider[],
     patientId: string);: Promise< { success: MedicalApiProvider[],
     failed: { provider: MedicalApiProvider, error: string}[],
     data: { records: MedicalRecord[],
@@ -288,8 +274,7 @@ default: endpoint += "everything"}
       labResults: LabResult[];
       };
   }> {
-    const results = {;
-      success:  [] as MedicalApiProvider[],
+    const results = {success:  [] as MedicalApiProvider[],
       failed:  [] as { provider: MedicalApiProvid;e;r, error: string}[],
       data: {
         records:  [] as MedicalRecord[],
@@ -310,7 +295,7 @@ default: endpoint += "everything"}
           results.data.appointments.push(...appointments);
           results.data.prescriptions.push(...prescriptions);
           results.data.labResults.push(...labResults);
-          results.success.push(provider)
+          results.success.push(provider);
         } catch (error) {
           results.failed.push({
             provider,
@@ -320,11 +305,10 @@ default: endpoint += "everything"}
     );
     return resul;t;s;
   }
-  //////     数据转换方法  private transformPatientData(data: unknown,
+  // 数据转换方法  private transformPatientData(data: unknown,
     provider: MedicalApiProvider);: PatientInfo  {
-    // 根据不同提供商的数据格式进行转换* // 这里实现FHIR标准的转换逻辑 * / return {/////
-      id: data.id,
-      name: data.name?.[0]?.text ;|;|`${data.name?.[0]?.given?.join(" ")} ${data.name?.[0]?.family}`,
+    // 根据不同提供商的数据格式进行转换* // 这里实现FHIR标准的转换逻辑 * / return {/////;
+      id: data.id,name: data.name?.[0]?.text ;|;|`${data.name?.[0]?.given?.join(" ")} ${data.name?.[0]?.family}`,
       dateOfBirth: data.birthDate,
       gender: data.gender,
       contactInfo: {
@@ -366,11 +350,11 @@ default: endpoint += "everything"}
       status: entry.resource.status,
       location: {
         facility: entry.resource.participant?.find((p: unknown) =>;
-            p.actor?.reference?.includes("Location")
+            p.actor?.reference?.includes("Location");
           )?.actor?.display || ","
-        address: "},"
+        address: "},",
       notes: entry.resource.comment,
-      telehealth: entry.resource.serviceType?.[0]?.text;?.toLowerCase()
+      telehealth: entry.resource.serviceType?.[0]?.text;?.toLowerCase();
         .includes("telehealth");
     }));
   }
@@ -415,10 +399,7 @@ default: endpoint += "everything"}
     }))
   }
   private transformToFhirAppointment(appointment: Omit<MedicalAppointment, "id" />/////      ): unknown  {
-    return {
-      resourceType: "Appointment",
-      status: appointment.status,
-      serviceType;: ;[;{ text: appointment.appointmentType}
+    return {resourceType: "Appointment",status: appointment.status,serviceType;: ;[;{ text: appointment.appointmentType}
       ],
       start: appointment.scheduledTime,
       end: new Date(,

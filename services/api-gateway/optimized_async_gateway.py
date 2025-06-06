@@ -1,29 +1,34 @@
+"""
+optimized_async_gateway - 索克生活项目模块
+"""
+
+from aiohttp import web, ClientSession, ClientTimeout
+from aiohttp_cors import setup as cors_setup, ResourceOptions
+from collections import defaultdict, deque
+from dataclasses import dataclass, asdict
+from datetime import datetime, timedelta
+from functools import wraps
+from typing import Dict, List, Any, Optional, Callable, Union
+import aiohttp
+import aioredis
+import asyncio
+import asyncpg
+import certifi
+import hashlib
+import json
+import jwt
+import logging
+import psutil
+import ssl
+import time
+import uuid
+
 #!/usr/bin/env python3
 """
 索克生活 - 优化后的异步API网关
 实现高并发I/O处理、智能负载均衡和性能监控
 """
 
-import asyncio
-import time
-import json
-import logging
-from typing import Dict, List, Any, Optional, Callable, Union
-from dataclasses import dataclass, asdict
-from datetime import datetime, timedelta
-import aiohttp
-import aioredis
-from aiohttp import web, ClientSession, ClientTimeout
-from aiohttp_cors import setup as cors_setup, ResourceOptions
-import jwt
-from functools import wraps
-import hashlib
-import uuid
-import psutil
-from collections import defaultdict, deque
-import asyncpg
-import ssl
-import certifi
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)

@@ -1,3 +1,11 @@
+"""
+config - 索克生活项目模块
+"""
+
+from typing import Dict, Any
+import os
+import yaml
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,9 +13,6 @@
 配置管理工具
 """
 
-import os
-import yaml
-from typing import Dict, Any
 
 
 def load_config(config_path: str) -> Dict[str, Any]:

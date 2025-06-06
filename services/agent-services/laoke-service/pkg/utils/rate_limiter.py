@@ -1,17 +1,22 @@
+"""
+rate_limiter - 索克生活项目模块
+"""
+
+from collections import deque
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any
+import asyncio
+import hashlib
+import logging
+import time
+
 #!/usr/bin/env python3
 """
 速率限制器
 提供灵活的速率限制功能，支持多种算法
 """
 
-import asyncio
-import hashlib
-import logging
-import time
-from collections import deque
-from dataclasses import dataclass
-from enum import Enum
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

@@ -1,3 +1,14 @@
+"""
+data_standardization - 索克生活项目模块
+"""
+
+from dataclasses import dataclass, field
+from datetime import datetime, date
+from enum import Enum
+from typing import Dict, List, Optional, Any, Union, Tuple
+import json
+import logging
+
 #!/usr/bin/env python3
 """
 健康数据标准化处理模块
@@ -6,12 +17,6 @@
 支持多种健康数据格式，包括生理指标、检验报告、影像数据等。
 """
 
-import json
-from dataclasses import dataclass, field
-from datetime import datetime, date
-from enum import Enum
-from typing import Dict, List, Optional, Any, Union, Tuple
-import logging
 
 logger = logging.getLogger(__name__)
 

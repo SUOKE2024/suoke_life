@@ -1,21 +1,28 @@
 """
+sensor_integration - 索克生活项目模块
+"""
+
+            from scipy import signal
+        import random
+from collections import deque
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Dict, List, Optional, Any, Callable, Tuple
+import asyncio
+import json
+import logging
+import numpy as np
+import threading
+import time
+
+"""
 切诊传感器集成模块
 
 负责管理各种传感器设备，包括压力传感器、脉搏传感器、温度传感器等，
 实现数据采集、预处理、质量控制和设备状态监控。
 """
 
-import asyncio
-import logging
-import numpy as np
-from typing import Dict, List, Optional, Any, Callable, Tuple
-from dataclasses import dataclass, field
-from enum import Enum
-from datetime import datetime, timedelta
-import json
-import threading
-from collections import deque
-import time
 
 logger = logging.getLogger(__name__)
 
@@ -544,7 +551,6 @@ class SensorDataProcessor:
                        sample_rate: float) -> np.ndarray:
         """低通滤波器"""
         try:
-            from scipy import signal
             nyquist = sample_rate / 2
             normalized_cutoff = cutoff / nyquist
             
@@ -563,7 +569,6 @@ class SensorDataProcessor:
                         sample_rate: float) -> np.ndarray:
         """高通滤波器"""
         try:
-            from scipy import signal
             nyquist = sample_rate / 2
             normalized_cutoff = cutoff / nyquist
             
@@ -583,7 +588,6 @@ class SensorDataProcessor:
                      sample_rate: float) -> np.ndarray:
         """陷波滤波器"""
         try:
-            from scipy import signal
             nyquist = sample_rate / 2
             
             if notch_freq >= nyquist:
@@ -619,7 +623,6 @@ class SensorDataProcessor:
         
         # 使用Savitzky-Golay滤波器进行平滑
         try:
-            from scipy import signal
             window_length = min(5, len(data) if len(data) % 2 == 1 else len(data) - 1)
             if window_length >= 3:
                 smoothed = signal.savgol_filter(data, window_length, 2)
@@ -783,7 +786,6 @@ class SensorManager:
     
     def _simulate_sensor_reading(self, sensor_type: SensorType) -> float:
         """模拟传感器读数"""
-        import random
         
         if sensor_type == SensorType.PRESSURE:
             # 模拟压力传感器：0-1000 Pa

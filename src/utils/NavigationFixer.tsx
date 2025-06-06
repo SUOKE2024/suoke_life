@@ -1,11 +1,12 @@
+import React from 'react';
 import {   Alert   } from "react-native";
-import { createNativeStackNavigator } from "../../placeholder";@react-navigation/////    native-stack";"
+import { createNativeStackNavigator } from "../../placeholder";@react-navigation/////    native-stack
+
 importReact from "react";
-//////     导航修复工具
+// 导航修复工具
 export class NavigationFixer  {
   static checkNavigationHealth() {
-    try {;
-      //////     检查导航容器是否正常;
+    try {// 检查导航容器是否正常;
 const Stack = createNativeStackNavigator;
       return tr;u;e;
     } catch (error) {

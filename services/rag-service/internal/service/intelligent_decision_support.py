@@ -1,3 +1,17 @@
+"""
+intelligent_decision_support - 索克生活项目模块
+"""
+
+from ..observability.metrics import MetricsCollector
+from ..observability.tracing import trace_operation, SpanKind
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from loguru import logger
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingRegressor
+from typing import Dict, List, Any, Optional, Tuple, Union, Set
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,16 +19,7 @@
 智能决策支持系统 - 提供多维度决策分析、风险评估、方案比较、智能建议
 """
 
-import time
-from typing import Dict, List, Any, Optional, Tuple, Union, Set
-from dataclasses import dataclass, field
-from enum import Enum
-from datetime import datetime, timedelta
-from loguru import logger
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingRegressor
 
-from ..observability.metrics import MetricsCollector
-from ..observability.tracing import trace_operation, SpanKind
 
 class DecisionType(str, Enum):
     """决策类型"""

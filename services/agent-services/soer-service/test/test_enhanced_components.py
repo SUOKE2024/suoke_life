@@ -1,21 +1,27 @@
 """
-增强组件测试用例
-验证依赖注入、错误处理、指标收集等功能
+test_enhanced_components - 索克生活项目模块
 """
-from unittest.mock import Mock, patch
 
-import pytest
-
+        import os
 from internal.delivery.health_check import ComponentHealth, HealthChecker
 from pkg.utils.dependency_injection import DependencyContainer, ServiceLifecycle
 from pkg.utils.enhanced_config import EnhancedConfig
 from pkg.utils.error_handling import (
+from pkg.utils.metrics import MetricsCollector
+from unittest.mock import Mock, patch
+import pytest
+
+"""
+增强组件测试用例
+验证依赖注入、错误处理、指标收集等功能
+"""
+
+
     ErrorSeverity,
     RetryConfig,
     SoerServiceException,
     retry_async,
 )
-from pkg.utils.metrics import MetricsCollector
 
 
 class TestDependencyInjection:
@@ -199,7 +205,6 @@ class TestEnhancedConfig:
 
     def test_config_environment_substitution(self):
         """测试环境变量替换"""
-        import os
 
         # 设置环境变量
         os.environ["TEST_HOST"] = "test.example.com"

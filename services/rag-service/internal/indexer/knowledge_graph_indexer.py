@@ -1,3 +1,14 @@
+"""
+knowledge_graph_indexer - 索克生活项目模块
+"""
+
+from ..service.embedding_service import EmbeddingService
+from dataclasses import dataclass, asdict
+from enum import Enum
+from loguru import logger
+from typing import Dict, List, Any, Optional, Tuple, Set
+import asyncio
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,13 +16,7 @@
 知识图谱索引器 - 中医知识的图谱化存储和检索系统
 """
 
-import asyncio
-from typing import Dict, List, Any, Optional, Tuple, Set
-from dataclasses import dataclass, asdict
-from enum import Enum
-from loguru import logger
 
-from ..service.embedding_service import EmbeddingService
     KnowledgeGraphNode, KnowledgeGraphRelation, 
     Syndrome, SingleHerb, HerbFormula, Symptom,
     ConstitutionType, PathologicalFactor

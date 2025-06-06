@@ -1,3 +1,13 @@
+"""
+milvus_repository - 索克生活项目模块
+"""
+
+from ..model.document import Document
+from loguru import logger
+from pymilvus import (
+from typing import List, Dict, Any, Optional, Tuple
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,9 +15,6 @@
 Milvus向量数据库连接实现
 """
 
-import time
-from typing import List, Dict, Any, Optional, Tuple
-from pymilvus import (
     connections,
     utility,
     Collection,
@@ -15,9 +22,7 @@ from pymilvus import (
     FieldSchema,
     DataType,
 )
-from loguru import logger
 
-from ..model.document import Document
 
 class MilvusRepository:
     """

@@ -1,10 +1,15 @@
+"""
+test_blockchain_service - 索克生活项目模块
+"""
+
+from unittest.mock import Mock, patch
+import pytest
+
 #!/usr/bin/env python3
 """
 blockchain_service 测试
 """
 
-import pytest
-from unittest.mock import Mock, patch
 
 class TestBlockchainService:
     """测试类"""

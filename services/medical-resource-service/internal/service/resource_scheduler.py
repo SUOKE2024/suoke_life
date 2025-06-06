@@ -1,16 +1,21 @@
 """
-资源调度引擎模块
-实现智能资源分配和调度优化功能
+resource_scheduler - 索克生活项目模块
 """
 
-import heapq
-import logging
+from ..domain.models import (
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
+import heapq
+import logging
 
-from ..domain.models import (
+"""
+资源调度引擎模块
+实现智能资源分配和调度优化功能
+"""
+
+
     Appointment,
     ConstitutionType,
     Doctor,

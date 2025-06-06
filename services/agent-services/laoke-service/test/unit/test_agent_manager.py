@@ -1,16 +1,21 @@
+"""
+test_agent_manager - 索克生活项目模块
+"""
+
+from internal.agent.agent_manager import AgentManager
+from unittest.mock import AsyncMock, patch
+import asyncio
+import pytest
+import uuid
+
 #!/usr/bin/env python
 
 """
 老克智能体管理器单元测试
 """
 
-import asyncio
-import uuid
-from unittest.mock import AsyncMock, patch
 
-import pytest
 
-from internal.agent.agent_manager import AgentManager
 
 
 class TestAgentManager:
@@ -53,7 +58,8 @@ class TestAgentManager:
             asyncio.run(manager.close())
 
     @pytest.mark.asyncio
-    async def test_process_knowledge_query(self, agent_manager, model_factory_mock):
+    async     @cache(timeout=300)  # 5分钟缓存
+def test_process_knowledge_query(self, agent_manager, model_factory_mock):
         """测试知识查询处理"""
         # 准备测试数据
         user_id = str(uuid.uuid4())

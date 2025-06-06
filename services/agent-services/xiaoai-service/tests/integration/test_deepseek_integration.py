@@ -1,13 +1,23 @@
+"""
+test_deepseek_integration - 索克生活项目模块
+"""
+
+        from internal.agent.agent_manager import AgentManager
+        from internal.agent.deepseek_model_factory import get_deepseek_model_factory
+        from pkg.utils.config_loader import ConfigLoader
+        from pkg.utils.config_loader import get_config
+        import openai
+import asyncio
+import os
+import sys
+import traceback
+
 #!/usr/bin/env python3
 """
 DeepSeek集成测试脚本
 测试真实的DeepSeek API集成
 """
 
-import asyncio
-import os
-import sys
-import traceback
 
 # 添加项目路径
 sys.path.append('.')
@@ -28,7 +38,6 @@ def test_environment_setup():
 
     # 检查openai库
     try:
-        import openai
         print(f"  ✓ OpenAI库版本: {openai.__version__}")
     except ImportError:
         print("  ❌ OpenAI库未安装")
@@ -41,7 +50,6 @@ async def test_deepseek_model_factory():
     print("\n🔍 测试DeepSeek模型工厂...")
 
     try:
-        from internal.agent.deepseek_model_factory import get_deepseek_model_factory
 
         # 获取DeepSeek模型工厂实例
         factory = await get_deepseek_model_factory()
@@ -77,7 +85,6 @@ async def test_chat_completion():
     print("\n🔍 测试聊天完成功能...")
 
     try:
-        from internal.agent.deepseek_model_factory import get_deepseek_model_factory
 
         factory = await get_deepseek_model_factory()
 
@@ -113,7 +120,6 @@ async def test_health_analysis():
     print("\n🔍 测试健康分析功能...")
 
     try:
-        from internal.agent.deepseek_model_factory import get_deepseek_model_factory
 
         factory = await get_deepseek_model_factory()
 
@@ -142,10 +148,8 @@ async def test_agent_manager_integration():
 
     try:
         # 临时修改配置以使用生产环境
-        from pkg.utils.config_loader import get_config
         get_config("config/prod.yaml")
 
-        from internal.agent.agent_manager import AgentManager
 
         agent_manager = AgentManager()
         print("  ✓ 智能体管理器实例创建成功")
@@ -179,7 +183,6 @@ async def test_configuration_loading():
     print("\n🔍 测试配置加载...")
 
     try:
-        from pkg.utils.config_loader import ConfigLoader
 
         # 测试生产环境配置
         config = ConfigLoader("config/prod.yaml")

@@ -1,19 +1,24 @@
+"""
+health_controller - 索克生活项目模块
+"""
+
+from fastapi import APIRouter, Response, status
+from internal.repository.health_check import HealthCheckRepository
+from pkg.utils.config import Config
+from pkg.utils.logger import get_logger
+import platform
+import psutil
+import socket
+import time
+
 #!/usr/bin/env python
 
 """
 健康检查控制器
 """
 
-import platform
-import socket
-import time
 
-import psutil
-from fastapi import APIRouter, Response, status
 
-from internal.repository.health_check import HealthCheckRepository
-from pkg.utils.config import Config
-from pkg.utils.logger import get_logger
 
 router = APIRouter(tags=["健康检查"])
 logger = get_logger(__name__)

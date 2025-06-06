@@ -1,6 +1,6 @@
-import React from "react";
 import { apiClient } from "./apiClient";
 import { ApiResponse, User } from "../types";
+import React from "react";
 import {
   storeAuthTokens,
   clearAuthTokens,
@@ -78,9 +78,10 @@ class AuthService {
     try {
       // 获取设备ID
       const deviceId = await getDeviceId();
-      
+
       const response: ApiResponse<LoginResponse> = await apiClient.post(
-        "/auth/login",
+        "AUTH",
+        "/login",
         {
           ...credentials,
           deviceId
@@ -108,9 +109,10 @@ class AuthService {
     try {
       // 获取设备ID
       const deviceId = await getDeviceId();
-      
+
       const response: ApiResponse<RegisterResponse> = await apiClient.post(
-        "/auth/register",
+        "AUTH",
+        "/register",
         {
           ...userData,
           deviceId
@@ -137,7 +139,7 @@ class AuthService {
   async logout(): Promise<void> {
     try {
       // 调用服务端登出接口
-      await apiClient.post("/auth/logout");
+      await apiClient.post("AUTH", "/logout");
     } catch (error) {
       // 即使服务端登出失败，也要清除本地令牌
       console.warn("服务端登出失败，但将清除本地令牌", error);
@@ -156,7 +158,8 @@ class AuthService {
       }
 
       const response: ApiResponse<RefreshTokenResponse> = await apiClient.post(
-        "/auth/refresh",
+        "AUTH",
+        "/refresh",
         {
           refreshToken
         }
@@ -183,7 +186,7 @@ class AuthService {
   // 获取当前用户信息
   async getCurrentUser(): Promise<User> {
     try {
-      const response: ApiResponse<User> = await apiClient.get("/auth/me");
+      const response: ApiResponse<User> = await apiClient.get("AUTH", "/me");
 
       if (!response.success || !response.data) {
         throw new Error(response.error?.message || "获取用户信息失败");
@@ -199,7 +202,8 @@ class AuthService {
   async forgotPassword(request: ForgotPasswordRequest): Promise<void> {
     try {
       const response: ApiResponse = await apiClient.post(
-        "/auth/forgot-password",
+        "AUTH",
+        "/forgot-password",
         request
       );
 
@@ -215,7 +219,8 @@ class AuthService {
   async verifyResetCode(request: VerifyResetCodeRequest): Promise<void> {
     try {
       const response: ApiResponse = await apiClient.post(
-        "/auth/verify-reset-code",
+        "AUTH",
+        "/verify-reset-code",
         request
       );
 
@@ -231,7 +236,8 @@ class AuthService {
   async resetPassword(request: ResetPasswordRequest): Promise<void> {
     try {
       const response: ApiResponse = await apiClient.post(
-        "/auth/reset-password",
+        "AUTH",
+        "/reset-password",
         request
       );
 
@@ -247,7 +253,8 @@ class AuthService {
   async changePassword(oldPassword: string, newPassword: string): Promise<void> {
     try {
       const response: ApiResponse = await apiClient.post(
-        "/auth/change-password",
+        "AUTH",
+        "/change-password",
         {
           oldPassword,
           newPassword
@@ -266,7 +273,8 @@ class AuthService {
   async verifyPassword(password: string): Promise<boolean> {
     try {
       const response: ApiResponse<{ valid: boolean }> = await apiClient.post(
-        "/auth/verify-password",
+        "AUTH",
+        "/verify-password",
         {
           password
         }
@@ -286,7 +294,8 @@ class AuthService {
   async checkEmailExists(email: string): Promise<boolean> {
     try {
       const response: ApiResponse<{ exists: boolean }> = await apiClient.get(
-        `/auth/check-email?email=${encodeURIComponent(email)}`
+        "AUTH",
+        `/check-email?email=${encodeURIComponent(email)}`
       );
 
       if (!response.success) {
@@ -303,7 +312,8 @@ class AuthService {
   async checkUsernameExists(username: string): Promise<boolean> {
     try {
       const response: ApiResponse<{ exists: boolean }> = await apiClient.get(
-        `/auth/check-username?username=${encodeURIComponent(username)}`
+        "AUTH",
+        `/check-username?username=${encodeURIComponent(username)}`
       );
 
       if (!response.success) {
@@ -320,7 +330,8 @@ class AuthService {
   async sendEmailVerification(email: string): Promise<void> {
     try {
       const response: ApiResponse = await apiClient.post(
-        "/auth/send-email-verification",
+        "AUTH",
+        "/send-email-verification",
         {
           email
         }
@@ -338,7 +349,8 @@ class AuthService {
   async verifyEmailCode(email: string, code: string): Promise<void> {
     try {
       const response: ApiResponse = await apiClient.post(
-        "/auth/verify-email-code",
+        "AUTH",
+        "/verify-email-code",
         {
           email,
           code

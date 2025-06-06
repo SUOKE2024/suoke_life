@@ -1,16 +1,21 @@
+"""
+deepseek_model_factory - 索克生活项目模块
+"""
+
+from asyncio import asyncio
+from datetime import datetime
+from logging import logging
+from loguru import logger
+from sys import sys
+from time import time
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Tuple
+
 #!/usr/bin/env python3
 """"""
 
-from asyncio import asyncio
-from logging import logging
-from sys import sys
-from time import time
-from datetime import datetime
-from typing import List
-from typing import Dict
-from typing import Any
-from typing import Tuple
-from loguru import logger
 
 
 DeepSeek

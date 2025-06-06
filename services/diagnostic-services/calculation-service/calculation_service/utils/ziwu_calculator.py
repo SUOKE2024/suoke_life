@@ -1,11 +1,16 @@
 """
+ziwu_calculator - 索克生活项目模块
+"""
+
+from datetime import datetime, time
+from typing import Dict, List, Optional
+
+"""
 子午流注计算器
 
 用于计算子午流注和最佳治疗时间
 """
 
-from datetime import datetime, time
-from typing import Dict, List, Optional
 
 
 class ZiwuCalculator:

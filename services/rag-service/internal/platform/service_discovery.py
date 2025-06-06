@@ -1,3 +1,19 @@
+"""
+service_discovery - 索克生活项目模块
+"""
+
+        import random
+from ..observability.metrics import MetricsCollector
+from dataclasses import dataclass, field
+from enum import Enum
+from loguru import logger
+from typing import Dict, List, Any, Optional, Callable
+import aiohttp
+import asyncio
+import consul
+import time
+import uuid
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,17 +21,7 @@
 服务发现和注册模块 - 实现服务注册、发现和健康检查
 """
 
-import asyncio
-import time
-import uuid
-from typing import Dict, List, Any, Optional, Callable
-from dataclasses import dataclass, field
-from enum import Enum
-import aiohttp
-import consul
-from loguru import logger
 
-from ..observability.metrics import MetricsCollector
 
 class ServiceStatus(str, Enum):
     """服务状态"""
@@ -447,7 +453,6 @@ class LoadBalancer:
     
     def _random_select(self, instances: List[ServiceInstance]) -> ServiceInstance:
         """随机选择"""
-        import random
         return random.choice(instances)
     
     def _least_connections_select(self, instances: List[ServiceInstance]) -> ServiceInstance:

@@ -1,35 +1,40 @@
+"""
+test_enhanced_integration - 索克生活项目模块
+"""
+
+    from xiaoai.observability.tracing import SpanKind, get_tracer
+    from xiaoai.resilience.circuit_breaker import (
+    from xiaoai.resilience.rate_limiter import (
+    from xiaoai.service.enhanced_diagnosis_service import (
+from pathlib import Path
+import asyncio
+import pytest
+import sys
+import time
+
 #!/usr/bin/env python3
 """
 增强版服务集成测试
 验证断路器、限流、追踪等功能
 """
 
-import asyncio
 
 # 添加项目根目录到Python路径
-import sys
-import time
-from pathlib import Path
 
-import pytest
 
 project_root = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 # 导入被测试的组件
 try:
-    from xiaoai.observability.tracing import SpanKind, get_tracer
-    from xiaoai.resilience.circuit_breaker import (
         CircuitBreakerConfig,
         CircuitBreakerOpenError,
         get_circuit_breaker,
     )
-    from xiaoai.resilience.rate_limiter import (
         RateLimitConfig,
         RateLimitExceededError,
         get_rate_limiter,
     )
-    from xiaoai.service.enhanced_diagnosis_service import (
         DiagnosisRequest,
         get_diagnosis_service,
     )

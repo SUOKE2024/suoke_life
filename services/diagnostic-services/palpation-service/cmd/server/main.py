@@ -1,3 +1,27 @@
+"""
+main - 索克生活项目模块
+"""
+
+            from http.server import HTTPServer, BaseHTTPRequestHandler
+            from prometheus_client import start_http_server
+            import json
+            import threading
+from api.grpc import palpation_service_pb2_grpc
+from concurrent import futures
+from internal.delivery.batch_analyzer import BatchAnalysisHandler
+from internal.delivery.comprehensive_analysis import ComprehensiveAnalysisHandler
+from internal.delivery.palpation_service_impl import PalpationServiceImpl
+from internal.repository.session_repository import SessionRepository
+from internal.repository.user_repository import UserRepository
+from pathlib import Path
+import grpc
+import logging
+import os
+import signal
+import sys
+import time
+import yaml
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,28 +30,13 @@
 启动gRPC服务器
 """
 
-import os
-import sys
-import logging
-import signal
-import time
-from concurrent import futures
-from pathlib import Path
 
-import grpc
-import yaml
 
 # 添加项目根目录到Python路径
 project_root = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(project_root))
 
 # 导入服务实现
-from api.grpc import palpation_service_pb2_grpc
-from internal.delivery.palpation_service_impl import PalpationServiceImpl
-from internal.delivery.comprehensive_analysis import ComprehensiveAnalysisHandler
-from internal.delivery.batch_analyzer import BatchAnalysisHandler
-from internal.repository.session_repository import SessionRepository
-from internal.repository.user_repository import UserRepository
 
 # 配置日志
 logging.basicConfig(
@@ -207,9 +216,6 @@ class PalpationServer:
     def _start_health_check_server(self):
         """启动健康检查HTTP服务器"""
         try:
-            from http.server import HTTPServer, BaseHTTPRequestHandler
-            import threading
-            import json
             
             class HealthCheckHandler(BaseHTTPRequestHandler):
                 def do_GET(self):
@@ -271,7 +277,6 @@ class PalpationServer:
     def _start_metrics_server(self):
         """启动Prometheus指标导出服务器"""
         try:
-            from prometheus_client import start_http_server
             
             metrics_port = self.config.get('monitoring', {}).get('prometheus', {}).get('port', 9090)
             start_http_server(metrics_port)

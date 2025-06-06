@@ -1,34 +1,39 @@
+"""
+test_gRPC_service - 索克生活项目模块
+"""
+
+from api.grpc import inquiry_service_pb2 as pb2
+from api.grpc import inquiry_service_pb2_grpc as pb2_grpc
+from concurrent import futures
+from internal.delivery.inquiry_service_impl import InquiryServiceServicer
+from internal.dialogue.dialogue_manager import DialogueManager
+from internal.knowledge.tcm_knowledge_base import TCMKnowledgeBase
+from internal.llm.health_risk_assessor import HealthRiskAssessor
+from internal.llm.llm_client import LLMClient
+from internal.llm.symptom_extractor import SymptomExtractor
+from internal.llm.tcm_pattern_mapper import TCMPatternMapper
+from internal.repository.session_repository import SessionRepository
+from internal.repository.user_repository import UserRepository
+import asyncio
+import grpc
+import os
+import pytest
+import pytest_asyncio
+import sys
+import time
+
 #!/usr/bin/env python
 
 """
 问诊服务gRPC接口集成测试
 """
 
-import asyncio
-from concurrent import futures
-import os
 
 # 导入生成的gRPC代码
-import sys
-import time
 
-import grpc
-import pytest
-import pytest_asyncio
-from api.grpc import inquiry_service_pb2 as pb2
-from api.grpc import inquiry_service_pb2_grpc as pb2_grpc
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-from internal.delivery.inquiry_service_impl import InquiryServiceServicer
-from internal.dialogue.dialogue_manager import DialogueManager
-from internal.llm.llm_client import LLMClient
-from internal.llm.symptom_extractor import SymptomExtractor
-from internal.llm.tcm_pattern_mapper import TCMPatternMapper
-from internal.llm.health_risk_assessor import HealthRiskAssessor
-from internal.knowledge.tcm_knowledge_base import TCMKnowledgeBase
-from internal.repository.session_repository import SessionRepository
-from internal.repository.user_repository import UserRepository
 
 class TestGRPCService:
     """gRPC服务集成测试类"""

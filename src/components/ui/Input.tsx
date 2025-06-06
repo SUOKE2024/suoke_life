@@ -1,52 +1,51 @@
+import {import { Text } from "react-native;"
+import { colors, spacing, borderRadius, components, typography } from "../../constants/////    theme";
+import { usePerformanceMonitor } from "../../placeholder";../../hooks/////    usePerformanceMonitor
+
 import React, { useState, useMemo, useCallback } from "react";
-import {
   TextInput,
   View,
   StyleSheet,
   ViewStyle,
   TextStyle,
   TouchableOpacity;
-} from "../../placeholder";react-native";"
-import { Text } from "react-native";";"
-import { colors, spacing, borderRadius, components, typography } from "../../constants/////    theme";
-import { usePerformanceMonitor } from "../../placeholder";../../hooks/////    usePerformanceMonitor";"
-//////     索克生活 - Input组件
-//////     统一的输入框组件，支持多种类型和状态
+} from "../../placeholder";react-native
+// 索克生活 - Input组件
+// 统一的输入框组件，支持多种类型和状态
 export interface InputProps {
-  //////     基础属性;
+  // 基础属性;
 ;
 value?: string;
   onChangeText?: (text: string) => void;
   placeholder?: string;
-  //////     输入类型
+  // 输入类型
 type?: text" | "email | "password" | number" | "phone;
   multiline?: boolean;
   numberOfLines?: number;
-  //////     状态
+  // 状态
 disabled?: boolean;
   error?: boolean;
   errorMessage?: string;
-  //////     样式
+  // 样式
 size?: "small" | medium" | "large;
   variant?: "outlined" | filled" | "underlined;
-  //////     图标
+  // 图标
 leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
-  //////     标签
+  // 标签
 label?: string;
   helperText?: string;
-  //////     自定义样式
+  // 自定义样式
 style?: ViewStyle;
   inputStyle?: TextStyle;
-  //////     其他属性
+  // 其他属性
 testID?: string;
   maxLength?: number;
   autoFocus?: boolean;
   onFocus?: () => void;
   onBlur?: () => void;
 }
-const Input: React.FC<InputProps>  = ({;
-  value,
+const Input: React.FC<InputProps>  = ({value,
   onChangeText,
   placeholder,
   type = "text",
@@ -69,24 +68,23 @@ const Input: React.FC<InputProps>  = ({;
   onFocus,
   onBlur;
 }) => {}
-  //////     性能监控
-const performanceMonitor = usePerformanceMonitor({;
-    componentName: "Input",
+  // 性能监控
+const performanceMonitor = usePerformanceMonitor({componentName: "Input",
     enableMemoryMonitoring: false,
     threshold: 100;
   });
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
-  const keyboardType = useMemo(() => {;}
+  const keyboardType = useMemo(() => {
     switch (type) {
-      case email":;"
+      case email":"
         return "email-address;"
       case "number":
-        return numeric";"
+        return numeric
       case "phone:"
         return "phone-pad";
       default:
-        return default";"
+        return default
     }
   }, [type]);
   const containerStyle = useMemo(() => [;
@@ -104,32 +102,32 @@ const performanceMonitor = usePerformanceMonitor({;
     multiline && styles.multiline,
     inputStyle;
   ].filter(Boolean) as TextStyle[], [size, multiline, inputStyle]);
-  const handleFocus = useCallback(() => {;}
+  const handleFocus = useCallback(() => {
     setIsFocused(true);
     onFocus?.();
   }, [onFocus]);
-  const handleBlur = useCallback(() => {;}
+  const handleBlur = useCallback(() => {
     setIsFocused(false);
     onBlur?.();
   }, [onBlur]);
-  const togglePasswordVisibility = useCallback(() => {;}
+  const togglePasswordVisibility = useCallback(() => {
     setIsPasswordVisible(prev => !prev);
   }, []);
-  //////     记录渲染性能
+  // 记录渲染性能
 performanceMonitor.recordRender();
-  return (
-    <View style={styles.wrapper}>
-      {label && (
-        <Text style={styles.label}>
-          {label}
-        </////    Text>
-      )}
-      <View style={containerStyle}>
-        {leftIcon && (
-          <View style={styles.leftIcon}>
-            {leftIcon}
-          </////    View>
-        )}
+  return (;
+    <View style={styles.wrapper}>;
+      {label && (;
+        <Text style={styles.label}>;
+          {label};
+        </////    Text>;
+      )};
+      <View style={containerStyle}>;
+        {leftIcon && (;
+          <View style={styles.leftIcon}>;
+            {leftIcon};
+          </////    View>;
+        )};
         <TextInput;
 style={textInputStyle}
           value={value}
@@ -172,16 +170,13 @@ style={error ? { ...styles.helperText, ...styles.errorText } : styles.helperText
     </////    View>
   );
 };
-const styles = StyleSheet.create({;
-  wrapper: {
+const styles = StyleSheet.create({wrapper: {
     marginBottom: spacing.sm},
   container: {
     flexDirection: row","
-    alignItems: "center,"
+    alignItems: "center,",
     borderRadius: borderRadius.md,
-    backgroundColor: colors.surface},
-  ;
-  //////     尺寸样式
+    backgroundColor: colors.surface},// 尺寸样式
 small: {
     height: 40,
     paddingHorizontal: spacing.sm},
@@ -191,7 +186,7 @@ small: {
   large: {
     height: 56,
     paddingHorizontal: spacing.lg},
-  //////     变体样式
+  // 变体样式
 outlined: {
     borderWidth: 1,
     borderColor: colors.border,
@@ -205,7 +200,7 @@ outlined: {
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
     borderRadius: 0},
-  //////     状态样式
+  // 状态样式
 focused: {
     borderColor: colors.primary},
   error: {
@@ -213,7 +208,7 @@ focused: {
   disabled: {
     backgroundColor: colors.gray100,
     borderColor: colors.gray200},
-  //////     输入框样式
+  // 输入框样式
 input: {
     flex: 1,
     fontFamily: typography.fontFamily.regular,
@@ -229,12 +224,12 @@ input: {
   multiline: {
     textAlignVertical: top","
     paddingVertical: spacing.sm},
-  //////     图标样式
+  // 图标样式
 leftIcon: {
     marginRight: spacing.xs},
   rightIcon: {
     marginLeft: spacing.xs},
-  //////     标签和帮助文本
+  // 标签和帮助文本
 label: {
     marginBottom: spacing.xs,
     color: colors.textSecondary},

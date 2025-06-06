@@ -1,9 +1,8 @@
 import { AgentBase } from "../base/AgentBase";
-import {
-  AgentType,
+import {AgentType,
   AgentCapability,
   AgentResponse,
-  AgentContext,
+  AgentContext
 } from "../types";
 
 /**
@@ -33,7 +32,7 @@ export class SoerAgentImpl extends AgentBase {
       AgentCapability.PERSONALIZED_RECOMMENDATIONS,
       AgentCapability.HABIT_TRACKING,
       AgentCapability.WELLNESS_COACHING,
-      AgentCapability.DATA_FUSION,
+      AgentCapability.DATA_FUSION
     ];
   }
 
@@ -116,27 +115,15 @@ export class SoerAgentImpl extends AgentBase {
 
       const executionTime = Date.now() - startTime;
 
-      return this.createSuccessResponse(
-        response.message,
-        response.data,
-        {
-          ...context,
-          lastInteraction: new Date(),
-          agentType: this.agentType,
-        },
-        {
-          executionTime,
-          requestType: analysis.type,
-          confidence: analysis.confidence,
-          dataSource: analysis.dataSource || "user_input",
-        }
+      return this.createSuccessResponse(;
+        response.message,response.data,{...context,lastInteraction: new Date(),agentType: this.agentType;
+        },{executionTime,requestType: analysis.type,confidence: analysis.confidence,dataSource: analysis.dataSource || "user_input";
+        };
       );
     } catch (error) {
       this.log("error", "索儿处理消息失败", error);
-      return this.createErrorResponse(
-        "抱歉，我在分析您的生活数据时遇到了问题，请稍后再试。",
-        error,
-        context
+      return this.createErrorResponse(;
+        "抱歉，我在分析您的生活数据时遇到了问题，请稍后再试。",error,context;
       );
     }
   }
@@ -153,20 +140,20 @@ export class SoerAgentImpl extends AgentBase {
         sleep: true,
         stress: true,
         bloodOxygen: true,
-        temperature: true,
+        temperature: true
       },
       smartRing: {
         heartRateVariability: true,
         bodyTemperature: true,
         sleepStages: true,
-        activity: true,
+        activity: true
       },
       smartClothing: {
         posture: true,
         movement: true,
         breathing: true,
-        muscleActivity: true,
-      },
+        muscleActivity: true
+      }
     });
 
     this.sensorNetwork.set("environmental_sensors", {
@@ -176,37 +163,37 @@ export class SoerAgentImpl extends AgentBase {
         co2: true,
         humidity: true,
         temperature: true,
-        voc: true,
+        voc: true
       },
       lighting: {
         brightness: true,
         colorTemperature: true,
         uvIndex: true,
-        circadianLighting: true,
+        circadianLighting: true
       },
       sound: {
         noiseLevel: true,
         soundQuality: true,
-        frequencyAnalysis: true,
-      },
+        frequencyAnalysis: true
+      }
     });
 
     this.sensorNetwork.set("smart_home", {
       bedroom: {
         sleepEnvironment: true,
         mattressSensors: true,
-        climateControl: true,
+        climateControl: true
       },
       kitchen: {
         nutritionTracking: true,
         cookingBehavior: true,
-        foodStorage: true,
+        foodStorage: true
       },
       bathroom: {
         weightScale: true,
         bodyComposition: true,
-        waterUsage: true,
-      },
+        waterUsage: true
+      }
     });
   }
 
@@ -221,22 +208,22 @@ export class SoerAgentImpl extends AgentBase {
         exerciseHabits: true,
         eatingBehaviors: true,
         workPatterns: true,
-        socialInteractions: true,
+        socialInteractions: true
       },
       interventionStrategies: {
         nudging: true,
         gamification: true,
         socialSupport: true,
         environmentalDesign: true,
-        cognitiveReframing: true,
+        cognitiveReframing: true
       },
       behaviorModels: {
         transtheoreticalModel: true,
         socialCognitiveTheory: true,
         healthBeliefModel: true,
-        planedBehaviorTheory: true,
+        planedBehaviorTheory: true
       },
-      initialized: true,
+      initialized: true
     };
   }
 
@@ -250,7 +237,7 @@ export class SoerAgentImpl extends AgentBase {
         voice: true,
         text: true,
         physiological: true,
-        behavioral: true,
+        behavioral: true
       },
       emotionalStates: [
         "joy",
@@ -264,7 +251,7 @@ export class SoerAgentImpl extends AgentBase {
         "stressed",
         "relaxed",
         "motivated",
-        "tired",
+        "tired"
       ],
       supportStrategies: {
         activeListening: true,
@@ -272,7 +259,7 @@ export class SoerAgentImpl extends AgentBase {
         cognitiveRestructuring: true,
         mindfulnessGuidance: true,
         breathingExercises: true,
-        progressiveMuscleRelaxation: true,
+        progressiveMuscleRelaxation: true
       },
       therapeuticApproaches: {
         cbt: true, // 认知行为疗法
@@ -280,7 +267,7 @@ export class SoerAgentImpl extends AgentBase {
         act: true, // 接受承诺疗法
         mindfulness: true, // 正念疗法
       },
-      initialized: true,
+      initialized: true
     };
   }
 
@@ -295,29 +282,29 @@ export class SoerAgentImpl extends AgentBase {
         temperature: true,
         humidity: true,
         noise: true,
-        ergonomics: true,
+        ergonomics: true
       },
       outdoorEnvironment: {
         weatherConditions: true,
         airPollution: true,
         uvRadiation: true,
         pollenCount: true,
-        noiseLevel: true,
+        noiseLevel: true
       },
       workEnvironment: {
         ergonomics: true,
         lighting: true,
         acoustics: true,
         airQuality: true,
-        stressFactors: true,
+        stressFactors: true
       },
       optimizationAlgorithms: {
         circadianRhythm: true,
         productivityOptimization: true,
         sleepOptimization: true,
-        moodEnhancement: true,
+        moodEnhancement: true
       },
-      initialized: true,
+      initialized: true
     };
   }
 
@@ -333,28 +320,28 @@ export class SoerAgentImpl extends AgentBase {
         stress: true,
         mindfulness: true,
         relationships: true,
-        workLifeBalance: true,
+        workLifeBalance: true
       },
       personalizedPlans: {
         goalSetting: true,
         progressTracking: true,
         adaptiveAdjustments: true,
-        motivationalSupport: true,
+        motivationalSupport: true
       },
       interventionTechniques: {
         behavioralNudges: true,
         habitStacking: true,
         environmentalDesign: true,
         socialAccountability: true,
-        rewardSystems: true,
+        rewardSystems: true
       },
       assessmentTools: {
         wellnessScoring: true,
         riskAssessment: true,
         progressMetrics: true,
-        satisfactionSurveys: true,
+        satisfactionSurveys: true
       },
-      initialized: true,
+      initialized: true
     };
   }
 
@@ -374,12 +361,9 @@ export class SoerAgentImpl extends AgentBase {
     if (
       keywords.includes("监测") ||
       keywords.includes("健康数据") ||
-      keywords.includes("生命体征")
+      keywords.includes("生命体征");
     ) {
-      return {
-        type: "health_monitoring",
-        confidence: 0.92,
-        dataSource: "sensors",
+      return {type: "health_monitoring",confidence: 0.92,dataSource: "sensors";
       };
     }
 
@@ -388,7 +372,7 @@ export class SoerAgentImpl extends AgentBase {
       keywords.includes("优化") ||
       keywords.includes("改善") ||
       keywords.includes("生活方式") ||
-      keywords.includes("习惯")
+      keywords.includes("习惯");
     ) {
       return { type: "lifestyle_optimization", confidence: 0.88 };
     }
@@ -398,7 +382,7 @@ export class SoerAgentImpl extends AgentBase {
       keywords.includes("改变") ||
       keywords.includes("戒除") ||
       keywords.includes("培养") ||
-      keywords.includes("坚持")
+      keywords.includes("坚持");
     ) {
       return { type: "behavior_intervention", confidence: 0.85 };
     }
@@ -408,7 +392,7 @@ export class SoerAgentImpl extends AgentBase {
       keywords.includes("情绪") ||
       keywords.includes("压力") ||
       keywords.includes("焦虑") ||
-      keywords.includes("心情")
+      keywords.includes("心情");
     ) {
       return { type: "emotional_support", confidence: 0.9 };
     }
@@ -418,7 +402,7 @@ export class SoerAgentImpl extends AgentBase {
       keywords.includes("环境") ||
       keywords.includes("空气") ||
       keywords.includes("光线") ||
-      keywords.includes("噪音")
+      keywords.includes("噪音");
     ) {
       return { type: "environment_analysis", confidence: 0.87 };
     }
@@ -428,7 +412,7 @@ export class SoerAgentImpl extends AgentBase {
       keywords.includes("追踪") ||
       keywords.includes("记录") ||
       keywords.includes("统计") ||
-      keywords.includes("分析")
+      keywords.includes("分析");
     ) {
       return { type: "habit_tracking", confidence: 0.83 };
     }
@@ -438,7 +422,7 @@ export class SoerAgentImpl extends AgentBase {
       keywords.includes("指导") ||
       keywords.includes("建议") ||
       keywords.includes("计划") ||
-      keywords.includes("目标")
+      keywords.includes("目标");
     ) {
       return { type: "wellness_coaching", confidence: 0.86 };
     }
@@ -448,7 +432,7 @@ export class SoerAgentImpl extends AgentBase {
       keywords.includes("传感器") ||
       keywords.includes("设备") ||
       keywords.includes("数据") ||
-      keywords.includes("测量")
+      keywords.includes("测量");
     ) {
       return { type: "sensor_data", confidence: 0.8 };
     }
@@ -469,22 +453,10 @@ export class SoerAgentImpl extends AgentBase {
       data: {
         currentVitals: healthData.vitals,
         trends: insights.trends,
-        alerts: insights.alerts,
-        recommendations: insights.recommendations,
-        monitoringCapabilities: {
-          realTimeTracking: true,
-          predictiveAnalytics: true,
-          anomalyDetection: true,
-          trendAnalysis: true,
-        },
-        connectedDevices: this.getConnectedDevices(),
-        dataVisualization: {
-          charts: true,
-          dashboards: true,
-          reports: true,
-          comparisons: true,
-        },
-      },
+        alerts: insights.alerts,recommendations: insights.recommendations,monitoringCapabilities: {realTimeTracking: true,predictiveAnalytics: true,anomalyDetection: true,trendAnalysis: true;
+        },connectedDevices: this.getConnectedDevices(),dataVisualization: {charts: true,dashboards: true,reports: true,comparisons: true;
+        };
+      };
     };
   }
 
@@ -495,22 +467,9 @@ export class SoerAgentImpl extends AgentBase {
     // 处理生活方式优化
     const optimizationPlan = await this.generateOptimizationPlan(context);
 
-    return {
-      message: "基于您的生活数据分析，我为您制定了个性化的生活方式优化方案：",
-      data: {
-        currentAssessment: optimizationPlan.assessment,
-        optimizationAreas: optimizationPlan.areas,
-        actionPlan: optimizationPlan.actions,
-        expectedOutcomes: optimizationPlan.outcomes,
-        timeline: optimizationPlan.timeline,
-        trackingMetrics: optimizationPlan.metrics,
-        supportResources: {
-          educationalContent: true,
-          communitySupport: true,
-          expertConsultation: true,
-          toolsAndApps: true,
-        },
-      },
+    return {message: "基于您的生活数据分析，我为您制定了个性化的生活方式优化方案：",data: {currentAssessment: optimizationPlan.assessment,optimizationAreas: optimizationPlan.areas,actionPlan: optimizationPlan.actions,expectedOutcomes: optimizationPlan.outcomes,timeline: optimizationPlan.timeline,trackingMetrics: optimizationPlan.metrics,supportResources: {educationalContent: true,communitySupport: true,expertConsultation: true,toolsAndApps: true;
+        };
+      };
     };
   }
 
@@ -519,9 +478,8 @@ export class SoerAgentImpl extends AgentBase {
     context: AgentContext
   ): Promise<any> {
     // 处理行为干预
-    const interventionStrategy = await this.designInterventionStrategy(
-      analysis.behavior,
-      context
+    const interventionStrategy = await this.designInterventionStrategy(;
+      analysis.behavior,context;
     );
 
     return {
@@ -529,22 +487,10 @@ export class SoerAgentImpl extends AgentBase {
       data: {
         targetBehavior: interventionStrategy.target,
         currentStage: interventionStrategy.stage,
-        interventionTechniques: interventionStrategy.techniques,
-        milestones: interventionStrategy.milestones,
-        supportSystem: interventionStrategy.support,
-        progressTracking: {
-          dailyCheckins: true,
-          weeklyReviews: true,
-          monthlyAssessments: true,
-          adaptiveAdjustments: true,
-        },
-        motivationalElements: {
-          gamification: true,
-          socialSupport: true,
-          rewardSystems: true,
-          progressVisualization: true,
-        },
-      },
+        interventionTechniques: interventionStrategy.techniques,milestones: interventionStrategy.milestones,supportSystem: interventionStrategy.support,progressTracking: {dailyCheckins: true,weeklyReviews: true,monthlyAssessments: true,adaptiveAdjustments: true;
+        },motivationalElements: {gamification: true,socialSupport: true,rewardSystems: true,progressVisualization: true;
+        };
+      };
     };
   }
 
@@ -554,9 +500,8 @@ export class SoerAgentImpl extends AgentBase {
   ): Promise<any> {
     // 处理情感支持
     const emotionalState = await this.assessEmotionalState(context);
-    const supportPlan = await this.createEmotionalSupportPlan(
-      emotionalState,
-      context
+    const supportPlan = await this.createEmotionalSupportPlan(;
+      emotionalState,context;
     );
 
     return {
@@ -570,22 +515,11 @@ export class SoerAgentImpl extends AgentBase {
         therapeuticTechniques: {
           mindfulness: "正念冥想练习",
           breathing: "深呼吸技巧",
-          grounding: "接地技术",
-          reframing: "认知重构",
-        },
-        emergencySupport: {
-          crisisHotline: true,
-          emergencyContacts: true,
-          professionalReferral: true,
-          safetyPlanning: true,
-        },
-        progressMonitoring: {
-          moodTracking: true,
-          stressAssessment: true,
-          copingEffectiveness: true,
-          wellbeingMetrics: true,
-        },
-      },
+          grounding: "接地技术",reframing: "认知重构";
+        },emergencySupport: {crisisHotline: true,emergencyContacts: true,professionalReferral: true,safetyPlanning: true;
+        },progressMonitoring: {moodTracking: true,stressAssessment: true,copingEffectiveness: true,wellbeingMetrics: true;
+        };
+      };
     };
   }
 
@@ -602,22 +536,10 @@ export class SoerAgentImpl extends AgentBase {
         environmentalFactors: environmentData.factors,
         healthImpacts: environmentData.impacts,
         optimizationSuggestions: environmentData.suggestions,
-        realTimeMonitoring: {
-          airQuality: environmentData.airQuality,
-          lighting: environmentData.lighting,
-          acoustics: environmentData.acoustics,
-          temperature: environmentData.temperature,
-          humidity: environmentData.humidity,
-        },
-        smartHomeIntegration: {
-          automatedAdjustments: true,
-          circadianLighting: true,
-          airPurification: true,
-          climateControl: true,
-          noiseReduction: true,
-        },
-        personalizedRecommendations: environmentData.personalizedTips,
-      },
+        realTimeMonitoring: {airQuality: environmentData.airQuality,lighting: environmentData.lighting,acoustics: environmentData.acoustics,temperature: environmentData.temperature,humidity: environmentData.humidity;
+        },smartHomeIntegration: {automatedAdjustments: true,circadianLighting: true,airPurification: true,climateControl: true,noiseReduction: true;
+        },personalizedRecommendations: environmentData.personalizedTips;
+      };
     };
   }
 
@@ -640,22 +562,11 @@ export class SoerAgentImpl extends AgentBase {
           automaticDetection: true,
           manualLogging: true,
           photoEvidence: true,
-          socialSharing: true,
-          reminderSystem: true,
-        },
-        analyticsTools: {
-          trendAnalysis: true,
-          correlationAnalysis: true,
-          predictiveModeling: true,
-          benchmarking: true,
-        },
-        motivationalFeatures: {
-          achievements: true,
-          challenges: true,
-          leaderboards: true,
-          rewards: true,
-        },
-      },
+          socialSharing: true,reminderSystem: true;
+        },analyticsTools: {trendAnalysis: true,correlationAnalysis: true,predictiveModeling: true,benchmarking: true;
+        },motivationalFeatures: {achievements: true,challenges: true,leaderboards: true,rewards: true;
+        };
+      };
     };
   }
 
@@ -678,22 +589,11 @@ export class SoerAgentImpl extends AgentBase {
           oneOnOneGuidance: true,
           groupSessions: true,
           peerSupport: true,
-          expertConsultations: true,
-        },
-        resourceLibrary: {
-          educationalContent: true,
-          workoutVideos: true,
-          meditationGuides: true,
-          nutritionPlans: true,
-          sleepOptimization: true,
-        },
-        adaptiveCoaching: {
-          personalizedFeedback: true,
-          dynamicAdjustments: true,
-          contextualSupport: true,
-          motivationalTiming: true,
-        },
-      },
+          expertConsultations: true;
+        },resourceLibrary: {educationalContent: true,workoutVideos: true,meditationGuides: true,nutritionPlans: true,sleepOptimization: true;
+        },adaptiveCoaching: {personalizedFeedback: true,dynamicAdjustments: true,contextualSupport: true,motivationalTiming: true;
+        };
+      };
     };
   }
 
@@ -715,22 +615,11 @@ export class SoerAgentImpl extends AgentBase {
         dataFusion: {
           multiSourceIntegration: true,
           realTimeProcessing: true,
-          patternRecognition: true,
-          anomalyDetection: true,
-        },
-        privacyProtection: {
-          dataEncryption: true,
-          localProcessing: true,
-          consentManagement: true,
-          dataMinimization: true,
-        },
-        futureExpansion: {
-          newSensorTypes: true,
-          improvedAccuracy: true,
-          enhancedIntegration: true,
-          advancedAnalytics: true,
-        },
-      },
+          patternRecognition: true,anomalyDetection: true;
+        },privacyProtection: {dataEncryption: true,localProcessing: true,consentManagement: true,dataMinimization: true;
+        },futureExpansion: {newSensorTypes: true,improvedAccuracy: true,enhancedIntegration: true,advancedAnalytics: true;
+        };
+      };
     };
   }
 
@@ -748,54 +637,38 @@ export class SoerAgentImpl extends AgentBase {
             name: "健康监测",
             description: "实时监测生命体征和健康指标",
             icon: "💓",
-            features: ["心率监测", "睡眠分析", "压力评估", "活动追踪"],
+            features: ["心率监测", "睡眠分析", "压力评估", "活动追踪"]
           },
           {
             name: "行为改变",
             description: "科学的行为干预和习惯培养",
             icon: "🎯",
-            features: ["目标设定", "进度追踪", "动机激励", "习惯养成"],
+            features: ["目标设定", "进度追踪", "动机激励", "习惯养成"]
           },
           {
             name: "情感支持",
             description: "专业的心理健康支持和情感陪伴",
             icon: "🤗",
-            features: ["情绪识别", "压力缓解", "心理疏导", "正念练习"],
+            features: ["情绪识别", "压力缓解", "心理疏导", "正念练习"]
           },
           {
             name: "环境优化",
             description: "智能环境监测和优化建议",
             icon: "🏠",
-            features: ["空气质量", "光线调节", "噪音控制", "温湿度管理"],
-          },
-          {
-            name: "个性化指导",
-            description: "基于数据的个性化健康指导",
-            icon: "👨‍⚕️",
-            features: ["健康评估", "风险预警", "改善建议", "专家咨询"],
-          },
-        ],
-        specialFeatures: [
-          "多传感器数据融合",
-          "实时健康监测",
-          "智能行为干预",
-          "情感AI支持",
-          "环境智能优化",
-        ],
-      },
+            features: ["空气质量", "光线调节", "噪音控制", "温湿度管理"]
+          },{name: "个性化指导",description: "基于数据的个性化健康指导",icon: "👨‍⚕️",features: ["健康评估", "风险预警", "改善建议", "专家咨询"];
+          };
+        ],specialFeatures: [;
+          "多传感器数据融合","实时健康监测","智能行为干预","情感AI支持","环境智能优化";
+        ];
+      };
     };
   }
 
   // 辅助方法实现
   private async collectHealthData(context: AgentContext): Promise<any> {
-    return {
-      vitals: {
-        heartRate: 72,
-        bloodPressure: { systolic: 120, diastolic: 80 },
-        temperature: 36.5,
-        oxygenSaturation: 98,
-        respiratoryRate: 16,
-      },
+    return {vitals: {heartRate: 72,bloodPressure: { systolic: 120, diastolic: 80 },temperature: 36.5,oxygenSaturation: 98,respiratoryRate: 16;
+      };
     };
   }
 
@@ -803,10 +676,7 @@ export class SoerAgentImpl extends AgentBase {
     healthData: any,
     context: AgentContext
   ): Promise<any> {
-    return {
-      trends: ["心率稳定", "血压正常", "睡眠质量良好"],
-      alerts: [],
-      recommendations: ["保持当前生活方式", "适当增加运动量"],
+    return {trends: ["心率稳定", "血压正常", "睡眠质量良好"],alerts: [],recommendations: ["保持当前生活方式", "适当增加运动量"];
     };
   }
 
@@ -815,13 +685,7 @@ export class SoerAgentImpl extends AgentBase {
   }
 
   private async generateOptimizationPlan(context: AgentContext): Promise<any> {
-    return {
-      assessment: "整体健康状况良好",
-      areas: ["睡眠优化", "运动增强", "营养改善"],
-      actions: ["建立规律作息", "增加有氧运动", "均衡膳食"],
-      outcomes: ["提升睡眠质量", "增强体能", "改善营养状况"],
-      timeline: "3个月",
-      metrics: ["睡眠评分", "运动量", "营养指数"],
+    return {assessment: "整体健康状况良好",areas: ["睡眠优化", "运动增强", "营养改善"],actions: ["建立规律作息", "增加有氧运动", "均衡膳食"],outcomes: ["提升睡眠质量", "增强体能", "改善营养状况"],timeline: "3个月",metrics: ["睡眠评分", "运动量", "营养指数"];
     };
   }
 
@@ -829,22 +693,12 @@ export class SoerAgentImpl extends AgentBase {
     behavior: string,
     context: AgentContext
   ): Promise<any> {
-    return {
-      target: "建立规律运动习惯",
-      stage: "准备阶段",
-      techniques: ["目标设定", "环境设计", "社会支持"],
-      milestones: ["第1周：制定计划", "第2周：开始行动", "第4周：形成习惯"],
-      support: ["专业指导", "同伴支持", "家庭鼓励"],
+    return {target: "建立规律运动习惯",stage: "准备阶段",techniques: ["目标设定", "环境设计", "社会支持"],milestones: ["第1周：制定计划", "第2周：开始行动", "第4周：形成习惯"],support: ["专业指导", "同伴支持", "家庭鼓励"];
     };
   }
 
   private async assessEmotionalState(context: AgentContext): Promise<any> {
-    return {
-      mood: "neutral",
-      stress: 3,
-      energy: 7,
-      confidence: 8,
-      socialConnection: 6,
+    return {mood: "neutral",stress: 3,energy: 7,confidence: 8,socialConnection: 6;
     };
   }
 
@@ -852,64 +706,32 @@ export class SoerAgentImpl extends AgentBase {
     emotionalState: any,
     context: AgentContext
   ): Promise<any> {
-    return {
-      strategies: ["正念冥想", "深呼吸练习", "积极思维"],
-      immediateCoping: ["5分钟冥想", "深呼吸3次", "听舒缓音乐"],
-      longTermSupport: ["定期心理咨询", "建立支持网络", "培养兴趣爱好"],
+    return {strategies: ["正念冥想", "深呼吸练习", "积极思维"],immediateCoping: ["5分钟冥想", "深呼吸3次", "听舒缓音乐"],longTermSupport: ["定期心理咨询", "建立支持网络", "培养兴趣爱好"];
     };
   }
 
   private async analyzeEnvironment(context: AgentContext): Promise<any> {
-    return {
-      factors: {
-        airQuality: "good",
-        lighting: "optimal",
-        noise: "low",
-        temperature: "comfortable",
-      },
-      impacts: ["有利于专注", "促进睡眠", "减少压力"],
-      suggestions: ["保持当前环境", "适当增加绿植"],
-      airQuality: { pm25: 15, co2: 400 },
-      lighting: { brightness: 300, colorTemp: 4000 },
-      acoustics: { noiseLevel: 35 },
-      temperature: 22,
-      humidity: 45,
-      personalizedTips: ["下午适当开窗通风", "晚上调暗灯光"],
+    return {factors: {airQuality: "good",lighting: "optimal",noise: "low",temperature: "comfortable";
+      },impacts: ["有利于专注", "促进睡眠", "减少压力"],suggestions: ["保持当前环境", "适当增加绿植"],airQuality: { pm25: 15, co2: 400 },lighting: { brightness: 300, colorTemp: 4000 },acoustics: { noiseLevel: 35 },temperature: 22,humidity: 45,personalizedTips: ["下午适当开窗通风", "晚上调暗灯光"];
     };
   }
 
   private async getHabitTrackingData(context: AgentContext): Promise<any> {
-    return {
-      habits: [
-        { name: "早起", streak: 7, completion: 0.85 },
-        { name: "运动", streak: 3, completion: 0.6 },
-        { name: "冥想", streak: 14, completion: 0.95 },
-      ],
-      progress: "本周完成率80%",
-      streaks: "最长连续14天",
-      patterns: "周末完成率较低",
-      insights: ["早起习惯已稳定", "运动需要加强", "冥想效果显著"],
+    return {habits: [;
+        { name: "早起", streak: 7, completion: 0.85 },{ name: "运动", streak: 3, completion: 0.6 },{ name: "冥想", streak: 14, completion: 0.95 };
+      ],progress: "本周完成率80%",streaks: "最长连续14天",patterns: "周末完成率较低",insights: ["早起习惯已稳定", "运动需要加强", "冥想效果显著"];
     };
   }
 
   private async createWellnessCoachingPlan(
     context: AgentContext
   ): Promise<any> {
-    return {
-      areas: ["营养", "运动", "睡眠", "压力管理"],
-      goals: ["减重5kg", "每周运动3次", "睡眠8小时", "压力水平降低"],
-      actions: ["制定饮食计划", "安排运动时间", "优化睡眠环境", "学习放松技巧"],
-      milestones: ["1个月：建立习惯", "2个月：看到效果", "3个月：达成目标"],
-      schedule: "每周2次指导，每月1次评估",
+    return {areas: ["营养", "运动", "睡眠", "压力管理"],goals: ["减重5kg", "每周运动3次", "睡眠8小时", "压力水平降低"],actions: ["制定饮食计划", "安排运动时间", "优化睡眠环境", "学习放松技巧"],milestones: ["1个月：建立习惯", "2个月：看到效果", "3个月：达成目标"],schedule: "每周2次指导，每月1次评估";
     };
   }
 
   private async getSensorNetworkStatus(): Promise<any> {
-    return {
-      connected: 12,
-      streams: 24,
-      quality: "excellent",
-      integration: "seamless",
+    return {connected: 12,streams: 24,quality: "excellent",integration: "seamless";
     };
   }
 
@@ -922,22 +744,10 @@ export class SoerAgentImpl extends AgentBase {
       errorRate: Math.random() * 0.06,
       lastCheck: new Date(),
       capabilities: this.capabilities,
-      version: this.version,
-      specialFeatures: [
-        "多传感器数据融合",
-        "实时健康监测",
-        "智能行为干预",
-        "情感AI支持",
-        "环境智能优化",
-        "个性化健康教练",
-      ],
-      systemStatus: {
-        sensorNetwork: this.sensorNetwork.size > 0,
-        behaviorEngine: this.behaviorEngine?.initialized || false,
-        emotionalAI: this.emotionalAI?.initialized || false,
-        environmentMonitor: this.environmentMonitor?.initialized || false,
-        wellnessCoach: this.wellnessCoach?.initialized || false,
-      },
+      version: this.version,specialFeatures: [;
+        "多传感器数据融合","实时健康监测","智能行为干预","情感AI支持","环境智能优化","个性化健康教练";
+      ],systemStatus: {sensorNetwork: this.sensorNetwork.size > 0,behaviorEngine: this.behaviorEngine?.initialized || false,emotionalAI: this.emotionalAI?.initialized || false,environmentMonitor: this.environmentMonitor?.initialized || false,wellnessCoach: this.wellnessCoach?.initialized || false;
+      };
     };
   }
 

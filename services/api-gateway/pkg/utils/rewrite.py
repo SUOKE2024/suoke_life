@@ -1,3 +1,12 @@
+"""
+rewrite - 索克生活项目模块
+"""
+
+from internal.model.config import RouteConfig
+from typing import Dict, List, Optional, Pattern
+import logging
+import re
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,11 +14,7 @@
 路径重写工具，用于根据配置的规则重写请求路径
 """
 
-import logging
-import re
-from typing import Dict, List, Optional, Pattern
 
-from internal.model.config import RouteConfig
 
 
 logger = logging.getLogger(__name__)

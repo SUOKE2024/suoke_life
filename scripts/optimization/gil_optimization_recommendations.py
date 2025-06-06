@@ -1,15 +1,25 @@
+"""
+gil_optimization_recommendations - 索克生活项目模块
+"""
+
+from concurrent.futures import ProcessPoolExecutor
+from dataclasses import dataclass
+from numba import jit
+from pathlib import Path
+from typing import Dict, List, Tuple, Any
+import asyncio
+import json
+import multiprocessing
+import os
+import queue
+import re
+
 #!/usr/bin/env python3
 """
 索克生活项目 GIL 优化建议生成器
 分析项目代码并生成具体的优化建议
 """
 
-import os
-import re
-import json
-from pathlib import Path
-from typing import Dict, List, Tuple, Any
-from dataclasses import dataclass
 
 
 @dataclass
@@ -94,17 +104,14 @@ class GILOptimizationAnalyzer:
 {current_line}
 
 优化建议1: 使用ProcessPoolExecutor
-from concurrent.futures import ProcessPoolExecutor
 executor = ProcessPoolExecutor(max_workers=4)
 
 优化建议2: 使用异步I/O（如果是I/O密集型）
-import asyncio
 async def async_task():
     # 异步实现
     pass
 
 优化建议3: 使用Numba JIT（如果是数值计算）
-from numba import jit
 @jit(nopython=True)
 def optimized_computation():
     # JIT编译的计算函数
@@ -115,15 +122,12 @@ def optimized_computation():
 {current_line}
 
 优化建议1: 使用asyncio.Lock（异步环境）
-import asyncio
 lock = asyncio.Lock()
 
 优化建议2: 考虑无锁数据结构
-import queue
 thread_safe_queue = queue.Queue()
 
 优化建议3: 使用多进程通信
-import multiprocessing
 manager = multiprocessing.Manager()
 shared_dict = manager.dict()
 """

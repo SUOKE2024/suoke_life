@@ -1,15 +1,21 @@
+"""
+run_tests - 索克生活项目模块
+"""
+
+            from services.common.examples.integration_test_example import (
+from pathlib import Path
+import argparse
+import asyncio
+import logging
+import sys
+import time
+
 #!/usr/bin/env python3
 """
 索克生活平台通用组件测试运行脚本
 提供便捷的测试执行和结果报告
 """
 
-import argparse
-import asyncio
-import logging
-from pathlib import Path
-import sys
-import time
 
 # 添加项目根目录到Python路径
 project_root = Path(__file__).parent.parent.parent.parent
@@ -36,7 +42,6 @@ class TestRunner:
         start_time = time.time()
 
         try:
-            from services.common.examples.integration_test_example import (
                 test_load_balancer,
             )
 
@@ -65,7 +70,6 @@ class TestRunner:
         start_time = time.time()
 
         try:
-            from services.common.examples.integration_test_example import (
                 test_health_checker,
             )
 
@@ -94,7 +98,6 @@ class TestRunner:
         start_time = time.time()
 
         try:
-            from services.common.examples.integration_test_example import (
                 test_health_monitor,
             )
 
@@ -123,7 +126,6 @@ class TestRunner:
         start_time = time.time()
 
         try:
-            from services.common.examples.integration_test_example import (
                 test_health_aggregator,
             )
 
@@ -152,7 +154,6 @@ class TestRunner:
         start_time = time.time()
 
         try:
-            from services.common.examples.integration_test_example import (
                 test_integrated_scenario,
             )
 

@@ -1,18 +1,23 @@
 """
+test_service - 索克生活项目模块
+"""
+
+from datetime import datetime, timedelta
+from suoke_blockchain_service.exceptions import (
+from suoke_blockchain_service.models import DataType, AccessLevel, TransactionStatus
+from suoke_blockchain_service.service import BlockchainService
+from unittest.mock import AsyncMock, MagicMock, patch
+import json
+import pytest
+import uuid
+
+"""
 区块链服务测试
 
 测试区块链服务的核心功能。
 """
 
-import pytest
-import json
-import uuid
-from datetime import datetime, timedelta
-from unittest.mock import AsyncMock, MagicMock, patch
 
-from suoke_blockchain_service.service import BlockchainService
-from suoke_blockchain_service.models import DataType, AccessLevel, TransactionStatus
-from suoke_blockchain_service.exceptions import (
     ValidationError, NotFoundError, BlockchainServiceError
 )
 

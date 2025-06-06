@@ -1,15 +1,20 @@
-"""认证服务REST API路由器"""
-
-from fastapi import APIRouter
+"""
+router - 索克生活项目模块
+"""
 
 from auth_service.api.rest.endpoints import auth, users, security
+from fastapi import APIRouter
+
+"""认证服务REST API路由器"""
+
+
 
 # 创建API路由器
 api_router = APIRouter()
 
 # 根路径端点
 @api_router.get("/")
-async def api_info():
+async async def api_info(
     """API信息端点"""
     return {"message": "auth-service is running", "version": "1.0.0"}
 

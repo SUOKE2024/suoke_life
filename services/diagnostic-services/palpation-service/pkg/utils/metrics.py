@@ -1,3 +1,15 @@
+"""
+metrics - 索克生活项目模块
+"""
+
+            from prometheus_client import Counter, Gauge, Histogram, CollectorRegistry
+            from prometheus_client import generate_latest
+from collections import defaultdict
+from typing import Dict, Any, Optional
+import logging
+import threading
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,11 +18,6 @@
 用于收集和导出服务指标
 """
 
-import logging
-import time
-from typing import Dict, Any, Optional
-from collections import defaultdict
-import threading
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +52,6 @@ class MetricsCollector:
     def _init_prometheus(self):
         """初始化Prometheus指标"""
         try:
-            from prometheus_client import Counter, Gauge, Histogram, CollectorRegistry
             
             self.registry = CollectorRegistry()
             
@@ -239,7 +245,6 @@ class MetricsCollector:
             return ""
         
         try:
-            from prometheus_client import generate_latest
             return generate_latest(self.registry)
         except Exception as e:
             logger.error(f"导出Prometheus指标失败: {e}")

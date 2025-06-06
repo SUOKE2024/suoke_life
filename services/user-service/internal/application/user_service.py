@@ -1,23 +1,29 @@
 """
+user_service - 索克生活项目模块
+"""
+
+            from pkg.errors.exceptions import AuthorizationError
+from datetime import datetime
+from internal.application.dto import (
+from internal.domain.repositories import UserRepository, HealthRepository, DeviceRepository
+from internal.domain.user import User, UserStatus, UserRole
+from pkg.cache.cache import CacheManager, cache_result
+from pkg.errors.exceptions import (
+from pkg.security.auth import PasswordManager, JWTManager, PermissionManager, SecurityUtils
+from typing import Dict, List, Optional, Tuple
+from uuid import UUID, uuid4
+import logging
+
+"""
 用户应用服务层
 实现用户相关的业务逻辑，使用依赖注入和缓存优化
 """
-import logging
-from datetime import datetime
-from typing import Dict, List, Optional, Tuple
-from uuid import UUID, uuid4
 
-from pkg.cache.cache import CacheManager, cache_result
-from pkg.errors.exceptions import (
     UserNotFoundError, UserAlreadyExistsError, InvalidCredentialsError,
     UserInactiveError, UserSuspendedError, ValidationError,
     DeviceNotFoundError, DeviceAlreadyBoundError, DeviceLimitExceededError,
     HealthDataNotFoundError
 )
-from pkg.security.auth import PasswordManager, JWTManager, PermissionManager, SecurityUtils
-from internal.domain.user import User, UserStatus, UserRole
-from internal.domain.repositories import UserRepository, HealthRepository, DeviceRepository
-from internal.application.dto import (
     CreateUserRequest, UpdateUserRequest, UserResponse,
     LoginRequest, LoginResponse, BindDeviceRequest, BindDeviceResponse,
     UpdateUserHealthRequest, UserHealthSummaryResponse
@@ -183,7 +189,6 @@ class UserApplicationService:
         """
         # 检查权限
         if not self.permission_manager.can_access_user_data(permissions, user_id, current_user_id):
-            from pkg.errors.exceptions import AuthorizationError
             raise AuthorizationError("无权访问该用户信息")
         
         user = await self.user_repository.get_by_id(UUID(user_id))
@@ -213,7 +218,6 @@ class UserApplicationService:
         """
         # 检查权限
         if not self.permission_manager.can_access_user_data(permissions, user_id, current_user_id):
-            from pkg.errors.exceptions import AuthorizationError
             raise AuthorizationError("无权修改该用户信息")
         
         user = await self.user_repository.get_by_id(UUID(user_id))
@@ -266,7 +270,6 @@ class UserApplicationService:
         # 检查权限
         if not ("user:delete" in permissions or 
                 (user_id == current_user_id and "user:delete_own" in permissions)):
-            from pkg.errors.exceptions import AuthorizationError
             raise AuthorizationError("无权删除该用户")
         
         user = await self.user_repository.get_by_id(UUID(user_id))
@@ -307,7 +310,6 @@ class UserApplicationService:
         """
         # 检查权限
         if not ("user:read" in permissions):
-            from pkg.errors.exceptions import AuthorizationError
             raise AuthorizationError("无权查看用户列表")
         
         users, total = await self.user_repository.list_users(offset, limit, status)
@@ -337,7 +339,6 @@ class UserApplicationService:
         # 检查权限
         if not (self.permission_manager.can_access_user_data(permissions, user_id, current_user_id) or
                 "health:read" in permissions):
-            from pkg.errors.exceptions import AuthorizationError
             raise AuthorizationError("无权访问该用户健康数据")
         
         health_summary = await self.health_repository.get_user_health_summary(UUID(user_id))
@@ -367,7 +368,6 @@ class UserApplicationService:
         """
         # 检查权限
         if not (user_id == current_user_id and "device:update_own" in permissions):
-            from pkg.errors.exceptions import AuthorizationError
             raise AuthorizationError("无权绑定设备")
         
         # 检查用户是否存在

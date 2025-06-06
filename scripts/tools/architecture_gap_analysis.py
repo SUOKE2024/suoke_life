@@ -1,12 +1,17 @@
+"""
+architecture_gap_analysis - 索克生活项目模块
+"""
+
+from pathlib import Path
+from typing import Dict, List, Any
+import json
+
 #!/usr/bin/env python3
 """
 架构差距分析脚本
 评估索克生活项目现有架构与最佳实践的差距
 """
 
-import json
-from typing import Dict, List, Any
-from pathlib import Path
 
 class ArchitectureGapAnalyzer:
     def __init__(self, project_root: str = "."):

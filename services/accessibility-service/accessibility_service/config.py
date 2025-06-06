@@ -1,9 +1,14 @@
 """
-accessibility-service 配置管理
+config - 索克生活项目模块
 """
 
 from pydantic_settings import BaseSettings
 from typing import Optional
+
+"""
+accessibility-service 配置管理
+"""
+
 
 class Settings(BaseSettings):
     """应用配置"""

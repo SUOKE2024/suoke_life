@@ -1,14 +1,21 @@
 """
+lifestyle_service - 索克生活项目模块
+"""
+
+        from ..models.lifestyle import StressSource
+        from datetime import time
+from ..models.lifestyle import ExercisePlan, SleepAnalysis, StressAssessment
+from .base_service import BaseService
+from datetime import datetime
+from typing import Any
+
+"""
 生活方式服务
 
 提供运动计划、睡眠分析、压力管理等功能
 """
 
-from datetime import datetime
-from typing import Any
 
-from ..models.lifestyle import ExercisePlan, SleepAnalysis, StressAssessment
-from .base_service import BaseService
 
 
 class LifestyleService(BaseService):
@@ -226,7 +233,6 @@ class LifestyleService(BaseService):
         self, sleep_data: list[dict[str, Any]]
     ) -> dict[str, Any]:
         """计算睡眠统计"""
-        from datetime import time
 
         return {
             "avg_duration": 7.5,
@@ -293,7 +299,6 @@ class LifestyleService(BaseService):
 
     async def _identify_stress_sources(self, indicators: dict[str, Any]) -> list[str]:
         """识别压力来源"""
-        from ..models.lifestyle import StressSource
 
         sources = []
 

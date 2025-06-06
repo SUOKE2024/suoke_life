@@ -1,3 +1,15 @@
+"""
+test_health_data_pipeline - 索克生活项目模块
+"""
+
+from health_data_service.core.data_standardization import (
+from health_data_service.services.health_data_pipeline import (
+import asyncio
+import json
+import os
+import pytest
+import sys
+
 #!/usr/bin/env python3
 """
 健康数据流水线测试
@@ -5,16 +17,10 @@
 测试健康数据的完整处理流程，包括数据标准化、零知识验证和区块链存储。
 """
 
-import asyncio
-import json
-import pytest
 
 # 导入测试模块
-import sys
-import os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-from health_data_service.core.data_standardization import (
     DataType, 
     DataQuality,
     standardize_vital_signs,
@@ -27,7 +33,6 @@ from health_data_service.core.data_standardization import (
     standardize_tcm_calculation_data
 )
 
-from health_data_service.services.health_data_pipeline import (
     HealthDataPipeline,
     PipelineConfig,
     PipelineStage,

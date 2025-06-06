@@ -1,18 +1,24 @@
+"""
+service_registry - 索克生活项目模块
+"""
+
+            import random
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any
+import asyncio
+import contextlib
+import logging
+import time
+
 #!/usr/bin/env python3
 """
 服务注册中心实现
 支持服务注册、发现、健康检查等功能
 """
 
-from abc import ABC, abstractmethod
-import asyncio
-import contextlib
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-import logging
-import time
-from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -327,7 +333,6 @@ class ServiceDiscovery:
 
         # 根据负载均衡策略选择实例
         if load_balancer == "random":
-            import random
 
             return random.choice(instances)
 

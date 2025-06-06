@@ -1,15 +1,37 @@
 """
+test_simple - 索克生活项目模块
+"""
+
+    from internal.error.error_handler import CircuitBreakerError, ErrorCode
+    from internal.error.error_handler import ErrorHandler, MessageBusError, ErrorCode
+    from internal.error.error_handler import InfrastructureError, ErrorSeverity
+    from internal.error.error_handler import MessageError
+    from internal.error.error_handler import RateLimitError, ErrorCode
+    from internal.error.error_handler import TopicError
+    from internal.error.error_handler import ValidationError, ErrorCode
+    from internal.model.message import Message
+    from internal.model.topic import Topic
+    from internal.performance.optimizer import ConnectionPool
+    from internal.performance.optimizer import LatencyTracker
+    from internal.performance.optimizer import MemoryManager
+    from internal.performance.optimizer import MessageBatcher
+    from internal.performance.optimizer import PerformanceMetrics
+    from internal.performance.optimizer import ThroughputCounter
+    from internal.reliability.retry_handler import DeadLetterQueue, RetryHandler
+    from internal.reliability.retry_handler import DeadLetterQueue, RetryableMessage, RetryConfig
+    from internal.reliability.retry_handler import RetryConfig, RetryStrategy
+from unittest.mock import MagicMock, AsyncMock, patch
+import asyncio
+import pytest
+
+"""
 简化的测试文件，用于验证基本功能
 """
 
-import pytest
-import asyncio
-from unittest.mock import MagicMock, AsyncMock, patch
 
 # 基本模型测试
 def test_message_model():
     """测试消息模型"""
-    from internal.model.message import Message
     
     message = Message(
         message_id="test-id",
@@ -30,7 +52,6 @@ def test_message_model():
 
 def test_topic_model():
     """测试主题模型"""
-    from internal.model.topic import Topic
     
     topic = Topic(
         name="test-topic",
@@ -51,7 +72,6 @@ def test_topic_model():
 
 def test_error_handler():
     """测试错误处理器"""
-    from internal.error.error_handler import ErrorHandler, MessageBusError, ErrorCode
     
     handler = ErrorHandler()
     
@@ -67,7 +87,6 @@ def test_error_handler():
 @pytest.mark.asyncio
 async def test_retry_handler():
     """测试重试处理器"""
-    from internal.reliability.retry_handler import DeadLetterQueue, RetryHandler
     
     dlq = DeadLetterQueue(max_size=100)
     retry_handler = RetryHandler(dlq)
@@ -80,7 +99,6 @@ async def test_retry_handler():
 
 def test_performance_metrics():
     """测试性能指标"""
-    from internal.performance.optimizer import PerformanceMetrics
     
     metrics = PerformanceMetrics(
         cpu_usage=50.0,
@@ -102,7 +120,6 @@ def test_performance_metrics():
 
 def test_memory_manager():
     """测试内存管理器"""
-    from internal.performance.optimizer import MemoryManager
     
     manager = MemoryManager(max_memory_mb=1024)
     
@@ -113,7 +130,6 @@ def test_memory_manager():
 
 def test_connection_pool():
     """测试连接池"""
-    from internal.performance.optimizer import ConnectionPool
     
     pool = ConnectionPool(max_connections=100)
     
@@ -128,7 +144,6 @@ def test_connection_pool():
 @pytest.mark.asyncio
 async def test_message_batcher():
     """测试消息批处理器"""
-    from internal.performance.optimizer import MessageBatcher
     
     processed_batches = []
     
@@ -155,7 +170,6 @@ async def test_message_batcher():
 
 def test_latency_tracker():
     """测试延迟跟踪器"""
-    from internal.performance.optimizer import LatencyTracker
     
     tracker = LatencyTracker(window_size=100)
     
@@ -174,7 +188,6 @@ def test_latency_tracker():
 
 def test_throughput_counter():
     """测试吞吐量计数器"""
-    from internal.performance.optimizer import ThroughputCounter
     
     counter = ThroughputCounter(window_seconds=60)
     
@@ -188,7 +201,6 @@ def test_throughput_counter():
 
 def test_retry_config():
     """测试重试配置"""
-    from internal.reliability.retry_handler import RetryConfig, RetryStrategy
     
     config = RetryConfig(
         max_attempts=5,
@@ -204,8 +216,6 @@ def test_retry_config():
 @pytest.mark.asyncio
 async def test_dead_letter_queue():
     """测试死信队列"""
-    from internal.reliability.retry_handler import DeadLetterQueue, RetryableMessage, RetryConfig
-    from internal.model.message import Message
     
     dlq = DeadLetterQueue(max_size=10)
     
@@ -242,7 +252,6 @@ async def test_dead_letter_queue():
 
 def test_circuit_breaker_error():
     """测试断路器错误"""
-    from internal.error.error_handler import CircuitBreakerError, ErrorCode
     
     error = CircuitBreakerError("kafka")
     
@@ -253,7 +262,6 @@ def test_circuit_breaker_error():
 
 def test_rate_limit_error():
     """测试限流错误"""
-    from internal.error.error_handler import RateLimitError, ErrorCode
     
     error = RateLimitError(limit=100, window=60)
     
@@ -265,7 +273,6 @@ def test_rate_limit_error():
 
 def test_validation_error():
     """测试验证错误"""
-    from internal.error.error_handler import ValidationError, ErrorCode
     
     error = ValidationError("Invalid field", field="username")
     
@@ -276,7 +283,6 @@ def test_validation_error():
 
 def test_topic_error():
     """测试主题错误"""
-    from internal.error.error_handler import TopicError
     
     error = TopicError("Topic not found", topic_name="test-topic")
     
@@ -286,7 +292,6 @@ def test_topic_error():
 
 def test_message_error():
     """测试消息错误"""
-    from internal.error.error_handler import MessageError
     
     error = MessageError(
         "Message failed", 
@@ -301,7 +306,6 @@ def test_message_error():
 
 def test_infrastructure_error():
     """测试基础设施错误"""
-    from internal.error.error_handler import InfrastructureError, ErrorSeverity
     
     error = InfrastructureError("Database connection failed", component="postgres")
     

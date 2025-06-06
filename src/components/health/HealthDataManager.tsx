@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
+import {import {View,
   Text,
   StyleSheet,
   ScrollView,
@@ -8,9 +7,8 @@ import {
   Alert,
   RefreshControl,
   Modal,
-  TextInput,
+  TextInput
 } from 'react-native';
-import { 
   healthDataService, 
   HealthData, 
   HealthDataType, 
@@ -28,29 +26,21 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
   const [refreshing, setRefreshing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [editingData, setEditingData] = useState<HealthData | null>(null);
-  const [formData, setFormData] = useState({
-    dataType: HealthDataType.HEART_RATE,
-    value: '',
-    unit: '',
-    source: DataSource.MANUAL,
-    tags: '',
-    notes: ''
+  const [formData, setFormData] = useState({dataType: HealthDataType.HEART_RATE,value: '',unit: '',source: DataSource.MANUAL,tags: '',notes: '';
   });
 
   useEffect(() => {
     loadHealthData();
   }, [userId]);
 
-  const loadHealthData = async () => {
-    try {
-      setLoading(true);
+  const loadHealthData = async () => {try {setLoading(true);
       const query: HealthDataQuery = {
         userId,
         limit: 50,
         sortBy: 'timestamp',
         sortOrder: 'desc'
       };
-      
+
       const response = await healthDataService.queryHealthData(query);
       if (response.data) {
         setHealthData(response.data.data);
@@ -63,14 +53,12 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
     }
   };
 
-  const onRefresh = async () => {
-    setRefreshing(true);
+  const onRefresh = async () => {setRefreshing(true);
     await loadHealthData();
     setRefreshing(false);
   };
 
-  const handleAddData = () => {
-    setEditingData(null);
+  const handleAddData = () => {setEditingData(null);
     setFormData({
       dataType: HealthDataType.HEART_RATE,
       value: '',
@@ -82,8 +70,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
     setModalVisible(true);
   };
 
-  const handleEditData = (data: HealthData) => {
-    setEditingData(data);
+  const handleEditData = (data: HealthData) => {setEditingData(data);
     setFormData({
       dataType: data.dataType,
       value: String(data.value),
@@ -95,24 +82,12 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
     setModalVisible(true);
   };
 
-  const handleSaveData = async () => {
-    try {
-      if (!formData.value.trim()) {
-        Alert.alert('错误', '请输入数值');
+  const handleSaveData = async () => {try {if (!formData.value.trim()) {Alert.alert('错误', '请输入数值');
         return;
       }
 
-      const dataToSave = {
-        userId,
-        dataType: formData.dataType,
-        value: isNaN(Number(formData.value)) ? formData.value : Number(formData.value),
-        unit: formData.unit,
-        source: formData.source,
-        timestamp: new Date().toISOString(),
-        tags: formData.tags ? formData.tags.split(',').map(tag => tag.trim()) : [],
-        metadata: {
-          notes: formData.notes
-        }
+      const dataToSave = {userId,dataType: formData.dataType,value: isNaN(Number(formData.value)) ? formData.value : Number(formData.value),unit: formData.unit,source: formData.source,timestamp: new Date().toISOString(),tags: formData.tags ? formData.tags.split(',').map(tag => tag.trim()) : [],metadata: {notes: formData.notes;
+        };
       };
 
       if (editingData) {
@@ -133,18 +108,9 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
     }
   };
 
-  const handleDeleteData = (data: HealthData) => {
-    Alert.alert(
-      '确认删除',
-      '确定要删除这条健康数据吗？',
-      [
-        { text: '取消', style: 'cancel' },
-        {
-          text: '删除',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              await healthDataService.deleteHealthData(data.id!);
+  const handleDeleteData = (data: HealthData) => {Alert.alert(;
+      '确认删除','确定要删除这条健康数据吗？',[;
+        { text: '取消', style: 'cancel' },{text: '删除',style: 'destructive',onPress: async () => {try {await healthDataService.deleteHealthData(data.id!);
               Alert.alert('成功', '健康数据已删除');
               await loadHealthData();
             } catch (error) {
@@ -159,48 +125,22 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
 
   const getDataTypeLabel = (type: HealthDataType): string => {
     const labels: Record<HealthDataType, string> = {
-      [HealthDataType.VITAL_SIGNS]: '生命体征',
-      [HealthDataType.BLOOD_GLUCOSE]: '血糖',
-      [HealthDataType.BLOOD_PRESSURE]: '血压',
-      [HealthDataType.HEART_RATE]: '心率',
-      [HealthDataType.TEMPERATURE]: '体温',
-      [HealthDataType.WEIGHT]: '体重',
-      [HealthDataType.HEIGHT]: '身高',
-      [HealthDataType.BMI]: 'BMI',
-      [HealthDataType.SLEEP]: '睡眠',
-      [HealthDataType.EXERCISE]: '运动',
-      [HealthDataType.NUTRITION]: '营养',
-      [HealthDataType.MEDICATION]: '用药',
-      [HealthDataType.SYMPTOMS]: '症状',
-      [HealthDataType.TCM_DIAGNOSIS]: '中医诊断',
-      [HealthDataType.LAB_RESULTS]: '检验结果',
-      [HealthDataType.MENTAL_HEALTH]: '心理健康'
+      [HealthDataType.VITAL_SIGNS]: '生命体征',[HealthDataType.BLOOD_GLUCOSE]: '血糖',[HealthDataType.BLOOD_PRESSURE]: '血压',[HealthDataType.HEART_RATE]: '心率',[HealthDataType.TEMPERATURE]: '体温',[HealthDataType.WEIGHT]: '体重',[HealthDataType.HEIGHT]: '身高',[HealthDataType.BMI]: 'BMI',[HealthDataType.SLEEP]: '睡眠',[HealthDataType.EXERCISE]: '运动',[HealthDataType.NUTRITION]: '营养',[HealthDataType.MEDICATION]: '用药',[HealthDataType.SYMPTOMS]: '症状',[HealthDataType.TCM_DIAGNOSIS]: '中医诊断',[HealthDataType.LAB_RESULTS]: '检验结果',[HealthDataType.MENTAL_HEALTH]: '心理健康';
     };
     return labels[type] || type;
   };
 
-  const getSourceLabel = (source: DataSource): string => {
-    const labels: Record<DataSource, string> = {
-      [DataSource.MANUAL]: '手动输入',
-      [DataSource.DEVICE]: '设备',
-      [DataSource.WEARABLE]: '可穿戴设备',
-      [DataSource.MEDICAL_DEVICE]: '医疗设备',
-      [DataSource.LABORATORY]: '实验室',
-      [DataSource.HEALTHCARE_PROVIDER]: '医疗机构',
-      [DataSource.AI_ANALYSIS]: 'AI分析'
+  const getSourceLabel = (source: DataSource): string => {const labels: Record<DataSource, string> = {[DataSource.MANUAL]: '手动输入',[DataSource.DEVICE]: '设备',[DataSource.WEARABLE]: '可穿戴设备',[DataSource.MEDICAL_DEVICE]: '医疗设备',[DataSource.LABORATORY]: '实验室',[DataSource.HEALTHCARE_PROVIDER]: '医疗机构',[DataSource.AI_ANALYSIS]: 'AI分析';
     };
     return labels[source] || source;
   };
 
-  const formatValue = (value: any, unit?: string): string => {
-    if (typeof value === 'object') {
-      return JSON.stringify(value);
+  const formatValue = (value: any, unit?: string): string => {if (typeof value === 'object') {return JSON.stringify(value);
     }
     return `${value}${unit ? ` ${unit}` : ''}`;
   };
 
-  const formatDate = (timestamp: string): string => {
-    return new Date(timestamp).toLocaleString('zh-CN');
+  const formatDate = (timestamp: string): string => {return new Date(timestamp).toLocaleString('zh-CN');
   };
 
   const renderHealthDataItem = (item: HealthData) => (
@@ -209,7 +149,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
         <Text style={styles.dataType}>{getDataTypeLabel(item.dataType)}</Text>
         <Text style={styles.dataDate}>{formatDate(item.timestamp)}</Text>
       </View>
-      
+
       <View style={styles.dataContent}>
         <Text style={styles.dataValue}>{formatValue(item.value, item.unit)}</Text>
         <Text style={styles.dataSource}>{getSourceLabel(item.source)}</Text>
@@ -226,22 +166,22 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
       {item.metadata?.notes && (
         <Text style={styles.notes}>{item.metadata.notes}</Text>
       )}
-
-      <View style={styles.actionButtons}>
-        <TouchableOpacity
-          style={[styles.actionButton, styles.editButton]}
-          onPress={() => handleEditData(item)}
-        >
-          <Text style={styles.actionButtonText}>编辑</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.actionButton, styles.deleteButton]}
-          onPress={() => handleDeleteData(item)}
-        >
-          <Text style={styles.actionButtonText}>删除</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+;
+      <View style={styles.actionButtons}>;
+        <TouchableOpacity;
+          style={[styles.actionButton, styles.editButton]};
+          onPress={() => handleEditData(item)};
+        >;
+          <Text style={styles.actionButtonText}>编辑</Text>;
+        </TouchableOpacity>;
+        <TouchableOpacity;
+          style={[styles.actionButton, styles.deleteButton]};
+          onPress={() => handleDeleteData(item)};
+        >;
+          <Text style={styles.actionButtonText}>删除</Text>;
+        </TouchableOpacity>;
+      </View>;
+    </View>;
   );
 
   return (
@@ -249,26 +189,25 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
       <View style={styles.header}>
         <Text style={styles.title}>健康数据管理</Text>
         <TouchableOpacity style={styles.addButton} onPress={handleAddData}>
-          <Text style={styles.addButtonText}>+ 添加数据</Text>
-        </TouchableOpacity>
-      </View>
-
-      <ScrollView
-        style={styles.scrollView}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
-        {loading ? (
-          <Text style={styles.loadingText}>加载中...</Text>
-        ) : healthData.length === 0 ? (
-          <Text style={styles.emptyText}>暂无健康数据</Text>
-        ) : (
-          healthData.map(renderHealthDataItem)
+          <Text style={styles.addButtonText}>+ 添加数据</Text>;
+        </TouchableOpacity>;
+      </View>;
+;
+      <ScrollView;
+        style={styles.scrollView};
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />;
+        };
+      >;
+        {loading ? (;
+          <Text style={styles.loadingText}>加载中...</Text>;
+        ) : healthData.length === 0 ? (;
+          <Text style={styles.emptyText}>暂无健康数据</Text>;
+        ) : (;
+          healthData.map(renderHealthDataItem);
         )}
       </ScrollView>
 
-      {/* 添加/编辑数据模态框 */}
+      {// 添加/编辑数据模态框}
       <Modal
         visible={modalVisible}
         animationType="slide"
@@ -354,14 +293,14 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
           </View>
         </View>
       </Modal>
-    </View>
+    </View>;
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f5f5f5'
   },
   header: {
     flexDirection: 'row',
@@ -370,39 +309,39 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#fff',
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: '#e0e0e0'
   },
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#333'
   },
   addButton: {
     backgroundColor: '#007AFF',
     paddingHorizontal: 16,
     paddingVertical: 8,
-    borderRadius: 8,
+    borderRadius: 8
   },
   addButtonText: {
     color: '#fff',
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: '500'
   },
   scrollView: {
     flex: 1,
-    padding: 16,
+    padding: 16
   },
   loadingText: {
     textAlign: 'center',
     color: '#666',
     fontSize: 16,
-    marginTop: 50,
+    marginTop: 50
   },
   emptyText: {
     textAlign: 'center',
     color: '#666',
     fontSize: 16,
-    marginTop: 50,
+    marginTop: 50
   },
   dataItem: {
     backgroundColor: '#fff',
@@ -413,33 +352,33 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 2,
+    elevation: 2
   },
   dataHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 8
   },
   dataType: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#333'
   },
   dataDate: {
     fontSize: 12,
-    color: '#666',
+    color: '#666'
   },
   dataContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 8
   },
   dataValue: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#007AFF',
+    color: '#007AFF'
   },
   dataSource: {
     fontSize: 12,
@@ -447,12 +386,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 4,
+    borderRadius: 4
   },
   tagsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginBottom: 8,
+    marginBottom: 8
   },
   tag: {
     fontSize: 12,
@@ -462,63 +401,63 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 12,
     marginRight: 8,
-    marginBottom: 4,
+    marginBottom: 4
   },
   notes: {
     fontSize: 14,
     color: '#666',
     fontStyle: 'italic',
-    marginBottom: 8,
+    marginBottom: 8
   },
   actionButtons: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-end'
   },
   actionButton: {
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 4,
-    marginLeft: 8,
+    marginLeft: 8
   },
   editButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#4CAF50'
   },
   deleteButton: {
-    backgroundColor: '#f44336',
+    backgroundColor: '#f44336'
   },
   actionButtonText: {
     color: '#fff',
     fontSize: 12,
-    fontWeight: '500',
+    fontWeight: '500'
   },
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   modalContent: {
     backgroundColor: '#fff',
     borderRadius: 12,
     padding: 20,
     width: '90%',
-    maxHeight: '80%',
+    maxHeight: '80%'
   },
   modalTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
     marginBottom: 20,
-    textAlign: 'center',
+    textAlign: 'center'
   },
   formGroup: {
-    marginBottom: 16,
+    marginBottom: 16
   },
   label: {
     fontSize: 14,
     fontWeight: '500',
     color: '#333',
-    marginBottom: 8,
+    marginBottom: 8
   },
   input: {
     borderWidth: 1,
@@ -527,11 +466,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 16,
-    backgroundColor: '#fff',
+    backgroundColor: '#fff'
   },
   textArea: {
     height: 80,
-    textAlignVertical: 'top',
+    textAlignVertical: 'top'
   },
   selectButton: {
     borderWidth: 1,
@@ -539,33 +478,22 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: '#fff',
     paddingHorizontal: 12,
-    paddingVertical: 10,
+    paddingVertical: 10
   },
   selectText: {
     fontSize: 16,
-    color: '#333',
+    color: '#333'
   },
   modalButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 20,
+    marginTop: 20
   },
   modalButton: {
     flex: 1,
-    paddingVertical: 12,
-    borderRadius: 8,
-    marginHorizontal: 8,
-  },
-  cancelButton: {
-    backgroundColor: '#666',
-  },
-  saveButton: {
-    backgroundColor: '#007AFF',
-  },
-  modalButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '500',
-    textAlign: 'center',
-  },
+    paddingVertical: 12,borderRadius: 8,marginHorizontal: 8;
+  },cancelButton: {backgroundColor: '#666';
+  },saveButton: {backgroundColor: '#007AFF';
+  },modalButtonText: {color: '#fff',fontSize: 16,fontWeight: '500',textAlign: 'center';
+  };
 }); 

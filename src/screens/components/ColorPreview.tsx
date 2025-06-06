@@ -1,19 +1,17 @@
-import React from "react";
 import {   ScrollView, StyleSheet, View   } from "react-native";
-import { Text, Card, Container, Button  } from "../../placeholder";../../components/ui";/import { colors, spacing } from "../../constants/theme";/////    importReact from "react";"
 import { usePerformanceMonitor } from "../hooks/////    usePerformanceMonitor";
-//////
- * 索克生活 - 颜色预览组件;
+
+import React from "react";
+import { Text, Card, Container, Button  } from "../../placeholder";../../components/ui";/import { colors, spacing } from "../../constants/theme";/////    importReact from "react
+// * 索克生活 - 颜色预览组件;
  * 展示更新后的品牌色彩系统
 interface ColorItemProps { name: string,
   color: string,
   description?: string}
 interface ColorPreviewProps {
   onBack?: () => void}
-const ColorItem: React.FC<ColorItemProps /> = ({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor(ColorPreview", { /////    "
-    trackRender: true,
-    trackMemory: false,
-    warnThreshold: 100, // ms //////     };)
+const ColorItem: React.FC<ColorItemProps /> = ({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor(ColorPreview", { /////    ";
+    trackRender: true,trackMemory: false,warnThreshold: 100, // ms // };);
  name, color, description }) => (
   <View style={styles.colorItem} />/    <View style={[styles.colorSwatch, { backgroundColor: color}]} />/    <View style={styles.colorInfo} />/      <Text variant="body1" style={styles.colorName} />/////            {name}
       </Text>/      <Text variant="caption" style={styles.colorValue} />/////            {color}
@@ -22,9 +20,9 @@ const ColorItem: React.FC<ColorItemProps /> = ({/  // 性能监控 // const perf
         </Text>/////    )}
     </View>/  </View>/////    );
 const ColorPreview: React.FC<ColorPreviewProps />  = ({ onBack }) => {/  // 记录渲染性能 // /////    }
-  performanceMonitor.recordRender()
-  return (
-    <ScrollView style={styles.container} />/      <Container padding="lg" />/        {// 返回按钮 }/////            {onBack && (
+  performanceMonitor.recordRender();
+  return (;
+    <ScrollView style={styles.container} />/      <Container padding="lg" />/        {// 返回按钮 }/////            {onBack && (;
           <View style={styles.backButtonContainer} />/////                <Button;
 title="← 返回组件库"
               variant="outline"
@@ -73,8 +71,7 @@ style={[
               ]} />/              <Text style={styles.buttonText} />次要按钮</Text>/            </View>/            <View style={[styles.exampleCard, { borderColor: colors.primary}]} />/              <Text style={styles.cardTitle} />健康卡片</Text>/              <Text style={styles.cardContent} />/////                    使用索克绿作为主题色的卡片示例
               </Text>/            </View>/          </View>/        </Card>/      </Container>/    </ScrollView>/////    );
 }
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     flex: 1,
     backgroundColor: colors.background},
   backButtonContainer: { marginBottom: spacing.md  },
@@ -127,6 +124,5 @@ const styles = StyleSheet.create({;
     fontSize: 18,
     fontWeight: "600",
     marginBottom: spacing.xs,
-    color: colors.primary},;
-  cardContent: { color: colors.textSecondary  };};);
+    color: colors.primary},cardContent: { color: colors.textSecondary  };};);
 export default React.memo(ColorPreview);

@@ -1,12 +1,19 @@
+"""
+test_multi_model_switching - 索克生活项目模块
+"""
+
+    import openai
+    import time
+import asyncio
+import os
+import sys
+
 #!/usr/bin/env python3
 """
 多模型切换演示脚本
 展示如何轻松在不同大模型之间切换
 """
 
-import asyncio
-import os
-import sys
 
 # 添加项目路径
 sys.path.append('.')
@@ -92,9 +99,7 @@ async def demo_model_switching():
 
 async def call_model_api(_config, question):
     """调用模型API"""
-    import time
 
-    import openai
 
     client = openai.OpenAI(
         api_key=config['api_key'],

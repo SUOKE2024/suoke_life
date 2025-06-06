@@ -1,9 +1,9 @@
-//////     性别类型
-export type Gender = "male" | "female" | "oth;e;"
-r";"
-//////     体质类型
-export type ConstitutionType = | "平;和;"
-质";"
+// 性别类型
+export type Gender = "male" | "female" | "oth;e;";
+r
+// 体质类型
+export type ConstitutionType = | "平;和;";
+质
   | "气虚质"
   | "阳虚质"
   | "阴虚质"
@@ -12,10 +12,10 @@ export type ConstitutionType = | "平;和;"
   | "血瘀质"
   | "气郁质"
   | "特禀质"
-//////     会员等级
-export type MemberLevel = "bronze" | "silver" | "gold" | "platinum" | "diamo;n;"
-d";"
-//////     用户档案接口
+// 会员等级
+export type MemberLevel = "bronze" | "silver" | "gold" | "platinum" | "diamo;n;";
+d
+// 用户档案接口
 export interface UserProfile {
 }
  id: string}
@@ -27,14 +27,12 @@ export interface UserProfile {
   memberLevel: MemberLevel,
   joinDate: string,
   healthScore: number,
-  totalDiagnosis: number,;
-  consecutiveDays: number,;
-  healthPoints: number;
+  totalDiagnosis: number,consecutiveDays: number,healthPoints: number;
   email?: string;
   phone?: string;
   location?: string;
   bio?: string}
-//////     智能体交互记录
+// 智能体交互记录
 export interface AgentInteraction {
 }
  id: string}
@@ -43,40 +41,34 @@ export interface AgentInteraction {
   lastInteraction: string,
   totalInteractions: number,
   favoriteFeature: string,
-  emoji: string,;
-  color: string,;
-  satisfaction: number;
- //////     满意度 1-5,
-  lastTopics: string[] //////     最近讨论的话题
+  emoji: string,color: string,satisfaction: number;
+ // 满意度 1-5,
+  lastTopics: string[] // 最近讨论的话题
   }
-//////     健康成就
+// 健康成就
 export interface HealthAchievement {
 }
  id: string}
   title: string,
   description: string,
-  icon: string,;
-  color: string,;
-  unlocked: boolean;
+  icon: string,color: string,unlocked: boolean;
   unlockedDate?: string;
   progress?: number;
   target?: number;
 category: "health" | "learning" | "social" | "lifestyle",
-  points: number; //////     获得的积分
+  points: number; // 获得的积分
   }
-//////     会员特权
+// 会员特权
 export interface MemberBenefit {
 }
  id: string}
   title: string,
-  description: string,;
-  icon: string,;
-  available: boolean;
+  description: string,icon: string,available: boolean;
   used?: number;
   limit?: number;
 category: "diagnosis" | "consultation" | "content" | "service";
   validUntil?: string}
-//////     设置项类型
+// 设置项类型
 export interface SettingItem {
 };
  id: string};
@@ -88,14 +80,14 @@ icon: string,
   onPress?: () => void;
   badge?: string | number;
   dangerous?: boolean}
-//////     设置分组
+// 设置分组
 export interface SettingSection {
 }
  id: string}
   title: string,
   items: SettingItem[]
   }
-//////     健康统计
+// 健康统计
 export interface HealthStats {
 }
  totalDiagnosis: number}
@@ -105,19 +97,17 @@ export interface HealthStats {
   weeklyGoal: number,
   weeklyProgress: number,
   monthlyTrend: "up" | "down" | "stable"}
-//////     活动记录
+// 活动记录
 export interface ActivityRecord {
 }
  id: string}
   type: "diagnosis" | "learning" | "exercise" | "meditation" | "consultation",
-  title: string,;
-  description: string,;
-  timestamp: string;
-  duration?: number; //////     分钟
+  title: string,description: string,timestamp: string;
+  duration?: number; // 分钟
 points: number,
   icon: string,
   color: string}
-//////     隐私设置
+// 隐私设置
 export interface PrivacySettings {
 }
  dataSharing: boolean}
@@ -126,7 +116,7 @@ export interface PrivacySettings {
   locationTracking: boolean,
   healthDataSync: boolean,
   notificationEnabled: boolean}
-//////     通知设置
+// 通知设置
 export interface NotificationSettings {
 }
  dailyReminder: boolean}
@@ -139,14 +129,12 @@ export interface NotificationSettings {
     startTime: string,
     endTime: string}
 }
-//////     用户偏好设置
+// 用户偏好设置
 export interface UserPreferences {
 }
  language: "zh-CN" | "en-US"}
   theme: "light" | "dark" | "auto",
   fontSize: "small" | "medium" | "large",
-  accessibility: {voiceOver: boolean,;
-    highContrast: boolean,;
-    reduceMotion: boolean};
+  accessibility: {voiceOver: boolean,highContrast: boolean,reduceMotion: boolean};
   privacy: PrivacySettings,
   notifications: NotificationSettings}

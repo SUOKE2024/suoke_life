@@ -1,3 +1,15 @@
+"""
+metrics - 索克生活项目模块
+"""
+
+from collections.abc import Callable
+from functools import wraps
+from prometheus_client import (
+from typing import Any, Optional, TypeVar
+import asyncio
+import functools
+import time
+
 #!/usr/bin/env python3
 
 """
@@ -5,14 +17,7 @@
 提供Prometheus指标收集和监控功能
 """
 
-import asyncio
-import functools
-import time
-from collections.abc import Callable
-from functools import wraps
-from typing import Any, Optional, TypeVar
 
-from prometheus_client import (
     CollectorRegistry,
     Counter,
     Gauge,

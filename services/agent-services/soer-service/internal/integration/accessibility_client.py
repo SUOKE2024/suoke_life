@@ -1,3 +1,14 @@
+"""
+accessibility_client - 索克生活项目模块
+"""
+
+from typing import Any
+import asyncio
+import grpc
+import logging
+import os
+import sys
+
 #!/usr/bin/env python
 
 """
@@ -5,15 +16,9 @@
 支持健康计划和传感器数据的无障碍转换
 """
 
-import asyncio
-import logging
 
 # 导入配置
-import os
-import sys
-from typing import Any
 
-import grpc
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 

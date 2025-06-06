@@ -1,10 +1,15 @@
+"""
+fhir_utils - 索克生活项目模块
+"""
+
+from typing import Dict, Any
+import json
+
 # -*- coding: utf-8 -*-
 """
 FHIR健康数据标准工具
 支持健康数据采集、存储、交换的FHIR格式转换与校验
 """
-from typing import Dict, Any
-import json
 
 # 以体温采集为例，生成FHIR Observation资源
 

@@ -1,17 +1,24 @@
-"""认证核心服务"""
+"""
+auth - 索克生活项目模块
+"""
 
-import secrets
-from datetime import datetime, timedelta
-from typing import Dict, Optional, Tuple
-
-import pyotp
-from jose import JWTError, jwt
-from passlib.context import CryptContext
-from sqlalchemy.ext.asyncio import AsyncSession
-
+        from auth_service.repositories.session_repository import SessionRepository
+        from auth_service.repositories.user_repository import UserRepository
 from auth_service.config.settings import get_settings
 from auth_service.models.auth import LoginResult, MFADevice
 from auth_service.models.user import User, UserSession
+from datetime import datetime, timedelta
+from jose import JWTError, jwt
+from passlib.context import CryptContext
+from sqlalchemy.ext.asyncio import AsyncSession
+from typing import Dict, Optional, Tuple
+import pyotp
+import secrets
+
+"""认证核心服务"""
+
+
+
 
 
 class AuthService:
@@ -77,7 +84,6 @@ class AuthService:
         password: str
     ) -> Tuple[Optional[User], LoginResult]:
         """用户认证"""
-        from auth_service.repositories.user_repository import UserRepository
         
         user_repo = UserRepository(db)
         user = await user_repo.get_by_username_or_email(username)
@@ -132,7 +138,6 @@ class AuthService:
         ip_address: Optional[str] = None
     ) -> UserSession:
         """创建用户会话"""
-        from auth_service.repositories.session_repository import SessionRepository
         
         # 创建令牌
         access_token = self.create_access_token(

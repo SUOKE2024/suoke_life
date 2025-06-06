@@ -1,3 +1,17 @@
+"""
+oauth2 - 索克生活项目模块
+"""
+
+            from urllib.parse import urlencode
+        from urllib.parse import urlencode
+    from urllib.parse import urlencode
+from ..core.logging import get_logger
+from ..services.oauth2_provider import get_oauth2_provider, OAuth2Provider
+from fastapi import APIRouter, HTTPException, Depends, Form, Query, Request
+from fastapi.responses import RedirectResponse, JSONResponse, HTMLResponse
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from typing import Dict, Any, Optional
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -7,14 +21,8 @@ OAuth2/OIDC API 端点
 提供完整的 OAuth2 授权服务和 OIDC 协议支持。
 """
 
-from typing import Dict, Any, Optional
 
-from fastapi import APIRouter, HTTPException, Depends, Form, Query, Request
-from fastapi.responses import RedirectResponse, JSONResponse, HTMLResponse
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
-from ..services.oauth2_provider import get_oauth2_provider, OAuth2Provider
-from ..core.logging import get_logger
 
 logger = get_logger(__name__)
 
@@ -96,7 +104,6 @@ async def authorize(
             if state:
                 error_params["state"] = state
             
-            from urllib.parse import urlencode
             error_url = f"{redirect_uri}?{urlencode(error_params)}"
             return RedirectResponse(url=error_url)
         
@@ -226,7 +233,6 @@ async def approve_authorization(
     )
     
     if "error" in result:
-        from urllib.parse import urlencode
         error_params = {"error": result["error"]}
         if state:
             error_params["state"] = state
@@ -243,7 +249,6 @@ async def deny_authorization(
     """
     拒绝授权请求
     """
-    from urllib.parse import urlencode
     error_params = {"error": "access_denied"}
     if state:
         error_params["state"] = state

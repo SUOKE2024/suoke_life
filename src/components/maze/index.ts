@@ -11,4 +11,4 @@ export { default as KnowledgeNodeModal } from './KnowledgeNodeModal';
 export { default as ChallengeModal } from './ChallengeModal';
 export { default as GameSettingsModal } from './GameSettingsModal';
 export { default as MazeStatsScreen } from './MazeStatsScreen';
-export { default as MazeCompletionScreen } from './MazeCompletionScreen'; 
+export { default as MazeCompletionScreen } from './MazeCompletionScreen';

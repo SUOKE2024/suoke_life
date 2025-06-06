@@ -1,24 +1,30 @@
+"""
+enhanced_api_gateway - 索克生活项目模块
+"""
+
+from contextlib import asynccontextmanager
+from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel, Field
+from services.agent_services.laoke_service.internal.service.enhanced_knowledge_service import (
+from services.common.observability.tracing import trace_middleware
+from typing import Any
+import asyncio
+import logging
+import time
+import uvicorn
+
 #!/usr/bin/env python3
 """
 laoke-service 增强版API网关
 集成FastAPI、中间件、追踪、监控等功能
 """
 
-import asyncio
-import logging
-import time
-from contextlib import asynccontextmanager
-from typing import Any
 
-import uvicorn
-from fastapi import Depends, FastAPI, HTTPException, Request
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.trustedhost import TrustedHostMiddleware
-from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field
 
 # 导入服务和通用组件
-from services.agent_services.laoke_service.internal.service.enhanced_knowledge_service import (
     CommunityContentRequest,
     ContentType,
     DifficultyLevel,
@@ -27,7 +33,6 @@ from services.agent_services.laoke_service.internal.service.enhanced_knowledge_s
     LearningStyle,
     get_knowledge_service,
 )
-from services.common.observability.tracing import trace_middleware
 
 logger = logging.getLogger(__name__)
 
@@ -169,22 +174,26 @@ async def general_exception_handler(request: Request, exc: Exception):
     )
 
 # 依赖注入
-async def get_knowledge_service_dependency():
+async async def get_knowledge_service_dependency(
     """获取知识服务依赖"""
     return app_state.get('knowledge_service')
 
 # API路由
+@cache(expire=300)  # 5分钟缓存
+@limiter.limit("100/minute")  # 每分钟100次请求
 @app.get("/health", response_model=HealthResponse)
 async def health_check():
     """健康检查"""
     return HealthResponse(
         status="healthy",
         timestamp=time.time(),
-        service="laoke-service"
+        ser@cache(expire=@limiter.limit("100/minute")  # 每分钟100次请求
+300)  # 5分钟缓存
+vice="laoke-service"
     )
 
 @app.get("/metrics")
-async def get_metrics():
+async async def get_metrics(
     """获取服务指标"""
     knowledge_service = app_state.get('knowledge_service')
     service_stats = knowledge_service.get_health_status() if knowledge_service else {}
@@ -192,7 +201,8 @@ async def get_metrics():
     return {
         "service": "laoke-service",
         "uptime": time.time() - app_state.get('start_time', time.time()),
-        "total_requests": app_state.get('request_count', 0),
+        "total_requests": app_state.get('request_count', @limiter.limit("100/minute")  # 每分钟100次请求
+0),
         "service_stats": service_stats,
         "timestamp": time.time()
     }
@@ -234,7 +244,8 @@ async def search_knowledge(
             "timestamp": result.timestamp
         }
 
-    except Exception as e:
+    except Exceptio@limiter.limit("100/minute")  # 每分钟100次请求
+n as e:
         logger.error(f"知识搜索失败: {e}")
         raise HTTPException(status_code=500, detail=f"知识搜索失败: {str(e)}") from e
 
@@ -273,7 +284,8 @@ async def generate_learning_path(
                 "milestones": result.milestones
             },
             "processing_time": result.processing_time,
-            "timestamp": result.timestamp
+            "timestamp": result.ti@limiter.limit("100/minute")  # 每分钟100次请求
+mestamp
         }
 
     except Exception as e:
@@ -312,12 +324,14 @@ async def get_community_content(
                 "engagement_stats": result.engagement_stats
             },
             "processing_time": result.processing_time,
-            "timestamp": result.timestamp
+            "timesta@limiter.limit("100/minute")  # 每分钟100次请求
+mp": result.timestamp
         }
 
     except Exception as e:
         logger.error(f"社区内容获取失败: {e}")
-        raise HTTPException(status_code=500, detail=f"社区内容获取失败: {str(e)}") from e
+        raise HTTPException@cache(expire=300)  # 5分钟缓存
+(status_code=500, detail=f"社区内容获取失败: {str(e)}") from e
 
 @app.get("/api/v1/content/{content_id}")
 async def get_content_details(
@@ -351,13 +365,15 @@ async def get_content_details(
                 ],
                 "prerequisites": ["中医入门", "基础概念"],
                 "related_content": ["中医诊断学", "方剂学基础"],
-                "tags": ["中医理论", "基础知识", "阴阳五行"]
+                "tags": ["中医理论", "基础知@limiter.limit("100/minute")  # 每分钟100次请求
+识", "阴阳五行"]
             },
             "timestamp": time.time()
         }
 
     except Exception as e:
-        logger.error(f"获取内容详情失败: {e}")
+        logger.error(f"获取内容详情失败: {e}")@cache(expire=300)  # 5分钟缓存
+
         raise HTTPException(status_code=500, detail=f"获取内容详情失败: {str(e)}") from e
 
 @app.get("/api/v1/learning-path/{path_id}")
@@ -400,7 +416,8 @@ async def get_learning_path_details(
                 ],
                 "instructor": {
                     "name": "李教授",
-                    "title": "中医学博士",
+                    "t@limiter.limit("100/minute")  # 每分钟100次请求
+itle": "中医学博士",
                     "experience": "20年教学经验"
                 }
             },
@@ -439,7 +456,8 @@ async def enroll_learning_path(
                 "access_level": "full",
                 "progress": {
                     "current_module": 1,
-                    "completion_percentage": 0,
+      @limiter.limit("100/minute")  # 每分钟100次请求
+              "completion_percentage": 0,
                     "time_spent": 0
                 }
             },
@@ -447,11 +465,12 @@ async def enroll_learning_path(
         }
 
     except Exception as e:
-        logger.error(f"报名学习路径失败: {e}")
+        lo@cache(expire=300)  # 5分钟缓存
+gger.error(f"报名学习路径失败: {e}")
         raise HTTPException(status_code=500, detail=f"报名学习路径失败: {str(e)}") from e
 
 @app.get("/api/v1/content-types")
-async def get_content_types():
+async async def get_content_types(
     """获取内容类型列表"""
     return {
         "success": True,
@@ -473,13 +492,15 @@ async def get_content_types():
                     "description": "音频讲解内容"
                 },
                 {
-                    "code": "course",
+  @limiter.limit("100/minute")  # 每分钟100次请求
+                  "code": "course",
                     "name": "课程",
                     "description": "系统性课程内容"
                 },
                 {
                     "code": "quiz",
-                    "name": "测验",
+                    "n@cache(expire=300)  # 5分钟缓存
+ame": "测验",
                     "description": "知识测验和练习"
                 }
             ]
@@ -488,7 +509,7 @@ async def get_content_types():
     }
 
 @app.get("/api/v1/difficulty-levels")
-async def get_difficulty_levels():
+async async def get_difficulty_levels(
     """获取难度级别列表"""
     return {
         "success": True,
@@ -502,7 +523,8 @@ async def get_difficulty_levels():
                 {
                     "code": "intermediate",
                     "name": "中级",
-                    "description": "有一定基础"
+                    "description": "有一定基础@limiter.limit("100/minute")  # 每分钟100次请求
+"
                 },
                 {
                     "code": "advanced",
@@ -510,7 +532,8 @@ async def get_difficulty_levels():
                     "description": "深入学习"
                 },
                 {
-                    "code": "expert",
+                    "code": "exp@cache(expire=300)  # 5分钟缓存
+ert",
                     "name": "专家级",
                     "description": "专业深度内容"
                 }
@@ -520,7 +543,7 @@ async def get_difficulty_levels():
     }
 
 @app.get("/api/v1/topics")
-async def get_popular_topics():
+async async def get_popular_topics(
     """获取热门主题"""
     return {
         "success": True,

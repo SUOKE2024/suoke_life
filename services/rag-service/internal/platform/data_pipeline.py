@@ -1,3 +1,22 @@
+"""
+data_pipeline - 索克生活项目模块
+"""
+
+                import re
+        import aiohttp
+        import jieba
+from ..observability.metrics import MetricsCollector
+from dataclasses import dataclass, field
+from enum import Enum
+from loguru import logger
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Callable, Union, AsyncGenerator
+import aiofiles
+import asyncio
+import json
+import time
+import uuid
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,18 +24,7 @@
 数据管道和ETL模块 - 处理RAG数据流和中医知识库更新
 """
 
-import asyncio
-import time
-import uuid
-import json
-from typing import Dict, List, Any, Optional, Callable, Union, AsyncGenerator
-from dataclasses import dataclass, field
-from enum import Enum
-from pathlib import Path
-import aiofiles
-from loguru import logger
 
-from ..observability.metrics import MetricsCollector
 
 
 class PipelineStatus(str, Enum):
@@ -253,7 +261,6 @@ class DataExtractor:
     
     async def _extract_from_api(self, source: DataSource) -> AsyncGenerator[DataRecord, None]:
         """从API提取数据"""
-        import aiohttp
         
         api_config = source.config
         url = api_config.get("url")
@@ -342,7 +349,6 @@ class DataTransformer:
             
             # 移除特殊字符（可配置）
             if config.get("remove_special_chars", False):
-                import re
                 cleaned = re.sub(r'[^\w\s\u4e00-\u9fff]', '', cleaned)
             
             record.content = cleaned
@@ -358,7 +364,6 @@ class DataTransformer:
     
     async def _extract_tcm_entities(self, record: DataRecord, config: Dict[str, Any]) -> List[DataRecord]:
         """提取中医实体"""
-        import jieba
         
         # 中医术语词典（简化版）
         tcm_terms = {

@@ -1,26 +1,25 @@
-//////     性能监控配置   索克生活APP - 性能监控设置
-export interface PerformanceConfig  {;
-  //////     全局性能监控开关;
+// 性能监控配置   索克生活APP - 性能监控设置
+export interface PerformanceConfig  {// 全局性能监控开关;
 enabled: boolean;
-  //////     开发环境配置
+  // 开发环境配置
 development: {
     trackRender: boolean,
     trackMemory: boolean,
     trackNetwork: boolean,
     logToConsole: boolean,
-    warnThreshold: number; //////     ms,
-    errorThreshold: number //////     ms;
+    warnThreshold: number; // ms,
+    errorThreshold: number // ms;
   }
-  //////     生产环境配置
+  // 生产环境配置
 production: {
     trackRender: boolean,
     trackMemory: boolean,
     trackNetwork: boolean,
     logToConsole: boolean,
-    warnThreshold: number; //////     ms,
-    errorThreshold: number //////     ms,
+    warnThreshold: number; // ms,
+    errorThreshold: number // ms,
     reportToAnalytics: boolean}
-  //////     组件特定配置
+  // 组件特定配置
 components: {
     [componentName: string]: {
       enabled: boolean;
@@ -36,9 +35,7 @@ export const performanceConfig: PerformanceConfig = {
     trackRender: true,
     trackMemory: true,
     trackNetwork: true,
-    logToConsole: true,;
-    warnThreshold: 50,;
-    errorThreshold: 100;
+    logToConsole: true,warnThreshold: 50,errorThreshold: 100;
   },
   production: {
     trackRender: true,
@@ -50,7 +47,7 @@ export const performanceConfig: PerformanceConfig = {
     reportToAnalytics: true;
   },
   components: {
-    //////     关键组件的特殊配置
+    // 关键组件的特殊配置
     "HomeScreen: {"
       enabled: true,
       warnThreshold: 30,
@@ -76,32 +73,27 @@ export const performanceConfig: PerformanceConfig = {
     }
   }
 }
-//////     性能阈值配置
+// 性能阈值配置
 export const performanceThresholds = ;
-{;
-  render: {
-    good: 16, //////     60fps;
-warning: 33, //////     30fps;
-critical: 50, //////     20fps;
+{render: {
+    good: 16, // 60fps;
+warning: 33, // 30fps;
+critical: 50, // 20fps;
   },
   memory: {
-    warning: 50 * 1024 * 1024, //////     50MB;
-critical: 100 * 1024 * 1024, //////     100MB;
+    warning: 50 * 1024 * 1024, // 50MB;
+critical: 100 * 1024 * 1024, // 100MB;
   },
   network: {
-    good: 1000, //////     1s;
-warning: 3000, //////     3s;
-critical: 5000, //////     5s;
+    good: 1000, // 1s;
+warning: 3000, // 3s;
+critical: 5000, // 5s;
   }
 }
-//////     获取组件性能配置
-export function getComponentConfig(componentName: string) {;
-  const isDev = __DEV;_;_;
+// 获取组件性能配置
+export function getComponentConfig(componentName: string) {const isDev = __DEV;_;_;
   const baseConfig = isDev ? performanceConfig.development : performanceConfig.producti;o;n;
-  const componentConfig = performanceConfig.components[componentName] || ;{;};
-  return {
-    ...baseConfig,
-    ...componentConfig,
-    enabled: performanceConfig.enabled && (componentConfig.enabled !== false;)
+  const componentConfig = performanceConfig.components[componentName] || ;{};
+  return {...baseConfig,...componentConfig,enabled: performanceConfig.enabled && (componentConfig.enabled !== false;)
   ;};
 }

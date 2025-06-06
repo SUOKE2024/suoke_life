@@ -1,11 +1,16 @@
-"""用户相关的API数据传输对象"""
-
-from datetime import datetime
-from typing import Dict, Optional
-
-from pydantic import BaseModel, EmailStr, Field, validator
+"""
+user - 索克生活项目模块
+"""
 
 from auth_service.models.user import UserStatus, Gender
+from datetime import datetime
+from pydantic import BaseModel, EmailStr, Field, validator
+from typing import Dict, Optional
+
+"""用户相关的API数据传输对象"""
+
+
+
 
 
 class UserCreateRequest(BaseModel):

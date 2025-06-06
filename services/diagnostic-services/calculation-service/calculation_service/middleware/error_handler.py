@@ -1,16 +1,21 @@
 """
+error_handler - 索克生活项目模块
+"""
+
+from ..exceptions import CalculationError
+from fastapi import Request, Response
+from fastapi.responses import JSONResponse
+from starlette.middleware.base import BaseHTTPMiddleware
+from typing import Callable
+import logging
+
+"""
 错误处理中间件
 
 统一处理应用异常
 """
 
-import logging
-from typing import Callable
-from fastapi import Request, Response
-from fastapi.responses import JSONResponse
-from starlette.middleware.base import BaseHTTPMiddleware
 
-from ..exceptions import CalculationError
 
 logger = logging.getLogger(__name__)
 

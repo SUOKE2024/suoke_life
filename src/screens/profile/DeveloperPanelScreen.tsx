@@ -1,8 +1,9 @@
+import { useNavigation } from "@react-navigation/native/import { colors, spacing, typography  } from ;../../constants/theme";/import { apiIntegrationTest } from ../../utils/apiIntegrationTest"/import { ApiIntegrationDemo } from "../demo/////    ApiIntegrationDemo
+import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/////      View,"
+
 import React from "react";
-import { useNavigation } from "@react-navigation/native/import { colors, spacing, typography  } from ";";../../constants/theme";/import { apiIntegrationTest } from ../../utils/apiIntegrationTest"/import { ApiIntegrationDemo } from "../demo/////    ApiIntegrationDemo";"
 /////
-importReact,{ useState, useEffect } from ";react"
-import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/////      View,;"
+importReact,{ useState, useEffect } from ";react";
   Text,
   StyleSheet,
   ScrollView,
@@ -11,7 +12,7 @@ import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/////      
   Switch,
   Platform,
   SafeAreaView,
-  { RefreshControl } from "react-native"
+  { RefreshControl } from "react-native";
   errorHandler,
   getErrorStats,
   clearErrorLog,
@@ -27,29 +28,25 @@ import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/////      
     timestamp: string}
 }
 export const DeveloperPanelScreen: React.FC  = () => {}
-  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor(DeveloperPanelScreen", { "
-    trackRender: true,;
-    trackMemory: true,;
-    warnThreshold: 50, // ms //////     };);
+  // 性能监控 // const performanceMonitor = usePerformanceMonitor(DeveloperPanelScreen", { ";
+    trackRender: true,trackMemory: true,warnThreshold: 50, // ms // };);
   const navigation = useNavigation;
   const [debugInfo, setDebugInfo] = useState<DebugInfo | null />(nul;l;);/////      const [performanceEnabled, setPerformanceEnabled] = useState<boolean>(tru;e;);
   const [loading, setLoading] = useState<boolean>(fals;e;);
   useEffect((); => {}
-    const effectStart = performance.now()
+    const effectStart = performance.now();
     loadDebugInfo();
-  }, []) // TODO: 检查依赖项  * // TODO: 检查依赖项  * / TODO: 检查依赖项* * * // TODO: 检查依赖项  * * * // TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项// , TODO: 检查依赖项// , TODO: 检查依赖项// //////     const loadDebugInfo = useCallback(() => {}
-    // TODO: Implement function body //////     const effectEnd = performance.now;
-    performanceMonitor.recordEffect(effectEnd - effectStart)
+  }, []) // TODO: 检查依赖项  * // TODO: 检查依赖项  * / TODO: 检查依赖项* * * // TODO: 检查依赖项  * * * // TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项// , TODO: 检查依赖项// , TODO: 检查依赖项// // const loadDebugInfo = useCallback(() => {;
+    // TODO: Implement function body // const effectEnd = performance.now;
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
     try {
       const errorStats = getErrorStats;
       const performanceStats = getPerformanceStats;
       const networkStats = getNetworkPerformanceStats;
-      const systemInfo = {;
-        platform: Platform.OS,
+      const systemInfo = {platform: Platform.OS,
         version: Platform.Version.toString(),
-        isDebug: __DEV__,;
-        timestamp: new Date().toISOString(;);};
+        isDebug: __DEV__,timestamp: new Date().toISOString(;);};
       setDebugInfo({
         errorStats,
         performanceStats,
@@ -60,35 +57,34 @@ export const DeveloperPanelScreen: React.FC  = () => {}
       Alert.alert("错误", 加载调试信息失败");"
     }
   };
-  const handleBack = useCallback((); => {;}
-    // TODO: Implement function body //////     const effectEnd = performance.now;
-    performanceMonitor.recordEffect(effectEnd - effectStart)
+  const handleBack = useCallback((); => {}
+    // TODO: Implement function body // const effectEnd = performance.now;
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
     navigation.goBack();
   };
-  const handleClearErrorLog = useCallback((); => {;}
-    // TODO: Implement function body //////     const effectEnd = performance.now;
-    performanceMonitor.recordEffect(effectEnd - effectStart)
+  const handleClearErrorLog = useCallback((); => {}
+    // TODO: Implement function body // const effectEnd = performance.now;
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [])
     Alert.alert(
-      "确认清除,"
-      "确定要清除所有错误日志吗？",
+      "确认清除,确定要清除所有错误日志吗？",
       [
         { text: 取消", style: "cancel},
         {
           text: "确定",
           onPress: (); => {}
             clearErrorLog();
-            loadDebugInfo()
+            loadDebugInfo();
             Alert.alert(成功", "错误日志已清除);
           }
         }
       ]
     );
   };
-  const handleClearPerformanceMetrics = useCallback((); => {;}
-    // TODO: Implement function body //////     const effectEnd = performance.now;
-    performanceMonitor.recordEffect(effectEnd - effectStart)
+  const handleClearPerformanceMetrics = useCallback((); => {}
+    // TODO: Implement function body // const effectEnd = performance.now;
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [])
     Alert.alert(
       "确认清除",
@@ -99,22 +95,22 @@ export const DeveloperPanelScreen: React.FC  = () => {}
           text: 确定","
           onPress: (); => {}
             clearPerformanceMetrics();
-            loadDebugInfo()
+            loadDebugInfo();
             Alert.alert("成功, "性能指标已清除");"
           }
         }
       ]
     );
   };
-  const handleTogglePerformanceMonitoring = useCallback((); => {;}
-    // TODO: Implement function body //////     const effectEnd = performance.now;
-    performanceMonitor.recordEffect(effectEnd - effectStart)
+  const handleTogglePerformanceMonitoring = useCallback((); => {}
+    // TODO: Implement function body // const effectEnd = performance.now;
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
     setPerformanceEnabled(enabled);
-    performanceMonitor.setEnabled(enabled)
+    performanceMonitor.setEnabled(enabled);
     Alert.alert(设置已更新", `性能监控已${enabled ? "启用 : "禁用"}`);
   };
-  const handleRunQuickTest = async() => {;}
+  const handleRunQuickTest = async() => {}
     setLoading(tru;e;);
     try {
       const result = await apiIntegrationTest.quickHealthChe;c;k;(;);
@@ -122,58 +118,53 @@ export const DeveloperPanelScreen: React.FC  = () => {}
         快速测试结果","
         `状态: ${result.success ? "成功 : "失败"}\n${result.message}`,"
         [{ text: 确定"}]"
-      )
+      );
     } catch (error: unknown) {
       Alert.alert("测试失败, error.message || "未知错误");"
     } finally {
       setLoading(false);
     }
   };
-  const handleExportDebugData = useCallback((); => {;}
-    // TODO: Implement function body //////     const effectEnd = performance.now;
-    performanceMonitor.recordEffect(effectEnd - effectStart)
+  const handleExportDebugData = useCallback((); => {}
+    // TODO: Implement function body // const effectEnd = performance.now;
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
     try {
-      const exportData = {;
-        timestamp: new Date().toISOString(),
+      const exportData = {timestamp: new Date().toISOString(),
         errorLog: errorHandler.getErrorLog(),
-        performanceData: performanceMonitor.exportData(),;
-        systemInfo: debugInfo?.systemInf;o;
+        performanceData: performanceMonitor.exportData(),systemInfo: debugInfo?.systemInf;o;
       ;}
       // 在实际应用中，这里可以实现数据导出功能 // / 比如保存到文件、发送邮件或上传到服务器* // Alert.alert(导出成功", "调试数据已导出到控制台) * /////
     } catch (error) {
-      Alert.alert(导出失败", "无法导出调试数据)
+      Alert.alert(导出失败", "无法导出调试数据);
     }
   };
-  const handleNavigateToApiDemo = useCallback((); => {;}
-    // TODO: Implement function body //////     const effectEnd = performance.now;
-    performanceMonitor.recordEffect(effectEnd - effectStart)
+  const handleNavigateToApiDemo = useCallback((); => {}
+    // TODO: Implement function body // const effectEnd = performance.now;
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [])
-    // 导航到ApiIntegrationDemo //////     navigation.navigate("ApiIntegrationDemo" as never)
+    // 导航到ApiIntegrationDemo // navigation.navigate("ApiIntegrationDemo" as never);
   };
-  const renderErrorStats = useCallback((); => {;}
-    // TODO: Implement function body //////     const effectEnd = performance.now;
-    performanceMonitor.recordEffect(effectEnd - effectStart)
+  const renderErrorStats = useCallback((); => {}
+    // TODO: Implement function body // const effectEnd = performance.now;
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
     if (!debugInfo?.errorStats) {return nu;l;l;}
     const { total, bySeverity, recent   } = debugInfo.errorSta;t;s;
-    // 记录渲染性能 //////
-    performanceMonitor.recordRender()
+    // 记录渲染性能 // performanceMonitor.recordRender();
     return (;
-      <View style={styles.section} />/        <Text style={styles.sectionTitle} />错误统计</Text>/        <View style={styles.statsContainer} />/          <View style={styles.statItem} />/            <Text style={styles.statLabel} />总错误数</Text>/            <Text style={styles.statValue} />{total}</Text>/          </View>/          <View style={styles.statItem} />/            <Text style={styles.statLabel} />最近1小时</Text>/            <Text style={styles.statValue} />{recent}</Text>/          </View>/        </View>//////
-        <Text style={styles.subSectionTitle} />按严重程度分类</Text>/////            {Object.entries(bySeverity).map(([severity, count;];) => (
+      <View style={styles.section} />/        <Text style={styles.sectionTitle} />错误统计</Text>/        <View style={styles.statsContainer} />/          <View style={styles.statItem} />/            <Text style={styles.statLabel} />总错误数</Text>/            <Text style={styles.statValue} />{total}</Text>/          </View>/          <View style={styles.statItem} />/            <Text style={styles.statLabel} />最近1小时</Text>/            <Text style={styles.statValue} />{recent}</Text>/          </View>/        </View>// <Text style={styles.subSectionTitle} />按严重程度分类</Text>/////            {Object.entries(bySeverity).map(([severity, count;];) => (
           <View key={severity} style={styles.severityItem} />/            <Text style={styles.severityLabel} />{severity}</Text>/            <Text style={styles.severityCount} />{count}</Text>/          </View>/////            ))}
         <TouchableOpacity style={styles.actionButton} onPress={handleClearErrorLog} accessibilityLabel="TODO: 添加无障碍标签" />/          <Text style={styles.actionButtonText} />清除错误日志</Text>/        </TouchableOpacity>/      </View>/////        );
   };
-  const renderPerformanceStats = useCallback((); => {;}
-    // TODO: Implement function body //////     const effectEnd = performance.now;
-    performanceMonitor.recordEffect(effectEnd - effectStart)
+  const renderPerformanceStats = useCallback((); => {}
+    // TODO: Implement function body // const effectEnd = performance.now;
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
     if (!debugInfo?.performanceStats) {return nu;l;l;}
     const { total, byType, averageDuration   } = debugInfo.performanceSta;t;s;
-    return (
-      <View style={styles.section} />/        <Text style={styles.sectionTitle} />性能统计</Text>/        <View style={styles.statsContainer} />/          <View style={styles.statItem} />/            <Text style={styles.statLabel} />总指标数</Text>/            <Text style={styles.statValue} />{total}</Text>/          </View>/          <View style={styles.statItem} />/            <Text style={styles.statLabel} />监控状态</Text>/////                <Switch,
-              value={performanceEnabled};
+    return (;
+      <View style={styles.section} />/        <Text style={styles.sectionTitle} />性能统计</Text>/        <View style={styles.statsContainer} />/          <View style={styles.statItem} />/            <Text style={styles.statLabel} />总指标数</Text>/            <Text style={styles.statValue} />{total}</Text>/          </View>/          <View style={styles.statItem} />/            <Text style={styles.statLabel} />监控状态</Text>/////                <Switch,value={performanceEnabled};
               onValueChange={handleTogglePerformanceMonitoring};
               trackColor={{ false: colors.gray400, true: colors.prima;r;y }}
               thumbColor={Platform.OS === android" ? colors.white: "} />/          </View>/        </View>/////
@@ -182,35 +173,33 @@ export const DeveloperPanelScreen: React.FC  = () => {}
             </Text>/          </View>/////            ))}
         <TouchableOpacity style={styles.actionButton} onPress={handleClearPerformanceMetrics} accessibilityLabel="TODO: 添加无障碍标签" />/          <Text style={styles.actionButtonText} />清除性能指标</Text>/        </TouchableOpacity>/      </View>/////        );
   };
-  const renderNetworkStats = useCallback((); => {;}
-    // TODO: Implement function body //////     const effectEnd = performance.now;
-    performanceMonitor.recordEffect(effectEnd - effectStart)
+  const renderNetworkStats = useCallback((); => {}
+    // TODO: Implement function body // const effectEnd = performance.now;
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
     if (!debugInfo?.networkStats) {return nu;l;l;}
     const { totalRequests, averageResponseTime, successRate   } = debugInfo.networkSta;t;s;
-    return (
+    return (;
       <View style={styles.section} />/        <Text style={styles.sectionTitle} />网络统计</Text>/        <View style={styles.statsContainer} />/          <View style={styles.statItem} />/            <Text style={styles.statLabel} />总请求数</Text>/            <Text style={styles.statValue} />{totalRequests}</Text>/          </View>/          <View style={styles.statItem} />/            <Text style={styles.statLabel} />平均响应时间</Text>/            <Text style={styles.statValue} />{averageResponseTime.toFixed(2)}ms</Text>/          </View>/          <View style={styles.statItem} />/            <Text style={styles.statLabel} />成功率</Text>///              <Text style={[; ///  >
               styles.statValue,
               { color: successRate /> 90 ? colors.success : successRate > 70 ? colors.warning : colors.err;o;r  ; },/////                ]}>
               {successRate.toFixed(1)}%
             </Text>/          </View>/        </View>/      </View>/////        );
   };
-  const renderSystemInfo = useCallback((); => {;}
-    // TODO: Implement function body //////     const effectEnd = performance.now;
-    performanceMonitor.recordEffect(effectEnd - effectStart)
+  const renderSystemInfo = useCallback((); => {}
+    // TODO: Implement function body // const effectEnd = performance.now;
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
     if (!debugInfo?.systemInfo) {return nu;l;l;}
     const { platform, version, isDebug, timestamp   } = debugInfo.systemIn;f;o;
-    return (
+    return (;
       <View style={styles.section} />/        <Text style={styles.sectionTitle} />系统信息</Text>/        <View style={styles.infoItem} />/          <Text style={styles.infoLabel} />平台</Text>/          <Text style={styles.infoValue} />{platform}</Text>/        </View>/        <View style={styles.infoItem} />/          <Text style={styles.infoLabel} />版本</Text>/          <Text style={styles.infoValue} />{version}</Text>/        </View>/        <View style={styles.infoItem} />/          <Text style={styles.infoLabel} />调试模式</Text>/          <Text style={styles.infoValue} />{isDebug ? 是" : "否}</Text>/        </View>/        <View style={styles.infoItem} />/          <Text style={styles.infoLabel} />更新时间</Text>/          <Text style={styles.infoValue} />{new Date(timestamp).toLocaleString()}</Text>/        </View>/      </View>/////        ;);
   }
-  return (
-    <SafeAreaView style={styles.container} />/////          <ScrollView,
-        style={styles.scrollView}
-        refreshControl={
-          <RefreshControl refreshing={loading} onRefresh={loadDebugInfo} />/////            }
-      >
-        <View style={styles.header} />/          <TouchableOpacity onPress={handleBack} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.backButtonText} />← 返回</Text>/          </TouchableOpacity>/          <Text style={styles.headerTitle} />开发者面板</Text>/          <TouchableOpacity onPress={loadDebugInfo} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.refreshButton} />刷新</Text>/          </TouchableOpacity>/        </View>/////
+  return (;
+    <SafeAreaView style={styles.container} />/////          <ScrollView,style={styles.scrollView};
+        refreshControl={<RefreshControl refreshing={loading} onRefresh={loadDebugInfo} />/////            };
+      >;
+        <View style={styles.header} />/          <TouchableOpacity onPress={handleBack} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.backButtonText} />← 返回</Text>/          </TouchableOpacity>/          <Text style={styles.headerTitle} />开发者面板</Text>/          <TouchableOpacity onPress={loadDebugInfo} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.refreshButton} />刷新</Text>/          </TouchableOpacity>/        </View>/////;
         <View style={styles.actionsSection} />/////              <TouchableOpacity;
 style={[styles.quickActionButton, styles.testButton]}
             onPress={handleRunQuickTest}
@@ -231,13 +220,12 @@ style={[styles.quickActionButton, styles.demoButton]}
         {renderNetworkStats()};
       </ScrollView>/    </SafeAreaView>/////      ;);
 }
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     flex: 1,
     backgroundColor: colors.background;
   },
   header: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center",
     justifyContent: space-between","
     padding: spacing.md,
@@ -268,7 +256,7 @@ const styles = StyleSheet.create({;
     padding: spacing.md;
   },
   actionsSection: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     justifyContent: "space-between",
     marginBottom: spacing.lg;
   },
@@ -292,8 +280,7 @@ const styles = StyleSheet.create({;
     padding: spacing.md,
     marginBottom: spacing.md,
     ...StyleSheet.flatten({
-      shadowColor: "#000",;
-      shadowOffset: { width: 0, height;: ;2 ;},
+      shadowColor: "#000",shadowOffset: { width: 0, height;: ;2 ;},
       shadowOpacity: 0.1,
       shadowRadius: 4,
       elevation: 2;
@@ -307,7 +294,7 @@ const styles = StyleSheet.create({;
   },
   subSectionTitle: {
     fontSize: typography.fontSize.sm,
-    fontWeight: "600,"
+    fontWeight: "600,",
     color: colors.textSecondary,
     marginTop: spacing.md,
     marginBottom: spacing.sm;
@@ -330,7 +317,7 @@ const styles = StyleSheet.create({;
   },
   severityItem: {
     flexDirection: row","
-    justifyContent: "space-between,"
+    justifyContent: "space-between,",
     paddingVertical: 4;
   },
   severityLabel: {
@@ -344,7 +331,7 @@ const styles = StyleSheet.create({;
   },
   typeItem: {
     flexDirection: row","
-    justifyContent: "space-between,"
+    justifyContent: "space-between,",
     paddingVertical: 4;
   },
   typeLabel: {
@@ -364,7 +351,7 @@ const styles = StyleSheet.create({;
   },
   infoItem: {
     flexDirection: row","
-    justifyContent: "space-between,"
+    justifyContent: "space-between,",
     paddingVertical: 8,
     borderBottomWidth: 1,
     borderBottomColor: colors.border;

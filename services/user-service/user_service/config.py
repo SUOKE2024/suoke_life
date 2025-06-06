@@ -1,9 +1,14 @@
-"""用户服务配置"""
+"""
+config - 索克生活项目模块
+"""
 
 from functools import lru_cache
-from typing import Optional, List
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from typing import Optional, List
+
+"""用户服务配置"""
+
 
 
 class DatabaseSettings(BaseSettings):

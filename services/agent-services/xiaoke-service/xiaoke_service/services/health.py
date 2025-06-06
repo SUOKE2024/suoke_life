@@ -1,16 +1,22 @@
 """
+health - 索克生活项目模块
+"""
+
+            import time
+from typing import Any
+from xiaoke_service.core.config import settings
+from xiaoke_service.core.logging import get_logger
+import asyncio
+import httpx
+import time
+
+"""
 健康检查服务
 
 提供应用和依赖服务的健康状态检查。
 """
 
-import time
-from typing import Any
-import asyncio
-import httpx
 
-from xiaoke_service.core.config import settings
-from xiaoke_service.core.logging import get_logger
 
 logger = get_logger(__name__)
 
@@ -217,7 +223,6 @@ class FourDiagnosisAggregator:
                 }
             ]
 
-            import time
             return {
                 "coordination_id": f"coord_{int(time.time())}",
                 "user_id": user_id,

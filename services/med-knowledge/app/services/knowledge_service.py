@@ -1,12 +1,20 @@
 """
+knowledge_service - 索克生活项目模块
+"""
+
+from app.core.logger import get_logger
+from app.models.entities import (
+from app.repositories.neo4j_repository import Neo4jRepository
+from app.services.cache_service import CacheKeys, CacheService
+from app.services.metrics_service import MetricsService, monitor_performance
+import hashlib
+
+"""
 中医知识服务
 提供中医知识图谱数据访问,集成缓存和监控功能
 """
 
-import hashlib
 
-from app.core.logger import get_logger
-from app.models.entities import (
     Acupoint,
     AcupointListResponse,
     Biomarker,
@@ -31,9 +39,6 @@ from app.models.entities import (
     WesternDisease,
     WesternDiseaseListResponse,
 )
-from app.repositories.neo4j_repository import Neo4jRepository
-from app.services.cache_service import CacheKeys, CacheService
-from app.services.metrics_service import MetricsService, monitor_performance
 
 logger = get_logger()
 

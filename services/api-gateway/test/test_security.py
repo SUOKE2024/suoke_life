@@ -1,3 +1,19 @@
+"""
+test_security - 索克生活项目模块
+"""
+
+from datetime import datetime, timedelta, UTC
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+from fastapi.testclient import TestClient
+from internal.delivery.rest.middleware import AuthMiddleware
+from internal.model.config import JwtConfig, AuthConfig, MiddlewareConfig
+from pkg.utils.auth import JWTManager, TokenPayload, extract_token_from_header
+import jwt
+import os
+import pytest
+import sys
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,22 +21,11 @@
 安全性测试：JWT令牌和认证机制
 """
 
-import os
-import sys
-from datetime import datetime, timedelta, UTC
 
-import jwt
-import pytest
-from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
-from fastapi.testclient import TestClient
 
 # 添加项目根目录到Python路径
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from pkg.utils.auth import JWTManager, TokenPayload, extract_token_from_header
-from internal.model.config import JwtConfig, AuthConfig, MiddlewareConfig
-from internal.delivery.rest.middleware import AuthMiddleware
 
 class TestSecurity:
     """安全测试类"""

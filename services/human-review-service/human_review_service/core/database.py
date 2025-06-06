@@ -1,26 +1,31 @@
 """
+database - 索克生活项目模块
+"""
+
+from .config import settings
+from .exceptions import DatabaseError
+from .models import Base
+from contextlib import asynccontextmanager
+from sqlalchemy.ext.asyncio import (
+from sqlalchemy.pool import NullPool, QueuePool
+from typing import AsyncGenerator
+import os
+import structlog
+
+"""
 数据库连接和会话管理
 Database Connection and Session Management
 
 管理 PostgreSQL 数据库连接、会话和事务
 """
 
-import os
-from contextlib import asynccontextmanager
-from typing import AsyncGenerator
 
-import structlog
-from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
     async_sessionmaker,
     create_async_engine,
 )
-from sqlalchemy.pool import NullPool, QueuePool
 
-from .config import settings
-from .exceptions import DatabaseError
-from .models import Base
 
 logger = structlog.get_logger(__name__)
 

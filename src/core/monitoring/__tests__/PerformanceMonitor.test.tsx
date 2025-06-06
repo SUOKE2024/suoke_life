@@ -1,138 +1,133 @@
-import React from "react";
 import { PerformanceMonitor, performanceMonitor, recordMetric, measureAsync, measure } from "../PerformanceMonitor";
+import { PerformanceMonitor, performanceMonitor, recordMetric, measureAsync, measure } from "../PerformanceMonitor";
+
+import React from "react";
 describe("PerformanceMonitor", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  describe(PerformanceMonitor", () => {"
+  describe("PerformanceMonitor", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = PerformanceMonitor(/* valid params   */);
+const result = PerformanceMonitor(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = PerformanceMonitor(/* edge case params   */);
+const result = PerformanceMonitor(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        PerformanceMonitor(/* invalid params     */)
-      }).not.toThrow()
+        PerformanceMonitor(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = PerformanceMonitor(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = PerformanceMonitor(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(performanceMonitor", () => {"
+  describe("performanceMonitor", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = performanceMonitor(/* valid params   */);
+const result = performanceMonitor(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = performanceMonitor(/* edge case params   */);
+const result = performanceMonitor(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        performanceMonitor(/* invalid params     */)
-      }).not.toThrow()
+        performanceMonitor(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = performanceMonitor(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = performanceMonitor(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(recordMetric", () => {"
+  describe("recordMetric", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = recordMetric(/* valid params   */);
+const result = recordMetric(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = recordMetric(/* edge case params   */);
+const result = recordMetric(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        recordMetric(/* invalid params     */)
-      }).not.toThrow()
+        recordMetric(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = recordMetric(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = recordMetric(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(measureAsync", () => {"
+  describe("measureAsync", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = measureAsync(/* valid params   */);
+const result = measureAsync(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = measureAsync(/* edge case params   */);
+const result = measureAsync(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        measureAsync(/* invalid params     */)
-      }).not.toThrow()
+        measureAsync(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = measureAsync(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = measureAsync(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(measure", () => {"
+  describe("measure", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = measure(/* valid params   */);
+const result = measure(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = measure(/* edge case params   */);
+const result = measure(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        measure(/* invalid params     */)
-      }).not.toThrow()
+        measure(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = measure(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = measure(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
 });
-import { performance } from "perf_hooks";
-import { PerformanceMonitor, performanceMonitor, recordMetric, measureAsync, measure } from "../PerformanceMonitor";
 describe("PerformanceMonitor Performance Tests", () => {
   it("should execute within performance thresholds", () => {
     const iterations = 10;
     const startTime = performance.now();
     for (let i = 0; i < iterations; i++) {
       // Execute performance-critical functions
-PerformanceMonitor(/* test params      */)
-      performanceMonitor(/* test params      */);
-      recordMetric(/* test params      */);
-      measureAsync(/* test params      */);
-      measure(/* test params      */);
+PerformanceMonitor(// test params);
+      performanceMonitor(// test params);
+      recordMetric(// test params);
+      measureAsync(// test params);
+      measure(// test params);
     });
     const endTime = performance.now();
     const averageTime = (endTime - startTime) / iterations;
@@ -143,7 +138,7 @@ expect(averageTime).toBeLessThan(1);
     const largeDataset = new Array(10000).fill(0).map((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
-PerformanceMonitor(largeDataset)
+PerformanceMonitor(largeDataset);
     const endTime = performance.now();
     // Should handle large datasets within 100ms
 expect(endTime - startTime).toBeLessThan(100);
@@ -152,7 +147,7 @@ expect(endTime - startTime).toBeLessThan(100);
     const initialMemory = process.memoryUsage().heapUsed;
     // Execute function multiple times
 for (let i = 0; i < 1000; i++) {
-      PerformanceMonitor(/* test params      */);
+      PerformanceMonitor(// test params);
     });
     // Force garbage collection if available
 if (global.gc) {

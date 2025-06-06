@@ -1,10 +1,11 @@
+import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/////      Text as RNText,";
+
 import React from "react";
 import { useTheme } from "../../contexts/ThemeContext";/import { useAccessibility } from "../../contexts/AccessibilityContext";/import { responsive, typography } from "../../utils/responsive";/////    importReact from "react";
-import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/////      Text as RNText,";
   StyleSheet,
   TextStyle,
   { AccessibilityRole } from ";react-native";
-//////     索克生活 - Text组件   统一的文本组件，支持多种样式和语义化标签
+// 索克生活 - Text组件   统一的文本组件，支持多种样式和语义化标签
 export interface TextProps { children: React.ReactNode;
   // 语义化标签 // variant?:  | "h1"////
     | "h2"
@@ -52,10 +53,8 @@ weight?: "300" | "400" | "500" | "600" | "700",
   // 其他属性 // testID?: string ////
   onPress?: () => void,
   onLongPress?: () => void}
-const Text: React.FC<TextProps /> = ({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor("Text', { /////    "'
-    trackRender: true,
-    trackMemory: false,
-    warnThreshold: 100, // ms //////     };)
+const Text: React.FC<TextProps /> = ({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor("Text', { /////    "';
+    trackRender: true,trackMemory: false,warnThreshold: 100, // ms // };);
   children,
   variant = "body1",
   color,
@@ -76,9 +75,8 @@ const Text: React.FC<TextProps /> = ({/  // 性能监控 // const performanceMon
 }) => {}
   const { theme   } = useTheme;
   const { config   } = useAccessibility;(;);
-  // 获取变体样式 //////     const getVariantStyle = (): TextStyle => {}
-    const variantStyles: Record<string, TextStyle> = {;
-      h1: {
+  // 获取变体样式 // const getVariantStyle = (): TextStyle => {};
+    const variantStyles: Record<string, TextStyle> = {h1: {
         fontSize: responsive.fontSize(theme.typography.fontSize["5xl"]),
         fontWeight: "700" as const,
         lineHeight: responsive.fontSize(,
@@ -168,11 +166,10 @@ const Text: React.FC<TextProps /> = ({/  // 性能监控 // const performanceMon
     ;};
     return variantStyles[variant] || variantStyles.bod;y;1;
   };
-  // 获取颜色 //////     const getColor = (): string => {}
-    if (!color) {;
-      return getVariantStyle().color as st;r;i;n;g;
+  // 获取颜色 // const getColor = (): string => {};
+    if (!color) {return getVariantStyle().color as st;r;i;n;g;
     }
-    // 主题颜色 //////     const themeColors: Record<string, string> = {
+    // 主题颜色 // const themeColors: Record<string, string> = {
       primary: theme.colors.primary,
       secondary: theme.colors.secondary,
       onSurface: theme.colors.onSurface,
@@ -185,22 +182,20 @@ const Text: React.FC<TextProps /> = ({/  // 性能监控 // const performanceMon
       info: theme.colors.info}
     return themeColors[color] || col;o;r;
   };
-  // 获取字体大小 //////     const getFontSize = (): number => {}
-    if (!size) {;
-      return getVariantStyle().fontSize as nu;m;b;e;r;
+  // 获取字体大小 // const getFontSize = (): number => {};
+    if (!size) {return getVariantStyle().fontSize as nu;m;b;e;r;
     }
     if (typeof size === "number") {
       return responsive.fontSize(siz;e;);
     }
     return responsive.fontSize(theme.typography.fontSize[size;];);
   };
-  // 应用无障碍字体缩放 //////     const getAccessibilityFontSize = (baseFontSize: number): number => {}
-    if (config.largeFontEnabled) {;
-      return typography.getScaledFontSize(baseFontSize * config.fontSc;a;l;e;);
+  // 应用无障碍字体缩放 // const getAccessibilityFontSize = (baseFontSize: number): number => {};
+    if (config.largeFontEnabled) {return typography.getScaledFontSize(baseFontSize * config.fontSc;a;l;e;);
     }
     return baseFontSi;z;e;
   };
-  // 构建样式 //////     const textStyle: TextStyle = {
+  // 构建样式 // const textStyle: TextStyle = {
     ...styles.base,
     ...getVariantStyle(),
     color: getColor(),
@@ -209,19 +204,17 @@ const Text: React.FC<TextProps /> = ({/  // 性能监控 // const performanceMon
     textAlign: align,
     ...(disabled && styles.disabled)
   };
-  // 生成无障碍标签 //////     const generateAccessibilityLabel = (): string => {}
-    if (accessibilityLabel) {;
-      return accessibilityL;a;b;e;l;
+  // 生成无障碍标签 // const generateAccessibilityLabel = (): string => {};
+    if (accessibilityLabel) {return accessibilityL;a;b;e;l;
     }
-    // 对于标题，添加级别信息 //////     if (variant.startsWith("h")) {
+    // 对于标题，添加级别信息 // if (variant.startsWith("h")) {
       const level = variant.charAt(1);
       return `${children} 标题级别${level;};`
     }
-    return typeof children === "string" ? children : ";";
+    return typeof children === "string" ? children : ;
   };
-  // 确定无障碍角色 //////     const getAccessibilityRole = (): AccessibilityRole | undefined => {}
-    if (accessibilityRole) {;
-      return accessibility;R;o;l;e;
+  // 确定无障碍角色 // const getAccessibilityRole = (): AccessibilityRole | undefined => {};
+    if (accessibilityRole) {return accessibility;R;o;l;e;
     }
     if (variant.startsWith("h")) {
       return "heade;r;"
@@ -237,9 +230,8 @@ const Text: React.FC<TextProps /> = ({/  // 性能监控 // const performanceMon
     }
     return "tex;t";
   };
-  // 记录渲染性能 //////
-  performanceMonitor.recordRender()
-  return (
+  // 记录渲染性能 // performanceMonitor.recordRender();
+  return (;
     <RNText;
 style={[textStyle, style]}
       numberOfLines={numberOfLines}
@@ -254,8 +246,6 @@ style={[textStyle, style]}
       onLongPress={onLongPress} />/////          {children};
     </RNText>/////      ;);
 };
-const styles = StyleSheet.create({;
-  base: {;
-    fontFamily: "System", // 使用系统字体 //////     },
+const styles = StyleSheet.create({base: {fontFamily: "System", // 使用系统字体 // },
   disabled: { opacity: 0.5  };};);
 export default React.memo(Text);

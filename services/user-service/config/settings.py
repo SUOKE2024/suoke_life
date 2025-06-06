@@ -1,10 +1,15 @@
 """
+settings - 索克生活项目模块
+"""
+
+from functools import lru_cache
+from pydantic import BaseSettings, Field, validator
+from typing import List, Optional
+
+"""
 应用配置管理
 使用Pydantic Settings进行配置管理
 """
-from typing import List, Optional
-from pydantic import BaseSettings, Field, validator
-from functools import lru_cache
 
 class DatabaseSettings(BaseSettings):
     """数据库配置"""

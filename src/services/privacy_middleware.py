@@ -1,13 +1,18 @@
+"""
+privacy_middleware - 索克生活项目模块
+"""
+
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.requests import Request
+from starlette.responses import Response
+import json
+import re
+
 # -*- coding: utf-8 -*-
 """
 敏感数据脱敏中间件示例
 适用于FastAPI等Python微服务
 """
-from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.requests import Request
-from starlette.responses import Response
-import re
-import json
 
 # 脱敏函数
 

@@ -1,26 +1,31 @@
 """
+calculation - 索克生活项目模块
+"""
+
+from ..core.algorithms.wuyun_liuqi import WuyunLiuqiCalculator
+from ..core.models.calculation import (
+from ..utils.bagua_calculator import BaguaCalculator
+from ..utils.bazi_calculator import BaziCalculator
+from ..utils.ziwu_calculator import ZiwuCalculator
+from datetime import date, datetime, time
+from typing import Dict, List, Optional, Any
+from uuid import uuid4
+import asyncio
+import logging
+
+"""
 算诊计算服务
 
 提供算诊相关的核心业务逻辑
 """
 
-import asyncio
-import logging
-from datetime import date, datetime, time
-from typing import Dict, List, Optional, Any
-from uuid import uuid4
 
-from ..core.algorithms.wuyun_liuqi import WuyunLiuqiCalculator
-from ..core.models.calculation import (
     WuyunLiuqiModel,
     BaguaAnalysisModel,
     ZiwuLiuzhuModel,
     ConstitutionAnalysisModel,
     ComprehensiveAnalysisModel
 )
-from ..utils.bazi_calculator import BaziCalculator
-from ..utils.bagua_calculator import BaguaCalculator
-from ..utils.ziwu_calculator import ZiwuCalculator
 
 class CalculationService:
     """算诊计算服务"""

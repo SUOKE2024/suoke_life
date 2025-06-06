@@ -1,14 +1,19 @@
 """
+agent - 索克生活项目模块
+"""
+
+from datetime import datetime
+from enum import Enum
+from pydantic import BaseModel, Field
+from typing import Any
+
+"""
 智能体相关数据模型
 
 定义智能体消息、响应、对话历史等数据结构
 """
 
-from datetime import datetime
-from enum import Enum
-from typing import Any
 
-from pydantic import BaseModel, Field
 
 
 class MessageType(str, Enum):

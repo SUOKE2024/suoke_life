@@ -1,9 +1,19 @@
-#!/usr/bin/env python3
 """
-动态配置管理器
-支持配置热重载、配置版本管理和回滚、环境特定配置覆盖、配置变更通知等功能
+dynamic_config - 索克生活项目模块
 """
 
+                import jsonschema
+                import toml
+        import aiohttp
+from collections.abc import Callable
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
+from pathlib import Path
+from typing import Any
+from watchdog.events import FileSystemEventHandler
+from watchdog.observers import Observer
+import aioredis
 import asyncio
 import contextlib
 import hashlib
@@ -11,17 +21,15 @@ import json
 import logging
 import os
 import time
-from collections.abc import Callable
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
-from pathlib import Path
-from typing import Any
-
-import aioredis
 import yaml
-from watchdog.events import FileSystemEventHandler
-from watchdog.observers import Observer
+
+#!/usr/bin/env python3
+"""
+动态配置管理器
+支持配置热重载、配置版本管理和回滚、环境特定配置覆盖、配置变更通知等功能
+"""
+
+
 
 logger = logging.getLogger(__name__)
 
@@ -231,7 +239,6 @@ class DynamicConfigManager:
             elif format_type == ConfigFormat.YAML:
                 data = yaml.safe_load(content)
             elif format_type == ConfigFormat.TOML:
-                import toml
 
                 data = toml.loads(content)
             else:
@@ -330,7 +337,6 @@ class DynamicConfigManager:
 
     async def _remote_config_poller(self):
         """远程配置轮询器"""
-        import aiohttp
 
         while True:
             try:
@@ -626,7 +632,6 @@ class DynamicConfigManager:
                     self.config_data, default_flow_style=False, allow_unicode=True
                 )
             elif format_type == ConfigFormat.TOML:
-                import toml
 
                 content = toml.dumps(self.config_data)
             else:
@@ -661,7 +666,6 @@ class DynamicConfigManager:
         # 如果提供了模式，进行模式验证
         if schema:
             try:
-                import jsonschema
 
                 jsonschema.validate(self.config_data, schema)
             except ImportError:

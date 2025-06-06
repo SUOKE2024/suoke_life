@@ -1,13 +1,18 @@
+"""
+emotional_routes - 索克生活项目模块
+"""
+
+from datetime import datetime
+from fastapi import APIRouter, File, Form, HTTPException, UploadFile, status
+from internal.lifecycle.emotional_analyzer.emotional_service import EmotionalService
+from pydantic import BaseModel, Field
+from typing import Any
 import base64
 import logging
-from datetime import datetime
-from typing import Any
 
-from fastapi import APIRouter, File, Form, HTTPException, UploadFile, status
-from pydantic import BaseModel, Field
+
 
 # 导入服务层组件
-from internal.lifecycle.emotional_analyzer.emotional_service import EmotionalService
 
 logger = logging.getLogger(__name__)
 

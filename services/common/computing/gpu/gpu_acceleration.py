@@ -1,16 +1,21 @@
+"""
+gpu_acceleration - 索克生活项目模块
+"""
+
+from dataclasses import dataclass
+from enum import Enum
+from typing import Dict, Any, List, Optional, Union, Tuple, Callable
+import logging
+import platform
+import psutil
+import time
+
 #!/usr/bin/env python3
 """
 索克生活 - GPU加速集成模块
 支持CUDA、OpenCL等GPU计算加速
 """
 
-import time
-import logging
-import platform
-from typing import Dict, Any, List, Optional, Union, Tuple, Callable
-from dataclasses import dataclass
-from enum import Enum
-import psutil
 
 logger = logging.getLogger(__name__)
 

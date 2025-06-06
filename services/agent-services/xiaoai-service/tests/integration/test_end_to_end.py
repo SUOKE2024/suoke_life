@@ -1,3 +1,22 @@
+"""
+test_end_to_end - 索克生活项目模块
+"""
+
+from internal.four_diagnosis.feature_extractor import FeatureExtractor
+from internal.four_diagnosis.multimodal_fusion import MultimodalFusion
+from internal.four_diagnosis.recommendation.health_advisor import HealthAdvisor
+from internal.four_diagnosis.syndrome_analyzer import SyndromeAnalyzer
+from internal.orchestrator.four_diagnosis_coordinator import FourDiagnosisCoordinator
+from pathlib import Path
+from pkg.utils.config_loader import get_config
+from unittest.mock import MagicMock, patch
+import asyncio
+import json
+import logging
+import pytest
+import sys
+import uuid
+
 #!/usr/bin/env python3
 
 """
@@ -5,27 +24,14 @@ xiaoai-service端到端测试
 测试从四诊数据采集到最终健康建议的完整流程
 """
 
-import asyncio
-import json
-import logging
-import sys
-import uuid
-from pathlib import Path
-from unittest.mock import MagicMock, patch
 
-import pytest
 
 # 添加项目根目录到路径
 project_root = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 # 导入需要测试的服务和模块
-from internal.four_diagnosis.feature_extractor import FeatureExtractor
-from internal.four_diagnosis.multimodal_fusion import MultimodalFusion
-from internal.four_diagnosis.recommendation.health_advisor import HealthAdvisor
-from internal.four_diagnosis.syndrome_analyzer import SyndromeAnalyzer
-from internal.orchestrator.four_diagnosis_coordinator import FourDiagnosisCoordinator
-from pkg.utils.config_loader import get_config
+
 
 logging.basicConfig(level=logging.DEBUG)
 # 使用loguru logger

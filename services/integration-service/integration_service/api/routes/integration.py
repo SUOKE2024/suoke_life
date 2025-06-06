@@ -1,9 +1,14 @@
 """
-integration-service 业务路由
+integration - 索克生活项目模块
 """
 
 from fastapi import APIRouter
 from pydantic import BaseModel
+
+"""
+integration-service 业务路由
+"""
+
 
 router = APIRouter()
 

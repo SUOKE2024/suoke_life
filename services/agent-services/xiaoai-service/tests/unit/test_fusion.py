@@ -1,19 +1,24 @@
+"""
+test_fusion - 索克生活项目模块
+"""
+
+from pathlib import Path
+from xiaoai.four_diagnosis.fusion.multimodal_fusion import (
+import json
+import sys
+import time
+import unittest
+
 #!/usr/bin/env python3
 """
 多模态融合引擎测试
 """
 
-import json
-import sys
-import time
-import unittest
-from pathlib import Path
 
 # 将项目根目录添加到Python路径
 project_root = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from xiaoai.four_diagnosis.fusion.multimodal_fusion import (
     ModalityFeature,
     MultimodalFusionEngine,
 )

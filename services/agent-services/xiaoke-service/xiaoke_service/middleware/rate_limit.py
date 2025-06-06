@@ -1,18 +1,23 @@
 """
+rate_limit - 索克生活项目模块
+"""
+
+from collections import defaultdict
+from collections.abc import Callable
+from fastapi import HTTPException, Request, Response
+from starlette.middleware.base import BaseHTTPMiddleware
+from xiaoke_service.core.config import settings
+from xiaoke_service.core.logging import get_logger
+import time
+
+"""
 限流中间件
 
 基于用户或IP地址的请求限流。
 """
 
-import time
-from collections import defaultdict
-from collections.abc import Callable
 
-from fastapi import HTTPException, Request, Response
-from starlette.middleware.base import BaseHTTPMiddleware
 
-from xiaoke_service.core.config import settings
-from xiaoke_service.core.logging import get_logger
 
 logger = get_logger(__name__)
 

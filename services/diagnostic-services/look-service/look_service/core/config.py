@@ -1,10 +1,15 @@
-"""Configuration management for look service."""
+"""
+config - 索克生活项目模块
+"""
 
 from functools import lru_cache
 from pathlib import Path
-
 from pydantic import Field, validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+"""Configuration management for look service."""
+
+
 
 
 class DatabaseSettings(BaseSettings):

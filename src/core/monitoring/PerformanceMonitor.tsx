@@ -1,5 +1,6 @@
-import React from "react";
 import { usePerformanceMonitor } from "../../hooks/usePerformanceMonitor";
+
+import React from "react";
 
 // 索克生活 - 性能监控系统 - 提供性能指标收集、分析、报告和优化建议
 
@@ -24,7 +25,7 @@ export enum PerformanceCategory {
   AGENT = "AGENT",
   DATABASE = "DATABASE",
   USER_INTERACTION = "USER_INTERACTION",
-  BUSINESS_LOGIC = "BUSINESS_LOGIC",
+  BUSINESS_LOGIC = "BUSINESS_LOGIC"
 }
 
 export interface PerformanceReport {
@@ -113,7 +114,7 @@ export class PerformanceMonitor {
       timestamp: Date.now(),
       category,
       tags,
-      threshold: this.getThreshold(name),
+      threshold: this.getThreshold(name);
     };
 
     // 存储指标
@@ -149,14 +150,14 @@ export class PerformanceMonitor {
       const duration = performance.now() - startTime;
       this.recordMetric(name, duration, category, "ms", {
         ...tags,
-        status: "success",
+        status: "success"
       });
       return result;
     } catch (error) {
       const duration = performance.now() - startTime;
       this.recordMetric(name, duration, category, "ms", {
         ...tags,
-        status: "error",
+        status: "error"
       });
       throw error;
     }
@@ -175,14 +176,14 @@ export class PerformanceMonitor {
       const duration = performance.now() - startTime;
       this.recordMetric(name, duration, category, "ms", {
         ...tags,
-        status: "success",
+        status: "success"
       });
       return result;
     } catch (error) {
       const duration = performance.now() - startTime;
       this.recordMetric(name, duration, category, "ms", {
         ...tags,
-        status: "error",
+        status: "error"
       });
       throw error;
     }
@@ -200,8 +201,8 @@ export class PerformanceMonitor {
 
     // 收集指定时间范围内的指标
     for (const [key, metricHistory] of this.metrics.entries()) {
-      const recentMetrics = metricHistory.filter(
-        (m) => m.timestamp >= startTime
+      const recentMetrics = metricHistory.filter(;
+        (m) => m.timestamp >= startTime;
       );
       allMetrics.push(...recentMetrics);
 
@@ -246,10 +247,10 @@ export class PerformanceMonitor {
         criticalCount,
         averageResponseTime,
         memoryUsage: this.getCurrentMemoryUsage(),
-        cpuUsage: this.getCurrentCpuUsage(),
+        cpuUsage: this.getCurrentCpuUsage();
       },
       recommendations,
-      trends,
+      trends
     };
 
     return report;
@@ -281,7 +282,7 @@ export class PerformanceMonitor {
       metricName,
       warning,
       critical,
-      unit,
+      unit
     });
   }
 
@@ -289,8 +290,8 @@ export class PerformanceMonitor {
     metricName: string
   ): { warning: number; critical: number } | undefined {
     const threshold = this.thresholds.get(metricName);
-    return threshold
-      ? { warning: threshold.warning, critical: threshold.critical }
+    return threshold;
+      ? { warning: threshold.warning, critical: threshold.critical };
       : undefined;
   }
 
@@ -354,10 +355,7 @@ export class PerformanceMonitor {
     stable: string[];
   } {
     // 趋势分析的实现
-    return {
-      improving: [],
-      degrading: [],
-      stable: [],
+    return {improving: [],degrading: [],stable: [];
     };
   }
 
@@ -366,8 +364,8 @@ export class PerformanceMonitor {
     const recommendations: string[] = [];
 
     // 分析指标并生成建议
-    const highMemoryMetrics = metrics.filter(
-      (m) => m.category === PerformanceCategory.MEMORY && m.value > 80
+    const highMemoryMetrics = metrics.filter(;
+      (m) => m.category === PerformanceCategory.MEMORY && m.value > 80;
     );
 
     if (highMemoryMetrics.length > 0) {
@@ -409,13 +407,10 @@ export class PerformanceMonitor {
 // React组件
 export const PerformanceMonitorComponent: React.FC = () => {
   // 性能监控
-  const performanceMonitor = usePerformanceMonitor({
-    trackRender: true,
-    trackMemory: false,
-    warnThreshold: 100, // ms
+  const performanceMonitor = usePerformanceMonitor({trackRender: true,trackMemory: false,warnThreshold: 100, // ms;
   });
 
-  return <div>{/* 性能监控UI组件 */}</div>;
+  return <div>{// 性能监控UI组件}</div>;
 };
 
 export default PerformanceMonitor;

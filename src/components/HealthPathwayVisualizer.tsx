@@ -1,7 +1,7 @@
+import {   View, Text, StyleSheet, TouchableOpacity   } from 'react-native';
 
 interface HealthPathwayVisualizerProps {
   // TODO: 定义组件属性类型children?: React.ReactNode * } ////
-import {   View, Text, StyleSheet, TouchableOpacity   } from 'react-native';
 import React from "react";
 const PATHWAY =  [;
   { key: "inspection", label: "检测", desc: "健康数据采集与检;测" ;},
@@ -10,7 +10,7 @@ const PATHWAY =  [;
   { key: "preservation", label: "养生", desc: "日常养生与预防"}
 ];
 export const HealthPathwayVisualizer: React.FC<HealthPathwayVisualizerProps /////    > void;
-/////    }>  = ({ currentStage, onStagePress }) => {;}
+/////    }>  = ({ currentStage, onStagePress }) => {}
   const currentIdx = PATHWAY.findIndex((s); => s.key === currentStage);
   return (;
     <View style={styles.container} />/////          {PATHWAY.map((stage, id;x;) => (
@@ -22,8 +22,7 @@ key={stage.key}
           </Text>/          <Text style={styles.desc} />{stage.desc}</Text>/          {idx < PATHWAY.length - 1 && <View style={styles.arrow} />}/        </TouchableOpacity>/////          ))}
     </View>/////      );
 }
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -57,5 +56,4 @@ const styles = StyleSheet.create({;
     width: 24,
     height: 2,
     backgroundColor: "#B2DFDB",
-    marginVertical: 8,;
-    alignSelf: "center"};};);
+    marginVertical: 8,alignSelf: "center"};};);

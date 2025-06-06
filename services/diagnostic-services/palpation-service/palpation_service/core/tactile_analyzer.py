@@ -1,19 +1,24 @@
 """
+tactile_analyzer - 索克生活项目模块
+"""
+
+from collections import defaultdict
+from dataclasses import dataclass
+from enum import Enum
+from scipy.stats import skew, kurtosis
+from typing import Dict, List, Tuple, Optional, Any
+import asyncio
+import logging
+import numpy as np
+import scipy.signal
+
+"""
 切诊触觉分析器
 
 基于传感器数据和信号处理技术，实现中医切诊的智能分析功能。
 包括脉象分析、腹诊、按压诊断等核心功能。
 """
 
-import asyncio
-import numpy as np
-import logging
-from typing import Dict, List, Tuple, Optional, Any
-from dataclasses import dataclass
-from enum import Enum
-import scipy.signal
-from scipy.stats import skew, kurtosis
-from collections import defaultdict
 
 logger = logging.getLogger(__name__)
 

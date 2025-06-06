@@ -1,15 +1,20 @@
 """
+health_aggregator - 索克生活项目模块
+"""
+
+from .health_checker import HealthCheckResult, HealthStatus
+from .health_monitor import AlertLevel, HealthAlert
+from dataclasses import dataclass, field
+from typing import Any
+import logging
+import time
+
+"""
 健康聚合器
 聚合多个服务的健康状态，提供统一的健康视图
 """
 
-from dataclasses import dataclass, field
-import logging
-import time
-from typing import Any
 
-from .health_checker import HealthCheckResult, HealthStatus
-from .health_monitor import AlertLevel, HealthAlert
 
 logger = logging.getLogger(__name__)
 

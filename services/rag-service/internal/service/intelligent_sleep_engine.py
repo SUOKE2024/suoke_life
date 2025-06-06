@@ -1,3 +1,16 @@
+"""
+intelligent_sleep_engine - 索克生活项目模块
+"""
+
+from ..observability.metrics import MetricsCollector
+from ..observability.tracing import trace_operation, SpanKind
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta, time
+from enum import Enum
+from loguru import logger
+from typing import Dict, List, Any, Optional, Tuple, Union
+import warnings
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,16 +19,8 @@
 结合中医睡眠养生理念和现代睡眠科学，为用户提供个性化睡眠健康管理
 """
 
-from typing import Dict, List, Any, Optional, Tuple, Union
-from dataclasses import dataclass, field
-from enum import Enum
-from datetime import datetime, timedelta, time
-from loguru import logger
-import warnings
 warnings.filterwarnings('ignore')
 
-from ..observability.metrics import MetricsCollector
-from ..observability.tracing import trace_operation, SpanKind
 
 class SleepStage(str, Enum):
     """睡眠阶段"""

@@ -1,3 +1,26 @@
+"""
+test_gateway - 索克生活项目模块
+"""
+
+        from internal.model.config import CacheConfig
+        from pkg.utils.auth import extract_token_from_header
+    from internal.model.config import JwtConfig
+from fastapi import FastAPI
+from fastapi.responses import JSONResponse
+from fastapi.testclient import TestClient
+from internal.delivery.rest.routes import setup_routes
+from internal.model.config import GatewayConfig, RouteConfig, MiddlewareConfig, CacheConfig
+from internal.service.service_registry import ServiceRegistry
+from pkg.utils.auth import JWTManager, TokenPayload
+from pkg.utils.cache import CacheKey, CacheItem, CacheManager
+from pkg.utils.rewrite import PathRewriter
+from unittest.mock import AsyncMock, MagicMock, Mock, patch
+import os
+import pytest
+import sys
+import time
+import unittest
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,26 +28,11 @@
 API网关单元测试
 """
 
-import os
-import sys
-import time
-import unittest
-from unittest.mock import AsyncMock, MagicMock, Mock, patch
 
-import pytest
-from fastapi import FastAPI
-from fastapi.testclient import TestClient
-from fastapi.responses import JSONResponse
 
 # 添加项目根目录到Python路径
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from internal.delivery.rest.routes import setup_routes
-from internal.model.config import GatewayConfig, RouteConfig, MiddlewareConfig, CacheConfig
-from internal.service.service_registry import ServiceRegistry
-from pkg.utils.auth import JWTManager, TokenPayload
-from pkg.utils.cache import CacheKey, CacheItem, CacheManager
-from pkg.utils.rewrite import PathRewriter
 
 # 创建测试应用
 @pytest.fixture
@@ -115,7 +123,6 @@ class TestGateway:
 @pytest.fixture
 def jwt_manager():
     """创建JWT管理器"""
-    from internal.model.config import JwtConfig
     
     config = JwtConfig(
         secret_key="test-secret-key",
@@ -183,7 +190,6 @@ class TestAuth:
     
     def test_token_extract(self):
         """测试从Authorization头提取令牌"""
-        from pkg.utils.auth import extract_token_from_header
         
         # 有效的授权头
         try:
@@ -251,7 +257,6 @@ class TestCache:
     @pytest.fixture
     def cache_manager(self):
         """创建缓存管理器"""
-        from internal.model.config import CacheConfig
         
         config = CacheConfig(
             enabled=True,

@@ -1,11 +1,10 @@
-import React from "react";
 import { renderHook, act } from "@testing-library/react-hooks";
-import { Provider } from "react-redux";
-import { configureStore } from @reduxjs/toolkit";"
-import HealthCard from "../HealthCard";
+import {  configureStore  } from "@reduxjs/toolkit";
+import { performance } from "perf_hooks";
+
+import React from "react";
 // Mock store for testing
-const mockStore = configureStore({;
-  reducer: {
+const mockStore = configureStore({reducer: {
     // Add your reducers here
   });};);
 const wrapper = ({ children }: { children: React.ReactNode }) => (;
@@ -18,7 +17,7 @@ describe("HealthCard", () => {
   it("should initialize with correct default values", () => {
     const { result   } = renderHook((); => HealthCard(), { wrapper });
     // Add assertions for initial state
-expect(result.current).toBeDefined()
+expect(result.current).toBeDefined();
   });
   it("should handle state updates correctly, async (); => {", () => {
     const { result   } = renderHook((); => HealthCard(), { wrapper });
@@ -27,7 +26,7 @@ expect(result.current).toBeDefined()
       // result.current.someFunction();
     });
     // Add assertions for state changes
-expect(result.current).toBeDefined()
+expect(result.current).toBeDefined();
   });
   it("should handle side effects properly", async (); => {
     const { result   } = renderHook((); => HealthCard(), { wrapper });
@@ -35,12 +34,12 @@ expect(result.current).toBeDefined()
       // Test side effects
     });
     // Add assertions for side effects
-expect(result.current).toBeDefined()
+expect(result.current).toBeDefined();
   });
   it("should cleanup resources on unmount", () => {
     const { unmount   } = renderHook((); => HealthCard(), { wrapper });
     // Test cleanup
-unmount()
+unmount();
     // Add assertions for cleanup
 expect(true).toBe(true);
   });
@@ -50,18 +49,16 @@ expect(true).toBe(true);
       // Trigger error scenarios
     });
     // Add error handling assertions
-expect(result.current).toBeDefined()
+expect(result.current).toBeDefined();
   });
 });
-import { performance } from "perf_hooks";
-import { HealthCard } from ../HealthCard";"
 describe("HealthCard Performance Tests, () => {", () => {
   it("should execute within performance thresholds", () => {
     const iterations = 10;
     const startTime = performance.now();
     for (let i = 0; i < iterations; i++) {
       // Execute performance-critical functions
-HealthCard(/* test params      */)
+HealthCard(// test params);
     });
     const endTime = performance.now();
     const averageTime = (endTime - startTime) / iterations;
@@ -72,7 +69,7 @@ expect(averageTime).toBeLessThan(1);
     const largeDataset = new Array(10000).fill(0).map((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
-HealthCard(largeDataset)
+HealthCard(largeDataset);
     const endTime = performance.now();
     // Should handle large datasets within 100ms
 expect(endTime - startTime).toBeLessThan(100);
@@ -81,7 +78,7 @@ expect(endTime - startTime).toBeLessThan(100);
     const initialMemory = process.memoryUsage().heapUsed;
     // Execute function multiple times
 for (let i = 0; i < 1000; i++) {
-      HealthCard(/* test params      */);
+      HealthCard(// test params);
     });
     // Force garbage collection if available
 if (global.gc) {

@@ -1,17 +1,22 @@
 """
+logging - 索克生活项目模块
+"""
+
+from collections.abc import Callable
+from fastapi import Request, Response
+from starlette.middleware.base import BaseHTTPMiddleware
+from xiaoke_service.core.logging import get_request_logger
+import time
+import uuid
+
+"""
 日志中间件
 
 记录所有HTTP请求和响应的详细信息。
 """
 
-import time
-import uuid
-from collections.abc import Callable
 
-from fastapi import Request, Response
-from starlette.middleware.base import BaseHTTPMiddleware
 
-from xiaoke_service.core.logging import get_request_logger
 
 logger = get_request_logger(__name__)
 

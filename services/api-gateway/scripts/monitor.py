@@ -1,3 +1,20 @@
+"""
+monitor - 索克生活项目模块
+"""
+
+from datetime import datetime, timedelta
+from pathlib import Path
+from rich.console import Console
+from rich.layout import Layout
+from rich.live import Live
+from rich.panel import Panel
+from rich.text import Text
+from typing import Dict, Any, List
+import argparse
+import asyncio
+import httpx
+import json
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -7,19 +24,7 @@ API 网关监控脚本
 实时监控 API 网关的运行状态，包括健康检查、性能指标、资源使用等。
 """
 
-import asyncio
-import json
-import argparse
-from typing import Dict, Any, List
-from datetime import datetime, timedelta
-from pathlib import Path
 
-import httpx
-from rich.console import Console
-from rich.live import Live
-from rich.panel import Panel
-from rich.layout import Layout
-from rich.text import Text
 
 class GatewayMonitor:
     """API 网关监控器"""

@@ -1,20 +1,26 @@
 """
+health - 索克生活项目模块
+"""
+
+            import psutil
+from ..core.config import Settings
+from ..core.logging import get_logger
+from ..models.gateway import HealthCheckResult
+from datetime import datetime, timedelta
+from pydantic import BaseModel
+from typing import Dict, List, Optional
+import asyncio
+import httpx
+import time
+
+"""
 健康检查服务
 
 监控系统和依赖服务的健康状态。
 """
 
-import asyncio
-import time
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional
 
-import httpx
-from pydantic import BaseModel
 
-from ..core.config import Settings
-from ..core.logging import get_logger
-from ..models.gateway import HealthCheckResult
 
 logger = get_logger(__name__)
 
@@ -207,7 +213,6 @@ class HealthService:
         start_time = time.time()
         
         try:
-            import psutil
             
             # 获取系统信息
             cpu_percent = psutil.cpu_percent(interval=1)

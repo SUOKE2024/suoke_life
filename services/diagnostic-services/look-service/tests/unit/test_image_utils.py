@@ -1,12 +1,17 @@
-"""Tests for image utilities."""
+"""
+test_image_utils - 索克生活项目模块
+"""
 
-from io import BytesIO
-
-import pytest
 from PIL import Image
-
+from io import BytesIO
 from look_service.exceptions import ImageProcessingError, ValidationError
 from look_service.utils.image_utils import (
+import pytest
+
+"""Tests for image utilities."""
+
+
+
     convert_image_format,
     create_thumbnail,
     extract_image_features,

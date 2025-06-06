@@ -1,3 +1,26 @@
+"""
+enhanced_rag_service - 索克生活项目模块
+"""
+
+from ..model.document import Document, DocumentReference, RetrieveResult, GenerateResult, QueryResult
+from ..platform.model_manager import get_model_manager, ModelType
+from ..repository.milvus_repository import MilvusRepository
+from .rag_service import RagService
+from collections import defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from loguru import logger
+from services.common.governance.circuit_breaker import (
+from services.common.governance.rate_limiter import (
+from services.common.observability.tracing import (
+from typing import Dict, List, Any, Optional, AsyncGenerator, Tuple, Set
+import asyncio
+import hashlib
+import json
+import time
+import uuid
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
@@ -8,36 +31,18 @@
 知识库分片存储、多级缓存、模型推理加速等，提供最高性能的检索增强生成服务。
 """
 
-import asyncio
-import time
-import uuid
-import hashlib
-import json
-from typing import Dict, List, Any, Optional, AsyncGenerator, Tuple, Set
-from datetime import datetime, timedelta
-from dataclasses import dataclass, field
-from enum import Enum
-from collections import defaultdict
-from loguru import logger
 
 # 导入基础服务
-from .rag_service import RagService
-from ..model.document import Document, DocumentReference, RetrieveResult, GenerateResult, QueryResult
-from ..repository.milvus_repository import MilvusRepository
 
 # 导入通用组件
-from services.common.governance.circuit_breaker import (
     CircuitBreaker, CircuitBreakerConfig, get_circuit_breaker
 )
-from services.common.governance.rate_limiter import (
     RateLimitConfig, get_rate_limiter, rate_limit
 )
-from services.common.observability.tracing import (
     get_tracer, trace, SpanKind
 )
 
 # 导入平台组件
-from ..platform.model_manager import get_model_manager, ModelType
 
 class IndexType(Enum):
     """索引类型"""

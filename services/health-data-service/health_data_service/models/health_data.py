@@ -1,15 +1,20 @@
-"""健康数据模型"""
-
-from datetime import datetime
-from enum import Enum
-from typing import Any, Dict, List, Optional, Union
-
-from pydantic import Field
-from pydantic import field_validator
+"""
+health_data - 索克生活项目模块
+"""
 
 from .base import BaseEntity
 from .base import BaseRequest
 from .base import BaseResponse
+from datetime import datetime
+from enum import Enum
+from pydantic import Field
+from pydantic import field_validator
+from typing import Any, Dict, List, Optional, Union
+
+"""健康数据模型"""
+
+
+
 
 
 class DataType(str, Enum):

@@ -1,34 +1,39 @@
 """
+rest_api - 索克生活项目模块
+"""
+
+from ..config.settings import get_settings
+from ..core.audio_analyzer import AudioAnalyzer
+from ..core.tcm_analyzer import TCMFeatureExtractor
+from ..models.audio_models import (
+from ..models.tcm_models import TCMAnalysisRequest
+from ..utils.cache import AudioCache
+from ..utils.logging import audit_logger
+from ..utils.performance import async_timer, performance_monitor
+from fastapi import BackgroundTasks, Depends, FastAPI, File, HTTPException, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from pydantic import BaseModel, Field
+from typing import Any
+import asyncio
+import structlog
+import time
+import uuid
+
+"""
 REST API接口实现
 
 提供HTTP接口用于音频分析和中医诊断服务。
 基于FastAPI框架，支持异步处理、文件上传、错误处理等功能。
 """
 
-import asyncio
-import time
-import uuid
-from typing import Any
 
-import structlog
-from fastapi import BackgroundTasks, Depends, FastAPI, File, HTTPException, UploadFile
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.gzip import GZipMiddleware
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from pydantic import BaseModel, Field
 
-from ..config.settings import get_settings
-from ..core.audio_analyzer import AudioAnalyzer
-from ..core.tcm_analyzer import TCMFeatureExtractor
-from ..models.audio_models import (
     AnalysisRequest,
     AudioFormat,
     AudioMetadata,
 )
-from ..models.tcm_models import TCMAnalysisRequest
-from ..utils.cache import AudioCache
-from ..utils.logging import audit_logger
-from ..utils.performance import async_timer, performance_monitor
 
 logger = structlog.get_logger(__name__)
 
@@ -183,7 +188,9 @@ def create_rest_app(
             raise
 
     # 健康检查端点
-    @app.get("/health", response_model=HealthResponse)
+    @cache(expire=300)  # 5分钟缓存
+@limiter.limit("100/minute")  # 每分钟100次请求
+@app.get("/health", response_model=HealthResponse)
     async def health_check():
         """健康检查"""
         try:
@@ -233,7 +240,9 @@ def create_rest_app(
 
         except Exception as e:
             logger.error("健康检查失败", error=str(e))
-            raise HTTPException(status_code=500, detail="健康检查失败")
+            raise HTTPException(status_code=500, detail=@cache(expire=@limiter.limit("100/minute")  # 每分钟100次请求
+300)  # 5分钟缓存
+"健康检查失败")
 
     # 统计信息端点
     @app.get("/stats", response_model=StatsResponse)
@@ -261,7 +270,8 @@ def create_rest_app(
 
         except Exception as e:
             logger.error("获取统计信息失败", error=str(e))
-            raise HTTPException(status_code=500, detail="获取统计信息失败")
+  @limiter.limit("100/minute")  # 每分钟100次请求
+          raise HTTPException(status_code=500, detail="获取统计信息失败")
 
     # 音频分析端点
     @app.post("/api/v1/analyze/audio")
@@ -363,7 +373,8 @@ def create_rest_app(
                 request_id=request_id,
                 error=str(e),
                 processing_time=processing_time,
-                exc_info=True,
+           @limiter.limit("100/minute")  # 每分钟100次请求
+     exc_info=True,
             )
             raise HTTPException(status_code=500, detail=f"音频分析失败: {e!s}")
 
@@ -465,7 +476,8 @@ def create_rest_app(
                 "中医诊断失败",
                 request_id=request_id,
                 error=str(e),
-                processing_time=processing_time,
+                pr@limiter.limit("100/minute")  # 每分钟100次请求
+ocessing_time=processing_time,
                 exc_info=True,
             )
             raise HTTPException(status_code=500, detail=f"中医诊断失败: {e!s}")
@@ -547,7 +559,8 @@ def create_rest_app(
                 "failed_results": failed_results,
                 "processing_time": processing_time,
                 "timestamp": time.time(),
-            }
+           @limiter.limit("100/minute")  # 每分钟100次请求
+ }
 
         except Exception as e:
             logger.error("批量分析失败", batch_id=batch_id, error=str(e), exc_info=True)
@@ -571,12 +584,14 @@ def create_rest_app(
             return {
                 "success": success,
                 "message": "缓存已清空" if success else "缓存清空失败",
-                "timestamp": time.time(),
+     @limiter.limit("100/minute")  # 每分钟100次请求
+           "timestamp": time.time(),
             }
 
         except Exception as e:
             logger.error("清空缓存失败", error=str(e))
-            raise HTTPException(status_code=500, detail=f"清空缓存失败: {e!s}")
+            raise HTTPException(stat@cache(expire=300)  # 5分钟缓存
+us_code=500, detail=f"清空缓存失败: {e!s}")
 
     # 性能监控端点
     @app.get("/api/v1/performance/metrics")

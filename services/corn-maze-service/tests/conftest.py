@@ -1,25 +1,33 @@
 """
+conftest - 索克生活项目模块
+"""
+
+    from corn_maze_service.internal.model.maze import MazeDifficulty, MazeTheme
+    from uuid import uuid4
+    import corn_maze_service.config
+from collections.abc import AsyncGenerator, Generator
+from corn_maze_service.config import Settings
+from corn_maze_service.internal.delivery.http import create_app
+from corn_maze_service.internal.model.maze import Maze, MazeNode, NodeType
+from fastapi import FastAPI
+from fastapi.testclient import TestClient
+from pathlib import Path
+from unittest.mock import AsyncMock, MagicMock
+import asyncio
+import pytest
+import sys
+import tempfile
+
+"""
 Pytest 配置文件
 
 提供测试夹具和配置。
 """
 
-import asyncio
-from collections.abc import AsyncGenerator, Generator
-from pathlib import Path
-import sys
-import tempfile
-from unittest.mock import AsyncMock, MagicMock
 
-from fastapi import FastAPI
-from fastapi.testclient import TestClient
-import pytest
 
-from corn_maze_service.config import Settings
 
 # from corn_maze_service.constants import MAZE_END_X, MAZE_END_Y
-from corn_maze_service.internal.delivery.http import create_app
-from corn_maze_service.internal.model.maze import Maze, MazeNode, NodeType
 
 # 添加项目根目录到Python路径
 project_root = Path(__file__).parent.parent
@@ -50,7 +58,6 @@ def settings():
 @pytest.fixture
 def mock_settings(settings: Settings) -> Generator[Settings]:
     """模拟设置"""
-    import corn_maze_service.config
     original_get_settings = corn_maze_service.config.get_settings
 
     def _get_test_settings():
@@ -91,9 +98,7 @@ async def db_session():
 @pytest.fixture
 def sample_maze():
     """示例迷宫"""
-    from uuid import uuid4
 
-    from corn_maze_service.internal.model.maze import MazeDifficulty, MazeTheme
 
     # 创建一个简单的3x3迷宫
     size = 3

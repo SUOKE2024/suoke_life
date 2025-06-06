@@ -1,14 +1,19 @@
 """
+test_config - 索克生活项目模块
+"""
+
+from corn_maze_service.config.settings import Settings
+from corn_maze_service.constants import (
+from pydantic import ValidationError
+import pytest
+
+"""
 配置测试模块
 
 测试配置管理功能
 """
 
-from pydantic import ValidationError
-import pytest
 
-from corn_maze_service.config.settings import Settings
-from corn_maze_service.constants import (
     DEFAULT_GRPC_PORT,
     DEFAULT_HTTP_PORT,
     DEFAULT_MAX_WORKERS,

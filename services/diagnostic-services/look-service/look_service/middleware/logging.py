@@ -1,13 +1,18 @@
-"""Logging middleware for request/response logging."""
-
-import time
-import uuid
-from collections.abc import Awaitable, Callable
-
-from fastapi import Request, Response
-from starlette.middleware.base import BaseHTTPMiddleware
+"""
+logging - 索克生活项目模块
+"""
 
 from ..core.logging import get_logger
+from collections.abc import Awaitable, Callable
+from fastapi import Request, Response
+from starlette.middleware.base import BaseHTTPMiddleware
+import time
+import uuid
+
+"""Logging middleware for request/response logging."""
+
+
+
 
 logger = get_logger(__name__)
 

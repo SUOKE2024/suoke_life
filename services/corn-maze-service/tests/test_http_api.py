@@ -1,14 +1,19 @@
 """
+test_http_api - 索克生活项目模块
+"""
+
+from corn_maze_service.internal.model.maze import MazeDifficulty, MazeTheme
+from fastapi.testclient import TestClient
+from uuid import uuid4
+
+"""
 HTTP API 测试模块
 
 测试 FastAPI HTTP 接口
 """
 
-from uuid import uuid4
 
-from fastapi.testclient import TestClient
 
-from corn_maze_service.internal.model.maze import MazeDifficulty, MazeTheme
 
 
 class TestHealthAPI:

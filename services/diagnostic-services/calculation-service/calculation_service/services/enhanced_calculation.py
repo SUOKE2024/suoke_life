@@ -1,19 +1,24 @@
 """
+enhanced_calculation - 索克生活项目模块
+"""
+
+from collections import defaultdict
+from dataclasses import dataclass
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Dict, List, Tuple, Optional, Any
+import asyncio
+import calendar
+import logging
+import math
+
+"""
 增强的算诊服务
 
 基于传统中医理论和现代算法，实现更精确的中医算诊功能。
 包括子午流注、八字体质、五运六气、八卦配属等核心算法。
 """
 
-import asyncio
-import logging
-from datetime import datetime, timedelta
-from typing import Dict, List, Tuple, Optional, Any
-from dataclasses import dataclass
-from enum import Enum
-import calendar
-from collections import defaultdict
-import math
 
 logger = logging.getLogger(__name__)
 

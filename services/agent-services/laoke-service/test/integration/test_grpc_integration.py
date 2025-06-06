@@ -1,27 +1,32 @@
+"""
+test_grpc_integration - 索克生活项目模块
+"""
+
+from api.grpc.laoke_service_pb2 import (
+from internal.delivery.grpc.laoke_service_impl import LaokeServiceServicer
+from unittest.mock import AsyncMock, MagicMock, patch
+import os
+import pytest
+import sys
+
 #!/usr/bin/env python
 
 """
 老克服务 gRPC 集成测试
 """
 
-import os
-import sys
-from unittest.mock import AsyncMock, MagicMock, patch
 
-import pytest
 
 # 添加项目根路径到 Python 路径
 sys.path.insert(0, os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))))
 
 # 导入服务实现
-from api.grpc.laoke_service_pb2 import (
     ContentModerationRequest,
     NPCInteractionRequest,
     SearchKnowledgeRequest,
     TrendingContentRequest,
     UserLearningPathRequest,
 )
-from internal.delivery.grpc.laoke_service_impl import LaokeServiceServicer
 
 
 @pytest.fixture

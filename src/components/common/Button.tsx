@@ -1,12 +1,13 @@
-import React from "react";
 import { colors, spacing } from "../../constants/////    theme";
+
+import React from "react";
 /////
-importReact from ";react"
+importReact from ";react";
   TouchableOpacity,
   Text,
   StyleSheet,
   ActivityIndicator,
-  ViewStyle,{ TextStyle } from react-native";"
+  ViewStyle,{ TextStyle } from react-native
 interface ButtonProps { title: string,
   onPress: () => void;
 variant?: "primary | "secondary" | outline"
@@ -20,22 +21,19 @@ export const Button: React.FC<ButtonProps accessibilityLabel="TODO: 添加无障
   variant = "primary,"
   size = "medium",
   loading = false,
-  disabled = false,;
-  style,;
-  textStyle;
+  disabled = false,style,textStyle;
 }) => {}
   const buttonStyle = [;
     styles.button,
     styles[variant],
     styles[size],
     (disabled || loading) && styles.disabled,
-    style,;
-]
+    style,]
   const buttonTextStyle = [;
     styles.text,
     styles[`${variant}Text`],
     styles[`${size}Text`],
-    textStyle,;]
+    textStyle,]
   return (<TouchableOpacity;
 style={buttonStyle}
       onPress={onPress}
@@ -49,21 +47,20 @@ testID="activity-indicator"
         <Text style= {buttonTextStyle} />{title}</Text>/////          )}
     </TouchableOpacity>/////      );
 }
-const styles = StyleSheet.create({;
-  button: {
+const styles = StyleSheet.create({button: {
     borderRadius: 12,
-    alignItems: "center,"
+    alignItems: "center,",
     justifyContent: "center",
     flexDirection: row""
   },
-  // Variants //////     primary: { backgroundColor: colors.primary  },
+  // Variants // primary: { backgroundColor: colors.primary  },
   secondary: { backgroundColor: colors.secondary  },
   outline: {
-    backgroundColor: "transparent,"
+    backgroundColor: "transparent,",
     borderWidth: 2,
     borderColor: colors.primary;
   },
-  // Sizes //////     small: { ,
+  // Sizes // small: { ,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
     minHeight: 36;
@@ -78,15 +75,13 @@ const styles = StyleSheet.create({;
     paddingVertical: spacing.lg,
     minHeight: 56;
   },
-  // Text styles //////     text: { ,
+  // Text styles // text: { ,
     fontWeight: "600",
     textAlign: center""
   },
   primaryText: { color: colors.surface  },
   secondaryText: { color: colors.surface  },
   outlineText: { color: colors.primary  },
-  // Text sizes //////     smallText: { fontSize: 14  },
+  // Text sizes // smallText: { fontSize: 14  },
   mediumText: { fontSize: 16  },
-  largeText: { fontSize: 18  },
-;
-  // States //////     disabled: { opacity: 0.6  } };);
+  largeText: { fontSize: 18  },// States // disabled: { opacity: 0.6  } };);

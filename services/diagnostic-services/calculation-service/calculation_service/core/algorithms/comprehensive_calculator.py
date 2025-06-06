@@ -1,20 +1,26 @@
 """
+comprehensive_calculator - 索克生活项目模块
+"""
+
+        import hashlib
+from .bagua.calculator import BaguaCalculator
+from .constitution.calculator import ConstitutionCalculator
+from .wuyun_liuqi.calculator import WuyunLiuqiCalculator
+from .ziwu_liuzhu.calculator import ZiwuLiuzhuCalculator
+from dataclasses import dataclass
+from datetime import datetime, date
+from typing import Dict, Any, List, Optional, Tuple
+import asyncio
+import logging
+import numpy as np
+
+"""
 综合算诊计算器
 
 整合多种算诊方法，提供综合分析和精确计算
 """
 
-import logging
-import asyncio
-from datetime import datetime, date
-from typing import Dict, Any, List, Optional, Tuple
-import numpy as np
-from dataclasses import dataclass
 
-from .ziwu_liuzhu.calculator import ZiwuLiuzhuCalculator
-from .constitution.calculator import ConstitutionCalculator
-from .bagua.calculator import BaguaCalculator
-from .wuyun_liuqi.calculator import WuyunLiuqiCalculator
 
 logger = logging.getLogger(__name__)
 
@@ -122,7 +128,6 @@ class AdvancedPerformanceOptimizer:
     
     def _generate_cache_key(self, func_name: str, args: tuple, kwargs: dict) -> str:
         """生成缓存键"""
-        import hashlib
         key_data = f"{func_name}_{str(args)}_{str(sorted(kwargs.items()))}"
         return hashlib.md5(key_data.encode()).hexdigest()
     
@@ -687,7 +692,8 @@ class ComprehensiveCalculator:
         # 按重要性排序（简单的关键词匹配）
         priority_keywords = ["紧急", "立即", "尽快", "重要", "关键"]
         
-        def get_priority(rec):
+            @cache(timeout=300)  # 5分钟缓存
+def get_priority(rec):
             for i, keyword in enumerate(priority_keywords):
                 if keyword in rec:
                     return i

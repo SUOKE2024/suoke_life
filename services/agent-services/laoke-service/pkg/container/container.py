@@ -1,15 +1,9 @@
-#!/usr/bin/env python3
 """
-依赖注入容器
-管理服务的所有依赖组件
+container - 索克生活项目模块
 """
 
-import asyncio
-import logging
 from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any, TypeVar
-
 from internal.agent.agent_manager import AgentManager
 from internal.agent.model_factory import ModelFactory
 from internal.repository.community_repository import CommunityRepository
@@ -18,6 +12,17 @@ from internal.repository.session_repository import SessionRepository
 from pkg.utils.config import Config
 from pkg.utils.logger import setup_logger
 from pkg.utils.metrics import MetricsCollector
+from typing import Any, TypeVar
+import asyncio
+import logging
+
+#!/usr/bin/env python3
+"""
+依赖注入容器
+管理服务的所有依赖组件
+"""
+
+
 
 T = TypeVar('T')
 

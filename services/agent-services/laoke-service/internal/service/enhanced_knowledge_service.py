@@ -1,3 +1,18 @@
+"""
+enhanced_knowledge_service - 索克生活项目模块
+"""
+
+from dataclasses import dataclass
+from enum import Enum
+from services.common.governance.circuit_breaker import (
+from services.common.governance.rate_limiter import (
+from services.common.observability.tracing import SpanKind, get_tracer, trace
+from typing import Any
+import asyncio
+import hashlib
+import logging
+import time
+
 #!/usr/bin/env python3
 """
 增强版知识管理服务
@@ -5,24 +20,14 @@
 专注于知识内容管理、学习路径推荐和社区内容管理
 """
 
-import asyncio
-import hashlib
-import logging
-import time
-from dataclasses import dataclass
-from enum import Enum
-from typing import Any
 
 # 导入通用组件
-from services.common.governance.circuit_breaker import (
     CircuitBreakerConfig,
     get_circuit_breaker,
 )
-from services.common.governance.rate_limiter import (
     RateLimitConfig,
     get_rate_limiter,
 )
-from services.common.observability.tracing import SpanKind, get_tracer, trace
 
 logger = logging.getLogger(__name__)
 

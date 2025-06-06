@@ -1,11 +1,16 @@
 """
-知识库 API 端点
+knowledge - 索克生活项目模块
 """
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-
 from xiaoke_service.core.logging import get_logger
+
+"""
+知识库 API 端点
+"""
+
+
 
 router = APIRouter()
 logger = get_logger(__name__)

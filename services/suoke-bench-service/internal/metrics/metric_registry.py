@@ -1,18 +1,23 @@
 """
-指标注册表
-
-用于管理评测指标的中央注册表。
+metric_registry - 索克生活项目模块
 """
-
-import logging
-from collections.abc import Callable
-from typing import Any
 
 from .agent_metrics import AgentCollaborationMetric
 from .edge_metrics import EdgePerformanceMetric
 from .metrics import BaseMetric
 from .privacy_metrics import PrivacyVerificationMetric
 from .tcm_metrics import (
+from collections.abc import Callable
+from typing import Any
+import logging
+
+"""
+指标注册表
+
+用于管理评测指标的中央注册表。
+"""
+
+
     ConstitutionClassificationMetric,
     FaceRecognitionMetric,
     PulseRecognitionMetric,

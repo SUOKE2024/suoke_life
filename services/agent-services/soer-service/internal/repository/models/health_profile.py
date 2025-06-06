@@ -1,10 +1,15 @@
 """
-健康画像数据模型
+health_profile - 索克生活项目模块
 """
+
 from datetime import datetime
+from pydantic import BaseModel, Field
 from typing import Any
 
-from pydantic import BaseModel, Field
+"""
+健康画像数据模型
+"""
+
 
 
 class PhysicalMetrics(BaseModel):

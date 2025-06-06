@@ -1,18 +1,26 @@
+"""
+__main__ - 索克生活项目模块
+"""
+
+from api.grpc import xiaoke_service_pb2_grpc
+from concurrent import futures
+from dotenv import load_dotenv
+from internal.delivery.health_check import start_health_server
+from internal.delivery.xiaoke_service_impl import XiaoKeServiceServicer
+import asyncio
+import grpc
+import logging
+import os
+import signal
+import sys
+
 #!/usr/bin/env python
 
 """
 小克服务(XiaoKeService)入口点
 """
 
-import asyncio
-import logging
-import os
-import signal
-import sys
-from concurrent import futures
 
-import grpc
-from dotenv import load_dotenv
 
 # 加载环境变量
 load_dotenv()
@@ -21,9 +29,6 @@ load_dotenv()
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 # 导入服务实现
-from api.grpc import xiaoke_service_pb2_grpc
-from internal.delivery.health_check import start_health_server
-from internal.delivery.xiaoke_service_impl import XiaoKeServiceServicer
 
 # 配置日志
 logging.basicConfig(

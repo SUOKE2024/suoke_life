@@ -1,5 +1,5 @@
 """
-Platform Adapters for Third-party Health Platforms
+__init__ - 索克生活项目模块
 """
 
 from .adapter_factory import AdapterFactory
@@ -11,6 +11,11 @@ from .google_fit import GoogleFitAdapter
 from .huawei import HuaweiAdapter
 from .wechat import WeChatAdapter
 from .xiaomi import XiaomiAdapter
+
+"""
+Platform Adapters for Third-party Health Platforms
+"""
+
 
 __all__ = [
     "BaseAdapter",

@@ -1,5 +1,6 @@
 import { ChatChannel, Contact, ChatMessage } from "../types/////    chat";
-//////     模拟聊天频道数据
+
+// 模拟聊天频道数据
 export const MOCK_CHAT_CHANNELS: ChatChannel[] = [;
   {
     id: "xiaoai",
@@ -94,7 +95,7 @@ export const MOCK_CHAT_CHANNELS: ChatChannel[] = [;
     specialization: "普通用户"
   }
 ];
-//////     模拟联系人数据
+// 模拟联系人数据
 export const MOCK_CONTACTS: Contact[] = [;
   {
     id: "xiaoai",
@@ -162,7 +163,7 @@ export const MOCK_CONTACTS: Contact[] = [;
     lastSeen: "45分钟前"
   }
 ];
-//////     模拟聊天消息数据
+// 模拟聊天消息数据
 export const MOCK_MESSAGES: Record<string, ChatMessage[]> = {
   xiaoai: [
     {
@@ -172,9 +173,7 @@ export const MOCK_MESSAGES: Record<string, ChatMessage[]> = {
       senderName: "小艾",
       senderAvatar: "🤖",
       content: "您好！我是小艾，您的健康助手。有什么可以帮助您的吗？",
-      timestamp: new Date().toISOString(),;
-      type: "text",;
-      isRead: true;
+      timestamp: new Date().toISOString(),type: "text",isRead: true;
     }
   ],
   xiaoke: [
@@ -204,7 +203,7 @@ export const MOCK_MESSAGES: Record<string, ChatMessage[]> = {
     }
   ]
 };
-//////     智能体配置
+// 智能体配置
 export const AGENT_CONFIGS = {
   xiaoai: {
     name: "小艾",
@@ -216,22 +215,8 @@ export const AGENT_CONFIGS = {
   xiaoke: {
     name: "小克",
     avatar: "👨‍⚕️",
-    color: "#34C759",
-    description: "医疗服务管理",
-    capabilities: ["预约管理", "医疗记录", "用药提醒", "康复指导"]
-  },
-  laoke: {
-    name: "老克",
-    avatar: "👴",
-    color: "#FF9500",
-    description: "中医养生教育",
-    capabilities: ["中医理论", "养生指导", "食疗建议", "运动推荐"]
-  },
-  soer: {
-    name: "索儿",
-    avatar: "👧",
-    color: "#FF2D92",
-    description: "生活方式指导",
-    capabilities: ["生活规划", "习惯养成", "目标设定", "进度跟踪"];
+    color: "#34C759",description: "医疗服务管理",capabilities: ["预约管理", "医疗记录", "用药提醒", "康复指导"];
+  },laoke: {name: "老克",avatar: "👴",color: "#FF9500",description: "中医养生教育",capabilities: ["中医理论", "养生指导", "食疗建议", "运动推荐"];
+  },soer: {name: "索儿",avatar: "👧",color: "#FF2D92",description: "生活方式指导",capabilities: ["生活规划", "习惯养成", "目标设定", "进度跟踪"];
   };
 } as const;

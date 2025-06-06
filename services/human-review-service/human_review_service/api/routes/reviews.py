@@ -1,18 +1,24 @@
 """
+reviews - 索克生活项目模块
+"""
+
+from ...core.database import get_session_dependency
+from ...core.models import (
+from ...core.service import HumanReviewService
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+from sqlalchemy.ext.asyncio import AsyncSession
+from typing import List, Optional
+import structlog
+
+"""
 审核任务路由
 Review Tasks Routes
 
 处理审核任务的创建、查询、更新等操作
 """
 
-from typing import List, Optional
 
-import structlog
-from fastapi import APIRouter, Depends, HTTPException, Query, status
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from ...core.database import get_session_dependency
-from ...core.models import (
     ReviewDecision,
     ReviewPriority,
     ReviewStatus,
@@ -21,7 +27,6 @@ from ...core.models import (
     ReviewTaskUpdate,
     ReviewType,
 )
-from ...core.service import HumanReviewService
 
 logger = structlog.get_logger(__name__)
 

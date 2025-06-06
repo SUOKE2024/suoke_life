@@ -1,14 +1,25 @@
+"""
+service_mesh_example - 索克生活项目模块
+"""
+
+from ..api_docs.doc_decorators import (
+from ..api_docs.openapi_generator import (
+from ..api_docs.swagger_ui import SwaggerUIServer
+from ..service_mesh.envoy_config import (
+from ..service_mesh.istio_client import (
+from ..service_mesh.mesh_manager import (
+from ..testing.test_framework import TestType, get_test_framework
+from pathlib import Path
+import asyncio
+import logging
+
 #!/usr/bin/env python3
 """
 服务网格使用示例
 展示如何使用索克生活平台的服务网格功能
 """
 
-import asyncio
-import logging
-from pathlib import Path
 
-from ..api_docs.doc_decorators import (
     api_doc,
     post_api,
     query_param,
@@ -16,22 +27,17 @@ from ..api_docs.doc_decorators import (
 )
 
 # 导入API文档生成组件
-from ..api_docs.openapi_generator import (
     OpenAPIGenerator,
 )
-from ..api_docs.swagger_ui import SwaggerUIServer
-from ..service_mesh.envoy_config import (
     EnvoyConfigManager,
     ListenerConfig,
 )
-from ..service_mesh.istio_client import (
     DestinationRule,
     Gateway,
     VirtualService,
 )
 
 # 导入服务网格组件
-from ..service_mesh.mesh_manager import (
     SecurityPolicyType,
     ServiceMeshManager,
     TrafficPolicyType,
@@ -43,7 +49,6 @@ from ..service_mesh.mesh_manager import (
 # from ..database.graph.neo4j_client import Neo4jClient
 # from ..database.graph.arangodb_client import ArangoDBClient
 # 导入测试框架
-from ..testing.test_framework import TestType, get_test_framework
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

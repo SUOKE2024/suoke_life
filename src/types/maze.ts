@@ -5,51 +5,51 @@
 
 // 基础枚举类型
 export enum MazeTheme {
-  HEALTH_PATH = 'health_path',           // 健康之路
+  HEALTH_PATH = 'health_path', // 健康之路
   NUTRITION_GARDEN = 'nutrition_garden', // 营养花园
-  TCM_JOURNEY = 'tcm_journey',          // 中医之旅
-  BALANCED_LIFE = 'balanced_life'        // 平衡生活
+  TCM_JOURNEY = 'tcm_journey', // 中医之旅
+  BALANCED_LIFE = 'balanced_life', // 平衡生活
 }
 
 export enum MazeDifficulty {
-  EASY = 'easy',       // 简单
-  NORMAL = 'normal',   // 普通
-  HARD = 'hard',       // 困难
-  EXPERT = 'expert'    // 专家
+  EASY = 'easy', // 简单
+  NORMAL = 'normal', // 普通
+  HARD = 'hard', // 困难
+  EXPERT = 'expert', // 专家
 }
 
 export enum NodeType {
-  EMPTY = 'empty',         // 空地
-  PATH = 'path',           // 路径
-  WALL = 'wall',           // 墙壁
-  START = 'start',         // 起点
-  END = 'end',             // 终点
+  EMPTY = 'empty', // 空地
+  PATH = 'path', // 路径
+  WALL = 'wall', // 墙壁
+  START = 'start', // 起点
+  END = 'end', // 终点
   KNOWLEDGE = 'knowledge', // 知识节点
   CHALLENGE = 'challenge', // 挑战节点
-  REWARD = 'reward'        // 奖励节点
+  REWARD = 'reward', // 奖励节点
 }
 
 export enum Direction {
-  NORTH = 'north',  // 北
-  EAST = 'east',    // 东
-  SOUTH = 'south',  // 南
-  WEST = 'west'     // 西
+  NORTH = 'north', // 北
+  EAST = 'east', // 东
+  SOUTH = 'south', // 南
+  WEST = 'west', // 西
 }
 
 export enum ProgressStatus {
   NOT_STARTED = 'not_started', // 未开始
   IN_PROGRESS = 'in_progress', // 进行中
-  COMPLETED = 'completed',     // 已完成
-  PAUSED = 'paused'           // 暂停
+  COMPLETED = 'completed', // 已完成
+  PAUSED = 'paused', // 暂停
 }
 
 export enum GameEventType {
-  NONE = 'none',               // 无事件
-  KNOWLEDGE = 'knowledge',     // 知识事件
-  CHALLENGE = 'challenge',     // 挑战事件
-  REWARD = 'reward',          // 奖励事件
-  GOAL = 'goal',              // 到达终点
-  WALL_HIT = 'wall_hit'       // 撞墙
+  NONE = 'none', // 无事件
+  KNOWLEDGE = 'knowledge', // 知识事件
+  CHALLENGE = 'challenge', // 挑战事件
+  REWARD = 'reward', // 奖励事件
+  GOAL = 'goal', // 到达终点
+  WALL_HIT = 'wall_hit', // 撞墙
 }
 
 // 位置坐标
@@ -63,11 +63,11 @@ export interface MazeNode {
   x: number;
   y: number;
   nodeType: NodeType;
-  content?: string;           // 节点内容
-  knowledgeId?: string;       // 知识点ID
-  challengeId?: string;       // 挑战ID
-  visited?: boolean;          // 是否已访问
-  accessible?: boolean;       // 是否可访问
+  content?: string; // 节点内容
+  knowledgeId?: string; // 知识点ID
+  challengeId?: string; // 挑战ID
+  visited?: boolean; // 是否已访问
+  accessible?: boolean; // 是否可访问
 }
 
 // 知识节点详情
@@ -75,7 +75,7 @@ export interface KnowledgeNode {
   nodeId: string;
   title: string;
   content: string;
-  category: string;           // 分类：四季养生、五行平衡等
+  category: string; // 分类：四季养生、五行平衡等
   difficultyLevel: string;
   relatedTags: string[];
   multimedia?: {
@@ -96,18 +96,18 @@ export interface Challenge {
   difficultyLevel: string;
   questions: ChallengeQuestion[];
   rewardDescription: string;
-  timeLimit?: number;         // 时间限制（秒）
-  maxAttempts?: number;       // 最大尝试次数
+  timeLimit?: number; // 时间限制（秒）
+  maxAttempts?: number; // 最大尝试次数
 }
 
 // 挑战题目
 export interface ChallengeQuestion {
   questionId: string;
   question: string;
-  options?: string[];         // 选择题选项
+  options?: string[]; // 选择题选项
   correctAnswer: string | string[];
-  explanation?: string;       // 答案解释
-  hints?: string[];          // 提示
+  explanation?: string; // 答案解释
+  hints?: string[]; // 提示
 }
 
 // 迷宫基本信息
@@ -115,20 +115,20 @@ export interface Maze {
   id: string;
   name: string;
   description?: string;
-  size: number;               // 迷宫大小 (size x size)
+  size: number; // 迷宫大小 (size x size)
   theme: MazeTheme;
   difficulty: MazeDifficulty;
   creatorId: string;
-  nodes: MazeNode[][];        // 二维节点数组
+  nodes: MazeNode[][]; // 二维节点数组
   startPosition: Position;
   endPosition: Position;
   knowledgeNodes: KnowledgeNode[];
   challenges: Challenge[];
   createdAt: Date;
   updatedAt: Date;
-  isPublic?: boolean;         // 是否公开
-  tags?: string[];           // 标签
-  estimatedTime?: number;     // 预计完成时间（分钟）
+  isPublic?: boolean; // 是否公开
+  tags?: string[]; // 标签
+  estimatedTime?: number; // 预计完成时间（分钟）
 }
 
 // 用户迷宫进度
@@ -137,17 +137,17 @@ export interface MazeProgress {
   mazeId: string;
   status: ProgressStatus;
   currentPosition: Position;
-  visitedNodes: Position[];   // 已访问的节点位置
-  collectedItems: string[];   // 收集的物品ID
+  visitedNodes: Position[]; // 已访问的节点位置
+  collectedItems: string[]; // 收集的物品ID
   completedChallenges: string[]; // 完成的挑战ID
-  acquiredKnowledge: string[];   // 获得的知识点ID
+  acquiredKnowledge: string[]; // 获得的知识点ID
   score: number;
-  stepsCount: number;         // 步数统计
+  stepsCount: number; // 步数统计
   startTime: Date;
   lastActiveTime: Date;
   completionTime?: Date;
-  achievements?: string[];    // 获得的成就
-  hints?: number;            // 使用的提示次数
+  achievements?: string[]; // 获得的成就
+  hints?: number; // 使用的提示次数
 }
 
 // 迷宫模板
@@ -269,11 +269,11 @@ export interface MazeInteraction {
   rewards: GameReward[];
   hints: string[];
   challenges: Challenge[];
-  storyProgression: number;   // 故事进度 0-100
+  storyProgression: number; // 故事进度 0-100
   nextActions: string[];
   timestamp: Date;
   agentType?: 'xiaoai' | 'xiaoke' | 'laoke' | 'soer';
-  contextualAdvice?: string;  // 上下文建议
+  contextualAdvice?: string; // 上下文建议
 }
 
 // 迷宫统计信息
@@ -281,11 +281,11 @@ export interface MazeStats {
   totalMazes: number;
   completedMazes: number;
   averageScore: number;
-  totalPlayTime: number;      // 总游戏时间（分钟）
+  totalPlayTime: number; // 总游戏时间（分钟）
   favoriteTheme: MazeTheme;
   achievements: string[];
-  rank?: number;              // 排名
-  level?: number;             // 等级
+  rank?: number; // 排名
+  level?: number; // 等级
 }
 
 // 排行榜条目
@@ -294,7 +294,7 @@ export interface LeaderboardEntry {
   username: string;
   avatar?: string;
   score: number;
-  completionTime: number;     // 完成时间（秒）
+  completionTime: number; // 完成时间（秒）
   rank: number;
   mazeId: string;
   mazeName: string;
@@ -330,4 +330,4 @@ export interface MazeGameEvent {
   timestamp: Date;
 }
 
-// 所有类型已通过interface和enum关键字导出，无需重复导出 
+// 所有类型已通过interface和enum关键字导出，无需重复导出

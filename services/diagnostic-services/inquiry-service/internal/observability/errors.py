@@ -1,3 +1,13 @@
+"""
+errors - 索克生活项目模块
+"""
+
+from enum import Enum
+from typing import Any
+import grpc
+import logging
+import uuid
+
 #!/usr/bin/env python
 
 """
@@ -5,12 +15,7 @@
 定义服务错误类型和处理方法
 """
 
-from enum import Enum
-import logging
-from typing import Any
-import uuid
 
-import grpc
 
 logger = logging.getLogger(__name__)
 

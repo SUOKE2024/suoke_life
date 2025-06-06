@@ -1,15 +1,21 @@
-"""用户数据仓库"""
+"""
+user_repository - 索克生活项目模块
+"""
 
-import uuid
+        from sqlalchemy import func
+from auth_service.config.settings import get_settings
+from auth_service.models.user import User, UserProfile, UserStatus
 from datetime import datetime, timedelta
-from typing import List, Optional
-
 from sqlalchemy import and_, or_, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
+from typing import List, Optional
+import uuid
 
-from auth_service.models.user import User, UserProfile, UserStatus
-from auth_service.config.settings import get_settings
+"""用户数据仓库"""
+
+
+
 
 
 class UserRepository:
@@ -190,11 +196,10 @@ class UserRepository:
         
         stmt = stmt.offset(offset).limit(limit)
         result = await self.db.execute(stmt)
-        return list(result.scalars().all())
+        return list(result.scalars().all()[:1000]  # 限制查询结果数量)
     
     async def count_users(self, status: Optional[UserStatus] = None) -> int:
         """统计用户数量"""
-        from sqlalchemy import func
         
         stmt = select(func.count(User.id))
         

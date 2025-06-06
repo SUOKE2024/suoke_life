@@ -1,3 +1,17 @@
+"""
+auth - 索克生活项目模块
+"""
+
+from datetime import datetime, timedelta, UTC
+from internal.model.config import JwtConfig
+from pydantic import BaseModel
+from typing import Dict, List, Optional, Union
+import jwt
+import logging
+import pydantic
+import time
+import uuid
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,17 +19,8 @@
 认证工具模块，提供JWT令牌管理
 """
 
-import logging
-import time
-import uuid
-from datetime import datetime, timedelta, UTC
-from typing import Dict, List, Optional, Union
 
-import jwt
-import pydantic
-from pydantic import BaseModel
 
-from internal.model.config import JwtConfig
 
 logger = logging.getLogger(__name__)
 

@@ -1,11 +1,16 @@
-"""日志中间件"""
+"""
+logging - 索克生活项目模块
+"""
 
-import time
-import uuid
-import logging
-from typing import Callable
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
+from typing import Callable
+import logging
+import time
+import uuid
+
+"""日志中间件"""
+
 
 logger = logging.getLogger(__name__)
 

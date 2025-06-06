@@ -1,19 +1,24 @@
-#!/usr/bin/env python3
 """
-索尔智能体管理器
-负责协调索尔智能体的不同功能组件，处理用户请求，生成健康计划和生活建议
+agent_manager - 索克生活项目模块
 """
-import asyncio
-import logging
-import os
-from datetime import datetime
-from typing import Any
 
+from datetime import datetime
 from internal.agent.model_factory import ModelFactory
 from internal.repository.knowledge_repository import KnowledgeRepository
 from internal.repository.session_repository import SessionRepository
 from pkg.utils.config_loader import get_config
 from pkg.utils.metrics import get_metrics_collector
+from typing import Any
+import asyncio
+import logging
+import os
+
+#!/usr/bin/env python3
+"""
+索尔智能体管理器
+负责协调索尔智能体的不同功能组件，处理用户请求，生成健康计划和生活建议
+"""
+
 
 logger = logging.getLogger(__name__)
 

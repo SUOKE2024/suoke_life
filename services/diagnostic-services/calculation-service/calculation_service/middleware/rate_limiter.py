@@ -1,15 +1,20 @@
 """
+rate_limiter - 索克生活项目模块
+"""
+
+from fastapi import Request, Response
+from fastapi.responses import JSONResponse
+from starlette.middleware.base import BaseHTTPMiddleware
+from typing import Callable, Dict
+import logging
+import time
+
+"""
 限流中间件
 
 防止API滥用
 """
 
-import time
-import logging
-from typing import Callable, Dict
-from fastapi import Request, Response
-from fastapi.responses import JSONResponse
-from starlette.middleware.base import BaseHTTPMiddleware
 
 logger = logging.getLogger(__name__)
 

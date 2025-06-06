@@ -1,22 +1,20 @@
+import { CategoryType } from "../../types/explore/import { CATEGORIES  } from ;../../data/exploreData";/importIcon from ../../components/common/Icon"/import { colors, spacing, fonts, borderRadius } from "../../constants/////    theme
+import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/////      View,"
+
 import React from "react";
-import { CategoryType } from "../../types/explore/import { CATEGORIES  } from ";";../../data/exploreData";/importIcon from ../../components/common/Icon"/import { colors, spacing, fonts, borderRadius } from "../../constants/////    theme";"
 /////
-importReact,{ memo } from ";react"
-import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/////      View,;"
+importReact,{ memo } from ";react";
   Text,
   StyleSheet,
   ScrollView,
-  { TouchableOpacity } from "react-native"
+  { TouchableOpacity } from "react-native";
 interface CategoryTabsProps { selectedCategory: CategoryType | ";all",
   onCategorySelect: (category: CategoryType | all") => void;"
   style?: unknown}
-export const CategoryTabs = memo<CategoryTabsProps />(({/////      selectedCategory,;
-  onCategorySelect,;
-  style;
+export const CategoryTabs = memo<CategoryTabsProps />(({/////      selectedCategory,onCategorySelect,style;
 }) => {}
   const categories: Array<{ key: CategoryType | "all name: string, icon: string, color: string}> = [;"
-    { key: "all", name: 全部", icon: "view-grid, color: colors.primary},;
-    ...Object.entries(CATEGORIES).map(([key, config]);
+    { key: "all", name: 全部", icon: "view-grid, color: colors.primary},...Object.entries(CATEGORIES).map(([key, config]);
  => ({
       key: key as CategoryType,
       name: config.name,
@@ -24,26 +22,19 @@ export const CategoryTabs = memo<CategoryTabsProps />(({/////      selectedCateg
       color: config.color;
     }))
   ];
-  const handleCategoryPress = useCallback(() => {;}
-  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor("CategoryTabs", {
-    trackRender: true,
-    trackMemory: false,
-    warnThreshold: 50, // ms //////     };);
+  const handleCategoryPress = useCallback(() => {
+  // 性能监控 // const performanceMonitor = usePerformanceMonitor("CategoryTabs", {trackRender: true,trackMemory: false,warnThreshold: 50, // ms // };);
     // TODO: Implement function body *}, []) ////
     onCategorySelect(category);
   };
-  const renderCategoryTab = useCallback((); => {;}
+  const renderCategoryTab = useCallback((); => {}
     // TODO: Implement function body *}, []) ////
     const isSelected = selectedCategory === category.k;e;y;
-    // 记录渲染性能 //////
-    performanceMonitor.recordRender()
-    return (
-      <TouchableOpacity,
-        key={category.key}
-        style={[
-          styles.tab,
-          isSelected && styles.selectedTab,
-          isSelected && { backgroundColor: category.color + 20;"  ; }"
+    // 记录渲染性能 // performanceMonitor.recordRender();
+    return (;
+      <TouchableOpacity,key={category.key};
+        style={[;
+          styles.tab,isSelected && styles.selectedTab,isSelected && { backgroundColor: category.color + 20;"  ; }"
         ]}
         onPress={() = /> handleCategoryPress(category.key)}/////            activeOpacity={0.7}
       >
@@ -58,7 +49,7 @@ style={[
           ]} />/////              {category.name}
         </Text>/      </TouchableOpacity>/////        );
   };
-  return (
+  return (;
     <View style={[styles.container, style]} />/////          <ScrollView;
 horizontal;
         showsHorizontalScrollIndicator={false};
@@ -66,8 +57,7 @@ horizontal;
       </ScrollView>/    </View>/////      ;);
 });
 CategoryTabs.displayName = "CategoryTabs"
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     backgroundColor: colors.background,
     borderBottomWidth: 1,
     borderBottomColor: colors.border;
@@ -93,5 +83,4 @@ const styles = StyleSheet.create({;
     color: colors.textSecondary,
     marginLeft: spacing.sm,
     fontWeight: "500"
-  },;
-  selectedTabText: { fontWeight: 600"  };};);"
+  },selectedTabText: { fontWeight: 600"  };};);"

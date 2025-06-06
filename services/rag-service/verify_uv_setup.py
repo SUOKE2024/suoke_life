@@ -1,13 +1,18 @@
+"""
+verify_uv_setup - 索克生活项目模块
+"""
+
+from pathlib import Path
+import subprocess
+import sys
+import tomllib
+
 #!/usr/bin/env python3
 """
 RAG Service UV 配置验证脚本
 验证 UV 包管理器配置是否正确
 """
 
-import sys
-import subprocess
-from pathlib import Path
-import tomllib
 
 def check_python_version():
     """检查 Python 版本"""

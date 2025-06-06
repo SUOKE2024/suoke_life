@@ -1,14 +1,19 @@
+"""
+tcm_knowledge_base - 索克生活项目模块
+"""
+
+from typing import Any
+import logging
+import os
+import yaml
+
 #!/usr/bin/env python
 
 """
 中医知识库模块，管理和查询中医相关知识数据
 """
 
-import logging
-import os
-from typing import Any
 
-import yaml
 
 logger = logging.getLogger(__name__)
 

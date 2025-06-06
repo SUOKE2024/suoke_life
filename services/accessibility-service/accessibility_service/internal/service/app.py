@@ -1,11 +1,16 @@
+"""
+app - 索克生活项目模块
+"""
+
+from typing import Any
+import logging
+
 #!/usr/bin/env python3
 
 """
 无障碍服务应用程序主类
 """
 
-import logging
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

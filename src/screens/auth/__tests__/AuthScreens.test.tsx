@@ -1,10 +1,9 @@
-import React from "react";
 import { render } from "@testing-library/react-native";
-import { NavigationContainer } from @react-navigation/native";"
 import { WelcomeScreen, LoginScreen, RegisterScreen, ForgotPasswordScreen } from "../index";
+
+import React from "react";
 // Mock navigation
-const mockNavigation = {;
-  navigate: jest.fn(),
+const mockNavigation = {navigate: jest.fn(),
   goBack: jest.fn(),
   reset: jest.fn(),
   setParams: jest.fn(),
@@ -13,24 +12,20 @@ const mockNavigation = {;
   isFocused: jest.fn(),
   canGoBack: jest.fn(),
   getId: jest.fn(),
-  getParent: jest.fn(),;
-  getState: jest.fn()};
-const mockRoute = {;
-  key: "test",;
-  name: Test" as const,;"
+  getParent: jest.fn(),getState: jest.fn()};
+const mockRoute = {key: "test",name: Test" as const,"
   params: undefined};
 jest.mock("@react-navigation/native, () => ({"
   ...jest.requireActual("@react-navigation/native"),
   useNavigation: () => mockNavigation,
   useRoute: () => mockRoute}));
-const renderWithNavigation = (component: React.ReactElement) => {;
-  return render(;
+const renderWithNavigation = (component: React.ReactElement) => {return render(;
     <NavigationContainer>;
       {component});
     </NavigationContainer>
   );
 };
-describe(认证屏幕测试", () => {"
+describe("认证屏幕测试", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -78,7 +73,7 @@ describe(认证屏幕测试", () => {"
       expect(getByText("中医智慧指导")).toBeTruthy();
     });
   });
-  describe(ForgotPasswordScreen", () => {"
+  describe("ForgotPasswordScreen", () => {
     it("应该正确渲染忘记密码屏幕, () => {", () => {
       const { getByText } = renderWithNavigation(<ForgotPasswordScreen />);
       expect(getByText("忘记密码")).toBeTruthy();

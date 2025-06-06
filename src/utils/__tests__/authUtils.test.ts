@@ -1,449 +1,431 @@
 import { validateEmail, validatePhone, validatePassword, getPasswordStrength, validateUsername, validateVerificationCode, validateLoginForm, validateRegisterForm, validateForgotPasswordForm, storeAuthTokens, getAuthToken, getRefreshToken, clearAuthTokens, isAuthenticated, formatAuthError, generateDeviceId, storeDeviceId, getDeviceId } from "../authUtils";
+import { validateEmail, validatePhone, validatePassword, getPasswordStrength, validateUsername, validateVerificationCode, validateLoginForm, validateRegisterForm, validateForgotPasswordForm, storeAuthTokens, getAuthToken, getRefreshToken, clearAuthTokens, isAuthenticated, formatAuthError, generateDeviceId, storeDeviceId, getDeviceId } from "../authUtils";
+
 describe("authUtils", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  describe(validateEmail", () => {"
+  describe("validateEmail", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = validateEmail(/* valid params   */);
+const result = validateEmail(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = validateEmail(/* edge case params   */);
+const result = validateEmail(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        validateEmail(/* invalid params     */)
-      }).not.toThrow()
+        validateEmail(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = validateEmail(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = validateEmail(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(validatePhone", () => {"
+  describe("validatePhone", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = validatePhone(/* valid params   */);
+const result = validatePhone(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = validatePhone(/* edge case params   */);
+const result = validatePhone(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        validatePhone(/* invalid params     */)
-      }).not.toThrow()
+        validatePhone(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = validatePhone(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = validatePhone(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(validatePassword", () => {"
+  describe("validatePassword", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = validatePassword(/* valid params   */);
+const result = validatePassword(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = validatePassword(/* edge case params   */);
+const result = validatePassword(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        validatePassword(/* invalid params     */)
-      }).not.toThrow()
+        validatePassword(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = validatePassword(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = validatePassword(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(getPasswordStrength", () => {"
+  describe("getPasswordStrength", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = getPasswordStrength(/* valid params   */);
+const result = getPasswordStrength(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = getPasswordStrength(/* edge case params   */);
+const result = getPasswordStrength(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        getPasswordStrength(/* invalid params     */)
-      }).not.toThrow()
+        getPasswordStrength(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = getPasswordStrength(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = getPasswordStrength(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(validateUsername", () => {"
+  describe("validateUsername", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = validateUsername(/* valid params   */);
+const result = validateUsername(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = validateUsername(/* edge case params   */);
+const result = validateUsername(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        validateUsername(/* invalid params     */)
-      }).not.toThrow()
+        validateUsername(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = validateUsername(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = validateUsername(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(validateVerificationCode", () => {"
+  describe("validateVerificationCode", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = validateVerificationCode(/* valid params   */);
+const result = validateVerificationCode(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = validateVerificationCode(/* edge case params   */);
+const result = validateVerificationCode(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        validateVerificationCode(/* invalid params     */)
-      }).not.toThrow()
+        validateVerificationCode(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = validateVerificationCode(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = validateVerificationCode(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(validateLoginForm", () => {"
+  describe("validateLoginForm", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = validateLoginForm(/* valid params   */);
+const result = validateLoginForm(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = validateLoginForm(/* edge case params   */);
+const result = validateLoginForm(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        validateLoginForm(/* invalid params     */)
-      }).not.toThrow()
+        validateLoginForm(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = validateLoginForm(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = validateLoginForm(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(validateRegisterForm", () => {"
+  describe("validateRegisterForm", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = validateRegisterForm(/* valid params   */);
+const result = validateRegisterForm(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = validateRegisterForm(/* edge case params   */);
+const result = validateRegisterForm(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        validateRegisterForm(/* invalid params     */)
-      }).not.toThrow()
+        validateRegisterForm(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = validateRegisterForm(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = validateRegisterForm(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(validateForgotPasswordForm", () => {"
+  describe("validateForgotPasswordForm", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = validateForgotPasswordForm(/* valid params   */);
+const result = validateForgotPasswordForm(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = validateForgotPasswordForm(/* edge case params   */);
+const result = validateForgotPasswordForm(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        validateForgotPasswordForm(/* invalid params     */)
-      }).not.toThrow()
+        validateForgotPasswordForm(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = validateForgotPasswordForm(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = validateForgotPasswordForm(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(storeAuthTokens", () => {"
+  describe("storeAuthTokens", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = storeAuthTokens(/* valid params   */);
+const result = storeAuthTokens(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = storeAuthTokens(/* edge case params   */);
+const result = storeAuthTokens(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        storeAuthTokens(/* invalid params     */)
-      }).not.toThrow()
+        storeAuthTokens(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = storeAuthTokens(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = storeAuthTokens(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(getAuthToken", () => {"
+  describe("getAuthToken", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = getAuthToken(/* valid params   */);
+const result = getAuthToken(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = getAuthToken(/* edge case params   */);
+const result = getAuthToken(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        getAuthToken(/* invalid params     */)
-      }).not.toThrow()
+        getAuthToken(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = getAuthToken(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = getAuthToken(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(getRefreshToken", () => {"
+  describe("getRefreshToken", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = getRefreshToken(/* valid params   */);
+const result = getRefreshToken(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = getRefreshToken(/* edge case params   */);
+const result = getRefreshToken(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        getRefreshToken(/* invalid params     */)
-      }).not.toThrow()
+        getRefreshToken(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = getRefreshToken(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = getRefreshToken(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(clearAuthTokens", () => {"
+  describe("clearAuthTokens", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = clearAuthTokens(/* valid params   */);
+const result = clearAuthTokens(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = clearAuthTokens(/* edge case params   */);
+const result = clearAuthTokens(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        clearAuthTokens(/* invalid params     */)
-      }).not.toThrow()
+        clearAuthTokens(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = clearAuthTokens(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = clearAuthTokens(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(isAuthenticated", () => {"
+  describe("isAuthenticated", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = isAuthenticated(/* valid params   */);
+const result = isAuthenticated(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = isAuthenticated(/* edge case params   */);
+const result = isAuthenticated(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        isAuthenticated(/* invalid params     */)
-      }).not.toThrow()
+        isAuthenticated(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = isAuthenticated(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = isAuthenticated(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(formatAuthError", () => {"
+  describe("formatAuthError", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = formatAuthError(/* valid params   */);
+const result = formatAuthError(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = formatAuthError(/* edge case params   */);
+const result = formatAuthError(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        formatAuthError(/* invalid params     */)
-      }).not.toThrow()
+        formatAuthError(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = formatAuthError(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = formatAuthError(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(generateDeviceId", () => {"
+  describe("generateDeviceId", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = generateDeviceId(/* valid params   */);
+const result = generateDeviceId(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = generateDeviceId(/* edge case params   */);
+const result = generateDeviceId(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        generateDeviceId(/* invalid params     */)
-      }).not.toThrow()
+        generateDeviceId(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = generateDeviceId(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = generateDeviceId(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(storeDeviceId", () => {"
+  describe("storeDeviceId", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = storeDeviceId(/* valid params   */);
+const result = storeDeviceId(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = storeDeviceId(/* edge case params   */);
+const result = storeDeviceId(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        storeDeviceId(/* invalid params     */)
-      }).not.toThrow()
+        storeDeviceId(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = storeDeviceId(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = storeDeviceId(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(getDeviceId", () => {"
+  describe("getDeviceId", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = getDeviceId(/* valid params   */);
+const result = getDeviceId(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = getDeviceId(/* edge case params   */);
+const result = getDeviceId(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        getDeviceId(/* invalid params     */)
-      }).not.toThrow()
+        getDeviceId(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = getDeviceId(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = getDeviceId(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
 });
-import { performance } from "perf_hooks";
-import { validateEmail, validatePhone, validatePassword, getPasswordStrength, validateUsername, validateVerificationCode, validateLoginForm, validateRegisterForm, validateForgotPasswordForm, storeAuthTokens, getAuthToken, getRefreshToken, clearAuthTokens, isAuthenticated, formatAuthError, generateDeviceId, storeDeviceId, getDeviceId } from "../authUtils";
 describe("authUtils Performance Tests", () => {
   it("should execute within performance thresholds", () => {
     const iterations = 10;
     const startTime = performance.now();
     for (let i = 0; i < iterations; i++) {
       // Execute performance-critical functions
-validateEmail(/* test params      */)
-      validatePhone(/* test params      */);
-      validatePassword(/* test params      */);
-      getPasswordStrength(/* test params      */);
-      validateUsername(/* test params      */);
-      validateVerificationCode(/* test params      */);
-      validateLoginForm(/* test params      */);
-      validateRegisterForm(/* test params      */);
-      validateForgotPasswordForm(/* test params      */);
-      storeAuthTokens(/* test params      */);
-      getAuthToken(/* test params      */);
-      getRefreshToken(/* test params      */);
-      clearAuthTokens(/* test params      */);
-      isAuthenticated(/* test params      */);
-      formatAuthError(/* test params      */);
-      generateDeviceId(/* test params      */);
-      storeDeviceId(/* test params      */);
-      getDeviceId(/* test params      */);
+validateEmail(// test params);
+      validatePhone(// test params);
+      validatePassword(// test params);
+      getPasswordStrength(// test params);
+      validateUsername(// test params);
+      validateVerificationCode(// test params);
+      validateLoginForm(// test params);
+      validateRegisterForm(// test params);
+      validateForgotPasswordForm(// test params);
+      storeAuthTokens(// test params);
+      getAuthToken(// test params);
+      getRefreshToken(// test params);
+      clearAuthTokens(// test params);
+      isAuthenticated(// test params);
+      formatAuthError(// test params);
+      generateDeviceId(// test params);
+      storeDeviceId(// test params);
+      getDeviceId(// test params);
     });
     const endTime = performance.now();
     const averageTime = (endTime - startTime) / iterations;
@@ -454,7 +436,7 @@ expect(averageTime).toBeLessThan(1);
     const largeDataset = new Array(10000).fill(0).map((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
-validateEmail(largeDataset)
+validateEmail(largeDataset);
     const endTime = performance.now();
     // Should handle large datasets within 100ms
 expect(endTime - startTime).toBeLessThan(100);
@@ -463,7 +445,7 @@ expect(endTime - startTime).toBeLessThan(100);
     const initialMemory = process.memoryUsage().heapUsed;
     // Execute function multiple times
 for (let i = 0; i < 1000; i++) {
-      validateEmail(/* test params      */);
+      validateEmail(// test params);
     });
     // Force garbage collection if available
 if (global.gc) {

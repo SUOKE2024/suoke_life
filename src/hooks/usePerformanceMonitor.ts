@@ -17,37 +17,27 @@ interface PerformanceMonitor {
 
 // 性能监控 Hook
 // 简化版本，用于基本的性能跟踪
-export const usePerformanceMonitor = (
+export const usePerformanceMonitor = (;
   options: PerformanceMonitorOptions = {}
 ): PerformanceMonitor => {
   const componentName = options.componentName || "Unknown";
 
-  const recordRender = useCallback(() => {
-    if (options.trackRender) {
-      // TODO: 实际的渲染性能记录逻辑
+  const recordRender = useCallback(() => {if (options.trackRender) {// TODO: 实际的渲染性能记录逻辑;
       console.log(`[Performance] ${componentName} rendered at ${Date.now()}`);
     }
   }, [componentName, options.trackRender]);
 
-  const recordMemory = useCallback(() => {
-    if (options.trackMemory || options.enableMemoryMonitoring) {
-      // TODO: 实际的内存监控逻辑
-      console.log(
-        `[Performance] ${componentName} memory check at ${Date.now()}`
+  const recordMemory = useCallback(() => {if (options.trackMemory || options.enableMemoryMonitoring) {// TODO: 实际的内存监控逻辑;
+      console.log(;
+        `[Performance] ${componentName} memory check at ${Date.now()}`;
       );
     }
   }, [componentName, options.trackMemory, options.enableMemoryMonitoring]);
 
-  const getMetrics = useCallback(() => {
-    return {
-      componentName,
-      timestamp: Date.now(),
+  const getMetrics = useCallback(() => {return {componentName,timestamp: Date.now();
     };
   }, [componentName]);
 
-  return {
-    recordRender,
-    recordMemory,
-    getMetrics,
+  return {recordRender,recordMemory,getMetrics;
   };
 };

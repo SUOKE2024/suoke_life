@@ -1,10 +1,14 @@
-#!/usr/bin/env python3
-
 """
-xiaoai-service性能测试脚本
-测试服务在不同负载下的性能表现
+performance_test - 索克生活项目模块
 """
 
+from internal.four_diagnosis.feature_extractor import FeatureExtractor
+from internal.four_diagnosis.multimodal_fusion import MultimodalFusion
+from internal.four_diagnosis.recommendation.health_advisor import HealthAdvisor
+from internal.four_diagnosis.syndrome_analyzer import SyndromeAnalyzer
+from internal.orchestrator.four_diagnosis_coordinator import FourDiagnosisCoordinator
+from pathlib import Path
+from unittest.mock import MagicMock
 import argparse
 import asyncio
 import json
@@ -13,19 +17,20 @@ import statistics
 import sys
 import time
 import uuid
-from pathlib import Path
-from unittest.mock import MagicMock
+
+#!/usr/bin/env python3
+
+"""
+xiaoai-service性能测试脚本
+测试服务在不同负载下的性能表现
+"""
+
 
 # 添加项目根目录到Python路径
 project_root = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 # 导入需要测试的服务和模块
-from internal.four_diagnosis.feature_extractor import FeatureExtractor
-from internal.four_diagnosis.multimodal_fusion import MultimodalFusion
-from internal.four_diagnosis.recommendation.health_advisor import HealthAdvisor
-from internal.four_diagnosis.syndrome_analyzer import SyndromeAnalyzer
-from internal.orchestrator.four_diagnosis_coordinator import FourDiagnosisCoordinator
 
 logging.basicConfig(level=logging.INFO)
 # 使用loguru logger

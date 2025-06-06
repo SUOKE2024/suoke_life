@@ -1,8 +1,13 @@
+"""
+fix_params - 索克生活项目模块
+"""
+
+import glob
+import re
+
 #!/usr/bin/env python3
 """
 
-import re
-import glob
 
 
 批量修复参数名问题的脚本

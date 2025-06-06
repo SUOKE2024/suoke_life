@@ -1,11 +1,16 @@
+"""
+final_agent_coordinator_fixer - 索克生活项目模块
+"""
+
+from pathlib import Path
+import os
+
 #!/usr/bin/env python3
 """
 索克生活项目最终AgentCoordinator测试文件修复脚本
 修复所有参数和语法问题
 """
 
-import os
-from pathlib import Path
 
 class FinalAgentCoordinatorFixer:
     def __init__(self, project_root: str):

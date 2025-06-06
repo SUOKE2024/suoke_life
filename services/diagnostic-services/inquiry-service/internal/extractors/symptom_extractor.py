@@ -1,12 +1,6 @@
-#!/usr/bin/env python
-
 """
-优化后的症状提取器
+symptom_extractor - 索克生活项目模块
 """
-
-import asyncio
-from dataclasses import asdict
-from typing import Any
 
 from ..common.base import BaseExtractor, SymptomInfo
 from ..common.exceptions import ProcessingError
@@ -16,6 +10,17 @@ from .context_analyzer import SymptomContextAnalyzer
 from .duration_extractor import DurationExtractor
 from .negation_detector import NegationDetector
 from .severity_analyzer import SeverityAnalyzer
+from dataclasses import asdict
+from typing import Any
+import asyncio
+
+#!/usr/bin/env python
+
+"""
+优化后的症状提取器
+"""
+
+
 
 
 class OptimizedSymptomExtractor(BaseExtractor):

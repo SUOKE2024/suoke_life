@@ -1,12 +1,17 @@
 """
+conftest_simple - 索克生活项目模块
+"""
+
+from unittest.mock import AsyncMock, MagicMock
+import asyncio
+import pytest
+
+"""
 简化的测试配置
 
 避免复杂依赖的测试配置。
 """
 
-import pytest
-import asyncio
-from unittest.mock import AsyncMock, MagicMock
 
 
 @pytest.fixture(scope="session")

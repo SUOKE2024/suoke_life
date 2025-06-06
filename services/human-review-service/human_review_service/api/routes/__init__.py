@@ -1,16 +1,21 @@
 """
+__init__ - 索克生活项目模块
+"""
+
+from .dashboard import router as dashboard_router
+from .reviewers import router as reviewers_router
+from .reviews import router as reviews_router
+from .websocket import router as websocket_router
+from fastapi import APIRouter
+
+"""
 API 路由
 API Routes
 
 定义所有的 API 端点和路由
 """
 
-from fastapi import APIRouter
 
-from .dashboard import router as dashboard_router
-from .reviewers import router as reviewers_router
-from .reviews import router as reviews_router
-from .websocket import router as websocket_router
 
 # 创建主路由器
 router = APIRouter()

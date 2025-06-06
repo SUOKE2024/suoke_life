@@ -1,14 +1,19 @@
 """
+health - 索克生活项目模块
+"""
+
+from datetime import datetime
+from enum import Enum
+from pydantic import BaseModel, Field
+from typing import Any
+
+"""
 健康相关数据模型
 
 定义健康数据、分析结果、建议等数据结构
 """
 
-from datetime import datetime
-from enum import Enum
-from typing import Any
 
-from pydantic import BaseModel, Field
 
 
 class HealthDataType(str, Enum):

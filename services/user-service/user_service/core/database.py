@@ -1,12 +1,17 @@
-"""数据库连接管理"""
+"""
+database - 索克生活项目模块
+"""
 
-import logging
-from typing import AsyncGenerator
+from sqlalchemy import MetaData
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy import MetaData
-
+from typing import AsyncGenerator
 from user_service.config import get_settings
+import logging
+
+"""数据库连接管理"""
+
+
 
 logger = logging.getLogger(__name__)
 

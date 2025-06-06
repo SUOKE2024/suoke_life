@@ -1,41 +1,40 @@
 import { AutomatedTestService } from "../AutomatedTestService";
+import { AutomatedTestService } from "../AutomatedTestService";
+
 describe("AutomatedTestService", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  describe(AutomatedTestService", () => {"
+  describe("AutomatedTestService", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = AutomatedTestService(/* valid params   */);
+const result = AutomatedTestService(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = AutomatedTestService(/* edge case params   */);
+const result = AutomatedTestService(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        AutomatedTestService(/* invalid params     */)
-      }).not.toThrow()
+        AutomatedTestService(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = AutomatedTestService(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = AutomatedTestService(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
 });
-import { performance } from "perf_hooks";
-import { AutomatedTestService } from "../AutomatedTestService";
 describe("AutomatedTestService Performance Tests", () => {
   it("should execute within performance thresholds", () => {
     const iterations = 10;
     const startTime = performance.now();
     for (let i = 0; i < iterations; i++) {
       // Execute performance-critical functions
-AutomatedTestService(/* test params      */)
+AutomatedTestService(// test params);
     });
     const endTime = performance.now();
     const averageTime = (endTime - startTime) / iterations;
@@ -46,7 +45,7 @@ expect(averageTime).toBeLessThan(1);
     const largeDataset = new Array(10000).fill(0).map((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
-AutomatedTestService(largeDataset)
+AutomatedTestService(largeDataset);
     const endTime = performance.now();
     // Should handle large datasets within 100ms
 expect(endTime - startTime).toBeLessThan(100);
@@ -55,7 +54,7 @@ expect(endTime - startTime).toBeLessThan(100);
     const initialMemory = process.memoryUsage().heapUsed;
     // Execute function multiple times
 for (let i = 0; i < 1000; i++) {
-      AutomatedTestService(/* test params      */);
+      AutomatedTestService(// test params);
     });
     // Force garbage collection if available
 if (global.gc) {

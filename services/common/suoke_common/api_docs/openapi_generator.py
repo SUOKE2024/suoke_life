@@ -1,17 +1,22 @@
+"""
+openapi_generator - 索克生活项目模块
+"""
+
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any
+import inspect
+import json
+import logging
+import yaml
+
 #!/usr/bin/env python3
 """
 OpenAPI文档生成器
 自动生成OpenAPI 3.0规范的API文档
 """
 
-from dataclasses import dataclass, field
-from enum import Enum
-import inspect
-import json
-import logging
-from typing import Any
 
-import yaml
 
 logger = logging.getLogger(__name__)
 

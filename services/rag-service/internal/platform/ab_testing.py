@@ -1,3 +1,17 @@
+"""
+ab_testing - 索克生活项目模块
+"""
+
+from ..observability.metrics import MetricsCollector
+from dataclasses import dataclass, field
+from enum import Enum
+from loguru import logger
+from typing import Dict, List, Any, Optional, Callable, Union
+import hashlib
+import random
+import time
+import uuid
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,16 +19,7 @@
 A/B测试框架 - 用于测试不同的RAG策略和中医算法
 """
 
-import time
-import uuid
-import hashlib
-from typing import Dict, List, Any, Optional, Callable, Union
-from dataclasses import dataclass, field
-from enum import Enum
-import random
-from loguru import logger
 
-from ..observability.metrics import MetricsCollector
 
 class ExperimentStatus(str, Enum):
     """实验状态"""

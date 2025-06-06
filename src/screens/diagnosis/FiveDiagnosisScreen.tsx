@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { usePerformanceMonitor } from '../../hooks/usePerformanceMonitor';
 import {
   View,
   Text,
@@ -11,15 +14,12 @@ import {
   Animated,
   Platform
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { 
+import {
   fiveDiagnosisService, 
   FiveDiagnosisInput, 
   FiveDiagnosisResult,
   FiveDiagnosisError 
 } from '../../services/fiveDiagnosisService';
-import { usePerformanceMonitor } from '../../hooks/usePerformanceMonitor';
 
 // 诊断步骤枚举
 enum DiagnosisStep {
@@ -99,7 +99,7 @@ const STEP_CONFIG = {
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
-export default function FiveDiagnosisScreen() {
+export default React.memo(function FiveDiagnosisScreen() {
   const navigation = useNavigation();
   const [diagnosisState, setDiagnosisState] = useState<DiagnosisState>({
     currentStep: DiagnosisStep.PREPARATION,
@@ -126,7 +126,7 @@ export default function FiveDiagnosisScreen() {
   // 初始化服务
   useEffect(() => {
     initializeDiagnosisService();
-  }, []);
+  }, [])  // 检查是否需要添加依赖项;
 
   // 监听焦点变化
   useFocusEffect(
@@ -158,7 +158,7 @@ export default function FiveDiagnosisScreen() {
         sessionId: generateSessionId()
       }));
     } catch (error) {
-      console.error('诊断服务初始化失败:', error);
+      console.error('五诊服务初始化失败:', error);
       setDiagnosisState(prev => ({ 
         ...prev, 
         isProcessing: false,
@@ -179,13 +179,13 @@ export default function FiveDiagnosisScreen() {
   // 完成当前步骤
   const completeCurrentStep = useCallback(async (stepData: any) => {
     const { currentStep } = diagnosisState;
-    
+
     try {
       setDiagnosisState(prev => ({ ...prev, isProcessing: true }));
 
       // 更新收集的数据
       const updatedData = { ...diagnosisState.collectedData };
-      
+
       switch (currentStep) {
         case DiagnosisStep.LOOKING:
           updatedData.lookingData = stepData;
@@ -207,7 +207,7 @@ export default function FiveDiagnosisScreen() {
       // 更新状态
       const completedSteps = new Set(diagnosisState.completedSteps);
       completedSteps.add(currentStep);
-      
+
       const nextStep = getNextStep(currentStep);
       const progress = calculateProgress(completedSteps);
 
@@ -230,7 +230,7 @@ export default function FiveDiagnosisScreen() {
       setDiagnosisState(prev => ({
         ...prev,
         isProcessing: false,
-        error: error instanceof FiveDiagnosisError ? error.message : '步骤处理失败'
+        error: '步骤处理失败，请重试'
       }));
     }
   }, [diagnosisState]);
@@ -238,14 +238,14 @@ export default function FiveDiagnosisScreen() {
   // 执行综合分析
   const performComprehensiveAnalysis = async (input: FiveDiagnosisInput) => {
     try {
-      setDiagnosisState(prev => ({ 
-        ...prev, 
+      setDiagnosisState(prev => ({
+        ...prev,
         isProcessing: true,
         currentStep: DiagnosisStep.ANALYSIS,
         progress: 87.5 // 7/8 的进度
       }));
 
-      const result = await fiveDiagnosisService.performDiagnosis(input);
+      const result = await fiveDiagnosisService.performComprehensiveDiagnosis(input);
 
       setDiagnosisState(prev => ({
         ...prev,
@@ -255,92 +255,37 @@ export default function FiveDiagnosisScreen() {
         isProcessing: false
       }));
 
-      // 成功动画
-      Animated.sequence([
-        Animated.timing(scaleAnimation, {
-          toValue: 1.1,
-          duration: 200,
-          useNativeDriver: true
-        }),
-        Animated.timing(scaleAnimation, {
-          toValue: 1,
-          duration: 200,
-          useNativeDriver: true
-        })
-      ]).start();
+      // 显示完成提示
+      Alert.alert(
+        '五诊分析完成',
+        '您的健康分析报告已生成，请查看详细结果。',
+        [{ text: '查看报告', onPress: () => {} }]
+      );
 
     } catch (error) {
       console.error('综合分析失败:', error);
       setDiagnosisState(prev => ({
         ...prev,
         isProcessing: false,
-        error: error instanceof FiveDiagnosisError ? error.message : '分析失败，请重试'
+        error: '分析失败，请重试'
       }));
     }
   };
 
-  // 跳过当前步骤
-  const skipCurrentStep = useCallback(() => {
-    Alert.alert(
-      '跳过步骤',
-      '跳过此步骤可能会影响诊断准确性，确定要跳过吗？',
-      [
-        { text: '取消', style: 'cancel' },
-        { 
-          text: '跳过', 
-          style: 'destructive',
-          onPress: () => completeCurrentStep(null)
-        }
-      ]
-    );
-  }, [completeCurrentStep]);
-
-  // 重新开始诊断
-  const restartDiagnosis = useCallback(() => {
-    Alert.alert(
-      '重新开始',
-      '确定要重新开始诊断吗？当前进度将会丢失。',
-      [
-        { text: '取消', style: 'cancel' },
-        {
-          text: '确定',
-          style: 'destructive',
-          onPress: () => {
-            setDiagnosisState({
-              currentStep: DiagnosisStep.PREPARATION,
-              completedSteps: new Set(),
-              isProcessing: false,
-              progress: 0,
-              collectedData: { userId: 'current_user' },
-              sessionId: generateSessionId()
-            });
-          }
-        }
-      ]
-    );
-  }, []);
-
-  // 查看详细结果
-  const viewDetailedResults = useCallback(() => {
-    if (diagnosisState.result) {
-      navigation.navigate('DiagnosisDetail', { 
-        result: diagnosisState.result 
-      });
-    }
-  }, [diagnosisState.result, navigation]);
-
-  // 辅助函数
+  // 获取下一步骤
   const getNextStep = (currentStep: DiagnosisStep): DiagnosisStep => {
     const steps = Object.values(DiagnosisStep);
     const currentIndex = steps.indexOf(currentStep);
     return steps[currentIndex + 1] || DiagnosisStep.RESULTS;
   };
 
+  // 计算进度
   const calculateProgress = (completedSteps: Set<DiagnosisStep>): number => {
     const totalSteps = Object.values(DiagnosisStep).length - 1; // 排除准备阶段
     return (completedSteps.size / totalSteps) * 100;
   };
 
+  // 生成会话ID
   const generateSessionId = (): string => {
     return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   };
@@ -417,109 +362,157 @@ export default function FiveDiagnosisScreen() {
     const { currentStep } = diagnosisState;
     const config = STEP_CONFIG[currentStep];
 
-    if (diagnosisState.error) {
-      return (
-        <View style={styles.errorContainer}>
-          <Text style={styles.errorIcon}>⚠️</Text>
-          <Text style={styles.errorTitle}>出现错误</Text>
-          <Text style={styles.errorMessage}>{diagnosisState.error}</Text>
-          <TouchableOpacity 
-            style={styles.retryButton}
-            onPress={() => setDiagnosisState(prev => ({ ...prev, error: undefined }))}
-          >
-            <Text style={styles.retryButtonText}>重试</Text>
-          </TouchableOpacity>
-        </View>
-      );
-    }
+    switch (currentStep) {
+      case DiagnosisStep.PREPARATION:
+        return (
+          <View style={styles.stepContent}>
+            <Text style={styles.stepDescription}>{config.description}</Text>
+            <Text style={styles.estimatedTime}>预计用时：{config.estimatedTime}</Text>
+            <TouchableOpacity 
+              style={styles.startButton}
+              onPress={startDiagnosis}
+              disabled={diagnosisState.isProcessing}
+            >
+              <Text style={styles.startButtonText}>开始五诊检测</Text>
+            </TouchableOpacity>
+          </View>
+        );
 
-    return (
-      <Animated.View 
-        style={[
-          styles.stepContent,
-          { 
-            opacity: fadeAnimation,
-            transform: [{ scale: scaleAnimation }]
-          }
-        ]}
-      >
-        <Text style={styles.stepIcon}>{config.icon}</Text>
-        <Text style={styles.stepTitle}>{config.title}</Text>
-        <Text style={styles.stepDescription}>{config.description}</Text>
-        
-        {diagnosisState.isProcessing ? (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#007AFF" />
-            <Text style={styles.loadingText}>处理中...</Text>
+      case DiagnosisStep.LOOKING:
+        return (
+          <View style={styles.stepContent}>
+            <Text style={styles.stepDescription}>{config.description}</Text>
+            <Text style={styles.estimatedTime}>预计用时：{config.estimatedTime}</Text>
+            <TouchableOpacity 
+              style={styles.actionButton}
+              onPress={() => completeCurrentStep(generateMockStepData(currentStep))}
+              disabled={diagnosisState.isProcessing}
+            >
+              <Text style={styles.actionButtonText}>开始拍照</Text>
+            </TouchableOpacity>
           </View>
-        ) : (
-          <View style={styles.actionContainer}>
-            {currentStep === DiagnosisStep.PREPARATION && (
-              <TouchableOpacity 
-                style={styles.primaryButton}
-                onPress={startDiagnosis}
-              >
-                <Text style={styles.primaryButtonText}>开始诊断</Text>
+        );
+
+      case DiagnosisStep.LISTENING:
+        return (
+          <View style={styles.stepContent}>
+            <Text style={styles.stepDescription}>{config.description}</Text>
+            <Text style={styles.estimatedTime}>预计用时：{config.estimatedTime}</Text>
+            <TouchableOpacity 
+              style={styles.actionButton}
+              onPress={() => completeCurrentStep(generateMockStepData(currentStep))}
+              disabled={diagnosisState.isProcessing}
+            >
+              <Text style={styles.actionButtonText}>开始录音</Text>
+            </TouchableOpacity>
+          </View>
+        );
+
+      case DiagnosisStep.INQUIRY:
+        return (
+          <View style={styles.stepContent}>
+            <Text style={styles.stepDescription}>{config.description}</Text>
+            <Text style={styles.estimatedTime}>预计用时：{config.estimatedTime}</Text>
+            <TouchableOpacity 
+              style={styles.actionButton}
+              onPress={() => completeCurrentStep(generateMockStepData(currentStep))}
+              disabled={diagnosisState.isProcessing}
+            >
+              <Text style={styles.actionButtonText}>开始问诊</Text>
+            </TouchableOpacity>
+          </View>
+        );
+
+      case DiagnosisStep.PALPATION:
+        return (
+          <View style={styles.stepContent}>
+            <Text style={styles.stepDescription}>{config.description}</Text>
+            <Text style={styles.estimatedTime}>预计用时：{config.estimatedTime}</Text>
+            <TouchableOpacity 
+              style={styles.actionButton}
+              onPress={() => completeCurrentStep(generateMockStepData(currentStep))}
+              disabled={diagnosisState.isProcessing}
+            >
+              <Text style={styles.actionButtonText}>开始切诊</Text>
+            </TouchableOpacity>
+          </View>
+        );
+
+      case DiagnosisStep.CALCULATION:
+        return (
+          <View style={styles.stepContent}>
+            <Text style={styles.stepDescription}>{config.description}</Text>
+            <Text style={styles.estimatedTime}>预计用时：{config.estimatedTime}</Text>
+            <View style={styles.calculationOptions}>
+              <Text style={styles.calculationTitle}>选择算诊分析类型：</Text>
+              <TouchableOpacity style={styles.calculationOption}>
+                <Text style={styles.calculationOptionText}>🕐 子午流注分析</Text>
               </TouchableOpacity>
-            )}
-            
-            {currentStep === DiagnosisStep.RESULTS && diagnosisState.result && (
-              <>
-                <View style={styles.resultSummary}>
-                  <Text style={styles.resultTitle}>诊断完成</Text>
-                  <Text style={styles.resultSubtitle}>
-                    主要证型: {diagnosisState.result.primarySyndrome.name}
-                  </Text>
-                  <Text style={styles.resultConfidence}>
-                    置信度: {Math.round(diagnosisState.result.overallConfidence * 100)}%
-                  </Text>
-                </View>
-                
-                <TouchableOpacity 
-                  style={styles.primaryButton}
-                  onPress={viewDetailedResults}
-                >
-                  <Text style={styles.primaryButtonText}>查看详细报告</Text>
-                </TouchableOpacity>
-              </>
-            )}
-            
-            {currentStep !== DiagnosisStep.PREPARATION && 
-             currentStep !== DiagnosisStep.RESULTS && 
-             currentStep !== DiagnosisStep.ANALYSIS && (
-              <>
-                <TouchableOpacity 
-                  style={styles.primaryButton}
-                  onPress={() => {
-                    // 这里应该导航到具体的诊断步骤页面
-                    // 暂时使用模拟数据完成步骤
-                    completeCurrentStep(generateMockStepData(currentStep));
-                  }}
-                >
-                  <Text style={styles.primaryButtonText}>
-                    开始{config.title}
-                  </Text>
-                </TouchableOpacity>
-                
-                <TouchableOpacity 
-                  style={styles.secondaryButton}
-                  onPress={skipCurrentStep}
-                >
-                  <Text style={styles.secondaryButtonText}>跳过此步骤</Text>
-                </TouchableOpacity>
-              </>
-            )}
+              <TouchableOpacity style={styles.calculationOption}>
+                <Text style={styles.calculationOptionText}>🎭 八字体质分析</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.calculationOption}>
+                <Text style={styles.calculationOptionText}>☯️ 八卦配属分析</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.calculationOption}>
+                <Text style={styles.calculationOptionText}>🌊 五运六气分析</Text>
+              </TouchableOpacity>
+            </View>
+            <TouchableOpacity 
+              style={styles.actionButton}
+              onPress={() => completeCurrentStep(generateMockStepData(currentStep))}
+              disabled={diagnosisState.isProcessing}
+            >
+              <Text style={styles.actionButtonText}>开始算诊</Text>
+            </TouchableOpacity>
           </View>
-        )}
-        
-        <Text style={styles.estimatedTime}>
-          预计用时: {config.estimatedTime}
-        </Text>
-      </Animated.View>
-    );
+        );
+
+      case DiagnosisStep.ANALYSIS:
+        return (
+          <View style={styles.stepContent}>
+            <ActivityIndicator size="large" color="#007AFF" />
+            <Text style={styles.stepDescription}>{config.description}</Text>
+            <Text style={styles.estimatedTime}>预计用时：{config.estimatedTime}</Text>
+          </View>
+        );
+
+      case DiagnosisStep.RESULTS:
+        return (
+          <View style={styles.stepContent}>
+            <Text style={styles.stepDescription}>{config.description}</Text>
+            {diagnosisState.result && (
+              <View style={styles.resultsContainer}>
+                <Text style={styles.resultsTitle}>五诊分析结果</Text>
+                <Text style={styles.resultsText}>
+                  整体评估：{diagnosisState.result.comprehensiveAnalysis.overallAssessment}
+                </Text>
+                <Text style={styles.resultsText}>
+                  中医证候：{diagnosisState.result.comprehensiveAnalysis.tcmSyndrome}
+                </Text>
+                <Text style={styles.resultsText}>
+                  体质类型：{diagnosisState.result.comprehensiveAnalysis.constitution}
+                </Text>
+                <Text style={styles.resultsText}>
+                  健康风险：{diagnosisState.result.comprehensiveAnalysis.healthRisk}
+                </Text>
+              </View>
+            )}
+            <TouchableOpacity 
+              style={styles.actionButton}
+              onPress={() => navigation.goBack()}
+            >
+              <Text style={styles.actionButtonText}>查看详细报告</Text>
+            </TouchableOpacity>
+          </View>
+        );
+
+      default:
+        return null;
+    }
   };
 
-  // 生成模拟步骤数据（实际应用中应该从具体的诊断页面获取）
+  // 生成模拟步骤数据
   const generateMockStepData = (step: DiagnosisStep) => {
     switch (step) {
       case DiagnosisStep.LOOKING:
@@ -531,28 +524,47 @@ export default function FiveDiagnosisScreen() {
       case DiagnosisStep.LISTENING:
         return {
           voiceRecording: 'mock_voice_data',
-          breathingPattern: [1, 2, 3, 4, 5],
-          metadata: { timestamp: Date.now() }
+          breathingSound: 'mock_breathing_data',
+          metadata: { timestamp: Date.now(), duration: 30 }
         };
       case DiagnosisStep.INQUIRY:
         return {
           symptoms: ['头痛', '失眠', '食欲不振'],
           medicalHistory: ['高血压'],
-          lifestyle: { exercise: 'low', diet: 'normal' },
-          metadata: { timestamp: Date.now() }
+          lifestyle: {
+            diet: '偏爱辛辣',
+            exercise: '很少运动',
+            sleep: '经常熬夜'
+          }
         };
       case DiagnosisStep.PALPATION:
         return {
-          pulseData: [70, 72, 68, 71, 69],
-          touchData: { temperature: 36.5, pressure: 'normal' },
-          metadata: { timestamp: Date.now() }
+          pulseData: {
+            rate: 72,
+            rhythm: '规律',
+            strength: '中等',
+            quality: '滑脉'
+          }
         };
       case DiagnosisStep.CALCULATION:
         return {
-          birthDate: '1990-01-01',
-          birthTime: '08:00',
-          location: '北京',
-          metadata: { timestamp: Date.now() }
+          personalInfo: {
+            birthYear: 1990,
+            birthMonth: 5,
+            birthDay: 15,
+            birthHour: 10,
+            gender: '男',
+            location: '北京'
+          },
+          analysisTypes: {
+            ziwuLiuzhu: true,
+            constitution: true,
+            bagua: true,
+            wuyunLiuqi: true,
+            comprehensive: true
+          },
+          currentTime: new Date().toISOString(),
+          healthConcerns: ['体质调理', '养生保健']
         };
       default:
         return {};
@@ -571,14 +583,21 @@ export default function FiveDiagnosisScreen() {
         <Text style={styles.headerTitle}>五诊检测</Text>
         <TouchableOpacity 
           style={styles.restartButton}
-          onPress={restartDiagnosis}
+          onPress={() => {
+            setDiagnosisState({
+              currentStep: DiagnosisStep.PREPARATION,
+              completedSteps: new Set(),
+              isProcessing: false,
+              progress: 0,
+              collectedData: { userId: 'current_user' },
+              sessionId: generateSessionId()
+            });
+          }}
         >
           <Text style={styles.restartButtonText}>重新开始</Text>
         </TouchableOpacity>
       </View>
-
       {renderProgressBar()}
-
       <ScrollView 
         style={styles.content}
         showsVerticalScrollIndicator={false}
@@ -727,20 +746,13 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     lineHeight: 24
   },
-  loadingContainer: {
-    alignItems: 'center',
-    marginVertical: 20
-  },
-  loadingText: {
-    fontSize: 16,
+  estimatedTime: {
+    fontSize: 14,
     color: '#6c757d',
-    marginTop: 10
+    marginTop: 20,
+    textAlign: 'center'
   },
-  actionContainer: {
-    width: '100%',
-    alignItems: 'center'
-  },
-  primaryButton: {
+  startButton: {
     backgroundColor: '#007AFF',
     paddingHorizontal: 40,
     paddingVertical: 15,
@@ -748,85 +760,59 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     minWidth: 200
   },
-  primaryButtonText: {
+  startButtonText: {
     color: '#ffffff',
     fontSize: 16,
     fontWeight: '600',
     textAlign: 'center'
   },
-  secondaryButton: {
-    backgroundColor: 'transparent',
+  actionButton: {
+    backgroundColor: '#007AFF',
     paddingHorizontal: 40,
     paddingVertical: 15,
     borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#6c757d',
+    marginBottom: 15,
     minWidth: 200
   },
-  secondaryButtonText: {
-    color: '#6c757d',
+  actionButtonText: {
+    color: '#ffffff',
     fontSize: 16,
+    fontWeight: '600',
     textAlign: 'center'
   },
-  estimatedTime: {
-    fontSize: 14,
-    color: '#6c757d',
-    marginTop: 20,
-    textAlign: 'center'
+  calculationOptions: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20
   },
-  resultSummary: {
+  calculationTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1a1a1a'
+  },
+  calculationOption: {
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#e9ecef',
+    borderRadius: 8
+  },
+  calculationOptionText: {
+    fontSize: 16,
+    color: '#1a1a1a'
+  },
+  resultsContainer: {
     alignItems: 'center',
     marginBottom: 30
   },
-  resultTitle: {
+  resultsTitle: {
     fontSize: 24,
     fontWeight: '700',
     color: '#28a745',
     marginBottom: 10
   },
-  resultSubtitle: {
+  resultsText: {
     fontSize: 18,
     color: '#1a1a1a',
     marginBottom: 5
-  },
-  resultConfidence: {
-    fontSize: 16,
-    color: '#6c757d'
-  },
-  errorContainer: {
-    backgroundColor: '#ffffff',
-    borderRadius: 12,
-    padding: 30,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#dc3545'
-  },
-  errorIcon: {
-    fontSize: 48,
-    marginBottom: 15
-  },
-  errorTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#dc3545',
-    marginBottom: 10
-  },
-  errorMessage: {
-    fontSize: 16,
-    color: '#6c757d',
-    textAlign: 'center',
-    marginBottom: 20,
-    lineHeight: 24
-  },
-  retryButton: {
-    backgroundColor: '#dc3545',
-    paddingHorizontal: 30,
-    paddingVertical: 12,
-    borderRadius: 8
-  },
-  retryButtonText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '600'
   }
 });

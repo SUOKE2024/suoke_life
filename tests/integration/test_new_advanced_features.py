@@ -1,11 +1,16 @@
+"""
+test_new_advanced_features - 索克生活项目模块
+"""
+
+from pathlib import Path
+import sys
+
 #!/usr/bin/env python3
 """
 索克生活高级功能模块测试脚本
 测试新增的区块链健康数据管理和AR体质可视化功能
 """
 
-import sys
-from pathlib import Path
 
 def test_blockchain_health_data_component():
     """测试区块链健康数据组件"""

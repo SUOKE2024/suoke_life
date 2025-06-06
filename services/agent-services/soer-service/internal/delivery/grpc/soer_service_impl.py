@@ -1,23 +1,10 @@
-#!/usr/bin/env python3
 """
-索尔服务gRPC接口实现
+soer_service_impl - 索克生活项目模块
 """
-import logging
-import time
-import uuid
-from typing import Any
-
-import grpc
 
 from api.grpc import soer_service_pb2, soer_service_pb2_grpc
 from internal.agent.agent_manager import AgentManager
 from internal.lifecycle.health_profile.profile_manager import ProfileManager
-
-# 导入生成的proto文件
-# 注：实际使用时需要先生成proto文件，此处假设已生成
-# from api.grpc.soer_service_pb2 import *
-# from api.grpc.soer_service_pb2_grpc import SoerServiceServicer, add_SoerServiceServicer_to_server
-# 导入服务
 from internal.lifecycle.health_profile.profile_service import HealthProfileService
 from internal.lifecycle.plan_generator.plan_generator import PlanGenerator
 from internal.lifecycle.plan_generator.plan_service import HealthPlanService
@@ -28,6 +15,24 @@ from internal.nutrition.recommendation.nutrition_service import NutritionService
 from internal.nutrition.recommendation.recommendation_engine import RecommendationEngine
 from pkg.utils.config_loader import get_config
 from pkg.utils.metrics import get_metrics_collector
+from typing import Any
+import grpc
+import logging
+import time
+import uuid
+
+#!/usr/bin/env python3
+"""
+索尔服务gRPC接口实现
+"""
+
+
+
+# 导入生成的proto文件
+# 注：实际使用时需要先生成proto文件，此处假设已生成
+# from api.grpc.soer_service_pb2 import *
+# from api.grpc.soer_service_pb2_grpc import SoerServiceServicer, add_SoerServiceServicer_to_server
+# 导入服务
 
 logger = logging.getLogger(__name__)
 

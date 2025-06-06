@@ -1,11 +1,16 @@
 """
+recommendation - 索克生活项目模块
+"""
+
+from datetime import date, datetime
+from typing import Dict, List, Optional, Any
+
+"""
 推荐服务
 
 提供算诊推荐相关的业务逻辑
 """
 
-from typing import Dict, List, Optional, Any
-from datetime import date, datetime
 
 
 class RecommendationService:

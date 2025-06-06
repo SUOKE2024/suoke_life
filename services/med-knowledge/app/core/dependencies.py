@@ -1,4 +1,9 @@
+"""
+dependencies - 索克生活项目模块
+"""
+
 from app.services.ai_service import AIService
+
 
 async def get_ai_service() -> AIService:
     """获取AI服务实例"""

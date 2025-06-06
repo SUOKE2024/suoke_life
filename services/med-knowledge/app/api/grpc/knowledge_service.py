@@ -1,11 +1,16 @@
+"""
+knowledge_service - 索克生活项目模块
+"""
+
+from app.api.grpc.generated import knowledge_pb2, knowledge_pb2_grpc
+from app.core.logger import get_logger
+from app.services.knowledge_service import KnowledgeService
 import grpc
+
 
 # 导入生成的gRPC模块
 # 注意:需要先使用protoc生成Python代码
 # 这里假设已经生成并放置在正确位置
-from app.api.grpc.generated import knowledge_pb2, knowledge_pb2_grpc
-from app.core.logger import get_logger
-from app.services.knowledge_service import KnowledgeService
 
 logger = get_logger()
 

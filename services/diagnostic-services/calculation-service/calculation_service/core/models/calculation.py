@@ -1,17 +1,22 @@
 """
+calculation - 索克生活项目模块
+"""
+
+from .base import CalculationBaseModel
+from .patient import BaziModel, WuxingModel
+from datetime import date, time
+from enum import Enum
+from pydantic import Field
+from typing import Dict, List, Optional
+
+"""
 算诊计算数据模型
 
 定义五运六气、八卦分析、子午流注等算诊方法的数据结构
 """
 
-from datetime import date, time
-from enum import Enum
-from typing import Dict, List, Optional
 
-from pydantic import Field
 
-from .base import CalculationBaseModel
-from .patient import BaziModel, WuxingModel
 
 
 class WuyunType(str, Enum):

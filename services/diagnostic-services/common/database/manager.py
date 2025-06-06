@@ -1,25 +1,30 @@
 """
+manager - 索克生活项目模块
+"""
+
+from ..config.settings import get_settings
+from .models import Base, Patient, DiagnosisSession, SystemLog, PerformanceMetric
+from contextlib import asynccontextmanager
+from datetime import datetime, timedelta
+from sqlalchemy import text, event
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import QueuePool
+from typing import Optional, Dict, Any, List, AsyncGenerator
+import asyncio
+import json
+import logging
+import redis.asyncio as redis
+import uuid
+
+"""
 数据库管理器
 
 提供数据库连接、会话管理、事务处理、数据访问等核心功能，
 支持异步操作和连接池管理。
 """
 
-import asyncio
-import logging
-from contextlib import asynccontextmanager
-from typing import Optional, Dict, Any, List, AsyncGenerator
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import text, event
-from sqlalchemy.pool import QueuePool
-import redis.asyncio as redis
-from datetime import datetime, timedelta
-import json
-import uuid
 
-from .models import Base, Patient, DiagnosisSession, SystemLog, PerformanceMetric
-from ..config.settings import get_settings
 
 logger = logging.getLogger(__name__)
 

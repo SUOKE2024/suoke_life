@@ -1,3 +1,18 @@
+"""
+enhanced_metrics - 索克生活项目模块
+"""
+
+            import psutil
+    from prometheus_client import Counter, Histogram, Gauge, Summary, CollectorRegistry, generate_latest
+from collections import defaultdict, deque
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Set, Callable, Union
+import asyncio
+import logging
+import threading
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,17 +21,8 @@
 专门针对消息总线的指标收集、性能监控和业务指标
 """
 
-import asyncio
-import logging
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Callable, Union
-from collections import defaultdict, deque
-import threading
 
 try:
-    from prometheus_client import Counter, Histogram, Gauge, Summary, CollectorRegistry, generate_latest
     PROMETHEUS_AVAILABLE = True
 except ImportError:
     PROMETHEUS_AVAILABLE = False
@@ -599,7 +605,6 @@ class EnhancedMetricsCollector:
     async def _collect_system_metrics(self):
         """收集系统指标"""
         try:
-            import psutil
             
             # CPU使用率
             cpu_percent = psutil.cpu_percent()

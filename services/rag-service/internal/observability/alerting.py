@@ -1,3 +1,19 @@
+"""
+alerting - 索克生活项目模块
+"""
+
+        import aiohttp
+from .metrics import MetricsCollector
+from .tracing import trace_operation, SpanKind
+from collections import deque, defaultdict
+from dataclasses import dataclass, field
+from enum import Enum
+from loguru import logger
+from typing import Dict, List, Any, Optional, Callable, Union, Tuple
+import asyncio
+import statistics
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,17 +21,7 @@
 高级监控告警系统 - 支持智能异常检测、预测性维护、自动化运维
 """
 
-import asyncio
-import time
-import statistics
-from typing import Dict, List, Any, Optional, Callable, Union, Tuple
-from dataclasses import dataclass, field
-from enum import Enum
-from collections import deque, defaultdict
-from loguru import logger
 
-from .metrics import MetricsCollector
-from .tracing import trace_operation, SpanKind
 
 class AlertSeverity(str, Enum):
     """告警严重程度"""
@@ -710,7 +716,6 @@ class WebhookNotifier:
     
     async def __call__(self, alert: Alert, action: str):
         """发送Webhook通知"""
-        import aiohttp
         
         payload = {
             "action": action,

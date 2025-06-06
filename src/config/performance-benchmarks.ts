@@ -1,6 +1,5 @@
 export const performanceConfig = ;
-{;
-  "monitoring": {
+{"monitoring": {
     "enabled": true,
     "interval": 1000,
     "bufferSize": 1000,

@@ -1,3 +1,19 @@
+"""
+api_gateway - 索克生活项目模块
+"""
+
+        import random
+from ..observability.metrics import MetricsCollector
+from ..resilience.circuit_breaker import CircuitBreakerService
+from dataclasses import dataclass, field
+from enum import Enum
+from loguru import logger
+from typing import Dict, List, Any, Optional, Union, Tuple
+import aiohttp
+import asyncio
+import grpc
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,17 +22,7 @@ API网关集成模块
 支持与其他服务的通信、协调和数据交换
 """
 
-import asyncio
-import time
-from typing import Dict, List, Any, Optional, Union, Tuple
-from dataclasses import dataclass, field
-from enum import Enum
-import aiohttp
-import grpc
-from loguru import logger
 
-from ..observability.metrics import MetricsCollector
-from ..resilience.circuit_breaker import CircuitBreakerService
 
 class ServiceType(str, Enum):
     """服务类型"""
@@ -353,7 +359,6 @@ class LoadBalancer:
     
     def _random_select(self, endpoints: List[ServiceEndpoint]) -> ServiceEndpoint:
         """随机选择"""
-        import random
         return random.choice(endpoints)
     
     def _least_connections_select(self, endpoints: List[ServiceEndpoint]) -> ServiceEndpoint:

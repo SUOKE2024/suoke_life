@@ -1,10 +1,11 @@
+import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/////      View,";
+
 import React from "react";
 import { colors, spacing } from "../../constants/theme";/import { useHealthData } from "../../hooks";/import { TabItem } from "../components/TabSelector";/import { ScreenHeader, HealthCard, TabSelector } from "../components";/////    importReact,{ useState, useMemo } from "react";
-import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/////      View,";
   StyleSheet,
   ScrollView,
   RefreshControl,
-  { Dimensions } from ";react-native"
+  { Dimensions } from ";react-native";
   HealthTrendChart,
   HealthPathwayVisualizer,
   AgentEmotionFeedback,
@@ -17,18 +18,16 @@ const cardWidth = useMemo((); => useMemo((); => useMemo((); => useMemo(;
   []
 ), []);
 export const HealthDashboard: React.FC  = () => {}
-  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor("HealthDashboard', { "'
-    trackRender: true,;
-    trackMemory: true,;
-    warnThreshold: 50, // ms //////     };);
+  // 性能监控 // const performanceMonitor = usePerformanceMonitor("HealthDashboard', { "';
+    trackRender: true,trackMemory: true,warnThreshold: 50, // ms // };);
   const { healthData, loading, refreshData   } = useHealthData;(;);
   const [selectedTab, setSelectedTab] = useState<string>("all;";);
-  // 标签页配置 //////     const tabs: TabItem[] = [{ id: "all", label: "全部"},
+  // 标签页配置 // const tabs: TabItem[] = [{ id: "all", label: "全部"},
     { id: "vital", label: "生命体征"},
     { id: "activity", label: "运动"},
     { id: "sleep", label: "睡眠"}
   ]
-  // 根据选中的标签过滤数据 //////     const getFilteredData = useMemo(() => useMemo((); => useMemo((); => useCallback((); => {[]), [])))}
+  // 根据选中的标签过滤数据 // const getFilteredData = useMemo(() => useMemo((); => useMemo((); => useCallback((); => {[]), [])))}
     switch (selectedTab) {
       case "vital":
         return healthData.filter((item: unknow;n;); =>["心率", "血压", "血糖"].includes(item.title);
@@ -44,17 +43,15 @@ export const HealthDashboard: React.FC  = () => {}
     }
   };
   const filteredData = useMemo((); => useMemo((); => useMemo((); => getFilteredData(), []);));
-  // 处理卡片点击 //////     const handleCardPress = useMemo(() => useMemo((); => useMemo((); => useCallback((data: unknown); => {[]), []);))}
-    // 这里可以导航到详细页面 //////     }
-  // 记录渲染性能 //////
-  performanceMonitor.recordRender()
-  return (
-    <ResponsiveContainer style={styles.container} />/      {// 头部 }/////          <ScreenHeader,
-        title="健康数据"
-        subtitle="实时监控您的健康状态"
-        showBackButton={true}
-        rightIcon="chart-line"
-        onRightPress={() = /> {/////              }}
+  // 处理卡片点击 // const handleCardPress = useMemo(() => useMemo((); => useMemo((); => useCallback((data: unknown); => {[]), []);))}
+    // 这里可以导航到详细页面 // }
+  // 记录渲染性能 // performanceMonitor.recordRender();
+  return (;
+    <ResponsiveContainer style={styles.container} />/      {// 头部 }/////          <ScreenHeader,title="健康数据";
+        subtitle="实时监控您的健康状态";
+        showBackButton={true};
+        rightIcon="chart-line";
+        onRightPress={() = /> {/////              }};
       />/      {// 路径可视化 }/////          <HealthPathwayVisualizer;
 currentStage={
           selectedTab === "vital"
@@ -63,7 +60,7 @@ currentStage={
             ? "regulation"
             : "health-preservation"
         }
-        onStagePress={(stage: string) = /> {/          // 可扩展：联动AI接口或页面跳转 //////     }}
+        onStagePress={(stage: string) = /> {/          // 可扩展：联动AI接口或页面跳转 // }}
       />/      {// 趋势图表 }/////          <HealthTrendChart;
 title={
           selectedTab === "vital"
@@ -74,7 +71,7 @@ title={
         data={filteredData.map((d: unknow;n;) = /> ({ date: d.date, value: d.value}))}/////            unit={
           selectedTab === "vital" ? "℃" : selectedTab === "activity" ? "步" : ""
         } />/      {// 情感反馈 }/////          <AgentEmotionFeedback;
-onFeedback={(type: string) = /> {/          // 可扩展：将反馈通过事件总线上传后端 //////     }}
+onFeedback={(type: string) = /> {/          // 可扩展：将反馈通过事件总线上传后端 // }}
       />/      {// 原有内容 }/      <View style={styles.tabContainer} />/////            <TabSelector;
 tabs={tabs}
           selectedTabId={selectedTab}
@@ -110,8 +107,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo(;
   (); => {}
     useMemo(
       (); => {}
-        useMemo(
-          () => {}
+        useMemo(() => {
             StyleSheet.create({
               container: {
                 flex: 1,

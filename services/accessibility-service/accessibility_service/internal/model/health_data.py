@@ -1,16 +1,21 @@
 """
-Health Data Models
+health_data - 索克生活项目模块
 """
 
+from .base import BaseDBModel, BaseModel
 from dataclasses import dataclass, field
 from datetime import date, datetime
 from enum import Enum
-from typing import Any
-
 from pydantic import Field
 from sqlalchemy import JSON, Column, Date, Float, Index, Integer, String
+from typing import Any
 
-from .base import BaseDBModel, BaseModel
+"""
+Health Data Models
+"""
+
+
+
 
 
 class DataType(str, Enum):
@@ -78,6 +83,18 @@ class HealthDataDB(BaseDBModel):
         Index('idx_user_source_date', 'user_id', 'source', 'record_date'),
     )
 
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'healthdatadb'
+        ordering = ['-created_at']
+
 
 class ActivityDataDB(BaseDBModel):
     """活动数据数据库模型"""
@@ -106,6 +123,18 @@ class ActivityDataDB(BaseDBModel):
     # 扩展数据
     extra_metadata = Column(JSON, default={})
     platform_id = Column(String(200), nullable=True)
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'sleepdatadb'
+        ordering = ['-created_at']
 
 
 class SleepDataDB(BaseDBModel):
@@ -137,6 +166,30 @@ class SleepDataDB(BaseDBModel):
     extra_metadata = Column(JSON, default={})
     platform_id = Column(String(200), nullable=True)
 
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'heartratedatadb'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'healthdata'
+        ordering = ['-created_at']
+
 
 class HeartRateDataDB(BaseDBModel):
     """心率数据数据库模型"""
@@ -157,6 +210,18 @@ class HeartRateDataDB(BaseDBModel):
     # 扩展数据
     extra_metadata = Column(JSON, default={})
     platform_id = Column(String(200), nullable=True)
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'activitydata'
+        ordering = ['-created_at']
 
 
 # Pydantic Models
@@ -186,6 +251,18 @@ class HealthData(BaseModel):
     created_at: datetime | None = None
     updated_at: datetime | None = None
 
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'sleepdata'
+        ordering = ['-created_at']
+
 
 class ActivityData(BaseModel):
     """活动数据"""
@@ -212,6 +289,18 @@ class ActivityData(BaseModel):
 
     created_at: datetime | None = None
     updated_at: datetime | None = None
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'heartratedata'
+        ordering = ['-created_at']
 
 
 class SleepData(BaseModel):
@@ -240,6 +329,18 @@ class SleepData(BaseModel):
 
     created_at: datetime | None = None
     updated_at: datetime | None = None
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'healthdatasummary'
+        ordering = ['-created_at']
 
 
 class HeartRateData(BaseModel):

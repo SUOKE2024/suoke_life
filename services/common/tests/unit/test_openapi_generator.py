@@ -1,14 +1,19 @@
+"""
+test_openapi_generator - 索克生活项目模块
+"""
+
+from suoke_common.api_docs.openapi_generator import (
+from unittest.mock import mock_open, patch
+import json
+import pytest
+
 #!/usr/bin/env python3
 """
 测试 OpenAPI 生成器功能
 """
 
-import json
-from unittest.mock import mock_open, patch
 
-import pytest
 
-from suoke_common.api_docs.openapi_generator import (
     APIEndpoint,
     APIParameter,
     APIResponse,

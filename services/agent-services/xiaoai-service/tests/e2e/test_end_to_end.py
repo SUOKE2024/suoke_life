@@ -1,21 +1,26 @@
-#!/usr/bin/env python3
 """
-小艾智能体端到端测试套件
-验证从用户请求到响应的完整功能流程
+test_end_to_end - 索克生活项目模块
 """
 
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
+import aiohttp
 import asyncio
 import json
 import logging
 import sys
 import time
 import uuid
-from dataclasses import dataclass
-from pathlib import Path
-from typing import Any
-
-import aiohttp
 import websockets
+
+#!/usr/bin/env python3
+"""
+小艾智能体端到端测试套件
+验证从用户请求到响应的完整功能流程
+"""
+
+
 
 # 添加项目路径
 sys.path.insert(0, Path().resolve())

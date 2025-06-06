@@ -1,3 +1,15 @@
+"""
+test_utils - 索克生活项目模块
+"""
+
+from suoke_api_gateway.core.config import Settings
+from suoke_api_gateway.utils.cache import CacheManager, CacheStats
+from suoke_api_gateway.utils.circuit_breaker import (
+from suoke_api_gateway.utils.retry import (
+from unittest.mock import AsyncMock, MagicMock, patch
+import asyncio
+import pytest
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,18 +17,11 @@
 工具模块测试
 """
 
-import asyncio
-from unittest.mock import AsyncMock, MagicMock, patch
 
-import pytest
 
-from suoke_api_gateway.core.config import Settings
-from suoke_api_gateway.utils.cache import CacheManager, CacheStats
-from suoke_api_gateway.utils.circuit_breaker import (
     CircuitBreaker, CircuitBreakerError, CircuitState,
     circuit_breaker, circuit_breaker_manager
 )
-from suoke_api_gateway.utils.retry import (
     RetryManager, RetryError, ExponentialBackoffStrategy,
     FixedDelayStrategy, retry
 )

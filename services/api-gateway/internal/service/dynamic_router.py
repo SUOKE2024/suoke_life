@@ -1,24 +1,30 @@
 """
-API网关动态路由服务
-支持服务发现、负载均衡和健康检查
+dynamic_router - 索克生活项目模块
 """
-import asyncio
-import logging
-import time
-import hashlib
-import random
-from typing import Dict, List, Optional, Any, Callable
+
+    from ...common.service_registry.consul_client import ConsulServiceRegistry
+from ...common.config.config_center import get_config_center, ServiceConfig
+from ...common.observability.tracing import get_tracing_manager, trace_function
+from ...common.service_registry.consul_client import get_consul_client, ServiceInstance
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-import aiohttp
-import json
+from typing import Dict, List, Optional, Any, Callable
 from urllib.parse import urljoin, urlparse
+import aiohttp
+import asyncio
+import hashlib
+import json
+import logging
+import random
+import time
+
+"""
+API网关动态路由服务
+支持服务发现、负载均衡和健康检查
+"""
 
 # 导入服务发现和配置中心
-from ...common.service_registry.consul_client import get_consul_client, ServiceInstance
-from ...common.config.config_center import get_config_center, ServiceConfig
-from ...common.observability.tracing import get_tracing_manager, trace_function
 
 logger = logging.getLogger(__name__)
 
@@ -374,7 +380,6 @@ def get_router(consul_client: ConsulServiceRegistry) -> DynamicRouter:
 # 使用示例
     async def main():
     """示例用法"""
-    from ...common.service_registry.consul_client import ConsulServiceRegistry
     
     # 创建Consul客户端和路由器
     consul_client = ConsulServiceRegistry()

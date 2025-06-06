@@ -1,19 +1,27 @@
 """
-User-Service 性能和压力测试
+test_performance - 索克生活项目模块
 """
-import pytest
-import pytest_asyncio
-import asyncio
-import tempfile
-import os
-import time
-import statistics
-from concurrent.futures import ThreadPoolExecutor
-from uuid import uuid4
 
+        import gc
+        import psutil
+        import random
+from concurrent.futures import ThreadPoolExecutor
+from internal.model.user import CreateUserRequest, UpdateUserRequest, BindDeviceRequest
 from internal.repository.sqlite_user_repository import SQLiteUserRepository
 from internal.service.user_service import UserService
-from internal.model.user import CreateUserRequest, UpdateUserRequest, BindDeviceRequest
+from uuid import uuid4
+import asyncio
+import os
+import pytest
+import pytest_asyncio
+import statistics
+import tempfile
+import time
+
+"""
+User-Service 性能和压力测试
+"""
+
 
 
 class TestUserServicePerformance:
@@ -215,7 +223,6 @@ class TestUserServicePerformance:
                 operations.append(('device', device_bind_operation, i))
         
         # 随机打乱操作顺序
-        import random
         random.shuffle(operations)
         
         # 执行混合工作负载
@@ -249,8 +256,6 @@ class TestUserServicePerformance:
     @pytest.mark.asyncio
     async def test_memory_usage_under_load(self, user_service):
         """测试负载下的内存使用情况"""
-        import psutil
-        import gc
         
         print(f"\n开始内存使用测试...")
         

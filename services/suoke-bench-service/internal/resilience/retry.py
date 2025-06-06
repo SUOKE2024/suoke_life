@@ -1,18 +1,23 @@
 """
-重试和错误处理模块
-
-提供智能重试机制、错误恢复和故障处理功能
+retry - 索克生活项目模块
 """
 
+from collections.abc import Callable
+from dataclasses import dataclass
+from enum import Enum
 import asyncio
 import functools
 import inspect
 import logging
 import random
 import time
-from collections.abc import Callable
-from dataclasses import dataclass
-from enum import Enum
+
+"""
+重试和错误处理模块
+
+提供智能重试机制、错误恢复和故障处理功能
+"""
+
 
 logger = logging.getLogger(__name__)
 

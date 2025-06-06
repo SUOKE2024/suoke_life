@@ -1,16 +1,21 @@
+"""
+encryption - 索克生活项目模块
+"""
+
+from cryptography.fernet import Fernet
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+import base64
+import bcrypt
+import hashlib
+import secrets
+
 #!/usr/bin/env python3
 """
 通用安全组件 - 加密和密码处理
 """
 
-import base64
-import hashlib
-import secrets
 
-import bcrypt
-from cryptography.fernet import Fernet
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 
 class EncryptionService:

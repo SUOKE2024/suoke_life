@@ -1,19 +1,24 @@
 """
+dashboard - 索克生活项目模块
+"""
+
+from ...core.database import get_session_dependency
+from ...core.models import DashboardData, ReviewStatistics
+from ...core.service import HumanReviewService
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+from sqlalchemy.ext.asyncio import AsyncSession
+from typing import Dict, List, Optional
+import structlog
+
+"""
 仪表板路由
 Dashboard Routes
 
 提供审核系统的统计数据和仪表板信息
 """
 
-from typing import Dict, List, Optional
 
-import structlog
-from fastapi import APIRouter, Depends, HTTPException, Query, status
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from ...core.database import get_session_dependency
-from ...core.models import DashboardData, ReviewStatistics
-from ...core.service import HumanReviewService
 
 logger = structlog.get_logger(__name__)
 

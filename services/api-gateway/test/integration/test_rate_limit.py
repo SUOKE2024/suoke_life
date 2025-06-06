@@ -1,3 +1,16 @@
+"""
+test_rate_limit - 索克生活项目模块
+"""
+
+from fastapi import FastAPI
+from fastapi.testclient import TestClient
+from internal.delivery.rest.middleware import RateLimitMiddleware, setup_middlewares
+from internal.model.config import MiddlewareConfig, RateLimitConfig
+import os
+import pytest
+import sys
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,19 +18,11 @@
 速率限制中间件集成测试
 """
 
-import os
-import sys
-import time
 
-import pytest
-from fastapi import FastAPI
-from fastapi.testclient import TestClient
 
 # 添加项目根目录到Python路径
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-from internal.delivery.rest.middleware import RateLimitMiddleware, setup_middlewares
-from internal.model.config import MiddlewareConfig, RateLimitConfig
 
 @pytest.fixture
 def rate_limit_config():

@@ -1,3 +1,13 @@
+"""
+final_verification - 索克生活项目模块
+"""
+
+        from internal.service.dependency_injection import DIContainer
+        from internal.service.factories.accessibility_factory import AccessibilityServiceFactory
+        from unittest.mock import Mock
+import os
+import sys
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
@@ -5,8 +15,6 @@
 索克生活无障碍服务 - 最终验证脚本
 """
 
-import sys
-import os
 
 # 添加当前目录到路径
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -19,7 +27,6 @@ def main():
 
     # 1. 测试相对导入
     try:
-        from internal.service.factories.accessibility_factory import AccessibilityServiceFactory
         print('✅ 相对导入测试通过')
         results.append(True)
     except Exception as e:
@@ -58,8 +65,6 @@ def main():
 
     # 3. 测试核心服务创建
     try:
-        from internal.service.dependency_injection import DIContainer
-        from unittest.mock import Mock
 
         container = DIContainer()
         mock_config = Mock()

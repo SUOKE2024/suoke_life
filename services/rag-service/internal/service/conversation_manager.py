@@ -1,18 +1,23 @@
 """
+conversation_manager - 索克生活项目模块
+"""
+
+from collections import defaultdict, deque
+from dataclasses import dataclass, asdict
+from datetime import datetime, timedelta
+from enum import Enum
+from loguru import logger
+from typing import Dict, List, Optional, Any, Tuple
+import json
+import uuid
+
+"""
 智能对话管理器
 
 支持多轮对话、上下文管理、对话状态跟踪和智能体协同
 """
 
-import json
-import uuid
-from datetime import datetime, timedelta
-from enum import Enum
-from typing import Dict, List, Optional, Any, Tuple
-from dataclasses import dataclass, asdict
-from collections import defaultdict, deque
 
-from loguru import logger
 
 class ConversationState(Enum):
     """对话状态"""

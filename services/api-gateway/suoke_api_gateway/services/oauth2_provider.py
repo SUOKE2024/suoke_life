@@ -1,3 +1,21 @@
+"""
+oauth2_provider - 索克生活项目模块
+"""
+
+from ..core.config import get_settings
+from ..core.logging import get_logger
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import rsa
+from dataclasses import dataclass, asdict
+from enum import Enum
+from typing import Dict, Any, Optional, List, Set
+from urllib.parse import urlencode, parse_qs, urlparse
+import base64
+import hashlib
+import jwt
+import secrets
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -7,21 +25,8 @@ OAuth2/OIDC 认证提供者
 实现标准的 OAuth2 授权码流程和 OIDC 协议。
 """
 
-import time
-import hashlib
-import secrets
-import base64
-from typing import Dict, Any, Optional, List, Set
-from dataclasses import dataclass, asdict
-from enum import Enum
-from urllib.parse import urlencode, parse_qs, urlparse
 
-import jwt
-from cryptography.hazmat.primitives import serialization
-from cryptography.hazmat.primitives.asymmetric import rsa
 
-from ..core.logging import get_logger
-from ..core.config import get_settings
 
 logger = get_logger(__name__)
 settings = get_settings()

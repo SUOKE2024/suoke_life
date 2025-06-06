@@ -1,9 +1,14 @@
+"""
+event_publisher - 索克生活项目模块
+"""
+
+from services.common.messaging.event_bus import EventBus
+
 # -*- coding: utf-8 -*-
 """
 诊断服务事件发布器示例
 诊断完成后发布诊断结果事件到消息队列（Kafka/RabbitMQ）
 """
-from services.common.messaging.event_bus import EventBus
 
 event_bus = EventBus(backend='kafka', config={})
 

@@ -1,3 +1,16 @@
+"""
+metrics - 索克生活项目模块
+"""
+
+        import platform
+        import sys
+from ..core.logging import get_logger
+from collections import defaultdict, deque
+from prometheus_client import (
+from threading import Lock
+from typing import Dict, List, Optional, Set
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -7,17 +20,11 @@
 实现 Prometheus 指标导出和自定义指标收集。
 """
 
-import time
-from typing import Dict, List, Optional, Set
-from collections import defaultdict, deque
-from threading import Lock
 
-from prometheus_client import (
     Counter, Histogram, Gauge, Info, Enum,
     CollectorRegistry, generate_latest, CONTENT_TYPE_LATEST
 )
 
-from ..core.logging import get_logger
 
 logger = get_logger(__name__)
 
@@ -316,8 +323,6 @@ class MetricsManager:
         self._start_time = time.time()
         
         # 设置系统信息
-        import platform
-        import sys
         
         self.collector.set_system_info({
             'version': '0.1.0',

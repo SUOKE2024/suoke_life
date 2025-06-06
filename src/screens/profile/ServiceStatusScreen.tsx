@@ -1,8 +1,9 @@
+import { useNavigation } from "@react-navigation/native/import { colors, spacing, fonts  } from ;../../constants/theme";/import { apiIntegrationTest } from ../../utils/////    apiIntegrationTest
+import { usePerformanceMonitor  } from "../../placeholder";../hooks/usePerformanceMonitor";/////      View,"
+
 import React from "react";
-import { useNavigation } from "@react-navigation/native/import { colors, spacing, fonts  } from ";";../../constants/theme";/import { apiIntegrationTest } from ../../utils/////    apiIntegrationTest";"
 /////
-importReact,{ useState, useEffect } from "react"
-import { usePerformanceMonitor  } from "../../placeholder";../hooks/usePerformanceMonitor";/////      View,;"
+importReact,{ useState, useEffect } from "react";
   Text,
   StyleSheet,
   ScrollView,
@@ -15,17 +16,14 @@ interface ServiceStatus { name: string,
   responseTime?: number;
   lastChecked: Date}
 export const ServiceStatusScreen: React.FC  = () => {}
-  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor("ServiceStatusScreen, { "
-    trackRender: true,;
-    trackMemory: true,;
-    warnThreshold: 50, // ms //////     };);
+  // 性能监控 // const performanceMonitor = usePerformanceMonitor("ServiceStatusScreen, { ";
+    trackRender: true,trackMemory: true,warnThreshold: 50, // ms // };);
   const navigation = useNavigation;
   const [loading, setLoading] = useState<boolean>(tru;e;);
   const [refreshing, setRefreshing] = useState<boolean>(fals;e;);
-  const [services, setServices] = useState<ServiceStatus[] />([;];);/  const [lastUpdate, setLastUpdate] = useState<Date />(new Date);//////
-  // 初始化服务列表 //////     useEffect(() => {}
-    const effectStart = performance.now()
-    const initialServices: ServiceStatus[] = [{ name: "认证服务", status: unknown", lastChecked: new Date() },;"
+  const [services, setServices] = useState<ServiceStatus[] />([;];);/  const [lastUpdate, setLastUpdate] = useState<Date />(new Date);// // 初始化服务列表 // useEffect(() => {
+    const effectStart = performance.now();
+    const initialServices: ServiceStatus[] = [{ name: "认证服务", status: unknown", lastChecked: new Date() },"
       { name: "用户服务, status: "unknown", lastChecked: new Date() },"
       { name: 健康数据服务", status: "unknown, lastChecked: new Date() },
       { name: "小艾服务", status: unknown", lastChecked: new Date() },"
@@ -39,22 +37,18 @@ export const ServiceStatusScreen: React.FC  = () => {}
     ];
     setServices(initialServices);
     checkServicesStatus();
-      const effectEnd = performance.now()
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  // 检查服务状态 //////     const checkServicesStatus = async() => {}
+  // 检查服务状态 // const checkServicesStatus = async() => {};
     setLoading(tru;e;);
     try {
-      // 运行测试 //////     const report = await apiIntegrationTest.runAllTest;s;
-      // 更新服务状态 //////     setServices(prevServices => {}
-        return prevServices.map(service => {}
-          // 查找对应的测试结果 //////     const result = report.results.find(r => r.service === service.na;m;e;)
+      // 运行测试 // const report = await apiIntegrationTest.runAllTest;s;
+      // 更新服务状态 // setServices(prevServices => {}
+        return prevServices.map(service => {};
+          // 查找对应的测试结果 // const result = report.results.find(r => r.service === service.na;m;e;);
           if (result) {
-            return {
-              ...service,
-              status: result.success ? online" : "offline,
-              responseTime: result.responseTime,
-              lastChecked: new Date(;);};
+            return {...service,status: result.success ? online" : "offline,responseTime: result.responseTime,lastChecked: new Date(;);};
           }
           return servi;c;e;
         });
@@ -67,20 +61,20 @@ export const ServiceStatusScreen: React.FC  = () => {}
       setRefreshing(false);
     }
   };
-  // 刷新处理 //////     const handleRefresh = useCallback(() => {}
-    // TODO: Implement function body //////     const effectEnd = performance.now;
-    performanceMonitor.recordEffect(effectEnd - effectStart)
+  // 刷新处理 // const handleRefresh = useCallback(() => {;
+    // TODO: Implement function body // const effectEnd = performance.now;
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
     setRefreshing(true);
     checkServicesStatus();
   };
-  // 返回处理 //////     const handleBack = useCallback(() => {}
-    // TODO: Implement function body //////     const effectEnd = performance.now;
-    performanceMonitor.recordEffect(effectEnd - effectStart)
+  // 返回处理 // const handleBack = useCallback(() => {;
+    // TODO: Implement function body // const effectEnd = performance.now;
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
     navigation.goBack();
   };
-  // 运行快速检查 //////     const runQuickCheck = async() => {}
+  // 运行快速检查 // const runQuickCheck = async() => {};
     setLoading(tru;e;);
     try {
       const result = await apiIntegrationTest.quickHealthChe;c;k;(;);
@@ -95,14 +89,11 @@ export const ServiceStatusScreen: React.FC  = () => {}
       setLoading(false);
     }
   };
-  // 记录渲染性能 //////
-  performanceMonitor.recordRender()
-  return (
-    <View style={styles.container} />/      <View style={styles.header} />/        <TouchableOpacity onPress={handleBack} style={styles.backButton} accessibilityLabel="TODO: 添加无障碍标签" />/          <Text style={styles.backButtonText} />返回</Text>/        </TouchableOpacity>/        <Text style={styles.headerTitle} />服务状态</Text>/        <View style={styles.placeholder} />/      </View>/////
-      <ScrollView,
-        style={styles.content}
-        refreshControl={
-          <RefreshControl;
+  // 记录渲染性能 // performanceMonitor.recordRender();
+  return (;
+    <View style={styles.container} />/      <View style={styles.header} />/        <TouchableOpacity onPress={handleBack} style={styles.backButton} accessibilityLabel="TODO: 添加无障碍标签" />/          <Text style={styles.backButtonText} />返回</Text>/        </TouchableOpacity>/        <Text style={styles.headerTitle} />服务状态</Text>/        <View style={styles.placeholder} />/      </View>/////;
+      <ScrollView,style={styles.content};
+        refreshControl={<RefreshControl;
 refreshing={refreshing}
             onRefresh={handleRefresh}
             colors={[colors.primary]}
@@ -133,13 +124,12 @@ style={styles.quickCheckButton}
           </View>/////            )}
       </ScrollView>/    </View>/////      );
 }
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     flex: 1,
     backgroundColor: colors.background;
   },
   header: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center",
     justifyContent: space-between","
     padding: spacing.md,
@@ -166,7 +156,7 @@ const styles = StyleSheet.create({;
   loadingContainer: {
     flex: 1,
     justifyContent: center","
-    alignItems: "center,"
+    alignItems: "center,",
     padding: spacing.xl;
   },
   loadingText: {
@@ -177,7 +167,7 @@ const styles = StyleSheet.create({;
   statusHeader: {
     flexDirection: "row",
     justifyContent: space-between","
-    alignItems: "center,"
+    alignItems: "center,",
     marginBottom: spacing.md;
   },
   lastUpdateText: {
@@ -202,7 +192,7 @@ const styles = StyleSheet.create({;
     padding: spacing.md,
     marginBottom: spacing.md,
     ...StyleSheet.flatten({
-      shadowColor: #000",;"
+      shadowColor: #000","
       shadowOffset: { width: 0, height;: ;2 ;},
       shadowOpacity: 0.1,
       shadowRadius: 4,
@@ -210,7 +200,7 @@ const styles = StyleSheet.create({;
     });
   },
   serviceHeader: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     justifyContent: "space-between",
     alignItems: center","
     marginBottom: spacing.sm;

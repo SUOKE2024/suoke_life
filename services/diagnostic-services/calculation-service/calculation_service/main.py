@@ -1,19 +1,25 @@
 """
-算诊服务主应用
-
-提供中医五诊中"算诊"功能的微服务
+main - 索克生活项目模块
 """
-
-import logging
-import uvicorn
-from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware
-from contextlib import asynccontextmanager
 
 from .api.routes import router
 from .config.settings import get_settings
 from .middleware import LoggingMiddleware, ErrorHandlerMiddleware, RateLimiterMiddleware
 from .utils.cache import cache_manager
+from contextlib import asynccontextmanager
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
+import logging
+import uvicorn
+
+"""
+算诊服务主应用
+
+提供中医五诊中"算诊"功能的微服务
+"""
+
+
 
 # 配置日志
 logging.basicConfig(
@@ -57,6 +63,9 @@ async def lifespan(app: FastAPI):
 
 # 创建FastAPI应用
 app = FastAPI(
+
+# 性能优化: 添加响应压缩
+app.add_middleware(GZipMiddleware, minimum_size=1000)
     title="索克生活 - 算诊服务",
     description="""
     中医五诊中的"算诊"功能微服务
@@ -115,6 +124,8 @@ app.add_middleware(
 # 注册路由
 app.include_router(router)
 
+@cache(expire=300)  # 5分钟缓存
+@limiter.limit("100/minute")  # 每分钟100次请求
 @app.get("/", summary="服务根路径")
 async def root():
     """服务根路径"""
@@ -139,7 +150,9 @@ async def root():
         ],
         "docs": "/docs",
         "health": "/api/v1/calculation/health",
-        "cache_enabled": settings.ENABLE_CACHE
+        "cache_enabled": s@cache(expire=@limiter.limit("100/minute")  # 每分钟100次请求
+300)  # 5分钟缓存
+ettings.ENABLE_CACHE
     }
 
 @app.get("/ping", summary="服务状态检查")
@@ -155,7 +168,8 @@ async def cache_stats():
     
     stats = cache_manager.get_stats()
     return {
-        "success": True,
+   @limiter.limit("100/minute")  # 每分钟100次请求
+     "success": True,
         "data": stats,
         "message": "缓存统计信息获取成功"
     }
@@ -164,7 +178,8 @@ async def cache_stats():
 async def clear_cache():
     """清理所有缓存"""
     if not settings.ENABLE_CACHE:
-        return {"message": "缓存未启用"}
+        retur@limiter.limit("100/minute")  # 每分钟100次请求
+n {"message": "缓存未启用"}
     
     cache_manager.clear()
     return {

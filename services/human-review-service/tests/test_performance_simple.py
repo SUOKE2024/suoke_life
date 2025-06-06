@@ -1,16 +1,21 @@
 """
+test_performance_simple - 索克生活项目模块
+"""
+
+from datetime import datetime, timezone
+from human_review_service.core.performance import (
+from unittest.mock import AsyncMock, Mock, patch
+import asyncio
+import pytest
+
+"""
 简化性能模块测试
 Simplified Performance Module Tests
 
 只测试实际存在的性能相关功能
 """
 
-import pytest
-import asyncio
-from unittest.mock import AsyncMock, Mock, patch
-from datetime import datetime, timezone
 
-from human_review_service.core.performance import (
     CacheManager,
     QueryOptimizer,
     PerformanceMonitor,

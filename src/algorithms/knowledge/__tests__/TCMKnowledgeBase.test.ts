@@ -1,18 +1,17 @@
-import React from "react";
-import { performance } from "perf_hooks";
-import TCMKnowledgeBase from "../TCMKnowledgeBase";
+import React from 'react';
+import TCMKnowledgeBase from '../TCMKnowledgeBase';
 
 beforeEach(() => {
   jest.clearAllMocks();
 });
 
-describe("TCMKnowledgeBase", () => {
-  it("should work with valid inputs", () => {
+describe('TCMKnowledgeBase', () => {
+  it('should work with valid inputs', () => {
     // Add test cases
     const config = {
-      version: "1.0.0",
+      version: '1.0.0',
       updateInterval: 3600000,
-      sources: ["test"],
+      sources: ['test'],
       caching: {
         enabled: true,
         ttl: 3600,
@@ -23,10 +22,10 @@ describe("TCMKnowledgeBase", () => {
     expect(result).toBeDefined();
   });
 
-  it("should handle edge cases", () => {
+  it('should handle edge cases', () => {
     // Add test cases
     const config = {
-      version: "1.0.0",
+      version: '1.0.0',
       updateInterval: 3600000,
       sources: [],
       caching: {
@@ -39,13 +38,13 @@ describe("TCMKnowledgeBase", () => {
     expect(result).toBeDefined();
   });
 
-  it("should handle invalid inputs gracefully", () => {
+  it('should handle invalid inputs gracefully', () => {
     // Add test cases
     expect(() => {
       const config = {
-        version: "1.0.0",
+        version: '1.0.0',
         updateInterval: 3600000,
-        sources: ["test"],
+        sources: ['test'],
         caching: {
           enabled: true,
           ttl: 3600,
@@ -56,12 +55,12 @@ describe("TCMKnowledgeBase", () => {
     }).not.toThrow();
   });
 
-  it("should return correct output format", () => {
-    // Add test cases
+  it('should return correct output format', () => {
+    // Add test cases;
     const config = {
-      version: "1.0.0",
+      version: '1.0.0',
       updateInterval: 3600000,
-      sources: ["test"],
+      sources: ['test'],
       caching: {
         enabled: true,
         ttl: 3600,
@@ -72,12 +71,12 @@ describe("TCMKnowledgeBase", () => {
     expect(result).toBeDefined();
   });
 
-  it("should handle performance requirements", () => {
+  it('should handle performance requirements', () => {
     const start = performance.now();
     const config = {
-      version: "1.0.0",
+      version: '1.0.0',
       updateInterval: 3600000,
-      sources: ["test"],
+      sources: ['test'],
       caching: {
         enabled: true,
         ttl: 3600,
@@ -92,16 +91,16 @@ describe("TCMKnowledgeBase", () => {
   });
 });
 
-describe("TCMKnowledgeBase Performance Tests", () => {
-  it("should execute within performance thresholds", () => {
+describe('TCMKnowledgeBase Performance Tests', () => {
+  it('should execute within performance thresholds', () => {
     const iterations = 10;
     const startTime = performance.now();
     for (let i = 0; i < iterations; i++) {
       // Execute performance-critical functions
       const config = {
-        version: "1.0.0",
+        version: '1.0.0',
         updateInterval: 3600000,
-        sources: ["test"],
+        sources: ['test'],
         caching: {
           enabled: true,
           ttl: 3600,
@@ -116,12 +115,12 @@ describe("TCMKnowledgeBase Performance Tests", () => {
     expect(averageTime).toBeLessThan(100);
   });
 
-  it("should handle large datasets efficiently", () => {
+  it('should handle large datasets efficiently', () => {
     const largeDataset = new Array(1000).fill(0).map((_, i) => `source-${i}`);
     const startTime = performance.now();
     // Test with large dataset
     const config = {
-      version: "1.0.0",
+      version: '1.0.0',
       updateInterval: 3600000,
       sources: largeDataset,
       caching: {
@@ -136,14 +135,14 @@ describe("TCMKnowledgeBase Performance Tests", () => {
     expect(endTime - startTime).toBeLessThan(1000);
   });
 
-  it("should not cause memory leaks", () => {
+  it('should not cause memory leaks', () => {
     const initialMemory = process.memoryUsage().heapUsed;
     // Execute function multiple times
     for (let i = 0; i < 100; i++) {
       const config = {
-        version: "1.0.0",
+        version: '1.0.0',
         updateInterval: 3600000,
-        sources: ["test"],
+        sources: ['test'],
         caching: {
           enabled: true,
           ttl: 3600,

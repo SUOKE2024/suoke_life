@@ -1,17 +1,22 @@
 """
+assignment_engine - 索克生活项目模块
+"""
+
+from .models import ReviewerDB, ReviewerStatus, ReviewPriority, ReviewTaskDB, ReviewType
+from sqlalchemy import and_, or_, select
+from sqlalchemy.ext.asyncio import AsyncSession
+from typing import Any, Dict, List, Optional
+import structlog
+
+"""
 任务分配引擎
 Assignment Engine
 
 用于智能分配审核任务给合适的审核员
 """
 
-from typing import Any, Dict, List, Optional
 
-import structlog
-from sqlalchemy import and_, or_, select
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from .models import ReviewerDB, ReviewerStatus, ReviewPriority, ReviewTaskDB, ReviewType
 
 logger = structlog.get_logger(__name__)
 

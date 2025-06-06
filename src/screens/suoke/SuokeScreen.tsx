@@ -1,17 +1,17 @@
+import {import { SafeAreaView } from "react-native-safe-area-context";
+import { useNavigation } from "@react-navigation/native";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { colors, spacing, typography } from "../../constants/theme";
+
 import React, { useState, useEffect } from "react";
-import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
   Alert,
-  ActivityIndicator,
+  ActivityIndicator
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useNavigation } from "@react-navigation/native";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { colors, spacing, typography } from "../../constants/theme";
 
 interface ServiceItem {
   id: string;
@@ -30,19 +30,10 @@ const SuokeScreen: React.FC = () => {
 
   useEffect(() => {
     loadServices();
-  }, []);
+  }, [])  // 检查是否需要添加依赖项;
 
-  const loadServices = async () => {
-    try {
-      const mockServices: ServiceItem[] = [
-        {
-          id: "medical-resource",
-          title: "医疗资源管理",
-          description: "智能搜索和管理医疗资源，预约医疗服务",
-          icon: "hospital-box",
-          status: "active",
-          lastUpdate: "2024-01-15 10:30",
-          action: () => navigateToMedicalResources(),
+  const loadServices = async () => {try {const mockServices: ServiceItem[] = [;
+        {id: "medical-resource",title: "医疗资源管理",description: "智能搜索和管理医疗资源，预约医疗服务",icon: "hospital-box",status: "active",lastUpdate: "2024-01-15 10:30",action: () => navigateToMedicalResources();
         },
         {
           id: "appointment-management",
@@ -51,7 +42,7 @@ const SuokeScreen: React.FC = () => {
           icon: "calendar-clock",
           status: "active",
           lastUpdate: "2024-01-15 09:45",
-          action: () => navigateToAppointments(),
+          action: () => navigateToAppointments();
         },
         {
           id: "health-monitoring",
@@ -60,7 +51,7 @@ const SuokeScreen: React.FC = () => {
           icon: "heart-pulse",
           status: "active",
           lastUpdate: "2024-01-15 09:45",
-          action: () => navigateToHealthMonitoring(),
+          action: () => navigateToHealthMonitoring();
         },
         {
           id: "tcm-diagnosis",
@@ -69,7 +60,7 @@ const SuokeScreen: React.FC = () => {
           icon: "medical-bag",
           status: "active",
           lastUpdate: "2024-01-15 10:30",
-          action: () => navigateToTCMDiagnosis(),
+          action: () => navigateToTCMDiagnosis();
         },
         {
           id: "agent-coordination",
@@ -78,7 +69,7 @@ const SuokeScreen: React.FC = () => {
           icon: "account-group",
           status: "active",
           lastUpdate: "2024-01-15 08:20",
-          action: () => navigateToAgentCoordination(),
+          action: () => navigateToAgentCoordination();
         },
         {
           id: "data-analysis",
@@ -87,10 +78,10 @@ const SuokeScreen: React.FC = () => {
           icon: "chart-line",
           status: "maintenance",
           lastUpdate: "2024-01-14 16:00",
-          action: () => navigateToDataAnalysis(),
-        },
+          action: () => navigateToDataAnalysis();
+        };
       ];
-      
+
       setServices(mockServices);
     } catch (error) {
       Alert.alert("错误", "加载服务列表失败，请稍后重试");
@@ -100,49 +91,40 @@ const SuokeScreen: React.FC = () => {
   };
 
   // 导航到医疗资源页面
-  const navigateToMedicalResources = () => {
-    // 导航到Life标签页的医疗资源部分
+  const navigateToMedicalResources = () => {// 导航到Life标签页的医疗资源部分;
     navigation.navigate("Life" as never);
   };
 
   // 导航到预约管理页面
-  const navigateToAppointments = () => {
-    // 导航到Life标签页的预约管理部分
+  const navigateToAppointments = () => {// 导航到Life标签页的预约管理部分;
     navigation.navigate("Life" as never);
   };
 
   // 导航到健康监测页面
-  const navigateToHealthMonitoring = () => {
-    Alert.alert("健康监测", "即将打开健康监测面板");
+  const navigateToHealthMonitoring = () => {Alert.alert("健康监测", "即将打开健康监测面板");
   };
 
   // 导航到中医诊断页面
-  const navigateToTCMDiagnosis = () => {
-    Alert.alert("中医诊断", "即将启动中医辨证诊断功能");
+  const navigateToTCMDiagnosis = () => {Alert.alert("中医诊断", "即将启动中医辨证诊断功能");
   };
 
   // 导航到智能体协调页面
-  const navigateToAgentCoordination = () => {
-    Alert.alert("智能体协调", "即将打开智能体管理界面");
+  const navigateToAgentCoordination = () => {Alert.alert("智能体协调", "即将打开智能体管理界面");
   };
 
   // 导航到数据分析页面
-  const navigateToDataAnalysis = () => {
-    Alert.alert("数据分析", "即将打开数据分析报告");
+  const navigateToDataAnalysis = () => {Alert.alert("数据分析", "即将打开数据分析报告");
   };
 
   // 搜索附近医院
-  const searchNearbyHospitals = () => {
-    Alert.alert("搜索附近医院", "正在搜索您附近的医疗机构...");
+  const searchNearbyHospitals = () => {Alert.alert("搜索附近医院", "正在搜索您附近的医疗机构...");
     // 这里可以集成实际的搜索功能
     setTimeout(() => {
       navigation.navigate("Life" as never);
     }, 1000);
   };
 
-  const handleServicePress = (service: ServiceItem) => {
-    if (service.status === "maintenance") {
-      Alert.alert("服务维护中", `${service.title} 正在维护，请稍后再试`);
+  const handleServicePress = (service: ServiceItem) => {if (service.status === "maintenance") {Alert.alert("服务维护中", `${service.title} 正在维护，请稍后再试`);
       return;
     }
 
@@ -153,10 +135,7 @@ const SuokeScreen: React.FC = () => {
     }
   };
 
-  const getStatusColor = (status: ServiceItem["status"]) => {
-    switch (status) {
-      case "active":
-        return colors.success;
+  const getStatusColor = (status: ServiceItem["status"]) => {switch (status) {case "active":return colors.success;
       case "inactive":
         return colors.error;
       case "maintenance":
@@ -166,10 +145,7 @@ const SuokeScreen: React.FC = () => {
     }
   };
 
-  const getStatusText = (status: ServiceItem["status"]) => {
-    switch (status) {
-      case "active":
-        return "运行中";
+  const getStatusText = (status: ServiceItem["status"]) => {switch (status) {case "active":return "运行中";
       case "inactive":
         return "已停止";
       case "maintenance":
@@ -190,32 +166,32 @@ const SuokeScreen: React.FC = () => {
         <View style={styles.serviceIconContainer}>
           <Icon name={service.icon} size={24} color={colors.primary} />
         </View>
-        <View style={styles.serviceInfo}>
-          <Text style={styles.serviceTitle}>{service.title}</Text>
-          <Text style={styles.serviceDescription}>{service.description}</Text>
-        </View>
-        <View style={styles.serviceStatus}>
-          <View style={[styles.statusIndicator, { backgroundColor: getStatusColor(service.status) }]} />
-          <Text style={[styles.statusText, { color: getStatusColor(service.status) }]}>
-            {getStatusText(service.status)}
-          </Text>
-        </View>
-      </View>
-      <View style={styles.serviceFooter}>
-        <Text style={styles.lastUpdateText}>最后更新: {service.lastUpdate}</Text>
-        <Icon name="chevron-right" size={20} color={colors.textSecondary} />
-      </View>
-    </TouchableOpacity>
+        <View style={styles.serviceInfo}>;
+          <Text style={styles.serviceTitle}>{service.title}</Text>;
+          <Text style={styles.serviceDescription}>{service.description}</Text>;
+        </View>;
+        <View style={styles.serviceStatus}>;
+          <View style={[styles.statusIndicator, { backgroundColor: getStatusColor(service.status) }]} />;
+          <Text style={[styles.statusText, { color: getStatusColor(service.status) }]}>;
+            {getStatusText(service.status)};
+          </Text>;
+        </View>;
+      </View>;
+      <View style={styles.serviceFooter}>;
+        <Text style={styles.lastUpdateText}>最后更新: {service.lastUpdate}</Text>;
+        <Icon name="chevron-right" size={20} color={colors.textSecondary} />;
+      </View>;
+    </TouchableOpacity>;
   );
 
   if (loading) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={colors.primary} />
-          <Text style={styles.loadingText}>正在加载服务...</Text>
-        </View>
-      </SafeAreaView>
+    return (;
+      <SafeAreaView style={styles.container}>;
+        <View style={styles.loadingContainer}>;
+          <ActivityIndicator size="large" color={colors.primary} />;
+          <Text style={styles.loadingText}>正在加载服务...</Text>;
+        </View>;
+      </SafeAreaView>;
     );
   }
 
@@ -244,7 +220,7 @@ const SuokeScreen: React.FC = () => {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* 医疗服务快捷入口 */}
+        {// 医疗服务快捷入口}
         <View style={styles.quickActionsSection}>
           <Text style={styles.sectionTitle}>医疗服务快捷入口</Text>
           <View style={styles.quickActionsContainer}>
@@ -272,97 +248,97 @@ const SuokeScreen: React.FC = () => {
           </View>
         </View>
 
-        {/* 管理的服务 */}
+        {// 管理的服务}
         <View style={styles.servicesSection}>
           <Text style={styles.sectionTitle}>管理的服务</Text>
           {services.map(renderServiceCard)}
         </View>
 
-        {/* 服务统计 */}
+        {// 服务统计}
         <View style={styles.statsSection}>
           <Text style={styles.sectionTitle}>服务统计</Text>
           <View style={styles.statsContainer}>
-            <View style={styles.statItem}>
-              <Text style={styles.statValue}>{services.filter(s => s.status === "active").length}</Text>
-              <Text style={styles.statLabel}>运行中</Text>
-            </View>
-            <View style={styles.statItem}>
-              <Text style={styles.statValue}>{services.filter(s => s.status === "maintenance").length}</Text>
-              <Text style={styles.statLabel}>维护中</Text>
-            </View>
-            <View style={styles.statItem}>
-              <Text style={styles.statValue}>{services.length}</Text>
-              <Text style={styles.statLabel}>总服务</Text>
-            </View>
-          </View>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+            <View style={styles.statItem}>;
+              <Text style={styles.statValue}>{services.filter(s => s.status === "active").length}</Text>;
+              <Text style={styles.statLabel}>运行中</Text>;
+            </View>;
+            <View style={styles.statItem}>;
+              <Text style={styles.statValue}>{services.filter(s => s.status === "maintenance").length}</Text>;
+              <Text style={styles.statLabel}>维护中</Text>;
+            </View>;
+            <View style={styles.statItem}>;
+              <Text style={styles.statValue}>{services.length}</Text>;
+              <Text style={styles.statLabel}>总服务</Text>;
+            </View>;
+          </View>;
+        </View>;
+      </ScrollView>;
+    </SafeAreaView>;
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: colors.background
   },
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   loadingText: {
     marginTop: spacing.md,
     fontSize: typography.fontSize.base,
-    color: colors.textSecondary,
+    color: colors.textSecondary
   },
   header: {
     backgroundColor: colors.surface,
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.border
   },
   headerContent: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   agentInfo: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "center"
   },
   agentEmoji: {
     fontSize: 32,
-    marginRight: spacing.md,
+    marginRight: spacing.md
   },
   agentName: {
     fontSize: typography.fontSize["2xl"],
     fontWeight: "700",
-    color: colors.textPrimary,
+    color: colors.textPrimary
   },
   agentRole: {
     fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
+    color: colors.textSecondary
   },
   settingsButton: {
-    padding: spacing.sm,
+    padding: spacing.sm
   },
   headerDescription: {
     fontSize: typography.fontSize.base,
     color: colors.textSecondary,
-    lineHeight: 20,
+    lineHeight: 20
   },
   scrollView: {
-    flex: 1,
+    flex: 1
   },
   scrollContent: {
-    paddingVertical: spacing.lg,
+    paddingVertical: spacing.lg
   },
   quickActionsSection: {
     paddingHorizontal: spacing.lg,
-    marginBottom: spacing.xl,
+    marginBottom: spacing.xl
   },
   quickActionsContainer: {
     flexDirection: "row",
@@ -371,27 +347,27 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: spacing.lg,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.border
   },
   quickActionButton: {
     alignItems: "center",
-    padding: spacing.sm,
+    padding: spacing.sm
   },
   quickActionText: {
     fontSize: typography.fontSize.sm,
     color: colors.text,
     marginTop: spacing.xs,
-    textAlign: "center",
+    textAlign: "center"
   },
   servicesSection: {
     paddingHorizontal: spacing.lg,
-    marginBottom: spacing.xl,
+    marginBottom: spacing.xl
   },
   sectionTitle: {
     fontSize: typography.fontSize.lg,
     fontWeight: "600",
     color: colors.text,
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   serviceCard: {
     backgroundColor: colors.surface,
@@ -399,12 +375,12 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     marginBottom: spacing.md,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.border
   },
   serviceHeader: {
     flexDirection: "row",
     alignItems: "flex-start",
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   serviceIconContainer: {
     width: 40,
@@ -413,35 +389,35 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primaryLight,
     justifyContent: "center",
     alignItems: "center",
-    marginRight: spacing.md,
+    marginRight: spacing.md
   },
   serviceInfo: {
     flex: 1,
-    marginRight: spacing.md,
+    marginRight: spacing.md
   },
   serviceTitle: {
     fontSize: typography.fontSize.base,
     fontWeight: "600",
     color: colors.text,
-    marginBottom: 4,
+    marginBottom: 4
   },
   serviceDescription: {
     fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
-    lineHeight: 16,
+    lineHeight: 16
   },
   serviceStatus: {
-    alignItems: "flex-end",
+    alignItems: "flex-end"
   },
   statusIndicator: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    marginBottom: 4,
+    marginBottom: 4
   },
   statusText: {
     fontSize: typography.fontSize.xs,
-    fontWeight: "600",
+    fontWeight: "600"
   },
   serviceFooter: {
     flexDirection: "row",
@@ -449,14 +425,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: spacing.sm,
     borderTopWidth: 1,
-    borderTopColor: colors.border,
+    borderTopColor: colors.border
   },
   lastUpdateText: {
     fontSize: typography.fontSize.xs,
-    color: colors.textSecondary,
+    color: colors.textSecondary
   },
   statsSection: {
-    paddingHorizontal: spacing.lg,
+    paddingHorizontal: spacing.lg
   },
   statsContainer: {
     flexDirection: "row",
@@ -464,22 +440,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderRadius: 12,
     padding: spacing.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  statItem: {
-    alignItems: "center",
-  },
-  statValue: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: colors.primary,
-    marginBottom: 4,
-  },
-  statLabel: {
-    fontSize: typography.fontSize.xs,
-    color: colors.textSecondary,
-  },
+    borderWidth: 1,borderColor: colors.border;
+  },statItem: {alignItems: "center";
+  },statValue: {fontSize: 24,fontWeight: "bold",color: colors.primary,marginBottom: 4;
+  },statLabel: {fontSize: typography.fontSize.xs,color: colors.textSecondary;
+  };
 });
 
 export default SuokeScreen;

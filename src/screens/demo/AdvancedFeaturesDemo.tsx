@@ -1,42 +1,40 @@
+import { graphqlClient } from "../../services/graphql/client/import { offlineManager  } from ;../../services/offline/offlineManager";/import { createWebSocketManager, WebSocketManager } from ../../services/websocket/websocketManager"/import { memoryCache, persistentCache, apiCache } from "../../services/cache/////    cacheManager
+import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/////      View,"
+
 import React from "react";
-import { graphqlClient } from "../../services/graphql/client/import { offlineManager  } from ";";../../services/offline/offlineManager";/import { createWebSocketManager, WebSocketManager } from ../../services/websocket/websocketManager"/import { memoryCache, persistentCache, apiCache } from "../../services/cache/////    cacheManager";"
-/////    ";"
-//////     索克生活 - 高级功能演示界面   展示GraphQL API、离线模式、WebSocket实时通信和缓存策略
+/////    
+// 索克生活 - 高级功能演示界面   展示GraphQL API、离线模式、WebSocket实时通信和缓存策略
 importReact,{ useState, useEffect, useCallback } from ";react";
-import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/////      View,;"
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
   TextInput,
   Alert,
-  { Switch } from "react-native;"
+  { Switch } from "react-native;";
 interface DemoState {
-  // GraphQL状态 //////     graphqlConnected: boolean,
+  // GraphQL状态 // graphqlConnected: boolean,
   graphqlLoading: boolean,
   graphqlResult: string;
-  // 离线模式状态 //////     offlineInitialized: boolean,
+  // 离线模式状态 // offlineInitialized: boolean,
   syncStatus: string,
   operationCount: number,
   conflictCount: number;
-  // WebSocket状态 //////     wsConnected: boolean,
+  // WebSocket状态 // wsConnected: boolean,
   wsLatency: number,
   wsMessages: string[]
-  // 缓存状态 //////     cacheStats: { memory: unknown,
+  // 缓存状态 // cacheStats: { memory: unknown,
     persistent: unknown,
     api: unknown}
 }
 export const AdvancedFeaturesDemo: React.FC  = () => {}
-  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor(""
-AdvancedFeaturesDemo", { "
-    trackRender: true,;
-    trackMemory: true,;
-    warnThreshold: 50, // ms //////     };)
-  const [state, setState] = useState<DemoState />({/////        graphqlConnected: false,;
-    graphqlLoading: false,
-    graphqlResult: ","
+  // 性能监控 // const performanceMonitor = usePerformanceMonitor("";
+AdvancedFeaturesDemo", { ";
+    trackRender: true,trackMemory: true,warnThreshold: 50, // ms // };);
+  const [state, setState] = useState<DemoState />({/////        graphqlConnected: false,graphqlLoading: false,
+    graphqlResult: ",",
     offlineInitialized: false,
-    syncStatus: "idle,"
+    syncStatus: "idle,",
     operationCount: 0,
     conflictCount: 0,
     wsConnected: false,
@@ -46,8 +44,7 @@ AdvancedFeaturesDemo", { "
       persistent: {},
       api: {};
     };};);
-  const [wsManager, setWsManager] = useState<WebSocketManager | null />(nul;l;)/////      const [testData, setTestData] = useState<object>({ graphqlQuery: `query GetUsers {;
-  users {
+  const [wsManager, setWsManager] = useState<WebSocketManager | null />(nul;l;)/////      const [testData, setTestData] = useState<object>({ graphqlQuery: `query GetUsers {users {
     id;
 name;
     email;
@@ -57,21 +54,19 @@ name;
     cacheValue: test-value","
     wsMessage: "Hello WebSocket!};);"
   useEffect((); => {}
-    const effectStart = performance.now()
+    const effectStart = performance.now();
     initializeServices();
-    // 记录渲染性能 //////
-    performanceMonitor.recordRender()
-    return() => {;}
+    // 记录渲染性能 // performanceMonitor.recordRender();
+    return() => {}
       cleanup;
     };
-      const effectEnd = performance.now()
+      const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  //////     初始化服务  const initializeServices = async() => {}
-    try {;
-      // 初始化离线管理器 //////     await offlineManager.initializ;e;
+  // 初始化服务  const initializeServices = async() => {};
+    try {// 初始化离线管理器 // await offlineManager.initializ;e;
       setState(prev => ({ ...prev, offlineInitialized: true});)
-      // 设置离线管理器事件监听 //////     offlineManager.on("syncStart", () => {}
+      // 设置离线管理器事件监听 // offlineManager.on("syncStart", () => {}
         setState(prev => ({ ...prev, syncStatus: syncing"}));"
       });
       offlineManager.on("syncComplete, () => {}"
@@ -81,21 +76,8 @@ name;
       offlineManager.on(syncError", () => {}"
         setState(prev => ({ ...prev, syncStatus: "error}););"
       });
-      // 初始化WebSocket管理器 //////     const ws = createWebSocketManager({
-        url: "ws://, localhost: 8080 * ws", /////     heartbeat: {
-          enabled: true,
-          interval: 30000,
-          timeout: 5000},
-        reconnect: {
-          enabled: true,
-          maxAttempts: 5,
-          delay: 1000,
-          backoffMultiplier: 2,
-          maxDelay: 30000},
-        messageQueue: {
-          enabled: true,
-          maxSize: 100};};)
-      // 设置WebSocket事件监听 //////     ws.on(connected", () => {}"
+      // 初始化WebSocket管理器 // const ws = createWebSocketManager({url: "ws://, localhost: 8080 * ws", /////     heartbeat: {enabled: true,interval: 30000,timeout: 5000},reconnect: {enabled: true,maxAttempts: 5,delay: 1000,backoffMultiplier: 2,maxDelay: 30000},messageQueue: {enabled: true,maxSize: 100};};);
+      // 设置WebSocket事件监听 // ws.on(connected", () => {}"
         setState(prev => ({ ...prev, wsConnected: true}););
       });
       ws.on("disconnected, () => {{}"
@@ -111,28 +93,28 @@ name;
         }));
       });
       setWsManager(ws);
-      // 更新缓存统计 //////     updateCacheStats()
-      // 设置定时更新 //////     const interval = setInterval(() => {}
+      // 更新缓存统计 // updateCacheStats();
+      // 设置定时更新 // const interval = setInterval(() => {;
         updateCacheStats();
         updateOfflineStats();
       }, 5000);
-      return() => clearInterval(interva;l;)
+      return() => clearInterval(interva;l;);
     } catch (error) {
       Alert.alert("错误", 初始化服务失败");"
     }
   };
-  //////     清理资源  const cleanup = useCallback(() => {}
-    // TODO: Implement function body //////     const effectEnd = performance.now;
-    performanceMonitor.recordEffect(effectEnd - effectStart)
+  // 清理资源  const cleanup = useCallback(() => {;
+    // TODO: Implement function body // const effectEnd = performance.now;
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
     if (wsManager) {
       wsManager.destroy();
     }
     offlineManager.removeAllListeners();
   };
-  //////     更新离线统计  const updateOfflineStats = useCallback(() => {}
-    // TODO: Implement function body //////     const effectEnd = performance.now;
-    performanceMonitor.recordEffect(effectEnd - effectStart)
+  // 更新离线统计  const updateOfflineStats = useCallback(() => {;
+    // TODO: Implement function body // const effectEnd = performance.now;
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
     const stats = offlineManager.getOperationStats;
     const conflicts = offlineManager.getConflicts;
@@ -141,9 +123,9 @@ name;
       operationCount: stats.total,
       conflictCount: conflicts.length}););
   };
-  //////     更新缓存统计  const updateCacheStats = useCallback(() => {}
-    // TODO: Implement function body //////     const effectEnd = performance.now;
-    performanceMonitor.recordEffect(effectEnd - effectStart)
+  // 更新缓存统计  const updateCacheStats = useCallback(() => {;
+    // TODO: Implement function body // const effectEnd = performance.now;
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
     setState(prev => ({
       ...prev,
@@ -153,7 +135,7 @@ name;
         api: apiCache.getStats()}
     }));
   };
-  //////     测试GraphQL查询  const testGraphQLQuery = async() => {}
+  // 测试GraphQL查询  const testGraphQLQuery = async() => {};
     setState(prev => ({ ...prev, graphqlLoading: tr;u;e ;}););
     try {
       const response = await graphqlClient.query(testData.graphqlQu;e;r;y;);
@@ -170,7 +152,7 @@ name;
       setState(prev => ({ ...prev, graphqlLoading: false}););
     }
   }
-  //////     测试GraphQL变更  const testGraphQLMutation = async() => {}
+  // 测试GraphQL变更  const testGraphQLMutation = async() => {};
     const mutation = `;
       mutation CreateUser($input: CreateUserInput!) {
         createUser(input: $input) {
@@ -179,9 +161,8 @@ name;
 email;
         };}
     ;`
-    const variables = {;
-      input: {
-        name: "测试用户,"
+    const variables = {input: {
+        name: "测试用户,",
         email: "test@example.com"}
     ;};
     try {
@@ -197,49 +178,42 @@ email;
       }););
     }
   }
-  //////     添加离线操作  const addOfflineOperation = async() => {}
-    try {
-      await offlineManager.addOperation(
-        create","
-        "User,"
-        {
-          name: "离线用户",
-          email: offline@example.com"},"
+  // 添加离线操作  const addOfflineOperation = async() => {};
+    try {await offlineManager.addOperation(;
+        create",User,";
+        {name: "离线用户",email: offline@example.com"},";
         1 // 高优先级 /////    );
-      updateOfflineStats()
+      updateOfflineStats();
       Alert.alert("成功, "离线操作已添加")"
     } catch (error) {
       Alert.alert(错误", `添加离线操作失败: ${error}`);"
     }
   };
-  //////     手动同步  const manualSync = async() => {}
-    try {;
-      await offlineManager.sy;n;c;(;)
+  // 手动同步  const manualSync = async() => {};
+    try {await offlineManager.sy;n;c;(;)
       Alert.alert("成功, "同步完成")"
     } catch (error) {
       Alert.alert(错误", `同步失败: ${error}`);"
     }
   };
-  //////     连接WebSocket  const connectWebSocket = async() => {}
-    if (wsManager) {;
-      try {;
-        await wsManager.conne;c;t;(;)
+  // 连接WebSocket  const connectWebSocket = async() => {};
+    if (wsManager) {try {await wsManager.conne;c;t;(;)
       } catch (error) {
         Alert.alert("错误, `WebSocket连接失败: ${error}`);"
       }
     }
   };
-  //////     断开WebSocket  const disconnectWebSocket = useCallback(() => {}
-    //////     TODO: Implement function body        const effectEnd = performance.now;
-    performanceMonitor.recordEffect(effectEnd - effectStart)
+  // 断开WebSocket  const disconnectWebSocket = useCallback(() => {;
+    // TODO: Implement function body        const effectEnd = performance.now;
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
     if (wsManager) {
       wsManager.disconnect();
     }
   };
-  //////     发送WebSocket消息  const sendWebSocketMessage = useCallback(() => {}
-    // TODO: Implement function body //////     const effectEnd = performance.now;
-    performanceMonitor.recordEffect(effectEnd - effectStart)
+  // 发送WebSocket消息  const sendWebSocketMessage = useCallback(() => {;
+    // TODO: Implement function body // const effectEnd = performance.now;
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [])
     if (wsManager && state.wsConnected) {
       wsManager.send({
@@ -250,9 +224,9 @@ email;
       Alert.alert(错误", "WebSocket未连接);
     }
   };
-  //////     订阅WebSocket频道  const subscribeChannel = useCallback(() => {}
-    // TODO: Implement function body //////     const effectEnd = performance.now;
-    performanceMonitor.recordEffect(effectEnd - effectStart)
+  // 订阅WebSocket频道  const subscribeChannel = useCallback(() => {;
+    // TODO: Implement function body // const effectEnd = performance.now;
+    performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [])
     if (wsManager) {
       wsManager.subscribe({
@@ -265,44 +239,41 @@ email;
       Alert.alert("成功, "已订阅测试频道");"
     }
   };
-  //////     测试缓存设置  const testCacheSet = async() => {}
-    try {;
-      await memoryCache.set(testData.cacheKey, testData.cacheVa;l;u;e;);
+  // 测试缓存设置  const testCacheSet = async() => {};
+    try {await memoryCache.set(testData.cacheKey, testData.cacheVa;l;u;e;);
       await persistentCache.set(testData.cacheKey, testData.cacheValu;e;);
       await apiCache.set(testData.cacheKey, testData.cacheValu;e;);
-      updateCacheStats()
-      Alert.alert(成功", "缓存设置完成)
+      updateCacheStats();
+      Alert.alert(成功", "缓存设置完成);
     } catch (error) {
       Alert.alert("错误", `缓存设置失败: ${error}`);
     }
   };
-  //////     测试缓存获取  const testCacheGet = async() => {}
-    try {;
-      const memoryValue = await memoryCache.get(testData.cache;K;e;y;);
+  // 测试缓存获取  const testCacheGet = async() => {};
+    try {const memoryValue = await memoryCache.get(testData.cache;K;e;y;);
       const persistentValue = await persistentCache.get(testData.cache;K;e;y;);
       const apiValue = await apiCache.get(testData.cache;K;e;y;);
       Alert.alert(缓存值", `"
 内存缓存: ${memoryValue}
 持久缓存: ${persistentValue}
 API缓存: ${apiValue}
-      `)
+      `);
     } catch (error) {
       Alert.alert("错误, `缓存获取失败: ${error}`);"
     }
   };
-  //////     清空缓存  const clearCaches = async() => {}
-    try {;
-      await memoryCache.cle;a;r;
+  // 清空缓存  const clearCaches = async() => {};
+    try {await memoryCache.cle;a;r;
       await persistentCache.clear;
       await apiCache.clear;
-      updateCacheStats()
+      updateCacheStats();
       Alert.alert("成功", 所有缓存已清空")"
     } catch (error) {
       Alert.alert("错误, `清空缓存失败: ${error}`);"
     }
   };
-  return (
-    <ScrollView style={styles.container} />/      <Text style={styles.title} />高级功能演示</Text>/////
+  return (;
+    <ScrollView style={styles.container} />/      <Text style={styles.title} />高级功能演示</Text>/////;
       {// GraphQL API 部分 }/      <View style={styles.section} />/        <Text style={styles.sectionTitle} />GraphQL API</Text>/        <View style={styles.statusRow} />/          <Text />连接状态: </Text>/          <Text style={[styles.status, { color: state.graphqlConnected ? "green" : red"  ; }]} />/            {state.graphqlConnected ? "已连接 : "未连接"}////
           </Text>/        </View>/////
         <TextInput,
@@ -369,30 +340,29 @@ style={[styles.textInput, { flex: 1}]}
         </Text>/        <Text style={styles.cacheStats} />/          API缓存: {state.cacheStats.api.size || 0} 项, 命中率: {((state.cacheStats.api.hitRate || 0) * 100).toFixed(1)}%////
         </Text>/      </View>/    </ScrollView>/////      );
 }
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     flex: 1,
-    backgroundColor: "#f5f5f5,"
+    backgroundColor: "#f5f5f5,",
     padding: 16},
   title: {
     fontSize: 24,
     fontWeight: "bold",
     textAlign: center","
     marginBottom: 20,
-    color: "#333},"
+    color: "#333},",
   section: {
     backgroundColor: "white",
     borderRadius: 8,
     padding: 16,
     marginBottom: 16,
-    shadowColor: #000",;"
+    shadowColor: #000","
     shadowOffset: { width: 0, height;: ;2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3},
   sectionTitle: {
     fontSize: 18,
-    fontWeight: "bold,"
+    fontWeight: "bold,",
     marginBottom: 12,
     color: "#333"},
   subTitle: {
@@ -400,7 +370,7 @@ const styles = StyleSheet.create({;
     fontWeight: 600","
     marginTop: 12,
     marginBottom: 8,
-    color: "#555},"
+    color: "#555},",
   statusRow: {
     flexDirection: "row",
     alignItems: center","
@@ -415,11 +385,11 @@ const styles = StyleSheet.create({;
     backgroundColor: #fff","
     minHeight: 40},
   inputRow: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center"},
   buttonRow: {
     flexDirection: row","
-    flexWrap: "wrap,"
+    flexWrap: "wrap,",
     gap: 8,
     marginBottom: 12},
   button: {
@@ -430,12 +400,12 @@ const styles = StyleSheet.create({;
     minWidth: 80},
   buttonDisabled: { backgroundColor: #ccc"  },"
   buttonText: {
-    color: "white,"
+    color: "white,",
     fontWeight: "600",
     textAlign: center","
     fontSize: 14},
   result: {
-    backgroundColor: "#f8f8f8,"
+    backgroundColor: "#f8f8f8,",
     padding: 12,
     borderRadius: 4,
     fontFamily: "monospace",
@@ -447,7 +417,7 @@ const styles = StyleSheet.create({;
     borderRadius: 4,
     marginBottom: 4,
     fontSize: 12,
-    fontFamily: "monospace},"
+    fontFamily: "monospace},",
   cacheStats: {
     fontSize: 14,
     color: "#666',"'

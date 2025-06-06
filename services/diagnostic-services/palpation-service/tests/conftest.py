@@ -1,15 +1,20 @@
 """
+conftest - 索克生活项目模块
+"""
+
+from datetime import datetime
+from palpation_service.config import get_settings
+from unittest.mock import MagicMock, AsyncMock
+from uuid import uuid4
+import asyncio
+import pytest
+
+"""
 测试配置文件 - 简化版本
 提供基本的测试夹具，不依赖复杂的internal模块
 """
 
-import pytest
-import asyncio
-from unittest.mock import MagicMock, AsyncMock
-from datetime import datetime
-from uuid import uuid4
 
-from palpation_service.config import get_settings
 
 
 @pytest.fixture

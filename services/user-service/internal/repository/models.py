@@ -1,15 +1,20 @@
 """
+models - 索克生活项目模块
+"""
+
+from datetime import datetime
+from sqlalchemy import Column, String, Integer, Boolean, DateTime, ForeignKey, Table, MetaData, Float, JSON, Text
+from sqlalchemy.dialects.postgresql import UUID, JSONB
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
+import uuid
+
+"""
 数据库模型定义模块
 
 该模块定义了PostgreSQL数据库的SQLAlchemy ORM模型。
 """
-import uuid
-from datetime import datetime
 
-from sqlalchemy import Column, String, Integer, Boolean, DateTime, ForeignKey, Table, MetaData, Float, JSON, Text
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.dialects.postgresql import UUID, JSONB
-from sqlalchemy.orm import relationship
 
 Base = declarative_base()
 metadata = MetaData()

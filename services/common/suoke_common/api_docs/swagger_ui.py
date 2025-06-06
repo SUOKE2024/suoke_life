@@ -1,21 +1,28 @@
+"""
+swagger_ui - 索克生活项目模块
+"""
+
+        import json
+    from .openapi_generator import create_default_generator
+    from aiohttp import ClientSession, web
+    from aiohttp.web_response import Response
+from .openapi_generator import get_openapi_generator
+import asyncio
+import logging
+
 #!/usr/bin/env python3
 """
 Swagger UI服务器
 提供Web界面来查看和测试API文档
 """
 
-import asyncio
-import logging
 
 try:
-    from aiohttp import ClientSession, web
-    from aiohttp.web_response import Response
 
     HAS_AIOHTTP = True
 except ImportError:
     HAS_AIOHTTP = False
 
-from .openapi_generator import get_openapi_generator
 
 logger = logging.getLogger(__name__)
 
@@ -243,7 +250,6 @@ class SwaggerUIServer:
             "schemas_count": len(generator.schemas) if generator else 0,
         }
 
-        import json
 
         return web.Response(
             text=json.dumps(health_data, ensure_ascii=False, indent=2),
@@ -324,7 +330,6 @@ async def serve_docs(
 
 if __name__ == "__main__":
     # 示例用法
-    from .openapi_generator import create_default_generator
 
     # 创建示例生成器
     generator = create_default_generator("示例服务")

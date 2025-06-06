@@ -1,22 +1,29 @@
 """
-医疗资源服务测试配置
+conftest - 索克生活项目模块
 """
 
-import asyncio
-import pytest
-import pytest_asyncio
-from typing import AsyncGenerator, Generator
-from unittest.mock import AsyncMock, MagicMock
-import uuid
+            import time
+        from internal.enhanced_medical_resource_service import ResourceRequest
 from datetime import datetime, timedelta
-
+from internal.domain.models import (
+from internal.enhanced_medical_resource_service import EnhancedMedicalResourceService
+from internal.infrastructure.models import Base
 from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
+from typing import AsyncGenerator, Generator
+from unittest.mock import AsyncMock, MagicMock
+import asyncio
+import pytest
+import pytest_asyncio
+import uuid
 
-from internal.infrastructure.models import Base
-from internal.enhanced_medical_resource_service import EnhancedMedicalResourceService
-from internal.domain.models import (
+"""
+医疗资源服务测试配置
+"""
+
+
+
     ResourceType, SpecialtyType, ResourceStatus, Priority,
     Location, TimeSlot, Doctor, Hospital, Equipment, Medicine
 )
@@ -212,7 +219,6 @@ class TestDataFactory:
         symptoms: list = None
     ):
         """创建资源请求"""
-        from internal.enhanced_medical_resource_service import ResourceRequest
         
         return ResourceRequest(
             request_id=str(uuid.uuid4()),
@@ -254,7 +260,6 @@ def performance_test(max_time_ms: int = 1000):
     """性能测试装饰器"""
     def decorator(func):
         async def wrapper(*args, **kwargs):
-            import time
             start_time = time.time()
             result = await func(*args, **kwargs)
             end_time = time.time()

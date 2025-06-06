@@ -1,13 +1,25 @@
+"""
+test_agent_with_deepseek - 索克生活项目模块
+"""
+
+        from internal.agent.agent_manager import AgentManager
+        from internal.agent.deepseek_model_factory import DeepSeekModelFactory
+        from internal.agent.deepseek_model_factory import get_deepseek_model_factory
+        from internal.agent.mock_model_factory import get_mock_model_factory
+        from pkg.utils.config_loader import ConfigLoader
+        import os
+        import time
+import asyncio
+import os
+import sys
+import traceback
+
 #!/usr/bin/env python3
 """
 智能体管理器使用DeepSeek的专项测试
 验证智能体管理器能否正确调用DeepSeek API
 """
 
-import asyncio
-import os
-import sys
-import traceback
 
 # 添加项目路径
 sys.path.append('.')
@@ -20,7 +32,6 @@ async def test_agent_manager_with_deepseek():
 
     try:
         # 强制使用生产配置
-        from pkg.utils.config_loader import ConfigLoader
 
         config = ConfigLoader("config/prod.yaml")
 
@@ -35,7 +46,6 @@ async def test_agent_manager_with_deepseek():
         print(f"    模拟服务: {dev_config.get('mock_services')}")
 
         # 临时替换全局配置
-        from internal.agent.agent_manager import AgentManager
         original_get_config = pkg.utils.config_loader.get_config
         pkg.utils.config_loader.get_config = lambda path=None: config
 
@@ -119,14 +129,12 @@ async def test_performance_comparison():
     print("\n🔍 测试性能对比...")
 
     try:
-        import time
 
         # 测试问题
         test_question = "请从中医角度分析失眠的原因和调理方法。"
 
         # 1. 测试模拟模型性能
         print("  📊 测试模拟模型性能...")
-        from internal.agent.mock_model_factory import get_mock_model_factory
         mock_factory = await get_mock_model_factory()
 
         start_time = time.time()
@@ -138,7 +146,6 @@ async def test_performance_comparison():
 
         # 2. 测试DeepSeek模型性能
         print("  📊 测试DeepSeek模型性能...")
-        from internal.agent.deepseek_model_factory import get_deepseek_model_factory
         deepseek_factory = await get_deepseek_model_factory()
 
         start_time = time.time()
@@ -166,9 +173,7 @@ async def test_error_handling():
     print("\n🔍 测试错误处理...")
 
     try:
-        import os
 
-        from internal.agent.deepseek_model_factory import DeepSeekModelFactory
         original_key = os.environ.get('DEEPSEEK_API_KEY')
 
         try:

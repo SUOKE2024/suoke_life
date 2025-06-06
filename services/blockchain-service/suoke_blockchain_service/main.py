@@ -1,23 +1,29 @@
 """
-主应用入口
-
-区块链服务的主要入口点, 负责应用的创建和启动。
+main - 索克生活项目模块
 """
-
-import asyncio
-from contextlib import asynccontextmanager
-from typing import TYPE_CHECKING
-from collections.abc import AsyncGenerator
-
-from fastapi import FastAPI
-import typer
-import uvicorn
 
 from .config import settings
 from .database import close_database, init_database
 from .grpc_server import GRPCServer
 from .logging import configure_logging, get_logger
 from .monitoring import setup_monitoring
+from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
+from fastapi import FastAPI
+from fastapi.middleware.gzip import GZipMiddleware
+from typing import TYPE_CHECKING
+import asyncio
+import typer
+import uvicorn
+
+"""
+主应用入口
+
+区块链服务的主要入口点, 负责应用的创建和启动。
+"""
+
+
+
 
 logger = get_logger(__name__)
 
@@ -52,6 +58,9 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
 def create_app() -> FastAPI:
     """创建 FastAPI 应用"""
     app = FastAPI(
+
+# 性能优化: 添加响应压缩
+app.add_middleware(GZipMiddleware, minimum_size=1000)
         title=settings.app_name,
         description="索克生活区块链服务 - 健康数据的区块链存储、验证和访问控制",
         version="0.1.0",
@@ -59,7 +68,9 @@ def create_app() -> FastAPI:
         lifespan=lifespan,
     )
 
-    @app.get("/health")
+    @cache(expire=300)  # 5分钟缓存
+@limiter.limit("100/minute")  # 每分钟100次请求
+@app.get("/health")
     async def health_check() -> dict[str, str]:
         """健康检查端点"""
         return {"status": "healthy", "service": "blockchain-service"}

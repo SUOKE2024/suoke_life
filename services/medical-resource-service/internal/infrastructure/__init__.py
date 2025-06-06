@@ -1,29 +1,36 @@
 """
-基础设施模块初始化
-提供便捷的导入和初始化函数
+__init__ - 索克生活项目模块
 """
 
 from .cache_manager import CacheLevel, CacheStrategy, SmartCacheManager
 from .config_manager import (
+from .container import (
+from .database import *
+from .database_pool import (
+from .event_bus import (
+from .models import *
+from .performance_monitor import (
+
+"""
+基础设施模块初始化
+提供便捷的导入和初始化函数
+"""
+
     ConfigManager,
     get_config,
     get_config_manager,
     init_config_manager,
 )
-from .container import (
     DependencyInjectionContainer,
     get_container,
     init_container,
     init_global_container,
 )
-from .database import *
-from .database_pool import (
     DatabasePoolManager,
     get_database_connection,
     get_database_pool_manager,
     init_database_pools,
 )
-from .event_bus import (
     Event,
     EventBus,
     EventPriority,
@@ -31,8 +38,6 @@ from .event_bus import (
     get_event_bus,
     init_event_bus,
 )
-from .models import *
-from .performance_monitor import (
     PerformanceMonitor,
     get_performance_monitor,
     init_performance_monitor,

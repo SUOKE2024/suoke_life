@@ -1,15 +1,21 @@
 """
+logging - 索克生活项目模块
+"""
+
+    import os
+from pythonjsonlogger.jsonlogger import JsonFormatter
+from typing import Any
+import logging
+import structlog
+import sys
+
+"""
 日志配置模块
 
 提供结构化日志和多种输出格式支持
 """
 
-import logging
-import sys
-from typing import Any
 
-import structlog
-from pythonjsonlogger.jsonlogger import JsonFormatter
 
 def setup_logging(log_level: str = "INFO") -> None:
     """
@@ -95,7 +101,6 @@ def setup_logging(log_level: str = "INFO") -> None:
     }
 
     # 创建日志目录
-    import os
 
     os.makedirs("logs", exist_ok=True)
 

@@ -1,15 +1,20 @@
 """
+calendar - 索克生活项目模块
+"""
+
+from .base import BaseModel
+from datetime import date, datetime
+from pydantic import Field
+from typing import Optional, Dict, Any
+
+"""
 历法数据模型
 
 定义农历、阳历和天文数据的数据结构
 """
 
-from datetime import date, datetime
-from typing import Optional, Dict, Any
 
-from pydantic import Field
 
-from .base import BaseModel
 
 
 class LunarDateModel(BaseModel):

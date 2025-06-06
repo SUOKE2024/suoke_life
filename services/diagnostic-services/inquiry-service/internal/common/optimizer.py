@@ -1,22 +1,27 @@
+"""
+optimizer - 索克生活项目模块
+"""
+
+from .logging import get_logger
+from collections import deque
+from collections.abc import Callable
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+from functools import wraps
+from typing import Any
+import asyncio
+import gc
+import psutil
+import time
+import weakref
+
 #!/usr/bin/env python
 
 """
 性能优化器
 """
 
-import asyncio
-from collections import deque
-from collections.abc import Callable
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
-from functools import wraps
-import gc
-import time
-from typing import Any
-import weakref
 
-import psutil
 
-from .logging import get_logger
 
 
 class BatchProcessor:
@@ -259,7 +264,8 @@ class MemoryOptimizer:
         after_count = sum(len(obj_list) for obj_list in self.object_pool.values())
         self.logger.info(f"对象池清理: {before_count} -> {after_count}")
 
-    def get_object(self, obj_type: str, factory: Callable = None):
+        @cache(timeout=300)  # 5分钟缓存
+def get_object(self, obj_type: str, factory: Callable = None):
         """从对象池获取对象"""
         if obj_type not in self.object_pool:
             self.object_pool[obj_type] = deque(maxlen=50)
@@ -344,7 +350,8 @@ class QueryOptimizer:
     def __init__(self):
         self.query_stats = {}
         self.slow_queries = deque(maxlen=100)
-        self.logger = get_logger(__name__)
+        self.lo    @cache(timeout=300)  # 5分钟缓存
+gger = get_logger(__name__)
 
     def record_query(self, query_id: str, duration: float, result_count: int = 0):
         """记录查询统计"""
@@ -450,7 +457,8 @@ def memory_optimized(max_memory_mb: int = 1024):
             if await optimizer.check_memory_pressure():
                 await optimizer.optimize_memory()
 
-            return await func(*args, **kwargs)
+            return await func    @cache(timeout=300)  # 5分钟缓存
+(*args, **kwargs)
 
         return wrapper
 

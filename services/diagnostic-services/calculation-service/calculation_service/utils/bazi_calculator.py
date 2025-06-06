@@ -1,12 +1,17 @@
 """
-八字计算器
-
-用于计算生辰八字和五行分析
+bazi_calculator - 索克生活项目模块
 """
 
 from datetime import date, time, datetime
 from typing import Dict, Optional, Tuple
 import lunardate
+
+"""
+八字计算器
+
+用于计算生辰八字和五行分析
+"""
+
 
 class BaziCalculator:
     """八字计算器"""

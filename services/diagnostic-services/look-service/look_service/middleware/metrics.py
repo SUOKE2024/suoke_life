@@ -1,14 +1,19 @@
-"""Metrics middleware for Prometheus monitoring."""
+"""
+metrics - 索克生活项目模块
+"""
 
-import contextlib
-import time
+from ..core.logging import get_logger
 from collections.abc import Awaitable, Callable
-
 from fastapi import Request, Response
 from prometheus_client import Counter, Histogram
 from starlette.middleware.base import BaseHTTPMiddleware
+import contextlib
+import time
 
-from ..core.logging import get_logger
+"""Metrics middleware for Prometheus monitoring."""
+
+
+
 
 logger = get_logger(__name__)
 

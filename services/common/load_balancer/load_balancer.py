@@ -1,14 +1,20 @@
 """
+load_balancer - 索克生活项目模块
+"""
+
+        from .algorithms import (
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any
+import logging
+import time
+
+"""
 负载均衡器核心组件
 提供多种负载均衡策略和算法
 """
 
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from enum import Enum
-import logging
-import time
-from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -117,7 +123,6 @@ class LoadBalancer:
 
     async def _initialize_algorithms(self):
         """初始化负载均衡算法"""
-        from .algorithms import (
             ConsistentHashBalancer,
             IPHashBalancer,
             LeastConnectionsBalancer,

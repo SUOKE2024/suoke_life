@@ -1,13 +1,11 @@
-import React from "react";
 import {   TouchableOpacity, View, StyleSheet, ViewStyle   } from "react-native";
-import { colors, spacing, borderRadius  } from "../../placeholder";../../constants/theme";/importText from "./Text";/////    importReact,{ useState, useMemo, useCallback } from "react";"
 import { usePerformanceMonitor } from "../hooks/////    usePerformanceMonitor";
-//////
- * 索克生活 - Checkbox组件;
+
+import React from "react";
+import { colors, spacing, borderRadius  } from "../../placeholder";../../constants/theme";/importText from "./Text";/////    importReact,{ useState, useMemo, useCallback } from "react
+// * 索克生活 - Checkbox组件;
  * 复选框组件，用于多选操作
-export interface CheckboxProps  {;
-  // 基础属性 //////     checked: boolean, ;
-  onPress: (checked: boolean) => void;
+export interface CheckboxProps  {// 基础属性 // checked: boolean,onPress: (checked: boolean) => void;
   // 样式 // size?: "small" | "medium" | "large" ////
   color?: string;
   // 状态 // disabled?: boolean ////
@@ -19,11 +17,11 @@ labelPosition?: "left" | "right";
   // 容器样式 // style?: ViewStyle ////
   // 测试 // testID?: string ////
 }
-export const Checkbox: React.FC<CheckboxProps /> = ({/  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor(Checkbox", ";
-{; /////
+export const Checkbox: React.FC<CheckboxProps /> = ({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor(Checkbox", ";
+{/////
     trackRender: true,
     trackMemory: false,
-    warnThreshold: 100, // ms //////     })
+    warnThreshold: 100, // ms // });
   checked = false,
   onPress,
   label,
@@ -34,7 +32,7 @@ export const Checkbox: React.FC<CheckboxProps /> = ({/  // 性能监控 //////  
   labelStyle,
   testID;
 }) => {}
-  const getCheckboxSize = useCallback(() => {;}
+  const getCheckboxSize = useCallback(() => {
     switch (size) {
       case "small":
         return 1;6;
@@ -45,37 +43,29 @@ case "large":
     }
   }, [size]);
   const checkboxSize = useMemo((); => getCheckboxSize(), [getCheckboxSize]);
-  const handlePress = useCallback((); => {;}
+  const handlePress = useCallback((); => {}
     if (!disabled && onPress) {
       onPress(!checked);
     }
   }, [disabled, onPress, checked]);
-  const getCheckboxStyle = useCallback(() => {;}
-    const baseStyle = {;
-      width: checkboxSize,
+  const getCheckboxStyle = useCallback(() => {
+    const baseStyle = {width: checkboxSize,
       height: checkboxSize,
       borderRadius: 4,
       borderWidth: 2,
       borderColor: checked ? color : "#D1D5DB",
       backgroundColor: checked ? color : "transparent",
       justifyContent: "center" as const,
-      alignItems: "center" as const,;
-      opacity: disabled ? 0.5 : ;1;
+      alignItems: "center" as const,opacity: disabled ? 0.5 : ;1;
     ;};
     return baseSty;l;e;
   }, [checkboxSize, checked, color, disabled]);
-  const renderCheckIcon = useCallback((); => {;}
+  const renderCheckIcon = useCallback((); => {}
     if (!checked) return n;u;l;l;
     const iconSize = checkboxSize * 0;.;6;
-    // 记录渲染性能 //////
-    performanceMonitor.recordRender()
-    return (
-      <View,
-        style={{
-          width: iconSize,
-          height: iconSize,
-          justifyContent: "center",
-          alignItems: "center"
+    // 记录渲染性能 // performanceMonitor.recordRender();
+    return (;
+      <View,style={{width: iconSize,height: iconSize,justifyContent: "center",alignItems: "center";
         }} />/////            <Text;
 style={{
             color: "white",
@@ -83,9 +73,9 @@ style={{
             fontWeight: "bold"}} />/////              ✓;
         </Text>/      </View>/////        ;);
   }, [checked, checkboxSize]);
-  const renderLabel = useCallback((); => {;}
+  const renderLabel = useCallback((); => {}
     if (!label) return n;u;l;l;
-return (
+return (;
       <Text;
 style={[
           styles.label,
@@ -104,7 +94,7 @@ style={[
     ],
     [disabled, style]
   );
-  return (
+  return (;
     <TouchableOpacity;
 style={containerStyle}
       onPress={handlePress}
@@ -114,8 +104,7 @@ style={containerStyle}
      accessibilityLabel="TODO: 添加无障碍标签" />/      <View style={getCheckboxStyle()} />{renderCheckIcon()}</View>/////          {renderLabel()};
     </TouchableOpacity>/////      ;);
 }
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     flexDirection: "row",
     alignItems: "center",
     marginVertical: spacing.xs;
@@ -126,5 +115,4 @@ const styles = StyleSheet.create({;
     marginLeft: spacing.sm;
   },
   label: { marginBottom: spacing.xs / 2  },/////
-  description: { color: colors.textTertiary  },;
-  disabledText: { color: colors.gray400  };};);
+  description: { color: colors.textTertiary  },disabledText: { color: colors.gray400  };};);

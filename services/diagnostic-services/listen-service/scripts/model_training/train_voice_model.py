@@ -1,20 +1,26 @@
+"""
+train_voice_model - 索克生活项目模块
+"""
+
+from internal.audio.voice_feature_extractor import VoiceFeatureExtractor
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+from sklearn.model_selection import train_test_split
+from torch.utils.data import Dataset, DataLoader
+from tqdm import tqdm
+import argparse
+import json
+import librosa
+import logging
+import os
+import sys
+import torch
+import yaml
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 语音特征分析模型训练脚本
 """
-import os
-import sys
-import argparse
-import logging
-import json
-import torch
-from torch.utils.data import Dataset, DataLoader
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, precision_recall_fscore_support
-import librosa
-import yaml
-from tqdm import tqdm
 
 # 设置日志
 logging.basicConfig(
@@ -26,7 +32,6 @@ logger = logging.getLogger(__name__)
 # 添加项目根目录到Python路径
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
 sys.path.insert(0, project_root)
-from internal.audio.voice_feature_extractor import VoiceFeatureExtractor
 
 class VoiceFeatureDataset(Dataset):
     """语音特征数据集"""
@@ -52,7 +57,8 @@ class VoiceFeatureDataset(Dataset):
     def __len__(self):
         return len(self.audio_files)
     
-    def __getitem__(self, idx):
+        @cache(timeout=300)  # 5分钟缓存
+def __getitem__(self, idx):
         audio_file = self.audio_files[idx]
         label = self.labels[idx]
         

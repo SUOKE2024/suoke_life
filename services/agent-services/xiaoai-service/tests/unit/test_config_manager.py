@@ -1,7 +1,12 @@
-#!/usr/bin/env python3
+"""
+test_config_manager - 索克生活项目模块
+"""
 
 import sys
 import traceback
+
+#!/usr/bin/env python3
+
 
 # 添加项目路径
 sys.path.append('.')

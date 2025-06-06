@@ -1,18 +1,23 @@
+"""
+test_health_advisor - 索克生活项目模块
+"""
+
+from pathlib import Path
+from xiaoai.four_diagnosis.recommendation.health_advisor import HealthAdvisor
+import sys
+import time
+import unittest
+
 #!/usr/bin/env python3
 """
 健康建议生成器单元测试
 """
 
-import sys
-import time
-import unittest
-from pathlib import Path
 
 # 将项目根目录添加到Python路径
 project_root = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from xiaoai.four_diagnosis.recommendation.health_advisor import HealthAdvisor
 
 
 class TestHealthAdvisor(unittest.TestCase):

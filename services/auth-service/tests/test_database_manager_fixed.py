@@ -1,18 +1,23 @@
 """
+test_database_manager_fixed - 索克生活项目模块
+"""
+
+from auth_service.core.database import DatabaseManager
+from auth_service.models.base import BaseModel
+from sqlalchemy import event
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
+from sqlalchemy.pool import StaticPool
+from typing import AsyncGenerator, Optional
+import asyncio
+import os
+import tempfile
+
+"""
 测试专用数据库管理器（修复版）
 解决TestClient不触发FastAPI lifespan事件的问题
 """
 
-import asyncio
-import tempfile
-import os
-from typing import AsyncGenerator, Optional
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-from sqlalchemy.pool import StaticPool
-from sqlalchemy import event
 
-from auth_service.core.database import DatabaseManager
-from auth_service.models.base import BaseModel
 
 
 class TestDatabaseManager:

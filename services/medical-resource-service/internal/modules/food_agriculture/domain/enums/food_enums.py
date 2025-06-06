@@ -1,9 +1,14 @@
 """
+food_enums - 索克生活项目模块
+"""
+
+from enum import Enum
+
+"""
 食物相关枚举定义
 从原始的food_agriculture_service.py中提取的枚举类型
 """
 
-from enum import Enum
 
 
 class FoodCategory(Enum):

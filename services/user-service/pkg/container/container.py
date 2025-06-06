@@ -1,12 +1,17 @@
 """
+container - 索克生活项目模块
+"""
+
+from functools import wraps
+from typing import Any, Callable, Dict, Optional, Type, TypeVar, Union
+import asyncio
+import inspect
+import logging
+
+"""
 依赖注入容器
 提供服务依赖管理和生命周期控制
 """
-import asyncio
-import logging
-from typing import Any, Callable, Dict, Optional, Type, TypeVar, Union
-from functools import wraps
-import inspect
 
 logger = logging.getLogger(__name__)
 

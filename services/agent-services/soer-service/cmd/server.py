@@ -1,24 +1,29 @@
+"""
+server - 索克生活项目模块
+"""
+
+from api.grpc import soer_service_pb2_grpc
+from concurrent import futures
+from dotenv import load_dotenv
+from internal.delivery.grpc.soer_service_impl import SoerServiceImpl
+from internal.delivery.rest import init_rest_app
+from pkg.utils.config_loader import load_config
+from pkg.utils.metrics import initialize_metrics
 import argparse
 import asyncio
+import grpc
 import logging
 import os
 import signal
 import sys
-from concurrent import futures
-
-import grpc
 import uvicorn
-from dotenv import load_dotenv
+
+
 
 # 确保Python能够找到模块
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # 导入gRPC服务定义
-from api.grpc import soer_service_pb2_grpc
-from internal.delivery.grpc.soer_service_impl import SoerServiceImpl
-from internal.delivery.rest import init_rest_app
-from pkg.utils.config_loader import load_config
-from pkg.utils.metrics import initialize_metrics
 
 # 加载环境变量
 load_dotenv()

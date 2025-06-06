@@ -1,20 +1,25 @@
 """
+sync_service - 索克生活项目模块
+"""
+
+from datetime import datetime
+from enum import Enum
+from internal.model.user import (User, UserHealthSummary, DeviceInfo, UserStatus,
+from internal.repository.postgres_user_repository import PostgresUserRepository
+from internal.repository.sqlite_user_repository import SQLiteUserRepository
+from typing import Dict, List, Optional, Set, Tuple, Any, Union
+from uuid import UUID
+import hashlib
+import json
+import logging
+
+"""
 数据同步服务模块
 
 该模块实现了SQLite(前端)和PostgreSQL(后端)之间的数据同步机制。
 """
-import hashlib
-import json
-import logging
-from datetime import datetime
-from enum import Enum
-from typing import Dict, List, Optional, Set, Tuple, Any, Union
-from uuid import UUID
 
-from internal.model.user import (User, UserHealthSummary, DeviceInfo, UserStatus,
                           UserRole, ConstitutionType, HealthMetric)
-from internal.repository.sqlite_user_repository import SQLiteUserRepository
-from internal.repository.postgres_user_repository import PostgresUserRepository
                                      DeviceNotFoundError, DeviceAlreadyBoundError)
 
 class SyncDirection(str, Enum):

@@ -1,23 +1,28 @@
 """
+user_server - 索克生活项目模块
+"""
+
+from google.protobuf import empty_pb2, timestamp_pb2
+from internal.model.user import (BindDeviceRequest, CreateUserRequest,
+from internal.repository.sqlite_user_repository import (DeviceAlreadyBoundError,
+from internal.service.user_service import UserService
+from protobuf.suoke.user.v1 import user_pb2, user_pb2_grpc
+from uuid import UUID
+import grpc
+import logging
+
+"""
 用户服务gRPC服务器实现
 
 该模块实现了用户服务的gRPC接口。
 """
-import logging
-from uuid import UUID
 
-import grpc
-from google.protobuf import empty_pb2, timestamp_pb2
 
-from internal.model.user import (BindDeviceRequest, CreateUserRequest,
                           UpdateUserPreferencesRequest, UpdateUserRequest,
                           UserRole, UserStatus, VerifyUserRequest)
-from internal.repository.sqlite_user_repository import (DeviceAlreadyBoundError,
                                                  DeviceNotFoundError,
                                                  UserAlreadyExistsError,
                                                  UserNotFoundError)
-from internal.service.user_service import UserService
-from protobuf.suoke.user.v1 import user_pb2, user_pb2_grpc
 
 logger = logging.getLogger(__name__)
 

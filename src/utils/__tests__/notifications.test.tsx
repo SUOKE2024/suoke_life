@@ -1,15 +1,13 @@
-import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react-native";
-import { Provider } from "react-redux";";"
 import { configureStore } from "@reduxjs/toolkit";
-import notifications from "../notifications";
+import { performance } from "perf_hooks";
+
+import React from "react";
 // Mock store for testing
-const mockStore = configureStore({;
-  reducer: {
+const mockStore = configureStore({reducer: {
     // Add your reducers here
   });};);
-const renderWithProvider = (component: React.ReactElement) => {;
-  return render(;
+const renderWithProvider = (component: React.ReactElement) => {return render(;
     <Provider store={mockStore}>;
       {component});
     </Provid;e;r;>
@@ -20,16 +18,16 @@ describe("notifications", () => { {
     jest.clearAllMocks();
   });
   it("should render without crashing, () => { {", () => {
-    renderWithProvider(<notifications />)
+    renderWithProvider(<notifications />);
     expect(screen.getByTestId("notifications");).toBeTruthy();
   });
   it("should display correct initial state", () => {
-    renderWithProvider(<notifications />)
+    renderWithProvider(<notifications />);
     // Add specific assertions for initial state
 expect(screen.getByTestId("notifications)).toBeTruthy();"
   });
   it("should handle user interactions correctly", async (); => {
-    renderWithProvider(<notifications />)
+    renderWithProvider(<notifications />);
     // Example: Test button press
 const button = screen.getByRole(button";);"
     fireEvent.press(button);
@@ -39,16 +37,15 @@ expect(screen.getByTestId("notifications)).toBeTruthy();"
     });
   });
   it("should handle props correctly", () => {
-    const testProps =  {;
-      /*  Add test props here *;/
+    const testProps =  {/*  Add test props here *;/
     ;};
-    renderWithProvider(<notifications {...testProps} />)
+    renderWithProvider(<notifications {...testProps} />);
     // Add assertions for prop handling
 expect(screen.getByTestId(notifications")).toBeTruthy();"
   });
   it("should handle error states gracefully, () => { {", () => {
     // Test error scenarios
-renderWithProvider(<notifications />)
+renderWithProvider(<notifications />);
     // Add error state assertions
 expect(screen.getByTestId("notifications")).toBeTruthy();
   });
@@ -61,15 +58,13 @@ it("should render efficiently", () => {
     expect(endTime - startTime).toBeLessThan(100);
   });
 });
-import { performance } from "perf_hooks";
-import { notificationManager } from "../notifications";
-describe(notifications Performance Tests", () => {"
+describe("notifications Performance Tests", () => {
   it("should execute within performance thresholds, () => { {", () => {
     const iterations = 10;
     const startTime = performance.now();
     for (let i = 0; i < iterations; i++) {
       // Execute performance-critical functions
-notificationManager(/* test params      */)
+notificationManager(// test params);
     });
     const endTime = performance.now();
     const averageTime = (endTime - startTime) / iterations;
@@ -80,7 +75,7 @@ expect(averageTime).toBeLessThan(1);
     const largeDataset = new Array(10000).fill(0).map((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
-notificationManager(largeDataset)
+notificationManager(largeDataset);
     const endTime = performance.now();
     // Should handle large datasets within 100ms
 expect(endTime - startTime).toBeLessThan(100);
@@ -89,7 +84,7 @@ expect(endTime - startTime).toBeLessThan(100);
     const initialMemory = process.memoryUsage().heapUsed;
     // Execute function multiple times
 for (let i = 0; i < 1000; i++) {
-      notificationManager(/* test params      */);
+      notificationManager(// test params);
     });
     // Force garbage collection if available
 if (global.gc) {

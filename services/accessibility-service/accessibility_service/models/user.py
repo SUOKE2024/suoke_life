@@ -1,12 +1,17 @@
 """
-User-related data models.
+user - 索克生活项目模块
 """
 
 from datetime import datetime, timezone
 from enum import Enum
+from pydantic import BaseModel, Field, field_validator
 from typing import Any
 
-from pydantic import BaseModel, Field, field_validator
+"""
+User-related data models.
+"""
+
+
 
 
 class UserRole(str, Enum):

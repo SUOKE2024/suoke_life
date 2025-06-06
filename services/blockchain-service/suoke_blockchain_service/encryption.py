@@ -1,18 +1,23 @@
 """
+encryption - 索克生活项目模块
+"""
+
+from .exceptions import EncryptionError
+from .logging import get_logger
+from cryptography.fernet import Fernet
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+from typing import Tuple
+import base64
+import os
+
+"""
 加密服务模块
 
 提供数据加密和解密功能。
 """
 
-import os
-import base64
-from typing import Tuple
-from cryptography.fernet import Fernet
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
-from .exceptions import EncryptionError
-from .logging import get_logger
 
 logger = get_logger(__name__)
 

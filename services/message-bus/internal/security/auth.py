@@ -1,14 +1,20 @@
 """
-安全机制模块，提供认证和授权功能
+auth - 索克生活项目模块
 """
-import time
-import logging
+
+        import aiohttp
+from internal.observability.metrics import request_counter
+from jwt.exceptions import PyJWTError
+from typing import Dict, Any, Optional, Callable, Awaitable, List
 import grpc
 import jwt
-from typing import Dict, Any, Optional, Callable, Awaitable, List
-from jwt.exceptions import PyJWTError
+import logging
+import time
 
-from internal.observability.metrics import request_counter
+"""
+安全机制模块，提供认证和授权功能
+"""
+
 
 logger = logging.getLogger(__name__)
 
@@ -235,7 +241,6 @@ class AuthInterceptor(grpc.aio.ServerInterceptor):
         Raises:
             AuthError: 如果验证失败
         """
-        import aiohttp
         
         # 认证服务的URL
         auth_url = f"{self.settings.auth_service_url}/api/auth/validate"

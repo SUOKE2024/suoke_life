@@ -1,3 +1,12 @@
+"""
+base - 索克生活项目模块
+"""
+
+from ..model.document import Document, RetrieveResult
+from typing import List, Dict, Any, Optional
+import abc
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,10 +14,6 @@
 检索器基类定义
 """
 
-import abc
-import time
-from typing import List, Dict, Any, Optional
-from ..model.document import Document, RetrieveResult
 
 
 class BaseRetriever(abc.ABC):

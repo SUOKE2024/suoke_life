@@ -1,3 +1,9 @@
+"""
+exceptions - 索克生活项目模块
+"""
+
+from typing import Optional, Dict, Any
+
 #!/usr/bin/env python3
 """
 异常处理模块
@@ -5,7 +11,6 @@
 定义健康数据服务的自定义异常类。
 """
 
-from typing import Optional, Dict, Any
 
 
 class HealthDataServiceException(Exception):

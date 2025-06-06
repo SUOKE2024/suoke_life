@@ -1,16 +1,21 @@
 """
+lifestyle - 索克生活项目模块
+"""
+
+from ...models.lifestyle import ExercisePlan, SleepAnalysis, StressAssessment
+from ...services.lifestyle_service import LifestyleService
+from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel
+from typing import Any
+
+"""
 生活方式管理 API 端点
 
 提供运动计划、睡眠管理、压力管理等功能
 """
 
-from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel
 
-from ...models.lifestyle import ExercisePlan, SleepAnalysis, StressAssessment
-from ...services.lifestyle_service import LifestyleService
 
 router = APIRouter()
 

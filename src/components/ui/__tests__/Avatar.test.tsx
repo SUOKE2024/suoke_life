@@ -1,15 +1,12 @@
-import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react-native";
-import { Provider } from "react-redux";";"
 import { configureStore } from "@reduxjs/toolkit";
-import Avatar from "../Avatar";
+
+import React from "react";
 // Mock store for testing
-const mockStore = configureStore({;
-  reducer: {
+const mockStore = configureStore({reducer: {
     // Add your reducers here
   });};);
-const renderWithProvider = (component: React.ReactElement) => {;
-  return render(;
+const renderWithProvider = (component: React.ReactElement) => {return render(;
     <Provider store={mockStore}>;
       {component});
     </Provid;e;r;>
@@ -20,16 +17,16 @@ describe("Avatar", () => { {
     jest.clearAllMocks();
   });
   it("should render without crashing, () => { {", () => {
-    renderWithProvider(<Avatar />)
+    renderWithProvider(<Avatar />);
     expect(screen.getByTestId("avatar");).toBeTruthy();
   });
   it("should display correct initial state", () => {
-    renderWithProvider(<Avatar />)
+    renderWithProvider(<Avatar />);
     // Add specific assertions for initial state
 expect(screen.getByTestId("avatar)).toBeTruthy();"
   });
   it("should handle user interactions correctly", async (); => {
-    renderWithProvider(<Avatar />)
+    renderWithProvider(<Avatar />);
     // Example: Test button press
 const button = screen.getByRole(button";);"
     fireEvent.press(button);
@@ -39,16 +36,15 @@ expect(screen.getByTestId("avatar)).toBeTruthy();"
     });
   });
   it("should handle props correctly", () => {
-    const testProps =  {;
-      /*  Add test props here *;/
+    const testProps =  {/*  Add test props here *;/
     ;};
-    renderWithProvider(<Avatar {...testProps} />)
+    renderWithProvider(<Avatar {...testProps} />);
     // Add assertions for prop handling
 expect(screen.getByTestId(avatar")).toBeTruthy();"
   });
   it("should handle error states gracefully, () => { {", () => {
     // Test error scenarios
-renderWithProvider(<Avatar />)
+renderWithProvider(<Avatar />);
     // Add error state assertions
 expect(screen.getByTestId("avatar")).toBeTruthy();
   });

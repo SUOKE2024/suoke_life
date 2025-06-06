@@ -1,16 +1,21 @@
 """
+logging - 索克生活项目模块
+"""
+
+from .config import settings
+from typing import Any
+import logging
+import structlog
+import sys
+
+"""
 结构化日志模块
 
 使用 structlog 提供结构化日志记录功能。
 """
 
-import logging
-import sys
-from typing import Any
 
-import structlog
 
-from .config import settings
 
 def configure_logging() -> None:
     """配置结构化日志"""

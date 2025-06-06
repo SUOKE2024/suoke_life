@@ -1,4 +1,4 @@
-import { performance } from "perf_hooks";
+import { performance } from 'perf_hooks';
 
 // Mock function for testing
 function someFunction(data?: any) {
@@ -6,19 +6,19 @@ function someFunction(data?: any) {
   return data;
 }
 
-describe("agents", () => {
+describe('agents', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("should have basic functionality", () => {
+  it('should have basic functionality', () => {
     // Basic test to prevent empty describe block error
     expect(true).toBe(true);
   });
 });
 
-describe("agents Performance Tests", () => {
-  it("should execute within performance thresholds", () => {
+describe('agents Performance Tests', () => {
+  it('should execute within performance thresholds', () => {
     const iterations = 10;
     const startTime = performance.now();
     for (let i = 0; i < iterations; i++) {
@@ -31,7 +31,7 @@ describe("agents Performance Tests", () => {
     expect(averageTime).toBeLessThan(1);
   });
 
-  it("should handle large datasets efficiently", () => {
+  it('should handle large datasets efficiently', () => {
     const largeDataset = new Array(10000).fill(0).map((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
@@ -41,7 +41,7 @@ describe("agents Performance Tests", () => {
     expect(endTime - startTime).toBeLessThan(100);
   });
 
-  it("should not cause memory leaks", () => {
+  it('should not cause memory leaks', () => {
     const initialMemory = process.memoryUsage().heapUsed;
     // Execute function multiple times
     for (let i = 0; i < 1000; i++) {

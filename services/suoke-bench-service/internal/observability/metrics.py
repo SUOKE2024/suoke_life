@@ -1,19 +1,25 @@
 """
+metrics - 索克生活项目模块
+"""
+
+            import psutil
+from collections import defaultdict, deque
+from dataclasses import dataclass, field
+from datetime import datetime
+from prometheus_client import (
+from typing import Any
+import logging
+import statistics
+import threading
+import time
+
+"""
 监控指标模块
 
 提供详细的性能监控、指标收集和可观测性功能
 """
 
-import logging
-import statistics
-import threading
-import time
-from collections import defaultdict, deque
-from dataclasses import dataclass, field
-from datetime import datetime
-from typing import Any
 
-from prometheus_client import (
     CollectorRegistry,
     Counter,
     Gauge,
@@ -351,7 +357,6 @@ class PerformanceMonitor:
         self._monitoring = True
 
         def monitor_loop():
-            import psutil
 
             while self._monitoring:
                 try:

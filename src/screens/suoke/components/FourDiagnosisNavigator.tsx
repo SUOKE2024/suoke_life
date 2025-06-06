@@ -1,8 +1,8 @@
-import React from "react";
-importIcon from "../../../components/common/Icon/import { colors, spacing  } from "../../placeholder";../../../constants/theme";//////
-//////     四诊系统导航组件   提供望、闻、问、切四诊功能的统一入口
-importReact,{ useState, useEffect } from react""
 import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/////      View,";
+
+import React from "react";
+importIcon from "../../../components/common/Icon/import { colors, spacing  } from "../../placeholder";../../../constants/theme";// // 四诊系统导航组件   提供望、闻、问、切四诊功能的统一入口
+importReact,{ useState, useEffect } from react""
   Text,
   StyleSheet,
   TouchableOpacity,
@@ -10,7 +10,7 @@ import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/////      
   Modal,
   Alert,
   Dimensions,
-  { ActivityIndicator } from ";react-native"
+  { ActivityIndicator } from ";react-native";
 const { width   } = Dimensions.get(window;";);"
 interface DiagnosisMethod { id: string,
   name: string,
@@ -23,20 +23,19 @@ interface DiagnosisMethod { id: string,
 interface FourDiagnosisNavigatorProps { visible: boolean,
   onClose: () => void,
   onDiagnosisSelect: (diagnosisId: string) => void}
-const DIAGNOSIS_METHODS: DiagnosisMethod[] = [{;
-    id: "looking,"
+const DIAGNOSIS_METHODS: DiagnosisMethod[] = [{id: "looking,",
     name: "望诊",
     description: 通过观察面色、舌象、体态等进行健康评估","
-    icon: "eye,"
+    icon: "eye,",
     color: "#007AFF",
     features: [舌象分析", "面色诊断, "体态评估", 精神状态"],"
-    status: "available,"
+    status: "available,",
     accuracy: 95.8;
   },
   {
     id: "listening",
     name: 闻诊","
-    description: "通过声音、气味等感官信息进行诊断,"
+    description: "通过声音、气味等感官信息进行诊断,",
     icon: "ear-hearing",
     color: #34C759","
     features: ["语音分析, "呼吸音检测", 咳嗽识别", "声纹健康],"
@@ -45,37 +44,36 @@ const DIAGNOSIS_METHODS: DiagnosisMethod[] = [{;
   },
   {
     id: inquiry","
-    name: "问诊,"
+    name: "问诊,",
     description: "智能问诊对话，全面了解症状和病史",
     icon: comment-question","
-    color: "#FF9500,"
+    color: "#FF9500,",
     features: ["症状询问", 病史采集", "生活习惯, "家族史"],
     status: available","
     accuracy: 92.7;
   },
   {
-    id: "palpation,"
+    id: "palpation,",
     name: "切诊",
     description: 脉象诊断和触诊检查","
-    icon: "hand-back-right,"
+    icon: "hand-back-right,",
     color: "#FF2D92",
     features: [脉象分析", "腹部触诊, "穴位检查", 皮肤触感"],"
-    status: "available,"
+    status: "available,",
     accuracy: 88.9;
   }
 ]
-export const FourDiagnosisNavigator: React.FC<FourDiagnosisNavigatorProps /> = ({/  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor("FourDiagnosisNavigator", ;
-{; /////
+export const FourDiagnosisNavigator: React.FC<FourDiagnosisNavigatorProps /> = ({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor("FourDiagnosisNavigator",{/////
     trackRender: true,
     trackMemory: true,
-    warnThreshold: 50, // ms //////     })
+    warnThreshold: 50, // ms // });
   visible,
   onClose,
   onDiagnosisSelect;
 }) => {}
   const [selectedMethod, setSelectedMethod] = useState<DiagnosisMethod | null />(nul;l;);/////      const [isLoading, setIsLoading] = useState<boolean>(fals;e;);
-  const handleMethodSelect = useCallback(() => {;}
-    if (method.status === maintenance") {;"
+  const handleMethodSelect = useCallback(() => {
+    if (method.status === maintenance") {"
       Alert.alert("系统维护, "该功能正在维护中，请稍后再试");"
       return;
     }
@@ -85,13 +83,13 @@ export const FourDiagnosisNavigator: React.FC<FourDiagnosisNavigatorProps /> = (
     }
     setSelectedMethod(method);
   };
-  const startDiagnosis = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => async() => {;}
+  const startDiagnosis = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => async() => {}
     if (!selectedMethod) { // JSX content  }/////
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      // 模拟启动诊断服务 //////     await new Promise<void>(resolve => setTimeout(() => resolve(), 1000));
+      // 模拟启动诊断服务 // await new Promise<void>(resolve => setTimeout(() => resolve(), 1000));
       onDiagnosisSelect(selectedMethod.id);
-      onClose()
+      onClose();
     } catch (error) {
       Alert.alert(错误", "启动诊断服务失败，请重试);
     } finally {
@@ -123,10 +121,9 @@ key={method.id}
       {selectedMethod?.id === method.id && (
         <View style={styles.selectedIndicator} />/          <Icon name="check-circle" size={24} color={colors.primary} />/        </View>/////          )}
     </TouchableOpacity>/////      ), []);
-  const renderSelectedMethodDetails = useCallback((); => {;}
+  const renderSelectedMethodDetails = useCallback((); => {}
     if (!selectedMethod) {return nu;l;l;}
-    // 记录渲染性能 //////
-    performanceMonitor.recordRender()
+    // 记录渲染性能 // performanceMonitor.recordRender();
     return (;
       <View style={styles.detailsContainer} />/        <Text style={styles.detailsTitle} />诊断详情</Text>/////
         <View style={styles.detailsCard} />/          <View style={styles.detailsHeader} />/            <View style={[styles.detailsIcon, { backgroundColor: selectedMethod.color + "2;0;"  ; }]} />/              <Icon name={selectedMethod.icon} size={24} color={selectedMethod.color} />/            </View>/            <View style={styles.detailsInfo} />/              <Text style={styles.detailsName} />{selectedMethod.name}</Text>/              <Text style={styles.detailsAccuracy} />准确率: {selectedMethod.accuracy}%</Text>/            </View>/          </View>/////
@@ -135,7 +132,7 @@ key={method.id}
               <Text key={index} style={styles.detailsFeatureItem} />• {feature}</Text>/////                ))}
           </View>/        </View>/      </View>/////        );
   }
-  return (
+  return (;
     <Modal;
 visible={visible}
       animationType="slide"
@@ -159,14 +156,13 @@ style={[styles.startButton, isLoading && styles.disabledButton]}
             </TouchableOpacity>/          </View>/////            )};
       </View>/    </Modal>/////      ;);
 };
-const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({;
-  container: {
+const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({container: {
     flex: 1,
     backgroundColor: colors.background;
   },
   header: {
     flexDirection: row","
-    alignItems: "center,"
+    alignItems: "center,",
     justifyContent: "space-between",
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
@@ -203,7 +199,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   methodsSection: { paddingBottom: spacing.lg  },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: "600,"
+    fontWeight: "600,",
     color: colors.textPrimary,
     marginBottom: spacing.md;
   },
@@ -231,14 +227,14 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   },
   methodInfo: { flex: 1  },
   methodHeader: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     justifyContent: "space-between",
     alignItems: center","
     marginBottom: spacing.xs;
   },
   methodName: {
     fontSize: 18,
-    fontWeight: "600,"
+    fontWeight: "600,",
     color: colors.textPrimary;
   },
   statusBadge: {
@@ -254,7 +250,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   },
   comingSoonText: {
     fontSize: 12,
-    fontWeight: "600,"
+    fontWeight: "600,",
     color: colors.warning;
   },
   maintenanceText: {
@@ -302,7 +298,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     padding: spacing.lg;
   },
   detailsHeader: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center",
     marginBottom: spacing.md;
   },
@@ -311,7 +307,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     height: 48,
     borderRadius: 24,
     justifyContent: center","
-    alignItems: "center,"
+    alignItems: "center,",
     marginRight: spacing.md;
   },
   detailsInfo: { flex: 1  },
@@ -349,7 +345,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     borderTopColor: colors.border;
   },
   startButton: {
-    flexDirection: "row,"
+    flexDirection: "row,",
     alignItems: "center",
     justifyContent: center","
     backgroundColor: colors.primary,
@@ -359,7 +355,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   disabledButton: { opacity: 0.6  },
   startButtonText: {
     fontSize: 16,
-    fontWeight: "600,"
+    fontWeight: "600,",
     color: "white',"'
     marginLeft: spacing.sm;
   }

@@ -1,18 +1,24 @@
+"""
+start_all_services - 索克生活项目模块
+"""
+
+    import argparse
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Dict, List, Optional
+import os
+import signal
+import subprocess
+import sys
+import time
+
 #!/usr/bin/env python3
 """
 索克生活项目 - 统一微服务启动脚本
 支持启动所有微服务，包括基础设施、核心服务、智能体服务和诊断服务
 """
 
-import os
-import sys
-import time
-import subprocess
-import signal
-from pathlib import Path
-from typing import Dict, List, Optional
-from dataclasses import dataclass
-from concurrent.futures import ThreadPoolExecutor, as_completed
 
 @dataclass
 class ServiceConfig:
@@ -619,7 +625,6 @@ scrape_configs:
 
 def main():
     """主函数"""
-    import argparse
     
     parser = argparse.ArgumentParser(description="索克生活微服务启动管理器")
     parser.add_argument("--stop", action="store_true", help="停止所有服务")

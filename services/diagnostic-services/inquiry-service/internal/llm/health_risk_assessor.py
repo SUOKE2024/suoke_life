@@ -1,14 +1,19 @@
+"""
+health_risk_assessor - 索克生活项目模块
+"""
+
+from datetime import datetime
+from typing import Any
+import json
+import logging
+import os
+
 #!/usr/bin/env python
 
 """
 健康风险评估模块，基于症状、病史和体质类型进行风险评估
 """
 
-from datetime import datetime
-import json
-import logging
-import os
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

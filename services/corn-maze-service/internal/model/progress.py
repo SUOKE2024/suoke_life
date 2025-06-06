@@ -1,12 +1,17 @@
+"""
+progress - 索克生活项目模块
+"""
+
+from dataclasses import dataclass, field
+from datetime import datetime
+from typing import Any
+
 #!/usr/bin/env python3
 
 """
 用户进度模型定义
 """
 
-from dataclasses import dataclass, field
-from datetime import datetime
-from typing import Any
 
 
 @dataclass

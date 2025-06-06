@@ -1,3 +1,12 @@
+"""
+service - 索克生活项目模块
+"""
+
+from datetime import datetime
+from enum import Enum
+from pydantic import BaseModel, Field
+from typing import Any, Dict, List, Optional
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -7,11 +16,7 @@
 定义服务实例、服务状态等相关的数据结构。
 """
 
-from datetime import datetime
-from enum import Enum
-from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, Field
 
 
 class ServiceStatus(str, Enum):

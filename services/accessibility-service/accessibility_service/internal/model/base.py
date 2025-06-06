@@ -1,17 +1,22 @@
 """
-Base Model Classes
+base - 索克生活项目模块
 """
 
 from abc import ABC
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any
-
 from pydantic import BaseModel as PydanticBaseModel
 from pydantic import Field
 from sqlalchemy import Column, DateTime, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
+from typing import Any
+
+"""
+Base Model Classes
+"""
+
+
 
 # SQLAlchemy Base
 SQLAlchemyBase = declarative_base()
@@ -57,6 +62,18 @@ class BaseDBModel(BaseModel):
         """更新时间戳"""
         self.updated_at = datetime.now()
 
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'basedbmodel'
+        ordering = ['-created_at']
+
 
 @dataclass
 class BaseRequest(ABC):
@@ -85,6 +102,30 @@ class BaseDBModel(SQLAlchemyBase):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     created_by = Column(String(100), nullable=True)
     updated_by = Column(String(100), nullable=True)
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'basemodel'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'paginationparams'
+        ordering = ['-created_at']
 
 
 class BaseModel(PydanticBaseModel):

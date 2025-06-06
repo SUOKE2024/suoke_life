@@ -1,13 +1,18 @@
 """
+gateway - 索克生活项目模块
+"""
+
+from datetime import datetime
+from pydantic import BaseModel, Field
+from typing import Any, Dict, List, Optional, Union
+
+"""
 网关请求响应模型
 
 定义网关处理的请求和响应数据结构。
 """
 
-from datetime import datetime
-from typing import Any, Dict, List, Optional, Union
 
-from pydantic import BaseModel, Field
 
 class GatewayRequest(BaseModel):
     """网关请求模型"""

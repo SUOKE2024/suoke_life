@@ -1,3 +1,15 @@
+"""
+simple_test - 索克生活项目模块
+"""
+
+        from calculation_service.core.algorithms.wuyun_liuqi.calculator import WuyunLiuqiCalculator
+        from calculation_service.utils.bagua_calculator import BaguaCalculator
+        from calculation_service.utils.bazi_calculator import BaziCalculator
+        from calculation_service.utils.ziwu_calculator import ZiwuCalculator
+from datetime import date
+import os
+import sys
+
 #!/usr/bin/env python3
 """
 简化测试脚本
@@ -5,9 +17,6 @@
 测试算诊微服务的基本功能，避免复杂的模型定义
 """
 
-import sys
-import os
-from datetime import date
 
 # 添加项目路径
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -23,13 +32,9 @@ def test_basic_imports():
         print("✓ 五运六气数据导入成功")
         
         # 测试计算器
-        from calculation_service.core.algorithms.wuyun_liuqi.calculator import WuyunLiuqiCalculator
         print("✓ 五运六气计算器导入成功")
         
         # 测试工具类
-        from calculation_service.utils.bazi_calculator import BaziCalculator
-        from calculation_service.utils.bagua_calculator import BaguaCalculator
-        from calculation_service.utils.ziwu_calculator import ZiwuCalculator
         print("✓ 工具类导入成功")
         
         return True
@@ -42,7 +47,6 @@ def test_wuyun_liuqi():
     try:
         print("\n测试五运六气计算...")
         
-        from calculation_service.core.algorithms.wuyun_liuqi.calculator import WuyunLiuqiCalculator
         
         calculator = WuyunLiuqiCalculator()
         result = calculator.calculate_year_analysis(2024)
@@ -61,7 +65,6 @@ def test_bazi_calculation():
     try:
         print("\n测试八字计算...")
         
-        from calculation_service.utils.bazi_calculator import BaziCalculator
         
         calculator = BaziCalculator()
         result = calculator.calculate_bazi(date(1990, 5, 15), "10:00")
@@ -82,7 +85,6 @@ def test_bagua_calculation():
     try:
         print("\n测试八卦计算...")
         
-        from calculation_service.utils.bagua_calculator import BaguaCalculator
         
         calculator = BaguaCalculator()
         result = calculator.calculate_constitution(date(1990, 5, 15), "male")
@@ -101,7 +103,6 @@ def test_ziwu_calculation():
     try:
         print("\n测试子午流注计算...")
         
-        from calculation_service.utils.ziwu_calculator import ZiwuCalculator
         
         calculator = ZiwuCalculator()
         result = calculator.calculate_optimal_time(date.today())

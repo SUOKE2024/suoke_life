@@ -1,3 +1,13 @@
+"""
+session - 索克生活项目模块
+"""
+
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any
+import time
+import uuid
+
 #!/usr/bin/env python
 
 """
@@ -5,11 +15,6 @@
 定义问诊会话的数据结构，包括会话状态、问答历史等
 """
 
-from dataclasses import dataclass, field
-from enum import Enum
-import time
-from typing import Any
-import uuid
 
 
 class SessionStatus(str, Enum):

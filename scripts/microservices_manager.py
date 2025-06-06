@@ -1,3 +1,21 @@
+"""
+microservices_manager - 索克生活项目模块
+"""
+
+    import argparse
+from dataclasses import dataclass, asdict
+from datetime import datetime
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple, Any
+import aiohttp
+import asyncio
+import os
+import signal
+import subprocess
+import sys
+import time
+import yaml
+
 #!/usr/bin/env python3
 """
 索克生活平台微服务统一管理系统
@@ -11,18 +29,6 @@
 6. 性能监控和报警
 """
 
-import os
-import yaml
-import asyncio
-import aiohttp
-import subprocess
-import time
-from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Any
-from dataclasses import dataclass, asdict
-from datetime import datetime
-import signal
-import sys
 
 @dataclass
 class ServiceInfo:
@@ -476,7 +482,6 @@ class MicroservicesManager:
 
 async def main():
     """主函数"""
-    import argparse
     
     parser = argparse.ArgumentParser(description="索克生活平台微服务管理系统")
     parser.add_argument("--start", action="store_true", help="启动所有微服务")

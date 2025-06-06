@@ -1,19 +1,26 @@
 """
-健康检查端点
-提供服务状态监控功能
+health_check - 索克生活项目模块
 """
-import asyncio
-import logging
-from datetime import datetime
-from typing import Any
 
+            import psutil
+        from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
+from datetime import datetime
 from fastapi import APIRouter, HTTPException, Response
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel
-
 from pkg.utils.connection_pool import get_pool_manager
 from pkg.utils.dependency_injection import get_container
 from pkg.utils.metrics import get_metrics_collector
+from pydantic import BaseModel
+from typing import Any
+import asyncio
+import logging
+
+"""
+健康检查端点
+提供服务状态监控功能
+"""
+
+
 
 logger = logging.getLogger(__name__)
 
@@ -245,7 +252,6 @@ class HealthChecker:
     async def _check_memory_usage(self) -> ComponentHealth:
         """检查内存使用情况"""
         try:
-            import psutil
 
             memory = psutil.virtual_memory()
             memory_percent = memory.percent
@@ -288,7 +294,6 @@ class HealthChecker:
     async def _check_disk_space(self) -> ComponentHealth:
         """检查磁盘空间"""
         try:
-            import psutil
 
             disk = psutil.disk_usage('/')
             disk_percent = (disk.used / disk.total) * 100
@@ -435,7 +440,6 @@ async def metrics_endpoint():
     返回Prometheus格式的指标
     """
     try:
-        from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 
         metrics_data = generate_latest()
 

@@ -1,12 +1,21 @@
 """
-Auth-Service 数据库初始化问题最终解决方案测试
-专注于验证核心数据库功能和基础服务端点
+test_auth_final_sqlite - 索克生活项目模块
 """
+
+        from test_database_manager_sqlite_compatible import TestUser
+    from auth_service.main import create_app
+from auth_service.core.database import get_db
+from fastapi.testclient import TestClient
+from sqlalchemy import text
+from test_database_manager_sqlite_compatible import TestDatabaseManager
 import os
 import pytest
 import pytest_asyncio
-from fastapi.testclient import TestClient
-from sqlalchemy import text
+
+"""
+Auth-Service 数据库初始化问题最终解决方案测试
+专注于验证核心数据库功能和基础服务端点
+"""
 
 # 设置测试环境变量
 os.environ["ENVIRONMENT"] = "testing"
@@ -14,8 +23,6 @@ os.environ["DATABASE_URL"] = "sqlite+aiosqlite:///:memory:"
 os.environ["SECRET_KEY"] = "test-secret-key-for-testing-only"
 os.environ["REDIS_URL"] = "redis://localhost:6379/1"
 
-from auth_service.core.database import get_db
-from test_database_manager_sqlite_compatible import TestDatabaseManager
 
 
 @pytest_asyncio.fixture(scope="function")
@@ -30,12 +37,12 @@ async def test_db_manager():
 @pytest.fixture
 def app(test_db_manager):
     """创建测试应用"""
-    from auth_service.main import create_app
     
     app = create_app()
     
     # 覆盖数据库依赖
-    async def override_get_db():
+    async     @cache(timeout=300)  # 5分钟缓存
+def override_get_db():
         async for session in test_db_manager.get_session():
             yield session
             break
@@ -98,7 +105,6 @@ class TestDatabaseInitialization:
         """测试基础CRUD操作"""
         print("💾 测试基础CRUD操作...")
         
-        from test_database_manager_sqlite_compatible import TestUser
         
         async for session in test_db_manager.get_session():
             # 创建用户
@@ -182,7 +188,6 @@ class TestDatabaseIsolation:
         """测试不同测试之间的数据库隔离"""
         print("🔒 测试数据库隔离...")
         
-        from test_database_manager_sqlite_compatible import TestUser
         
         async for session in test_db_manager.get_session():
             # 检查数据库是否为空（新的测试应该有干净的数据库）

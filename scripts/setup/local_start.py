@@ -1,17 +1,23 @@
+"""
+local_start - 索克生活项目模块
+"""
+
+    import argparse
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Dict, List, Optional
+import os
+import signal
+import subprocess
+import sys
+import time
+
 #!/usr/bin/env python3
 """
 索克生活项目 - 本地简化启动脚本
 直接启动应用服务，不依赖Docker基础设施
 """
 
-import os
-import sys
-import time
-import subprocess
-import signal
-from pathlib import Path
-from typing import Dict, List, Optional
-from dataclasses import dataclass
 
 @dataclass
 class LocalService:
@@ -306,7 +312,6 @@ class LocalServiceManager:
 
 def main():
     """主函数"""
-    import argparse
     
     parser = argparse.ArgumentParser(description="索克生活本地服务启动管理器")
     parser.add_argument("--stop", action="store_true", help="停止所有服务")

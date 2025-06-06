@@ -1,13 +1,18 @@
 """
-Unit tests for the core accessibility service.
+test_core_service - 索克生活项目模块
 """
-
-import asyncio
-import pytest
-from unittest.mock import AsyncMock, MagicMock, patch
 
 from accessibility_service.core.service import AccessibilityService
 from accessibility_service.models.accessibility import (
+from unittest.mock import AsyncMock, MagicMock, patch
+import asyncio
+import pytest
+
+"""
+Unit tests for the core accessibility service.
+"""
+
+
     AccessibilityRequest,
     AccessibilityResponse,
     VisualAnalysis,

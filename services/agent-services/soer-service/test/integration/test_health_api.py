@@ -1,17 +1,22 @@
-#!/usr/bin/env python3
 """
-健康检查API集成测试
+test_health_api - 索克生活项目模块
 """
+
+from fastapi.testclient import TestClient
+from internal.delivery.rest import init_rest_app
 import os
 import sys
 import unittest
 
-from fastapi.testclient import TestClient
+#!/usr/bin/env python3
+"""
+健康检查API集成测试
+"""
+
 
 # 确保能够导入应用代码
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-from internal.delivery.rest import init_rest_app
 
 
 class TestHealthAPI(unittest.TestCase):

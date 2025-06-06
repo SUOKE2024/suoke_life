@@ -1,12 +1,17 @@
+"""
+quick_finish_migration - 索克生活项目模块
+"""
+
+from pathlib import Path
+from typing import Dict, List
+import subprocess
+
 #!/usr/bin/env python3
 """
 索克生活项目 - 快速完成uv迁移脚本
 处理剩余服务并生成最终报告
 """
 
-import subprocess
-from pathlib import Path
-from typing import Dict, List
 
 class QuickMigrationFinisher:
     """快速迁移完成器"""

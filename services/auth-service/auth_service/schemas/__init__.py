@@ -1,6 +1,12 @@
-"""API数据传输对象模块"""
+"""
+__init__ - 索克生活项目模块
+"""
 
 from auth_service.schemas.auth import (
+from auth_service.schemas.user import (
+
+"""API数据传输对象模块"""
+
     LoginRequest,
     LoginResponse,
     RefreshTokenRequest,
@@ -9,7 +15,6 @@ from auth_service.schemas.auth import (
     MFASetupResponse,
     MFAVerifyRequest,
 )
-from auth_service.schemas.user import (
     UserCreateRequest,
     UserResponse,
     UserUpdateRequest,

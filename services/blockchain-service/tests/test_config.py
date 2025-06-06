@@ -1,13 +1,19 @@
 """
+test_config - 索克生活项目模块
+"""
+
+    import os
+from pydantic import ValidationError
+from suoke_blockchain_service.config import Settings
+import pytest
+
+"""
 配置模块测试
 
 测试现代化的配置管理功能。
 """
 
-from pydantic import ValidationError
-import pytest
 
-from suoke_blockchain_service.config import Settings
 
 
 def test_settings_creation():
@@ -100,7 +106,6 @@ def test_invalid_log_level():
 
 def test_environment_override():
     """测试环境变量覆盖"""
-    import os
 
     # 临时设置环境变量
     os.environ["APP_NAME"] = "Test Service"

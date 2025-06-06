@@ -1,24 +1,29 @@
-#!/usr/bin/env python3
 """
-消息队列和异步任务管理器
-支持Redis、RabbitMQ等多种消息队列，提供任务调度、延迟队列、死信队列等功能
+queue_manager - 索克生活项目模块
 """
 
-import asyncio
-import json
-import logging
-import time
-import uuid
+from aio_pika import DeliveryMode, Message
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from functools import wraps
 from typing import Any
-
 import aio_pika
 import aioredis
-from aio_pika import DeliveryMode, Message
+import asyncio
+import json
+import logging
+import time
+import uuid
+
+#!/usr/bin/env python3
+"""
+消息队列和异步任务管理器
+支持Redis、RabbitMQ等多种消息队列，提供任务调度、延迟队列、死信队列等功能
+"""
+
+
 
 logger = logging.getLogger(__name__)
 

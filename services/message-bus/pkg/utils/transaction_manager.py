@@ -1,3 +1,17 @@
+"""
+transaction_manager - 索克生活项目模块
+"""
+
+                import redis
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Set, Callable, Union
+import asyncio
+import json
+import logging
+import time
+import uuid
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,14 +20,6 @@
 支持消息事务、两阶段提交、分布式事务和可靠性保证
 """
 
-import asyncio
-import json
-import logging
-import time
-import uuid
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Callable, Union
 
 logger = logging.getLogger(__name__)
 
@@ -925,7 +931,6 @@ class TransactionManagerFactory:
         if storage is None:
             # 创建默认的Redis存储
             try:
-                import redis
                 redis_client = redis.Redis(host='localhost', port=6379, decode_responses=True)
                 storage = RedisTransactionStorage(redis_client)
             except ImportError:

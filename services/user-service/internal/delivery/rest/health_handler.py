@@ -1,21 +1,27 @@
 """
-健康检查API处理器
-提供健康检查、状态监控和指标暴露等功能
+health_handler - 索克生活项目模块
 """
+
+        import psutil
+from datetime import datetime, timedelta
+from fastapi import APIRouter, Depends, Request, Response
+from fastapi.responses import JSONResponse
+from internal.observability.metrics import prometheus_metrics
+from internal.repository.sqlite_user_repository import SQLiteUserRepository
+from prometheus_client import REGISTRY, generate_latest, CONTENT_TYPE_LATEST
+from typing import Dict, List, Optional, Any
 import logging
 import os
 import platform
 import sys
 import time
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Any
 
-from fastapi import APIRouter, Depends, Request, Response
-from fastapi.responses import JSONResponse
-from prometheus_client import REGISTRY, generate_latest, CONTENT_TYPE_LATEST
+"""
+健康检查API处理器
+提供健康检查、状态监控和指标暴露等功能
+"""
 
-from internal.repository.sqlite_user_repository import SQLiteUserRepository
-from internal.observability.metrics import prometheus_metrics
+
 
 # 日志记录器
 logger = logging.getLogger(__name__)
@@ -178,7 +184,6 @@ def get_process_memory_mb() -> float:
         float: 内存使用量（MB）
     """
     try:
-        import psutil
         process = psutil.Process(os.getpid())
         memory_info = process.memory_info()
         return round(memory_info.rss / (1024 * 1024), 2)  # 转换为MB

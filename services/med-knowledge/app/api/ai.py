@@ -1,15 +1,21 @@
 """
+ai - 索克生活项目模块
+"""
+
+            import json
+from app.core.dependencies import get_ai_service
+from app.core.logger import get_logger
+from app.services.ai_service import AIService
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
+from pydantic import BaseModel, Field
+from typing import Any, Dict, List, Optional
+
+"""
 AI服务API端点
 提供智能诊断、多模态分析和知识增强RAG功能
 """
 
-from typing import Any, Dict, List, Optional
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
-from pydantic import BaseModel, Field
 
-from app.core.dependencies import get_ai_service
-from app.services.ai_service import AIService
-from app.core.logger import get_logger
 
 logger = get_logger()
 
@@ -168,7 +174,6 @@ async def multimodal_image_analysis(
         # 解析上下文
         context_data = None
         if context:
-            import json
             try:
                 context_data = json.loads(context)
             except json.JSONDecodeError:
@@ -214,7 +219,6 @@ async def multimodal_audio_analysis(
         # 解析上下文
         context_data = None
         if context:
-            import json
             try:
                 context_data = json.loads(context)
             except json.JSONDecodeError:
@@ -264,7 +268,6 @@ async def multimodal_combined_analysis(
         # 解析上下文
         context_data = None
         if context:
-            import json
             try:
                 context_data = json.loads(context)
             except json.JSONDecodeError:

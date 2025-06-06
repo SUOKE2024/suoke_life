@@ -1,3 +1,12 @@
+"""
+service_registry - 索克生活项目模块
+"""
+
+from internal.model.config import GatewayConfig, ServiceConfig, ServiceEndpointConfig
+from kubernetes_asyncio import client, config
+from typing import Dict, List, Optional, Tuple
+import logging
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,13 +15,9 @@
 支持静态配置、Consul和Kubernetes服务发现
 """
 
-import logging
-from typing import Dict, List, Optional, Tuple
 
 # 导入自定义修补模块
-from kubernetes_asyncio import client, config
 
-from internal.model.config import GatewayConfig, ServiceConfig, ServiceEndpointConfig
 
 logger = logging.getLogger(__name__)
 

@@ -1,3 +1,22 @@
+"""
+data_quality - 索克生活项目模块
+"""
+
+                            from datetime import datetime
+from ..observability.metrics import MetricsCollector
+from ..observability.tracing import trace_operation, SpanKind
+from collections import defaultdict, Counter
+from dataclasses import dataclass, field
+from enum import Enum
+from loguru import logger
+from typing import Dict, List, Any, Optional, Callable, Union, Tuple, Set
+import asyncio
+import hashlib
+import json
+import re
+import statistics
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,20 +24,7 @@
 数据质量管理器 - 支持数据质量监控、清洗、治理等功能
 """
 
-import asyncio
-import time
-import json
-import re
-import hashlib
-from typing import Dict, List, Any, Optional, Callable, Union, Tuple, Set
-from dataclasses import dataclass, field
-from enum import Enum
-from collections import defaultdict, Counter
-import statistics
-from loguru import logger
 
-from ..observability.metrics import MetricsCollector
-from ..observability.tracing import trace_operation, SpanKind
 
 
 class DataQualityDimension(str, Enum):
@@ -431,7 +437,6 @@ class DataCleaner:
                     if format_type == "date":
                         # 日期格式标准化
                         try:
-                            from datetime import datetime
                             input_format = format_config.get("input_format", "%Y-%m-%d")
                             output_format = format_config.get("output_format", "%Y-%m-%d")
                             

@@ -1,17 +1,21 @@
 """
+logging - 索克生活项目模块
+"""
+
+from corn_maze_service.config import get_settings
+from structlog.types import EventDict, Processor
+from typing import Any
+import logging.config
+import structlog
+
+"""
 结构化日志配置
 
 使用 structlog 提供结构化日志记录功能。
 """
 
-import logging
-import logging.config
-from typing import Any
 
-import structlog
-from structlog.types import EventDict, Processor
 
-from corn_maze_service.config import get_settings
 
 
 def add_correlation_id(_logger: Any, _method_name: str, event_dict: EventDict) -> EventDict:

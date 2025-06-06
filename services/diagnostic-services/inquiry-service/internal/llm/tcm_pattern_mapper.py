@@ -1,13 +1,18 @@
+"""
+tcm_pattern_mapper - 索克生活项目模块
+"""
+
+from typing import Any
+import json
+import logging
+import os
+
 #!/usr/bin/env python
 
 """
 TCM证型映射器模块，根据症状映射到中医证型
 """
 
-import json
-import logging
-import os
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

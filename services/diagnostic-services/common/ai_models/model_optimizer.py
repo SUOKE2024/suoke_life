@@ -1,24 +1,29 @@
 """
+model_optimizer - 索克生活项目模块
+"""
+
+from dataclasses import dataclass
+from datetime import datetime
+from pathlib import Path
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.model_selection import train_test_split
+from torch.utils.data import DataLoader, Dataset
+from typing import Dict, List, Tuple, Any, Optional
+import asyncio
+import joblib
+import json
+import logging
+import numpy as np
+import time
+import torch
+import torch.nn as nn
+import torch.optim as optim
+
+"""
 AI模型优化器 - 提升五诊服务模型精度
 支持模型训练、调优、压缩和部署优化
 """
 
-import asyncio
-import logging
-import numpy as np
-import torch
-import torch.nn as nn
-import torch.optim as optim
-from torch.utils.data import DataLoader, Dataset
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-import joblib
-import json
-from pathlib import Path
-from typing import Dict, List, Tuple, Any, Optional
-from dataclasses import dataclass
-import time
-from datetime import datetime
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)

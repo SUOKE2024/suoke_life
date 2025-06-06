@@ -1,15 +1,20 @@
 """
-基于角色的访问控制中间件
+rbac - 索克生活项目模块
 """
-import logging
-from enum import Enum
-from functools import wraps
-from typing import Callable, Dict, List, Optional, Set, Union, Any
 
+from enum import Enum
 from fastapi import HTTPException, Request, Depends, Security
 from fastapi.security import OAuth2PasswordBearer, SecurityScopes
+from functools import wraps
 from jose import jwt, JWTError
 from pydantic import BaseModel
+from typing import Callable, Dict, List, Optional, Set, Union, Any
+import logging
+
+"""
+基于角色的访问控制中间件
+"""
+
 
 # 日志记录器
 logger = logging.getLogger(__name__)

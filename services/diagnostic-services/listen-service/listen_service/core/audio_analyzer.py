@@ -1,39 +1,46 @@
 """
+audio_analyzer - 索克生活项目模块
+"""
+
+                import io
+        import hashlib
+from ..config.settings import get_settings
+from ..models.audio_models import (
+from ..models.tcm_models import TCMDiagnosis
+from ..utils.cache import AudioCache
+from ..utils.performance import async_timer
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass
+from enum import Enum
+from pathlib import Path
+from scipy.stats import skew, kurtosis
+from sklearn.preprocessing import StandardScaler
+from typing import Any, Dict, List, Tuple, Optional
+import asyncio
+import librosa
+import numpy as np
+import scipy.signal
+import soundfile as sf
+import structlog
+import time
+import torch
+import webrtcvad
+
+"""
 现代化音频分析器
 
 基于 Python 3.13.3 和异步处理的高性能音频分析模块，
 专为中医闻诊设计，支持语音特征提取、声音分析和情绪识别。
 """
 
-import asyncio
-import time
-from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass
-from pathlib import Path
-from typing import Any, Dict, List, Tuple, Optional
 
-import librosa
-import soundfile as sf
-import structlog
-import torch
-import webrtcvad
-from sklearn.preprocessing import StandardScaler
-import numpy as np
-import scipy.signal
-from scipy.stats import skew, kurtosis
-from enum import Enum
 
-from ..config.settings import get_settings
-from ..models.audio_models import (
     AudioAnalysisRequest,
     AudioAnalysisResponse,
     AnalysisRequest,
     VoiceFeatures,
     ListenResult,
 )
-from ..models.tcm_models import TCMDiagnosis
-from ..utils.cache import AudioCache
-from ..utils.performance import async_timer
 
 logger = structlog.get_logger(__name__)
 
@@ -315,7 +322,6 @@ class AudioAnalyzer:
             # 处理字节数据
             try:
                 # 首先尝试作为音频文件读取
-                import io
                 audio_array, sample_rate = sf.read(io.BytesIO(audio_data))
                 return audio_array, sample_rate
             except Exception:
@@ -562,7 +568,6 @@ class AudioAnalyzer:
         request: AudioAnalysisRequest | None,
     ) -> str:
         """生成缓存键"""
-        import hashlib
 
         # 简化的缓存键生成
         if isinstance(audio_data, (str, Path)):

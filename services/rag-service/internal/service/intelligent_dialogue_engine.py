@@ -1,3 +1,19 @@
+"""
+intelligent_dialogue_engine - 索克生活项目模块
+"""
+
+from ..observability.metrics import MetricsCollector
+from ..observability.tracing import trace_operation, SpanKind
+from collections import defaultdict, deque
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from loguru import logger
+from typing import Dict, List, Any, Optional, Tuple, Union
+import jieba
+import re
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,18 +21,7 @@
 智能对话引擎 - 提供多轮对话、上下文理解、意图识别、情感分析
 """
 
-import time
-import re
-from typing import Dict, List, Any, Optional, Tuple, Union
-from dataclasses import dataclass, field
-from enum import Enum
-from datetime import datetime, timedelta
-from loguru import logger
-import jieba
-from collections import defaultdict, deque
 
-from ..observability.metrics import MetricsCollector
-from ..observability.tracing import trace_operation, SpanKind
 
 class DialogueState(str, Enum):
     """对话状态"""

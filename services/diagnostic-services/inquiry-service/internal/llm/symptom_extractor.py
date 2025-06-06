@@ -1,16 +1,23 @@
+"""
+symptom_extractor - 索克生活项目模块
+"""
+
+                from transformers import AutoModelForTokenClassification, AutoTokenizer
+            import torch
+from internal.llm.llm_client import LLMClient
+from typing import Any
+import json
+import logging
+import os
+import re
+
 #!/usr/bin/env python
 
 """
 症状提取器模块，用于从用户文本中提取症状信息
 """
 
-import json
-import logging
-import os
-import re
-from typing import Any
 
-from internal.llm.llm_client import LLMClient
 
 logger = logging.getLogger(__name__)
 
@@ -260,7 +267,6 @@ class SymptomExtractor:
             # 这里应该根据实际使用的模型类型进行加载
             # 例如使用基于HuggingFace transformers库的NER模型
             try:
-                from transformers import AutoModelForTokenClassification, AutoTokenizer
 
                 logger.info(f"正在加载症状提取模型: {self.model_path}")
                 self.tokenizer = AutoTokenizer.from_pretrained(self.model_path)
@@ -404,7 +410,6 @@ class SymptomExtractor:
     ) -> tuple[list[dict], list[dict], list[dict], float]:
         """使用NER模型提取症状"""
         try:
-            import torch
 
             # 对文本进行编码
             inputs = self.tokenizer(

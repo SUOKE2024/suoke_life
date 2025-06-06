@@ -1,25 +1,31 @@
 """
+vision_model - 索克生活项目模块
+"""
+
+        from io import BytesIO
+from ..config.settings import get_settings
+from ..models.accessibility import VisualAnalysis
+from PIL import Image
+from pathlib import Path
+from transformers import (
+from typing import Dict, List, Optional, Tuple, Any
+import asyncio
+import cv2
+import logging
+import numpy as np
+import torch
+import torchvision.transforms as transforms
+
+"""
 Vision AI model for accessibility analysis.
 Provides computer vision capabilities for visual accessibility features.
 """
 
-import asyncio
-import logging
-import numpy as np
-from typing import Dict, List, Optional, Tuple, Any
-from pathlib import Path
-import cv2
-from PIL import Image
-import torch
-import torchvision.transforms as transforms
-from transformers import (
     BlipProcessor, BlipForConditionalGeneration,
     DetrImageProcessor, DetrForObjectDetection,
     pipeline
 )
 
-from ..config.settings import get_settings
-from ..models.accessibility import VisualAnalysis
 
 logger = logging.getLogger(__name__)
 
@@ -744,7 +750,6 @@ class VisionModel:
     
     def _bytes_to_image(self, image_data: bytes) -> Image.Image:
         """Convert bytes to PIL Image."""
-        from io import BytesIO
         return Image.open(BytesIO(image_data)).convert("RGB")
     
     async def shutdown(self) -> None:

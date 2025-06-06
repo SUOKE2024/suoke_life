@@ -1,10 +1,15 @@
 """
-健康计划数据模型
+health_plan - 索克生活项目模块
 """
+
 from datetime import datetime, time
+from pydantic import BaseModel, Field
 from typing import Any
 
-from pydantic import BaseModel, Field
+"""
+健康计划数据模型
+"""
+
 
 
 class DietRecommendation(BaseModel):

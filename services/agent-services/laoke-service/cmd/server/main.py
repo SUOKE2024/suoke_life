@@ -1,26 +1,31 @@
+"""
+main - 索克生活项目模块
+"""
+
+from internal.delivery.grpc_server import GRPCServer  # noqa: E402
+from internal.delivery.rest_server import RESTServer  # noqa: E402
+from pathlib import Path
+from pkg.container.container import ServiceContainer  # noqa: E402
+from pkg.utils.config import Config  # noqa: E402
+from pkg.utils.logger import setup_logger  # noqa: E402
+import asyncio
+import logging
+import os
+import signal
+import sys
+
 #!/usr/bin/env python3
 
 """
 老克智能体服务器启动脚本
 """
 
-import asyncio
-import logging
-import os
-import signal
-import sys
-from pathlib import Path
 
 # 添加项目根目录到 Python 路径
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 # 项目导入
-from internal.delivery.grpc_server import GRPCServer  # noqa: E402
-from internal.delivery.rest_server import RESTServer  # noqa: E402
-from pkg.container.container import ServiceContainer  # noqa: E402
-from pkg.utils.config import Config  # noqa: E402
-from pkg.utils.logger import setup_logger  # noqa: E402
 
 logger = logging.getLogger(__name__)
 

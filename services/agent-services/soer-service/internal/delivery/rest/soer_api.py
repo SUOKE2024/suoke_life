@@ -1,15 +1,24 @@
 """
-索尔服务REST API接口实现
+soer_api - 索克生活项目模块
 """
-import logging
-from datetime import datetime
-from typing import Any
 
+from api.rest.schemas import (
+from datetime import datetime
 from fastapi import APIRouter, Body, Depends, FastAPI, HTTPException, Path, Query
 from fastapi.middleware.cors import CORSMiddleware
+from internal.lifecycle.health_profile.profile_service import HealthProfileService
+from internal.lifecycle.plan_generator.plan_service import HealthPlanService
+from internal.lifecycle.sensor_analyzer.sensor_service import SensorAnalysisService
+from internal.nutrition.recommendation.nutrition_service import NutritionService
+from typing import Any
+import logging
+
+"""
+索尔服务REST API接口实现
+"""
+
 
 # 导入API模型定义
-from api.rest.schemas import (
     AbnormalPatternRequest,
     AbnormalPatternResponse,
     HealthPlanRequest,
@@ -23,16 +32,12 @@ from api.rest.schemas import (
 )
 
 # 导入业务服务
-from internal.lifecycle.health_profile.profile_service import HealthProfileService
-from internal.lifecycle.plan_generator.plan_service import HealthPlanService
-from internal.lifecycle.sensor_analyzer.sensor_service import SensorAnalysisService
-from internal.nutrition.recommendation.nutrition_service import NutritionService
 
 logger = logging.getLogger(__name__)
 
 
 # 创建依赖项，获取服务实例
-def get_services():
+async def get_services(
     """获取服务实例的依赖项"""
     # 注：实际使用时应通过依赖注入框架获取
     return {
@@ -47,6 +52,7 @@ def get_services():
 router = APIRouter(prefix="/api/v1/soer", tags=["soer"])
 
 
+@limiter.limit("100/minute")  # 每分钟100次请求
 @router.post("/health-plans", response_model=HealthPlanResponse)
 async def generate_health_plan(
     request: HealthPlanRequest,
@@ -86,9 +92,11 @@ async def generate_health_plan(
 
     except Exception as e:
         logger.error(f"健康计划生成失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"健康计划生成失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"健康计划生成失败:@limiter.limit("100/minute")  # 每分钟100次请求
+ {str(e)}")
 
 
+@cache(expire=300)  # 5分钟缓存
 @router.get("/health-plans/{plan_id}", response_model=HealthPlanResponse)
 async def get_health_plan(
     plan_id: str = Path(..., description="健康计划ID"),
@@ -126,7 +134,9 @@ async def get_health_plan(
         raise
     except Exception as e:
         logger.error(f"获取健康计划失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"获取健康计划失败: {str(e)}")
+        raise HTTPExc@limiter.limit("100/minute")  # 每分钟100次请求
+eption(status_code=500, deta@cache(expire=300)  # 5分钟缓存
+il=f"获取健康计划失败: {str(e)}")
 
 
 @router.get("/users/{user_id}/active-plan", response_model=HealthPlanResponse)
@@ -165,8 +175,10 @@ async def get_active_plan(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"获取用户活跃健康计划失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"获取用户活跃健康计划失败: {str(e)}")
+        logger.error(f"获取用户活跃健康@limiter.limit("100/minute")  # 每分钟100次请求
+计划失败: {str(e)}")
+        raise HTTPExcepti@cache(expire=300)  # 5分钟缓存
+on(status_code=500, detail=f"获取用户活跃健康计划失败: {str(e)}")
 
 
 @router.get("/users/{user_id}/health-profile", response_model=dict[str, Any])
@@ -201,7 +213,8 @@ async def get_health_profile(
 
         return profile
 
-    except HTTPException:
+    except HTTPException@limiter.limit("100/minute")  # 每分钟100次请求
+:
         raise
     except Exception as e:
         logger.error(f"获取用户健康画像失败: {str(e)}")
@@ -232,7 +245,8 @@ async def analyze_sensor_data(
         # 构建响应
         response = SensorDataResponse(
             metrics=analysis_results.get("metrics", []),
-            insights=analysis_results.get("insights", [])
+            insights=analysis_resu@limiter.limit("100/minute")  # 每分钟100次请求
+lts.get("insights", [])
         )
 
         return response
@@ -267,7 +281,8 @@ async def track_nutrition(
             nutrition_balance=nutrition_analysis.get("nutrition_balance", {}),
             five_flavors_analysis=nutrition_analysis.get("five_flavors_analysis", {}),
             four_natures_analysis=nutrition_analysis.get("four_natures_analysis", {}),
-            improvement_suggestions=nutrition_analysis.get("improvement_suggestions", [])
+            improvemen@limiter.limit("100/minute")  # 每分钟100次请求
+t_suggestions=nutrition_analysis.get("improvement_suggestions", [])
         )
 
         return response
@@ -292,7 +307,8 @@ async def generate_diet_recommendations(
         logger.info(f"生成饮食推荐: user_id={user_id}, constitution_type={constitution_type}")
 
         # 调用营养服务
-        recommendations = await services["nutrition_service"].generate_diet_recommendations(
+        recommendations = await services["nutrition_service"].generate_diet_recommenda@limiter.limit("100/minute")  # 每分钟100次请求
+tions(
             user_id,
             constitution_type,
             season,
@@ -323,7 +339,8 @@ async def detect_abnormal_patterns(
             user_id,
             request.data_types,
             request.days,
-            request.sensitivity
+         @limiter.limit("100/minute")  # 每分钟100次请求
+   request.sensitivity
         )
 
         # 构建响应
@@ -355,7 +372,8 @@ async def predict_health_trends(
             user_id,
             request.metrics,
             request.prediction_days,
-            request.include_seasonal_factors
+           @limiter.limit("100/minute")  # 每分钟100次请求
+ request.include_seasonal_factors
         )
 
         # 构建响应
@@ -366,7 +384,8 @@ async def predict_health_trends(
         return response
 
     except Exception as e:
-        logger.error(f"健康趋势预测失败: {str(e)}")
+        logger.error(f"健康趋势预测失败: {str@cache(expire=300)  # 5分钟缓存
+(e)}")
         raise HTTPException(status_code=500, detail=f"健康趋势预测失败: {str(e)}")
 
 
@@ -382,7 +401,8 @@ async def get_food_details(
         logger.info(f"获取食物详情: food_name={food_name}")
 
         # 调用营养服务
-        food_details = await services["nutrition_service"].get_food_details(food_name)
+        food_details = await @limiter.limit("100/minute")  # 每分钟100次请求
+services["nutrition_service"].get_food_details(food_name)
 
         if "error" in food_details:
             raise HTTPException(status_code=404, detail=f"找不到食物: {food_name}")
@@ -392,7 +412,8 @@ async def get_food_details(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"获取食物详情失败: {str(e)}")
+        l@cache(expire=300)  # 5分钟缓存
+ogger.error(f"获取食物详情失败: {str(e)}")
         raise HTTPException(status_code=500, detail=f"获取食物详情失败: {str(e)}")
 
 
@@ -450,15 +471,17 @@ def create_app(config: dict, repos):
     health_profile_service = HealthProfileService(config, repos)
     health_plan_service = HealthPlanService(config, repos)
     sensor_analysis_service = SensorAnalysisService(config, repos)
-    nutrition_service = NutritionService(config, repos)
+    nutrition_service = NutritionService(config,@limiter.limit("100/minute")  # 每分钟100次请求
+ repos)
 
     # 覆盖依赖项获取函数
-    def get_services_override():
+    async def get_services_override(
         return {
             "health_profile_service": health_profile_service,
             "health_plan_service": health_plan_service,
             "sensor_analysis_service": sensor_analysis_service,
-            "nutrition_service": nutrition_service
+            "nutrition_service": nutr@cache(expire=300)  # 5分钟缓存
+ition_service
         }
 
     app.dependency_overrides[get_services] = get_services_override

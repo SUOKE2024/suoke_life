@@ -1,3 +1,16 @@
+"""
+tcm_knowledge_graph - 索克生活项目模块
+"""
+
+from ..common.base import BaseService
+from ..common.cache import cached
+from ..common.exceptions import InquiryServiceError
+from ..common.metrics import counter, memory_optimized, timer
+from dataclasses import dataclass, field
+from enum import Enum
+from loguru import logger
+from typing import Any
+
 #!/usr/bin/env python3
 
 """
@@ -7,16 +20,8 @@
 方剂推荐、知识推理和智能诊断辅助。
 """
 
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any
 
-from loguru import logger
 
-from ..common.base import BaseService
-from ..common.cache import cached
-from ..common.exceptions import InquiryServiceError
-from ..common.metrics import counter, memory_optimized, timer
 
 
 class TCMEntityType(Enum):

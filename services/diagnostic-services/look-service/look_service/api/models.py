@@ -1,12 +1,17 @@
 """
+models - 索克生活项目模块
+"""
+
+from datetime import datetime
+from pydantic import BaseModel, Field
+from typing import Any, Dict, List, Optional
+
+"""
 API模型定义
 
 定义望诊服务的请求和响应模型
 """
 
-from datetime import datetime
-from typing import Any, Dict, List, Optional
-from pydantic import BaseModel, Field
 
 
 class LookDiagnosisRequest(BaseModel):

@@ -1,18 +1,23 @@
+"""
+gil_performance_test - 索克生活项目模块
+"""
+
+from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+from typing import List, Dict, Any
+import asyncio
+import json
+import multiprocessing
+import pickle
+import psutil
+import time
+import zlib
+
 #!/usr/bin/env python3
 """
 GIL性能影响测试脚本
 用于评估项目中CPU密集型任务的GIL影响
 """
 
-import asyncio
-import time
-import multiprocessing
-import psutil
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
-from typing import List, Dict, Any
-import json
-import pickle
-import zlib
 
 class GILPerformanceTester:
     """GIL性能测试器"""

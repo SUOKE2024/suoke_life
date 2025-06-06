@@ -1,15 +1,20 @@
 """
+user_experience_enhancer - 索克生活项目模块
+"""
+
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Dict, List, Any, Optional
+import asyncio
+import json
+import logging
+import time
+
+"""
 用户体验优化器 - 提升五诊系统用户体验
 包含界面优化、交互改进、响应式设计等功能
 """
 
-import asyncio
-import json
-import logging
-from typing import Dict, List, Any, Optional
-from dataclasses import dataclass
-from pathlib import Path
-import time
 
 logger = logging.getLogger(__name__)
 

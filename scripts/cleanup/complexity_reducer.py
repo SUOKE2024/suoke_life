@@ -1,15 +1,20 @@
+"""
+complexity_reducer - 索克生活项目模块
+"""
+
+from pathlib import Path
+from radon.visitors import ComplexityVisitor
+from typing import List, Dict, Set, Tuple
+import ast
+import os
+import re
+
 #!/usr/bin/env python3
 """
 索克生活项目函数复杂度降低脚本
 检测高复杂度函数并进行重构以降低复杂度
 """
 
-import os
-import re
-import ast
-from pathlib import Path
-from typing import List, Dict, Set, Tuple
-from radon.visitors import ComplexityVisitor
 
 class ComplexityReducer:
     def __init__(self, project_root: str):

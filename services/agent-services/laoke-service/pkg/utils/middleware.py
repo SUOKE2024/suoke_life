@@ -1,3 +1,17 @@
+"""
+middleware - 索克生活项目模块
+"""
+
+from .config import Config
+from collections.abc import Callable
+from fastapi import Request, Response
+from starlette.middleware.base import BaseHTTPMiddleware
+from typing import Any
+import json
+import logging
+import time
+import uuid
+
 #!/usr/bin/env python
 
 """
@@ -5,17 +19,8 @@
 提供请求处理的中间件功能
 """
 
-import json
-import logging
-import time
-import uuid
-from collections.abc import Callable
-from typing import Any
 
-from fastapi import Request, Response
-from starlette.middleware.base import BaseHTTPMiddleware
 
-from .config import Config
 
 logger = logging.getLogger(__name__)
 config = Config()

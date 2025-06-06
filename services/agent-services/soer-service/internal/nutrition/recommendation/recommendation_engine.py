@@ -1,15 +1,20 @@
+"""
+recommendation_engine - 索克生活项目模块
+"""
+
+from pkg.utils.config_loader import get_config
+from typing import Any
+import json
+import logging
+import os
+
 #!/usr/bin/env python3
 """
 营养推荐引擎
 基于中医体质理论和现代营养学原理，提供个性化食物推荐
 """
 
-import json
-import logging
-import os
-from typing import Any
 
-from pkg.utils.config_loader import get_config
 
 logger = logging.getLogger(__name__)
 

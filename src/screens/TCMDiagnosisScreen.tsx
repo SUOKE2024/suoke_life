@@ -1,8 +1,10 @@
-/**////
- * 中医诊断界面
+import {import { Camera, CameraType } from "expo-camera;"
+import {  Ionicons, MaterialIcons  } from "@expo/////    vector-icons";
+
+/**
+ * * 中医诊断界面
  * 整合舌脉象分析和传感器数据采集功能
 import React, { useState, useEffect, useRef } from "react";
-import {
   View,
   Text,
   StyleSheet,
@@ -12,11 +14,9 @@ import {
   Alert,
   ActivityIndicator,
   Dimensions,
-  { Modal} from "../../placeholder";react-native";"
-import { Camera, CameraType } from "expo-camera";";"
-expo-linear-gradient";"
-import { Ionicons, MaterialIcons } from @expo/////    vector-icons";"
-//////     类型定义
+  { Modal} from "../../placeholder";react-native
+expo-linear-gradient
+// 类型定义
 interface TongueAnalysisResult {
   color: string;
   coating: string;
@@ -58,8 +58,8 @@ interface DiagnosisResult {
   timestamp: string;
 }
 const { width, height } = Dimensions.get("window);"
-const TCMDiagnosisScreen: React.FC  = () => {;}
-  //////     状态管理
+const TCMDiagnosisScreen: React.FC  = () => {}
+  // 状态管理
 const [currentStep, setCurrentStep] = useState<"tongue" | pulse" | "result>("tongue");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [tongueImage, setTongueImage] = useState<string | null>(null);
@@ -72,35 +72,33 @@ const [currentStep, setCurrentStep] = useState<"tongue" | pulse" | "result>("ton
   const [sensorConnected, setSensorConnected] = useState(false);
   const cameraRef = useRef<Camera>(null);
   const pulseTimerRef = useRef<NodeJS.Timeout | null>(null);
-  //////     权限检查
-useEffect(() => {}
+  // 权限检查
+useEffect(() => {
     checkCameraPermission();
-  }, []);
-  const checkCameraPermission = async() => {;}
+  }, [])  // 检查是否需要添加依赖项;
+  const checkCameraPermission = async() => {}
     const { status } = await Camera.requestCameraPermissionsAsync();
     setCameraPermission(status === granted");"
   };
-  //////     拍摄舌象照片
-const takeTonguePhoto = async() => {;}
+  // 拍摄舌象照片
+const takeTonguePhoto = async() => {}
     if (cameraRef.current) {
       try {
-        const photo = await cameraRef.current.takePictureAsync({;
-          quality: 0.8,;
-          base64: true});
+        const photo = await cameraRef.current.takePictureAsync({quality: 0.8,base64: true});
         setTongueImage(photo.uri);
         setShowCamera(false);
-        //////     分析舌象
+        // 分析舌象
 await analyzeTongueImage(photo.base64!);
       } catch (error) {
         Alert.alert("错误", 拍照失败，请重试");"
       }
     }
   };
-  //////     分析舌象图像
-const analyzeTongueImage = async (base64Image: string) => {;}
+  // 分析舌象图像
+const analyzeTongueImage = async (base64Image: string) => {}
     setIsAnalyzing(true);
     try {
-      const response = await fetch("http:// localhost:8000/api/v1/diagnosis/////    tongue-analysis, {;"
+      const response = await fetch("http:// localhost:8000/api/v1/diagnosis/////    tongue-analysis, {"
         method: "POST",
         headers: {
           Content-Type": "application/////    json},
@@ -109,20 +107,18 @@ const analyzeTongueImage = async (base64Image: string) => {;}
           image_format: "base64"})});
       if (response.ok) {
         const result = await response.json();
-        //////     这里可以保存结果到状态
+        // 这里可以保存结果到状态
       } else {
-        throw new Error("舌象分析失败)"
-      }
-    } catch (error) {
-      Alert.alert(错误", "舌象分析失败，请重试);
+        throw new Error("舌象分析失败)";
+      };
+    } catch (error) {Alert.alert(错误", "舌象分析失败，请重试);
     } finally {
       setIsAnalyzing(false);
     }
   };
-  //////     开始脉象采集
-const startPulseRecording = async() => {;}
-    try {;
-      //////     检查传感器连接
+  // 开始脉象采集
+const startPulseRecording = async() => {}
+    try {// 检查传感器连接
 const sensorResponse = await fetch("http:// localhost:8001/api/v1/////    sensors");
       const sensors = await sensorResponse.json();
       if (sensors.length === 0) {
@@ -131,20 +127,19 @@ const sensorResponse = await fetch("http:// localhost:8001/api/v1/////    sensor
       }
       setIsRecordingPulse(true);
       setPulseRecordingTime(0);
-      //////     启动数据流
-const streamResponse = await fetch("http:// localhost:8001/api/v1/data-stream/////    start", {;
-        method: POST","
+      // 启动数据流
+const streamResponse = await fetch("http:// localhost:8001/api/v1/data-stream/////    start", {method: POST","
         headers: {
           "Content-Type: "application/////    json"},"
         body: JSON.stringify({
           sensors: [sensors[0].device_id],
-          duration: 30, //////     30秒采集
+          duration: 30, // 30秒采集
 buffer_size: 1000,
           quality_filter: true})});
       if (streamResponse.ok) {
         const streamResult = await streamResponse.json();
-        //////     开始计时器
-pulseTimerRef.current = setInterval(() => {}
+        // 开始计时器
+pulseTimerRef.current = setInterval(() => {
           setPulseRecordingTime(prev => {}
             if (prev >= 30) {
               stopPulseRecording();
@@ -153,8 +148,8 @@ pulseTimerRef.current = setInterval(() => {}
             return prev + 1;
           });
         }, 1000);
-        //////     30秒后自动停止
-setTimeout(() => {}
+        // 30秒后自动停止
+setTimeout(() => {
           stopPulseRecording();
         }, 30000);
       }
@@ -163,27 +158,27 @@ setTimeout(() => {}
       setIsRecordingPulse(false);
     }
   };
-  //////     停止脉象采集
-const stopPulseRecording = async() => {;}
+  // 停止脉象采集
+const stopPulseRecording = async() => {}
     setIsRecordingPulse(false);
     if (pulseTimerRef.current) {
       clearInterval(pulseTimerRef.current);
       pulseTimerRef.current = null;
     }
-    //////     这里应该获取采集到的脉象数据并进行分析
-    //////     模拟脉象数据
+    // 这里应该获取采集到的脉象数据并进行分析
+    // 模拟脉象数据
 const mockPulseData = Array.from({ length: 30000 }, (_, i) =>;
       Math.sin(2 * Math.PI * 1.25 * i / 1000) + 0.1 * Math.random();////
     );
     setPulseData(mockPulseData);
     await analyzePulseData(mockPulseData);
   };
-  //////     分析脉象数据
-const analyzePulseData = async (waveformData: number[]) => {;}
+  // 分析脉象数据
+const analyzePulseData = async (waveformData: number[]) => {}
     setIsAnalyzing(true);
     try {
-      const response = await fetch(http:// localhost:8000/api/v1/diagnosis/////    pulse-analysis", {;"
-        method: "POST,"
+      const response = await fetch(http:// localhost:8000/api/v1/diagnosis/////    pulse-analysis", {"
+        method: "POST,",
         headers: {
           "Content-Type": application/////    json"},"
         body: JSON.stringify({
@@ -201,23 +196,21 @@ const analyzePulseData = async (waveformData: number[]) => {;}
       setIsAnalyzing(false);
     }
   };
-  //////     综合诊断
-const performComprehensiveDiagnosis = async() => {;}
-    if (!tongueImage || !pulseData) {;
-      Alert.alert(提示", "请先完成舌象拍摄和脉象采集);
+  // 综合诊断
+const performComprehensiveDiagnosis = async() => {}
+    if (!tongueImage || !pulseData) {Alert.alert(提示", "请先完成舌象拍摄和脉象采集);
       return;
     }
     setIsAnalyzing(true);
     try {
-      const response = await fetch("http:// localhost:8000/api/v1/diagnosis/////    comprehensive", {;
-        method: POST","
+      const response = await fetch("http:// localhost:8000/api/v1/diagnosis/////    comprehensive", {method: POST","
         headers: {
           "Content-Type: "application/////    json"},"
         body: JSON.stringify({
           tongue_image: tongueImage,
           pulse_waveform: pulseData,
           pulse_duration: 30.0,
-          symptoms: [], //////     可以添加症状输入
+          symptoms: [], // 可以添加症状输入
         })});
       if (response.ok) {
         const result = await response.json();
@@ -232,7 +225,7 @@ const performComprehensiveDiagnosis = async() => {;}
       setIsAnalyzing(false);
     }
   };
-  //////     渲染舌象采集界面
+  // 渲染舌象采集界面
 const renderTongueCapture = () => (;
     <View style={styles.stepContainer}>
       <Text style={styles.stepTitle}>舌象采集</////    Text>
@@ -241,7 +234,7 @@ const renderTongueCapture = () => (;
       </////    Text>
       {tongueImage ? (
         <View style={styles.imageContainer}>
-          <Image source={{ uri: tongueImage }} style={styles.tongueImage} /////    >;
+          <Image source={{ uri: tongueImage }} style={styles.tongueImage} /////     loading="lazy" decoding="async" />;
           <TouchableOpacity;
 style={styles.retakeButton}
             onPress={() => setShowCamera(true)}
@@ -269,7 +262,7 @@ style={styles.nextButton}
       )}
     </////    View>
   );
-  //////     渲染脉象采集界面
+  // 渲染脉象采集界面
 const renderPulseCapture = () => (;
     <View style={styles.stepContainer}>
       <Text style={styles.stepTitle}>脉象采集</////    Text>
@@ -327,8 +320,8 @@ style={styles.diagnoseButton}
       )}
     </////    View>
   );
-  //////     渲染诊断结果界面
-const renderDiagnosisResult = () => {;}
+  // 渲染诊断结果界面
+const renderDiagnosisResult = () => {}
     if (!diagnosisResult) return null;
     return (
       <ScrollView style={styles.resultContainer}>
@@ -375,22 +368,22 @@ const renderDiagnosisResult = () => {;}
           <View style={styles.syndromeContainer}>
             <Text style={styles.primarySyndrome}>
               {diagnosisResult.syndrome_classification.primary_syndrome}
-            </////    Text>
-            <Text style={styles.syndromeScore}>
-              匹配度：{(diagnosisResult.syndrome_classification.primary_score * 100).toFixed(1)}%
-            </////    Text>
-          </////    View>
-        </////    View>
-        {/* 治疗建议 }////
-        <View style={styles.resultSection}>
-          <Text style={styles.sectionTitle}>治疗建议</////    Text>
-          {diagnosisResult.recommendations.map((rec, index) => (
-            <View key={index} style={styles.recommendationItem}>
-              <Text style={styles.recommendationType}>{rec.type}</////    Text>
-              <Text style={styles.recommendationContent}>{rec.content}</////    Text>
-            </////    View>
-          ))}
-        </////    View>
+            </////    Text>;
+            <Text style={styles.syndromeScore}>;
+              匹配度：{(diagnosisResult.syndrome_classification.primary_score * 100).toFixed(1)}%;
+            </////    Text>;
+          </////    View>;
+        </////    View>;
+        {/* 治疗建议 }////;
+        <View style={styles.resultSection}>;
+          <Text style={styles.sectionTitle}>治疗建议</////    Text>;
+          {diagnosisResult.recommendations.map((rec, index) => (;
+            <View key={index} style={styles.recommendationItem}>;
+              <Text style={styles.recommendationType}>{rec.type}</////    Text>;
+              <Text style={styles.recommendationContent}>{rec.content}</////    Text>;
+            </////    View>;
+          ))};
+        </////    View>;
         <TouchableOpacity;
 style={styles.newDiagnosisButton}
           onPress={() => {}
@@ -405,7 +398,7 @@ style={styles.newDiagnosisButton}
       </////    ScrollView>
     );
   };
-  //////     相机模态框
+  // 相机模态框
 const renderCameraModal = () => (;
     <Modal visible={showCamera} animationType="slide">
       <View style={styles.cameraContainer}>
@@ -448,7 +441,7 @@ style={styles.permissionButton}
       </////    View>
     </////    Modal>
   );
-  return (
+  return (;
     <LinearGradient;
 colors={["#667eea, "#764ba2"]}"
       style={styles.container}
@@ -476,8 +469,7 @@ colors={["#667eea, "#764ba2"]}"
     </////    LinearGradient>
   );
 };
-const styles = StyleSheet.create({;
-  container: {
+const styles = StyleSheet.create({container: {
     flex: 1},
   header: {
     paddingTop: 50,
@@ -486,12 +478,12 @@ const styles = StyleSheet.create({;
   headerTitle: {
     fontSize: 24,
     fontWeight: bold","
-    color: "#fff,"
+    color: "#fff,",
     textAlign: "center",
     marginBottom: 20},
   stepIndicator: {
     flexDirection: row","
-    justifyContent: "space-around},"
+    justifyContent: "space-around},",
   step: {
     paddingVertical: 8,
     paddingHorizontal: 16,
@@ -500,7 +492,7 @@ const styles = StyleSheet.create({;
   activeStep: {
     backgroundColor: rgba(255, 255, 255, 0.8)"},"
   stepText: {
-    color: "#fff,"
+    color: "#fff,",
     fontWeight: "600"},
   content: {
     flex: 1,
@@ -511,7 +503,7 @@ const styles = StyleSheet.create({;
   stepContainer: {
     flex: 1,
     paddingHorizontal: 20,
-    alignItems: "center},"
+    alignItems: "center},",
   stepTitle: {
     fontSize: 20,
     fontWeight: "bold",
@@ -519,7 +511,7 @@ const styles = StyleSheet.create({;
     marginBottom: 10},
   stepDescription: {
     fontSize: 14,
-    color: "#666,"
+    color: "#666,",
     textAlign: "center",
     marginBottom: 30},
   imageContainer: {
@@ -534,18 +526,18 @@ const styles = StyleSheet.create({;
     width: 200,
     height: 200,
     borderRadius: 100,
-    backgroundColor: "#667eea,"
+    backgroundColor: "#667eea,",
     justifyContent: "center",
     alignItems: center","
     marginBottom: 30},
   captureButtonText: {
-    color: "#fff,"
+    color: "#fff,",
     fontSize: 16,
     fontWeight: "600",
     marginTop: 10},
   retakeButton: {
     flexDirection: row","
-    alignItems: "center,"
+    alignItems: "center,",
     backgroundColor: "#FF9800",
     paddingHorizontal: 15,
     paddingVertical: 8,
@@ -553,7 +545,7 @@ const styles = StyleSheet.create({;
   retakeButtonText: {
     color: #fff","
     marginLeft: 5,
-    fontWeight: "600},"
+    fontWeight: "600},",
   nextButton: {
     backgroundColor: "#4CAF50",
     paddingHorizontal: 30,
@@ -562,14 +554,14 @@ const styles = StyleSheet.create({;
   nextButtonText: {
     color: #fff","
     fontSize: 16,
-    fontWeight: "600},"
+    fontWeight: "600},",
   pulseContainer: {
     alignItems: "center",
     marginBottom: 30},
   recordingContainer: {
     alignItems: center"},"
   pulseWave: {
-    alignItems: "center,"
+    alignItems: "center,",
     marginBottom: 20},
   recordingText: {
     fontSize: 18,
@@ -578,14 +570,14 @@ const styles = StyleSheet.create({;
   timerText: {
     fontSize: 24,
     fontWeight: bold","
-    color: "#667eea},"
+    color: "#667eea},",
   stopButton: {
     width: 80,
     height: 80,
     borderRadius: 40,
     backgroundColor: "#F44336",
     justifyContent: center","
-    alignItems: "center},"
+    alignItems: "center},",
   pulseResultContainer: {
     alignItems: "center"},
   pulseCompleteText: {
@@ -597,11 +589,11 @@ const styles = StyleSheet.create({;
     width: 200,
     height: 200,
     borderRadius: 100,
-    backgroundColor: "#667eea,"
+    backgroundColor: "#667eea,",
     justifyContent: "center",
     alignItems: center"},"
   startPulseButtonText: {
-    color: "#fff,"
+    color: "#fff,",
     fontSize: 16,
     fontWeight: "600",
     marginTop: 10},
@@ -611,7 +603,7 @@ const styles = StyleSheet.create({;
     paddingVertical: 15,
     borderRadius: 25},
   diagnoseButtonText: {
-    color: "#fff,"
+    color: "#fff,",
     fontSize: 16,
     fontWeight: "600"},
   resultContainer: {
@@ -620,7 +612,7 @@ const styles = StyleSheet.create({;
   resultTitle: {
     fontSize: 24,
     fontWeight: bold","
-    color: "#333,"
+    color: "#333,",
     textAlign: "center",
     marginBottom: 30},
   resultSection: {
@@ -630,7 +622,7 @@ const styles = StyleSheet.create({;
     marginBottom: 20},
   sectionTitle: {
     fontSize: 18,
-    fontWeight: "bold,"
+    fontWeight: "bold,",
     color: "#333",
     marginBottom: 15},
   resultItem: {
@@ -638,7 +630,7 @@ const styles = StyleSheet.create({;
     marginBottom: 10},
   resultLabel: {
     fontSize: 16,
-    color: "#666,"
+    color: "#666,",
     width: 80},
   resultValue: {
     fontSize: 16,
@@ -646,7 +638,7 @@ const styles = StyleSheet.create({;
     fontWeight: 600","
     flex: 1},
   syndromeContainer: {
-    alignItems: "center},"
+    alignItems: "center},",
   primarySyndrome: {
     fontSize: 20,
     fontWeight: "bold",
@@ -654,7 +646,7 @@ const styles = StyleSheet.create({;
     marginBottom: 5},
   syndromeScore: {
     fontSize: 14,
-    color: "#666},"
+    color: "#666},",
   recommendationItem: {
     marginBottom: 15},
   recommendationType: {
@@ -664,7 +656,7 @@ const styles = StyleSheet.create({;
     marginBottom: 5},
   recommendationContent: {
     fontSize: 14,
-    color: "#333,"
+    color: "#333,",
     lineHeight: 20},
   newDiagnosisButton: {
     backgroundColor: "#667eea",
@@ -675,7 +667,7 @@ const styles = StyleSheet.create({;
   newDiagnosisButtonText: {
     color: #fff","
     fontSize: 16,
-    fontWeight: "600,"
+    fontWeight: "600,",
     textAlign: "center"},
   cameraContainer: {
     flex: 1},
@@ -684,7 +676,7 @@ const styles = StyleSheet.create({;
   cameraOverlay: {
     flex: 1,
     backgroundColor: transparent","
-    justifyContent: "space-between,"
+    justifyContent: "space-between,",
     paddingVertical: 50,
     paddingHorizontal: 20},
   closeButton: {
@@ -692,12 +684,12 @@ const styles = StyleSheet.create({;
   tongueGuide: {
     alignItems: center","
     flex: 1,
-    justifyContent: "center},"
+    justifyContent: "center},",
   guideText: {
     color: "#fff",
     fontSize: 16,
     textAlign: center","
-    backgroundColor: "rgba(0, 0, 0, 0.5),"
+    backgroundColor: "rgba(0, 0, 0, 0.5),",
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 20},
@@ -707,7 +699,7 @@ const styles = StyleSheet.create({;
     borderRadius: 40,
     backgroundColor: "rgba(255, 255, 255, 0.3)",
     justifyContent: center","
-    alignItems: "center,"
+    alignItems: "center,",
     alignSelf: "center"},
   shutterInner: {
     width: 60,
@@ -716,11 +708,11 @@ const styles = StyleSheet.create({;
     backgroundColor: #fff"},"
   permissionContainer: {
     flex: 1,
-    justifyContent: "center,"
+    justifyContent: "center,",
     alignItems: "center",
     backgroundColor: #000"},"
   permissionText: {
-    color: "#fff,"
+    color: "#fff,",
     fontSize: 16,
     textAlign: "center",
     marginBottom: 20},
@@ -730,8 +722,8 @@ const styles = StyleSheet.create({;
     paddingVertical: 10,
     borderRadius: 20},
   permissionButtonText: {
-    color: "#fff,"
-    fontSize: 16,; */
+    color: "#fff,",
+    fontSize: 16,*/
     fontWeight: "600'}});" *///  '
-export default TCMDiagnosisScreen; *///
+export default TCMDiagnosisScreen; *///;
   */////

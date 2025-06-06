@@ -1,24 +1,29 @@
+"""
+intelligent_task_scheduler - 索克生活项目模块
+"""
+
+from collections import defaultdict, deque
+from dataclasses import dataclass, asdict
+from datetime import datetime, timedelta
+from enum import Enum
+from numba import jit
+from typing import Dict, List, Any, Optional, Callable, Union
+import aioredis
+import asyncio
+import heapq
+import json
+import logging
+import psutil
+import threading
+import time
+import uuid
+
 #!/usr/bin/env python3
 """
 索克生活 - 智能任务调度器
 实现智能任务分配、负载均衡和优先级管理
 """
 
-import asyncio
-import time
-import logging
-import json
-import uuid
-from typing import Dict, List, Any, Optional, Callable, Union
-from dataclasses import dataclass, asdict
-from datetime import datetime, timedelta
-from enum import Enum
-from collections import defaultdict, deque
-import heapq
-import threading
-import psutil
-import aioredis
-from numba import jit
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)

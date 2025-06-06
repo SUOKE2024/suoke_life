@@ -1,16 +1,21 @@
 """
-医疗资源质量控制服务
-负责医疗资源质量评估、服务效果跟踪、用户满意度监控等
+quality_control_service - 索克生活项目模块
 """
 
-import asyncio
-import logging
-import statistics
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
+import asyncio
+import logging
+import statistics
+
+"""
+医疗资源质量控制服务
+负责医疗资源质量评估、服务效果跟踪、用户满意度监控等
+"""
+
 
 logger = logging.getLogger(__name__)
 

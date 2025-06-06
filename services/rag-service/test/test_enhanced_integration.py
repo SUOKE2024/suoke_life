@@ -1,3 +1,14 @@
+"""
+test_enhanced_integration - 索克生活项目模块
+"""
+
+from datetime import datetime
+from services.rag_service.internal.model.document import Document
+from services.rag_service.internal.service.enhanced_rag_service import (
+import asyncio
+import pytest
+import time
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -5,15 +16,9 @@ RAG服务集成测试
 测试增强版RAG服务的所有功能
 """
 
-import asyncio
-import pytest
-import time
-from datetime import datetime
 
-from services.rag_service.internal.service.enhanced_rag_service import (
     EnhancedRagService, IndexType, ShardingStrategy, CacheLevel
 )
-from services.rag_service.internal.model.document import Document
 
 @pytest.fixture
 async def rag_service():
@@ -193,7 +198,8 @@ class TestEnhancedRagService:
         # 注意：实际统计可能需要从内部stats获取
     
     @pytest.mark.asyncio
-    async def test_streaming_query(self, rag_service):
+    async     @cache(timeout=300)  # 5分钟缓存
+def test_streaming_query(self, rag_service):
         """测试流式查询功能"""
         query = "请详细介绍中医的整体观念"
         
@@ -243,7 +249,8 @@ class TestEnhancedRagService:
         
         print("多级缓存测试通过")
     
-    @pytest.mark.asyncio
+      @cache(timeout=300)  # 5分钟缓存
+  @pytest.mark.asyncio
     async def test_query_plan_generation(self, rag_service):
         """测试查询计划生成"""
         # 简单查询

@@ -1,14 +1,19 @@
 """
+security - 索克生活项目模块
+"""
+
+from ..core.config import get_settings
+from ..core.logging import get_logger
+from fastapi import Request, Response
+from starlette.middleware.base import BaseHTTPMiddleware
+
+"""
 安全中间件
 
 添加安全头、防止常见攻击等。
 """
 
-from fastapi import Request, Response
-from starlette.middleware.base import BaseHTTPMiddleware
 
-from ..core.config import get_settings
-from ..core.logging import get_logger
 
 logger = get_logger(__name__)
 

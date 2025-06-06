@@ -1,14 +1,20 @@
 """
+agent_service - 索克生活项目模块
+"""
+
+from ..models.agent import (
+from .base_service import BaseService
+from datetime import datetime
+from typing import Any
+import uuid
+
+"""
 智能体服务
 
 提供索儿智能体的核心功能，包括对话处理、个性化交互等
 """
 
-import uuid
-from datetime import datetime
-from typing import Any
 
-from ..models.agent import (
     AgentConfiguration,
     AgentMessage,
     AgentPersonality,
@@ -17,7 +23,6 @@ from ..models.agent import (
     MessageRole,
     MessageType,
 )
-from .base_service import BaseService
 
 
 class AgentService(BaseService):

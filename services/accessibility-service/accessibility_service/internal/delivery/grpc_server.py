@@ -1,20 +1,25 @@
+"""
+grpc_server - 索克生活项目模块
+"""
+
+from api.grpc import accessibility_pb2, accessibility_pb2_grpc
+from typing import Any
+import grpc
+import logging
+import os
+import sys
+
 #!/usr/bin/env python3
 
 """
 无障碍服务 gRPC 服务器实现
 """
 
-import logging
-import os
 
 # 导入protobuf生成的类
-import sys
-from typing import Any
 
-import grpc
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
-from api.grpc import accessibility_pb2, accessibility_pb2_grpc
 
 logger = logging.getLogger(__name__)
 

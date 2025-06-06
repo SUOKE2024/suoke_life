@@ -1,23 +1,27 @@
 """
-User-Service 高级功能测试
+test_user_advanced - 索克生活项目模块
 """
-import pytest
-import pytest_asyncio
-import pytest_asyncio
-import asyncio
-import tempfile
-import os
-import time
-from uuid import uuid4
-from datetime import datetime, timezone
 
+from datetime import datetime, timezone
+from internal.model.user import (
+from internal.repository.exceptions import (
 from internal.repository.sqlite_user_repository import SQLiteUserRepository
 from internal.service.user_service import UserService
-from internal.model.user import (
+from uuid import uuid4
+import asyncio
+import os
+import pytest
+import pytest_asyncio
+import tempfile
+import time
+
+"""
+User-Service 高级功能测试
+"""
+
     CreateUserRequest, UpdateUserRequest, BindDeviceRequest,
     UpdateUserHealthRequest, ConstitutionType, BloodType, HealthCondition
 )
-from internal.repository.exceptions import (
     UserNotFoundError, UserAlreadyExistsError, DeviceAlreadyBoundError
 )
 

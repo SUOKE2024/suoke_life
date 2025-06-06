@@ -1,12 +1,18 @@
 """
-简单的测试脚本，用于验证用户服务的基本功能
+simple_test - 索克生活项目模块
 """
-import asyncio
-import tempfile
-import os
+
+        import traceback
+from internal.model.user import CreateUserRequest
 from internal.repository.sqlite_user_repository import SQLiteUserRepository
 from internal.service.user_service import UserService
-from internal.model.user import CreateUserRequest
+import asyncio
+import os
+import tempfile
+
+"""
+简单的测试脚本，用于验证用户服务的基本功能
+"""
 
 async def test_user_creation():
     """测试用户创建功能"""
@@ -44,7 +50,6 @@ async def test_user_creation():
         
     except Exception as e:
         print(f"✗ 测试失败: {e}")
-        import traceback
         traceback.print_exc()
     finally:
         # 清理临时文件

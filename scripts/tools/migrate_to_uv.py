@@ -1,16 +1,21 @@
+"""
+migrate_to_uv - 索克生活项目模块
+"""
+
+from pathlib import Path
+from typing import List, Dict, Optional
+import argparse
+import shutil
+import subprocess
+import sys
+import time
+
 #!/usr/bin/env python3
 """
 索克生活项目 - uv迁移自动化脚本
 自动将项目从pip/Poetry迁移到uv包管理器
 """
 
-import sys
-import subprocess
-import shutil
-from pathlib import Path
-from typing import List, Dict, Optional
-import argparse
-import time
 
 class UVMigrator:
     """uv迁移工具类"""

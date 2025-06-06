@@ -1,3 +1,21 @@
+"""
+vector_service - 索克生活项目模块
+"""
+
+from abc import ABC, abstractmethod
+from config.settings import get_settings
+from dataclasses import dataclass
+from internal.model.entities import Document, SearchResult, SearchQuery
+from internal.repository.knowledge_graph_repository import KnowledgeGraphRepository
+from internal.repository.vector_repository import VectorRepository
+from loguru import logger
+from pkg.cache.cache_manager import CacheManager
+from pkg.metrics.metrics_collector import MetricsCollector
+from typing import List, Dict, Any, Optional, Tuple, Union
+import asyncio
+import numpy as np
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,20 +24,7 @@
 支持混合检索、重排序、知识图谱增强等高级功能
 """
 
-import asyncio
-import numpy as np
-from typing import List, Dict, Any, Optional, Tuple, Union
-from dataclasses import dataclass
-from abc import ABC, abstractmethod
-import time
-from loguru import logger
 
-from config.settings import get_settings
-from internal.model.entities import Document, SearchResult, SearchQuery
-from internal.repository.vector_repository import VectorRepository
-from internal.repository.knowledge_graph_repository import KnowledgeGraphRepository
-from pkg.cache.cache_manager import CacheManager
-from pkg.metrics.metrics_collector import MetricsCollector
 
 
 @dataclass

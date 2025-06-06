@@ -1,10 +1,15 @@
+"""
+analyze_results - 索克生活项目模块
+"""
+
+import json
+
 #!/usr/bin/env python3
 """
 分析GitHub最佳实践搜索结果
 针对索克生活项目的特定需求进行分类和推荐
 """
 
-import json
 
 def analyze_results():
     with open('github_best_practices_evaluation.json', 'r', encoding='utf-8') as f:

@@ -1,3 +1,22 @@
+"""
+service - 索克生活项目模块
+"""
+
+from .common.base import BaseService
+from .common.exceptions import InquiryServiceError
+from .common.metrics import counter, memory_optimized, timer
+from .dialogue.intelligent_flow_manager import (
+from .extractors.context_analyzer import ContextAnalyzer
+from .extractors.severity_analyzer import SeverityAnalyzer
+from .extractors.symptom_extractor import SymptomExtractor
+from .knowledge.tcm_knowledge_graph import (
+from .observability.health_monitor import HealthMonitor
+from dataclasses import dataclass, field
+from datetime import datetime
+from loguru import logger
+from typing import Any
+import uuid
+
 #!/usr/bin/env python3
 
 """
@@ -7,34 +26,20 @@
 实时健康监测等先进功能，提供全面的智能问诊解决方案。
 """
 
-from dataclasses import dataclass, field
-from datetime import datetime
-from typing import Any
-import uuid
 
-from loguru import logger
 
-from .common.base import BaseService
-from .common.exceptions import InquiryServiceError
-from .common.metrics import counter, memory_optimized, timer
 
 # 导入新增的优化组件
-from .dialogue.intelligent_flow_manager import (
     FlowDecision,
     InquiryContext,
     IntelligentFlowManager,
 )
-from .extractors.context_analyzer import ContextAnalyzer
-from .extractors.severity_analyzer import SeverityAnalyzer
 
 # 导入现有组件
-from .extractors.symptom_extractor import SymptomExtractor
-from .knowledge.tcm_knowledge_graph import (
     FormulaRecommendation,
     SyndromeMapping,
     TCMKnowledgeGraph,
 )
-from .observability.health_monitor import HealthMonitor
 
 
 @dataclass

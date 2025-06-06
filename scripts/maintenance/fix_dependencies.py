@@ -1,12 +1,17 @@
+"""
+fix_dependencies - 索克生活项目模块
+"""
+
+from pathlib import Path
+from typing import Dict, List, Tuple
+import re
+
 #!/usr/bin/env python3
 """
 索克生活项目 - 依赖冲突修复脚本
 修复uv迁移过程中的版本冲突问题
 """
 
-import re
-from pathlib import Path
-from typing import Dict, List, Tuple
 
 class DependencyFixer:
     """依赖冲突修复器"""

@@ -1,11 +1,16 @@
-"""基础数据模型"""
+"""
+base - 索克生活项目模块
+"""
 
 from datetime import datetime
-from typing import Any, Dict, List, Optional
-
 from pydantic import BaseModel
 from pydantic import ConfigDict
 from pydantic import Field
+from typing import Any, Dict, List, Optional
+
+"""基础数据模型"""
+
+
 
 
 class BaseEntity(BaseModel):

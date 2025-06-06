@@ -1,21 +1,26 @@
 """
+test_database_manager_sqlite_compatible - 索克生活项目模块
+"""
+
+from auth_service.core.database import DatabaseManager
+from datetime import datetime
+from sqlalchemy import event, JSON, Text, String, Boolean, DateTime, Integer, func
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.pool import StaticPool
+from typing import AsyncGenerator, Optional
+import asyncio
+import os
+import tempfile
+import uuid
+
+"""
 SQLite兼容的测试专用数据库管理器
 解决JSONB类型不兼容问题
 """
 
-import asyncio
-import tempfile
-import os
-from typing import AsyncGenerator, Optional
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-from sqlalchemy.pool import StaticPool
-from sqlalchemy import event, JSON, Text, String, Boolean, DateTime, Integer, func
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy.dialects.postgresql import UUID
-import uuid
-from datetime import datetime
 
-from auth_service.core.database import DatabaseManager
 
 
 class SQLiteCompatibleBase(DeclarativeBase):

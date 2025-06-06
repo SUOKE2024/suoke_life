@@ -1,16 +1,23 @@
 """
+config - 索克生活项目模块
+"""
+
+            import json
+    import yaml
+from functools import lru_cache
+from pathlib import Path
+from pydantic import BaseModel, Field, validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from typing import Any, Dict, List, Optional, Union
+
+"""
 配置管理模块
 
 使用 Pydantic Settings 进行类型安全的配置管理，
 支持环境变量、配置文件等多种配置源。
 """
 
-from functools import lru_cache
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
 
-from pydantic import BaseModel, Field, validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class DatabaseConfig(BaseModel):
     """数据库配置"""
@@ -251,7 +258,6 @@ def get_settings() -> Settings:
 
 def load_config_from_file(config_path: Union[str, Path]) -> Dict[str, Any]:
     """从文件加载配置"""
-    import yaml
     
     config_path = Path(config_path)
     if not config_path.exists():
@@ -261,7 +267,6 @@ def load_config_from_file(config_path: Union[str, Path]) -> Dict[str, Any]:
         if config_path.suffix in [".yaml", ".yml"]:
             return yaml.safe_load(f)
         elif config_path.suffix == ".json":
-            import json
             return json.load(f)
         else:
             raise ValueError(f"Unsupported config file format: {config_path.suffix}")

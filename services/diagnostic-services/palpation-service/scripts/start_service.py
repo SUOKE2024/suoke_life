@@ -1,18 +1,25 @@
+"""
+start_service - 索克生活项目模块
+"""
+
+        from palpation_service.main import PalpationServiceApp
+        from palpation_service.simple_main import main
+from palpation_service.config import get_settings
+from pathlib import Path
+import argparse
+import sys
+
 #!/usr/bin/env python3
 """
 触诊服务启动脚本
 提供简化版和完整版两种启动模式
 """
 
-import argparse
-import sys
-from pathlib import Path
 
 # 添加项目根目录到Python路径
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from palpation_service.config import get_settings
 
 def start_simple_service():
     """启动简化版服务"""
@@ -20,7 +27,6 @@ def start_simple_service():
     print("=" * 50)
     
     try:
-        from palpation_service.simple_main import main
         main()
     except KeyboardInterrupt:
         print("\n👋 服务已停止")
@@ -34,7 +40,6 @@ def start_full_service():
     print("=" * 50)
     
     try:
-        from palpation_service.main import PalpationServiceApp
         app_instance = PalpationServiceApp()
         app_instance.run()
     except KeyboardInterrupt:

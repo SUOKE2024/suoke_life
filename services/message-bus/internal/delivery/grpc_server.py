@@ -1,15 +1,22 @@
+"""
+grpc_server - 索克生活项目模块
+"""
+
+from api.grpc.message_bus_pb2 import (
+from api.grpc.message_bus_pb2_grpc import (
+from concurrent import futures
+from grpc_health.v1 import health_pb2_grpc
+from internal.delivery.health_check import HealthCheck, HealthServicer
+from internal.observability.metrics import (
+from internal.service.message_service import MessageService
 import asyncio
+import grpc
 import logging
 import time
-import grpc
-from concurrent import futures
 
-from internal.service.message_service import MessageService
-from internal.observability.metrics import (
+
     message_counter, message_publish_latency, api_requests, api_request_latency
 )
-from internal.delivery.health_check import HealthCheck, HealthServicer
-from api.grpc.message_bus_pb2 import (
     PublishRequest, PublishResponse,
     CreateTopicRequest, CreateTopicResponse,
     ListTopicsRequest, ListTopicsResponse,
@@ -19,11 +26,9 @@ from api.grpc.message_bus_pb2 import (
     HealthCheckRequest, HealthCheckResponse,
     Topic, Message
 )
-from api.grpc.message_bus_pb2_grpc import (
     MessageBusServiceServicer, 
     add_MessageBusServiceServicer_to_server
 )
-from grpc_health.v1 import health_pb2_grpc
 
 logger = logging.getLogger(__name__)
 

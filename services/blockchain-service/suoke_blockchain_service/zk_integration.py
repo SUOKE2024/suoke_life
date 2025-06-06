@@ -1,3 +1,18 @@
+"""
+zk_integration - 索克生活项目模块
+"""
+
+        import hashlib
+        import uuid
+    from zk_snarks import (
+from dataclasses import dataclass, asdict
+from datetime import datetime
+from enum import Enum
+from typing import Dict, List, Optional, Any, Tuple
+import logging
+import os
+import sys
+
 #!/usr/bin/env python3
 """
 区块链服务零知识验证集成
@@ -5,19 +20,11 @@
 将零知识验证功能集成到区块链服务中，提供健康数据的隐私保护存储和验证。
 """
 
-from dataclasses import dataclass, asdict
-from datetime import datetime
-from typing import Dict, List, Optional, Any, Tuple
-import logging
-from enum import Enum
 
 # 导入零知识验证模块
-import sys
-import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../common/security'))
 
 try:
-    from zk_snarks import (
         HealthDataZKService,
         HealthDataProof,
         get_zk_service,
@@ -38,7 +45,8 @@ except ImportError:
         def verify_health_data_proof(self, proof):
             return True
     
-    def get_zk_service():
+        @cache(timeout=300)  # 5分钟缓存
+def get_zk_service():
         return HealthDataZKService()
 
 logger = logging.getLogger(__name__)
@@ -446,7 +454,6 @@ class ZKBlockchainService:
     
     def _generate_transaction_id(self) -> str:
         """生成交易ID"""
-        import uuid
         return f"tx_{uuid.uuid4().hex[:16]}"
     
     def _calculate_merkle_root(self, transactions: List[BlockchainTransaction]) -> str:
@@ -471,7 +478,6 @@ class ZKBlockchainService:
     
     def _calculate_hash(self, data: str) -> str:
         """计算哈希"""
-        import hashlib
         return hashlib.sha256(data.encode()).hexdigest()
 
 # 全局服务实例

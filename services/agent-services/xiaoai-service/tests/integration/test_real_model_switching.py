@@ -1,13 +1,26 @@
+"""
+test_real_model_switching - 索克生活项目模块
+"""
+
+                    from internal.agent.deepseek_model_factory import (
+                    from internal.agent.mock_model_factory import get_mock_model_factory
+                from internal.agent.agent_manager import AgentManager
+        from internal.agent.agent_manager import AgentManager
+        from internal.agent.deepseek_model_factory import get_deepseek_model_factory
+        from internal.agent.mock_model_factory import get_mock_model_factory
+        from pkg.utils.config_loader import ConfigLoader
+        import time
+import asyncio
+import os
+import sys
+import traceback
+
 #!/usr/bin/env python3
 """
 实际多模型切换测试
 演示如何在运行时动态切换不同的大模型
 """
 
-import asyncio
-import os
-import sys
-import traceback
 
 # 添加项目路径
 sys.path.append('.')
@@ -20,7 +33,6 @@ async def test_dynamic_model_switching():
     print("="*50)
 
     try:
-        from internal.agent.agent_manager import AgentManager
 
         agent_manager = AgentManager()
         await agent_manager.initialize()
@@ -46,7 +58,6 @@ async def test_dynamic_model_switching():
 
         # 2. 动态切换到DeepSeek(如果还没有使用)
         print("\n🔄 测试2: 强制切换到DeepSeek")
-        from internal.agent.deepseek_model_factory import get_deepseek_model_factory
 
         # 保存原始工厂
         original_factory = agent_manager.model_factory
@@ -67,7 +78,6 @@ async def test_dynamic_model_switching():
 
         # 3. 切换到模拟模型
         print("\n🔄 测试3: 切换到模拟模型")
-        from internal.agent.mock_model_factory import get_mock_model_factory
 
         agent_manager.model_factory = await get_mock_model_factory()
 
@@ -110,8 +120,7 @@ async def test_config_based_switching():
     print("="*50)
 
     try:
-        from internal.agent.agent_manager import AgentManager
-        from pkg.utils.config_loader import ConfigLoader
+
 
         # 测试不同配置
         configs = [
@@ -209,7 +218,6 @@ async def test_environment_variable_switching():
                 del os.environ['DEEPSEEK_API_KEY']
 
             try:
-                from internal.agent.agent_manager import AgentManager
 
                 agent_manager = AgentManager()
                 await agent_manager.initialize()
@@ -249,7 +257,6 @@ async def test_model_performance_comparison():
     print("="*50)
 
     try:
-        import time
 
         # 测试问题
         test_question = "请从中医角度分析失眠的原因和调理方法。"
@@ -274,10 +281,8 @@ async def test_model_performance_comparison():
             try:
                 # 动态导入工厂
                 if factory_info['factory_func'] == 'get_mock_model_factory':
-                    from internal.agent.mock_model_factory import get_mock_model_factory
                     factory = await get_mock_model_factory()
                 else:
-                    from internal.agent.deepseek_model_factory import (
                         get_deepseek_model_factory,
                     )
                     factory = await get_deepseek_model_factory()

@@ -1,3 +1,4 @@
+import React from 'react';
 /**
  * 老克智能体协同测试
  * 测试老克在四智能体协同决策中的中医辨证论治功能
@@ -66,7 +67,7 @@ describe("老克智能体协同测试", () => {
   });
 
   describe("中医辨证论治协同决策", () => {
-    test("应该基于四诊信息进行准确的证候辨识", async () => {
+    test(""应该基于四诊信息进行准确的证候辨识", async () => {
       const tcmContext: DecisionContext = {
         userId: "user-tcm-123",
         sessionId: "session-tcm-456",
@@ -125,7 +126,7 @@ describe("老克智能体协同测试", () => {
       expect(laokeVote?.recommendation.syndrome).toContain("脾胃虚寒");
     });
 
-    test("应该制定个性化的中医治疗方案", async () => {
+    test(""应该制定个性化的中医治疗方案", async () => {
       const treatmentContext: DecisionContext = {
         userId: "user-treatment-001",
         sessionId: "session-treatment-001",
@@ -186,7 +187,7 @@ describe("老克智能体协同测试", () => {
   });
 
   describe("中西医结合协同诊疗", () => {
-    test("应该与小克协同进行中西医结合诊断", async () => {
+    test(""应该与小克协同进行中西医结合诊断", async () => {
       const integratedContext: DecisionContext = {
         userId: "user-integrated-001",
         sessionId: "session-integrated-001",
@@ -253,7 +254,7 @@ describe("老克智能体协同测试", () => {
       expect(laokeVote?.recommendation.integratedTreatment).toHaveProperty("tcmTreatment");
     });
 
-    test("应该评估中药与西药的相互作用", async () => {
+    test(""应该评估中药与西药的相互作用", async () => {
       const drugInteractionContext: DecisionContext = {
         userId: "user-interaction-001",
         sessionId: "session-interaction-001",
@@ -308,7 +309,7 @@ describe("老克智能体协同测试", () => {
   });
 
   describe("体质辨识与调理", () => {
-    test("应该准确识别中医体质类型", async () => {
+    test(""应该准确识别中医体质类型", async () => {
       const constitutionContext: DecisionContext = {
         userId: "user-constitution-001",
         sessionId: "session-constitution-001",
@@ -377,7 +378,7 @@ describe("老克智能体协同测试", () => {
   });
 
   describe("季节性养生指导", () => {
-    test("应该提供个性化的季节养生建议", async () => {
+    test(""应该提供个性化的季节养生建议", async () => {
       const seasonalContext: DecisionContext = {
         userId: "user-seasonal-001",
         sessionId: "session-seasonal-001",

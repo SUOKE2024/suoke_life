@@ -1,3 +1,28 @@
+"""
+config_manager - 索克生活项目模块
+"""
+
+                import re
+from collections.abc import Callable
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from jsonschema import ValidationError, validate
+from pathlib import Path
+from typing import Any
+from watchdog.events import FileSystemEventHandler
+from watchdog.observers import Observer
+import asyncio
+import copy
+import hashlib
+import json
+import logging
+import os
+import threading
+import toml
+import yaml
+
 #!/usr/bin/env python3
 
 """
@@ -6,26 +31,7 @@
 支持多种配置格式（YAML、JSON、TOML）和配置继承
 """
 
-import asyncio
-import copy
-import hashlib
-import json
-import logging
-import os
-import threading
-from collections.abc import Callable
-from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
-from pathlib import Path
-from typing import Any
 
-import toml
-import yaml
-from jsonschema import ValidationError, validate
-from watchdog.events import FileSystemEventHandler
-from watchdog.observers import Observer
 
 logger = logging.getLogger(__name__)
 
@@ -582,7 +588,6 @@ class ConfigManager:
                 min_val, max_val = rule.rule_value
                 return min_val <= value <= max_val
             elif rule.rule_type == "regex":
-                import re
 
                 return re.match(rule.rule_value, str(value)) is not None
             elif rule.rule_type == "custom":

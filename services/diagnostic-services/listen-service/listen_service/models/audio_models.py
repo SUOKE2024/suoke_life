@@ -1,13 +1,18 @@
 """
-音频分析相关的数据模型
-
-包含音频类型、质量、请求、响应等数据结构定义。
+audio_models - 索克生活项目模块
 """
 
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
+
+"""
+音频分析相关的数据模型
+
+包含音频类型、质量、请求、响应等数据结构定义。
+"""
+
 
 
 class AudioType(Enum):

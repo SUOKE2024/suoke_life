@@ -1,3 +1,26 @@
+"""
+microservices_completion_tool - 索克生活项目模块
+"""
+
+    from {}.api.main import create_app
+    import argparse
+from dataclasses import dataclass, asdict
+from datetime import datetime
+from fastapi import APIRouter
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.testclient import TestClient
+from pathlib import Path
+from pydantic import BaseModel
+from pydantic_settings import BaseSettings
+from typing import Dict, List, Optional, Tuple
+from typing import Optional
+from unittest.mock import Mock
+from {module_name}.api.main import create_app
+from {module_name}.api.routes import health, {module_name.split("_")[0]}
+import pytest
+import uvicorn
+
 #!/usr/bin/env python3
 """
 索克生活平台微服务完成度评估和自动化完善工具
@@ -10,10 +33,6 @@
 5. 创建监控和测试配置
 """
 
-from pathlib import Path
-from typing import Dict, List, Optional, Tuple
-from dataclasses import dataclass, asdict
-from datetime import datetime
 
 @dataclass
 class ServiceStatus:
@@ -438,9 +457,6 @@ __author__ = "Suoke Life Team"
 {service_name} 主入口文件
 """
 
-import uvicorn
-from fastapi import FastAPI
-from {module_name}.api.main import create_app
 
 def main():
     """主函数"""
@@ -477,9 +493,6 @@ if __name__ == "__main__":
 {service_name} API主文件
 """
 
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from {module_name}.api.routes import health, {module_name.split("_")[0]}
 
 def create_app() -> FastAPI:
     """创建FastAPI应用"""
@@ -517,8 +530,6 @@ def create_app() -> FastAPI:
 健康检查路由
 """
 
-from fastapi import APIRouter
-from pydantic import BaseModel
 
 router = APIRouter()
 
@@ -543,8 +554,6 @@ async def health_check():
 {service_name} 业务路由
 """
 
-from fastapi import APIRouter
-from pydantic import BaseModel
 
 router = APIRouter()
 
@@ -581,14 +590,10 @@ async def get_service_info():
 测试配置文件
 """
 
-import pytest
-from fastapi.testclient import TestClient
-from unittest.mock import Mock
 
 @pytest.fixture
 def client():
     """测试客户端"""
-    from {}.api.main import create_app
     app = create_app()
     return TestClient(app)
 '''.format(service_name.replace("-", "_"))
@@ -669,8 +674,6 @@ METRICS_PORT=9090
 {service_name} 配置管理
 """
 
-from pydantic_settings import BaseSettings
-from typing import Optional
 
 class Settings(BaseSettings):
     """应用配置"""
@@ -849,7 +852,6 @@ health:  ## 健康检查
 
 def main():
     """主函数"""
-    import argparse
     
     parser = argparse.ArgumentParser(description="微服务完成度评估和自动化完善工具")
     parser.add_argument("--evaluate", action="store_true", help="评估所有微服务完成度")

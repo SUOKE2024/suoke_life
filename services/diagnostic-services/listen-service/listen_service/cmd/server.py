@@ -1,23 +1,29 @@
 """
-服务器启动命令行工具
-
-支持启动gRPC服务器和REST API服务器。
+server - 索克生活项目模块
 """
 
-import asyncio
-import signal
-import sys
-
-import click
-import structlog
-import uvicorn
-
+    from ..models.audio_models import AnalysisRequest, AudioFormat, AudioMetadata
 from ..core.audio_analyzer import AudioAnalyzer
 from ..core.tcm_analyzer import TCMFeatureExtractor
 from ..delivery.grpc_server import ListenServiceGRPCServer
 from ..delivery.rest_api import create_rest_app
 from ..utils.cache import AudioCache, MemoryCache, RedisCache
 from ..utils.logging import setup_logging
+import asyncio
+import click
+import signal
+import structlog
+import sys
+import uvicorn
+
+"""
+服务器启动命令行工具
+
+支持启动gRPC服务器和REST API服务器。
+"""
+
+
+
 
 logger = structlog.get_logger(__name__)
 
@@ -306,7 +312,6 @@ async def _test_components(cache_backend: str, redis_url: str):
 
     test_audio = (np.random.randn(16000) * 32767).astype(np.int16).tobytes()
 
-    from ..models.audio_models import AnalysisRequest, AudioFormat, AudioMetadata
 
     metadata = AudioMetadata(
         sample_rate=16000,

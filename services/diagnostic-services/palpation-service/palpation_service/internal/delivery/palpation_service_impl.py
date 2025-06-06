@@ -1,3 +1,23 @@
+"""
+palpation_service_impl - 索克生活项目模块
+"""
+
+from collections.abc import Iterator
+from internal.model.pulse_analyzer import PulseAnalyzer
+from internal.model.tcm_pattern_mapper import TCMPatternMapper
+from internal.repository.session_repository import SessionRepository
+from internal.repository.user_repository import UserRepository
+from internal.signal.abdominal_analyzer import AbdominalAnalyzer
+from internal.signal.pulse_processor import PulseProcessor
+from internal.signal.skin_analyzer import SkinAnalyzer
+from pathlib import Path
+from pkg.utils.metrics import MetricsCollector
+from typing import Any
+import grpc
+import logging
+import time
+import uuid
+
 #!/usr/bin/env python
 
 """
@@ -5,26 +25,11 @@
 负责实现gRPC服务接口
 """
 
-import logging
-import time
-import uuid
-from collections.abc import Iterator
-from pathlib import Path
-from typing import Any
 
-import grpc
-from internal.model.pulse_analyzer import PulseAnalyzer
-from internal.model.tcm_pattern_mapper import TCMPatternMapper
-from internal.repository.session_repository import SessionRepository
-from internal.repository.user_repository import UserRepository
-from internal.signal.abdominal_analyzer import AbdominalAnalyzer
 
 # 导入内部模块
-from internal.signal.pulse_processor import PulseProcessor
-from internal.signal.skin_analyzer import SkinAnalyzer
 
 # 导入生成的gRPC代码
-from pkg.utils.metrics import MetricsCollector
 
 logger = logging.getLogger(__name__)
 

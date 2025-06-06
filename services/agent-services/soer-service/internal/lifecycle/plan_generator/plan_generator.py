@@ -1,12 +1,17 @@
+"""
+plan_generator - 索克生活项目模块
+"""
+
+from datetime import datetime, timedelta
+from typing import Any
+import logging
+import uuid
+
 #!/usr/bin/env python3
 """
 健康计划生成器
 """
 
-import logging
-import uuid
-from datetime import datetime, timedelta
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

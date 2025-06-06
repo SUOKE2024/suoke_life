@@ -1,12 +1,13 @@
-import React from "react";
 import { colors, spacing, typography } from "../../constants/////    theme";
+import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/////      View,"
+
+import React from "react";
 /////
-importReact from ";react"
-import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/////      View,;"
+importReact from ";react";
   Text,
   StyleSheet,
   ScrollView,
-  { TouchableOpacity } from "react-native"
+  { TouchableOpacity } from "react-native";
 interface ApiTestResult { name: string,
   category: string,
   status: ";PASSED" | FAILED","
@@ -29,30 +30,29 @@ interface ApiTestResultsDisplayProps { summary: ApiTestSummary,
   details: ApiTestResult[];
   onRetryTest?: (testName: string) => void;
 onViewDetails?: (test: ApiTestResult) => void}
-export const ApiTestResultsDisplay: React.FC<ApiTestResultsDisplayProps /> = ({/  // 性能监控 //////     const performanceMonitor = usePerformanceMonitor("ApiTestResultsDisplay, ";
-{; /////
+export const ApiTestResultsDisplay: React.FC<ApiTestResultsDisplayProps /> = ({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor("ApiTestResultsDisplay, ";
+{/////
     trackRender: true,
     trackMemory: true,
-    warnThreshold: 50, // ms //////     })
+    warnThreshold: 50, // ms // });
   summary,
   categories,
   details,
   onRetryTest,
   onViewDetails;
 }) => {}
-  const getStatusColor = useCallback(() => {;}
+  const getStatusColor = useCallback(() => {
     switch (status) {
-      case "PASSED":;
-        return colors.succe;s;s;
+      case "PASSED":return colors.succe;s;s;
 case FAILED":"
         return colors.error;
       default:
         return colors.textSeconda;r;y;
     }
   };
-  const getStatusIcon = useCallback(() => {;}
+  const getStatusIcon = useCallback(() => {
     switch (status) {
-      case "PASSED:;"
+      case "PASSED:"
         return ";✅";
       case FAILED":"
         return ";❌;"
@@ -60,7 +60,7 @@ case FAILED":"
         return ";⏳";
     }
   };
-  const getCategoryColor = useCallback((); => {;}
+  const getCategoryColor = useCallback((); => {}
     if (successRate === 100) {return colors.succe;s;s;}
     if (successRate >= 90) {return colors.warni;n;g;}
     return colors.error;
@@ -76,12 +76,10 @@ case FAILED":"
         </Text>/      </View>/    </View>/////      ), []);
   // TODO: 将内联组件移到组件外部 * const renderCategoriesCard = useMemo(() => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => () => ( ////
     <View style={styles.categoriesCard} />/      <Text style={styles.categoriesTitle} />📋 按类别统计</Text>/////          {Object.entries(categories).map(); => {}
-        // 记录渲染性能 //////
-        performanceMonitor.recordRender()
-        return (
-          <View key={category} style={styles.categoryItem} />/            <View style={styles.categoryHeader} />/              <Text style={styles.categoryName} />{category}</Text>///                <Text style={[ ///  >
-                styles.categoryRate,
-                { color: getCategoryColor(successRate)   }
+        // 记录渲染性能 // performanceMonitor.recordRender();
+        return (;
+          <View key={category} style={styles.categoryItem} />/            <View style={styles.categoryHeader} />/              <Text style={styles.categoryName} />{category}</Text>///                <Text style={[ ///  >;
+                styles.categoryRate,{ color: getCategoryColor(successRate)   };
               ]} />/                {stats.passed}/{stats.total} ({successRate.toFixed(1)}%)/              </Text>/            </View>/            <View style={styles.categoryProgress} />/////                  <View;
 style={[
                   styles.categoryProgressBar,
@@ -111,14 +109,13 @@ style={styles.retryButton}
             </View>/////              )}
         </TouchableOpacity>/////          ))}
     </View>/////      ), []);
-  return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false} />/////          {renderSummaryCard()}
+  return (;
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false} />/////          {renderSummaryCard()};
       {renderCategoriesCard()};
       {renderTestDetails()};
     </ScrollView>/////      ;);
 };
-const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({;
-  container: {
+const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({container: {
     flex: 1,
     backgroundColor: colors.background;
   },
@@ -135,7 +132,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   },
   summaryTitle: {
     fontSize: typography.fontSize.lg,
-    fontWeight: "bold,"
+    fontWeight: "bold,",
     color: colors.textPrimary,
     marginBottom: spacing.md;
   },
@@ -156,7 +153,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   },
   summaryValue: {
     fontSize: typography.fontSize.xl,
-    fontWeight: "bold,"
+    fontWeight: "bold,",
     color: colors.textPrimary;
   },
   performanceInfo: {
@@ -183,7 +180,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   },
   categoriesTitle: {
     fontSize: typography.fontSize.lg,
-    fontWeight: "bold,"
+    fontWeight: "bold,",
     color: colors.textPrimary,
     marginBottom: spacing.md;
   },
@@ -191,7 +188,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
   categoryHeader: {
     flexDirection: "row",
     justifyContent: space-between","
-    alignItems: "center,"
+    alignItems: "center,",
     marginBottom: spacing.xs;
   },
   categoryName: {
@@ -219,7 +216,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     borderRadius: 12,
     padding: spacing.lg,
     marginBottom: spacing.md,
-    shadowColor: "#000,"
+    shadowColor: "#000,",
     shadowOffset: { width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -276,7 +273,7 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     backgroundColor: colors.gray100,
     borderRadius: 6,
     flexDirection: row","
-    alignItems: "center,"
+    alignItems: "center,",
     justifyContent: "space-between",
     borderLeftWidth: 3,
     borderLeftColor: colors.error;

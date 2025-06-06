@@ -1,15 +1,20 @@
-"""用户服务认证模块"""
+"""
+auth - 索克生活项目模块
+"""
 
-import httpx
-import jwt
 from datetime import datetime, timedelta
-from typing import Optional, Dict, Any
-from functools import wraps
 from fastapi import HTTPException, status, Depends, Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from functools import wraps
+from typing import Optional, Dict, Any
+from user_service.config import get_settings
+import httpx
+import jwt
 import structlog
 
-from user_service.config import get_settings
+"""用户服务认证模块"""
+
+
 
 logger = structlog.get_logger()
 security = HTTPBearer()

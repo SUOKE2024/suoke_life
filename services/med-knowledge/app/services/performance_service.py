@@ -1,19 +1,25 @@
 """
+performance_service - 索克生活项目模块
+"""
+
+            import psutil
+from app.core.exceptions import ServiceUnavailableException
+from app.core.logger import get_logger
+from app.services.cache_service import CacheService
+from collections import defaultdict
+from collections.abc import Callable
+from functools import wraps
+from typing import Any
+import asyncio
+import hashlib
+import time
+
+"""
 性能优化服务
 提供查询优化、缓存策略、批处理等功能
 """
 
-import asyncio
-from collections import defaultdict
-from collections.abc import Callable
-from functools import wraps
-import hashlib
-import time
-from typing import Any
 
-from app.core.exceptions import ServiceUnavailableException
-from app.core.logger import get_logger
-from app.services.cache_service import CacheService
 
 logger = get_logger()
 
@@ -338,7 +344,6 @@ class PerformanceService:
     async def _get_system_statistics(self) -> dict[str, Any]:
         """获取系统统计"""
         try:
-            import psutil
 
             # CPU使用率
             cpu_percent = psutil.cpu_percent(interval=1)

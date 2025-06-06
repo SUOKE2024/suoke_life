@@ -1,3 +1,13 @@
+"""
+circuit_breaker - 索克生活项目模块
+"""
+
+from enum import Enum
+from internal.model.config import CircuitBreakerConfig
+from typing import Dict, Optional
+import logging
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -7,12 +17,7 @@
 从而使系统继续运行并避免级联故障
 """
 
-import logging
-import time
-from enum import Enum
-from typing import Dict, Optional
 
-from internal.model.config import CircuitBreakerConfig
 
 logger = logging.getLogger(__name__)
 

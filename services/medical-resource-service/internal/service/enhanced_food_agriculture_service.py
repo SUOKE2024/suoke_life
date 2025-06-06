@@ -1,20 +1,32 @@
 """
+enhanced_food_agriculture_service - 索克生活项目模块
+"""
+
+        from dataclasses import dataclass, field
+        from datetime import datetime
+        from enum import Enum
+        from food_agriculture_service import (
+        from typing import Dict, List, Any, Optional
+    from .food_agriculture_service import (
+    import os
+    import sys
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Dict, List, Optional, Any, Tuple
+import aiohttp
+import asyncio
+import json
+import logging
+import uuid
+
+"""
 增强版食农结合服务
 优化与med-knowledge服务的集成，提供更智能的食疗和农业指导
 """
 
-import asyncio
-import logging
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Any, Tuple
-from dataclasses import dataclass, field
-from enum import Enum
-import uuid
-import json
-import aiohttp
 
 try:
-    from .food_agriculture_service import (
         FoodAgricultureService,
         FoodItem,
         AgriculturalProduct,
@@ -27,12 +39,9 @@ try:
     )
 except ImportError:
     # 如果相对导入失败，尝试绝对导入
-    import sys
-    import os
     current_dir = os.path.dirname(__file__)
     sys.path.append(current_dir)
     try:
-        from food_agriculture_service import (
             FoodAgricultureService,
             FoodItem,
             AgriculturalProduct,
@@ -45,10 +54,6 @@ except ImportError:
         )
     except ImportError:
         # 如果还是失败，创建模拟类
-        from dataclasses import dataclass, field
-        from datetime import datetime
-        from enum import Enum
-        from typing import Dict, List, Any, Optional
         
         class ConstitutionType(Enum):
             BALANCED = "balanced"

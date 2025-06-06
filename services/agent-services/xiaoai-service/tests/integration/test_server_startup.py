@@ -1,11 +1,21 @@
+"""
+test_server_startup - 索克生活项目模块
+"""
+
+        from cmd.server import XiaoAIServer
+        from concurrent import futures
+        from internal.delivery.xiaoai_service_impl import XiaoAIServiceImpl
+        import grpc
+        import traceback
+from pathlib import Path
+import asyncio
+import sys
+
 #!/usr/bin/env python3
 """
 测试服务器启动脚本
 """
 
-import asyncio
-import sys
-from pathlib import Path
 
 # 添加项目根目录到PYTHONPATH
 sys.path.insert(0, Path().resolve())
@@ -15,7 +25,6 @@ async def test_server_startup():
     print("🔍 测试服务器启动...\n")
 
     try:
-        from cmd.server import XiaoAIServer
 
         server = XiaoAIServer("config/dev.yaml")
         print("✓ 服务器实例创建成功")
@@ -24,9 +33,7 @@ async def test_server_startup():
 
         print("\n🔧 测试服务器组件初始化...")
 
-        from concurrent import futures
 
-        import grpc
 
 
         test_server = grpc.aio.server(
@@ -34,7 +41,6 @@ async def test_server_startup():
         )
         print("✓ gRPC服务器创建成功")
 
-        from internal.delivery.xiaoai_service_impl import XiaoAIServiceImpl
         service_impl = XiaoAIServiceImpl()
         print("✓ 服务实现创建成功")
 
@@ -63,7 +69,6 @@ async def test_server_startup():
 
     except Exception as e:
         print(f"\n❌ 服务器启动测试失败: {e}")
-        import traceback
         traceback.print_exc()
         return False
 

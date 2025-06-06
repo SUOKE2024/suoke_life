@@ -1,12 +1,17 @@
-"""基础服务类"""
+"""
+base - 索克生活项目模块
+"""
 
 from abc import ABC
 from abc import abstractmethod
+from health_data_service.core.logging import log_database_operation
 from typing import Any
 from typing import Generic
 from typing import TypeVar
 
-from health_data_service.core.logging import log_database_operation
+"""基础服务类"""
+
+
 
 # 泛型类型变量
 T = TypeVar("T")

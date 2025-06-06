@@ -1,4 +1,10 @@
 """
+__init__ - 索克生活项目模块
+"""
+
+from inquiry_service.core.exceptions import InquiryServiceError
+
+"""
 问诊服务 (Inquiry Service)
 
 索克生活智能健康管理平台的核心诊断服务，负责通过智能对话收集用户的健康信息，
@@ -16,7 +22,6 @@ __version__ = "1.0.0"
 __author__ = "Suoke Life Team"
 __email__ = "dev@suokelife.com"
 
-from inquiry_service.core.exceptions import InquiryServiceError
 
 __all__ = [
     "InquiryServiceError",

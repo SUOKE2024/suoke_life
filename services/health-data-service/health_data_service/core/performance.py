@@ -1,21 +1,26 @@
 """
+performance - 索克生活项目模块
+"""
+
+from .cache import get_cache_manager
+from .monitoring import record_cache_metrics, record_db_metrics
+from contextlib import asynccontextmanager
+from dataclasses import dataclass
+from datetime import datetime, timedelta
+from loguru import logger
+from typing import Any, Callable, Dict, Optional, TypeVar, Union, List
+import asyncio
+import functools
+import time
+
+"""
 性能优化模块
 
 提供缓存优化、连接池管理、查询优化等性能提升功能。
 """
 
-import asyncio
-import time
-import functools
-from typing import Any, Callable, Dict, Optional, TypeVar, Union, List
-from datetime import datetime, timedelta
-from dataclasses import dataclass
-from contextlib import asynccontextmanager
 
-from loguru import logger
 
-from .cache import get_cache_manager
-from .monitoring import record_cache_metrics, record_db_metrics
 
 T = TypeVar('T')
 

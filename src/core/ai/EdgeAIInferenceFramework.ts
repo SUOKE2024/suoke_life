@@ -1,9 +1,9 @@
 import { EventEmitter } from "events";
-import { Logger } from "../../placeholder";../monitoring/////    Logger";"
-import { MetricsCollector } from ../monitoring/////    MetricsCollector";"
+import { Logger } from "../../placeholder";../monitoring/////    Logger
+import { MetricsCollector } from ../monitoring/////    MetricsCollector
 import { ErrorHandler } from "../error/////    ErrorHandler";
-export interface ModelConfig {;
-  modelId: string";"
+
+export interface ModelConfig {modelId: string
   modelType: ";onnx" | tflite" | "pytorch | "custom";
   modelPath: string;
   inputShape: number[];
@@ -13,11 +13,10 @@ export interface ModelConfig {;
   maxBatchSize: number;
   warmupIterations: number;
 }
-export interface InferenceRequest {;
-  requestId: string;
+export interface InferenceRequest {requestId: string;
   modelId: string;
   inputData: any;
-  priority: low" | "normal | "high" | critical";"
+  priority: low" | "normal | "high" | critical
   timeout: number;
   metadata: {
     userId?: string;
@@ -25,8 +24,7 @@ export interface InferenceRequest {;
     timestamp: number;
   };
 }
-export interface InferenceResult {;
-  requestId: string;
+export interface InferenceResult {requestId: string;
   modelId: string;
   outputData: any;
   confidence: number;
@@ -38,8 +36,7 @@ export interface InferenceResult {;
     memoryUsage: number;
   };
 }
-export interface DeviceInfo {;
-  deviceId: string;
+export interface DeviceInfo {deviceId: string;
   deviceType: "cpu | "gpu" | npu";
   capabilities: string[];
   memoryTotal: number;
@@ -47,8 +44,7 @@ export interface DeviceInfo {;
   computeUnits: number;
   isAvailable: boolean;
 }
-export class EdgeAIInferenceFramework extends EventEmitter {;
-  private logger: Logger;
+export class EdgeAIInferenceFramework extends EventEmitter {private logger: Logger;
   private metrics: MetricsCollector;
   private errorHandler: ErrorHandler;
   private loadedModels: Map<string, any>;
@@ -69,16 +65,16 @@ export class EdgeAIInferenceFramework extends EventEmitter {;
     this.modelConfigs = new Map();
     this.isInitialized = false;
   }
-  /**////
-   * 初始化边缘AI推理框架
+  /**
+ * * 初始化边缘AI推理框架
   async initialize(): Promise<void> {
     try {
       this.logger.info("正在初始化边缘AI推理框架...");
-      //////     检测可用设备
+      // 检测可用设备
 await this.detectDevices();
-      //////     初始化推理引擎
+      // 初始化推理引擎
 await this.initializeInferenceEngines();
-      //////     启动请求处理器
+      // 启动请求处理器
 this.startRequestProcessor();
       this.isInitialized = true;
       this.logger.info(边缘AI推理框架初始化完成");"
@@ -88,14 +84,13 @@ this.startRequestProcessor();
       throw error;
     }
   }
-  /**////
-   * 检测可用设备
+  /**
+ * * 检测可用设备
   private async detectDevices(): Promise<void> {
     try {
-      //////     CPU设备
-const cpuDevice: DeviceInfo = {;
-        deviceId: cpu-0","
-        deviceType: "cpu,"
+      // CPU设备
+const cpuDevice: DeviceInfo = {deviceId: cpu-0","
+        deviceType: "cpu,",
         capabilities: ["fp32", fp16", "int8],
         memoryTotal: this.getSystemMemory(),
         memoryAvailable: this.getAvailableMemory(),
@@ -103,11 +98,10 @@ const cpuDevice: DeviceInfo = {;
         isAvailable: true;
       };
       this.deviceInfo.set("cpu-0", cpuDevice);
-      //////     GPU设备检测（如果可用）
+      // GPU设备检测（如果可用）
       if (await this.isGPUAvailable()) {
-        const gpuDevice: DeviceInfo = {;
-          deviceId: gpu-0","
-          deviceType: "gpu,"
+        const gpuDevice: DeviceInfo = {deviceId: gpu-0","
+          deviceType: "gpu,",
           capabilities: ["fp32", fp16"],"
           memoryTotal: await this.getGPUMemory(),
           memoryAvailable: await this.getAvailableGPUMemory(),
@@ -116,10 +110,9 @@ const cpuDevice: DeviceInfo = {;
         }
         this.deviceInfo.set("gpu-0, gpuDevice);"
       }
-      //////     NPU设备检测（如果可用）
+      // NPU设备检测（如果可用）
       if (await this.isNPUAvailable()) {
-        const npuDevice: DeviceInfo = {;
-          deviceId: "npu-0",
+        const npuDevice: DeviceInfo = {deviceId: "npu-0",
           deviceType: npu","
           capabilities: ["int8, "fp16"],"
           memoryTotal: await this.getNPUMemory(),
@@ -135,11 +128,11 @@ const cpuDevice: DeviceInfo = {;
       throw error;
     }
   }
-  /**////
-   * 初始化推理引擎
+  /**
+ * * 初始化推理引擎
   private async initializeInferenceEngines(): Promise<void> {
     try {
-      //////     根据设备类型初始化相应的推理引擎
+      // 根据设备类型初始化相应的推理引擎
 for (const [deviceId, device] of this.deviceInfo) {
         switch (device.deviceType) {
           case "cpu":
@@ -158,8 +151,8 @@ for (const [deviceId, device] of this.deviceInfo) {
       throw error;
     }
   }
-  /**////
-   * 加载模型
+  /**
+ * * 加载模型
   async loadModel(config: ModelConfig): Promise<void> {
     try {
       if (this.loadedModels.has(config.modelId)) {
@@ -168,14 +161,14 @@ for (const [deviceId, device] of this.deviceInfo) {
       }
       this.logger.info(`正在加载模型: ${config.modelId}`);
       const startTime = Date.now();
-      //////     选择最适合的设备
+      // 选择最适合的设备
 const selectedDevice = this.selectOptimalDevice(config);
       if (!selectedDevice) {
         throw new Error(没有可用的设备来加载模型");"
       }
-      //////     根据模型类型和设备类型加载模型
+      // 根据模型类型和设备类型加载模型
 const model = await this.loadModelOnDevice(config, selectedDevice);
-      //////     模型预热
+      // 模型预热
 await this.warmupModel(model, config);
       this.loadedModels.set(config.modelId, {
         model,
@@ -195,8 +188,8 @@ await this.warmupModel(model, config);
       throw error;
     }
   }
-  /**////
-   * 执行推理
+  /**
+ * * 执行推理
   async inference(request: InferenceRequest): Promise<InferenceResult> {
     try {
       if (!this.isInitialized) {
@@ -207,10 +200,10 @@ await this.warmupModel(model, config);
       }
       this.logger.debug(`开始推理: ${request.requestId}`, { modelId: request.modelId });
       const startTime = Date.now();
-      //////     添加到请求队列
+      // 添加到请求队列
 this.requestQueue.push(request);
       this.activeRequests.set(request.requestId, request);
-      //////     等待推理完成
+      // 等待推理完成
 const result = await this.processInferenceRequest(request);
       const endTime = Date.now();
       result.latency = endTime - startTime;
@@ -231,12 +224,12 @@ const result = await this.processInferenceRequest(request);
       throw error;
     }
   }
-  /**////
-   * 批量推理
+  /**
+ * * 批量推理
   async batchInference(requests: InferenceRequest[]): Promise<InferenceResult[]> {
     try {
       const results: InferenceResult[] = [];
-      //////     按模型分组
+      // 按模型分组
 const requestsByModel = new Map<string, InferenceRequest[]>();
       requests.forEach(request => {}
         if (!requestsByModel.has(request.modelId)) {
@@ -244,9 +237,9 @@ const requestsByModel = new Map<string, InferenceRequest[]>();
         }
         requestsByModel.get(request.modelId)!.push(request);
       });
-      //////     并行处理每个模型的批次
+      // 并行处理每个模型的批次
 const batchPromises = Array.from(requestsByModel.entries()).map(;
-        async ([modelId, modelRequests]) => {;}
+        async ([modelId, modelRequests]) => {}
           return await this.processBatchForModel(modelId, modelRequests);
         }
       );
@@ -259,40 +252,32 @@ const batchPromises = Array.from(requestsByModel.entries()).map(;
       throw error;
     }
   }
-  /**////
-   * 处理单个推理请求
+  /**
+ * * 处理单个推理请求
   private async processInferenceRequest(request: InferenceRequest): Promise<InferenceResult> {
     const modelInfo = this.loadedModels.get(request.modelId)!;
     const device = this.deviceInfo.get(modelInfo.deviceId)!;
-    //////     预处理输入数据
+    // 预处理输入数据
 const preprocessedInput = await this.preprocessInput(request.inputData, modelInfo.config);
-    //////     执行推理
+    // 执行推理
 const rawOutput = await this.executeInference(modelInfo.model, preprocessedInput, device);
-    //////     后处理输出数据
+    // 后处理输出数据
 const processedOutput = await this.postprocessOutput(rawOutput, modelInfo.config);
-    //////     计算置信度
+    // 计算置信度
 const confidence = this.calculateConfidence(processedOutput);
-    return {
-      requestId: request.requestId,
-      modelId: request.modelId,
-      outputData: processedOutput,
-      confidence,
-      latency: 0, //////     将在调用方设置
-deviceUsed: device.deviceId,
-      metadata: {
-        timestamp: Date.now(),
-        processingTime: 0, //////     将在调用方设置
-memoryUsage: await this.getCurrentMemoryUsage(device.deviceId)
-      }
+    return {requestId: request.requestId,modelId: request.modelId,outputData: processedOutput,confidence,latency: 0, // 将在调用方设置;
+deviceUsed: device.deviceId,metadata: {timestamp: Date.now(),processingTime: 0, // 将在调用方设置;
+memoryUsage: await this.getCurrentMemoryUsage(device.deviceId);
+      };
     };
   }
-  /**////
-   * 处理模型批次推理
+  /**
+ * * 处理模型批次推理
   private async processBatchForModel(modelId: string, requests: InferenceRequest[]): Promise<InferenceResult[]> {
     const modelInfo = this.loadedModels.get(modelId)!;
     const maxBatchSize = modelInfo.config.maxBatchSize;
     const results: InferenceResult[] = [];
-    //////     分批处理
+    // 分批处理
 for (let i = 0; i < requests.length; i += maxBatchSize) {
       const batch = requests.slice(i, i + maxBatchSize);
       const batchResults = await Promise.all(;
@@ -302,15 +287,15 @@ for (let i = 0; i < requests.length; i += maxBatchSize) {
     }
     return results;
   }
-  /**////
-   * 选择最优设备
+  /**
+ * * 选择最优设备
   private selectOptimalDevice(config: ModelConfig): DeviceInfo | null {
     const availableDevices = Array.from(this.deviceInfo.values());
       .filter(device => device.isAvailable);
     if (availableDevices.length === 0) {
       return null;
     }
-    //////     优先级：NPU > GPU > CPU（对于支持的精度）
+    // 优先级：NPU > GPU > CPU（对于支持的精度）
     const preferredOrder: Array<npu" | "gpu | "cpu"> = [npu", "gpu, "cpu"];
     for (const deviceType of preferredOrder) {
       const device = availableDevices.find(d =>;
@@ -321,14 +306,14 @@ for (let i = 0; i < requests.length; i += maxBatchSize) {
         return device;
       }
     }
-    //////     如果没有找到支持指定精度的设备，返回第一个可用设备
+    // 如果没有找到支持指定精度的设备，返回第一个可用设备
 return availableDevices[0];
   }
-  /**////
-   * 在设备上加载模型
+  /**
+ * * 在设备上加载模型
   private async loadModelOnDevice(config: ModelConfig, device: DeviceInfo): Promise<any> {
-    //////     这里应该根据模型类型和设备类型实现具体的加载逻辑
-    //////     示例实现
+    // 这里应该根据模型类型和设备类型实现具体的加载逻辑
+    // 示例实现
 switch (config.modelType) {
       case onnx":"
         return await this.loadONNXModel(config, device);
@@ -340,34 +325,34 @@ switch (config.modelType) {
         throw new Error(`不支持的模型类型: ${config.modelType}`);
     }
   }
-  /**////
-   * 模型预热
+  /**
+ * * 模型预热
   private async warmupModel(model: any, config: ModelConfig): Promise<void> {
     const dummyInput = this.createDummyInput(config.inputShape);
     for (let i = 0; i < config.warmupIterations; i++) {
       await this.executeInference(model, dummyInput, this.deviceInfo.values().next().value);
     }
   }
-  /**////
-   * 启动请求处理器
+  /**
+ * * 启动请求处理器
   private startRequestProcessor(): void {
-    setInterval(() => {}
+    setInterval(() => {
       this.processRequestQueue();
-    }, 10); //////     每10ms处理一次队列
+    }, 10); // 每10ms处理一次队列
   }
-  /**////
-   * 处理请求队列
+  /**
+ * * 处理请求队列
   private processRequestQueue(): void {
-    //////     按优先级排序
+    // 按优先级排序
 this.requestQueue.sort((a, b) => {}
       const priorityOrder = { critical: 0, high: 1, normal: 2, low: 3 };
       return priorityOrder[a.priority] - priorityOrder[b.priority];
     });
-    //////     处理队列中的请求（这里简化处理，实际应该考虑设备负载）
+    // 处理队列中的请求（这里简化处理，实际应该考虑设备负载）
     this.requestQueue = []
   }
-  /**////
-   * 获取框架状态
+  /**
+ * * 获取框架状态
   getFrameworkStatus(): {
     isInitialized: boolean;
     loadedModels: number;
@@ -375,16 +360,11 @@ this.requestQueue.sort((a, b) => {}
     activeRequests: number;
     queuedRequests: number;
   } {
-    return {
-      isInitialized: this.isInitialized,
-      loadedModels: this.loadedModels.size,
-      availableDevices: Array.from(this.deviceInfo.values()).filter(d => d.isAvailable).length,
-      activeRequests: this.activeRequests.size,
-      queuedRequests: this.requestQueue.length;
+    return {isInitialized: this.isInitialized,loadedModels: this.loadedModels.size,availableDevices: Array.from(this.deviceInfo.values()).filter(d => d.isAvailable).length,activeRequests: this.activeRequests.size,queuedRequests: this.requestQueue.length;
     };
   }
-  /**////
-   * 卸载模型
+  /**
+ * * 卸载模型
   async unloadModel(modelId: string): Promise<void> {
     if (this.loadedModels.has(modelId)) {
       this.loadedModels.delete(modelId);
@@ -394,9 +374,9 @@ this.requestQueue.sort((a, b) => {}
       this.emit('modelUnloaded', { modelId });
     }
   }
-  //////     以下是辅助方法的占位符实现
-private getSystemMemory(): number { return 8 * 1024 * 1024 * 1024; } //////     8GB;
-private getAvailableMemory(): number { return 4 * 1024 * 1024 * 1024; } //////     4GB;
+  // 以下是辅助方法的占位符实现
+private getSystemMemory(): number { return 8 * 1024 * 1024 * 1024; } // 8GB;
+private getAvailableMemory(): number { return 4 * 1024 * 1024 * 1024; } // 4GB;
 private getCPUCores(): number { return 8; }
   private async isGPUAvailable(): Promise<boolean> { return false; }
   private async getGPUMemory(): Promise<number> { return 0; }

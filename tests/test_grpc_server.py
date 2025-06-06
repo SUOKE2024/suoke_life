@@ -1,17 +1,22 @@
 """
+test_grpc_server - 索克生活项目模块
+"""
+
+from grpc import aio
+from suoke_blockchain_service import blockchain_pb2, blockchain_pb2_grpc
+from suoke_blockchain_service.exceptions import ValidationError, NotFoundError
+from suoke_blockchain_service.grpc_server import BlockchainServicer
+from unittest.mock import AsyncMock, MagicMock, patch
+import grpc
+import pytest
+
+"""
 gRPC服务器测试模块
 
 测试gRPC服务器的接口实现。
 """
 
-import pytest
-from unittest.mock import AsyncMock, MagicMock, patch
-import grpc
-from grpc import aio
 
-from suoke_blockchain_service.grpc_server import BlockchainServicer
-from suoke_blockchain_service import blockchain_pb2, blockchain_pb2_grpc
-from suoke_blockchain_service.exceptions import ValidationError, NotFoundError
 
 
 class TestBlockchainServicer:

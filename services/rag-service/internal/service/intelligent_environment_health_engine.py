@@ -1,3 +1,19 @@
+"""
+intelligent_environment_health_engine - 索克生活项目模块
+"""
+
+from ..observability.metrics import MetricsCollector
+from ..observability.tracing import trace_operation, SpanKind
+from collections import defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime, date, timedelta
+from enum import Enum
+from typing import Dict, List, Optional, Any, Tuple, Union
+import asyncio
+import json
+import logging
+import math
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -13,18 +29,7 @@
 - 环境污染防护策略
 """
 
-import asyncio
-import logging
-from datetime import datetime, date, timedelta
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Dict, List, Optional, Any, Tuple, Union
-import json
-import math
-from collections import defaultdict
 
-from ..observability.metrics import MetricsCollector
-from ..observability.tracing import trace_operation, SpanKind
 
 
 class EnvironmentType(str, Enum):

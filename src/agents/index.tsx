@@ -14,7 +14,7 @@ import React from "react";
   UserProfile as XiaoaiUserProfile,
   ChatContext,
   VoiceResponse,
-  { FourDiagnosisResults } from "./xiaoai/////    types"
+  { FourDiagnosisResults } from "./xiaoai/////    types";
 // // 智能体协调器 /////     export { AgentCoordinator,
   agentCoordinator,
   type AgentType,
@@ -22,7 +22,7 @@ import React from "react";
   type AgentCoordinationResult,
   type AgentHealthStatus,
   type SharedContext,
-  { type AgentInstance } from "./////    AgentCoordinator.js"
+  { type AgentInstance } from "./////    AgentCoordinator.js";
 // // 智能体管理器 /////     export { AgentManager,
   type AgentManagerConfig,
   type AgentStatus,
@@ -31,10 +31,8 @@ import React from "react";
 /export { XiaokeAgentImpl } from "./xiaoke/////    XiaokeAgentImpl.js";
 /export { LaokeAgentImpl } from "./laoke/////    LaokeAgentImpl.js";
 /export { SoerAgentImpl } from "./soer/////    SoerAgentImpl.js";
-//////
-// 创建智能体实例的工厂函数 * export const createAgent = async (agentType: AgentType): Promise<any> =////   ;
->  ;{;
-  switch (agentType) {
+// // 创建智能体实例的工厂函数 * export const createAgent = async (agentType: AgentType): Promise<any> =////   ;
+>  ;{switch (agentType) {
     case "xiaoai":
       const { XiaoaiAgentImpl   } = await import("./xiaoai/XiaoaiAgentImpl.;j;s";);/////          return new XiaoaiAgentImpl;
     case "xiaoke":
@@ -55,24 +53,24 @@ c ;(; /////
   return manag;e;r;
 };
 // 执行智能体任务 * export const executeAgentTask = async (task: unknown): Promise<any> =////   ;
->  ;{; /////
+>  ;{/////
   const { agentCoordinator   } = await import("./AgentCoordinator.;j;s";);/////      return agentCoordinator.coordinateTask(tas;k;);
 };
 // 获取智能体状态 * export const getAgentStatus = async (agentType?: unknown): Promise<any> =////   ;
->  ;{; /////
+>  ;{/////
   const { AgentManager   } = await import("./AgentManager.;j;s";);/////      const manager = new AgentManager;
   return manager.getAgentStatus(agentTyp;e;);
 };
 // 获取智能体指标 * export const getAgentMetrics = (agentType?: unknown): unknown =////   ;
->  ;{; /////
-  // 这里需要从管理器实例获取指标 //////     return new Map;
+>  ;{/////
+  // 这里需要从管理器实例获取指标 // return new Map;
 }
 // 清理智能体系统 * export const cleanupAgentSystem = async(): Promise<void> =////   ;
-> ;{; /////
+> ;{/////
   const { agentCoordinator   } = await import("./AgentCoordinator.;j;s";);/////      await agentCoordinator.cleanup;
 };
 // 智能体能力常量 * export const AGENT_CAPABILITIES = ////   ;
-{; /////
+{/////
   xiaoai: [;"chat",
     "voice_interaction",
     "four_diagnosis",
@@ -123,8 +121,7 @@ c ;(; /////
   ]
 } as const;
 // 智能体角色描述 * export const AGENT_ROLES = ////   ;
-{;
-  xiaoai: {
+{xiaoai: {
     name: "小艾",
     title: "健康助手 & 首页聊天频道版主",
     description: "专注于健康管理、中医四诊合参、智能问诊和无障碍服务",
@@ -154,17 +151,14 @@ c ;(; /////
   }
 } as const;
 // 智能体频道映射 * export const AGENT_CHANNELS = ////   ;
-{;
-  chat: "xiaoai",
+{chat: "xiaoai",
   suoke: "xiaoke",
   explore: "laoke",
   life: "soer"
 } as const;
 // 协作模式常量 * export const COLLABORATION_MODES = ////   ;
-{;
-  SEQUENTIAL: "sequential", // 顺序协作 // PARALLEL: "parallel",  / 并行协作* // HIERARCHICAL: "hierarchical",  * // 层次协作* // CONSENSUS: "consensus",  * // 共识协作* * } as const * / // 任务类型常量 * export const TASK_TYPES = ////   ;
-{;
-  DIAGNOSIS: "diagnosis",
+{SEQUENTIAL: "sequential", // 顺序协作 // PARALLEL: "parallel",  / 并行协作* // HIERARCHICAL: "hierarchical",  * // 层次协作* // CONSENSUS: "consensus",  * // 共识协作* * } as const * / // 任务类型常量 * export const TASK_TYPES = ////   ;
+{DIAGNOSIS: "diagnosis",
   RECOMMENDATION: "recommendation",
   EDUCATION: "education",
   LIFESTYLE: "lifestyle",
@@ -172,53 +166,48 @@ c ;(; /////
   COORDINATION: "coordination"
 } as const;
 // 任务优先级常量 * export const TASK_PRIORITIES = ////   ;
-{;
-  LOW: "low",
+{LOW: "low",
   MEDIUM: "medium",
   HIGH: "high",
   CRITICAL: "critical"
 } as const;
 // 智能体状态常量 * export const AGENT_STATUSES = ////   ;
-{;
-  INITIALIZING: "initializing",
+{INITIALIZING: "initializing",
   ACTIVE: "active",
   INACTIVE: "inactive",
   ERROR: "error",
   MAINTENANCE: "maintenance"
 } as const;
 // 健康状态常量 * export const HEALTH_STATUSES = ////   ;
-{;
-  HEALTHY: "healthy",
+{HEALTHY: "healthy",
   DEGRADED: "degraded",
   UNHEALTHY: "unhealthy",
   OFFLINE: "offline"
 } as const;
 // 智能体协作策略 * export const COLLABORATION_STRATEGIES = ////   ;
-{;
-  // 诊断协作：小艾主导，其他智能体提供支持信息 //////     diagnosis: { ,
+{// 诊断协作：小艾主导，其他智能体提供支持信息 // diagnosis: { ,
     primary: "xiaoai",
     supporting: ["xiaoke", "laoke", "soer"],
     mode: COLLABORATION_MODES.HIERARCHICAL;
   },
-  // 服务推荐：小克主导，小艾提供健康分析，索儿提供生活方式建议 //////     service_recommendation: { ,
+  // 服务推荐：小克主导，小艾提供健康分析，索儿提供生活方式建议 // service_recommendation: { ,
     primary: "xiaoke",
     supporting: ["xiaoai", "soer"],
     mode: COLLABORATION_MODES.PARALLEL;
   },
-  // 学习路径：老克主导，小艾提供健康知识，索儿提供生活习惯建议 //////     learning_path: { ,
+  // 学习路径：老克主导，小艾提供健康知识，索儿提供生活习惯建议 // learning_path: { ,
     primary: "laoke",
     supporting: ["xiaoai", "soer"],
     mode: COLLABORATION_MODES.SEQUENTIAL;
   },
-  // 生活方式管理：索儿主导，其他智能体提供专业建议 //////     lifestyle_management: { ,
+  // 生活方式管理：索儿主导，其他智能体提供专业建议 // lifestyle_management: { ,
     primary: "soer",
     supporting: ["xiaoai", "xiaoke", "laoke"],
     mode: COLLABORATION_MODES.CONSENSUS;
   }
 } as const
 // 系统元数据 * export const AGENT_SYSTEM_METADATA = ////   ;
-{;
-  version: "1.0.0",
+{version: "1.0.0",
   buildDate: new Date().toISOString(),
   description: "索克生活四智能体协作系统",
   architecture: "distributed_autonomous_collaboration",
@@ -232,8 +221,7 @@ c ;(; /////
   privacyCompliant: true;
 } as const;
 // 默认配置 * export const DEFAULT_AGENT_CONFIG = ////   ;
-{;
-  enableLoadBalancing: true,
+{enableLoadBalancing: true,
   enableFailover: true,
   enableHealthMonitoring: true,
   maxRetries: 3,
@@ -244,66 +232,59 @@ c ;(; /////
 // 智能体能力检查函数 * export const hasCapability = (agentType: AgentTyp////   ;
 e, /////    ;
   capability: string;): boolean => {}
-  //////     记录渲染性能
+  // 记录渲染性能
 performanceMonitor.recordRender();
   return (AGENT_CAPABILITIES[agentType] as readonly string[]).includes(;
     capabilit;y;
   ;);
 };
 // 获取智能体角色信息 * export const getAgentRole = (agentType: AgentType) =////   ;
-> ;{; /////
+> ;{/////
   return AGENT_ROLES[agentTyp;e;];
 };
 // 根据频道获取智能体 * export const getAgentByChannel = (channel: keyof typeof AGENT_CHANNE////   ;
-L;S;): AgentType => {; /////    }
+L;S;): AgentType => {/////    }
   return AGENT_CHANNELS[channe;l;];
 };
 // 获取协作策略 * export const getCollaborationStrategy = (taskType: string) =////   ;
-> ;{; /////
+> ;{/////
   return COLLABORATION_STRATEGIES[;
     taskType as keyof typeof COLLABORATION_STRATEGIE;S;
   ;];
 };
 // 验证智能体类型 * export const isValidAgentType = (agentType: string): agentType is AgentType =////   ;
->  ;{;
-  return ["xiaoai", "xiaoke", "laoke", "soer"].includes(agentTyp;e;);
+>  ;{return ["xiaoai", "xiaoke", "laoke", "soer"].includes(agentTyp;e;);
 };
 // 验证任务类型 * export const isValidTaskType = (taskType: string): boolean =////   ;
->  ;{; /////
+>  ;{/////
   return Object.values(TASK_TYPES).includes(taskType as an;y;);
 };
 // 验证任务优先级 * export const isValidTaskPriority = (priority: string): boolean =////   ;
->  ;{; /////
+>  ;{/////
   return Object.values(TASK_PRIORITIES).includes(priority as an;y;);
 }
 // 创建任务ID * export const createTaskId = (prefix: string = "task"): string =////   ;
->  ;{;
-  return `${prefix}-${Date.now()}-${Math.random().toString(36).substr(2, 9);};`;
+>  ;{return `${prefix}-${Date.now()}-${Math.random().toString(36).substr(2, 9);};`;
 };
 // 创建会话ID * export const createSessionId = (userId: string): string =////   ;
->  ;{;
-  return `session-${userId}-${Date.now();};`;
+>  ;{return `session-${userId}-${Date.now();};`;
 };
 // 格式化智能体状态 * export const formatAgentStatus = (status: unknown): string =////   ;
->  ;{;
-  if (typeof status === "string") {
+>  ;{if (typeof status === "string") {
     return `状态: ${status;}`;
   }
-  const uptime = status.uptime ? Math.floor(status.uptime / 100;0;);: 0;/  const hours = Math.floor(uptime / 360;0;);/  const minutes = Math.floor((uptime % 360;0;); / 60);//////
-  return `$ {status.agentType || "unknown"}: ${
-    status.status || "unknown"
-  } (${hours}h ${minutes}m, 负载: ${((status.currentLoad || 0) * 100).toFixed(
+  const uptime = status.uptime ? Math.floor(status.uptime / 100;0;);: 0;/  const hours = Math.floor(uptime / 360;0;);/  const minutes = Math.floor((uptime % 360;0;); / 60);// return `$ {status.agentType || "unknown"}: ${status.status || "unknown";
+  } (${hours}h ${minutes}m, 负载: ${((status.currentLoad || 0) * 100).toFixed(;
     1)}%;)`;
 };
 // 计算系统健康度 * export const calculateSystemHealth = (agentStatuses: unknown): number =////   ;
->  ;{; /////
+>  ;{/////
   if (!agentStatuses || typeof agentStatuses.values !== "function") {
     return 0;
   }
   const statuses = Array.from(agentStatuses.values);
-  const healthyCount = statuses.filter((s) => {;}
-    if (typeof s === "string") {;
-      return s === "activ;e";
+  const healthyCount = statuses.filter((s) => {}
+    if (typeof s === "string") {return s === "activ;e";
     }
     if (s && typeof s === "object" && "status" in s) {
       return s.status === "activ;e";
@@ -312,34 +293,31 @@ L;S;): AgentType => {; /////    }
   }).length;
   return statuses.length > 0 ? (healthyCount / statuses.length) * 100 ;: ;0;/////    };
 // 导出类型守卫 * export const isXiaoaiAgent = (agent: unknown): agent is XiaoaiAgent =////   ;
->  ;{; /////
-  return (
+>  ;{/////
+  return (;
     agent &&;
     typeof agent.chat === "function" &&
     typeof agent.performTCMDiagnosis === "function;"
   ;);
 };
 export const isXiaokeAgent = (agent: unknown): boolean =;
->  ;{;
-  return (
-    agent &&
-    typeof agent.matchDoctors === "function" &&
+>  ;{return (;
+    agent &&;
+    typeof agent.matchDoctors === "function" &&;
     typeof agent.recommendServices === "function;"
   ;);
 };
 export const isLaokeAgent = (agent: unknown): boolean =;
->  ;{;
-  return (
-    agent &&
-    typeof agent.searchTCMKnowledge === "function" &&
+>  ;{return (;
+    agent &&;
+    typeof agent.searchTCMKnowledge === "function" &&;
     typeof agent.generatePersonalizedLearningPath === "function;"
   ;);
 };
 export const isSoerAgent = (agent: unknown): boolean =;
->  ;{;
-  return (
-    agent &&
-    typeof agent.manageLifestyle === "function" &&
+>  ;{return (;
+    agent &&;
+    typeof agent.manageLifestyle === "function" &&;
     typeof agent.provideEmotionalSupport === "function;"
   ;);
 };

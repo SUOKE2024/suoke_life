@@ -1,3 +1,13 @@
+"""
+service - 索克生活项目模块
+"""
+
+from internal.model.config import GatewayConfig, RouteConfig
+from internal.service.service_registry import ServiceRegistry
+import grpc
+import httpx
+import logging
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,10 +16,7 @@ API网关的gRPC服务实现
 提供健康检查、代理请求、获取路由等功能
 """
 
-import logging
 
-import grpc
-import httpx
 
 # 由于缺少生成的模块，创建MockResponse模块和基类以便测试
 class MockResponse:
@@ -68,8 +75,6 @@ def add_ApiGatewayServicer_to_server(servicer, server):
 # )
 # from api.grpc.gen.api_gateway_pb2_grpc import ApiGatewayServicer, add_ApiGatewayServicer_to_server
 
-from internal.model.config import GatewayConfig, RouteConfig
-from internal.service.service_registry import ServiceRegistry
 
 logger = logging.getLogger(__name__)
 

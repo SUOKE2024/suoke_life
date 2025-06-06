@@ -1,11 +1,16 @@
+"""
+run - 索克生活项目模块
+"""
+
+from integration_service.config import settings
+from integration_service.main import create_app
+import uvicorn
+
 #!/usr/bin/env python3
 """
 Integration Service 启动脚本
 """
 
-import uvicorn
-from integration_service.main import create_app
-from integration_service.config import settings
 
 if __name__ == "__main__":
     app = create_app()

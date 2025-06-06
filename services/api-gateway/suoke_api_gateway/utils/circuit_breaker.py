@@ -1,15 +1,20 @@
 """
+circuit_breaker - 索克生活项目模块
+"""
+
+from ..core.logging import get_logger
+from enum import Enum
+from typing import Any, Callable, Dict, Optional
+import asyncio
+import time
+
+"""
 熔断器模块
 
 实现熔断器模式，防止级联故障。
 """
 
-import asyncio
-import time
-from enum import Enum
-from typing import Any, Callable, Dict, Optional
 
-from ..core.logging import get_logger
 
 logger = get_logger(__name__)
 

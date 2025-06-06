@@ -1,17 +1,22 @@
 """
+models - 索克生活项目模块
+"""
+
+from datetime import datetime
+from sqlalchemy import Column, Integer, String, DateTime, Text, Float, Boolean, JSON, ForeignKey
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
+from typing import Optional, Dict, Any, List
+import uuid
+
+"""
 五诊服务数据库模型
 
 定义患者信息、诊断记录、分析结果等核心数据模型，
 支持多种诊断类型的数据存储和查询。
 """
 
-from datetime import datetime
-from typing import Optional, Dict, Any, List
-from sqlalchemy import Column, Integer, String, DateTime, Text, Float, Boolean, JSON, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
-from sqlalchemy.dialects.postgresql import UUID
-import uuid
 
 Base = declarative_base()
 

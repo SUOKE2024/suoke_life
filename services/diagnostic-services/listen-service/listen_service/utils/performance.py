@@ -1,19 +1,25 @@
 """
+performance - 索克生活项目模块
+"""
+
+        import psutil
+from collections import defaultdict, deque
+from collections.abc import Callable
+from dataclasses import dataclass, field
+from typing import Any, List, TypeVar
+import asyncio
+import functools
+import structlog
+import threading
+import time
+
+"""
 性能监控工具
 
 提供异步函数性能监控、计时器和性能统计功能。
 """
 
-import asyncio
-import functools
-import threading
-import time
-from collections import defaultdict, deque
-from collections.abc import Callable
-from dataclasses import dataclass, field
-from typing import Any, List, TypeVar
 
-import structlog
 
 logger = structlog.get_logger(__name__)
 
@@ -363,7 +369,6 @@ profiler = PerformanceProfiler()
 async def get_system_performance() -> dict[str, Any]:
     """获取系统性能信息"""
     try:
-        import psutil
 
         # CPU 使用率
         cpu_percent = psutil.cpu_percent(interval=1)

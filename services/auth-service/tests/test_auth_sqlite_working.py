@@ -1,12 +1,21 @@
 """
-Auth-Service SQLite兼容测试
-解决数据库初始化问题的完整测试套件
+test_auth_sqlite_working - 索克生活项目模块
 """
+
+        from test_database_manager_sqlite_compatible import TestUser
+    from auth_service.main import create_app
+from auth_service.core.database import get_db
+from fastapi.testclient import TestClient
+from sqlalchemy import text
+from test_database_manager_sqlite_compatible import TestDatabaseManager
 import os
 import pytest
 import pytest_asyncio
-from fastapi.testclient import TestClient
-from sqlalchemy import text
+
+"""
+Auth-Service SQLite兼容测试
+解决数据库初始化问题的完整测试套件
+"""
 
 # 设置测试环境变量
 os.environ["ENVIRONMENT"] = "testing"
@@ -14,8 +23,6 @@ os.environ["DATABASE_URL"] = "sqlite+aiosqlite:///:memory:"
 os.environ["SECRET_KEY"] = "test-secret-key-for-testing-only"
 os.environ["REDIS_URL"] = "redis://localhost:6379/1"
 
-from auth_service.core.database import get_db
-from test_database_manager_sqlite_compatible import TestDatabaseManager
 
 
 @pytest_asyncio.fixture(scope="session")
@@ -30,12 +37,12 @@ async def test_db_manager():
 @pytest.fixture
 def app(test_db_manager):
     """创建测试应用"""
-    from auth_service.main import create_app
     
     app = create_app()
     
     # 覆盖数据库依赖
-    async def override_get_db():
+    async     @cache(timeout=300)  # 5分钟缓存
+def override_get_db():
         async for session in test_db_manager.get_session():
             yield session
             break  # 只需要一个会话
@@ -208,7 +215,6 @@ class TestDatabaseOperations:
         """测试创建测试用户"""
         print("👤 测试创建用户...")
         
-        from test_database_manager_sqlite_compatible import TestUser
         
         # 确保表已创建
         await test_db_manager.reset_database()

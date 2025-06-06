@@ -1,9 +1,14 @@
 """
+user - 索克生活项目模块
+"""
+
+from internal.model.user import (
+
+"""
 用户模型模块
 从internal.model.user导入所有用户相关模型
 """
 
-from internal.model.user import (
     # 枚举类型
     UserStatus,
     UserRole,

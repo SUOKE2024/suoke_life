@@ -1,10 +1,10 @@
-//////     Web平台存储工具 - 提供与AsyncStorage兼容的API;
-//////     简单的内存存储作为fallback;
+// Web平台存储工具 - 提供与AsyncStorage兼容的API;
+// 简单的内存存储作为fallback;
 const memoryStorage: { [key: string]: string } = {};
 class WebStorage {
   private isLocalStorageAvailable(): boolean {
     try {
-      const test = "__localStorage_test__";
+      const test = '__localStorage_test__';
       (globalThis as any).localStorage?.setItem(test, test);
       (globalThis as any).localStorage?.removeItem(test);
       return true;
@@ -53,9 +53,9 @@ class WebStorage {
       if (this.isLocalStorageAvailable()) {
         (globalThis as any).localStorage.clear();
       }
-      Object.keys(memoryStorage).forEach((key) => delete memoryStorage[key]);
+      Object.keys(memoryStorage).forEach(key => delete memoryStorage[key]);
     } catch (error) {
-      Object.keys(memoryStorage).forEach((key) => delete memoryStorage[key]);
+      Object.keys(memoryStorage).forEach(key => delete memoryStorage[key]);
     }
   }
   async getAllKeys(): Promise<string[]> {

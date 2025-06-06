@@ -1,17 +1,22 @@
 """
+user_service - 索克生活项目模块
+"""
+
+from ..core.security import verify_password, get_password_hash
+from ..models.user import User, UserPlatformAuth
+from .base_service import BaseService
+from datetime import datetime
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import Session
+from typing import Optional, Dict, Any
+import logging
+
+"""
 用户服务模块
 """
 
-import logging
-from typing import Optional, Dict, Any
-from datetime import datetime
 
-from sqlalchemy.orm import Session
-from sqlalchemy.exc import IntegrityError
 
-from ..models.user import User, UserPlatformAuth
-from ..core.security import verify_password, get_password_hash
-from .base_service import BaseService
 
 logger = logging.getLogger(__name__)
 
@@ -351,5 +356,5 @@ class UserService(BaseService[User]):
                 UserPlatformAuth.user_id == user_id,
                 UserPlatformAuth.is_active
             )
-            .all()
+            .all()[:1000]  # 限制查询结果数量
         )

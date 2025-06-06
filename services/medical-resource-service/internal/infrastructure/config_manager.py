@@ -1,25 +1,30 @@
 """
-增强的配置管理模块
-支持动态配置、环境变量、配置验证、热重载等功能
+config_manager - 索克生活项目模块
 """
 
-import asyncio
-import hashlib
-import json
-import logging
-import os
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Type, Union
-
-import structlog
-import yaml
 from pydantic import BaseModel, Field, ValidationError
+from typing import Any, Callable, Dict, List, Optional, Type, Union
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
+import asyncio
+import hashlib
+import json
+import logging
+import os
+import structlog
+import yaml
+
+"""
+增强的配置管理模块
+支持动态配置、环境变量、配置验证、热重载等功能
+"""
+
+
 
 logger = structlog.get_logger(__name__)
 
@@ -99,6 +104,18 @@ class ServiceConfig(BaseModel):
     debug: bool = Field(default=False, description="调试模式")
     workers: int = Field(default=4, ge=1, description="工作进程数")
 
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'serviceconfig'
+        ordering = ['-created_at']
+
 
 class DatabaseConfig(BaseModel):
     """数据库配置模型"""
@@ -111,6 +128,30 @@ class DatabaseConfig(BaseModel):
     pool_size: int = Field(default=20, ge=1, description="连接池大小")
     max_overflow: int = Field(default=30, ge=0, description="最大溢出连接数")
     pool_timeout: int = Field(default=30, ge=1, description="连接池超时")
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'xiaokeagentconfig'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'medicalresourceconfig'
+        ordering = ['-created_at']
 
 
 class XiaokeAgentConfig(BaseModel):

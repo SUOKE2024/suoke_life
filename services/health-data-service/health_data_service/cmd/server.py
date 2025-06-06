@@ -1,14 +1,21 @@
-"""服务器启动命令"""
+"""
+server - 索克生活项目模块
+"""
 
+        from health_data_service.api.main import app
+        import json
+from health_data_service.core.config import settings
+from loguru import logger
+from typing import Any
+import click
 import signal
 import sys
-from typing import Any
-
-import click
 import uvicorn
-from loguru import logger
 
-from health_data_service.core.config import settings
+"""服务器启动命令"""
+
+
+
 
 
 @click.group()
@@ -168,9 +175,7 @@ def export_openapi(output: str) -> None:
     logger.info(f"导出OpenAPI规范到 {output}")
 
     try:
-        import json
 
-        from health_data_service.api.main import app
 
         openapi_schema = app.openapi()
 

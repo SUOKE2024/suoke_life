@@ -1,19 +1,24 @@
+"""
+plugin_system - 索克生活项目模块
+"""
+
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from datetime import datetime
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Type, Callable
+import importlib
+import inspect
+import json
+import logging
+import os
+import sys
+
 """插件系统
 
 支持自定义评测模板和扩展功能
 """
 
-import importlib
-import inspect
-import os
-import sys
-from abc import ABC, abstractmethod
-from typing import Dict, List, Any, Optional, Type, Callable
-from dataclasses import dataclass
-from pathlib import Path
-import json
-import logging
-from datetime import datetime
 
 logger = logging.getLogger(__name__)
 

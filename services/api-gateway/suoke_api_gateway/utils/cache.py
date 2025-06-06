@@ -1,17 +1,22 @@
 """
+cache - 索克生活项目模块
+"""
+
+from ..core.config import Settings
+from ..core.logging import get_logger
+from datetime import datetime, timedelta
+from pydantic import BaseModel
+from typing import Any, Dict, List, Optional, Union
+import json
+
+"""
 缓存管理器
 
 基于 Redis 的分布式缓存实现。
 """
 
-import json
-from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional, Union
 
-from pydantic import BaseModel
 
-from ..core.config import Settings
-from ..core.logging import get_logger
 
 logger = get_logger(__name__)
 

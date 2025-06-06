@@ -1,11 +1,16 @@
 """
+__init__ - 索克生活项目模块
+"""
+
+from .cache import CacheManager
+from .formatters import format_analysis_result, format_health_advice
+from .helpers import calculate_age, get_zodiac_sign
+from .validators import validate_birth_info, validate_time_format
+
+"""
 算诊服务工具模块
 """
 
-from .validators import validate_birth_info, validate_time_format
-from .formatters import format_analysis_result, format_health_advice
-from .cache import CacheManager
-from .helpers import calculate_age, get_zodiac_sign
 
 __all__ = [
     "validate_birth_info",

@@ -1,18 +1,23 @@
+"""
+db_manager - 索克生活项目模块
+"""
+
+from functools import wraps
+from pkg.utils.metrics import track_database_query
+from typing import Any
+import asyncio
+import asyncpg
+import logging
+import time
+
 #!/usr/bin/env python3
 """
 数据库连接管理器
 
 提供SQL数据库和Redis缓存的连接管理功能
 """
-import asyncio
-import logging
-import time
-from functools import wraps
-from typing import Any
 
-import asyncpg
 
-from pkg.utils.metrics import track_database_query
 
 # 配置日志
 logger = logging.getLogger(__name__)

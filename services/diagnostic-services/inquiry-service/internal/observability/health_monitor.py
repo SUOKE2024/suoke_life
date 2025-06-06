@@ -1,3 +1,21 @@
+"""
+health_monitor - 索克生活项目模块
+"""
+
+            import gc
+from ..common.base import BaseService
+from ..common.exceptions import InquiryServiceError
+from ..common.metrics import memory_optimized, timer
+from collections.abc import Callable
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from loguru import logger
+from typing import Any
+import asyncio
+import psutil
+import time
+
 #!/usr/bin/env python3
 
 """
@@ -7,20 +25,8 @@
 异常检测和自动恢复机制。
 """
 
-import asyncio
-from collections.abc import Callable
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-import time
-from typing import Any
 
-from loguru import logger
-import psutil
 
-from ..common.base import BaseService
-from ..common.exceptions import InquiryServiceError
-from ..common.metrics import memory_optimized, timer
 
 
 class HealthStatus(Enum):
@@ -641,7 +647,6 @@ class HealthMonitor(BaseService):
     async def _check_memory_usage(self) -> dict[str, Any]:
         """检查内存使用"""
         try:
-            import gc
 
             # 强制垃圾回收
             gc.collect()

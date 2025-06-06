@@ -1,17 +1,23 @@
 """
-Consul服务发现客户端
-提供服务注册、发现、健康检查等功能
+consul_client - 索克生活项目模块
 """
 
+            import random
 from collections.abc import Callable
 from dataclasses import dataclass
+from typing import Dict, List, Optional
+import consul
 import json
 import logging
 import threading
 import time
-from typing import Dict, List, Optional
 
-import consul
+"""
+Consul服务发现客户端
+提供服务注册、发现、健康检查等功能
+"""
+
+
 
 logger = logging.getLogger(__name__)
 
@@ -112,7 +118,6 @@ class ConsulServiceRegistry:
             instance = instances[index % len(instances)]
             setattr(self, f"_{service_name}_index", index + 1)
         elif load_balance == "random":
-            import random
 
             instance = random.choice(instances)
         else:

@@ -1,11 +1,16 @@
+"""
+initial_migration - 索克生活项目模块
+"""
+
+from alembic import op
+from sqlalchemy.dialects.postgresql import UUID, JSONB
+
 """初始数据库结构
 
 Revision ID: 001
 Create Date: 2025-05-19
 
 """
-from alembic import op
-from sqlalchemy.dialects.postgresql import UUID, JSONB
 
 # revision identifier, used by Alembic
 revision = '001'

@@ -1,3 +1,15 @@
+"""
+knowledge_connector - 索克生活项目模块
+"""
+
+from api.grpc import med_knowledge_pb2, med_knowledge_pb2_grpc
+from tenacity import (
+import grpc
+import httpx
+import json
+import logging
+import time
+
 #!/usr/bin/env python3
 
 """
@@ -7,13 +19,7 @@
 增强LLM的医学专业知识，支持更精准的症状识别、辨证和诊断。
 """
 
-import json
-import logging
-import time
 
-import grpc
-import httpx
-from tenacity import (
     retry,
     retry_if_exception_type,
     stop_after_attempt,
@@ -21,7 +27,6 @@ from tenacity import (
 )
 
 # 导入proto生成的代码
-from api.grpc import med_knowledge_pb2, med_knowledge_pb2_grpc
 
 logger = logging.getLogger(__name__)
 

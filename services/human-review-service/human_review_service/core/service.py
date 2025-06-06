@@ -1,23 +1,29 @@
 """
+service - 索克生活项目模块
+"""
+
+from .assignment_engine import AssignmentEngine
+from .config import settings
+from .models import (
+from .notification import NotificationService
+from .risk_assessment import RiskAssessmentEngine
+from datetime import datetime, timedelta, timezone
+from sqlalchemy import and_, desc, func, or_, select, update
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
+from typing import Any, Dict, List, Optional, Tuple
+from uuid import uuid4
+import structlog
+
+"""
 核心业务服务
 Core Business Service
 
 实现人工审核系统的主要业务逻辑
 """
 
-from datetime import datetime, timedelta, timezone
-from typing import Any, Dict, List, Optional, Tuple
-from uuid import uuid4
 
-import structlog
-from sqlalchemy import and_, desc, func, or_, select, update
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
 
-from .assignment_engine import AssignmentEngine
-from .config import settings
-from .notification import NotificationService
-from .models import (
     DashboardData,
     ReviewDecision,
     Reviewer,
@@ -35,7 +41,6 @@ from .models import (
     ReviewTaskUpdate,
     ReviewType,
 )
-from .risk_assessment import RiskAssessmentEngine
 
 logger = structlog.get_logger(__name__)
 
@@ -556,7 +561,7 @@ class HumanReviewService:
             .options(selectinload(ReviewTaskDB.reviewer))
         )
 
-        db_tasks = result.scalars().all()
+        db_tasks = result.scalars().all()[:1000]  # 限制查询结果数量
         return [ReviewTask.model_validate(task) for task in db_tasks]
 
     async def get_reviewer_tasks(
@@ -589,7 +594,7 @@ class HumanReviewService:
             .options(selectinload(ReviewTaskDB.reviewer))
         )
 
-        db_tasks = result.scalars().all()
+        db_tasks = result.scalars().all()[:1000]  # 限制查询结果数量
         return [ReviewTask.model_validate(task) for task in db_tasks]
 
     async def get_dashboard_data(self, session: AsyncSession) -> DashboardData:
@@ -695,7 +700,7 @@ class HumanReviewService:
             .order_by(ReviewerDB.quality_score.desc())
         )
 
-        db_reviewers = result.scalars().all()
+        db_reviewers = result.scalars().all()[:1000]  # 限制查询结果数量
         return [Reviewer.model_validate(reviewer) for reviewer in db_reviewers]
 
     async def list_reviewers(
@@ -722,7 +727,7 @@ class HumanReviewService:
         query = query.offset(offset).limit(limit)
 
         result = await session.execute(query)
-        db_reviewers = result.scalars().all()
+        db_reviewers = result.scalars().all()[:1000]  # 限制查询结果数量
         return [Reviewer.model_validate(reviewer) for reviewer in db_reviewers]
 
     async def list_review_tasks(
@@ -751,7 +756,7 @@ class HumanReviewService:
         query = query.offset(offset).limit(limit)
 
         result = await session.execute(query)
-        db_tasks = result.scalars().all()
+        db_tasks = result.scalars().all()[:1000]  # 限制查询结果数量
         return [ReviewTask.model_validate(task) for task in db_tasks]
 
     async def list_tasks(
@@ -1299,7 +1304,7 @@ class HumanReviewService:
             .options(selectinload(ReviewTaskDB.reviewer))
         )
 
-        db_tasks = result.scalars().all()
+        db_tasks = result.scalars().all()[:1000]  # 限制查询结果数量
         return [ReviewTask.model_validate(task) for task in db_tasks]
 
     async def _calculate_current_load(self, session: AsyncSession) -> float:

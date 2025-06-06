@@ -50,25 +50,25 @@ describe("小爱智能体协同测试", () => {
   });
 
   describe("基础功能测试", () => {
-    test("应该能够初始化小爱服务", async () => {
+    test(""应该能够初始化小爱服务", async () => {
       // 测试服务初始化
       expect(mockRedis).toBeDefined();
       expect(mockRegistry).toBeDefined();
     });
 
-    test("应该能够连接到Redis", async () => {
+    test(""应该能够连接到Redis", async () => {
       const result = await mockRedis.ping();
       expect(result).toBe("PONG");
     });
 
-    test("应该能够注册到服务中心", async () => {
+    test(""应该能够注册到服务中心", async () => {
       const result = await mockRegistry.register();
       expect(result).toBe(true);
     });
   });
 
   describe("健康监测测试", () => {
-    test("应该能够监测生命体征", async () => {
+    test(""应该能够监测生命体征", async () => {
       const vitalSigns = {
         heartRate: 72,
         bloodPressure: { systolic: 120, diastolic: 80 },
@@ -89,7 +89,7 @@ describe("小爱智能体协同测试", () => {
       expect(analysis.riskLevel).toBe("low");
     });
 
-    test("应该能够检测异常指标", async () => {
+    test(""应该能够检测异常指标", async () => {
       const abnormalVitals = {
         heartRate: 120, // 异常高
         bloodPressure: { systolic: 160, diastolic: 100 }, // 高血压
@@ -111,7 +111,7 @@ describe("小爱智能体协同测试", () => {
   });
 
   describe("协同决策测试", () => {
-    test("应该能够提供健康数据支持", async () => {
+    test(""应该能够提供健康数据支持", async () => {
       const healthData = {
         userId: "user-001",
         timestamp: new Date().toISOString(),
@@ -132,7 +132,7 @@ describe("小爱智能体协同测试", () => {
       expect(result).toBe("OK");
     });
 
-    test("应该能够参与协同诊断", async () => {
+    test(""应该能够参与协同诊断", async () => {
       const collaborativeInput = {
         healthMetrics: {
           trend: "stable",
@@ -149,7 +149,7 @@ describe("小爱智能体协同测试", () => {
   });
 
   describe("数据处理测试", () => {
-    test("应该能够处理实时数据流", async () => {
+    test(""应该能够处理实时数据流", async () => {
       const dataStream = [
         { timestamp: "2024-01-01T10:00:00Z", heartRate: 72 },
         { timestamp: "2024-01-01T10:01:00Z", heartRate: 74 },
@@ -167,7 +167,7 @@ describe("小爱智能体协同测试", () => {
       expect(processed.every(item => item.processed)).toBe(true);
     });
 
-    test("应该能够生成健康报告", async () => {
+    test(""应该能够生成健康报告", async () => {
       const report = {
         period: "daily",
         summary: {
@@ -188,7 +188,7 @@ describe("小爱智能体协同测试", () => {
   });
 
   describe("通信协议测试", () => {
-    test("应该能够发送健康警报", async () => {
+    test(""应该能够发送健康警报", async () => {
       const alert = {
         from: "xiaoai",
         to: "xiaoke",
@@ -210,7 +210,7 @@ describe("小爱智能体协同测试", () => {
       expect(result).toBe(1);
     });
 
-    test("应该能够接收诊断请求", async () => {
+    test(""应该能够接收诊断请求", async () => {
       const request = {
         from: "xiaoke",
         to: "xiaoai",
@@ -233,7 +233,7 @@ describe("小爱智能体协同测试", () => {
   });
 
   describe("性能测试", () => {
-    test("应该能够快速处理健康数据", async () => {
+    test(""应该能够快速处理健康数据", async () => {
       const startTime = Date.now();
       
       // 模拟数据处理
@@ -256,7 +256,7 @@ describe("小爱智能体协同测试", () => {
   });
 
   describe("错误处理测试", () => {
-    test("应该能够处理传感器故障", async () => {
+    test(""应该能够处理传感器故障", async () => {
       // 模拟传感器错误
       const sensorError = new Error("Sensor disconnected");
       
@@ -273,7 +273,7 @@ describe("小爱智能体协同测试", () => {
       expect(result.fallback).toBeDefined();
     });
 
-    test("应该能够处理数据异常", async () => {
+    test(""应该能够处理数据异常", async () => {
       const invalidData = {
         heartRate: -10, // 无效值
         temperature: 50, // 异常值

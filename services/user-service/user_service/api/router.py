@@ -1,10 +1,15 @@
-"""用户服务主API路由器"""
+"""
+router - 索克生活项目模块
+"""
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import JSONResponse
-
 from user_service.api.endpoints import users, analytics, monitoring, health
 from user_service.auth import get_current_user
+
+"""用户服务主API路由器"""
+
+
 
 # 创建主API路由器
 api_router = APIRouter()

@@ -1,13 +1,18 @@
 """
+calculator - 索克生活项目模块
+"""
+
+from .data import (
+from datetime import datetime, time, timedelta
+from typing import Dict, List, Optional, Tuple
+
+"""
 子午流注计算器
 
 实现子午流注时间医学的核心算法
 """
 
-from datetime import datetime, time, timedelta
-from typing import Dict, List, Optional, Tuple
 
-from .data import (
     MERIDIAN_TIME_MAP,
     ACUPOINT_TIME_MAP, 
     SHICHEN_DIZHI_MAP,

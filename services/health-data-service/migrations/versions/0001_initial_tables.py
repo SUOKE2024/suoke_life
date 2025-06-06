@@ -1,3 +1,11 @@
+"""
+0001_initial_tables - 索克生活项目模块
+"""
+
+from alembic import op
+from sqlalchemy.dialects import postgresql
+import sqlalchemy as sa
+
 """创建初始数据库表
 
 Revision ID: 0001
@@ -5,9 +13,6 @@ Revises:
 Create Date: 2024-01-01 00:00:00.000000
 
 """
-from alembic import op
-import sqlalchemy as sa
-from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
 revision = '0001'

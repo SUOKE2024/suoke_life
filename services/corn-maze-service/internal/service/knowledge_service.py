@@ -1,14 +1,19 @@
+"""
+knowledge_service - 索克生活项目模块
+"""
+
+from internal.model.knowledge import KnowledgeNode
+from internal.repository.knowledge_repository import KnowledgeRepository
+from typing import Any
+import logging
+
 #!/usr/bin/env python3
 
 """
 知识服务 - 负责管理和检索中医养生知识
 """
 
-import logging
-from typing import Any
 
-from internal.model.knowledge import KnowledgeNode
-from internal.repository.knowledge_repository import KnowledgeRepository
 
 logger = logging.getLogger(__name__)
 

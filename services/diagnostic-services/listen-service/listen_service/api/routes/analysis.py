@@ -1,21 +1,26 @@
 """
+analysis - 索克生活项目模块
+"""
+
+from ...core.audio_analyzer import (
+from fastapi import APIRouter, UploadFile, File, HTTPException, Depends, Form
+from fastapi.responses import JSONResponse
+from typing import Dict, Any, Optional, List
+import asyncio
+import io
+import librosa
+import logging
+import numpy as np
+import soundfile as sf
+import wave
+
+"""
 闻诊分析API路由
 
 提供语音分析、呼吸音分析、咳嗽分析的智能接口
 """
 
-import asyncio
-import logging
-import io
-import wave
-import numpy as np
-from fastapi import APIRouter, UploadFile, File, HTTPException, Depends, Form
-from fastapi.responses import JSONResponse
-from typing import Dict, Any, Optional, List
-import librosa
-import soundfile as sf
 
-from ...core.audio_analyzer import (
     AudioAnalyzer,
     VoiceAnalysisResult,
     BreathingAnalysisResult,

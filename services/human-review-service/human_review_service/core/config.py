@@ -1,15 +1,20 @@
 """
+config - 索克生活项目模块
+"""
+
+from functools import lru_cache
+from pydantic import Field, field_validator, validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from typing import Any, Dict, List, Optional
+
+"""
 配置管理
 Configuration Management
 
 使用 Pydantic Settings 管理应用配置和环境变量
 """
 
-from functools import lru_cache
-from typing import Any, Dict, List, Optional
 
-from pydantic import Field, field_validator, validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class DatabaseSettings(BaseSettings):
     """数据库配置"""

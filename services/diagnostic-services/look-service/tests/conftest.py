@@ -1,14 +1,21 @@
-"""Pytest configuration and fixtures."""
+"""
+conftest - 索克生活项目模块
+"""
 
-import asyncio
+    from PIL import Image
+    import io
 from collections.abc import AsyncGenerator, Generator
-
-import pytest
 from fastapi.testclient import TestClient
 from httpx import AsyncClient
-
 from look_service.api.app import create_app
 from look_service.core.config import settings
+import asyncio
+import pytest
+
+"""Pytest configuration and fixtures."""
+
+
+
 
 
 @pytest.fixture(scope="session")
@@ -47,9 +54,7 @@ async def async_client(app) -> AsyncGenerator[AsyncClient]:
 def sample_image_data() -> bytes:
     """Create sample image data for testing."""
     # Create a 100x100 pixel PNG image to meet minimum size requirements
-    import io
 
-    from PIL import Image
 
     img = Image.new('RGB', (100, 100), color='red')
     img_bytes = io.BytesIO()

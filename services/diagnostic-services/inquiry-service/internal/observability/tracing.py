@@ -1,3 +1,19 @@
+"""
+tracing - 索克生活项目模块
+"""
+
+from collections.abc import Callable
+from opentelemetry import trace
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry.sdk.resources import Resource
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.semconv.resource import ResourceAttributes
+from typing import Any, TypeVar, cast
+import functools
+import logging
+import os
+
 #!/usr/bin/env python
 
 """
@@ -5,18 +21,7 @@
 提供服务调用链追踪功能
 """
 
-from collections.abc import Callable
-import functools
-import logging
-import os
-from typing import Any, TypeVar, cast
 
-from opentelemetry import trace
-from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
-from opentelemetry.sdk.resources import Resource
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.semconv.resource import ResourceAttributes
 
 logger = logging.getLogger(__name__)
 

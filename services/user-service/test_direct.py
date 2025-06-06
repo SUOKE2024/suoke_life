@@ -1,14 +1,20 @@
 """
-直接测试用户服务功能
+test_direct - 索克生活项目模块
 """
-import asyncio
-import tempfile
-import os
-from uuid import UUID
 
+        import traceback
+from internal.model.user import CreateUserRequest, UpdateUserRequest, BindDeviceRequest
 from internal.repository.sqlite_user_repository import SQLiteUserRepository
 from internal.service.user_service import UserService
-from internal.model.user import CreateUserRequest, UpdateUserRequest, BindDeviceRequest
+from uuid import UUID
+import asyncio
+import os
+import tempfile
+
+"""
+直接测试用户服务功能
+"""
+
 
 async def test_user_service():
     """测试用户服务的完整功能"""
@@ -81,7 +87,6 @@ async def test_user_service():
         
     except Exception as e:
         print(f"✗ 测试失败: {e}")
-        import traceback
         traceback.print_exc()
     finally:
         # 清理临时文件

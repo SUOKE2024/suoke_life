@@ -1,14 +1,20 @@
 """
-优化后的医疗资源服务API测试
+test_optimized_api - 索克生活项目模块
 """
 
-import pytest
-from datetime import datetime, timedelta
-from unittest.mock import AsyncMock, MagicMock
-
+        from ..internal.service.resource_scheduling_service import ResourceSchedulingService
 from ..internal.agent.xiaoke_agent import XiaokeAgent
 from ..internal.domain.models import UrgencyLevel, ResourceType
 from ..internal.service.resource_scheduling_service import ResourceSchedulingService
+from datetime import datetime, timedelta
+from unittest.mock import AsyncMock, MagicMock
+import pytest
+
+"""
+优化后的医疗资源服务API测试
+"""
+
+
 
 
 class TestOptimizedMedicalResourceAPI:
@@ -189,7 +195,6 @@ class TestOptimizedMedicalResourceAPI:
 
     def test_symptom_categorization(self):
         """测试症状分类功能"""
-        from ..internal.service.resource_scheduling_service import ResourceSchedulingService
         
         # 创建调度服务实例（仅用于测试方法）
         scheduler = ResourceSchedulingService({}, None)
@@ -211,7 +216,6 @@ class TestOptimizedMedicalResourceAPI:
 
     def test_symptom_severity_assessment(self):
         """测试症状严重程度评估"""
-        from ..internal.service.resource_scheduling_service import ResourceSchedulingService
         
         scheduler = ResourceSchedulingService({}, None)
         

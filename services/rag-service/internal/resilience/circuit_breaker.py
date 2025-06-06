@@ -1,3 +1,15 @@
+"""
+circuit_breaker - 索克生活项目模块
+"""
+
+from enum import Enum
+from functools import wraps
+from loguru import logger
+from typing import Callable, Any, Dict, Optional, TypeVar, Awaitable, Union, List
+import asyncio
+import random
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,14 +17,7 @@
 断路器模块，用于提高服务的容错能力
 """
 
-import time
-import asyncio
-from enum import Enum
-from typing import Callable, Any, Dict, Optional, TypeVar, Awaitable, Union, List
-from functools import wraps
-import random
 
-from loguru import logger
 
 T = TypeVar('T')
 

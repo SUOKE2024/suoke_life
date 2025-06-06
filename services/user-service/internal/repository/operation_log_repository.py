@@ -1,21 +1,26 @@
 """
-操作日志和审计日志存储库
-用于记录用户操作、系统事件和关键流程的日志信息
+operation_log_repository - 索克生活项目模块
 """
-import logging
-import uuid
-from datetime import datetime
-from typing import Dict, List, Optional, Union, Any
 
+from datetime import datetime
+from internal.model.user import UserAuditLog as UserAuditLogModel
+from internal.repository.exceptions import RepositoryError
+from internal.repository.models import UserAuditLog, OperationLog, Base
 from sqlalchemy import create_engine, select, desc
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import text
+from typing import Dict, List, Optional, Union, Any
+import logging
+import uuid
 
-from internal.model.user import UserAuditLog as UserAuditLogModel
-from internal.repository.exceptions import RepositoryError
-from internal.repository.models import UserAuditLog, OperationLog, Base
+"""
+操作日志和审计日志存储库
+用于记录用户操作、系统事件和关键流程的日志信息
+"""
+
+
 
 # 日志记录器
 logger = logging.getLogger(__name__)
@@ -133,7 +138,7 @@ class AuditLogRepository:
                 
                 # 执行查询
                 result = await session.execute(query)
-                db_logs = result.scalars().all()
+                db_logs = result.scalars().all()[:1000]  # 限制查询结果数量
                 
                 # 转换为模型
                 audit_logs = []
@@ -186,7 +191,7 @@ class AuditLogRepository:
                 
                 # 执行查询
                 result = await session.execute(query)
-                return len(result.scalars().all())
+                return len(result.scalars().all()[:1000]  # 限制查询结果数量)
         except SQLAlchemyError as e:
             logger.error(f"获取用户审计日志数量失败: {str(e)}")
             raise RepositoryError(f"获取用户审计日志数量失败: {str(e)}")
@@ -367,7 +372,7 @@ class OperationLogRepository:
                 
                 # 执行查询
                 result = await session.execute(query)
-                db_logs = result.scalars().all()
+                db_logs = result.scalars().all()[:1000]  # 限制查询结果数量
                 
                 # 转换为字典列表
                 logs = []

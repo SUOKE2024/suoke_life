@@ -1,24 +1,35 @@
 """
-SuokeBench API 接口
+api - 索克生活项目模块
 """
 
-import logging
-import os
-from typing import Dict, List, Optional, Union, Any
+                from internal.benchmark.model_interface import LocalModel
+        from dataclasses import asdict
+        import gc
+        import platform
+        import psutil
+    import asyncio
 from datetime import datetime
-
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, UploadFile, Path, BackgroundTasks
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
-from pydantic import BaseModel, Field
-
 from internal.benchmark.benchmark_service import BenchmarkService, get_global_executor
+from internal.benchmark.model_cache import get_global_cache
 from internal.benchmark.model_interface import ModelRegistry, model_registry
 from internal.evaluation.report_generator import ReportGenerator
 from internal.metrics.basic_metrics import register_basic_metrics
-from internal.suokebench.config import BenchConfig, load_config
-from internal.benchmark.model_cache import get_global_cache
 from internal.observability.metrics import get_global_metrics
 from internal.resilience.retry import retry, circuit_breaker
+from internal.suokebench.config import BenchConfig, load_config
+from pydantic import BaseModel, Field
+from typing import Dict, List, Optional, Union, Any
+import logging
+import os
+
+"""
+SuokeBench API 接口
+"""
+
+
+
 
 # 初始化基础指标
 register_basic_metrics()
@@ -43,11 +54,119 @@ class RunBenchmarkRequest(BaseModel):
     model_id: str = Field(..., description="模型ID")
     model_version: str = Field(..., description="模型版本")
     parameters: Optional[Dict[str, str]] = Field(default=None, description="附加参数")
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'runbenchmarkrequest'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'comparebenchmarksrequest'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'reportrequest'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'settingsrequest'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'benchmarkrequest'
+        ordering = ['-created_at']
+
 
 class GetResultRequest(BaseModel):
     """获取结果请求"""
     run_id: str = Field(..., description="运行ID")
     include_details: bool = Field(default=False, description="是否包含详细结果")
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'benchmarkresponse'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'taskstatusresponse'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'tasklistresponse'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'cachestatsresponse'
+        ordering = ['-created_at']
+
 
 class CompareBenchmarksRequest(BaseModel):
     """比较基准测试请求"""
@@ -117,6 +236,7 @@ class CacheStatsResponse(BaseModel):
     models: Dict[str, Any] = Field(..., description="模型详情")
 
 # API端点
+@limiter.limit("100/minute")  # 每分钟100次请求
 @router.post("/run", summary="运行基准测试")
 async def run_benchmark(request: RunBenchmarkRequest):
     """
@@ -141,10 +261,12 @@ async def run_benchmark(request: RunBenchmarkRequest):
         }
     except Exception as e:
         logging.error(f"运行基准测试失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPE@limiter.limit("100/minute")  # 每分钟100次请求
+xception(status_code=500, detail=str(e))
 
 @router.post("/result", summary="获取基准测试结果")
-async def get_result(request: GetResultRequest):
+async     @cache(timeout=300)  # 5分钟缓存
+async def get_result(
     """
     获取基准测试结果
     """
@@ -172,8 +294,10 @@ async def get_result(request: GetResultRequest):
         }
     except Exception as e:
         logging.error(f"获取基准测试结果失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+     @limiter.limit("100/minute")  # 每分钟100次请求
+   raise HTTPException(status_code=500, detail=str(e))
 
+@cache(expire=300)  # 5分钟缓存
 @router.get("/benchmarks", summary="列出可用基准测试")
 async def list_benchmarks(
     task_filter: Optional[str] = Query(None, description="任务类型过滤"),
@@ -193,7 +317,8 @@ async def list_benchmarks(
         response = benchmark_service.ListBenchmarks(grpc_request, None)
         
         return [b.to_dict() for b in response.benchmarks]
-    except Exception as e:
+    exc@limiter.limit("100/minute")  # 每分钟100次请求
+ept Exception as e:
         logging.error(f"列出基准测试失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -217,7 +342,8 @@ async def compare_benchmarks(request: CompareBenchmarksRequest):
             "compare_model": response.compare_model,
             "metrics": {k: v.to_dict() for k, v in response.metrics.items()},
             "case_comparisons": [c.to_dict() for c in response.case_comparisons],
-            "summary": response.summary,
+            "sum@limiter.limit("100/minute")  # 每分钟100次请求
+mary": response.summary,
         }
     except Exception as e:
         logging.error(f"比较基准测试失败: {str(e)}")
@@ -267,15 +393,19 @@ async def generate_report(request: ReportRequest):
         report_url = f"{base_url}{filename}"
         
         return {
-            "report_url": report_url,
+            "report_url": repo@limiter.limit("100/minute")  # 每分钟100次请求
+rt_url,
             "message": f"报告已生成",
         }
     except Exception as e:
         logging.error(f"生成报告失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(statu@cache(expire=300)  # 5分钟缓存
+s_code=500, detail=str(e))
 
-@router.get("/report/{filename}", summary="获取报告文件")
-async def get_report(filename: str):
+@router.get("/report/{fil    @cache(timeout=300)  # 5分钟缓存
+ename}", summary="获取报告文件")
+async def get_report(f@limiter.limit("100/minute")  # 每分钟100次请求
+ilename: str):
     """
     获取报告文件
     """
@@ -300,13 +430,16 @@ async def register_model(request: ModelRegistrationRequest):
             model_config=request.model_config,
         )
         
-        return {
+   @limiter.limit("100/minute")  # 每分钟100次请求
+     return {
             "status": "success",
             "message": f"模型 {request.model_id}:{request.model_version} 注册成功",
         }
     except Exception as e:
         logging.error(f"注册模型失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+     @cache(expire=300)  # 5分钟缓存
+   raise HTTPException(@limiter.limit("100/minute")  # 每分钟100次请求
+status_code=500, detail=str(e))
 
 @router.get("/models", summary="列出已注册模型")
 async def list_models():
@@ -329,7 +462,8 @@ async def unregister_model(model_id: str, model_version: str):
         success = model_registry.unregister_model(model_id, model_version)
         
         if not success:
-            raise HTTPException(status_code=404, detail=f"模型 {model_id}:{model_version} 不存在")
+            raise HTTP@limiter.limit("100/minute")  # 每分钟100次请求
+Exception(status_code=404, detail=f"模型 {model_id}:{model_version} 不存在")
             
         return {
             "status": "success",
@@ -357,7 +491,8 @@ async def upload_dataset(
         # 保存文件
         save_path = os.path.join(save_dir, file.filename)
         
-        with open(save_path, "wb") as f:
+        with open(save_path, "wb") as f@limiter.limit("100/minute")  # 每分钟100次请求
+:
             content = await file.read()
             f.write(content)
             
@@ -368,16 +503,19 @@ async def upload_dataset(
         }
     except Exception as e:
         logging.error(f"上传数据集失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        ra@cache(expire=300)  # 5分钟缓存
+ise HTTPException(status_code=5    @cache(timeout=300)  # 5分钟缓存
+00, detail=str(e))
 
 @router.get("/tasks", summary="获取任务类型")
-async def get_task_types():
+async async def get_task_types(
     """
     获取任务类型
     """
     task_types = {
         "TCM_DIAGNOSIS": "中医辨证",
-        "TONGUE_RECOGNITION": "舌象识别",
+     @limiter.limit("100/minute")  # 每分钟100次请求
+   "TONGUE_RECOGNITION": "舌象识别",
         "FACE_RECOGNITION": "面色识别",
         "PULSE_RECOGNITION": "脉象识别",
         "HEALTH_PLAN_GENERATION": "健康方案生成",
@@ -387,7 +525,8 @@ async def get_task_types():
         "DIALECT_RECOGNITION": "方言识别",
     }
     
-    return {
+    re@cache(expire=300)  # 5分钟缓存
+turn {
         "task_types": [
             {"id": k, "name": v} for k, v in task_types.items()
         ]
@@ -411,7 +550,8 @@ async def get_benchmark_history(
                 {
                     "run_id": h.run_id,
                     "benchmark_id": h.benchmark_id,
-                    "model_id": h.model_id,
+                    "model_i@limiter.limit("100/minute")  # 每分钟100次请求
+d": h.model_id,
                     "model_version": h.model_version,
                     "status": h.status,
                     "created_at": h.created_at,
@@ -420,10 +560,12 @@ async def get_benchmark_history(
                 }
                 for h in history
             ]
-        }
+   @cache(expire=300)  # 5分钟缓存
+     }
     except Exception as e:
         logging.error(f"获取评测历史失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPExcepti@limiter.limit("100/minute")  # 每分钟100次请求
+on(status_code=500, detail=str(e))
 
 @router.get("/runs/{run_id}/status", summary="检查评测状态")
 async def check_run_status(run_id: str):
@@ -444,7 +586,8 @@ async def check_run_status(run_id: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.delete("/runs/{run_id}", summary="删除评测记录")
-async def delete_run(run_id: str):
+async def delet@limiter.limit("100/minute")  # 每分钟100次请求
+e_run(run_id: str):
     """
     删除评测记录
     """
@@ -460,13 +603,15 @@ async def delete_run(run_id: str):
         }
     except HTTPException:
         raise
-    except Exception as e:
+    except@cache(expire=300)  # 5分钟缓存
+ Exception as e:
         logging.error(f"删除评测记录失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(    @cache(timeout=300)  # 5分钟缓存
+status_code=500, detail=str(e))
 
 # Web UI 路由
 @router.get("/ui/dashboard", summary="获取仪表盘数据")
-async def get_dashboard_data():
+async async def get_dashboard_data(
     """
     获取仪表盘数据
     """
@@ -489,7 +634,8 @@ async def get_dashboard_data():
         return {
             "benchmark_count": benchmark_count,
             "model_count": model_count,
-            "total_runs": total_runs,
+            "total_ru@limiter.limit("100/minute")  # 每分钟100次请求
+ns": total_runs,
             "passing_rate": passing_rate,
             "recent_runs": [
                 {
@@ -500,6 +646,7 @@ async def get_dashboard_data():
                     "created_at": r.created_at,
                     "metrics_summary": r.metrics_summary,
                 }
+@cache(expire=300)  # 5分钟缓存
                 for r in recent_runs
             ],
         }
@@ -507,7 +654,8 @@ async def get_dashboard_data():
         logging.error(f"获取仪表盘数据失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/ui/metrics-stats", summary="获取指标统计数据")
+@router.get("/ui/metrics-stats", s@limiter.limit("100/minute")  # 每分钟100次请求
+ummary="获取指标统计数据")
 async def get_metrics_stats(
     benchmark_id: Optional[str] = Query(None, description="基准测试ID"),
     metric_name: Optional[str] = Query(None, description="指标名称"),
@@ -519,16 +667,18 @@ async def get_metrics_stats(
     try:
         stats = benchmark_service.get_metrics_stats(benchmark_id, metric_name, time_range)
         
-        return {
+        return@cache(expire=300)  # 5分钟缓存
+ {
             "stats": stats,
         }
     except Exception as e:
-        logging.error(f"获取指标统计数据失败: {str(e)}")
+        logging.error(f"获取指标统计数据失败: {    @cache(timeout=300)  # 5分钟缓存
+str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 # 新增Web界面API端点
 @router.get("/stats", summary="获取统计数据")
-async def get_stats():
+async async def get_stats(
     """
     获取系统统计数据，用于仪表盘
     """
@@ -537,7 +687,8 @@ async def get_stats():
         completed_benchmarks = len([r for r in benchmark_service.get_history(limit=1000) if r.status == "COMPLETED"])
         
         # 获取运行中评测数量
-        running_benchmarks = len([r for r in benchmark_service.get_history(limit=1000) if r.status == "RUNNING"])
+        running_benchmarks = len([r for r in benchmark_service.get_history(limit=1000) i@limiter.limit("100/minute")  # 每分钟100次请求
+f r.status == "RUNNING"])
         
         # 获取可用模型数量
         available_models = len(model_registry.list_models())
@@ -547,7 +698,8 @@ async def get_stats():
         
         return {
             "completed_benchmarks": completed_benchmarks,
-            "running_benchmarks": running_benchmarks,
+            "running_benchmarks@cache(expire=300)  # 5分钟缓存
+": running_benchmarks,
             "available_models": available_models,
             "data_sets": data_sets,
         }
@@ -556,7 +708,8 @@ async def get_stats():
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/recent-runs", summary="获取最近运行记录")
-async def get_recent_runs(limit: int = Query(5, description="返回数量限制")):
+async def get_recent_runs(limit: int = Qu@limiter.limit("100/minute")  # 每分钟100次请求
+ery(5, description="返回数量限制")):
     """
     获取最近运行记录，用于仪表盘显示
     """
@@ -571,7 +724,8 @@ async def get_recent_runs(limit: int = Query(5, description="返回数量限制"
                 "model_id": r.model_id,
                 "model_version": r.model_version,
                 "status": r.status,
-                "created_at": r.created_at,
+    @cache(expire=300)  # 5分钟缓存
+            "created_at": r.created_at,
                 "completed_at": r.completed_at,
             }
             for r in recent_runs
@@ -609,7 +763,8 @@ async def get_results_list(
         
         return {
             "results": [
-                {
+           @limiter.limit("100/minute")  # 每分钟100次请求
+     {
                     "run_id": r.run_id,
                     "benchmark_id": r.benchmark_id,
                     "benchmark_name": r.benchmark_name,
@@ -620,18 +775,20 @@ async def get_results_list(
                     "completed_at": r.completed_at,
                 }
                 for r in page_results
-            ],
+            ]@cache(expire=300)  # 5分钟缓存
+,
             "total": total,
             "page": page,
             "page_size": page_size,
             "total_pages": total_pages,
         }
-    except Exception as e:
+    except Excep    @cache(timeout=300)  # 5分钟缓存
+tion as e:
         logging.error(f"获取结果列表失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/reports", summary="获取报告列表")
-async def get_reports_list():
+async async def get_reports_list(
     """
     获取所有生成的报告列表
     """
@@ -664,7 +821,8 @@ async def get_reports_list():
                 })
             except Exception:
                 # 如果无法获取元数据，使用文件属性
-                file_path = os.path.join(reports_dir, filename)
+                file_path = os.path@limiter.limit("100/minute")  # 每分钟100次请求
+.join(reports_dir, filename)
                 stat = os.stat(file_path)
                 
                 reports.append({
@@ -675,19 +833,21 @@ async def get_reports_list():
                     "model_id": "未知",
                     "model_version": "未知",
                     "created_at": stat.st_mtime,
-                    "format": filename.split(".")[-1].upper(),
+                    "format": filenam@cache(expire=300)  # 5分钟缓存
+e.split(".")[-1].upper(),
                 })
         
         # 按创建时间排序
         reports.sort(key=lambda r: r["created_at"], reverse=True)
         
-        return reports
+        ret    @cache(timeout=300)  # 5分钟缓存
+urn reports
     except Exception as e:
         logging.error(f"获取报告列表失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/result-ui", summary="获取结果Web界面")
-async def get_result_ui(run_id: str):
+async async def get_result_ui(
     """
     获取单个结果的Web界面展示
     """
@@ -702,7 +862,8 @@ async def get_result_ui(run_id: str):
                 "benchmark_id": result.benchmark_id,
                 "model_id": result.model_id,
                 "model_version": result.model_version,
-                "status": result.status,
+                "s@limiter.limit("100/minute")  # 每分钟100次请求
+tatus": result.status,
                 "metrics": {k: v.to_dict() for k, v in result.metrics.items()},
                 "samples": [s.to_dict() for s in result.samples],
                 "task": result.task,
@@ -714,19 +875,21 @@ async def get_result_ui(run_id: str):
         )
         
         if not report_path:
-            raise HTTPException(status_code=500, detail="生成报告失败")
+            raise HTTPException(status_code=500, detail="生成@cache(expire=300)  # 5分钟缓存
+报告失败")
             
         # 返回报告HTML
         with open(report_path, "r", encoding="utf-8") as f:
             html_content = f.read()
             
-        return HTMLResponse(content=html_content)
+        retur    @cache(timeout=300)  # 5分钟缓存
+n HTMLResponse(content=html_content)
     except Exception as e:
         logging.error(f"获取结果UI失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/agent-performance", summary="获取智能体性能数据")
-async def get_agent_performance():
+async async def get_agent_performance(
     """
     获取智能体性能对比数据，用于雷达图
     """
@@ -734,6 +897,7 @@ async def get_agent_performance():
         # 模拟数据，实际使用时需要从数据库获取
         return {
             "metrics": ["辨证准确率", "舌象识别", "面色识别", "脉象识别", "方案生成", "协作效率", "隐私安全"],
+@limiter.limit("100/minute")  # 每分钟100次请求
             "agents": [
                 {
                     "name": "小艾",
@@ -748,12 +912,14 @@ async def get_agent_performance():
                 {
                     "name": "老克",
                     "color": "#ff5722",
-                    "scores": [90, 85, 80, 75, 95, 90, 75]
+                    "scores": [90, 85, 80, 75, 9@cache(expire=300)  # 5分钟缓存
+5, 90, 75]
                 },
                 {
                     "name": "索儿",
                     "color": "#9c27b0",
-                    "scores": [80, 75, 85, 90, 85, 75, 85]
+                    "scores": [80    @cache(timeout=300)  # 5分钟缓存
+, 75, 85, 90, 85, 75, 85]
                 }
             ]
         }
@@ -762,7 +928,7 @@ async def get_agent_performance():
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/task-distribution", summary="获取任务分布数据")
-async def get_task_distribution():
+async async def get_task_distribution(
     """
     获取评测任务分布数据，用于饼图
     """
@@ -771,7 +937,8 @@ async def get_task_distribution():
         all_results = benchmark_service.get_history(limit=1000)
         
         # 按任务类型分组
-        task_counts = {}
+        ta@limiter.limit("100/minute")  # 每分钟100次请求
+sk_counts = {}
         task_names = {
             "TCM_DIAGNOSIS": "中医辨证",
             "TONGUE_RECOGNITION": "舌象识别",
@@ -785,12 +952,15 @@ async def get_task_distribution():
         
         for result in all_results:
             task = result.task
-            task_name = task_names.get(task, task)
-            if task_name in task_counts:
+   @limiter.limit("100/minute")  # 每分钟100次请求
+         task_name = task_names.get(task, task)
+        @cache(expire=300)  # 5分钟缓存
+    if task_name in task_counts:
                 task_counts[task_name] += 1
             else:
                 task_counts[task_name] = 1
-        
+     @cache(timeout=300)  # 5分钟缓存
+       
         # 转换为列表格式
         return [{"task": task, "count": count} for task, count in task_counts.items()]
     except Exception as e:
@@ -798,7 +968,7 @@ async def get_task_distribution():
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/settings", summary="获取当前设置")
-async def get_settings():
+async async def get_settings(
     """
     获取当前系统设置
     """
@@ -808,7 +978,8 @@ async def get_settings():
             "data_dir": config.data_dir,
             "report_dir": config.report_dir,
             "parallel_runs": config.max_parallel_runs,
-            "log_level": config.log_level,
+ @limiter.limit("100/minute")  # 每分钟100次请求
+           "log_level": config.log_level,
         }
         
         return settings
@@ -861,7 +1032,8 @@ async def submit_benchmark(request: BenchmarkRequest, background_tasks: Backgrou
     Returns:
         基准测试响应
     """
-    try:
+    tr@limiter.limit("100/minute")  # 每分钟100次请求
+y:
         executor = get_global_executor()
         
         # 验证请求数据
@@ -880,8 +1052,10 @@ async def submit_benchmark(request: BenchmarkRequest, background_tasks: Backgrou
             config=request.config
         )
         
-        # 添加后台清理任务
-        background_tasks.add_task(executor.cleanup_old_tasks, 24)
+        # @cache(expire=300)  # 5分钟缓存
+添加后台清理任务
+        background_tasks.add_task(executor.c@limiter.limit("100/minute")  # 每分钟100次请求
+leanup_old_tasks, 24)
         
         logger.info(f"基准测试任务已提交: {task_id}")
         
@@ -904,14 +1078,16 @@ async def get_task_status(task_id: str = Path(..., description="任务ID")):
         task_id: 任务ID
         
     Returns:
-        任务状态响应
+      @cache(expire=300)  # 5分钟缓存
+  任务状态响应
     """
     try:
         executor = get_global_executor()
         status = executor.get_task_status(task_id)
         
         if not status:
-            raise HTTPException(status_code=404, detail=f"找不到任务: {task_id}")
+            raise HTTPException(status_code@limiter.limit("100/minute")  # 每分钟100次请求
+=404, detail=f"找不到任务: {task_id}")
         
         return TaskStatusResponse(**status)
         
@@ -933,8 +1109,10 @@ async def list_tasks(
     Args:
         status: 状态过滤
         limit: 数量限制
-        offset: 偏移量
-        
+        offset@cache(expire=300)  # 5分钟缓存
+: 偏移量
+      @limiter.limit("100/minute")  # 每分钟100次请求
+  
     Returns:
         任务列表响应
     """
@@ -971,10 +1149,10 @@ async def get_task_result(task_id: str = Path(..., description="任务ID")):
         result = executor.get_task_result(task_id)
         
         if not result:
-            raise HTTPException(status_code=404, detail=f"找不到任务结果: {task_id}")
+            raise HTTPExcepti@limiter.limit("100/minute")  # 每分钟100次请求
+on(status_code=404, detail=f"找不到任务结果: {task_id}")
         
         # 转换为字典格式
-        from dataclasses import asdict
         return asdict(result)
         
     except HTTPException:
@@ -984,7 +1162,8 @@ async def get_task_result(task_id: str = Path(..., description="任务ID")):
         raise HTTPException(status_code=500, detail=f"获取任务结果失败: {str(e)}")
 
 @router.post("/benchmarks/tasks/{task_id}/report")
-async def generate_report(task_id: str = Path(..., description="任务ID")):
+async def g@limiter.limit("100/minute")  # 每分钟100次请求
+enerate_report(task_id: str = Path(..., description="任务ID")):
     """
     生成测试报告
     
@@ -998,13 +1177,16 @@ async def generate_report(task_id: str = Path(..., description="任务ID")):
         executor = get_global_executor()
         report_path = await executor.generate_report(task_id)
         
-        if not report_path:
-            raise HTTPException(status_code=404, detail=f"找不到任务或任务未完成: {task_id}")
+        if not@cache(expire=300)  # 5分钟缓存
+ report_path:
+            raise HTTPException(status_code=404, detail=f"找不到任务或任务未完成: {task@limiter.limit("100/minute")  # 每分钟100次请求
+_id}")
         
         return {
             "task_id": task_id,
             "report_path": report_path,
-            "report_url": f"/reports/{task_id}_report.html",
+            "report_url": f"/reports/{task_    @cache(timeout=300)  # 5分钟缓存
+id}_report.html",
             "message": "报告生成成功"
         }
         
@@ -1016,7 +1198,7 @@ async def generate_report(task_id: str = Path(..., description="任务ID")):
 
 # 缓存管理接口
 @router.get("/cache/stats", response_model=CacheStatsResponse)
-async def get_cache_stats():
+async async def get_cache_stats(
     """
     获取缓存统计信息
     
@@ -1047,7 +1229,8 @@ async def clear_cache():
         
         return {
             "message": "缓存已清空",
-            "timestamp": datetime.now().isoformat()
+            "timestamp": da@limiter.limit("100/minute")  # 每分钟100次请求
+tetime.now().isoformat()
         }
         
     except Exception as e:
@@ -1068,14 +1251,15 @@ async def preload_models(model_configs: Dict[str, str]):
     try:
         cache = get_global_cache()
         
-        # 简化实现，实际应该根据model_type创建对应的工厂函数
+        # 简化实现，实际应该根据mode@limiter.limit("100/minute")  # 每分钟100次请求
+l_type创建对应的工厂函数
         def create_model_factory(model_type: str):
             def factory():
-                from internal.benchmark.model_interface import LocalModel
                 return LocalModel("preload", "1.0", None)
             return factory
         
-        factories = {
+        factories = @cache(expire=300)  # 5分钟缓存
+{
             key: create_model_factory(model_type)
             for key, model_type in model_configs.items()
         }
@@ -1083,18 +1267,21 @@ async def preload_models(model_configs: Dict[str, str]):
         cache.preload_models(factories)
         
         return {
-            "message": f"已预加载 {len(model_configs)} 个模型",
+            "message": f"已预加载 {len(model    @cache(timeout=300)  # 5分钟缓存
+_configs)} 个模型",
             "models": list(model_configs.keys()),
             "timestamp": datetime.now().isoformat()
         }
         
     except Exception as e:
         logger.error(f"预加载模型失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"预加载模型失败: {str(e)}")
+        raise HTTPException@cache(expire=300)  # 5分钟缓存
+(status_code=500, detail=f"预加载模型失败: {str(e)}")
 
 # 监控和指标接口
-@router.get("/metrics/summary", response_model=MetricsResponse)
-async def get_metrics_summary():
+@router.get("/metrics/summary", respons@limiter.limit("100/minute")  # 每分钟100次请求
+e_model=MetricsResponse)
+async async def get_metrics_summary(
     """
     获取指标摘要
     
@@ -1128,7 +1315,8 @@ async def get_custom_metric(
         
     Returns:
         指标统计
-    """
+    @limiter.limit("100/minute")  # 每分钟100次请求
+"""
     try:
         metrics = get_global_metrics()
         stats = metrics.get_custom_metric_stats(metric_name, window_seconds)
@@ -1156,7 +1344,8 @@ async def record_custom_metric(
     labels: Optional[Dict[str, str]] = None
 ):
     """
-    记录自定义指标
+    记录自定义指@cache(expire=300)  # 5分钟缓存
+标
     
     Args:
         name: 指标名称
@@ -1168,7 +1357,8 @@ async def record_custom_metric(
     """
     try:
         metrics = get_global_metrics()
-        metrics.record_custom_metric(name, value, labels)
+        metrics.record_custom_metric(name, value, labels    @cache(timeout=300)  # 5分钟缓存
+)
         
         return {
             "message": f"指标 {name} 已记录",
@@ -1183,7 +1373,7 @@ async def record_custom_metric(
 
 # 系统管理接口
 @router.get("/system/info")
-async def get_system_info():
+async async def get_system_info(
     """
     获取系统信息
     
@@ -1191,13 +1381,12 @@ async def get_system_info():
         系统信息
     """
     try:
-        import psutil
-        import platform
         
         # 获取系统信息
         cpu_percent = psutil.cpu_percent(interval=1)
         memory = psutil.virtual_memory()
-        disk = psutil.disk_usage('/')
+        disk @limiter.limit("100/minute")  # 每分钟100次请求
+= psutil.disk_usage('/')
         
         # 获取缓存和任务统计
         cache = get_global_cache()
@@ -1213,12 +1402,14 @@ async def get_system_info():
                 "python_version": platform.python_version(),
                 "cpu_count": psutil.cpu_count(),
                 "cpu_percent": cpu_percent,
-                "memory_total_gb": memory.total / 1024 / 1024 / 1024,
+                "memory_total_gb": memory.total / 102@limiter.limit("100/minute")  # 每分钟100次请求
+4 / 1024 / 1024,
                 "memory_used_gb": memory.used / 1024 / 1024 / 1024,
                 "memory_percent": memory.percent,
                 "disk_total_gb": disk.total / 1024 / 1024 / 1024,
                 "disk_used_gb": disk.used / 1024 / 1024 / 1024,
-                "disk_percent": (disk.used / disk.total) * 100
+         @limiter.limit("100/minute")  # 每分钟100次请求
+       "disk_percent": (disk.used / disk.total) * 100
             },
             "service": {
                 "version": "1.1.0",
@@ -1233,7 +1424,8 @@ async def get_system_info():
         
     except Exception as e:
         logger.error(f"获取系统信息失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"获取系统信息失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"@cache(expire=300)  # 5分钟缓存
+获取系统信息失败: {str(e)}")
 
 @router.post("/system/cleanup")
 async def cleanup_system():
@@ -1249,8 +1441,8 @@ async def cleanup_system():
         executor.cleanup_old_tasks(24)
         
         # 强制垃圾回收
-        import gc
-        collected = gc.collect()
+ @cache(expire=300)  # 5分钟缓存
+       collected = gc.collect()
         
         return {
             "message": "系统清理完成",
@@ -1271,7 +1463,6 @@ async def test_error():
 @router.get("/test/timeout")
 async def test_timeout():
     """测试超时处理（仅用于开发调试）"""
-    import asyncio
     await asyncio.sleep(10)  # 模拟长时间操作
     return {"message": "操作完成"}
 

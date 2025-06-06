@@ -1,3 +1,23 @@
+"""
+predictive_analyzer - 索克生活项目模块
+"""
+
+        from collections import Counter
+    from statsmodels.tsa.arima.model import ARIMA
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from pathlib import Path
+from sklearn.cluster import KMeans
+from sklearn.ensemble import (
+from sklearn.linear_model import LinearRegression, LogisticRegression
+from sklearn.preprocessing import StandardScaler
+from typing import Any
+import logging
+import pickle
+import warnings
+
 #!/usr/bin/env python3
 
 """
@@ -6,30 +26,16 @@
 支持时序预测、异常检测和个性化风险建模
 """
 
-import logging
-import pickle
-import warnings
-from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
-from pathlib import Path
-from typing import Any
 
-from sklearn.cluster import KMeans
 
 # 机器学习库
-from sklearn.ensemble import (
     GradientBoostingRegressor,
     IsolationForest,
     RandomForestRegressor,
 )
-from sklearn.linear_model import LinearRegression, LogisticRegression
-from sklearn.preprocessing import StandardScaler
 
 # 时序分析库
 try:
-    from statsmodels.tsa.arima.model import ARIMA
 
     STATSMODELS_AVAILABLE = True
 except ImportError:
@@ -887,7 +893,6 @@ class PredictiveAnalyzer:
         stability = 1.0 - (len(unique_constitutions) - 1) / max(1, len(historical_constitutions))
 
         # 识别主要体质
-        from collections import Counter
 
         constitution_counts = Counter(historical_constitutions)
         dominant_constitution = constitution_counts.most_common(1)[0][0]

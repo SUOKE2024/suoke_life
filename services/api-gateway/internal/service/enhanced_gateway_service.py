@@ -1,3 +1,20 @@
+"""
+enhanced_gateway_service - 索克生活项目模块
+"""
+
+from dataclasses import dataclass
+from enum import Enum
+from services.common.governance.circuit_breaker import (
+from services.common.governance.rate_limiter import (
+from services.common.observability.tracing import (
+from typing import Dict, Any, List, Optional, Callable
+import aiohttp
+import asyncio
+import hashlib
+import json
+import logging
+import time
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -5,24 +22,12 @@
 集成断路器、限流、缓存、智能路由等优化组件
 """
 
-import asyncio
-import logging
-import time
-import hashlib
-import json
-from typing import Dict, Any, List, Optional, Callable
-from dataclasses import dataclass
-from enum import Enum
-import aiohttp
 
 # 导入通用组件
-from services.common.governance.circuit_breaker import (
     CircuitBreaker, CircuitBreakerConfig, get_circuit_breaker
 )
-from services.common.governance.rate_limiter import (
     RateLimitConfig, get_rate_limiter, rate_limit
 )
-from services.common.observability.tracing import (
     get_tracer, trace, SpanKind
 )
 

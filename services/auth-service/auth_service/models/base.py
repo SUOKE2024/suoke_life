@@ -1,13 +1,18 @@
-"""基础数据模型"""
+"""
+base - 索克生活项目模块
+"""
 
-import uuid
 from datetime import datetime
-from typing import Any, Dict, Optional
-
 from sqlalchemy import DateTime, String, Text, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from typing import Any, Dict, Optional
+import uuid
+
+"""基础数据模型"""
+
+
 
 
 class BaseModel(DeclarativeBase):

@@ -1,25 +1,30 @@
+"""
+optimization - 索克生活项目模块
+"""
+
+    import redis
+from collections import OrderedDict, defaultdict
+from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+from contextlib import asynccontextmanager
+from dataclasses import dataclass
+from functools import wraps, lru_cache
+from typing import Dict, List, Any, Optional, Callable, TypeVar, Generic
+import asyncio
+import gc
+import hashlib
+import pickle
+import psutil
+import threading
+import time
+import weakref
+
 """性能优化模块
 
 提供缓存优化、并发控制、资源管理等性能优化功能
 """
 
-import asyncio
-import time
-import threading
-from typing import Dict, List, Any, Optional, Callable, TypeVar, Generic
-from dataclasses import dataclass
-from collections import OrderedDict, defaultdict
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
-import weakref
-import gc
-import psutil
-from functools import wraps, lru_cache
-import hashlib
-import pickle
-from contextlib import asynccontextmanager
 
 try:
-    import redis
     REDIS_AVAILABLE = True
 except ImportError:
     REDIS_AVAILABLE = False

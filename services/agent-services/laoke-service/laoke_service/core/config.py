@@ -1,16 +1,22 @@
 """
+config - 索克生活项目模块
+"""
+
+        import yaml
+from functools import lru_cache
+from pathlib import Path
+from pydantic import BaseModel, Field, validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from typing import Any
+import os
+
+"""
 配置管理模块
 
 使用 Pydantic Settings 进行类型安全的配置管理
 """
 
-import os
-from functools import lru_cache
-from pathlib import Path
-from typing import Any
 
-from pydantic import BaseModel, Field, validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class DatabaseConfig(BaseModel):
@@ -210,7 +216,6 @@ class Settings(BaseSettings):
     @classmethod
     def from_file(cls, config_path: str | Path) -> "Settings":
         """从配置文件加载设置"""
-        import yaml
 
         path = Path(config_path)
         if not path.exists():

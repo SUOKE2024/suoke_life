@@ -1,15 +1,20 @@
+"""
+validator - 索克生活项目模块
+"""
+
+from dataclasses import dataclass
+from typing import Any
+import html
+import json
+import logging
+import re
+
 #!/usr/bin/env python3
 """
 请求验证器
 提供输入验证和数据清理功能
 """
 
-import html
-import json
-import logging
-import re
-from dataclasses import dataclass
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

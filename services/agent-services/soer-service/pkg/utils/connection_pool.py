@@ -1,17 +1,22 @@
 """
-连接池管理器
-提供数据库、Redis等连接的统一管理和优化
+connection_pool - 索克生活项目模块
 """
-import logging
+
 from contextlib import asynccontextmanager
-from typing import Any, AsyncContextManager
-
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
-from sqlalchemy.pool import QueuePool
-
 from pkg.utils.dependency_injection import ServiceLifecycle
 from pkg.utils.enhanced_config import CacheConfig, DatabaseConfig
 from pkg.utils.error_handling import DatabaseException, RetryConfig, retry_async
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.pool import QueuePool
+from typing import Any, AsyncContextManager
+import logging
+
+"""
+连接池管理器
+提供数据库、Redis等连接的统一管理和优化
+"""
+
+
 
 logger = logging.getLogger(__name__)
 
@@ -289,7 +294,8 @@ class MongoConnectionPool(ServiceLifecycle):
             logger.error(f"MongoDB健康检查失败: {e}")
             return False
 
-    def get_collection(self, collection_name: str):
+        @cache(timeout=300)  # 5分钟缓存
+def get_collection(self, collection_name: str):
         """获取集合"""
         if not self.database:
             raise DatabaseException("MongoDB连接池未初始化")

@@ -1,20 +1,26 @@
 """
+agent - 索克生活项目模块
+"""
+
+            import time
+from .config import Settings
+from .exceptions import AIServiceError, KnowledgeBaseError, LaoKeServiceError
+from .logging import get_logger
+from pydantic import BaseModel, Field
+from typing import Any
+from uuid import uuid4
+import asyncio
+import httpx
+
+"""
 老克智能体核心模块
 
 实现老克智能体的核心功能和业务逻辑
 """
 
-from typing import Any
-from uuid import uuid4
 
-from pydantic import BaseModel, Field
 
-from .config import Settings
-from .exceptions import AIServiceError, KnowledgeBaseError, LaoKeServiceError
-from .logging import get_logger
 
-import asyncio
-import httpx
 
 
 class AgentMessage(BaseModel):
@@ -26,6 +32,18 @@ class AgentMessage(BaseModel):
     metadata: dict[str, Any] = Field(default_factory=dict, description="元数据")
     timestamp: str | None = Field(default=None, description="时间戳")
 
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'agentmessage'
+        ordering = ['-created_at']
+
 
 class AgentResponse(BaseModel):
     """智能体响应模型"""
@@ -35,6 +53,42 @@ class AgentResponse(BaseModel):
     data: dict[str, Any] | None = Field(default=None, description="响应数据")
     error_code: str | None = Field(default=None, description="错误代码")
     suggestions: list[str] = Field(default_factory=list, description="建议")
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'knowledgeitem'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'learningpath'
+        ordering = ['-created_at']
+
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'communitypost'
+        ordering = ['-created_at']
 
 
 class KnowledgeItem(BaseModel):
@@ -565,7 +619,6 @@ class FourDiagnosisAggregator:
                 }
             ]
 
-            import time
             return {
                 "coordination_id": f"coord_{int(time.time())}",
                 "user_id": user_id,

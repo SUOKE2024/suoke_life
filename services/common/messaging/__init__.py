@@ -1,11 +1,17 @@
+"""
+__init__ - 索克生活项目模块
+"""
+
+from .kafka_client import KafkaMessageQueue
+from .message_queue import (
+from .rabbitmq_client import RabbitMQMessageQueue
+
 #!/usr/bin/env python3
 """
 消息队列模块
 提供对Kafka、RabbitMQ等消息队列的统一抽象
 """
 
-from .kafka_client import KafkaMessageQueue
-from .message_queue import (
     ConsumerConfig,
     Message,
     MessageHandler,
@@ -13,7 +19,6 @@ from .message_queue import (
     ProducerConfig,
     get_message_queue,
 )
-from .rabbitmq_client import RabbitMQMessageQueue
 
 __all__ = [
     "ConsumerConfig",

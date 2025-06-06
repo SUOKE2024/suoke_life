@@ -1,6 +1,12 @@
-"""Exception handling for look service."""
+"""
+__init__ - 索克生活项目模块
+"""
 
 from .base import (
+from .handlers import (
+
+"""Exception handling for look service."""
+
     AuthenticationError,
     AuthorizationError,
     DatabaseError,
@@ -11,7 +17,6 @@ from .base import (
     NotFoundError,
     ValidationError,
 )
-from .handlers import (
     handle_internal_error,
     handle_not_found_error,
     handle_validation_error,

@@ -1,14 +1,22 @@
 """
+tongue_pulse_analysis - 索克生活项目模块
+"""
+
+        from scipy import signal
+        from scipy.fft import fft, fftfreq
+        from scipy.signal import find_peaks
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
+from typing import Dict, List, Tuple, Optional, Any
+import cv2
+import logging
+
+"""
 舌脉象计算模型
 实现中医舌诊和脉诊的数字化分析算法
 """
 
-import cv2
-from typing import Dict, List, Tuple, Optional, Any
-from dataclasses import dataclass
-from enum import Enum
-import logging
-from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -458,7 +466,6 @@ class PulseWaveformAnalyzer:
     def _preprocess_waveform(self, waveform: np.ndarray) -> np.ndarray:
         """波形预处理"""
         # 去除基线漂移
-        from scipy import signal
         
         # 高通滤波去除基线漂移
         b, a = signal.butter(4, 0.5 / (self.sampling_rate / 2), 'high')
@@ -475,7 +482,6 @@ class PulseWaveformAnalyzer:
     
     def _detect_peaks(self, waveform: np.ndarray) -> np.ndarray:
         """检测脉搏峰值"""
-        from scipy.signal import find_peaks
         
         # 设置峰值检测参数
         height = np.mean(waveform) + 0.3 * np.std(waveform)
@@ -610,7 +616,6 @@ class PulseWaveformAnalyzer:
     
     def _analyze_frequency(self, waveform: np.ndarray) -> Dict[str, float]:
         """频域分析"""
-        from scipy.fft import fft, fftfreq
         
         # 计算FFT
         fft_values = fft(waveform)

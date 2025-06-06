@@ -1,18 +1,25 @@
 """
-Auth-Service 修复的高级功能测试
+test_auth_advanced_fixed - 索克生活项目模块
 """
-import pytest
-import pytest_asyncio
-import asyncio
-import time
-import statistics
-from concurrent.futures import ThreadPoolExecutor
-from uuid import uuid4
 
-from auth_service.repositories.user_repository import UserRepository
-from auth_service.repositories.session_repository import SessionRepository
+        import os
+        import psutil
 from auth_service.core.auth import get_password_hash, verify_password, create_access_token
 from auth_service.models.user import UserStatus
+from auth_service.repositories.session_repository import SessionRepository
+from auth_service.repositories.user_repository import UserRepository
+from concurrent.futures import ThreadPoolExecutor
+from uuid import uuid4
+import asyncio
+import pytest
+import pytest_asyncio
+import statistics
+import time
+
+"""
+Auth-Service 修复的高级功能测试
+"""
+
 
 
 class TestAuthServiceAdvancedFixed:
@@ -411,8 +418,6 @@ class TestAuthServicePerformance:
     @pytest.mark.asyncio
     async def test_memory_usage_monitoring(self, client):
         """内存使用监控测试"""
-        import psutil
-        import os
         
         process = psutil.Process(os.getpid())
         initial_memory = process.memory_info().rss / 1024 / 1024  # MB

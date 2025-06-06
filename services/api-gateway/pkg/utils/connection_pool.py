@@ -1,3 +1,15 @@
+"""
+connection_pool - 索克生活项目模块
+"""
+
+from aiohttp import ClientSession, ClientTimeout, TCPConnector
+from dataclasses import dataclass
+from typing import Dict, Optional, Set
+from urllib.parse import urlparse
+import asyncio
+import logging
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,14 +18,7 @@
 提供高效的HTTP连接池管理，支持连接复用、健康检查和自动清理
 """
 
-import asyncio
-import logging
-import time
-from typing import Dict, Optional, Set
-from dataclasses import dataclass
-from urllib.parse import urlparse
 
-from aiohttp import ClientSession, ClientTimeout, TCPConnector
 
 logger = logging.getLogger(__name__)
 

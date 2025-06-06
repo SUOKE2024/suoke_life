@@ -1,3 +1,11 @@
+"""
+pulse_analyzer - 索克生活项目模块
+"""
+
+from dataclasses import dataclass
+from typing import Any
+import logging
+
 #!/usr/bin/env python
 
 """
@@ -5,9 +13,6 @@
 负责分析脉象特征并识别脉象类型
 """
 
-import logging
-from dataclasses import dataclass
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

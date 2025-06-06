@@ -1,8 +1,13 @@
-#!/usr/bin/env python3
+"""
+fix_logger_names - 索克生活项目模块
 """
 
 from loguru import logger
 import os
+
+#!/usr/bin/env python3
+"""
+
 
 
 

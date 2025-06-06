@@ -1,257 +1,247 @@
 import { Environment, currentEnv, API_CONFIG, CACHE_CONFIG, STORAGE_CONFIG, APP_CONFIG, AGENT_INFO, CONSTITUTION_INFO, ERROR_CODES, EVENTS } from "../config";
+import { Environment, currentEnv, API_CONFIG, CACHE_CONFIG, STORAGE_CONFIG, APP_CONFIG, AGENT_INFO, CONSTITUTION_INFO, ERROR_CODES, EVENTS } from "../config";
+
 describe("config", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  describe(Environment", () => {"
+  describe("Environment", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = Environment(/* valid params   */);
+const result = Environment(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = Environment(/* edge case params   */);
+const result = Environment(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        Environment(/* invalid params     */)
-      }).not.toThrow()
+        Environment(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = Environment(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = Environment(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(currentEnv", () => {"
+  describe("currentEnv", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = currentEnv(/* valid params   */);
+const result = currentEnv(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = currentEnv(/* edge case params   */);
+const result = currentEnv(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        currentEnv(/* invalid params     */)
-      }).not.toThrow()
+        currentEnv(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = currentEnv(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = currentEnv(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(API_CONFIG", () => {"
+  describe("API_CONFIG", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = API_CONFIG(/* valid params   */);
+const result = API_CONFIG(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = API_CONFIG(/* edge case params   */);
+const result = API_CONFIG(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        API_CONFIG(/* invalid params     */)
-      }).not.toThrow()
+        API_CONFIG(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = API_CONFIG(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = API_CONFIG(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(CACHE_CONFIG", () => {"
+  describe("CACHE_CONFIG", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = CACHE_CONFIG(/* valid params   */);
+const result = CACHE_CONFIG(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = CACHE_CONFIG(/* edge case params   */);
+const result = CACHE_CONFIG(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        CACHE_CONFIG(/* invalid params     */)
-      }).not.toThrow()
+        CACHE_CONFIG(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = CACHE_CONFIG(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = CACHE_CONFIG(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(STORAGE_CONFIG", () => {"
+  describe("STORAGE_CONFIG", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = STORAGE_CONFIG(/* valid params   */);
+const result = STORAGE_CONFIG(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = STORAGE_CONFIG(/* edge case params   */);
+const result = STORAGE_CONFIG(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        STORAGE_CONFIG(/* invalid params     */)
-      }).not.toThrow()
+        STORAGE_CONFIG(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = STORAGE_CONFIG(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = STORAGE_CONFIG(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(APP_CONFIG", () => {"
+  describe("APP_CONFIG", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = APP_CONFIG(/* valid params   */);
+const result = APP_CONFIG(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = APP_CONFIG(/* edge case params   */);
+const result = APP_CONFIG(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        APP_CONFIG(/* invalid params     */)
-      }).not.toThrow()
+        APP_CONFIG(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = APP_CONFIG(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = APP_CONFIG(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(AGENT_INFO", () => {"
+  describe("AGENT_INFO", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = AGENT_INFO(/* valid params   */);
+const result = AGENT_INFO(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = AGENT_INFO(/* edge case params   */);
+const result = AGENT_INFO(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        AGENT_INFO(/* invalid params     */)
-      }).not.toThrow()
+        AGENT_INFO(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = AGENT_INFO(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = AGENT_INFO(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(CONSTITUTION_INFO", () => {"
+  describe("CONSTITUTION_INFO", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = CONSTITUTION_INFO(/* valid params   */);
+const result = CONSTITUTION_INFO(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = CONSTITUTION_INFO(/* edge case params   */);
+const result = CONSTITUTION_INFO(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        CONSTITUTION_INFO(/* invalid params     */)
-      }).not.toThrow()
+        CONSTITUTION_INFO(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = CONSTITUTION_INFO(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = CONSTITUTION_INFO(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(ERROR_CODES", () => {"
+  describe("ERROR_CODES", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = ERROR_CODES(/* valid params   */);
+const result = ERROR_CODES(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = ERROR_CODES(/* edge case params   */);
+const result = ERROR_CODES(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        ERROR_CODES(/* invalid params     */)
-      }).not.toThrow()
+        ERROR_CODES(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = ERROR_CODES(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = ERROR_CODES(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(EVENTS", () => {"
+  describe("EVENTS", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = EVENTS(/* valid params   */);
+const result = EVENTS(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = EVENTS(/* edge case params   */);
+const result = EVENTS(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        EVENTS(/* invalid params     */)
-      }).not.toThrow()
+        EVENTS(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = EVENTS(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = EVENTS(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
 });
-import { performance } from "perf_hooks";
-import { Environment, currentEnv, API_CONFIG, CACHE_CONFIG, STORAGE_CONFIG, APP_CONFIG, AGENT_INFO, CONSTITUTION_INFO, ERROR_CODES, EVENTS } from "../config";
 describe("config Performance Tests", () => {
   it("should execute within performance thresholds", () => {
     const iterations = 10;
     const startTime = performance.now();
     for (let i = 0; i < iterations; i++) {
       // Execute performance-critical functions
-Environment(/* test params      */)
-      currentEnv(/* test params      */);
-      API_CONFIG(/* test params      */);
-      CACHE_CONFIG(/* test params      */);
-      STORAGE_CONFIG(/* test params      */);
-      APP_CONFIG(/* test params      */);
-      AGENT_INFO(/* test params      */);
-      CONSTITUTION_INFO(/* test params      */);
-      ERROR_CODES(/* test params      */);
-      EVENTS(/* test params      */);
+Environment(// test params);
+      currentEnv(// test params);
+      API_CONFIG(// test params);
+      CACHE_CONFIG(// test params);
+      STORAGE_CONFIG(// test params);
+      APP_CONFIG(// test params);
+      AGENT_INFO(// test params);
+      CONSTITUTION_INFO(// test params);
+      ERROR_CODES(// test params);
+      EVENTS(// test params);
     });
     const endTime = performance.now();
     const averageTime = (endTime - startTime) / iterations;
@@ -262,7 +252,7 @@ expect(averageTime).toBeLessThan(1);
     const largeDataset = new Array(10000).fill(0).map((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
-Environment(largeDataset)
+Environment(largeDataset);
     const endTime = performance.now();
     // Should handle large datasets within 100ms
 expect(endTime - startTime).toBeLessThan(100);
@@ -271,7 +261,7 @@ expect(endTime - startTime).toBeLessThan(100);
     const initialMemory = process.memoryUsage().heapUsed;
     // Execute function multiple times
 for (let i = 0; i < 1000; i++) {
-      Environment(/* test params      */);
+      Environment(// test params);
     });
     // Force garbage collection if available
 if (global.gc) {

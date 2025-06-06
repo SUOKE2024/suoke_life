@@ -1,18 +1,23 @@
+"""
+knowledge_repository - 索克生活项目模块
+"""
+
+from internal.model.knowledge import KnowledgeNode
+from pathlib import Path
+import aiosqlite
+import json
+import logging
+import os
+import uuid
+
 #!/usr/bin/env python3
 
 """
 知识存储库 - 负责中医养生知识的存储和检索
 """
 
-import json
-import logging
-import os
-from pathlib import Path
-import uuid
 
-import aiosqlite
 
-from internal.model.knowledge import KnowledgeNode
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +28,8 @@ class KnowledgeRepository:
         self.db_path = os.environ.get("MAZE_DB_PATH", "data/maze.db")
         logger.info(f"知识存储库初始化, 数据库路径: {self.db_path}")
 
-    async def _get_db(self):
+    async     @cache(timeout=300)  # 5分钟缓存
+def _get_db(self):
         """获取数据库连接"""
         # 确保数据库目录存在
         Path(self.db_path).parent.mkdir(parents=True, exist_ok=True)

@@ -1,3 +1,16 @@
+"""
+edu_service - 索克生活项目模块
+"""
+
+from pkg.utils.cache import AsyncCacheClient
+from pkg.utils.config import Config
+from pkg.utils.metrics import timed_and_counted_function
+from typing import Any
+import httpx
+import json
+import logging
+import time
+
 #!/usr/bin/env python
 
 """
@@ -5,16 +18,8 @@
 负责与外部教育服务和资源的集成
 """
 
-import json
-import logging
-import time
-from typing import Any
 
-import httpx
 
-from pkg.utils.cache import AsyncCacheClient
-from pkg.utils.config import Config
-from pkg.utils.metrics import timed_and_counted_function
 
 # 获取日志记录器
 logger = logging.getLogger(__name__)

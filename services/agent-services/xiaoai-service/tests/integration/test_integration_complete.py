@@ -1,12 +1,26 @@
+"""
+test_integration_complete - 索克生活项目模块
+"""
+
+        from cmd.server import XiaoAIServer
+        from internal.agent.agent_manager import AgentManager
+        from internal.delivery.xiaoai_service_impl import XiaoAIServiceImpl
+        from internal.orchestrator.diagnosis_coordinator import DiagnosisCoordinator
+        from internal.repository.diagnosis_repository import DiagnosisRepository
+        from internal.repository.session_repository import SessionRepository
+        from pkg.utils.config_loader import get_config
+        from pkg.utils.metrics import get_metrics_collector
+        import traceback
+from pathlib import Path
+import asyncio
+import sys
+
 #!/usr/bin/env python3
 """
 完整集成测试脚本
 验证小艾服务的完整启动和基本功能
 """
 
-import asyncio
-import sys
-from pathlib import Path
 
 # 添加项目根目录到PYTHONPATH
 sys.path.insert(0, Path().resolve())
@@ -18,20 +32,16 @@ async def test_complete_integration():
     try:
         # 1. 测试配置加载
         print("1. 测试配置加载...")
-        from pkg.utils.config_loader import get_config
         config = get_config("config/dev.yaml")
         print(f"✓ 配置加载成功: {type(config)}")
 
         # 2. 测试指标收集器
         print("\n2. 测试指标收集器...")
-        from pkg.utils.metrics import get_metrics_collector
         metrics = get_metrics_collector()
         print(f"✓ 指标收集器初始化成功: {type(metrics)}")
 
         # 3. 测试存储库
         print("\n3. 测试存储库...")
-        from internal.repository.diagnosis_repository import DiagnosisRepository
-        from internal.repository.session_repository import SessionRepository
 
         session_repo = SessionRepository()
         diagnosis_repo = DiagnosisRepository()
@@ -40,7 +50,6 @@ async def test_complete_integration():
 
         # 4. 测试智能体管理器
         print("\n4. 测试智能体管理器...")
-        from internal.agent.agent_manager import AgentManager
 
         agent_manager = AgentManager()
         print(f"✓ 智能体管理器创建成功: {type(agent_manager)}")
@@ -50,21 +59,18 @@ async def test_complete_integration():
 
         # 5. 测试四诊协调器
         print("\n5. 测试四诊协调器...")
-        from internal.orchestrator.diagnosis_coordinator import DiagnosisCoordinator
 
         coordinator = DiagnosisCoordinator(agent_manager, diagnosis_repo)
         print(f"✓ 四诊协调器创建成功: {type(coordinator)}")
 
         # 6. 测试服务实现
         print("\n6. 测试服务实现...")
-        from internal.delivery.xiaoai_service_impl import XiaoAIServiceImpl
 
         service_impl = XiaoAIServiceImpl()
         print(f"✓ 服务实现创建成功: {type(service_impl)}")
 
         # 7. 测试服务器
         print("\n7. 测试服务器...")
-        from cmd.server import XiaoAIServer
 
         server = XiaoAIServer("config/dev.yaml")
         print(f"✓ 服务器创建成功: {type(server)}")
@@ -119,7 +125,6 @@ async def test_complete_integration():
 
     except Exception as e:
         print(f"\n❌ 集成测试失败: {e}")
-        import traceback
         traceback.print_exc()
         return False
 
@@ -128,7 +133,6 @@ async def test_service_startup():
     print("\n🔍 测试服务启动流程...\n")
 
     try:
-        from cmd.server import XiaoAIServer
 
         server = XiaoAIServer("config/dev.yaml")
         print("✓ 服务器实例创建成功")
@@ -146,7 +150,6 @@ async def test_service_startup():
 
     except Exception as e:
         print(f"❌ 服务启动流程验证失败: {e}")
-        import traceback
         traceback.print_exc()
         return False
 

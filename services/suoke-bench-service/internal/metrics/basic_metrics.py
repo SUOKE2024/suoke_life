@@ -1,21 +1,26 @@
 """
+basic_metrics - 索克生活项目模块
+"""
+
+from internal.metrics.metric_registry import MetricInfo, metric_registry
+from sklearn.metrics import (
+from typing import Any
+import logging
+import re
+
+"""
 基础评估指标
 
 实现常用评估指标的计算函数。
 """
 
-import logging
-import re
-from typing import Any
 
-from sklearn.metrics import (
     accuracy_score,
     f1_score,
     precision_score,
     recall_score,
 )
 
-from internal.metrics.metric_registry import MetricInfo, metric_registry
 
 logger = logging.getLogger(__name__)
 

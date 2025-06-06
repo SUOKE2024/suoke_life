@@ -140,7 +140,9 @@ export class BenchmarkService {
    */
   async listBenchmarks(status?: string): Promise<BenchmarkTask[]> {
     try {
-      const url = status ? `${this.baseUrl}/api/v1/benchmarks?status=${status}` : `${this.baseUrl}/api/v1/benchmarks`;
+      const url = status;
+        ? `${this.baseUrl}/api/v1/benchmarks?status=${status}`;
+        : `${this.baseUrl}/api/v1/benchmarks`;
       const response = await apiClient.get(url);
       return response.data.tasks || [];
     } catch (error) {
@@ -167,8 +169,7 @@ export class BenchmarkService {
    */
   async predictWithModel(modelId: string, data: any): Promise<ModelPrediction> {
     try {
-      const response = await apiClient.post(`${this.baseUrl}/api/v1/models/${modelId}/predict`, {
-        input_data: data
+      const response = await apiClient.post(`${this.baseUrl}/api/v1/models/${modelId}/predict`, {input_data: data;
       });
       return response.data;
     } catch (error) {
@@ -195,7 +196,9 @@ export class BenchmarkService {
    */
   async runPluginBenchmark(pluginName: string, config: any): Promise<string> {
     try {
-      const response = await apiClient.post(`${this.baseUrl}/api/v1/plugins/${pluginName}/benchmark`, config);
+      const response = await apiClient.post(;
+        `${this.baseUrl}/api/v1/plugins/${pluginName}/benchmark`,config;
+      );
       return response.data.task_id;
     } catch (error) {
       console.error('Failed to run plugin benchmark:', error);
@@ -221,11 +224,8 @@ export class BenchmarkService {
    */
   async cancelBenchmark(taskId: string): Promise<void> {
     try {
-      const response = await fetch(`${this.baseUrl}/api/v1/benchmarks/${taskId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        }
+      const response = await fetch(`${this.baseUrl}/api/v1/benchmarks/${taskId}`, {method: 'DELETE',headers: {'Content-Type': 'application/json';
+        };
       });
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -267,4 +267,4 @@ export class BenchmarkService {
 // 创建单例实例
 export const benchmarkService = new BenchmarkService();
 
-// 类型已在上面定义并导出，无需重复导出 
+// 类型已在上面定义并导出，无需重复导出

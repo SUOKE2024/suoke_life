@@ -1,3 +1,20 @@
+"""
+server - 索克生活项目模块
+"""
+
+    from health_data_service.api.grpc import health_data_pb2, health_data_pb2_grpc
+from datetime import datetime
+from google.protobuf import struct_pb2, timestamp_pb2
+from grpc import aio
+from health_data_service.core.config import get_settings
+from health_data_service.core.exceptions import DatabaseError, NotFoundError, ValidationError
+from health_data_service.models import (
+from health_data_service.services.health_data_service import (
+from typing import Dict, Any, List, Optional
+import asyncio
+import grpc
+import logging
+
 #!/usr/bin/env python3
 """
 gRPC服务器实现
@@ -5,25 +22,14 @@ gRPC服务器实现
 提供健康数据服务的gRPC接口实现。
 """
 
-import asyncio
-import logging
-from datetime import datetime
-from typing import Dict, Any, List, Optional
 
-import grpc
-from google.protobuf import struct_pb2, timestamp_pb2
-from grpc import aio
 
-from health_data_service.core.config import get_settings
-from health_data_service.core.exceptions import DatabaseError, NotFoundError, ValidationError
-from health_data_service.models import (
     CreateHealthDataRequest,
     CreateVitalSignsRequest,
     UpdateHealthDataRequest,
     DataType,
     DataSource,
 )
-from health_data_service.services.health_data_service import (
     HealthDataService,
     VitalSignsService,
     TCMDiagnosisService,
@@ -31,7 +37,6 @@ from health_data_service.services.health_data_service import (
 
 # 导入生成的gRPC代码（需要先编译proto文件）
 try:
-    from health_data_service.api.grpc import health_data_pb2, health_data_pb2_grpc
 except ImportError:
     # 如果没有生成的代码，创建占位符
     class health_data_pb2:

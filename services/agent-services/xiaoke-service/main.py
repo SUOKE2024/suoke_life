@@ -1,3 +1,25 @@
+"""
+main - 索克生活项目模块
+"""
+
+from contextlib import asynccontextmanager
+from fastapi import FastAPI, HTTPException, Depends
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
+from loguru import logger
+from xiaoke_service.agent.xiaoke_agent import XiaokeAgent
+from xiaoke_service.config.settings import get_settings
+from xiaoke_service.delivery.api.appointments import appointments_router
+from xiaoke_service.delivery.api.health import health_router
+from xiaoke_service.delivery.api.products import products_router
+from xiaoke_service.delivery.api.services import services_router
+from xiaoke_service.delivery.api.supply_chain import supply_chain_router
+from xiaoke_service.observability.monitoring import setup_monitoring
+from xiaoke_service.platform.lifecycle import AgentLifecycleManager
+import os
+import sys
+import uvicorn
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
@@ -6,26 +28,10 @@
 SUOKE频道版主，负责服务订阅、农产品预制、供应链管理等商业化服务
 """
 
-import uvicorn
-from fastapi import FastAPI, HTTPException, Depends
-from fastapi.middleware.cors import CORSMiddleware
-from contextlib import asynccontextmanager
-from loguru import logger
-import sys
-import os
 
 # 添加项目根目录到Python路径
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from xiaoke_service.agent.xiaoke_agent import XiaokeAgent
-from xiaoke_service.config.settings import get_settings
-from xiaoke_service.delivery.api.health import health_router
-from xiaoke_service.delivery.api.services import services_router
-from xiaoke_service.delivery.api.products import products_router
-from xiaoke_service.delivery.api.appointments import appointments_router
-from xiaoke_service.delivery.api.supply_chain import supply_chain_router
-from xiaoke_service.observability.monitoring import setup_monitoring
-from xiaoke_service.platform.lifecycle import AgentLifecycleManager
 
 # 全局变量
 xiaoke_agent: XiaokeAgent = None
@@ -75,6 +81,9 @@ def create_app() -> FastAPI:
     settings = get_settings()
     
     app = FastAPI(
+
+# 性能优化: 添加响应压缩
+app.add_middleware(GZipMiddleware, minimum_size=1000)
         title="小克智能体服务",
         description="SUOKE频道版主，负责服务订阅、农产品预制、供应链管理等商业化服务",
         version="1.0.0",
@@ -110,6 +119,8 @@ def get_xiaoke_agent() -> XiaokeAgent:
 # 创建应用实例
 app = create_app()
 
+@cache(expire=300)  # 5分钟缓存
+@limiter.limit("100/minute")  # 每分钟100次请求
 @app.get("/")
 async def root():
     """根路径"""
@@ -123,7 +134,9 @@ async def root():
             "个性化服务推荐",
             "农产品区块链溯源",
             "第三方API集成",
-            "健康商品推荐与店铺管理"
+            "健康@cache(expire=@limiter.limit("100/minute")  # 每分钟100次请求
+300)  # 5分钟缓存
+商品推荐与店铺管理"
         ]
     }
 
@@ -147,7 +160,8 @@ async def send_message(
         )
         return response
     except Exception as e:
-        logger.error(f"处理消息失败: {e}")
+        logger@limiter.limit("100/minute")  # 每分钟100次请求
+.error(f"处理消息失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/agent/recommend-service")
@@ -162,7 +176,8 @@ async def recommend_service(
             health_data=request.get("health_data"),
             preferences=request.get("preferences", {})
         )
-        return recommendations
+        return recommendations@limiter.limit("100/minute")  # 每分钟100次请求
+
     except Exception as e:
         logger.error(f"服务推荐失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))

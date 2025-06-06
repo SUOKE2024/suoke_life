@@ -1,18 +1,24 @@
 """
+test_grpc_server - 索克生活项目模块
+"""
+
+from api.grpc.message_bus_pb2 import (
+from api.grpc.message_bus_pb2_grpc import MessageBusServiceServicer
+from internal.delivery.grpc_server import MessageBusServicer, GrpcServer
+from internal.model.message import Message
+from internal.model.topic import Topic
+from internal.service.message_service import MessageService
+from unittest.mock import AsyncMock, MagicMock, patch
+import asyncio
+import grpc
+import pytest
+
+"""
 gRPC服务器单元测试
 """
 
-import asyncio
-import pytest
-import grpc
-from unittest.mock import AsyncMock, MagicMock, patch
 # from grpc_testing import server_from_dictionary, strict_real_time
 
-from internal.delivery.grpc_server import MessageBusServicer, GrpcServer
-from internal.service.message_service import MessageService
-from internal.model.message import Message
-from internal.model.topic import Topic
-from api.grpc.message_bus_pb2 import (
     PublishRequest, PublishResponse,
     CreateTopicRequest, CreateTopicResponse,
     ListTopicsRequest, ListTopicsResponse,
@@ -21,7 +27,6 @@ from api.grpc.message_bus_pb2 import (
     SubscribeRequest, SubscribeResponse,
     HealthCheckRequest, HealthCheckResponse
 )
-from api.grpc.message_bus_pb2_grpc import MessageBusServiceServicer
 
 
 @pytest.fixture

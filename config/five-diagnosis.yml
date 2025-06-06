@@ -1,0 +1,327 @@
+# 索克生活 - 五诊服务配置文件
+# 配置传统四诊和新增算诊的所有服务参数
+
+# 服务基础配置
+service:
+  name: "suoke-five-diagnosis"
+  version: "1.0.0"
+  description: "索克生活五诊合参系统"
+  environment: "development"
+  
+# 网关配置
+gateway:
+  host: "localhost"
+  port: 8000
+  timeout: 30
+  max_connections: 1000
+  rate_limit:
+    requests_per_minute: 100
+    burst_size: 20
+
+# 传统四诊服务配置
+traditional_diagnosis:
+  # 望诊服务
+  looking:
+    host: "localhost"
+    port: 8004
+    endpoints:
+      face_analysis: "/api/v1/face/analyze"
+      tongue_analysis: "/api/v1/tongue/analyze"
+      complexion_analysis: "/api/v1/complexion/analyze"
+    ai_models:
+      face_model: "face_analysis_v2.onnx"
+      tongue_model: "tongue_analysis_v2.onnx"
+    image_processing:
+      max_size: "10MB"
+      supported_formats: ["jpg", "jpeg", "png", "webp"]
+      quality_threshold: 0.8
+  
+  # 闻诊服务
+  listening:
+    host: "localhost"
+    port: 8005
+    endpoints:
+      voice_analysis: "/api/v1/voice/analyze"
+      breath_analysis: "/api/v1/breath/analyze"
+      cough_analysis: "/api/v1/cough/analyze"
+    ai_models:
+      voice_model: "voice_analysis_v2.onnx"
+      breath_model: "breath_analysis_v1.onnx"
+    audio_processing:
+      max_duration: 300  # 5分钟
+      sample_rate: 44100
+      supported_formats: ["wav", "mp3", "m4a"]
+      noise_reduction: true
+  
+  # 问诊服务
+  inquiry:
+    host: "localhost"
+    port: 8006
+    endpoints:
+      symptom_analysis: "/api/v1/symptoms/analyze"
+      medical_history: "/api/v1/history/analyze"
+      lifestyle_analysis: "/api/v1/lifestyle/analyze"
+    questionnaire:
+      max_questions: 50
+      adaptive_questioning: true
+      symptom_categories:
+        - "头部症状"
+        - "胸部症状"
+        - "腹部症状"
+        - "四肢症状"
+        - "精神症状"
+        - "睡眠症状"
+        - "饮食症状"
+        - "二便症状"
+  
+  # 切诊服务
+  palpation:
+    host: "localhost"
+    port: 8007
+    endpoints:
+      pulse_analysis: "/api/v1/pulse/analyze"
+      pressure_analysis: "/api/v1/pressure/analyze"
+      temperature_analysis: "/api/v1/temperature/analyze"
+    sensors:
+      pulse_sensor: "enabled"
+      pressure_sensor: "enabled"
+      temperature_sensor: "enabled"
+    analysis:
+      pulse_patterns: 28  # 28种脉象
+      measurement_duration: 60  # 60秒
+      sampling_rate: 1000  # 1000Hz
+
+# 新增算诊服务配置
+calculation_diagnosis:
+  # 算诊核心服务
+  calculation:
+    host: "localhost"
+    port: 8008
+    endpoints:
+      comprehensive: "/api/v1/calculation/comprehensive"
+      ziwu_analysis: "/api/v1/calculation/ziwu"
+      constitution_analysis: "/api/v1/calculation/constitution"
+      bagua_analysis: "/api/v1/calculation/bagua"
+      wuyun_analysis: "/api/v1/calculation/wuyun"
+    
+    # 子午流注分析
+    ziwu_liuzhu:
+      enabled: true
+      meridian_count: 12
+      time_periods: 24  # 24小时制
+      analysis_depth: "detailed"
+      recommendations: true
+    
+    # 八字体质分析
+    constitution:
+      enabled: true
+      elements: ["金", "木", "水", "火", "土"]
+      constitution_types: 9  # 九种体质
+      genetic_factors: true
+      environmental_factors: true
+    
+    # 八卦配属分析
+    bagua:
+      enabled: true
+      trigrams: 8  # 八卦
+      health_mapping: true
+      organ_correspondence: true
+      seasonal_analysis: true
+    
+    # 五运六气分析
+    wuyun_liuqi:
+      enabled: true
+      five_movements: ["木运", "火运", "土运", "金运", "水运"]
+      six_qi: ["厥阴风木", "少阴君火", "少阳相火", "太阴湿土", "阳明燥金", "太阳寒水"]
+      yearly_analysis: true
+      seasonal_analysis: true
+      climate_factors: true
+
+# 数据库配置
+database:
+  # 主数据库 (PostgreSQL)
+  primary:
+    host: "localhost"
+    port: 5432
+    database: "suoke_five_diagnosis"
+    username: "suoke_user"
+    password: "${DB_PASSWORD}"
+    pool_size: 20
+    max_overflow: 30
+    
+  # 缓存数据库 (Redis)
+  cache:
+    host: "localhost"
+    port: 6379
+    database: 0
+    password: "${REDIS_PASSWORD}"
+    ttl: 3600  # 1小时
+    
+  # 时序数据库 (InfluxDB)
+  timeseries:
+    host: "localhost"
+    port: 8086
+    database: "suoke_metrics"
+    username: "suoke_metrics"
+    password: "${INFLUX_PASSWORD}"
+
+# AI模型配置
+ai_models:
+  # 模型存储路径
+  model_path: "./models"
+  
+  # ONNX Runtime配置
+  onnx:
+    providers: ["CPUExecutionProvider"]
+    session_options:
+      enable_profiling: false
+      enable_mem_pattern: true
+      enable_cpu_mem_arena: true
+    
+  # 模型列表
+  models:
+    face_analysis:
+      path: "face_analysis_v2.onnx"
+      input_shape: [1, 3, 224, 224]
+      confidence_threshold: 0.8
+    
+    tongue_analysis:
+      path: "tongue_analysis_v2.onnx"
+      input_shape: [1, 3, 224, 224]
+      confidence_threshold: 0.75
+    
+    voice_analysis:
+      path: "voice_analysis_v2.onnx"
+      input_shape: [1, 1, 16000]
+      confidence_threshold: 0.7
+    
+    pulse_analysis:
+      path: "pulse_analysis_v1.onnx"
+      input_shape: [1, 1000]
+      confidence_threshold: 0.85
+
+# 安全配置
+security:
+  # JWT配置
+  jwt:
+    secret_key: "${JWT_SECRET_KEY}"
+    algorithm: "HS256"
+    access_token_expire_minutes: 30
+    refresh_token_expire_days: 7
+  
+  # API密钥配置
+  api_keys:
+    enabled: true
+    header_name: "X-API-Key"
+    rate_limit: 1000  # 每小时1000次请求
+  
+  # CORS配置
+  cors:
+    allow_origins: ["http://localhost:3000", "http://localhost:8081"]
+    allow_methods: ["GET", "POST", "PUT", "DELETE"]
+    allow_headers: ["*"]
+    allow_credentials: true
+
+# 监控配置
+monitoring:
+  # Prometheus指标
+  prometheus:
+    enabled: true
+    port: 9090
+    metrics_path: "/metrics"
+    
+  # 健康检查
+  health_check:
+    enabled: true
+    interval: 30  # 30秒
+    timeout: 10   # 10秒
+    endpoints:
+      - "/health"
+      - "/ready"
+      - "/live"
+  
+  # 日志配置
+  logging:
+    level: "INFO"
+    format: "json"
+    file: "./logs/five-diagnosis.log"
+    max_size: "100MB"
+    backup_count: 5
+    
+  # 性能监控
+  performance:
+    enabled: true
+    response_time_threshold: 5000  # 5秒
+    memory_threshold: "1GB"
+    cpu_threshold: 80  # 80%
+
+# 业务规则配置
+business_rules:
+  # 诊断流程
+  diagnosis_flow:
+    required_steps: ["looking", "listening", "inquiry", "palpation", "calculation"]
+    optional_steps: []
+    max_duration: 3600  # 1小时
+    auto_save_interval: 300  # 5分钟
+  
+  # 数据质量
+  data_quality:
+    min_image_quality: 0.8
+    min_audio_quality: 0.7
+    required_fields_completion: 0.9
+    
+  # 分析规则
+  analysis_rules:
+    confidence_threshold: 0.75
+    consensus_requirement: 0.8  # 80%一致性
+    expert_review_threshold: 0.6  # 低于60%需要专家审核
+
+# 集成配置
+integrations:
+  # 第三方服务
+  external_services:
+    weather_api:
+      enabled: true
+      provider: "openweathermap"
+      api_key: "${WEATHER_API_KEY}"
+    
+    location_api:
+      enabled: true
+      provider: "amap"
+      api_key: "${AMAP_API_KEY}"
+  
+  # 消息队列
+  message_queue:
+    provider: "rabbitmq"
+    host: "localhost"
+    port: 5672
+    username: "suoke_mq"
+    password: "${MQ_PASSWORD}"
+    
+  # 文件存储
+  file_storage:
+    provider: "local"  # 可选: "local", "s3", "oss"
+    local_path: "./storage"
+    max_file_size: "50MB"
+
+# 开发配置
+development:
+  debug: true
+  hot_reload: true
+  mock_services: false
+  test_data: true
+  
+# 生产配置
+production:
+  debug: false
+  hot_reload: false
+  mock_services: false
+  test_data: false
+  ssl_enabled: true
+  
+# 测试配置
+testing:
+  test_database: "suoke_five_diagnosis_test"
+  mock_ai_models: true
+  test_timeout: 30
+  coverage_threshold: 80 

@@ -1,10 +1,15 @@
 """
-健康检查 API 端点
+health - 索克生活项目模块
 """
 
 from fastapi import APIRouter, Request, Body
 from pydantic import BaseModel
 from xiaoke_service.services.health import FourDiagnosisAggregator
+
+"""
+健康检查 API 端点
+"""
+
 
 router = APIRouter()
 

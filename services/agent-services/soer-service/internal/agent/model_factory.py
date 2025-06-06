@@ -1,19 +1,30 @@
+"""
+model_factory - 索克生活项目模块
+"""
+
+    from openai.types.chat import (
+    import openai
+    import zhipuai
+from abc import ABC, abstractmethod
+from pkg.utils.config_loader import get_config
+from pkg.utils.metrics import get_metrics_collector, track_llm_metrics
+from pkg.utils.resilience import circuit_breaker, rate_limiter
+from tenacity import (
+from typing import Any
+import aiohttp
+import asyncio
+import httpx
+import logging
+import os
+import time
+
 #!/usr/bin/env python3
 """
 大模型工厂类
 负责创建和管理不同类型的大模型客户端，为索儿智能体提供支持
 """
 
-import asyncio
-import logging
-import os
-import time
-from abc import ABC, abstractmethod
-from typing import Any
 
-import aiohttp
-import httpx
-from tenacity import (
     retry,
     retry_if_exception_type,
     stop_after_attempt,
@@ -21,8 +32,6 @@ from tenacity import (
 )
 
 try:
-    import openai
-    from openai.types.chat import (
         ChatCompletionAssistantMessageParam,
         ChatCompletionMessageParam,
         ChatCompletionSystemMessageParam,
@@ -34,15 +43,11 @@ except ImportError:
     logging.warning("未安装openai库，无法使用OpenAI API")
 
 try:
-    import zhipuai
     HAS_ZHIPUAI = True
 except ImportError:
     HAS_ZHIPUAI = False
     logging.warning("未安装zhipuai库，无法使用智谱API")
 
-from pkg.utils.config_loader import get_config
-from pkg.utils.metrics import get_metrics_collector, track_llm_metrics
-from pkg.utils.resilience import circuit_breaker, rate_limiter
 
 logger = logging.getLogger(__name__)
 
@@ -148,6 +153,18 @@ class LLMModel(ModelInterface):
         if self.session:
             await self.session.close()
             self.session = None
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'llmmodel'
+        ordering = ['-created_at']
+
 
 class ChatLLMModel(ModelInterface):
     """聊天模型实现"""
@@ -249,6 +266,18 @@ class ChatLLMModel(ModelInterface):
         if self.session:
             await self.session.close()
             self.session = None
+    class Meta:
+        # 性能优化: 添加常用查询字段的索引
+        indexes = [
+            # 根据实际查询需求添加索引
+            # models.Index(fields=['created_at']),
+            # models.Index(fields=['user_id']),
+            # models.Index(fields=['status']),
+        ]
+        # 数据库表选项
+        db_table = 'mockmodel'
+        ordering = ['-created_at']
+
 
 class MockModel(ModelInterface):
     """模拟模型实现（测试和开发环境使用）"""
@@ -887,7 +916,8 @@ class ModelFactory:
 
         return response_text, metadata
 
-    async def _get_baidu_access_token(self, api_key, secret_key):
+    async     @cache(timeout=300)  # 5分钟缓存
+def _get_baidu_access_token(self, api_key, secret_key):
         """获取百度API访问令牌"""
         url = f"https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id={api_key}&client_secret={secret_key}"
 

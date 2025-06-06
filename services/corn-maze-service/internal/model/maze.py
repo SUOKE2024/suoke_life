@@ -1,12 +1,17 @@
+"""
+maze - 索克生活项目模块
+"""
+
+from dataclasses import dataclass, field
+from datetime import datetime
+from typing import Any, TypedDict
+
 #!/usr/bin/env python3
 
 """
 迷宫数据模型
 """
 
-from dataclasses import dataclass, field
-from datetime import datetime
-from typing import Any, TypedDict
 
 
 # 类型定义

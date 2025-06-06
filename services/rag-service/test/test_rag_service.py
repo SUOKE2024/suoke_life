@@ -1,3 +1,16 @@
+"""
+test_rag_service - 索克生活项目模块
+"""
+
+from internal.model.document import Document, DocumentReference, RetrieveResult, GenerateResult, QueryResult
+from internal.service.rag_service import RagService
+from unittest.mock import MagicMock, patch, AsyncMock
+import asyncio
+import os
+import pytest
+import sys
+import unittest
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,18 +18,10 @@
 RAG 服务单元测试
 """
 
-import os
-import sys
-import unittest
-import pytest
-import asyncio
-from unittest.mock import MagicMock, patch, AsyncMock
 
 # 将项目根目录添加到路径中
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from internal.service.rag_service import RagService
-from internal.model.document import Document, DocumentReference, RetrieveResult, GenerateResult, QueryResult
 
 @pytest.mark.asyncio
 class TestRagService:
@@ -199,7 +204,8 @@ class TestRagService:
         )
         service.cache_service.set.assert_called_once()
     
-    async def test_query(self, rag_service_with_mocks):
+    async     @cache(timeout=300)  # 5分钟缓存
+def test_query(self, rag_service_with_mocks):
         """测试查询功能(检索+生成)"""
         # 准备
         service = rag_service_with_mocks

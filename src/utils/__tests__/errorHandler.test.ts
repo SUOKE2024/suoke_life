@@ -1,137 +1,132 @@
 import { ErrorHandler, errorHandler, handleError, getErrorStats, clearErrorLog } from "../errorHandler";
+import { ErrorHandler, errorHandler, handleError, getErrorStats, clearErrorLog } from "../errorHandler";
+
 describe("errorHandler", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  describe(ErrorHandler", () => {"
+  describe("ErrorHandler", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = ErrorHandler(/* valid params   */);
+const result = ErrorHandler(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = ErrorHandler(/* edge case params   */);
+const result = ErrorHandler(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        ErrorHandler(/* invalid params     */)
-      }).not.toThrow()
+        ErrorHandler(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = ErrorHandler(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = ErrorHandler(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(errorHandler", () => {"
+  describe("errorHandler", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = errorHandler(/* valid params   */);
+const result = errorHandler(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = errorHandler(/* edge case params   */);
+const result = errorHandler(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        errorHandler(/* invalid params     */)
-      }).not.toThrow()
+        errorHandler(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = errorHandler(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = errorHandler(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(handleError", () => {"
+  describe("handleError", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = handleError(/* valid params   */);
+const result = handleError(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = handleError(/* edge case params   */);
+const result = handleError(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        handleError(/* invalid params     */)
-      }).not.toThrow()
+        handleError(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = handleError(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = handleError(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(getErrorStats", () => {"
+  describe("getErrorStats", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = getErrorStats(/* valid params   */);
+const result = getErrorStats(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = getErrorStats(/* edge case params   */);
+const result = getErrorStats(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        getErrorStats(/* invalid params     */)
-      }).not.toThrow()
+        getErrorStats(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = getErrorStats(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = getErrorStats(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
-  describe(clearErrorLog", () => {"
+  describe("clearErrorLog", () => {
     it("should work with valid inputs", () => {
       // Add test cases
-const result = clearErrorLog(/* valid params   */);
+const result = clearErrorLog(// valid params);
       expect(result).toBeDefined();
     });
     it("should handle edge cases", () => {
       // Add test cases
-const result = clearErrorLog(/* edge case params   */);
+const result = clearErrorLog(// edge case params);
       expect(result).toBeDefined();
     });
     it("should handle invalid inputs gracefully", () => {
       // Add test cases
 expect(() => {
-        clearErrorLog(/* invalid params     */)
-      }).not.toThrow()
+        clearErrorLog(// invalid params);
+      }).not.toThrow();
     });
-    it("should return output format,  => {", () => {
-      // Add test cases
-const result = clearErrorLog(/* test params   */);
+    it("should return output format,  => {", () => {// Add test cases;
+const result = clearErrorLog(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
   });
 });
-import { performance } from "perf_hooks";
-import { ErrorHandler, errorHandler, handleError, getErrorStats, clearErrorLog } from "../errorHandler";
 describe("errorHandler Performance Tests", () => {
   it("should execute within performance thresholds", () => {
     const iterations = 10;
     const startTime = performance.now();
     for (let i = 0; i < iterations; i++) {
       // Execute performance-critical functions
-ErrorHandler(/* test params      */)
-      errorHandler(/* test params      */);
-      handleError(/* test params      */);
-      getErrorStats(/* test params      */);
-      clearErrorLog(/* test params      */);
+ErrorHandler(// test params);
+      errorHandler(// test params);
+      handleError(// test params);
+      getErrorStats(// test params);
+      clearErrorLog(// test params);
     });
     const endTime = performance.now();
     const averageTime = (endTime - startTime) / iterations;
@@ -142,7 +137,7 @@ expect(averageTime).toBeLessThan(1);
     const largeDataset = new Array(10000).fill(0).map((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
-ErrorHandler(largeDataset)
+ErrorHandler(largeDataset);
     const endTime = performance.now();
     // Should handle large datasets within 100ms
 expect(endTime - startTime).toBeLessThan(100);
@@ -151,7 +146,7 @@ expect(endTime - startTime).toBeLessThan(100);
     const initialMemory = process.memoryUsage().heapUsed;
     // Execute function multiple times
 for (let i = 0; i < 1000; i++) {
-      ErrorHandler(/* test params      */);
+      ErrorHandler(// test params);
     });
     // Force garbage collection if available
 if (global.gc) {

@@ -1,8 +1,8 @@
+import { performance } from "perf_hooks";
+
 import React from "react";
-import { renderHook, act } from "@testing-library/react-hooks/import { Provider } from ";";react-redux";
-import { configureStore } from @reduxjs/toolkit"/import ChatChannelItem from "../ChatChannelItem";/";
-// Mock store for testing * const mockStore = configureStore({ reducer: { */
-    // Add your reducers here *     } */
+// Mock store for testing * const mockStore = configureStore({ reducer: { */;
+    // Add your reducers here *     } */;
 ;};);
 const wrapper = ({ children }: { children: React.ReactNo;d;e  ; }) => (;
   <Provider store={mockStore} />{children}</Provider>/)
@@ -38,8 +38,6 @@ describe("ChatChannelItem", () => {
     // Add error handling assertions *     expect(result.current).toBeDefined() */
   });
 });
-import { performance } from "perf_hooks";
-import { ChatChannelItem } from ../ChatChannelItem";/"
 describe("ChatChannelItem Performance Tests, () => {", () => {
   it("should execute within performance thresholds", () => {
     const iterations = 10;
@@ -60,7 +58,7 @@ describe("ChatChannelItem Performance Tests, () => {", () => {
   it('should not cause memory leaks', () => { {
     const initialMemory = process.memoryUsage().heapUsed;
     // Execute function multiple times *     for (let i = 0 i < 1000; i++) { */
-      ChatChannelItem(/* test params      */);/    });
+      ChatChannelItem(// test params);/    });
     // Force garbage collection if available *     if (global.gc) { */
       global.gc();
     });

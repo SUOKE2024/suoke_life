@@ -1,3 +1,12 @@
+"""
+comprehensive_analysis - 索克生活项目模块
+"""
+
+import grpc
+import logging
+import time
+import uuid
+
 #!/usr/bin/env python
 
 """
@@ -5,11 +14,7 @@
 实现综合切诊分析功能
 """
 
-import logging
-import time
-import uuid
 
-import grpc
 
 # 导入生成的gRPC代码
 

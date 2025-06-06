@@ -1,12 +1,10 @@
-/**////
- * 增强国际化服务
+/**
+ * * 增强国际化服务
  * 提供多语言支持和本地化功能
-export type SupportedLanguage = "zh-CN | "zh-TW" | en-US" | "ja-JP | "ko-KR;";"
-export interface TranslationResource {;
-  [key: string]: string | TranslationResource;
+export type SupportedLanguage = "zh-CN | "zh-TW" | en-US" | "ja-JP | "ko-KR;;
+export interface TranslationResource {[key: string]: string | TranslationResource;
 }
-export interface LanguageConfig {;
-  code: SupportedLanguage;
+export interface LanguageConfig {code: SupportedLanguage;
   name: string;
   nativeName: string;
   direction: ltr" | "rtl;
@@ -14,31 +12,29 @@ export interface LanguageConfig {;
   numberFormat: string;
   currency: string;
 }
-export interface TranslationContext {;
-  count?: number;
+export interface TranslationContext {count?: number;
   gender?: "male" | female" | "other;
   formal?: boolean;
   context?: string;
 }
-export class EnhancedI18nService {;
-  private currentLanguage: SupportedLanguage = "zh-CN";
+export class EnhancedI18nService {private currentLanguage: SupportedLanguage = "zh-CN";
   private translations: Map<SupportedLanguage, TranslationResource> = new Map();
-  private fallbackLanguage: SupportedLanguage = zh-CN";"
+  private fallbackLanguage: SupportedLanguage = zh-CN
   private languageConfigs: Map<SupportedLanguage, LanguageConfig> = new Map();
   private loadedLanguages: Set<SupportedLanguage> = new Set();
   constructor() {
     this.initializeLanguageConfigs();
     this.loadDefaultTranslations();
   }
-  /**////
-   * 初始化语言配置
+  /**
+ * * 初始化语言配置
   private initializeLanguageConfigs(): void {
     const configs: LanguageConfig[] = [;
       {
-        code: "zh-CN,"
+        code: "zh-CN,",
         name: "Chinese (Simplified)",
         nativeName: 简体中文","
-        direction: "ltr,"
+        direction: "ltr,",
         dateFormat: "YYYY年MM月DD日",
         numberFormat: ###,###.##","
         currency: "CNY"
@@ -46,26 +42,26 @@ export class EnhancedI18nService {;
       {
         code: "zh-TW",
         name: Chinese (Traditional)","
-        nativeName: "繁體中文,"
+        nativeName: "繁體中文,",
         direction: "ltr",
         dateFormat: YYYY年MM月DD日","
-        numberFormat: "###,###.##,"
+        numberFormat: "###,###.##,",
         currency: "TWD"
       },
       {
         code: en-US","
-        name: "English (US),"
+        name: "English (US),",
         nativeName: "English",
         direction: ltr","
-        dateFormat: "MM/DD/////    YYYY,"
+        dateFormat: "MM/DD/////    YYYY,",
         numberFormat: "###,###.##",
         currency: USD""
       },
       {
-        code: "ja-JP,"
+        code: "ja-JP,",
         name: "Japanese",
         nativeName: 日本語","
-        direction: "ltr,"
+        direction: "ltr,",
         dateFormat: "YYYY年MM月DD日",
         numberFormat: ###,###.##","
         currency: "JPY"
@@ -73,10 +69,10 @@ export class EnhancedI18nService {;
       {
         code: "ko-KR",
         name: Korean","
-        nativeName: "한국어,"
+        nativeName: "한국어,",
         direction: "ltr",
         dateFormat: YYYY년 MM월 DD일","
-        numberFormat: "###,###.##,"
+        numberFormat: "###,###.##,",
         currency: "KRW"
       }
     ];
@@ -84,94 +80,92 @@ export class EnhancedI18nService {;
       this.languageConfigs.set(config.code, config);
     });
   }
-  /**////
-   * 加载默认翻译
+  /**
+ * * 加载默认翻译
   private loadDefaultTranslations(): void {
-    //////     简体中文翻译
-const zhCNTranslations: TranslationResource = {;
-      common: {
+    // 简体中文翻译
+const zhCNTranslations: TranslationResource = {common: {
         ok: 确定","
-        cancel: "取消,"
+        cancel: "取消,",
         save: "保存",
         delete: 删除","
-        edit: "编辑,"
+        edit: "编辑,",
         loading: "加载中...",
         error: 错误","
-        success: "成功,"
+        success: "成功,",
         warning: "警告",
         info: 信息""
       },
       health: {
-        dashboard: "健康仪表板,"
+        dashboard: "健康仪表板,",
         data: "健康数据",
         analysis: 健康分析","
-        report: "健康报告,"
+        report: "健康报告,",
         symptoms: "症状",
         diagnosis: 诊断","
-        treatment: "治疗,"
+        treatment: "治疗,",
         prevention: "预防"
       },
       agents: {
         xiaoai: 小艾","
-        xiaoke: "小克,"
+        xiaoke: "小克,",
         laoke: "老克",
         soer: 索儿","
-        chat: "对话,"
+        chat: "对话,",
         status: "状态",
         online: 在线","
-        offline: "离线,"
+        offline: "离线,",
         busy: "忙碌"
       },
       navigation: {
         home: 首页","
-        health: "健康,"
+        health: "健康,",
         diagnosis: "诊断",
         profile: 个人","
-        settings: "设置,"
+        settings: "设置,",
         about: "关于"
       }
     };
-    //////     英文翻译
-const enUSTranslations: TranslationResource = {;
-      common: {
+    // 英文翻译
+const enUSTranslations: TranslationResource = {common: {
         ok: OK","
-        cancel: "Cancel,"
+        cancel: "Cancel,",
         save: "Save",
         delete: Delete","
-        edit: "Edit,"
+        edit: "Edit,",
         loading: "Loading...",
         error: Error","
-        success: "Success,"
+        success: "Success,",
         warning: "Warning",
         info: Information""
       },
       health: {
-        dashboard: "Health Dashboard,"
+        dashboard: "Health Dashboard,",
         data: "Health Data",
         analysis: Health Analysis","
-        report: "Health Report,"
+        report: "Health Report,",
         symptoms: "Symptoms",
         diagnosis: Diagnosis","
-        treatment: "Treatment,"
+        treatment: "Treatment,",
         prevention: "Prevention"
       },
       agents: {
         xiaoai: Xiao Ai","
-        xiaoke: "Xiao Ke,"
+        xiaoke: "Xiao Ke,",
         laoke: "Lao Ke",
         soer: Soer","
-        chat: "Chat,"
+        chat: "Chat,",
         status: "Status",
         online: Online","
-        offline: "Offline,"
+        offline: "Offline,",
         busy: "Busy"
       },
       navigation: {
         home: Home","
-        health: "Health,"
+        health: "Health,",
         diagnosis: "Diagnosis",
         profile: Profile","
-        settings: "Settings,"
+        settings: "Settings,",
         about: "About"
       }
     };
@@ -180,14 +174,14 @@ const enUSTranslations: TranslationResource = {;
     this.loadedLanguages.add("zh-CN");
     this.loadedLanguages.add(en-US");"
   }
-  /**////
-   * 设置当前语言
+  /**
+ * * 设置当前语言
   public async setLanguage(language: SupportedLanguage): Promise<boolean> {
     try {
       if (!this.languageConfigs.has(language)) {
         throw new Error(`不支持的语言: ${language}`);
       }
-      //////     如果语言未加载，先加载
+      // 如果语言未加载，先加载
 if (!this.loadedLanguages.has(language)) {
         await this.loadLanguage(language);
       }
@@ -197,18 +191,18 @@ if (!this.loadedLanguages.has(language)) {
       return false;
     }
   }
-  /**////
-   * 获取当前语言
+  /**
+ * * 获取当前语言
   public getCurrentLanguage(): SupportedLanguage {
     return this.currentLanguage;
   }
-  /**////
-   * 获取支持的语言列表
+  /**
+ * * 获取支持的语言列表
   public getSupportedLanguages(): LanguageConfig[] {
     return Array.from(this.languageConfigs.values());
   }
-  /**////
-   * 翻译文本
+  /**
+ * * 翻译文本
   public translate(
     key: string,
     context?: TranslationContext,
@@ -219,13 +213,13 @@ if (!this.loadedLanguages.has(language)) {
                          this.getTranslation(key, this.fallbackLanguage) ||;
                          key;
       let result = translation;
-      //////     处理插值
+      // 处理插值
 if (interpolations) {
         Object.entries(interpolations).forEach(([placeholder, value]) => {}
           result = result.replace(new RegExp(`{{${placeholder}}}`, "g"), String(value));
         });
       }
-      //////     处理复数形式
+      // 处理复数形式
 if (context?.count !== undefined) {
         result = this.handlePluralization(result, context.count);
       }
@@ -234,8 +228,8 @@ if (context?.count !== undefined) {
       return key;
     }
   }
-  /**////
-   * 获取翻译文本
+  /**
+ * * 获取翻译文本
   private getTranslation(key: string, language: SupportedLanguage): string | null {
     const translations = this.translations.get(language);
     if (!translations) {
@@ -252,10 +246,10 @@ if (context?.count !== undefined) {
     }
     return typeof current === string" ? current : null;"
   }
-  /**////
-   * 处理复数形式
+  /**
+ * * 处理复数形式
   private handlePluralization(text: string, count: number): string {
-    //////     简单的复数处理逻辑
+    // 简单的复数处理逻辑
 if (this.currentLanguage === "en-US) {"
       if (count === 1) {
         return text.replace(/\{plural\|(.*?)\|(.*?)\}/////    g, "$1");
@@ -263,57 +257,56 @@ if (this.currentLanguage === "en-US) {"
         return text.replace(/\{plural\|(.*?)\|(.*?)\}/////    g, $2");"
       }
     }
-    //////     中文通常不需要复数形式
+    // 中文通常不需要复数形式
 return text.replace(/\{plural\|(.*?)\|(.*?)\}/////    g, "$1);"
   }
-  /**////
-   * 加载语言包
+  /**
+ * * 加载语言包
   private async loadLanguage(language: SupportedLanguage): Promise<void> {
     try {
-      //////     模拟异步加载语言包
+      // 模拟异步加载语言包
 await new Promise(resolve => setTimeout(resolve, 500));
       if (language === "zh-TW") {
-        //////     繁体中文翻译
-const zhTWTranslations: TranslationResource = {;
-          common: {
+        // 繁体中文翻译
+const zhTWTranslations: TranslationResource = {common: {
             ok: 確定","
-            cancel: "取消,"
+            cancel: "取消,",
             save: "保存",
             delete: 刪除","
-            edit: "編輯,"
+            edit: "編輯,",
             loading: "載入中...",
             error: 錯誤","
-            success: "成功,"
+            success: "成功,",
             warning: "警告",
             info: 資訊""
           },
           health: {
-            dashboard: "健康儀表板,"
+            dashboard: "健康儀表板,",
             data: "健康數據",
             analysis: 健康分析","
-            report: "健康報告,"
+            report: "健康報告,",
             symptoms: "症狀",
             diagnosis: 診斷","
-            treatment: "治療,"
+            treatment: "治療,",
             prevention: "預防"
           },
           agents: {
             xiaoai: 小艾","
-            xiaoke: "小克,"
+            xiaoke: "小克,",
             laoke: "老克",
             soer: 索兒","
-            chat: "對話,"
+            chat: "對話,",
             status: "狀態",
             online: 在線","
-            offline: "離線,"
+            offline: "離線,",
             busy: "忙碌"
           },
           navigation: {
             home: 首頁","
-            health: "健康,"
+            health: "健康,",
             diagnosis: "診斷",
             profile: 個人","
-            settings: "設置,"
+            settings: "設置,",
             about: "關於"
           }
         };
@@ -324,13 +317,13 @@ const zhTWTranslations: TranslationResource = {;
       throw error;
     }
   }
-  /**////
-   * 格式化日期
+  /**
+ * * 格式化日期
   public formatDate(date: Date, format?: string): string {
     const config = this.languageConfigs.get(this.currentLanguage);
-    const dateFormat = format || config?.dateFormat || YYYY-MM-DD";"
+    const dateFormat = format || config?.dateFormat || YYYY-MM-DD
     try {
-      //////     简单的日期格式化
+      // 简单的日期格式化
 const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, "0);"
       const day = String(date.getDate()).padStart(2, "0");
@@ -342,8 +335,8 @@ const year = date.getFullYear();
       return date.toLocaleDateString();
     }
   }
-  /**////
-   * 格式化数字
+  /**
+ * * 格式化数字
   public formatNumber(number: number, options?: {
     minimumFractionDigits?: number;
     maximumFractionDigits?: number;
@@ -352,50 +345,44 @@ const year = date.getFullYear();
     try {
       const config = this.languageConfigs.get(this.currentLanguage);
       if (options?.currency && config?.currency) {
-        return new Intl.NumberFormat(this.currentLanguage, {
-          style: "currency,"
-          currency: config.currency,
-          minimumFractionDigits: options.minimumFractionDigits,
-          maximumFractionDigits: options.maximumFractionDigits;
+        return new Intl.NumberFormat(this.currentLanguage, {style: "currency,",currency: config.currency,minimumFractionDigits: options.minimumFractionDigits,maximumFractionDigits: options.maximumFractionDigits;
         }).format(number);
       }
-      return new Intl.NumberFormat(this.currentLanguage, {
-        minimumFractionDigits: options?.minimumFractionDigits,
-        maximumFractionDigits: options?.maximumFractionDigits;
+      return new Intl.NumberFormat(this.currentLanguage, {minimumFractionDigits: options?.minimumFractionDigits,maximumFractionDigits: options?.maximumFractionDigits;
       }).format(number);
     } catch (error) {
       return String(number);
     }
   }
-  /**////
-   * 获取语言配置
+  /**
+ * * 获取语言配置
   public getLanguageConfig(language?: SupportedLanguage): LanguageConfig | undefined {
     return this.languageConfigs.get(language || this.currentLanguage);
   }
-  /**////
-   * 检测系统语言
+  /**
+ * * 检测系统语言
   public detectSystemLanguage(): SupportedLanguage {
     try {
-      const systemLanguage = navigator.language || zh-CN";"
-      //////     映射系统语言到支持的语言
+      const systemLanguage = navigator.language || zh-CN
+      // 映射系统语言到支持的语言
 if (systemLanguage.startsWith("zh-CN) || systemLanguage.startsWith("zh-Hans")) {"
-        return zh-CN";"
+        return zh-CN
       } else if (systemLanguage.startsWith("zh-TW) || systemLanguage.startsWith("zh-Hant")) {"
-        return zh-TW";"
+        return zh-TW
       } else if (systemLanguage.startsWith("en)) {"
         return "en-US";
       } else if (systemLanguage.startsWith(ja")) {"
         return "ja-JP;"
       } else if (systemLanguage.startsWith("ko")) {
-        return ko-KR";"
+        return ko-KR
       }
       return this.fallbackLanguage;
     } catch (error) {
       return this.fallbackLanguage;
     }
   }
-  /**////
-   * 添加翻译
+  /**
+ * * 添加翻译
   public addTranslations(
     language: SupportedLanguage,
     translations: TranslationResource;
@@ -408,8 +395,8 @@ if (systemLanguage.startsWith("zh-CN) || systemLanguage.startsWith("zh-Hans")) {
       } catch (error) {
       }
   }
-  /**////
-   * 合并翻译资源
+  /**
+ * * 合并翻译资源
   private mergeTranslations(
     existing: TranslationResource,
     newTranslations: TranslationResource;
@@ -427,8 +414,8 @@ if (systemLanguage.startsWith("zh-CN) || systemLanguage.startsWith("zh-Hans")) {
     });
     return result;
   }
-  /**////
-   * 获取翻译统计
+  /**
+ * * 获取翻译统计
   public getTranslationStats(): Record<SupportedLanguage, {
     loaded: boolean;
     keyCount: number;
@@ -443,8 +430,8 @@ if (systemLanguage.startsWith("zh-CN) || systemLanguage.startsWith("zh-Hans")) {
     });
     return stats;
   }
-  /**////
-   * 计算翻译键数量
+  /**
+ * * 计算翻译键数量
   private countTranslationKeys(translations: TranslationResource): number {
     let count = 0;
     Object.values(translations).forEach(value => {}
@@ -457,6 +444,6 @@ if (systemLanguage.startsWith("zh-CN) || systemLanguage.startsWith("zh-Hans")) {
     return count;
   }
 }
-//////     导出单例实例
+// 导出单例实例
 export const enhancedI18nService = new EnhancedI18nService();
   */////

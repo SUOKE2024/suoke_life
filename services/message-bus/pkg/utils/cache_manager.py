@@ -1,3 +1,18 @@
+"""
+cache_manager - 索克生活项目模块
+"""
+
+            import redis
+from collections import OrderedDict, defaultdict
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Set, Callable, Union, Tuple
+import asyncio
+import json
+import logging
+import threading
+import time
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -6,15 +21,6 @@
 支持多级缓存、LRU策略、TTL过期和性能优化
 """
 
-import asyncio
-import json
-import logging
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Callable, Union, Tuple
-from collections import OrderedDict, defaultdict
-import threading
 
 logger = logging.getLogger(__name__)
 
@@ -372,7 +378,6 @@ class RedisCache:
     def _init_redis(self):
         """初始化Redis客户端"""
         try:
-            import redis
             self.redis_client = redis.Redis(
                 host=self.host,
                 port=self.port,

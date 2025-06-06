@@ -1,14 +1,19 @@
 """
+test_performance - 索克生活项目模块
+"""
+
+from datetime import datetime, timedelta
+from human_review_service.core.performance import (
+from unittest.mock import Mock, patch, AsyncMock
+import asyncio
+import pytest
+import time
+
+"""
 性能模块测试
 """
 
-import pytest
-import asyncio
-import time
-from unittest.mock import Mock, patch, AsyncMock
-from datetime import datetime, timedelta
 
-from human_review_service.core.performance import (
     CacheManager,
     QueryOptimizer,
     PerformanceMonitor,

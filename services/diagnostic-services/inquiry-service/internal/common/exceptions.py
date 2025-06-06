@@ -1,10 +1,15 @@
+"""
+exceptions - 索克生活项目模块
+"""
+
+from typing import Any
+
 #!/usr/bin/env python
 
 """
 统一异常处理模块
 """
 
-from typing import Any
 
 
 class InquiryServiceError(Exception):

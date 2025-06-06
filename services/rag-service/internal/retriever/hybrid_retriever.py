@@ -1,3 +1,15 @@
+"""
+hybrid_retriever - 索克生活项目模块
+"""
+
+from ..model.document import Document, RetrieveResult
+from ..repository.milvus_repository import MilvusRepository
+from .base import BaseRetriever
+from loguru import logger
+from rank_bm25 import BM25Okapi
+from typing import Any, Dict, List, Optional, Tuple
+import re
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -5,14 +17,7 @@
 混合检索器模块，实现向量检索与关键词检索的融合
 """
 
-import re
-from typing import Any, Dict, List, Optional, Tuple
-from rank_bm25 import BM25Okapi
-from loguru import logger
 
-from .base import BaseRetriever
-from ..model.document import Document, RetrieveResult
-from ..repository.milvus_repository import MilvusRepository
 
 class HybridRetriever(BaseRetriever):
     """

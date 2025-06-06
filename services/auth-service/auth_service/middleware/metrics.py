@@ -1,12 +1,17 @@
-"""指标中间件"""
+"""
+metrics - 索克生活项目模块
+"""
 
-import time
-from typing import Callable
-
-import structlog
 from fastapi import Request, Response
 from prometheus_client import Counter, Histogram, generate_latest
 from starlette.middleware.base import BaseHTTPMiddleware
+from typing import Callable
+import structlog
+import time
+
+"""指标中间件"""
+
+
 
 logger = structlog.get_logger(__name__)
 
