@@ -1,0 +1,336 @@
+# 索克生活平台安全策略配置
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: security-policy
+  namespace: suoke-life-prod
+  labels:
+    app: suoke-life
+    component: security
+data:
+  # 密码策略
+  password-policy.json: |
+    {
+      "minLength": 8,
+      "maxLength": 128,
+      "requireUppercase": true,
+      "requireLowercase": true,
+      "requireNumbers": true,
+      "requireSpecialChars": true,
+      "forbiddenPatterns": [
+        "password",
+        "123456",
+        "qwerty",
+        "admin"
+      ],
+      "maxAttempts": 5,
+      "lockoutDuration": 900,
+      "passwordHistory": 5,
+      "expirationDays": 90
+    }
+
+  # JWT配置
+  jwt-config.json: |
+    {
+      "algorithm": "RS256",
+      "accessTokenExpiry": "15m",
+      "refreshTokenExpiry": "7d",
+      "issuer": "suoke-life",
+      "audience": "suoke-life-users",
+      "clockTolerance": 30,
+      "maxRefreshCount": 10
+    }
+
+  # API限流配置
+  rate-limit-config.json: |
+    {
+      "global": {
+        "requests": 1000,
+        "window": "1m"
+      },
+      "perUser": {
+        "requests": 100,
+        "window": "1m"
+      },
+      "perIP": {
+        "requests": 200,
+        "window": "1m"
+      },
+      "endpoints": {
+        "/api/v1/auth/login": {
+          "requests": 5,
+          "window": "5m"
+        },
+        "/api/v1/auth/register": {
+          "requests": 3,
+          "window": "10m"
+        },
+        "/api/v1/health/upload": {
+          "requests": 10,
+          "window": "1m"
+        }
+      }
+    }
+
+  # CORS配置
+  cors-config.json: |
+    {
+      "allowedOrigins": [
+        "https://app.suoke.life",
+        "https://admin.suoke.life",
+        "https://api.suoke.life"
+      ],
+      "allowedMethods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "OPTIONS"
+      ],
+      "allowedHeaders": [
+        "Content-Type",
+        "Authorization",
+        "X-Requested-With",
+        "X-API-Key",
+        "X-User-Agent"
+      ],
+      "exposedHeaders": [
+        "X-Total-Count",
+        "X-Rate-Limit-Remaining"
+      ],
+      "allowCredentials": true,
+      "maxAge": 86400
+    }
+
+  # 数据加密配置
+  encryption-config.json: |
+    {
+      "algorithm": "AES-256-GCM",
+      "keyRotationDays": 30,
+      "encryptedFields": [
+        "user.phone",
+        "user.email",
+        "user.idCard",
+        "health.medicalRecord",
+        "health.diagnosis",
+        "payment.cardNumber"
+      ],
+      "hashFields": [
+        "user.password",
+        "user.pin"
+      ],
+      "saltRounds": 12
+    }
+
+  # 审计日志配置
+  audit-config.json: |
+    {
+      "enabled": true,
+      "logLevel": "INFO",
+      "events": [
+        "user.login",
+        "user.logout",
+        "user.register",
+        "user.passwordChange",
+        "admin.access",
+        "data.export",
+        "data.delete",
+        "payment.transaction",
+        "health.dataAccess"
+      ],
+      "retention": {
+        "days": 365,
+        "archiveAfterDays": 90
+      },
+      "destinations": [
+        "elasticsearch",
+        "s3"
+      ]
+    }
+
+  # 数据脱敏配置
+  data-masking.json: |
+    {
+      "rules": [
+        {
+          "field": "user.phone",
+          "pattern": "***-****-{last4}",
+          "contexts": ["api", "logs"]
+        },
+        {
+          "field": "user.email",
+          "pattern": "{first3}***@{domain}",
+          "contexts": ["api", "logs"]
+        },
+        {
+          "field": "user.idCard",
+          "pattern": "***********{last4}",
+          "contexts": ["api", "logs", "export"]
+        },
+        {
+          "field": "payment.cardNumber",
+          "pattern": "****-****-****-{last4}",
+          "contexts": ["api", "logs", "export"]
+        }
+      ]
+    }
+
+---
+# 网络安全策略
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: suoke-life-network-policy
+  namespace: suoke-life-prod
+spec:
+  podSelector:
+    matchLabels:
+      app: suoke-life
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # 允许来自API网关的流量
+  - from:
+    - podSelector:
+        matchLabels:
+          component: api-gateway
+    ports:
+    - protocol: TCP
+      port: 8080
+  # 允许来自监控系统的流量
+  - from:
+    - podSelector:
+        matchLabels:
+          component: monitoring
+    ports:
+    - protocol: TCP
+      port: 9090
+  egress:
+  # 允许访问数据库
+  - to:
+    - podSelector:
+        matchLabels:
+          component: database
+    ports:
+    - protocol: TCP
+      port: 5432
+  # 允许访问Redis
+  - to:
+    - podSelector:
+        matchLabels:
+          component: redis
+    ports:
+    - protocol: TCP
+      port: 6379
+  # 允许DNS查询
+  - to: []
+    ports:
+    - protocol: UDP
+      port: 53
+
+---
+# Pod安全策略
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: suoke-life-psp
+  namespace: suoke-life-prod
+spec:
+  privileged: false
+  allowPrivilegeEscalation: false
+  requiredDropCapabilities:
+    - ALL
+  volumes:
+    - 'configMap'
+    - 'emptyDir'
+    - 'projected'
+    - 'secret'
+    - 'downwardAPI'
+    - 'persistentVolumeClaim'
+  runAsUser:
+    rule: 'MustRunAsNonRoot'
+  seLinux:
+    rule: 'RunAsAny'
+  fsGroup:
+    rule: 'RunAsAny'
+  readOnlyRootFilesystem: true
+  seccompProfile:
+    type: RuntimeDefault
+
+---
+# 服务账户
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: suoke-life-sa
+  namespace: suoke-life-prod
+  labels:
+    app: suoke-life
+automountServiceAccountToken: false
+
+---
+# RBAC角色
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: suoke-life-role
+  namespace: suoke-life-prod
+rules:
+- apiGroups: [""]
+  resources: ["configmaps", "secrets"]
+  verbs: ["get", "list"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "watch"]
+
+---
+# RBAC角色绑定
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: suoke-life-rolebinding
+  namespace: suoke-life-prod
+subjects:
+- kind: ServiceAccount
+  name: suoke-life-sa
+  namespace: suoke-life-prod
+roleRef:
+  kind: Role
+  name: suoke-life-role
+  apiGroup: rbac.authorization.k8s.io
+
+---
+# 密钥管理
+apiVersion: v1
+kind: Secret
+metadata:
+  name: suoke-life-secrets
+  namespace: suoke-life-prod
+  labels:
+    app: suoke-life
+    component: security
+type: Opaque
+data:
+  # 这些值应该通过安全的方式注入，而不是硬编码
+  jwt-private-key: ""  # Base64编码的RSA私钥
+  jwt-public-key: ""   # Base64编码的RSA公钥
+  database-password: ""  # Base64编码的数据库密码
+  redis-password: ""     # Base64编码的Redis密码
+  encryption-key: ""     # Base64编码的加密密钥
+  api-key: ""           # Base64编码的API密钥
+
+---
+# 证书管理
+apiVersion: v1
+kind: Secret
+metadata:
+  name: suoke-life-tls
+  namespace: suoke-life-prod
+  labels:
+    app: suoke-life
+    component: tls
+type: kubernetes.io/tls
+data:
+  tls.crt: ""  # Base64编码的TLS证书
+  tls.key: ""  # Base64编码的TLS私钥 

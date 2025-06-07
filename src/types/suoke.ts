@@ -1,20 +1,20 @@
 // 服务分类类型
-export type ServiceCategory  = | "diagnosis"
-  | "product"
-  | "service"
-  | "subscription"
-  | "appointment"
-  | "market"
-  | "custom"
-  | "supplier"
-  | "eco";
+export type ServiceCategory  = | 'diagnosis'
+  | 'product'
+  | 'service'
+  | 'subscription'
+  | 'appointment'
+  | 'market'
+  | 'custom'
+  | 'supplier'
+  | 'eco';
 // 诊断类型
-export type DiagnosisType = "look" | "listen" | "inquiry" | "palpation";
+export type DiagnosisType = 'look' | 'listen' | 'inquiry' | 'palpation';
 // 服务状态
-export type ServiceStatus  = | "available"
-  | "unavailable"
-  | "coming_soon"
-  | "maintenance";
+export type ServiceStatus  = | 'available'
+  | 'unavailable'
+  | 'coming_soon'
+  | 'maintenance';
 // 服务项接口
 export interface ServiceItem {
   id: string;
@@ -35,7 +35,7 @@ export interface ServiceItem {
 }
 // 分类配置接口
 export interface CategoryConfig {
-  key: ServiceCategory | "all";
+  key: ServiceCategory | 'all';
   label: string;
   icon: string;
   color?: string;
@@ -47,7 +47,7 @@ export interface ServiceBooking {
   serviceId: string;
   userId: string;
   appointmentTime: string;
-  status: "pending" | "confirmed" | "completed" | "cancelled";
+  status: 'pending' | 'confirmed' | 'completed' | 'cancelled';
   notes?: string;
   price: number;
 }

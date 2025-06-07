@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: suoke-life-prod
+  labels:
+    name: suoke-life-prod
+    environment: production
+    app: suoke-life
+  annotations:
+    description: "索克生活生产环境命名空间"
+    contact: "devops@suoke.life"
+    version: "v1.0.0"
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: suoke-life-quota
+  namespace: suoke-life-prod
+spec:
+  hard:
+    requests.cpu: "20"
+    requests.memory: 40Gi
+    limits.cpu: "40"
+    limits.memory: 80Gi
+    persistentvolumeclaims: "10"
+    services: "20"
+    secrets: "20"
+    configmaps: "20"
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: suoke-life-limits
+  namespace: suoke-life-prod
+spec:
+  limits:
+  - default:
+      cpu: "1"
+      memory: "2Gi"
+    defaultRequest:
+      cpu: "100m"
+      memory: "128Mi"
+    type: Container
+  - default:
+      storage: "10Gi"
+    type: PersistentVolumeClaim 

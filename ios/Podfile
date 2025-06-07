@@ -9,25 +9,22 @@ ENV['COCOAPODS_DISABLE_GITHUB_PROXY'] = 'true'
 
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 
-platform :ios, '15.1'
+platform :ios, min_ios_version_supported
 prepare_react_native_project!
-
-linkage = ENV['USE_FRAMEWORKS']
-if linkage != nil
-  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
-  use_frameworks! :linkage => linkage.to_sym
-end
 
 target 'SuokeLife' do
   config = use_native_modules!
+  
+  # 手动指定SocketRocket使用GitHub main分支
+  pod 'SocketRocket', :git => 'https://github.com/facebook/SocketRocket.git', :branch => 'main'
   
   use_react_native!(
     :path => config[:reactNativePath],
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/..",
-    # 启用 Hermes 和 Fabric（新架构）
-    :hermes_enabled => true,
-    :fabric_enabled => true
+    # 禁用新架构和Hermes以简化依赖
+    :hermes_enabled => false,
+    :fabric_enabled => false
   )
 
 
@@ -40,85 +37,5 @@ target 'SuokeLife' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
-    
-    # React Native 0.79 兼容性配置
-    installer.pods_project.targets.each do |target|
-      target.build_configurations.each do |config|
-        # 确保所有Pod使用相同的iOS Deployment Target
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.1'
-        # 禁用严格警告以避免编译错误
-        config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'] = 'YES'
-        # 升级到C++20以支持std::unordered_map::contains方法
-        config.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++20'
-        config.build_settings['CLANG_CXX_LIBRARY'] = 'libc++'
-        # 解决模块映射问题
-        config.build_settings['DEFINES_MODULE'] = 'YES'
-        # 确保使用最新的C++标准库
-        config.build_settings['MACOSX_DEPLOYMENT_TARGET'] = '10.15'
-        
-        # 添加更多编译器标志来解决构建问题
-        config.build_settings['OTHER_CPLUSPLUSFLAGS'] = '$(OTHER_CFLAGS) -DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1'
-        config.build_settings['OTHER_CFLAGS'] = '$(inherited) -DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1'
-        
-        # 禁用一些可能导致问题的警告
-        config.build_settings['WARNING_CFLAGS'] = '$(inherited) -Wno-error -Wno-unused-function -Wno-unused-variable'
-        
-        # 修复 Swift 标准库嵌入问题
-        # 对于静态库，不应该嵌入 Swift 标准库
-        if target.respond_to?(:product_type) && target.product_type == "com.apple.product-type.library.static"
-          config.build_settings['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'NO'
-        end
-        
-        # 对于应用程序目标，确保嵌入 Swift 标准库
-        if target.respond_to?(:product_type) && target.product_type == "com.apple.product-type.application"
-          config.build_settings['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'YES'
-        end
-        
-        # 添加编译器优化设置
-        config.build_settings['ENABLE_BITCODE'] = 'NO'
-        config.build_settings['COMPILER_INDEX_STORE_ENABLE'] = 'NO'
-        
-        # 解决并行编译问题
-        config.build_settings['SWIFT_COMPILATION_MODE'] = 'wholemodule'
-      end
-    end
-    
-    # 修复 VisionCamera 警告
-    installer.pods_project.targets.each do |target|
-      if target.name == 'VisionCamera'
-        target.build_configurations.each do |config|
-          # 减少 VisionCamera 的警告
-          config.build_settings['SWIFT_SUPPRESS_WARNINGS'] = 'YES'
-        end
-      end
-    end
-    
-    # 修复 Hermes 脚本阶段警告
-    installer.pods_project.targets.each do |target|
-      if target.name == 'hermes-engine'
-        target.build_phases.each do |build_phase|
-          if build_phase.is_a?(Xcodeproj::Project::Object::PBXShellScriptBuildPhase) && 
-             build_phase.name && build_phase.name.include?('[Hermes]')
-            # 添加输出路径以避免每次构建都运行脚本
-            build_phase.output_paths = ['$(DERIVED_FILE_DIR)/hermes-configured'] if build_phase.output_paths&.empty?
-            puts "✅ 已修复 Hermes 脚本阶段警告"
-          end
-        end
-      end
-    end
-    
-    # 修复 RCT-Folly 编译问题
-    installer.pods_project.targets.each do |target|
-      if target.name == 'RCT-Folly'
-        target.build_configurations.each do |config|
-          config.build_settings['HEADER_SEARCH_PATHS'] = '$(inherited) $(PODS_ROOT)/boost $(PODS_ROOT)/RCT-Folly'
-          config.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++20'
-          config.build_settings['CLANG_CXX_LIBRARY'] = 'libc++'
-          # 禁用一些可能导致问题的优化
-          config.build_settings['GCC_OPTIMIZATION_LEVEL'] = '0'
-          config.build_settings['SWIFT_OPTIMIZATION_LEVEL'] = '-Onone'
-        end
-      end
-    end
   end
 end

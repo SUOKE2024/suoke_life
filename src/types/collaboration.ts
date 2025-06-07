@@ -1,4 +1,4 @@
-import { HealthContext } from "./////    health";
+import { HealthContext } from './////    health';
 
 /**
  * * 任务优先级枚举
@@ -13,7 +13,7 @@ export enum TaskPriority {
 export enum TaskStatus {
 };
 };
-  PENDING = 
+  PENDING =
 pending","
   IN_PROGRESS = in_progress","
   COMPLETED = "completed,"

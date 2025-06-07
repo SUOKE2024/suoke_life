@@ -59,7 +59,7 @@ export class GlobalErrorHandler {
         enableReporting: true,
         enableUserNotification: true,
         maxRetries: 3,
-        retryDelay: 1000
+        retryDelay: 1000,
       };
       GlobalErrorHandler.instance = new GlobalErrorHandler(config || defaultConfig);
     }
@@ -71,7 +71,7 @@ export class GlobalErrorHandler {
    */
   public handleError(error: Error | ErrorInfo, context?: any): void {
     const errorInfo = this.normalizeError(error, context);
-    
+
     // 记录错误
     if (this.config.enableLogging) {
       this.logError(errorInfo);
@@ -89,7 +89,7 @@ export class GlobalErrorHandler {
 
     // 添加到错误队列
     this.errorQueue.push(errorInfo);
-    
+
     // 保持队列大小
     if (this.errorQueue.length > 100) {
       this.errorQueue.shift();
@@ -106,7 +106,7 @@ export class GlobalErrorHandler {
       message: `网络请求失败: ${error.message}`,
       details: { url, originalError: error.message },
       timestamp: Date.now(),
-      stackTrace: error.stack
+      stackTrace: error.stack,
     });
   }
 
@@ -115,14 +115,14 @@ export class GlobalErrorHandler {
    */
   public handleApiError(status: number, message: string, endpoint?: string): void {
     const severity = status >= 500 ? ErrorSeverity.HIGH : ErrorSeverity.MEDIUM;
-    
+
     this.handleError({
       type: ErrorType.API_ERROR,
       severity,
       message: `API错误 (${status}): ${message}`,
       code: status.toString(),
       details: { endpoint, status },
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
   }
 
@@ -135,7 +135,7 @@ export class GlobalErrorHandler {
       severity: ErrorSeverity.LOW,
       message: `验证失败: ${field} - ${message}`,
       details: { field },
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
   }
 
@@ -147,7 +147,7 @@ export class GlobalErrorHandler {
       type: ErrorType.AUTHENTICATION_ERROR,
       severity: ErrorSeverity.HIGH,
       message: `认证失败: ${message}`,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
   }
 
@@ -160,7 +160,7 @@ export class GlobalErrorHandler {
       severity: ErrorSeverity.MEDIUM,
       message,
       details,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
   }
 
@@ -185,7 +185,7 @@ export class GlobalErrorHandler {
       total: this.errorQueue.length,
       byType,
       bySeverity,
-      recent: this.errorQueue.slice(-10)
+      recent: this.errorQueue.slice(-10),
     };
   }
 
@@ -208,7 +208,7 @@ export class GlobalErrorHandler {
           severity: ErrorSeverity.HIGH,
           message: `未处理的Promise拒绝: ${event.reason}`,
           details: { reason: event.reason },
-          timestamp: Date.now()
+          timestamp: Date.now(),
         });
       });
 
@@ -218,13 +218,13 @@ export class GlobalErrorHandler {
           type: ErrorType.SYSTEM_ERROR,
           severity: ErrorSeverity.HIGH,
           message: `全局错误: ${event.message}`,
-          details: { 
+          details: {
             filename: event.filename,
             lineno: event.lineno,
-            colno: event.colno
+            colno: event.colno,
           },
           timestamp: Date.now(),
-          stackTrace: event.error?.stack
+          stackTrace: event.error?.stack,
         });
       });
     }
@@ -244,7 +244,7 @@ export class GlobalErrorHandler {
       message: error.message || '未知错误',
       timestamp: Date.now(),
       stackTrace: error.stack,
-      details: context
+      details: context,
     };
   }
 
@@ -254,12 +254,12 @@ export class GlobalErrorHandler {
   private logError(error: ErrorInfo): void {
     const logLevel = this.getLogLevel(error.severity);
     const logMessage = `[${error.type}] ${error.message}`;
-    
+
     console[logLevel](logMessage, {
       severity: error.severity,
       timestamp: new Date(error.timestamp).toISOString(),
       details: error.details,
-      stackTrace: error.stackTrace
+      stackTrace: error.stackTrace,
     });
   }
 
@@ -273,9 +273,9 @@ export class GlobalErrorHandler {
       await fetch(this.config.reportingEndpoint, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(error)
+        body: JSON.stringify(error),
       });
     } catch (reportingError) {
       console.error('错误上报失败:', reportingError);
@@ -289,7 +289,7 @@ export class GlobalErrorHandler {
     if (error.severity === ErrorSeverity.LOW) return;
 
     const userMessage = this.getUserFriendlyMessage(error);
-    
+
     // 这里可以集成具体的通知机制（Toast、Modal等）
     console.warn('用户通知:', userMessage);
   }
@@ -334,4 +334,4 @@ export class GlobalErrorHandler {
 }
 
 // 导出单例实例
-export const globalErrorHandler = GlobalErrorHandler.getInstance(); 
+export const globalErrorHandler = GlobalErrorHandler.getInstance();

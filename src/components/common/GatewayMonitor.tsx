@@ -28,7 +28,7 @@ export const GatewayMonitor: React.FC = () => {
   const loadGatewayStatus = async () => {
     try {
       setError(null);
-      
+
       // 获取网关状态
       const [healthResponse, statsResponse] = await Promise.allSettled([
         unifiedApiService.getServiceHealth(),
@@ -37,8 +37,8 @@ export const GatewayMonitor: React.FC = () => {
 
       // 处理服务健康状态
       if (healthResponse.status === 'fulfilled' && healthResponse.value.success) {
-        const serviceData = Array.isArray(healthResponse.value.data) 
-          ? healthResponse.value.data 
+        const serviceData = Array.isArray(healthResponse.value.data)
+          ? healthResponse.value.data
           : Object.entries(healthResponse.value.data || {}).map(([name, data]: [string, any]) => ({
               name,
               status: data.status || 'unknown',
@@ -50,14 +50,14 @@ export const GatewayMonitor: React.FC = () => {
       } else {
         // 如果无法获取服务状态，显示默认服务列表
         const defaultServices = [
-          'AUTH', 'USER', 'HEALTH_DATA', 'AGENTS', 'DIAGNOSIS', 
+          'AUTH', 'USER', 'HEALTH_DATA', 'AGENTS', 'DIAGNOSIS',
           'RAG', 'BLOCKCHAIN', 'MESSAGE_BUS', 'MEDICAL_RESOURCE',
-          'CORN_MAZE', 'ACCESSIBILITY', 'SUOKE_BENCH'
+          'CORN_MAZE', 'ACCESSIBILITY', 'SUOKE_BENCH',
         ].map(name => ({
           name,
           status: 'unknown' as const,
           instances: 0,
-          error: '无法连接到服务'
+          error: '无法连接到服务',
         }));
         setServices(defaultServices);
       }
@@ -88,11 +88,11 @@ export const GatewayMonitor: React.FC = () => {
 
   useEffect(() => {
     loadGatewayStatus();
-    
+
     // 每30秒自动刷新
     const interval = setInterval(loadGatewayStatus, 30000);
     return () => clearInterval(interval);
-  }, [])  // 检查是否需要添加依赖项;
+  }, []);  // 检查是否需要添加依赖项;
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -130,7 +130,7 @@ export const GatewayMonitor: React.FC = () => {
   }
 
   return (
-    <ScrollView 
+    <ScrollView
       style={styles.container}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -153,11 +153,11 @@ export const GatewayMonitor: React.FC = () => {
       {gatewayStats && (
         <View style={styles.statsContainer}>
           <Text style={styles.sectionTitle}>网关统计</Text>
-          
+
           <View style={styles.statRow}>
             <Text style={styles.statLabel}>网关状态:</Text>
-            <View style={[styles.statusDot, { 
-              backgroundColor: gatewayStats.gatewayHealth ? '#4CAF50' : '#F44336' 
+            <View style={[styles.statusDot, {
+              backgroundColor: gatewayStats.gatewayHealth ? '#4CAF50' : '#F44336',
             }]} />
             <Text style={styles.statValue}>
               {gatewayStats.gatewayHealth ? '在线' : '离线'}
@@ -166,8 +166,8 @@ export const GatewayMonitor: React.FC = () => {
 
           <View style={styles.statRow}>
             <Text style={styles.statLabel}>熔断器状态:</Text>
-            <View style={[styles.statusDot, { 
-              backgroundColor: getCircuitBreakerColor(gatewayStats.circuitBreakerState) 
+            <View style={[styles.statusDot, {
+              backgroundColor: getCircuitBreakerColor(gatewayStats.circuitBreakerState),
             }]} />
             <Text style={styles.statValue}>{gatewayStats.circuitBreakerState}</Text>
           </View>
@@ -182,7 +182,7 @@ export const GatewayMonitor: React.FC = () => {
       {/* 服务状态列表 */}
       <View style={styles.servicesContainer}>
         <Text style={styles.sectionTitle}>微服务状态</Text>
-        
+
         {services.map((service, index) => (
           <View key={index} style={styles.serviceItem}>
             <View style={styles.serviceHeader}>
@@ -192,7 +192,7 @@ export const GatewayMonitor: React.FC = () => {
                 {getStatusText(service.status)}
               </Text>
             </View>
-            
+
             <View style={styles.serviceDetails}>
               <Text style={styles.serviceDetail}>实例数: {service.instances}</Text>
               {service.responseTime && (
@@ -364,4 +364,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GatewayMonitor; 
+export default GatewayMonitor;

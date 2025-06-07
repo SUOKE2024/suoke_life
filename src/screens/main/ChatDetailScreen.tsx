@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   View,
   Text,
@@ -10,12 +10,12 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
-  ActivityIndicator
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+  ActivityIndicator,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 
@@ -50,7 +50,7 @@ const ChatDetailScreen: React.FC = () => {
   const { chatId, chatType, chatName } = route.params;
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [inputText, setInputText] = useState("");
+  const [inputText, setInputText] = useState('');
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const flatListRef = useRef<FlatList>(null);
@@ -63,29 +63,29 @@ const ChatDetailScreen: React.FC = () => {
   const generateAgentReply = (agentId: string, userMessage: string): string => {
     const replies: Record<string, string[]> = {
       xiaoai: [
-        "我正在分析您的健康数据，请稍等...",
-        "根据您的描述，建议您注意休息和饮食调理。",
-        "我为您推荐一些适合的健康建议，您可以参考一下。",
-        "您的健康状况看起来不错，继续保持良好的生活习惯。"
+        '我正在分析您的健康数据，请稍等...',
+        '根据您的描述，建议您注意休息和饮食调理。',
+        '我为您推荐一些适合的健康建议，您可以参考一下。',
+        '您的健康状况看起来不错，继续保持良好的生活习惯。',
       ],
       xiaoke: [
-        "从中医角度来看，您的症状可能与体质有关。",
-        "建议您进行四诊合参的全面检查。",
-        "根据中医理论，这种情况需要辨证论治。",
-        "我建议您调整作息，配合适当的中医调理。"
+        '从中医角度来看，您的症状可能与体质有关。',
+        '建议您进行四诊合参的全面检查。',
+        '根据中医理论，这种情况需要辨证论治。',
+        '我建议您调整作息，配合适当的中医调理。',
       ],
       laoke: [
-        "让我为您制定一个个性化的健康管理方案。",
-        "根据您的年龄和体质，我推荐以下康复训练。",
-        "健康管理是一个长期过程，需要坚持和耐心。",
-        "您的康复进展很好，继续按照计划执行。"
+        '让我为您制定一个个性化的健康管理方案。',
+        '根据您的年龄和体质，我推荐以下康复训练。',
+        '健康管理是一个长期过程，需要坚持和耐心。',
+        '您的康复进展很好，继续按照计划执行。',
       ],
       soer: [
-        "生活方式的改变需要循序渐进，不要急于求成。",
-        "我为您推荐一些简单易行的日常保健方法。",
-        "保持积极的心态对健康很重要。",
-        "今天的运动目标完成得如何？记得适量运动。"
-      ]
+        '生活方式的改变需要循序渐进，不要急于求成。',
+        '我为您推荐一些简单易行的日常保健方法。',
+        '保持积极的心态对健康很重要。',
+        '今天的运动目标完成得如何？记得适量运动。',
+      ],
     };
 
     const agentReplies = replies[agentId] || replies.xiaoai;
@@ -95,11 +95,11 @@ const ChatDetailScreen: React.FC = () => {
   // 生成医生回复
   const generateDoctorReply = (userMessage: string): string => {
     const replies = [
-      "感谢您的咨询，我会仔细查看您的情况。",
-      "根据您的描述，建议您到医院进行进一步检查。",
-      "请按时服药，有任何不适及时联系我。",
-      "您的恢复情况良好，继续按照治疗方案执行。",
-      "建议您注意饮食和作息，配合药物治疗。"
+      '感谢您的咨询，我会仔细查看您的情况。',
+      '根据您的描述，建议您到医院进行进一步检查。',
+      '请按时服药，有任何不适及时联系我。',
+      '您的恢复情况良好，继续按照治疗方案执行。',
+      '建议您注意饮食和作息，配合药物治疗。',
     ];
     return replies[Math.floor(Math.random() * replies.length)];
   };
@@ -108,15 +108,15 @@ const ChatDetailScreen: React.FC = () => {
   const loadChatHistory = useCallback(async () => {
     try {
       setLoading(true);
-      
+
       // 模拟API延迟
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       // 生成模拟聊天历史
       const mockMessages: ChatMessage[] = [
         {
           id: '1',
-          content: chatType === 'agent' ? 
+          content: chatType === 'agent' ?
             `您好！我是${chatName}，有什么可以帮助您的吗？` :
             chatType === 'doctor' ?
             `您好，我是${chatName}，请问有什么健康问题需要咨询？` :
@@ -125,31 +125,31 @@ const ChatDetailScreen: React.FC = () => {
           sender: chatType === 'user' ? 'other' : chatType as any,
           senderName: chatName,
           type: 'text',
-          status: 'read'
+          status: 'read',
         },
         {
           id: '2',
-          content: "您好，我想咨询一下健康管理的问题。",
+          content: '您好，我想咨询一下健康管理的问题。',
           timestamp: Date.now() - 3000000, // 50分钟前
           sender: 'user',
           type: 'text',
-          status: 'read'
+          status: 'read',
         },
         {
           id: '3',
           content: chatType === 'agent' ?
-            generateAgentReply(chatId, "健康管理") :
+            generateAgentReply(chatId, '健康管理') :
             chatType === 'doctor' ?
-            generateDoctorReply("健康管理") :
-            "这是一个很好的话题，大家可以一起讨论。",
+            generateDoctorReply('健康管理') :
+            '这是一个很好的话题，大家可以一起讨论。',
           timestamp: Date.now() - 2700000, // 45分钟前
           sender: chatType === 'user' ? 'other' : chatType as any,
           senderName: chatType === 'user' ? '群成员' : chatName,
           type: 'text',
-          status: 'read'
-        }
+          status: 'read',
+        },
       ];
-      
+
       setMessages(mockMessages);
     } catch (error) {
       console.error('加载聊天历史失败:', error);
@@ -164,7 +164,7 @@ const ChatDetailScreen: React.FC = () => {
     if (!inputText.trim() || sending) return;
 
     const messageText = inputText.trim();
-    setInputText("");
+    setInputText('');
     setSending(true);
 
     // 创建用户消息
@@ -174,7 +174,7 @@ const ChatDetailScreen: React.FC = () => {
       timestamp: Date.now(),
       sender: 'user',
       type: 'text',
-      status: 'sending'
+      status: 'sending',
     };
 
     setMessages(prev => [...prev, userMessage]);
@@ -184,8 +184,8 @@ const ChatDetailScreen: React.FC = () => {
       await new Promise(resolve => setTimeout(resolve, 500));
 
       // 更新消息状态为已发送
-      setMessages(prev => prev.map(msg => 
-        msg.id === userMessage.id ? { ...msg, status: 'sent' } : msg
+      setMessages(prev => prev.map(msg =>
+        msg.id === userMessage.id ? { ...msg, status: 'sent' } : msg,
       ));
 
       // 生成回复（仅对智能体和医生）
@@ -202,7 +202,7 @@ const ChatDetailScreen: React.FC = () => {
             sender: chatType as any,
             senderName: chatName,
             type: 'text',
-            status: 'read'
+            status: 'read',
           };
 
           setMessages(prev => [...prev, replyMessage]);
@@ -212,8 +212,8 @@ const ChatDetailScreen: React.FC = () => {
     } catch (error) {
       console.error('发送消息失败:', error);
       // 更新消息状态为失败
-      setMessages(prev => prev.map(msg => 
-        msg.id === userMessage.id ? { ...msg, status: 'failed' } : msg
+      setMessages(prev => prev.map(msg =>
+        msg.id === userMessage.id ? { ...msg, status: 'failed' } : msg,
       ));
       Alert.alert('错误', '发送消息失败，请重试');
     } finally {
@@ -270,7 +270,7 @@ const ChatDetailScreen: React.FC = () => {
   // 渲染消息项
   const renderMessage = ({ item }: { item: ChatMessage }) => {
     const isUser = item.sender === 'user';
-    
+
     return (
       <View style={[styles.messageContainer, isUser ? styles.userMessage : styles.otherMessage]}>
         {!isUser && item.senderName && (
@@ -312,7 +312,7 @@ const ChatDetailScreen: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
-      
+
       {/* 头部 */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
@@ -324,7 +324,7 @@ const ChatDetailScreen: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      <KeyboardAvoidingView 
+      <KeyboardAvoidingView
         style={styles.content}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
@@ -350,7 +350,7 @@ const ChatDetailScreen: React.FC = () => {
             maxLength={500}
             placeholderTextColor="#999"
           />
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[styles.sendButton, (!inputText.trim() || sending) && styles.sendButtonDisabled]}
             onPress={sendMessage}
             disabled={!inputText.trim() || sending}
@@ -370,103 +370,103 @@ const ChatDetailScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f6f6f6"
+    backgroundColor: '#f6f6f6',
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderBottomWidth: 1,
-    borderBottomColor: "#e0e0e0"
+    borderBottomColor: '#e0e0e0',
   },
   backButton: {
     padding: 8,
-    marginRight: 8
+    marginRight: 8,
   },
   headerTitle: {
     flex: 1,
     fontSize: 18,
-    fontWeight: "600",
-    color: "#333"
+    fontWeight: '600',
+    color: '#333',
   },
   moreButton: {
-    padding: 8
+    padding: 8,
   },
   content: {
-    flex: 1
+    flex: 1,
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   loadingText: {
     fontSize: 16,
     color: '#666',
-    marginTop: 10
+    marginTop: 10,
   },
   messagesList: {
-    flex: 1
+    flex: 1,
   },
   messagesContent: {
-    padding: 16
+    padding: 16,
   },
   messageContainer: {
-    marginBottom: 16
+    marginBottom: 16,
   },
   userMessage: {
-    alignItems: 'flex-end'
+    alignItems: 'flex-end',
   },
   otherMessage: {
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
   senderName: {
     fontSize: 12,
     color: '#666',
     marginBottom: 4,
-    marginLeft: 8
+    marginLeft: 8,
   },
   messageBubble: {
     maxWidth: '80%',
     paddingHorizontal: 16,
     paddingVertical: 10,
-    borderRadius: 20
+    borderRadius: 20,
   },
   userBubble: {
-    backgroundColor: '#007AFF'
+    backgroundColor: '#007AFF',
   },
   otherBubble: {
     backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: '#e0e0e0'
+    borderColor: '#e0e0e0',
   },
   messageText: {
     fontSize: 16,
-    lineHeight: 22
+    lineHeight: 22,
   },
   userText: {
-    color: '#fff'
+    color: '#fff',
   },
   otherText: {
-    color: '#333'
+    color: '#333',
   },
   messageInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 4
+    marginTop: 4,
   },
   userInfo: {
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   },
   otherInfo: {
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
   },
   timeText: {
     fontSize: 12,
     color: '#999',
-    marginHorizontal: 4
+    marginHorizontal: 4,
   },
   inputContainer: {
     flexDirection: 'row',
@@ -475,7 +475,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     backgroundColor: '#fff',
     borderTopWidth: 1,
-    borderTopColor: '#e0e0e0'
+    borderTopColor: '#e0e0e0',
   },
   textInput: {
     flex: 1,
@@ -487,7 +487,7 @@ const styles = StyleSheet.create({
     marginRight: 12,
     maxHeight: 100,
     fontSize: 16,
-    color: '#333'
+    color: '#333',
   },
   sendButton: {
     width: 40,
@@ -495,11 +495,11 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: '#007AFF',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   sendButtonDisabled: {
-    backgroundColor: '#ccc'
-  }
+    backgroundColor: '#ccc',
+  },
 });
 
 export default ChatDetailScreen;

@@ -1,6 +1,6 @@
-import { View, ViewStyle, I18nManager } from "../../placeholder";react-native
+import { View, ViewStyle, I18nManager } from '../../placeholder';react-native;
 
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react';
 export interface RTLViewProps {children: React.ReactNode;
   style?: ViewStyle;
   forceRTL?: boolean;

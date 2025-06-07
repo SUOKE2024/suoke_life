@@ -8,7 +8,7 @@ export const GATEWAY_CONFIG = {
   BASE_URL: process.env.REACT_APP_GATEWAY_URL || 'http://localhost:8000',
   API_VERSION: 'v1',
   TIMEOUT: 30000,
-  
+
   // 重试配置
   RETRY: {
     ATTEMPTS: 3,
@@ -362,25 +362,25 @@ export const CACHE_STRATEGIES = {
     TTL: 300000, // 5分钟
     STRATEGY: 'memory',
   },
-  
+
   // 用户数据 - 中期缓存
   USER_DATA: {
     TTL: 900000, // 15分钟
     STRATEGY: 'memory',
   },
-  
+
   // 健康数据 - 短期缓存
   HEALTH_DATA: {
     TTL: 180000, // 3分钟
     STRATEGY: 'memory',
   },
-  
+
   // 静态数据 - 长期缓存
   STATIC_DATA: {
     TTL: 3600000, // 1小时
     STRATEGY: 'memory',
   },
-  
+
   // RAG查询 - 中期缓存
   RAG_QUERIES: {
     TTL: 600000, // 10分钟
@@ -392,10 +392,10 @@ export const CACHE_STRATEGIES = {
 export const ERROR_HANDLING = {
   // 重试的HTTP状态码
   RETRYABLE_STATUS_CODES: [408, 429, 500, 502, 503, 504],
-  
+
   // 不重试的HTTP状态码
   NON_RETRYABLE_STATUS_CODES: [400, 401, 403, 404, 422],
-  
+
   // 错误分类
   ERROR_CATEGORIES: {
     NETWORK: 'network',
@@ -417,10 +417,10 @@ export const PERFORMANCE_CONFIG = {
     ERROR_RATE_WARNING: 0.05, // 5%
     ERROR_RATE_CRITICAL: 0.1, // 10%
   },
-  
+
   // 采样率
   SAMPLING_RATE: 0.1, // 10%
-  
+
   // 指标收集间隔
   METRICS_INTERVAL: 60000, // 1分钟
 };
@@ -438,13 +438,13 @@ export const SECURITY_CONFIG = {
     ALLOWED_HEADERS: ['Content-Type', 'Authorization', 'X-Request-ID'],
     CREDENTIALS: true,
   },
-  
+
   // 请求头验证
   REQUIRED_HEADERS: {
     'X-Request-ID': true,
     'User-Agent': false,
   },
-  
+
   // 输入验证
   INPUT_VALIDATION: {
     MAX_REQUEST_SIZE: 10 * 1024 * 1024, // 10MB
@@ -466,4 +466,4 @@ export const API_GATEWAY_CONFIG = {
   SECURITY: SECURITY_CONFIG,
 };
 
-export default API_GATEWAY_CONFIG; 
+export default API_GATEWAY_CONFIG;

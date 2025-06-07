@@ -1,4 +1,4 @@
-import { MCPTimestamp, TimeRange } from "../types/////    TCM;";
+import { MCPTimestamp, TimeRange } from '../types/////    TCM;';
 
 /**
  * * 索克生活 - MCP时间戳服务工具类

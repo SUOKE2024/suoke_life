@@ -1,39 +1,39 @@
-import { FiveDiagnosisEngine } from "../FiveDiagnosisEngine";
+import { FiveDiagnosisEngine } from '../FiveDiagnosisEngine';
 
-describe("FiveDiagnosisEngine", () => {
+describe('FiveDiagnosisEngine', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  describe("FiveDiagnosisEngine", () => {
-    it("should work with valid inputs", () => {
+  describe('FiveDiagnosisEngine', () => {
+    it('should work with valid inputs', () => {
       // Add test cases
       const engine = new FiveDiagnosisEngine({});
       expect(engine).toBeDefined();
     });
 
-    it("should handle edge cases", () => {
+    it('should handle edge cases', () => {
       // Add test cases
       const engine = new FiveDiagnosisEngine({}); // edge case params
       expect(engine).toBeDefined();
     });
 
-    it("should handle invalid inputs gracefully", () => {
+    it('should handle invalid inputs gracefully', () => {
       // Add test cases
       expect(() => {
         new FiveDiagnosisEngine(); // invalid params
       }).not.toThrow();
     });
 
-    it("should return correct output format", () => {
+    it('should return correct output format', () => {
       // Add test cases
       const engine = new FiveDiagnosisEngine({}); // test params
-      expect(typeof engine).toBe("object"); // or appropriate type
+      expect(typeof engine).toBe('object'); // or appropriate type
     });
   });
 
-  describe("FiveDiagnosisEngine Performance Tests", () => {
-    it("should execute within performance thresholds", () => {
+  describe('FiveDiagnosisEngine Performance Tests', () => {
+    it('should execute within performance thresholds', () => {
       const iterations = 10;
       const startTime = performance.now();
       for (let i = 0; i < iterations; i++) {
@@ -46,7 +46,7 @@ describe("FiveDiagnosisEngine", () => {
       expect(averageTime).toBeLessThan(1);
     });
 
-    it("should handle large datasets efficiently", () => {
+    it('should handle large datasets efficiently', () => {
       const largeDataset = new Array(10000).fill(0).map((_, i) => i);
       const startTime = performance.now();
       // Test with large dataset
@@ -56,7 +56,7 @@ describe("FiveDiagnosisEngine", () => {
       expect(endTime - startTime).toBeLessThan(100);
     });
 
-    it("should not cause memory leaks", () => {
+    it('should not cause memory leaks', () => {
       const initialMemory = process.memoryUsage().heapUsed;
       // Execute function multiple times
       for (let i = 0; i < 1000; i++) {

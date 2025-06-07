@@ -128,36 +128,36 @@ const MainTabs = () => {
         headerShown: false,
       })}
     >
-      <Tab.Screen 
-        name="Main" 
-        component={HomeScreen} 
+      <Tab.Screen
+        name="Main"
+        component={HomeScreen}
         options={{ title: '首页' }}
       />
-      <Tab.Screen 
-        name="Health" 
-        component={LifeOverviewScreen} 
+      <Tab.Screen
+        name="Health"
+        component={LifeOverviewScreen}
         options={{ title: '健康' }}
       />
-      <Tab.Screen 
-        name="Diagnosis" 
-        component={FiveDiagnosisAgentIntegrationScreen} 
+      <Tab.Screen
+        name="Diagnosis"
+        component={FiveDiagnosisAgentIntegrationScreen}
         options={{ title: '四诊' }}
       />
-      <Tab.Screen 
-        name="Explore" 
-        component={ExploreScreen} 
+      <Tab.Screen
+        name="Explore"
+        component={ExploreScreen}
         options={{ title: '探索' }}
       />
-      <Tab.Screen 
-        name="Profile" 
-        component={ProfileScreen} 
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
         options={{ title: '我的' }}
       />
       {/* 开发环境显示网关管理 */}
       {APP_CONFIG.ENVIRONMENT === 'development' && (
-        <Tab.Screen 
-          name="Gateway" 
-          component={GatewayManagementScreen} 
+        <Tab.Screen
+          name="Gateway"
+          component={GatewayManagementScreen}
           options={{ title: '网关' }}
         />
       )}
@@ -172,7 +172,7 @@ const AppStatusChecker: React.FC<{ children: React.ReactNode }> = ({ children })
 
   useEffect(() => {
     checkAppStatus();
-  }, [])  // 检查是否需要添加依赖项;
+  }, []);  // 检查是否需要添加依赖项;
 
   const checkAppStatus = async () => {
     try {
@@ -181,8 +181,8 @@ const AppStatusChecker: React.FC<{ children: React.ReactNode }> = ({ children })
       console.log('App starting with config:', {
         environment: APP_CONFIG.ENVIRONMENT,
         gatewayUrl: config.GATEWAY_URL,
-        features: Object.entries(config).filter(([key, value]) => 
-          key.startsWith('ENABLE_') && value
+        features: Object.entries(config).filter(([key, value]) =>
+          key.startsWith('ENABLE_') && value,
         ).map(([key]) => key),
       });
 
@@ -196,14 +196,14 @@ const AppStatusChecker: React.FC<{ children: React.ReactNode }> = ({ children })
       const errorMessage = err instanceof Error ? err.message : '应用初始化失败';
       setError(errorMessage);
       console.error('App initialization error:', err);
-      
+
       Alert.alert(
         '初始化错误',
         errorMessage,
         [
           { text: '重试', onPress: checkAppStatus },
           { text: '继续', onPress: () => setIsReady(true) },
-        ]
+        ],
       );
     }
   };

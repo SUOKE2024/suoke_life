@@ -1,4 +1,4 @@
-import {AGENT_CAPABILITIES,
+import { AGENT_CAPABILITIES,
   AGENT_ROLES,
   AGENT_CHANNELS,
   COLLABORATION_MODES,
@@ -6,111 +6,111 @@ import {AGENT_CAPABILITIES,
   TASK_PRIORITIES,
   AGENT_STATUSES,
   HEALTH_STATUSES,
-  COLLABORATION_STRATEGIES
-} from "../index";
+  COLLABORATION_STRATEGIES,
+} from '../index';
 
-describe("Agent System", () => {
+describe('Agent System', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  describe("Agent Creation", () => {
-    it("should create agent with valid parameters", () => {
+  describe('Agent Creation', () => {
+    it('should create agent with valid parameters', () => {
       expect(() => {
         // Mock agent creation test
       }).not.toThrow();
     });
 
-    it("should handle invalid agent creation gracefully", () => {
+    it('should handle invalid agent creation gracefully', () => {
       expect(() => {
         // Mock invalid input test
       }).not.toThrow();
     });
   });
 
-  describe("Agent System Initialization", () => {
-    it("should initialize agent system", () => {
+  describe('Agent System Initialization', () => {
+    it('should initialize agent system', () => {
       expect(() => {
         // Mock initialization test
       }).not.toThrow();
     });
 
-    it("should cleanup agent system", () => {
+    it('should cleanup agent system', () => {
       expect(() => {
         // Mock cleanup test
       }).not.toThrow();
     });
   });
 
-  describe("Agent Task Execution", () => {
-    it("should execute agent tasks", () => {
+  describe('Agent Task Execution', () => {
+    it('should execute agent tasks', () => {
       expect(() => {
         // Mock task execution test
       }).not.toThrow();
     });
 
-    it("should get agent status", () => {
+    it('should get agent status', () => {
       expect(() => {
         // Mock status retrieval test
       }).not.toThrow();
     });
 
-    it("should get agent metrics", () => {
+    it('should get agent metrics', () => {
       expect(() => {
         // Mock metrics retrieval test
       }).not.toThrow();
     });
   });
 
-  describe("Agent Constants", () => {
-    it("should have agent capabilities defined", () => {
+  describe('Agent Constants', () => {
+    it('should have agent capabilities defined', () => {
       expect(AGENT_CAPABILITIES).toBeDefined();
       expect(typeof AGENT_CAPABILITIES).toBe('object');
     });
 
-    it("should have agent roles defined", () => {
+    it('should have agent roles defined', () => {
       expect(AGENT_ROLES).toBeDefined();
       expect(typeof AGENT_ROLES).toBe('object');
     });
 
-    it("should have agent channels defined", () => {
+    it('should have agent channels defined', () => {
       expect(AGENT_CHANNELS).toBeDefined();
       expect(typeof AGENT_CHANNELS).toBe('object');
     });
 
-    it("should have collaboration modes defined", () => {
+    it('should have collaboration modes defined', () => {
       expect(COLLABORATION_MODES).toBeDefined();
       expect(typeof COLLABORATION_MODES).toBe('object');
     });
 
-    it("should have task types defined", () => {
+    it('should have task types defined', () => {
       expect(TASK_TYPES).toBeDefined();
       expect(typeof TASK_TYPES).toBe('object');
     });
 
-    it("should have task priorities defined", () => {
+    it('should have task priorities defined', () => {
       expect(TASK_PRIORITIES).toBeDefined();
       expect(typeof TASK_PRIORITIES).toBe('object');
     });
 
-    it("should have agent statuses defined", () => {
+    it('should have agent statuses defined', () => {
       expect(AGENT_STATUSES).toBeDefined();
       expect(typeof AGENT_STATUSES).toBe('object');
     });
 
-    it("should have health statuses defined", () => {
+    it('should have health statuses defined', () => {
       expect(HEALTH_STATUSES).toBeDefined();
       expect(typeof HEALTH_STATUSES).toBe('object');
     });
 
-    it("should have collaboration strategies defined", () => {
+    it('should have collaboration strategies defined', () => {
       expect(COLLABORATION_STRATEGIES).toBeDefined();
       expect(typeof COLLABORATION_STRATEGIES).toBe('object');
     });
   });
 
-  describe("Performance Tests", () => {
-    it("should execute within performance thresholds", () => {
+  describe('Performance Tests', () => {
+    it('should execute within performance thresholds', () => {
       const startTime = Date.now();
 
       // Execute performance-critical functions
@@ -125,7 +125,7 @@ describe("Agent System", () => {
       expect(duration).toBeLessThan(1000);
     });
 
-    it("should handle concurrent operations", () => {
+    it('should handle concurrent operations', () => {
       const promises = [];
 
       for (let i = 0; i < 5; i++) {
@@ -135,7 +135,7 @@ describe("Agent System", () => {
               // Simulate async agent operation
               resolve(true);
             }, 10);
-          })
+          }),
         );
       }
 

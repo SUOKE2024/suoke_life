@@ -20,12 +20,12 @@ const TABS: DashboardTab[] = [
   { id: 'performance', title: '性能指标', icon: '📊' },
   { id: 'usage', title: '服务使用', icon: '🔧' },
   { id: 'behavior', title: '用户行为', icon: '👤' },
-  { id: 'sync', title: '同步状态', icon: '🔄' }
+  { id: 'sync', title: '同步状态', icon: '🔄' },
 ];
 
 export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
   visible = true,
-  onClose
+  onClose,
 }) => {
   const [activeTab, setActiveTab] = useState('performance');
   const [performanceMetrics, setPerformanceMetrics] = useState<PerformanceMetrics | null>(null);
@@ -45,23 +45,23 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
   const loadAnalyticsData = async () => {
     try {
       setRefreshing(true);
-      
+
       // 加载性能指标
       const metrics = analyticsService.getPerformanceMetrics();
       setPerformanceMetrics(metrics);
-      
+
       // 加载服务使用统计
       const usage = analyticsService.getServiceUsage();
       setServiceUsage(usage);
-      
+
       // 加载用户行为数据
       const behavior = analyticsService.getUserBehavior();
       setUserBehavior(behavior);
-      
+
       // 加载同步状态
       const sync = syncService.getSyncStatus();
       setSyncStatus(sync);
-      
+
     } catch (error) {
       console.error('Error loading analytics data:', error);
     } finally {
@@ -97,7 +97,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
               {formatDuration(performanceMetrics.responseTime)}
             </Text>
             <Text style={styles.metricSubtext}>
-              {performanceMetrics.responseTime < 1000 ? '优秀' : 
+              {performanceMetrics.responseTime < 1000 ? '优秀' :
                performanceMetrics.responseTime < 3000 ? '良好' : '需要优化'}
             </Text>
           </View>
@@ -114,12 +114,12 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
             <Text style={styles.metricTitle}>错误率</Text>
             <Text style={[
               styles.metricValue,
-              { color: performanceMetrics.errorRate > 5 ? '#ff4444' : '#00aa00' }
+              { color: performanceMetrics.errorRate > 5 ? '#ff4444' : '#00aa00' },
             ]}>
               {performanceMetrics.errorRate.toFixed(1)}%
             </Text>
             <Text style={styles.metricSubtext}>
-              {performanceMetrics.errorRate < 1 ? '优秀' : 
+              {performanceMetrics.errorRate < 1 ? '优秀' :
                performanceMetrics.errorRate < 5 ? '良好' : '需要关注'}
             </Text>
           </View>
@@ -128,12 +128,12 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
             <Text style={styles.metricTitle}>缓存命中率</Text>
             <Text style={[
               styles.metricValue,
-              { color: performanceMetrics.cacheHitRate > 80 ? '#00aa00' : '#ff8800' }
+              { color: performanceMetrics.cacheHitRate > 80 ? '#00aa00' : '#ff8800' },
             ]}>
               {performanceMetrics.cacheHitRate.toFixed(1)}%
             </Text>
             <Text style={styles.metricSubtext}>
-              {performanceMetrics.cacheHitRate > 80 ? '优秀' : 
+              {performanceMetrics.cacheHitRate > 80 ? '优秀' :
                performanceMetrics.cacheHitRate > 60 ? '良好' : '需要优化'}
             </Text>
           </View>
@@ -142,12 +142,12 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
             <Text style={styles.metricTitle}>内存使用</Text>
             <Text style={[
               styles.metricValue,
-              { color: performanceMetrics.memoryUsage > 80 ? '#ff4444' : '#00aa00' }
+              { color: performanceMetrics.memoryUsage > 80 ? '#ff4444' : '#00aa00' },
             ]}>
               {performanceMetrics.memoryUsage.toFixed(1)}%
             </Text>
             <Text style={styles.metricSubtext}>
-              {performanceMetrics.memoryUsage < 60 ? '正常' : 
+              {performanceMetrics.memoryUsage < 60 ? '正常' :
                performanceMetrics.memoryUsage < 80 ? '注意' : '警告'}
             </Text>
           </View>
@@ -184,30 +184,30 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                 {service.errors === 0 ? '✅' : '⚠️'}
               </Text>
             </View>
-            
+
             <View style={styles.serviceStats}>
               <View style={styles.statItem}>
                 <Text style={styles.statLabel}>调用次数</Text>
                 <Text style={styles.statValue}>{service.calls}</Text>
               </View>
-              
+
               <View style={styles.statItem}>
                 <Text style={styles.statLabel}>错误次数</Text>
                 <Text style={[
                   styles.statValue,
-                  { color: service.errors > 0 ? '#ff4444' : '#666' }
+                  { color: service.errors > 0 ? '#ff4444' : '#666' },
                 ]}>
                   {service.errors}
                 </Text>
               </View>
-              
+
               <View style={styles.statItem}>
                 <Text style={styles.statLabel}>平均响应时间</Text>
                 <Text style={styles.statValue}>
                   {formatDuration(service.avgResponseTime)}
                 </Text>
               </View>
-              
+
               <View style={styles.statItem}>
                 <Text style={styles.statLabel}>最后使用</Text>
                 <Text style={styles.statValue}>
@@ -215,20 +215,20 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                 </Text>
               </View>
             </View>
-            
+
             <View style={styles.serviceMetrics}>
               <Text style={styles.metricLabel}>
                 成功率: {((service.calls - service.errors) / service.calls * 100).toFixed(1)}%
               </Text>
               <View style={styles.progressBar}>
-                <View 
+                <View
                   style={[
                     styles.progressFill,
-                    { 
+                    {
                       width: `${(service.calls - service.errors) / service.calls * 100}%`,
-                      backgroundColor: service.errors === 0 ? '#00aa00' : '#ff8800'
-                    }
-                  ]} 
+                      backgroundColor: service.errors === 0 ? '#00aa00' : '#ff8800',
+                    },
+                  ]}
                 />
               </View>
             </View>
@@ -258,35 +258,35 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                 会话时长: {formatDuration(behavior.duration)}
               </Text>
             </View>
-            
+
             <View style={styles.behaviorStats}>
               <View style={styles.behaviorStat}>
                 <Text style={styles.behaviorStatLabel}>操作次数</Text>
                 <Text style={styles.behaviorStatValue}>{behavior.actions.length}</Text>
               </View>
-              
+
               <View style={styles.behaviorStat}>
                 <Text style={styles.behaviorStatLabel}>访问页面</Text>
                 <Text style={styles.behaviorStatValue}>{behavior.screens.length}</Text>
               </View>
-              
+
               <View style={styles.behaviorStat}>
                 <Text style={styles.behaviorStatLabel}>错误次数</Text>
                 <Text style={[
                   styles.behaviorStatValue,
-                  { color: behavior.errors > 0 ? '#ff4444' : '#666' }
+                  { color: behavior.errors > 0 ? '#ff4444' : '#666' },
                 ]}>
                   {behavior.errors}
                 </Text>
               </View>
             </View>
-            
+
             <View style={styles.behaviorDetails}>
               <Text style={styles.behaviorDetailTitle}>最近操作:</Text>
               <Text style={styles.behaviorDetailText}>
                 {behavior.actions.slice(-3).join(' → ')}
               </Text>
-              
+
               <Text style={styles.behaviorDetailTitle}>访问页面:</Text>
               <Text style={styles.behaviorDetailText}>
                 {behavior.screens.join(' → ')}
@@ -310,53 +310,53 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
     return (
       <ScrollView style={styles.tabContent}>
         <Text style={styles.sectionTitle}>数据同步状态</Text>
-        
+
         <View style={styles.syncCard}>
           <View style={styles.syncHeader}>
             <Text style={styles.syncTitle}>同步状态</Text>
             <Text style={[
               styles.syncStatus,
-              { 
+              {
                 color: syncStatus.isSyncing ? '#ff8800' : '#00aa00',
-                backgroundColor: syncStatus.isSyncing ? '#fff3e0' : '#e8f5e8'
-              }
+                backgroundColor: syncStatus.isSyncing ? '#fff3e0' : '#e8f5e8',
+              },
             ]}>
               {syncStatus.isSyncing ? '同步中...' : '已同步'}
             </Text>
           </View>
-          
+
           <View style={styles.syncStats}>
             <View style={styles.syncStat}>
               <Text style={styles.syncStatLabel}>最后同步时间</Text>
               <Text style={styles.syncStatValue}>
-                {syncStatus.lastSyncTime > 0 
+                {syncStatus.lastSyncTime > 0
                   ? formatTimestamp(syncStatus.lastSyncTime)
                   : '从未同步'
                 }
               </Text>
             </View>
-            
+
             <View style={styles.syncStat}>
               <Text style={styles.syncStatLabel}>待处理冲突</Text>
               <Text style={[
                 styles.syncStatValue,
-                { color: syncStatus.conflicts > 0 ? '#ff4444' : '#666' }
+                { color: syncStatus.conflicts > 0 ? '#ff4444' : '#666' },
               ]}>
                 {syncStatus.conflicts}
               </Text>
             </View>
-            
+
             <View style={styles.syncStat}>
               <Text style={styles.syncStatLabel}>自动同步</Text>
               <Text style={[
                 styles.syncStatValue,
-                { color: syncStatus.autoSync ? '#00aa00' : '#ff8800' }
+                { color: syncStatus.autoSync ? '#00aa00' : '#ff8800' },
               ]}>
                 {syncStatus.autoSync ? '已启用' : '已禁用'}
               </Text>
             </View>
           </View>
-          
+
           {syncStatus.conflicts > 0 && (
             <View style={styles.conflictWarning}>
               <Text style={styles.conflictText}>
@@ -391,7 +391,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
       <View style={styles.header}>
         <Text style={styles.title}>分析仪表板</Text>
         <View style={styles.headerActions}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.refreshButton}
             onPress={loadAnalyticsData}
             disabled={refreshing}
@@ -400,7 +400,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
               {refreshing ? '刷新中...' : '🔄 刷新'}
             </Text>
           </TouchableOpacity>
-          
+
           {onClose && (
             <TouchableOpacity style={styles.closeButton} onPress={onClose}>
               <Text style={styles.closeText}>✕</Text>
@@ -415,14 +415,14 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
             key={tab.id}
             style={[
               styles.tab,
-              activeTab === tab.id && styles.activeTab
+              activeTab === tab.id && styles.activeTab,
             ]}
             onPress={() => setActiveTab(tab.id)}
           >
             <Text style={styles.tabIcon}>{tab.icon}</Text>
             <Text style={[
               styles.tabText,
-              activeTab === tab.id && styles.activeTabText
+              activeTab === tab.id && styles.activeTabText,
             ]}>
               {tab.title}
             </Text>
@@ -740,4 +740,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AnalyticsDashboard; 
+export default AnalyticsDashboard;

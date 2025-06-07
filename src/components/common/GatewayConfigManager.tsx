@@ -31,7 +31,7 @@ interface GatewayConfigManagerProps {
 
 export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
   visible = true,
-  onClose
+  onClose,
 }) => {
   const [configs, setConfigs] = useState<ConfigSection[]>([]);
   const [activeSection, setActiveSection] = useState('gateway');
@@ -53,7 +53,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
         retryDelay: configService.get('gateway.retryDelay', 1000),
         enableCache: configService.get('gateway.enableCache', true),
         cacheTimeout: configService.get('gateway.cacheTimeout', 300000),
-        enableCircuitBreaker: configService.get('gateway.enableCircuitBreaker', true)
+        enableCircuitBreaker: configService.get('gateway.enableCircuitBreaker', true),
       };
       const analyticsConfig = analyticsService.getConfig();
       const syncConfig = syncService.getConfig();
@@ -73,7 +73,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               description: '单个请求的最大等待时间',
               min: 1000,
               max: 120000,
-              unit: 'ms'
+              unit: 'ms',
             },
             {
               key: 'retryAttempts',
@@ -82,7 +82,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               value: gatewayConfig.retryAttempts || 3,
               description: '请求失败时的重试次数',
               min: 0,
-              max: 10
+              max: 10,
             },
             {
               key: 'retryDelay',
@@ -92,14 +92,14 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               description: '重试之间的延迟时间',
               min: 100,
               max: 10000,
-              unit: 'ms'
+              unit: 'ms',
             },
             {
               key: 'enableCache',
               label: '启用缓存',
               type: 'boolean',
               value: gatewayConfig.enableCache !== false,
-              description: '是否启用响应缓存'
+              description: '是否启用响应缓存',
             },
             {
               key: 'cacheTimeout',
@@ -109,16 +109,16 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               description: '缓存数据的有效期',
               min: 10000,
               max: 3600000,
-              unit: 'ms'
+              unit: 'ms',
             },
             {
               key: 'enableCircuitBreaker',
               label: '启用熔断器',
               type: 'boolean',
               value: gatewayConfig.enableCircuitBreaker !== false,
-              description: '是否启用熔断器保护'
-            }
-          ]
+              description: '是否启用熔断器保护',
+            },
+          ],
         },
         {
           id: 'analytics',
@@ -130,7 +130,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               label: '启用分析',
               type: 'boolean',
               value: analyticsConfig.enabled,
-              description: '是否收集分析数据'
+              description: '是否收集分析数据',
             },
             {
               key: 'batchSize',
@@ -139,7 +139,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               value: analyticsConfig.batchSize,
               description: '批量发送事件的数量',
               min: 10,
-              max: 200
+              max: 200,
             },
             {
               key: 'flushInterval',
@@ -149,30 +149,30 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               description: '自动发送数据的间隔',
               min: 5000,
               max: 300000,
-              unit: 'ms'
+              unit: 'ms',
             },
             {
               key: 'enableUserTracking',
               label: '用户行为跟踪',
               type: 'boolean',
               value: analyticsConfig.enableUserTracking,
-              description: '是否跟踪用户行为'
+              description: '是否跟踪用户行为',
             },
             {
               key: 'enablePerformanceTracking',
               label: '性能跟踪',
               type: 'boolean',
               value: analyticsConfig.enablePerformanceTracking,
-              description: '是否跟踪性能指标'
+              description: '是否跟踪性能指标',
             },
             {
               key: 'enableErrorTracking',
               label: '错误跟踪',
               type: 'boolean',
               value: analyticsConfig.enableErrorTracking,
-              description: '是否跟踪错误信息'
-            }
-          ]
+              description: '是否跟踪错误信息',
+            },
+          ],
         },
         {
           id: 'sync',
@@ -184,14 +184,14 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               label: '启用同步',
               type: 'boolean',
               value: syncConfig.enabled,
-              description: '是否启用数据同步'
+              description: '是否启用数据同步',
             },
             {
               key: 'autoSync',
               label: '自动同步',
               type: 'boolean',
               value: syncConfig.autoSync,
-              description: '是否自动同步数据'
+              description: '是否自动同步数据',
             },
             {
               key: 'syncInterval',
@@ -201,7 +201,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               description: '自动同步的时间间隔',
               min: 60000,
               max: 3600000,
-              unit: 'ms'
+              unit: 'ms',
             },
             {
               key: 'batchSize',
@@ -210,7 +210,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               value: syncConfig.batchSize,
               description: '批量同步的数据量',
               min: 10,
-              max: 200
+              max: 200,
             },
             {
               key: 'conflictResolution',
@@ -222,8 +222,8 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
                 { label: '手动处理', value: 'manual' },
                 { label: '使用本地数据', value: 'local' },
                 { label: '使用远程数据', value: 'remote' },
-                { label: '自动合并', value: 'merge' }
-              ]
+                { label: '自动合并', value: 'merge' },
+              ],
             },
             {
               key: 'retryAttempts',
@@ -232,9 +232,9 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               value: syncConfig.retryAttempts,
               description: '同步失败时的重试次数',
               min: 0,
-              max: 10
-            }
-          ]
+              max: 10,
+            },
+          ],
         },
         {
           id: 'offline',
@@ -246,7 +246,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               label: '启用离线模式',
               type: 'boolean',
               value: true, // 从离线服务状态推断
-              description: '是否支持离线操作'
+              description: '是否支持离线操作',
             },
             {
               key: 'maxCacheSize',
@@ -255,7 +255,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               value: 50, // 默认值
               description: '离线缓存的最大条目数',
               min: 10,
-              max: 500
+              max: 500,
             },
             {
               key: 'cacheStrategy',
@@ -266,18 +266,18 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               options: [
                 { label: 'LRU (最近最少使用)', value: 'lru' },
                 { label: 'FIFO (先进先出)', value: 'fifo' },
-                { label: 'TTL (基于时间)', value: 'ttl' }
-              ]
+                { label: 'TTL (基于时间)', value: 'ttl' },
+              ],
             },
             {
               key: 'autoCleanup',
               label: '自动清理',
               type: 'boolean',
               value: true,
-              description: '是否自动清理过期缓存'
-            }
-          ]
-        }
+              description: '是否自动清理过期缓存',
+            },
+          ],
+        },
       ];
 
       setConfigs(configSections);
@@ -288,17 +288,17 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
   };
 
   const updateConfigValue = (sectionId: string, configKey: string, value: any) => {
-    setConfigs(prevConfigs => 
-      prevConfigs.map(section => 
-        section.id === sectionId 
+    setConfigs(prevConfigs =>
+      prevConfigs.map(section =>
+        section.id === sectionId
           ? {
               ...section,
               configs: section.configs.map(config =>
-                config.key === configKey ? { ...config, value } : config
-              )
+                config.key === configKey ? { ...config, value } : config,
+              ),
             }
-          : section
-      )
+          : section,
+      ),
     );
     setHasChanges(true);
   };
@@ -309,7 +309,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
 
       // 构建配置对象
       const newConfigs: Record<string, any> = {};
-      
+
       configs.forEach(section => {
         newConfigs[section.id] = {};
         section.configs.forEach(config => {
@@ -336,7 +336,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
       // 记录配置更改事件
       analyticsService.trackEvent('system', {
         action: 'config_updated',
-        sections: Object.keys(newConfigs)
+        sections: Object.keys(newConfigs),
       });
 
       setHasChanges(false);
@@ -362,9 +362,9 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
           onPress: () => {
             loadConfigurations();
             setHasChanges(false);
-          }
-        }
-      ]
+          },
+        },
+      ],
     );
   };
 
@@ -391,7 +391,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
                   const num = parseInt(text) || 0;
                   const clampedValue = Math.max(
                     config.min || 0,
-                    Math.min(config.max || Infinity, num)
+                    Math.min(config.max || Infinity, num),
                   );
                   updateConfigValue(sectionId, config.key, clampedValue);
                 }}
@@ -422,13 +422,13 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
                   key={option.value}
                   style={[
                     styles.selectOption,
-                    config.value === option.value && styles.selectedOption
+                    config.value === option.value && styles.selectedOption,
                   ]}
                   onPress={() => updateConfigValue(sectionId, config.key, option.value)}
                 >
                   <Text style={[
                     styles.selectOptionText,
-                    config.value === option.value && styles.selectedOptionText
+                    config.value === option.value && styles.selectedOptionText,
                   ]}>
                     {option.label}
                   </Text>
@@ -452,17 +452,17 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
             </View>
           )}
         </View>
-        
+
         {config.description && (
           <Text style={styles.configDescription}>{config.description}</Text>
         )}
-        
+
         {config.type === 'select' && (
           <View style={styles.configSelectWrapper}>
             {renderInput()}
           </View>
         )}
-        
+
         {config.type === 'number' && config.min !== undefined && config.max !== undefined && (
           <Text style={styles.configRange}>
             范围: {config.min} - {config.max} {config.unit || ''}
@@ -501,14 +501,14 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               </Text>
             </TouchableOpacity>
           )}
-          
+
           <TouchableOpacity
             style={styles.resetButton}
             onPress={resetToDefaults}
           >
             <Text style={styles.resetButtonText}>🔄 重置</Text>
           </TouchableOpacity>
-          
+
           {onClose && (
             <TouchableOpacity style={styles.closeButton} onPress={onClose}>
               <Text style={styles.closeText}>✕</Text>
@@ -525,14 +525,14 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               key={section.id}
               style={[
                 styles.sidebarItem,
-                activeSection === section.id && styles.activeSidebarItem
+                activeSection === section.id && styles.activeSidebarItem,
               ]}
               onPress={() => setActiveSection(section.id)}
             >
               <Text style={styles.sidebarIcon}>{section.icon}</Text>
               <Text style={[
                 styles.sidebarText,
-                activeSection === section.id && styles.activeSidebarText
+                activeSection === section.id && styles.activeSidebarText,
               ]}>
                 {section.title}
               </Text>
@@ -760,4 +760,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GatewayConfigManager; 
+export default GatewayConfigManager;

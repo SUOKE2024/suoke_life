@@ -1,6 +1,6 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "../../placeholder";react-native
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from '../../placeholder';react-native;
 
-import React from "react";
+import React from 'react';
 export interface EcoService {id: string;
   name: string;
   description: string;

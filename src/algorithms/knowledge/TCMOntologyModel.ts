@@ -1,4 +1,4 @@
-import { ConstitutionType } from "../../types/////    collaboration;";
+import { ConstitutionType } from '../../types/////    collaboration;';
 
 /**
  * * 中医本体模型

@@ -3,7 +3,6 @@ module.exports = {
   extends: [
     "@react-native",
     "eslint:recommended",
-    "@typescript-eslint/recommended",
     "prettier" // 确保prettier规则在最后
   ],
   plugins: [
@@ -37,7 +36,7 @@ module.exports = {
     "semi": ["error", "always"],
     "no-trailing-spaces": "warn",
     "eol-last": "warn",
-    "comma-dangle": ["error", "es5"],
+    "comma-dangle": ["error", "always-multiline"],
     
     // TypeScript规则
     "@typescript-eslint/no-unused-vars": ["error", { 

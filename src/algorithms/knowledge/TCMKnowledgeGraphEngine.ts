@@ -1,4 +1,4 @@
-import { EventEmitter } from "events;";
+import { EventEmitter } from 'events;';
 
 /**
  * * 中医知识图谱推理引擎
@@ -24,7 +24,7 @@ export interface TCMTriple {subject: TCMEntity;
   predicate: TCMRelation
   object: TCMEntity
 }
-export enum EntityType {SYMPTOM = 
+export enum EntityType {SYMPTOM =
 symptom",           // 症状"
 SYNDROME = syndrome",         // 证候"
 DISEASE = "disease,           // 疾病"

@@ -52,7 +52,7 @@ const defaultConfig: ErrorHandlerConfig = {
   enableLocalLogging: true,
   enableUserNotification: true,
   maxErrorsInMemory: 100,
-  autoReportThreshold: ErrorSeverity.HIGH
+  autoReportThreshold: ErrorSeverity.HIGH,
 };
 
 // 错误处理器类
@@ -85,7 +85,7 @@ export class ErrorHandler {
         severity: ErrorSeverity.HIGH,
         message: 'Unhandled Promise Rejection',
         details: event.reason,
-        stackTrace: event.reason?.stack
+        stackTrace: event.reason?.stack,
       });
 
       if (originalHandler) {
@@ -101,7 +101,7 @@ export class ErrorHandler {
         severity: isFatal ? ErrorSeverity.CRITICAL : ErrorSeverity.HIGH,
         message: error.message || 'JavaScript Error',
         details: error,
-        stackTrace: error.stack
+        stackTrace: error.stack,
       });
 
       if (originalErrorHandler) {
@@ -117,7 +117,7 @@ export class ErrorHandler {
       severity: ErrorSeverity.MEDIUM,
       timestamp: Date.now(),
       resolved: false,
-      ...errorInput
+      ...errorInput,
     };
 
     // 添加到错误队列
@@ -168,9 +168,9 @@ export class ErrorHandler {
         status: error.status,
         statusText: error.statusText,
         url: error.config?.url,
-        method: error.config?.method
+        method: error.config?.method,
       },
-      context
+      context,
     });
   }
 
@@ -198,7 +198,7 @@ export class ErrorHandler {
       severity,
       message,
       details: { agentId, originalError: error },
-      context
+      context,
     });
   }
 
@@ -208,7 +208,7 @@ export class ErrorHandler {
       type: ErrorType.VALIDATION,
       severity: ErrorSeverity.LOW,
       message: `字段 ${field} 验证失败`,
-      details: { field, value, rule }
+      details: { field, value, rule },
     });
   }
 
@@ -219,7 +219,7 @@ export class ErrorHandler {
       severity: ErrorSeverity.MEDIUM,
       message: `缺少权限: ${permission}`,
       details: { permission },
-      context
+      context,
     });
   }
 
@@ -267,7 +267,7 @@ export class ErrorHandler {
   // 添加到错误队列
   private addToErrorQueue(error: AppError): void {
     this.errorQueue.push(error);
-    
+
     // 保持队列大小限制
     if (this.errorQueue.length > this.config.maxErrorsInMemory) {
       this.errorQueue.shift();
@@ -280,13 +280,13 @@ export class ErrorHandler {
 
     const logLevel = this.getLogLevel(error.severity);
     const logMessage = `[${error.type}] ${error.message}`;
-    
+
     console[logLevel](logMessage, {
       id: error.id,
       severity: error.severity,
       timestamp: new Date(error.timestamp).toISOString(),
       details: error.details,
-      context: error.context
+      context: error.context,
     });
   }
 
@@ -303,7 +303,7 @@ export class ErrorHandler {
         severity: error.severity,
         timestamp: error.timestamp,
         details: JSON.stringify(error.details),
-        context: JSON.stringify(error.context)
+        context: JSON.stringify(error.context),
       });
 
       // 设置自定义属性
@@ -311,7 +311,7 @@ export class ErrorHandler {
         errorType: error.type,
         severity: error.severity,
         userId: error.userId || 'unknown',
-        sessionId: error.sessionId || 'unknown'
+        sessionId: error.sessionId || 'unknown',
       });
     } catch (reportError) {
       console.warn('Failed to report error to Crashlytics:', reportError);
@@ -343,14 +343,14 @@ export class ErrorHandler {
       [
         {
           text: '确定',
-          style: 'default'
+          style: 'default',
         },
         ...(error.severity >= ErrorSeverity.HIGH ? [{
           text: '反馈问题',
           style: 'default',
-          onPress: () => this.openFeedback(error)
-        }] : [])
-      ]
+          onPress: () => this.openFeedback(error),
+        }] : []),
+      ],
     );
   }
 
@@ -416,8 +416,8 @@ export class ErrorHandler {
   // 检查是否为用户友好的消息
   private isUserFriendlyMessage(message: string): boolean {
     // 简单的启发式检查
-    return !message.includes('Error:') && 
-           !message.includes('Exception:') && 
+    return !message.includes('Error:') &&
+           !message.includes('Exception:') &&
            !message.includes('undefined') &&
            !message.includes('null') &&
            message.length < 100;
@@ -447,7 +447,7 @@ export class ErrorHandler {
       byType: {} as Record<ErrorType, number>,
       bySeverity: {} as Record<ErrorSeverity, number>,
       resolved: 0,
-      unresolved: 0
+      unresolved: 0,
     };
 
     // 初始化计数器
@@ -477,19 +477,19 @@ export class ErrorHandler {
 export const errorHandler = ErrorHandler.getInstance();
 
 // 便捷函数
-export const handleError = (error: Partial<AppError> & { type: ErrorType; message: string }) => 
+export const handleError = (error: Partial<AppError> & { type: ErrorType; message: string }) =>
   errorHandler.handleError(error);
 
-export const handleNetworkError = (error: any, context?: Record<string, any>) => 
+export const handleNetworkError = (error: any, context?: Record<string, any>) =>
   errorHandler.handleNetworkError(error, context);
 
-export const handleAgentServiceError = (error: any, agentId?: string, context?: Record<string, any>) => 
+export const handleAgentServiceError = (error: any, agentId?: string, context?: Record<string, any>) =>
   errorHandler.handleAgentServiceError(error, agentId, context);
 
-export const handleValidationError = (field: string, value: any, rule: string) => 
+export const handleValidationError = (field: string, value: any, rule: string) =>
   errorHandler.handleValidationError(field, value, rule);
 
-export const handlePermissionError = (permission: string, context?: Record<string, any>) => 
+export const handlePermissionError = (permission: string, context?: Record<string, any>) =>
   errorHandler.handlePermissionError(permission, context);
 
 // React Hook for error handling
@@ -504,7 +504,7 @@ export const useErrorHandler = () => {
     getErrorStats: () => errorHandler.getErrorStats(),
     addErrorListener: (listener: (error: AppError) => void) => errorHandler.addErrorListener(listener),
     resolveError: (errorId: string) => errorHandler.resolveError(errorId),
-    clearErrorHistory: () => errorHandler.clearErrorHistory()
+    clearErrorHistory: () => errorHandler.clearErrorHistory(),
   };
 };
 

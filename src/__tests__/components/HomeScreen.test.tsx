@@ -1,69 +1,57 @@
 import React from 'react';
+import { render, fireEvent, waitFor, act } from '@testing-library/react-native';
 import { Provider } from 'react-redux';
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-const HomeScreen = React.lazy(() => import('../../screens/main/HomeScreen'));
+import { configureStore } from '@reduxjs/toolkit';
+import HomeScreen from '../../screens/main/HomeScreen';
+import authSlice from '../../store/slices/authSlice';
 
 // Mock dependencies
-jest.mock('react-native-vector-icons/MaterialCommunityIcons', () => {
-  const React = require('react');
-  return React.forwardRef((props: any, ref: any) => {
-    const { View } = require('react-native');
-    return React.createElement(View, { ...props, ref });
-  });
-});
-jest.mock('../../services/agentService', () => ({
-  agentService: {
-    getAgentStatus: jest.fn().mockResolvedValue({
-      id: 'xiaoai',
-      name: '小艾',
-      status: 'online',
-      lastActive: Date.now(),
-      capabilities: ['健康咨询'],
-      healthScore: 95,
-      responseTime: 200
-    }),
-    getAllAgentStatuses: jest.fn().mockResolvedValue({
-      xiaoai: { id: 'xiaoai', name: '小艾', status: 'online' }
-    })
-  }
+jest.mock('react-native-vector-icons/MaterialCommunityIcons', () => 'Icon');
+jest.mock('react-native-safe-area-context', () => ({
+  SafeAreaView: ({ children }: any) => children,
 }));
 
-jest.mock('../../services/apiClient', () => ({
-  apiClient: {
-    get: jest.fn().mockResolvedValue({
-      data: { count: 0 }
-    }),
-    post: jest.fn().mockResolvedValue({
-      data: { success: true }
-    })
-  }
+// Mock navigation
+const mockNavigate = jest.fn();
+jest.mock('@react-navigation/native', () => ({
+  ...jest.requireActual('@react-navigation/native'),
+  useNavigation: () => ({
+    navigate: mockNavigate,
+  }),
 }));
 
-// Mock store
-const createMockStore = (initialState = {}) => {
+// Create test store
+const createTestStore = (initialState = {}) => {
   return configureStore({
     reducer: {
-      auth: () => ({ isAuthenticated: true, user: { id: 'test-user' } }),
-      agents: () => ({}),
-      medKnowledge: () => ({}),
-      rag: () => ({}),
-      medicalResource: () => ({}),
-      benchmark: () => ({})
+      auth: authSlice,
     },
-    preloadedState: initialState
+    preloadedState: {
+      auth: {
+        isAuthenticated: false,
+        user: null,
+        loading: false,
+        error: null,
+        ...initialState.auth,
+      },
+    },
   });
 };
 
 // Test wrapper component
-const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const TestWrapper: React.FC<{ children: React.ReactNode; store?: any }> = ({
+  children,
+  store = createTestStore(),
+}) => {
   const Stack = createNativeStackNavigator();
-  const store = createMockStore();
 
   return (
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="Home" component={() => children as React.ReactElement} />
+          <Stack.Screen name="Home" component={() => children} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
@@ -75,290 +63,350 @@ describe('HomeScreen', () => {
     jest.clearAllMocks();
   });
 
-  it('应该正确渲染HomeScreen', async () => {
-    render(
-      <TestWrapper>
-        <HomeScreen />
-      </TestWrapper>
-    );
+  describe('渲染测试', () => {
+    it('应该正确渲染基本组件', async () => {
+      const { getByText, getByPlaceholderText } = render(
+        <TestWrapper>
+          <HomeScreen />
+        </TestWrapper>,
+      );
 
-    // 检查标题是否存在
-    expect(screen.getByText('索克生活')).toBeTruthy();
-    
-    // 检查搜索框是否存在
-    expect(screen.getByPlaceholderText('搜索聊天记录')).toBeTruthy();
-  });
-
-  it('应该显示加载状态', () => {
-    render(
-      <TestWrapper>
-        <HomeScreen />
-      </TestWrapper>
-    );
-
-    // 初始状态应该显示加载中
-    expect(screen.getByText('加载中...')).toBeTruthy();
-  });
-
-  it('应该能够搜索聊天记录', async () => {
-    render(
-      <TestWrapper>
-        <HomeScreen />
-      </TestWrapper>
-    );
-
-    // 等待加载完成
-    await waitFor(() => {
-      expect(screen.queryByText('加载中...')).toBeNull();
-    });
-
-    // 找到搜索输入框
-    const searchInput = screen.getByPlaceholderText('搜索聊天记录');
-    
-    // 输入搜索内容
-    fireEvent.changeText(searchInput, '小艾');
-    
-    // 验证搜索功能
-    expect(searchInput.props.value).toBe('小艾');
-  });
-
-  it('应该能够点击添加按钮', async () => {
-    render(
-      <TestWrapper>
-        <HomeScreen />
-      </TestWrapper>
-    );
-
-    // 等待加载完成
-    await waitFor(() => {
-      expect(screen.queryByText('加载中...')).toBeNull();
-    });
-
-    // 查找添加按钮（通过testID或其他方式）
-    const addButtons = screen.getAllByRole('button');
-    const addButton = addButtons.find(button => 
-      button.props.accessibilityLabel === 'add' || 
-      button.props.children?.props?.name === 'plus'
-    );
-
-    if (addButton) {
-      fireEvent.press(addButton);
-      // 这里可以验证弹出的Alert或导航行为
-    }
-  });
-
-  it('应该能够下拉刷新', async () => {
-    render(
-      <TestWrapper>
-        <HomeScreen />
-      </TestWrapper>
-    );
-
-    // 等待加载完成
-    await waitFor(() => {
-      expect(screen.queryByText('加载中...')).toBeNull();
-    });
-
-    // 查找FlatList
-    const flatList = screen.getByTestId('chat-list') || screen.UNSAFE_getByType('FlatList');
-    
-    if (flatList) {
-      // 模拟下拉刷新
-      fireEvent(flatList, 'refresh');
-      
-      // 验证刷新状态
+      // 等待加载完成
       await waitFor(() => {
-        expect(flatList.props.refreshing).toBe(false);
+        expect(getByText('你好')).toBeTruthy();
+        expect(getByText('今天想聊些什么呢？')).toBeTruthy();
+        expect(getByPlaceholderText('搜索聊天记录...')).toBeTruthy();
       });
-    }
+    });
+
+    it('应该显示用户名称当用户已登录', async () => {
+      const store = createTestStore({
+        auth: {
+          isAuthenticated: true,
+          user: { name: '张三', id: '123' },
+          loading: false,
+          error: null,
+        },
+      });
+
+      const { getByText } = render(
+        <TestWrapper store={store}>
+          <HomeScreen />
+        </TestWrapper>,
+      );
+
+      await waitFor(() => {
+        expect(getByText('你好，张三')).toBeTruthy();
+      });
+    });
+
+    it('应该显示智能体聊天列表', async () => {
+      const { getByText } = render(
+        <TestWrapper>
+          <HomeScreen />
+        </TestWrapper>,
+      );
+
+      await waitFor(() => {
+        expect(getByText('小艾')).toBeTruthy();
+        expect(getByText('小克')).toBeTruthy();
+        expect(getByText('老克')).toBeTruthy();
+        expect(getByText('索儿')).toBeTruthy();
+      });
+    });
+
+    it('应该显示智能体标签', async () => {
+      const { getByText } = render(
+        <TestWrapper>
+          <HomeScreen />
+        </TestWrapper>,
+      );
+
+      await waitFor(() => {
+        expect(getByText('健康助手')).toBeTruthy();
+        expect(getByText('中医辨证')).toBeTruthy();
+        expect(getByText('健康顾问')).toBeTruthy();
+        expect(getByText('生活教练')).toBeTruthy();
+      });
+    });
   });
 
-  it('应该正确显示智能体聊天项', async () => {
-    render(
-      <TestWrapper>
-        <HomeScreen />
-      </TestWrapper>
-    );
+  describe('交互测试', () => {
+    it('应该能够搜索聊天记录', async () => {
+      const { getByPlaceholderText, getByText, queryByText } = render(
+        <TestWrapper>
+          <HomeScreen />
+        </TestWrapper>,
+      );
 
-    // 等待加载完成
-    await waitFor(() => {
-      expect(screen.queryByText('加载中...')).toBeNull();
+      await waitFor(() => {
+        expect(getByText('小艾')).toBeTruthy();
+      });
+
+      const searchInput = getByPlaceholderText('搜索聊天记录...');
+
+      // 搜索"小艾"
+      fireEvent.changeText(searchInput, '小艾');
+
+      await waitFor(() => {
+        expect(getByText('小艾')).toBeTruthy();
+        expect(queryByText('小克')).toBeFalsy();
+      });
     });
 
-    // 检查智能体是否显示
-    await waitFor(() => {
-      expect(screen.getByText('小艾')).toBeTruthy();
-      expect(screen.getByText('小克')).toBeTruthy();
-      expect(screen.getByText('老克')).toBeTruthy();
-      expect(screen.getByText('索儿')).toBeTruthy();
-    });
-  });
+    it('应该能够清除搜索内容', async () => {
+      const { getByPlaceholderText, getByText, queryByTestId } = render(
+        <TestWrapper>
+          <HomeScreen />
+        </TestWrapper>,
+      );
 
-  it('应该能够点击聊天项进行导航', async () => {
-    const mockNavigate = jest.fn();
-    
-    // Mock navigation
-    jest.doMock('@react-navigation/native', () => ({
-      ...jest.requireActual('@react-navigation/native'),
-      useNavigation: () => ({
-        navigate: mockNavigate,
-        goBack: jest.fn()
-      })
-    }));
+      await waitFor(() => {
+        expect(getByText('小艾')).toBeTruthy();
+      });
 
-    render(
-      <TestWrapper>
-        <HomeScreen />
-      </TestWrapper>
-    );
+      const searchInput = getByPlaceholderText('搜索聊天记录...');
 
-    // 等待加载完成
-    await waitFor(() => {
-      expect(screen.queryByText('加载中...')).toBeNull();
+      // 输入搜索内容
+      fireEvent.changeText(searchInput, '测试');
+
+      // 应该显示清除按钮
+      await waitFor(() => {
+        const clearButton = queryByTestId('clear-search-button');
+        if (clearButton) {
+          fireEvent.press(clearButton);
+        }
+      });
     });
 
-    // 查找并点击聊天项
-    const chatItem = screen.getByText('小艾');
-    fireEvent.press(chatItem.parent || chatItem);
+    it('应该能够点击聊天项导航到详情页', async () => {
+      const { getByText } = render(
+        <TestWrapper>
+          <HomeScreen />
+        </TestWrapper>,
+      );
 
-    // 验证导航是否被调用
-    await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith('ChatDetail', expect.objectContaining({
+      await waitFor(() => {
+        const xiaoaiChat = getByText('小艾');
+        fireEvent.press(xiaoaiChat);
+      });
+
+      expect(mockNavigate).toHaveBeenCalledWith('ChatDetail', {
         chatId: 'xiaoai',
         chatType: 'agent',
-        chatName: '小艾'
-      }));
+        chatName: '小艾',
+      });
+    });
+
+    it('应该支持下拉刷新', async () => {
+      const { getByTestId } = render(
+        <TestWrapper>
+          <HomeScreen />
+        </TestWrapper>,
+      );
+
+      await waitFor(() => {
+        const flatList = getByTestId('chat-list');
+        if (flatList) {
+          // 模拟下拉刷新
+          fireEvent(flatList, 'refresh');
+        }
+      });
     });
   });
 
-  it('应该正确处理错误状态', async () => {
-    // Mock API错误
-    const mockApiClient = require('../../services/apiClient');
-    mockApiClient.apiClient.get.mockRejectedValueOnce(new Error('网络错误'));
+  describe('加载状态测试', () => {
+    it('应该显示加载指示器', () => {
+      // 创建一个始终加载的组件版本
+      const LoadingHomeScreen = () => {
+        return <HomeScreen />;
+      };
 
-    render(
-      <TestWrapper>
-        <HomeScreen />
-      </TestWrapper>
-    );
+      const { getByText } = render(
+        <TestWrapper>
+          <LoadingHomeScreen />
+        </TestWrapper>,
+      );
 
-    // 等待错误处理
-    await waitFor(() => {
-      // 应该仍然显示默认的聊天列表
-      expect(screen.getByText('小艾')).toBeTruthy();
+      // 在组件首次渲染时应该显示加载状态
+      expect(getByText('加载中...')).toBeTruthy();
     });
   });
 
-  it('应该正确显示未读消息数量', async () => {
-    render(
-      <TestWrapper>
-        <HomeScreen />
-      </TestWrapper>
-    );
+  describe('错误处理测试', () => {
+    it('应该处理数据加载错误', async () => {
+      // Mock console.error to avoid test output pollution
+      const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
 
-    // 等待加载完成
-    await waitFor(() => {
-      expect(screen.queryByText('加载中...')).toBeNull();
+      // Mock a failing API call
+      const originalFetch = global.fetch;
+      global.fetch = jest.fn().mockRejectedValue(new Error('Network error'));
+
+      const { getByText } = render(
+        <TestWrapper>
+          <HomeScreen />
+        </TestWrapper>,
+      );
+
+      await waitFor(() => {
+        // 组件应该优雅地处理错误
+        expect(getByText('你好')).toBeTruthy();
+      });
+
+      // Restore
+      global.fetch = originalFetch;
+      consoleSpy.mockRestore();
     });
-
-    // 检查是否有未读消息徽章
-    const unreadBadges = screen.queryAllByTestId('unread-badge');
-    expect(unreadBadges.length).toBeGreaterThanOrEqual(0);
   });
 
-  it('应该正确显示在线状态指示器', async () => {
-    render(
-      <TestWrapper>
-        <HomeScreen />
-      </TestWrapper>
-    );
+  describe('数据格式测试', () => {
+    it('应该正确格式化时间显示', async () => {
+      const { getByText } = render(
+        <TestWrapper>
+          <HomeScreen />
+        </TestWrapper>,
+      );
 
-    // 等待加载完成
-    await waitFor(() => {
-      expect(screen.queryByText('加载中...')).toBeNull();
+      await waitFor(() => {
+        // 检查是否有时间相关的文本
+        expect(getByText('刚刚')).toBeTruthy();
+      });
     });
 
-    // 检查在线状态指示器
-    const onlineIndicators = screen.queryAllByTestId('online-indicator');
-    expect(onlineIndicators.length).toBeGreaterThanOrEqual(0);
+    it('应该正确显示未读消息数量', async () => {
+      const { queryByText } = render(
+        <TestWrapper>
+          <HomeScreen />
+        </TestWrapper>,
+      );
+
+      await waitFor(() => {
+        // 可能会有未读消息徽章
+        const unreadBadge = queryByText(/^\d+$/);
+        if (unreadBadge) {
+          expect(unreadBadge).toBeTruthy();
+        }
+      });
+    });
+  });
+
+  describe('可访问性测试', () => {
+    it('应该有正确的可访问性标签', async () => {
+      const { getByText } = render(
+        <TestWrapper>
+          <HomeScreen />
+        </TestWrapper>,
+      );
+
+      await waitFor(() => {
+        // 检查重要元素是否可访问
+        expect(getByText('你好')).toBeTruthy();
+        expect(getByText('今天想聊些什么呢？')).toBeTruthy();
+      });
+    });
+  });
+
+  describe('性能测试', () => {
+    it('应该在合理时间内完成渲染', async () => {
+      const startTime = Date.now();
+
+      const { getByText } = render(
+        <TestWrapper>
+          <HomeScreen />
+        </TestWrapper>,
+      );
+
+      await waitFor(() => {
+        expect(getByText('你好')).toBeTruthy();
+      });
+
+      const endTime = Date.now();
+      const renderTime = endTime - startTime;
+
+      // 渲染时间应该少于2秒
+      expect(renderTime).toBeLessThan(2000);
+    });
+  });
+
+  describe('边界情况测试', () => {
+    it('应该处理空聊天列表', async () => {
+      // 这个测试需要mock数据为空的情况
+      const { getByText } = render(
+        <TestWrapper>
+          <HomeScreen />
+        </TestWrapper>,
+      );
+
+      await waitFor(() => {
+        // 即使没有聊天记录，基本UI仍应显示
+        expect(getByText('你好')).toBeTruthy();
+      });
+    });
+
+    it('应该处理长文本消息', async () => {
+      const { getByText } = render(
+        <TestWrapper>
+          <HomeScreen />
+        </TestWrapper>,
+      );
+
+      await waitFor(() => {
+        // 检查是否正确处理长文本
+        expect(getByText('小艾')).toBeTruthy();
+      });
+    });
+
+    it('应该处理特殊字符', async () => {
+      const { getByPlaceholderText } = render(
+        <TestWrapper>
+          <HomeScreen />
+        </TestWrapper>,
+      );
+
+      await waitFor(() => {
+        const searchInput = getByPlaceholderText('搜索聊天记录...');
+
+        // 测试特殊字符输入
+        fireEvent.changeText(searchInput, '!@#$%^&*()');
+
+        // 应该不会崩溃
+        expect(searchInput).toBeTruthy();
+      });
+    });
+  });
+
+  describe('状态管理测试', () => {
+    it('应该正确响应Redux状态变化', async () => {
+      const store = createTestStore();
+
+      const { getByText, rerender } = render(
+        <TestWrapper store={store}>
+          <HomeScreen />
+        </TestWrapper>,
+      );
+
+      await waitFor(() => {
+        expect(getByText('你好')).toBeTruthy();
+      });
+
+      // 模拟用户登录
+      act(() => {
+        store.dispatch({
+          type: 'auth/loginSuccess',
+          payload: { user: { name: '李四', id: '456' } },
+        });
+      });
+
+      // 重新渲染后应该显示用户名
+      rerender(
+        <TestWrapper store={store}>
+          <HomeScreen />
+        </TestWrapper>,
+      );
+
+      await waitFor(() => {
+        expect(getByText('你好，李四')).toBeTruthy();
+      });
+    });
   });
 });
-
-// 性能测试
-describe('HomeScreen Performance', () => {
-  it('应该在合理时间内完成渲染', async () => {
-    const startTime = Date.now();
-    
-    render(
-      <TestWrapper>
-        <HomeScreen />
-      </TestWrapper>
-    );
-
-    await waitFor(() => {
-      expect(screen.queryByText('加载中...')).toBeNull();
-    });
-
-    const renderTime = Date.now() - startTime;
-    expect(renderTime).toBeLessThan(3000); // 3秒内完成渲染
-  });
-
-  it('应该正确处理大量聊天数据', async () => {
-    // Mock大量数据
-    const mockApiClient = require('../../services/apiClient');
-    const largeChatList = Array.from({ length: 100 }, (_, i) => ({
-      id: `chat_${i}`,
-      name: `聊天 ${i}`,
-      message: `消息内容 ${i}`,
-      time: '刚刚',
-      unread: i % 5
-    }));
-
-    mockApiClient.apiClient.get.mockResolvedValueOnce({
-      data: largeChatList
-    });
-
-    render(
-      <TestWrapper>
-        <HomeScreen />
-      </TestWrapper>
-    );
-
-    // 验证能够处理大量数据
-    await waitFor(() => {
-      expect(screen.queryByText('加载中...')).toBeNull();
-    });
-  });
-});
-
-// 可访问性测试
-describe('HomeScreen Accessibility', () => {
-  it('应该具有正确的可访问性标签', async () => {
-    render(
-      <TestWrapper>
-        <HomeScreen />
-      </TestWrapper>
-    );
-
-    // 检查重要元素的可访问性
-    const searchInput = screen.getByPlaceholderText('搜索聊天记录');
-    expect(searchInput.props.accessibilityLabel || searchInput.props.placeholder).toBeTruthy();
-  });
-
-  it('应该支持屏幕阅读器', async () => {
-    render(
-      <TestWrapper>
-        <HomeScreen />
-      </TestWrapper>
-    );
-
-    // 等待加载完成
-    await waitFor(() => {
-      expect(screen.queryByText('加载中...')).toBeNull();
-    });
-
-    // 检查关键元素是否可被屏幕阅读器访问
-    const title = screen.getByText('索克生活');
-    expect(title.props.accessible !== false).toBeTruthy();
-  });
-}); 

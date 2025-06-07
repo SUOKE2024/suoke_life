@@ -43,25 +43,25 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
 
   useEffect(() => {
     loadGatewayStatus();
-    
+
     // 每30秒自动刷新
     const interval = setInterval(loadGatewayStatus, 30000);
-    
+
     return () => clearInterval(interval);
-  }, [])  // 检查是否需要添加依赖项;
+  }, []);  // 检查是否需要添加依赖项;
 
   const loadGatewayStatus = async () => {
     try {
       // 获取性能指标
       const currentMetrics = performanceMonitor.getCurrentMetrics();
       setMetrics(currentMetrics);
-      
+
       // 获取服务状态
       await loadServicesStatus();
-      
+
       // 评估网关整体健康状态
       evaluateGatewayHealth(currentMetrics);
-      
+
       setLastUpdate(new Date());
     } catch (error) {
       console.error('加载网关状态失败:', error);
@@ -88,7 +88,7 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
 
   const evaluateGatewayHealth = (metrics: PerformanceMetrics) => {
     const healthScore = calculateHealthScore(metrics);
-    
+
     if (healthScore >= 80) {
       setGatewayHealth('healthy');
     } else if (healthScore >= 60) {
@@ -100,23 +100,23 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
 
   const calculateHealthScore = (metrics: PerformanceMetrics): number => {
     let score = 100;
-    
+
     // API响应时间评分
     if (metrics.apiResponseTime > 2000) score -= 20;
     else if (metrics.apiResponseTime > 1000) score -= 10;
-    
+
     // API成功率评分
     if (metrics.apiSuccessRate < 95) score -= 30;
     else if (metrics.apiSuccessRate < 98) score -= 15;
-    
+
     // 错误率评分
     if (metrics.apiErrorRate > 5) score -= 25;
     else if (metrics.apiErrorRate > 2) score -= 10;
-    
+
     // 网络延迟评分
     if (metrics.networkLatency > 1000) score -= 15;
     else if (metrics.networkLatency > 500) score -= 5;
-    
+
     return Math.max(0, score);
   };
 
@@ -133,7 +133,7 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
       Alert.alert(
         '服务详情',
         `服务名称: ${service.name}\n状态: ${getStatusText(service.status)}\n响应时间: ${service.responseTime || 'N/A'}ms\n实例数: ${service.instances || 'N/A'}`,
-        [{ text: '确定' }]
+        [{ text: '确定' }],
       );
     }
   };
@@ -204,7 +204,7 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
       {showDetailedMetrics && (
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>性能指标</Text>
-          
+
           <View style={styles.metricsGrid}>
             <View style={styles.metricCard}>
               <Text style={styles.metricLabel}>API响应时间</Text>
@@ -212,41 +212,41 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
                 {formatResponseTime(metrics.apiResponseTime)}
               </Text>
             </View>
-            
+
             <View style={styles.metricCard}>
               <Text style={styles.metricLabel}>成功率</Text>
               <Text style={[styles.metricValue, { color: metrics.apiSuccessRate >= 95 ? '#4CAF50' : '#F44336' }]}>
                 {formatPercentage(metrics.apiSuccessRate)}
               </Text>
             </View>
-            
+
             <View style={styles.metricCard}>
               <Text style={styles.metricLabel}>错误率</Text>
               <Text style={[styles.metricValue, { color: metrics.apiErrorRate <= 5 ? '#4CAF50' : '#F44336' }]}>
                 {formatPercentage(metrics.apiErrorRate)}
               </Text>
             </View>
-            
+
             <View style={styles.metricCard}>
               <Text style={styles.metricLabel}>网络延迟</Text>
               <Text style={styles.metricValue}>
                 {formatResponseTime(metrics.networkLatency)}
               </Text>
             </View>
-            
+
             <View style={styles.metricCard}>
               <Text style={styles.metricLabel}>连接质量</Text>
               <Text style={[styles.metricValue, { color: getStatusColor(
                 metrics.connectionQuality === 'excellent' ? 'healthy' :
                 metrics.connectionQuality === 'good' ? 'healthy' :
-                metrics.connectionQuality === 'fair' ? 'degraded' : 'unhealthy'
-              )}]}>
+                metrics.connectionQuality === 'fair' ? 'degraded' : 'unhealthy',
+              ) }]}>
                 {metrics.connectionQuality === 'excellent' ? '优秀' :
                  metrics.connectionQuality === 'good' ? '良好' :
                  metrics.connectionQuality === 'fair' ? '一般' : '较差'}
               </Text>
             </View>
-            
+
             <View style={styles.metricCard}>
               <Text style={styles.metricLabel}>错误数量</Text>
               <Text style={styles.metricValue}>
@@ -272,7 +272,7 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
                 <Text style={styles.statusBadgeText}>{getStatusText(service.status)}</Text>
               </View>
             </View>
-            
+
             <View style={styles.serviceDetails}>
               {service.responseTime && (
                 <Text style={styles.serviceDetailText}>
@@ -298,67 +298,67 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
       {showDetailedMetrics && (
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>系统资源</Text>
-          
+
           <View style={styles.resourceCard}>
             <View style={styles.resourceItem}>
               <Text style={styles.resourceLabel}>内存使用率</Text>
               <View style={styles.progressBar}>
-                <View 
+                <View
                   style={[
-                    styles.progressFill, 
-                    { 
+                    styles.progressFill,
+                    {
                       width: `${metrics.memoryUsage}%`,
-                      backgroundColor: metrics.memoryUsage > 80 ? '#F44336' : '#4CAF50'
-                    }
-                  ]} 
+                      backgroundColor: metrics.memoryUsage > 80 ? '#F44336' : '#4CAF50',
+                    },
+                  ]}
                 />
               </View>
               <Text style={styles.resourceValue}>{formatPercentage(metrics.memoryUsage)}</Text>
             </View>
-            
+
             <View style={styles.resourceItem}>
               <Text style={styles.resourceLabel}>CPU使用率</Text>
               <View style={styles.progressBar}>
-                <View 
+                <View
                   style={[
-                    styles.progressFill, 
-                    { 
+                    styles.progressFill,
+                    {
                       width: `${metrics.cpuUsage}%`,
-                      backgroundColor: metrics.cpuUsage > 70 ? '#F44336' : '#4CAF50'
-                    }
-                  ]} 
+                      backgroundColor: metrics.cpuUsage > 70 ? '#F44336' : '#4CAF50',
+                    },
+                  ]}
                 />
               </View>
               <Text style={styles.resourceValue}>{formatPercentage(metrics.cpuUsage)}</Text>
             </View>
-            
+
             <View style={styles.resourceItem}>
               <Text style={styles.resourceLabel}>存储使用率</Text>
               <View style={styles.progressBar}>
-                <View 
+                <View
                   style={[
-                    styles.progressFill, 
-                    { 
+                    styles.progressFill,
+                    {
                       width: `${metrics.storageUsage}%`,
-                      backgroundColor: metrics.storageUsage > 85 ? '#F44336' : '#4CAF50'
-                    }
-                  ]} 
+                      backgroundColor: metrics.storageUsage > 85 ? '#F44336' : '#4CAF50',
+                    },
+                  ]}
                 />
               </View>
               <Text style={styles.resourceValue}>{formatPercentage(metrics.storageUsage)}</Text>
             </View>
-            
+
             <View style={styles.resourceItem}>
               <Text style={styles.resourceLabel}>电池电量</Text>
               <View style={styles.progressBar}>
-                <View 
+                <View
                   style={[
-                    styles.progressFill, 
-                    { 
+                    styles.progressFill,
+                    {
                       width: `${metrics.batteryLevel}%`,
-                      backgroundColor: metrics.batteryLevel < 20 ? '#F44336' : '#4CAF50'
-                    }
-                  ]} 
+                      backgroundColor: metrics.batteryLevel < 20 ? '#F44336' : '#4CAF50',
+                    },
+                  ]}
                 />
               </View>
               <Text style={styles.resourceValue}>{formatPercentage(metrics.batteryLevel)}</Text>
@@ -527,4 +527,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GatewayStatus; 
+export default GatewayStatus;

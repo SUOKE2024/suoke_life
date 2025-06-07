@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import {import { SafeAreaView } from 'react-native-safe-area-context';
-const Icon = React.lazy(() => import('../../components/common/Icon'));
-import { colors } from '../../constants/theme';
-import { cornMazeService } from '../../services/cornMazeService';
-import {View,
+import {
+  View,
   Text,
   StyleSheet,
   ScrollView,
@@ -12,6 +9,11 @@ import {View,
   Alert,
   Dimensions
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSelector } from 'react-redux';
+import { colors } from '../../constants/theme';
+import { cornMazeService } from '../../services/cornMazeService';
+import {
   Maze,
   MazeTemplate,
   MazeTheme,
@@ -34,7 +36,7 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [selectedTab, setSelectedTab] = useState<'my' | 'templates' | 'progress'>('my');
 
-  const userId = 'current-user'; // TODO: 从用户上下文获取
+  const userId = useSelector((state: any) => state.auth.user?.id || 'guest-user');
 
   // 主题配置
   const themeConfig = {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -8,14 +8,20 @@ import {
   TextInput,
   StatusBar,
   Alert,
-  ActivityIndicator
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+  ActivityIndicator,
+  Dimensions,
+  Animated,
+  RefreshControl,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+// import LinearGradient from 'react-native-linear-gradient';
+
+const { width, height } = Dimensions.get('window');
 
 // 聊天项类型定义
 interface ChatItem {
@@ -25,9 +31,10 @@ interface ChatItem {
   message: string;
   time: string;
   unread: number;
-  type: "agent" | "doctor" | "user";
+  type: 'agent' | 'doctor' | 'user';
   isOnline?: boolean;
   tag?: string;
+  priority?: number;
 }
 
 type MainTabParamList = {
@@ -41,15 +48,17 @@ type MainTabParamList = {
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<
   MainTabParamList,
-  "Home"
+  'Home'
 >;
 
 const HomeScreen: React.FC = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [chatList, setChatList] = useState<ChatItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [fadeAnim] = useState(new Animated.Value(0));
+  const [slideAnim] = useState(new Animated.Value(50));
 
   // 从Redux获取用户信息
   const authState = useSelector((state: RootState) => state.auth);
@@ -57,31 +66,31 @@ const HomeScreen: React.FC = () => {
 
   // 工具函数
   const getAgentName = (agentType: string): string => {
-    const names: Record<string, string> = { 
-      xiaoai: '小艾', 
-      xiaoke: '小克', 
-      laoke: '老克', 
-      soer: '索儿' 
+    const names: Record<string, string> = {
+      xiaoai: '小艾',
+      xiaoke: '小克',
+      laoke: '老克',
+      soer: '索儿',
     };
     return names[agentType] || agentType;
   };
 
   const getAgentAvatar = (agentType: string): string => {
-    const avatars: Record<string, string> = { 
-      xiaoai: '🤖', 
-      xiaoke: '🧘‍♂️', 
-      laoke: '👨‍⚕️', 
-      soer: '🏃‍♀️' 
+    const avatars: Record<string, string> = {
+      xiaoai: '🤖',
+      xiaoke: '🧘‍♂️',
+      laoke: '👨‍⚕️',
+      soer: '🏃‍♀️',
     };
     return avatars[agentType] || '🤖';
   };
 
   const getAgentTag = (agentType: string): string => {
-    const tags: Record<string, string> = { 
-      xiaoai: '健康助手', 
-      xiaoke: '中医辨证', 
-      laoke: '健康顾问', 
-      soer: '生活教练' 
+    const tags: Record<string, string> = {
+      xiaoai: '健康助手',
+      xiaoke: '中医辨证',
+      laoke: '健康顾问',
+      soer: '生活教练',
     };
     return tags[agentType] || '';
   };
@@ -91,14 +100,24 @@ const HomeScreen: React.FC = () => {
       xiaoai: '您好！我是小艾，有什么健康问题需要咨询吗？',
       xiaoke: '您好！我是小克，需要什么服务帮助吗？',
       laoke: '您好！我是老克，想学习什么健康知识呢？',
-      soer: '您好！我是索儿，今天想了解什么生活建议呢？'
+      soer: '您好！我是索儿，今天想了解什么生活建议呢？',
     };
     return greetings[agentType] || '您好！';
   };
 
+  const getAgentColors = (agentType: string): { primary: string; secondary: string } => {
+    const colors: Record<string, { primary: string; secondary: string }> = {
+      xiaoai: { primary: '#4A90E2', secondary: '#E3F2FD' },
+      xiaoke: { primary: '#7B68EE', secondary: '#F3E5F5' },
+      laoke: { primary: '#FF6B6B', secondary: '#FFEBEE' },
+      soer: { primary: '#4ECDC4', secondary: '#E0F2F1' },
+    };
+    return colors[agentType] || { primary: '#4A90E2', secondary: '#E3F2FD' };
+  };
+
   const formatTime = (timestamp: string | Date | number): string => {
     if (!timestamp) return '';
-    
+
     const date = new Date(timestamp);
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
@@ -110,22 +129,23 @@ const HomeScreen: React.FC = () => {
     if (diffMins < 60) return `${diffMins}分钟前`;
     if (diffHours < 24) return `${diffHours}小时前`;
     if (diffDays < 7) return `${diffDays}天前`;
-    
+
     return date.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
   };
 
   // 生成智能体聊天数据
   const generateAgentChats = (): ChatItem[] => {
-    return ['xiaoai', 'xiaoke', 'laoke', 'soer'].map(agentType => ({
+    return ['xiaoai', 'xiaoke', 'laoke', 'soer'].map((agentType, index) => ({
       id: agentType,
       name: getAgentName(agentType),
       avatar: getAgentAvatar(agentType),
       message: getAgentGreeting(agentType),
       time: '刚刚',
       unread: Math.floor(Math.random() * 3), // 随机未读数
-      type: "agent" as const,
+      type: 'agent' as const,
       isOnline: Math.random() > 0.3, // 70%概率在线
-      tag: getAgentTag(agentType)
+      tag: getAgentTag(agentType),
+      priority: 10 - index, // 优先级
     }));
   };
 
@@ -134,18 +154,19 @@ const HomeScreen: React.FC = () => {
     const doctors = [
       { name: '张医生', specialty: '中医内科', message: '您的检查结果已出，一切正常' },
       { name: '李教授', specialty: '针灸专家', message: '请按照方案坚持服药，下周复诊' },
-      { name: '王主任', specialty: '康复科', message: '康复训练进展良好，继续保持' }
+      { name: '王主任', specialty: '康复科', message: '康复训练进展良好，继续保持' },
     ];
 
     return doctors.map((doctor, index) => ({
       id: `doctor_${index}`,
       name: doctor.name,
-      avatar: index % 2 === 0 ? "👩‍⚕️" : "👨‍⚕️",
+      avatar: index % 2 === 0 ? '👩‍⚕️' : '👨‍⚕️',
       message: doctor.message,
       time: ['周二', '上周', '3天前'][index],
       unread: index === 0 ? 1 : 0,
-      type: "doctor" as const,
-      tag: doctor.specialty
+      type: 'doctor' as const,
+      tag: doctor.specialty,
+      priority: 5 - index,
     }));
   };
 
@@ -154,17 +175,18 @@ const HomeScreen: React.FC = () => {
     const groups = [
       { name: '健康小组', message: '[王医生]: 分享了一篇养生文章', unread: 3 },
       { name: '家人健康群', message: '[妈妈]: 今天按时吃药了吗？', unread: 0 },
-      { name: '运动打卡群', message: '[小明]: 今天跑步5公里完成！', unread: 2 }
+      { name: '运动打卡群', message: '[小明]: 今天跑步5公里完成！', unread: 2 },
     ];
 
     return groups.map((group, index) => ({
       id: `group_${index}`,
       name: group.name,
-      avatar: "👥",
+      avatar: '👥',
       message: group.message,
       time: ['周三', '3/15', '昨天'][index],
       unread: group.unread,
-      type: "user" as const
+      type: 'user' as const,
+      priority: 2 - index,
     }));
   };
 
@@ -172,147 +194,220 @@ const HomeScreen: React.FC = () => {
   const loadChatList = useCallback(async () => {
     try {
       setLoading(true);
-      
+
       // 模拟API延迟
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise(resolve => setTimeout(resolve, 800));
+
       // 生成聊天数据
       const agentChats = generateAgentChats();
       const doctorChats = generateDoctorChats();
       const userChats = generateUserChats();
-      
+
       const allChats = [...agentChats, ...doctorChats, ...userChats];
-      
-      // 按优先级排序：智能体 > 有未读消息的 > 其他
+
+      // 按优先级排序
       allChats.sort((a, b) => {
         if (a.type === 'agent' && b.type !== 'agent') return -1;
         if (a.type !== 'agent' && b.type === 'agent') return 1;
         if (a.unread > 0 && b.unread === 0) return -1;
         if (a.unread === 0 && b.unread > 0) return 1;
-        return 0;
+        return (b.priority || 0) - (a.priority || 0);
       });
-      
+
       setChatList(allChats);
+
+      // 启动动画
+      Animated.parallel([
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 600,
+          useNativeDriver: true,
+        }),
+        Animated.timing(slideAnim, {
+          toValue: 0,
+          duration: 600,
+          useNativeDriver: true,
+        }),
+      ]).start();
+
     } catch (error) {
       console.error('加载聊天列表失败:', error);
       Alert.alert('错误', '加载聊天列表失败，请稍后重试');
     } finally {
       setLoading(false);
     }
-  }, []);
-
-  // 初始化加载
-  useEffect(() => {
-    loadChatList();
-  }, [loadChatList]);
+  }, [fadeAnim, slideAnim]);
 
   // 下拉刷新
-  const handleRefresh = useCallback(async () => {
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await loadChatList();
     setRefreshing(false);
   }, [loadChatList]);
 
-  // 过滤聊天列表
-  const filteredChatList = chatList.filter(
-    (chat) =>
-      chat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      chat.message.toLowerCase().includes(searchQuery.toLowerCase())
+  // 初始化
+  useEffect(() => {
+    loadChatList();
+  }, [loadChatList]);
+
+  // 搜索过滤
+  const filteredChatList = chatList.filter(item =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.message.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   // 处理聊天项点击
-  const handleChatItemPress = useCallback(async (chatItem: ChatItem) => {
-    try {
-      // 标记消息为已读
-      if (chatItem.unread > 0) {
-        setChatList(prev => prev.map(chat => 
-          chat.id === chatItem.id ? { ...chat, unread: 0 } : chat
-        ));
-      }
-
-      // 导航到聊天详情页面
-      navigation.navigate("ChatDetail", { 
-        chatId: chatItem.id,
-        chatType: chatItem.type,
-        chatName: chatItem.name
-      });
-    } catch (error) {
-      console.error('打开聊天失败:', error);
-      Alert.alert('错误', '无法打开聊天，请稍后重试');
-    }
-  }, [navigation]);
-
-  // 处理添加新聊天
-  const handleAddChat = useCallback(() => {
-    Alert.alert(
-      '新建聊天',
-      '选择聊天类型',
-      [
-        { text: '联系医生', onPress: () => navigation.navigate('Life' as never) },
-        { text: '加入群组', onPress: () => navigation.navigate('Explore' as never) },
-        { text: '取消', style: 'cancel' }
-      ]
-    );
-  }, [navigation]);
+  const handleChatPress = (item: ChatItem) => {
+    navigation.navigate('ChatDetail', {
+      chatId: item.id,
+      chatType: item.type,
+      chatName: item.name,
+    });
+  };
 
   // 渲染聊天项
-  const renderChatItem = ({ item }: { item: ChatItem }) => (
-    <TouchableOpacity
-      style={styles.chatItem}
-      onPress={() => handleChatItemPress(item)}
-      activeOpacity={0.7}
-    >
-      {/* 头像 */}
-      <View style={styles.avatarContainer}>
-        <View style={styles.avatarImageContainer}>
-          <Text style={styles.avatarText}>{item.avatar}</Text>
+  const renderChatItem = ({ item, index }: { item: ChatItem; index: number }) => {
+    const colors = item.type === 'agent' ? getAgentColors(item.id) : { primary: '#666', secondary: '#F5F5F5' };
+
+    return (
+      <Animated.View
+        style={[
+          styles.chatItemContainer,
+          {
+            opacity: fadeAnim,
+            transform: [{ translateY: slideAnim }],
+          },
+        ]}
+      >
+        <TouchableOpacity
+          style={[
+            styles.chatItem,
+            item.type === 'agent' && styles.agentChatItem,
+          ]}
+          onPress={() => handleChatPress(item)}
+          activeOpacity={0.7}
+        >
+          {/* 左侧头像区域 */}
+          <View style={styles.avatarContainer}>
+            <View style={[
+              styles.avatarWrapper,
+              { backgroundColor: colors.secondary },
+            ]}>
+              <Text style={[styles.avatar, { color: colors.primary }]}>
+                {item.avatar}
+              </Text>
+              {item.isOnline && (
+                <View style={styles.onlineIndicator} />
+              )}
+            </View>
+          </View>
+
+          {/* 中间内容区域 */}
+          <View style={styles.contentContainer}>
+            <View style={styles.headerRow}>
+              <Text style={[
+                styles.chatName,
+                item.type === 'agent' && { color: colors.primary },
+              ]}>
+                {item.name}
+              </Text>
+              {item.tag && (
+                <View style={[styles.tagContainer, { backgroundColor: colors.secondary }]}>
+                  <Text style={[styles.tagText, { color: colors.primary }]}>
+                    {item.tag}
+                  </Text>
+                </View>
+              )}
+              <Text style={styles.timeText}>{item.time}</Text>
+            </View>
+
+            <Text style={styles.messageText} numberOfLines={2}>
+              {item.message}
+            </Text>
+          </View>
+
+          {/* 右侧状态区域 */}
+          <View style={styles.statusContainer}>
+            {item.unread > 0 && (
+              <View style={[styles.unreadBadge, { backgroundColor: colors.primary }]}>
+                <Text style={styles.unreadText}>
+                  {item.unread > 99 ? '99+' : item.unread}
+                </Text>
+              </View>
+            )}
+            <Icon
+              name="chevron-right"
+              size={20}
+              color="#C0C0C0"
+              style={styles.chevronIcon}
+            />
+          </View>
+        </TouchableOpacity>
+      </Animated.View>
+    );
+  };
+
+  // 渲染头部
+  const renderHeader = () => (
+    <View style={styles.header}>
+      <View style={styles.headerGradient}>
+        <View style={styles.headerContent}>
+          <View style={styles.greetingContainer}>
+            <Text style={styles.greetingText}>
+              {user && typeof user === 'object' && 'name' in user ? `你好，${(user as any).name}` : '你好'}
+            </Text>
+            <Text style={styles.subGreetingText}>
+              今天想聊些什么呢？
+            </Text>
+          </View>
+
+          <TouchableOpacity style={styles.profileButton}>
+            <Icon name="account-circle" size={32} color="#FFFFFF" />
+          </TouchableOpacity>
         </View>
-        {item.isOnline !== undefined && (
-          <View
-            style={[
-              styles.onlineIndicator,
-              { backgroundColor: item.isOnline ? "#4CAF50" : "#9E9E9E" }
-            ]}
-          />
-        )}
       </View>
 
-      {/* 聊天内容 */}
-      <View style={styles.chatContent}>
-        <View style={styles.chatHeader}>
-          <Text style={styles.chatName}>{item.name}</Text>
-          <Text style={styles.chatTime}>{item.time}</Text>
-        </View>
-        <View style={styles.messageRow}>
-          <Text
-            style={styles.chatMessage}
-            numberOfLines={1}
-            ellipsizeMode="tail"
-          >
-            {item.message}
-          </Text>
-          {item.unread > 0 && (
-            <View style={styles.unreadBadge}>
-              <Text style={styles.unreadText}>
-                {item.unread > 99 ? "99+" : item.unread}
-              </Text>
-            </View>
+      {/* 搜索栏 */}
+      <View style={styles.searchContainer}>
+        <View style={styles.searchInputContainer}>
+          <Icon name="magnify" size={20} color="#999" style={styles.searchIcon} />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="搜索聊天记录..."
+            placeholderTextColor="#999"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
+          {searchQuery.length > 0 && (
+            <TouchableOpacity
+              onPress={() => setSearchQuery('')}
+              style={styles.clearButton}
+            >
+              <Icon name="close-circle" size={20} color="#999" />
+            </TouchableOpacity>
           )}
         </View>
-        {item.tag && (
-          <View style={styles.tagContainer}>
-            <Text style={styles.tagText}>{item.tag}</Text>
-          </View>
-        )}
       </View>
-    </TouchableOpacity>
+    </View>
   );
 
+  // 渲染空状态
+  const renderEmptyState = () => (
+    <View style={styles.emptyContainer}>
+      <Icon name="chat-outline" size={64} color="#C0C0C0" />
+      <Text style={styles.emptyTitle}>暂无聊天记录</Text>
+      <Text style={styles.emptySubtitle}>开始与AI智能体对话吧</Text>
+    </View>
+  );
+
+  // 渲染加载状态
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="light-content" backgroundColor="#4A90E2" />
+        {renderHeader()}
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#007AFF" />
+          <ActivityIndicator size="large" color="#4A90E2" />
           <Text style={styles.loadingText}>加载中...</Text>
         </View>
       </SafeAreaView>
@@ -321,37 +416,25 @@ const HomeScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#f6f6f6" />
+      <StatusBar barStyle="light-content" backgroundColor="#4A90E2" />
 
-      {/* 头部 */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>索克生活</Text>
-        <TouchableOpacity style={styles.addButton} onPress={handleAddChat}>
-          <Icon name="plus" size={24} color="#007AFF" />
-        </TouchableOpacity>
-      </View>
-
-      {/* 搜索框 */}
-      <View style={styles.searchContainer}>
-        <Icon name="magnify" size={20} color="#999" style={styles.searchIcon} />
-        <TextInput
-          style={styles.searchInput}
-          placeholder="搜索聊天记录"
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          placeholderTextColor="#999"
-        />
-      </View>
-
-      {/* 聊天列表 */}
       <FlatList
         data={filteredChatList}
-        renderItem={renderChatItem}
         keyExtractor={(item) => item.id}
-        style={styles.chatList}
+        renderItem={renderChatItem}
+        ListHeaderComponent={renderHeader}
+        ListEmptyComponent={renderEmptyState}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={['#4A90E2']}
+            tintColor="#4A90E2"
+          />
+        }
         showsVerticalScrollIndicator={false}
-        refreshing={refreshing}
-        onRefresh={handleRefresh}
+        contentContainerStyle={styles.listContainer}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
     </SafeAreaView>
   );
@@ -360,149 +443,208 @@ const HomeScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f6f6f6"
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  loadingText: {
-    fontSize: 16,
-    color: '#666',
-    marginTop: 10
+    backgroundColor: '#F8F9FA',
   },
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: "#fff",
-    borderBottomWidth: 1,
-    borderBottomColor: "#e0e0e0"
+    backgroundColor: '#FFFFFF',
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
+    marginBottom: 10,
   },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#333"
+  headerGradient: {
+    paddingTop: 10,
+    paddingBottom: 20,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    backgroundColor: '#4A90E2',
   },
-  addButton: {
-    padding: 8
+  headerContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  greetingContainer: {
+    flex: 1,
+  },
+  greetingText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginBottom: 4,
+  },
+  subGreetingText: {
+    fontSize: 14,
+    color: '#E3F2FD',
+  },
+  profileButton: {
+    padding: 8,
   },
   searchContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#fff",
-    marginHorizontal: 16,
-    marginVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#e0e0e0"
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+  },
+  searchInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F5F5F5',
+    borderRadius: 25,
+    paddingHorizontal: 15,
+    height: 50,
   },
   searchIcon: {
-    marginRight: 8
+    marginRight: 10,
   },
   searchInput: {
     flex: 1,
-    height: 40,
     fontSize: 16,
-    color: "#333"
+    color: '#333',
   },
-  chatList: {
-    flex: 1
+  clearButton: {
+    padding: 5,
+  },
+  listContainer: {
+    paddingBottom: 20,
+  },
+  chatItemContainer: {
+    marginHorizontal: 15,
+    marginVertical: 4,
   },
   chatItem: {
-    flexDirection: "row",
-    backgroundColor: "#fff",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: "#f0f0f0"
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  agentChatItem: {
+    borderLeftWidth: 4,
+    borderLeftColor: '#4A90E2',
   },
   avatarContainer: {
-    position: "relative",
-    marginRight: 12
+    marginRight: 12,
   },
-  avatarImageContainer: {
+  avatarWrapper: {
     width: 50,
     height: 50,
     borderRadius: 25,
-    backgroundColor: "#f0f0f0",
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
   },
-  avatarText: {
+  avatar: {
     fontSize: 24,
-    textAlign: "center"
+    fontWeight: 'bold',
   },
   onlineIndicator: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 2,
     right: 2,
     width: 12,
     height: 12,
     borderRadius: 6,
+    backgroundColor: '#4CAF50',
     borderWidth: 2,
-    borderColor: "#fff"
+    borderColor: '#FFFFFF',
   },
-  chatContent: {
+  contentContainer: {
     flex: 1,
-    justifyContent: "center"
+    marginRight: 8,
   },
-  chatHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 4
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 4,
   },
   chatName: {
     fontSize: 16,
-    fontWeight: "600",
-    color: "#333"
-  },
-  chatTime: {
-    fontSize: 12,
-    color: "#999"
-  },
-  messageRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 4
-  },
-  chatMessage: {
-    flex: 1,
-    fontSize: 14,
-    color: "#666",
-    marginRight: 8
-  },
-  unreadBadge: {
-    backgroundColor: "#FF3B30",
-    borderRadius: 10,
-    minWidth: 20,
-    height: 20,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 6
-  },
-  unreadText: {
-    fontSize: 12,
-    color: "#fff",
-    fontWeight: "600"
+    fontWeight: '600',
+    color: '#333',
+    marginRight: 8,
   },
   tagContainer: {
-    alignSelf: "flex-start"
-  },
-  tagText: {
-    fontSize: 12,
-    color: "#007AFF",
-    backgroundColor: "#E3F2FD",
     paddingHorizontal: 8,
     paddingVertical: 2,
-    borderRadius: 4
-  }
+    borderRadius: 10,
+    marginRight: 8,
+  },
+  tagText: {
+    fontSize: 10,
+    fontWeight: '500',
+  },
+  timeText: {
+    fontSize: 12,
+    color: '#999',
+    marginLeft: 'auto',
+  },
+  messageText: {
+    fontSize: 14,
+    color: '#666',
+    lineHeight: 20,
+  },
+  statusContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  unreadBadge: {
+    minWidth: 20,
+    height: 20,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  unreadText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: 'bold',
+    paddingHorizontal: 6,
+  },
+  chevronIcon: {
+    opacity: 0.5,
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#F0F0F0',
+    marginHorizontal: 20,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#666',
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 60,
+  },
+  emptyTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#666',
+    marginTop: 16,
+    marginBottom: 8,
+  },
+  emptySubtitle: {
+    fontSize: 14,
+    color: '#999',
+  },
 });
 
 export default HomeScreen;

@@ -207,13 +207,13 @@ export const SyncStatusCard: React.FC<SyncStatusCardProps> = ({ style }) => {
 
   useEffect(() => {
     const unsubscribe = addSyncListener(setSyncStatus);
-    
+
     // 获取缓存统计
     const stats = offlineService.getCacheStats();
     setCacheStats(stats);
 
     return unsubscribe;
-  }, [])  // 检查是否需要添加依赖项;
+  }, []);  // 检查是否需要添加依赖项;
 
   if (!GATEWAY_FEATURES.ENABLE_OFFLINE) {
     return null;
@@ -250,7 +250,7 @@ export const SyncStatusCard: React.FC<SyncStatusCardProps> = ({ style }) => {
             <Text style={styles.statusItemLabel}>网络</Text>
             <Text style={[
               styles.statusItemValue,
-              { color: syncStatus.isOnline ? '#4CAF50' : '#f44336' }
+              { color: syncStatus.isOnline ? '#4CAF50' : '#f44336' },
             ]}>
               {syncStatus.isOnline ? '在线' : '离线'}
             </Text>
@@ -265,7 +265,7 @@ export const SyncStatusCard: React.FC<SyncStatusCardProps> = ({ style }) => {
             <Text style={styles.statusItemLabel}>失败</Text>
             <Text style={[
               styles.statusItemValue,
-              { color: syncStatus.failedOperations > 0 ? '#f44336' : '#666' }
+              { color: syncStatus.failedOperations > 0 ? '#f44336' : '#666' },
             ]}>
               {syncStatus.failedOperations}
             </Text>
@@ -275,7 +275,7 @@ export const SyncStatusCard: React.FC<SyncStatusCardProps> = ({ style }) => {
             <Text style={styles.statusItemLabel}>同步中</Text>
             <Text style={[
               styles.statusItemValue,
-              { color: syncStatus.syncInProgress ? '#ff9800' : '#666' }
+              { color: syncStatus.syncInProgress ? '#ff9800' : '#666' },
             ]}>
               {syncStatus.syncInProgress ? '是' : '否'}
             </Text>
@@ -286,7 +286,7 @@ export const SyncStatusCard: React.FC<SyncStatusCardProps> = ({ style }) => {
           <View style={styles.cacheStats}>
             <Text style={styles.cacheStatsTitle}>缓存统计</Text>
             <Text style={styles.cacheStatsText}>
-              缓存项: {cacheStats.totalItems} | 
+              缓存项: {cacheStats.totalItems} |
               大小: {Math.round(cacheStats.totalSize / 1024)}KB |
               过期: {cacheStats.expiredItems}
             </Text>
@@ -494,4 +494,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OfflineIndicator; 
+export default OfflineIndicator;

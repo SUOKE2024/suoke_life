@@ -3,7 +3,7 @@ config - 索克生活项目模块
 """
 
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict, Optional
 import logging
 import os
 import yaml
@@ -25,7 +25,7 @@ class ConfigManager:
 
     def __init__(self):
         """初始化配置管理器"""
-        self._config: dict[str, Any] = {}
+        self._config: Dict[str, Any] = {}
         self._loaded = False
 
     def get_config(self) -> dict[str, Any]:
@@ -39,7 +39,7 @@ class ConfigManager:
             self.load_config()
         return self._config
 
-    def load_config(self, config_file: str | None = None) -> dict[str, Any]:
+    def load_config(self, config_file: Optional[str] = None) -> Dict[str, Any]:
         """
         加载配置文件
 
@@ -264,7 +264,7 @@ def get_config() -> dict[str, Any]:
     return ConfigManagerSingleton.get_instance().get_config()
 
 
-def load_config(config_file: str | None = None) -> dict[str, Any]:
+def load_config(config_file: Optional[str] = None) -> Dict[str, Any]:
     """加载配置文件（向后兼容）"""
     return ConfigManagerSingleton.get_instance().load_config(config_file)
 

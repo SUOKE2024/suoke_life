@@ -17,38 +17,38 @@ export const STORAGE_CONFIG = {
 export const API_GATEWAY_CONFIG = {
   // 网关基础URL
   GATEWAY_URL: 'http://localhost:8000',
-  
+
   // 网关API版本
   API_VERSION: 'v1',
-  
+
   // 网关路由前缀
   GATEWAY_PREFIX: '/api/v1/gateway',
-  
+
   // 超时配置
   TIMEOUT: 30000,
   RETRY_ATTEMPTS: 3,
   RETRY_DELAY: 1000,
-  
+
   // 通过网关的服务端点
   SERVICES: {
     // 认证服务
     AUTH: '/auth-service',
-    
+
     // 用户服务
     USER: '/user-service',
-    
+
     // 健康数据服务
     HEALTH_DATA: '/health-data-service',
-    
+
     // 区块链服务
     BLOCKCHAIN: '/blockchain-service',
-    
+
     // RAG服务
     RAG: '/rag-service',
-    
+
     // 医学知识服务
     MED_KNOWLEDGE: '/med-knowledge-service',
-    
+
     // 智能体服务
     AGENTS: {
       XIAOAI: '/agent-services/xiaoai-service',
@@ -56,7 +56,7 @@ export const API_GATEWAY_CONFIG = {
       LAOKE: '/agent-services/laoke-service',
       SOER: '/agent-services/soer-service',
     },
-    
+
     // 四诊服务
     DIAGNOSIS: {
       LOOK: '/diagnostic-services/look-service',
@@ -65,7 +65,7 @@ export const API_GATEWAY_CONFIG = {
       PALPATION: '/diagnostic-services/palpation-service',
       CALCULATION: '/diagnostic-services/calculation-service',
     },
-    
+
     // 其他服务
     MESSAGE_BUS: '/message-bus-service',
     CORN_MAZE: '/corn-maze-service',
@@ -75,7 +75,7 @@ export const API_GATEWAY_CONFIG = {
     INTEGRATION: '/integration-service',
     SUOKE_BENCH: '/suoke-bench-service',
   },
-  
+
   // 服务端点映射
   ENDPOINTS: {
     // 认证相关
@@ -87,7 +87,7 @@ export const API_GATEWAY_CONFIG = {
       PROFILE: '/auth/profile',
       VERIFY: '/auth/verify',
     },
-    
+
     // 用户相关
     USER: {
       PROFILE: '/users/profile',
@@ -95,7 +95,7 @@ export const API_GATEWAY_CONFIG = {
       PREFERENCES: '/users/preferences',
       HEALTH_PROFILE: '/users/health-profile',
     },
-    
+
     // 健康数据
     HEALTH: {
       DATA: '/health-data',
@@ -103,7 +103,7 @@ export const API_GATEWAY_CONFIG = {
       EXPORT: '/health-data/export',
       ANALYSIS: '/health-data/analysis',
     },
-    
+
     // 智能体
     AGENTS: {
       STATUS: '/agents/status',
@@ -111,7 +111,7 @@ export const API_GATEWAY_CONFIG = {
       PERFORMANCE: '/agents/performance',
       SETTINGS: '/agents/settings',
     },
-    
+
     // 四诊
     DIAGNOSIS: {
       LOOK: '/diagnosis/look',
@@ -120,7 +120,7 @@ export const API_GATEWAY_CONFIG = {
       PALPATION: '/diagnosis/palpation',
       COMPREHENSIVE: '/diagnosis/comprehensive',
     },
-    
+
     // RAG服务
     RAG: {
       QUERY: '/rag/query',
@@ -131,7 +131,7 @@ export const API_GATEWAY_CONFIG = {
       SYNDROME_ANALYSIS: '/rag/tcm/syndrome',
       CONSTITUTION_ANALYSIS: '/rag/tcm/constitution',
     },
-    
+
     // 区块链
     BLOCKCHAIN: {
       RECORDS: '/blockchain/records',
@@ -146,33 +146,33 @@ export const API_GATEWAY_CONFIG = {
 export const buildApiUrl = (service: string, endpoint: string = ''): string => {
   const { GATEWAY_URL, GATEWAY_PREFIX } = API_GATEWAY_CONFIG;
   const serviceUrl = API_GATEWAY_CONFIG.SERVICES[service as keyof typeof API_GATEWAY_CONFIG.SERVICES];
-  
+
   if (!serviceUrl) {
     throw new Error(`Unknown service: ${service}`);
   }
-  
+
   return `${GATEWAY_URL}${GATEWAY_PREFIX}${serviceUrl}${endpoint}`;
 };
 
 // 构建智能体服务URL
 export const buildAgentUrl = (agent: string, endpoint: string = ''): string => {
   const agentService = API_GATEWAY_CONFIG.SERVICES.AGENTS[agent as keyof typeof API_GATEWAY_CONFIG.SERVICES.AGENTS];
-  
+
   if (!agentService) {
     throw new Error(`Unknown agent: ${agent}`);
   }
-  
+
   return `${API_GATEWAY_CONFIG.GATEWAY_URL}${API_GATEWAY_CONFIG.GATEWAY_PREFIX}${agentService}${endpoint}`;
 };
 
 // 构建四诊服务URL
 export const buildDiagnosisUrl = (diagnosis: string, endpoint: string = ''): string => {
   const diagnosisService = API_GATEWAY_CONFIG.SERVICES.DIAGNOSIS[diagnosis as keyof typeof API_GATEWAY_CONFIG.SERVICES.DIAGNOSIS];
-  
+
   if (!diagnosisService) {
     throw new Error(`Unknown diagnosis service: ${diagnosis}`);
   }
-  
+
   return `${API_GATEWAY_CONFIG.GATEWAY_URL}${API_GATEWAY_CONFIG.GATEWAY_PREFIX}${diagnosisService}${endpoint}`;
 };
 
@@ -210,9 +210,9 @@ export const LANGUAGE_CONFIG = {
 export const HEALTH_CONFIG = {
   VITAL_SIGNS: {
     HEART_RATE: { min: 60, max: 100 },
-    BLOOD_PRESSURE: { 
-      systolic: { min: 90, max: 140 }, 
-      diastolic: { min: 60, max: 90 } 
+    BLOOD_PRESSURE: {
+      systolic: { min: 90, max: 140 },
+      diastolic: { min: 60, max: 90 },
     },
     TEMPERATURE: { min: 36.1, max: 37.2 },
     OXYGEN_SATURATION: { min: 95, max: 100 },
@@ -316,7 +316,7 @@ export const ENV_CONFIG = {
 export const getCurrentEnvConfig = () => {
   const env = APP_CONFIG.ENVIRONMENT as keyof typeof ENV_CONFIG;
   const envConfig = ENV_CONFIG[env] || ENV_CONFIG.development;
-  
+
   // 合并网关配置
   return {
     ...envConfig,
@@ -337,10 +337,10 @@ export const SERVICE_DISCOVERY_CONFIG = {
 // 获取服务健康状态URL
 export const getServiceHealthUrl = (service?: string): string => {
   const { GATEWAY_URL, GATEWAY_PREFIX } = getCurrentEnvConfig();
-  
+
   if (service) {
     return `${GATEWAY_URL}${GATEWAY_PREFIX}/services/${service}/health`;
   }
-  
+
   return `${GATEWAY_URL}${GATEWAY_PREFIX}/services`;
 };

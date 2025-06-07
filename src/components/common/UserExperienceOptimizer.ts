@@ -11,8 +11,8 @@ export interface UXOptimizationConfig {enablePerformanceMonitoring: boolean;
   enableUserFeedback: boolean;
   optimizationThreshold: number;
 }
-export interface UXRecommendation {type: "performance" | "accessibility" | "usability" | "content";
-  priority: "low" | "medium" | "high" | "critical";
+export interface UXRecommendation {type: 'performance' | 'accessibility' | 'usability' | 'content';
+  priority: 'low' | 'medium' | 'high' | 'critical';
   description: string;
   action: string;
   impact: number;

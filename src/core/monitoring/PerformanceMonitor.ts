@@ -45,11 +45,11 @@ export class PerformanceMonitor {
    */
   public startMonitoring(): void {
     if (this.isMonitoring) return;
-    
+
     this.isMonitoring = true;
     this.collectInitialMetrics();
     this.startPeriodicCollection();
-    
+
     console.log('🚀 性能监控已启动');
   }
 
@@ -60,7 +60,7 @@ export class PerformanceMonitor {
     this.isMonitoring = false;
     this.observers.forEach(observer => observer.disconnect());
     this.observers = [];
-    
+
     console.log('⏹️ 性能监控已停止');
   }
 
@@ -72,7 +72,7 @@ export class PerformanceMonitor {
     value: number,
     unit: string,
     category: PerformanceMetric['category'],
-    threshold?: number
+    threshold?: number,
   ): void {
     const metric: PerformanceMetric = {
       name,
@@ -81,7 +81,7 @@ export class PerformanceMonitor {
       timestamp: Date.now(),
       category,
       threshold,
-      status: this.getMetricStatus(value, threshold)
+      status: this.getMetricStatus(value, threshold),
     };
 
     this.metrics.push(metric);
@@ -93,22 +93,22 @@ export class PerformanceMonitor {
    */
   public async measureFunction<T>(
     name: string,
-    fn: () => Promise<T> | T
+    fn: () => Promise<T> | T,
   ): Promise<T> {
     const startTime = performance.now();
-    
+
     try {
       const result = await fn();
       const duration = performance.now() - startTime;
-      
+
       this.recordMetric(
         `function_${name}`,
         duration,
         'ms',
         'cpu',
-        100 // 100ms threshold
+        100, // 100ms threshold
       );
-      
+
       return result;
     } catch (error) {
       const duration = performance.now() - startTime;
@@ -116,7 +116,7 @@ export class PerformanceMonitor {
         `function_${name}_error`,
         duration,
         'ms',
-        'cpu'
+        'cpu',
       );
       throw error;
     }
@@ -131,14 +131,14 @@ export class PerformanceMonitor {
       duration,
       'ms',
       'network',
-      2000 // 2s threshold
+      2000, // 2s threshold
     );
 
     this.recordMetric(
       `api_status_${status}`,
       1,
       'count',
-      'network'
+      'network',
     );
   }
 
@@ -147,7 +147,7 @@ export class PerformanceMonitor {
    */
   public getPerformanceReport(): PerformanceReport {
     const recentMetrics = this.metrics.filter(
-      metric => Date.now() - metric.timestamp < 60000 // 最近1分钟
+      metric => Date.now() - metric.timestamp < 60000, // 最近1分钟
     );
 
     const score = this.calculatePerformanceScore(recentMetrics);
@@ -160,8 +160,8 @@ export class PerformanceMonitor {
       summary: {
         score,
         issues,
-        recommendations
-      }
+        recommendations,
+      },
     };
   }
 
@@ -187,7 +187,7 @@ export class PerformanceMonitor {
       lcp: getLatestMetric('largest_contentful_paint'),
       fid: getLatestMetric('first_input_delay'),
       cls: getLatestMetric('cumulative_layout_shift'),
-      ttfb: getLatestMetric('time_to_first_byte')
+      ttfb: getLatestMetric('time_to_first_byte'),
     };
   }
 
@@ -204,7 +204,7 @@ export class PerformanceMonitor {
       return {
         used: memory.usedJSHeapSize,
         total: memory.totalJSHeapSize,
-        percentage: (memory.usedJSHeapSize / memory.totalJSHeapSize) * 100
+        percentage: (memory.usedJSHeapSize / memory.totalJSHeapSize) * 100,
       };
     }
 
@@ -276,7 +276,7 @@ export class PerformanceMonitor {
         memoryUsage.percentage,
         '%',
         'memory',
-        80 // 80% threshold
+        80, // 80% threshold
       );
     }
 
@@ -287,7 +287,7 @@ export class PerformanceMonitor {
         'network_downlink',
         connection.downlink,
         'Mbps',
-        'network'
+        'network',
       );
     }
   }
@@ -298,7 +298,7 @@ export class PerformanceMonitor {
   private startPeriodicCollection(): void {
     setInterval(() => {
       if (!this.isMonitoring) return;
-      
+
       this.collectInitialMetrics();
     }, 30000); // 每30秒收集一次
   }
@@ -320,13 +320,13 @@ export class PerformanceMonitor {
   private recordResourceMetric(entry: PerformanceResourceTiming): void {
     const duration = entry.responseEnd - entry.startTime;
     const resourceType = this.getResourceType(entry.name);
-    
+
     this.recordMetric(
       `resource_${resourceType}`,
       duration,
       'ms',
       'network',
-      1000 // 1s threshold
+      1000, // 1s threshold
     );
   }
 
@@ -339,7 +339,7 @@ export class PerformanceMonitor {
       entry.duration,
       'ms',
       'user_interaction',
-      100 // 100ms threshold
+      100, // 100ms threshold
     );
   }
 
@@ -348,7 +348,7 @@ export class PerformanceMonitor {
    */
   private getMetricStatus(value: number, threshold?: number): PerformanceMetric['status'] {
     if (!threshold) return 'good';
-    
+
     if (value > threshold * 2) return 'critical';
     if (value > threshold) return 'warning';
     return 'good';
@@ -363,7 +363,7 @@ export class PerformanceMonitor {
     const weights = {
       good: 1,
       warning: 0.7,
-      critical: 0.3
+      critical: 0.3,
     };
 
     const totalWeight = metrics.reduce((sum, metric) => sum + weights[metric.status], 0);
@@ -377,7 +377,7 @@ export class PerformanceMonitor {
    */
   private identifyIssues(metrics: PerformanceMetric[]): string[] {
     const issues: string[] = [];
-    
+
     const criticalMetrics = metrics.filter(m => m.status === 'critical');
     const warningMetrics = metrics.filter(m => m.status === 'warning');
 
@@ -445,12 +445,12 @@ export class PerformanceMonitor {
    */
   private getResourceType(url: string): string {
     const extension = url.split('.').pop()?.toLowerCase();
-    
+
     if (['js', 'ts'].includes(extension || '')) return 'script';
     if (['css'].includes(extension || '')) return 'style';
     if (['png', 'jpg', 'jpeg', 'gif', 'svg'].includes(extension || '')) return 'image';
     if (['woff', 'woff2', 'ttf'].includes(extension || '')) return 'font';
-    
+
     return 'other';
   }
 
@@ -460,10 +460,10 @@ export class PerformanceMonitor {
   private trimMetrics(): void {
     const maxAge = 5 * 60 * 1000; // 5分钟
     const cutoff = Date.now() - maxAge;
-    
+
     this.metrics = this.metrics.filter(metric => metric.timestamp > cutoff);
   }
 }
 
 // 导出单例实例
-export const performanceMonitor = PerformanceMonitor.getInstance(); 
+export const performanceMonitor = PerformanceMonitor.getInstance();

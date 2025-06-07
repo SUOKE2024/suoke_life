@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { unifiedApiService } from '../../services/unifiedApiService';
@@ -32,7 +32,7 @@ const LoginScreen: React.FC = () => {
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
     password: '',
-    rememberMe: false
+    rememberMe: false,
   });
   const [errors, setErrors] = useState<LoginFormErrors>({});
   const [loading, setLoading] = useState(false);
@@ -41,7 +41,7 @@ const LoginScreen: React.FC = () => {
   // 检查是否已登录
   useEffect(() => {
     checkAuthStatus();
-  }, [])  // 检查是否需要添加依赖项;
+  }, []);  // 检查是否需要添加依赖项;
 
   const checkAuthStatus = async () => {
     try {
@@ -94,7 +94,7 @@ const LoginScreen: React.FC = () => {
       const loginResponse = await unifiedApiService.login({
         email: formData.email,
         password: formData.password,
-        rememberMe: formData.rememberMe
+        rememberMe: formData.rememberMe,
       });
 
       // 获取用户信息
@@ -106,14 +106,14 @@ const LoginScreen: React.FC = () => {
         [
           {
             text: '确定',
-            onPress: () => navigation.navigate('Main' as never)
-          }
-        ]
+            onPress: () => navigation.navigate('Main' as never),
+          },
+        ],
       );
     } catch (error: any) {
       console.error('登录失败:', error);
       setErrors({
-        general: error.message || '登录失败，请检查邮箱和密码'
+        general: error.message || '登录失败，请检查邮箱和密码',
       });
     } finally {
       setLoading(false);
@@ -174,7 +174,7 @@ const LoginScreen: React.FC = () => {
               <TextInput
                 style={[
                   styles.passwordInput,
-                  errors.password && styles.inputError
+                  errors.password && styles.inputError,
                 ]}
                 placeholder="请输入密码"
                 value={formData.password}
@@ -207,13 +207,13 @@ const LoginScreen: React.FC = () => {
               onPress={() =>
                 setFormData({
                   ...formData,
-                  rememberMe: !formData.rememberMe
+                  rememberMe: !formData.rememberMe,
                 })
               }
             >
               <View style={[
                 styles.checkboxInner,
-                formData.rememberMe && styles.checkboxChecked
+                formData.rememberMe && styles.checkboxChecked,
               ]}>
                 {formData.rememberMe && (
                   <Text style={styles.checkmark}>✓</Text>
@@ -288,27 +288,27 @@ const LoginScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F7FA'
+    backgroundColor: '#F5F7FA',
   },
   scrollContainer: {
     flexGrow: 1,
     justifyContent: 'center',
-    padding: 20
+    padding: 20,
   },
   header: {
     alignItems: 'center',
-    marginBottom: 40
+    marginBottom: 40,
   },
   title: {
     fontSize: 32,
     fontWeight: 'bold',
     color: '#2C3E50',
-    marginBottom: 8
+    marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
     color: '#7F8C8D',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   form: {
     backgroundColor: '#FFFFFF',
@@ -317,20 +317,20 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.1,
     shadowRadius: 8,
-    elevation: 4
+    elevation: 4,
   },
   inputContainer: {
-    marginBottom: 20
+    marginBottom: 20,
   },
   label: {
     fontSize: 16,
     fontWeight: '600',
     color: '#2C3E50',
-    marginBottom: 8
+    marginBottom: 8,
   },
   input: {
     borderWidth: 1,
@@ -338,14 +338,14 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
-    backgroundColor: '#FFFFFF'
+    backgroundColor: '#FFFFFF',
   },
   inputError: {
-    borderColor: '#E74C3C'
+    borderColor: '#E74C3C',
   },
   passwordContainer: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   passwordInput: {
     flex: 1,
@@ -354,24 +354,24 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
-    backgroundColor: '#FFFFFF'
+    backgroundColor: '#FFFFFF',
   },
   eyeButton: {
     position: 'absolute',
     right: 12,
-    padding: 4
+    padding: 4,
   },
   eyeText: {
     color: '#3498DB',
-    fontSize: 14
+    fontSize: 14,
   },
   rememberContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20
+    marginBottom: 20,
   },
   checkbox: {
-    marginRight: 8
+    marginRight: 8,
   },
   checkboxInner: {
     width: 20,
@@ -380,68 +380,68 @@ const styles = StyleSheet.create({
     borderColor: '#E1E8ED',
     borderRadius: 4,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   checkboxChecked: {
     backgroundColor: '#3498DB',
-    borderColor: '#3498DB'
+    borderColor: '#3498DB',
   },
   checkmark: {
     color: '#FFFFFF',
     fontSize: 12,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   rememberText: {
     fontSize: 14,
-    color: '#7F8C8D'
+    color: '#7F8C8D',
   },
   errorText: {
     color: '#E74C3C',
     fontSize: 14,
-    marginTop: 4
+    marginTop: 4,
   },
   loginButton: {
     backgroundColor: '#3498DB',
     borderRadius: 8,
     padding: 16,
     alignItems: 'center',
-    marginBottom: 16
+    marginBottom: 16,
   },
   loginButtonDisabled: {
-    backgroundColor: '#BDC3C7'
+    backgroundColor: '#BDC3C7',
   },
   loginButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: '600'
+    fontWeight: '600',
   },
   forgotPasswordButton: {
     alignItems: 'center',
-    marginBottom: 24
+    marginBottom: 24,
   },
   forgotPasswordText: {
     color: '#3498DB',
-    fontSize: 14
+    fontSize: 14,
   },
   divider: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 24
+    marginBottom: 24,
   },
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: '#E1E8ED'
+    backgroundColor: '#E1E8ED',
   },
   dividerText: {
     marginHorizontal: 16,
     color: '#7F8C8D',
-    fontSize: 14
+    fontSize: 14,
   },
   socialContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 24
+    marginBottom: 24,
   },
   socialButton: {
     flex: 1,
@@ -449,28 +449,28 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 12,
     alignItems: 'center',
-    marginHorizontal: 4
+    marginHorizontal: 4,
   },
   socialButtonText: {
     color: '#2C3E50',
     fontSize: 14,
-    fontWeight: '500'
+    fontWeight: '500',
   },
   registerContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   registerText: {
     color: '#7F8C8D',
-    fontSize: 14
+    fontSize: 14,
   },
   registerLink: {
     color: '#3498DB',
     fontSize: 14,
     fontWeight: '600',
-    marginLeft: 4
-  }
+    marginLeft: 4,
+  },
 });
 
-export default LoginScreen; 
+export default LoginScreen;

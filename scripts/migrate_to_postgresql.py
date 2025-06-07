@@ -1,32 +1,28 @@
-"""
-migrate_to_postgresql - 索克生活项目模块
-"""
-
-                            import json
-            import json
-from pathlib import Path
-from psycopg2 import sql
-from typing import Any, Dict, List, Tuple
-import argparse
-import logging
-import psycopg2
-import sqlite3
-import sys
-
 #!/usr/bin/env python3
 """
+migrate_to_postgresql - 索克生活项目模块
+
 SQLite到PostgreSQL数据迁移脚本
 
 该脚本用于将SQLite数据库中的数据迁移到PostgreSQL数据库。
 支持表结构创建、数据迁移、序列重置等功能。
 """
 
+import argparse
+import json
+import logging
+import psycopg2
+import sqlite3
+import sys
+from pathlib import Path
+from psycopg2 import sql
+from typing import Any, Dict, List, Tuple, Optional
 
 
 class DatabaseMigrator:
     """数据库迁移器"""
 
-    def __init__(self, config_path: str | None = None) -> None:
+    def __init__(self, config_path: Optional[str] = None) -> None:
         """
         初始化迁移器
 
@@ -34,8 +30,8 @@ class DatabaseMigrator:
             config_path: 配置文件路径
         """
         self.logger = logging.getLogger(__name__)
-        self.sqlite_conn: sqlite3.Connection | None = None
-        self.pg_conn: psycopg2.extensions.connection | None = None
+        self.sqlite_conn: Optional[sqlite3.Connection] = None
+        self.pg_conn: Optional[psycopg2.extensions.connection] = None
 
         # 默认配置
         self.config = {

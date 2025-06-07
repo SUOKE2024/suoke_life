@@ -43,7 +43,7 @@ const GatewayConfig: React.FC = () => {
   // 初始化配置
   useEffect(() => {
     initializeConfigs();
-  }, [])  // 检查是否需要添加依赖项;
+  }, []);  // 检查是否需要添加依赖项;
 
   const initializeConfigs = () => {
     const configSections: ConfigSection[] = [
@@ -197,9 +197,9 @@ const GatewayConfig: React.FC = () => {
       prevConfigs.map(section => ({
         ...section,
         items: section.items.map(item =>
-          item.key === key ? { ...item, value } : item
+          item.key === key ? { ...item, value } : item,
         ),
-      }))
+      })),
     );
     setHasChanges(true);
   };
@@ -245,7 +245,7 @@ const GatewayConfig: React.FC = () => {
             setIsEditing(false);
           },
         },
-      ]
+      ],
     );
   };
 
@@ -263,7 +263,7 @@ const GatewayConfig: React.FC = () => {
             Alert.alert('成功', '缓存已清除');
           },
         },
-      ]
+      ],
     );
   };
 
@@ -343,7 +343,7 @@ const GatewayConfig: React.FC = () => {
           >
             <Text style={styles.actionButtonText}>清除缓存</Text>
           </TouchableOpacity>
-          
+
           <TouchableOpacity
             style={[styles.actionButton, styles.advancedButton]}
             onPress={() => setShowAdvanced(!showAdvanced)}
@@ -393,7 +393,7 @@ const GatewayConfig: React.FC = () => {
                           setHasChanges(false);
                         },
                       },
-                    ]
+                    ],
                   );
                 } else {
                   setIsEditing(false);
@@ -580,4 +580,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GatewayConfig; 
+export default GatewayConfig;

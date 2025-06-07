@@ -29,7 +29,7 @@ const AppNavigator: React.FC = () => {
   // 从Redux获取认证状态
   const authState = useSelector((state: RootState) => state.auth);
   const isAuthenticated = 'isAuthenticated' in authState ? authState.isAuthenticated : false;
-  
+
   // 本地状态管理
   const [isLoading, setIsLoading] = useState(true);
   const [isDemoMode, setIsDemoMode] = useState(false);
@@ -66,7 +66,7 @@ const AppNavigator: React.FC = () => {
       screenOptions={{
         headerShown: false,
         gestureEnabled: true,
-        animation: 'slide_from_right'
+        animation: 'slide_from_right',
       }}
     >
       {isAuthenticated || isDemoMode ? (
@@ -76,7 +76,7 @@ const AppNavigator: React.FC = () => {
             name="Main"
             component={MainNavigator}
             options={{
-              animationTypeForReplace: 'push'
+              animationTypeForReplace: 'push',
             }}
           />
           <Stack.Screen
@@ -84,7 +84,7 @@ const AppNavigator: React.FC = () => {
             component={ChatDetailScreen}
             options={{
               presentation: 'card',
-              animation: 'slide_from_right'
+              animation: 'slide_from_right',
             }}
           />
           <Stack.Screen
@@ -92,7 +92,7 @@ const AppNavigator: React.FC = () => {
             component={AgentDemoScreen}
             options={{
               presentation: 'card',
-              animation: 'slide_from_right'
+              animation: 'slide_from_right',
             }}
           />
         </>
@@ -103,7 +103,7 @@ const AppNavigator: React.FC = () => {
             name="Auth"
             component={AuthNavigator}
             options={{
-              animationTypeForReplace: 'pop'
+              animationTypeForReplace: 'pop',
             }}
           />
           <Stack.Screen
@@ -111,7 +111,7 @@ const AppNavigator: React.FC = () => {
             component={AgentDemoScreen}
             options={{
               presentation: 'card',
-              animation: 'slide_from_right'
+              animation: 'slide_from_right',
             }}
           />
         </>

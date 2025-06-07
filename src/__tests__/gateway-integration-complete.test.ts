@@ -17,18 +17,18 @@ describe('Gateway Integration - Complete Test Suite', () => {
     it('should track events correctly', () => {
       const eventData = {
         action: 'test_action',
-        value: 123
+        value: 123,
       };
 
       analyticsService.trackEvent('user_action', eventData);
-      
+
       const stats = analyticsService.getEventStats();
       expect(stats.user_action).toBe(1);
     });
 
     it('should track API calls with performance metrics', () => {
       analyticsService.trackApiCall('user-service', '/profile', 'GET', 250, 200);
-      
+
       const metrics = analyticsService.getPerformanceMetrics();
       expect(metrics.responseTime).toBe(250);
       expect(metrics.throughput).toBe(1);
@@ -39,9 +39,9 @@ describe('Gateway Integration - Complete Test Suite', () => {
       analyticsService.trackApiCall('user-service', '/profile', 'GET', 100, 200);
       analyticsService.trackApiCall('user-service', '/settings', 'POST', 200, 200);
       analyticsService.trackApiCall('auth-service', '/login', 'POST', 150, 200);
-      
+
       const usage = analyticsService.getServiceUsage();
-      
+
       expect(usage).toHaveLength(2);
       expect(usage.find(s => s.service === 'user-service')?.calls).toBe(2);
       expect(usage.find(s => s.service === 'auth-service')?.calls).toBe(1);
@@ -57,7 +57,7 @@ describe('Gateway Integration - Complete Test Suite', () => {
 
     it('should set configuration values', async () => {
       await configService.set('gateway.timeout', 45000);
-      
+
       const timeout = configService.get('gateway.timeout');
       expect(timeout).toBe(45000);
     });
@@ -72,14 +72,14 @@ describe('Gateway Integration - Complete Test Suite', () => {
     it('should handle configuration changes across services', async () => {
       // 更新配置
       await configService.set('analytics.enabled', false);
-      
+
       // 应用到分析服务
       analyticsService.updateConfig({ enabled: false });
-      
+
       // 验证配置生效
       analyticsService.trackEvent('system', { data: 'test' });
       const stats = analyticsService.getEventStats();
       expect(Object.keys(stats)).toHaveLength(0);
     });
   });
-}); 
+});
