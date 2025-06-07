@@ -1,51 +1,30 @@
-import {import { Text } from "react-native;"
-import { colors, spacing, borderRadius, components, typography } from "../../constants/////    theme";
-import { usePerformanceMonitor } from "../../placeholder";../../hooks/////    usePerformanceMonitor
-
-import React, { useState, useMemo, useCallback } from "react";
-  TextInput,
+import React, { useState, useCallback, useMemo } from 'react';
+import {
   View,
+  Text,
+  TextInput,
+  TouchableOpacity,
   StyleSheet,
   ViewStyle,
   TextStyle,
-  TouchableOpacity;
-} from "../../placeholder";react-native
-// 索克生活 - Input组件
-// 统一的输入框组件，支持多种类型和状态
-export interface InputProps {
-  // 基础属性;
-;
-value?: string;
-  onChangeText?: (text: string) => void;
-  placeholder?: string;
-  // 输入类型
-type?: text" | "email | "password" | number" | "phone;
-  multiline?: boolean;
-  numberOfLines?: number;
-  // 状态
-disabled?: boolean;
+  TextInputProps;
+} from 'react-native';
+export interface InputProps extends TextInputProps {
+  label?: string;
   error?: boolean;
   errorMessage?: string;
-  // 样式
-size?: "small" | medium" | "large;
-  variant?: "outlined" | filled" | "underlined;
-  // 图标
-leftIcon?: React.ReactNode;
+  size?: "small" | "medium" | "large";
+  variant?: "outlined" | "filled" | "underlined";
+  leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
-  // 标签
-label?: string;
   helperText?: string;
-  // 自定义样式
-style?: ViewStyle;
+  type?: "text" | "email" | "password" | "number" | "phone";
+  containerStyle?: ViewStyle;
   inputStyle?: TextStyle;
-  // 其他属性
-testID?: string;
-  maxLength?: number;
-  autoFocus?: boolean;
-  onFocus?: () => void;
-  onBlur?: () => void;
+  disabled?: boolean;
 }
-const Input: React.FC<InputProps>  = ({value,
+const Input: React.FC<InputProps> = ({
+  value,
   onChangeText,
   placeholder,
   type = "text",
@@ -54,8 +33,8 @@ const Input: React.FC<InputProps>  = ({value,
   disabled = false,
   error = false,
   errorMessage,
-  size = medium","
-  variant = "outlined,"
+  size = "medium",
+  variant = "outlined",
   leftIcon,
   rightIcon,
   label,
@@ -66,76 +45,76 @@ const Input: React.FC<InputProps>  = ({value,
   maxLength,
   autoFocus,
   onFocus,
-  onBlur;
-}) => {}
-  // 性能监控
-const performanceMonitor = usePerformanceMonitor({componentName: "Input",
-    enableMemoryMonitoring: false,
-    threshold: 100;
-  });
+  onBlur,
+  containerStyle,
+  ...props;
+}) => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
-  const keyboardType = useMemo(() => {
+  const keyboardType = useMemo() => {
     switch (type) {
-      case email":"
-        return "email-address;"
+      case "email":
+        return "email-address";
       case "number":
-        return numeric
-      case "phone:"
+        return "numeric";
+      case "phone":
         return "phone-pad";
       default:
-        return default
+        return "default";
     }
   }, [type]);
-  const containerStyle = useMemo(() => [;
-    styles.container,
-    styles[size],
-    styles[variant],
-    isFocused && styles.focused,
-    error && styles.error,
-    disabled && styles.disabled,
-    style;
-  ].filter(Boolean) as ViewStyle[], [size, variant, isFocused, error, disabled, style]);
-  const textInputStyle = useMemo(() => [;
-    styles.input,
-    styles[`${size}Input`],
-    multiline && styles.multiline,
-    inputStyle;
-  ].filter(Boolean) as TextStyle[], [size, multiline, inputStyle]);
-  const handleFocus = useCallback(() => {
+  const handleFocus = useCallback(e: any) => {
     setIsFocused(true);
-    onFocus?.();
+    onFocus?.(e);
   }, [onFocus]);
-  const handleBlur = useCallback(() => {
+  const handleBlur = useCallback(e: any) => {
     setIsFocused(false);
-    onBlur?.();
+    onBlur?.(e);
   }, [onBlur]);
-  const togglePasswordVisibility = useCallback(() => {
+  const togglePasswordVisibility = useCallback() => {
     setIsPasswordVisible(prev => !prev);
   }, []);
-  // 记录渲染性能
-performanceMonitor.recordRender();
-  return (;
-    <View style={styles.wrapper}>;
-      {label && (;
-        <Text style={styles.label}>;
-          {label};
-        </////    Text>;
-      )};
-      <View style={containerStyle}>;
-        {leftIcon && (;
-          <View style={styles.leftIcon}>;
-            {leftIcon};
-          </////    View>;
-        )};
+  const getContainerStyle = (): ViewStyle[] => {
+    const baseStyle = [styles.container];
+        if (size === "small") baseStyle.push(styles.small);
+    if (size === "large") baseStyle.push(styles.large);
+    if (variant === "filled") baseStyle.push(styles.filled);
+    if (variant === "underlined") baseStyle.push(styles.underlined);
+    if (isFocused) baseStyle.push(styles.focused);
+    if (error) baseStyle.push(styles.error);
+    if (disabled) baseStyle.push(styles.disabled);
+    if (containerStyle) baseStyle.push(containerStyle);
+        return baseStyle;
+  };
+  const getInputStyle = (): TextStyle[] => {
+    const baseStyle = [styles.input];
+        if (size === "small") baseStyle.push(styles.smallInput);
+    if (size === "large") baseStyle.push(styles.largeInput);
+    if (multiline) baseStyle.push(styles.multiline);
+    if (inputStyle) baseStyle.push(inputStyle);
+        return baseStyle;
+  };
+  return (
+    <View style={[styles.wrapper, style]}>
+      {label && (
+        <Text style={styles.label}>
+          {label}
+        </Text>
+      )}
+      <View style={getContainerStyle()}>
+        {leftIcon && (
+        <View style={styles.leftIcon}>
+            {leftIcon}
+          </View>
+        )}
         <TextInput;
-style={textInputStyle}
+          style={getInputStyle()}
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
-          placeholderTextColor={colors.gray400}
+          placeholderTextColor="#999"
           keyboardType={keyboardType}
-          secureTextEntry={type === "password && !isPasswordVisible}"
+          secureTextEntry={type === "password" && !isPasswordVisible}
           multiline={multiline}
           numberOfLines={numberOfLines}
           editable={!disabled}
@@ -144,98 +123,108 @@ style={textInputStyle}
           onFocus={handleFocus}
           onBlur={handleBlur}
           testID={testID}
-        /////    >
+          {...props}
+        />
         {type === "password" && (
           <TouchableOpacity;
-style={styles.rightIcon}
+            style={styles.rightIcon}
             onPress={togglePasswordVisibility}
             accessibilityLabel={isPasswordVisible ? "隐藏密码" : "显示密码"}
           >
-            <Text>{isPasswordVisible ? 🙈" : "👁️}</////    Text>
-          </////    TouchableOpacity>
+            <Text>{isPasswordVisible ? "🙈" : "👁️"}</Text>
+          </TouchableOpacity>
         )}
         {rightIcon && type !== "password" && (
-          <View style={styles.rightIcon}>
+        <View style={styles.rightIcon}>
             {rightIcon}
-          </////    View>
+          </View>
         )}
-      </////    View>
+      </View>
       {(errorMessage || helperText) && (
-        <Text;
-style={error ? { ...styles.helperText, ...styles.errorText } : styles.helperText}
-        >
+        <Text style={error ? [styles.helperText, styles.errorText] : styles.helperText}>
           {error ? errorMessage : helperText}
-        </////    Text>
+        </Text>
       )}
-    </////    View>
+    </View>
   );
 };
-const styles = StyleSheet.create({wrapper: {
-    marginBottom: spacing.sm},
-  container: {
-    flexDirection: row","
-    alignItems: "center,",
-    borderRadius: borderRadius.md,
-    backgroundColor: colors.surface},// 尺寸样式
-small: {
-    height: 40,
-    paddingHorizontal: spacing.sm},
-  medium: {
-    height: components.input.height,
-    paddingHorizontal: components.input.paddingHorizontal},
-  large: {
-    height: 56,
-    paddingHorizontal: spacing.lg},
-  // 变体样式
-outlined: {
+const styles = StyleSheet.create({
+  wrapper: {,
+  marginBottom: 16,
+  },
+  container: {,
+  flexDirection: "row",
+    alignItems: "center",
+    borderRadius: 8,
+    backgroundColor: "#fff",
     borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface},
-  filled: {
-    backgroundColor: colors.surfaceSecondary,
-    borderWidth: 0},
-  underlined: {
-    backgroundColor: "transparent",
+    borderColor: "#ddd",
+    paddingHorizontal: 12,
+    height: 48,
+  },
+  small: {,
+  height: 40,
+    paddingHorizontal: 8,
+  },
+  large: {,
+  height: 56,
+    paddingHorizontal: 16,
+  },
+  filled: {,
+  backgroundColor: "#f5f5f5",
+    borderWidth: 0,
+  },
+  underlined: {,
+  backgroundColor: "transparent",
     borderWidth: 0,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-    borderRadius: 0},
-  // 状态样式
-focused: {
-    borderColor: colors.primary},
-  error: {
-    borderColor: colors.error},
-  disabled: {
-    backgroundColor: colors.gray100,
-    borderColor: colors.gray200},
-  // 输入框样式
-input: {
-    flex: 1,
-    fontFamily: typography.fontFamily.regular,
-    fontSize: typography.fontSize.base,
-    color: colors.textPrimary,
-    paddingVertical: 0},
-  smallInput: {
-    fontSize: typography.fontSize.sm},
-  mediumInput: {
-    fontSize: typography.fontSize.base},
-  largeInput: {
-    fontSize: typography.fontSize.lg},
-  multiline: {
-    textAlignVertical: top","
-    paddingVertical: spacing.sm},
-  // 图标样式
-leftIcon: {
-    marginRight: spacing.xs},
-  rightIcon: {
-    marginLeft: spacing.xs},
-  // 标签和帮助文本
-label: {
-    marginBottom: spacing.xs,
-    color: colors.textSecondary},
-  helperText: {
-    marginTop: spacing.xs,
-    color: colors.textSecondary},
-  errorText: {
-    color: colors.error}});
+    borderBottomColor: "#ddd",
+    borderRadius: 0,
+  },
+  focused: {,
+  borderColor: "#007AFF",
+  },
+  error: {,
+  borderColor: "#FF3B30",
+  },
+  disabled: {,
+  backgroundColor: "#f0f0f0",
+    borderColor: "#ccc",
+  },
+  input: {,
+  flex: 1,
+    fontSize: 16,
+    color: "#333",
+    paddingVertical: 0,
+  },
+  smallInput: {,
+  fontSize: 14,
+  },
+  largeInput: {,
+  fontSize: 18,
+  },
+  multiline: {,
+  textAlignVertical: "top",
+    paddingVertical: 8,
+  },
+  leftIcon: {,
+  marginRight: 8,
+  },
+  rightIcon: {,
+  marginLeft: 8,
+  },
+  label: {,
+  marginBottom: 4,
+    color: "#666",
+    fontSize: 14,
+  },
+  helperText: {,
+  marginTop: 4,
+    color: "#666",
+    fontSize: 12,
+  },
+  errorText: {,
+  color: "#FF3B30",
+  },
+});
 export default Input;

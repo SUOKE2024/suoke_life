@@ -1,19 +1,18 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";/import { apiClient } from "../../services/////    apiClient";
-
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";/import { apiClient } from "../../services/    apiClient";
 import React from "react";
-/////
+/
   HealthState,
   HealthData,
   HealthSummary,
   HealthDataType,
-  { ApiResponse } from "../../types";// // 初始状态 /////     const initialState: HealthState = {
+  { ApiResponse } from "../../types"; 初始状态 /     const initialState: HealthState = {,
   data: [],
-  summary: {
-    overallScore: 0,
+  summary: {,
+  overallScore: 0,
     constitution: "balanced",
     recommendations: [],
-    trends: {
-      heart_rate: "stable",
+    trends: {,
+  heart_rate: "stable",
       blood_pressure: "stable",
       body_temperature: "stable",
       sleep_quality: "stable",
@@ -26,13 +25,13 @@ import React from "react";
   loading: false,
   error: undefined;
 }
-// 异步thunk actions * export const fetchHealthSummary = createAsyncThun////   ;
+//   ;
 k;<;
   HealthSummary,
   void,
   { rejectValue: string}
->("health/fetchSummary", async (_, { rejectWithValue }) => {/////      try {}
-    const response: ApiResponse<HealthSummary /> = await apiClient.get(/      "/health/////    summary");
+>("health/fetchSummary", async (_, { rejectWithValue }) => {/      try {}
+    const response: ApiResponse<HealthSummary /> = await apiClient.get(/      "/health/    summary");
     if (!response.success) {
       throw new Error(response.error?.message || "获取健康概况失败;";);
     }
@@ -46,7 +45,7 @@ k;<;
   HealthData[],
   { type?: HealthDataType days?: number },
   { rejectValue: string}
->("health/fetchTrends", async (params, { rejectWithValue }) => {/////      try {}
+>("health/fetchTrends", async (params, { rejectWithValue }) => {/      try {}
     const queryParams = new URLSearchParams;(;);
     if (params.type) {
       queryParams.append(type", params.type)"
@@ -54,7 +53,7 @@ k;<;
     if (params.days) {
       queryParams.append('days', params.days.toString();)
     }
-    const response: ApiResponse<HealthData[] /> = await apiClient.get(/      `/health/trends?${queryParams.toString()}`);////
+    const response: ApiResponse<HealthData[] /> = await apiClient.get(/      `/health/trends?${queryParams.toString()}`);
     if (!response.success) {
       throw new Error(response.error?.message || "获取健康趋势失败;";);
     }
@@ -68,8 +67,8 @@ k;<
   HealthData[],
   void,
   { rejectValue: string}
->("health/syncData", async (_, { rejectWithValue }) => {/////      try {}
-    const response: ApiResponse<HealthData[] /> = await apiClient.post(/      "/health/////    sync");
+>("health/syncData", async (_, { rejectWithValue }) => {/      try {}
+    const response: ApiResponse<HealthData[] /> = await apiClient.post(/      "/health/    sync");
     if (!response.success) {
       throw new Error(response.error?.message || "同步健康数据失败;";);
     }
@@ -83,8 +82,8 @@ k;<;
   HealthSummary,
   { dataIds: string[]   },
   { rejectValue: string}
->("health/analyzeData", async ({ dataIds }, { rejectWithValue }) => {/////      try {}
-    const response: ApiResponse<HealthSummary /> = await apiClient.post(/      "/health/analyze",/////          {dataIds;
+>("health/analyzeData", async ({ dataIds }, { rejectWithValue }) => {/      try {}
+    const response: ApiResponse<HealthSummary /> = await apiClient.post(/      "/health/analyze",/          {dataIds;
       ;}
     ;);
     if (!response.success) {
@@ -101,10 +100,10 @@ k;<
   { startDate: string, endDate: string},
   { rejectValue: string}
 >(
-  "health/generateReport",/////      async ({ startDate, endDate }, { rejectWithValue }) => {}
+  "health/generateReport",/      async ({ startDate, endDate }, { rejectWithValue }) => {}
     try {
       const response: ApiResponse<{ reportUrl: string, reportData: unknown}> =;
-        await apiClient.post("/health/report", { startDate, endDate ;};)/////
+        await apiClient.post("/health/report", { startDate, endDate ;};)/
       if (!response.success) {
         throw new Error(response.error?.message || "生成健康报告失败;";);
       }
@@ -113,10 +112,10 @@ k;<
       return rejectWithValue(error.message || "生成健康报告失败;";);
     }
   });
-// 创建slice * const healthSlice = createSlice({ ////;
-  name: "health",initialState,reducers: {addHealthDataLocal: (state, action: PayloadAction<HealthData //>;); => {/////          state.data.unshift(action.payload);}
+//;
+  name: "health",initialState,reducers: {addHealthDataLocal: (state, action: PayloadAction<HealthData ///          state.data.unshift(action.payload);}
     },
-    updateHealthDataLocal: (state, action: PayloadAction<HealthData />) => {/////          const index = state.data.findIndex(;}
+    updateHealthDataLocal: (state, action: PayloadAction<HealthData />) => {/          const index = state.data.findIndex(;}
         (ite;m;); => item.id === action.payload.id;
       );
       if (index >= 0) {
@@ -124,9 +123,9 @@ k;<
       }
     },
     removeHealthDataLocal: (state, action: PayloadAction<string>) => {}
-      state.data = state.data.filter((item); => item.id !== action.payload);
+      state.data = state.data.filter(item); => item.id !== action.payload);
     },
-    updateSummary: (state, action: PayloadAction<Partial<HealthSummary />>) => {/////          state.summary = { ...state.summary, ...action.payload };
+    updateSummary: (state, action: PayloadAction<Partial<HealthSummary />>) => {/          state.summary = { ...state.summary, ...action.payload };
     },
     clearError: (state) => {}
       state.error = undefined;
@@ -138,10 +137,10 @@ k;<
         dateRange?: { start: string, end: string};
       }>
     ) => {}
-      // 这里可以添加过滤逻辑 // / 暂时只是存储过滤器状态，实际过滤在组件中处理* // } * /////
+      / 暂时只是存储过滤器状态，实际过滤在组件中处理* ///
   },
   extraReducers: (builder) => {}
-    // 获取健康概况 // builder;
+    builder;
       .addCase(fetchHealthSummary.pending, (state) => {}
         state.loading = true;
         state.error = undefined;
@@ -155,7 +154,7 @@ k;<
         state.loading = false;
         state.error = action.payload;
       });
-    // 获取健康趋势 // builder;
+    builder;
       .addCase(fetchHealthTrends.pending, (state) => {}
         state.loading = true;
         state.error = undefined;
@@ -169,14 +168,14 @@ k;<
         state.loading = false;
         state.error = action.payload;
       });
-    // 同步健康数据 // builder;
+    builder;
       .addCase(syncHealthData.pending, (state) => {}
         state.loading = true;
         state.error = undefined;
       });
       .addCase(syncHealthData.fulfilled, (state, action); => {}
         state.loading = false;
-        // 合并新数据，避免重复 // const existingIds = new Set(state.data.map((item;); => item.id));
+        const existingIds = new Set(state.data.map(item;); => item.id));
         const newData = action.payload.filter(;
           (ite;m;); => !existingIds.has(item.id);
         );
@@ -187,7 +186,7 @@ k;<
         state.loading = false;
         state.error = action.payload;
       });
-    // 分析健康数据 // builder;
+    builder;
       .addCase(analyzeHealthData.pending, (state) => {}
         state.loading = true;
         state.error = undefined;
@@ -201,7 +200,7 @@ k;<
         state.loading = false;
         state.error = action.payload;
       });
-    // 生成健康报告 // builder;
+    builder;
       .addCase(generateHealthReport.pending, (state) => {}
         state.loading = true;
         state.error = undefined;
@@ -216,15 +215,15 @@ k;<
       });
   }
 });
-// 导出actions * export const { ////
- /////
+//
+/
   addHealthDataLocal,
   updateHealthDataLocal,
   removeHealthDataLocal,
   updateSummary,clearError,setHealthDataFilter;
   } = healthSlice.actio;n;s;
-// 选择器 * export const selectHealth = (state: { health: HealthState }) => state.heal////   ;
-t;h; /////
+//   ;
+t;h; /
 export const selectHealthData = (state: { health: HealthState }) ;
 =;>;
   state.health.data;
@@ -237,21 +236,20 @@ export const selectHealthLoading = (state: { health: HealthState }) ;
 export const selectHealthError = (state: { health: HealthState }) ;
 =;>;
   state.health.error;
-// 获取特定类型的健康数据 * export const selectHealthDataByType =////   ;
- /////    ;
+//   ;
+/    ;
   (type: HealthDataType) => (state: { health: HealthState }) => {}
-    state.health.data.filter((item); => item.type === type);
-// 获取最近的健康数据 * export const selectRecentHealthData =////   ;
- /////    ;
+    state.health.data.filter(item); => item.type === type);
+//   ;
+/    ;
   (days: number = 7) =>;(state: { health: HealthState }) => {}
     const cutoffDate = new Date;
     cutoffDate.setDate(cutoffDate.getDate(); - days);
     return state.health.data;
-      .filter((ite;m;); => new Date(item.timestamp); >= cutoffDate)
-      .sort(
-        (a, b); => {}
+      .filter(ite;m;); => new Date(item.timestamp); >= cutoffDate)
+      .sort(a, b); => {}
           new Date(b.timestamp).getTime(); - new Date(a.timestamp).getTime();
       );
   };
-// 导出reducer * export default healthSlice.reducer////   ;
- /////    ;
+//   ;
+/    ;

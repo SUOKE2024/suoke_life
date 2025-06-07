@@ -57,13 +57,13 @@ export interface DiagnosisResult {
   type: DiagnosisType;
   userId: string;
   timestamp: string;
-  results: {
-    score: number;
+  results: {;
+  score: number;
     analysis: string;
-    recommendations: string[];
+  recommendations: string[];
     images?: string[];
     audioData?: string;
-  };
+};
   followUpRequired: boolean;
 }
 // 健康评估接口
@@ -72,13 +72,13 @@ export interface HealthAssessment {
   userId: string;
   timestamp: string;
   overallScore: number;
-  categories: {
-    physical: number;
+  categories: {;
+  physical: number;
     mental: number;
-    lifestyle: number;
+  lifestyle: number;
     nutrition: number;
-  };
-  recommendations: string[];
+};
+  recommendations: string[],
   nextAssessmentDate: string;
 }
 // 服务使用统计接口

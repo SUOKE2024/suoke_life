@@ -1,10 +1,8 @@
 import { offlineService } from './offlineService';
 import { analyticsService } from './analyticsService';
 import { GatewayApiClient } from './apiClient';
-
 // 创建API客户端实例
 const gatewayApiClient = new GatewayApiClient();
-
 // 同步状态枚举
 export enum SyncStatus {
   IDLE = 'idle',
@@ -13,7 +11,6 @@ export enum SyncStatus {
   ERROR = 'error',
   CONFLICT = 'conflict'
 }
-
 // 数据实体接口
 export interface DataEntity {
   id: string;
@@ -23,7 +20,6 @@ export interface DataEntity {
   lastModified: number;
   checksum?: string;
 }
-
 // 同步冲突接口
 export interface SyncConflict {
   id: string;
@@ -33,7 +29,6 @@ export interface SyncConflict {
   conflictType: 'version' | 'content' | 'deleted';
   timestamp: number;
 }
-
 // 同步结果接口
 export interface SyncResult {
   status: SyncStatus;
@@ -43,7 +38,6 @@ export interface SyncResult {
   duration: number;
   timestamp: number;
 }
-
 // 同步配置接口
 interface SyncConfig {
   enabled: boolean;
@@ -54,22 +48,19 @@ interface SyncConfig {
   retryAttempts: number;
   retryDelay: number;
 }
-
 // 同步事件接口
 interface SyncEvent {
   type: 'start' | 'progress' | 'complete' | 'error' | 'conflict';
   data?: any;
   timestamp: number;
 }
-
 class SyncService {
   private config: SyncConfig;
   private syncTimer?: NodeJS.Timeout;
   private isSyncing = false;
   private lastSyncTime = 0;
   private conflicts: SyncConflict[] = [];
-  private listeners: ((event: SyncEvent) => void)[] = [];
-
+  private listeners: (event: SyncEvent) => void)[] = [];
   constructor() {
     this.config = {
       enabled: true,
@@ -78,43 +69,39 @@ class SyncService {
       batchSize: 50,
       conflictResolution: 'manual',
       retryAttempts: 3,
-      retryDelay: 5000
+      retryDelay: 5000;
     };
-
     this.initializeAutoSync();
     this.setupNetworkListener();
   }
-
   // 初始化自动同步
   private initializeAutoSync() {
     if (this.config.autoSync && this.config.enabled) {
       this.startAutoSync();
     }
   }
-
   // 设置网络监听器
   private setupNetworkListener() {
     if (typeof window !== 'undefined' && 'navigator' in window) {
       window.addEventListener('online', () => {
-        this.emitEvent({ type: 'start', timestamp: Date.now() });
+        this.emitEvent({
+      type: "start",
+      timestamp: Date.now() });
         this.sync();
       });
     }
   }
-
   // 启动自动同步
   startAutoSync() {
     if (this.syncTimer) {
       clearInterval(this.syncTimer);
     }
-
-    this.syncTimer = setInterval(() => {
+    this.syncTimer = setInterval() => {
       if (navigator.onLine && !this.isSyncing) {
         this.sync();
       }
     }, this.config.syncInterval);
   }
-
   // 停止自动同步
   stopAutoSync() {
     if (this.syncTimer) {
@@ -122,12 +109,10 @@ class SyncService {
       this.syncTimer = undefined;
     }
   }
-
   // 添加事件监听器
   addEventListener(listener: (event: SyncEvent) => void) {
     this.listeners.push(listener);
   }
-
   // 移除事件监听器
   removeEventListener(listener: (event: SyncEvent) => void) {
     const index = this.listeners.indexOf(listener);
@@ -135,7 +120,6 @@ class SyncService {
       this.listeners.splice(index, 1);
     }
   }
-
   // 发送事件
   private emitEvent(event: SyncEvent) {
     this.listeners.forEach(listener => {
@@ -146,100 +130,83 @@ class SyncService {
       }
     });
   }
-
   // 主同步方法
   async sync(): Promise<SyncResult> {
     if (this.isSyncing) {
       throw new Error('Sync already in progress');
     }
-
     if (!navigator.onLine) {
       throw new Error('No network connection');
     }
-
     this.isSyncing = true;
     const startTime = Date.now();
-    
-    this.emitEvent({ type: 'start', timestamp: startTime });
-
+        this.emitEvent({
+      type: "start",
+      timestamp: startTime });
     try {
       const result = await this.performSync();
-      
-      this.lastSyncTime = Date.now();
-      this.emitEvent({ 
-        type: 'complete', 
-        data: result, 
-        timestamp: Date.now() 
+            this.lastSyncTime = Date.now();
+      this.emitEvent({
+      type: "complete",
+      data: result,
+        timestamp: Date.now()
       });
-
       analyticsService.trackEvent('system', {
-        action: 'sync_complete',
-        duration: result.duration,
+      action: "sync_complete",
+      duration: result.duration,
         synced: result.synced,
-        conflicts: result.conflicts.length
+        conflicts: result.conflicts.length;
       });
-
       return result;
     } catch (error) {
-      const errorResult: SyncResult = {
-        status: SyncStatus.ERROR,
+      const errorResult: SyncResult = {,
+  status: SyncStatus.ERROR,
         synced: 0,
         conflicts: [],
         errors: [error instanceof Error ? error.message : String(error)],
         duration: Date.now() - startTime,
         timestamp: Date.now()
       };
-
-      this.emitEvent({ 
-        type: 'error', 
-        data: error, 
-        timestamp: Date.now() 
+      this.emitEvent({
+      type: "error",
+      data: error,
+        timestamp: Date.now()
       });
-
       analyticsService.trackError(error instanceof Error ? error : new Error(String(error)), {
         context: 'sync_service'
       });
-
       return errorResult;
     } finally {
       this.isSyncing = false;
     }
   }
-
   // 执行同步逻辑
   private async performSync(): Promise<SyncResult> {
     const startTime = Date.now();
     let syncedCount = 0;
     const conflicts: SyncConflict[] = [];
     const errors: string[] = [];
-
     try {
       // 1. 获取本地待同步数据
       const localData = await this.getLocalPendingData();
-      
-      // 2. 获取远程数据变更
+            // 2. 获取远程数据变更
       const remoteChanges = await this.getRemoteChanges();
-      
-      // 3. 上传本地数据
+            // 3. 上传本地数据
       const uploadResult = await this.uploadLocalData(localData);
       syncedCount += uploadResult.synced;
       conflicts.push(...uploadResult.conflicts);
       errors.push(...uploadResult.errors);
-
       // 4. 下载远程数据
       const downloadResult = await this.downloadRemoteData(remoteChanges);
       syncedCount += downloadResult.synced;
       conflicts.push(...downloadResult.conflicts);
       errors.push(...downloadResult.errors);
-
       // 5. 处理冲突
       if (conflicts.length > 0) {
         await this.handleConflicts(conflicts);
       }
-
-      const status = conflicts.length > 0 ? SyncStatus.CONFLICT : 
+      const status = conflicts.length > 0 ? SyncStatus.CONFLICT :
                     errors.length > 0 ? SyncStatus.ERROR : SyncStatus.SUCCESS;
-
       return {
         status,
         synced: syncedCount,
@@ -252,26 +219,22 @@ class SyncService {
       throw error;
     }
   }
-
   // 获取本地待同步数据
   private async getLocalPendingData(): Promise<DataEntity[]> {
     const syncStatus = offlineService.getSyncStatus();
     const entities: DataEntity[] = [];
-
     // 由于OfflineService没有直接的getPendingOperations方法，
     // 我们使用同步状态中的待处理操作数量作为参考
     // 实际实现中需要扩展OfflineService来提供操作列表
-    
-    // 临时实现：从本地存储获取操作
+        // 临时实现：从本地存储获取操作
     try {
       const storedOperations = localStorage.getItem('@suoke_life:offline_queue');
       if (storedOperations) {
         const operations = JSON.parse(storedOperations);
-        
-        for (const operation of operations) {
+                for (const operation of operations) {
           try {
-            const entity: DataEntity = {
-              id: operation.id,
+            const entity: DataEntity = {,
+  id: operation.id,
               type: operation.type,
               data: operation.data,
               version: 1,
@@ -287,103 +250,88 @@ class SyncService {
     } catch (error) {
       console.error('Error loading pending operations:', error);
     }
-
     return entities;
   }
-
   // 获取远程数据变更
   private async getRemoteChanges(): Promise<DataEntity[]> {
     try {
-      const response = await gatewayApiClient.get('sync', '/changes', {
+      const response = await gatewayApiClient.get("sync",/changes', {
         headers: {
           'Last-Sync-Time': this.lastSyncTime.toString()
         }
       });
-
       return response.data.changes || [];
     } catch (error) {
       console.error('Error fetching remote changes:', error);
       return [];
     }
   }
-
   // 上传本地数据
-  private async uploadLocalData(entities: DataEntity[]): Promise<{
-    synced: number;
-    conflicts: SyncConflict[];
-    errors: string[];
+  private async uploadLocalData(entities: DataEntity[]): Promise<{,
+  synced: number;
+    conflicts: SyncConflict[],
+  errors: string[];
   }> {
     let synced = 0;
     const conflicts: SyncConflict[] = [];
     const errors: string[] = [];
-
     // 分批处理
     for (let i = 0; i < entities.length; i += this.config.batchSize) {
       const batch = entities.slice(i, i + this.config.batchSize);
-      
-      try {
-        const response = await gatewayApiClient.post('sync', '/upload', {
-          entities: batch
+            try {
+        const response = await gatewayApiClient.post("sync",/upload', {
+          entities: batch;
         });
-
         const result = response.data;
         synced += result.synced || 0;
-        
-        if (result.conflicts) {
+                if (result.conflicts) {
           conflicts.push(...result.conflicts);
         }
-
-                 // 标记已同步的操作为完成
-         // 注意：OfflineService没有markOperationCompleted方法
-         // 实际实现中需要扩展OfflineService来支持此功能
-         for (const entity of batch) {
-           if (!result.conflicts?.some((c: any) => c.id === entity.id)) {
-             // 临时实现：从本地存储中移除已完成的操作
-             try {
-               const storedOperations = localStorage.getItem('@suoke_life:offline_queue');
-               if (storedOperations) {
-                 const operations = JSON.parse(storedOperations);
-                 const updatedOperations = operations.filter((op: any) => op.id !== entity.id);
-                 localStorage.setItem('@suoke_life:offline_queue', JSON.stringify(updatedOperations));
-               }
-             } catch (error) {
-               console.error('Error marking operation as completed:', error);
-             }
-           }
-         }
-
+                // 标记已同步的操作为完成
+        // 注意：OfflineService没有markOperationCompleted方法
+        // 实际实现中需要扩展OfflineService来支持此功能
+        for (const entity of batch) {
+          if (!result.conflicts?.some(c: any) => c.id === entity.id)) {
+            // 临时实现：从本地存储中移除已完成的操作
+            try {
+              const storedOperations = localStorage.getItem('@suoke_life:offline_queue');
+              if (storedOperations) {
+                const operations = JSON.parse(storedOperations);
+                const updatedOperations = operations.filter(op: any) => op.id !== entity.id);
+                localStorage.setItem('@suoke_life:offline_queue', JSON.stringify(updatedOperations));
+              }
+            } catch (error) {
+              console.error('Error marking operation as completed:', error);
+            }
+          }
+        }
         this.emitEvent({
-          type: 'progress',
-          data: { uploaded: synced, total: entities.length },
+      type: "progress",
+      data: { uploaded: synced, total: entities.length },
           timestamp: Date.now()
         });
-
       } catch (error) {
         const errorMsg = error instanceof Error ? error.message : String(error);
         errors.push(`Upload batch error: ${errorMsg}`);
         console.error('Upload batch error:', error);
       }
     }
-
     return { synced, conflicts, errors };
   }
-
   // 下载远程数据
-  private async downloadRemoteData(entities: DataEntity[]): Promise<{
-    synced: number;
-    conflicts: SyncConflict[];
-    errors: string[];
+  private async downloadRemoteData(entities: DataEntity[]): Promise<{,
+  synced: number;
+    conflicts: SyncConflict[],
+  errors: string[];
   }> {
     let synced = 0;
     const conflicts: SyncConflict[] = [];
     const errors: string[] = [];
-
     for (const entity of entities) {
       try {
         // 检查本地是否有相同数据
         const localEntity = await this.getLocalEntity(entity.id, entity.type);
-        
-        if (localEntity) {
+                if (localEntity) {
           // 检查冲突
           const conflict = this.detectConflict(localEntity, entity);
           if (conflict) {
@@ -391,27 +339,22 @@ class SyncService {
             continue;
           }
         }
-
         // 保存到本地
         await this.saveLocalEntity(entity);
         synced++;
-
         this.emitEvent({
-          type: 'progress',
-          data: { downloaded: synced, total: entities.length },
+      type: "progress",
+      data: { downloaded: synced, total: entities.length },
           timestamp: Date.now()
         });
-
       } catch (error) {
         const errorMsg = error instanceof Error ? error.message : String(error);
         errors.push(`Download entity error: ${errorMsg}`);
         console.error('Download entity error:', error);
       }
     }
-
     return { synced, conflicts, errors };
   }
-
   // 检测冲突
   private detectConflict(local: DataEntity, remote: DataEntity): SyncConflict | null {
     // 版本冲突
@@ -425,7 +368,6 @@ class SyncService {
         timestamp: Date.now()
       };
     }
-
     // 内容冲突
     if (local.checksum !== remote.checksum) {
       return {
@@ -437,33 +379,27 @@ class SyncService {
         timestamp: Date.now()
       };
     }
-
     return null;
   }
-
   // 处理冲突
   private async handleConflicts(conflicts: SyncConflict[]) {
     this.conflicts.push(...conflicts);
-
     for (const conflict of conflicts) {
       this.emitEvent({
-        type: 'conflict',
-        data: conflict,
+      type: "conflict",
+      data: conflict,
         timestamp: Date.now()
       });
-
       // 根据配置自动解决冲突
       if (this.config.conflictResolution !== 'manual') {
         await this.resolveConflict(conflict, this.config.conflictResolution);
       }
     }
   }
-
   // 解决冲突
   async resolveConflict(conflict: SyncConflict, resolution: 'local' | 'remote' | 'merge') {
     try {
       let resolvedEntity: DataEntity;
-
       switch (resolution) {
         case 'local':
           resolvedEntity = conflict.localData;
@@ -477,34 +413,28 @@ class SyncService {
         default:
           throw new Error(`Unknown resolution strategy: ${resolution}`);
       }
-
       // 保存解决后的数据
       await this.saveLocalEntity(resolvedEntity);
-      
-      // 上传到服务器
-      await gatewayApiClient.post('sync', '/resolve', {
+            // 上传到服务器
+      await gatewayApiClient.post("sync",/resolve', {
         conflictId: conflict.id,
-        resolution: resolvedEntity
+        resolution: resolvedEntity;
       });
-
       // 从冲突列表中移除
       const index = this.conflicts.findIndex(c => c.id === conflict.id);
       if (index > -1) {
         this.conflicts.splice(index, 1);
       }
-
       analyticsService.trackEvent('system', {
-        action: 'conflict_resolved',
-        conflictType: conflict.conflictType,
-        resolution
+      action: "conflict_resolved",
+      conflictType: conflict.conflictType,
+        resolution;
       });
-
     } catch (error) {
       console.error('Error resolving conflict:', error);
       throw error;
     }
   }
-
   // 合并实体
   private async mergeEntities(local: DataEntity, remote: DataEntity): Promise<DataEntity> {
     // 简单的合并策略：使用最新的时间戳
@@ -513,7 +443,6 @@ class SyncService {
       version: Math.max(local.version, remote.version) + 1,
       lastModified: Date.now()
     };
-
     // 合并数据字段
     if (typeof local.data === 'object' && typeof remote.data === 'object') {
       merged.data = { ...local.data, ...remote.data };
@@ -521,11 +450,9 @@ class SyncService {
       // 使用时间戳较新的数据
       merged.data = local.lastModified > remote.lastModified ? local.data : remote.data;
     }
-
     merged.checksum = this.calculateChecksum(merged.data);
     return merged;
   }
-
   // 获取本地实体
   private async getLocalEntity(id: string, type: string): Promise<DataEntity | null> {
     try {
@@ -537,7 +464,6 @@ class SyncService {
       return null;
     }
   }
-
   // 保存本地实体
   private async saveLocalEntity(entity: DataEntity) {
     try {
@@ -548,50 +474,44 @@ class SyncService {
       throw error;
     }
   }
-
   // 计算校验和
   private calculateChecksum(data: any): string {
     const str = JSON.stringify(data);
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
       const char = str.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
+      hash = (hash << 5) - hash) + char;
       hash = hash & hash; // 转换为32位整数
     }
     return hash.toString(16);
   }
-
   // 获取同步状态
   getSyncStatus(): {
-    isSyncing: boolean;
-    lastSyncTime: number;
-    conflicts: number;
-    autoSync: boolean;
+    isSyncing: boolean,
+  lastSyncTime: number;
+    conflicts: number,
+  autoSync: boolean;
   } {
     return {
       isSyncing: this.isSyncing,
       lastSyncTime: this.lastSyncTime,
       conflicts: this.conflicts.length,
-      autoSync: this.config.autoSync
+      autoSync: this.config.autoSync;
     };
   }
-
   // 获取冲突列表
   getConflicts(): SyncConflict[] {
     return [...this.conflicts];
   }
-
   // 强制同步
   async forcSync(): Promise<SyncResult> {
     this.lastSyncTime = 0; // 重置最后同步时间以获取所有数据
     return this.sync();
   }
-
   // 更新配置
   updateConfig(newConfig: Partial<SyncConfig>) {
     this.config = { ...this.config, ...newConfig };
-    
-    if (newConfig.autoSync !== undefined) {
+        if (newConfig.autoSync !== undefined) {
       if (newConfig.autoSync) {
         this.startAutoSync();
       } else {
@@ -599,12 +519,10 @@ class SyncService {
       }
     }
   }
-
   // 获取配置
   getConfig(): SyncConfig {
     return { ...this.config };
   }
-
   // 清理资源
   destroy() {
     this.stopAutoSync();
@@ -612,6 +530,5 @@ class SyncService {
     this.conflicts = [];
   }
 }
-
 // 导出单例实例
-export const syncService = new SyncService(); 
+export const syncService = new SyncService();

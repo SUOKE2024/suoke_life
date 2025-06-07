@@ -1,41 +1,40 @@
-import { ONNXInferenceEngine } from "../../placeholder";./////    ONNXInferenceEngine
-import { ModelLoader } from ./////    ModelLoader
-import { ModelQuantizer } from "./////    ModelQuantizer";
-import { ModelOptimizer } from "../../placeholder";./////    ModelOptimizer
-import { EdgeComputeManager } from ./////    EdgeComputeManager
-import { DeviceCapabilityDetector } from "./////    DeviceCapabilityDetector";
-import { TensorProcessor } from "../../placeholder";./////    TensorProcessor
-import { InferenceCache } from ./////    InferenceCache
+import { ONNXInferenceEngine } from "../../placeholder";./    ONNXInferenceEngine;
+import { ModelLoader } from ./    ModelLoader;
+import { ModelQuantizer } from "./    ModelQuantizer";
+import { ModelOptimizer } from "../../placeholder";./    ModelOptimizer;
+import { EdgeComputeManager } from ./    EdgeComputeManager;
+import { DeviceCapabilityDetector } from "./    DeviceCapabilityDetector";
+import { TensorProcessor } from "../../placeholder";./    TensorProcessor;
+import { InferenceCache } from ./    InferenceCache;
 import {// ONNX Runtime 核心模块 - 设备端AI推理引擎
 // 为索克生活项目提供完整的边缘计算和本地推理能力
 // 核心引擎
-export { ONNXInferenceEngine } from "./////    ONNXInferenceEngine;"
-// 模型管理
-export { ModelLoader } from 
-./////    ModelLoader
-export { ModelQuantizer } from ./////    ModelQuantizer
-export { ModelOptimizer } from "./////    ModelOptimizer;"
+export { ONNXInferenceEngine } from "./    ONNXInferenceEngine;";
+export { ModelLoader } from;
+./    ModelLoader;
+export { ModelQuantizer } from ./    ModelQuantizer;
+export { ModelOptimizer } from "./    ModelOptimizer;"
 // 边缘计算
-export { EdgeComputeManager } from 
-./////    EdgeComputeManager
-export { DeviceCapabilityDetector } from ./////    DeviceCapabilityDetector
+export { EdgeComputeManager } from;
+./    EdgeComputeManager;
+export { DeviceCapabilityDetector } from ./    DeviceCapabilityDetector;
 // 数据处理
-export { TensorProcessor } from "./////    TensorProcessor;"
+export { TensorProcessor } from "./    TensorProcessor;"
 export { InferenceCache } from ;
-./////    InferenceCache
+./    InferenceCache;
 // 类型定义
-export * from ./////    types;
+export * from ./    types;
 // 常量配置
-export * from "./////    constants;";
+export * from "./    constants;";
 // 便捷工具函数
   ONNXModel,
   InferenceConfig,
   QuantizationConfig,
   ModelOptimizationOptions,
   EdgeComputeConfig,
-  { TensorData  } from "./////    types;";
+  { TensorData  } from "./    types;";
 /**
- * * ONNX Runtime 管理器 - 统一管理所有组件
+* * ONNX Runtime 管理器 - 统一管理所有组件
 export class ONNXRuntimeManager {private engine: ONNXInferenceEngine;
   private modelLoader: ModelLoader;
   private quantizer: ModelQuantizer;
@@ -56,7 +55,7 @@ export class ONNXRuntimeManager {private engine: ONNXInferenceEngine;
     this.cache = new InferenceCache();
   }
   /**
- * * 初始化ONNX Runtime管理器
+* * 初始化ONNX Runtime管理器
   async initialize(config?: InferenceConfig): Promise<void> {
     if (this.isInitialized) {
       return;
@@ -74,7 +73,7 @@ await this.engine.initialize(config);
     }
   }
   /**
- * * 销毁管理器
+* * 销毁管理器
   async destroy(): Promise<void> {
     if (!this.isInitialized) {
       return;
@@ -88,47 +87,47 @@ await this.engine.initialize(config);
       }
   }
   /**
- * * 获取推理引擎
+* * 获取推理引擎
   getInferenceEngine(): ONNXInferenceEngine {
     return this.engine;
   }
   /**
- * * 获取模型加载器
+* * 获取模型加载器
   getModelLoader(): ModelLoader {
     return this.modelLoader;
   }
   /**
- * * 获取模型量化器
+* * 获取模型量化器
   getModelQuantizer(): ModelQuantizer {
     return this.quantizer;
   }
   /**
- * * 获取模型优化器
+* * 获取模型优化器
   getModelOptimizer(): ModelOptimizer {
     return this.optimizer;
   }
   /**
- * * 获取边缘计算管理器
+* * 获取边缘计算管理器
   getEdgeComputeManager(): EdgeComputeManager {
     return this.edgeManager;
   }
   /**
- * * 获取设备能力检测器
+* * 获取设备能力检测器
   getDeviceCapabilityDetector(): DeviceCapabilityDetector {
     return this.deviceDetector;
   }
   /**
- * * 获取张量处理器
+* * 获取张量处理器
   getTensorProcessor(): TensorProcessor {
     return this.tensorProcessor;
   }
   /**
- * * 获取推理缓存
+* * 获取推理缓存
   getInferenceCache(): InferenceCache {
     return this.cache;
   }
   /**
- * * 一键式模型部署 - 加载、优化、量化模型
+* * 一键式模型部署 - 加载、优化、量化模型
   async deployModel(
     modelPath: string,
     options?: {
@@ -162,7 +161,7 @@ await this.engine.loadModel(model);
     }
   }
   /**
- * * 智能推理 - 自动处理输入输出和缓存
+* * 智能推理 - 自动处理输入输出和缓存
   async smartInference(
     modelId: string,
     inputs: Record<string, TensorData>,
@@ -210,7 +209,7 @@ if (options?.useCache) {
     }
   }
   /**
- * * 获取系统状态
+* * 获取系统状态
   getSystemStatus() {
     return {isInitialized: this.isInitialized,loadedModels: this.engine.getLoadedModels(),deviceCapabilities: this.deviceDetector.getLastDetectionResult(),performanceMetrics: this.engine.getPerformanceMetrics(),cacheStats: this.cache.getStats(),edgeComputeStats: this.edgeManager.getStats();
     };
@@ -221,31 +220,31 @@ private generateCacheKey(modelId: string, inputs: Record<string, TensorData>): s
       Object.entries(inputs).map(([key, tensor]) => [
         key,
         tensor.dims,
-        tensor.type
+        tensor.type;
       ]);
     );
     return `${modelId}_${btoa(inputHash)}`;
   }
 }
 /**
- * * 创建ONNX Runtime管理器实例
+* * 创建ONNX Runtime管理器实例
 export function createONNXRuntimeManager(): ONNXRuntimeManager {return new ONNXRuntimeManager();
 }
 /**
- * * 全局单例实例（可选）
+* * 全局单例实例（可选）
 let globalManager: ONNXRuntimeManager | null = null;
 /**
- * * 获取全局ONNX Runtime管理器实例
+* * 获取全局ONNX Runtime管理器实例
 export function getGlobalONNXRuntimeManager(): ONNXRuntimeManager {if (!globalManager) {globalManager = new ONNXRuntimeManager();
   }
   return globalManager;
 }
 /**
- * * 便捷函数：快速初始化和部署模型
+* * 便捷函数：快速初始化和部署模型
 export async function quickDeploy(;
   modelPath: string,config?: InferenceConfig;
 ): Promise<{
-  manager: ONNXRuntimeManager;
+  manager: ONNXRuntimeManager,
   model: ONNXModel;
 }> {
   const manager = createONNXRuntimeManager();
@@ -257,11 +256,11 @@ export async function quickDeploy(;
   return { manager, model }
 }
 /**
- * * 便捷函数：为索克生活项目优化的模型部署
+* * 便捷函数：为索克生活项目优化的模型部署
 export async function deploySuokeLifeModel(;
   modelPath: string,modelType: "tcm | "health" | symptom" | "lifestyle";
 ): Promise<{
-  manager: ONNXRuntimeManager;
+  manager: ONNXRuntimeManager,
   model: ONNXModel;
 }> {
   const manager = createONNXRuntimeManager();
@@ -283,7 +282,7 @@ const deployOptions = {quantize: true,
 }
 // 辅助函数
 function getQuantizationConfigForModelType(modelType: string): QuantizationConfig {
-  const baseConfig: QuantizationConfig = {level: int8","
+  const baseConfig: QuantizationConfig = {level: int8",
     outputPath: ",",
     preserveAccuracy: false,
     targetDevice: "cpu",
@@ -303,7 +302,7 @@ function getQuantizationConfigForModelType(modelType: string): QuantizationConfi
   }
 }
 function getOptimizationOptionsForModelType(modelType: string): ModelOptimizationOptions {
-  const baseOptions: ModelOptimizationOptions = {level: extended","
+  const baseOptions: ModelOptimizationOptions = {level: extended",
     enableGraphOptimization: true,
     enableMemoryOptimization: true,
     enableCpuOptimization: true,
@@ -321,4 +320,4 @@ function getOptimizationOptionsForModelType(modelType: string): ModelOptimizatio
     default:
       return baseOptions;
   }
-}  */////
+}  */

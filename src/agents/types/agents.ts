@@ -1,7 +1,6 @@
 /**
- * 索克生活智能体类型定义
- */
-
+* 索克生活智能体类型定义
+*/
 // 智能体类型枚举
 export enum AgentType {
   XIAOAI = 'xiaoai',
@@ -9,7 +8,6 @@ export enum AgentType {
   LAOKE = 'laoke',
   SOER = 'soer'
 }
-
 // 智能体状态枚举
 export enum AgentStatus {
   IDLE = 'idle',
@@ -17,7 +15,6 @@ export enum AgentStatus {
   OFFLINE = 'offline',
   ERROR = 'error'
 }
-
 // 智能体优先级枚举
 export enum AgentPriority {
   LOW = 'low',
@@ -25,7 +22,6 @@ export enum AgentPriority {
   HIGH = 'high',
   CRITICAL = 'critical'
 }
-
 // 智能体任务类型
 export enum TaskType {
   DIAGNOSIS = 'diagnosis',
@@ -35,7 +31,6 @@ export enum TaskType {
   MONITORING = 'monitoring',
   COMPANIONSHIP = 'companionship'
 }
-
 // 智能体能力接口
 export interface AgentCapability {
   id: string;
@@ -44,7 +39,6 @@ export interface AgentCapability {
   enabled: boolean;
   version: string;
 }
-
 // 智能体健康状态
 export interface AgentHealth {
   status: AgentStatus;
@@ -53,7 +47,6 @@ export interface AgentHealth {
   errorCount: number;
   uptime: number;
 }
-
 // 智能体任务接口
 export interface AgentTask {
   id: string;
@@ -66,7 +59,6 @@ export interface AgentTask {
   result?: any;
   error?: string;
 }
-
 // 智能体消息接口
 export interface AgentMessage {
   id: string;
@@ -77,7 +69,6 @@ export interface AgentMessage {
   timestamp: Date;
   correlationId?: string;
 }
-
 // 智能体协作上下文
 export interface CollaborationContext {
   sessionId: string;
@@ -88,7 +79,6 @@ export interface CollaborationContext {
   startTime: Date;
   endTime?: Date;
 }
-
 // 智能体性能指标
 export interface AgentMetrics {
   agentType: AgentType;
@@ -99,7 +89,6 @@ export interface AgentMetrics {
   throughput: number;
   lastUpdated: Date;
 }
-
 // 智能体事件类型
 export type AgentEvent =
   | { type: 'agent_started'; agentType: AgentType; timestamp: Date }
@@ -110,7 +99,6 @@ export type AgentEvent =
   | { type: 'collaboration_started'; sessionId: string; participants: AgentType[]; timestamp: Date }
   | { type: 'collaboration_ended'; sessionId: string; timestamp: Date }
   | { type: 'health_check'; agentType: AgentType; health: AgentHealth; timestamp: Date };
-
 // 基础智能体接口
 export interface Agent {
   getId(): string;

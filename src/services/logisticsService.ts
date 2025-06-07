@@ -1,5 +1,6 @@
 // 物流服务 - 处理配送、追踪等物流相关功能
-export interface DeliveryAddress {id: string;
+export interface DeliveryAddress {
+  id: string;
   name: string;
   phone: string;
   province: string;
@@ -8,28 +9,31 @@ export interface DeliveryAddress {id: string;
   detail: string;
   isDefault: boolean;
 }
-export interface LogisticsOrder {id: string;
+export interface LogisticsOrder {
+  id: string;
   orderNumber: string;
   trackingNumber?: string;
   status: "pending" | "picked_up" | "in_transit" | "delivered" | "cancelled";
   sender: DeliveryAddress;
   receiver: DeliveryAddress;
-  items: Array<{
+  items: Array<{;
     name: string;
-    quantity: number;
+  quantity: number;
     weight: number;
-  }>;
+}>;
   estimatedDelivery?: Date;
   actualDelivery?: Date;
-  createdAt: Date;
+  createdAt: Date,
   updatedAt: Date;
 }
-export interface TrackingInfo {timestamp: Date;
+export interface TrackingInfo {
+  timestamp: Date;
   status: string;
   location: string;
   description: string;
 }
-export interface DeliveryQuote {carrierId: string;
+export interface DeliveryQuote {
+  carrierId: string;
   carrierName: string;
   serviceType: string;
   price: number;
@@ -37,8 +41,8 @@ export interface DeliveryQuote {carrierId: string;
   features: string[];
 }
 /**
- * * 物流服务类
- * 提供配送、追踪、地址管理等功能
+* * 物流服务类
+* 提供配送、追踪、地址管理等功能
 export class LogisticsService {private orders: Map<string, LogisticsOrder> = new Map();
   private addresses: Map<string, DeliveryAddress> = new Map();
   private trackingCache: Map<string, TrackingInfo[]> = new Map();
@@ -48,7 +52,8 @@ export class LogisticsService {private orders: Map<string, LogisticsOrder> = new
   // 初始化默认数据
 private initializeDefaultData(): void {
     // 添加一些示例地址
-const defaultAddress: DeliveryAddress = {id: "addr-001",
+const defaultAddress: DeliveryAddress = {
+      id: "addr-001",
       name: "张三",
       phone: "13800138000",
       province: "北京市",
@@ -106,7 +111,8 @@ if (order.trackingNumber) {
   }
   // 获取状态描述
 private getStatusDescription(status: LogisticsOrder["status"]): string {
-    const descriptions = {pending: "订单已创建，等待揽收",
+    const descriptions = {
+      pending: "订单已创建，等待揽收",
       picked_up: "快递已揽收",
       in_transit: "运输中",
       delivered: "已送达",
@@ -151,28 +157,28 @@ async getDeliveryQuotes(
     // 模拟不同快递公司的报价
 const quotes: DeliveryQuote[] = [;
       {
-        carrierId: "sf",
-        carrierName: "顺丰速运",
+      carrierId: "sf",
+      carrierName: "顺丰速运",
         serviceType: "标准快递",
         price: 15 + weight * 2,
         estimatedDays: 1,
-        features: ["次日达", "保价服务", "签收确认"]
+        features: ["次日达",保价服务", "签收确认"]
       },
       {
-        carrierId: "yt",
-        carrierName: "圆通速递",
+      carrierId: "yt",
+      carrierName: "圆通速递",
         serviceType: "经济快递",
         price: 8 + weight * 1.5,
         estimatedDays: 3,
-        features: ["经济实惠", "网点覆盖广"]
+        features: ["经济实惠",网点覆盖广"]
       },
       {
-        carrierId: "sto",
-        carrierName: "申通快递",
+      carrierId: "sto",
+      carrierName: "申通快递",
         serviceType: "标准快递",
         price: 10 + weight * 1.8,
         estimatedDays: 2,
-        features: ["性价比高", "服务稳定"]
+        features: ["性价比高",服务稳定"]
       }
     ];
     return quotes;
@@ -230,7 +236,7 @@ async getDefaultAddress(): Promise<DeliveryAddress | null> {
   // 计算配送费用
 calculateShippingFee(distance: number, weight: number, serviceType: string = "standard"): number {
     const baseFee = 8;
-    const distanceFee = Math.ceil(distance / 100) * 2;////
+    const distanceFee = Math.ceil(distance / 100) * 2;
     const weightFee = Math.ceil(weight) * 1.5;
     let multiplier = 1;
     if (serviceType === "express") {
@@ -238,7 +244,7 @@ calculateShippingFee(distance: number, weight: number, serviceType: string = "st
     } else if (serviceType === "same_day") {
       multiplier = 2;
     }
-    return Math.round((baseFee + distanceFee + weightFee) * multiplier);
+    return Math.round(baseFee + distanceFee + weightFee) * multiplier);
   }
   // 估算配送时间
 estimateDeliveryTime(distance: number, serviceType: string = "standard"): Date {
@@ -256,10 +262,10 @@ if (serviceType === "express") {
     return new Date(now.getTime() + hours * 60 * 60 * 1000);
   };
   // 获取订单统计;
-getOrderStats(): {total: number;
-    pending: number;
-    inTransit: number;
-    delivered: number;
+getOrderStats(): {total: number,
+  pending: number;
+    inTransit: number,
+  delivered: number;
     cancelled: number;
   } {
     const stats = {total: this.orders.size,
@@ -291,4 +297,4 @@ getOrderStats(): {total: number;
 // 导出单例实例
 export const logisticsService = new LogisticsService();
 export default logisticsService;
-  */////
+  */

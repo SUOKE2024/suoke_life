@@ -26,7 +26,7 @@ export const BenchmarkScreen: React.FC = () => {
       <BenchmarkDashboard onTaskSelect={handleTaskSelect} />
 
       {// 浮动操作按钮}
-      <TouchableOpacity
+      <TouchableOpacity;
         style={styles.fab}
         onPress={() => setShowCreator(true)}
       >;
@@ -53,12 +53,12 @@ export const BenchmarkScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  container: {,
+  flex: 1,
     backgroundColor: '#f5f5f5'
   },
-  fab: {
-    position: 'absolute',
+  fab: {,
+  position: 'absolute',
     bottom: 24,
     right: 24,
     width: 56,

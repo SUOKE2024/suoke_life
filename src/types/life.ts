@@ -1,7 +1,7 @@
 // 生活建议类型
 export interface LifeSuggestion {
 }
- id: string}
+id: string}
   title: string,
   description: string,
   category: "diet" | "exercise" | "sleep" | "mental" | "social" | "work",
@@ -14,7 +14,7 @@ export interface LifeSuggestion {
 // 健康指标类型
 export interface HealthMetric {
 }
- id: string}
+id: string}
   name: string,
   value: number,
   unit: string,
@@ -26,12 +26,12 @@ export interface HealthMetric {
 // 健康指标历史记录
 export interface HealthMetricHistory {
 }
- date: string}
+date: string}
   value: number}
 // 生活计划类型
 export interface LifePlan {
 }
- id: string}
+id: string}
   title: string,
   description: string,
   progress: number,
@@ -46,14 +46,14 @@ export interface LifePlan {
 // 计划里程碑
 export interface PlanMilestone {
 }
- id: string}
+id: string}
   title: string,
   description: string,targetDate: string,completed: boolean;
 completedDate?: string}
 // 生活习惯类型
 export interface LifeHabit {
 }
- id: string}
+id: string}
   name: string,
   description: string,
   category: "health" | "productivity" | "wellness" | "social",
@@ -72,7 +72,7 @@ message: string}
 // 生活目标类型
 export interface LifeGoal {
 }
- id: string}
+id: string}
   title: string,
   description: string,
   category: "health" | "career" | "relationship" | "personal",
@@ -83,13 +83,13 @@ export interface LifeGoal {
 // 子目标
 export interface SubGoal {
 }
- id: string};
+id: string};
   title: string,completed: boolean;
   completedDate?: string}
 // 生活评估类型
 export interface LifeAssessment {
 }
- id: string}
+id: string}
   date: string,
   overallScore: number,
   categories: {health: number,
@@ -101,14 +101,14 @@ export interface LifeAssessment {
 // 生活建议配置
 export interface SuggestionConfig {
 }
- categories: string[]};
+categories: string[]};
   priorities: string[],timePreferences: string[];
   excludedCategories?: string[];
   }
 // 生活数据统计
 export interface LifeStats {
 }
- totalSuggestions: number}
+totalSuggestions: number}
   completedSuggestions: number,
   activePlans: number,
   completedPlans: number,

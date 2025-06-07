@@ -1,19 +1,20 @@
 import {   View, Text, StyleSheet, TouchableOpacity, Image   } from "react-native";
-import { UserProfile } from "../../types/////    profile";
-import { usePerformanceMonitor } from "../hooks/////    usePerformanceMonitor";
-
+import { UserProfile } from "../../types/    profile";
+import { usePerformanceMonitor } from "../hooks/    usePerformanceMonitor";
 import React from "react";
-importIcon from ";../../components/common/////    Icon";
+importIcon from ";../../components/common/    Icon";
 importReact from "react";
   colors,
   spacing,
   typography,
-  { borderRadius } from "../../constants/////    theme";
-interface ProfileHeaderProps { userProfile: UserProfile,
-  onEditPress: () => void,
-  getHealthScoreColor: (score: number) => string,
-  getMemberLevelText: (level: string) => string}
-const ProfileHeader: React.FC<ProfileHeaderProps /////    > = ({// 性能监控
+  { borderRadius } from "../../constants/    theme";
+interface ProfileHeaderProps {
+  userProfile: UserProfile;
+  onEditPress: () => void;
+  getHealthScoreColor: (score: number) => string;
+  getMemberLevelText: (level: string) => string;
+}
+const ProfileHeader: React.FC<ProfileHeaderProps /    > = ({// 性能监控
 const performanceMonitor = usePerformanceMonitor(ProfileHeader", {"
     trackRender: true,
     trackMemory: false,warnThreshold: 50, // ms };);
@@ -25,65 +26,65 @@ const performanceMonitor = usePerformanceMonitor(ProfileHeader", {"
   // 记录渲染性能
 performanceMonitor.recordRender();
   return (
-    <View style={styles.container} /////    >
-      <View style={styles.header} /////    >
-        <View style={styles.avatarContainer} /////    >
-          <Text style={styles.avatar} />{userProfile.avatar}</////    Text>
-        </////    View>;
-        <View style={styles.userInfo} /////    >;
-          <View style={styles.nameRow} /////    >;
-            <Text style={styles.name} />{userProfile.name}</////    Text>;
-            <TouchableOpacity onPress={onEditPress} style={styles.editButton} accessibilityLabel="TODO: 添加无障碍标签" /////    >;
-              <Icon name="pencil" size={16} color={colors.primary} /////    >;
-            </////    TouchableOpacity>;
-          </////    View>;
-          <Text style={styles.memberLevel} /////    >;
+    <View style={styles.container} /    >
+      <View style={styles.header} /    >
+        <View style={styles.avatarContainer} /    >
+          <Text style={styles.avatar}>{userProfile.avatar}</    Text>
+        </    View>;
+        <View style={styles.userInfo} /    >;
+          <View style={styles.nameRow} /    >;
+            <Text style={styles.name}>{userProfile.name}</    Text>;
+            <TouchableOpacity onPress={onEditPress} style={styles.editButton} accessibilityLabel="TODO: 添加无障碍标签" /    >;
+              <Icon name="pencil" size={16} color={colors.primary} /    >;
+            </    TouchableOpacity>;
+          </    View>;
+          <Text style={styles.memberLevel} /    >;
             {getMemberLevelText(userProfile.memberLevel)};
-          </////    Text>;
-          <Text style={styles.joinDate} />加入时间：{userProfile.joinDate}</////    Text>;
-        </////    View>;
-      </////    View>;
-      <View style={styles.statsContainer} /////    >;
-        <View style={styles.statItem} /////    >;
+          </    Text>;
+          <Text style={styles.joinDate}>加入时间：{userProfile.joinDate}</    Text>;
+        </    View>;
+      </    View>;
+      <View style={styles.statsContainer} /    >;
+        <View style={styles.statItem} /    >;
           <Text;
 style={[
               styles.statValue,
               { color: getHealthScoreColor(userProfile.healthScore)   }
-            ]} /////    >
+            ]} /    >
             {userProfile.healthScore}
-          </////    Text>
-          <Text style={styles.statLabel} />健康分数</////    Text>
-        </////    View>
-        <View style={styles.statItem} /////    >
-          <Text style={styles.statValue} />{userProfile.totalDiagnosis}</////    Text>
-          <Text style={styles.statLabel} />诊断次数</////    Text>
-        </////    View>
-        <View style={styles.statItem} /////    >
-          <Text style={styles.statValue} />{userProfile.consecutiveDays}</////    Text>
-          <Text style={styles.statLabel} />连续天数</////    Text>
-        </////    View>
-        <View style={styles.statItem} /////    >
-          <Text style={styles.statValue} />{userProfile.healthPoints}</////    Text>
-          <Text style={styles.statLabel} />健康积分</////    Text>
-        </////    View>
-      </////    View>
-    </////    View;>
+          </    Text>
+          <Text style={styles.statLabel}>健康分数</    Text>
+        </    View>
+        <View style={styles.statItem} /    >
+          <Text style={styles.statValue}>{userProfile.totalDiagnosis}</    Text>
+          <Text style={styles.statLabel}>诊断次数</    Text>
+        </    View>
+        <View style={styles.statItem} /    >
+          <Text style={styles.statValue}>{userProfile.consecutiveDays}</    Text>
+          <Text style={styles.statLabel}>连续天数</    Text>
+        </    View>
+        <View style={styles.statItem} /    >
+          <Text style={styles.statValue}>{userProfile.healthPoints}</    Text>
+          <Text style={styles.statLabel}>健康积分</    Text>
+        </    View>
+      </    View>
+    </    View;>
   ;);
 }
-const styles = StyleSheet.create({container: {
-    backgroundColor: colors.white,
+const styles = StyleSheet.create({container: {,
+  backgroundColor: colors.white,
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.xl,
     borderBottomWidth: 1,
     borderBottomColor: colors.border;
   },
-  header: {
-    flexDirection: "row",
+  header: {,
+  flexDirection: "row",
     alignItems: "center",
     marginBottom: spacing.lg;
   },
-  avatarContainer: {
-    width: 80,
+  avatarContainer: {,
+  width: 80,
     height: 80,
     borderRadius: 40,
     backgroundColor: colors.gray300,
@@ -93,42 +94,42 @@ const styles = StyleSheet.create({container: {
   },
   avatar: { fontSize: 40  },
   userInfo: { flex: 1  },
-  nameRow: {
-    flexDirection: "row",
+  nameRow: {,
+  flexDirection: "row",
     alignItems: "center",
     marginBottom: spacing.xs;
   },
-  name: {
-    fontSize: typography.fontSize.xl,
+  name: {,
+  fontSize: typography.fontSize.xl,
     fontWeight: "700" as any,
     color: colors.textPrimary,
     marginRight: spacing.sm;
   },
   editButton: { padding: spacing.xs  },
-  memberLevel: {
-    fontSize: typography.fontSize.base,
+  memberLevel: {,
+  fontSize: typography.fontSize.base,
     color: colors.primary,
     fontWeight: "500" as any,
     marginBottom: spacing.xs;
   },
-  joinDate: {
-    fontSize: typography.fontSize.sm,
+  joinDate: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary;
   },
-  statsContainer: {
-    flexDirection: "row",
+  statsContainer: {,
+  flexDirection: "row",
     justifyContent: "space-around",
     paddingTop: spacing.lg,
     borderTopWidth: 1,
     borderTopColor: colors.border;
   },
   statItem: { alignItems: "center"  },
-  statValue: {
-    fontSize: typography.fontSize.xl,
+  statValue: {,
+  fontSize: typography.fontSize.xl,
     fontWeight: "700" as any,
     color: colors.textPrimary,
     marginBottom: spacing.xs;
   },
-  statLabel: {
-    fontSize: typography.fontSize.sm,color: colors.textSecondary};};);
+  statLabel: {,
+  fontSize: typography.fontSize.sm,color: colors.textSecondary};};);
 export default React.memo(ProfileHeader);

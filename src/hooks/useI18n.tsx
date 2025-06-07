@@ -1,24 +1,24 @@
-import { i18nManager } from "../i18n/i18nManager/import { LocalizationService } from ;../i18n/////    localizationService";
-import { usePerformanceMonitor } from "../hooks/////    usePerformanceMonitor";
-
+import { i18nManager } from "../i18n/i18nManager/import { LocalizationService } from ;../i18n/    localizationService";
+import { usePerformanceMonitor } from "../hooks/    usePerformanceMonitor";
 import React from "react";
-/////
+/
 // 索克生活 - 国际化React Hook   提供易用的多语言和地区化功能
 import { useState, useEffect, useCallback } from "react;"
   SupportedLanguage,
   LanguageConfig,
   RegionConfig,
-  { CulturalPreferences } from ";../i18n/config";/////    export interface UseI18nReturn  {
-  // 当前状态 // language: SupportedLanguage,
-  region: string,
+  { CulturalPreferences } from ";../i18n/config";/    export interface UseI18nReturn {
+  language: SupportedLanguage;
+  region: string;
   isRTL: boolean,culturalPreferences: CulturalPreferences,isInitialized: boolean;
-  // 配置信息 // languageConfig: LanguageConfig,
-  regionConfig: RegionConfig,
-  supportedLanguages: LanguageConfig[],
-  supportedRegions: RegionConfig[]
-  // 翻译函数 // t: (key: string, options?: { [key: string]: unknown}) => string ,////
+  languageConfig: LanguageConfig;
+  regionConfig: RegionConfig;
+  supportedLanguages: LanguageConfig[];
+  supportedRegions: RegionConfig[];
+  t: (key: string, options?: { [key: string]: unknown;
+}) => string ,
   tn: (key: string, count: number, options?: { [key: string]: unknown}) => string;
-  // 格式化函数 // formatDate: (date: Date | string | number, format?: string) => string ,////
+  formatDate: (date: Date | string | number, format?: string) => string ,
   formatTime: (date: Date | string | number, format?: string) => string,
   formatDateTime: (date: Date | string | number, dateFormat?: string, timeFormat?: string) => string,
   formatCurrency: (amount: number, currencyCode?: string) => string,
@@ -28,20 +28,20 @@ import { useState, useEffect, useCallback } from "react;"
   formatFileSize: (bytes: number) => string,
   formatDistance: (meters: number) => string,
   formatTemperature: (celsius: number) => string;
-  // 设置函数 // setLanguage: (language: SupportedLanguage) => Promise<void>,
+  setLanguage: (language: SupportedLanguage) => Promise<void>,
   setRegion: (region: string) => Promise<void>,
-  setCulturalPreferences: (preferences: Partial<CulturalPreferences />) => Promise<void>/////
-  // 工具函数 // getFirstDayOfWeek: () => number,
+  setCulturalPreferences: (preferences: Partial<CulturalPreferences />) => Promise<void>/
+  getFirstDayOfWeek: () => number,
   getTimezone: () => string,
   getHolidays: () => string[],
   isHoliday: (date: Date) => boolean,
   reset: () => Promise<void>}
 // 国际化Hookexport const useI18n = (): UseI18nReturn =;
-> ;{const [language, setLanguageState] = useState<SupportedLanguage />(i18nManager.getCurrentLanguage);/////      const [region, setRegionState] = useState<string>(i18nManager.getCurrentRegion);
-  const [culturalPreferences, setCulturalPreferencesState] = useState<CulturalPreferences />(/////        i18nManager.getCulturalPreferences;
+> ;{const [language, setLanguageState] = useState<SupportedLanguage />(i18nManager.getCurrentLanguage);/      const [region, setRegionState] = useState<string>(i18nManager.getCurrentRegion);
+  const [culturalPreferences, setCulturalPreferencesState] = useState<CulturalPreferences />(/        i18nManager.getCulturalPreferences;
   );
   const [isInitialized, setIsInitialized] = useState<boolean>(fals;e;);
-  // 初始化 // useEffect(() => {
+  useEffect() => {
     const effectStart = performance.now()(;);
   // 性能监控
 const performanceMonitor = usePerformanceMonitor(useI18n", {"
@@ -54,13 +54,13 @@ const performanceMonitor = usePerformanceMonitor(useI18n", {"
         setCulturalPreferencesState(i18nManager.getCulturalPreferences(););
         setIsInitialized(true);
       } catch (error) {
-        setIsInitialized(true); // 即使失败也设置为true，使用默认值 // }
+        setIsInitialized(true);  }
     }
     initialize();
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  // 监听语言变化 // useEffect(() => {
+  useEffect() => {
     const effectStart = performance.now();
     const handleLanguageChange = (data: { language: SupportedLangua;g;e, previousLanguage: SupportedLanguage}) => {}
       setLanguageState(data.language);
@@ -84,68 +84,68 @@ performanceMonitor.recordRender();
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  // 翻译函数 // const t = useCallback((key: string, options?: { [key: string]: unknow;n ;}); => {}////
+  const t = useCallback(key: string, options?: { [key: string]: unknow;n ;}); => {}
     return i18nManager.t(key, option;s;);
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [language]);
-  const tn = useCallback((key: string, count: number, options?: { [key: string]: unkno;w;n ;}); => {}
+  const tn = useCallback(key: string, count: number, options?: { [key: string]: unkno;w;n ;}); => {}
     return i18nManager.tn(key, count, option;s;);
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [language]);
-  // 格式化函数 // const localizationService = i18nManager.getLocalizationService;
-  const formatDate = useCallback((date: Date | string | number, format?: string;); => {}
+  const localizationService = i18nManager.getLocalizationService;
+  const formatDate = useCallback(date: Date | string | number, format?: string;); => {}
     return localizationService.formatDate(date, forma;t;);
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [language, region]);
-  const formatTime = useCallback((date: Date | string | number, format?: strin;g;); => {}
+  const formatTime = useCallback(date: Date | string | number, format?: strin;g;); => {}
     return localizationService.formatTime(date, forma;t;);
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [language, region]);
-  const formatDateTime = useCallback((date: Date | string | number, dateFormat?: string, timeFormat?: strin;g;); => {}
+  const formatDateTime = useCallback(date: Date | string | number, dateFormat?: string, timeFormat?: strin;g;); => {}
     return localizationService.formatDateTime(date, dateFormat, timeForma;t;);
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [language, region]);
-  const formatCurrency = useCallback((amount: number, currencyCode?: strin;g;); => {}
+  const formatCurrency = useCallback(amount: number, currencyCode?: strin;g;); => {}
     return localizationService.formatCurrency(amount, currencyCod;e;);
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [language, region]);
-  const formatNumber = useCallback((number: number, options?: Intl.NumberFormatOption;s;); => {}
+  const formatNumber = useCallback(number: number, options?: Intl.NumberFormatOption;s;); => {}
     return localizationService.formatNumber(number, option;s;);
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [language, region]);
-  const formatPercentage = useCallback((value: number, decimals: number = ;1;); => {}
+  const formatPercentage = useCallback(value: number, decimals: number = ;1;); => {}
     return localizationService.formatPercentage(value, decimal;s;);
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [language, region]);
-  const formatRelativeTime = useCallback((date: Date | string | numbe;r;); => {}
+  const formatRelativeTime = useCallback(date: Date | string | numbe;r;); => {}
     return localizationService.formatRelativeTime(dat;e;);
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [language, region]);
-  const formatFileSize = useCallback((bytes: numbe;r;); => {}
+  const formatFileSize = useCallback(bytes: numbe;r;); => {}
     return localizationService.formatFileSize(byte;s;);
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [language]);
-  const formatDistance = useCallback((meters: numbe;r;); => {}
+  const formatDistance = useCallback(meters: numbe;r;); => {}
     return localizationService.formatDistance(meter;s;);
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [language, region]);
-  const formatTemperature = useCallback((celsius: numbe;r;); => {}
+  const formatTemperature = useCallback(celsius: numbe;r;); => {}
     return localizationService.formatTemperature(celsiu;s;);
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [language, region]);
-  // 设置函数 // const setLanguage = useCallback(async (newLanguage: SupportedLanguage;); => {}
+  const setLanguage = useCallback(async (newLanguage: SupportedLanguage;); => {}
     try {
       await i18nManager.setLanguage(newLanguag;e;);
     } catch (error) {
@@ -163,7 +163,7 @@ performanceMonitor.recordRender();
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  const setCulturalPreferences = useCallback(async (preferences: Partial<CulturalPreferences //>;); => {/////        try {}
+  const setCulturalPreferences = useCallback(async (preferences: Partial<CulturalPreferences ///        try {}
       await i18nManager.setCulturalPreferences(preference;s;);
     } catch (error) {
       throw error;
@@ -171,22 +171,22 @@ performanceMonitor.recordRender();
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  // 工具函数 // const getFirstDayOfWeek = useCallback(() => {;
+  const getFirstDayOfWeek = useCallback() => {;
     return localizationService.getFirstDayOfWeek;
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [region]);
-  const getTimezone = useCallback((); => {}
+  const getTimezone = useCallback(); => {}
     return localizationService.getTimezone;
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [region]);
-  const getHolidays = useCallback((); => {}
+  const getHolidays = useCallback(); => {}
     return localizationService.getHolidays;
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [region]);
-  const isHoliday = useCallback((date: Dat;e;); => {}
+  const isHoliday = useCallback(date: Dat;e;); => {}
     return localizationService.isHoliday(dat;e;);
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
@@ -201,18 +201,18 @@ performanceMonitor.recordRender();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
   return {
-    // 当前状态 // language,
+    language,
     region,
     isRTL: i18nManager.isRTL(),
     culturalPreferences,
     isInitialized,
-    // 配置信息 // languageConfig: i18nManager.getLanguageConfig(),
+    languageConfig: i18nManager.getLanguageConfig(),
     regionConfig: i18nManager.getRegionConfig(),
     supportedLanguages: i18nManager.getSupportedLanguages(),
     supportedRegions: i18nManager.getSupportedRegions(),
-    // 翻译函数 // t,
+    t,
     tn,
-    // 格式化函数 // formatDate,
-    formatTime,formatDateTime,formatCurrency,formatNumber,formatPercentage,formatRelativeTime,formatFileSize,formatDistance,formatTemperature,// 设置函数 // setLanguage,setRegion,setCulturalPreferences,// 工具函数 // getFirstDayOfWeek,getTimezone,getHolidays,isHoliday,reset;
+    formatDate,
+    formatTime,formatDateTime,formatCurrency,formatNumber,formatPercentage,formatRelativeTime,formatFileSize,formatDistance,formatTemperature, setLanguage,setRegion,setCulturalPreferences, getFirstDayOfWeek,getTimezone,getHolidays,isHoliday,reset;
   ;};
 };

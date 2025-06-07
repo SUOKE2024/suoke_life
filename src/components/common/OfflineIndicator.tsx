@@ -3,13 +3,11 @@ import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { offlineService, getSyncStatus, addSyncListener, SyncStatus } from '../../services/offlineService';
 import { GATEWAY_FEATURES } from '../../constants/config';
-
 interface OfflineIndicatorProps {
   style?: any;
   showDetails?: boolean;
   onPress?: () => void;
 }
-
 export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
   style,
   showDetails = false,
@@ -18,17 +16,14 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
   const [syncStatus, setSyncStatus] = useState<SyncStatus>(getSyncStatus());
   const [fadeAnim] = useState(new Animated.Value(0));
   const [slideAnim] = useState(new Animated.Value(-100));
-
-  useEffect(() => {
+  useEffect() => {
     // 监听同步状态变化
-    const unsubscribe = addSyncListener((status) => {
+    const unsubscribe = addSyncListener(status) => {
       setSyncStatus(status);
     });
-
     return unsubscribe;
   }, []);
-
-  useEffect(() => {
+  useEffect() => {
     // 当离线时显示指示器
     if (!syncStatus.isOnline || syncStatus.pendingOperations > 0) {
       Animated.parallel([
@@ -58,38 +53,32 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
       ]).start();
     }
   }, [syncStatus.isOnline, syncStatus.pendingOperations, fadeAnim, slideAnim]);
-
   // 如果没有启用离线功能，不显示指示器
   if (!GATEWAY_FEATURES.ENABLE_OFFLINE) {
     return null;
   }
-
   // 如果在线且没有待处理操作，不显示指示器
   if (syncStatus.isOnline && syncStatus.pendingOperations === 0) {
     return null;
   }
-
   const getStatusColor = () => {
     if (!syncStatus.isOnline) return '#f44336'; // 红色 - 离线
     if (syncStatus.syncInProgress) return '#ff9800'; // 橙色 - 同步中
     if (syncStatus.pendingOperations > 0) return '#2196F3'; // 蓝色 - 有待处理操作
     return '#4CAF50'; // 绿色 - 正常
   };
-
   const getStatusText = () => {
     if (!syncStatus.isOnline) return '离线模式';
     if (syncStatus.syncInProgress) return '正在同步...';
     if (syncStatus.pendingOperations > 0) return `${syncStatus.pendingOperations} 个操作待同步`;
     return '已同步';
   };
-
   const getStatusIcon = () => {
     if (!syncStatus.isOnline) return 'cloud-off';
     if (syncStatus.syncInProgress) return 'sync';
     if (syncStatus.pendingOperations > 0) return 'cloud-queue';
     return 'cloud-done';
   };
-
   const handlePress = () => {
     if (onPress) {
       onPress();
@@ -98,9 +87,8 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
       offlineService.forcSync().catch(console.error);
     }
   };
-
   const renderBasicIndicator = () => (
-    <Animated.View
+    <Animated.View;
       style={[
         styles.basicIndicator,
         { backgroundColor: getStatusColor() },
@@ -111,7 +99,7 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
         style,
       ]}
     >
-      <TouchableOpacity
+      <TouchableOpacity;
         style={styles.basicContent}
         onPress={handlePress}
         activeOpacity={0.8}
@@ -119,16 +107,15 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
         <Icon name={getStatusIcon()} size={16} color="#fff" />
         <Text style={styles.basicText}>{getStatusText()}</Text>
         {syncStatus.pendingOperations > 0 && (
-          <View style={styles.badge}>
+        <View style={styles.badge}>
             <Text style={styles.badgeText}>{syncStatus.pendingOperations}</Text>
           </View>
         )}
       </TouchableOpacity>
     </Animated.View>
   );
-
   const renderDetailedIndicator = () => (
-    <Animated.View
+    <Animated.View;
       style={[
         styles.detailedIndicator,
         {
@@ -138,7 +125,7 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
         style,
       ]}
     >
-      <TouchableOpacity
+      <TouchableOpacity;
         style={styles.detailedContent}
         onPress={handlePress}
         activeOpacity={0.8}
@@ -149,7 +136,6 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
             {getStatusText()}
           </Text>
         </View>
-
         <View style={styles.statusDetails}>
           <View style={styles.statusRow}>
             <Text style={styles.statusLabel}>网络状态:</Text>
@@ -157,25 +143,22 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
               {syncStatus.isOnline ? '在线' : '离线'}
             </Text>
           </View>
-
           {syncStatus.pendingOperations > 0 && (
-            <View style={styles.statusRow}>
+        <View style={styles.statusRow}>
               <Text style={styles.statusLabel}>待同步操作:</Text>
               <Text style={styles.statusValue}>{syncStatus.pendingOperations}</Text>
             </View>
           )}
-
           {syncStatus.failedOperations > 0 && (
-            <View style={styles.statusRow}>
+        <View style={styles.statusRow}>
               <Text style={styles.statusLabel}>失败操作:</Text>
               <Text style={[styles.statusValue, { color: '#f44336' }]}>
                 {syncStatus.failedOperations}
               </Text>
             </View>
           )}
-
           {syncStatus.lastSyncTime && (
-            <View style={styles.statusRow}>
+        <View style={styles.statusRow}>
               <Text style={styles.statusLabel}>上次同步:</Text>
               <Text style={styles.statusValue}>
                 {new Date(syncStatus.lastSyncTime).toLocaleTimeString()}
@@ -183,42 +166,33 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
             </View>
           )}
         </View>
-
         {syncStatus.isOnline && syncStatus.pendingOperations > 0 && (
-          <View style={styles.actionButton}>
+        <View style={styles.actionButton}>
             <Text style={styles.actionButtonText}>点击同步</Text>
           </View>
         )}
       </TouchableOpacity>
     </Animated.View>
   );
-
   return showDetails ? renderDetailedIndicator() : renderBasicIndicator();
 };
-
 // 同步状态卡片组件
 interface SyncStatusCardProps {
   style?: any;
 }
-
 export const SyncStatusCard: React.FC<SyncStatusCardProps> = ({ style }) => {
   const [syncStatus, setSyncStatus] = useState<SyncStatus>(getSyncStatus());
   const [cacheStats, setCacheStats] = useState<any>(null);
-
-  useEffect(() => {
+  useEffect() => {
     const unsubscribe = addSyncListener(setSyncStatus);
-
     // 获取缓存统计
     const stats = offlineService.getCacheStats();
     setCacheStats(stats);
-
     return unsubscribe;
   }, []);  // 检查是否需要添加依赖项;
-
   if (!GATEWAY_FEATURES.ENABLE_OFFLINE) {
     return null;
   }
-
   const handleForcSync = async () => {
     try {
       await offlineService.forcSync();
@@ -226,7 +200,6 @@ export const SyncStatusCard: React.FC<SyncStatusCardProps> = ({ style }) => {
       console.error('Force sync failed:', error);
     }
   };
-
   const handleClearCache = async () => {
     try {
       await offlineService.clearOfflineData();
@@ -236,14 +209,12 @@ export const SyncStatusCard: React.FC<SyncStatusCardProps> = ({ style }) => {
       console.error('Clear cache failed:', error);
     }
   };
-
   return (
     <View style={[styles.syncCard, style]}>
       <View style={styles.syncCardHeader}>
         <Icon name="sync" size={24} color="#2196F3" />
         <Text style={styles.syncCardTitle}>同步状态</Text>
       </View>
-
       <View style={styles.syncCardContent}>
         <View style={styles.statusGrid}>
           <View style={styles.statusItem}>
@@ -255,12 +226,10 @@ export const SyncStatusCard: React.FC<SyncStatusCardProps> = ({ style }) => {
               {syncStatus.isOnline ? '在线' : '离线'}
             </Text>
           </View>
-
           <View style={styles.statusItem}>
             <Text style={styles.statusItemLabel}>待同步</Text>
             <Text style={styles.statusItemValue}>{syncStatus.pendingOperations}</Text>
           </View>
-
           <View style={styles.statusItem}>
             <Text style={styles.statusItemLabel}>失败</Text>
             <Text style={[
@@ -270,7 +239,6 @@ export const SyncStatusCard: React.FC<SyncStatusCardProps> = ({ style }) => {
               {syncStatus.failedOperations}
             </Text>
           </View>
-
           <View style={styles.statusItem}>
             <Text style={styles.statusItemLabel}>同步中</Text>
             <Text style={[
@@ -281,9 +249,8 @@ export const SyncStatusCard: React.FC<SyncStatusCardProps> = ({ style }) => {
             </Text>
           </View>
         </View>
-
         {cacheStats && (
-          <View style={styles.cacheStats}>
+        <View style={styles.cacheStats}>
             <Text style={styles.cacheStatsTitle}>缓存统计</Text>
             <Text style={styles.cacheStatsText}>
               缓存项: {cacheStats.totalItems} |
@@ -292,7 +259,6 @@ export const SyncStatusCard: React.FC<SyncStatusCardProps> = ({ style }) => {
             </Text>
           </View>
         )}
-
         <View style={styles.syncCardActions}>
           {syncStatus.isOnline && syncStatus.pendingOperations > 0 && (
             <TouchableOpacity style={styles.syncButton} onPress={handleForcSync}>
@@ -300,7 +266,6 @@ export const SyncStatusCard: React.FC<SyncStatusCardProps> = ({ style }) => {
               <Text style={styles.syncButtonText}>立即同步</Text>
             </TouchableOpacity>
           )}
-
           <TouchableOpacity style={styles.clearButton} onPress={handleClearCache}>
             <Icon name="clear-all" size={16} color="#666" />
             <Text style={styles.clearButtonText}>清除缓存</Text>
@@ -310,43 +275,42 @@ export const SyncStatusCard: React.FC<SyncStatusCardProps> = ({ style }) => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
-  basicIndicator: {
-    position: 'absolute',
+  basicIndicator: {,
+  position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     zIndex: 1000,
   },
-  basicContent: {
-    flexDirection: 'row',
+  basicContent: {,
+  flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 8,
     paddingHorizontal: 16,
     gap: 8,
   },
-  basicText: {
-    color: '#fff',
+  basicText: {,
+  color: '#fff',
     fontSize: 14,
     fontWeight: '500',
   },
-  badge: {
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+  badge: {,
+  backgroundColor: 'rgba(255, 255, 255, 0.3)',
     borderRadius: 10,
     paddingHorizontal: 6,
     paddingVertical: 2,
     minWidth: 20,
     alignItems: 'center',
   },
-  badgeText: {
-    color: '#fff',
+  badgeText: {,
+  color: '#fff',
     fontSize: 12,
     fontWeight: 'bold',
   },
-  detailedIndicator: {
-    backgroundColor: '#fff',
+  detailedIndicator: {,
+  backgroundColor: '#fff',
     margin: 16,
     borderRadius: 12,
     shadowColor: '#000',
@@ -355,50 +319,50 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  detailedContent: {
-    padding: 16,
+  detailedContent: {,
+  padding: 16,
   },
-  statusHeader: {
-    flexDirection: 'row',
+  statusHeader: {,
+  flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 16,
     gap: 12,
   },
-  statusTitle: {
-    fontSize: 18,
+  statusTitle: {,
+  fontSize: 18,
     fontWeight: 'bold',
   },
-  statusDetails: {
-    gap: 8,
+  statusDetails: {,
+  gap: 8,
   },
-  statusRow: {
-    flexDirection: 'row',
+  statusRow: {,
+  flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  statusLabel: {
-    fontSize: 14,
+  statusLabel: {,
+  fontSize: 14,
     color: '#666',
   },
-  statusValue: {
-    fontSize: 14,
+  statusValue: {,
+  fontSize: 14,
     fontWeight: '500',
     color: '#333',
   },
-  actionButton: {
-    marginTop: 16,
+  actionButton: {,
+  marginTop: 16,
     backgroundColor: '#2196F3',
     borderRadius: 8,
     paddingVertical: 12,
     alignItems: 'center',
   },
-  actionButtonText: {
-    color: '#fff',
+  actionButtonText: {,
+  color: '#fff',
     fontSize: 16,
     fontWeight: '600',
   },
-  syncCard: {
-    backgroundColor: '#fff',
+  syncCard: {,
+  backgroundColor: '#fff',
     borderRadius: 12,
     padding: 16,
     shadowColor: '#000',
@@ -407,61 +371,61 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  syncCardHeader: {
-    flexDirection: 'row',
+  syncCardHeader: {,
+  flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 16,
     gap: 12,
   },
-  syncCardTitle: {
-    fontSize: 18,
+  syncCardTitle: {,
+  fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
   },
-  syncCardContent: {
-    gap: 16,
+  syncCardContent: {,
+  gap: 16,
   },
-  statusGrid: {
-    flexDirection: 'row',
+  statusGrid: {,
+  flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 16,
   },
-  statusItem: {
-    flex: 1,
+  statusItem: {,
+  flex: 1,
     minWidth: '40%',
     alignItems: 'center',
   },
-  statusItemLabel: {
-    fontSize: 12,
+  statusItemLabel: {,
+  fontSize: 12,
     color: '#666',
     marginBottom: 4,
   },
-  statusItemValue: {
-    fontSize: 16,
+  statusItemValue: {,
+  fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
   },
-  cacheStats: {
-    backgroundColor: '#f5f5f5',
+  cacheStats: {,
+  backgroundColor: '#f5f5f5',
     borderRadius: 8,
     padding: 12,
   },
-  cacheStatsTitle: {
-    fontSize: 14,
+  cacheStatsTitle: {,
+  fontSize: 14,
     fontWeight: 'bold',
     color: '#333',
     marginBottom: 4,
   },
-  cacheStatsText: {
-    fontSize: 12,
+  cacheStatsText: {,
+  fontSize: 12,
     color: '#666',
   },
-  syncCardActions: {
-    flexDirection: 'row',
+  syncCardActions: {,
+  flexDirection: 'row',
     gap: 12,
   },
-  syncButton: {
-    flex: 1,
+  syncButton: {,
+  flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -470,13 +434,13 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     gap: 8,
   },
-  syncButtonText: {
-    color: '#fff',
+  syncButtonText: {,
+  color: '#fff',
     fontSize: 14,
     fontWeight: '600',
   },
-  clearButton: {
-    flex: 1,
+  clearButton: {,
+  flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -487,11 +451,10 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     gap: 8,
   },
-  clearButtonText: {
-    color: '#666',
+  clearButtonText: {,
+  color: '#666',
     fontSize: 14,
     fontWeight: '600',
   },
 });
-
 export default OfflineIndicator;

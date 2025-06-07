@@ -9,9 +9,8 @@ import {medKnowledgeService,
   KnowledgeResult,
   GraphData,
   HealthRecommendation,
-  RecommendationRequest
+  RecommendationRequest;
 } from '../../services/medKnowledgeService';
-
 // 状态接口定义
 export interface MedKnowledgeState {
   // 数据状态
@@ -23,60 +22,53 @@ export interface MedKnowledgeState {
   searchResults: KnowledgeResult[];
   knowledgeGraph: GraphData | null;
   recommendations: HealthRecommendation[];
-
   // 当前选中项
   selectedConstitution: Constitution | null;
   selectedSymptom: Symptom | null;
   selectedAcupoint: Acupoint | null;
   selectedHerb: Herb | null;
   selectedSyndrome: Syndrome | null;
-
   // 加载状态
-  loading: {
-    constitutions: boolean;
+  loading: {;
+  constitutions: boolean;
     symptoms: boolean;
-    acupoints: boolean;
+  acupoints: boolean;
     herbs: boolean;
-    syndromes: boolean;
+  syndromes: boolean;
     search: boolean;
-    graph: boolean;
+  graph: boolean;
     recommendations: boolean;
-  };
-
+};
   // 错误状态
-  error: {
-    constitutions: string | null;
-    symptoms: string | null;
-    acupoints: string | null;
-    herbs: string | null;
-    syndromes: string | null;
-    search: string | null;
-    graph: string | null;
+  error: {,
+  constitutions: string | null;
+    symptoms: string | null,
+  acupoints: string | null;
+    herbs: string | null,
+  syndromes: string | null;
+    search: string | null,
+  graph: string | null;
     recommendations: string | null;
   };
-
   // 搜索状态
-  searchQuery: KnowledgeQuery | null;
+  searchQuery: KnowledgeQuery | null,
   searchHistory: string[];
-
   // 缓存状态
-  lastUpdated: {
-    constitutions: number | null;
-    symptoms: number | null;
-    acupoints: number | null;
-    herbs: number | null;
-    syndromes: number | null;
+  lastUpdated: {,
+  constitutions: number | null;
+    symptoms: number | null,
+  acupoints: number | null;
+    herbs: number | null,
+  syndromes: number | null;
   };
-
   // 服务状态
-  serviceHealth: {
-    status: 'unknown' | 'healthy' | 'unhealthy';
+  serviceHealth: {,
+  status: 'unknown' | 'healthy' | 'unhealthy';
     lastCheck: number | null;
   };
 }
-
 // 初始状态
-const initialState: MedKnowledgeState = {
+const initialState: MedKnowledgeState = {,
   constitutions: [],
   symptoms: [],
   acupoints: [],
@@ -85,52 +77,45 @@ const initialState: MedKnowledgeState = {
   searchResults: [],
   knowledgeGraph: null,
   recommendations: [],
-
   selectedConstitution: null,
   selectedSymptom: null,
   selectedAcupoint: null,
   selectedHerb: null,
   selectedSyndrome: null,
-
-  loading: {
-    constitutions: false,
+  loading: {,
+  constitutions: false,
     symptoms: false,
     acupoints: false,
     herbs: false,
     syndromes: false,
     search: false,
     graph: false,
-    recommendations: false
+    recommendations: false;
   },
-
-  error: {
-    constitutions: null,
+  error: {,
+  constitutions: null,
     symptoms: null,
     acupoints: null,
     herbs: null,
     syndromes: null,
     search: null,
     graph: null,
-    recommendations: null
+    recommendations: null;
   },
-
   searchQuery: null,
   searchHistory: [],
-
-  lastUpdated: {
-    constitutions: null,
+  lastUpdated: {,
+  constitutions: null,
     symptoms: null,
     acupoints: null,
     herbs: null,
-    syndromes: null
+    syndromes: null;
   },
-
-  serviceHealth: {
-    status: 'unknown',
-    lastCheck: null
+  serviceHealth: {,
+  status: 'unknown',
+    lastCheck: null;
   }
 };
-
 // 异步操作
 export const fetchConstitutions = createAsyncThunk(;
   'medKnowledge/fetchConstitutions',
@@ -142,7 +127,6 @@ export const fetchConstitutions = createAsyncThunk(;
     }
   }
 );
-
 export const fetchConstitutionById = createAsyncThunk(;
   'medKnowledge/fetchConstitutionById',
   async (id: string, { rejectWithValue }) => {
@@ -153,7 +137,6 @@ export const fetchConstitutionById = createAsyncThunk(;
     }
   }
 );
-
 export const fetchSymptoms = createAsyncThunk(;
   'medKnowledge/fetchSymptoms',
   async (_, { rejectWithValue }) => {
@@ -164,7 +147,6 @@ export const fetchSymptoms = createAsyncThunk(;
     }
   }
 );
-
 export const searchSymptoms = createAsyncThunk(;
   'medKnowledge/searchSymptoms',
   async (query: string, { rejectWithValue }) => {
@@ -175,7 +157,6 @@ export const searchSymptoms = createAsyncThunk(;
     }
   }
 );
-
 export const fetchAcupoints = createAsyncThunk(;
   'medKnowledge/fetchAcupoints',
   async (_, { rejectWithValue }) => {
@@ -186,7 +167,6 @@ export const fetchAcupoints = createAsyncThunk(;
     }
   }
 );
-
 export const fetchAcupointsByConstitution = createAsyncThunk(;
   'medKnowledge/fetchAcupointsByConstitution',
   async (constitutionId: string, { rejectWithValue }) => {
@@ -197,7 +177,6 @@ export const fetchAcupointsByConstitution = createAsyncThunk(;
     }
   }
 );
-
 export const fetchHerbs = createAsyncThunk(;
   'medKnowledge/fetchHerbs',
   async (_, { rejectWithValue }) => {
@@ -208,7 +187,6 @@ export const fetchHerbs = createAsyncThunk(;
     }
   }
 );
-
 export const fetchHerbsBySymptom = createAsyncThunk(;
   'medKnowledge/fetchHerbsBySymptom',
   async (symptomId: string, { rejectWithValue }) => {
@@ -219,7 +197,6 @@ export const fetchHerbsBySymptom = createAsyncThunk(;
     }
   }
 );
-
 export const fetchSyndromes = createAsyncThunk(;
   'medKnowledge/fetchSyndromes',
   async (_, { rejectWithValue }) => {
@@ -230,7 +207,6 @@ export const fetchSyndromes = createAsyncThunk(;
     }
   }
 );
-
 export const searchKnowledge = createAsyncThunk(;
   'medKnowledge/searchKnowledge',
   async (query: KnowledgeQuery, { rejectWithValue }) => {
@@ -241,7 +217,6 @@ export const searchKnowledge = createAsyncThunk(;
     }
   }
 );
-
 export const fetchKnowledgeGraph = createAsyncThunk(;
   'medKnowledge/fetchKnowledgeGraph',
   async (_, { rejectWithValue }) => {
@@ -252,7 +227,6 @@ export const fetchKnowledgeGraph = createAsyncThunk(;
     }
   }
 );
-
 export const fetchPersonalizedRecommendations = createAsyncThunk(;
   'medKnowledge/fetchPersonalizedRecommendations',
   async (request: RecommendationRequest, { rejectWithValue }) => {
@@ -263,7 +237,6 @@ export const fetchPersonalizedRecommendations = createAsyncThunk(;
     }
   }
 );
-
 export const checkServiceHealth = createAsyncThunk(;
   'medKnowledge/checkServiceHealth',
   async (_, { rejectWithValue }) => {
@@ -275,10 +248,9 @@ export const checkServiceHealth = createAsyncThunk(;
     }
   }
 );
-
 // 创建切片
-const medKnowledgeSlice = createSlice({name: 'medKnowledge',initialState,reducers: {// 选择操作;
-    selectConstitution: (state, action: PayloadAction<Constitution | null>) => {state.selectedConstitution = action.payload;
+const medKnowledgeSlice = createSlice({name: 'medKnowledge',initialState,reducers: {// 选择操作,
+  selectConstitution: (state, action: PayloadAction<Constitution | null>) => {state.selectedConstitution = action.payload;
     },
     selectSymptom: (state, action: PayloadAction<Symptom | null>) => {
       state.selectedSymptom = action.payload;
@@ -292,7 +264,6 @@ const medKnowledgeSlice = createSlice({name: 'medKnowledge',initialState,reducer
     selectSyndrome: (state, action: PayloadAction<Syndrome | null>) => {
       state.selectedSyndrome = action.payload;
     },
-
     // 搜索历史管理
     addToSearchHistory: (state, action: PayloadAction<string>) => {
       const query = action.payload.trim();
@@ -307,7 +278,6 @@ const medKnowledgeSlice = createSlice({name: 'medKnowledge',initialState,reducer
     clearSearchHistory: (state) => {
       state.searchHistory = [];
     },
-
     // 清除错误
     clearError: (state, action: PayloadAction<keyof MedKnowledgeState['error']>) => {
       state.error[action.payload] = null;
@@ -317,19 +287,17 @@ const medKnowledgeSlice = createSlice({name: 'medKnowledge',initialState,reducer
         state.error[key as keyof MedKnowledgeState['error']] = null;
       });
     },
-
     // 清除搜索结果
     clearSearchResults: (state) => {
       state.searchResults = [];
       state.searchQuery = null;
     },
-
     // 重置状态
-    resetState: () => initialState
+    resetState: () => initialState;
   },
   extraReducers: (builder) => {
     // 体质相关
-    builder
+    builder;
       .addCase(fetchConstitutions.pending, (state) => {
         state.loading.constitutions = true;
         state.error.constitutions = null;
@@ -343,7 +311,6 @@ const medKnowledgeSlice = createSlice({name: 'medKnowledge',initialState,reducer
         state.loading.constitutions = false;
         state.error.constitutions = action.payload as string;
       })
-
       .addCase(fetchConstitutionById.fulfilled, (state, action) => {
         state.selectedConstitution = action.payload;
         // 更新列表中的对应项
@@ -352,7 +319,6 @@ const medKnowledgeSlice = createSlice({name: 'medKnowledge',initialState,reducer
           state.constitutions[index] = action.payload;
         }
       })
-
       // 症状相关
       .addCase(fetchSymptoms.pending, (state) => {
         state.loading.symptoms = true;
@@ -367,11 +333,9 @@ const medKnowledgeSlice = createSlice({name: 'medKnowledge',initialState,reducer
         state.loading.symptoms = false;
         state.error.symptoms = action.payload as string;
       })
-
       .addCase(searchSymptoms.fulfilled, (state, action) => {
         state.symptoms = action.payload;
       })
-
       // 穴位相关
       .addCase(fetchAcupoints.pending, (state) => {
         state.loading.acupoints = true;
@@ -386,11 +350,9 @@ const medKnowledgeSlice = createSlice({name: 'medKnowledge',initialState,reducer
         state.loading.acupoints = false;
         state.error.acupoints = action.payload as string;
       })
-
       .addCase(fetchAcupointsByConstitution.fulfilled, (state, action) => {
         state.acupoints = action.payload;
       })
-
       // 中药相关
       .addCase(fetchHerbs.pending, (state) => {
         state.loading.herbs = true;
@@ -405,11 +367,9 @@ const medKnowledgeSlice = createSlice({name: 'medKnowledge',initialState,reducer
         state.loading.herbs = false;
         state.error.herbs = action.payload as string;
       })
-
       .addCase(fetchHerbsBySymptom.fulfilled, (state, action) => {
         state.herbs = action.payload;
       })
-
       // 证型相关
       .addCase(fetchSyndromes.pending, (state) => {
         state.loading.syndromes = true;
@@ -424,7 +384,6 @@ const medKnowledgeSlice = createSlice({name: 'medKnowledge',initialState,reducer
         state.loading.syndromes = false;
         state.error.syndromes = action.payload as string;
       })
-
       // 知识搜索
       .addCase(searchKnowledge.pending, (state) => {
         state.loading.search = true;
@@ -439,7 +398,6 @@ const medKnowledgeSlice = createSlice({name: 'medKnowledge',initialState,reducer
         state.loading.search = false;
         state.error.search = action.payload as string;
       })
-
       // 知识图谱
       .addCase(fetchKnowledgeGraph.pending, (state) => {
         state.loading.graph = true;
@@ -453,7 +411,6 @@ const medKnowledgeSlice = createSlice({name: 'medKnowledge',initialState,reducer
         state.loading.graph = false;
         state.error.graph = action.payload as string;
       })
-
       // 个性化推荐
       .addCase(fetchPersonalizedRecommendations.pending, (state) => {
         state.loading.recommendations = true;
@@ -467,7 +424,6 @@ const medKnowledgeSlice = createSlice({name: 'medKnowledge',initialState,reducer
         state.loading.recommendations = false;
         state.error.recommendations = action.payload as string;
       })
-
       // 服务健康检查
       .addCase(checkServiceHealth.fulfilled, (state) => {
         state.serviceHealth.status = 'healthy';
@@ -479,8 +435,7 @@ const medKnowledgeSlice = createSlice({name: 'medKnowledge',initialState,reducer
       });
   }
 });
-
-// 导出actions
+// 导出actions;
 export const {
   selectConstitution,
   selectSymptom,
@@ -492,9 +447,8 @@ export const {
   clearError,
   clearAllErrors,
   clearSearchResults,
-  resetState
+  resetState;
 } = medKnowledgeSlice.actions;
-
 // 选择器
 export const selectMedKnowledgeState = (state: { medKnowledge: MedKnowledgeState }) => state.medKnowledge;
 export const selectConstitutions = (state: { medKnowledge: MedKnowledgeState }) => state.medKnowledge.constitutions;
@@ -510,5 +464,4 @@ export const selectLoading = (state: { medKnowledge: MedKnowledgeState }) => sta
 export const selectErrors = (state: { medKnowledge: MedKnowledgeState }) => state.medKnowledge.error;
 export const selectSearchHistory = (state: { medKnowledge: MedKnowledgeState }) => state.medKnowledge.searchHistory;
 export const selectServiceHealth = (state: { medKnowledge: MedKnowledgeState }) => state.medKnowledge.serviceHealth;
-
-export default medKnowledgeSlice.reducer; 
+export default medKnowledgeSlice.reducer;

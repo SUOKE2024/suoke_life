@@ -83,8 +83,6 @@ export const performanceConfig = ;
   },
   "reporting": {
     "enabled": true,
-    "format": "json",
-    "destination": "logs/////    performance",
-    "retention": 30;
+    "format": "json",destination": "logs/    performance",retention": 30;
   }
 };

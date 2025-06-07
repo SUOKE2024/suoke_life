@@ -1,18 +1,19 @@
 // 性能监控配置   索克生活APP - 性能监控设置
-export interface PerformanceConfig  {// 全局性能监控开关;
+export interface PerformanceConfig {
+  // 全局性能监控开关;
 enabled: boolean;
   // 开发环境配置
-development: {
-    trackRender: boolean,
-    trackMemory: boolean,
-    trackNetwork: boolean,
-    logToConsole: boolean,
-    warnThreshold: number; // ms,
+development: {;
+  trackRender: boolean;
+    trackMemory: boolean;
+    trackNetwork: boolean;
+    logToConsole: boolean;
+    warnThreshold: number; // ms;
     errorThreshold: number // ms;
-  }
+}
   // 生产环境配置
-production: {
-    trackRender: boolean,
+production: {,
+  trackRender: boolean,
     trackMemory: boolean,
     trackNetwork: boolean,
     logToConsole: boolean,
@@ -21,24 +22,24 @@ production: {
     reportToAnalytics: boolean}
   // 组件特定配置
 components: {
-    [componentName: string]: {
-      enabled: boolean;
+    [componentName: string]: {,
+  enabled: boolean;
       warnThreshold?: number;
       trackMemory?: boolean;
       customMetrics?: string[];
     };
   };
 }
-export const performanceConfig: PerformanceConfig = {
+export const performanceConfig: PerformanceConfig = {,
   enabled: true,
-  development: {
-    trackRender: true,
+  development: {,
+  trackRender: true,
     trackMemory: true,
     trackNetwork: true,
     logToConsole: true,warnThreshold: 50,errorThreshold: 100;
   },
-  production: {
-    trackRender: true,
+  production: {,
+  trackRender: true,
     trackMemory: false,
     trackNetwork: true,
     logToConsole: false,
@@ -48,14 +49,14 @@ export const performanceConfig: PerformanceConfig = {
   },
   components: {
     // 关键组件的特殊配置
-    "HomeScreen: {"
-      enabled: true,
+    "HomeScreen: {",
+  enabled: true,
       warnThreshold: 30,
       trackMemory: true,
       customMetrics: ["userInteraction", dataLoad"]"
     },
-    "ProfileScreen: {"
-      enabled: true,
+    "ProfileScreen: {",
+  enabled: true,
       warnThreshold: 50,
       trackMemory: true;
     },
@@ -63,29 +64,29 @@ export const performanceConfig: PerformanceConfig = {
       enabled: true,
       warnThreshold: 40,
       trackMemory: true,
-      customMetrics: [chartRender", "dataUpdate]
+      customMetrics: [chartRender",dataUpdate]
     },
     "AgentChat": {
       enabled: true,
       warnThreshold: 30,
       trackMemory: true,
-      customMetrics: [messageRender", 'scrollPerformance']"
+      customMetrics: [messageRender",scrollPerformance']"
     }
   }
 }
 // 性能阈值配置
 export const performanceThresholds = ;
-{render: {
-    good: 16, // 60fps;
+{render: {,
+  good: 16, // 60fps;
 warning: 33, // 30fps;
 critical: 50, // 20fps;
   },
-  memory: {
-    warning: 50 * 1024 * 1024, // 50MB;
+  memory: {,
+  warning: 50 * 1024 * 1024, // 50MB;
 critical: 100 * 1024 * 1024, // 100MB;
   },
-  network: {
-    good: 1000, // 1s;
+  network: {,
+  good: 1000, // 1s;
 warning: 3000, // 3s;
 critical: 5000, // 5s;
   }

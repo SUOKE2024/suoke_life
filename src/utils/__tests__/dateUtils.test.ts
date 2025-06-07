@@ -1,5 +1,4 @@
 import { formatDate, formatRelativeTime, getRelativeTime, calculateAge, isSameDay, isToday, isThisWeek, addTime, getTimeRange, getDaysInMonth, isLeapYear, getQuarter, convertTimezone, getWorkdays, parseDate } from "../dateUtils";
-
 describe("dateUtils", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -363,7 +362,7 @@ formatDate(// test params);
 expect(averageTime).toBeLessThan(1);
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
 formatDate(largeDataset);

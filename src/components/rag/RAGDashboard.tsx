@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {import { useRAGService } from '../../hooks/useRAGService';
 import { RAGQueryComponent } from './RAGQueryComponent';
 import { TCMAnalysisComponent } from './TCMAnalysisComponent';
-
   View,
   Text,
   StyleSheet,
@@ -13,25 +12,31 @@ import { TCMAnalysisComponent } from './TCMAnalysisComponent';
   TextInput,
   Modal,
   FlatList,
-  Dimensions
+  Dimensions;
 } from 'react-native';
-
 const { width, height } = Dimensions.get('window');
-
 interface TabItem {
   id: string;
   title: string;
   icon: string;
 }
-
 const tabs: TabItem[] = [
-  { id: 'query', title: 'RAG查询', icon: '🔍' },
-  { id: 'tcm', title: '中医分析', icon: '🏥' },
-  { id: 'history', title: '历史记录', icon: '📚' },
-  { id: 'stats', title: '统计信息', icon: '📊' },
-  { id: 'settings', title: '设置', icon: '⚙️' }
+  {
+      id: "query",
+      title: 'RAG查询', icon: '🔍' },
+  {
+      id: "tcm",
+      title: '中医分析', icon: '🏥' },
+  {
+      id: "history",
+      title: '历史记录', icon: '📚' },
+  {
+      id: "stats",
+      title: '统计信息', icon: '📊' },
+  {
+      id: "settings",
+      title: '设置', icon: '⚙️' }
 ];
-
 export const RAGDashboard: React.FC = () => {
   const {
     isQuerying,
@@ -55,41 +60,37 @@ export const RAGDashboard: React.FC = () => {
     exportHistory,
     importHistory,
     getSmartSuggestions,
-    getRelatedQueries
+    getRelatedQueries;
   } = useRAGService();
-
   const [activeTab, setActiveTab] = useState('query');
   const [showSettings, setShowSettings] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState('');
   const [filteredHistory, setFilteredHistory] = useState(queryHistory);
   const [smartSuggestions, setSmartSuggestions] = useState<string[]>([]);
-
   // 更新过滤后的历史记录
-  useEffect(() => {
+  useEffect() => {
     if (searchKeyword.trim()) {
       setFilteredHistory(searchHistory(searchKeyword));
     } else {
       setFilteredHistory(queryHistory);
     }
   }, [searchKeyword, queryHistory, searchHistory]);
-
   // 获取智能建议
-  useEffect(() => {
+  useEffect() => {
     if (activeTab === 'query') {
       getSmartSuggestions('健康咨询').then(setSmartSuggestions);
     }
   }, [activeTab, getSmartSuggestions]);
-
   // 渲染标签栏
   const renderTabBar = () => (
     <View style={styles.tabBar}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {tabs.map((tab) => (
-          <TouchableOpacity
+        {tabs.map(tab) => (
+          <TouchableOpacity;
             key={tab.id}
             style={[
               styles.tab,
-              activeTab === tab.id && styles.activeTab
+              activeTab === tab.id && styles.activeTab;
             ]};
             onPress={() => setActiveTab(tab.id)};
           >;
@@ -106,12 +107,11 @@ export const RAGDashboard: React.FC = () => {
       </ScrollView>;
     </View>;
   );
-
   // 渲染状态指示器
   const renderStatusIndicator = () => (
     <View style={styles.statusBar}>
       <View style={styles.statusItem}>
-        <View
+        <View;
           style={[
             styles.statusDot,
             { backgroundColor: offlineStatus.isOffline ? '#ff4444' : '#44ff44' }
@@ -121,7 +121,6 @@ export const RAGDashboard: React.FC = () => {
           {offlineStatus.isOffline ? '离线' : '在线'}
         </Text>
       </View>
-
       {(isQuerying || isStreaming || isAnalyzing || isRecommending) && (
         <View style={styles.statusItem}>;
           <View style={[styles.statusDot, { backgroundColor: '#ffaa00' }]} />;
@@ -140,7 +139,6 @@ export const RAGDashboard: React.FC = () => {
       )};
     </View>;
   );
-
   // 渲染历史记录
   const renderHistoryItem = ({ item }: { item: any }) => (
     <View style={styles.historyItem}>
@@ -158,12 +156,11 @@ export const RAGDashboard: React.FC = () => {
           响应时间: {item.responseTime || 0}ms;
         </Text>;
         <Text style={styles.historyMetaText}>;
-          置信度: {((item.confidence || 0) * 100).toFixed(1)}%;
+          置信度: {(item.confidence || 0) * 100).toFixed(1)}%;
         </Text>;
       </View>;
     </View>;
   );
-
   // 渲染统计信息
   const renderStats = () => (
     <ScrollView style={styles.statsContainer}>
@@ -172,7 +169,7 @@ export const RAGDashboard: React.FC = () => {
         <View style={styles.statsGrid}>
           <View style={styles.statCard}>
             <Text style={styles.statValue}>
-              {performanceMetrics.averageResponseTime.toFixed(0)}ms
+              {performanceMetrics.averageResponseTime.toFixed(0)}ms;
             </Text>
             <Text style={styles.statLabel}>平均响应时间</Text>
           </View>
@@ -196,7 +193,6 @@ export const RAGDashboard: React.FC = () => {
           </View>
         </View>
       </View>
-
       <View style={styles.statsSection}>
         <Text style={styles.sectionTitle}>缓存统计</Text>
         <View style={styles.statsGrid}>
@@ -225,39 +221,43 @@ export const RAGDashboard: React.FC = () => {
         <TouchableOpacity;
           style={styles.actionButton};
           onPress={() => {Alert.alert(;
-              '清理缓存','确定要清理所有缓存吗？',[;
-                { text: '取消', style: 'cancel' },{ text: '确定', onPress: clearQueryCache };
+              "清理缓存",确定要清理所有缓存吗？',[;
+                {
+      text: "取消",
+      style: 'cancel' },{
+      text: "确定",
+      onPress: clearQueryCache };
               ];
             );
           }}
         >
           <Text style={styles.actionButtonText}>清理缓存</Text>
         </TouchableOpacity>
-
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.actionButton}
           onPress={() => {
             Alert.alert(
-              '重置统计',
-              '确定要重置性能统计吗？',
+              "重置统计",确定要重置性能统计吗？',
               [
-                { text: '取消', style: 'cancel' },
-                { text: '确定', onPress: resetMetrics }
+                {
+      text: "取消",
+      style: 'cancel' },
+                {
+      text: "确定",
+      onPress: resetMetrics }
               ]
             );
           }}
         >
           <Text style={styles.actionButtonText}>重置统计</Text>
         </TouchableOpacity>
-
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.actionButton}
           onPress={handleExportData}
         >
           <Text style={styles.actionButtonText}>导出数据</Text>
         </TouchableOpacity>
-
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.actionButton}
           onPress={handleHealthCheck}
         >
@@ -266,27 +266,23 @@ export const RAGDashboard: React.FC = () => {
       </View>
     </ScrollView>
   );
-
   // 导出数据
   const handleExportData = async () => {try {const data = {timestamp: new Date().toISOString(),queryHistory,performanceMetrics,cacheStats,preferences;
       };
-
       // 这里可以实现导出功能
       console.log('导出数据:', data);
-      Alert.alert('成功', '数据已导出');
+      Alert.alert("成功",数据已导出');
     } catch (error) {
-      Alert.alert('错误', '导出数据失败');
+      Alert.alert("错误",导出数据失败');
     }
   };
-
   // 健康检查
   const handleHealthCheck = async () => {try {// 这里可以调用健康检查API;
-      Alert.alert('健康检查', '所有服务运行正常');
+      Alert.alert("健康检查",所有服务运行正常');
     } catch (error) {
-      Alert.alert('健康检查', '部分服务异常');
+      Alert.alert("健康检查",部分服务异常');
     }
   };
-
   // 渲染设置
   const renderSettings = () => (;
     <ScrollView style={styles.settingsContainer}>;
@@ -302,42 +298,37 @@ export const RAGDashboard: React.FC = () => {
             }
           />
         </View>
-
         <View style={styles.settingItem}>
           <Text style={styles.settingLabel}>启用流式查询</Text>
-          <Switch
+          <Switch;
             value={preferences.enableStreaming}
             onValueChange={(value) =>
               updateUserPreferences({ enableStreaming: value });
             }
           />
         </View>
-
         <View style={styles.settingItem}>
           <Text style={styles.settingLabel}>自动保存历史</Text>
-          <Switch
+          <Switch;
             value={preferences.autoSaveHistory}
             onValueChange={(value) =>
               updateUserPreferences({ autoSaveHistory: value });
             }
           />
         </View>
-
         <View style={styles.settingItem}>
           <Text style={styles.settingLabel}>离线模式</Text>
-          <Switch
+          <Switch;
             value={offlineStatus.isOffline}
             onValueChange={setOffline}
           />
         </View>
       </View>
-
       <View style={styles.settingSection}>
         <Text style={styles.sectionTitle}>高级设置</Text>
-
         <View style={styles.settingItem}>
           <Text style={styles.settingLabel}>历史记录上限</Text>
-          <TextInput
+          <TextInput;
             style={styles.settingInput}
             value={preferences.maxHistorySize.toString()}
             onChangeText={(text) => {const value = parseInt(text) || 50;
@@ -348,9 +339,8 @@ export const RAGDashboard: React.FC = () => {
           />
         </View>
       </View>
-
       <View style={styles.actionButtons}>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.actionButton}
           onPress={() => {
             const data = exportHistory();
@@ -359,16 +349,18 @@ export const RAGDashboard: React.FC = () => {
         >
           <Text style={styles.actionButtonText}>导出历史</Text>
         </TouchableOpacity>
-
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.actionButton}
           onPress={() => {
             Alert.prompt(
-              '导入历史',
-              '请粘贴导出的历史记录数据',
+              "导入历史",请粘贴导出的历史记录数据',
               [
-                { text: '取消', style: 'cancel' },
-                { text: '导入', onPress: (data) => data && importHistory(data) }
+                {
+      text: "取消",
+      style: 'cancel' },
+                {
+      text: "导入",
+      onPress: (data) => data && importHistory(data) }
               ],
               'plain-text'
             );
@@ -379,7 +371,6 @@ export const RAGDashboard: React.FC = () => {
       </View>
     </ScrollView>
   );
-
   // 渲染主要内容
   const renderContent = () => {switch (activeTab) {case 'query':return <RAGQueryComponent userId="current-user" />;
       case 'tcm':
@@ -388,7 +379,7 @@ export const RAGDashboard: React.FC = () => {
         return (
           <View style={styles.historyContainer}>
             <View style={styles.searchContainer}>
-              <TextInput
+              <TextInput;
                 style={styles.searchInput}
                 placeholder="搜索历史记录..."
                 value={searchKeyword};
@@ -415,7 +406,6 @@ export const RAGDashboard: React.FC = () => {
         return null;
     }
   };
-
   return (
     <View style={styles.container}>
       {renderStatusIndicator()}
@@ -442,14 +432,13 @@ export const RAGDashboard: React.FC = () => {
           ))}
         </View>
       )}
-
       {// 错误提示}
       {error && (
         <View style={styles.errorOverlay}>
           <View style={styles.errorContainer}>
             <Text style={styles.errorTitle}>错误</Text>
             <Text style={styles.errorMessage}>{error}</Text>
-            <TouchableOpacity
+            <TouchableOpacity;
               style={styles.errorButton}
               onPress={clearError}
             >
@@ -461,14 +450,13 @@ export const RAGDashboard: React.FC = () => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  container: {,
+  flex: 1,
     backgroundColor: '#f5f5f5'
   },
-  statusBar: {
-    flexDirection: 'row',
+  statusBar: {,
+  flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 8,
@@ -476,185 +464,185 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0'
   },
-  statusItem: {
-    flexDirection: 'row',
+  statusItem: {,
+  flexDirection: 'row',
     alignItems: 'center',
-    marginRight: 16
+    marginRight: 16;
   },
-  statusDot: {
-    width: 8,
+  statusDot: {,
+  width: 8,
     height: 8,
     borderRadius: 4,
-    marginRight: 6
+    marginRight: 6;
   },
-  statusText: {
-    fontSize: 12,
+  statusText: {,
+  fontSize: 12,
     color: '#666'
   },
-  tabBar: {
-    backgroundColor: '#fff',
+  tabBar: {,
+  backgroundColor: '#fff',
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0'
   },
-  tab: {
-    flexDirection: 'row',
+  tab: {,
+  flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    marginRight: 8
+    marginRight: 8;
   },
-  activeTab: {
-    borderBottomWidth: 2,
+  activeTab: {,
+  borderBottomWidth: 2,
     borderBottomColor: '#007AFF'
   },
-  tabIcon: {
-    fontSize: 16,
-    marginRight: 6
+  tabIcon: {,
+  fontSize: 16,
+    marginRight: 6;
   },
-  tabText: {
-    fontSize: 14,
+  tabText: {,
+  fontSize: 14,
     color: '#666'
   },
-  activeTabText: {
-    color: '#007AFF',
+  activeTabText: {,
+  color: '#007AFF',
     fontWeight: '600'
   },
-  content: {
-    flex: 1
+  content: {,
+  flex: 1;
   },
-  historyContainer: {
-    flex: 1,
+  historyContainer: {,
+  flex: 1,
     backgroundColor: '#fff'
   },
-  searchContainer: {
-    padding: 16,
+  searchContainer: {,
+  padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0'
   },
-  searchInput: {
-    height: 40,
+  searchInput: {,
+  height: 40,
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 8,
     paddingHorizontal: 12,
-    fontSize: 14
+    fontSize: 14;
   },
-  historyItem: {
-    padding: 16,
+  historyItem: {,
+  padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0'
   },
-  historyTime: {
-    fontSize: 12,
+  historyTime: {,
+  fontSize: 12,
     color: '#999',
-    marginBottom: 4
+    marginBottom: 4;
   },
-  historyQuery: {
-    fontSize: 14,
+  historyQuery: {,
+  fontSize: 14,
     fontWeight: '600',
     color: '#333',
-    marginBottom: 8
+    marginBottom: 8;
   },
-  historyAnswer: {
-    fontSize: 14,
+  historyAnswer: {,
+  fontSize: 14,
     color: '#666',
     lineHeight: 20,
-    marginBottom: 8
+    marginBottom: 8;
   },
-  historyMeta: {
-    flexDirection: 'row',
+  historyMeta: {,
+  flexDirection: 'row',
     justifyContent: 'space-between'
   },
-  historyMetaText: {
-    fontSize: 12,
+  historyMetaText: {,
+  fontSize: 12,
     color: '#999'
   },
-  emptyContainer: {
-    flex: 1,
+  emptyContainer: {,
+  flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 60
+    paddingVertical: 60;
   },
-  emptyText: {
-    fontSize: 16,
+  emptyText: {,
+  fontSize: 16,
     color: '#999'
   },
-  statsContainer: {
-    flex: 1,
+  statsContainer: {,
+  flex: 1,
     backgroundColor: '#fff'
   },
-  statsSection: {
-    padding: 16,
+  statsSection: {,
+  padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0'
   },
-  sectionTitle: {
-    fontSize: 18,
+  sectionTitle: {,
+  fontSize: 18,
     fontWeight: '600',
     color: '#333',
-    marginBottom: 16
+    marginBottom: 16;
   },
-  statsGrid: {
-    flexDirection: 'row',
+  statsGrid: {,
+  flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between'
   },
-  statCard: {
-    width: (width - 48) / 2,
+  statCard: {,
+  width: (width - 48) / 2,
     backgroundColor: '#f8f9fa',
     padding: 16,
     borderRadius: 8,
     marginBottom: 12,
     alignItems: 'center'
   },
-  statValue: {
-    fontSize: 24,
+  statValue: {,
+  fontSize: 24,
     fontWeight: 'bold',
     color: '#007AFF',
-    marginBottom: 4
+    marginBottom: 4;
   },
-  statLabel: {
-    fontSize: 12,
+  statLabel: {,
+  fontSize: 12,
     color: '#666',
     textAlign: 'center'
   },
-  actionButtons: {
-    flexDirection: 'row',
+  actionButtons: {,
+  flexDirection: 'row',
     justifyContent: 'space-around',
-    padding: 16
+    padding: 16;
   },
-  actionButton: {
-    backgroundColor: '#007AFF',
+  actionButton: {,
+  backgroundColor: '#007AFF',
     paddingHorizontal: 24,
     paddingVertical: 12,
-    borderRadius: 8
+    borderRadius: 8;
   },
-  actionButtonText: {
-    color: '#fff',
+  actionButtonText: {,
+  color: '#fff',
     fontSize: 14,
     fontWeight: '600'
   },
-  settingsContainer: {
-    flex: 1,
+  settingsContainer: {,
+  flex: 1,
     backgroundColor: '#fff'
   },
-  settingSection: {
-    padding: 16,
+  settingSection: {,
+  padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0'
   },
-  settingItem: {
-    flexDirection: 'row',
+  settingItem: {,
+  flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 12
+    paddingVertical: 12;
   },
-  settingLabel: {
-    fontSize: 16,
+  settingLabel: {,
+  fontSize: 16,
     color: '#333'
   },
-  settingInput: {
-    width: 80,
+  settingInput: {,
+  width: 80,
     height: 36,
     borderWidth: 1,
     borderColor: '#ddd',
@@ -662,8 +650,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     textAlign: 'center'
   },
-  suggestionsOverlay: {
-    position: 'absolute',
+  suggestionsOverlay: {,
+  position: 'absolute',
     top: 100,
     right: 16,
     backgroundColor: '#fff',
@@ -674,23 +662,23 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
-    maxWidth: width * 0.8
+    maxWidth: width * 0.8;
   },
-  suggestionsTitle: {
-    fontSize: 14,
+  suggestionsTitle: {,
+  fontSize: 14,
     fontWeight: '600',
     color: '#333',
-    marginBottom: 8
+    marginBottom: 8;
   },
-  suggestionItem: {
-    paddingVertical: 6
+  suggestionItem: {,
+  paddingVertical: 6;
   },
-  suggestionText: {
-    fontSize: 12,
+  suggestionText: {,
+  fontSize: 12,
     color: '#666'
   },
-  errorOverlay: {
-    position: 'absolute',
+  errorOverlay: {,
+  position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
@@ -699,25 +687,29 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  errorContainer: {
-    backgroundColor: '#fff',
+  errorContainer: {,
+  backgroundColor: '#fff',
     borderRadius: 12,
     padding: 24,
     margin: 32,
-    maxWidth: width * 0.8
+    maxWidth: width * 0.8;
   },
-  errorTitle: {
-    fontSize: 18,
+  errorTitle: {,
+  fontSize: 18,
     fontWeight: '600',
     color: '#ff4444',
     marginBottom: 12,
     textAlign: 'center'
   },
-  errorMessage: {
-    fontSize: 14,
+  errorMessage: {,
+  fontSize: 14,
     color: '#666',
     lineHeight: 20,marginBottom: 20,textAlign: 'center';
-  },errorButton: {backgroundColor: '#007AFF',paddingHorizontal: 24,paddingVertical: 12,borderRadius: 8,alignSelf: 'center';
-  },errorButtonText: {color: '#fff',fontSize: 14,fontWeight: '600';
+  },errorButton: {
+      backgroundColor: "#007AFF",
+      paddingHorizontal: 24,paddingVertical: 12,borderRadius: 8,alignSelf: 'center';
+  },errorButtonText: {
+      color: "#fff",
+      fontSize: 14,fontWeight: '600';
   };
-}); 
+});

@@ -1,21 +1,24 @@
-import { performanceThresholds } from "../config/////    performance";
-
+import { performanceThresholds } from "../config/    performance";
 import React from "react";
 // 性能报告生成器   索克生活APP - 性能数据收集和报告
-/////    
-export interface PerformanceMetric { componentName: string,metricType: 
-render" | memory" | "network | "effect","
-  value: number,
+/
+export interface PerformanceMetric {
+  componentName: string,metricType:  ;
+render" | memory" | "network | "effect",
+  value: number;
   timestamp: number;
-  threshold?: number,
-  severity: good" | "warning | "critical"}
-export interface PerformanceReport { sessionId: string,
-  startTime: number,
-  endTime: number,
-  metrics: PerformanceMetric[],
-  summary: {totalComponents: number,
-    slowComponents: string[],
-    memoryLeaks: string[],criticalIssues: number,averageRenderTime: number};
+  threshold?: number;
+  severity: good" | "warning | "critical";
+}
+export interface PerformanceReport {
+  sessionId: string;
+  startTime: number;
+  endTime: number;
+  metrics: PerformanceMetric[];
+  summary: {totalComponents: number;
+    slowComponents: string[];
+    memoryLeaks: string[],criticalIssues: number,averageRenderTime: number;
+};
 }
 class PerformanceReporter {
   private metrics: PerformanceMetric[] = [];
@@ -28,13 +31,13 @@ class PerformanceReporter {
   private generateSessionId(): string {
     return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9);};`
   }
-  // 记录性能指标 // recordMetric(metric: Omit<PerformanceMetric, timestamp" | "severity  / >) { * const severity = this.calculateSeverity(metric.metricType, metric.value;); ////
+  recordMetric(metric: Omit<PerformanceMetric, timestamp" | "severity  / >) { * const severity = this.calculateSeverity(metric.metricType, metric.value;);
     const fullMetric: PerformanceMetric = {...metric,
       timestamp: Date.now(),
       severity;
     };
     this.metrics.push(fullMetric);
-    // 在开发环境中实时警告 // if (__DEV__ && severity !== "good") {
+    if (__DEV__ && severity !== "good") {
       }
   }
   private calculateSeverity(type: string, value: number): good" | "warning | "critical"  {
@@ -44,7 +47,7 @@ class PerformanceReporter {
     if (value >= thresholds.warning) return "warn;i;n;g;"
     return goo;d;
   }
-  // 生成性能报告 // generateReport(): PerformanceReport {
+  generateReport(): PerformanceReport {
     const endTime = Date.now;(;);
     const renderMetrics = this.metrics.filter(m => m.metricType === "render;);"
     const slowComponents = Array.from(new Set(;
@@ -59,7 +62,7 @@ class PerformanceReporter {
     ))
     const criticalIssues = this.metrics.filter(m => m.severity === "critical").leng;t;h;
     const averageRenderTime = renderMetrics.length > 0;
-      ? renderMetrics.reduce((sum,m;); => sum + m.value, 0) / renderMetrics.length/////          : 0;
+      ? renderMetrics.reduce(sum,m;); => sum + m.value, 0) / renderMetrics.length/          : 0;
     return {sessionId: this.sessionId,startTime: this.startTime,endTime,metrics: this.metrics,summary: {totalComponents: Array.from(new Set(this.metrics.map(m => m.componentNam;e;);)).length,
         slowComponents,
         memoryLeaks,
@@ -68,16 +71,16 @@ class PerformanceReporter {
       }
     };
   }
-  // 导出报告到文件（开发环境） // exportReport() {
+  exportReport() {
     if (!__DEV__) retur;n;
     const report = this.generateReport;
     const reportJson = JSON.stringify(report, null,2;);
-    // 在开发环境中保存到本地 // / 可以扩展为保存到文件或发送到分析服务* // return repor;t; * /////     }
-  // 清除旧指标 // clearMetrics() {
+    / 可以扩展为保存到文件或发送到分析服务* ///     }
+  clearMetrics() {
     this.metrics = []
     this.startTime = Date.now();
   }
-  // 获取组件性能统计 // getComponentStats(componentName: string) {
+  getComponentStats(componentName: string) {
     const componentMetrics = this.metrics.filter(m => m.componentName === componentName;);
     if (componentMetrics.length === 0) {
       return nu;l;l;
@@ -85,13 +88,13 @@ class PerformanceReporter {
     const renderMetrics = componentMetrics.filter(m => m.metricType === render;";);"
     const memoryMetrics = componentMetrics.filter(m => m.metricType === "memory;);"
     return {totalRenders: renderMetrics.length,
-      averageRenderTime: renderMetrics.reduce((sum,m;); => sum + m.value, 0) / renderMetrics.length,/////          maxRenderTime: Math.max(...renderMetrics.map(m => m.value)),
+      averageRenderTime: renderMetrics.reduce(sum,m;); => sum + m.value, 0) / renderMetrics.length,/          maxRenderTime: Math.max(...renderMetrics.map(m => m.value)),
       memoryUsage: memoryMetrics.length > 0 ? memoryMetrics[memoryMetrics.length - 1].value : 0,
       criticalIssues: componentMetrics.filter(m => m.severity === "critical').length};"'
   }
 }
-// 全局性能报告器实例 * export const performanceReporter = new PerformanceReporter ////   ;
-// 定期生成报告（开发环境） * if (__DEV__) { ////
-  setInterval(() => {
+//   ;
+//
+  setInterval() => {
     performanceReporter.exportReport();
-  }, 60000); // 每分钟生成一次报告 * } ////
+  }, 60000); //

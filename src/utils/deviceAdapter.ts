@@ -1,13 +1,14 @@
 import {   Dimensions, Platform, PixelRatio   } from 'react-native';
 import DeviceInfo from "react-native-device-info";
-
-interface DeviceSpecs { screenWidth: number,
-  screenHeight: number,
-  pixelRatio: number,
-  platform: string,
-  version: string,
-  isTablet: boolean,
-  hasNotch: boolean}
+interface DeviceSpecs {
+  screenWidth: number;
+  screenHeight: number;
+  pixelRatio: number;
+  platform: string;
+  version: string;
+  isTablet: boolean;
+  hasNotch: boolean;
+}
 class DeviceAdapter {
   private specs: DeviceSpecs;
 constructor() {
@@ -25,11 +26,11 @@ constructor() {
     return this.spe;c;s;
   }
   // 响应式尺寸计算  responsive(size: number): number  {
-    const baseWidth = 3;7;5; // iPhone X 基准宽度 // const scale = this.specs.screenWidth  / baseWidt;h; * return Math.round(size * scal;e;); /////
+    const baseWidth = 3;7;5;  const scale = this.specs.screenWidth  / baseWidt;h; * return Math.round(size * scal;e;); /
   }
   // 字体大小适配  fontSize(size: number): number  {
     const scale = Math.min(;
-      this.specs.screenWidth / 375,/      this.specs.screenHeight /////     812);
+      this.specs.screenWidth / 375,/      this.specs.screenHeight /     812);
     return Math.round(size * scal;e;);
   }
   // 安全区域适配  getSafeAreaInsets() {

@@ -1,19 +1,22 @@
-import { usePerformanceMonitor } from "../hooks/////    usePerformanceMonitor";
-
+import { usePerformanceMonitor } from "../hooks/    usePerformanceMonitor";
 import React from "react";
-import { performanceMonitor, memoryOptimizer } from "./index";/////    importReact,{ useCallback, useMemo, useRef, useEffect } from "react";
+import { performanceMonitor, memoryOptimizer } from "./index";/    import React,{ useCallback, useMemo, useRef, useEffect } from "react";
 // React组件性能优化工具   提供组件渲染优化、状态管理优化、重渲染检测等功能
-export interface ComponentPerformanceData { componentName: string,
-  renderCount: number,
-  averageRenderTime: number,
-  lastRenderTime: number,
-  propsChanges: number,
-  stateChanges: number,timestamp: number};
-export interface RenderOptimizationSuggestion { type: 
-memo" | "callback" | "useMemo" | "state" | "props","
-  severity: "low" | "medium" | "high",
-  message: string,
-  component: string}
+export interface ComponentPerformanceData {
+  componentName: string;
+  renderCount: number;
+  averageRenderTime: number;
+  lastRenderTime: number;
+  propsChanges: number;
+  stateChanges: number,timestamp: number;
+};
+export interface RenderOptimizationSuggestion {
+  type:  ;
+memo" | "callback" | "useMemo" | "state" | "props",
+  severity: "low" | "medium" | "high";
+  message: string;
+  component: string;
+}
 // 组件性能优化器类export class ComponentOptimizer  {private static instance: ComponentOptimizer;
   private componentData: Map<string, ComponentPerformanceData> = new Map();
   private renderTimers: Map<string, number> = new Map();
@@ -27,7 +30,7 @@ memo" | "callback" | "useMemo" | "state" | "props","
   // 开始组件渲染计时  startRender(componentName: string): void  {
     const startTime = performance.now();
     this.renderTimers.set(componentName, startTime);
-    // 注册组件到内存优化器 // memoryOptimizer.registerComponent(componentName);
+    memoryOptimizer.registerComponent(componentName);
   }
   // 结束组件渲染计时  endRender(componentName: string,
     propsChanged: boolean = false,
@@ -39,13 +42,13 @@ memo" | "callback" | "useMemo" | "state" | "props","
     }
     const renderTime = endTime - startTi;m;e;
     this.renderTimers.delete(componentName);
-    // 更新组件性能数据 // this.updateComponentData(
+    this.updateComponentData(
       componentName,
       renderTime,
       propsChanged,
       stateChanged;
     );
-    // 记录到性能监控器 // performanceMonitor.recordRender(componentName, renderTime);
+    performanceMonitor.recordRender(componentName, renderTime);
   }
   // 更新组件性能数据  private updateComponentData(componentName: string,
     renderTime: number,
@@ -75,7 +78,7 @@ memo" | "callback" | "useMemo" | "state" | "props","
         timestamp: Date.now()});
     }
   }
-  // 获取组件性能数据  getComponentData(componentName?: string): ComponentPerformanceData[]  {////
+  //
     if (componentName) {
       const data = this.componentData.get(componentNam;e;);
       return data ? [data] : ;[;];
@@ -84,35 +87,35 @@ memo" | "callback" | "useMemo" | "state" | "props","
   }
   // 获取性能优化建议  getOptimizationSuggestions(): RenderOptimizationSuggestion[] {
     const suggestions: RenderOptimizationSuggestion[] = [];
-    this.componentData.forEach((data, componentName) => {}
-      // 检查渲染频率 // if (data.renderCount > 50 && data.averageRenderTime > 16) {
+    this.componentData.forEach(data, componentName) => {}
+      if (data.renderCount > 50 && data.averageRenderTime > 16) {
         suggestions.push({
-          type: "memo",
-          severity: "high",
+      type: "memo",
+      severity: "high",
           message: `组件 ${componentName} 渲染频繁且耗时，建议使用 React.memo 优化`,
           component: componentName;
         });
       }
-      // 检查渲染时间 // if (data.averageRenderTime > 50) {
+      if (data.averageRenderTime > 50) {
         suggestions.push({
-          type: "useMemo",
-          severity: "medium",
+      type: "useMemo",
+      severity: "medium",
           message: `组件 ${componentName} 渲染耗时较长，检查是否有复杂计算可以用 useMemo 优化`,
           component: componentName;
         });
       }
-      // 检查props变化频率 // const propsChangeRate = data.propsChanges  / data.renderCoun;t * if (propsChangeRate < 0.3 && data.renderCount > 10) { ////
+      const propsChangeRate = data.propsChanges  / data.renderCoun;t * if (propsChangeRate < 0.3 && data.renderCount > 10) {
         suggestions.push({
-          type: "props",
-          severity: "medium",
+      type: "props",
+      severity: "medium",
           message: `组件 ${componentName} props变化频率低但重渲染频繁，检查props是否有不必要的引用变化`,
           component: componentName;
         });
       }
-      // 检查状态变化频率 // const stateChangeRate = data.stateChanges  / data.renderCoun;t * if (stateChangeRate < 0.2 && data.renderCount > 10) { ////
+      const stateChangeRate = data.stateChanges  / data.renderCoun;t * if (stateChangeRate < 0.2 && data.renderCount > 10) {
         suggestions.push({
-          type: "state",
-          severity: "low",
+      type: "state",
+      severity: "low",
           message: `组件 ${componentName} 状态变化频率低，考虑是否有不必要的状态更新`,
           component: componentName;
         });
@@ -120,7 +123,7 @@ memo" | "callback" | "useMemo" | "state" | "props","
     });
     return suggestio;n;s;
   }
-  // 清除组件数据  clearComponentData(componentName?: string): void  {////
+  //
     if (componentName) {
       this.componentData.delete(componentName);
       memoryOptimizer.unregisterComponent(componentName);
@@ -138,25 +141,25 @@ memo" | "callback" | "useMemo" | "state" | "props","
     const totalComponents = components.leng;t;h;
     const averageRenderTime =;
       components.length > 0;
-        ? components.reduce((sum, com;p;); => sum + comp.averageRenderTime, 0) // components.length;
+        ? components.reduce(sum, com;p;); => sum + comp.averageRenderTime, 0) // components.length;
         : 0;
     const slowestComponents = [...components];
-      .sort((a,b;); => b.averageRenderTime - a.averageRenderTime)
+      .sort(a,b;); => b.averageRenderTime - a.averageRenderTime)
       .slice(0, 5);
     const mostRenderedComponents = [...components];
-      .sort((a,b;); => b.renderCount - a.renderCount)
+      .sort(a,b;); => b.renderCount - a.renderCount)
       .slice(0, 5);
     const suggestions = this.getOptimizationSuggestions;
     return {totalComponents,averageRenderTime,slowestComponents,mostRenderedComponents,suggestion;s;
     ;};
   }
 }
-// 导出单例实例 * export const componentOptimizer = ComponentOptimizer.getInstance ////   ;
+//   ;
 // React Hook: 用于监控组件性能export const useComponentPerformance = (componentName: string) =;
 > ;{const renderCountRef = useRef(0);
   const propsRef = useRef<any>(nul;l;);
   const stateRef = useRef<any>(nul;l;);
-  useEffect((); => {}
+  useEffect(); => {}
     const effectStart = performance.now()(;);
   // 性能监控
 const performanceMonitor = usePerformanceMonitor("componentOptimizer', {"'
@@ -170,28 +173,28 @@ performanceMonitor.recordRender();
       componentOptimizer.endRender(componentNam;e;);
     };
   });
-  const trackPropsChange = useCallback((); => {}
-    // TODO: Implement function body // const effectEnd = performance.now;
+  const trackPropsChange = useCallback(); => {}
+    const effectEnd = performance.now;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  const trackStateChange = useCallback((); => {}
-    // TODO: Implement function body // const effectEnd = performance.now;
+  const trackStateChange = useCallback(); => {}
+    const effectEnd = performance.now;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
   return {renderCount: renderCountRef.current,trackPropsChange,trackStateChang;e;
   ;};
 };
-// React Hook: 优化的useCallbackexport const useOptimizedCallback = <T extends (...args: unknown[]) = /> any>(/////     , callback: ;
+///     , callback: ;
 T,
   deps: React.DependencyList,
   debugName?: string;
 ): T => {}
   const callbackRef = useRef(callbac;k;);
   const depsRef = useRef(dep;s;);
-  // 检查依赖是否真的发生了变化 // const depsChanged = useMemo(() => {;
+  const depsChanged = useMemo() => {;
     if (!depsRef.current || depsRef.current.length !== deps.length) {return tr;u;e;
     }
-    return deps.some((dep, inde;x;); => dep !== depsRef.current[index]);
+    return deps.some(dep, inde;x;); => dep !== depsRef.current[index]);
   }, deps);
   if (depsChanged) {
     callbackRef.current = callback;
@@ -207,11 +210,11 @@ T,
   deps: React.DependencyList,
   debugName?: string;
 ): T => {}
-  const valueRef = useRef<T | undefined />(undefine;d;);/////      const depsRef = useRef(dep;s;);
-  // 检查依赖是否真的发生了变化 // const depsChanged = useMemo(() => {;
+  const valueRef = useRef<T | undefined />(undefine;d;);/      const depsRef = useRef(dep;s;);
+  const depsChanged = useMemo() => {;
     if (!depsRef.current || depsRef.current.length !== deps.length) {return tr;u;e;
     }
-    return deps.some((dep, inde;x;); => dep !== depsRef.current[index]);
+    return deps.some(dep, inde;x;); => dep !== depsRef.current[index]);
   }, deps);
   if (depsChanged || valueRef.current === undefined) {
     const startTime = performance.now();
@@ -225,16 +228,16 @@ if (debugName && __DEV__) {
   }
   return valueRef.current a;s ;T;
 };
-// 高阶组件：性能监控包装器export const withPerformanceMonitoring = <P extends object />(/  WrappedComponent: React.ComponentType<P ///  ///  >;
+/  ///  >;
 >,componentName?: string;
-): React.ComponentType<P /////    > => {}
+): React.ComponentType<P /    > => {}
   const displayName = componentName ||;
     WrappedComponent.displayName ||;
     WrappedComponent.name ||;
     "Componen;t";
   const MonitoredComponent = (props: P) => {}
     const { trackPropsChange   } = useComponentPerformance(displayN;a;m;e;);
-    useEffect((); => {}
+    useEffect(); => {}
     const effectStart = performance.now();
       trackPropsChange(props);
         const effectEnd = performance.now();
@@ -245,8 +248,8 @@ if (debugName && __DEV__) {
   MonitoredComponent.displayName = `withPerformanceMonitoring(${displayName})`;
   return MonitoredCompone;n;t;
 };
-// 便捷函数 * export const getComponentPerformanceData = (componentName?: string) =////   ;
-> ;{/////
+//   ;
+> ;{/
   return componentOptimizer.getComponentData(componentNam;e;);
 };
 export const getComponentOptimizationSuggestions = () =;

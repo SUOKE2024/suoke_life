@@ -1,93 +1,46 @@
-import { renderHook, act } from "@testing-library/react-hooks";
-import {  configureStore  } from "@reduxjs/toolkit";
-import { performance } from "perf_hooks";
-
-import React from "react";
-// Mock store for testing
-const mockStore = configureStore({reducer: {
-    // Add your reducers here
-  });};);
-const wrapper = ({ children }: { children: React.ReactNode }) => (;
-  <Provider store={mockStore}>{children}</Provider;>
-;)
-describe("AdvancedHealthDashboard", () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
+import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react-native';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import AdvancedHealthDashboard from '../AdvancedHealthDashboard.tsx';
+const mockStore = configureStore({
+  reducer: { root: (state = {}) => state }
+});
+const renderWithProvider = (component: React.ReactElement) => {
+  return render(<Provider store={mockStore}>{component}</Provider>);
+};
+describe('AdvancedHealthDashboard', () => {
+  it('应该正确渲染', () => {
+    const { getByTestId } = renderWithProvider(<AdvancedHealthDashboard />);
+    expect(getByTestId('advancedhealthdashboard')).toBeTruthy();
   });
-  it("should initialize with correct default values", () => {
-    const { result   } = renderHook((); => AdvancedHealthDashboard(), { wrapper });
-    // Add assertions for initial state
-expect(result.current).toBeDefined();
+  it('应该处理用户交互', () => {
+    const mockOnPress = jest.fn();
+    const { getByTestId } = renderWithProvider(
+      <AdvancedHealthDashboard onPress={mockOnPress} />
+    );
+        fireEvent.press(getByTestId('advancedhealthdashboard'));
+    expect(mockOnPress).toHaveBeenCalled();
   });
-  it("should handle state updates correctly, async (); => {", () => {
-    const { result   } = renderHook((); => AdvancedHealthDashboard(), { wrapper });
-    await act(async  => {
-      // Trigger state updates
-      // result.current.someFunction();
-    });
-    // Add assertions for state changes
-expect(result.current).toBeDefined();
+  it('应该正确显示属性', () => {
+    const testProps = {
+      title: "测试标题",
+      description: '测试描述'
+    };
+        const { getByText } = renderWithProvider(<AdvancedHealthDashboard {...testProps} />);
+    expect(getByText(testProps.title)).toBeTruthy();
+    expect(getByText(testProps.description)).toBeTruthy();
   });
-  it("should handle side effects properly", async (); => {
-    const { result   } = renderHook((); => AdvancedHealthDashboard(), { wrapper });
-    await act(async  => {
-      // Test side effects
-    });
-    // Add assertions for side effects
-expect(result.current).toBeDefined();
+  it('应该处理错误状态', () => {
+    const { getByTestId } = renderWithProvider(
+      <AdvancedHealthDashboard error="测试错误" />
+    );
+        expect(getByTestId('error-message')).toBeTruthy();
   });
-  it("should cleanup resources on unmount", () => {
-    const { unmount   } = renderHook((); => AdvancedHealthDashboard(), { wrapper });
-    // Test cleanup
-unmount();
-    // Add assertions for cleanup
-expect(true).toBe(true);
-  });
-  it("should handle error scenarios, async (); => {", () => {
-    const { result   } = renderHook((); => AdvancedHealthDashboard(), { wrapper });
-    await act(async  => {
-      // Trigger error scenarios
-    });
-    // Add error handling assertions
-expect(result.current).toBeDefined();
+  it('应该处理加载状态', () => {
+    const { getByTestId } = renderWithProvider(
+      <AdvancedHealthDashboard loading={true} />
+    );
+        expect(getByTestId('loading-indicator')).toBeTruthy();
   });
 });
-describe("AdvancedHealthDashboard Performance Tests, () => {", () => {
-  it("should execute within performance thresholds", () => {
-    const iterations = 10;
-    const startTime = performance.now();
-    for (let i = 0; i < iterations; i++) {
-      // Execute performance-critical functions
-AdvancedHealthDashboard(// test params);
-    });
-    const endTime = performance.now();
-    const averageTime = (endTime - startTime) / iterations;
-    // Should execute within 1ms on average
-expect(averageTime).toBeLessThan(1);
-  });
-  it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map((_, i) => i);
-    const startTime = performance.now();
-    // Test with large dataset
-AdvancedHealthDashboard(largeDataset);
-    const endTime = performance.now();
-    // Should handle large datasets within 100ms
-expect(endTime - startTime).toBeLessThan(100);
-  });
-  it('should not cause memory leaks', () => { {
-    const initialMemory = process.memoryUsage().heapUsed;
-    // Execute function multiple times
-for (let i = 0; i < 1000; i++) {
-      AdvancedHealthDashboard(// test params);
-    });
-    // Force garbage collection if available
-if (global.gc) {
-      global.gc();
-    });
-    const finalMemory = process.memoryUsage().heapUsed;
-    const memoryIncrease = finalMemory - initialMemory;
-    // Memory increase should be minimal (less than 10MB)
-    expect(memoryIncrease).toBeLessThan(10 * 1024 * 1024);
-  });
-});
-});});});});

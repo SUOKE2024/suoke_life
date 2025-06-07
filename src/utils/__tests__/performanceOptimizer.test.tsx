@@ -1,6 +1,5 @@
 import { PerformanceOptimizer, performanceOptimizer, cache, optimizeImage, createOptimizedFetch, batchOperations } from "../performanceOptimizer";
 import { PerformanceOptimizer, performanceOptimizer, cache, optimizeImage, createOptimizedFetch, batchOperations } from "../performanceOptimizer";
-
 import React from "react";
 describe("performanceOptimizer", () => {
   beforeEach(() => {
@@ -158,7 +157,7 @@ PerformanceOptimizer(// test params);
 expect(averageTime).toBeLessThan(1);
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
 PerformanceOptimizer(largeDataset);

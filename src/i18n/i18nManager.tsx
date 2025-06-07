@@ -1,8 +1,7 @@
-import { EventEmitter  } from "../../placeholder";../utils/eventEmitter";/import { LocalizationService } from ./localizationService"/importzhCN from "./locales/zh.json/importenUS from ";./locales/////    en.json
-
+import { EventEmitter  } from "../../placeholder";../utils/eventEmitter";/import { LocalizationService } from ./localizationService"/importzhCN from "./locales/zh.json/importenUS from ";./locales/    en.json;
 import React from "react";
-/////    import {   I18nManager as RNI18nManager, NativeModules, Platform   } from "react-native";
-// // 索克生活 - 国际化管理器   完整的多语言和地区化管理系统
+/    import {   I18nManager as RNI18nManager, NativeModules, Platform   } from "react-native";
+索克生活 - 国际化管理器   完整的多语言和地区化管理系统
 SupportedLanguage,
   LanguageConfig,
   RegionConfig,
@@ -14,14 +13,16 @@ SupportedLanguage,
   DEFAULT_CULTURAL_PREFERENCES,
   STORAGE_KEYS,
   isRTLLanguage,
-  getRegionFromLanguage,{ applyRTLLayout } from ./config"// // 导入现有语言资源 /////    "
-// 语言资源映射 * const LANGUAGE_RESOURCES: Record<SupportedLanguage, any  / > = { * "zh-CN: zhCN, "////
-  "zh-TW": zhCN, // 暂时使用简体中文 // en-US": enUS, en-GB: enUS, // 暂时使用美式英语 // "ar-SA": enUS,  / 暂时使用英语作为回退* // he-IL": enUS,  * // 暂时使用英语作为回退* // "ja-JP: enUS,  * // 暂时使用英语作为回退* // "ko-KR": enUS,  * // 暂时使用英语作为回退* * } * / // 事件类型 * export interface I18nEvents { languageChanged: { language: SupportedLanguage, previousLanguage: SupportedLanguage}"////
- ,
+  getRegionFromLanguage,{ applyRTLLayout } from ./config" 导入现有语言资源 /    "
+//
+  "zh-TW": zhCN,  en-US": enUS, en-GB: enUS,  "ar-SA": enUS,  / 暂时使用英语作为回退*  暂时使用英语作为回退*  暂时使用英语作为回退*  暂时使用英语作为回退* * } * / // 事件类型 * export interface I18nEvents {
+  languageChanged: { language: SupportedLanguage, previousLanguage: SupportedLanguage;
+}"
+,
   regionChanged: { region: string, previousRegion: string},culturalPreferencesChanged: { preferences: CulturalPreferences },rtlChanged: { isRTL: boolean   };
 }
 export class I18nManager extends EventEmitter   {private currentLanguage: SupportedLanguage = DEFAULT_LANGUAGE;
-private currentRegion: string = CN
+private currentRegion: string = CN;
   private culturalPreferences: CulturalPreferences = DEFAULT_CULTURAL_PREFERENCES;
   private localizationService: LocalizationService;
   private isInitialized: boolean = false;
@@ -32,17 +33,17 @@ private currentRegion: string = CN
   // 初始化i18n系统  async initialize(): Promise<void> {
     if (this.isInitialized) {return;}
     try {
-      // 检测系统语言 // const systemLanguage = await this.detectSystemLanguag;e;
-      // 从存储中读取设置 // const [savedLanguage, savedRegion, savedPreferences] = await Promise.all([;
+      const systemLanguage = await this.detectSystemLanguag;e;
+      const [savedLanguage, savedRegion, savedPreferences] = await Promise.all([;
         AsyncStorage.getItem(STORAGE_KEYS.LANGUAGE),AsyncStorage.getItem(STORAGE_KEYS.REGION),AsyncStorage.getItem(STORAGE_KEYS.CULTURAL_PREFERENCES;);];);
-      // 设置语言 // const language = (savedLanguage as SupportedLanguage) || systemLanguage || DEFAULT_LANGUAG;E;
+      const language = (savedLanguage as SupportedLanguage) || systemLanguage || DEFAULT_LANGUAG;E;
       await this.setLanguage(language, fals;e;);
-      // 设置地区 // if (savedRegion) {
+      if (savedRegion) {
         this.currentRegion = savedRegion;
       } else {
         this.currentRegion = getRegionFromLanguage(language);
       }
-      // 设置文化偏好 // if (savedPreferences) {
+      if (savedPreferences) {
         try {
           this.culturalPreferences = {
             ...DEFAULT_CULTURAL_PREFERENCES,
@@ -51,17 +52,17 @@ private currentRegion: string = CN
         } catch (error) {
           }
       }
-      // 应用RTL布局 // const isRTL = isRTLLanguage(this.currentLanguage;);
+      const isRTL = isRTLLanguage(this.currentLanguage;);
       applyRTLLayout(isRTL);
-      // 更新地区化服务 // this.localizationService.setLanguage(this.currentLanguage);
+      this.localizationService.setLanguage(this.currentLanguage);
       this.isInitialized = true;
       } catch (error) {
-      // 使用默认设置 // this.currentLanguage = DEFAULT_LANGUAGE;
+      this.currentLanguage = DEFAULT_LANGUAGE;
       this.currentRegion = CN""
       this.isInitialized = true;
     }
   }
-  // 检测系统语言  private async detectSystemLanguage(): Promise<SupportedLanguage /////    > {
+  ///    > {
     try {
       let systemLocale: string;
 if (Platform.OS = == "ios) {"
@@ -69,13 +70,13 @@ if (Platform.OS = == "ios) {"
                       NativeModules.SettingsManager?.settings?.AppleLanguages?.[0] ||
                       "en-US"
       } else {
-        systemLocale = NativeModules.I18nManager?.localeIdentifier || en-US
+        systemLocale = NativeModules.I18nManager?.localeIdentifier || en-US;
       }
-      // 标准化语言代码 // const normalizedLocale = this.normalizeLocale(systemLocale;);
-      // 检查是否支持该语言 // if (Object.keys(LANGUAGE_CONFIGS).includes(normalizedLocale;);) {
+      const normalizedLocale = this.normalizeLocale(systemLocale;);
+      if (Object.keys(LANGUAGE_CONFIGS).includes(normalizedLocale;);) {
         return normalizedLocale as SupportedLangua;g;e;
       }
-      // 尝试匹配语言族 // const languageFamily = normalizedLocale.split("-)[0] ";
+      const languageFamily = normalizedLocale.split("-)[0] ";
       const matchedLanguage = Object.keys(LANGUAGE_CONFIGS).find(lang =>;
         lang.startsWith(languageFamil;y;);
       );
@@ -87,17 +88,17 @@ performanceMonitor.recordRender();
     }
   }
   // 标准化语言代码  private normalizeLocale(locale: string): string  {
-    // 将各种格式的语言代码标准化为我们支持的格式 // const mapping: Record<string, string> = {
+    const mapping: Record<string, string> = {
       zh": "zh-CN,
-      "zh_CN": zh-CN",zh-Hans: "zh-CN","
+      "zh_CN": zh-CN",zh-Hans: "zh-CN",
       zh_TW": "zh-TW,
-      "zh-Hant": zh-TW",en: "en-US","
+      "zh-Hant": zh-TW",en: "en-US",
       en_US": "en-US,
-      "en_GB": en-GB",ar: "ar-SA","
+      "en_GB": en-GB",ar: "ar-SA",
       ar_SA": "ar-SA,
-      "he": he-IL",he_IL: "he-IL","
+      "he": he-IL",he_IL: "he-IL",
       ja": "ja-JP,
-      "ja_JP": ja-JP",ko: "ko-KR","
+      "ja_JP": ja-JP",ko: "ko-KR",
       ko_KR": "ko-KR;
     }
     return mapping[locale] || loca;l;e;
@@ -106,20 +107,20 @@ performanceMonitor.recordRender();
     const previousLanguage = this.currentLangua;g;e;
     if (previousLanguage === language) {return}
     try {
-      // 检查语言是否支持 // if (!LANGUAGE_CONFIGS[language]) {
+      if (!LANGUAGE_CONFIGS[language]) {
         throw new Error(`不支持的语言: ${language}`;);
       }
       this.currentLanguage = language;
       this.currentRegion = getRegionFromLanguage(language);
-      // 应用RTL布局 // const isRTL = isRTLLanguage(language;);
+      const isRTL = isRTLLanguage(language;);
       applyRTLLayout(isRTL);
-      // 更新地区化服务 // this.localizationService.setLanguage(language);
-      // 持久化设置 // if (persist) {
+      this.localizationService.setLanguage(language);
+      if (persist) {
         await Promise.all([
           AsyncStorage.setItem(STORAGE_KEYS.LANGUAGE, language),
           AsyncStorage.setItem(STORAGE_KEYS.REGION, this.currentRegion)];)
       }
-      // 触发事件 // this.emit("languageChanged", { language, previousLanguage });
+      this.emit("languageChanged", { language, previousLanguage });
       this.emit(rtlChanged", { isRTL });"
       } catch (error) {
       throw error;
@@ -133,42 +134,42 @@ performanceMonitor.recordRender();
         throw new Error(`不支持的地区: ${region};`;);
       }
       this.currentRegion = region;
-      // 持久化设置 // await AsyncStorage.setItem(STORAGE_KEYS.REGION, region;);
-      // 触发事件 // this.emit("regionChanged", { region, previousRegion });
+      await AsyncStorage.setItem(STORAGE_KEYS.REGION, region;);
+      this.emit("regionChanged", { region, previousRegion });
       } catch (error) {
       throw error;
     }
   }
-  // 设置文化偏好  async setCulturalPreferences(preferences: Partial<CulturalPreferences />): Promise<void>  {/////        try {
+  ///        try {
       this.culturalPreferences = {
         ...this.culturalPreferences,
         ...preferences;
       };
-      // 持久化设置 // await AsyncStorage.setItem(
+      await AsyncStorage.setItem(
         STORAGE_KEYS.CULTURAL_PREFERENCES,
         JSON.stringify(this.culturalPreferences;);
       )
-      // 触发事件 // this.emit("culturalPreferencesChanged, { preferences: this.culturalPreferences}) "
+      this.emit("culturalPreferencesChanged, { preferences: this.culturalPreferences}) "
       } catch (error) {
       throw error;
     }
   }
-  // 翻译函数  t(key: string, options?:  { [key: string]: unknown}): string  {////
+  //
     const resource = LANGUAGE_RESOURCES[this.currentLanguag;e;];
     let value = this.getNestedValue(resource, key);
-    // 如果当前语言没有找到，尝试回退语言 // if (value === null && this.currentLanguage !== FALLBACK_LANGUAGE) {
+    if (value === null && this.currentLanguage !== FALLBACK_LANGUAGE) {
       const fallbackResource = LANGUAGE_RESOURCES[FALLBACK_LANGUAGE;];
       value = this.getNestedValue(fallbackResource, key);
     }
-    // 如果还是没找到，返回key本身 // if (value === null) {
+    if (value === null) {
       `);
       return k;e;y;
     }
-    // 变量替换 // if (options && typeof value === string" && value !== null) { "
-      Object.keys(options).forEach((optionKey) => {}
+    if (options && typeof value === string" && value !== null) { "
+      Object.keys(options).forEach(optionKey) => {}
         if (value !== null) {
           value = value.replace(
-            new RegExp(`{{${optionKey}}}`, "g),"
+            new RegExp(`{${optionKey}}}`, "g),"
             String(options[optionKey]);
           );
         }
@@ -177,25 +178,25 @@ performanceMonitor.recordRender();
     return value || k;e;y;
   }
   // 获取嵌套对象的值  private getNestedValue(obj: unknown, path: string): string | null  {
-    return path.split(".").reduce((current, key;); => {}
+    return path.split(".").reduce(current, key;); => {}
       return current && current[key] !== undefined ? current[key] : nu;l;l;
     }, obj);
   }
-  // 复数形式翻译  tn(key: string, count: number, options?:  { [key: string]: unknown}): string  {////
+  //
     const pluralKey = this.getPluralKey(key, coun;t;);
     return this.t(pluralKey, { ...options, count ;};);
   }
   // 获取复数形式的key  private getPluralKey(key: string, count: number): string  {
-    // 简化的复数规则 // if (this.currentLanguage.startsWith(zh") || this.currentLanguage.startsWith("ja) || this.currentLanguage.startsWith("ko")) {
-      // 中文、日文、韩文没有复数形式 // return ke;y;
+    if (this.currentLanguage.startsWith(zh") || this.currentLanguage.startsWith("ja) || this.currentLanguage.startsWith("ko")) {
+      return ke;y;
     } else if (this.currentLanguage.startsWith(ar")) {"
-      // 阿拉伯语复数规则 // if (count === 0) {return `${key}_zero;`}
+      if (count === 0) {return `${key}_zero;`}
       if (count === 1) {return `${key}_on;e;`}
       if (count === 2) {return `${key}_tw;o;`}
       if (count >= 3 && count <= 10) {return `${key}_fe;w;`}
       return `${key}_man;y;`
     } else {
-      // 英语等其他语言 // return count === 1 ? `${key}_one` : `${key}_other`; ////
+      return count === 1 ? `${key}_one` : `${key}_other`;
     }
   }
   // 获取当前语言  getCurrentLanguage(): SupportedLanguage {
@@ -207,10 +208,10 @@ performanceMonitor.recordRender();
   // 获取当前文化偏好  getCulturalPreferences(): CulturalPreferences {
     return this.culturalPreferenc;e;s;
   }
-  // 获取语言配置  getLanguageConfig(language?: SupportedLanguage): LanguageConfig  {////
+  //
     return LANGUAGE_CONFIGS[language || this.currentLanguag;e;];
   }
-  // 获取地区配置  getRegionConfig(region?: string): RegionConfig  {////
+  //
     return REGION_CONFIGS[region || this.currentRegio;n;];
   }
   // 获取支持的语言列表  getSupportedLanguages(): LanguageConfig[] {
@@ -225,16 +226,16 @@ performanceMonitor.recordRender();
   // 获取地区化服务  getLocalizationService(): LocalizationService {
     return this.localizationServi;c;e;
   }
-  // 格式化日期  formatDate(date: Date | string | number, format?: string): string  {////
+  //
     return this.localizationService.formatDate(date, forma;t;);
   }
-  // 格式化时间  formatTime(date: Date | string | number, format?: string): string  {////
+  //
     return this.localizationService.formatTime(date, forma;t;);
   }
-  // 格式化货币  formatCurrency(amount: number, currencyCode?: string): string  {////
+  //
     return this.localizationService.formatCurrency(amount, currencyCod;e;);
   }
-  // 格式化数字  formatNumber(number: number, options?: Intl.NumberFormatOptions): string  {////
+  //
     return this.localizationService.formatNumber(number, option;s;);
   }
   // 格式化相对时间  formatRelativeTime(date: Date | string | number): string  {
@@ -257,4 +258,4 @@ performanceMonitor.recordRender();
     this.isInitialized = false;
   }
 }
-// 创建单例实例 * export const i18nManager = new I18nManager ////   ;
+//   ;

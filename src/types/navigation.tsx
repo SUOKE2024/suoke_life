@@ -1,24 +1,23 @@
-import { NavigationProp } from "@react-navigation/////    native";
-
+import { NavigationProp } from "@react-navigation/    native";
 import React from "react";
 // 导航类型定义
-export type RootStackParamList = {Auth: undefine;d;
+export type RootStackParamList = {Auth: undefine;d,
   Main: undefined;
 };
-export type AuthStackParamList = {Welcome: undefine;d;
+export type AuthStackParamList = {Welcome: undefine;d,
   Login: undefined;
-  Register: undefined;
+  Register: undefined,
   ForgotPassword: undefined;
 };
-export type MainTabParamList = {Home: undefine;d;
+export type MainTabParamList = {Home: undefine;d,
   Suoke: undefined;
-  Explore: undefined;
+  Explore: undefined,
   Life: undefined;
   Profile: undefined;
 };
-export type MainStackParamList = {MainTabs: undefine;d;
+export type MainStackParamList = {MainTabs: undefine;d,
   Settings: undefined;
-  ServiceStatus: undefined;
+  ServiceStatus: undefined,
   ServiceManagement: undefined;
   DeveloperPanel: undefined;
 };

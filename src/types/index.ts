@@ -10,7 +10,6 @@ export interface User {
   createdAt: string;
   updatedAt: string;
 }
-
 // 用户档案
 export interface UserProfile {
   name: string;
@@ -22,7 +21,6 @@ export interface UserProfile {
   medicalHistory?: string[];
   allergies?: string[];
 }
-
 // 认证状态
 export interface AuthState {
   isAuthenticated: boolean;
@@ -32,7 +30,6 @@ export interface AuthState {
   loading: boolean;
   error?: string;
 }
-
 // API响应类型
 export interface ApiResponse<T = any> {
   success: boolean;
@@ -43,13 +40,10 @@ export interface ApiResponse<T = any> {
   };
   message?: string;
 }
-
 // 导出智能体类型
 export * from './agents';
-
 // 导出中医辨证类型
 export * from './TCM';
-
 // 导出其他核心类型
 export * from './core';
 export * from './api';

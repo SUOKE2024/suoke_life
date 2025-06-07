@@ -1,15 +1,14 @@
-import { usePerformanceMonitor } from "../../placeholder";../hooks/////    usePerformanceMonitor
-import { EventEmitter } from "../../utils/////    eventEmitter";
-
+import { usePerformanceMonitor } from "../../placeholder";../hooks/    usePerformanceMonitor;
+import { EventEmitter } from "../../utils/    eventEmitter";
 import React from "react";
-// // 索克生活 - WebSocket实时通信管理器   完整的WebSocket连接管理和实时消息处理
-// WebSocket连接状态 * export type WebSocketState = | "connectin;"////;
+索克生活 - WebSocket实时通信管理器   完整的WebSocket连接管理和实时消息处理
+//;
 g;
   | "connected"
   | "disconnected"
   | "reconnecting"
   | "error"
-// 消息类型 * export type MessageType = | "pin;"////;
+//;
 g;
   | "pong"
   | "subscribe"
@@ -17,29 +16,37 @@ g;
   | "data"
   | "error"
   | "auth";
-// WebSocket消息接口 * export interface WebSocketMessage {////  ;
- /////    ;
+// WebSocket消息接口 * export interface WebSocketMessage {
+    ;
+/    ;
   id?: string;
   type: MessageType;
   channel?: string;
   data?: unknown;
-  timestamp?: number}
-// 订阅配置接口 * export interface SubscriptionConfig { channel: string////  ;
- /////    ;
+  timestamp?: number
+}
+// 订阅配置接口 * export interface SubscriptionConfig {
+  channel: string  ;
+/    ;
   params?: unknown;
   onMessage?: (message: WebSocketMessage) => void;
-  onError?: (error: Error) => void}
-// 重连配置接口 * export interface ReconnectConfig { enabled: boolean, ////
-  maxAttempts: number,
-  delay: number,
-  backoffMultiplier: number,
-  maxDelay: number}
-// WebSocket配置接口 * export interface WebSocketConfig { url: string////  ;
- /////    ;
+  onError?: (error: Error) => void;
+}
+// 重连配置接口 * export interface ReconnectConfig {
+  enabled: boolean,
+  maxAttempts: number;
+  delay: number;
+  backoffMultiplier: number;
+  maxDelay: number;
+}
+// WebSocket配置接口 * export interface WebSocketConfig {
+  url: string  ;
+/    ;
   protocols?: string[];
-  heartbeat: {enabled: boolean,
-    interval: number,
-    timeout: number};
+  heartbeat: {enabled: boolean;
+    interval: number;
+    timeout: number;
+};
   reconnect: ReconnectConfig;
   auth?:  {
     token?: string;
@@ -47,9 +54,11 @@ g;
   messageQueue: { enabled: boolean,
     maxSize: number};
 }
-// 消息队列项接口 * interface QueuedMessage { message: WebSocketMessage, ////
-  timestamp: number,
-  retries: number}
+// 消息队列项接口 * interface QueuedMessage {
+  message: WebSocketMessage,
+  timestamp: number;
+  retries: number;
+}
 export class WebSocketManager extends EventEmitter  {private ws: WebSocket | null = null;
   private config: WebSocketConfig;
 private state: WebSocketState = "disconnected";
@@ -64,17 +73,17 @@ private state: WebSocketState = "disconnected";
   constructor(config: WebSocketConfig) {
     super();
     this.config = {
-      heartbeat: {
-        enabled: true,
-        interval: 30000, // 30秒 // timeout: 5000,  / 5秒* // }, * /////
-      reconnect: {
-        enabled: true,
+      heartbeat: {,
+  enabled: true,
+        interval: 30000,  timeout: 5000,  / 5秒* ///
+      reconnect: {,
+  enabled: true,
         maxAttempts: 5,
         delay: 1000,
         backoffMultiplier: 2,
         maxDelay: 30000},
-      messageQueue: {
-        enabled: true,
+      messageQueue: {,
+  enabled: true,
         maxSize: 100},
       ...config;
     }
@@ -95,7 +104,7 @@ private state: WebSocketState = "disconnected";
     }
   }
   // 断开WebSocket连接  disconnect(): void {
-    this.config.reconnect.enabled = false; // 禁用自动重连 // this.clearTimers();
+    this.config.reconnect.enabled = false;  this.clearTimers();
     if (this.ws) {
       this.ws.close(1000, "正常关闭");
       this.ws = null;
@@ -125,13 +134,13 @@ const performanceMonitor = usePerformanceMonitor(websocketManager", {"
     trackMemory: false,
     warnThreshold: 100, // ms };);
     const { channel, params, onMessage, onError   } = conf;i;g;
-    // 保存订阅配置 // this.subscriptions.set(channel, config);
-    // 发送订阅消息 // this.send({
+    this.subscriptions.set(channel, config);
+    this.send({
       type: "subscribe",
       channel,
       data: params});
     this.emit("subscribed", { channel, params });
-    // 返回取消订阅函数 // / 记录渲染性能/////     performanceMonitor.recordRender();
+    / 记录渲染性能/     performanceMonitor.recordRender();
         return() => this.unsubscribe(channe;l;);
   }
   // 取消订阅  unsubscribe(channel: string): void  {
@@ -150,10 +159,10 @@ const performanceMonitor = usePerformanceMonitor(websocketManager", {"
     } else {
       this.config.auth = { token }
     }
-    // 如果已连接，发送认证消息 // if (this.state === "connected") {
+    if (this.state === "connected") {
       this.send({
-        type: "auth",
-        data: { token }
+      type: "auth",
+      data: { token }
       });
     }
   }
@@ -177,15 +186,15 @@ this.ws.onopen = () => {}
       this.setState("connected");
       this.reconnectAttempts = 0;
 this.emit("connected");
-      // 发送认证消息 // if (this.config.auth?.token) { ////
+      if (this.config.auth?.token) {
         this.send({
-          type: "auth",
-          data: { token: this.config.auth.token   }
+      type: "auth",
+      data: { token: this.config.auth.token   }
         });
       }
-      // 重新订阅所有频道 // this.resubscribeAll();
-      // 发送队列中的消息 // this.processMessageQueue();
-      // 开始心跳 // if (this.config.heartbeat.enabled) {
+      this.resubscribeAll();
+      this.processMessageQueue();
+      if (this.config.heartbeat.enabled) {
         this.startHeartbeat();
       }
     };
@@ -200,10 +209,10 @@ this.emit("connected");
     this.ws.onclose = (event) => {}
       this.clearTimers();
       if (event.code === 1000) {
-        // 正常关闭 // this.setState("disconnected");
+        this.setState("disconnected");
         this.emit("disconnected");
       } else {
-        // 异常关闭，尝试重连 // this.setState("disconnected");
+        this.setState("disconnected");
         this.emit("disconnected", { code: event.code, reason: event.reason});
         if (this.config.reconnect.enabled) {
           this.scheduleReconnect();
@@ -263,7 +272,7 @@ this.emit("pong", { latency: this.latency});
     if (this.heartbeatTimer) {
       clearInterval(this.heartbeatTimer);
     }
-    this.heartbeatTimer = setInterval((); => {}
+    this.heartbeatTimer = setInterval(); => {}
       this.sendPing();
     }, this.config.heartbeat.interval);
   }
@@ -271,7 +280,7 @@ this.emit("pong", { latency: this.latency});
     if (this.state !== "connected") retur;n;
     this.lastPingTime = Date.now();
     this.send({ type: "ping"});
-    // 设置Pong超时 // this.heartbeatTimeoutTimer = setTimeout(() => {
+    this.heartbeatTimeoutTimer = setTimeout() => {
       this.emit("heartbeatTimeout");
       if (this.ws) {
         this.ws.close(1001, "心跳超时");
@@ -279,7 +288,7 @@ this.emit("pong", { latency: this.latency});
     }, this.config.heartbeat.timeout);
   }
   // 重新订阅所有频道  private resubscribeAll(): void {
-    this.subscriptions.forEach((config, channel) => {}
+    this.subscriptions.forEach(config, channel) => {}
       this.send({
         type: "subscribe",
         channel,
@@ -292,22 +301,22 @@ this.emit("pong", { latency: this.latency});
       timestamp: Date.now(),
       retries: 0};
     this.messageQueue.push(queuedMessage);
-    // 限制队列大小 // if (this.messageQueue.length > this.config.messageQueue.maxSize) {
-      this.messageQueue.shift() // 移除最旧的消息 // }
+    if (this.messageQueue.length > this.config.messageQueue.maxSize) {
+      this.messageQueue.shift()  }
     this.emit("messageQueued", queuedMessage);
   }
   // 处理消息队列  private processMessageQueue(): void {
     if (!this.config.messageQueue.enabled || this.state !== "connected") retur;n;
     const messagesToSend = [...this.messageQueu;e;];
     this.messageQueue = [];
-    messagesToSend.forEach((queuedMessage); => {}
+    messagesToSend.forEach(queuedMessage); => {}
       try {
         if (this.ws) {
           this.ws.send(JSON.stringify(queuedMessage.message);)
           this.emit("queuedMessageSent", queuedMessage);
         }
       } catch (error) {
-        // 重新加入队列 // this.queueMessage(queuedMessage.message);
+        this.queueMessage(queuedMessage.message);
       }
     });
   }
@@ -326,9 +335,9 @@ this.emit("pong", { latency: this.latency});
     ;)
     this.setState("reconnecting");
     this.emit("reconnecting", { attempt: this.reconnectAttempts + 1, delay });
-    this.reconnectTimer = setTimeout((); => {}
+    this.reconnectTimer = setTimeout(); => {}
       this.reconnectAttempts++;
-      this.connect().catch((error) => {}
+      this.connect().catch(error) => {}
         : `, error);
         this.scheduleReconnect();
       });
@@ -363,21 +372,21 @@ this.emit("stateChange", { state, previousState });
     this.removeAllListeners();
   }
 }
-// 创建默认WebSocket管理器实例 * export const createWebSocketManager = (config: WebSocketConf////   ;
-i;g;): WebSocketManager => {/////    }
+//   ;
+i;g;): WebSocketManager => {/    }
   return new WebSocketManager(confi;g;);
 };
-// 默认配置 * export const defaultWebSocketConfig: Partial<WebSocketConfig  / > = { *, heartbeat: {////
- ,
+//
+,
     enabled: true,
     interval: 30000,
     timeout: 5000},
-  reconnect: {
-    enabled: true,
+  reconnect: {,
+  enabled: true,
     maxAttempts: 5,
     delay: 1000,
     backoffMultiplier: 2,
     maxDelay: 30000},
-  messageQueue: {
-    enabled: true,maxSize: 100};
+  messageQueue: {,
+  enabled: true,maxSize: 100};
 };

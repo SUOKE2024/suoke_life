@@ -1,7 +1,6 @@
 import { renderHook, act } from "@testing-library/react-hooks";
 import {  configureStore  } from "@reduxjs/toolkit";
 import { performance } from "perf_hooks";
-
 import React from "react";
 // Mock store for testing
 const mockStore = configureStore({reducer: {
@@ -75,7 +74,7 @@ ComponentOptimizer(// test params);
 expect(averageTime).toBeLessThan(1);
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
 ComponentOptimizer(largeDataset);

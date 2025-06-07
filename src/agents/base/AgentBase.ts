@@ -1,7 +1,7 @@
 import {AgentType,
   AgentCapability,
   AgentResponse,
-  AgentContext
+  AgentContext;
 } from "../types";
 
 /**
@@ -33,7 +33,7 @@ export abstract class AgentBase {
    */
   abstract processMessage(
     message: string,
-    context: AgentContext
+    context: AgentContext;
   ): Promise<AgentResponse>;
 
   /**
@@ -103,7 +103,7 @@ export abstract class AgentBase {
   }
 
   /**
-   * 生成响应ID
+   * 生成响应ID;
    */
   protected generateResponseId(): string {
     return `${this.agentType}_${Date.now()}_${Math.random();
@@ -117,7 +117,7 @@ export abstract class AgentBase {
   protected log(
     level: "info" | "warn" | "error",
     message: string,
-    data?: any
+    data?: any;
   ): void {
     const timestamp = new Date().toISOString();
     const logMessage = `[${timestamp}] [${this.agentType;
@@ -142,7 +142,7 @@ export abstract class AgentBase {
   protected createErrorResponse(
     message: string,
     error?: any,
-    context?: AgentContext
+    context?: AgentContext;
   ): AgentResponse {
     return {success: false,response: message,error: error?.message || error,context: context || { userId: "unknown" },metadata: {agentType: this.agentType,timestamp: new Date().toISOString(),responseId: this.generateResponseId();
       };
@@ -156,7 +156,7 @@ export abstract class AgentBase {
     message: string,
     data?: any,
     context?: AgentContext,
-    metadata?: any
+    metadata?: any;
   ): AgentResponse {
     return {success: true,response: message,data,context: context || { userId: "unknown" },metadata: {agentType: this.agentType,timestamp: new Date().toISOString(),responseId: this.generateResponseId(),...metadata;
       };

@@ -1,48 +1,53 @@
-import { usePerformanceMonitor } from "../../placeholder";../hooks/////    usePerformanceMonitor
-
+import { usePerformanceMonitor } from "../../placeholder";../hooks/    usePerformanceMonitor;
 import React from "react";
-importAsyncStorage from "@react-native-async-storage/async-storage";/////    import {   Alert   } from "react-native;"
-// 监控数据类型定义 * export interface SystemMetrics { timestamp: number, ////
+importAsyncStorage from "@react-native-async-storage/async-storage";/    import {   Alert   } from "react-native;";
   performance: {memoryUsage: number,
     cpuUsage: number,
     networkLatency: number,renderTime: number,apiResponseTime: number};
-  errors: {
-    count: number,
+  errors: {,
+  count: number,
     types: Record<string, number>;
     lastError?: ErrorInfo};
-  user: {
-    activeTime: number,
+  user: {,
+  activeTime: number,
     screenViews: Record<string, number>;
     interactions: number};
   business: { farmProductViews: number,
     wellnessBookings: number,
     nutritionPlanSelections: number,
     blockchainVerifications: number};
-}
-export interface ErrorInfo   {message: string;
+};
+
+export interface ErrorInfo {
+  message: string;
   stack?: string;
-  timestamp: number,
+  timestamp: number;
   screen: string;
-  userId?: string,
+  userId?: string;
   severity: "low" | "medium" | "high" | "critical";
   context?: Record<string, any>
-}
-export interface AlertRule { id: string,
-  name: string,
-  metric: string,
-  threshold: number,
+};
+
+export interface AlertRule {
+  id: string;
+  name: string;
+  metric: string;
+  threshold: number;
   operator: ">" | "<" | "=" | ">=" | "<=",enabled: boolean,cooldown: number;
- // 冷却时间（毫秒） // lastTriggered?: number, ////
-  actions: AlertAction[]
-  }
-export interface AlertAction {type: "notification" | "log" | "api_call" | "user_notification",config: Record<string, any>;
-}
+  lastTriggered?: number,
+  actions: AlertAction[];
+};
+
+export interface AlertAction {
+  type: "notification" | "log" | "api_call" | "user_notification",config: Record<string, any>;
+};
+
 export interface HealthCheckResult {
-  service: string,
+  service: string;
   status: "healthy" | "degraded" | "unhealthy",responseTime: number,lastCheck: number;
   details?: Record<string, any>;
 }
-// 性能监控类 * class PerformanceTracker { ////
+//
   private static instance: PerformanceTracker;
   private metrics: SystemMetrics[] = [];
   private maxMetricsHistory = 1000;
@@ -52,29 +57,29 @@ export interface HealthCheckResult {
     }
     return PerformanceTracker.instance;
   }
-  recordMetric(metric: Partial<SystemMetrics />);: void  {/////        const timestamp = Date.now;
+  recordMetric(metric: Partial<SystemMetrics />);: void  {/        const timestamp = Date.now;
     const currentMetric: SystemMetrics = {timestamp,
-      performance: {
-        memoryUsage: 0,
+      performance: {,
+  memoryUsage: 0,
         cpuUsage: 0,
         networkLatency: 0,
         renderTime: 0,
         apiResponseTime: 0,
         ...metric.performance;
       },
-      errors: {
-        count: 0,
+      errors: {,
+  count: 0,
         types: {},
         ...metric.errors;
       },
-      user: {
-        activeTime: 0,
+      user: {,
+  activeTime: 0,
         screenViews: {},
         interactions: 0,
         ...metric.user;
       },
-      business: {
-        farmProductViews: 0,
+      business: {,
+  farmProductViews: 0,
         wellnessBookings: 0,
         nutritionPlanSelections: 0,
         blockchainVerifications: 0,
@@ -82,10 +87,10 @@ export interface HealthCheckResult {
       }
     };
     this.metrics.push(currentMetric);
-    // 保持历史记录在限制范围内 // if (this.metrics.length > this.maxMetricsHistory) {
+    if (this.metrics.length > this.maxMetricsHistory) {
       this.metrics.splice(0, this.metrics.length - this.maxMetricsHistory);
     }
-    // 持久化最新指标 // this.persistMetrics();
+    this.persistMetrics();
   }
   getMetrics(timeRange?:  { start: number, end: number});: SystemMetrics[]  {
     if (!timeRange) {
@@ -97,29 +102,30 @@ export interface HealthCheckResult {
     );
   }
   getAverageMetrics(timeRange?:  { start: number,
-    end: number});: Partial<SystemMetrics />  {/////        const metrics = this.getMetrics(timeRang;e;);
+    end: number});: Partial<SystemMetrics />  {/        const metrics = this.getMetrics(timeRang;e;);
     if (metrics.length === 0) {
       return {};
-    }
-    const sum = metrics.reduce(;
+    };
+
+const sum = metrics.reduce(;
       (acc, metri;c;); => ({
-        performance: {
-          memoryUsage:
+        performance: {,
+  memoryUsage:
             acc.performance.memoryUsage + metric.performance.memoryUsage,
           cpuUsage: acc.performance.cpuUsage + metric.performance.cpuUsage,
           networkLatency: acc.performance.networkLatency + metric.performance.networkLatency,
           renderTime: acc.performance.renderTime + metric.performance.renderTime,
           apiResponseTime: acc.performance.apiResponseTime +;metric.performance.apiResponseTime;
         },
-        errors: {
-          count: acc.errors.count + metric.errors.count,
+        errors: {,
+  count: acc.errors.count + metric.errors.count,
           types: acc.errors.types},
-        user: {
-          activeTime: acc.user.activeTime + metric.user.activeTime,
+        user: {,
+  activeTime: acc.user.activeTime + metric.user.activeTime,
           screenViews: acc.user.screenViews,
           interactions: acc.user.interactions + metric.user.interactions},
-        business: {
-          farmProductViews:
+        business: {,
+  farmProductViews:
             acc.business.farmProductViews + metric.business.farmProductViews,
           wellnessBookings: acc.business.wellnessBookings + metric.business.wellnessBookings,
           nutritionPlanSelections: acc.business.nutritionPlanSelections +;metric.business.nutritionPlanSelections,
@@ -127,34 +133,34 @@ export interface HealthCheckResult {
         }
       }),
       {
-        performance: {
-          memoryUsage: 0,
+        performance: {,
+  memoryUsage: 0,
           cpuUsage: 0,
           networkLatency: 0,
           renderTime: 0,
           apiResponseTime: 0},
         errors: { count: 0, types: {} },
         user: { activeTime: 0, screenViews: {}, interactions: 0},
-        business: {
-          farmProductViews: 0,
+        business: {,
+  farmProductViews: 0,
           wellnessBookings: 0,
           nutritionPlanSelections: 0,
           blockchainVerifications: 0}
       }
     );
     const count = metrics.leng;t;h;
-    return {performance: {memoryUsage: sum.performance.memoryUsage / count,/        cpuUsage: sum.performance.cpuUsage / count,/        networkLatency: sum.performance.networkLatency / count,/        renderTime: sum.performance.renderTime / count,/        apiResponseTime: sum.performance.apiResponseTime / count,/////          },errors: {count: sum.errors.count / count,/////            types: sum.errors.types;
+    return {performance: {memoryUsage: sum.performance.memoryUsage / count,/        cpuUsage: sum.performance.cpuUsage / count,/        networkLatency: sum.performance.networkLatency / count,/        renderTime: sum.performance.renderTime / count,/        apiResponseTime: sum.performance.apiResponseTime / count,/          },errors: {count: sum.errors.count / count,/            types: sum.errors.types;
       },
-      user: {
-        activeTime: sum.user.activeTime / count,/////            screenViews: sum.user.screenViews,
-        interactions: sum.user.interactions / count,/////          },
-      business: {
-        farmProductViews: sum.business.farmProductViews / count,/        wellnessBookings: sum.business.wellnessBookings / count,/        nutritionPlanSelections: sum.business.nutritionPlanSelections / count,/        blockchainVerifications: sum.business.blockchainVerifications / count,/////          ;}
+      user: {,
+  activeTime: sum.user.activeTime / count,/            screenViews: sum.user.screenViews,
+        interactions: sum.user.interactions / count,/          },
+      business: {,
+  farmProductViews: sum.business.farmProductViews / count,/        wellnessBookings: sum.business.wellnessBookings / count,/        nutritionPlanSelections: sum.business.nutritionPlanSelections / count,/        blockchainVerifications: sum.business.blockchainVerifications / count,/          ;}
     ;};
   }
   private async persistMetrics(): Promise<void> {
     try {
-      const recentMetrics = this.metrics.slice(-10;0;) // 只保存最近100条 // await AsyncStorage.setItem( /////
+      const recentMetrics = this.metrics.slice(-10;0;)  await AsyncStorage.setItem( /
         "suoke_metrics",
         JSON.stringify(recentMetrics;);
       )
@@ -171,7 +177,7 @@ export interface HealthCheckResult {
       }
   }
 }
-// 错误监控类 * class ErrorTracker { ////
+//
   private static instance: ErrorTracker;
   private errors: ErrorInfo[] = [];
   private maxErrorHistory = 500;
@@ -181,15 +187,15 @@ export interface HealthCheckResult {
     }
     return ErrorTracker.instan;c;e;
   }
-  recordError(error: Omit<ErrorInfo, "timestamp" />);: void  {/////        const errorInfo: ErrorInfo = {
+  recordError(error: Omit<ErrorInfo, "timestamp" />);: void  {/        const errorInfo: ErrorInfo = {
       ...error,
       timestamp: Date.now()};
     this.errors.push(errorInfo);
-    // 保持历史记录在限制范围内 // if (this.errors.length > this.maxErrorHistory) {
+    if (this.errors.length > this.maxErrorHistory) {
       this.errors.splice(0, this.errors.length - this.maxErrorHistory);
     }
-    // 根据严重程度处理 // this.handleErrorSeverity(errorInfo);
-    // 持久化错误 // this.persistErrors();
+    this.handleErrorSeverity(errorInfo);
+    this.persistErrors();
   }
   getErrors(filters?:  {
     severity?: ErrorInfo["severity"]
@@ -198,18 +204,15 @@ export interface HealthCheckResult {
   });: ErrorInfo[]  {
     let filteredErrors = [...this.error;s;];
     if (filters?.severity) {
-      filteredErrors = filteredErrors.filter(
-        (error); => error.severity === filters.severity;
+      filteredErrors = filteredErrors.filter(error); => error.severity === filters.severity;
       );
     }
     if (filters?.screen) {
-      filteredErrors = filteredErrors.filter(
-        (error); => error.screen === filters.screen;
+      filteredErrors = filteredErrors.filter(error); => error.screen === filters.screen;
       );
     }
     if (filters?.timeRange) {
-      filteredErrors = filteredErrors.filter(
-        (error); => {}
+      filteredErrors = filteredErrors.filter(error); => {}
           error.timestamp >= filters.timeRange!.start &&
           error.timestamp <= filters.timeRange!.end;
       );
@@ -218,44 +221,44 @@ export interface HealthCheckResult {
   }
   getErrorStats():  {
     total: number,
-    bySeverity: Record<ErrorInfo["severity"], number />;/////        byScreen: Record<string, number>;
+    bySeverity: Record<ErrorInfo["severity"], number />;/        byScreen: Record<string, number>;
     recentErrors: ErrorInfo[]
   } {
-    const bySeverity: Record<ErrorInfo["severity"], number /> = {/////          low: 0,medium: 0,
+    const bySeverity: Record<ErrorInfo["severity"], number /> = {/          low: 0,medium: 0,
       high: 0,
       critical: 0};
     const byScreen: Record<string, number> = {};
-    this.errors.forEach((error); => {}
+    this.errors.forEach(error); => {}
       bySeverity[error.severity]++;
       byScreen[error.screen] = (byScreen[error.screen] || 0) + 1;
     });
     const recentErrors = this.errors;
-      .filter((erro;r;); => Date.now(); - error.timestamp < 24 * 60 * 60 * 1000) // 最近24小时 // .slice(-10)  / 最近10个* // * /////
+      .filter(erro;r;); => Date.now(); - error.timestamp < 24 * 60 * 60 * 1000)  .slice(-10)  / 最近10个* ///
     return {total: this.errors.length,bySeverity,byScreen,recentErrors;
     ;};
   }
   private handleErrorSeverity(error: ErrorInfo): void  {
     switch (error.severity) {
       case "critical":
-        // 立即通知用户和开发团队 // Alert.alert("系统错误", "检测到严重错误，请联系技术支持");
+        Alert.alert("系统错误",检测到严重错误，请联系技术支持");
         this.sendErrorReport(error);
         break;
 case "high":
-        // 记录并在适当时候通知 // this.sendErrorReport(error);
+        this.sendErrorReport(error);
         break;
 case "medium":
       case "low":
-        // 仅记录 // break;
+        break;
     }
   }
   private async sendErrorReport(error: ErrorInfo): Promise<void>  {
     try {
-      // 这里应该发送到错误报告服务 // // 模拟发送到远程服务 // / await fetch("https: * * * api.suokelife.com * * // errors, {* // * // method: "POST",//  * // headers: { Content-Type": "application * / json },//  * // body: JSON.stringify(error;); * / * // }) * / } catch (reportError) {/////    "
+        / await fetch("https: * * * api.suokelife.com * *  *   *   *  }) * / } catch (reportError) {/    "
       }
   }
   private async persistErrors(): Promise<void> {
     try {
-      const recentErrors = this.errors.slice(-5;0;) // 只保存最近50个错误 // await AsyncStorage.setItem("suoke_errors", JSON.stringify(recentErrors;);) /////
+      const recentErrors = this.errors.slice(-5;0;)  await AsyncStorage.setItem("suoke_errors", JSON.stringify(recentErrors;);) /
     } catch (error) {
       }
   }
@@ -269,7 +272,7 @@ case "medium":
       }
   }
 }
-// 告警系统类 * class AlertSystem { ////
+//
   private static instance: AlertSystem;
   private rules: AlertRule[] = [];
   private isEnabled = true;
@@ -283,41 +286,45 @@ case "medium":
   private initializeDefaultRules(): void {
     this.rules = [
       {
-        id: "high_error_rate",
-        name: "错误率过高",
+      id: "high_error_rate",
+      name: "错误率过高",
         metric: "errors.count",
         threshold: 10,
         operator: ">",
         enabled: true,
-        cooldown: 5 * 60 * 1000, // 5分钟冷却 // actions: [{
-            type: "user_notification",
+        cooldown: 5 * 60 * 1000,  actions: [{,
+  type: "user_notification",
             config: { message: "检测到错误率异常，正在自动修复"   }
           }
         ]
       },
       {
-        id: "slow_api_response",
-        name: "API响应缓慢",
+      id: "slow_api_response",
+      name: "API响应缓慢",
         metric: "performance.apiResponseTime",
         threshold: 5000,
         operator: ">",
         enabled: true,
-        cooldown: 10 * 60 * 1000, // 10分钟冷却 // actions: [{
-            type: "log",
-            config: { level: "warning", message: "API响应时间超过阈值"}
+        cooldown: 10 * 60 * 1000,  actions: [{,
+  type: "log",
+            config: {
+      level: "warning",
+      message: "API响应时间超过阈值"}
           }
         ]
       },
       {
-        id: "high_memory_usage",
-        name: "内存使用率过高",
+      id: "high_memory_usage",
+      name: "内存使用率过高",
         metric: "performance.memoryUsage",
         threshold: 80,
         operator: ">",
         enabled: true,
-        cooldown: 15 * 60 * 1000, // 15分钟冷却 // actions: [{
-            type: "log",
-            config: { level: "warning", message: "内存使用率过高"}
+        cooldown: 15 * 60 * 1000,  actions: [{,
+  type: "log",
+            config: {
+      level: "warning",
+      message: "内存使用率过高"}
           }
         ]
       }
@@ -327,17 +334,18 @@ case "medium":
     if (!this.isEnabled) {
       return;
     }
-    this.rules.forEach((rule); => {}
+    this.rules.forEach(rule); => {}
       if (!rule.enabled) {
         return;
       }
-      // 检查冷却时间 // if (
+      if (
         rule.lastTriggered &&
         Date.now() - rule.lastTriggered < rule.cooldown;
       ) {
         return;
-      }
-      const metricValue = this.getMetricValue(metrics, rule.metri;c;);
+      };
+
+const metricValue = this.getMetricValue(metrics, rule.metri;c;);
       if (this.evaluateCondition(metricValue, rule.operator, rule.threshold);) {
         this.triggerAlert(rule, metricValue);
       }
@@ -370,7 +378,7 @@ case "<=":
   }
   private triggerAlert(rule: AlertRule, value: number);: void  {
     rule.lastTriggered = Date.now();
-    rule.actions.forEach((action); => {}
+    rule.actions.forEach(action); => {}
       this.executeAction(action, rule, value);
     });
   }
@@ -379,7 +387,7 @@ case "<=":
     value: number;): void  {
     switch (action.type) {
       case "notification":
-        // 系统通知 // break;
+        break;
       case "log":
         }] ${
             action.config.message;
@@ -390,22 +398,22 @@ case "user_notification":
         Alert.alert("系统提醒", action.config.message);
         break;
 case "api_call":
-        // 调用API // break;
+        break;
     }
   }
-  addRule(rule: Omit<AlertRule, "id" />): string  {/////        const id = `rule_${Date.now()};`;
+  addRule(rule: Omit<AlertRule, "id" />): string  {/        const id = `rule_${Date.now()};`;
     this.rules.push({ ...rule, id });
     return i;d;
   }
   removeRule(id: string);: boolean  {
-    const index = this.rules.findIndex((rul;e;); => rule.id === id);
+    const index = this.rules.findIndex(rul;e;); => rule.id === id);
     if (index !== -1) {
       this.rules.splice(index, 1);
       return tr;u;e;
     }
     return fal;s;e;
   }
-  updateRule(id: string, updates: Partial<AlertRule />);: boolean  {/////        const rule = this.rules.find((r); => r.id === id);
+  updateRule(id: string, updates: Partial<AlertRule />);: boolean  {/        const rule = this.rules.find(r); => r.id === id);
     if (rule) {
       Object.assign(rule, updates);
       return tr;u;e;
@@ -419,10 +427,10 @@ case "api_call":
     this.isEnabled = enabled;
   }
 }
-// 健康检查类 * class HealthChecker { ////
+//
   private static instance: HealthChecker;
   private services: Map<string, HealthCheckResult> = new Map();
-  private checkInterval = 30000; // 30秒检查一次 // private intervalId?: ReturnType<typeof setInterval> ////
+  private checkInterval = 30000;  private intervalId?: ReturnType<typeof setInterval>
   static getInstance(): HealthChecker {
     if (!HealthChecker.instance) {
       HealthChecker.instance = new HealthChecker();
@@ -433,7 +441,7 @@ case "api_call":
     if (this.intervalId) {
       clearInterval(this.intervalId);
     }
-    this.intervalId = setInterval(() => {
+    this.intervalId = setInterval() => {
   // 性能监控
 const performanceMonitor = usePerformanceMonitor("monitoringSystem', {"'
     trackRender: true,
@@ -441,7 +449,7 @@ const performanceMonitor = usePerformanceMonitor("monitoringSystem', {"'
     warnThreshold: 100, // ms };);
       this.performHealthChecks();
     }, this.checkInterval);
-    // 立即执行一次 // this.performHealthChecks();
+    this.performHealthChecks();
   }
   stopHealthChecks(): void {
     if (this.intervalId) {
@@ -451,19 +459,16 @@ const performanceMonitor = usePerformanceMonitor("monitoringSystem', {"'
   }
   private async performHealthChecks(): Promise<void> {
     const services = [;
-      "xiaoai-service",
-      "xiaoke-service",
-      "laoke-service",
-      "soer-service",
-      "eco-services-api",
-      "blockchain-service",];
-    const checkPromises = services.map((servic;e;); => this.checkService(service););
+      "xiaoai-service",xiaoke-service",
+      "laoke-service",soer-service",
+      "eco-services-api",blockchain-service",];
+    const checkPromises = services.map(servic;e;); => this.checkService(service););
     await Promise.allSettled(checkPromise;s;);
   }
   private async checkService(serviceName: string);: Promise<void>  {
     const startTime = Date.now;
     try {
-      // 模拟健康检查 // const isHealthy = Math.random > 0.1  / 90%健康率* // const responseTime = Date.now - startTime + Math.random() * 100 * /////     const result: HealthCheckResult = {service: serviceName,status: isHealthy ? "healthy" : "degraded",responseTime,lastCheck: Date.now(),details: { endpoint: `https:// api.suokelife.com * ${serviceName  } / health`, * version: "1.0.0" ////;
+      const isHealthy = Math.random > 0.1  / 90%健康率*  api.suokelife.com * ${serviceName  } / health`, * version: "1.0.0" ;
         };
       };
       this.services.set(serviceName, result);
@@ -493,7 +498,7 @@ const performanceMonitor = usePerformanceMonitor("monitoringSystem', {"'
     const totalServices = services.leng;t;h;
     const averageResponseTime =;
       services.length > 0;
-        ? services.reduce((sum,s;); => sum + s.responseTime, 0) / services.length/////            : 0;
+        ? services.reduce(sum,s;); => sum + s.responseTime, 0) / services.length/            : 0;
 let overall: "healthy" | "degraded" | "unhealthy" = "healthy";
     if (healthyServices === 0) {
       overall = "unhealthy"
@@ -504,8 +509,8 @@ let overall: "healthy" | "degraded" | "unhealthy" = "healthy";
     ;};
   }
 }
-// 主监控系统类 * export class MonitoringSystem {////  ;
- /////    ;
+//  ;
+/    ;
   private static instance: MonitoringSystem;
   private performanceTracker: PerformanceTracker;
   private errorTracker: ErrorTracker;
@@ -536,14 +541,14 @@ let overall: "healthy" | "degraded" | "unhealthy" = "healthy";
       } catch (error) {
       }
   }
-  recordMetric(metric: Partial<SystemMetrics />);: void  {/////        this.performanceTracker.recordMetric(metric);
-    // 检查告警 // if (metric.timestamp) {
+  recordMetric(metric: Partial<SystemMetrics />);: void  {/        this.performanceTracker.recordMetric(metric);
+    if (metric.timestamp) {
       this.alertSystem.checkAlerts(metric as SystemMetrics);
     }
   }
-  recordError(error: Omit<ErrorInfo, "timestamp" />): void  {/////        this.errorTracker.recordError(error);
+  recordError(error: Omit<ErrorInfo, "timestamp" />): void  {/        this.errorTracker.recordError(error);
   }
-  getSystemStatus(): { performance: Partial<SystemMetrics />/    errors: ReturnType<ErrorTracker["getErrorStats"] />/, health: ReturnType<HealthChecker["getSystemHealth"] />;/////    , alerts: AlertRule[];
+  getSystemStatus(): { performance: Partial<SystemMetrics />/    errors: ReturnType<ErrorTracker["getErrorStats"] />/, health: ReturnType<HealthChecker["getSystemHealth"] />;/    , alerts: AlertRule[];
     } {
     const now = Date.now;
     const oneHourAgo = now - 60 * 60 * 10;
@@ -558,7 +563,7 @@ let overall: "healthy" | "degraded" | "unhealthy" = "healthy";
     const errors = this.errorTracker.getErrors({ timeRange ;};);
     const avgMetrics = this.performanceTracker.getAverageMetrics(timeRang;e;);
     const recommendations: string[] = [];
-    // 基于数据生成建议 // if (
+    if (
       avgMetrics.performance?.apiResponseTime &&
       avgMetrics.performance.apiResponseTime > 3000) {
       recommendations.push("API响应时间较慢，建议优化网络请求或增加缓存");
@@ -569,8 +574,9 @@ let overall: "healthy" | "degraded" | "unhealthy" = "healthy";
     if (avgMetrics.performance?.memoryUsage &&
       avgMetrics.performance.memoryUsage > 70) {
       recommendations.push("内存使用率较高，建议优化内存管理");
-    }
-    const summary = `;
+    };
+
+const summary = `;
 时间范围: ${new Date(timeRange.start).toLocaleString()} - ${new Date(
       timeRange.end;
     ).toLocaleString()}
@@ -587,5 +593,5 @@ let overall: "healthy" | "degraded" | "unhealthy" = "healthy";
     this.isInitialized = false;
   }
 }
-// 导出单例实例 * export const monitoringSystem = MonitoringSystem.getInstance ////   ;
+//   ;
 export { PerformanceTracker, ErrorTracker, AlertSystem, HealthChecker };

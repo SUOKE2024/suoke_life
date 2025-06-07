@@ -1,10 +1,9 @@
-import { useTheme } from "../../contexts/ThemeContext/import { useAccessibility  } from ;../../contexts/AccessibilityContext";/import { responsive } from ../../utils/responsive"/import { animations, createAnimatedValue } from "../../utils/////    animations
-import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/////      TouchableOpacity,"
-
+import { useTheme } from "../../contexts/ThemeContext/import { useAccessibility  } from ;../../contexts/AccessibilityContext";/import { responsive } from ../../utils/responsive"/import { animations, createAnimatedValue } from "../../utils/    animations;
+import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor";
 import React from "react";
-/////
+/
 // 索克生活 - 主题切换组件   支持在浅色和暗黑模式之间切换
-importReact,{ useRef } from ";react";
+import React,{ useRef } from ";react";
   View,
   Text,
   StyleSheet,
@@ -12,57 +11,58 @@ importReact,{ useRef } from ";react";
 interface ThemeToggleProps {
   size?: ";small" | medium" | "large;
   showLabel?: boolean;
-style?: unknown}
-export const ThemeToggle: React.FC<ThemeToggleProps /> = ({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor("ThemeToggle",{/////
+style?: unknown
+}
+export const ThemeToggle: React.FC<ThemeToggleProps /> = ({/   const performanceMonitor = usePerformanceMonitor("ThemeToggle",{/
     trackRender: true,
     trackMemory: false,
-    warnThreshold: 50, // ms // });
-  size = medium","
+    warnThreshold: 50,  });
+  size = medium",
   showLabel = true,
   style;
 }) => {}
   const { theme, isDark, toggleTheme   } = useTheme;
   const { config, triggerHapticFeedback, announceForAccessibility   } = useAccessibility;
-  // 动画值 // const switchAnimation = useRef(createAnimatedValue(isDark ? 1 : 0;);).current; ////
+  const switchAnimation = useRef(createAnimatedValue(isDark ? 1 : 0;);).current;
   const scaleAnimation = useRef(createAnimatedValue(1);).current;
-  // 切换主题 // const handleToggle = useCallback(() => {;
-    // TODO: Implement function body *}, []) ////;
-    // 触觉反馈 // if (config.hapticFeedbackEnabled) {triggerHapticFeedback("light)";
+  const handleToggle = useCallback() => {;
+    //;
+    if (config.hapticFeedbackEnabled) {triggerHapticFeedback("light)";
     };
-    // 无障碍公告 // const newMode = isDark ? "浅色模式" : 暗黑模式////
+    const newMode = isDark ? "浅色模式" : 暗黑模式
     announceForAccessibility(`已切换到${newMode}`);
-    // 动画效果 // const toValue = isDark ? 0 : ;1; ////
+    const toValue = isDark ? 0 : ;1;
     animations.fadeIn(switchAnimation, { duration: 200}).start();
-    // 按钮缩放动画 // animations.bounce(scaleAnimation).start();
-    // 切换主题 // toggleTheme();
+    animations.bounce(scaleAnimation).start();
+    toggleTheme();
   };
-  // 获取尺寸样式 // const getSizeStyles = useCallback(() => {;
-    // TODO: Implement function body *}, []) ////;
-    const sizes = {small: {
-        width: responsive.width(40),
+  const getSizeStyles = useCallback() => {;
+    //;
+    const sizes = {small: {,
+  width: responsive.width(40),
         height: responsive.height(20),
         borderRadius: responsive.width(10),
         thumbSize: responsive.width(16)},
-      medium: {
-        width: responsive.width(50),
+      medium: {,
+  width: responsive.width(50),
         height: responsive.height(26),
         borderRadius: responsive.width(13),
         thumbSize: responsive.width(22)},
-      large: {
-        width: responsive.width(60),
+      large: {,
+  width: responsive.width(60),
         height: responsive.height(32),
         borderRadius: responsive.width(16),
         thumbSize: responsive.width(28)};};
     return sizes[siz;e;];
   };
   const sizeStyles = getSizeStyles;
-  // 计算滑块位置 // const thumbTranslateX = switchAnimation.interpolate({inputRange: [0, 1],outputRange: [2, sizeStyles.width - sizeStyles.thumbSize - 2];};);
-  // 背景颜色动画 // const backgroundColor = switchAnimation.interpolate({inputRange: [0, 1],outputRange: [theme.colors.outline, theme.colors.primary];};);
-  // 记录渲染性能 // performanceMonitor.recordRender();
+  const thumbTranslateX = switchAnimation.interpolate({inputRange: [0, 1],outputRange: [2, sizeStyles.width - sizeStyles.thumbSize - 2];};);
+  const backgroundColor = switchAnimation.interpolate({inputRange: [0, 1],outputRange: [theme.colors.outline, theme.colors.primary];};);
+  performanceMonitor.recordRender();
   return (;
-    <View style={[styles.container, style]} />/////          {showLabel && (;
-        <Text style={[styles.label, { color: theme.colors.onSurfa;c;e   }]} />/          {isDark ? "暗黑模式 : "浅色模式"}"////
-        </Text>/////          )}
+    <View style={[styles.container, style]} />/          {showLabel && (;
+        <Text style={[styles.label, { color: theme.colors.onSurfa;c;e   }]} />/          {isDark ? "暗黑模式 : "浅色模式"}"
+        </Text>/          )}
       <TouchableOpacity,
         style={[
           styles.switch,
@@ -79,7 +79,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps /> = ({/  // 性能监控 //
         accessibilityRole="switch"
         accessibilityLabel={`主题切换开关，当前为${isDark ? 暗黑" : "浅色}模式`}
         accessibilityHint="双击切换主题模式"
-        accessibilityState={{ checked: isDark}} />/////            <Animated.View;
+        accessibilityState={ checked: isDark}} />/            <Animated.View;
 style={[
             styles.track,
             {
@@ -89,40 +89,40 @@ style={[
               borderRadius: sizeStyles.borderRadius;
             }
           ]}
-        />/////
+        />/
         <Animated.View;
 style={[
             styles.thumb,
             {
               width: sizeStyles.thumbSize,
               height: sizeStyles.thumbSize,
-              borderRadius: sizeStyles.thumbSize / 2,/////                  backgroundColor: theme.colors.surface,
+              borderRadius: sizeStyles.thumbSize / 2,/                  backgroundColor: theme.colors.surface,
               transform: [{ translateX: thumbTranslateX   }],
               ...theme.shadows.sm;
             }
-          ]} />/          <View style={[styles.thumbIcon, { backgroundColor: isDark ? "#FFD700" : #87CEEB"}]} />/        </Animated.View>/      </TouchableOpacity>/    </View>/////      );"
+          ]} />/          <View style={[styles.thumbIcon, { backgroundColor: isDark ? "#FFD700" : #87CEEB"}]} />/        </Animated.View>/      </TouchableOpacity>/    </View>/      );"
 }
-const styles = StyleSheet.create({container: {
-    flexDirection: "row,",
+const styles = StyleSheet.create({container: {,
+  flexDirection: "row,",
     alignItems: "center",
     gap: responsive.width(12)},
-  label: {
-    fontSize: responsive.fontSize(14),
+  label: {,
+  fontSize: responsive.fontSize(14),
     fontWeight: 500""
   },
-  switch: {
-    position: "relative,",
+  switch: {,
+  position: "relative,",
     justifyContent: "center"
   },
   track: { position: absolute"  },"
-  thumb: {
-    position: "absolute,",
+  thumb: {,
+  position: "absolute,",
     justifyContent: "center",
     alignItems: center""
   },
-  thumbIcon: {
-    width: "60%,",
-    height: "60%',"'
+  thumbIcon: {,
+  width: "60%,",
+    height: "60%",'
     borderRadius: 999;
   };};);
 export default React.memo(ThemeToggle);

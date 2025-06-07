@@ -1,53 +1,63 @@
-import { usePerformanceMonitor } from "../../placeholder";../hooks/////    usePerformanceMonitor
-import { apiClient } from "./apiClient";/import { authService } from "./authService";/import { EventEmitter } from "../utils/////    eventEmitter";
-
+import { usePerformanceMonitor } from "../../placeholder";../hooks/    usePerformanceMonitor;
+import { apiClient } from "./apiClient";/import { authService } from "./authService";/import { EventEmitter } from "../utils/    eventEmitter";
 import React from "react";
-// // API服务配置接口 * interface ApiServiceConfig { baseURL: string, ////
-  timeout: number,
-  retries: number,
-  enableCache: boolean,
-  enableRealTime: boolean}
-// 健康数据接口 * interface HealthData { id: string, ////
-  userId: string,
-  metrics: {heartRate: number,
-    bloodPressure: { systolic: number, diastolic: number},
+API服务配置接口 * interface ApiServiceConfig {
+  baseURL: string,
+  timeout: number;
+  retries: number;
+  enableCache: boolean;
+  enableRealTime: boolean;
+}
+// 健康数据接口 * interface HealthData {
+  id: string,
+  userId: string;
+  metrics: {heartRate: number;
+    bloodPressure: { systolic: number, diastolic: number;
+},
     sleepQuality: number,
     stressLevel: number,
     activityLevel: number,
-    nutritionScore: number}
-  constitution: { type: string,
+    nutritionScore: number};
+
+constitution: { type: string,
     percentage: number,
     description: string}[]
   timestamp: string}
-// 智能体状态接口 * interface AgentStatus { id: string, ////
-  name: string,
-  status: "online" | "offline" | "busy",
-  workload: number,
-  performance: {accuracy: number,
-    responseTime: number,
-    userSatisfaction: number}
+// 智能体状态接口 * interface AgentStatus {
+  id: string,
+  name: string;
+  status: "online" | "offline" | "busy";
+  workload: number;
+  performance: {accuracy: number;
+    responseTime: number;
+    userSatisfaction: number;
+}
   currentTask?: string,
   lastUpdate: string}
-// 诊断结果接口 * interface DiagnosisResult { id: string, ////
-  userId: string,
-  type: "look" | "listen" | "inquiry" | "palpation" | "comprehensive",
-  results: {symptoms: string[],
-    constitution: string,
-    recommendations: string[],
-    confidence: number}
+// 诊断结果接口 * interface DiagnosisResult {
+  id: string,
+  userId: string;
+  type: "look" | "listen" | "inquiry" | "palpation" | "comprehensive";
+  results: {symptoms: string[];
+    constitution: string;
+    recommendations: string[];
+    confidence: number;
+}
   timestamp: string}
-// 用户设置接口 * interface UserSettings { accessibility: {screenReader: boolean, ////
-    highContrast: boolean,
-    largeText: boolean,
-    reduceMotion: boolean,
-    voiceOver: boolean,
-    hapticFeedback: boolean}
+// 用户设置接口 * interface UserSettings {
+  accessibility: {screenReader: boolean,
+    highContrast: boolean;
+    largeText: boolean;
+    reduceMotion: boolean;
+    voiceOver: boolean;
+    hapticFeedback: boolean;
+}
   personalization: { theme: "light" | "dark" | "auto",
     language: "zh" | "en",
     fontSize: number,
     animationSpeed: number,
-    notifications: {
-      health: boolean,
+    notifications: {,
+  health: boolean,
       agents: boolean,
       system: boolean}
   };
@@ -55,21 +65,25 @@ import React from "react";
     analytics: boolean,
     locationTracking: boolean};
 }
-// 区块链健康记录接口 * interface BlockchainHealthRecord { id: string, ////
-  userId: string,
-  dataHash: string,
-  timestamp: string,
-  signature: string,
-  verified: boolean,
-  metadata: {dataType: string,
-    source: string,
-    version: string}
+// 区块链健康记录接口 * interface BlockchainHealthRecord {
+  id: string,
+  userId: string;
+  dataHash: string;
+  timestamp: string;
+  signature: string;
+  verified: boolean;
+  metadata: {dataType: string;
+    source: string;
+    version: string;
 }
-// 医疗资源接口 * interface MedicalResource { id: string, ////
-  type: "hospital" | "clinic" | "pharmacy" | "specialist",
-  name: string,
-  location: {address: string,
-    coordinates: { lat: number, lng: number}
+}
+// 医疗资源接口 * interface MedicalResource {
+  id: string,
+  type: "hospital" | "clinic" | "pharmacy" | "specialist";
+  name: string;
+  location: {address: string;
+    coordinates: { lat: number, lng: number;
+}
   };
   services: string[],
   rating: number,
@@ -80,36 +94,46 @@ import React from "react";
     website?: string;
     email?: string}
 }
-// 知识库查询接口 * interface KnowledgeQuery { query: string, ////
-  type: "symptom" | "treatment" | "medicine" | "general"
+// 知识库查询接口 * interface KnowledgeQuery {
+  query: string,
+  type: "symptom" | "treatment" | "medicine" | "general";
   context?:  {
     userId?: string;
     symptoms?: string[];
-    constitution?: string}
+    constitution?: string
 }
-interface KnowledgeResult { id: string,
-  title: string,
-  content: string,
-  relevance: number,
-  source: string,
-  category: string,
-  tags: string[],
-  lastUpdated: string}
-// 反馈接口 * interface UserFeedback { userId: string, ////
-  type: "bug" | "feature" | "improvement" | "general",
-  rating: number,
+};
+
+interface KnowledgeResult {
+  id: string;
+  title: string;
+  content: string;
+  relevance: number;
+  source: string;
+  category: string;
+  tags: string[];
+  lastUpdated: string;
+}
+// 反馈接口 * interface UserFeedback {
+  userId: string,
+  type: "bug" | "feature" | "improvement" | "general";
+  rating: number;
   message: string;
-  metadata?: unknown}
-// 性能指标接口 * interface PerformanceMetrics { userId: string, ////
-  renderTime: number,
-  memoryUsage: number,
-  networkLatency: number,
-  errorCount: number,
-  userSatisfaction: number}
+  metadata?: unknown
+}
+// 性能指标接口 * interface PerformanceMetrics {
+  userId: string,
+  renderTime: number;
+  memoryUsage: number;
+  networkLatency: number;
+  errorCount: number;
+  userSatisfaction: number;
+};
+
 export class ApiIntegrationService  {private eventEmitter: EventEmitter;
   private config: ApiServiceConfig;
-constructor(config: Partial<ApiServiceConfig /> = {}) {/////        this.config = {
-      baseURL: "http:// , localhost: 8000", // timeout: 30000,
+constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
+      baseURL: "http: timeout: 30000,
       retries: 3,
       enableCache: true,
       enableRealTime: true,
@@ -119,12 +143,12 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/////        this.config 
     this.setupEventListeners();
   }
   private setupEventListeners() {
-    // 设置全局事件监听 // this.eventEmitter.on("api: error", (error) => {}
+    this.eventEmitter.on("api: error", (error) => {}
       });
     this.eventEmitter.on("api: success", (data); => {}
       });
   }
-  // ==================== 认证相关 API ==================== // async login(credentials: { username: string, password: string}) {
+  async login(credentials: { username: string, password: string}) {
     try {
       const response = await authService.login({email: credentials.username,
         password: credentials.passwo;r;d;
@@ -160,19 +184,19 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/////        this.config 
       throw error;
     }
   }
-  // ==================== 健康数据 API ==================== // async getHealthData(userId: string,
-    timeRange?:  { start: string, end: string}): Promise<HealthData[] /////    >  {
+  async getHealthData(userId: string,
+    timeRange?:  { start: string, end: string}): Promise<HealthData[] /    >  {
     try {
-      const response = await apiClient.get("/health-data", {/////            userId,...timeRan;g;e;
+      const response = await apiClient.get("/health-data", {/            userId,...timeRan;g;e;
       ;};);
       return response.da;t;a;
     } catch (error) {
       throw err;o;r;
     }
   }
-  async saveHealthData(data: Omit<HealthData, "id" | "timestamp" />/  ): Promise<HealthData /////    >  {
+  async saveHealthData(data: Omit<HealthData, "id" | "timestamp" />/  ): Promise<HealthData /    >  {
     try {
-      const response = await apiClient.post("/health-data", {/////            ...data,timestamp: new Date().toISOString};)
+      const response = await apiClient.post("/health-data", {/            ...data,timestamp: new Date().toISOString};)
       this.eventEmitter.emit("health: data:saved", response.data);
       return response.da;t;a;
     } catch (error) {
@@ -181,7 +205,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/////        this.config 
   }
   async getHealthMetrics(userId: string, metric: string, period: string) {
     try {
-      const response = await apiClient.get(`/health-data/metrics/${metric}`, {/////            userId,peri;o;d;
+      const response = await apiClient.get(`/health-data/metrics/${metric}`, {/            userId,peri;o;d;
       ;};);
       return response.da;t;a;
     } catch (error) {
@@ -192,23 +216,23 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/////        this.config 
     userId: string,
     format: "json" | "csv" | "pdf" = "json") {
     try {
-      const response = await apiClient.get(`/health-data/export`, {/////            userId,form;a;t;
+      const response = await apiClient.get(`/health-data/export`, {/            userId,form;a;t;
       ;};);
       return response.da;t;a;
     } catch (error) {
       throw error;
     }
   }
-  // ==================== 智能体相关 API ==================== // async getAgentStatus(): Promise<AgentStatus[] /////    > {
+  async getAgentStatus(): Promise<AgentStatus[] /    > {
     try {
-      const response = await apiClient.get("/agents/statu;s;";);/////          return response.da;t;a;
+      const response = await apiClient.get("/agents/statu;s;";);/          return response.da;t;a;
     } catch (error) {
       throw err;o;r;
     }
   }
   async startAgentChat(agentId: string, message: string) {
     try {
-      const response = await apiClient.post(`/agents/${agentId}/chat`, {/////            message,timestamp: new Date().toISOString};)
+      const response = await apiClient.post(`/agents/${agentId}/chat`, {/            message,timestamp: new Date().toISOString};)
       this.eventEmitter.emit("agent: chat:started", { agentId, response });
       return response.da;t;a;
     } catch (error) {
@@ -217,7 +241,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/////        this.config 
   }
   async sendMessageToAgent(agentId: string, message: string, context?: unknown) {
     try {
-      const response = await apiClient.post(`/agents/${agentId}/message`, {/////            message,context,
+      const response = await apiClient.post(`/agents/${agentId}/message`, {/            message,context,
         timestamp: new Date().toISOString};)
       this.eventEmitter.emit("agent: message:sent", {
         agentId,
@@ -234,7 +258,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/////        this.config 
     timeRange?:  { start: string, end: string}) {
     try {
       const response = await apiClient.get(;
-        `/agents/${agentId}/performance`,/////            timeRa;n;g;e;
+        `/agents/${agentId}/performance`,/            timeRa;n;g;e;
       ;);
       return response.da;t;a;
     } catch (error) {
@@ -244,7 +268,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/////        this.config 
   async updateAgentSettings(agentId: string, settings: unknown) {
     try {
       const response = await apiClient.put(;
-        `/agents/${agentId}/settings`,/////            setti;n;g;s;
+        `/agents/${agentId}/settings`,/            setti;n;g;s;
       ;);
       this.eventEmitter.emit("agent: settings:updated", { agentId, settings });
       return response.da;t;a;
@@ -252,10 +276,10 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/////        this.config 
       throw err;o;r;
     }
   }
-  // ==================== 四诊相关 API ==================== // async startDiagnosis(type: "look" | "listen" | "inquiry" | "palpation",
-    data: unknown): Promise<DiagnosisResult /////    >  {
+  async startDiagnosis(type: "look" | "listen" | "inquiry" | "palpation",
+    data: unknown): Promise<DiagnosisResult /    >  {
     try {
-      const response = await apiClient.post(`/diagnosis/${type}`, {/////            ...data,timestamp: new Date().toISOString};)
+      const response = await apiClient.post(`/diagnosis/${type}`, {/            ...data,timestamp: new Date().toISOString};)
       this.eventEmitter.emit("diagnosis: started", { type, response });
       return response.da;t;a;
     } catch (error) {
@@ -263,9 +287,9 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/////        this.config 
     }
   }
   async getDiagnosisHistory(userId: string,
-    limit: number = 10;): Promise<DiagnosisResult[] /////    >  {
+    limit: number = 10;): Promise<DiagnosisResult[] /    >  {
     try {
-      const response = await apiClient.get("/diagnosis/history", {/////            userId,lim;i;t;
+      const response = await apiClient.get("/diagnosis/history", {/            userId,lim;i;t;
       ;};);
       return response.da;t;a;
     } catch (error) {
@@ -273,9 +297,9 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/////        this.config 
     }
   }
   async getComprehensiveDiagnosis(userId: string,
-    symptoms: string[];): Promise<DiagnosisResult /////    >  {
+    symptoms: string[];): Promise<DiagnosisResult /    >  {
     try {
-      const response = await apiClient.post("/diagnosis/comprehensive", {/////            userId,symptoms,
+      const response = await apiClient.post("/diagnosis/comprehensive", {/            userId,symptoms,
         timestamp: new Date().toISOString};)
       this.eventEmitter.emit(
         "diagnosis: comprehensive:completed",
@@ -286,18 +310,18 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/////        this.config 
       throw error;
     }
   }
-  // ==================== 用户设置 API ==================== // async getUserSettings(userId: string): Promise<UserSettings /////    >  {
+  async getUserSettings(userId: string): Promise<UserSettings /    >  {
     try {
-      const response = await apiClient.get(`/users/${userId}/setting;s;`;);/////          return response.da;t;a;
+      const response = await apiClient.get(`/users/${userId}/setting;s;`;);/          return response.da;t;a;
     } catch (error) {
       throw error;
     }
   }
   async updateUserSettings(userId: string,
-    settings: Partial<UserSettings />/);: Promise<UserSettings /////    >  {
+    settings: Partial<UserSettings />/);: Promise<UserSettings /    >  {
     try {
       const response = await apiClient.put(;
-        `/users/${userId}/settings`,/////            setti;n;g;s;
+        `/users/${userId}/settings`,/            setti;n;g;s;
       ;);
       this.eventEmitter.emit("user: settings:updated", {
         userId,
@@ -307,18 +331,18 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/////        this.config 
       throw error;
     }
   }
-  async resetUserSettings(userId: string): Promise<UserSettings /////    >  {
+  async resetUserSettings(userId: string): Promise<UserSettings /    >  {
     try {
-      const response = await apiClient.post(`/users/${userId}/settings/res;e;t;`;)/////          this.eventEmitter.emit("user: settings:reset", { userId });
+      const response = await apiClient.post(`/users/${userId}/settings/res;e;t;`;)/          this.eventEmitter.emit("user: settings:reset", { userId });
       return response.da;t;a;
     } catch (error) {
       throw error;
     }
   }
-  // ==================== 区块链健康记录 API ==================== // async saveHealthRecordToBlockchain(userId: string,
-    healthData: unknown): Promise<BlockchainHealthRecord /////    >  {
+  async saveHealthRecordToBlockchain(userId: string,
+    healthData: unknown): Promise<BlockchainHealthRecord /    >  {
     try {
-      const response = await apiClient.post("/blockchain/health-records", {/////            userId,data: healthData,
+      const response = await apiClient.post("/blockchain/health-records", {/            userId,data: healthData,
         timestamp: new Date().toISOString};)
       this.eventEmitter.emit("blockchain: record:saved", response.data);
       return response.da;t;a;
@@ -326,10 +350,10 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/////        this.config 
       throw error;
     }
   }
-  async getBlockchainHealthRecords(userId: string;);: Promise<BlockchainHealthRecord[] /////    >  {
+  async getBlockchainHealthRecords(userId: string;);: Promise<BlockchainHealthRecord[] /    >  {
     try {
       const response = await apiClient.get(;
-        `/blockchain/health-records/////    ${userId;};`);
+        `/blockchain/health-records/    ${userId;};`);
       return response.da;t;a;
     } catch (error) {
       throw error;
@@ -337,25 +361,25 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/////        this.config 
   }
   async verifyHealthRecord(recordId: string;): Promise< { verified: boolean, details: unknown}> {
     try {
-      const response = await apiClient.post(`/blockchain/verify/${recordI;d;};`;);/////          return response.da;t;a;
+      const response = await apiClient.post(`/blockchain/verify/${recordI;d;};`;);/          return response.da;t;a;
     } catch (error) {
       throw error;
     }
   }
-  // ==================== 医疗资源 API ==================== // async searchMedicalResources(query: {
+  async searchMedicalResources(query: {
     type?: string;
     location?:  { lat: number, lng: number, radius: number};
     services?: string[];
-  }): Promise<MedicalResource[] /////    >  {
+  }): Promise<MedicalResource[] /    >  {
     try {
-      const response = await apiClient.get("/medical-resources/search", qu;e;r;y;);/////          return response.da;t;a;
+      const response = await apiClient.get("/medical-resources/search", qu;e;r;y;);/          return response.da;t;a;
     } catch (error) {
       throw error;
     }
   }
-  async getMedicalResourceDetails(resourceId: string;): Promise<MedicalResource /////    >  {
+  async getMedicalResourceDetails(resourceId: string;): Promise<MedicalResource /    >  {
     try {
-      const response = await apiClient.get(`/medical-resources/${resourceI;d;};`;);/////          return response.da;t;a;
+      const response = await apiClient.get(`/medical-resources/${resourceI;d;};`;);/          return response.da;t;a;
     } catch (error) {
       throw error;
     }
@@ -369,7 +393,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/////        this.config 
   ) {
     try {
       const response = await apiClient.post(;
-        `/medical-resources/${resourceId}/appointments`,/////            {...appointmentData,
+        `/medical-resources/${resourceId}/appointments`,/            {...appointmentData,
           timestamp: new Date().toISOString}
       ;)
       this.eventEmitter.emit("appointment: booked", response.data);
@@ -378,35 +402,35 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/////        this.config 
       throw error;
     }
   }
-  // ==================== 知识库 API ==================== // async searchKnowledge(query: KnowledgeQuery): Promise<KnowledgeResult[] /////    >  {
+  async searchKnowledge(query: KnowledgeQuery): Promise<KnowledgeResult[] /    >  {
     try {
-      const response = await apiClient.post("/knowledge/search", que;r;y;);/////          return response.da;t;a;
+      const response = await apiClient.post("/knowledge/search", que;r;y;);/          return response.da;t;a;
     } catch (error) {
       throw error;
     }
   }
-  async getKnowledgeDetails(knowledgeId: string): Promise<KnowledgeResult /////    >  {
+  async getKnowledgeDetails(knowledgeId: string): Promise<KnowledgeResult /    >  {
     try {
-      const response = await apiClient.get(`/knowledge/${knowledgeI;d;};`;);/////          return response.da;t;a;
+      const response = await apiClient.get(`/knowledge/${knowledgeI;d;};`;);/          return response.da;t;a;
     } catch (error) {
       throw error;
     }
   }
   async getRecommendedKnowledge(userId: string,
     context?: unknown;
-  );: Promise<KnowledgeResult[] /////    >  {
+  );: Promise<KnowledgeResult[] /    >  {
     try {
       const response = await apiClient.get(;
-        `/knowledge/recommendations/${userId}`,/////            { conte;x;t ;}
+        `/knowledge/recommendations/${userId}`,/            { conte;x;t ;}
       ;);
       return response.da;t;a;
     } catch (error) {
       throw err;o;r;
     }
   }
-  // ==================== 机器学习 API ==================== // async trainPersonalModel(userId: string, trainingData: unknown) {
+  async trainPersonalModel(userId: string, trainingData: unknown) {
     try {
-      const response = await apiClient.post(`/ml/models/${userId}/train`, {/////            data: trainingData,timestamp: new Date().toISOString};)
+      const response = await apiClient.post(`/ml/models/${userId}/train`, {/            data: trainingData,timestamp: new Date().toISOString};)
       this.eventEmitter.emit("ml: training:started", { userId, response });
       return response.da;t;a;
     } catch (error) {
@@ -415,7 +439,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/////        this.config 
   }
   async getModelPrediction(userId: string, inputData: unknown) {
     try {
-      const response = await apiClient.post(`/ml/models/${userId}/predict`, {/////            input: inputData,timestamp: new Date().toISOString};);
+      const response = await apiClient.post(`/ml/models/${userId}/predict`, {/            input: inputData,timestamp: new Date().toISOString};);
       return response.da;t;a;
     } catch (error) {
       throw err;o;r;
@@ -423,14 +447,14 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/////        this.config 
   }
   async getModelPerformance(userId: string) {
     try {
-      const response = await apiClient.get(`/ml/models/${userId}/performan;c;e;`;);/////          return response.da;t;a;
+      const response = await apiClient.get(`/ml/models/${userId}/performan;c;e;`;);/          return response.da;t;a;
     } catch (error) {
       throw err;o;r;
     }
   }
-  // ==================== 无障碍服务 API ==================== // async getAccessibilitySettings(userId: string) {
+  async getAccessibilitySettings(userId: string) {
     try {
-      const response = await apiClient.get(`/accessibility/settings/${userId;};`;);/////          return response.da;t;a;
+      const response = await apiClient.get(`/accessibility/settings/${userId;};`;);/          return response.da;t;a;
     } catch (error) {
       throw error;
     }
@@ -438,7 +462,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/////        this.config 
   async updateAccessibilitySettings(userId: string, settings: unknown) {
     try {
       const response = await apiClient.put(;
-        `/accessibility/settings/${userId}`,/////            setti;n;g;s;
+        `/accessibility/settings/${userId}`,/            setti;n;g;s;
       ;);
       this.eventEmitter.emit("accessibility: settings:updated", {
         userId,
@@ -451,14 +475,14 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/////        this.config 
   }
   async generateAccessibilityReport(userId: string) {
     try {
-      const response = await apiClient.get(`/accessibility/report/${userI;d;};`;);/////          return response.da;t;a;
+      const response = await apiClient.get(`/accessibility/report/${userI;d;};`;);/          return response.da;t;a;
     } catch (error) {
       throw err;o;r;
     }
   }
-  // ==================== 生态服务 API ==================== // async getEcoServices() {
+  async getEcoServices() {
     try {
-      const response = await apiClient.get("/eco-service;s;";);/////          return response.da;t;a;
+      const response = await apiClient.get("/eco-service;s;";);/          return response.da;t;a;
     } catch (error) {
       throw err;o;r;
     }
@@ -466,7 +490,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/////        this.config 
   async subscribeToEcoService(userId: string, serviceId: string, plan: string) {
     try {
       const response = await apiClient.post(;
-        `/eco-services/${serviceId}/subscribe`,/////            {
+        `/eco-services/${serviceId}/subscribe`,/            {
           userId,
           plan,
           timestamp: new Date().toISOString}
@@ -484,15 +508,15 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/////        this.config 
   async getEcoServiceUsage(userId: string, serviceId: string) {
     try {
       const response = await apiClient.get(;
-        `/eco-services/${serviceId}/usage/////    ${userId;};`);
+        `/eco-services/${serviceId}/usage/    ${userId;};`);
       return response.da;t;a;
     } catch (error) {
       throw err;o;r;
     }
   }
-  // ==================== 反馈和支持 API ==================== // async submitFeedback(feedback: UserFeedback) {
+  async submitFeedback(feedback: UserFeedback) {
     try {
-      const response = await apiClient.post("/feedback", {/////            ...feedback,timestamp: new Date().toISOString};)
+      const response = await apiClient.post("/feedback", {/            ...feedback,timestamp: new Date().toISOString};)
       this.eventEmitter.emit("feedback: submitted", response.data);
       return response.da;t;a;
     } catch (error) {
@@ -501,14 +525,14 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/////        this.config 
   }
   async getFeedbackHistory(userId: string) {
     try {
-      const response = await apiClient.get(`/feedback/history/${userI;d;};`;);/////          return response.da;t;a;
+      const response = await apiClient.get(`/feedback/history/${userI;d;};`;);/          return response.da;t;a;
     } catch (error) {
       throw err;o;r;
     }
   }
   async getSupportTickets(userId: string) {
     try {
-      const response = await apiClient.get(`/support/tickets/${userI;d;};`;);/////          return response.da;t;a;
+      const response = await apiClient.get(`/support/tickets/${userI;d;};`;);/          return response.da;t;a;
     } catch (error) {
       throw err;o;r;
     }
@@ -519,36 +543,36 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/////        this.config 
     priority: "low" | "medium" | "high" | "urgent",
     category: string}) {
     try {
-      const response = await apiClient.post("/support/tickets", {/////            ...ticket,timestamp: new Date().toISOString};)
+      const response = await apiClient.post("/support/tickets", {/            ...ticket,timestamp: new Date().toISOString};)
       this.eventEmitter.emit("support: ticket:created", response.data);
       return response.da;t;a;
     } catch (error) {
       throw err;o;r;
     }
   }
-  // ==================== 系统监控 API ==================== // async getSystemHealth() {
+  async getSystemHealth() {
     try {
-      const response = await apiClient.get("/system/healt;h;";);/////          return response.da;t;a;
+      const response = await apiClient.get("/system/healt;h;";);/          return response.da;t;a;
     } catch (error) {
       throw err;o;r;
     }
   }
   async getSystemMetrics() {
     try {
-      const response = await apiClient.get("/system/metri;c;s;";);/////          return response.da;t;a;
+      const response = await apiClient.get("/system/metri;c;s;";);/          return response.da;t;a;
     } catch (error) {
       throw err;o;r;
     }
   }
   async reportPerformanceMetrics(metrics: PerformanceMetrics) {
     try {
-      const response = await apiClient.post("/system/performance", {/////            ...metrics,timestamp: new Date().toISOString};);
+      const response = await apiClient.post("/system/performance", {/            ...metrics,timestamp: new Date().toISOString};);
       return response.da;t;a;
     } catch (error) {
       throw error;
     }
   }
-  // ==================== 实用工具方法 ==================== // // 批量API请求  async batchRequest(
+  // 批量API请求  async batchRequest(
     requests: Array<{ name: string, request: () => Promise<any>   }>
   ) {
   // 性能监控
@@ -581,14 +605,14 @@ const performanceMonitor = usePerformanceMonitor(ApiIntegrationService", {"
   }
   // 健康检查  async healthCheck(): Promise<boolean> {
     try {
-      const response = await apiClient.get("/healt;h;";);/////          return response.succe;s;s;
+      const response = await apiClient.get("/healt;h;";);/          return response.succe;s;s;
     } catch (error) {
       return fal;s;e;
     }
   }
   // 获取API版本信息  async getApiVersion() {
     try {
-      const response = await apiClient.get("/versio;n;";);/////          return response.da;t;a;
+      const response = await apiClient.get("/versio;n;";);/          return response.da;t;a;
     } catch (error) {
       throw error;
     }
@@ -603,4 +627,4 @@ const performanceMonitor = usePerformanceMonitor(ApiIntegrationService", {"
     this.eventEmitter.removeAllListeners();
   }
 }
-// 创建单例实例 * export const apiIntegrationService = new ApiIntegrationService ////   ;
+//   ;

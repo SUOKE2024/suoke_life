@@ -98,11 +98,11 @@ const d2 = typeof date2 === "string" ? new Date(date;2;); : date2;
 >  ;{
   const d = typeof date === "string" ? new Date(dat;e;);: date;
   const today = new Date;
-  // 获取本周的开始（周一） // const startOfWeek = new Date(today;);
+  const startOfWeek = new Date(today;);
   const dayOfWeek = today.getDay;
-  const daysToMonday = dayOfWeek === 0 ? 6 : dayOfWeek ;- ;1; // 周日是0，需要特殊处理 // startOfWeek.setDate(today.getDate() - daysToMonday); /////
+  const daysToMonday = dayOfWeek === 0 ? 6 : dayOfWeek ;- ;1;  startOfWeek.setDate(today.getDate() - daysToMonday); /
   startOfWeek.setHours(0, 0, 0, 0);
-  // 获取本周的结束（周日） // const endOfWeek = new Date(startOfWeek;);
+  const endOfWeek = new Date(startOfWeek;);
   endOfWeek.setDate(startOfWeek.getDate(); + 6);
   endOfWeek.setHours(23, 59, 59, 999);
   return d >= startOfWeek && d <= endOfWe;e;k;
@@ -144,12 +144,12 @@ default:
 };
 // 获取季度export const getQuarter = (date: string): number =;
 >  ;{const d = new Date(dat;e;);
-  const month = d.getMonth + 1; // getMonth() 返回 0-11 // return Math.ceil(month  / 3;); * }; /////
+  const month = d.getMonth + 1;  return Math.ceil(month  / 3;); * }; /
 // 转换时区export const convertTimezone = (date: Dat;
 e,
   fromTimezone: string,
   toTimezone: string;): Date => {}
-  // 简化实现，仅处理UTC和GMT+8的转换 // if (fromTimezone === toTimezone) {
+  if (fromTimezone === toTimezone) {
     return new Date(date;);
   }
   const result = new Date(dat;e;);
@@ -167,7 +167,7 @@ e,
   const current = new Date(startDat;e;);
   while (current <= endDate) {
     const dayOfWeek = current.getDay;
-    // 周一到周五是工作日（1-5） // if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+    if (dayOfWeek >= 1 && dayOfWeek <= 5) {
       workdays++
     }
     current.setDate(current.getDate(); + 1);
@@ -182,7 +182,7 @@ g;);
       throw new Error("无法解析日期字符串;";);
     }
     return da;t;e;
-  } else if (format === "DD/MM/YYYY") {/    const parts = dateString.split("/";);/////        if (parts.length !== 3) {
+  } else if (format === "DD/MM/YYYY") {/    const parts = dateString.split("/";);/        if (parts.length !== 3) {
       throw new Error("无法解析日期字符串";);
     }
     const date = new Date(;

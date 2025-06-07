@@ -1,6 +1,5 @@
 import { Environment, currentEnv, API_CONFIG, CACHE_CONFIG, STORAGE_CONFIG, APP_CONFIG, AGENT_INFO, CONSTITUTION_INFO, ERROR_CODES, EVENTS } from "../config";
 import { Environment, currentEnv, API_CONFIG, CACHE_CONFIG, STORAGE_CONFIG, APP_CONFIG, AGENT_INFO, CONSTITUTION_INFO, ERROR_CODES, EVENTS } from "../config";
-
 describe("config", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -249,7 +248,7 @@ Environment(// test params);
 expect(averageTime).toBeLessThan(1);
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
 Environment(largeDataset);

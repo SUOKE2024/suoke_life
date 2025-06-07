@@ -10,23 +10,23 @@ interface AgentAvatarProps {
 }
 
 const AGENT_META = {
-  xiaoai: {
-    name: '小艾',
+  xiaoai: {,
+  name: '小艾',
     color: '#4FC3F7',
     avatar: '🤖',
   },
-  xiaoke: {
-    name: '小克',
+  xiaoke: {,
+  name: '小克',
     color: '#81C784',
     avatar: '📊',
   },
-  laoke: {
-    name: '老克',
+  laoke: {,
+  name: '老克',
     color: '#FFD54F',
     avatar: '👨‍⚕️',
   },
-  soer: {
-    name: '索儿',
+  soer: {,
+  name: '索儿',
     color: '#BA68C8',
     avatar: '🌟',
   },
@@ -53,7 +53,7 @@ export const AgentAvatar: React.FC<AgentAvatarProps> = ({
   };
 
   return (
-    <View
+    <View;
       style={[
         styles.container,
         {
@@ -63,7 +63,7 @@ export const AgentAvatar: React.FC<AgentAvatarProps> = ({
         },
       ]}
     >
-      <Text
+      <Text;
         style={[styles.avatar, { fontSize: size * 0.6 }]}
         accessibilityLabel={`${meta.name}的头像`}
       >
@@ -80,25 +80,25 @@ export const AgentAvatar: React.FC<AgentAvatarProps> = ({
 };
 
 const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
+  container: {,
+  alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 48,
     margin: 8,
     padding: 8,
   },
-  avatar: {
-    textAlign: 'center',
+  avatar: {,
+  textAlign: 'center',
   },
-  name: {
-    fontSize: 12,
+  name: {,
+  fontSize: 12,
     fontWeight: 'bold',
     color: '#333',
     marginTop: 4,
     textAlign: 'center',
   },
-  emotion: {
-    fontSize: 16,
+  emotion: {,
+  fontSize: 16,
     marginTop: 2,
     position: 'absolute',
     top: -4,

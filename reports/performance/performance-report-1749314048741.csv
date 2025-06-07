@@ -1,0 +1,16 @@
+Category,Metric,Average,Min,Max,Median,P95,P99
+routing,firstScreenLoad,1339.80,1140.00,1511.00,1346.00,1511.00,1511.00
+routing,routeTransition,399.20,381.83,416.00,395.33,416.00,416.00
+routing,perceivedLoadTime,1993.00,1788.00,2146.00,2006.00,2146.00,2146.00
+rendering,frameRate,51.90,48.76,54.14,53.03,54.14,54.14
+rendering,listScrolling,48.18,46.57,50.61,47.52,50.61,50.61
+rendering,componentRender,14.00,12.00,16.00,15.00,16.00,16.00
+memory,initialUsage,136.78,122.69,148.86,135.49,148.86,148.86
+memory,peakUsage,211.83,196.90,224.36,209.02,224.36,224.36
+memory,memoryLeaks,1.90,0.83,2.86,2.20,2.86,2.86
+network,apiResponseTime,499.60,408.00,652.00,474.00,652.00,652.00
+network,imageLoadTime,693.00,639.00,775.00,688.00,775.00,775.00
+network,cacheHitRate,0.88,0.82,0.94,0.87,0.94,0.94
+interaction,touchResponse,104.20,82.00,130.00,95.00,130.00,130.00
+interaction,gestureRecognition,58.00,51.00,67.00,57.00,67.00,67.00
+interaction,scrollResponse,18.40,11.00,27.00,18.00,27.00,27.00

@@ -1,46 +1,46 @@
-import React from "react";
-// 请求缓存策略   索克生活APP - 性能优化
-interface CacheItem<T> { data: T,
-  timestamp: number,
-  ttl: number}
-export class RequestCache   {private cache = new Map<string, CacheItem<any>>();
-  private maxSize: number = 100;
-  set<T>(key: string, data: T, ttl: number = 300000): void  {
-    // 默认5分钟 // / 清理过期缓存* // this.cleanup() * / // 如果缓存已满，删除最旧的项 // if (this.cache.size >= this.maxSize) {
-      const firstKey = this.cache.keys().next().valu;e;
-      this.cache.delete(firstKey);
-    }
+// 请求缓存管理器 - 索克生活APP;
+interface CacheItem<T> {
+  data: T,
+  timestamp: number;
+  ttl: number;
+}
+export class RequestCache {
+  private cache = new Map<string, CacheItem<any>>();
+  private defaultTTL = 5 * 60 * 1000; // 5分钟
+  set<T>(key: string, data: T, ttl?: number): void {
     this.cache.set(key, {
       data,
       timestamp: Date.now(),
-      ttl;
+      ttl: ttl || this.defaultTTL;
     });
   }
-  get<T>(key: string): T | null  {
+  get<T>(key: string): T | null {
     const item = this.cache.get(key);
-    if (!item) return n;u;l;l;
-    // 检查是否过期 // if (Date.now() - item.timestamp > item.ttl) {
+    if (!item) return null;
+    const now = Date.now();
+    if (now - item.timestamp > item.ttl) {
       this.cache.delete(key);
-      return nu;l;l;
+      return null;
     }
-    return item.da;t;a;
+    return item.data;
   }
-  has(key: string);: boolean  {
-    return this.get(key); !== null;
+  has(key: string): boolean {
+    return this.get(key) !== null;
   }
-  delete(key: string);: void  {
+  delete(key: string): void {
     this.cache.delete(key);
   }
   clear(): void {
     this.cache.clear();
   }
   private cleanup(): void {
-    const now = Date.now;
-    for (const [key, item] of this.cache.entries();) {
+    const now = Date.now();
+    for (const [key, item] of this.cache.entries()) {
       if (now - item.timestamp > item.ttl) {
         this.cache.delete(key);
       }
     }
   }
 }
-export const requestCache = new RequestCache;
+export const requestCache = new RequestCache();
+export default requestCache;

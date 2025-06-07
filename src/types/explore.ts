@@ -1,6 +1,6 @@
 // 内容类型
 export type ContentType = | "artic;l;";
-e
+e;
   | "video"
   | "course"
   | "recipe"
@@ -17,11 +17,11 @@ m;""
   | "acupoints"
 // 难度等级
 export type DifficultyLevel = "beginner" | "intermediate" | "advanc;e;";
-d
+d;
 // 内容项接口
 export interface ContentItem {
 }
- id: string}
+id: string}
   title: string,
   subtitle: string,
   type: ContentType,
@@ -36,29 +36,29 @@ export interface ContentItem {
 // 分类配置接口
 export interface CategoryConfig {
 }
- name: string}
+name: string}
   icon: string,
   color: string,
   description: string}
 // 热门话题接口
 export interface HotTopic {
 }
- id: string}
+id: string}
   title: string,count: number,icon: string;
   trending?: boolean}
 // 学习进度接口
 export interface LearningProgress {
 }
- contentId: string};
+contentId: string};
   userId: string,progress: number;
- // 0-100,
+// 0-100,
   completed: boolean,
   lastAccessTime: string,
   bookmarked: boolean}
 // 搜索过滤器接口
 export interface SearchFilters {
 }
- category: CategoryType | "all"}
+category: CategoryType | "all"}
   contentType: ContentType | "all",
   difficulty: DifficultyLevel | "all",
   author: string,
@@ -67,7 +67,7 @@ export interface SearchFilters {
 // 探索页面状态接口
 export interface ExploreState {
 }
- selectedCategory: CategoryType | "all"}
+selectedCategory: CategoryType | "all"}
   searchQuery: string,
   filters: SearchFilters,
   isLoading: boolean,

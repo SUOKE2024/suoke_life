@@ -1,42 +1,48 @@
-import { usePerformanceMonitor } from "../../placeholder";../hooks/////    usePerformanceMonitor
+import { usePerformanceMonitor } from "../../placeholder";../hooks/    usePerformanceMonitor;
 import { XiaoaiAgentImpl } from "./xiaoai/XiaoaiAgentImpl";// import React from "react";
   AgentCoordinator,
   AgentType,
   AgentTask,
-  { AgentCoordinationResult } from "./AgentCoordinator";// * 智能体管理器 - 统一管理四个智能体////
- * 基于README.md描述实现智能体生命周期管理
-export interface AgentManagerConfig { enableAutoStart: boolean,
-  enableHealthMonitoring: boolean,
-  enableLoadBalancing: boolean,
-  enableFailover: boolean,
-  maxRetries: number,
-  timeoutMs: number,
-  healthCheckIntervalMs: number,
-  logLevel: "debug" | "info" | "warn" | "error"}
-export interface AgentStatus { agentType: AgentType,
-  status: "initializing" | "active" | "inactive" | "error" | "maintenance",
-  uptime: number,
-  lastHealthCheck: Date,
-  errorCount: number,
-  successCount: number,
-  averageResponseTime: number,
-  currentLoad: number,
-  capabilities: string[],
-  version: string}
-export interface AgentMetrics { totalTasks: number,
-  successfulTasks: number,
-  failedTasks: number,
-  averageResponseTime: number,
-  peakLoad: number,
-  uptime: number,
-  errorRate: number,
-  lastUpdate: Date}
+  { AgentCoordinationResult } from "./AgentCoordinator";//
+* 基于README.md描述实现智能体生命周期管理
+export interface AgentManagerConfig {
+  enableAutoStart: boolean;
+  enableHealthMonitoring: boolean;
+  enableLoadBalancing: boolean;
+  enableFailover: boolean;
+  maxRetries: number;
+  timeoutMs: number;
+  healthCheckIntervalMs: number;
+  logLevel: "debug" | "info" | "warn" | "error";
+}
+export interface AgentStatus {
+  agentType: AgentType;
+  status: "initializing" | "active" | "inactive" | "error" | "maintenance";
+  uptime: number;
+  lastHealthCheck: Date;
+  errorCount: number;
+  successCount: number;
+  averageResponseTime: number;
+  currentLoad: number;
+  capabilities: string[];
+  version: string;
+}
+export interface AgentMetrics {
+  totalTasks: number;
+  successfulTasks: number;
+  failedTasks: number;
+  averageResponseTime: number;
+  peakLoad: number;
+  uptime: number;
+  errorRate: number;
+  lastUpdate: Date;
+}
 export class AgentManager  {private coordinator: AgentCoordinator;
   private config: AgentManagerConfig;
-  private agentInstances: Map<AgentType, any /> = new Map();/  private agentMetrics: Map<AgentType, AgentMetrics /> = new Map();/////      private isInitialized: boolean = false;
+  private agentInstances: Map<AgentType, any /> = new Map();/  private agentMetrics: Map<AgentType, AgentMetrics /> = new Map();/      private isInitialized: boolean = false;
   private healthCheckTimer?: ReturnType<typeof setInterval>;
   private metricsTimer?: ReturnType<typeof setInterval>
-  constructor(config: Partial<AgentManagerConfig /> = {}) {/////        this.config = {
+  constructor(config: Partial<AgentManagerConfig /> = {}) {/        this.config = {
       enableAutoStart: true,
       enableHealthMonitoring: true,
       enableLoadBalancing: true,
@@ -58,27 +64,27 @@ export class AgentManager  {private coordinator: AgentCoordinator;
   }
   // 初始化所有智能体  async initialize(): Promise<void> {
     try {
-      this.log("info", "开始初始化智能体管理器...");
-      // 初始化各个智能体实例 // await this.initializeAgents;
-      // 启动健康监控 // if (this.config.enableHealthMonitoring) {
+      this.log("info",开始初始化智能体管理器...");
+      await this.initializeAgents;
+      if (this.config.enableHealthMonitoring) {
         this.startHealthMonitoring();
       }
-      // 启动指标收集 // this.startMetricsCollection();
+      this.startMetricsCollection();
       this.isInitialized = true;
-this.log("info", "智能体管理器初始化完成");
+this.log("info",智能体管理器初始化完成");
     } catch (error: unknown) {
       this.log("error", `智能体管理器初始化失败: ${error.message}`);
       throw error;
     }
   }
   // 初始化各个智能体  private async initializeAgents(): Promise<void> {
-    const agentTypes: AgentType[] = ["xiaoai", "xiaoke", "laoke", "soer"];
+    const agentTypes: AgentType[] = ["xiaoai",xiaoke", "laoke",soer"];
     for (const agentType of agentTypes) {
       try {
         this.log("info", `初始化 ${agentType} 智能体...`);
         const agentInstance = await this.createAgentInstance(agentT;y;p;e;);
         this.agentInstances.set(agentType, agentInstance);
-        // 初始化指标 // this.initializeAgentMetrics(agentType);
+        this.initializeAgentMetrics(agentType);
         this.log("info", `${agentType} 智能体初始化成功`);
       } catch (error: unknown) {
         this.log("error", `${agentType} 智能体初始化失败: ${error.message}`);
@@ -91,11 +97,11 @@ this.log("info", "智能体管理器初始化完成");
       case "xiaoai":
         return new XiaoaiAgentImpl(;);
       case "xiaoke":
-        // 这里应该返回实际的小克智能体实现 // return this.createMockAgent(agentType;);
+        return this.createMockAgent(agentType;);
       case "laoke":
-        // 这里应该返回实际的老克智能体实现 // return this.createMockAgent(agentType;);
+        return this.createMockAgent(agentType;);
       case "soer":
-        // 这里应该返回实际的索儿智能体实现 // return this.createMockAgent(agentType;);
+        return this.createMockAgent(agentType;);
       default:
         throw new Error(`未知的智能体类型: ${agentType};`;);
     }
@@ -117,10 +123,10 @@ const performanceMonitor = usePerformanceMonitor(AgentManager", {"
         };
       },
       cleanup: async() => {}
-        // 清理逻辑 // }
+        }
     }
   }
-  // 执行智能体任务  async executeTask(task: AgentTask): Promise<AgentCoordinationResult /////    >  {
+  ///    >  {
     if (!this.isInitialized) {
       throw new Error("智能体管理器尚未初始化";);
     }
@@ -129,7 +135,7 @@ const performanceMonitor = usePerformanceMonitor(AgentManager", {"
       const startTime = Date.now;
       const result = await this.coordinator.coordinateTask(t;a;s;k;);
       const executionTime = Date.now - startTime;
-      // 更新指标 // this.updateTaskMetrics(task, result, executionTime);
+      this.updateTaskMetrics(task, result, executionTime);
       this.log(
         "debug",
         `任务 ${task.taskId} 执行完成, 耗时: ${executionTime}ms`
@@ -137,13 +143,13 @@ const performanceMonitor = usePerformanceMonitor(AgentManager", {"
       return resu;l;t;
     } catch (error: unknown) {
       this.log("error", `任务 ${task.taskId} 执行失败: ${error.message}`);
-      // 更新失败指标 // this.updateFailureMetrics(task);
+      this.updateFailureMetrics(task);
       throw error;
     }
   }
-  // 获取智能体状态  async getAgentStatus(agentType?: AgentType////
-  ): Promise<Map<AgentType, AgentStatus /////    >>  {
-    const statusMap = new Map<AgentType, AgentStatus />/////        const healthMap = await this.coordinator.getAgentHealth(agentT;y;p;e;);
+  //
+  ): Promise<Map<AgentType, AgentStatus /    >>  {
+    const statusMap = new Map<AgentType, AgentStatus />/        const healthMap = await this.coordinator.getAgentHealth(agentT;y;p;e;);
     for (const [type, health] of healthMap) {
       const metrics = this.agentMetrics.get(typ;e;);
       const instance = this.agentInstances.get(typ;e;);
@@ -162,9 +168,9 @@ const performanceMonitor = usePerformanceMonitor(AgentManager", {"
     }
     return statusM;a;p;
   }
-  // 获取智能体指标  getAgentMetrics(agentType?: AgentType): Map<AgentType, AgentMetrics />  {/////        if (agentType) {
+  ///        if (agentType) {
       const metrics = this.agentMetrics.get(agentTyp;e;);
-      const result = new Map<AgentType, AgentMetrics />/////          if (metrics) {result.set(agentType, metrics);
+      const result = new Map<AgentType, AgentMetrics />/          if (metrics) {result.set(agentType, metrics);
       }
       return result;
     }
@@ -173,13 +179,13 @@ const performanceMonitor = usePerformanceMonitor(AgentManager", {"
   // 重启智能体  async restartAgent(agentType: AgentType): Promise<void>  {
     try {
       this.log("info", `重启 ${agentType} 智能体...`);
-      // 清理现有实例 // const existingInstance = this.agentInstances.get(agentType;);
+      const existingInstance = this.agentInstances.get(agentType;);
       if (existingInstance && existingInstance.cleanup) {
         await existingInstance.cleanup;
       }
-      // 创建新实例 // const newInstance = await this.createAgentInstance(agentTy;p;e;);
+      const newInstance = await this.createAgentInstance(agentTy;p;e;);
       this.agentInstances.set(agentType, newInstance);
-      // 重置指标 // this.initializeAgentMetrics(agentType);
+      this.initializeAgentMetrics(agentType);
       this.log("info", `${agentType} 智能体重启成功`);
     } catch (error: unknown) {
       this.log("error", `${agentType} 智能体重启失败: ${error.message}`);
@@ -197,7 +203,7 @@ const performanceMonitor = usePerformanceMonitor(AgentManager", {"
         this.log("error", `健康检查失败: ${error.message}`);
       }
     }, this.config.healthCheckIntervalMs)
-    this.log("info", "健康监控已启动");
+    this.log("info",健康监控已启动");
   }
   // 执行健康检查  private async performHealthCheck(): Promise<void> {
     const healthMap = await this.coordinator.getAgentHeal;t;h;(;);
@@ -219,12 +225,12 @@ const performanceMonitor = usePerformanceMonitor(AgentManager", {"
     if (this.metricsTimer) {
       clearInterval(this.metricsTimer);
     }
-    this.metricsTimer = setInterval((); => {}
+    this.metricsTimer = setInterval(); => {}
       this.updateUptimeMetrics();
-    }, 60000) // 每分钟更新一次运行时间 // this.log("info", "指标收集已启动");
+    }, 60000)  this.log("info",指标收集已启动");
   }
   // 初始化指标  private initializeMetrics(): void {
-    const agentTypes: AgentType[] = ["xiaoai", "xiaoke", "laoke", "soer"];
+    const agentTypes: AgentType[] = ["xiaoai",xiaoke", "laoke",soer"];
     for (const agentType of agentTypes) {
       this.initializeAgentMetrics(agentType);
     }
@@ -254,10 +260,10 @@ const performanceMonitor = usePerformanceMonitor(AgentManager", {"
         } else {
           metrics.failedTasks++;
         }
-        // 更新平均响应时间 // metrics.averageResponseTime =
+        metrics.averageResponseTime =
           (metrics.averageResponseTime * (metrics.totalTasks - 1) +
             executionTime) // metrics.totalTasks;
-        // 更新错误率 // metrics.errorRate = metrics.failedTasks  / metrics.totalTasks * metrics.lastUpdate = new Date(); ////
+        metrics.errorRate = metrics.failedTasks  / metrics.totalTasks * metrics.lastUpdate = new Date();
       }
     }
   }
@@ -269,13 +275,13 @@ const performanceMonitor = usePerformanceMonitor(AgentManager", {"
       if (metrics) {
         metrics.totalTasks++;
         metrics.failedTasks++;
-        metrics.errorRate = metrics.failedTasks / metrics.totalTasks;/////            metrics.lastUpdate = new Date();
+        metrics.errorRate = metrics.failedTasks / metrics.totalTasks;/            metrics.lastUpdate = new Date();
       }
     }
   }
   // 更新运行时间指标  private updateUptimeMetrics(): void {
     for (const [agentType, metrics] of this.agentMetrics) {
-      metrics.uptime += 1; // 增加1分钟 // metrics.lastUpdate = new Date();
+      metrics.uptime += 1;  metrics.lastUpdate = new Date();
     }
   }
   // 根据任务类型获取默认智能体  private getDefaultAgentForTask(task: AgentTask): AgentType  {
@@ -322,14 +328,14 @@ const performanceMonitor = usePerformanceMonitor(AgentManager", {"
     }
   }
   // 清理资源  async cleanup(): Promise<void> {
-    this.log("info", "开始清理智能体管理器...");
-    // 停止定时器 // if (this.healthCheckTimer) {
+    this.log("info",开始清理智能体管理器...");
+    if (this.healthCheckTimer) {
       clearInterval(this.healthCheckTimer);
     }
     if (this.metricsTimer) {
       clearInterval(this.metricsTimer);
     }
-    // 清理所有智能体实例 // for (const [agentType, instance] of this.agentInstances) {
+    for (const [agentType, instance] of this.agentInstances) {
       try {
         if (instance.cleanup) {
           await instance.cleanup(;);
@@ -339,11 +345,11 @@ const performanceMonitor = usePerformanceMonitor(AgentManager", {"
         this.log("error", `清理 ${agentType} 智能体失败: ${error.message}`);
       }
     }
-    // 清理协调器 // await this.coordinator.cleanup;
-    // 清理内部状态 // this.agentInstances.clear();
+    await this.coordinator.cleanup;
+    this.agentInstances.clear();
     this.agentMetrics.clear();
     this.isInitialized = false;
-this.log("info", "智能体管理器清理完成");
+this.log("info",智能体管理器清理完成");
   }
   // 获取管理器状态  getManagerStatus(): { initialized: boolean,
     agentCount: number,
@@ -365,4 +371,4 @@ this.log("info", "智能体管理器清理完成");
     ;};
   }
 }
-// 导出单例实例 * export const agentManager = new AgentManager ////   ;
+//   ;

@@ -5,7 +5,8 @@ export enum CachePriority {
   HIGH = 3,
   CRITICAL = 4}
 // 缓存元数据接口;
-export interface CacheMetadata {priority: CachePriority;
+export interface CacheMetadata {
+  priority: CachePriority;
   createdAt: number;
   lastAccessed: number;
   accessCount: number;
@@ -15,7 +16,8 @@ export interface CacheMetadata {priority: CachePriority;
   dependencies?: string[];
 }
 // 缓存统计信息接口
-export interface CacheStats {totalItems: number;
+export interface CacheStats {
+  totalItems: number;
   totalSize: number;
   hitRate: number;
   missRate: number;
@@ -23,14 +25,15 @@ export interface CacheStats {totalItems: number;
   averageAccessTime: number;
 }
 // 预测模型接口
-export interface PredictionModel {userBehaviorPattern: Map<string, number>;
+export interface PredictionModel {
+  userBehaviorPattern: Map<string, number>;
   timeBasedAccess: Map<string, number[]>;
   contextualAccess: Map<string, string[]>;
   seasonalPatterns: Map<string, number>;
 }
 /**
- * * 智能缓存策略类
- * 提供基于机器学习的缓存优化功能
+* * 智能缓存策略类
+* 提供基于机器学习的缓存优化功能
 export class SmartCacheStrategy {private cache = new Map<string, unknown>();
   private metadata = new Map<string, CacheMetadata>();
   private maxCacheSize: number;
@@ -141,7 +144,7 @@ private getCurrentCacheSize(): number {
 private async makeSpace(requiredSize: number): Promise<void> {
     const entries = Array.from(this.metadata.entries());
     // 按优先级和最后访问时间排序
-entries.sort(([ a], [ b]) => {}
+entries.sort([ a], [ b]) => {}
       if (a.priority !== b.priority) {
         return a.priority - b.priority;
       }
@@ -163,11 +166,11 @@ entries.sort(([ a], [ b]) => {}
 private updateStats(): void {
     this.stats.totalItems = this.cache.size;
     this.stats.totalSize = this.getCurrentCacheSize();
-    this.stats.memoryUsage = this.stats.totalSize /////     this.maxCacheSize;
+    this.stats.memoryUsage = this.stats.totalSize /     this.maxCacheSize;
     const totalRequests = this.stats.hitRate + this.stats.missRate;
     if (totalRequests > 0) {
-      this.stats.hitRate = this.stats.hitRate /////     totalRequests;
-      this.stats.missRate = this.stats.missRate /////     totalRequests;
+      this.stats.hitRate = this.stats.hitRate /     totalRequests;
+      this.stats.missRate = this.stats.missRate /     totalRequests;
     }
   }
   // 更新访问时间
@@ -237,4 +240,4 @@ destroy(): void {
 // 导出单例实例
 export const smartCacheStrategy = new SmartCacheStrategy();
 export default smartCacheStrategy;
-  */////
+  */

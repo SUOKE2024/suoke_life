@@ -1,20 +1,21 @@
 import {   DeviceEventEmitter   } from 'react-native';
-
-importNetInfo from "@react-native-community/////    netinfo";
-interface NetworkState { isConnected: boolean,
-  type: string,
+importNetInfo from "@react-native-community/    netinfo";
+interface NetworkState {
+  isConnected: boolean;
+  type: string;
   isInternetReachable: boolean;
-strength?: number}
+strength?: number
+}
 class NetworkManager {
-  private currentState: NetworkState = {
-    isConnected: false,
+  private currentState: NetworkState = {,
+  isConnected: false,
     type: "unknown",
     isInternetReachable: false;
   };
-  private listeners: ((state: NetworkState) => void)[] = [];
+  private listeners: (state: NetworkState) => void)[] = [];
   // 初始化网络监控
 initialize() {
-    NetInfo.addEventListener((state); => {}
+    NetInfo.addEventListener(state); => {}
       this.currentState = {
         isConnected: state.isConnected || false,
         type: state.type,
@@ -55,7 +56,7 @@ removeListener(callback: (state: NetworkState); => void) {
     }
   }
   private notifyListeners() {
-    this.listeners.forEach((listener); => {}
+    this.listeners.forEach(listener); => {}
       try {
         listener(this.currentState);
       } catch (error) {

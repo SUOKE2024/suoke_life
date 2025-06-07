@@ -1,6 +1,5 @@
 import { ANIMATION_DURATION, EASING, createAnimatedValue, createAnimatedValueXY, animateValue, animateSpring, animateSequence, animateParallel, animateStagger, animateLoop, animations, layoutAnimations, gestureAnimations, loadingAnimations, transitionAnimations, animationUtils, performanceUtils } from "../animations";
 import { ANIMATION_DURATION, EASING, createAnimatedValue, createAnimatedValueXY, animateValue, animateSpring, animateSequence, animateParallel, animateStagger, animateLoop, animations, layoutAnimations, gestureAnimations, loadingAnimations, transitionAnimations, animationUtils, performanceUtils } from "../animations";
-
 describe("animations", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -410,7 +409,7 @@ ANIMATION_DURATION(// test params);
 expect(averageTime).toBeLessThan(1);
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
 ANIMATION_DURATION(largeDataset);

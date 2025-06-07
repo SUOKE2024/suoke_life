@@ -2,18 +2,16 @@ import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor";
 import { API_CONFIG, STORAGE_CONFIG, ERROR_CODES } from "../constants/config";
 import { ApiResponse } from "../types";
 import { webStorage } from "../utils/storage.web";
-
 import React from "react";
-
-interface ApiResponse<T = any /> { data: T;
+interface ApiResponse<T = any /> { data: T,
   success: boolean;
   message?: string;
   code?: number}
-
 // 请求配置接口 * interface RequestConfig {
   headers?: Record<string, string>
   timeout?: number;
-  requireAuth?: boolean}
+  requireAuth?: boolean
+}
 // HTTP方法类型 * type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATC;H";
 class ApiClient {
   private baseURL: string;
@@ -41,14 +39,14 @@ class ApiClient {
     } catch (error) {
       }
   }
-  // 构建请求头  private async buildHeaders(config?: RequestConfig
+  // 构建请求头  private async buildHeaders(config?: RequestConfig;
   ): Promise<Record<string, string >>  {
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
       Accept: "application/json",
-      ...config?.headers
+      ...config?.headers;
     }
-    // 如果需要认证，添加Authorization头 // if (config?.requireAuth !== false) {
+    if (config?.requireAuth !== false) {
       const token = await this.getAuthToken();
       if (token) {
         headers.Authorization = `Bearer ${token}`;
@@ -67,7 +65,7 @@ class ApiClient {
       const headers = await this.buildHeaders(config);
       const timeout = config?.timeout || this.defaultTimeout;
       const controller = new AbortController;
-      const timeoutId = setTimeout(() => controller.abort(), timeout);
+      const timeoutId = setTimeout() => controller.abort(), timeout);
       const requestOptions: RequestInit = {
   // 性能监控
 const performanceMonitor = usePerformanceMonitor(apiClient.web", {"
@@ -78,7 +76,7 @@ const performanceMonitor = usePerformanceMonitor(apiClient.web", {"
         headers,
         signal: controller.signal;
       }
-      // 为POST、PUT、PATCH请求添加body // if (data && ["POST", "PUT", "PATCH"].includes(method)) {
+      if (data && ["POST",PUT", "PATCH"].includes(method)) {
         requestOptions.body = JSON.stringify(data);
       }
       const response = await fetch(url, requestOptions);
@@ -143,10 +141,10 @@ const performanceMonitor = usePerformanceMonitor(apiClient.web", {"
   ): Promise<ApiResponse<T>>  {
     try {
       const url = `${this.baseURL}${endpoint};`;
-      const headers = await this.buildHeaders({...config,headers: {// 不设置Content-Type，让浏览器自动设置 // ...config?.headers;
+      const headers = await this.buildHeaders({...config,headers: { ...config?.headers;
         };
       });
-      // 移除Content-Type，让浏览器自动设置 // delete headers["Content-Type"]
+      delete headers["Content-Type"]
       const formData = new FormData();
       formData.append("file", file);
       const response = await fetch(url, {method: "POST",headers,body: formData;

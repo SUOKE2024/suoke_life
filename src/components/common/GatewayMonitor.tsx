@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
 import { unifiedApiService } from '../../services/unifiedApiService';
 import { apiClient } from '../../services/apiClient';
-
 interface ServiceHealth {
   name: string;
   status: 'healthy' | 'unhealthy' | 'unknown';
@@ -11,34 +10,30 @@ interface ServiceHealth {
   lastCheck?: string;
   error?: string;
 }
-
 interface GatewayStats {
-  cacheStats: { size: number };
-  circuitBreakerState: string;
+  cacheStats: { size: number;
+};
+  circuitBreakerState: string,
   gatewayHealth: boolean;
 }
-
 export const GatewayMonitor: React.FC = () => {
   const [services, setServices] = useState<ServiceHealth[]>([]);
   const [gatewayStats, setGatewayStats] = useState<GatewayStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
   const loadGatewayStatus = async () => {
     try {
       setError(null);
-
       // 获取网关状态
       const [healthResponse, statsResponse] = await Promise.allSettled([
         unifiedApiService.getServiceHealth(),
         unifiedApiService.getApiStats(),
       ]);
-
       // 处理服务健康状态
       if (healthResponse.status === 'fulfilled' && healthResponse.value.success) {
         const serviceData = Array.isArray(healthResponse.value.data)
-          ? healthResponse.value.data
+          ? healthResponse.value.data;
           : Object.entries(healthResponse.value.data || {}).map(([name, data]: [string, any]) => ({
               name,
               status: data.status || 'unknown',
@@ -50,9 +45,7 @@ export const GatewayMonitor: React.FC = () => {
       } else {
         // 如果无法获取服务状态，显示默认服务列表
         const defaultServices = [
-          'AUTH', 'USER', 'HEALTH_DATA', 'AGENTS', 'DIAGNOSIS',
-          'RAG', 'BLOCKCHAIN', 'MESSAGE_BUS', 'MEDICAL_RESOURCE',
-          'CORN_MAZE', 'ACCESSIBILITY', 'SUOKE_BENCH',
+          "AUTH",USER', "HEALTH_DATA",AGENTS', "DIAGNOSIS",RAG', "BLOCKCHAIN",MESSAGE_BUS', "MEDICAL_RESOURCE",CORN_MAZE', "ACCESSIBILITY",SUOKE_BENCH',
         ].map(name => ({
           name,
           status: 'unknown' as const,
@@ -61,12 +54,10 @@ export const GatewayMonitor: React.FC = () => {
         }));
         setServices(defaultServices);
       }
-
       // 处理网关统计信息
       if (statsResponse.status === 'fulfilled') {
         setGatewayStats(statsResponse.value);
       }
-
     } catch (err: any) {
       console.error('Failed to load gateway status:', err);
       setError(err.message || '加载网关状态失败');
@@ -75,25 +66,20 @@ export const GatewayMonitor: React.FC = () => {
       setRefreshing(false);
     }
   };
-
   const onRefresh = async () => {
     setRefreshing(true);
     await loadGatewayStatus();
   };
-
   const clearCache = () => {
     apiClient.clearCache();
     loadGatewayStatus();
   };
-
-  useEffect(() => {
+  useEffect() => {
     loadGatewayStatus();
-
     // 每30秒自动刷新
     const interval = setInterval(loadGatewayStatus, 30000);
     return () => clearInterval(interval);
   }, []);  // 检查是否需要添加依赖项;
-
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'healthy': return '#4CAF50';
@@ -102,7 +88,6 @@ export const GatewayMonitor: React.FC = () => {
       default: return '#9E9E9E';
     }
   };
-
   const getStatusText = (status: string) => {
     switch (status) {
       case 'healthy': return '健康';
@@ -111,7 +96,6 @@ export const GatewayMonitor: React.FC = () => {
       default: return '离线';
     }
   };
-
   const getCircuitBreakerColor = (state: string) => {
     switch (state) {
       case 'CLOSED': return '#4CAF50';
@@ -120,7 +104,6 @@ export const GatewayMonitor: React.FC = () => {
       default: return '#9E9E9E';
     }
   };
-
   if (loading && !refreshing) {
     return (
       <View style={styles.container}>
@@ -128,9 +111,8 @@ export const GatewayMonitor: React.FC = () => {
       </View>
     );
   }
-
   return (
-    <ScrollView
+    <ScrollView;
       style={styles.container}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -142,18 +124,15 @@ export const GatewayMonitor: React.FC = () => {
           <Text style={styles.clearButtonText}>清除缓存</Text>
         </TouchableOpacity>
       </View>
-
       {error && (
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>⚠️ {error}</Text>
         </View>
       )}
-
-      {/* 网关统计信息 */}
+      {}
       {gatewayStats && (
         <View style={styles.statsContainer}>
           <Text style={styles.sectionTitle}>网关统计</Text>
-
           <View style={styles.statRow}>
             <Text style={styles.statLabel}>网关状态:</Text>
             <View style={[styles.statusDot, {
@@ -163,7 +142,6 @@ export const GatewayMonitor: React.FC = () => {
               {gatewayStats.gatewayHealth ? '在线' : '离线'}
             </Text>
           </View>
-
           <View style={styles.statRow}>
             <Text style={styles.statLabel}>熔断器状态:</Text>
             <View style={[styles.statusDot, {
@@ -171,18 +149,15 @@ export const GatewayMonitor: React.FC = () => {
             }]} />
             <Text style={styles.statValue}>{gatewayStats.circuitBreakerState}</Text>
           </View>
-
           <View style={styles.statRow}>
             <Text style={styles.statLabel}>缓存大小:</Text>
             <Text style={styles.statValue}>{gatewayStats.cacheStats.size} 项</Text>
           </View>
         </View>
       )}
-
-      {/* 服务状态列表 */}
+      {}
       <View style={styles.servicesContainer}>
         <Text style={styles.sectionTitle}>微服务状态</Text>
-
         {services.map((service, index) => (
           <View key={index} style={styles.serviceItem}>
             <View style={styles.serviceHeader}>
@@ -192,7 +167,6 @@ export const GatewayMonitor: React.FC = () => {
                 {getStatusText(service.status)}
               </Text>
             </View>
-
             <View style={styles.serviceDetails}>
               <Text style={styles.serviceDetail}>实例数: {service.instances}</Text>
               {service.responseTime && (
@@ -210,7 +184,6 @@ export const GatewayMonitor: React.FC = () => {
           </View>
         ))}
       </View>
-
       <View style={styles.footer}>
         <Text style={styles.footerText}>
           最后更新: {new Date().toLocaleTimeString()}
@@ -222,14 +195,13 @@ export const GatewayMonitor: React.FC = () => {
     </ScrollView>
   );
 };
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  container: {,
+  flex: 1,
     backgroundColor: '#f5f5f5',
   },
-  header: {
-    flexDirection: 'row',
+  header: {,
+  flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 16,
@@ -237,42 +209,42 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
   },
-  title: {
-    fontSize: 20,
+  title: {,
+  fontSize: 20,
     fontWeight: 'bold',
     color: '#333',
   },
-  clearButton: {
-    backgroundColor: '#2196F3',
+  clearButton: {,
+  backgroundColor: '#2196F3',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 4,
   },
-  clearButtonText: {
-    color: '#fff',
+  clearButtonText: {,
+  color: '#fff',
     fontSize: 12,
     fontWeight: '500',
   },
-  loadingText: {
-    textAlign: 'center',
+  loadingText: {,
+  textAlign: 'center',
     marginTop: 50,
     fontSize: 16,
     color: '#666',
   },
-  errorContainer: {
-    margin: 16,
+  errorContainer: {,
+  margin: 16,
     padding: 12,
     backgroundColor: '#ffebee',
     borderRadius: 8,
     borderLeftWidth: 4,
     borderLeftColor: '#f44336',
   },
-  errorText: {
-    color: '#c62828',
+  errorText: {,
+  color: '#c62828',
     fontSize: 14,
   },
-  statsContainer: {
-    margin: 16,
+  statsContainer: {,
+  margin: 16,
     padding: 16,
     backgroundColor: '#fff',
     borderRadius: 8,
@@ -282,40 +254,40 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
-  sectionTitle: {
-    fontSize: 18,
+  sectionTitle: {,
+  fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
     marginBottom: 12,
   },
-  statRow: {
-    flexDirection: 'row',
+  statRow: {,
+  flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 8,
   },
-  statLabel: {
-    fontSize: 14,
+  statLabel: {,
+  fontSize: 14,
     color: '#666',
     minWidth: 100,
   },
-  statValue: {
-    fontSize: 14,
+  statValue: {,
+  fontSize: 14,
     color: '#333',
     fontWeight: '500',
     marginLeft: 8,
   },
-  statusDot: {
-    width: 8,
+  statusDot: {,
+  width: 8,
     height: 8,
     borderRadius: 4,
     marginRight: 8,
   },
-  servicesContainer: {
-    margin: 16,
+  servicesContainer: {,
+  margin: 16,
     marginTop: 0,
   },
-  serviceItem: {
-    backgroundColor: '#fff',
+  serviceItem: {,
+  backgroundColor: '#fff',
     borderRadius: 8,
     padding: 16,
     marginBottom: 8,
@@ -325,43 +297,42 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 2,
   },
-  serviceHeader: {
-    flexDirection: 'row',
+  serviceHeader: {,
+  flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 8,
   },
-  serviceName: {
-    fontSize: 16,
+  serviceName: {,
+  fontSize: 16,
     fontWeight: '600',
     color: '#333',
     flex: 1,
   },
-  serviceStatus: {
-    fontSize: 14,
+  serviceStatus: {,
+  fontSize: 14,
     fontWeight: '500',
   },
-  serviceDetails: {
-    paddingLeft: 16,
+  serviceDetails: {,
+  paddingLeft: 16,
   },
-  serviceDetail: {
-    fontSize: 12,
+  serviceDetail: {,
+  fontSize: 12,
     color: '#666',
     marginBottom: 2,
   },
-  errorDetail: {
-    fontSize: 12,
+  errorDetail: {,
+  fontSize: 12,
     color: '#f44336',
     marginTop: 4,
   },
-  footer: {
-    padding: 16,
+  footer: {,
+  padding: 16,
     alignItems: 'center',
   },
-  footerText: {
-    fontSize: 12,
+  footerText: {,
+  fontSize: 12,
     color: '#999',
     marginBottom: 4,
   },
 });
-
 export default GatewayMonitor;

@@ -1,5 +1,5 @@
 import React from "react";
-// 高阶组件：为组件添加React.memo优化export function withMemo<T extends React.ComponentType<any />>(/////      Component: T,areEqual?: (prevProps: unknown, nextProps: unknown) => boolean;
+///      Component: T,areEqual?: (prevProps: unknown, nextProps: unknown) => boolean;
 ): T {
   return React.memo(Component, areEqua;l;); as T;
 }

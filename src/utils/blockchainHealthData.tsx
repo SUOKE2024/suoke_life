@@ -1,78 +1,89 @@
-import { securityManager } from "./////    securityManager";
-
+import { securityManager } from "./    securityManager";
 import React from "react";
-@react-native-async-storage/async-storage";/////    importCryptoJS from "crypto-js
-// // 区块链配置 * const BLOCKCHAIN_CONFIG = { ////;
-  NETWORK_ID: "suoke_health_network",BLOCK_SIZE_LIMIT: 1024 * 1024, // 1MB // MINING_DIFFICULTY: 4,BLOCK_TIME: 30000, // 30秒 // CONSENSUS_THRESHOLD: 0.67,  / 67%共识* // DATA_RETENTION_DAYS: 365 * 7,  * // 7年* * ;}; * / // 健康数据类型 * export interface HealthDataRecord { id: string, ////
-  userId: string,
-  dataType:   | "vital_signs"| "diagnosis"| "treatment",
+@react-native-async-storage/async-storage";/    importCryptoJS from "crypto-js;
+区块链配置 * const BLOCKCHAIN_CONFIG = { ;
+  NETWORK_ID: "suoke_health_network",BLOCK_SIZE_LIMIT: 1024 * 1024,  MINING_DIFFICULTY: 4,BLOCK_TIME: 30000,  CONSENSUS_THRESHOLD: 0.67,  / 67%共识*  7年* * ;}; * / // 健康数据类型 * export interface HealthDataRecord {
+  id: string,
+  userId: string;
+  dataType: | "vital_signs"| "diagnosis"| "treatment";
     | "lifestyle"
     | "genetic"
     | "environmental"
-  data: unknown,
-  timestamp: number,
-  source: string,
-  privacy_level: "public" | "private" | "confidential" | "restricted",
-  consent: ConsentRecord,
-  hash: string}
-export interface ConsentRecord { granted: boolean,
+  data: unknown;
+  timestamp: number;
+  source: string;
+  privacy_level: "public" | "private" | "confidential" | "restricted";
+  consent: ConsentRecord;
+  hash: string;
+}
+export interface ConsentRecord {
+  granted: boolean;
   scope: string[],expiry: number,grantor: string;
   witness?: string;
-  signature: string}
-// 区块结构 * export interface Block { index: number, ////
-  timestamp: number,
-  data: HealthDataRecord[],
-  previousHash: string,
-  hash: string,
-  nonce: number,
-  merkleRoot: string,
-  validator: string}
-// 交易记录 * export interface Transaction { id: string, ////
-  type:   | "data_write"| "data_read"| "consent_update",
+  signature: string;
+}
+// 区块结构 * export interface Block {
+  index: number,
+  timestamp: number;
+  data: HealthDataRecord[];
+  previousHash: string;
+  hash: string;
+  nonce: number;
+  merkleRoot: string;
+  validator: string;
+}
+// 交易记录 * export interface Transaction {
+  id: string,
+  type: | "data_write"| "data_read"| "consent_update";
     | "access_grant"
     | "data_share";
-;
   from: string;
   to?: string;
-  data: unknown,
-  timestamp: number,
-  signature: string,
-  fee: number}
-// 访问控制记录 * export interface AccessControl { dataId: string, ////
-  userId: string,
+  data: unknown;
+  timestamp: number;
+  signature: string;
+  fee: number;
+}
+// 访问控制记录 * export interface AccessControl {
+  dataId: string,
+  userId: string;
   permissions: string[],grantedBy: string,grantedAt: number;
   expiresAt?: number;
   conditions?: string[];
-  }
-// 零知识证明 * export interface ZKProof { statement: string, ////
-  proof: string,
-  publicInputs: unknown[],
-  verificationKey: string,
-  timestamp: number};
-// Merkle树节点 * interface MerkleNode { hash: string ////   ;
+}
+// 零知识证明 * export interface ZKProof {
+  statement: string,
+  proof: string;
+  publicInputs: unknown[];
+  verificationKey: string;
+  timestamp: number;
+};
+// Merkle树节点 * interface MerkleNode {
+  hash: string    ;
   left?: MerkleNode;
   right?: MerkleNode;
-  data?: unknown}
-// Merkle树实现 * class MerkleTree { ////
+  data?: unknown
+}
+//
   private root: MerkleNode | null = null;
   private leaves: MerkleNode[] = [];
   constructor(data: unknown[]) {
     this.buildTree(data);
   }
   private buildTree(data: unknown[]);: void  {
-    // 创建叶子节点 // this.leaves = data.map((item) => ({
+    this.leaves = data.map(item) => ({
       hash: this.hash(JSON.stringify(item);),
       data: item}));
     if (this.leaves.length === 0) {
       this.root = null;
       return;
     }
-    // 构建树 // let currentLevel = [...this.leaves;];
+    let currentLevel = [...this.leaves;];
     while (currentLevel.length > 1) {
       const nextLevel: MerkleNode[] = [];
       for (let i = 0; i < currentLevel.length; i += 2) {
         const left = currentLevel[i];
-        const right = currentLevel[i + 1] || le;f;t; // 如果是奇数个节点，复制最后一个 // /////
+        const right = currentLevel[i + 1] || le;f;t;  /
         const parent: MerkleNode = {hash: this.hash(left.hash + right.hash),
           left,
           right;
@@ -89,7 +100,7 @@ export interface ConsentRecord { granted: boolean,
   getRootHash(): string {
     return this.root?.hash || ;
   }
-  // 生成Merkle证明 // generateProof(dataIndex: number): string[]  {
+  generateProof(dataIndex: number): string[]  {
     if (!this.root || dataIndex >= this.leaves.length) {
       return [;];
     }
@@ -101,13 +112,13 @@ export interface ConsentRecord { granted: boolean,
       for (let i = 0; i < currentLevel.length; i += 2) {
         const left = currentLevel[i];
         const right = currentLevel[i + 1] || le;f;t;
-        // 如果当前索引在这一对中 // if (i === currentIndex || i + 1 === currentIndex) { ////
-          // 添加兄弟节点的哈希到证明中 // if (i === currentIndex) {
+        if (i === currentIndex || i + 1 === currentIndex) {
+          if (i === currentIndex) {
             proof.push(right.hash);
           } else {
             proof.push(left.hash);
           }
-          currentIndex = Math.floor(i / 2);/////            }
+          currentIndex = Math.floor(i / 2);/            }
         nextLevel.push({
           hash: this.hash(left.hash + right.hash),
           left,
@@ -118,7 +129,7 @@ export interface ConsentRecord { granted: boolean,
     }
     return pro;o;f;
   }
-  // 验证Merkle证明 // static verifyProof(leafHash: string,
+  static verifyProof(leafHash: string,
     proof: string[],
     rootHash: string,
     leafIndex: number);: boolean  {
@@ -130,11 +141,11 @@ export interface ConsentRecord { granted: boolean,
       } else {
         computedHash = CryptoJS.SHA256(proofElement + computedHash).toString();
       }
-      index = Math.floor(index / 2);/////        }
+      index = Math.floor(index / 2);/        }
     return computedHash === rootHa;s;h;
   }
 }
-// 零知识证明生成器 * class ZKProofGenerator { ////
+//
   private static instance: ZKProofGenerator;
   static getInstance(): ZKProofGenerator {
     if (!ZKProofGenerator.instance) {
@@ -142,22 +153,22 @@ export interface ConsentRecord { granted: boolean,
     }
     return ZKProofGenerator.instance;
   }
-  // 生成年龄范围证明（不暴露具体年龄） // generateAgeRangeProof(actualAge: number,
+  generateAgeRangeProof(actualAge: number,
     minAge: number,
     maxAge: number,
     secret: string): ZKProof  {
     const statement = `Age is between ${minAge} and ${maxAge;};`;
     const isValid = actualAge >= minAge && actualAge <= maxA;g;e;
-    // 简化的零知识证明（实际应用中需要使用专业的ZK库） // const commitment = CryptoJS.SHA256(actualAge + secret).toString ////;
+    const commitment = CryptoJS.SHA256(actualAge + secret).toString ;
     const challenge = CryptoJS.SHA256(statement + commitment).toString;
     const response = CryptoJS.SHA256(secret + challenge).toString;
     return {statement,proof: JSON.stringify({commitment,challenge,response,valid: isValid}),publicInputs: [minAge, maxAge],verificationKey: CryptoJS.SHA256(statement).toString(),timestamp: Date.now();};
   }
-  // 生成健康状态证明（不暴露具体健康数据） // generateHealthStatusProof(healthData: unknown,
+  generateHealthStatusProof(healthData: unknown,
     threshold: unknown,
     secret: string): ZKProof  {
     const statement = "Health metrics meet required standard;s;";
-    // 简化的健康状态验证 // const meetsStandards = this.evaluateHealthStandards(healthData, threshold;);
+    const meetsStandards = this.evaluateHealthStandards(healthData, threshold;);
     const commitment = CryptoJS.SHA256(;
       JSON.stringify(healthDat;a;); + secret;
     ).toString();
@@ -165,10 +176,10 @@ export interface ConsentRecord { granted: boolean,
     const response = CryptoJS.SHA256(secret + challenge).toString;
     return {statement,proof: JSON.stringify({commitment,challenge,response,valid: meetsStandards}),publicInputs: [threshold],verificationKey: CryptoJS.SHA256(statement).toString(),timestamp: Date.now(;);};
   }
-  // 验证零知识证明 // verifyProof(proof: ZKProof): boolean  {
+  verifyProof(proof: ZKProof): boolean  {
     try {
       const proofData = JSON.parse(proof.proo;f;);
-      // 重新计算挑战 // constChallenge = CryptoJS.SHA256(
+      constChallenge = CryptoJS.SHA256(
         proof.statement + proofData.commitment;
       ).toString;
       return proofData.challenge === expectedChallenge && proofData.val;i;d;
@@ -177,7 +188,7 @@ export interface ConsentRecord { granted: boolean,
     }
   }
   private evaluateHealthStandards(healthData: unknown, threshold: unknown);: boolean  {
-    // 简化的健康标准评估 // if (healthData.bloodPressure && threshold.bloodPressure) {
+    if (healthData.bloodPressure && threshold.bloodPressure) {
       const systolic = healthData.bloodPressure.systoli;c;
       const diastolic = healthData.bloodPressure.diastol;i;c;
       if (systolic > threshold.bloodPressure.maxSystolic ||
@@ -188,8 +199,8 @@ export interface ConsentRecord { granted: boolean,
     return tr;u;e;
   }
 }
-// 区块链健康数据管理器 * export class BlockchainHealthDataManager {////  ;
- /////    ;
+//  ;
+/    ;
   private static instance: BlockchainHealthDataManager;
   private blockchain: Block[] = [];
   private pendingTransactions: Transaction[] = [];
@@ -206,34 +217,34 @@ export interface ConsentRecord { granted: boolean,
     }
     return BlockchainHealthDataManager.instance;
   }
-  // 初始化区块链 // private async initializeBlockchain(): Promise<void> {
+  private async initializeBlockchain(): Promise<void> {
     try {
-      // 尝试从存储加载现有区块链 // const stored = await AsyncStorage.getItem("health_blockchai;n;";);
+      const stored = await AsyncStorage.getItem("health_blockchai;n;";);
       if (stored) {
         const decrypted = securityManager.decryptData(store;d;);
         this.blockchain = decrypted.blocks || [];
         this.accessControls = new Map(decrypted.accessControls || []);
       }
-      // 如果没有区块链，创建创世区块 // if (this.blockchain.length === 0) {
+      if (this.blockchain.length === 0) {
         this.createGenesisBlock();
       }
     } catch (error) {
       this.createGenesisBlock();
     }
   }
-  // 创建创世区块 // private createGenesisBlock(): void {
+  private createGenesisBlock(): void {
     const genesisBlock: Block = {index: 0,
       timestamp: Date.now(),
       data:  [],
       previousHash: "0",
-      hash: ",",
+      hash: ",,
       nonce: 0,
       merkleRoot: ",",
       validator: "system"};
     genesisBlock.hash = this.calculateHash(genesisBlock);
     this.blockchain.push(genesisBlock);
     }
-  // 添加健康数据 // async addHealthData(userId: string,
+  async addHealthData(userId: string,
     dataType: HealthDataRecord["dataType"],
     data: unknown,
     source: string,
@@ -243,14 +254,14 @@ export interface ConsentRecord { granted: boolean,
     const healthRecord: HealthDataRecord = {id: dataId,
       userId,
       dataType,
-      data: securityManager.encryptData(data), // 加密敏感数据 // timestamp: Date.now(),
+      data: securityManager.encryptData(data),  timestamp: Date.now(),
       source,
       privacy_level: privacyLevel,
       consent,
       hash: "}"
-    // 计算数据哈希 // healthRecord.hash = this.calculateDataHash(healthRecord);
-    // 创建交易 // const transaction: Transaction = {
-      id: this.generateTransactionId(),
+    healthRecord.hash = this.calculateDataHash(healthRecord);
+    const transaction: Transaction = {,
+  id: this.generateTransactionId(),
       type: "data_write",
       from: userId,
       data: healthRecord,
@@ -258,41 +269,41 @@ export interface ConsentRecord { granted: boolean,
       signature: this.signTransaction(healthRecord, userId),
       fee: 1}
     this.pendingTransactions.push(transaction);
-    // 记录安全事件 // securityManager.logSecurityEvent({
+    securityManager.logSecurityEvent({
       type: "data_access",
       userId,
-      details: {
-        action: "health_data_added",
+      details: {,
+  action: "health_data_added",
         dataId,
         dataType,
         privacyLevel;
       },
       severity: "low"});
-    // 如果有足够的待处理交易，挖掘新区块 // if (this.pendingTransactions.length >= 5) {
+    if (this.pendingTransactions.length >= 5) {
       await this.mineBlock;
     }
     return dataI;d;
   }
-  // 获取健康数据（带权限检查） // async getHealthData(dataId: string,
+  async getHealthData(dataId: string,
     requesterId: string,
-    purpose: string): Promise<HealthDataRecord | null /////    >  {
-    // 检查访问权限 // if (!this.checkAccess(dataId, requesterId, "read")) {
+    purpose: string): Promise<HealthDataRecord | null /    >  {
+    if (!this.checkAccess(dataId, requesterId, "read")) {
       securityManager.logSecurityEvent({
-        type: "access_denied",
-        userId: requesterId,
-        details: {
-          action: "unauthorized_data_access",
+      type: "access_denied",
+      userId: requesterId,
+        details: {,
+  action: "unauthorized_data_access",
           dataId,
           purpose;
         },
         severity: "high"});
       throw new Error("访问被拒绝：权限不足;";);
     }
-    // 在区块链中查找数据 // for (const block of this.blockchain) {
+    for (const block of this.blockchain) {
       for (const record of block.data) {
         if (record.id === dataId) {
-          // 记录访问事件 // const transaction: Transaction = {
-            id: this.generateTransactionId(),
+          const transaction: Transaction = {,
+  id: this.generateTransactionId(),
             type: "data_read",
             from: requesterId,
             data: { dataId, purpose },
@@ -300,7 +311,7 @@ export interface ConsentRecord { granted: boolean,
             signature: this.signTransaction({ dataId, purpose }, requesterId),
             fee: 0.1}
           this.pendingTransactions.push(transaction);
-          // 解密数据（如果有权限） // const decryptedRecord = { ...record ;}
+          const decryptedRecord = { ...record ;}
           if (this.checkAccess(dataId, requesterId, "decrypt");) {
             decryptedRecord.data = securityManager.decryptData(record.data);
           }
@@ -310,7 +321,7 @@ export interface ConsentRecord { granted: boolean,
     }
     return nu;l;l;
   }
-  // 生成零知识证明 // generateZKProof(userId: string,
+  generateZKProof(userId: string,
     proofType: "age_range" | "health_status",
     parameters: unknown,
     secret: string): ZKProof  {
@@ -326,10 +337,10 @@ export interface ConsentRecord { granted: boolean,
       default: throw new Error("不支持的证明类型;";);
     }
   }
-  // 验证零知识证明 // verifyZKProof(proof: ZKProof): boolean  {
+  verifyZKProof(proof: ZKProof): boolean  {
     return this.zkProofGenerator.verifyProof(proo;f;);
   }
-  // 授予数据访问权限 // grantAccess(dataId: string,
+  grantAccess(dataId: string,
     userId: string,
     permissions: string[],
     grantedBy: string,
@@ -345,8 +356,8 @@ export interface ConsentRecord { granted: boolean,
     const existing = this.accessControls.get(dataI;d;); || [];
     existing.push(accessControl);
     this.accessControls.set(dataId, existing);
-    // 创建访问授权交易 // const transaction: Transaction = {
-      id: this.generateTransactionId(),
+    const transaction: Transaction = {,
+  id: this.generateTransactionId(),
       type: "access_grant",
       from: grantedBy,
       to: userId,
@@ -356,7 +367,7 @@ export interface ConsentRecord { granted: boolean,
       fee: 0.5}
     this.pendingTransactions.push(transaction);
   }
-  // 检查访问权限 // private checkAccess(dataId: string,
+  private checkAccess(dataId: string,
     userId: string,
     permission: string);: boolean  {
     const controls = this.accessControls.get(dataI;d;); || [];
@@ -365,7 +376,7 @@ export interface ConsentRecord { granted: boolean,
         control.userId === userId &&
         control.permissions.includes(permission);
       ) {
-        // 检查是否过期 // if (control.expiresAt && Date.now() > control.expiresAt) {
+        if (control.expiresAt && Date.now() > control.expiresAt) {
           continue;
         }
         return tr;u;e;
@@ -373,24 +384,24 @@ export interface ConsentRecord { granted: boolean,
     }
     return fal;s;e;
   }
-  // 挖掘新区块 // private async mineBlock(): Promise<void> {
+  private async mineBlock(): Promise<void> {
     const previousBlock = this.blockchain[this.blockchain.length - ;1;];
     const newBlock: Block = {index: previousBlock.index + 1,
       timestamp: Date.now(),
       data: this.extractHealthRecords(this.pendingTransactions),
       previousHash: previousBlock.hash,
-      hash: ",",
+      hash: ",,
       nonce: 0,
       merkleRoot: ",",
       validator: "system"};
-    // 计算Merkle根 // const merkleTree = new MerkleTree(newBlock.data;);
+    const merkleTree = new MerkleTree(newBlock.data;);
     newBlock.merkleRoot = merkleTree.getRootHash();
-    // 工作量证明 // newBlock.hash = this.mineBlockWithProofOfWork(newBlock);
-    // 添加到区块链 // this.blockchain.push(newBlock);
-    // 清空待处理交易 // this.pendingTransactions = []
-    // 持久化区块链 // await this.persistBlockchain;
+    newBlock.hash = this.mineBlockWithProofOfWork(newBlock);
+    this.blockchain.push(newBlock);
+    this.pendingTransactions = []
+    await this.persistBlockchain;
     }
-  // 工作量证明挖矿 // private mineBlockWithProofOfWork(block: Block): string  {
+  private mineBlockWithProofOfWork(block: Block): string  {
     const target = "0".repeat(BLOCKCHAIN_CONFIG.MINING_DIFFICULTY;);
     while (true) {
       const hash = this.calculateHash(bloc;k;);
@@ -400,25 +411,25 @@ export interface ConsentRecord { granted: boolean,
       block.nonce++;
     }
   }
-  // 验证区块链完整性 // validateBlockchain(): boolean {
+  validateBlockchain(): boolean {
     for (let i = ;1; i < this.blockchain.length; i++) {
       const currentBlock = this.blockchain[i];
       const previousBlock = this.blockchain[i - ;1;];
-      // 验证当前区块哈希 // if (currentBlock.hash !== this.calculateHash(currentBlock)) {
+      if (currentBlock.hash !== this.calculateHash(currentBlock)) {
         return fal;s;e;
       }
-      // 验证前一个区块的连接 // if (currentBlock.previousHash !== previousBlock.hash) {
+      if (currentBlock.previousHash !== previousBlock.hash) {
         return fal;s;e;
       }
-      // 验证Merkle根 // const merkleTree = new MerkleTree(currentBlock.data;);
+      const merkleTree = new MerkleTree(currentBlock.data;);
       if (currentBlock.merkleRoot !== merkleTree.getRootHash()) {
         return fal;s;e;
       }
     }
     return tr;u;e;
   }
-  // 获取用户健康数据摘要 // getUserHealthSummary(userId: string):   {
-    totalRecords: number,
+  getUserHealthSummary(userId: string):   {,
+  totalRecords: number,
     dataTypes: string[],
     latestRecord: number,
     privacyDistribution: Record<string, number>;
@@ -441,7 +452,7 @@ export interface ConsentRecord { granted: boolean,
     return {totalRecords,dataTypes: Array.from(dataTypes),latestRecord,privacyDistributio;n;
     ;};
   }
-  // 计算区块哈希 // private calculateHash(block: Block): string  {
+  private calculateHash(block: Block): string  {
     return CryptoJS.SHA256(;
       block.index +;
         block.timestamp +;
@@ -451,7 +462,7 @@ export interface ConsentRecord { granted: boolean,
         block.merkleRoot;
     ).toString();
   }
-  // 计算数据哈希 // private calculateDataHash(record: HealthDataRecord): string  {
+  private calculateDataHash(record: HealthDataRecord): string  {
     return CryptoJS.SHA256(;
       record.id +;
         record.userId +;
@@ -461,15 +472,15 @@ export interface ConsentRecord { granted: boolean,
         record.source;
     ).toString();
   }
-  // 签名交易 // private signTransaction(data: unknown, userId: string): string  {
+  private signTransaction(data: unknown, userId: string): string  {
     return CryptoJS.SHA256(JSON.stringify(dat;a;); + userId).toString();
   }
-  // 从交易中提取健康记录 // private extractHealthRecords(transactions: Transaction[]);: HealthDataRecord[]  {
+  private extractHealthRecords(transactions: Transaction[]);: HealthDataRecord[]  {
     return transactions;
-      .filter((t;x;) => tx.type === "data_write")
-      .map((tx); => tx.data as HealthDataRecord);
+      .filter(t;x;) => tx.type === "data_write")
+      .map(tx); => tx.data as HealthDataRecord);
   }
-  // 持久化区块链 // private async persistBlockchain(): Promise<void> {
+  private async persistBlockchain(): Promise<void> {
     try {
       const data = {blocks: this.blockchain,
         accessControls: Array.from(this.accessControls.entries);
@@ -479,13 +490,13 @@ export interface ConsentRecord { granted: boolean,
     } catch (error) {
       }
   }
-  // 生成数据ID // private generateDataId(): string {
+  private generateDataId(): string {
     return `data_${Date.now()}_${Math.random().toString(36).substr(2, 9)};`;
   }
-  // 生成交易ID // private generateTransactionId(): string {
+  private generateTransactionId(): string {
     return `tx_${Date.now()}_${Math.random().toString(36).substr(2, 9)};`;
   }
-  // 获取区块链统计 // getBlockchainStats(): { totalBlocks: number,
+  getBlockchainStats(): { totalBlocks: number,
     totalTransactions: number,
     totalDataRecords: number,
     chainSize: number,
@@ -502,6 +513,6 @@ export interface ConsentRecord { granted: boolean,
     ;};
   }
 }
-// 导出单例实例 * export const blockchainHealthDataManager =////   ;
- /////    ;
+//   ;
+/    ;
   BlockchainHealthDataManager.getInstance();

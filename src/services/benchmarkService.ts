@@ -1,6 +1,5 @@
 import { apiClient } from './apiClient';
 import { getCurrentEnvConfig } from '../constants/config';
-
 // 基准测试配置接口
 export interface BenchmarkConfig {
   benchmark_id: string;
@@ -9,7 +8,6 @@ export interface BenchmarkConfig {
   test_data: any[];
   config?: Record<string, any>;
 }
-
 // 基准测试任务接口
 export interface BenchmarkTask {
   task_id: string;
@@ -22,7 +20,6 @@ export interface BenchmarkTask {
   results?: BenchmarkResult;
   error_message?: string;
 }
-
 // 基准测试结果接口
 export interface BenchmarkResult {
   task_id: string;
@@ -35,7 +32,6 @@ export interface BenchmarkResult {
   timestamp: string;
   metadata: Record<string, any>;
 }
-
 // 模型预测接口
 export interface ModelPrediction {
   input_data: any;
@@ -43,7 +39,6 @@ export interface ModelPrediction {
   confidence?: number;
   processing_time: number;
 }
-
 // 模型配置接口
 export interface ModelConfig {
   model_id: string;
@@ -52,7 +47,6 @@ export interface ModelConfig {
   description?: string;
   metadata?: Record<string, any>;
 }
-
 // 插件接口
 export interface Plugin {
   name: string;
@@ -62,7 +56,6 @@ export interface Plugin {
   category: string;
   enabled: boolean;
 }
-
 // 基准测试状态接口
 export interface BenchmarkStatus {
   task_id: string;
@@ -72,33 +65,29 @@ export interface BenchmarkStatus {
   estimated_remaining_time?: number;
   error_message?: string;
 }
-
 // 服务健康状态接口
 export interface HealthStatus {
   status: 'healthy' | 'unhealthy';
   version: string;
   uptime: number;
-  system_info: {
+  system_info: {;
     cpu_usage: number;
-    memory_usage: number;
+  memory_usage: number;
     disk_usage: number;
-  };
+};
 }
-
 /**
- * SuokeBench 服务客户端
- */
+* SuokeBench 服务客户端
+*/
 export class BenchmarkService {
   private baseUrl: string;
-
   constructor() {
     const envConfig = getCurrentEnvConfig();
     this.baseUrl = envConfig.API_BASE_URL || 'http://localhost:8000';
   }
-
   /**
-   * 提交基准测试任务
-   */
+  * 提交基准测试任务
+  */
   async submitBenchmark(config: BenchmarkConfig): Promise<string> {
     try {
       const response = await apiClient.post(`${this.baseUrl}/api/v1/benchmarks`, config);
@@ -108,10 +97,9 @@ export class BenchmarkService {
       throw new Error('提交基准测试失败');
     }
   }
-
   /**
-   * 获取基准测试状态
-   */
+  * 获取基准测试状态
+  */
   async getBenchmarkStatus(taskId: string): Promise<BenchmarkStatus> {
     try {
       const response = await apiClient.get(`${this.baseUrl}/api/v1/benchmarks/${taskId}/status`);
@@ -121,10 +109,9 @@ export class BenchmarkService {
       throw new Error('获取测试状态失败');
     }
   }
-
   /**
-   * 获取基准测试结果
-   */
+  * 获取基准测试结果
+  */
   async getBenchmarkResult(taskId: string): Promise<BenchmarkResult> {
     try {
       const response = await apiClient.get(`${this.baseUrl}/api/v1/benchmarks/${taskId}`);
@@ -134,10 +121,9 @@ export class BenchmarkService {
       throw new Error('获取测试结果失败');
     }
   }
-
   /**
-   * 列出所有基准测试任务
-   */
+  * 列出所有基准测试任务
+  */
   async listBenchmarks(status?: string): Promise<BenchmarkTask[]> {
     try {
       const url = status;
@@ -150,10 +136,9 @@ export class BenchmarkService {
       throw new Error('获取测试列表失败');
     }
   }
-
   /**
-   * 注册模型
-   */
+  * 注册模型
+  */
   async registerModel(model: ModelConfig): Promise<string> {
     try {
       const response = await apiClient.post(`${this.baseUrl}/api/v1/models/register`, model);
@@ -163,10 +148,9 @@ export class BenchmarkService {
       throw new Error('注册模型失败');
     }
   }
-
   /**
-   * 模型预测
-   */
+  * 模型预测
+  */
   async predictWithModel(modelId: string, data: any): Promise<ModelPrediction> {
     try {
       const response = await apiClient.post(`${this.baseUrl}/api/v1/models/${modelId}/predict`, {input_data: data;
@@ -177,10 +161,9 @@ export class BenchmarkService {
       throw new Error('模型预测失败');
     }
   }
-
   /**
-   * 列出可用插件
-   */
+  * 列出可用插件
+  */
   async listPlugins(): Promise<Plugin[]> {
     try {
       const response = await apiClient.get(`${this.baseUrl}/api/v1/plugins`);
@@ -190,10 +173,9 @@ export class BenchmarkService {
       throw new Error('获取插件列表失败');
     }
   }
-
   /**
-   * 运行插件基准测试
-   */
+  * 运行插件基准测试
+  */
   async runPluginBenchmark(pluginName: string, config: any): Promise<string> {
     try {
       const response = await apiClient.post(;
@@ -205,10 +187,9 @@ export class BenchmarkService {
       throw new Error('运行插件测试失败');
     }
   }
-
   /**
-   * 获取服务健康状态
-   */
+  * 获取服务健康状态
+  */
   async getHealthStatus(): Promise<HealthStatus> {
     try {
       const response = await apiClient.get(`${this.baseUrl}/health`);
@@ -218,13 +199,14 @@ export class BenchmarkService {
       throw new Error('获取服务状态失败');
     }
   }
-
   /**
-   * 取消基准测试任务
-   */
+  * 取消基准测试任务
+  */
   async cancelBenchmark(taskId: string): Promise<void> {
     try {
-      const response = await fetch(`${this.baseUrl}/api/v1/benchmarks/${taskId}`, {method: 'DELETE',headers: {'Content-Type': 'application/json';
+      const response = await fetch(`${this.baseUrl}/api/v1/benchmarks/${taskId}`, {
+      method: "DELETE",
+      headers: {'Content-Type': 'application/json';
         };
       });
       if (!response.ok) {
@@ -235,10 +217,9 @@ export class BenchmarkService {
       throw new Error('取消测试失败');
     }
   }
-
   /**
-   * 获取基准测试日志
-   */
+  * 获取基准测试日志
+  */
   async getBenchmarkLogs(taskId: string): Promise<string[]> {
     try {
       const response = await apiClient.get(`${this.baseUrl}/api/v1/benchmarks/${taskId}/logs`);
@@ -248,10 +229,9 @@ export class BenchmarkService {
       throw new Error('获取测试日志失败');
     }
   }
-
   /**
-   * 生成基准测试报告
-   */
+  * 生成基准测试报告
+  */
   async generateReport(taskId: string, format: 'html' | 'json' = 'html'): Promise<string> {
     try {
       const url = `${this.baseUrl}/api/v1/benchmarks/${taskId}/report?format=${format}`;
@@ -263,8 +243,6 @@ export class BenchmarkService {
     }
   }
 }
-
 // 创建单例实例
 export const benchmarkService = new BenchmarkService();
-
 // 类型已在上面定义并导出，无需重复导出

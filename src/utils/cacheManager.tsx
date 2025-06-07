@@ -1,21 +1,24 @@
-import { usePerformanceMonitor } from "../../placeholder";../hooks/////    usePerformanceMonitor
-import AsyncStorage from "@react-native-async-storage/////    async-storage";
-
+import { usePerformanceMonitor } from "../../placeholder";../hooks/    usePerformanceMonitor;
+import AsyncStorage from "@react-native-async-storage/    async-storage";
 import React from "react";
-// // 数据缓存管理工具   提供统一的缓存管理接口，支持过期时间、缓存大小限制等功能
-export interface CacheItem<T = any /////    > { data: T;
-/////     , timestamp: number;
+数据缓存管理工具   提供统一的缓存管理接口，支持过期时间、缓存大小限制等功能
+export interface CacheItem<T = any /    > { data: T;
+/     , timestamp: number;
   expiresAt?: number;
   size?: number;
   accessCount: number,
   lastAccessed: number}
-export interface CacheOptions   {ttl?: number; // 生存时间（毫秒） // maxSize?: number  / 最大缓存大小（字节）* // maxItems?: number  * / 最大缓存项数* // compress?: boolean  * / 是否压缩数据* * } * /////
-export interface CacheStats { totalItems: number,
+export interface CacheOptions {
+  ttl?: number;  maxSize?: number  / 最大缓存大小（字节）*  compress?: boolean  * / 是否压缩数据* *
+} * /
+export interface CacheStats {
+  totalItems: number;
   totalSize: number,hitRate: number,missRate: number;
   oldestItem?: string;
   newestItem?: string;
   mostAccessed?: string;
-  leastAccessed?: string}
+  leastAccessed?: string
+}
 // 缓存管理器类export class CacheManager  {private static instance: CacheManager;
   private cache: Map<string, CacheItem> = new Map();
   private stats = {
@@ -24,7 +27,7 @@ export interface CacheStats { totalItems: number,
     sets: 0,
     deletes: 0;
   };
-  private options: Required<CacheOptions /> = {/   , ttl: 24 * 60 * 60 * 1000, // 默认24小时 // maxSize: 50 * 1024 * 1024,  / 默认50MB* // maxItems: 1000,  * // 默认1000项* // compress: false * /////
+  private options: Required<CacheOptions /> = {/   , ttl: 24 * 60 * 60 * 1000,  maxSize: 50 * 1024 * 1024,  / 默认50MB*  默认1000项* ///
   }
   private constructor() {
     this.loadFromStorage();
@@ -36,17 +39,17 @@ export interface CacheStats { totalItems: number,
     }
     return CacheManager.instance;
   }
-  // 设置缓存配置  configure(options: Partial<CacheOptions />): void  {/////        this.options = { ...this.options, ...options };
+  ///        this.options = { ...this.options, ...options };
   }
   // 设置缓存项  async set<T>(key: string,
     data: T,
-    options?: Partial<CacheOptions />/////      ): Promise<void>  {
+    options?: Partial<CacheOptions />/      ): Promise<void>  {
     try {
       const now = Date.now;
       const itemOptions = { ...this.options, ...options ;};
       const serializedData = JSON.stringify(dat;a;);
       const size = new Blob([serializedData]).si;z;e;
-      // 检查单个项目大小限制 // if (size > itemOptions.maxSize) {
+      if (size > itemOptions.maxSize) {
         return;
       }
       const cacheItem: CacheItem<T> = {data,
@@ -56,26 +59,26 @@ export interface CacheStats { totalItems: number,
         accessCount: 0,
         lastAccessed: now;
       };
-      // 检查是否需要清理空间 // await this.ensureSpace(size, itemOptions;);
+      await this.ensureSpace(size, itemOptions;);
       this.cache.set(key, cacheItem);
       this.stats.sets++;
-      // 异步保存到持久存储 // this.saveToStorage(key, cacheItem);
+      this.saveToStorage(key, cacheItem);
     } catch (error) {
       }
   }
-  // 获取缓存项  async get<T>(key: string): Promise<T | null /////    >  {
+  ///    >  {
     try {
       const item = this.cache.get(key;);
       if (!item) {
         this.stats.misses++;
         return nu;l;l;
       }
-      // 检查是否过期 // if (item.expiresAt && Date.now() > item.expiresAt) {
+      if (item.expiresAt && Date.now() > item.expiresAt) {
         await this.delete(key);
         this.stats.misses++;
         return nu;l;l;
       }
-      // 更新访问统计 // item.accessCount++ ////
+      item.accessCount++
       item.lastAccessed = Date.now();
       this.stats.hits++;
       return item.data a;s ;T;
@@ -111,9 +114,9 @@ export interface CacheStats { totalItems: number,
     try {
       const keys = Array.from(this.cache.keys);
       this.cache.clear();
-      // 清理持久存储 // const storageKeys = keys.map((key;) => `cache_${key}`);
+      const storageKeys = keys.map(key;) => `cache_${key}`);
       await AsyncStorage.multiRemove(storageKey;s;);
-      // 重置统计 // this.stats = { hits: 0, misses: 0, sets: 0, deletes: 0}
+      this.stats = { hits: 0, misses: 0, sets: 0, deletes: 0}
     } catch (error) {
       }
   }
@@ -135,25 +138,25 @@ export interface CacheStats { totalItems: number,
     let mostAccessed: string | undefined;
     let leastAccessed: string | undefined;
     if (items.length > 0) {
-      // 找到最老和最新的项 // const sortedByTime = items.sort(;
+      const sortedByTime = items.sort(;
         (a,b;); => a[1].timestamp - b[1].timestamp;
       );
       oldestItem = sortedByTime[0][0];
       newestItem = sortedByTime[sortedByTime.length - 1][0];
-      // 找到访问最多和最少的项 // const sortedByAccess = items.sort(;
+      const sortedByAccess = items.sort(;
         (a,b;); => b[1].accessCount - a[1].accessCount;
       );
       mostAccessed = sortedByAccess[0][0];
       leastAccessed = sortedByAccess[sortedByAccess.length - 1][0];
     }
-    return {totalItems: this.cache.size,totalSize,hitRate: totalRequests > 0 ? (this.stats.hits / totalRequests) * 100 : 0,/////          missRate:;
-        totalRequests > 0 ? (this.stats.misses / totalRequests) * 100 : 0,/////          oldestItem,newestItem,mostAccessed,leastAccesse;d;
+    return {totalItems: this.cache.size,totalSize,hitRate: totalRequests > 0 ? (this.stats.hits / totalRequests) * 100 : 0,/          missRate:;
+        totalRequests > 0 ? (this.stats.misses / totalRequests) * 100 : 0,/          oldestItem,newestItem,mostAccessed,leastAccesse;d;
     ;};
   }
   // 获取详细统计信息  getDetailedStats(): { stats: CacheStats,
     operations: typeof this.stats,
-    items: Array<{
-      key: string,
+    items: Array<{,
+  key: string,
       size: number,
       age: number,
       accessCount: number,
@@ -162,7 +165,7 @@ export interface CacheStats { totalItems: number,
   } {
     const stats = this.getStats;
     const now = Date.now;
-    const items = Array.from(this.cache.entries).map(([key, item]); => ({key,
+    const items = Array.from(this.cache.entries).map([key, item]); => ({key,
       size: item.size || 0,
       age: now - item.timestamp,
       accessCount: item.accessCount,
@@ -173,13 +176,13 @@ export interface CacheStats { totalItems: number,
     ;};
   }
   // 确保有足够的空间  private async ensureSpace(requiredSize: number,
-    options: Required<CacheOptions />/////      ): Promise<void>  {
+    options: Required<CacheOptions />/      ): Promise<void>  {
     const currentSize = this.getCurrentSize;
     const currentItems = this.cache.si;z;e;
-    // 检查项目数量限制 // if (currentItems >= options.maxItems) {
+    if (currentItems >= options.maxItems) {
       await this.evictLeastRecentlyUsed(1);
     }
-    // 检查大小限制 // if (currentSize + requiredSize > options.maxSize) { ////
+    if (currentSize + requiredSize > options.maxSize) {
       const sizeToFree = currentSize + requiredSize - options.maxSiz;e;
       await this.evictBySize(sizeToFre;e;);
     }
@@ -192,7 +195,7 @@ export interface CacheStats { totalItems: number,
   }
   // 按LRU策略清理缓存  private async evictLeastRecentlyUsed(count: number): Promise<void>  {
     const items = Array.from(this.cache.entries);
-      .sort((a, b); => a[1].lastAccessed - b[1].lastAccessed)
+      .sort(a, b); => a[1].lastAccessed - b[1].lastAccessed)
       .slice(0, count);
     for (const [key] of items) {
       await this.delete(key);
@@ -224,7 +227,7 @@ export interface CacheStats { totalItems: number,
     }
   }
   // 启动清理定时器  private startCleanupTimer(): void {
-    // 每5分钟清理一次过期项 // setInterval(() => {
+    setInterval() => {
   // 性能监控
 const performanceMonitor = usePerformanceMonitor(cacheManager", {"
     trackRender: true,
@@ -235,7 +238,7 @@ const performanceMonitor = usePerformanceMonitor(cacheManager", {"
   // 从持久存储加载缓存  private async loadFromStorage(): Promise<void> {
     try {
       const keys = await AsyncStorage.getAllKe;y;s;
-      const cacheKeys = keys.filter((key) => key.startsWith("cache_"););
+      const cacheKeys = keys.filter(key) => key.startsWith("cache_"););
       if (cacheKeys.length === 0) {
         return;
       }
@@ -245,9 +248,9 @@ const performanceMonitor = usePerformanceMonitor(cacheManager", {"
           continue;
         }
         try {
-          const key = storageKey.replace("cache_", ";);"
+          const key = storageKey.replace("cache_",;);"
           const item: CacheItem = JSON.parse(value);
-          // 检查是否过期 // if (item.expiresAt && Date.now() > item.expiresAt) {
+          if (item.expiresAt && Date.now() > item.expiresAt) {
             await AsyncStorage.removeItem(storageKe;y;);
             continue;
           }
@@ -265,7 +268,7 @@ const performanceMonitor = usePerformanceMonitor(cacheManager", {"
     } catch (error) {
       }
   }
-  // 导出缓存数据  async exportCache(): Promise<Record<string, any /////    >> {
+  ///    >> {
     const exported: Record<string, any> = {};
     for (const [key, item] of this.cache.entries();) {
       exported[key] = {
@@ -286,15 +289,15 @@ const performanceMonitor = usePerformanceMonitor(cacheManager", {"
     }
   }
 }
-// 导出单例实例 * export const cacheManager = CacheManager.getInstance ////   ;
-// 便捷函数 * export const setCache = <T ///   ; ///  >;
+//   ;
+/   ; ///  >;
 >;(;
   key: string,
   data: T,
-  options?: Partial<CacheOptions />/////    ) => {}
+  options?: Partial<CacheOptions />/    ) => {}
   return cacheManager.set(key, data, option;s;);
 };
-export const getCache = <T>(key: string): Promise<T | null /////    > =;
+export const getCache = <T>(key: string): Promise<T | null /    > =;
 >  ;{return cacheManager.get<T>(key);
 };
 export const deleteCache = (key: string) =;

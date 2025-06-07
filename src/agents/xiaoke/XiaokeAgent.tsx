@@ -1,7 +1,6 @@
-import { apiClient } from ../../services/////    apiClient
-
+import { apiClient } from ../../services/    apiClient;
 import React from "react";
-/////
+/
   XiaokeAgent,
   ServiceRecommendation,
   DoctorMatch,
@@ -9,24 +8,24 @@ import React from "react";
   SupplyChainInfo,
   AppointmentInfo,
   UserProfile,
-  { ServiceContext } from "./types;// * 小克智能体主类"////
- * SUOKE频道版主，负责服务订阅、农产品预制、供应链管理等商业化服务
- export class XiaokeAgentImpl implements XiaokeAgent {private personality: unknown = {style: 
-professional", // 专业型 // tone: efficient",      / 高效的语调* // expertise: "business,  * // 商业专业* // approach: "service-oriented",  * // 服务导向* // } * /////    "
-  private serviceEndpoint = /api/agents/xiaoke"/////    "
+  { ServiceContext } from "./types;//
+* SUOKE频道版主，负责服务订阅、农产品预制、供应链管理等商业化服务
+export class XiaokeAgentImpl implements XiaokeAgent {private personality: unknown = {style:
+professional",  tone: efficient",      / 高效的语调*  商业专业*  服务导向* ///    "
+  private serviceEndpoint = /api/agents/xiaoke"/    "
   constructor() {
-    // 初始化小克智能体 // }
+    }
   // 核心消息处理功能  async processMessage(message: string,
     context: ServiceContext,
     userId?: string,
     sessionId?: string;
   ): Promise<any>  {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/message`, {/////            text: message,context,
+      const response = await apiClient.post(`${this.serviceEndpoint}/message`, {/            text: message,context,
         user_id: userId,
         session_id: session;I;d;
       ;};);
-      // 应用个性化风格 // response.data.text = this.applyPersonalityToResponse(response.data.text, context);
+      response.data.text = this.applyPersonalityToResponse(response.data.text, context);
       return response.da;t;a;
     } catch (error) {
       return this.generateFallbackResponse(message, contex;t;);
@@ -35,13 +34,13 @@ professional", // 专业型 // tone: efficient",      / 高效的语调* // expe
   // 推荐服务  async recommendServices(userProfile: UserProfile,
     healthData?: unknown,
     preferences?: unknown;
-  ): Promise<ServiceRecommendation[] /////    >  {
+  ): Promise<ServiceRecommendation[] /    >  {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/recommend-service`, {/////            user_profile: userProfile,health_data: healthData,
+      const response = await apiClient.post(`${this.serviceEndpoint}/recommend-service`, {/            user_profile: userProfile,health_data: healthData,
         preferences: preferenc;e;s;
       ;};);
-      return response.data.map((rec: unknow;n;); => ({
-        id: rec.id,
+      return response.data.map(rec: unknow;n;); => ({,
+  id: rec.id,
         name: rec.name,
         category: rec.category,
         description: rec.description,
@@ -63,14 +62,14 @@ professional", // 专业型 // tone: efficient",      / 高效的语调* // expe
     specialty?: string,
     location?: string,
     preferences?: unknown;
-  ): Promise<DoctorMatch[] /////    >  {
+  ): Promise<DoctorMatch[] /    >  {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/match-doctor`, {/////            symptoms,specialty,
+      const response = await apiClient.post(`${this.serviceEndpoint}/match-doctor`, {/            symptoms,specialty,
         location,
         preferenc;e;s;
       ;};);
-      return response.data.map((match: unknow;n;); => ({
-        doctorId: match.doctor_id,
+      return response.data.map(match: unknow;n;); => ({,
+  doctorId: match.doctor_id,
         name: match.name,
         specialty: match.specialty,
         hospital: match.hospital,
@@ -89,7 +88,7 @@ professional", // 专业型 // tone: efficient",      / 高效的语调* // expe
       return [;];
     }
   }
-  // 获取产品信息  async getProductInfo(productId: string): Promise<ProductInfo | null /////    >  {
+  ///    >  {
     try {
       const response = await apiClient.get(`${this.serviceEndpoint}/products/${productId;};`;);// return {id: response.data.id,name: response.data.name,category: response.data.category,description: response.data.description,price: response.data.price,images: response.data.images || [],specifications: response.data.specifications || {},nutritionInfo: response.data.nutrition_info,origin: response.data.origin,certifications: response.data.certifications || [],availability: response.data.availability,rating: response.data.rating,reviews: response.data.reviews || [],supplyChain: response.data.supply_chai;n;
       ;}
@@ -104,12 +103,12 @@ professional", // 专业型 // tone: efficient",      / 高效的语调* // expe
       location?: string;
       organic?: boolean;
       inStock?: boolean}
-  ): Promise<ProductInfo[] /////    >  {
+  ): Promise<ProductInfo[] /    >  {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/products/search`, {/////            query,filte;r;s;
+      const response = await apiClient.post(`${this.serviceEndpoint}/products/search`, {/            query,filte;r;s;
       ;};);
-      return response.data.map((product: unknow;n;); => ({
-        id: product.id,
+      return response.data.map(product: unknow;n;); => ({,
+  id: product.id,
         name: product.name,
         category: product.category,
         description: product.description,
@@ -128,11 +127,11 @@ professional", // 专业型 // tone: efficient",      / 高效的语调* // expe
       return [;];
     }
   }
-  // 获取供应链信息  async getSupplyChainInfo(productId: string): Promise<SupplyChainInfo | null /////    >  {
+  ///    >  {
     try {
       const response = await apiClient.get(`${this.serviceEndpoint}/supply-chain/${productId;};`;);// return {productId: response.data.product_id,
-        stages: response.data.stages.map((stage: unknow;n;); => ({
-          id: stage.id,
+        stages: response.data.stages.map(stage: unknow;n;); => ({,
+  id: stage.id,
           name: stage.name,
           description: stage.description,
           location: stage.location,
@@ -156,9 +155,9 @@ professional", // 专业型 // tone: efficient",      / 高效的语调* // expe
     timeSlot: Date,
     type: "consultation | "checkup" | follow-up",
     notes?: string;
-  ): Promise<AppointmentInfo | null /////    >  {
+  ): Promise<AppointmentInfo | null /    >  {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/appointments`, {/////            doctor_id: doctorId,time_slot: timeSlot.toISOString(),
+      const response = await apiClient.post(`${this.serviceEndpoint}/appointments`, {/            doctor_id: doctorId,time_slot: timeSlot.toISOString(),
         type,
         not;e;s;
       ;};);
@@ -167,10 +166,10 @@ professional", // 专业型 // tone: efficient",      / 高效的语调* // expe
       return nu;l;l;
     }
   }
-  // 获取用户预约列表  async getUserAppointments(userId: string): Promise<AppointmentInfo[] /////    >  {
+  ///    >  {
     try {
-      const response = await apiClient.get(`${this.serviceEndpoint}/appointments/user/${userId;};`;);// return response.data.map((appointment: unknow;n;); => ({
-        id: appointment.id,
+      const response = await apiClient.get(`${this.serviceEndpoint}/appointments/user/${userId;};`;);// return response.data.map(appointment: unknow;n;); => ({,
+  id: appointment.id,
         doctorId: appointment.doctor_id,
         patientId: appointment.patient_id,
         timeSlot: new Date(appointment.time_slot),
@@ -187,13 +186,13 @@ professional", // 专业型 // tone: efficient",      / 高效的语调* // expe
   }
   // 订阅服务  async subscribeToService(serviceId: string,
     plan: basic" | "premium | "enterprise",
-    duration: number // 月数 // ): Promise< { subscriptionId: string,
+    duration: number  ): Promise< { subscriptionId: string,
     status: string,
     startDate: Date,
     endDate: Date,
     paymentInfo: unknown} | null> {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/services/subscribe`, {/////            service_id: serviceId,plan,
+      const response = await apiClient.post(`${this.serviceEndpoint}/services/subscribe`, {/            service_id: serviceId,plan,
         durati;o;n;
       ;};);
       return {subscriptionId: response.data.subscription_id,status: response.data.status,startDate: new Date(response.data.start_date),endDate: new Date(response.data.end_date),paymentInfo: response.data.payment_inf;o;
@@ -204,9 +203,11 @@ professional", // 专业型 // tone: efficient",      / 高效的语调* // expe
   }
   // 获取智能体状态  async getStatus(): Promise<any> {
     try {
-      const response = await apiClient.get(`${this.serviceEndpoint}/statu;s;`;);/////          return response.da;t;a;
+      const response = await apiClient.get(`${this.serviceEndpoint}/statu;s;`;);/          return response.da;t;a;
     } catch (error) {
-      return {status: "offline",capabilities: [],performance: {accuracy: 0,responseTime: 0,userSatisfaction: 0};
+      return {
+      status: "offline",
+      capabilities: [],performance: {accuracy: 0,responseTime: 0,userSatisfaction: 0};
       ;};
     }
   }
@@ -214,27 +215,29 @@ professional", // 专业型 // tone: efficient",      / 高效的语调* // expe
     this.personality = { ...this.personality, ...traits };
   }
   // 应用个性化风格到响应  private applyPersonalityToResponse(text: string, context: ServiceContext): string  {
-    // 根据小克的专业高效风格调整响应 // let styledText = tex;t;
-    // 添加专业性表达 // if (context.type === service_inquiry") { "
+    let styledText = tex;t;
+    if (context.type === service_inquiry") { "
       styledText = `基于您的需求，我为您推荐以下专业服务：${styledText}`
     } else if (context.type === "product_search) {"
       styledText = `经过精准匹配，为您找到以下优质产品：${styledText}`
     }
-    // 添加效率导向的结尾 // if (!styledText.includes("如需")) {
+    if (!styledText.includes("如需")) {
       styledText +=  如需进一步了解或预约服务，我可以立即为您安排。""
     }
     return styledTe;x;t;
   }
   // 生成备用响应  private generateFallbackResponse(message: string, context: ServiceContext): unknown  {
-    return {text: "抱歉，我暂时无法处理您的请求。作为您的专业服务顾问，我建议您稍后重试，或者我可以为您转接人工客服。,",type: "fallback",suggestions: ;[查看热门服务",浏览推荐产品,联系客服",
+    return {
+      text: "抱歉，我暂时无法处理您的请求。作为您的专业服务顾问，我建议您稍后重试，或者我可以为您转接人工客服。,",
+      type: "fallback",suggestions: ;[查看热门服务",浏览推荐产品,联系客服",
         查看我的订单""
       ],
       timestamp: Date.now()};
   }
   // 清理资源  async cleanup(userId: string): Promise<void>  {
     try {
-      // 清理用户相关的缓存和临时数据 // } catch (error) {
+      } catch (error) {
       }
   }
 }
-// 导出单例实例 * export const xiaokeAgent = new XiaokeAgentImpl ////   ;
+//   ;

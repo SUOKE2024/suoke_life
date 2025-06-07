@@ -1,33 +1,28 @@
 /**
- * 性能监控服务
- * 监控API网关和应用的性能指标
- */
-
+* 性能监控服务
+* 监控API网关和应用的性能指标
+*/
 export interface PerformanceMetrics {
   // API性能指标
   apiResponseTime: number;
   apiSuccessRate: number;
   apiErrorRate: number;
   apiThroughput: number;
-  
   // 网络性能指标
   networkLatency: number;
   networkBandwidth: number;
   connectionQuality: 'excellent' | 'good' | 'fair' | 'poor';
-  
   // 应用性能指标
   memoryUsage: number;
   cpuUsage: number;
   batteryLevel: number;
   storageUsage: number;
-  
   // 用户体验指标
   screenLoadTime: number;
   interactionResponseTime: number;
   errorCount: number;
   crashCount: number;
 }
-
 export interface PerformanceAlert {
   id: string;
   type: 'warning' | 'error' | 'critical';
@@ -38,42 +33,36 @@ export interface PerformanceAlert {
   timestamp: Date;
   resolved: boolean;
 }
-
 class PerformanceMonitor {
   private metrics: PerformanceMetrics;
   private alerts: PerformanceAlert[] = [];
   private isMonitoring = false;
-
   constructor() {
     this.metrics = this.getInitialMetrics();
   }
-
   /**
-   * 开始性能监控
-   */
+  * 开始性能监控
+  */
   startMonitoring(): void {
     this.isMonitoring = true;
     console.log('性能监控已启动');
   }
-
   /**
-   * 停止性能监控
-   */
+  * 停止性能监控
+  */
   stopMonitoring(): void {
     this.isMonitoring = false;
     console.log('性能监控已停止');
   }
-
   /**
-   * 获取当前性能指标
-   */
+  * 获取当前性能指标
+  */
   getCurrentMetrics(): PerformanceMetrics {
     return { ...this.metrics };
   }
-
   /**
-   * 记录API调用性能
-   */
+  * 记录API调用性能
+  */
   recordApiCall(duration: number, success: boolean): void {
     this.metrics.apiResponseTime = duration;
     if (success) {
@@ -83,15 +72,13 @@ class PerformanceMonitor {
       this.metrics.errorCount++;
     }
   }
-
   /**
-   * 记录屏幕加载时间
-   */
+  * 记录屏幕加载时间
+  */
   recordScreenLoad(screenName: string, loadTime: number): void {
     this.metrics.screenLoadTime = loadTime;
     console.log(`屏幕 ${screenName} 加载时间: ${loadTime}ms`);
   }
-
   private getInitialMetrics(): PerformanceMetrics {
     return {
       apiResponseTime: 0,
@@ -108,13 +95,11 @@ class PerformanceMonitor {
       screenLoadTime: 0,
       interactionResponseTime: 0,
       errorCount: 0,
-      crashCount: 0
+      crashCount: 0;
     };
   }
 }
-
 // 创建全局实例
 export const performanceMonitor = new PerformanceMonitor();
-
 // 导出类型和实例
-export default PerformanceMonitor; 
+export default PerformanceMonitor;

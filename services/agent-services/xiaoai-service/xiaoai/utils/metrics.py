@@ -1,22 +1,38 @@
 """
-metrics - 索克生活项目模块
+小艾智能体指标收集模块
+提供性能监控、指标收集和Prometheus集成功能
 """
 
-        import asyncio
-    from prometheus_client import Counter, Gauge, Histogram, start_http_server
 import functools
 import time
 
-#!/usr/bin/env python3
-"""
-指标收集模块 - 提供应用程序性能和业务指标收集
-"""
-
-
+# 尝试导入Prometheus客户端
 try:
+    from prometheus_client import Counter, Gauge, Histogram, start_http_server
     PROMETHEUS_AVAILABLE = True
 except ImportError:
     PROMETHEUS_AVAILABLE = False
+    # 创建模拟类
+    class Counter:
+        def __init__(self, *args, **kwargs):
+            pass
+        def inc(self, *args, **kwargs):
+            pass
+
+    class Gauge:
+        def __init__(self, *args, **kwargs):
+            pass
+        def set(self, *args, **kwargs):
+            pass
+
+    class Histogram:
+        def __init__(self, *args, **kwargs):
+            pass
+        def observe(self, *args, **kwargs):
+            pass
+
+    def start_http_server(port):
+        pass
 
 
 class MetricsCollector:
@@ -49,7 +65,7 @@ class MetricsCollector:
             'request_duration_seconds', 'Request duration', ['method', 'endpoint']
         )
 
-    def increment_counter(self, name: str, value: float = 1.0, tags: dict[str, str] | None = None):
+    def increment_counter(self, name: str, value: int = 1, tags: dict[str, str] | None = None):
         """增加计数器"""
         if self.enable_prometheus and name in self._counters:
             if tags:
@@ -58,26 +74,25 @@ class MetricsCollector:
                 self._counters[name].inc(value)
 
     def set_gauge(self, name: str, value: float, tags: dict[str, str] | None = None):
-        """设置仪表值"""
+        """设置仪表盘值"""
         if self.enable_prometheus and name in self._gauges:
             if tags:
                 self._gauges[name].labels(**tags).set(value)
             else:
                 self._gauges[name].set(value)
 
-    def record_timer(self, name: str, duration: float, tags: dict[str, str] | None = None):
-        """记录时间"""
+    def observe_histogram(self, name: str, value: float, tags: dict[str, str] | None = None):
+        """观察直方图值"""
         if self.enable_prometheus and name in self._histograms:
             if tags:
-                self._histograms[name].labels(**tags).observe(duration)
+                self._histograms[name].labels(**tags).observe(value)
             else:
-                self._histograms[name].observe(duration)
+                self._histograms[name].observe(value)
 
-    def start_metrics_server(self, port: int = 8080):
+    def start_metrics_server(self, port: int = 8000):
         """启动指标服务器"""
-        if self.enable_prometheus:
+        if self.enable_prometheus and PROMETHEUS_AVAILABLE:
             start_http_server(port)
-
 
 # 全局指标收集器实例
 _metrics_collector = None
@@ -91,27 +106,30 @@ def get_metrics_collector() -> MetricsCollector:
     return _metrics_collector
 
 
-def increment(name: str, value: float = 1.0, tags: dict[str, str] | None = None):
+def increment_counter(name: str, value: int = 1, tags: dict[str, str] | None = None):
     """增加计数器的便捷函数"""
-    get_metrics_collector().increment_counter(name, value, tags)
+    collector = get_metrics_collector()
+    collector.increment_counter(name, value, tags)
 
 
-def gauge(name: str, value: float, tags: dict[str, str] | None = None):
-    """设置仪表的便捷函数"""
-    get_metrics_collector().set_gauge(name, value, tags)
+def set_gauge(name: str, value: float, tags: dict[str, str] | None = None):
+    """设置仪表盘值的便捷函数"""
+    collector = get_metrics_collector()
+    collector.set_gauge(name, value, tags)
 
 
 def record_time(name: str, duration: float, tags: dict[str, str] | None = None):
     """记录时间的便捷函数"""
-    get_metrics_collector().record_timer(name, duration, tags)
+    collector = get_metrics_collector()
+    collector.observe_histogram(name, duration, tags)
 
 
-class TimerContext:
+class Timer:
     """计时器上下文管理器"""
 
     def __init__(self, name: str, tags: dict[str, str] | None = None):
         self.name = name
-        self.tags = tags or {}
+        self.tags = tags
         self.start_time = None
 
     def __enter__(self):
@@ -130,9 +148,9 @@ def timer(name: str, tags: dict[str, str] | None = None):
         @functools.wraps(func)
         async def async_wrapper(*args, **kwargs):
             start_time = time.time()
+            success = True
             try:
                 result = await func(*args, **kwargs)
-                success = True
                 return result
             except Exception:
                 success = False
@@ -142,16 +160,16 @@ def timer(name: str, tags: dict[str, str] | None = None):
                 final_tags = (tags or {}).copy()
                 final_tags.update({
                     'function': func.__name__,
-                    'success': str(success).lower()
+                    'success': str(success)
                 })
                 record_time(name, duration, final_tags)
 
         @functools.wraps(func)
         def sync_wrapper(*args, **kwargs):
             start_time = time.time()
+            success = True
             try:
                 result = func(*args, **kwargs)
-                success = True
                 return result
             except Exception:
                 success = False
@@ -161,18 +179,18 @@ def timer(name: str, tags: dict[str, str] | None = None):
                 final_tags = (tags or {}).copy()
                 final_tags.update({
                     'function': func.__name__,
-                    'success': str(success).lower()
+                    'success': str(success)
                 })
                 record_time(name, duration, final_tags)
 
         # 检查是否是异步函数
+        import asyncio
         if asyncio.iscoroutinefunction(func):
             return async_wrapper
         else:
             return sync_wrapper
 
     return decorator
-
 
 # 业务指标记录函数
 def record_agent_operation(agent_name: str, action: str, success: bool, duration: float):
@@ -182,9 +200,8 @@ def record_agent_operation(agent_name: str, action: str, success: bool, duration
         'action': action,
         'success': str(success).lower()
     }
-    increment('agent_operations_total', 1.0, tags)
+    increment_counter('agent_operations_total', 1.0, tags)
     record_time('agent_operation_duration', duration, tags)
-
 
 def record_api_request(method: str, endpoint: str, status_code: int, duration: float):
     """记录API请求指标"""
@@ -194,25 +211,22 @@ def record_api_request(method: str, endpoint: str, status_code: int, duration: f
         'status_code': str(status_code),
         'success': str(200 <= status_code < 400).lower()
     }
-    increment('api_requests_total', 1.0, tags)
+    increment_counter('api_requests_total', 1.0, tags)
     record_time('api_request_duration', duration, tags)
-
 
 def record_cache_operation(operation: str, hit: bool):
     """记录缓存操作指标"""
     tags = {'operation': operation}
-    increment('cache_operations_total', 1.0, tags)
+    increment_counter('cache_operations_total', 1.0, tags)
 
     if hit:
-        increment('cache_hits_total', 1.0, tags)
+        increment_counter('cache_hits_total', 1.0, tags)
     else:
-        increment('cache_misses_total', 1.0, tags)
-
+        increment_counter('cache_misses_total', 1.0, tags)
 
 def set_active_sessions(count: int):
     """设置活跃会话数"""
-    gauge('active_sessions', float(count))
-
+    set_gauge('active_sessions', float(count))
 
 def record_chat_message(user_id: str, message_type: str):
     """记录聊天消息"""
@@ -220,8 +234,7 @@ def record_chat_message(user_id: str, message_type: str):
         'user_id': user_id,
         'message_type': message_type
     }
-    increment('chat_messages_total', 1.0, tags)
-
+    increment_counter('chat_messages_total', 1.0, tags)
 
 def record_multimodal_process(input_type: str, status: str, latency: float, input_size: int):
     """记录多模态处理"""
@@ -229,6 +242,6 @@ def record_multimodal_process(input_type: str, status: str, latency: float, inpu
         'input_type': input_type,
         'status': status
     }
-    increment('multimodal_processes_total', 1.0, tags)
+    increment_counter('multimodal_processes_total', 1.0, tags)
     record_time('multimodal_process_duration', latency, tags)
-    gauge('multimodal_input_size_bytes', float(input_size), tags)
+    set_gauge('multimodal_input_size_bytes', float(input_size), tags)

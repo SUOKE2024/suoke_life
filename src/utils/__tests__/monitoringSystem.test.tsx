@@ -1,6 +1,5 @@
 import { MonitoringSystem, monitoringSystem } from "../monitoringSystem";
 import { MonitoringSystem, monitoringSystem } from "../monitoringSystem";
-
 import React from "react";
 describe("monitoringSystem", () => {
   beforeEach(() => {
@@ -66,7 +65,7 @@ MonitoringSystem(// test params);
 expect(averageTime).toBeLessThan(1);
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
 MonitoringSystem(largeDataset);

@@ -1,6 +1,5 @@
 import { MemoryOptimizer, memoryOptimizer, registerComponent, unregisterComponent, registerListener, unregisterListener, getMemoryStats, takeMemorySnapshot, detectMemoryLeaks } from "../memoryOptimizer";
 import { MemoryOptimizer, memoryOptimizer, registerComponent, unregisterComponent, registerListener, unregisterListener, getMemoryStats, takeMemorySnapshot, detectMemoryLeaks } from "../memoryOptimizer";
-
 describe("memoryOptimizer", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -226,7 +225,7 @@ MemoryOptimizer(// test params);
 expect(averageTime).toBeLessThan(1);
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
 MemoryOptimizer(largeDataset);

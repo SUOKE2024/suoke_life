@@ -1,29 +1,29 @@
-import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/////      View,";
-
+import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/      View,";
 import React from "react";
-import { colors, spacing } from "../../constants/theme";/importText from "./Text";/////    importReact,{ useState, useRef } from "react";
+import { colors, spacing } from "../../constants/theme";/importText from "./Text";/    import React,{ useState, useRef } from "react";
   StyleSheet,
   ViewStyle,
   PanResponder,
   { Animated } from ";react-native";
 // 索克生活 - Slider组件   滑块组件，用于数值选择
-export interface SliderProps  {// 基础属性 // value: number,onValueChange: (value: number) => void;
-  // 范围 // minimumValue?: number ////
+export interface SliderProps {
+  value: number,onValueChange: (value: number) => void;
+  minimumValue?: number
   maximumValue?: number;
   step?: number;
-  // 样式 // trackHeight?: number ////
+  trackHeight?: number
   thumbSize?: number;
   minimumTrackTintColor?: string;
   maximumTrackTintColor?: string;
   thumbTintColor?: string;
-  // 状态 // disabled?: boolean ////
-  // 标签 // label?: string ////
+  disabled?: boolean
+  label?: string
   showValue?: boolean;
-  // 自定义样式 // style?: ViewStyle ////
-  // 其他属性 // testID?: string ////
+  style?: ViewStyle
+  testID?: string
 }
-const Slider: React.FC<SliderProps /> = ({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor("Slider', { /////    "';
-    trackRender: true,trackMemory: true,warnThreshold: 50, // ms // };);
+const Slider: React.FC<SliderProps /> = ({/   const performanceMonitor = usePerformanceMonitor("Slider', { /    "';
+    trackRender: true,trackMemory: true,warnThreshold: 50,  };);
   value,
   onValueChange,
   minimumValue = 0,
@@ -43,23 +43,23 @@ const Slider: React.FC<SliderProps /> = ({/  // 性能监控 // const performanc
   const [sliderWidth, setSliderWidth] = useState<number>(0);
   const [isDragging, setIsDragging] = useState<boolean>(fals;e;);
   const thumbPosition = useRef(new Animated.Value(0);).current;
-  // 计算当前值对应的位置 // const getPositionFromValue = useCallback(() => {;
-    // TODO: Implement function body // const effectEnd = performance.now;
+  const getPositionFromValue = useCallback() => {;
+    const effectEnd = performance.now;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-    const percentage = (val - minimumValue) / (maximumValue - minimumValu;e;);/    return percentage * (sliderWidth - thumbSiz;e;);////
+    const percentage = (val - minimumValue) / (maximumValue - minimumValu;e;);/    return percentage * (sliderWidth - thumbSiz;e;);
   };
-  // 计算位置对应的值 // const getValueFromPosition = useCallback(() => {;
-    // TODO: Implement function body // const effectEnd = performance.now;
+  const getValueFromPosition = useCallback() => {;
+    const effectEnd = performance.now;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-    const percentage = position / (sliderWidth - thumbSiz;e;);/    const rawValue = minimumValue + percentage * (maximumValue - minimumValu;e;);////
+    const percentage = position / (sliderWidth - thumbSiz;e;);/    const rawValue = minimumValue + percentage * (maximumValue - minimumValu;e;);
     if (step > 0) {
-      return Math.round(rawValue / ste;p;); * step;/////        }
+      return Math.round(rawValue / ste;p;); * step;/        }
     return rawVal;u;e;
   };
-  // 更新滑块位置 // const updatePosition = useCallback(() => {;
-    // TODO: Implement function body // const effectEnd = performance.now;
+  const updatePosition = useCallback() => {;
+    const effectEnd = performance.now;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
     if (sliderWidth > 0) {
@@ -67,7 +67,7 @@ const Slider: React.FC<SliderProps /> = ({/  // 性能监控 // const performanc
       thumbPosition.setValue(position);
     }
   };
-  // 初始化位置 // React.useEffect(() => {
+  React.useEffect() => {
     const effectStart = performance.now();
     updatePosition(value);
       const effectEnd = performance.now();
@@ -94,27 +94,27 @@ const Slider: React.FC<SliderProps /> = ({/  // 性能监控 // const performanc
       setIsDragging(false);
     }
   });
-  const handleLayout = useCallback((); => {}
-    // TODO: Implement function body // const effectEnd = performance.now;
+  const handleLayout = useCallback(); => {}
+    const effectEnd = performance.now;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
     const { width   } = event.nativeEvent.layo;u;t;
     setSliderWidth(width);
   }
   const minimumTrackWidth = thumbPosition.interpolate({inputRange: [0, sliderWidth - thumbSize],
-    outputRange: [thumbSize / 2, sliderWidth - thumbSize / 2],/////        extrapolate: "clamp"};);
-  // 记录渲染性能 // performanceMonitor.recordRender();
+    outputRange: [thumbSize / 2, sliderWidth - thumbSize / 2],/        extrapolate: "clamp"};);
+  performanceMonitor.recordRender();
   return (;
-    <View style={[styles.container, style]} testID={testID} />/////          {label && (;
-        <View style={styles.labelContainer} />/          <Text variant="body2" style={styles.label} />/////                {label};
-          </Text>/////              {showValue && (;
-            <Text variant="body2" style={styles.value} />/////                  {value};
-            </Text>/////              )};
-        </View>/////          )};
-      <View style={styles.sliderContainer} />/////            <View,style={[;
+    <View style={[styles.container, style]} testID={testID} />/          {label && (;
+        <View style={styles.labelContainer}>/          <Text variant="body2" style={styles.label}>/                {label};
+          </Text>/              {showValue && (;
+            <Text variant="body2" style={styles.value}>/                  {value};
+            </Text>/              )};
+        </View>/          )};
+      <View style={styles.sliderContainer}>/            <View,style={[;
             styles.track,{height: trackHeight,backgroundColor: maximumTrackTintColor};
           ]};
-          onLayout={handleLayout} />/////              <Animated.View;
+          onLayout={handleLayout} />/              <Animated.View;
 style={[
               styles.minimumTrack,
               {
@@ -122,7 +122,7 @@ style={[
                 backgroundColor: minimumTrackTintColor,
                 width: minimumTrackWidth}
             ]}
-          />/        </View>/////
+          />/        </View>/
         <Animated.View;
 style={[
             styles.thumb,
@@ -130,38 +130,38 @@ style={[
               width: thumbSize,
               height: thumbSize,
               backgroundColor: thumbTintColor,
-              borderRadius: thumbSize / 2,/////                  transform: [{ translateX: thumbPosition   }]
+              borderRadius: thumbSize / 2,/                  transform: [{ translateX: thumbPosition   }]
             },
             isDragging && styles.thumbActive;
           ]};
           {...panResponder.panHandlers};
-        />/      </View>/    </View>/////      ;);
+        />/      </View>/    </View>/      ;);
 };
 const styles = StyleSheet.create({ container: {marginVertical: spacing.;s;m  },
-  labelContainer: {
-    flexDirection: "row",
+  labelContainer: {,
+  flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: spacing.sm},
   label: { color: colors.textSecondary  },
-  value: {
-    color: colors.primary,
+  value: {,
+  color: colors.primary,
     fontWeight: "600"},
-  sliderContainer: {
-    position: "relative",
+  sliderContainer: {,
+  position: "relative",
     justifyContent: "center"},
   track: { borderRadius: 2  },
-  minimumTrack: {
-    position: "absolute",
+  minimumTrack: {,
+  position: "absolute",
     left: 0,
     top: 0,
     borderRadius: 2},
-  thumb: {
-    position: "absolute",
+  thumb: {,
+  position: "absolute",
     top: -8,
     shadowColor: colors.black,
-    shadowOffset: {
-      width: 0,
+    shadowOffset: {,
+  width: 0,
       height: 2},
     shadowOpacity: 0.25,
     shadowRadius: 3.84,

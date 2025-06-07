@@ -1,37 +1,31 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { AgentType, AgentMetrics } from '../../types/agents';
-
 interface AgentAnalyticsProps {
   refreshInterval?: number;
 }
-
 interface AnalyticsData {
   agentType: AgentType;
   metrics: AgentMetrics;
-  trends: {
-    responseTimeChange: number;
+  trends: {;
+  responseTimeChange: number;
     successRateChange: number;
-    throughputChange: number;
-  };
-  alerts: Array<{
-    type: 'warning' | 'error' | 'info';
-    message: string;
-    timestamp: Date;
+  throughputChange: number;
+};
+  alerts: Array<{,
+  type: 'warning' | 'error' | 'info';
+    message: string,
+  timestamp: Date;
   }>;
 }
-
 const { width } = Dimensions.get('window');
-
 const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000 }) => {
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedAgent, setSelectedAgent] = useState<AgentType | null>(null);
   const [timeRange, setTimeRange] = useState<'1h' | '6h' | '24h' | '7d'>('1h');
-
   const agentNames = {[AgentType.XIAOAI]: '小艾',[AgentType.XIAOKE]: '小克',[AgentType.LAOKE]: '老克',[AgentType.SOER]: '索儿';
   };
-
   const fetchAnalyticsData = useCallback(async () => {try {setLoading(true);
       const agents = Object.values(AgentType);
       const analyticsPromises = agents.map(async agentType => {
@@ -44,10 +38,8 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
           },sessions: {active: Math.floor(Math.random() * 50 + 10),total: Math.floor(Math.random() * 1000 + 500),averageDuration: Math.random() * 300 + 120;
           };
         };
-
         const trends = {responseTimeChange: (Math.random() - 0.5) * 20,successRateChange: (Math.random() - 0.5) * 0.1,throughputChange: (Math.random() - 0.5) * 30;
         };
-
         const alerts = [];
         if (mockMetrics.performance.errorRate > 0.03) {
           alerts.push({
@@ -63,11 +55,9 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
             timestamp: new Date();
           });
         }
-
         return {agentType,metrics: mockMetrics,trends,alerts;
         };
       });
-
       const results = await Promise.all(analyticsPromises);
       setAnalyticsData(results);
     } catch (error) {
@@ -76,18 +66,16 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
       setLoading(false);
     }
   }, []);
-
-  useEffect(() => {
+  useEffect() => {
     fetchAnalyticsData();
     const interval = setInterval(fetchAnalyticsData, refreshInterval);
     return () => clearInterval(interval);
   }, [fetchAnalyticsData, refreshInterval]);
-
   const renderMetricCard = (
     title: string,
     value: string | number,
     change?: number,
-    unit?: string
+    unit?: string;
   ) => (
     <View style={styles.metricCard}>
       <Text style={styles.metricTitle}>{title}</Text>
@@ -109,13 +97,12 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
       </View>;
     </View>;
   );
-
   const renderAgentOverview = () => (
     <View style={styles.overviewContainer}>
       <Text style={styles.sectionTitle}>智能体概览</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {analyticsData.map(data => (
-          <TouchableOpacity
+        {analyticsData.map((data => (
+          <TouchableOpacity;
             key={data.agentType}
             style={[styles.agentCard, selectedAgent === data.agentType && styles.selectedAgentCard]}
             onPress={() => setSelectedAgent(data.agentType)}
@@ -140,16 +127,12 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
       </ScrollView>;
     </View>;
   );
-
   const renderDetailedMetrics = () => {if (!selectedAgent) return null;
-
     const data = analyticsData.find(d => d.agentType === selectedAgent);
     if (!data) return null;
-
     return (
       <View style={styles.detailsContainer}>
         <Text style={styles.sectionTitle}>{agentNames[selectedAgent]} 详细指标</Text>
-
         <View style={styles.metricsGrid}>
           {renderMetricCard(
             '响应时间',
@@ -171,7 +154,6 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
           )}
           {renderMetricCard('错误率', data.metrics.performance.errorRate * 100, undefined, '%')}
         </View>
-
         <View style={styles.resourcesSection}>
           <Text style={styles.subsectionTitle}>资源使用情况</Text>
           <View style={styles.metricsGrid}>
@@ -180,7 +162,6 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
             {renderMetricCard('网络使用率', data.metrics.resources.networkUsage, undefined, '%')}
           </View>
         </View>
-
         <View style={styles.sessionsSection}>
           <Text style={styles.subsectionTitle}>会话统计</Text>
           <View style={styles.metricsGrid}>
@@ -189,12 +170,11 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
             {renderMetricCard('平均时长', data.metrics.sessions.averageDuration, undefined, 's')}
           </View>
         </View>
-
         {data.alerts.length > 0 && (
-          <View style={styles.alertsSection}>
+        <View style={styles.alertsSection}>
             <Text style={styles.subsectionTitle}>告警信息</Text>
             {data.alerts.map((alert, index) => (
-              <View
+              <View;
                 key={index}
                 style={[;
                   styles.alertItem,alert.type === 'error';
@@ -213,11 +193,10 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
       </View>;
     );
   };
-
   const renderTimeRangeSelector = () => (;
     <View style={styles.timeRangeContainer}>;
       <Text style={styles.timeRangeLabel}>时间范围:</Text>;
-      {(['1h', '6h', '24h', '7d'] as const).map(range => (;
+      {(["1h",6h', "24h",7d'] as const).map((range => (;
         <TouchableOpacity;
           key={range};
           style={[styles.timeRangeButton, timeRange === range && styles.selectedTimeRange]};
@@ -230,7 +209,6 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
       ))};
     </View>;
   );
-
   if (loading) {
     return (;
       <View style={styles.loadingContainer}>;
@@ -238,7 +216,6 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
       </View>;
     );
   }
-
   return (;
     <ScrollView style={styles.container}>;
       <View style={styles.header}>;
@@ -254,14 +231,13 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
     </ScrollView>;
   );
 };
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  container: {,
+  flex: 1,
     backgroundColor: '#f5f5f5'
   },
-  header: {
-    flexDirection: 'row',
+  header: {,
+  flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 16,
@@ -269,64 +245,64 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0'
   },
-  title: {
-    fontSize: 24,
+  title: {,
+  fontSize: 24,
     fontWeight: 'bold',
     color: '#333'
   },
-  refreshButton: {
-    backgroundColor: '#007AFF',
+  refreshButton: {,
+  backgroundColor: '#007AFF',
     paddingHorizontal: 16,
     paddingVertical: 8,
-    borderRadius: 8
+    borderRadius: 8;
   },
-  refreshButtonText: {
-    color: '#fff',
+  refreshButtonText: {,
+  color: '#fff',
     fontWeight: '600'
   },
-  timeRangeContainer: {
-    flexDirection: 'row',
+  timeRangeContainer: {,
+  flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
     backgroundColor: '#fff',
-    marginBottom: 8
+    marginBottom: 8;
   },
-  timeRangeLabel: {
-    fontSize: 16,
+  timeRangeLabel: {,
+  fontSize: 16,
     fontWeight: '600',
     marginRight: 12,
     color: '#333'
   },
-  timeRangeButton: {
-    paddingHorizontal: 12,
+  timeRangeButton: {,
+  paddingHorizontal: 12,
     paddingVertical: 6,
     marginRight: 8,
     borderRadius: 16,
     backgroundColor: '#f0f0f0'
   },
-  selectedTimeRange: {
-    backgroundColor: '#007AFF'
+  selectedTimeRange: {,
+  backgroundColor: '#007AFF'
   },
-  timeRangeText: {
-    fontSize: 14,
+  timeRangeText: {,
+  fontSize: 14,
     color: '#666'
   },
-  selectedTimeRangeText: {
-    color: '#fff'
+  selectedTimeRangeText: {,
+  color: '#fff'
   },
-  overviewContainer: {
-    backgroundColor: '#fff',
+  overviewContainer: {,
+  backgroundColor: '#fff',
     marginBottom: 8,
-    padding: 16
+    padding: 16;
   },
-  sectionTitle: {
-    fontSize: 20,
+  sectionTitle: {,
+  fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 16,
     color: '#333'
   },
-  agentCard: {
-    width: width * 0.7,
+  agentCard: {,
+  width: width * 0.7,
     marginRight: 12,
     padding: 16,
     backgroundColor: '#f8f9fa',
@@ -334,26 +310,26 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'transparent'
   },
-  selectedAgentCard: {
-    borderColor: '#007AFF',
+  selectedAgentCard: {,
+  borderColor: '#007AFF',
     backgroundColor: '#f0f8ff'
   },
-  agentName: {
-    fontSize: 18,
+  agentName: {,
+  fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 8,
     color: '#333'
   },
-  agentMetrics: {
-    marginBottom: 8
+  agentMetrics: {,
+  marginBottom: 8;
   },
-  agentMetricText: {
-    fontSize: 14,
+  agentMetricText: {,
+  fontSize: 14,
     color: '#666',
-    marginBottom: 4
+    marginBottom: 4;
   },
-  alertBadge: {
-    position: 'absolute',
+  alertBadge: {,
+  position: 'absolute',
     top: 8,
     right: 8,
     backgroundColor: '#FF3B30',
@@ -363,97 +339,97 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  alertBadgeText: {
-    color: '#fff',
+  alertBadgeText: {,
+  color: '#fff',
     fontSize: 12,
     fontWeight: 'bold'
   },
-  detailsContainer: {
-    backgroundColor: '#fff',
-    padding: 16
+  detailsContainer: {,
+  backgroundColor: '#fff',
+    padding: 16;
   },
-  metricsGrid: {
-    flexDirection: 'row',
+  metricsGrid: {,
+  flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    marginBottom: 16
+    marginBottom: 16;
   },
-  metricCard: {
-    width: '48%',
+  metricCard: {,
+  width: '48%',
     backgroundColor: '#f8f9fa',
     padding: 12,
     borderRadius: 8,
-    marginBottom: 8
+    marginBottom: 8;
   },
-  metricTitle: {
-    fontSize: 14,
+  metricTitle: {,
+  fontSize: 14,
     color: '#666',
-    marginBottom: 4
+    marginBottom: 4;
   },
-  metricValueContainer: {
-    flexDirection: 'row',
+  metricValueContainer: {,
+  flexDirection: 'row',
     alignItems: 'baseline',
     justifyContent: 'space-between'
   },
-  metricValue: {
-    fontSize: 18,
+  metricValue: {,
+  fontSize: 18,
     fontWeight: 'bold',
     color: '#333'
   },
-  metricUnit: {
-    fontSize: 12,
+  metricUnit: {,
+  fontSize: 12,
     color: '#666'
   },
-  metricChange: {
-    fontSize: 12,
+  metricChange: {,
+  fontSize: 12,
     fontWeight: '600'
   },
-  metricIncrease: {
-    color: '#34C759'
+  metricIncrease: {,
+  color: '#34C759'
   },
-  metricDecrease: {
-    color: '#FF3B30'
+  metricDecrease: {,
+  color: '#FF3B30'
   },
-  resourcesSection: {
-    marginBottom: 16
+  resourcesSection: {,
+  marginBottom: 16;
   },
-  sessionsSection: {
-    marginBottom: 16
+  sessionsSection: {,
+  marginBottom: 16;
   },
-  subsectionTitle: {
-    fontSize: 16,
+  subsectionTitle: {,
+  fontSize: 16,
     fontWeight: '600',
     marginBottom: 12,
     color: '#333'
   },
-  alertsSection: {
-    marginBottom: 16
+  alertsSection: {,
+  marginBottom: 16;
   },
-  alertItem: {
-    padding: 12,
+  alertItem: {,
+  padding: 12,
     borderRadius: 8,
     marginBottom: 8,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center'
   },
-  errorAlert: {
-    backgroundColor: '#FFEBEE',
+  errorAlert: {,
+  backgroundColor: '#FFEBEE',
     borderLeftWidth: 4,
     borderLeftColor: '#FF3B30'
   },
-  warningAlert: {
-    backgroundColor: '#FFF8E1',
+  warningAlert: {,
+  backgroundColor: '#FFF8E1',
     borderLeftWidth: 4,
     borderLeftColor: '#FF9500'
   },
-  infoAlert: {
-    backgroundColor: '#E3F2FD',
+  infoAlert: {,
+  backgroundColor: '#E3F2FD',
     borderLeftWidth: 4,
     borderLeftColor: '#007AFF'
   },
-  alertMessage: {
-    fontSize: 14,
+  alertMessage: {,
+  fontSize: 14,
     color: '#333',
     flex: 1;
   },alertTime: {fontSize: 12,color: '#666';
@@ -461,5 +437,4 @@ const styles = StyleSheet.create({
   },loadingText: {fontSize: 16,color: '#666';
   };
 });
-
 export default AgentAnalytics;

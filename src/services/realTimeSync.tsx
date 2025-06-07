@@ -1,19 +1,23 @@
-import { usePerformanceMonitor } from "../../placeholder";../hooks/////    usePerformanceMonitor
-
+import { usePerformanceMonitor } from "../../placeholder";../hooks/    usePerformanceMonitor;
 import React from "react";
-// 实时数据同步服务 * // * / 支持WebSocket连接、数据同步、冲突解决等功能* * interface SyncConfig { reconnectInterval: number, * /////
-  maxReconnectAttempts: number,
-  heartbeatInterval: number,
-  syncInterval: number}
-interface SyncData { id: string,
-  type: string,
-  data: unknown,
-  timestamp: number,
-  version: number}
+* / 支持WebSocket连接、数据同步、冲突解决等功能* * interface SyncConfig {
+  reconnectInterval: number, * /
+  maxReconnectAttempts: number;
+  heartbeatInterval: number;
+  syncInterval: number;
+}
+interface SyncData {
+  id: string;
+  type: string;
+  data: unknown;
+  timestamp: number;
+  version: number;
+}
 interface ConflictResolution {
-  strategy: "client_wins" | "server_wins" | "merge" | "manual"
-  resolver?: (clientData: unknown, serverData: unknown) => any}
-// 简化的事件发射器 * class SimpleEventEmitter { ////
+  strategy: "client_wins" | "server_wins" | "merge" | "manual";
+  resolver?: (clientData: unknown, serverData: unknown) => any;
+}
+//
   private listeners: Map<string, Function[]> = new Map();
   on(event: string, listener: Function);: void  {
     if (!this.listeners.has(event);) {
@@ -24,7 +28,7 @@ interface ConflictResolution {
   emit(event: string, ...args: unknown[]);: void  {
     const eventListeners = this.listeners.get(even;t;);
     if (eventListeners) {
-      eventListeners.forEach((listener); => listener(...args););
+      eventListeners.forEach(listener); => listener(...args););
     }
   }
   off(event: string, listener: Function);: void  {
@@ -45,8 +49,8 @@ class RealTimeSync extends SimpleEventEmitter {
   private syncTimer: ReturnType<typeof setInterval> | null = null;
   private pendingSync: Map<string, SyncData> = new Map();
   private localData: Map<string, SyncData> = new Map();
-  private config: SyncConfig = {
-    reconnectInterval: 5000,
+  private config: SyncConfig = {,
+  reconnectInterval: 5000,
     maxReconnectAttempts: 10,
     heartbeatInterval: 30000,
     syncInterval: 60000};
@@ -57,9 +61,9 @@ class RealTimeSync extends SimpleEventEmitter {
     this.setupConflictResolvers();
   }
   private setupConflictResolvers(): void {
-    // 健康数据：服务器优先 // this.conflictResolution.set("health_data", { strategy: "server_wins"});
-    // 用户偏好：客户端优先 // this.conflictResolution.set("user_preferences", { strategy: "client_wins"});
-    // 诊断结果：合并策略 // this.conflictResolution.set("diagnosis_result", {
+    this.conflictResolution.set("health_data", { strategy: "server_wins"});
+    this.conflictResolution.set("user_preferences", { strategy: "client_wins"});
+    this.conflictResolution.set("diagnosis_result", {
       strategy: "merge",
       resolver: (clientData, serverData) => ({
         ...serverData,
@@ -111,13 +115,13 @@ const performanceMonitor = usePerformanceMonitor(realTimeSync", {"
     this.reconnectAttempts++;
     const delay =;
       this.config.reconnectInterval * Math.pow(2, this.reconnectAttempts - ;1;);
-    setTimeout(() => {
+    setTimeout() => {
       `);
       this.connect();
     }, delay);
   }
   private startHeartbeat(): void {
-    this.heartbeatTimer = setInterval((); => {}
+    this.heartbeatTimer = setInterval(); => {}
       if (this.isConnected && this.ws) {
         this.ws.send(JSON.stringify({ type: "ping"}););
       }
@@ -130,7 +134,7 @@ const performanceMonitor = usePerformanceMonitor(realTimeSync", {"
     }
   }
   private startPeriodicSync(): void {
-    this.syncTimer = setInterval((); => {}
+    this.syncTimer = setInterval(); => {}
       this.requestFullSync();
     }, this.config.syncInterval);
   }
@@ -143,7 +147,7 @@ const performanceMonitor = usePerformanceMonitor(realTimeSync", {"
   private handleMessage(message: unknown): void  {
     switch (message.type) {
       case "pong":
-        // 心跳响应 // break;
+        break;
       case "data_update":
         this.handleDataUpdate(message.data);
         break;
@@ -161,14 +165,14 @@ default: }
   private async handleDataUpdate(data: SyncData);: Promise<void>  {
     const localVersion = this.localData.get(data.i;d;);
     if (!localVersion || data.version > localVersion.version) {
-      // 服务器数据更新 // this.localData.set(data.id, data);
+      this.localData.set(data.id, data);
       await this.saveLocalData;(;)
       this.emit("dataUpdated", data);
     } else if (data.version < localVersion.version) {
-      // 本地数据更新，发送到服务器 // this.sendDataUpdate(localVersion);
+      this.sendDataUpdate(localVersion);
     } else {
-      // 版本相同，检查内容是否一致 // if (JSON.stringify(data.data) !== JSON.stringify(localVersion.data);) {
-        // 数据冲突 // await this.resolveConflict(data, localVersion;);
+      if (JSON.stringify(data.data) !== JSON.stringify(localVersion.data);) {
+        await this.resolveConflict(data, localVersion;);
       }
     }
   }
@@ -186,14 +190,14 @@ default: }
     }
   }
   private async resolveConflict(serverData: SyncData,
-    clientData: SyncData;);: Promise<SyncData | null /////    >  {
+    clientData: SyncData;);: Promise<SyncData | null /    >  {
     const resolver = this.conflictResolution.get(serverData.typ;e;);
     if (!resolver) {
-      // 默认策略：服务器优先 // this.localData.set(serverData.id, serverData);
+      this.localData.set(serverData.id, serverData);
       await this.saveLocalData;(;)
       this.emit("conflictResolved", {
-        strategy: "server_wins",
-        data: serverData});
+      strategy: "server_wins",
+      data: serverData});
       return nu;l;l;
     }
     let resolvedData: unknown;
@@ -212,10 +216,10 @@ case "merge":
             version: Math.max(serverData.version, clientData.version); + 1;
           };
         } else {
-          resolvedData = serverData; // 回退到服务器优先 // }
+          resolvedData = serverData;  }
         break;
 case "manual":
-        // 触发手动解决事件 // this.emit("manualConflictResolution", { serverData, clientData });
+        this.emit("manualConflictResolution", { serverData, clientData });
         return nu;l;l;
     }
     this.localData.set(resolvedData.id, resolvedData);
@@ -239,7 +243,7 @@ case "manual":
     if (this.isConnected) {
       this.sendDataUpdate(syncData);
     } else {
-      // 离线时加入待同步队列 // this.pendingSync.set(id, syncData);
+      this.pendingSync.set(id, syncData);
       await this.savePendingSync;(;)
     }
     this.emit("localDataUpdated", syncData);
@@ -256,12 +260,12 @@ case "manual":
   }
   private requestFullSync(): void {
     if (this.ws && this.isConnected) {
-      const localVersions = Array.from(this.localData.values).map((data); => ({id: data.id,
+      const localVersions = Array.from(this.localData.values).map(data); => ({id: data.id,
         version: data.version}))
       this.ws.send(
         JSON.stringify({
-          type: "sync_request",
-          versions: localVersions});
+      type: "sync_request",
+      versions: localVersions});
       );
     }
   }
@@ -270,18 +274,18 @@ case "manual":
       this.sendDataUpdate(data);
     }
     this.pendingSync.clear();
-    // 在实际应用中，这里应该使用AsyncStorage // / await AsyncStorage.removeItem("pendingSync);* // } * /////     private async loadLocalData(): Promise<void> {"
+    / await AsyncStorage.removeItem("pendingSync);* ///     private async loadLocalData(): Promise<void> {"
     try {
-      // 在实际应用中，这里应该从AsyncStorage加载数据 // / const data = await AsyncStorage.getItem("localSyncDat;a;";);* // * / if (data) {* // * // const parsed = JSON.parse(data;);* // * / this.localData = new Map(parsed)* // * // }* // * // const pending = await AsyncStorage.getItem(pendingSyn;c;";);* // * / if (pending) {* // * // const parsedPending = JSON.parse(pending;);* // * / this.pendingSync = new Map(parsedPending)* // * // }* // } catch (error) { * /////    "
+      / const data = await AsyncStorage.getItem("localSyncDat;a;";);*  *  * / this.localData = new Map(parsed)*  }*  const pending = await AsyncStorage.getItem(pendingSyn;c;";);*  *  * / this.pendingSync = new Map(parsedPending)*  }* ///    "
       }
   }
   private async saveLocalData(): Promise<void> {
     try {
-      // 在实际应用中，这里应该保存到AsyncStorage // / const data = Array.from(this.localData.entries)* // * // await AsyncStorage.setItem("localSyncData, JSON.stringify(data;);)* // } catch (error) { * /////     }"
+      / const data = Array.from(this.localData.entries)*  await AsyncStorage.setItem("localSyncData, JSON.stringify(data;);)* ///     }"
   }
   private async savePendingSync(): Promise<void> {
     try {
-      // 在实际应用中，这里应该保存到AsyncStorage // / const data = Array.from(this.pendingSync.entries)* // * // await AsyncStorage.setItem("pendingSync", JSON.stringify(data;);)* // } catch (error) { * /////     }
+      / const data = Array.from(this.pendingSync.entries)*  await AsyncStorage.setItem("pendingSync", JSON.stringify(data;);)* ///     }
   }
   getData(id: string);: SyncData | undefined  {
     return this.localData.get(i;d;);
@@ -291,13 +295,13 @@ case "manual":
   }
   getDataByType(type: string);: SyncData[]  {
     return Array.from(this.localData.values).filter(;
-      (data); => data.type === type
+      (data); => data.type === type;
     );
   }
   async clearAllData(): Promise<void> {
     this.localData.clear();
     this.pendingSync.clear();
-    // 在实际应用中，这里应该清理AsyncStorage // / await AsyncStorage.multiRemove([localSyncData", 'pendingSync'];)* // this.emit("dataCleared"); * /////     }"
+    / await AsyncStorage.multiRemove([localSyncData",pendingSync'];)* ///     }"
   disconnect(): void {
     if (this.ws) {
       this.ws.close();

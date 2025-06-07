@@ -1,23 +1,25 @@
 import { Request, Response } from "express";
-
 // 健康检查端点
-interface HealthStatus { status: "healthy" | "unhealthy",
-  timestamp: string,
-  uptime: number,
-  version: string,
-  services: {database: "connected" | "disconnected",
-    redis: "connected" | "disconnected",
-    external_apis: "available" | "unavailable"};
+interface HealthStatus {
+  status: "healthy" | "unhealthy";
+  timestamp: string;
+  uptime: number;
+  version: string;
+  services: {database: "connected" | "disconnected";
+    redis: "connected" | "disconnected";
+    external_apis: "available" | "unavailable";
+};
 }
 export const healthCheck = async (req: Request, res: Response) =;
 > ;{
   try {
-    const status: HealthStatus = {status: "healthy",
+    const status: HealthStatus = {
+      status: "healthy",
       timestamp: new Date().toISOString(),
       uptime: process.uptime(),
       version: process.env.npm_package_version || "1.0.0",
-      services: {
-        database: await checkDatabase(),
+      services: {,
+  database: await checkDatabase(),
         redis: await checkRedis(),
         external_apis: await checkExternalAPIs()}
     ;};
@@ -42,8 +44,8 @@ export const readinessCheck = async (req: Request, res: Response) =;
 > ;{
   // 简单的就绪检查
 res.status(200).json({
-    status: "ready",
-    timestamp: new Date().toISOString()});
+      status: "ready",
+      timestamp: new Date().toISOString()});
 };
 async function checkDatabase(): Promise<"connected" | "disconnected"> {
   try {

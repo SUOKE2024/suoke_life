@@ -1,10 +1,10 @@
-import { createSlice, PayloadAction } from "@reduxjs/////    toolkit";
-import { UIState, Notification } from "../../////    types";
-
+import { createSlice, PayloadAction } from "@reduxjs/    toolkit";
+import { UIState, Notification } from "../../    types";
 import React from "react";
 // 初始状态
-const initialState: UIState = {theme: "light",
-  language: "zh",
+const initialState: UIState = {
+      theme: "light",
+      language: "zh",
   notifications: [],
   loading: false;
 }
@@ -19,15 +19,14 @@ const uiSlice = createSlice({name: "ui",
     },
     addNotification: (
       state,
-      action: PayloadAction<Omit<Notification, "id" /////    >>
+      action: PayloadAction<Omit<Notification, "id" /    >>
     ) => {}
       const notification: Notification = {...action.payload,
         id: Date.now().toString()};
       state.notifications.unshift(notification);
     },
     removeNotification: (state, action: PayloadAction<string>) => {}
-      state.notifications = state.notifications.filter(
-        (notification); => notification.id !== action.payload;
+      state.notifications = state.notifications.filter(notification); => notification.id !== action.payload;
       );
     },
     markNotificationAsRead: (state, action: PayloadAction<string>) => {}
@@ -39,7 +38,7 @@ const uiSlice = createSlice({name: "ui",
       }
     },
     markAllNotificationsAsRead: (state) => {}
-      state.notifications.forEach((notification); => {}
+      state.notifications.forEach(notification); => {}
         notification.read = true;
       });
     },
@@ -117,10 +116,10 @@ export const selectNotifications = (state: { ui: UIState }) ;
   state.ui.notifications;
 export const selectUnreadNotifications = (state: { ui: UIState }) ;
 =;>;
-  state.ui.notifications.filter((n); => !n.read);
+  state.ui.notifications.filter(n); => !n.read);
 export const selectUnreadNotificationsCount = (state: { ui: UIState }) ;
 =;>;
-  state.ui.notifications.filter((n); => !n.read).length;
+  state.ui.notifications.filter(n); => !n.read).length;
 export const selectUILoading = (state: { ui: UIState }) => state.ui.loadi;
 n;g;
 // 导出reducer;

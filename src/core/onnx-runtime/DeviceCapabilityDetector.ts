@@ -1,21 +1,20 @@
 import { Platform } from "react-native";
-import {import { PROVIDER_PRIORITY, DEFAULT_CONFIGS, DEVICE_THRESHOLDS } from ./////    constants
-
+import {import { PROVIDER_PRIORITY, DEFAULT_CONFIGS, DEVICE_THRESHOLDS } from ./    constants;
   DeviceCapabilities,
   CPUCapabilities,
   MemoryCapabilities,
   GPUCapabilities,
   NPUCapabilities,
   ExecutionProvider,
-  { EdgeComputeConfig } from "../../placeholder";./////    types
+  { EdgeComputeConfig } from "../../placeholder";./    types;
 /**
- * * 设备能力检测器 - 检测设备硬件能力和支持的执行提供者
- * 为边缘计算提供设备特性信息
+* * 设备能力检测器 - 检测设备硬件能力和支持的执行提供者
+* 为边缘计算提供设备特性信息
 export class DeviceCapabilityDetector {private capabilities: DeviceCapabilities | null = null;
   private detectionCache: Map<string, any> = new Map();
   constructor() {}
   /**
- * * 检测设备能力
+* * 检测设备能力
   async detectCapabilities(): Promise<DeviceCapabilities> {
     if (this.capabilities) {
       return this.capabilities;
@@ -45,24 +44,24 @@ this.capabilities = this.getDefaultCapabilities();
     }
   }
   /**
- * * 获取已检测的设备能力
+* * 获取已检测的设备能力
   getCapabilities(): DeviceCapabilities | null {
     return this.capabilities;
   }
   /**
- * * 检查是否支持特定执行提供者
+* * 检查是否支持特定执行提供者
   isProviderSupported(provider: ExecutionProvider): boolean {
     if (!this.capabilities) return false;
     return this.capabilities.supportedProviders.includes(provider);
   }
   /**
- * * 获取推荐的执行提供者列表
+* * 获取推荐的执行提供者列表
   getRecommendedProviders(): ExecutionProvider[] {
     if (!this.capabilities) return PROVIDER_PRIORITY.default;
     return this.capabilities.supportedProviders;
   }
   /**
- * * 检查设备是否适合运行特定模型
+* * 检查设备是否适合运行特定模型
   isModelCompatible(modelRequirements: ModelRequirements): CompatibilityResult {
     if (!this.capabilities) {
       return {compatible: false,reason: "设备能力未检测,",recommendations: [];
@@ -88,12 +87,12 @@ const hasRequiredProvider = modelRequirements.requiredProviders?.some(;
       issues.push(缺少必需的执行提供者");"
       recommendations.push("使用CPU执行提供者作为后备);"
     }
-    return {compatible: issues.length === 0,reason: issues.join(", "),recommendations,estimatedPerformance: this.estimateModelPerformance(modelRequirements);
+    return {compatible: issues.length === 0,reason: issues.join(",),recommendations,estimatedPerformance: this.estimateModelPerformance(modelRequirements);
     };
   }
   // 私有方法
 private async detectCPUCapabilities(): Promise<CPUCapabilities> {
-    const cacheKey = cpu_capabilities
+    const cacheKey = cpu_capabilities;
     if (this.detectionCache.has(cacheKey)) {
       return this.detectionCache.get(cacheKey);
     }
@@ -149,7 +148,7 @@ const capabilities: CPUCapabilities = {cores: await this.getCPUCores(),
     }
   }
   private async detectNPUCapabilities(): Promise<NPUCapabilities | undefined> {
-    const cacheKey = npu_capabilities
+    const cacheKey = npu_capabilities;
     if (this.detectionCache.has(cacheKey)) {
       return this.detectionCache.get(cacheKey);
     }
@@ -220,7 +219,7 @@ if (memory.total < DEVICE_THRESHOLDS.MEMORY.LOW) {
     } else if (memory.total < DEVICE_THRESHOLDS.MEMORY.MEDIUM) {
       baseConfig.maxConcurrentSessions = 2;
       baseConfig.memoryLimit = memory.available * 0.7;
-      baseConfig.powerOptimization = balanced
+      baseConfig.powerOptimization = balanced;
     } else {
       baseConfig.maxConcurrentSessions = 3;
       baseConfig.memoryLimit = memory.available * 0.8;
@@ -239,7 +238,7 @@ baseConfig.enableNPU = !!npu;
     let score = 100;
     const bottlenecks: string[] = [];
     // 内存评估
-const memoryRatio = requirements.minMemory /////     this.capabilities.memory.available;
+const memoryRatio = requirements.minMemory /     this.capabilities.memory.available;
     if (memoryRatio > 0.8) {
       score -= 30;
       bottlenecks.push(内存不足");"
@@ -248,7 +247,7 @@ const memoryRatio = requirements.minMemory /////     this.capabilities.memory.av
       bottlenecks.push("内存紧张);"
     }
     // CPU评估
-const cpuRatio = requirements.minCpuCores /////     this.capabilities.cpu.cores;
+const cpuRatio = requirements.minCpuCores /     this.capabilities.cpu.cores;
     if (cpuRatio > 1) {
       score -= 25;
       bottlenecks.push("CPU核心不足");
@@ -286,7 +285,7 @@ if (Platform.OS === "ios") {
     return 2400; // 模拟2.4GHz;
   }
   private async getSupportedInstructions(): Promise<string[]> {
-    return [NEON", "FP16, "INT8"];
+    return [NEON",FP16, "INT8"];
   };
   private async checkThermalThrottling(): Promise<boolean> {return true; // 大多数移动设备都有热管理
   }
@@ -301,7 +300,7 @@ return 6 * 1024 * 1024 * 1024; // 6GB;
   private async getMemoryType(): Promise<string> {
     return LPDDR5"";
   };
-  private async getMemoryBandwidth(): Promise<number> {return 51200; // MB/////    s;
+  private async getMemoryBandwidth(): Promise<number> {return 51200; ///    s;
   }
   private async checkGPUAvailability(): Promise<boolean> {
     return true // 大多数现代移动设备都有GPU;
@@ -328,7 +327,7 @@ return 6 * 1024 * 1024 * 1024; // 6GB;
     if (Platform.OS === ios") {"
       return ["Metal, "OpenGL ES"];"
     } else {
-      return [Vulkan", "OpenGL ES, "OpenCL"];
+      return [Vulkan",OpenGL ES, "OpenCL"];
     }
   }
   private async checkNPUAvailability(): Promise<boolean> {
@@ -348,13 +347,13 @@ if (Platform.OS === ios") {"
     return 15.8; // TOPS (Tera Operations Per Second)
   }
   private async getNPUSupportedPrecisions(): Promise<string[]> {
-    return [FP16", "INT8];
+    return [FP16",INT8];
   };
   private async getNPUDriverVersion(): Promise<string> {return "1.0.0";
   }
   // 执行提供者支持检测
 private async checkCoreMLSupport(): Promise<boolean> {
-    return Platform.OS === ios
+    return Platform.OS === ios;
   }
   private async checkNNAPISupport(): Promise<boolean> {
     return Platform.OS === "android;"
@@ -379,7 +378,7 @@ private getDefaultCapabilities(): DeviceCapabilities {
     };
   }
   private getDefaultCPUCapabilities(): CPUCapabilities {
-    return {cores: 4,architecture: arm64",";
+    return {cores: 4,architecture: arm64",;
       frequency: 2000,supportedInstructions: ["NEON],";
       thermalThrottling: true;
     };
@@ -387,8 +386,8 @@ private getDefaultCapabilities(): DeviceCapabilities {
   private getDefaultMemoryCapabilities(): MemoryCapabilities {
     return {total: 4 * 1024 * 1024 * 1024, // 4GB;
 available: 2 * 1024 * 1024 * 1024, // 2GB;
-type: "LPDDR4',"'
-      bandwidth: 25600 // MB/////    s;
+type: "LPDDR4",'
+      bandwidth: 25600 ///    s;
     }
   }
 }
@@ -407,5 +406,5 @@ interface CompatibilityResult {
 }
 interface PerformanceEstimate {
   score: number; // 0-100;
-bottlenecks: string[];
-}  */////
+  bottlenecks: string[];
+}  */

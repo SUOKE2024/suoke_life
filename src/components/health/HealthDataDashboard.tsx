@@ -4,28 +4,32 @@ import { VitalSignsMonitor } from './VitalSignsMonitor';
 import { TCMDiagnosisPanel } from './TCMDiagnosisPanel';
 import { HealthReportGenerator } from './HealthReportGenerator';
 import { HealthDataImportExport } from './HealthDataImportExport';
-
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  SafeAreaView
+  SafeAreaView;
 } from 'react-native';
-
 interface HealthDataDashboardProps {
   userId: string;
 }
-
 type TabType = 'overview' | 'vitals' | 'tcm' | 'reports' | 'data';
-
 export const HealthDataDashboard: React.FC<HealthDataDashboardProps> = ({ userId }) => {
   const [activeTab, setActiveTab] = useState<TabType>('overview');
-
   const tabs = [;
-    { key: 'overview', label: '数据管理', icon: '📊' },{ key: 'vitals', label: '生命体征', icon: '💓' },{ key: 'tcm', label: '中医五诊', icon: '🏥' },{ key: 'reports', label: '健康报告', icon: '📋' },{ key: 'data', label: '数据管理', icon: '💾' };
+    {
+      key: "overview",
+      label: '数据管理', icon: '📊' },{
+      key: "vitals",
+      label: '生命体征', icon: '💓' },{
+      key: "tcm",
+      label: '中医五诊', icon: '🏥' },{
+      key: "reports",
+      label: '健康报告', icon: '📋' },{
+      key: "data",
+      label: '数据管理', icon: '💾' };
   ];
-
   const renderTabContent = () => {switch (activeTab) {case 'overview':return <HealthDataManager userId={userId} />;
       case 'vitals':
         return <VitalSignsMonitor userId={userId} />;
@@ -39,16 +43,15 @@ export const HealthDataDashboard: React.FC<HealthDataDashboardProps> = ({ userId
         return <HealthDataManager userId={userId} />;
     }
   };
-
   const renderTabBar = () => (
     <View style={styles.tabBar}>
-      <ScrollView 
-        horizontal 
+      <ScrollView;
+        horizontal;
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.tabScrollContent}
       >
-        {tabs.map((tab) => (
-          <TouchableOpacity
+        {tabs.map(tab) => (
+          <TouchableOpacity;
             key={tab.key}
             style={[
               styles.tab,activeTab === tab.key && styles.activeTab;
@@ -66,7 +69,6 @@ export const HealthDataDashboard: React.FC<HealthDataDashboardProps> = ({ userId
       </ScrollView>;
     </View>;
   );
-
   return (;
     <SafeAreaView style={styles.container}>;
       <View style={styles.header}>;
@@ -82,51 +84,50 @@ export const HealthDataDashboard: React.FC<HealthDataDashboardProps> = ({ userId
     </SafeAreaView>;
   );
 };
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  container: {,
+  flex: 1,
     backgroundColor: '#f5f5f5'
   },
-  header: {
-    backgroundColor: '#fff',
+  header: {,
+  backgroundColor: '#fff',
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0'
   },
-  title: {
-    fontSize: 24,
+  title: {,
+  fontSize: 24,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 4
+    marginBottom: 4;
   },
-  subtitle: {
-    fontSize: 16,
+  subtitle: {,
+  fontSize: 16,
     color: '#666'
   },
-  tabBar: {
-    backgroundColor: '#fff',
+  tabBar: {,
+  backgroundColor: '#fff',
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0'
   },
-  tabScrollContent: {
-    paddingHorizontal: 16
+  tabScrollContent: {,
+  paddingHorizontal: 16;
   },
-  tab: {
-    paddingHorizontal: 20,
+  tab: {,
+  paddingHorizontal: 20,
     paddingVertical: 12,
     marginRight: 8,
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    minWidth: 80
+    minWidth: 80;
   },
-  activeTab: {
-    backgroundColor: '#007AFF'
+  activeTab: {,
+  backgroundColor: '#007AFF'
   },tabIcon: {fontSize: 20,marginBottom: 4;
   },tabLabel: {fontSize: 12,color: '#666',fontWeight: '500';
   },activeTabLabel: {color: '#fff';
   },content: {flex: 1;
   };
-}); 
+});

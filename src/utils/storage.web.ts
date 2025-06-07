@@ -61,7 +61,7 @@ class WebStorage {
   async getAllKeys(): Promise<string[]> {
     try {
       if (this.isLocalStorageAvailable()) {
-        return Object.keys((globalThis as any).localStorage);
+        return Object.keys(globalThis as any).localStorage);
       }
       return Object.keys(memoryStorage);
     } catch (error) {

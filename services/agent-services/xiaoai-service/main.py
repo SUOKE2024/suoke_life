@@ -1,25 +1,3 @@
-"""
-main - 索克生活项目模块
-"""
-
-    from fastapi import APIRouter
-    from xiaoai.agent.xiaoai_agent import XiaoaiAgent
-    from xiaoai.config.settings import get_settings
-    from xiaoai.delivery.api.accessibility import accessibility_router
-    from xiaoai.delivery.api.chat import chat_router
-    from xiaoai.delivery.api.diagnosis import diagnosis_router
-    from xiaoai.delivery.api.health import health_router
-    from xiaoai.observability.monitoring import setup_monitoring
-    from xiaoai.platform.lifecycle import AgentLifecycleManager
-from contextlib import asynccontextmanager
-from fastapi import FastAPI, HTTPException, Depends
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.gzip import GZipMiddleware
-from loguru import logger
-import os
-import sys
-import uvicorn
-
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
@@ -28,17 +6,36 @@ import uvicorn
 健康助手 & 首页聊天频道版主，提供语音引导、交互、问诊及无障碍服务
 """
 
+import os
+import sys
+import uvicorn
+from contextlib import asynccontextmanager
+from fastapi import FastAPI, HTTPException, Depends
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
+from loguru import logger
 
 # 添加项目根目录到Python路径
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 try:
+    from xiaoai.agent.xiaoai_agent import XiaoaiAgent
+    from xiaoai.config.settings import get_settings
+    from xiaoai.delivery.api.health import health_router
+    from xiaoai.delivery.api.chat import chat_router
+    from xiaoai.platform.lifecycle import AgentLifecycleManager
+    from xiaoai.observability.monitoring import setup_monitoring
 except ImportError as e:
     logger.warning(f"导入模块失败: {e}")
     # 创建占位符类
+    from fastapi import APIRouter
+    
     class XiaoaiAgent:
-        def __init__(self, settings):
+        def __init__(self, settings=None):
             self.settings = settings
+            self.status = "ready"
+            self.capabilities = ["基础聊天功能"]
+            self.multimodal_config = {}
         
         async def initialize(self):
             pass
@@ -46,11 +43,11 @@ except ImportError as e:
         async def cleanup(self):
             pass
         
-        async async def get_status(
+        async def get_status(self):
             return {"status": "ok", "agent": "xiaoai"}
         
-        async def process_message(self, text, context, user_id, session_id):
-            return {"response": f"收到消息: {text}", "agent": "xiaoai"}
+        async def process_message(self, text, context=None, user_id=None, session_id=None):
+            return {"response": f"收到消息: {text}", "agent": "xiaoai", "session_id": session_id or "default"}
     
     class AgentLifecycleManager:
         def __init__(self, settings):
@@ -62,7 +59,7 @@ except ImportError as e:
         async def cleanup(self):
             pass
     
-    async def get_settings(
+    def get_settings():
         class Settings:
             debug = True
             host = "0.0.0.0"
@@ -73,8 +70,14 @@ except ImportError as e:
     # 创建占位符路由
     health_router = APIRouter()
     chat_router = APIRouter()
-    diagnosis_router = APIRouter()
-    accessibility_router = APIRouter()
+    
+    @health_router.get("/")
+    async def health_check():
+        return {"status": "ok", "service": "xiaoai-service"}
+    
+    @chat_router.post("/message")
+    async def send_message(message: dict):
+        return {"response": f"收到消息: {message.get('text', '')}", "agent": "xiaoai"}
     
     def setup_monitoring(app, agent):
         pass
@@ -82,6 +85,7 @@ except ImportError as e:
 # 全局变量
 xiaoai_agent: XiaoaiAgent = None
 lifecycle_manager: AgentLifecycleManager = None
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -122,14 +126,12 @@ async def lifespan(app: FastAPI):
             await lifecycle_manager.cleanup()
         logger.info("🔄 小艾智能体服务已停止")
 
+
 def create_app() -> FastAPI:
     """创建FastAPI应用"""
     settings = get_settings()
 
     app = FastAPI(
-
-# 性能优化: 添加响应压缩
-app.add_middleware(GZipMiddleware, minimum_size=1000)
         title="小艾智能体服务",
         description="健康助手 & 首页聊天频道版主，提供语音引导、交互、问诊及无障碍服务",
         version="1.0.0",
@@ -147,13 +149,15 @@ app.add_middleware(GZipMiddleware, minimum_size=1000)
         allow_headers=["*"]
     )
 
+    # 性能优化: 添加响应压缩
+    app.add_middleware(GZipMiddleware, minimum_size=1000)
+
     # 注册路由
     app.include_router(health_router, prefix="/health", tags=["健康检查"])
     app.include_router(chat_router, prefix="/chat", tags=["聊天交互"])
-    app.include_router(diagnosis_router, prefix="/diagnosis", tags=["四诊功能"])
-    app.include_router(accessibility_router, prefix="/accessibility", tags=["无障碍服务"])
 
     return app
+
 
 def get_xiaoai_agent() -> XiaoaiAgent:
     """获取小艾智能体实例"""
@@ -161,11 +165,11 @@ def get_xiaoai_agent() -> XiaoaiAgent:
         raise HTTPException(status_code=503, detail="小艾智能体服务未就绪")
     return xiaoai_agent
 
+
 # 创建应用实例
 app = create_app()
 
-@cache(expire=300)  # 5分钟缓存
-@limiter.limit("100/minute")  # 每分钟100次请求
+
 @app.get("/")
 async def root():
     """根路径"""
@@ -178,16 +182,16 @@ async def root():
             "语音交互与多模态理解",
             "中医望诊与智能问诊",
             "无障碍服务（导盲导医、手语识别）",
-            @cache(expire=@limiter.limit("100/minute")  # 每分钟100次请求
-300)  # 5分钟缓存
-"实时健康档案管理"
+            "实时健康档案管理"
         ]
     }
+
 
 @app.get("/agent/status")
 async def get_agent_status(agent: XiaoaiAgent = Depends(get_xiaoai_agent)):
     """获取智能体状态"""
     return await agent.get_status()
+
 
 @app.post("/agent/message")
 async def send_message(
@@ -198,29 +202,29 @@ async def send_message(
     try:
         response = await agent.process_message(
             message.get("text", ""),
-            message.get("context", {}),
-            message.get("context", {}).get("user_id", ""),
-            message.get("context", {}).get("session_id", "")
+            message.get("context"),
+            message.get("user_id"),
+            message.get("session_id")
         )
         return response
     except Exception as e:
-        logger.error(f"处理消息失败: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
 
 def main():
     """主函数"""
     settings = get_settings()
-
-    logger.info("🚀 启动小艾智能体服务...")
-
+    
+    logger.info(f"启动小艾智能体服务 - {settings.host}:{settings.port}")
+    
     uvicorn.run(
         "main:app",
         host=settings.host,
         port=settings.port,
         reload=settings.debug,
-        log_level="info" if settings.debug else "warning",
-        access_log=settings.debug
+        log_level="info"
     )
+
 
 if __name__ == "__main__":
     main()

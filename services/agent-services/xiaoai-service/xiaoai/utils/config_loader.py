@@ -1,24 +1,28 @@
+#!/usr/bin/env python3
 """
 config_loader - 索克生活项目模块
 """
 
-from typing import Any
 import os
-import yaml
+from pathlib import Path
+from typing import Any
+
+try:
+    import yaml
+    YAML_AVAILABLE = True
+except ImportError:
+    YAML_AVAILABLE = False
 
 """
-配置加载器模块 - 提供配置文件加载功能
+配置加载器模块 - 提供配置文件加载和环境变量处理功能
 """
-
-
-
 
 class ConfigLoader:
     """配置加载器"""
 
     def __init__(self, config_path: str | None = None):
         self.config_path = config_path
-        self.config = {}
+        self.config: dict[str, Any] = {}
 
         if config_path:
             self.load_config()
@@ -28,34 +32,34 @@ class ConfigLoader:
         if not self.config_path:
             # 尝试查找默认配置文件
             possible_paths = [
-                "config/dev.yaml",
+                "config.yaml",
+                "config.yml",
                 "config/config.yaml",
-                "../config/dev.yaml",
-                "../config/config.yaml",
-                os.path.join(os.path.dirname(__file__), "../../config/dev.yaml"),
-                os.path.join(os.path.dirname(__file__), "../../config/config.yaml"),
+                "config/config.yml"
             ]
 
             for path in possible_paths:
-                if os.path.exists(path):
+                if Path(path).exists():
                     self.config_path = path
                     break
             else:
                 raise FileNotFoundError("No configuration file found")
 
         try:
-            with open(self.config_path, encoding='utf-8') as file:
-                self.config = yaml.safe_load(file) or {}
+            if not YAML_AVAILABLE:
+                raise ImportError("PyYAML is required for YAML config files")
 
-            self._apply_environment_variables()
-            return self.config
+            with open(self.config_path, encoding='utf-8') as f:
+                self.config = yaml.safe_load(f) or {}
 
         except Exception as e:
-            raise RuntimeError(f"Failed to load config from {self.config_path}: {e}")
+            print(f"Error loading config from {self.config_path}: {e}")
+            self.config = {}
 
-    def _apply_environment_variables(self):
-        """应用环境变量覆盖"""
+        # 处理环境变量
         self._process_env_vars(self.config)
+
+        return self.config
 
     def _process_env_vars(self, config_dict: dict[str, Any], prefix: str = ""):
         """递归处理环境变量"""
@@ -76,12 +80,12 @@ class ConfigLoader:
     def _parse_env_value(self, value: str) -> Any:
         """解析环境变量值"""
         # 尝试解析为布尔值
-        if value.lower() in ('true', 'false'):
-            return value.lower() == 'true'
+        if value.lower() in ("true", "false"):
+            return value.lower() == "true"
 
         # 尝试解析为数字
         try:
-            if '.' in value:
+            if "." in value:
                 return float(value)
             return int(value)
         except ValueError:
@@ -92,7 +96,7 @@ class ConfigLoader:
 
     def get(self, key: str, default: Any = None) -> Any:
         """获取配置值"""
-        keys = key.split('.')
+        keys = key.split(".")
         value = self.config
 
         for k in keys:
@@ -105,7 +109,7 @@ class ConfigLoader:
 
     def set(self, key: str, value: Any):
         """设置配置值"""
-        keys = key.split('.')
+        keys = key.split(".")
         config = self.config
 
         for k in keys[:-1]:
@@ -123,11 +127,14 @@ _config_instance: ConfigLoader | None = None
 def get_config_loader(config_path: str | None = None) -> ConfigLoader:
     """获取配置加载器实例"""
     global _config_instance
-
     if _config_instance is None:
         _config_instance = ConfigLoader(config_path)
-
     return _config_instance
+
+
+def load_config(config_path: str | None = None) -> dict[str, Any]:
+    """加载配置的便捷函数"""
+    return get_config_loader(config_path).load_config()
 
 
 def get_config(key: str, default: Any = None) -> Any:

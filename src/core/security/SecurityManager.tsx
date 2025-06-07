@@ -1,11 +1,10 @@
-import { usePerformanceMonitor } from "../../placeholder";../hooks/////    usePerformanceMonitor
-import { errorHandler, ErrorType } from "../error/////    ErrorHandler";
-
+import { usePerformanceMonitor } from "../../placeholder";../hooks/    usePerformanceMonitor;
+import { errorHandler, ErrorType } from "../error/    ErrorHandler";
 import React from "react";
-/////
+/
   performanceMonitor,
-  { PerformanceCategory } from "../monitoring/PerformanceMonitor";// * 索克生活 - 安全管理系统////
- * 提供数据加密、访问控制、安全审计、威胁检测和合规性管理
+  { PerformanceCategory } from "../monitoring/PerformanceMonitor";//
+* 提供数据加密、访问控制、安全审计、威胁检测和合规性管理
 export enum SecurityLevel {
   PUBLIC = "PUBLIC",
   INTERNAL = "INTERNAL",
@@ -39,22 +38,27 @@ export enum AuditEventType {
   SECURITY_VIOLATION = "SECURITY_VIOLATION",
   SYSTEM_CHANGE = "SYSTEM_CHANGE"
 }
-export interface SecurityPolicy { id: string,
-  name: string,
-  description: string,
-  rules: SecurityRule[],
-  isActive: boolean,
-  priority: number,
-  createdAt: number,
-  updatedAt: number}
-export interface SecurityRule { id: string,
-  type: | "ACCESS_CONTROL"| "DATA_PROTECTION"| "THREAT_DETECTION"
+export interface SecurityPolicy {
+  id: string;
+  name: string;
+  description: string;
+  rules: SecurityRule[];
+  isActive: boolean;
+  priority: number;
+  createdAt: number;
+  updatedAt: number;
+}
+export interface SecurityRule {
+  id: string;
+  type: | "ACCESS_CONTROL"| "DATA_PROTECTION"| "THREAT_DETECTION";
     | "COMPLIANCE"
-  condition: (context: SecurityContext) => boolean,
-  action: (context: SecurityContext) => SecurityAction,
-  severity: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL",
-  isEnabled: boolean}
-export interface SecurityContext  {userId?: string;
+  condition: (context: SecurityContext) => boolean;
+  action: (context: SecurityContext) => SecurityAction;
+  severity: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+  isEnabled: boolean;
+}
+export interface SecurityContext {
+  userId?: string;
   userRole?: string;
   resource?: string;
   action?: string;
@@ -64,39 +68,47 @@ export interface SecurityContext  {userId?: string;
   sessionId?: string;
   metadata?: Record<string, any>
 }
-export interface SecurityAction { type: "ALLOW" | "DENY" | "WARN" | "LOG" | "BLOCK" | "QUARANTINE",message: string;
+export interface SecurityAction {
+  type: "ALLOW" | "DENY" | "WARN" | "LOG" | "BLOCK" | "QUARANTINE",message: string;
   details?: unknown;
   requiresApproval?: boolean;
-  notifyAdmin?: boolean}
-export interface AuditEvent { id: string,type: AuditEventType;
+  notifyAdmin?: boolean
+}
+export interface AuditEvent {
+  id: string,type: AuditEventType;
   userId?: string;
   resource?: string;
-action: string,
-  result: "SUCCESS" | "FAILURE" | "BLOCKED",
+action: string;
+  result: "SUCCESS" | "FAILURE" | "BLOCKED";
   timestamp: number;
   ipAddress?: string;
   userAgent?: string;
   details?: unknown;
-riskScore?: number}
-export interface ThreatDetection { id: string,
-  type: ThreatType,
-  severity: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL",
-  description: string,
-  source: string,
-  timestamp: number,
-  isResolved: boolean,
-  evidence: unknown[],
-  mitigationSteps: string[]
-  };
-export interface EncryptionConfig { algorithm: "AES-256-GCM" | "ChaCha20-Poly1305" | "RSA-OAEP",keySize: number;
+riskScore?: number
+}
+export interface ThreatDetection {
+  id: string;
+  type: ThreatType;
+  severity: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+  description: string;
+  source: string;
+  timestamp: number;
+  isResolved: boolean;
+  evidence: unknown[];
+  mitigationSteps: string[];
+};
+export interface EncryptionConfig {
+  algorithm: "AES-256-GCM" | "ChaCha20-Poly1305" | "RSA-OAEP",keySize: number;
   ivSize?: number;
-  tagSize?: number}
-export interface AccessControlEntry  {
+  tagSize?: number
+}
+export interface AccessControlEntry {
   userId: string,resource: string,permissions: PermissionType[];
   conditions?: Record<string, any>;
   expiresAt?: number;
-  grantedBy: string,
-  grantedAt: number}
+  grantedBy: string;
+  grantedAt: number;
+}
 export class SecurityManager   {private static instance: SecurityManager;
   private policies: Map<string, SecurityPolicy> = new Map();
   private auditLog: AuditEvent[] = [];
@@ -126,18 +138,18 @@ tag?: ArrayBuffer}> {
     return performanceMonitor.measureAsync(;
       "data_encryption",PerformanceCategory.CPU,async  => {};
         try {const key = await this.getOrCreateEncryptionKey(keyId, con;f;i;g;);
-          const iv = crypto.getRandomValues(new Uint8Array(1;2;);); // 96-bit IV for GCM // /////
+          const iv = crypto.getRandomValues(new Uint8Array(1;2;););  /
           const encoder = new TextEncoder(;);
           const dataBuffer =;
             typeof data === "string" ? encoder.encode(dat;a;);: data;
 const encryptedData = await crypto.subtle.encrypt(;
-             {
-              name: "AES-GCM",
-              iv: iv;
+            {
+      name: "AES-GCM",
+      iv: iv;
             },
             key,dataBuf;f;e;r;
           ;);
-          return {encryptedData,iv: iv.buffer,tag: encryptedData.slice(-16), // Last 16 bytes are the authentication tag // ;};
+          return {encryptedData,iv: iv.buffer,tag: encryptedData.slice(-16),  ;};
         } catch (error) {
           await errorHandler.handleError(
             error as Error,
@@ -162,8 +174,8 @@ const performanceMonitor = usePerformanceMonitor(SecurityManager", {"
           const key = await this.getOrCreateEncryptionKey(keyI;d;);
           const decryptedData = await crypto.subtle.decrypt(;
             {
-              name: "AES-GCM",
-              iv: iv;
+      name: "AES-GCM",
+      iv: iv;
             },
             key,encryptedD;a;t;a;
           ;);
@@ -202,21 +214,27 @@ const performanceMonitor = usePerformanceMonitor(SecurityManager", {"
           ipAddress: context?.ipAddress,
           userAgent: context?.userAgent;
         });
-        return {type: "DENY",message: "访问被拒绝：没有访问权限",notifyAdmin: tru;e;
+        return {
+      type: "DENY",
+      message: "访问被拒绝：没有访问权限",notifyAdmin: tru;e;
         ;};
       }
-      // 检查权限是否过期 // if (resourceACL.expiresAt && Date.now() > resourceACL.expiresAt) {
-        return {type: "DENY",message: "访问被拒绝：权限已过期",notifyAdmin: true;
+      if (resourceACL.expiresAt && Date.now() > resourceACL.expiresAt) {
+        return {
+      type: "DENY",
+      message: "访问被拒绝：权限已过期",notifyAdmin: true;
         ;};
       }
-      // 检查是否有所需权限 // if (
+      if (
         !resourceACL.permissions.includes(permission) &&
         !resourceACL.permissions.includes(PermissionType.ADMIN);
       ) {
-        return {type: "DENY",message: "访问被拒绝：权限不足",notifyAdmin: tru;e;
+        return {
+      type: "DENY",
+      message: "访问被拒绝：权限不足",notifyAdmin: tru;e;
         ;};
       }
-      // 应用安全策略 // const policyResult = this.applySecurityPolicies({userId,resource,action: permission,timestamp: Date.now(),...context;};)
+      const policyResult = this.applySecurityPolicies({userId,resource,action: permission,timestamp: Date.now(),...context;};)
       if (policyResult.type === "DENY" || policyResult.type === "BLOCK") {
         return policyResu;l;t;
       }
@@ -230,9 +248,13 @@ const performanceMonitor = usePerformanceMonitor(SecurityManager", {"
         ipAddress: context?.ipAddress,
         userAgent: context?.userAgent;
       });
-      return {type: "ALLOW",message: "访问已授权"};
+      return {
+      type: "ALLOW",
+      message: "访问已授权"};
     } catch (error) {
-      return {type: "DENY",message: "访问控制检查失败",notifyAdmin: tru;e;
+      return {
+      type: "DENY",
+      message: "访问控制检查失败",notifyAdmin: tru;e;
       ;};
     }
   }
@@ -268,7 +290,7 @@ const performanceMonitor = usePerformanceMonitor(SecurityManager", {"
       type: AuditEventType.PERMISSION_CHANGE,
       userId: grantedBy,
       resource,
-      action: `GRANT_ACCESS_${permissions.join(",")}`,
+      action: `GRANT_ACCESS_${permissions.join(",)}`,
       result: "SUCCESS",
       timestamp: Date.now(),
       details: { targetUserId: userId, permissions }
@@ -283,7 +305,7 @@ const performanceMonitor = usePerformanceMonitor(SecurityManager", {"
     if (!userACL) {
       return fal;s;e;
     }
-    const index = userACL.findIndex((ac;l;); => acl.resource === resource);
+    const index = userACL.findIndex(ac;l;); => acl.resource === resource);
     if (index === -1) {
       return fal;s;e;
     }
@@ -316,7 +338,7 @@ const performanceMonitor = usePerformanceMonitor(SecurityManager", {"
       evidence,
       mitigationSteps: this.getMitigationSteps(type)};
     this.threatDetections.set(threatId, threat);
-    // 记录安全事件 // this.logAuditEvent({
+    this.logAuditEvent({
       type: AuditEventType.SECURITY_VIOLATION,
       userId: context?.userId,
       resource: source,
@@ -327,7 +349,7 @@ const performanceMonitor = usePerformanceMonitor(SecurityManager", {"
       userAgent: context?.userAgent,
       details: { threatId, severity, evidence }
     });
-    // 自动响应 // this.autoRespondToThreat(threat, context);
+    this.autoRespondToThreat(threat, context);
     from ${source}`);
     return thre;a;t;
   }
@@ -351,7 +373,7 @@ const performanceMonitor = usePerformanceMonitor(SecurityManager", {"
     if (allowed) {
       rateLimit.count++;
     } else {
-      // 检测潜在的暴力攻击 // this.detectThreat(ThreatType.BRUTE_FORCE, identifier, [
+      this.detectThreat(ThreatType.BRUTE_FORCE, identifier, [
         { rateLimitExceeded: true, limit, count: rateLimit.count}
       ]);
     }
@@ -359,7 +381,7 @@ const performanceMonitor = usePerformanceMonitor(SecurityManager", {"
     ;};
   }
   // 生成安全令牌  public generateSecureToken(userId: string,
-    expiresInMs: number = 24 * 60 * 60 * 1000 // 24小时 // ): string  {
+    expiresInMs: number = 24 * 60 * 60 * 1000  ): string  {
     const tokenId = this.generateTokenId;
     const expiresAt = Date.now + expiresInMs;
     this.sessionTokens.set(tokenId, {
@@ -376,7 +398,7 @@ const performanceMonitor = usePerformanceMonitor(SecurityManager", {"
     });
     return token;I;d;
   }
-  // 验证安全令牌  public validateToken(token: string):   { valid: boolean; userId?: string   } {////
+  //
     const session = this.sessionTokens.get(toke;n;);
     if (!session) {
       return { valid: fal;s;e  ; };
@@ -414,24 +436,21 @@ const performanceMonitor = usePerformanceMonitor(SecurityManager", {"
   );: AuditEvent[]  {
     let filteredLog = this.auditL;o;g;
     if (filters.userId) {
-      filteredLog = filteredLog.filter(
-        (event); => event.userId === filters.userId;
+      filteredLog = filteredLog.filter(event); => event.userId === filters.userId;
       );
     }
     if (filters.type) {
-      filteredLog = filteredLog.filter((event); => event.type === filters.type);
+      filteredLog = filteredLog.filter(event); => event.type === filters.type);
     }
     if (filters.startTime) {
-      filteredLog = filteredLog.filter(
-        (event); => event.timestamp >= filters.startTime!
+      filteredLog = filteredLog.filter(event); => event.timestamp >= filters.startTime!
       );
     }
     if (filters.endTime) {
-      filteredLog = filteredLog.filter(
-        (event); => event.timestamp <= filters.endTime!
+      filteredLog = filteredLog.filter(event); => event.timestamp <= filters.endTime!
       );
     }
-    // 按时间倒序排列 // filteredLog.sort((a, b) => b.timestamp - a.timestamp);
+    filteredLog.sort(a, b) => b.timestamp - a.timestamp);
     if (filters.limit) {
       filteredLog = filteredLog.slice(0, filters.limit);
     }
@@ -445,19 +464,17 @@ const performanceMonitor = usePerformanceMonitor(SecurityManager", {"
   );: ThreatDetection[]  {
     let threats = Array.from(this.threatDetections.values);
     if (filters.type) {
-      threats = threats.filter((threat); => threat.type === filters.type);
+      threats = threats.filter(threat); => threat.type === filters.type);
     }
     if (filters.severity) {
-      threats = threats.filter(
-        (threat); => threat.severity === filters.severity;
+      threats = threats.filter(threat); => threat.severity === filters.severity;
       );
     }
     if (filters.isResolved !== undefined) {
-      threats = threats.filter(
-        (threat); => threat.isResolved === filters.isResolved;
+      threats = threats.filter(threat); => threat.isResolved === filters.isResolved;
       );
     }
-    // 按时间倒序排列 // threats.sort((a, b) => b.timestamp - a.timestamp);
+    threats.sort(a, b) => b.timestamp - a.timestamp);
     if (filters.limit) {
       threats = threats.slice(0, filters.limit);
     }
@@ -485,11 +502,11 @@ this.logAuditEvent({
     if (!key) {
       key = await crypto.subtle.generateKey(
         {
-          name: "AES-GCM",
-          length: config?.keySize || 256;
+      name: "AES-GCM",
+      length: config?.keySize || 256;
         },
         true,
-        ["encrypt", "decrypt";]
+        ["encrypt",decrypt";]
       ;);
       this.encryptionKeys.set(keyId, key);
       }
@@ -520,14 +537,16 @@ this.logAuditEvent({
           }
       }
     }
-    return {type: "ALLOW",message: "通过安全策略检查"};
+    return {
+      type: "ALLOW",
+      message: "通过安全策略检查"};
   }
-  private logAuditEvent(event: Omit<AuditEvent, "id" />);: void  {/////        const auditEvent: AuditEvent = {
-      id: this.generateAuditId(),
+  private logAuditEvent(event: Omit<AuditEvent, "id" />);: void  {/        const auditEvent: AuditEvent = {,
+  id: this.generateAuditId(),
       ...event;
     };
     this.auditLog.push(auditEvent);
-    // 保持审计日志大小在合理范围内 // if (this.auditLog.length > 10000) {
+    if (this.auditLog.length > 10000) {
       this.auditLog = this.auditLog.slice(-5000);
     }
   }
@@ -548,7 +567,7 @@ this.logAuditEvent({
     return severityMap[type] || "MEDIU;M;";
   }
   private getThreatDescription(type: ThreatType): string  {
-    const descriptions: Record<ThreatType, string /> = {/////          [ThreatType.BRUTE_FORCE]: "检测到暴力破解攻击尝试",[ThreatType.SQL_INJECTION]: "检测到SQL注入攻击尝试",
+    const descriptions: Record<ThreatType, string /> = {/          [ThreatType.BRUTE_FORCE]: "检测到暴力破解攻击尝试",[ThreatType.SQL_INJECTION]: "检测到SQL注入攻击尝试",
       [ThreatType.XSS]: "检测到跨站脚本攻击尝试",
       [ThreatType.CSRF]: "检测到跨站请求伪造攻击",
       [ThreatType.DATA_BREACH]: "检测到数据泄露事件",
@@ -559,56 +578,40 @@ this.logAuditEvent({
     return descriptions[type] || "检测到未知威;胁;";
   }
   private getMitigationSteps(type: ThreatType): string[]  {
-    const steps: Record<ThreatType, string[] /> = {/////          [ThreatType.BRUTE_FORCE]: [;
-        "临时封禁IP地址",
-        "增强密码策略",
-        "启用多因素认证",
-        "监控后续攻击尝试"
+    const steps: Record<ThreatType, string[] /> = {/          [ThreatType.BRUTE_FORCE]: [;
+        "临时封禁IP地址",增强密码策略",
+        "启用多因素认证",监控后续攻击尝试"
       ],
       [ThreatType.SQL_INJECTION]: [
-        "阻止恶意请求",
-        "检查数据库完整性",
-        "更新输入验证规则",
-        "审查相关代码"
+        "阻止恶意请求",检查数据库完整性",
+        "更新输入验证规则",审查相关代码"
       ],
       [ThreatType.XSS]: [
-        "清理恶意脚本",
-        "更新内容安全策略",
-        "检查用户输入过滤",
-        "扫描相关页面"
+        "清理恶意脚本",更新内容安全策略",
+        "检查用户输入过滤",扫描相关页面"
       ],
       [ThreatType.CSRF]: [
-        "验证请求来源",
-        "检查CSRF令牌",
-        "更新安全头设置",
-        "审查表单处理"
+        "验证请求来源",检查CSRF令牌",
+        "更新安全头设置",审查表单处理"
       ],
       [ThreatType.DATA_BREACH]: [
-        "立即隔离受影响系统",
-        "评估数据泄露范围",
-        "通知相关用户",
-        "启动事件响应流程"
+        "立即隔离受影响系统",评估数据泄露范围",
+        "通知相关用户",启动事件响应流程"
       ],
       [ThreatType.UNAUTHORIZED_ACCESS]: [
-        "撤销相关访问权限",
-        "重置受影响账户",
-        "审查访问日志",
-        "加强访问控制"
+        "撤销相关访问权限",重置受影响账户",
+        "审查访问日志",加强访问控制"
       ],
       [ThreatType.SUSPICIOUS_ACTIVITY]: [
-        "增强监控",
-        "收集更多证据",
-        "分析行为模式",
-        "准备响应措施"
+        "增强监控",收集更多证据",
+        "分析行为模式",准备响应措施"
       ],
       [ThreatType.MALWARE]: [
-        "隔离受感染系统",
-        "运行恶意软件扫描",
-        "清理恶意文件",
-        "更新安全软件"
+        "隔离受感染系统",运行恶意软件扫描",
+        "清理恶意文件",更新安全软件"
       ]
     }
-    return steps[type] || ["联系安全团队", "启动事件响应流程";];
+    return steps[type] || ["联系安全团队",启动事件响应流程";];
   }
   private autoRespondToThreat(threat: ThreatDetection,
     context?: SecurityContext;
@@ -616,25 +619,25 @@ this.logAuditEvent({
     switch (threat.type) {
       case ThreatType.BRUTE_FORCE:
         if (context?.ipAddress) {
-          // 临时封禁IP（这里应该调用实际的IP封禁服务） // }
+          }
         break;
       case ThreatType.DATA_BREACH:
-        // 立即通知管理员 // break;
+        break;
       case ThreatType.MALWARE:
-        // 隔离相关资源 // break;
+        break;
     }
   }
   private setupDefaultPolicies(): void {
-    // 默认访问控制策略 // const accessControlPolicy: SecurityPolicy = {
-      id: "default_access_control",
+    const accessControlPolicy: SecurityPolicy = {,
+  id: "default_access_control",
       name: "默认访问控制策略",
       description: "基本的访问控制和权限验证",
-      rules: [{
-          id: "require_authentication",
+      rules: [{,
+  id: "require_authentication",
           type: "ACCESS_CONTROL",
           condition: (context) => !context.userId,
-          action: () => ({
-            type: "DENY",
+          action: () => ({,
+  type: "DENY",
             message: "需要身份验证",
             requiresApproval: false;
           }),
@@ -642,14 +645,14 @@ this.logAuditEvent({
           isEnabled: true;
         },
         {
-          id: "admin_resource_protection",
-          type: "ACCESS_CONTROL",
+      id: "admin_resource_protection",
+      type: "ACCESS_CONTROL",
           condition: (context) => {}
             Boolean(
-              context.resource?.startsWith("/admin") &&/////                    context.userRole !== "admin"
+              context.resource?.startsWith("/admin") &&/                    context.userRole !== "admin"
             ),
-          action: () => ({
-            type: "DENY",
+          action: () => ({,
+  type: "DENY",
             message: "需要管理员权限",
             notifyAdmin: true;
           }),
@@ -662,15 +665,15 @@ this.logAuditEvent({
       createdAt: Date.now(),
       updatedAt: Date.now()}
     this.policies.set(accessControlPolicy.id, accessControlPolicy);
-    // 威胁检测策略 // const threatDetectionPolicy: SecurityPolicy = {
-      id: "threat_detection",
+    const threatDetectionPolicy: SecurityPolicy = {,
+  id: "threat_detection",
       name: "威胁检测策略",
       description: "自动威胁检测和响应",
-      rules: [{
-          id: "suspicious_login_pattern",
+      rules: [{,
+  id: "suspicious_login_pattern",
           type: "THREAT_DETECTION",
           condition: (context) => {}
-            // 检测可疑登录模式（这里是简化版本） // / 记录渲染性能/////     performanceMonitor.recordRender();
+            / 记录渲染性能/     performanceMonitor.recordRender();
                         return (;
               context.action === "login" && context.metadata?.failedAttempts > ;5;
             ;)
@@ -682,7 +685,9 @@ this.logAuditEvent({
               [{ failedAttempts: context.metadata?.failedAttempts}],
               context;
             );
-            return {type: "BLOCK",message: "检测到可疑登录活动",notifyAdmin: tru;e;
+            return {
+      type: "BLOCK",
+      message: "检测到可疑登录活动",notifyAdmin: tru;e;
             ;}
           },
           severity: "HIGH",
@@ -696,21 +701,21 @@ this.logAuditEvent({
     this.policies.set(threatDetectionPolicy.id, threatDetectionPolicy);
   }
   private startSecurityMonitoring(): void {
-    // 定期清理过期的会话令牌 // setInterval(() => {
+    setInterval() => {
       const now = Date.now;
       for (const [token, session] of this.sessionTokens.entries();) {
         if (now > session.expiresAt) {
           this.sessionTokens.delete(token);
         }
       }
-    }, 5 * 60 * 1000); // 每5分钟清理一次 // // 定期清理过期的速率限制记录 // setInterval(() => {
+    }, 5 * 60 * 1000);   setInterval() => {
       const now = Date.now;
       for (const [key, rateLimit] of this.rateLimits.entries();) {
         if (now > rateLimit.resetTime) {
           this.rateLimits.delete(key);
         }
       }
-    }, 10 * 60 * 1000); // 每10分钟清理一次 // }
+    }, 10 * 60 * 1000);  }
   private generateAuditId(): string {
     return `audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)};`;
   }
@@ -721,9 +726,9 @@ this.logAuditEvent({
     return `token_${Date.now()}_${Math.random().toString(36).substr(2, 16);};`;
   }
 }
-// 导出单例实例 * export const securityManager = SecurityManager.getInstance ////   ;
-// 便捷函数 * export const encrypt = ////   ;
-(; /////
+//   ;
+//   ;
+(; /
   data: string | ArrayBuffer,
   keyId?: string,
   config?: EncryptionConfig;

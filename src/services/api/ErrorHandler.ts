@@ -1,10 +1,14 @@
 // 索克生活API错误处理服务   统一处理API错误响应和状态码
-export interface ApiError { code: number,message: string;
+export interface ApiError {
+  code: number,message: string;
   details?: unknown;
   timestamp: string;
-  requestId?: string}
-export interface ErrorResponse { success: false,error: ApiError;
-  data?: null}
+  requestId?: string
+}
+export interface ErrorResponse {
+  success: false,error: ApiError;
+  data?: null
+}
 export class ApiErrorHandler  {
   // 创建标准化错误响应
 static createErrorResponse(

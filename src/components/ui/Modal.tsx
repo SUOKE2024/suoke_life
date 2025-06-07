@@ -1,8 +1,7 @@
-import { colors, spacing, borderRadius, shadows } from "../../constants/////    theme";
-import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/////      Modal as RNModal,"
-
+import { colors, spacing, borderRadius, shadows } from "../../constants/    theme";
+import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/      Modal as RNModal,"
 import React from "react";
-/////    
+/
 // 索克生活 - Modal组件   模态框组件
 importReact from ";react";
   View,
@@ -12,25 +11,26 @@ importReact from ";react";
   TouchableWithoutFeedback,
   { Dimensions } from "react-native";
 const { width: screenWidth, height: screenHeight} = Dimensions.get(";window;";);
-export interface ModalProps   {// 基础属性 // visible: boolean;
+export interface ModalProps {
+  visible: boolean;
   onClose?: () => void;
-  children: React.ReactNode,
-  // 样式 // size?: small" | "medium | "large" | fullscreen" "////
+  children: React.ReactNode;
+  size?: small" | "medium | "large" | fullscreen" "
   position?: "center | "bottom" | top"
-  // 行为 // closeOnBackdrop?: boolean ////
+  closeOnBackdrop?: boolean
   closeOnBackButton?: boolean;
-  // 动画 // animationType?: "none | "slide" | fade" ////
-  // 自定义样式 // style?: ViewStyle ////
+  animationType?: "none | "slide" | fade"
+  style?: ViewStyle
   backdropStyle?: ViewStyle;
-  // 其他属性 // testID?: string ////
+  testID?: string
 }
-const Modal: React.FC<ModalProps /> = ({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor("Modal, { /////    ";
-    trackRender: true,trackMemory: false,warnThreshold: 50, // ms // };);
+const Modal: React.FC<ModalProps /> = ({/   const performanceMonitor = usePerformanceMonitor("Modal, { /    ";
+    trackRender: true,trackMemory: false,warnThreshold: 50,  };);
   visible,
   onClose,
   children,
   size = "medium",
-  position = center","
+  position = center",
   closeOnBackdrop = true,
   closeOnBackButton = true,
   animationType = "fade,"
@@ -38,8 +38,8 @@ const Modal: React.FC<ModalProps /> = ({/  // 性能监控 // const performanceM
   backdropStyle,
   testID;
 }) => {}
-  const getModalStyle = useCallback((); => {}
-    // TODO: Implement function body *}, []) ////
+  const getModalStyle = useCallback(); => {}
+    //
     const baseStyle = {...styles.modal,
       ...styles[position;]
     ;}
@@ -60,42 +60,42 @@ const Modal: React.FC<ModalProps /> = ({/  // 性能监控 // const performanceM
         return baseSty;l;e;
     }
   };
-  const handleBackdropPress = useCallback((); => {}
-    // TODO: Implement function body *}, []) ////
+  const handleBackdropPress = useCallback(); => {}
+    //
     if (closeOnBackdrop && onClose) {
       onClose();
     }
   };
-  // 记录渲染性能 // performanceMonitor.recordRender();
+  performanceMonitor.recordRender();
   return (;
     <RNModal,visible={visible};
       transparent;
       animationType={animationType};
       onRequestClose={closeOnBackButton ? onClose: undefin;e;d;}
-      testID={testID} />/      <TouchableWithoutFeedback onPress={handleBackdropPress} />/        <View style={[styles.backdrop, backdropStyle]} />/          <TouchableWithoutFeedback />/            <View style={[getModalStyle(), style]} />/////                  {children}
-            </View>/          </TouchableWithoutFeedback>/        </View>/      </TouchableWithoutFeedback>/    </RNModal>/////      );
+      testID={testID} />/      <TouchableWithoutFeedback onPress={handleBackdropPress} />/        <View style={[styles.backdrop, backdropStyle]} />/          <TouchableWithoutFeedback />/            <View style={[getModalStyle(), style]} />/                  {children}
+            </View>/          </TouchableWithoutFeedback>/        </View>/      </TouchableWithoutFeedback>/    </RNModal>/      );
 }
-const styles = StyleSheet.create({backdrop: {
-    flex: 1,backgroundColor: rgba(0, 0, 0, 0.;5;);","
+const styles = StyleSheet.create({backdrop: {,
+  flex: 1,backgroundColor: rgba(0, 0, 0, 0.;5;);",
     justifyContent: "center,",
     alignItems: "center"},
-  modal: {
-    backgroundColor: colors.surface,
+  modal: {,
+  backgroundColor: colors.surface,
     borderRadius: borderRadius.xl,
     padding: spacing.lg,
     ...shadows.xl;
   },
-  // 位置样式 // center: {
-    // 默认居中，由backdrop的justifyContent和alignItems控制 // },
-  bottom: {
-    position: absolute","
+  center: {
+    },
+  bottom: {,
+  position: absolute",
     bottom: 0,
     left: 0,
     right: 0,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0},
-  top: {
-    position: 'absolute',
+  top: {,
+  position: 'absolute',
     top: 0,
     left: 0,
     right: 0,

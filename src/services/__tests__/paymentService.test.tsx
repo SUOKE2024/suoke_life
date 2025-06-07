@@ -1,6 +1,5 @@
 import { paymentService } from "../paymentService";
 import { paymentService } from "../paymentService";
-
 import React from "react";
 describe("paymentService", () => {
   beforeEach(() => {
@@ -43,7 +42,7 @@ paymentService(// test params);
 expect(averageTime).toBeLessThan(1);
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
 paymentService(largeDataset);

@@ -1,6 +1,5 @@
 import { render } from "@testing-library/react-native";
 import { WelcomeScreen, LoginScreen, RegisterScreen, ForgotPasswordScreen } from "../index";
-
 import React from "react";
 // Mock navigation
 const mockNavigation = {navigate: jest.fn(),
@@ -13,7 +12,9 @@ const mockNavigation = {navigate: jest.fn(),
   canGoBack: jest.fn(),
   getId: jest.fn(),
   getParent: jest.fn(),getState: jest.fn()};
-const mockRoute = {key: "test",name: Test" as const,"
+const mockRoute = {
+      key: "test",
+      name: Test" as const,"
   params: undefined};
 jest.mock("@react-navigation/native, () => ({"
   ...jest.requireActual("@react-navigation/native"),

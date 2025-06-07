@@ -1,10 +1,8 @@
 import axios, { AxiosInstance } from 'axios';
-
 /**
- * 消息总线服务客户端
- * 提供消息发布/订阅、主题管理等功能
- */
-
+* 消息总线服务客户端
+* 提供消息发布/订阅、主题管理等功能
+*/
 // 类型定义
 export interface Message {
   id: string;
@@ -14,7 +12,6 @@ export interface Message {
   publishTime: number;
   publisherId?: string;
 }
-
 export interface Topic {
   name: string;
   description?: string;
@@ -23,20 +20,17 @@ export interface Topic {
   partitionCount: number;
   retentionHours: number;
 }
-
 export interface PublishRequest {
   topic: string;
   payload: any;
   attributes?: Record<string, string>;
 }
-
 export interface PublishResponse {
   messageId: string;
   publishTime: number;
   success: boolean;
   errorMessage?: string;
 }
-
 export interface SubscribeRequest {
   topic: string;
   subscriptionName?: string;
@@ -45,11 +39,9 @@ export interface SubscribeRequest {
   maxMessages?: number;
   timeoutSeconds?: number;
 }
-
 export interface SubscribeResponse {
   messages: Message[];
 }
-
 export interface CreateTopicRequest {
   name: string;
   description?: string;
@@ -57,24 +49,20 @@ export interface CreateTopicRequest {
   partitionCount?: number;
   retentionHours?: number;
 }
-
 export interface CreateTopicResponse {
   success: boolean;
   errorMessage?: string;
   topic?: Topic;
 }
-
 export interface ListTopicsRequest {
   pageSize?: number;
   pageToken?: string;
 }
-
 export interface ListTopicsResponse {
   topics: Topic[];
   nextPageToken?: string;
   totalCount: number;
 }
-
 export interface Subscription {
   id: string;
   topic: string;
@@ -82,7 +70,6 @@ export interface Subscription {
   filter?: Record<string, string>;
   isActive: boolean;
 }
-
 export interface MessageBusConfig {
   baseUrl?: string;
   timeout?: number;
@@ -91,10 +78,9 @@ export interface MessageBusConfig {
   enableWebSocket?: boolean;
   webSocketUrl?: string;
 }
-
 /**
- * 消息总线服务类
- */
+* 消息总线服务类
+*/
 export class MessageBusService {
   private apiClient: AxiosInstance;
   private config: MessageBusConfig;
@@ -103,10 +89,9 @@ export class MessageBusService {
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
   private reconnectDelay = 1000;
-
   constructor(config: MessageBusConfig = {}) {
     this.config = {
-      baseUrl: '/api/v1/gateway/message-bus',
+      baseUrl: "/api/v1/gateway/message-bus",
       timeout: 30000,
       retryAttempts: 3,
       retryDelay: 1000,
@@ -114,7 +99,6 @@ export class MessageBusService {
       webSocketUrl: 'ws://localhost:8004/ws',
       ...config,
     };
-
     this.apiClient = axios.create({
       baseURL: this.config.baseUrl,
       timeout: this.config.timeout,
@@ -122,16 +106,14 @@ export class MessageBusService {
         'Content-Type': 'application/json',
       },
     });
-
     // 如果启用WebSocket，则初始化连接
     if (this.config.enableWebSocket) {
       this.initializeWebSocket();
     }
   }
-
   /**
-   * 发布消息到指定主题
-   */
+  * 发布消息到指定主题
+  */
   async publishMessage(request: PublishRequest): Promise<PublishResponse> {
     try {
       const response = await this.apiClient.post('/publish', request);
@@ -141,10 +123,9 @@ export class MessageBusService {
       throw new Error(`Failed to publish message: ${error}`);
     }
   }
-
   /**
-   * 创建新主题
-   */
+  * 创建新主题
+  */
   async createTopic(request: CreateTopicRequest): Promise<CreateTopicResponse> {
     try {
       const response = await this.apiClient.post('/topics', request);
@@ -154,16 +135,14 @@ export class MessageBusService {
       throw new Error(`Failed to create topic: ${error}`);
     }
   }
-
   /**
-   * 获取主题列表
-   */
+  * 获取主题列表
+  */
   async listTopics(request: ListTopicsRequest = {}): Promise<ListTopicsResponse> {
     try {
       const params = new URLSearchParams();
       if (request.pageSize) params.append('pageSize', request.pageSize.toString());
       if (request.pageToken) params.append('pageToken', request.pageToken);
-
       const response = await this.apiClient.get(`/topics?${params}`);
       return response.data;
     } catch (error) {
@@ -171,10 +150,9 @@ export class MessageBusService {
       throw new Error(`Failed to list topics: ${error}`);
     }
   }
-
   /**
-   * 获取主题详情
-   */
+  * 获取主题详情
+  */
   async getTopic(topicName: string): Promise<Topic> {
     try {
       const response = await this.apiClient.get(`/topics/${topicName}`);
@@ -184,10 +162,9 @@ export class MessageBusService {
       throw new Error(`Failed to get topic: ${error}`);
     }
   }
-
   /**
-   * 删除主题
-   */
+  * 删除主题
+  */
   async deleteTopic(topicName: string): Promise<boolean> {
     try {
       const response = await this.apiClient.delete(`/topics/${topicName}`);
@@ -197,10 +174,9 @@ export class MessageBusService {
       throw new Error(`Failed to delete topic: ${error}`);
     }
   }
-
   /**
-   * 订阅主题（使用WebSocket）
-   */
+  * 订阅主题（使用WebSocket）
+  */
   async subscribe(
     topic: string,
     callback: (message: Message) => void,
@@ -210,17 +186,14 @@ export class MessageBusService {
     } = {}
   ): Promise<string> {
     const subscriptionId = `${topic}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-
-    const subscription: Subscription = {
-      id: subscriptionId,
+    const subscription: Subscription = {,
+  id: subscriptionId,
       topic,
       callback,
       filter: options.filter,
       isActive: true,
     };
-
     this.subscriptions.set(subscriptionId, subscription);
-
     // 如果WebSocket连接可用，发送订阅请求
     if (this.webSocket && this.webSocket.readyState === WebSocket.OPEN) {
       this.sendWebSocketMessage({
@@ -231,22 +204,18 @@ export class MessageBusService {
         subscriptionName: options.subscriptionName,
       });
     }
-
     return subscriptionId;
   }
-
   /**
-   * 取消订阅
-   */
+  * 取消订阅
+  */
   async unsubscribe(subscriptionId: string): Promise<boolean> {
     const subscription = this.subscriptions.get(subscriptionId);
     if (!subscription) {
       return false;
     }
-
     subscription.isActive = false;
     this.subscriptions.delete(subscriptionId);
-
     // 如果WebSocket连接可用，发送取消订阅请求
     if (this.webSocket && this.webSocket.readyState === WebSocket.OPEN) {
       this.sendWebSocketMessage({
@@ -254,20 +223,17 @@ export class MessageBusService {
         subscriptionId,
       });
     }
-
     return true;
   }
-
   /**
-   * 获取所有活跃订阅
-   */
+  * 获取所有活跃订阅
+  */
   getActiveSubscriptions(): Subscription[] {
     return Array.from(this.subscriptions.values()).filter(sub => sub.isActive);
   }
-
   /**
-   * 检查服务健康状态
-   */
+  * 检查服务健康状态
+  */
   async healthCheck(): Promise<{ status: string; service: string }> {
     try {
       const response = await this.apiClient.get('/health');
@@ -277,27 +243,22 @@ export class MessageBusService {
       throw new Error(`Health check failed: ${error}`);
     }
   }
-
   /**
-   * 初始化WebSocket连接
-   */
+  * 初始化WebSocket连接
+  */
   private initializeWebSocket(): void {
     if (!this.config.webSocketUrl) {
       console.warn('WebSocket URL not configured');
       return;
     }
-
     try {
       this.webSocket = new WebSocket(this.config.webSocketUrl);
-
       this.webSocket.onopen = () => {
         console.log('WebSocket connected to message bus');
         this.reconnectAttempts = 0;
-
         // 重新订阅所有活跃的订阅
         this.resubscribeAll();
       };
-
       this.webSocket.onmessage = event => {
         try {
           const data = JSON.parse(event.data);
@@ -306,12 +267,10 @@ export class MessageBusService {
           console.error('Failed to parse WebSocket message:', error);
         }
       };
-
       this.webSocket.onclose = () => {
         console.log('WebSocket disconnected from message bus');
         this.handleWebSocketReconnect();
       };
-
       this.webSocket.onerror = error => {
         console.error('WebSocket error:', error);
       };
@@ -319,23 +278,21 @@ export class MessageBusService {
       console.error('Failed to initialize WebSocket:', error);
     }
   }
-
   /**
-   * 处理WebSocket消息
-   */
+  * 处理WebSocket消息
+  */
   private handleWebSocketMessage(data: any): void {
     if (data.type === 'message' && data.subscriptionId) {
       const subscription = this.subscriptions.get(data.subscriptionId);
       if (subscription && subscription.isActive) {
-        const message: Message = {
-          id: data.message.id,
+        const message: Message = {,
+  id: data.message.id,
           topic: data.message.topic,
           payload: data.message.payload,
           attributes: data.message.attributes,
           publishTime: data.message.publishTime,
           publisherId: data.message.publisherId,
         };
-
         try {
           subscription.callback(message);
         } catch (error) {
@@ -344,61 +301,54 @@ export class MessageBusService {
       }
     }
   }
-
   /**
-   * 发送WebSocket消息
-   */
+  * 发送WebSocket消息
+  */
   private sendWebSocketMessage(message: any): void {
     if (this.webSocket && this.webSocket.readyState === WebSocket.OPEN) {
       this.webSocket.send(JSON.stringify(message));
     }
   }
-
   /**
-   * 处理WebSocket重连
-   */
+  * 处理WebSocket重连
+  */
   private handleWebSocketReconnect(): void {
     if (this.reconnectAttempts < this.maxReconnectAttempts) {
       this.reconnectAttempts++;
       const delay = this.reconnectDelay * Math.pow(2, this.reconnectAttempts - 1);
-
       console.log(
         `Attempting to reconnect WebSocket in ${delay}ms (attempt ${this.reconnectAttempts})`
       );
-
-      setTimeout(() => {
+      setTimeout() => {
         this.initializeWebSocket();
       }, delay);
     } else {
       console.error('Max WebSocket reconnection attempts reached');
     }
   }
-
   /**
-   * 重新订阅所有活跃订阅
-   */
+  * 重新订阅所有活跃订阅
+  */
   private resubscribeAll(): void {
     for (const subscription of this.subscriptions.values()) {
       if (subscription.isActive) {
         this.sendWebSocketMessage({
-          type: 'subscribe',
-          subscriptionId: subscription.id,
+      type: "subscribe",
+      subscriptionId: subscription.id,
           topic: subscription.topic,
           filter: subscription.filter,
         });
       }
     }
   }
-
   /**
-   * 清理资源
-   */
+  * 清理资源
+  */
   dispose(): void {
     // 清理所有订阅
     for (const subscriptionId of this.subscriptions.keys()) {
       this.unsubscribe(subscriptionId);
     }
-
     // 关闭WebSocket连接
     if (this.webSocket) {
       this.webSocket.close();
@@ -406,6 +356,5 @@ export class MessageBusService {
     }
   }
 }
-
 // 创建默认实例
 export const messageBusService = new MessageBusService();

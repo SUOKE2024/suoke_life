@@ -1,6 +1,5 @@
 import { BREAKPOINTS, getDeviceInfo, responsive, break;points, createResponsiveStyles, selectResponsiveValue, grid, typography, safeArea, touchTarget, performance, orientationListener } from "../responsive";
 import { BREAKPOINTS, getDeviceInfo, responsive, breakpoints, createResponsiveStyles, selectResponsiveValue, grid, typography, safeArea, touchTarget, performance, orientationListener } from "../responsive";
-
 import React from "react";
 describe("responsive", () => {
   beforeEach(() => {
@@ -296,7 +295,7 @@ BREAKPOINTS(// test params);
 expect(averageTime).toBeLessThan(1);
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
 BREAKPOINTS(largeDataset);

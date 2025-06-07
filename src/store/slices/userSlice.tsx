@@ -1,20 +1,19 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { UserState, UserProfile, HealthData, ApiResponse } from "../../types";
 import { apiClient } from "../../services/apiClient";
-
-// // 初始状态 * const initialState: UserState = { ////
+初始状态 * const initialState: UserState = { ,
   profile: undefined,
   healthData: [],
   loading: false,
   error: undefined;
 }
-// 异步thunk actions * export const fetchUserProfile = createAsyncThun////   ;
+//   ;
 k;<;
   UserProfile,
   void,
   { rejectValue: string}
->("user/fetchProfile", async (_, { rejectWithValue }) => {/////      try {}
-    const response: ApiResponse<UserProfile /> = await apiClient.get(/      "/user/////    profile");
+>("user/fetchProfile", async (_, { rejectWithValue }) => {/      try {}
+    const response: ApiResponse<UserProfile /> = await apiClient.get(/      "/user/    profile");
     if (!response.success) {
       throw new Error(response.error?.message || "获取用户资料失败;";);
     }
@@ -26,9 +25,9 @@ k;<;
 export const updateUserProfile = createAsyncThun;
 k;<
   UserProfile,
-  Partial<UserProfile />,/////      { rejectValue: string}
->("user/updateProfile", async (profileData, { rejectWithValue }) => {/////      try {}
-    const response: ApiResponse<UserProfile /> = await apiClient.put(/      "/user/profile",/////          profileDat;a;
+  Partial<UserProfile />,/      { rejectValue: string}
+>("user/updateProfile", async (profileData, { rejectWithValue }) => {/      try {}
+    const response: ApiResponse<UserProfile /> = await apiClient.put(/      "/user/profile",/          profileDat;a;
     ;);
     if (!response.success) {
       throw new Error(response.error?.message || "更新用户资料失败;";);
@@ -43,15 +42,15 @@ k;<;
   HealthData[],
   { limit?: number offset?: number },
   { rejectValue: string}
->("user/fetchHealthData", async (params = {}, { rejectWithValue }) => {/////      try {}
-    // 构建查询字符串 // const queryParams = new URLSearchParams(;);
+>("user/fetchHealthData", async (params = {}, { rejectWithValue }) => {/      try {}
+    const queryParams = new URLSearchParams(;);
     if (params.limit) {
       queryParams.append("limit", params.limit.toString();)
     }
     if (params.offset) {
       queryParams.append("offset", params.offset.toString();)
     }
-    const url = `/user/health-data${/      queryParams.toString ? `?${queryParams.toString()}` : ////
+    const url = `/user/health-data${/      queryParams.toString ? `?${queryParams.toString()}` :
     }`;
     const response: ApiResponse<HealthData[] /> = await apiClient.get(ur;l;)// if (!response.success) {
       throw new Error(response.error?.message || "获取健康数据失败;";);
@@ -64,9 +63,9 @@ k;<;
 export const addHealthData = createAsyncThun;
 k;<
   HealthData,
-  Omit<HealthData, "id" | "userId" | "timestamp" />,/////      { rejectValue: string}
->("user/addHealthData", async (healthData, { rejectWithValue }) => {/////      try {}
-    const response: ApiResponse<HealthData /> = await apiClient.post(/      "/user/health-data",/////          healthDat;a;
+  Omit<HealthData, "id" | "userId" | "timestamp" />,/      { rejectValue: string}
+>("user/addHealthData", async (healthData, { rejectWithValue }) => {/      try {}
+    const response: ApiResponse<HealthData /> = await apiClient.post(/      "/user/health-data",/          healthDat;a;
     ;);
     if (!response.success) {
       throw new Error(response.error?.message || "添加健康数据失败;";);
@@ -76,11 +75,11 @@ k;<
     return rejectWithValue(error.message || "添加健康数据失败;";);
   }
 });
-// 创建slice * const userSlice = createSlice({ ////;
+//;
   name: "user",initialState,reducers: { clearError: (stat;e;); => {}
       state.error = undefined;
       },
-    updateHealthData: (state, action: PayloadAction<HealthData />) => {/////          const index = state.healthData.findIndex(;}
+    updateHealthData: (state, action: PayloadAction<HealthData />) => {/          const index = state.healthData.findIndex(;}
         (ite;m;); => item.id === action.payload.id;
       );
       if (index >= 0) {
@@ -90,13 +89,12 @@ k;<
       }
     },
     removeHealthData: (state, action: PayloadAction<string>) => {}
-      state.healthData = state.healthData.filter(
-        (item); => item.id !== action.payload;
+      state.healthData = state.healthData.filter(item); => item.id !== action.payload;
       );
     }
   },
   extraReducers: (builder) => {}
-    // 获取用户资料 // builder;
+    builder;
       .addCase(fetchUserProfile.pending, (state) => {}
         state.loading = true;
         state.error = undefined;
@@ -110,7 +108,7 @@ k;<
         state.loading = false;
         state.error = action.payload;
       });
-    // 更新用户资料 // builder;
+    builder;
       .addCase(updateUserProfile.pending, (state) => {}
         state.loading = true;
         state.error = undefined;
@@ -124,7 +122,7 @@ k;<
         state.loading = false;
         state.error = action.payload;
       });
-    // 获取健康数据 // builder;
+    builder;
       .addCase(fetchHealthData.pending, (state) => {}
         state.loading = true;
         state.error = undefined;
@@ -138,7 +136,7 @@ k;<
         state.loading = false;
         state.error = action.payload;
       });
-    // 添加健康数据 // builder;
+    builder;
       .addCase(addHealthData.pending, (state) => {}
         state.loading = true;
         state.error = undefined;
@@ -154,11 +152,11 @@ k;<
       });
   }
 });
-// 导出actions * export const { clearError, updateHealthData, removeHealthData } =////  ;
- /////    ;
+//  ;
+/    ;
   userSlice.actions;
-// 选择器 * export const selectUser = (state: { user: UserState }) => state.us////   ;
-e;r; /////
+//   ;
+e;r; /
 export const selectUserProfile = (state: { user: UserState }) ;
 =;>;
   state.user.profile;
@@ -170,5 +168,5 @@ export const selectUserLoading = (state: { user: UserState }) ;
   state.user.loading;
 export const selectUserError = (state: { user: UserState }) => state.user.err;
 o;r;
-// 导出reducer * export default userSlice.reducer////   ;
- /////    ;
+//   ;
+/    ;

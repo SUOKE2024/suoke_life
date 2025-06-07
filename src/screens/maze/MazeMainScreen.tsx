@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   RefreshControl,
   Alert,
-  Dimensions
+  Dimensions;
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
@@ -19,15 +19,12 @@ import {
   MazeTheme,
   MazeDifficulty,
   MazeProgress,
-  ProgressStatus
+  ProgressStatus;
 } from '../../types/maze';
-
 const { width } = Dimensions.get('window');
-
 interface MazeMainScreenProps {
   navigation: any;
 }
-
 const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
   const [mazes, setMazes] = useState<Maze[]>([]);
   const [templates, setTemplates] = useState<MazeTemplate[]>([]);
@@ -35,106 +32,106 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [selectedTab, setSelectedTab] = useState<'my' | 'templates' | 'progress'>('my');
-
-  const userId = useSelector((state: any) => state.auth.user?.id || 'guest-user');
-
+  const userId = useSelector(state: any) => state.auth.user?.id || 'guest-user');
   // 主题配置
   const themeConfig = {
     [MazeTheme.HEALTH_PATH]: {
-      name: '健康之路',
+      name: "健康之路",
       color: '#4CAF50',
       icon: 'heart-pulse',
       description: '探索基础健康知识'
     },
     [MazeTheme.NUTRITION_GARDEN]: {
-      name: '营养花园',
+      name: "营养花园",
       color: '#FF9800',icon: 'food-apple',description: '学习营养学知识';
-    },[MazeTheme.TCM_JOURNEY]: {name: '中医之旅',color: '#9C27B0',icon: 'leaf',description: '传统中医智慧';
-    },[MazeTheme.BALANCED_LIFE]: {name: '平衡生活',color: '#2196F3',icon: 'scale-balance',description: '生活方式平衡';
+    },[MazeTheme.TCM_JOURNEY]: {
+      name: "中医之旅",
+      color: '#9C27B0',icon: 'leaf',description: '传统中医智慧';
+    },[MazeTheme.BALANCED_LIFE]: {
+      name: "平衡生活",
+      color: '#2196F3',icon: 'scale-balance',description: '生活方式平衡';
     };
   };
-
-  const difficultyConfig = {[MazeDifficulty.EASY]: { name: '简单', color: '#4CAF50' },[MazeDifficulty.NORMAL]: { name: '普通', color: '#FF9800' },[MazeDifficulty.HARD]: { name: '困难', color: '#F44336' },[MazeDifficulty.EXPERT]: { name: '专家', color: '#9C27B0' };
+  const difficultyConfig = {[MazeDifficulty.EASY]: {
+      name: "简单",
+      color: '#4CAF50' },[MazeDifficulty.NORMAL]: {
+      name: "普通",
+      color: '#FF9800' },[MazeDifficulty.HARD]: {
+      name: "困难",
+      color: '#F44336' },[MazeDifficulty.EXPERT]: {
+      name: "专家",
+      color: '#9C27B0' };
   };
-
   // 加载数据
   const loadData = useCallback(async () => {try {setLoading(true);
       const [mazesResponse, templatesResponse] = await Promise.all([;
         cornMazeService.listMazes(),cornMazeService.listMazeTemplates(undefined, undefined, 1, 20);
       ]);
-
       setMazes(mazesResponse.mazes);
       setTemplates(templatesResponse.templates);
-
       // 加载用户进度
       const progressPromises = mazesResponse.mazes.map(maze =>;
-        cornMazeService.getUserProgress(maze.id, userId).catch(() => null);
+        cornMazeService.getUserProgress(maze.id, userId).catch() => null);
       );
       const progressResults = await Promise.all(progressPromises);
       const validProgress = progressResults.filter(Boolean) as any[];
       setUserProgress(validProgress.map(p => p.progress));
     } catch (error) {
       console.error('加载迷宫数据失败:', error);
-      Alert.alert('错误', '加载数据失败，请重试');
+      Alert.alert("错误",加载数据失败，请重试');
     } finally {
       setLoading(false);
     }
   }, [userId]);
-
   // 刷新数据
   const onRefresh = useCallback(async () => {setRefreshing(true);
     await loadData();
     setRefreshing(false);
   }, [loadData]);
-
-  useEffect(() => {
+  useEffect() => {
     loadData();
   }, [loadData]);
-
   // 开始游戏
   const startMaze = async (mazeId: string) => {try {await cornMazeService.startMaze({ userId, mazeId });
       navigation.navigate('MazeGame', { mazeId, userId });
     } catch (error) {
       console.error('开始游戏失败:', error);
-      Alert.alert('错误', '开始游戏失败，请重试');
+      Alert.alert("错误",开始游戏失败，请重试');
     }
   };
-
   // 继续游戏
   const continueMaze = (mazeId: string) => {navigation.navigate('MazeGame', { mazeId, userId });
   };
-
   // 从模板创建迷宫
   const createFromTemplate = async (template: MazeTemplate) => {try {const maze = await cornMazeService.createMaze({name: `${template.name} - 我的迷宫`,theme: template.mazeType,difficulty: template.difficulty,useTemplate: true,templateId: template.templateId;
       });
-
       Alert.alert(
-        '创建成功',
-        '迷宫已创建，是否立即开始游戏？',
+        "创建成功",迷宫已创建，是否立即开始游戏？',
         [
-          { text: '稍后', style: 'cancel' },
-          { text: '开始', onPress: () => startMaze(maze.id) }
+          {
+      text: "稍后",
+      style: 'cancel' },
+          {
+      text: "开始",
+      onPress: () => startMaze(maze.id) }
         ]
       );
-
       await loadData(); // 刷新列表
     } catch (error) {
       console.error('创建迷宫失败:', error);
-      Alert.alert('错误', '创建迷宫失败，请重试');
+      Alert.alert("错误",创建迷宫失败，请重试');
     }
   };
-
   // 渲染迷宫卡片
   const renderMazeCard = (maze: Maze) => {const theme = themeConfig[maze.theme];
     const difficulty = difficultyConfig[maze.difficulty];
     const progress = userProgress.find(p => p.mazeId === maze.id);
-
     return (;
       <TouchableOpacity;
         key={maze.id};
         style={[styles.mazeCard, { borderLeftColor: theme.color }]};
         onPress={() => progress?.status === ProgressStatus.IN_PROGRESS ;
-          ? continueMaze(maze.id); 
+          ? continueMaze(maze.id);
           : startMaze(maze.id);
         }
       >
@@ -150,11 +147,9 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
             <Text style={styles.difficultyText}>{difficulty.name}</Text>
           </View>
         </View>
-
         {maze.description && (
           <Text style={styles.mazeDescription}>{maze.description}</Text>
         )}
-
         <View style={styles.mazeStats}>
           <View style={styles.statItem}>
             <Icon name="grid" size={16} color={colors.textSecondary} />
@@ -165,11 +160,11 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
             <Text style={styles.statText}>{maze.estimatedTime || 15}分钟</Text>
           </View>
           {progress && (
-            <View style={styles.statItem}>
-              <Icon 
-                name={progress.status === ProgressStatus.COMPLETED ? "check-circle" : "play-circle"} 
-                size={16} 
-                color={progress.status === ProgressStatus.COMPLETED ? colors.success : colors.primary} 
+        <View style={styles.statItem}>
+              <Icon;
+                name={progress.status === ProgressStatus.COMPLETED ? "check-circle" : "play-circle"}
+                size={16}
+                color={progress.status === ProgressStatus.COMPLETED ? colors.success : colors.primary}
               />
               <Text style={styles.statText}>
                 {progress.status === ProgressStatus.COMPLETED ? '已完成' : '进行中'}
@@ -180,13 +175,11 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
       </TouchableOpacity>;
     );
   };
-
   // 渲染模板卡片
   const renderTemplateCard = (template: MazeTemplate) => {const theme = themeConfig[template.mazeType];
     const difficulty = difficultyConfig[template.difficulty];
-
     return (
-      <TouchableOpacity
+      <TouchableOpacity;
         key={template.templateId}
         style={[styles.templateCard, { borderLeftColor: theme.color }]}
         onPress={() => createFromTemplate(template)}
@@ -203,9 +196,7 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
             <Text style={styles.difficultyText}>{difficulty.name}</Text>
           </View>
         </View>
-
         <Text style={styles.templateDescription}>{template.description}</Text>
-
         <View style={styles.templateStats}>
           <View style={styles.statItem}>
             <Icon name="grid" size={14} color={colors.textSecondary} />
@@ -230,16 +221,13 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
       </TouchableOpacity>;
     );
   };
-
   // 渲染进度卡片
   const renderProgressCard = (progress: MazeProgress) => {const maze = mazes.find(m => m.id === progress.mazeId);
     if (!maze) return null;
-
     const theme = themeConfig[maze.theme];
     const completionRate = (progress.visitedNodes.length / (maze.size * maze.size)) * 100;
-
     return (
-      <TouchableOpacity
+      <TouchableOpacity;
         key={progress.mazeId}
         style={[styles.progressCard, { borderLeftColor: theme.color }]}
         onPress={() => continueMaze(progress.mazeId)}
@@ -256,14 +244,13 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
           </View>
           <Text style={styles.progressScore}>{progress.score}分</Text>
         </View>
-
         <View style={styles.progressBar}>
-          <View 
+          <View;
             style={[
-              styles.progressFill, 
-              { 
+              styles.progressFill,
+              {
                 width: `${completionRate}%`,
-                backgroundColor: theme.color 
+                backgroundColor: theme.color;
               }
             ]} ;
           />;
@@ -283,21 +270,19 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
       </TouchableOpacity>;
     );
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>玉米迷宫</Text>
-        <TouchableOpacity 
+        <TouchableOpacity;
           style={styles.createButton}
           onPress={() => navigation.navigate('CreateMaze')}
         >
           <Icon name="plus" size={20} color={colors.white} />
         </TouchableOpacity>
       </View>
-
       <View style={styles.tabContainer}>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.tab, selectedTab === 'my' && styles.activeTab]}
           onPress={() => setSelectedTab('my')}
         >
@@ -305,7 +290,7 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
             我的迷宫
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.tab, selectedTab === 'templates' && styles.activeTab]}
           onPress={() => setSelectedTab('templates')}
         >
@@ -313,7 +298,7 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
             模板库
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.tab, selectedTab === 'progress' && styles.activeTab]}
           onPress={() => setSelectedTab('progress')}
         >
@@ -341,15 +326,13 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
             )}
           </View>
         )}
-
         {selectedTab === 'templates' && (
-          <View style={styles.section}>
+        <View style={styles.section}>
             {templates.map(renderTemplateCard)}
           </View>
         )}
-
         {selectedTab === 'progress' && (
-          <View style={styles.section}>
+        <View style={styles.section}>
             {userProgress.length > 0 ? (
               userProgress.map(renderProgressCard);
             ) : (
@@ -365,68 +348,67 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
     </SafeAreaView>;
   );
 };
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background
+  container: {,
+  flex: 1,
+    backgroundColor: colors.background;
   },
-  header: {
-    flexDirection: 'row',
+  header: {,
+  flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border
+    borderBottomColor: colors.border;
   },
-  title: {
-    fontSize: 24,
+  title: {,
+  fontSize: 24,
     fontWeight: 'bold',
-    color: colors.text
+    color: colors.text;
   },
-  createButton: {
-    backgroundColor: colors.primary,
+  createButton: {,
+  backgroundColor: colors.primary,
     borderRadius: 20,
     width: 40,
     height: 40,
     justifyContent: 'center',
     alignItems: 'center'
   },
-  tabContainer: {
-    flexDirection: 'row',
+  tabContainer: {,
+  flexDirection: 'row',
     backgroundColor: colors.surface,
     marginHorizontal: 20,
     marginTop: 16,
     borderRadius: 12,
-    padding: 4
+    padding: 4;
   },
-  tab: {
-    flex: 1,
+  tab: {,
+  flex: 1,
     paddingVertical: 12,
     alignItems: 'center',
-    borderRadius: 8
+    borderRadius: 8;
   },
-  activeTab: {
-    backgroundColor: colors.primary
+  activeTab: {,
+  backgroundColor: colors.primary;
   },
-  tabText: {
-    fontSize: 14,
+  tabText: {,
+  fontSize: 14,
     fontWeight: '600',
-    color: colors.textSecondary
+    color: colors.textSecondary;
   },
-  activeTabText: {
-    color: colors.white
+  activeTabText: {,
+  color: colors.white;
   },
-  content: {
-    flex: 1,
-    paddingHorizontal: 20
+  content: {,
+  flex: 1,
+    paddingHorizontal: 20;
   },
-  section: {
-    paddingVertical: 16
+  section: {,
+  paddingVertical: 16;
   },
-  mazeCard: {
-    backgroundColor: colors.surface,
+  mazeCard: {,
+  backgroundColor: colors.surface,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -435,64 +417,64 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 4
+    shadowRadius: 4;
   },
-  mazeHeader: {
-    flexDirection: 'row',
+  mazeHeader: {,
+  flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8
+    marginBottom: 8;
   },
-  mazeInfo: {
-    flexDirection: 'row',
+  mazeInfo: {,
+  flexDirection: 'row',
     alignItems: 'center',
-    flex: 1
+    flex: 1;
   },
-  mazeText: {
-    marginLeft: 12,
-    flex: 1
+  mazeText: {,
+  marginLeft: 12,
+    flex: 1;
   },
-  mazeName: {
-    fontSize: 16,
+  mazeName: {,
+  fontSize: 16,
     fontWeight: '600',
-    color: colors.text
+    color: colors.text;
   },
-  mazeTheme: {
-    fontSize: 14,
+  mazeTheme: {,
+  fontSize: 14,
     color: colors.textSecondary,
-    marginTop: 2
+    marginTop: 2;
   },
-  difficultyBadge: {
-    paddingHorizontal: 8,
+  difficultyBadge: {,
+  paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 12
+    borderRadius: 12;
   },
-  difficultyText: {
-    fontSize: 12,
+  difficultyText: {,
+  fontSize: 12,
     fontWeight: '600',
-    color: colors.white
+    color: colors.white;
   },
-  mazeDescription: {
-    fontSize: 14,
+  mazeDescription: {,
+  fontSize: 14,
     color: colors.textSecondary,
     marginBottom: 12,
-    lineHeight: 20
+    lineHeight: 20;
   },
-  mazeStats: {
-    flexDirection: 'row',
+  mazeStats: {,
+  flexDirection: 'row',
     justifyContent: 'space-between'
   },
-  statItem: {
-    flexDirection: 'row',
+  statItem: {,
+  flexDirection: 'row',
     alignItems: 'center'
   },
-  statText: {
-    fontSize: 12,
+  statText: {,
+  fontSize: 12,
     color: colors.textSecondary,
-    marginLeft: 4
+    marginLeft: 4;
   },
-  templateCard: {
-    backgroundColor: colors.surface,
+  templateCard: {,
+  backgroundColor: colors.surface,
     borderRadius: 12,
     padding: 12,
     marginBottom: 8,
@@ -501,45 +483,45 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
-    shadowRadius: 2
+    shadowRadius: 2;
   },
-  templateHeader: {
-    flexDirection: 'row',
+  templateHeader: {,
+  flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 6
+    marginBottom: 6;
   },
-  templateInfo: {
-    flexDirection: 'row',
+  templateInfo: {,
+  flexDirection: 'row',
     alignItems: 'center',
-    flex: 1
+    flex: 1;
   },
-  templateText: {
-    marginLeft: 8,
-    flex: 1
+  templateText: {,
+  marginLeft: 8,
+    flex: 1;
   },
-  templateName: {
-    fontSize: 14,
+  templateName: {,
+  fontSize: 14,
     fontWeight: '600',
-    color: colors.text
+    color: colors.text;
   },
-  templateTheme: {
-    fontSize: 12,
+  templateTheme: {,
+  fontSize: 12,
     color: colors.textSecondary,
-    marginTop: 1
+    marginTop: 1;
   },
-  templateDescription: {
-    fontSize: 12,
+  templateDescription: {,
+  fontSize: 12,
     color: colors.textSecondary,
     marginBottom: 8,
-    lineHeight: 16
+    lineHeight: 16;
   },
-  templateStats: {
-    flexDirection: 'row',
+  templateStats: {,
+  flexDirection: 'row',
     justifyContent: 'space-between'
   },
-  popularBadge: {
-    position: 'absolute',
+  popularBadge: {,
+  position: 'absolute',
     top: 8,
     right: 8,
     flexDirection: 'row',
@@ -547,16 +529,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF3E0',
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: 8
+    borderRadius: 8;
   },
-  popularText: {
-    fontSize: 10,
+  popularText: {,
+  fontSize: 10,
     fontWeight: '600',
     color: '#FF5722',
-    marginLeft: 2
+    marginLeft: 2;
   },
-  progressCard: {
-    backgroundColor: colors.surface,
+  progressCard: {,
+  backgroundColor: colors.surface,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -565,60 +547,61 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 4
+    shadowRadius: 4;
   },
-  progressHeader: {
-    flexDirection: 'row',
+  progressHeader: {,
+  flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12
+    marginBottom: 12;
   },
-  progressInfo: {
-    flexDirection: 'row',
+  progressInfo: {,
+  flexDirection: 'row',
     alignItems: 'center',
-    flex: 1
+    flex: 1;
   },
-  progressText: {
-    marginLeft: 12,
-    flex: 1
+  progressText: {,
+  marginLeft: 12,
+    flex: 1;
   },
-  progressMazeName: {
-    fontSize: 16,
+  progressMazeName: {,
+  fontSize: 16,
     fontWeight: '600',
-    color: colors.text
+    color: colors.text;
   },
-  progressStatus: {
-    fontSize: 14,
+  progressStatus: {,
+  fontSize: 14,
     color: colors.textSecondary,
-    marginTop: 2
+    marginTop: 2;
   },
-  progressScore: {
-    fontSize: 18,
+  progressScore: {,
+  fontSize: 18,
     fontWeight: 'bold',
-    color: colors.primary
+    color: colors.primary;
   },
-  progressBar: {
-    height: 6,
+  progressBar: {,
+  height: 6,
     backgroundColor: colors.border,
     borderRadius: 3,
-    marginBottom: 12
+    marginBottom: 12;
   },
-  progressFill: {
-    height: '100%',
-    borderRadius: 3
+  progressFill: {,
+  height: '100%',
+    borderRadius: 3;
   },
-  progressStats: {
-    flexDirection: 'row',
+  progressStats: {,
+  flexDirection: 'row',
     justifyContent: 'space-between'
   },
-  progressStatText: {
-    fontSize: 12,
-    color: colors.textSecondary
+  progressStatText: {,
+  fontSize: 12,
+    color: colors.textSecondary;
   },
-  emptyState: {alignItems: 'center',paddingVertical: 60;
+  emptyState: {
+      alignItems: "center",
+      paddingVertical: 60;
   },emptyText: {fontSize: 18,fontWeight: '600',color: colors.textSecondary,marginTop: 16;
   },emptySubtext: {fontSize: 14,color: colors.textSecondary,marginTop: 8,textAlign: 'center';
   };
 });
-
-export default MazeMainScreen; 
+export default MazeMainScreen;

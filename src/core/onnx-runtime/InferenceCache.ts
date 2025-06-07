@@ -1,11 +1,10 @@
 import { InferenceSession } from "onnxruntime-react-native";
-import AsyncStorage from "../../placeholder";@react-native-async-storage/////    async-storage
-import { CacheConfig, InferenceResult, ONNXError } from ./////    types
-import { CACHE_KEYS } from "./////    constants;";
-
+import AsyncStorage from "../../placeholder";@react-native-async-storage/    async-storage;
+import { CacheConfig, InferenceResult, ONNXError } from ./    types;
+import { CACHE_KEYS } from "./    constants;";
 /**
- * * 推理缓存 - 缓存模型和推理结果以提高性能
- * 支持LRU策略、压缩和加密
+* * 推理缓存 - 缓存模型和推理结果以提高性能
+* 支持LRU策略、压缩和加密
 export class InferenceCache {private config: CacheConfig;
   private modelCache: Map<string, InferenceSession> = new Map();
   private inferenceCache: Map<string, CachedInferenceResult> = new Map();
@@ -15,7 +14,7 @@ export class InferenceCache {private config: CacheConfig;
     this.config = config;
   }
   /**
- * * 初始化缓存
+* * 初始化缓存
   async initialize(): Promise<void> {
     try {
       if (this.config.enableModelCache) {
@@ -27,12 +26,14 @@ export class InferenceCache {private config: CacheConfig;
       // 启动清理任务
 this.startCleanupTask()
       } catch (error) {
-      throw new ONNXError({code: "CACHE_ERROR",message: `缓存初始化失败: ${error.message}`,details: error,timestamp: new Date();
+      throw new ONNXError({
+      code: "CACHE_ERROR",
+      message: `缓存初始化失败: ${error.message}`,details: error,timestamp: new Date();
       });
     }
   }
   /**
- * * 缓存模型
+* * 缓存模型
   async setModel(modelId: string, session: InferenceSession): Promise<void> {
     if (!this.config.enableModelCache) return;
     try {
@@ -49,7 +50,7 @@ if (this.config.enableModelCache) {
       }
   }
   /**
- * * 获取缓存的模型
+* * 获取缓存的模型
   async getModel(modelId: string): Promise<InferenceSession | null> {
     if (!this.config.enableModelCache) return null;
     const cacheKey = `${CACHE_KEYS.MODEL}${modelId}`;
@@ -71,7 +72,7 @@ try {
     return null;
   }
   /**
- * * 缓存推理结果
+* * 缓存推理结果
   async setInference(cacheKey: string, result: InferenceResult): Promise<void> {
     if (!this.config.enableInferenceCache) return;
     try {
@@ -90,7 +91,7 @@ await this.saveInferenceToStorage(cacheKey, cachedResult);
       }
   }
   /**
- * * 获取缓存的推理结果
+* * 获取缓存的推理结果
   async getInference(cacheKey: string): Promise<InferenceResult | null> {
     if (!this.config.enableInferenceCache) return null;
     const fullCacheKey = `${CACHE_KEYS.INFERENCE}${cacheKey}`;
@@ -126,7 +127,7 @@ if (Date.now() - cached.timestamp > this.config.ttl) {
     return null;
   }
   /**
- * * 清除特定模型的缓存
+* * 清除特定模型的缓存
   async clearModel(modelId: string): Promise<void> {
     const cacheKey = `${CACHE_KEYS.MODEL}${modelId}`;
     this.modelCache.delete(cacheKey);
@@ -137,7 +138,7 @@ if (Date.now() - cached.timestamp > this.config.ttl) {
       }
   }
   /**
- * * 清除所有缓存
+* * 清除所有缓存
   async clear(): Promise<void> {
     // 清除内存缓存
 this.modelCache.clear();
@@ -158,17 +159,17 @@ try {
       }
     }
   /**
- * * 获取缓存统计信息
+* * 获取缓存统计信息
   getCacheStats(): CacheStats {
     const modelCacheSize = this.modelCache.size;
     const inferenceCacheSize = this.inferenceCache.size;
     const totalSize = this.currentSize;
     const hitRate = this.calculateHitRate();
-    return {modelCacheSize,inferenceCacheSize,totalSize,maxSize: this.config.maxCacheSize,hitRate,memoryUsage: (totalSize / this.config.maxCacheSize) * 100////;
+    return {modelCacheSize,inferenceCacheSize,totalSize,maxSize: this.config.maxCacheSize,hitRate,memoryUsage: (totalSize / this.config.maxCacheSize) * 100;
     };
   }
   /**
- * * 优化缓存
+* * 优化缓存
   async optimizeCache(): Promise<void> {
     // 清理过期的推理结果
 await this.cleanupExpiredInferences();
@@ -308,7 +309,7 @@ return null;
   }
   private startCleanupTask(): void {
     // 每小时清理一次过期缓存
-setInterval(() => {
+setInterval() => {
       this.cleanupExpiredInferences();
     }, 60 * 60 * 1000);
   }
@@ -360,7 +361,7 @@ const totalAccess = this.accessTimes.size;
     const hits = Array.from(this.inferenceCache.values()).reduce(;
       (sum, cached) => sum + cached.accessCount, 0;
     );
-    return totalAccess > 0 ? (hits / totalAccess) * 100 : 0;////
+    return totalAccess > 0 ? (hits / totalAccess) * 100 : 0;
   }
 }
 // 辅助接口
@@ -376,4 +377,4 @@ interface CacheStats {
   maxSize: number;
   hitRate: number;
   memoryUsage: number;
-}  */////
+}  */

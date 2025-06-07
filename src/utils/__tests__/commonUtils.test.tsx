@@ -1,6 +1,5 @@
 import { debounce, throttle, deepClone, generateId, sleep, unique, uniqueBy, groupBy, formatNumber, formatFileSize, generateRandomColor, getDeviceInfo, isEmpty, safeJsonParse } from "../commonUtils";
 import { debounce, throttle, deepClone, generateId, sleep, unique, uniqueBy, groupBy, formatNumber, formatFileSize, generateRandomColor, getDeviceInfo, isEmpty, safeJsonParse } from "../commonUtils";
-
 import React from "react";
 describe("commonUtils", () => {
   beforeEach(() => {
@@ -342,7 +341,7 @@ debounce(// test params);
 expect(averageTime).toBeLessThan(1);
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
 debounce(largeDataset);

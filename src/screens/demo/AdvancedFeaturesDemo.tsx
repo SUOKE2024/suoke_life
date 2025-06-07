@@ -1,10 +1,9 @@
-import { graphqlClient } from "../../services/graphql/client/import { offlineManager  } from ;../../services/offline/offlineManager";/import { createWebSocketManager, WebSocketManager } from ../../services/websocket/websocketManager"/import { memoryCache, persistentCache, apiCache } from "../../services/cache/////    cacheManager
-import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/////      View,"
-
+import { graphqlClient } from "../../services/graphql/client/import { offlineManager  } from ;../../services/offline/offlineManager";/import { createWebSocketManager, WebSocketManager } from ../../services/websocket/websocketManager"/import { memoryCache, persistentCache, apiCache } from "../../services/cache/    cacheManager;
+import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor";
 import React from "react";
-/////    
+/
 // 索克生活 - 高级功能演示界面   展示GraphQL API、离线模式、WebSocket实时通信和缓存策略
-importReact,{ useState, useEffect, useCallback } from ";react";
+import React,{ useState, useEffect, useCallback } from ";react";
   Text,
   StyleSheet,
   ScrollView,
@@ -13,26 +12,27 @@ importReact,{ useState, useEffect, useCallback } from ";react";
   Alert,
   { Switch } from "react-native;";
 interface DemoState {
-  // GraphQL状态 // graphqlConnected: boolean,
-  graphqlLoading: boolean,
+  graphqlConnected: boolean;
+  graphqlLoading: boolean;
   graphqlResult: string;
-  // 离线模式状态 // offlineInitialized: boolean,
-  syncStatus: string,
-  operationCount: number,
+  offlineInitialized: boolean;
+  syncStatus: string;
+  operationCount: number;
   conflictCount: number;
-  // WebSocket状态 // wsConnected: boolean,
-  wsLatency: number,
-  wsMessages: string[]
-  // 缓存状态 // cacheStats: { memory: unknown,
-    persistent: unknown,
-    api: unknown}
+  wsConnected: boolean;
+  wsLatency: number;
+  wsMessages: string[];
+  cacheStats: { memory: unknown;
+    persistent: unknown;
+    api: unknown;
+}
 }
 export const AdvancedFeaturesDemo: React.FC  = () => {}
-  // 性能监控 // const performanceMonitor = usePerformanceMonitor("";
+  const performanceMonitor = usePerformanceMonitor("";
 AdvancedFeaturesDemo", { ";
-    trackRender: true,trackMemory: true,warnThreshold: 50, // ms // };);
-  const [state, setState] = useState<DemoState />({/////        graphqlConnected: false,graphqlLoading: false,
-    graphqlResult: ",",
+    trackRender: true,trackMemory: true,warnThreshold: 50,  };);
+  const [state, setState] = useState<DemoState />({/        graphqlConnected: false,graphqlLoading: false,
+    graphqlResult: ",,
     offlineInitialized: false,
     syncStatus: "idle,",
     operationCount: 0,
@@ -44,19 +44,19 @@ AdvancedFeaturesDemo", { ";
       persistent: {},
       api: {};
     };};);
-  const [wsManager, setWsManager] = useState<WebSocketManager | null />(nul;l;)/////      const [testData, setTestData] = useState<object>({ graphqlQuery: `query GetUsers {users {
+  const [wsManager, setWsManager] = useState<WebSocketManager | null />(nul;l;)/      const [testData, setTestData] = useState<object>({ graphqlQuery: `query GetUsers {users {
     id;
 name;
     email;
     }
 }`,
     cacheKey: "test-key",
-    cacheValue: test-value","
-    wsMessage: "Hello WebSocket!};);"
-  useEffect((); => {}
+    cacheValue: test-value",
+    wsMessage: "Hello WebSocket!};);
+  useEffect(); => {}
     const effectStart = performance.now();
     initializeServices();
-    // 记录渲染性能 // performanceMonitor.recordRender();
+    performanceMonitor.recordRender();
     return() => {}
       cleanup;
     };
@@ -64,9 +64,9 @@ name;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
   // 初始化服务  const initializeServices = async() => {};
-    try {// 初始化离线管理器 // await offlineManager.initializ;e;
+    try { await offlineManager.initializ;e;
       setState(prev => ({ ...prev, offlineInitialized: true});)
-      // 设置离线管理器事件监听 // offlineManager.on("syncStart", () => {}
+      offlineManager.on("syncStart", () => {}
         setState(prev => ({ ...prev, syncStatus: syncing"}));"
       });
       offlineManager.on("syncComplete, () => {}"
@@ -76,11 +76,11 @@ name;
       offlineManager.on(syncError", () => {}"
         setState(prev => ({ ...prev, syncStatus: "error}););"
       });
-      // 初始化WebSocket管理器 // const ws = createWebSocketManager({url: "ws://, localhost: 8080 * ws", /////     heartbeat: {enabled: true,interval: 30000,timeout: 5000},reconnect: {enabled: true,maxAttempts: 5,delay: 1000,backoffMultiplier: 2,maxDelay: 30000},messageQueue: {enabled: true,maxSize: 100};};);
-      // 设置WebSocket事件监听 // ws.on(connected", () => {}"
+      const ws = createWebSocketManager({url: "ws:///     heartbeat: {enabled: true,interval: 30000,timeout: 5000},reconnect: {enabled: true,maxAttempts: 5,delay: 1000,backoffMultiplier: 2,maxDelay: 30000},messageQueue: {enabled: true,maxSize: 100};};);
+      ws.on(connected", () => {}"
         setState(prev => ({ ...prev, wsConnected: true}););
       });
-      ws.on("disconnected, () => {{}"
+      ws.on("disconnected, () => {}"
         setState(prev => ({ ...prev, wsConnected: false}););
       });
       ws.on("pong", ({ latency }); => {}
@@ -93,8 +93,8 @@ name;
         }));
       });
       setWsManager(ws);
-      // 更新缓存统计 // updateCacheStats();
-      // 设置定时更新 // const interval = setInterval(() => {;
+      updateCacheStats();
+      const interval = setInterval() => {;
         updateCacheStats();
         updateOfflineStats();
       }, 5000);
@@ -103,8 +103,8 @@ name;
       Alert.alert("错误", 初始化服务失败");"
     }
   };
-  // 清理资源  const cleanup = useCallback(() => {;
-    // TODO: Implement function body // const effectEnd = performance.now;
+  // 清理资源  const cleanup = useCallback() => {;
+    const effectEnd = performance.now;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
     if (wsManager) {
@@ -112,8 +112,8 @@ name;
     }
     offlineManager.removeAllListeners();
   };
-  // 更新离线统计  const updateOfflineStats = useCallback(() => {;
-    // TODO: Implement function body // const effectEnd = performance.now;
+  // 更新离线统计  const updateOfflineStats = useCallback() => {;
+    const effectEnd = performance.now;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
     const stats = offlineManager.getOperationStats;
@@ -123,14 +123,14 @@ name;
       operationCount: stats.total,
       conflictCount: conflicts.length}););
   };
-  // 更新缓存统计  const updateCacheStats = useCallback(() => {;
-    // TODO: Implement function body // const effectEnd = performance.now;
+  // 更新缓存统计  const updateCacheStats = useCallback() => {;
+    const effectEnd = performance.now;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
     setState(prev => ({
       ...prev,
-      cacheStats: {
-        memory: memoryCache.getStats(),
+      cacheStats: {,
+  memory: memoryCache.getStats(),
         persistent: persistentCache.getStats(),
         api: apiCache.getStats()}
     }));
@@ -161,8 +161,8 @@ name;
 email;
         };}
     ;`
-    const variables = {input: {
-        name: "测试用户,",
+    const variables = {input: {,
+  name: "测试用户,",
         email: "test@example.com"}
     ;};
     try {
@@ -181,8 +181,10 @@ email;
   // 添加离线操作  const addOfflineOperation = async() => {};
     try {await offlineManager.addOperation(;
         create",User,";
-        {name: "离线用户",email: offline@example.com"},";
-        1 // 高优先级 /////    );
+        {
+      name: "离线用户",
+      email: offline@example.com"},";
+        1 ///    );
       updateOfflineStats();
       Alert.alert("成功, "离线操作已添加")"
     } catch (error) {
@@ -203,7 +205,7 @@ email;
       }
     }
   };
-  // 断开WebSocket  const disconnectWebSocket = useCallback(() => {;
+  // 断开WebSocket  const disconnectWebSocket = useCallback() => {;
     // TODO: Implement function body        const effectEnd = performance.now;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
@@ -211,27 +213,27 @@ email;
       wsManager.disconnect();
     }
   };
-  // 发送WebSocket消息  const sendWebSocketMessage = useCallback(() => {;
-    // TODO: Implement function body // const effectEnd = performance.now;
+  // 发送WebSocket消息  const sendWebSocketMessage = useCallback() => {;
+    const effectEnd = performance.now;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [])
     if (wsManager && state.wsConnected) {
       wsManager.send({
-        type: "data",
-        data: { message: testData.wsMessage   }
+      type: "data",
+      data: { message: testData.wsMessage   }
       });
     } else {
-      Alert.alert(错误", "WebSocket未连接);
+      Alert.alert(错误",WebSocket未连接);
     }
   };
-  // 订阅WebSocket频道  const subscribeChannel = useCallback(() => {;
-    // TODO: Implement function body // const effectEnd = performance.now;
+  // 订阅WebSocket频道  const subscribeChannel = useCallback() => {;
+    const effectEnd = performance.now;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [])
     if (wsManager) {
       wsManager.subscribe({
-        channel: "test-channel",
-        onMessage: (message) => {}
+      channel: "test-channel",
+      onMessage: (message) => {}
           },
         onError: (error) => {}
           }
@@ -244,7 +246,7 @@ email;
       await persistentCache.set(testData.cacheKey, testData.cacheValu;e;);
       await apiCache.set(testData.cacheKey, testData.cacheValu;e;);
       updateCacheStats();
-      Alert.alert(成功", "缓存设置完成);
+      Alert.alert(成功",缓存设置完成);
     } catch (error) {
       Alert.alert("错误", `缓存设置失败: ${error}`);
     }
@@ -273,154 +275,154 @@ API缓存: ${apiValue}
     }
   };
   return (;
-    <ScrollView style={styles.container} />/      <Text style={styles.title} />高级功能演示</Text>/////;
-      {// GraphQL API 部分 }/      <View style={styles.section} />/        <Text style={styles.sectionTitle} />GraphQL API</Text>/        <View style={styles.statusRow} />/          <Text />连接状态: </Text>/          <Text style={[styles.status, { color: state.graphqlConnected ? "green" : red"  ; }]} />/            {state.graphqlConnected ? "已连接 : "未连接"}////
-          </Text>/        </View>/////
+    <ScrollView style={styles.container}>/      <Text style={styles.title}>高级功能演示</Text>/;
+      {//
+          </Text>/        </View>/
         <TextInput,
           style={styles.textInput}
           multiline;
 value={testData.graphqlQuery}
-          onChangeText={(text) = /> setTestData(prev => ({ ...prev, graphqlQuery: text}))}/////              placeholder="输入GraphQL查询"
-        />/////
-        <View style={styles.buttonRow} />/////              <TouchableOpacity;
+          onChangeText={(text) = /> setTestData(prev => ({ ...prev, graphqlQuery: text}))}/              placeholder="输入GraphQL查询"
+        />/
+        <View style={styles.buttonRow}>/              <TouchableOpacity;
 style={[styles.button, state.graphqlLoading && styles.buttonDisabled]}
             onPress={testGraphQLQuery}
             disabled={state.graphqlLoading}
-           accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText} />/              {state.graphqlLoading ? 查询中..." : "执行查询}////
-            </Text>/          </TouchableOpacity>/////
-          <TouchableOpacity style={styles.button} onPress={testGraphQLMutation} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText} />测试变更</Text>/          </TouchableOpacity>/        </View>/////
-        {state.graphqlResult ? (<Text style={styles.result} />{state.graphqlResult}</Text>/////    ): null}
-      </View>/////
-       {// 离线模式部分 }/      <View style={styles.section} />/        <Text style={styles.sectionTitle} />离线模式</Text>/        <View style={styles.statusRow} />/          <Text />初始化状态: </Text>/          <Text style={[styles.status, { color: state.offlineInitialized ? "green" : red"}]} />/            {state.offlineInitialized ? "已初始化 : "未初始化"}////
-          </Text>/        </View>/////
-        <View style={styles.statusRow} />/          <Text />同步状态: </Text>/          <Text style={styles.status} />{state.syncStatus}</Text>/        </View>/////
-        <View style={styles.statusRow} />/          <Text />待同步操作: </Text>/          <Text style={styles.status} />{state.operationCount}</Text>/        </View>/////
-        <View style={styles.statusRow} />/          <Text />冲突数量: </Text>/          <Text style={styles.status} />{state.conflictCount}</Text>/        </View>/////
-        <View style={styles.buttonRow} />/          <TouchableOpacity style={styles.button} onPress={addOfflineOperation} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText} />添加离线操作</Text>/          </TouchableOpacity>/////
-          <TouchableOpacity style={styles.button} onPress={manualSync} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText} />手动同步</Text>/          </TouchableOpacity>/        </View>/      </View>/////
-      {// WebSocket部分 }/      <View style={styles.section} />/        <Text style={styles.sectionTitle} />WebSocket实时通信</Text>/        <View style={styles.statusRow} />/          <Text />连接状态: </Text>/          <Text style={[styles.status, { color: state.wsConnected ? green" : "red}]} />/            {state.wsConnected ? "已连接" : 未连接"}"////
-          </Text>/        </View>/////
-        <View style={styles.statusRow} />/          <Text />延迟: </Text>/          <Text style={styles.status} />{state.wsLatency}ms</Text>/        </View>/////
+          accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>/              {state.graphqlLoading ? 查询中..." : "执行查询}
+            </Text>/          </TouchableOpacity>/
+          <TouchableOpacity style={styles.button} onPress={testGraphQLMutation} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>测试变更</Text>/          </TouchableOpacity>/        </View>/
+        {state.graphqlResult ? (<Text style={styles.result}>{state.graphqlResult}</Text>/    ): null}
+      </View>/
+      {//
+          </Text>/        </View>/
+        <View style={styles.statusRow}>/          <Text />同步状态: </Text>/          <Text style={styles.status}>{state.syncStatus}</Text>/        </View>/
+        <View style={styles.statusRow}>/          <Text />待同步操作: </Text>/          <Text style={styles.status}>{state.operationCount}</Text>/        </View>/
+        <View style={styles.statusRow}>/          <Text />冲突数量: </Text>/          <Text style={styles.status}>{state.conflictCount}</Text>/        </View>/
+        <View style={styles.buttonRow}>/          <TouchableOpacity style={styles.button} onPress={addOfflineOperation} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>添加离线操作</Text>/          </TouchableOpacity>/
+          <TouchableOpacity style={styles.button} onPress={manualSync} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>手动同步</Text>/          </TouchableOpacity>/        </View>/      </View>/
+      {//
+          </Text>/        </View>/
+        <View style={styles.statusRow}>/          <Text />延迟: </Text>/          <Text style={styles.status}>{state.wsLatency}ms</Text>/        </View>/
         <TextInput;
 style={styles.textInput}
           value={testData.wsMessage}
-          onChangeText={(text) = /> setTestData(prev => ({ ...prev, wsMessage: text}))}/////              placeholder="输入WebSocket消息"
-        />/////
-        <View style={styles.buttonRow} />/////              <TouchableOpacity;
+          onChangeText={(text) = /> setTestData(prev => ({ ...prev, wsMessage: text}))}/              placeholder="输入WebSocket消息"
+        />/
+        <View style={styles.buttonRow}>/              <TouchableOpacity;
 style={[styles.button, state.wsConnected && styles.buttonDisabled]}
             onPress={connectWebSocket}
             disabled={state.wsConnected}
-           accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText} />连接</Text>/          </TouchableOpacity>/////
+          accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>连接</Text>/          </TouchableOpacity>/
           <TouchableOpacity;
 style={[styles.button, !state.wsConnected && styles.buttonDisabled]}
             onPress={disconnectWebSocket}
             disabled={!state.wsConnected}
-           accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText} />断开</Text>/          </TouchableOpacity>/////
-          <TouchableOpacity style={styles.button} onPress={sendWebSocketMessage} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText} />发送消息</Text>/          </TouchableOpacity>/////
-          <TouchableOpacity style={styles.button} onPress={subscribeChannel} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText} />订阅频道</Text>/          </TouchableOpacity>/        </View>/////
-        <Text style={styles.subTitle} />最近消息:</Text>/////            {state.wsMessages.map((message, index); => (
-          <Text key={index} style={styles.message} />/////                {message}
-          </Text>/////            ))}
-      </View>/////
-      {// 缓存策略部分 }/      <View style={styles.section} />/        <Text style={styles.sectionTitle} />缓存策略</Text>/////
-        <View style={styles.inputRow} />/////              <TextInput;
+          accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>断开</Text>/          </TouchableOpacity>/
+          <TouchableOpacity style={styles.button} onPress={sendWebSocketMessage} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>发送消息</Text>/          </TouchableOpacity>/
+          <TouchableOpacity style={styles.button} onPress={subscribeChannel} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>订阅频道</Text>/          </TouchableOpacity>/        </View>/
+        <Text style={styles.subTitle}>最近消息:</Text>/            {state.wsMessages.map(message, index); => (
+          <Text key={index} style={styles.message}>/                {message}
+          </Text>/            ))}
+      </View>/
+      {///
+        <View style={styles.inputRow}>/              <TextInput;
 style={[styles.textInput, { flex: 1, marginRight: 10}]}
             value={testData.cacheKey}
-            onChangeText={(text) = /> setTestData(prev => ({ ...prev, cacheKey: text}))}/////                placeholder="缓存键"
-          />/////              <TextInput;
+            onChangeText={(text) = /> setTestData(prev => ({ ...prev, cacheKey: text}))}/                placeholder="缓存键"
+          />/              <TextInput;
 style={[styles.textInput, { flex: 1}]}
             value={testData.cacheValue}
-            onChangeText={(text) = /> setTestData(prev => ({ ...prev, cacheValue: text}))}/////                placeholder="缓存值"
-          />/        </View>/////
-        <View style={styles.buttonRow} />/          <TouchableOpacity style={styles.button} onPress={testCacheSet} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText} />设置缓存</Text>/          </TouchableOpacity>/////
-          <TouchableOpacity style={styles.button} onPress={testCacheGet} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText} />获取缓存</Text>/          </TouchableOpacity>/////
-          <TouchableOpacity style={styles.button} onPress={clearCaches} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText} />清空缓存</Text>/          </TouchableOpacity>/        </View>/////
-        <Text style={styles.subTitle} />缓存统计:</Text>/        <Text style={styles.cacheStats} />/          内存缓存: {state.cacheStats.memory.size || 0} 项, 命中率: {((state.cacheStats.memory.hitRate || 0) * 100).toFixed(1)}%////
-        </Text>/        <Text style={styles.cacheStats} />/          持久缓存: {state.cacheStats.persistent.size || 0} 项, 命中率: {((state.cacheStats.persistent.hitRate || 0) * 100).toFixed(1)}%////
-        </Text>/        <Text style={styles.cacheStats} />/          API缓存: {state.cacheStats.api.size || 0} 项, 命中率: {((state.cacheStats.api.hitRate || 0) * 100).toFixed(1)}%////
-        </Text>/      </View>/    </ScrollView>/////      );
+            onChangeText={(text) = /> setTestData(prev => ({ ...prev, cacheValue: text}))}/                placeholder="缓存值"
+          />/        </View>/
+        <View style={styles.buttonRow}>/          <TouchableOpacity style={styles.button} onPress={testCacheSet} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>设置缓存</Text>/          </TouchableOpacity>/
+          <TouchableOpacity style={styles.button} onPress={testCacheGet} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>获取缓存</Text>/          </TouchableOpacity>/
+          <TouchableOpacity style={styles.button} onPress={clearCaches} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>清空缓存</Text>/          </TouchableOpacity>/        </View>/
+        <Text style={styles.subTitle}>缓存统计:</Text>/        <Text style={styles.cacheStats}>/          内存缓存: {state.cacheStats.memory.size || 0} 项, 命中率: {(state.cacheStats.memory.hitRate || 0) * 100).toFixed(1)}%
+        </Text>/        <Text style={styles.cacheStats}>/          持久缓存: {state.cacheStats.persistent.size || 0} 项, 命中率: {(state.cacheStats.persistent.hitRate || 0) * 100).toFixed(1)}%
+        </Text>/        <Text style={styles.cacheStats}>/          API缓存: {state.cacheStats.api.size || 0} 项, 命中率: {(state.cacheStats.api.hitRate || 0) * 100).toFixed(1)}%
+        </Text>/      </View>/    </ScrollView>/      );
 }
-const styles = StyleSheet.create({container: {
-    flex: 1,
+const styles = StyleSheet.create({container: {,
+  flex: 1,
     backgroundColor: "#f5f5f5,",
     padding: 16},
-  title: {
-    fontSize: 24,
+  title: {,
+  fontSize: 24,
     fontWeight: "bold",
-    textAlign: center","
+    textAlign: center",
     marginBottom: 20,
     color: "#333},",
-  section: {
-    backgroundColor: "white",
+  section: {,
+  backgroundColor: "white",
     borderRadius: 8,
     padding: 16,
     marginBottom: 16,
-    shadowColor: #000","
+    shadowColor: #000",
     shadowOffset: { width: 0, height;: ;2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3},
-  sectionTitle: {
-    fontSize: 18,
+  sectionTitle: {,
+  fontSize: 18,
     fontWeight: "bold,",
     marginBottom: 12,
     color: "#333"},
-  subTitle: {
-    fontSize: 16,
-    fontWeight: 600","
+  subTitle: {,
+  fontSize: 16,
+    fontWeight: 600",
     marginTop: 12,
     marginBottom: 8,
     color: "#555},",
-  statusRow: {
-    flexDirection: "row",
-    alignItems: center","
+  statusRow: {,
+  flexDirection: "row",
+    alignItems: center",
     marginBottom: 8},
   status: { fontWeight: "600  },"
-  textInput: {
-    borderWidth: 1,
+  textInput: {,
+  borderWidth: 1,
     borderColor: "#ddd",
     borderRadius: 4,
     padding: 12,
     marginBottom: 12,
-    backgroundColor: #fff","
+    backgroundColor: #fff",
     minHeight: 40},
-  inputRow: {
-    flexDirection: "row,",
+  inputRow: {,
+  flexDirection: "row,",
     alignItems: "center"},
-  buttonRow: {
-    flexDirection: row","
+  buttonRow: {,
+  flexDirection: row",
     flexWrap: "wrap,",
     gap: 8,
     marginBottom: 12},
-  button: {
-    backgroundColor: "#007AFF",
+  button: {,
+  backgroundColor: "#007AFF",
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 4,
     minWidth: 80},
   buttonDisabled: { backgroundColor: #ccc"  },"
-  buttonText: {
-    color: "white,",
+  buttonText: {,
+  color: "white,",
     fontWeight: "600",
-    textAlign: center","
+    textAlign: center",
     fontSize: 14},
-  result: {
-    backgroundColor: "#f8f8f8,",
+  result: {,
+  backgroundColor: "#f8f8f8,",
     padding: 12,
     borderRadius: 4,
     fontFamily: "monospace",
     fontSize: 12,
     maxHeight: 200},
-  message: {
-    backgroundColor: #f0f0f0","
+  message: {,
+  backgroundColor: #f0f0f0",
     padding: 8,
     borderRadius: 4,
     marginBottom: 4,
     fontSize: 12,
     fontFamily: "monospace},",
-  cacheStats: {
-    fontSize: 14,
-    color: "#666',"'
+  cacheStats: {,
+  fontSize: 14,
+    color: "#666",'
     marginBottom: 4}
 });
 export default React.memo(AdvancedFeaturesDemo);

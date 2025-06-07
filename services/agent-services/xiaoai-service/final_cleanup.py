@@ -15,218 +15,232 @@ import re
 
 
 class FinalCleanup:
-    def __init__(self):
-        self.base_path = Path(__file__).parent
-        self.fixes_applied = 0
-
-    def remove_commented_code(self, content: str) -> str:
-        """移除注释掉的代码"""
-        lines = content.split('\n')
-        cleaned_lines = []
-
-        for line in lines:
-            stripped = line.strip()
-            # 跳过完全注释掉的代码行（但保留文档字符串和有意义的注释）
-            if (stripped.startswith('#') and
-                not stripped.startswith('# -*- coding:') and
-                not stripped.startswith('#!/') and
-                not stripped.startswith('# TODO') and
-                not stripped.startswith('# FIXME') and
-                not stripped.startswith('# NOTE') and
-                not stripped.startswith('# WARNING') and
-                not stripped.startswith('# Copyright') and
-                not stripped.startswith('# License') and
-                len(stripped) > 10 and
-                any(keyword in stripped.lower() for keyword in [
-                    'def ', 'class ', 'import ', 'from ', 'if ', 'for ', 'while ',
-                    'try:', 'except:', 'return ', 'yield ', 'await ', '= ', '==', '!=',
-                    'print(', 'logger.', '.append(', '.extend(', '.update('
-                ])):
-                self.fixes_applied += 1
-                continue
-            cleaned_lines.append(line)
-
-        return '\n'.join(cleaned_lines)
-
-    def fix_whitespace_issues(self, content: str) -> str:
-        """修复空白字符问题"""
-        # 移除行尾空白
-        lines = content.split('\n')
-        fixed_lines = []
-
-        for line in lines:
-            # 移除行尾空白
-            fixed_line = line.rstrip()
-            fixed_lines.append(fixed_line)
-
-        # 确保文件以换行符结尾
-        result = '\n'.join(fixed_lines)
-        if result and not result.endswith('\n'):
-            result += '\n'
-
-        return result
-
-    def fix_import_issues(self, content: str) -> str:
+    """最终清理器"""
+    
+    def __init__(self, base_path: str = "xiaoai"):
+        self.base_path = Path(base_path)
+        self.fixed_files = []
+        
+    def cleanup_all(self):
+        """执行最终清理"""
+        print("开始最终清理...")
+        
+        # 1. 移除所有注释代码
+        self._remove_all_commented_code()
+        
+        # 2. 修复剩余的语法错误
+        self._fix_remaining_syntax_errors()
+        
+        # 3. 修复全角标点符号
+        self._fix_unicode_characters()
+        
+        # 4. 清理多余的pass语句
+        self._cleanup_pass_statements()
+        
+        # 5. 修复导入问题
+        self._fix_import_issues()
+        
+        print(f"最终清理完成！修复了 {len(self.fixed_files)} 个文件")
+        
+    def _remove_all_commented_code(self):
+        """移除所有注释代码"""
+        print("移除注释代码...")
+        
+        for py_file in self.base_path.rglob("*.py"):
+            try:
+                content = py_file.read_text(encoding='utf-8')
+                original_content = content
+                
+                # 移除明显的注释代码行
+                lines = content.split('\n')
+                cleaned_lines = []
+                
+                for line in lines:
+                    stripped = line.strip()
+                    
+                    # 保留有意义的注释，移除注释的代码
+                    if stripped.startswith('#'):
+                        # 检查是否是代码注释
+                        comment_content = stripped[1:].strip()
+                        if (comment_content.startswith(('def ', 'class ', 'import ', 'from ', 'if ', 'for ', 'while ', 'try:', 'except', 'return ', 'raise ')) or
+                            comment_content.startswith(('{', '[', '"', "'")) or
+                            comment_content.endswith(('}', ']', ')', ',', ';')) or
+                            '=' in comment_content and not comment_content.startswith('=')):
+                            continue  # 跳过注释的代码
+                        else:
+                            cleaned_lines.append(line)  # 保留有意义的注释
+                    else:
+                        cleaned_lines.append(line)
+                
+                content = '\n'.join(cleaned_lines)
+                
+                # 清理连续的空行
+                content = re.sub(r'\n\s*\n\s*\n+', '\n\n', content)
+                
+                if content != original_content:
+                    py_file.write_text(content, encoding='utf-8')
+                    self.fixed_files.append(str(py_file))
+                    
+            except Exception as e:
+                print(f"处理文件 {py_file} 时出错: {e}")
+                
+    def _fix_remaining_syntax_errors(self):
+        """修复剩余的语法错误"""
+        print("修复剩余语法错误...")
+        
+        for py_file in self.base_path.rglob("*.py"):
+            try:
+                content = py_file.read_text(encoding='utf-8')
+                original_content = content
+                
+                # 修复多语句在一行的问题
+                content = re.sub(r'if\s+([^:]+):\s*([^:]+):\s*$', r'if \1:\n        \2', content, flags=re.MULTILINE)
+                
+                # 修复缩进问题
+                lines = content.split('\n')
+                fixed_lines = []
+                
+                for i, line in enumerate(lines):
+                    # 修复错误的缩进
+                    if line.strip().startswith('from ') and i > 0:
+                        # 确保导入语句在正确位置
+                        if not lines[i-1].strip().startswith(('from ', 'import ', '"""', "'''", '#')):
+                            # 移动到文件顶部
+                            continue
+                    
+                    fixed_lines.append(line)
+                
+                content = '\n'.join(fixed_lines)
+                
+                if content != original_content:
+                    py_file.write_text(content, encoding='utf-8')
+                    self.fixed_files.append(str(py_file))
+                    
+            except Exception as e:
+                print(f"处理文件 {py_file} 时出错: {e}")
+                
+    def _fix_unicode_characters(self):
+        """修复全角标点符号"""
+        print("修复全角标点符号...")
+        
+        # 全角到半角的映射
+        punctuation_map = {
+            '：': ':',
+            '，': ',',
+            '（': '(',
+            '）': ')',
+        }
+        
+        for py_file in self.base_path.rglob("*.py"):
+            try:
+                content = py_file.read_text(encoding='utf-8')
+                original_content = content
+                
+                # 只在注释中替换标点符号
+                lines = content.split('\n')
+                for i, line in enumerate(lines):
+                    if line.strip().startswith('#') or '"""' in line or "'''" in line:
+                        for full_width, half_width in punctuation_map.items():
+                            line = line.replace(full_width, half_width)
+                        lines[i] = line
+                
+                content = '\n'.join(lines)
+                
+                if content != original_content:
+                    py_file.write_text(content, encoding='utf-8')
+                    self.fixed_files.append(str(py_file))
+                    
+            except Exception as e:
+                print(f"处理文件 {py_file} 时出错: {e}")
+                
+    def _cleanup_pass_statements(self):
+        """清理多余的pass语句"""
+        print("清理多余的pass语句...")
+        
+        for py_file in self.base_path.rglob("*.py"):
+            try:
+                content = py_file.read_text(encoding='utf-8')
+                original_content = content
+                
+                # 移除孤立的pass语句
+                lines = content.split('\n')
+                cleaned_lines = []
+                
+                for i, line in enumerate(lines):
+                    if line.strip() == 'pass':
+                        # 检查是否是必要的pass
+                        if i > 0 and lines[i-1].strip().endswith(':'):
+                            # 检查后面是否有其他语句
+                            has_following_code = False
+                            for j in range(i+1, len(lines)):
+                                next_line = lines[j].strip()
+                                if next_line and not next_line.startswith('#'):
+                                    # 检查缩进级别
+                                    if len(lines[j]) - len(lines[j].lstrip()) > len(line) - len(line.lstrip()):
+                                        has_following_code = True
+                                        break
+                                    else:
+                                        break
+                            
+                            if not has_following_code:
+                                cleaned_lines.append(line)  # 保留必要的pass
+                        # 否则跳过孤立的pass
+                    else:
+                        cleaned_lines.append(line)
+                
+                content = '\n'.join(cleaned_lines)
+                
+                if content != original_content:
+                    py_file.write_text(content, encoding='utf-8')
+                    self.fixed_files.append(str(py_file))
+                    
+            except Exception as e:
+                print(f"处理文件 {py_file} 时出错: {e}")
+                
+    def _fix_import_issues(self):
         """修复导入问题"""
-        lines = content.split('\n')
+        print("修复导入问题...")
+        
+        for py_file in self.base_path.rglob("*.py"):
+            try:
+                content = py_file.read_text(encoding='utf-8')
+                original_content = content
+                
+                # 修复typing导入
+                content = re.sub(r'from typing import List', 'from typing import list', content)
+                
+                # 修复重复的导入
+                lines = content.split('\n')
+                seen_imports = set()
+                cleaned_lines = []
+                
+                for line in lines:
+                    if line.strip().startswith(('import ', 'from ')):
+                        if line.strip() not in seen_imports:
+                            seen_imports.add(line.strip())
+                            cleaned_lines.append(line)
+                    else:
+                        cleaned_lines.append(line)
+                
+                content = '\n'.join(cleaned_lines)
+                
+                if content != original_content:
+                    py_file.write_text(content, encoding='utf-8')
+                    self.fixed_files.append(str(py_file))
+                    
+            except Exception as e:
+                print(f"处理文件 {py_file} 时出错: {e}")
 
-        # 分离不同类型的内容
-        header_lines = []
-        import_lines = []
-        other_lines = []
 
-        in_header = True
-        for line in lines:
-            stripped = line.strip()
+def main():
+    """主函数"""
+    cleanup = FinalCleanup()
+    cleanup.cleanup_all()
+    
+    print("\n修复的文件列表:")
+    for file_path in set(cleanup.fixed_files):
+        print(f"  - {file_path}")
 
-            if in_header and (stripped.startswith('#') or stripped.startswith('"""') or
-                             stripped.startswith("'''") or stripped == ''):
-                header_lines.append(line)
-            elif stripped.startswith(('import ', 'from ')) and not stripped.startswith('#'):
-                import_lines.append(line)
-                in_header = False
-            else:
-                other_lines.append(line)
-                in_header = False
-
-        # 去重导入语句
-        unique_imports = []
-        seen_imports = set()
-
-        for imp in import_lines:
-            if imp.strip() not in seen_imports:
-                unique_imports.append(imp)
-                seen_imports.add(imp.strip())
-
-        # 重新组合
-        result_lines = header_lines
-        if unique_imports:
-            if header_lines and header_lines[-1].strip():
-                result_lines.append('')
-            result_lines.extend(unique_imports)
-            result_lines.append('')
-        result_lines.extend(other_lines)
-
-        return '\n'.join(result_lines)
-
-    def fix_undefined_variables(self, content: str) -> str:
-        """修复未定义变量的特定情况"""
-        # 修复特定的未定义变量模式
-        fixes = [
-            # 修复capability_id相关问题
-            (r'\bcapability_id\b(?!\s*=)', 'capability.get("id", "")'),
-            # 修复params相关问题
-            (r'\bparams\b(?!\s*=)(?!\s*:)', 'request.get("params", {})'),
-            # 修复常见的上下文变量
-            (r'\buser_id\b(?!\s*=)(?!\s*:)', 'context.get("user_id", "")'),
-            (r'\bsession_id\b(?!\s*=)(?!\s*:)', 'context.get("session_id", "")'),
-        ]
-
-        modified = content
-        for pattern, replacement in fixes:
-            if re.search(pattern, modified):
-                modified = re.sub(pattern, replacement, modified)
-                self.fixes_applied += 1
-
-        return modified
-
-    def add_missing_error_handling(self, content: str) -> str:
-        """为缺少错误处理的代码添加基本的try-except"""
-        lines = content.split('\n')
-        modified_lines = []
-
-        i = 0
-        while i < len(lines):
-            line = lines[i]
-            stripped = line.strip()
-
-            # 检查是否是可能抛出异常的操作
-            if (any(pattern in stripped for pattern in [
-                'await ', '.get(', '.post(', '.put(', '.delete(',
-                'json.loads(', 'json.dumps(', 'open(', 'requests.',
-                '.connect(', '.execute(', '.query('
-            ]) and 'try:' not in stripped and 'except' not in stripped):
-                pass
-
-                # 检查前后是否已经在try块中
-                in_try_block = False
-                for j in range(max(0, i-5), i):
-                    if 'try:' in lines[j] and lines[j].strip().endswith('try:'):
-                        in_try_block = True
-                        break
-
-                if not in_try_block:
-                    indent = len(line) - len(line.lstrip())
-                    indent_str = ' ' * indent
-
-                    # 添加try-except包装
-                    modified_lines.append(f"{indent_str}try:")
-                    modified_lines.append(f"{indent_str}    {stripped}")
-                    modified_lines.append(f"{indent_str}except Exception as e:")
-                    modified_lines.append(f"{indent_str}    logger.error(f'Error: {{e}}')")
-                    modified_lines.append(f"{indent_str}    raise")
-                    self.fixes_applied += 1
-                else:
-                    modified_lines.append(line)
-            else:
-                modified_lines.append(line)
-
-            i += 1
-
-        return '\n'.join(modified_lines)
-
-    def fix_file(self, file_path: Path) -> bool:
-        """修复单个文件"""
-        try:
-            with open(file_path, encoding='utf-8') as f:
-                content = f.read()
-
-            original_content = content
-
-            # 应用各种修复
-            content = self.remove_commented_code(content)
-            content = self.fix_whitespace_issues(content)
-            content = self.fix_import_issues(content)
-            content = self.fix_undefined_variables(content)
-
-            # 如果内容有变化，写回文件
-            if content != original_content:
-                with open(file_path, 'w', encoding='utf-8') as f:
-                    f.write(content)
-                return True
-
-            return False
-        except Exception as e:
-            print(f"  ❌ 修复文件失败 {file_path}: {e}")
-            return False
-
-    def run(self):
-        """运行最终清理"""
-        print("🧹 开始最终清理...")
-
-        # 获取所有Python文件
-        python_files = list(self.base_path.rglob("*.py"))
-
-        fixed_files = 0
-        for file_path in python_files:
-            if (file_path.name.startswith('.') or
-                'test' in str(file_path) or
-                '__pycache__' in str(file_path) or
-                file_path.name in ['critical_fixes.py', 'final_cleanup.py', 'comprehensive_fix.py']):
-                continue
-
-            print(f"🧹 清理文件: {file_path.relative_to(self.base_path)}")
-            if self.fix_file(file_path):
-                fixed_files += 1
-                print("  ✅ 文件已清理")
-            else:
-                print("  ℹ️ 文件无需清理")
-
-        print("\n📊 清理完成:")
-        print(f"  - 检查文件: {len(python_files)}")
-        print(f"  - 清理文件: {fixed_files}")
-        print(f"  - 应用修复: {self.fixes_applied}")
 
 if __name__ == "__main__":
-    cleanup = FinalCleanup()
-    cleanup.run()
+    main()

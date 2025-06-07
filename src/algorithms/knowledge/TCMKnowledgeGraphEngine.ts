@@ -1,10 +1,10 @@
 import { EventEmitter } from 'events;';
-
 /**
- * * 中医知识图谱推理引擎
- * 实现基于知识图谱的中医辨证论治推理
+* * 中医知识图谱推理引擎
+* 实现基于知识图谱的中医辨证论治推理
 // 基础数据结构定义
-export interface TCMEntity {id: string;
+export interface TCMEntity {
+  id: string;
   name: string;
   type: EntityType;
   properties: Record<string, any>;
@@ -12,7 +12,8 @@ export interface TCMEntity {id: string;
   description?: string;
   confidence?: number;
 }
-export interface TCMRelation {id: string;
+export interface TCMRelation {
+  id: string;
   source: string;
   target: string;
   type: RelationType;
@@ -20,9 +21,10 @@ export interface TCMRelation {id: string;
   weight?: number;
   confidence?: number;
 }
-export interface TCMTriple {subject: TCMEntity;
-  predicate: TCMRelation
-  object: TCMEntity
+export interface TCMTriple {
+  subject: TCMEntity;
+  predicate: TCMRelation;
+  object: TCMEntity;
 }
 export enum EntityType {SYMPTOM =
 symptom",           // 症状"
@@ -69,39 +71,42 @@ FOLLOWS = "follows                // 后于"
 export interface DiagnosisInput {
   symptoms: string[];
   tongueAnalysis?: {color: string;
-    coating: string;
+  coating: string;
     texture: string;
-    moisture: number;
-  };
+  moisture: number;
+};
   pulseAnalysis?: {
-    type: string;
-    rate: number;
-    rhythm: string;
-    strength: number;
+    type: string,
+  rate: number;
+    rhythm: string,
+  strength: number;
   };
   patientInfo?: {
-    age: number;
-    gender: string;
+    age: number,
+  gender: string;
     constitution?: string;
     medicalHistory?: string[];
   };
   additionalInfo?: Record<string, any>;
 }
-export interface DiagnosisResult {primarySyndrome: TCMEntity;
+export interface DiagnosisResult {
+  primarySyndrome: TCMEntity;
   secondarySyndromes: TCMEntity[];
   confidence: number;
   reasoning: ReasoningPath[];
   recommendations: TreatmentRecommendation[];
   differentialDiagnosis: DifferentialDiagnosis[];
 }
-export interface ReasoningPath {step: number;
+export interface ReasoningPath {
+  step: number;
   description: string;
   entities: TCMEntity[];
   relations: TCMRelation[];
   confidence: number;
   reasoning: string;
 }
-export interface TreatmentRecommendation {type: "formula" | herb" | "acupuncture | "lifestyle";
+export interface TreatmentRecommendation {
+  type: "formula" | herb" | "acupuncture | "lifestyle";
   entity: TCMEntity;
   dosage?: string;
   duration?: string;
@@ -109,20 +114,22 @@ export interface TreatmentRecommendation {type: "formula" | herb" | "acupuncture
   notes?: string;
   confidence: number;
 }
-export interface DifferentialDiagnosis {syndrome: TCMEntity;
+export interface DifferentialDiagnosis {
+  syndrome: TCMEntity;
   probability: number;
   supportingEvidence: string[];
   contradictingEvidence: string[];
 }
-export interface KnowledgeGraphConfig {enableFuzzyMatching: boolean;
+export interface KnowledgeGraphConfig {
+  enableFuzzyMatching: boolean;
   confidenceThreshold: number;
   maxReasoningDepth: number;
   enableTemporalReasoning: boolean;
   enableUncertaintyHandling: boolean;
-  weightingStrategy: uniform" | "frequency | "expert" | ml
+  weightingStrategy: uniform" | "frequency | "expert" | ml;
 }
 /**
- * * 中医知识图谱推理引擎
+* * 中医知识图谱推理引擎
 export class TCMKnowledgeGraphEngine extends EventEmitter {private entities: Map<string, TCMEntity> = new Map();
   private relations: Map<string, TCMRelation> = new Map();
   private entityIndex: Map<EntityType, Set<string>> = new Map();
@@ -144,7 +151,7 @@ export class TCMKnowledgeGraphEngine extends EventEmitter {private entities: Map
     this.buildIndices();
   }
   /**
- * * 初始化知识库
+* * 初始化知识库
   private initializeKnowledgeBase(): void {
     // 加载基础中医知识
 this.loadBasicEntities();
@@ -153,11 +160,13 @@ this.loadBasicEntities();
     this.loadTreatmentProtocols();
   }
   /**
- * * 加载基础实体
+* * 加载基础实体
   private loadBasicEntities(): void {
     // 常见症状
 const symptoms = [;
-      { id: "sym_fatigue", name: 乏力", aliases: ["疲劳, "倦怠"] },
+      {
+      id: "sym_fatigue",
+      name: 乏力", aliases: ["疲劳, "倦怠"] },
       { id: sym_headache", name: "头痛, aliases: ["头疼"] },
       { id: sym_dizziness", name: "头晕, aliases: ["眩晕"] },
       { id: sym_insomnia", name: "失眠, aliases: ["不寐"] },
@@ -233,18 +242,24 @@ const organs = [;
     });
   }
   /**
- * * 加载基础关系
+* * 加载基础关系
   private loadBasicRelations(): void {
     // 症状-证候关系
 const symptomSyndromeRelations = [;
       { symptom: sym_fatigue", syndrome: "syn_qi_deficiency, weight: 0.8 },
-      { symptom: "sym_shortness_breath", syndrome: syn_qi_deficiency", weight: 0.7 },"
+      {
+      symptom: "sym_shortness_breath",
+      syndrome: syn_qi_deficiency", weight: 0.7 },"
       { symptom: "sym_poor_appetite, syndrome: "syn_spleen_deficiency", weight: 0.8 },"
       { symptom: sym_cold_limbs", syndrome: "syn_yang_deficiency, weight: 0.9 },
-      { symptom: "sym_night_sweats", syndrome: syn_yin_deficiency", weight: 0.8 },"
+      {
+      symptom: "sym_night_sweats",
+      syndrome: syn_yin_deficiency", weight: 0.8 },"
       { symptom: "sym_dry_mouth, syndrome: "syn_yin_deficiency", weight: 0.7 },"
       { symptom: sym_palpitation", syndrome: "syn_liver_qi_stagnation, weight: 0.6 },
-      { symptom: "sym_insomnia", syndrome: syn_liver_qi_stagnation", weight: 0.7 };"
+      {
+      symptom: "sym_insomnia",
+      syndrome: syn_liver_qi_stagnation", weight: 0.7 };"
     ];
     symptomSyndromeRelations.forEach(rel => {}
       this.addRelation({
@@ -260,10 +275,14 @@ const symptomSyndromeRelations = [;
 const syndromeFormulaRelations = [;
       { syndrome: "syn_qi_deficiency, formula: "form_sijunzi", weight: 0.9 },"
       { syndrome: syn_spleen_deficiency", formula: "form_sijunzi, weight: 0.8 },
-      { syndrome: "syn_yin_deficiency", formula: form_liuwei_dihuang", weight: 0.9 },"
+      {
+      syndrome: "syn_yin_deficiency",
+      formula: form_liuwei_dihuang", weight: 0.9 },"
       { syndrome: "syn_kidney_deficiency, formula: "form_liuwei_dihuang", weight: 0.8 },"
       { syndrome: syn_liver_qi_stagnation", formula: "form_xiaoyao, weight: 0.9 },
-      { syndrome: "syn_blood_stasis", formula: form_buyang_huanwu", weight: 0.8 },"
+      {
+      syndrome: "syn_blood_stasis",
+      formula: form_buyang_huanwu", weight: 0.8 },"
       { syndrome: "syn_damp_heat, formula: "form_ganlu_xiaodu", weight: 0.9 };"
     ];
     syndromeFormulaRelations.forEach(rel => {}
@@ -279,10 +298,14 @@ const syndromeFormulaRelations = [;
     // 脏腑相关关系
 const organRelations = [;
       { source: org_heart", target: "org_kidney, type: RelationType.NOURISHES, weight: 0.8 },
-      { source: "org_liver", target: org_spleen", type: RelationType.RESTRAINS, weight: 0.7 },"
+      {
+      source: "org_liver",
+      target: org_spleen", type: RelationType.RESTRAINS, weight: 0.7 },"
       { source: "org_spleen, target: "org_lung", type: RelationType.GENERATES, weight: 0.8 },"
       { source: org_lung", target: "org_kidney, type: RelationType.NOURISHES, weight: 0.7 },
-      { source: "org_kidney", target: org_liver", type: RelationType.NOURISHES, weight: 0.8 };"
+      {
+      source: "org_kidney",
+      target: org_liver", type: RelationType.NOURISHES, weight: 0.8 };"
     ];
     organRelations.forEach(rel => {}
       this.addRelation({
@@ -296,30 +319,34 @@ const organRelations = [;
     });
   }
   /**
- * * 加载证候模式
+* * 加载证候模式
   private loadSyndromePatterns(): void {
     // 定义证候的典型症状组合模式
 const patterns = [;
       {
-        syndrome: "syn_qi_deficiency,",
-        requiredSymptoms: ["sym_fatigue", sym_shortness_breath"],"
+      syndrome: "syn_qi_deficiency,",
+      requiredSymptoms: ["sym_fatigue", sym_shortness_breath"],"
         optionalSymptoms: ["sym_poor_appetite, "sym_dizziness"],"
         tonguePattern: { color: 淡白", coating: "薄白 },
-        pulsePattern: { type: "弱脉", characteristics: [weak", "deep] }
+        pulsePattern: {
+      type: "弱脉",
+      characteristics: [weak",deep] }
       },
       {
-        syndrome: "syn_yin_deficiency",
-        requiredSymptoms: [sym_night_sweats", "sym_dry_mouth],
+      syndrome: "syn_yin_deficiency",
+      requiredSymptoms: [sym_night_sweats",sym_dry_mouth],
         optionalSymptoms: ["sym_insomnia", sym_dizziness"],"
         tonguePattern: { color: "红, coating: "少苔" },"
         pulsePattern: { type: 细数脉", characteristics: ["rapid, "weak"] }
       },
       {
-        syndrome: syn_blood_stasis","
+        syndrome: syn_blood_stasis",
         requiredSymptoms: ["sym_palpitation],"
         optionalSymptoms: ["sym_headache"],
         tonguePattern: { color: 紫暗", coating: "薄白 },
-        pulsePattern: { type: "涩脉", characteristics: [rough", "irregular] }
+        pulsePattern: {
+      type: "涩脉",
+      characteristics: [rough",irregular] }
       };
     ];
     patterns.forEach(pattern => {}
@@ -330,21 +357,25 @@ const patterns = [;
     });
   }
   /**
- * * 加载治疗方案
+* * 加载治疗方案
   private loadTreatmentProtocols(): void {
     // 为每个证候定义标准治疗方案
 const protocols = [;
       {
-        syndrome: "syn_qi_deficiency",
-        treatments: [
+      syndrome: "syn_qi_deficiency",
+      treatments: [
           { type: formula", entity: "form_sijunzi, priority: 1 },
-          { type: "lifestyle", recommendation: 适当运动，避免过劳", priority: 2 }"
+          {
+      type: "lifestyle",
+      recommendation: 适当运动，避免过劳", priority: 2 }"
         ]
       },
       {
-        syndrome: "syn_yin_deficiency,",
-        treatments: [
-          { type: "formula", entity: form_liuwei_dihuang", priority: 1 },"
+      syndrome: "syn_yin_deficiency,",
+      treatments: [
+          {
+      type: "formula",
+      entity: form_liuwei_dihuang", priority: 1 },"
           { type: "lifestyle, recommendation: "避免熬夜，多食滋阴食物", priority: 2 }"
         ]
       };
@@ -357,13 +388,13 @@ const protocols = [;
     });
   }
   /**
- * * 构建索引
+* * 构建索引
   private buildIndices(): void {
     // 构建实体类型索引
 for (const entityType of Object.values(EntityType)) {
       this.entityIndex.set(entityType, new Set());
     }
-    this.entities.forEach((entity, id) => {}
+    this.entities.forEach(entity, id) => {}
       const typeSet = this.entityIndex.get(entity.type);
       if (typeSet) {
         typeSet.add(id);
@@ -373,7 +404,7 @@ for (const entityType of Object.values(EntityType)) {
 for (const relationType of Object.values(RelationType)) {
       this.relationIndex.set(relationType, new Set());
     }
-    this.relations.forEach((relation, id) => {}
+    this.relations.forEach(relation, id) => {}
       const typeSet = this.relationIndex.get(relation.type);
       if (typeSet) {
         typeSet.add(id);
@@ -381,7 +412,7 @@ for (const relationType of Object.values(RelationType)) {
     });
   }
   /**
- * * 添加实体
+* * 添加实体
   public addEntity(entity: TCMEntity): void {
     this.entities.set(entity.id, entity);
     const typeSet = this.entityIndex.get(entity.type);
@@ -393,7 +424,7 @@ for (const relationType of Object.values(RelationType)) {
     this.emit(entityAdded", entity);"
   }
   /**
- * * 添加关系
+* * 添加关系
   public addRelation(relation: TCMRelation): void {
     this.relations.set(relation.id, relation);
     const typeSet = this.relationIndex.get(relation.type);
@@ -405,7 +436,7 @@ for (const relationType of Object.values(RelationType)) {
     this.emit("relationAdded, relation);"
   }
   /**
- * * 查找实体
+* * 查找实体
   public findEntity(query: string, type?: EntityType): TCMEntity[] {
     const results: TCMEntity[] = [];
     const searchEntities = type ?;
@@ -416,10 +447,10 @@ for (const relationType of Object.values(RelationType)) {
         results.push(entity);
       }
     }
-    return results.sort((a, b) => (b.confidence || 0) - (a.confidence || 0));
+    return results.sort(a, b) => (b.confidence || 0) - (a.confidence || 0));
   }
   /**
- * * 查询匹配
+* * 查询匹配
   private matchesQuery(entity: TCMEntity, query: string): boolean {
     const normalizedQuery = query.toLowerCase().trim();
     // 精确匹配名称
@@ -457,7 +488,7 @@ if (entity.aliases) {
     return false;
   }
   /**
- * * 计算字符串相似度
+* * 计算字符串相似度
   private calculateSimilarity(str1: string, str2: string): number {
     const len1 = str1.length;
     const len2 = str2.length;
@@ -481,10 +512,10 @@ if (entity.aliases) {
       }
     }
     const maxLen = Math.max(len1, len2);
-    return 1 - matrix[len1][len2] /////     maxLen;
+    return 1 - matrix[len1][len2] /     maxLen;
   }
   /**
- * * 获取相关实体
+* * 获取相关实体
   public getRelatedEntities(entityId: string, relationType?: RelationType): TCMEntity[] {
     const related: TCMEntity[] = [];
     const searchRelations = relationType ?;
@@ -505,10 +536,10 @@ if (entity.aliases) {
         }
       }
     }
-    return related.sort((a, b) => (b.confidence || 0) - (a.confidence || 0));
+    return related.sort(a, b) => (b.confidence || 0) - (a.confidence || 0));
   }
   /**
- * * 主要诊断推理方法
+* * 主要诊断推理方法
   public async diagnose(input: DiagnosisInput): Promise<DiagnosisResult> {
     const cacheKey = this.generateCacheKey(input);
     // 检查缓存
@@ -548,7 +579,7 @@ this.reasoningCache.set(cacheKey, result);
     }
   }
   /**
- * * 症状识别
+* * 症状识别
   private async recognizeSymptoms(symptoms: string[]): Promise<TCMEntity[]> {
     const recognized: TCMEntity[] = [];
     for (const symptom of symptoms) {
@@ -569,7 +600,7 @@ const unknownSymptom: TCMEntity = {id: `unknown_${Date.now()}_${Math.random()}`,
     return recognized;
   }
   /**
- * * 多模态证据融合
+* * 多模态证据融合
   private fuseMultimodalEvidence(input: DiagnosisInput, symptoms: TCMEntity[]): any {
     const evidence = {symptoms,
       tongueEvidence: null as any,
@@ -590,25 +621,33 @@ evidence.fusionScore = this.calculateFusionScore(evidence);
     return evidence;
   }
   /**
- * * 处理舌诊证据
+* * 处理舌诊证据
   private processTongueEvidence(tongueAnalysis: any): any {
     return {color: tongueAnalysis.color,coating: tongueAnalysis.coating,texture: tongueAnalysis.texture,moisture: tongueAnalysis.moisture,syndromeIndicators: this.mapTongueToSyndromes(tongueAnalysis);
     };
   }
   /**
- * * 处理脉诊证据
+* * 处理脉诊证据
   private processPulseEvidence(pulseAnalysis: any): any {
     return {type: pulseAnalysis.type,rate: pulseAnalysis.rate,rhythm: pulseAnalysis.rhythm,strength: pulseAnalysis.strength,syndromeIndicators: this.mapPulseToSyndromes(pulseAnalysis);
     };
   }
   /**
- * * 舌象到证候的映射
+* * 舌象到证候的映射
   private mapTongueToSyndromes(tongueAnalysis: any): Array<{syndrome: string, confidence: number}> {
     const mappings = [;
-      { color: "淡白", coating: 薄白", syndrome: "syn_qi_deficiency, confidence: 0.8 },
-      { color: "红", coating: 少苔", syndrome: "syn_yin_deficiency, confidence: 0.8 },
-      { color: "紫暗", coating: 薄白", syndrome: "syn_blood_stasis, confidence: 0.9 },
-      { color: "红", coating: 黄腻", syndrome: "syn_damp_heat, confidence: 0.8 };
+      {
+      color: "淡白",
+      coating: 薄白", syndrome: "syn_qi_deficiency, confidence: 0.8 },
+      {
+      color: "红",
+      coating: 少苔", syndrome: "syn_yin_deficiency, confidence: 0.8 },
+      {
+      color: "紫暗",
+      coating: 薄白", syndrome: "syn_blood_stasis, confidence: 0.9 },
+      {
+      color: "红",
+      coating: 黄腻", syndrome: "syn_damp_heat, confidence: 0.8 };
     ];
     return mappings;
       .filter(mapping => {}
@@ -621,13 +660,17 @@ evidence.fusionScore = this.calculateFusionScore(evidence);
       }));
   }
   /**
- * * 脉象到证候的映射
+* * 脉象到证候的映射
   private mapPulseToSyndromes(pulseAnalysis: any): Array<{syndrome: string, confidence: number}> {
     const mappings = [;
-      { type: "弱脉", syndrome: syn_qi_deficiency", confidence: 0.8 },"
+      {
+      type: "弱脉",
+      syndrome: syn_qi_deficiency", confidence: 0.8 },"
       { type: "细数脉, syndrome: "syn_yin_deficiency", confidence: 0.8 },"
       { type: 涩脉", syndrome: "syn_blood_stasis, confidence: 0.9 },
-      { type: "滑数脉", syndrome: syn_damp_heat", confidence: 0.8 };"
+      {
+      type: "滑数脉",
+      syndrome: syn_damp_heat", confidence: 0.8 };"
     ];
     return mappings;
       .filter(mapping => mapping.type === pulseAnalysis.type);
@@ -637,7 +680,7 @@ evidence.fusionScore = this.calculateFusionScore(evidence);
       }));
   }
   /**
- * * 计算融合评分
+* * 计算融合评分
   private calculateFusionScore(evidence: any): number {
     let score = 0;
     let factors = 0;
@@ -653,10 +696,10 @@ evidence.fusionScore = this.calculateFusionScore(evidence);
       score += 0.3;
       factors++;
     }
-    return factors > 0 ? score /////     factors : 0;
+    return factors > 0 ? score /     factors : 0;
   }
   /**
- * * 生成证候假设
+* * 生成证候假设
   private async generateSyndromeHypotheses(evidence: any): Promise<TCMEntity[]> {
     const hypotheses = new Map<string, TCMEntity>();
     // 基于症状的证候推理
@@ -698,13 +741,13 @@ if (evidence.pulseEvidence?.syndromeIndicators) {
     }
     return Array.from(hypotheses.values());
       .filter(syndrome => (syndrome.confidence || 0) >= this.config.confidenceThreshold);
-      .sort((a, b) => (b.confidence || 0) - (a.confidence || 0));
+      .sort(a, b) => (b.confidence || 0) - (a.confidence || 0));
   }
   /**
- * * 构建推理路径
+* * 构建推理路径
   private buildReasoningPaths(evidence: any, syndromes: TCMEntity[]): ReasoningPath[] {
     const paths: ReasoningPath[] = [];
-    syndromes.forEach((syndrome, index) => {}
+    syndromes.forEach(syndrome, index) => {}
       const path: ReasoningPath = {step: index + 1,
         description: `推理${syndrome.name}`,
         entities: [syndrome],
@@ -716,8 +759,8 @@ if (evidence.pulseEvidence?.syndromeIndicators) {
 for (const symptom of evidence.symptoms) {
         const relations = Array.from(this.relations.values()).filter(;
           rel => rel.source === symptom.id &&
-                 rel.target === syndrome.id &&
-                 rel.type === RelationType.INDICATES;
+                rel.target === syndrome.id &&
+                rel.type === RelationType.INDICATES;
         );
         if (relations.length > 0) {
           path.entities.push(symptom);
@@ -729,19 +772,19 @@ for (const symptom of evidence.symptoms) {
     return paths;
   }
   /**
- * * 生成推理解释
+* * 生成推理解释
   private generateReasoningExplanation(syndrome: TCMEntity, evidence: any): string {
     const explanations: string[] = [];
     // 症状支持
-const supportingSymptoms = evidence.symptoms.filter((symptom: TCMEntity) => {}
+const supportingSymptoms = evidence.symptoms.filter(symptom: TCMEntity) => {}
       return Array.from(this.relations.values()).some(;
         rel => rel.source === symptom.id &&;
-               rel.target === syndrome.id &&;
-               rel.type === RelationType.INDICATES;
+              rel.target === syndrome.id &&;
+              rel.type === RelationType.INDICATES;
       );
     });
     if (supportingSymptoms.length > 0) {
-      explanations.push(`症状${supportingSymptoms.map((s: TCMEntity) => s.name).join("、)}支持${syndrome.name}的诊断`);"
+      explanations.push(`症状${supportingSymptoms.map(s: TCMEntity) => s.name).join("、)}支持${syndrome.name}的诊断`);"
     }
     // 舌诊支持
 if (evidence.tongueEvidence?.syndromeIndicators) {
@@ -764,7 +807,7 @@ if (evidence.pulseEvidence?.syndromeIndicators) {
     return explanations.join("；") || `基于综合分析推断为${syndrome.name}`;
   }
   /**
- * * 计算证候置信度
+* * 计算证候置信度
   private calculateSyndromeConfidence(syndromes: TCMEntity[], paths: ReasoningPath[]): TCMEntity[] {
     return syndromes.map((syndrome, index) => {};
       const path = paths[index];
@@ -775,14 +818,14 @@ const evidenceBonus = Math.min(evidenceCount * 0.1, 0.3);
       confidence = Math.min(confidence + evidenceBonus, 1.0);
       // 基于关系权重调整
 const avgRelationWeight = path.relations.length > 0 ?;
-        path.relations.reduce((sum, rel) => sum + (rel.weight || 0.5), 0) /////     path.relations.length :;
+        path.relations.reduce(sum, rel) => sum + (rel.weight || 0.5), 0) /     path.relations.length :;
         0.5;
       confidence = confidence * (0.7 + avgRelationWeight * 0.3);
       return { ...syndrome, confidence };
-    }).sort((a, b) => (b.confidence || 0) - (a.confidence || 0));
+    }).sort(a, b) => (b.confidence || 0) - (a.confidence || 0));
   }
   /**
- * * 生成治疗建议
+* * 生成治疗建议
   private async generateTreatmentRecommendations(syndromes: TCMEntity[]): Promise<TreatmentRecommendation[]> {
     const recommendations: TreatmentRecommendation[] = [];
     for (const syndrome of syndromes.slice(0, 2)) { // 只为前两个证候生成建议
@@ -790,7 +833,7 @@ const avgRelationWeight = path.relations.length > 0 ?;
 const treatmentFormulas = this.getRelatedEntities(syndrome.id, RelationType.TREATS);
       for (const formula of treatmentFormulas.slice(0, 2)) { // 每个证候最多2个方剂
 recommendations.push({
-          type: formula","
+          type: formula",
           entity: formula,
           confidence: (syndrome.confidence || 0) * (formula.confidence || 0),
           notes: `针对${syndrome.name}的经典方剂`
@@ -802,18 +845,18 @@ const lifestyleAdvice = this.generateLifestyleAdvice(syndrome);
         recommendations.push(lifestyleAdvice);
       }
     }
-    return recommendations.sort((a, b) => b.confidence - a.confidence);
+    return recommendations.sort(a, b) => b.confidence - a.confidence);
   }
   /**
- * * 生成生活方式建议
+* * 生成生活方式建议
   private generateLifestyleAdvice(syndrome: TCMEntity): TreatmentRecommendation | null {
-    const adviceMap: Record<string, string> = {"syn_qi_deficiency: "适当运动，避免过度劳累，规律作息","
+    const adviceMap: Record<string, string> = {"syn_qi_deficiency: "适当运动，避免过度劳累，规律作息",
       syn_yin_deficiency": "避免熬夜，多食滋阴润燥食物，保持心情平和,
       "syn_blood_stasis": 适当活动，避免久坐，注意保暖",syn_damp_heat: "饮食清淡，避免辛辣油腻，保持环境通风""
     };
     const advice = adviceMap[syndrome.id];
     if (advice) {
-      return {type: lifestyle",";
+      return {type: lifestyle",;
         entity: {id: `lifestyle_${syndrome.id}`,name: "生活调理,",type: EntityType.TREATMENT,properties: { advice };
         },confidence: (syndrome.confidence || 0) * 0.8,notes: advice;
       };
@@ -821,7 +864,7 @@ const lifestyleAdvice = this.generateLifestyleAdvice(syndrome);
     return null;
   }
   /**
- * * 执行鉴别诊断
+* * 执行鉴别诊断
   private performDifferentialDiagnosis(syndromes: TCMEntity[], evidence: any): DifferentialDiagnosis[] {
     return syndromes.map(syndrome => {};
       const supportingEvidence: string[] = [];
@@ -830,8 +873,8 @@ const lifestyleAdvice = this.generateLifestyleAdvice(syndrome);
 for (const symptom of evidence.symptoms) {
         const hasSupport = Array.from(this.relations.values()).some(;
           rel => rel.source === symptom.id &&
-                 rel.target === syndrome.id &&
-                 rel.type === RelationType.INDICATES;
+                rel.target === syndrome.id &&
+                rel.type === RelationType.INDICATES;
         );
         if (hasSupport) {
           supportingEvidence.push(`症状：${symptom.name}`);
@@ -860,18 +903,18 @@ if (evidence.pulseEvidence?.syndromeIndicators) {
     });
   }
   /**
- * * 生成缓存键
+* * 生成缓存键
   private generateCacheKey(input: DiagnosisInput): string {
     return JSON.stringify({symptoms: input.symptoms.sort(),tongue: input.tongueAnalysis,pulse: input.pulseAnalysis,patient: input.patientInfo;
     });
   }
   /**
- * * 清除缓存
+* * 清除缓存
   public clearCache(): void {
     this.reasoningCache.clear();
   }
   /**
- * * 获取统计信息
+* * 获取统计信息
   public getStatistics(): any {
     return {entities: {total: this.entities.size,byType: Object.fromEntries(;
           Array.from(this.entityIndex.entries()).map(([type, ids]) => [type, ids.size]);
@@ -884,14 +927,14 @@ if (evidence.pulseEvidence?.syndromeIndicators) {
     };
   }
   /**
- * * 导出知识图谱
+* * 导出知识图谱
   public exportKnowledgeGraph(): any {
     return {entities: Array.from(this.entities.values()),relations: Array.from(this.relations.values()),metadata: {exportTime: new Date().toISOString(),version: "1.0.0",config: this.config;
       }
     };
   }
   /**
- * * 导入知识图谱
+* * 导入知识图谱
   public importKnowledgeGraph(data: any): void {
     // 清空现有数据
 this.entities.clear();
@@ -908,4 +951,4 @@ for (const relation of data.relations) {
     }
     this.emit(knowledgeGraphImported", data.metadata);"
   }
-}  */////
+}  */

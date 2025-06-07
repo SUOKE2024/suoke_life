@@ -1,53 +1,60 @@
-import { usePerformanceMonitor } from "../../placeholder";../hooks/////    usePerformanceMonitor
-
+import { usePerformanceMonitor } from "../../placeholder";../hooks/    usePerformanceMonitor;
 import React from "react";
-importAsyncStorage from "@react-native-async-storage/async-storage";/import { EventEmitter } from "../../utils/eventEmitter";/import { graphqlClient } from "../graphql/client";// // 索克生活 - 离线模式管理器   完整的离线数据存储和同步功能
-// 离线操作类型 * export type OfflineOperationType = "create" | "update" | "delete" | "quer;"////;
-y"; /////    "
-// 离线操作接口 * export interface OfflineOperation { id: string, ////
-  type: OfflineOperationType,
-  entity: string,
-  data: unknown,
-  timestamp: number,
-  retryCount: number,maxRetries: number,priority: number; // 优先级，数字越小优先级越高 // }
-// 同步状态 * export type SyncStatus = "idle" | "syncing" | "error" | "complete;"////;
-d"; /////    "
-// 冲突解决策略 * export type ConflictResolutionStrategy = | "client-win;"////;
-s"; /////    "
+importAsyncStorage from "@react-native-async-storage/async-storage";/import { EventEmitter } from "../../utils/eventEmitter";/import { graphqlClient } from "../graphql/client"; 索克生活 - 离线模式管理器   完整的离线数据存储和同步功能
+//;
+y"; /    "
+// 离线操作接口 * export interface OfflineOperation {
+  id: string,
+  type: OfflineOperationType;
+  entity: string;
+  data: unknown;
+  timestamp: number;
+  retryCount: number,maxRetries: number,priority: number;
+}
+//;
+d"; /    "
+//;
+s"; /    "
   | "server-wins"
   | "merge"
   | "manual";
-// 冲突数据接口 * export interface ConflictData { id: string, ////
-  entity: string,
-  clientData: unknown,
-  serverData: unknown,
-  timestamp: number,
-  strategy: ConflictResolutionStrategy}
-// 同步配置接口 * export interface SyncConfig { batchSize: number, ////
-  retryDelay: number,
-  maxRetries: number,conflictStrategy: ConflictResolutionStrategy,syncInterval: number; // 自动同步间隔（毫秒） // }
-// 网络状态接口 * export interface NetworkState { isConnected: boolean, ////
-  connectionType: string,
-  isInternetReachable: boolean}
-// 存储键常量 * const STORAGE_KEYS = { ////;
+// 冲突数据接口 * export interface ConflictData {
+  id: string,
+  entity: string;
+  clientData: unknown;
+  serverData: unknown;
+  timestamp: number;
+  strategy: ConflictResolutionStrategy;
+}
+// 同步配置接口 * export interface SyncConfig {
+  batchSize: number,
+  retryDelay: number;
+  maxRetries: number,conflictStrategy: ConflictResolutionStrategy,syncInterval: number;
+}
+// 网络状态接口 * export interface NetworkState {
+  isConnected: boolean,
+  connectionType: string;
+  isInternetReachable: boolean;
+}
+//;
   OFFLINE_OPERATIONS: "@suoke_offline_operations",OFFLINE_DATA: "@suoke_offline_data",SYNC_METADATA: "@suoke_sync_metadata",CONFLICTS: "@suoke_conflicts"};
 export class OfflineManager extends EventEmitter   {private operations: Map<string, OfflineOperation> = new Map();
   private offlineData: Map<string, any> = new Map();
   private conflicts: Map<string, ConflictData> = new Map();
   private syncStatus: SyncStatus = "idle"
-  private networkState: NetworkState = {
-    isConnected: false,
+  private networkState: NetworkState = {,
+  isConnected: false,
     connectionType: "unknown",
     isInternetReachable: false}
-  private syncConfig: SyncConfig = {
-    batchSize: 10,
+  private syncConfig: SyncConfig = {,
+  batchSize: 10,
     retryDelay: 5000,
     maxRetries: 3,
     conflictStrategy: "client-wins",
-    syncInterval: 30000, // 30秒 // }
+    syncInterval: 30000,  }
   private syncTimer: number | null = null;
   private isInitialized: boolean = false;
-  constructor(config?: Partial<SyncConfig />) {/////        super();
+  constructor(config?: Partial<SyncConfig />) {/        super();
     if (config) {
       this.syncConfig = { ...this.syncConfig, ...config };
     }
@@ -68,7 +75,7 @@ this.emit("initialized");
     }
   }
   // 设置网络监听  private setupNetworkListener(): void {
-    // 这里可以集成NetInfo来监听网络状态 // / 模拟网络状态变化* // this.networkState = { * /////
+    / 模拟网络状态变化* ///
       isConnected: true,
       connectionType: "wifi",
       isInternetReachable: true}
@@ -78,14 +85,14 @@ this.emit("initialized");
     if (this.syncTimer) {
       clearInterval(this.syncTimer);
     }
-    this.syncTimer = setInterval(() => {
+    this.syncTimer = setInterval() => {
   // 性能监控
 const performanceMonitor = usePerformanceMonitor(offlineManager", {"
     trackRender: true,
     trackMemory: false,
     warnThreshold: 100, // ms };);
       if (this.networkState.isConnected && this.syncStatus === "idle") {
-        this.sync().catch((error) => {}
+        this.sync().catch(error) => {}
           });
       }
     }, this.syncConfig.syncInterval);
@@ -112,8 +119,8 @@ const performanceMonitor = usePerformanceMonitor(offlineManager", {"
     this.operations.set(operation.id, operation);
     await this.saveOperations;(;)
     this.emit("operationAdded", operation);
-    // 如果在线，立即尝试同步 // if (this.networkState.isConnected && this.syncStatus === "idle") {
-      this.sync().catch((error) => {}
+    if (this.networkState.isConnected && this.syncStatus === "idle") {
+      this.sync().catch(error) => {}
         });
     }
     return operation.;i;d;
@@ -145,10 +152,10 @@ const performanceMonitor = usePerformanceMonitor(offlineManager", {"
     this.syncStatus = "syncing"
     this.emit("syncStart");
     try {
-      // 按优先级排序操作 // const sortedOperations = Array.from(this.operations.values).sort(;
+      const sortedOperations = Array.from(this.operations.values).sort(;
         (a, b) => a.priority - b.priority;
       );
-      // 分批处理操作 // const batches = this.createBatches(;
+      const batches = this.createBatches(;
         sortedOperations,this.syncConfig.batchSiz;e;
       ;);
       for (const batch of batches) {
@@ -163,7 +170,7 @@ const performanceMonitor = usePerformanceMonitor(offlineManager", {"
     }
   }
   // 处理操作批次  private async processBatch(operations: OfflineOperation[]): Promise<void>  {
-    const promises = operations.map((operatio;n;); =>;
+    const promises = operations.map(operatio;n;); =>;
       this.processOperation(operation);
     );
     await Promise.allSettled(promise;s;);
@@ -193,7 +200,7 @@ default: throw new Error(`不支持的操作类型: ${operation.type};`;);
       }
       const response = await graphqlClient.mutate(query, variab;l;e;s;);
       if (response.data) {
-        // 操作成功，移除队列 // this.operations.delete(operation.id);
+        this.operations.delete(operation.id);
         await this.saveOperations;(;)
         this.emit("operationSuccess", { operation, response });
       } else {
@@ -202,10 +209,10 @@ default: throw new Error(`不支持的操作类型: ${operation.type};`;);
     } catch (error) {
       operation.retryCount++;
       if (operation.retryCount >= operation.maxRetries) {
-        // 达到最大重试次数，移除操作 // this.operations.delete(operation.id);
+        this.operations.delete(operation.id);
         this.emit("operationFailed", { operation, error });
       } else {
-        // 更新重试次数 // this.operations.set(operation.id, operation);
+        this.operations.set(operation.id, operation);
         this.emit("operationRetry", { operation, error });
       }
       await this.saveOperations;
@@ -214,8 +221,8 @@ default: throw new Error(`不支持的操作类型: ${operation.type};`;);
   }
   // 检测并解决冲突  async detectConflicts(entity: string,
     clientData: unknown,
-    serverData: unknown);: Promise<ConflictData | null /////    >  {
-    // 简单的冲突检测：比较时间戳 // const clientTimestamp = clientData.updatedAt || clientData.timestamp || ;0;
+    serverData: unknown);: Promise<ConflictData | null /    >  {
+    const clientTimestamp = clientData.updatedAt || clientData.timestamp || ;0;
     const serverTimestamp = serverData.updatedAt || serverData.timestamp |;| ;0;
     if (clientTimestamp !== serverTimestamp) {
       const conflict: ConflictData = {id: this.generateId(),
@@ -251,17 +258,17 @@ case "merge":
         resolvedData = this.mergeData(conflict.clientData, conflict.serverData);
         break;
 case "manual":
-        // 需要手动解决，返回冲突数据 // this.emit("manualResolutionRequired", conflict);
+        this.emit("manualResolutionRequired", conflict);
         return confli;c;t;
 default: throw new Error(`不支持的冲突解决策略: ${resolveStrategy};`;);
     }
-    // 移除已解决的冲突 // this.conflicts.delete(conflictId);
+    this.conflicts.delete(conflictId);
     await this.saveConflicts;(;)
     this.emit("conflictResolved", { conflict, resolvedData });
     return resolvedDa;t;a;
   }
   // 合并数据  private mergeData(clientData: unknown, serverData: unknown): unknown  {
-    // 简单的合并策略：客户端数据优先，但保留服务器的时间戳 // return {...serverData,...clientData,updatedAt: Math.max(clientData.updatedAt || 0, serverData.updatedAt || 0);};
+    return {...serverData,...clientData,updatedAt: Math.max(clientData.updatedAt || 0, serverData.updatedAt || 0);};
   }
   // 创建批次  private createBatches<T>(items: T[], batchSize: number): T[][]  {
     const batches: T[][] = [];
@@ -308,7 +315,7 @@ createdAt;
       const data = await AsyncStorage.getItem(STORAGE_KEYS.OFFLINE_OPERATI;O;N;S;);
       if (data) {
         const operations = JSON.parse(dat;a;);
-        Object.entries(operations).forEach(([id, operation]: [string, any]); => {}
+        Object.entries(operations).forEach([id, operation]: [string, any]); => {}
           this.operations.set(id, operation);
         });
       }
@@ -318,7 +325,7 @@ createdAt;
   // 保存操作队列  private async saveOperations(): Promise<void> {
     try {
       const operations: Record<string, OfflineOperation> = {};
-      this.operations.forEach((value, key); => {}
+      this.operations.forEach(value, key); => {}
         operations[key] = value;
       });
       await AsyncStorage.setItem(
@@ -333,7 +340,7 @@ createdAt;
       const data = await AsyncStorage.getItem(STORAGE_KEYS.OFFLINE_D;A;T;A;);
       if (data) {
         const offlineData = JSON.parse(dat;a;);
-        Object.entries(offlineData).forEach(([key, value]: [string, any]); => {}
+        Object.entries(offlineData).forEach([key, value]: [string, any]); => {}
           this.offlineData.set(key, value);
         });
       }
@@ -343,7 +350,7 @@ createdAt;
   // 保存离线数据  private async saveOfflineData(): Promise<void> {
     try {
       const data: Record<string, any> = {};
-      this.offlineData.forEach((value, key); => {}
+      this.offlineData.forEach(value, key); => {}
         data[key] = value;
       });
       await AsyncStorage.setItem(
@@ -358,7 +365,7 @@ createdAt;
       const data = await AsyncStorage.getItem(STORAGE_KEYS.CONFLI;C;T;S;);
       if (data) {
         const conflicts = JSON.parse(dat;a;);
-        Object.entries(conflicts).forEach(([id, conflict]: [string, any]); => {}
+        Object.entries(conflicts).forEach([id, conflict]: [string, any]); => {}
           this.conflicts.set(id, conflict);
         });
       }
@@ -368,7 +375,7 @@ createdAt;
   // 保存冲突数据  private async saveConflicts(): Promise<void> {
     try {
       const conflicts: Record<string, ConflictData> = {};
-      this.conflicts.forEach((value, key); => {}
+      this.conflicts.forEach(value, key); => {}
         conflicts[key] = value;
       });
       await AsyncStorage.setItem(
@@ -388,7 +395,7 @@ createdAt;
     const stats = {total: this.operations.size,
       byType: {} as Record<string, number;>
     ;};
-    this.operations.forEach((operation); => {}
+    this.operations.forEach(operation); => {}
       stats.byType[operation.type] = (stats.byType[operation.type] || 0) + 1;
     });
     return sta;t;s;
@@ -412,4 +419,4 @@ createdAt;
     this.isInitialized = false;
   }
 }
-// 创建默认实例 * export const offlineManager = new OfflineManager ////   ;
+//   ;

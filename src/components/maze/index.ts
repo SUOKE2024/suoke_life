@@ -1,6 +1,6 @@
 /**
  * 迷宫组件导出文件
- * Maze Components Export
+ * Maze Components Export;
  */
 
 export { default as MazeGameScreen } from './MazeGameScreen';

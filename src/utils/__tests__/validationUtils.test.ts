@@ -1,6 +1,5 @@
 import { validateEmail, validatePhone, validatePassword, validateUsername, validateIdCard, validateRequired, validateNumberRange, validateAgeNumber, validateAge, validateHeight, validateWeight, validateUrl, validateField } from "../validationUtils";
 import { validateEmail, validatePhone, validatePassword, validateUsername, validateIdCard, validateRequired, validateNumberRange, validateAgeNumber, validateAge, validateHeight, validateWeight, validateUrl, validateField } from "../validationUtils";
-
 describe("validationUtils", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -318,7 +317,7 @@ validateEmail(// test params);
 expect(averageTime).toBeLessThan(1);
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
 validateEmail(largeDataset);

@@ -10,8 +10,7 @@ export { messageBusService } from './messageBusService';
 export { cornMazeService, CornMazeService, createCornMazeService } from './cornMazeService';
 export { benchmarkService, BenchmarkService } from './benchmarkService';
 export { benchmarkStreamingService, BenchmarkStreamingService } from './benchmarkStreamingService';
-
-// UI * UX优化服务完整导出 ////
+//
 export {
   UIUXOptimizationService,
   AnimationManager,
@@ -25,8 +24,7 @@ export {
   defaultResponsiveConfig,
   defaultThemeConfig,
 } from './uiUxOptimizationService';
-
-// UI * UX优化服务类型导出 ////
+//
 export type {
   AnimationConfig,
   AdvancedAnimationType,
@@ -38,7 +36,6 @@ export type {
   ResponsiveConfig,
   ThemeConfig,
 } from './uiUxOptimizationService';
-
 // RAG服务相关类型导出
 export type {
   RAGQueryRequest,
@@ -50,7 +47,6 @@ export type {
   HerbRecommendationResponse,
   DocumentIndexRequest,
 } from './ragService';
-
 // 消息总线服务相关类型导出
 export type {
   Message,
@@ -62,7 +58,6 @@ export type {
   Subscription,
   MessageBusConfig,
 } from './messageBusService';
-
 // 基准测试服务相关类型导出
 export type {
   BenchmarkConfig,
@@ -74,17 +69,14 @@ export type {
   BenchmarkStatus,
   HealthStatus,
 } from './benchmarkService';
-
 // 基准测试流式服务相关类型导出
 export type { StreamEvent, StreamConfig, EventListener } from './benchmarkStreamingService';
-
 // 导出所有服务
 export { apiClient } from './apiClient';
 export { healthDataService } from './healthDataService';
 export { fiveDiagnosisService } from './fiveDiagnosisService';
-
 // 导出类型
-export type { 
+export type {
   FiveDiagnosisInput,
   FiveDiagnosisResult,
   FiveDiagnosisError,

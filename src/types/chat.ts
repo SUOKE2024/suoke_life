@@ -1,12 +1,12 @@
 import React from 'react';
 // chat.ts   索克生活APP - 自动生成的类型安全文件     @description TODO: 添加文件描述 @author 索克生活开发团队   @version 1.0.0;
 export type AgentType = "xiaoai" | "xiaoke" | "laoke" | "so;e;";
-r
+r;
 export type ChannelType = "agent" | "user" | "doctor" | "gro;u;";
-p
+p;
 export interface ChatChannel {
 }
- id: string}
+id: string}
   name: string,
   type: ChannelType,
   avatar: string,
@@ -16,7 +16,7 @@ export interface ChatChannel {
   specialization?: string}
 export interface ChatMessage {
 }
- id: string}
+id: string}
   channelId: string,
   senderId: string,
   senderName: string,
@@ -27,12 +27,12 @@ export interface ChatMessage {
   }
 export interface MessageReaction {
 }
- emoji: string}
+emoji: string}
   userId: string,
   userName: string}
 export interface Contact {
 }
- id: string};
+id: string};
   name: string,type: ChannelType;
   agentType?: AgentType;
   avatar: string,

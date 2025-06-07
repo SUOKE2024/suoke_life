@@ -1,8 +1,7 @@
 /**
- * 全局错误处理器
- * 统一处理应用中的所有错误
- */
-
+* 全局错误处理器
+* 统一处理应用中的所有错误
+*/
 export enum ErrorType {
   NETWORK_ERROR = 'NETWORK_ERROR',
   API_ERROR = 'API_ERROR',
@@ -13,14 +12,12 @@ export enum ErrorType {
   SYSTEM_ERROR = 'SYSTEM_ERROR',
   UNKNOWN_ERROR = 'UNKNOWN_ERROR'
 }
-
 export enum ErrorSeverity {
   LOW = 'LOW',
   MEDIUM = 'MEDIUM',
   HIGH = 'HIGH',
   CRITICAL = 'CRITICAL'
 }
-
 export interface ErrorInfo {
   type: ErrorType;
   severity: ErrorSeverity;
@@ -32,7 +29,6 @@ export interface ErrorInfo {
   sessionId?: string;
   stackTrace?: string;
 }
-
 export interface ErrorHandlerConfig {
   enableLogging: boolean;
   enableReporting: boolean;
@@ -41,21 +37,18 @@ export interface ErrorHandlerConfig {
   maxRetries: number;
   retryDelay: number;
 }
-
 export class GlobalErrorHandler {
   private static instance: GlobalErrorHandler;
   private config: ErrorHandlerConfig;
   private errorQueue: ErrorInfo[] = [];
-
   private constructor(config: ErrorHandlerConfig) {
     this.config = config;
     this.setupGlobalHandlers();
   }
-
   public static getInstance(config?: ErrorHandlerConfig): GlobalErrorHandler {
     if (!GlobalErrorHandler.instance) {
-      const defaultConfig: ErrorHandlerConfig = {
-        enableLogging: true,
+      const defaultConfig: ErrorHandlerConfig = {,
+  enableLogging: true,
         enableReporting: true,
         enableUserNotification: true,
         maxRetries: 3,
@@ -65,40 +58,33 @@ export class GlobalErrorHandler {
     }
     return GlobalErrorHandler.instance;
   }
-
   /**
-   * 处理错误
-   */
+  * 处理错误
+  */
   public handleError(error: Error | ErrorInfo, context?: any): void {
     const errorInfo = this.normalizeError(error, context);
-
     // 记录错误
     if (this.config.enableLogging) {
       this.logError(errorInfo);
     }
-
     // 上报错误
     if (this.config.enableReporting) {
       this.reportError(errorInfo);
     }
-
     // 用户通知
     if (this.config.enableUserNotification) {
       this.notifyUser(errorInfo);
     }
-
     // 添加到错误队列
     this.errorQueue.push(errorInfo);
-
     // 保持队列大小
     if (this.errorQueue.length > 100) {
       this.errorQueue.shift();
     }
   }
-
   /**
-   * 处理网络错误
-   */
+  * 处理网络错误
+  */
   public handleNetworkError(error: Error, url?: string): void {
     this.handleError({
       type: ErrorType.NETWORK_ERROR,
@@ -109,13 +95,11 @@ export class GlobalErrorHandler {
       stackTrace: error.stack,
     });
   }
-
   /**
-   * 处理API错误
-   */
+  * 处理API错误
+  */
   public handleApiError(status: number, message: string, endpoint?: string): void {
     const severity = status >= 500 ? ErrorSeverity.HIGH : ErrorSeverity.MEDIUM;
-
     this.handleError({
       type: ErrorType.API_ERROR,
       severity,
@@ -125,10 +109,9 @@ export class GlobalErrorHandler {
       timestamp: Date.now(),
     });
   }
-
   /**
-   * 处理验证错误
-   */
+  * 处理验证错误
+  */
   public handleValidationError(field: string, message: string): void {
     this.handleError({
       type: ErrorType.VALIDATION_ERROR,
@@ -138,10 +121,9 @@ export class GlobalErrorHandler {
       timestamp: Date.now(),
     });
   }
-
   /**
-   * 处理认证错误
-   */
+  * 处理认证错误
+  */
   public handleAuthError(message: string): void {
     this.handleError({
       type: ErrorType.AUTHENTICATION_ERROR,
@@ -150,10 +132,9 @@ export class GlobalErrorHandler {
       timestamp: Date.now(),
     });
   }
-
   /**
-   * 处理业务逻辑错误
-   */
+  * 处理业务逻辑错误
+  */
   public handleBusinessError(message: string, details?: any): void {
     this.handleError({
       type: ErrorType.BUSINESS_LOGIC_ERROR,
@@ -163,24 +144,21 @@ export class GlobalErrorHandler {
       timestamp: Date.now(),
     });
   }
-
   /**
-   * 获取错误统计
-   */
+  * 获取错误统计
+  */
   public getErrorStats(): {
-    total: number;
-    byType: Record<ErrorType, number>;
+    total: number,
+  byType: Record<ErrorType, number>;
     bySeverity: Record<ErrorSeverity, number>;
     recent: ErrorInfo[];
   } {
     const byType = {} as Record<ErrorType, number>;
     const bySeverity = {} as Record<ErrorSeverity, number>;
-
     this.errorQueue.forEach(error => {
       byType[error.type] = (byType[error.type] || 0) + 1;
       bySeverity[error.severity] = (bySeverity[error.severity] || 0) + 1;
     });
-
     return {
       total: this.errorQueue.length,
       byType,
@@ -188,17 +166,15 @@ export class GlobalErrorHandler {
       recent: this.errorQueue.slice(-10),
     };
   }
-
   /**
-   * 清除错误队列
-   */
+  * 清除错误队列
+  */
   public clearErrors(): void {
     this.errorQueue = [];
   }
-
   /**
-   * 设置全局错误处理器
-   */
+  * 设置全局错误处理器
+  */
   private setupGlobalHandlers(): void {
     // 处理未捕获的Promise拒绝
     if (typeof window !== 'undefined') {
@@ -211,15 +187,14 @@ export class GlobalErrorHandler {
           timestamp: Date.now(),
         });
       });
-
       // 处理全局错误
       window.addEventListener('error', (event) => {
         this.handleError({
           type: ErrorType.SYSTEM_ERROR,
           severity: ErrorSeverity.HIGH,
           message: `全局错误: ${event.message}`,
-          details: {
-            filename: event.filename,
+          details: {,
+  filename: event.filename,
             lineno: event.lineno,
             colno: event.colno,
           },
@@ -229,15 +204,13 @@ export class GlobalErrorHandler {
       });
     }
   }
-
   /**
-   * 标准化错误对象
-   */
+  * 标准化错误对象
+  */
   private normalizeError(error: Error | ErrorInfo, context?: any): ErrorInfo {
     if ('type' in error) {
       return error;
     }
-
     return {
       type: ErrorType.UNKNOWN_ERROR,
       severity: ErrorSeverity.MEDIUM,
@@ -247,14 +220,12 @@ export class GlobalErrorHandler {
       details: context,
     };
   }
-
   /**
-   * 记录错误
-   */
+  * 记录错误
+  */
   private logError(error: ErrorInfo): void {
     const logLevel = this.getLogLevel(error.severity);
     const logMessage = `[${error.type}] ${error.message}`;
-
     console[logLevel](logMessage, {
       severity: error.severity,
       timestamp: new Date(error.timestamp).toISOString(),
@@ -262,17 +233,15 @@ export class GlobalErrorHandler {
       stackTrace: error.stackTrace,
     });
   }
-
   /**
-   * 上报错误
-   */
+  * 上报错误
+  */
   private async reportError(error: ErrorInfo): Promise<void> {
     if (!this.config.reportingEndpoint) return;
-
     try {
       await fetch(this.config.reportingEndpoint, {
-        method: 'POST',
-        headers: {
+      method: "POST",
+      headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(error),
@@ -281,22 +250,18 @@ export class GlobalErrorHandler {
       console.error('错误上报失败:', reportingError);
     }
   }
-
   /**
-   * 通知用户
-   */
+  * 通知用户
+  */
   private notifyUser(error: ErrorInfo): void {
     if (error.severity === ErrorSeverity.LOW) return;
-
     const userMessage = this.getUserFriendlyMessage(error);
-
     // 这里可以集成具体的通知机制（Toast、Modal等）
     console.warn('用户通知:', userMessage);
   }
-
   /**
-   * 获取日志级别
-   */
+  * 获取日志级别
+  */
   private getLogLevel(severity: ErrorSeverity): 'error' | 'warn' | 'info' {
     switch (severity) {
       case ErrorSeverity.CRITICAL:
@@ -309,10 +274,9 @@ export class GlobalErrorHandler {
         return 'info';
     }
   }
-
   /**
-   * 获取用户友好的错误消息
-   */
+  * 获取用户友好的错误消息
+  */
   private getUserFriendlyMessage(error: ErrorInfo): string {
     switch (error.type) {
       case ErrorType.NETWORK_ERROR:
@@ -326,12 +290,11 @@ export class GlobalErrorHandler {
       case ErrorType.VALIDATION_ERROR:
         return '输入信息有误，请检查后重试';
       case ErrorType.BUSINESS_LOGIC_ERROR:
-        return error.message;
-      default:
+        return error.message,
+  default:
         return '系统异常，请稍后重试';
     }
   }
 }
-
 // 导出单例实例
 export const globalErrorHandler = GlobalErrorHandler.getInstance();

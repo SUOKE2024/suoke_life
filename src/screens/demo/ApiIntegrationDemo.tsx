@@ -1,9 +1,8 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useNavigation  } from "../../placeholder";@react-navigation/native";/import { Card, Button } from ../../components/ui"/import { useApiIntegration } from "../../hooks/useApiIntegration/import { colors, spacing, typography  } from ;../../constants/theme";/import { ApiTestResultsDisplay } from ../../components/demo/////    ApiTestResultsDisplay
-import { usePerformanceMonitor  } from "../../placeholder";../hooks/usePerformanceMonitor";/////      View,"
-
+import { useNavigation } from "../../placeholder";@react-navigation/native";/import { Card, Button } from ../../components/ui"/import { useApiIntegration } from "../../hooks/useApiIntegration/import { colors, spacing, typography  } from ;../../constants/theme";/import { ApiTestResultsDisplay } from ../../components/demo/    ApiTestResultsDisplay;
+import { usePerformanceMonitor } from "../../placeholder";../hooks/usePerformanceMonitor";/      View,"
 import React from "react";
-// importReact,{ useState, useEffect } from "react;";
+// import React,{ useState, useEffect } from "react;";
   Text,
   StyleSheet,
   ScrollView,
@@ -12,18 +11,17 @@ import React from "react";
   Dimensions,
   RefreshControl,
   { ActivityIndicator } from react-native""
-const { width   } = Dimensions.get("window;);"
-// 模拟测试报告数据 * const mockTestReportData = useMemo(() => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => {////
-  // 性能监控 // const performanceMonitor = usePerformanceMonitor("ApiIntegrationDemo", {trackRender: true,trackMemory: true,warnThreshold: 50, // ms // };);
+const { width   } = Dimensions.get("window;);" //
+  const performanceMonitor = usePerformanceMonitor("ApiIntegrationDemo", {trackRender: true,trackMemory: true,warnThreshold: 50,  };);
   timestamp: new Date().toISOString(),
-  summary: {
-    total: 51,
+  summary: {,
+  total: 51,
     passed: 50,
     failed: 1,
     successRate: 98.0,
     avgDuration: 162.78},
-  categories: {
-    auth: { total: 3, passed: 3, failed: 0},
+  categories: {,
+  auth: { total: 3, passed: 3, failed: 0},
     health: { total: 8, passed: 8, failed: 0},
     agents: { total: 10, passed: 10, failed: 0},
     diagnosis: { total: 8, passed: 7, failed: 1},
@@ -35,57 +33,64 @@ const { width   } = Dimensions.get("window;);"
     support: { total: 4, passed: 4, failed: 0},
     system: { total: 3, passed: 3, failed: 0}
   },
-  details: [{
-      name: 健康检查","
+  details: [{,
+  name: 健康检查",
       category: "auth,",
       status: "PASSED" as const,
       duration: 99,
-      endpoint: /health",/////          method: "GET;
+      endpoint: /health",/          method: "GET;
     },
     {
       name: "启动问诊",
-      category: diagnosis","
+      category: diagnosis",
       status: "FAILED as const,",
       duration: 215,
-      endpoint: "/diagnosis/inquiry",/////          method: POST","
-      error: "API调用失败: POST /diagnosis/inquiry,/////        },"
-    // ... 其他测试结果 // ],
+      endpoint: "/diagnosis/inquiry",/          method: POST",
+      error: "API调用失败: POST /diagnosis/inquiry,/        },"
+    ],
     const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [])
-interface ApiTestResult { name: string,
-  category: string,
-  status: "PASSED" | FAILED","
-  duration: number,
+interface ApiTestResult {
+  name: string;
+  category: string;
+  status: "PASSED" | FAILED",
+  duration: number;
   endpoint: string,method: string;
-  error?: string}
-export const ApiIntegrationDemo: React.FC  = () => {}
-  const navigation = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useNavigation(), []);)))));
-  const api = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useApiIntegration(), []))))));
-  const [currentTab, setCurrentTab] = useState<"overview | "results" | live">("overview;);"
+  error?: string
+};
+
+export const ApiIntegrationDemo: React.FC  = () => {};
+
+const navigation = useMemo(() => useNavigation(), []););
+  const api = useMemo(() => useApiIntegration(), []);
+  const [currentTab, setCurrentTab] = useState<"overview | "results" | live">("overview;);
   const [testResults, setTestResults] = useState<any>(mockTestReportDat;a;);
   const [isRunningTests, setIsRunningTests] = useState<boolean>(fals;e;);
   const [refreshing, setRefreshing] = useState<boolean>(fals;e;);
-  useEffect((); => {}
-    const effectStart = performance.now();
-    // 加载最新的测试结果 // loadTestResults();
-  }, []) // TODO: 检查依赖项  * // TODO: 检查依赖项  * / TODO: 检查依赖项* * * // TODO: 检查依赖项  * * * // TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项//, TODO: 检查依赖项//, TODO: 检查依赖项// // const loadTestResults = useMemo(() => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => async() => {}
+  useEffect(); => {};
+
+const effectStart = performance.now();
+    loadTestResults();
+  }, [])  TODO: 检查依赖项  * / TODO: 检查依赖项* * *  TODO: 检查依赖项 TODO: 检查依赖项, TODO: 检查依赖项 // const loadTestResults = useMemo() => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => async() => {}
     try {
-      // 这里可以从实际的API或本地存储加载测试结果 // / 目前使用静态数据* // setTestResults(mockTestReportData), []) * /////     } catch (error) {
+      / 目前使用静态数据* ///     } catch (error) {
       }
   };
-  const handleRunAllTests = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => async() => {}
+  const handleRunAllTests = useMemo(() => async() => {}
     setIsRunningTests(true), [])
     try {
       Alert.alert(
         开始测试",即将运行所有51个API接口测试，这可能需要几分钟时间。,"
         [
-          { text: "取消", style: cancel"},"
           {
-            text: "开始,",
-            onPress: async(); => {}
+      text: "取消",
+      style: cancel"},"
+          {
+      text: "开始,",
+      onPress: async(); => {}
               try {
-                // 使用现有的API方法进行测试 // await api.healthCheck;
+                await api.healthCheck;
                 await api.getApiVersion;
                 await api.getCurrentUser(;);
                 Alert.alert("测试完成", 所有API测试已完成，请查看结果。");"
@@ -102,9 +107,9 @@ export const ApiIntegrationDemo: React.FC  = () => {}
       setIsRunningTests(false);
     }
   };
-  const handleRetryTest = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => async (testName: string) => {}
+  const handleRetryTest = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => async (testName: string) => {}
     try {
-      // 根据测试名称执行对应的API调用 // if (testName === "健康检查) { "
+      if (testName === "健康检查) { "
         await api.healthCheck(), [];)
       } else if (testName === "获取API版本") {
         await api.getApiVersion;(;)
@@ -115,7 +120,7 @@ export const ApiIntegrationDemo: React.FC  = () => {}
       Alert.alert("重试失败, error.message || "重试过程中发生错误");"
     }
   };
-  const handleViewTestDetails = useCallback(() => {
+  const handleViewTestDetails = useCallback() => {
     Alert.alert(
       test.name,
       `状态: ${test.status}\n` +
@@ -125,75 +130,77 @@ export const ApiIntegrationDemo: React.FC  = () => {}
       (test.error ? `\n错误: ${test.error}` : "),"
       [{ text: "确定}]);"
   };
-  const handleRefresh = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => async() => {}
+  const handleRefresh = useMemo(() => async() => {}
     setRefreshing(true), []);
     await loadTestResults;
     setRefreshing(false);
   };
-  // TODO: 将内联组件移到组件外部 * const renderHeader = useMemo(() => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => () => ( ////
-    <View style={styles.header} />/      <TouchableOpacity onPress={() = / accessibilityLabel="TODO: 添加无障碍标签" /> navigation.goBack()} style={styles.backButton}>/        <Text style={styles.backButtonText} />← 返回</Text>/      </TouchableOpacity>/      <Text style={styles.headerTitle} />API集成演示</Text>/      <TouchableOpacity onPress={handleRefresh} style={styles.refreshButton} / accessibilityLabel="TODO: 添加无障碍标签" />/        <Text style={styles.refreshButtonText} />刷新</Text>/      </TouchableOpacity>/    </View>/////    ), []);
-  // TODO: 将内联组件移到组件外部 * const renderTabBar = useMemo(() => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => () => ( ////
-    <View style={styles.tabBar} />///        <TouchableOpacity style={[styles.tab, currentTab === "overview" && styles.activeTab]} ///  >
-        onPress={() = / accessibilityLabel="TODO: 添加无障碍标签" /> setCurrentTab(overview")}/////          >"
-        <Text style={[styles.tabText, currentTab === "overview && styles.activeTabText]} />/////              概览"
-        </Text>/      </TouchableOpacity>///        <TouchableOpacity style={[styles.tab, currentTab === "results" && styles.activeTab]} ///  >
-        onPress={() = / accessibilityLabel="TODO: 添加无障碍标签" /> setCurrentTab(results")}/////          >"
-        <Text style={[styles.tabText, currentTab === "results && styles.activeTabText]} />/////              测试结果"
-        </Text>/      </TouchableOpacity>///        <TouchableOpacity style={[styles.tab, currentTab === "live" && styles.activeTab]} ///  >
-        onPress={() = / accessibilityLabel="TODO: 添加无障碍标签" /> setCurrentTab(live")}/////          >"
-        <Text style={[styles.tabText, currentTab === "live && styles.activeTabText]} />/////              实时测试"
-        </Text>/      </TouchableOpacity>/    </View>/////      ), []);
-  // TODO: 将内联组件移到组件外部 * const renderOverview = useMemo(() => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => () => (<ScrollView //  ///  >
+  //
+    <View style={styles.header}>/      <TouchableOpacity onPress={() = / accessibilityLabel="TODO: 添加无障碍标签" /> navigation.goBack()} style={styles.backButton}>/        <Text style={styles.backButtonText}>← 返回</Text>/      </TouchableOpacity>/      <Text style={styles.headerTitle}>API集成演示</Text>/      <TouchableOpacity onPress={handleRefresh} style={styles.refreshButton} / accessibilityLabel="TODO: 添加无障碍标签" />/        <Text style={styles.refreshButtonText}>刷新</Text>/      </TouchableOpacity>/    </View>/    ), []);
+  //
+    <View style={styles.tabBar}>/  >
+        onPress={() = / accessibilityLabel="TODO: 添加无障碍标签" /> setCurrentTab(overview")}/          >"
+        <Text style={[styles.tabText, currentTab === "overview && styles.activeTabText]} />/              概览"
+        </Text>/      </TouchableOpacity>/  >
+        onPress={() = / accessibilityLabel="TODO: 添加无障碍标签" /> setCurrentTab(results")}/          >"
+        <Text style={[styles.tabText, currentTab === "results && styles.activeTabText]} />/              测试结果"
+        </Text>/      </TouchableOpacity>/  >
+        onPress={() = / accessibilityLabel="TODO: 添加无障碍标签" /> setCurrentTab(live")}/          >"
+        <Text style={[styles.tabText, currentTab === "live && styles.activeTabText]} />/              实时测试"
+        </Text>/      </TouchableOpacity>/    </View>/      ), []);
+    ///  >
       style={styles.content}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}/////        >
-      <View style={styles.overviewCard} />/        <Text style={styles.cardTitle} />🏥 索克生活 API集成系统</Text>/        <Text style={styles.cardDescription} />/////              本演示展示了索克生活平台的完整API集成功能，包含51个核心接口，
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}/        >
+      <View style={styles.overviewCard}>/        <Text style={styles.cardTitle}>🏥 索克生活 API集成系统</Text>/        <Text style={styles.cardDescription}>/              本演示展示了索克生活平台的完整API集成功能，包含51个核心接口，
           涵盖四大智能体、五诊系统、健康数据管理、区块链存储等功能模块。
-        </Text>/////
-        <View style={styles.featureList} />/          <View style={styles.featureItem} />/            <Text style={styles.featureIcon} />🤖</Text>/            <View style={styles.featureContent} />/              <Text style={styles.featureTitle} />四大智能体</Text>/              <Text style={styles.featureDesc} />小艾、小克、老克、索儿协同工作</Text>/            </View>/          </View>/////
-          <View style={styles.featureItem} />/            <Text style={styles.featureIcon} />🔍</Text>/            <View style={styles.featureContent} />/              <Text style={styles.featureTitle} />五诊系统</Text>/              <Text style={styles.featureDesc} />望、闻、问、切、综合诊断</Text>/            </View>/          </View>/////
-          <View style={styles.featureItem} />/            <Text style={styles.featureIcon} />📊</Text>/            <View style={styles.featureContent} />/              <Text style={styles.featureTitle} />健康数据</Text>/              <Text style={styles.featureDesc} />多维度健康指标监测与分析</Text>/            </View>/          </View>/////
-          <View style={styles.featureItem} />/            <Text style={styles.featureIcon} />🔐</Text>/            <View style={styles.featureContent} />/              <Text style={styles.featureTitle} />区块链存储</Text>/              <Text style={styles.featureDesc} />安全可信的健康数据管理</Text>/            </View>/          </View>/        </View>/////
+        </Text>/
+        <View style={styles.featureList}>/          <View style={styles.featureItem}>/            <Text style={styles.featureIcon}>🤖</Text>/            <View style={styles.featureContent}>/              <Text style={styles.featureTitle}>四大智能体</Text>/              <Text style={styles.featureDesc}>小艾、小克、老克、索儿协同工作</Text>/            </View>/          </View>/
+          <View style={styles.featureItem}>/            <Text style={styles.featureIcon}>🔍</Text>/            <View style={styles.featureContent}>/              <Text style={styles.featureTitle}>五诊系统</Text>/              <Text style={styles.featureDesc}>望、闻、问、切、综合诊断</Text>/            </View>/          </View>/
+          <View style={styles.featureItem}>/            <Text style={styles.featureIcon}>📊</Text>/            <View style={styles.featureContent}>/              <Text style={styles.featureTitle}>健康数据</Text>/              <Text style={styles.featureDesc}>多维度健康指标监测与分析</Text>/            </View>/          </View>/
+          <View style={styles.featureItem}>/            <Text style={styles.featureIcon}>🔐</Text>/            <View style={styles.featureContent}>/              <Text style={styles.featureTitle}>区块链存储</Text>/              <Text style={styles.featureDesc}>安全可信的健康数据管理</Text>/            </View>/          </View>/        </View>/
         <TouchableOpacity style={styles.runTestButton} ///  >
           onPress={handleRunAllTests}
-          disabled={isRunningTests} / accessibilityLabel="TODO: 添加无障碍标签" />/          {isRunningTests ? (////
-            <ActivityIndicator color={colors.white} />/////    ): (
-            <Text style= {styles.runTestButtonText} />运行完整测试</Text>/////              )}
-        </TouchableOpacity>/      </View>/////
-      <View style={styles.statsCard} />/        <Text style={styles.cardTitle} />📈 最新测试统计</Text>/        <View style={styles.statsGrid} />/          <View style={styles.statItem} />/            <Text style={styles.statValue} />{testResults.summary.total}</Text>/            <Text style={styles.statLabel} />总接口数</Text>/          </View>/          <View style={styles.statItem} />/            <Text style={[styles.statValue, { color: colors.success}]} />/////                  {testResults.summary.passed}
-            </Text>/            <Text style={styles.statLabel} />成功</Text>/          </View>/          <View style={styles.statItem} />/            <Text style={[styles.statValue, { color: colors.error}]} />/////                  {testResults.summary.failed}
-            </Text>/            <Text style={styles.statLabel} />失败</Text>/          </View>/          <View style={styles.statItem} />///              <Text style={[ ///  >
+          disabled={isRunningTests} / accessibilityLabel="TODO: 添加无障碍标签" />/          {isRunningTests ? (
+            <ActivityIndicator color={colors.white} />/    ): (
+            <Text style= {styles.runTestButtonText} />运行完整测试</Text>/              )}
+        </TouchableOpacity>/      </View>/
+      <View style={styles.statsCard}>/        <Text style={styles.cardTitle}>📈 最新测试统计</Text>/        <View style={styles.statsGrid}>/          <View style={styles.statItem}>/            <Text style={styles.statValue}>{testResults.summary.total}</Text>/            <Text style={styles.statLabel}>总接口数</Text>/          </View>/          <View style={styles.statItem}>/            <Text style={[styles.statValue, { color: colors.success}]} />/                  {testResults.summary.passed}
+            </Text>/            <Text style={styles.statLabel}>成功</Text>/          </View>/          <View style={styles.statItem}>/            <Text style={[styles.statValue, { color: colors.error}]} />/                  {testResults.summary.failed}
+            </Text>/            <Text style={styles.statLabel}>失败</Text>/          </View>/          <View style={styles.statItem}>/  >
               styles.statValue,
-              { color: testResults.summary.successRate />= 90 ? colors.success : colors.warning},/////                ]}>
+              { color: testResults.summary.successRate />= 90 ? colors.success : colors.warning},/                ]}>
               {testResults.summary.successRate.toFixed(1)}%
-            </Text>/            <Text style={styles.statLabel} />成功率</Text>/          </View>/        </View>/        <Text style={styles.lastUpdate} />/////              最后更新: {new Date(testResults.timestamp).toLocaleString()}
-        </Text>/      </View>/    </ScrollView>/////      ), []);
-  // TODO: 将内联组件移到组件外部 * const renderResults = useMemo(() => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => () => ( ////
+            </Text>/            <Text style={styles.statLabel}>成功率</Text>/          </View>/        </View>/        <Text style={styles.lastUpdate}>/              最后更新: {new Date(testResults.timestamp).toLocaleString()}
+        </Text>/      </View>/    </ScrollView>/      ), []);
+  //
     <ApiTestResultsDisplay;
 summary={testResults.summary}
       categories={testResults.categories}
       details={testResults.details}
       onRetryTest={handleRetryTest}
-      onViewDetails={handleViewTestDetails} />/////      ), []);
-  // TODO: 将内联组件移到组件外部 * const renderLiveTest = useMemo(() => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => () => ( ////
-    <ScrollView style={styles.content} />/      <View style={styles.liveTestCard} />/        <Text style={styles.cardTitle} />🔴 实时API测试</Text>/        <Text style={styles.cardDescription} />/////              选择要测试的API类别或单个接口进行实时测试
-        </Text>/////
-        <View style={styles.categoryButtons} />/////              {Object.entries(testResults.categories).map(([category, stats]) => (
+      onViewDetails={handleViewTestDetails} />/      ), []);
+  //
+    <ScrollView style={styles.content}>/      <View style={styles.liveTestCard}>/        <Text style={styles.cardTitle}>🔴 实时API测试</Text>/        <Text style={styles.cardDescription}>/              选择要测试的API类别或单个接口进行实时测试
+        </Text>/
+        <View style={styles.categoryButtons}>/              {Object.entries(testResults.categories).map(([category, stats]) => (
             <TouchableOpacity key={category} ///  >
               style={styles.categoryButton}
-              onPress={() = / accessibilityLabel="TODO: 添加无障碍标签" /> {/////                    Alert.alert(
+              onPress={() = / accessibilityLabel="TODO: 添加无障碍标签" /> {/                    Alert.alert(
                   `测试 ${category} 类别`,
                   `即将测试 ${stats.total} 个 ${category} 相关的API接口`,
                   [
-                    { text: "取消", style: cancel"},"
+                    {
+      text: "取消",
+      style: cancel"},"
                     { text: "开始测试, onPress: (); => }"
                   ]
                 ), [])
               }}
             >
-              <Text style={styles.categoryButtonText} />{category}</Text>/              <Text style={styles.categoryButtonCount} />{stats.total} 个接口</Text>/            </TouchableOpacity>/////              ))}
-        </View>/////
-        <View style={styles.quickActions} />///            <TouchableOpacity style={styles.quickActionButton} ///  >
-            onPress={async() = / accessibilityLabel="TODO: 添加无障碍标签" /> {/////                  try {
+              <Text style={styles.categoryButtonText}>{category}</Text>/              <Text style={styles.categoryButtonCount}>{stats.total} 个接口</Text>/            </TouchableOpacity>/              ))}
+        </View>/
+        <View style={styles.quickActions}>/  >
+            onPress={async() = / accessibilityLabel="TODO: 添加无障碍标签" /> {/                  try {
                 await api.healthCheck;(;)
                 Alert.alert("健康检查", 系统状态正常")"
               } catch (error: unknown) {
@@ -201,8 +208,8 @@ summary={testResults.summary}
               }
             }}
           >
-            <Text style={styles.quickActionText} />健康检查</Text>/          </TouchableOpacity>///            <TouchableOpacity style={styles.quickActionButton} ///  >
-            onPress={async() = / accessibilityLabel="TODO: 添加无障碍标签" /> {/////                  try {
+            <Text style={styles.quickActionText}>健康检查</Text>/          </TouchableOpacity>/  >
+            onPress={async() = / accessibilityLabel="TODO: 添加无障碍标签" /> {/                  try {
                 await api.getAgentStatus;(;)
                 Alert.alert("智能体状态", 所有智能体运行正常")"
               } catch (error: unknown) {
@@ -210,8 +217,8 @@ summary={testResults.summary}
               }
             }}
           >
-            <Text style={styles.quickActionText} />智能体状态</Text>/          </TouchableOpacity>///            <TouchableOpacity style={styles.quickActionButton} ///  >
-            onPress={async() = / accessibilityLabel="TODO: 添加无障碍标签" /> {/////                  try {
+            <Text style={styles.quickActionText}>智能体状态</Text>/          </TouchableOpacity>/  >
+            onPress={async() = / accessibilityLabel="TODO: 添加无障碍标签" /> {/                  try {
                 await api.getSystemHealth;(;)
                 Alert.alert("系统监控", 系统运行状态良好")"
               } catch (error: unknown) {
@@ -219,8 +226,8 @@ summary={testResults.summary}
               }
             }}
           >
-            <Text style={styles.quickActionText} />系统监控</Text>/          </TouchableOpacity>/        </View>/      </View>/    </ScrollView>/////      );
-  const renderContent = useCallback(() => {
+            <Text style={styles.quickActionText}>系统监控</Text>/          </TouchableOpacity>/        </View>/      </View>/    </ScrollView>/      );
+  const renderContent = useCallback() => {
     switch (currentTab) {
       case "overview":
         return renderOverview;(;)
@@ -231,62 +238,62 @@ summary={testResults.summary}
       default: return renderOverview;
     }
   };
-  // 记录渲染性能 // performanceMonitor.recordRender();
+  performanceMonitor.recordRender();
   return (;
-    <SafeAreaView style={styles.container} />/////          {renderHeader()};
+    <SafeAreaView style={styles.container}>/          {renderHeader()};
       {renderTabBar()};
       {renderContent()};
-    </SafeAreaView>/////      ;);
+    </SafeAreaView>/      ;);
 };
-const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({container: {
-    flex: 1,
+const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,
+  flex: 1,
     backgroundColor: colors.background},
-  header: {
-    flexDirection: "row",
-    alignItems: center","
+  header: {,
+  flexDirection: "row",
+    alignItems: center",
     justifyContent: "space-between,",
     padding: spacing.md,
     backgroundColor: colors.white,
     borderBottomWidth: 1,
     borderBottomColor: colors.border},
   backButton: { padding: spacing.sm  },
-  backButtonText: {
-    color: colors.primary,
+  backButtonText: {,
+  color: colors.primary,
     fontSize: typography.fontSize.base,
     fontWeight: "bold"},
-  headerTitle: {
-    fontSize: typography.fontSize.lg,
-    fontWeight: bold","
+  headerTitle: {,
+  fontSize: typography.fontSize.lg,
+    fontWeight: bold",
     color: colors.textPrimary},
   refreshButton: { padding: spacing.sm  },
-  refreshButtonText: {
-    color: colors.primary,
+  refreshButtonText: {,
+  color: colors.primary,
     fontSize: typography.fontSize.base,
     fontWeight: "bold},",
-  tabBar: {
-    flexDirection: "row",
+  tabBar: {,
+  flexDirection: "row",
     backgroundColor: colors.white,
     borderBottomWidth: 1,
     borderBottomColor: colors.border},
-  tab: {
-    flex: 1,
+  tab: {,
+  flex: 1,
     paddingVertical: spacing.md,
-    alignItems: center","
+    alignItems: center",
     borderBottomWidth: 2,
     borderBottomColor: "transparent},",
   activeTab: { borderBottomColor: colors.primary  },
-  tabText: {
-    fontSize: typography.fontSize.base,
+  tabText: {,
+  fontSize: typography.fontSize.base,
     color: colors.textSecondary,
     fontWeight: "500"},
-  activeTabText: {
-    color: colors.primary,
+  activeTabText: {,
+  color: colors.primary,
     fontWeight: bold"},"
-  content: {
-    flex: 1,
+  content: {,
+  flex: 1,
     padding: spacing.md},
-  overviewCard: {
-    backgroundColor: colors.white,
+  overviewCard: {,
+  backgroundColor: colors.white,
     borderRadius: 12,
     padding: spacing.lg,
     marginBottom: spacing.md,
@@ -295,74 +302,74 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3},
-  cardTitle: {
-    fontSize: typography.fontSize.lg,
+  cardTitle: {,
+  fontSize: typography.fontSize.lg,
     fontWeight: "bold",
     color: colors.textPrimary,
     marginBottom: spacing.md},
-  cardDescription: {
-    fontSize: typography.fontSize.base,
+  cardDescription: {,
+  fontSize: typography.fontSize.base,
     color: colors.textSecondary,
     lineHeight: 24,
     marginBottom: spacing.lg},
   featureList: { marginBottom: spacing.lg  },
-  featureItem: {
-    flexDirection: row","
+  featureItem: {,
+  flexDirection: row",
     alignItems: "center,",
     marginBottom: spacing.md},
-  featureIcon: {
-    fontSize: 24,
+  featureIcon: {,
+  fontSize: 24,
     marginRight: spacing.md},
   featureContent: { flex: 1 },
-  featureTitle: {
-    fontSize: typography.fontSize.base,
+  featureTitle: {,
+  fontSize: typography.fontSize.base,
     fontWeight: "600",
     color: colors.textPrimary,
     marginBottom: 2},
-  featureDesc: {
-    fontSize: typography.fontSize.sm,
+  featureDesc: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary},
-  runTestButton: {
-    backgroundColor: colors.primary,
+  runTestButton: {,
+  backgroundColor: colors.primary,
     borderRadius: 8,
     paddingVertical: spacing.md,
-    alignItems: center","
+    alignItems: center",
     justifyContent: "center,",
     minHeight: 48},
-  runTestButtonText: {
-    color: colors.white,
+  runTestButtonText: {,
+  color: colors.white,
     fontSize: typography.fontSize.base,
     fontWeight: "bold"},
-  statsCard: {
-    backgroundColor: colors.white,
+  statsCard: {,
+  backgroundColor: colors.white,
     borderRadius: 12,
     padding: spacing.lg,
     marginBottom: spacing.md,
-    shadowColor: #000","
+    shadowColor: #000",
     shadowOffset: { width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3},
-  statsGrid: {
-    flexDirection: "row,",
+  statsGrid: {,
+  flexDirection: "row,",
     justifyContent: "space-between",
     marginBottom: spacing.md},
   statItem: { alignItems: center"  },"
-  statValue: {
-    fontSize: typography.fontSize["2xl],"
+  statValue: {,
+  fontSize: typography.fontSize["2xl],"
     fontWeight: "bold",
     color: colors.textPrimary,
     marginBottom: 4},
-  statLabel: {
-    fontSize: typography.fontSize.sm,
+  statLabel: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary},
-  lastUpdate: {
-    fontSize: typography.fontSize.sm,
+  lastUpdate: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
-    textAlign: center","
+    textAlign: center",
     fontStyle: "italic},",
-  liveTestCard: {
-    backgroundColor: colors.white,
+  liveTestCard: {,
+  backgroundColor: colors.white,
     borderRadius: 12,
     padding: spacing.lg,
     marginBottom: spacing.md,
@@ -372,36 +379,36 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     shadowRadius: 4,
     elevation: 3},
   categoryButtons: { marginBottom: spacing.lg  },
-  categoryButton: {
-    backgroundColor: colors.gray50,
+  categoryButton: {,
+  backgroundColor: colors.gray50,
     borderRadius: 8,
     padding: spacing.md,
     marginBottom: spacing.sm,
-    flexDirection: row","
+    flexDirection: row",
     justifyContent: "space-between,",
     alignItems: "center",
     borderWidth: 1,
     borderColor: colors.border},
-  categoryButtonText: {
-    fontSize: typography.fontSize.base,
-    fontWeight: 600","
+  categoryButtonText: {,
+  fontSize: typography.fontSize.base,
+    fontWeight: 600",
     color: colors.textPrimary,
     textTransform: "capitalize},",
-  categoryButtonCount: {
-    fontSize: typography.fontSize.sm,
+  categoryButtonCount: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary},
-  quickActions: {
-    flexDirection: "row",
+  quickActions: {,
+  flexDirection: "row",
     justifyContent: space-between"},"
-  quickActionButton: {
-    flex: 1,
+  quickActionButton: {,
+  flex: 1,
     backgroundColor: colors.primary,
     borderRadius: 6,
     paddingVertical: spacing.sm,
     alignItems: "center,",
     marginHorizontal: spacing.xs},
-  quickActionText: {
-    color: colors.white,
+  quickActionText: {,
+  color: colors.white,
     fontSize: typography.fontSize.sm,
     fontWeight: "bold'}"'
 }), []);

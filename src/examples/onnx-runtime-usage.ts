@@ -1,20 +1,19 @@
-import {import { getQuantizationUtils, quantizeForSuokeLife } from "../../placeholder";../utils/////    modelQuantization
-import { TensorData, ONNXModel } from ../core/onnx-runtime/////    types
-
+import {import { getQuantizationUtils, quantizeForSuokeLife } from "../../placeholder";../utils/    modelQuantization;
+import { TensorData, ONNXModel } from ../core/onnx-runtime/    types;
 /**
- * * ONNX Runtime 使用示例
- * 展示如何在索克生活项目中使用设备端AI推理功能
+* * ONNX Runtime 使用示例
+* 展示如何在索克生活项目中使用设备端AI推理功能
   ONNXRuntimeManager,
   createONNXRuntimeManager,
   deploySuokeLifeModel,
   quickDeploy,
   TensorProcessor,
-  { ModelQuantizer } from "../core/////    onnx-runtime";
+  { ModelQuantizer } from "../core/    onnx-runtime";
 /**
- * * 示例1：基础使用 - 快速部署和推理
+* * 示例1：基础使用 - 快速部署和推理
 export async function basicUsageExample() {
   try {// 1. 快速部署模型;
-const { manager, model } = await quickDeploy("/models/////    tcm_diagnosis.onnx");
+const { manager, model } = await quickDeploy("/models/    tcm_diagnosis.onnx");
     // 2. 准备输入数据
 const inputData: TensorData = {data: new Float32Array([1.0, 2.0, 3.0, 4.0]),
       dims: [1, 4],
@@ -33,11 +32,11 @@ await manager.destroy();
     }
 }
 /**
- * * 示例2：索克生活专用 - 中医诊断模型
+* * 示例2：索克生活专用 - 中医诊断模型
 export async function tcmDiagnosisExample() {
   try {// 1. 部署中医诊断模型;
 const { manager, model } = await deploySuokeLifeModel(;
-      "/models/////    tcm_diagnosis_v2.onnx",
+      "/models/    tcm_diagnosis_v2.onnx",
       tcm""
     );
     // 2. 准备中医诊断数据
@@ -48,23 +47,23 @@ complexion: new Float32Array([0.4, 0.8, 0.2]), // 面诊数据
 symptoms: new Float32Array([1, 0, 1, 0, 1]) // 症状数据
     }
     // 3. 转换为张量格式
-const inputs: Record<string, TensorData> = {pulse: {
-        data: patientData.pulse,
+const inputs: Record<string, TensorData> = {pulse: {,
+  data: patientData.pulse,
         dims: [1, 3],
         type: "float32"
       },
-      tongue: {
-        data: patientData.tongue,
+      tongue: {,
+  data: patientData.tongue,
         dims: [1, 3],
         type: "float32"
       },
-      complexion: {
-        data: patientData.complexion,
+      complexion: {,
+  data: patientData.complexion,
         dims: [1, 3],
         type: float32""
       },
-      symptoms: {
-        data: patientData.symptoms,
+      symptoms: {,
+  data: patientData.symptoms,
         dims: [1, 5],
         type: "float32"
       }
@@ -81,9 +80,9 @@ const diagnosisResult = parseTCMDiagnosis(diagnosis);
     }
 }
 /**
- * * 示例3：健康评估模型
+* * 示例3：健康评估模型
 export async function healthAssessmentExample() {try {const { manager, model } = await deploySuokeLifeModel(;
-      "/models/////    health_assessment.onnx",
+      "/models/    health_assessment.onnx",
       health""
     );
     // 健康数据
@@ -91,18 +90,18 @@ const healthData =  {vitals: new Float32Array([120, 80, 72, 36.5]), // 血压、
 biomarkers: new Float32Array([5.5, 2.1, 1.8, 0.9]), // 生物标志物
 lifestyle: new Float32Array([7, 3, 1, 0]) // 生活方式评分
     }
-    const inputs: Record<string, TensorData> = {vitals: {
-        data: healthData.vitals,
+    const inputs: Record<string, TensorData> = {vitals: {,
+  data: healthData.vitals,
         dims: [1, 4],
         type: "float32"
       },
-      biomarkers: {
-        data: healthData.biomarkers,
+      biomarkers: {,
+  data: healthData.biomarkers,
         dims: [1, 4],
         type: "float32"
       },
-      lifestyle: {
-        data: healthData.lifestyle,
+      lifestyle: {,
+  data: healthData.lifestyle,
         dims: [1, 4],
         type: float32""
       }
@@ -114,17 +113,17 @@ lifestyle: new Float32Array([7, 3, 1, 0]) // 生活方式评分
     }
 }
 /**
- * * 示例4：高级功能 - 模型量化和优化
+* * 示例4：高级功能 - 模型量化和优化
 export async function advancedOptimizationExample() {try {const manager = createONNXRuntimeManager();
     await manager.initialize();
     // 1. 加载原始模型
-const originalModel = await manager.getModelLoader().loadModel("/models/////    symptom_analysis.onnx);"
+const originalModel = await manager.getModelLoader().loadModel("/models/    symptom_analysis.onnx);"
     // 2. 模型量化
 const quantizedModel = await quantizeForSuokeLife(originalModel, "symptom");
     .toFixed(2)}x`);
     // 3. 模型优化
 const optimizer = manager.getModelOptimizer();
-    const optimizedModel = await optimizer.optimizeModel(quantizedModel, {level: all","
+    const optimizedModel = await optimizer.optimizeModel(quantizedModel, {level: all",
       enableGraphOptimization: true,
       enableMemoryOptimization: true,
       enableCpuOptimization: true,
@@ -138,11 +137,11 @@ await performanceComparison(manager, originalModel, optimizedModel);
     }
 }
 /**
- * * 示例5：批量处理和缓存
+* * 示例5：批量处理和缓存
 export async function batchProcessingExample() {try {const manager = createONNXRuntimeManager();
     await manager.initialize();
     // 部署生活方式推荐模型
-const model = await manager.deployModel("/models/////    lifestyle_recommendation.onnx, {"
+const model = await manager.deployModel("/models/    lifestyle_recommendation.onnx, {"
       quantize: true,
       optimize: true,
       cache: true;
@@ -174,7 +173,7 @@ const cacheStats = manager.getInferenceCache().getStats();
     }
 }
 /**
- * * 示例6：张量处理和数据预处理
+* * 示例6：张量处理和数据预处理
 export async function tensorProcessingExample() {try {const tensorProcessor = new TensorProcessor();
     // 1. 创建测试张量
 const originalTensor = tensorProcessor.createRandomTensor([2, 3, 4], "float32, 0, 100);"
@@ -194,11 +193,11 @@ const tensors = [originalTensor, preprocessedTensor, int8Tensor];
     }
 }
 /**
- * * 示例7：系统监控和性能分析
+* * 示例7：系统监控和性能分析
 export async function systemMonitoringExample() {try {const manager = createONNXRuntimeManager();
     await manager.initialize();
     // 部署模型
-const model = await manager.deployModel("/models/////    tcm_diagnosis.onnx);"
+const model = await manager.deployModel("/models/    tcm_diagnosis.onnx);"
     // 执行多次推理以收集性能数据
 for (let i = 0; i < 10; i++) {
       const input: TensorData = {data: new Float32Array(Array.from({ length: 100 }, () => Math.random())),
@@ -228,8 +227,8 @@ const syndromeOutput = outputs["syndrome];"
     const constitutionProbs = Array.from(constitutionOutput.data);
     return {syndrome: {type: getSyndromeType(syndromeProbs.indexOf(Math.max(...syndromeProbs))),confidence: Math.max(...syndromeProbs);
       },
-      constitution: {
-        type: getConstitutionType(constitutionProbs.indexOf(Math.max(...constitutionProbs))),
+      constitution: {,
+  type: getConstitutionType(constitutionProbs.indexOf(Math.max(...constitutionProbs))),
         confidence: Math.max(...constitutionProbs);
       };
     };
@@ -278,11 +277,11 @@ await manager.getInferenceEngine().loadModel(optimizedModel);
   .toFixed(2)}x`);
 }
 function getSyndromeType(index: number): string {
-  const syndromes = ["气虚", 血虚", "阴虚, "阳虚", 气滞", "血瘀, "痰湿", 湿热"];"
+  const syndromes = ["气虚", 血虚",阴虚, "阳虚", 气滞",血瘀, "痰湿", 湿热"];"
   return syndromes[index] || "未知;"
 }
 function getConstitutionType(index: number): string {
-  const constitutions = ["平和质", 气虚质", "阳虚质, "阴虚质", 痰湿质", "湿热质, "血瘀质", 气郁质", "特禀质];
+  const constitutions = ["平和质", 气虚质",阳虚质, "阴虚质", 痰湿质",湿热质, "血瘀质", 气郁质",特禀质];
   return constitutions[index] || "未知";
 }
 function getHealthRecommendation(score: number): string {
@@ -302,4 +301,4 @@ export async function runAllExamples() {const exampleFunctions = Object.values(e
       } catch (error) {
       }
   }
-  }  */////
+  }  */

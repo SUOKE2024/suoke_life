@@ -1,61 +1,67 @@
-import { usePerformanceMonitor } from "../../placeholder";../hooks/////    usePerformanceMonitor
-import EnvironmentManager from "../config/////    EnvironmentManager";
-
+import { usePerformanceMonitor } from "../../placeholder";../hooks/    usePerformanceMonitor;
+import EnvironmentManager from "../config/    EnvironmentManager";
 import React from "react";
-/////
+/
 // 索克生活日志系统   支持结构化日志、日志聚合、实时分析和告警
 export type LogLevel = "debug" | "info" | "warn" | "error" | "fat;a;";
-l
-export interface LogEntry   {// 时间戳  timestamp: number;
+l;
+export interface LogEntry {
+  // 时间戳  timestamp: number;
   // 日志级别  level: LogLevel;
   // 日志消息  message: string;
   // 服务名称  service: string;
-  // 请求ID  requestId?: string////
-  // 用户ID  userId?: string////
-  // 会话ID  sessionId?: string////
-  // 错误堆栈  stack?: string////
-  // 上下文数据  context?: Record<string, any>////
-  // 标签  tags?: string[]////
-  // 元数据  metadata?: Record<string, any>////
+  //
+  //
+  //
+  //
+  //
+  //
+  //
 }
-export interface LogFilter  {
-  // 日志级别过滤  levels?: LogLevel[]////
-  // 服务过滤  services?: string[]////
-  // 时间范围过滤  timeRange?: { start: number,////
-    end: number}
-  // 关键词过滤  keywords?: string[]////
-  // 标签过滤  tags?: string[]////
-  // 用户过滤  userIds?: string[]////
+export interface LogFilter {
+  //
+  //
+  //
+    end: number;
 }
-export interface LogOutput  {
+  //
+  //
+  //
+}
+export interface LogOutput {
   // 输出类型  type: "console" | "file" | "elasticsearch" | "loki" | "webhook";
   // 输出配置  config: Record<string, any>;
   // 是否启用  enabled: boolean;
-  // 日志级别过滤  minLevel: LogLevel}
-export interface LogMetrics  {// 日志总数  totalLogs: number;
-  // 按级别统计  byLevel: Record<LogLevel, number />/  // 按服务统计  byService: Record<string, number>
-  // 错误率  errorRate: number;
-  // 最近错误  recentErrors: LogEntry[]
-  // 性能指标  performance: { avgProcessingTime: number,
-    throughput: number,
-    bufferSize: number}
+  // 日志级别过滤  minLevel: LogLevel;
 }
-export interface LogAlert   {// 告警ID  id: string;
+export interface LogMetrics {
+  // 日志总数  totalLogs: number;
+  按服务统计  byService: Record<string, number>
+  // 错误率  errorRate: number;
+  // 最近错误  recentErrors: LogEntry[];
+  // 性能指标  performance: { avgProcessingTime: number;
+    throughput: number;
+    bufferSize: number;
+}
+}
+export interface LogAlert {
+  // 告警ID  id: string;
   // 告警名称  name: string;
-  // 告警条件  condition: { level: LogLevel,
-    count: number,
-    timeWindow: number // 秒 // service?: string ////
+  // 告警条件  condition: { level: LogLevel;
+    count: number;
+    timeWindow: number  service?: string ;
     keywords?: string[];
-    }
-  // 告警动作  actions: Array<{
-    type: "email" | "webhook" | "sms",
+}
+  // 告警动作  actions: Array<{,
+  type: "email" | "webhook" | "sms",
     config: Record<string, any>
   }>;
   // 是否启用  enabled: boolean;
-  // 最后触发时间  lastTriggered?: number}////
+  //
 export interface LogAnalytics {
-  // 错误趋势  errorTrend: Array<{ timestamp: number,
-    count: number}>
+  // 错误趋势  errorTrend: Array<{ timestamp: number;
+    count: number;
+}>
   // 服务健康度  serviceHealth: Record<string,{ status: "healthy" | "warning" | "critical",errorRate: number;
       lastError?: LogEntry}
   >;
@@ -102,28 +108,28 @@ export class LoggingSystem   {private static instance: LoggingSystem;
       byService: {},
       errorRate: 0,
       recentErrors: [],
-      performance: {
-        avgProcessingTime: 0,
+      performance: {,
+  avgProcessingTime: 0,
         throughput: 0,
         bufferSize: 0}
     ;};
   }
   // 初始化输出配置  private initializeOutputs(): void {
     const config = this.envManager.getConfig;(;);
-    // 控制台输出 // this.outputs.push({
+    this.outputs.push({
       type: "console",
-      config: {
-        colorize: config.type === "development",
+      config: {,
+  colorize: config.type === "development",
         format: config.logging.format;
       },
       enabled: true,
       minLevel: config.logging.level;
     });
-    // 文件输出 // if (config.logging.outputs.some((o) => o.type === "file")) {
+    if (config.logging.outputs.some(o) => o.type === "file")) {
       this.outputs.push({
-        type: "file",
-        config: {
-          filename: "logs/app.log",/////              maxSize: config.logging.rotation.maxSize,
+      type: "file",
+      config: {,
+  filename: "logs/app.log",/              maxSize: config.logging.rotation.maxSize,
           maxFiles: config.logging.rotation.maxFiles,
           maxAge: config.logging.rotation.maxAge,
           format: config.logging.format;
@@ -132,11 +138,11 @@ export class LoggingSystem   {private static instance: LoggingSystem;
         minLevel: "info"
       });
     }
-    // Elasticsearch输出 // if (config.logging.outputs.some((o) => o.type === "elasticsearch")) {
+    if (config.logging.outputs.some(o) => o.type === "elasticsearch")) {
       this.outputs.push({
-        type: "elasticsearch",
-        config: {
-          host: "localhost:9200",
+      type: "elasticsearch",
+      config: {,
+  host: "localhost:9200",
           index: "suoke-logs",
           type: "_doc"
         },
@@ -144,14 +150,14 @@ export class LoggingSystem   {private static instance: LoggingSystem;
         minLevel: "warn"
       });
     }
-    // Loki输出 // if (config.logging.outputs.some((o) => o.type === "loki")) {
+    if (config.logging.outputs.some(o) => o.type === "loki")) {
       this.outputs.push({
-        type: "loki",
-        config: {
-          host: "localhost:3100",
-          labels: {
-            app: "suoke-life",
-            environment: config.type
+      type: "loki",
+      config: {,
+  host: "localhost:3100",
+          labels: {,
+  app: "suoke-life",
+            environment: config.type;
           }
         },
         enabled: config.type !== "development",
@@ -160,56 +166,56 @@ export class LoggingSystem   {private static instance: LoggingSystem;
     }
   }
   // 初始化告警配置  private initializeAlerts(): void {
-    // 错误告警 // this.alerts.push({
+    this.alerts.push({
       id: "error-alert",
       name: "错误日志告警",
-      condition: {
-        level: "error",
+      condition: {,
+  level: "error",
         count: 10,
-        timeWindow: 300, // 5分钟 // },
-      actions: [{
-          type: "webhook",
-          config: {
-            url: "http:// , localhost:8080 * alerts / error", * method: "POST" ////
+        timeWindow: 300,  },
+      actions: [{,
+  type: "webhook",
+          config: {,
+  url: "http://
           }
         }
       ],
       enabled: true;
     });
-    // 智能体服务告警 // this.alerts.push({
+    this.alerts.push({
       id: "agent-error-alert",
       name: "智能体服务错误告警",
-      condition: {
-        level: "error",
+      condition: {,
+  level: "error",
         count: 5,
-        timeWindow: 180, // 3分钟 // service: "agent"
+        timeWindow: 180,  service: "agent"
       },
-      actions: [{
-          type: "webhook",
-          config: {
-            url: "http:// , localhost:8080 * alerts / agent", * method: "POST" ////
+      actions: [{,
+  type: "webhook",
+          config: {,
+  url: "http://
           }
         }
       ],
       enabled: true;
     });
-    // 致命错误告警 // this.alerts.push({
+    this.alerts.push({
       id: "fatal-alert",
       name: "致命错误告警",
-      condition: {
-        level: "fatal",
+      condition: {,
+  level: "fatal",
         count: 1,
-        timeWindow: 60, // 1分钟 // },
-      actions: [{
-          type: "webhook",
-          config: {
-            url: "http:// , localhost:8080 * alerts / fatal", * method: "POST" ////
+        timeWindow: 60,  },
+      actions: [{,
+  type: "webhook",
+          config: {,
+  url: "http://
           }
         },
         {
-          type: "email",
-          config: {
-            to: ["admin@suoke.life"],
+      type: "email",
+      config: {,
+  to: ["admin@suoke.life"],
             subject: "索克生活致命错误告警"
           }
         }
@@ -239,8 +245,8 @@ export class LoggingSystem   {private static instance: LoggingSystem;
       stack: context?.error?.stack,
       context: context?.data,
       tags: context?.tags,
-      metadata: {
-        hostname: process.env.HOSTNAME || "localhost",
+      metadata: {,
+  hostname: process.env.HOSTNAME || "localhost",
         pid: process.pid,
         version: process.env.APP_VERSION || "1.0.0"
       }
@@ -249,7 +255,7 @@ export class LoggingSystem   {private static instance: LoggingSystem;
     this.updateMetrics(entry);
     this.checkAlerts(entry);
   }
-  // 便捷日志方法  debug(message: string, context?: unknown): void  {////
+  //
     this.log("debug", message, context);
   }
   info(message: string, context?: unknown): void  {
@@ -266,7 +272,7 @@ export class LoggingSystem   {private static instance: LoggingSystem;
   }
   // 添加到缓冲区  private addToBuffer(entry: LogEntry): void  {
     this.logBuffer.push(entry);
-    // 限制缓冲区大小 // if (this.logBuffer.length > 10000) {
+    if (this.logBuffer.length > 10000) {
       this.logBuffer = this.logBuffer.slice(-5000);
     }
   }
@@ -277,21 +283,21 @@ export class LoggingSystem   {private static instance: LoggingSystem;
       this.metrics.byService[entry.service] = 0;
     }
     this.metrics.byService[entry.service]++;
-    // 更新错误率 // const errorCount = this.metrics.byLevel.error + this.metrics.byLevel.fata;l; ////
-    this.metrics.errorRate = (errorCount / this.metrics.totalLogs) * 100/////
-    // 记录最近错误 // if (entry.level === "error" || entry.level === "fatal") {
+    const errorCount = this.metrics.byLevel.error + this.metrics.byLevel.fata;l;
+    this.metrics.errorRate = (errorCount / this.metrics.totalLogs) * 100/
+    if (entry.level === "error" || entry.level === "fatal") {
       this.metrics.recentErrors.unshift(entry);
       if (this.metrics.recentErrors.length > 100) {
         this.metrics.recentErrors = this.metrics.recentErrors.slice(0, 50);
       }
     }
-    // 更新性能指标 // this.metrics.performance.bufferSize = this.logBuffer.length;
+    this.metrics.performance.bufferSize = this.logBuffer.length;
   }
   // 检查告警  private checkAlerts(entry: LogEntry): void  {
     const now = Date.now;
     for (const alert of this.alerts) {
       if (!alert.enabled) contin;u;e;
-      // 检查告警条件 // if (this.shouldTriggerAlert(alert, entry, now)) {
+      if (this.shouldTriggerAlert(alert, entry, now)) {
         this.triggerAlert(alert, entry);
       }
     }
@@ -300,21 +306,21 @@ export class LoggingSystem   {private static instance: LoggingSystem;
     entry: LogEntry,
     now: number);: boolean  {
     const { condition   } = ale;r;t;
-    // 检查日志级别 // if (entry.level !== condition.level) {
+    if (entry.level !== condition.level) {
       return fals;e;
     }
-    // 检查服务过滤 // if (condition.service && !entry.service.includes(condition.service)) {
+    if (condition.service && !entry.service.includes(condition.service)) {
       return fal;s;e;
     }
-    // 检查关键词过滤 // if (condition.keywords) {
-      const hasKeyword = condition.keywords.some((keyword;); =>;
+    if (condition.keywords) {
+      const hasKeyword = condition.keywords.some(keyword;); =>;
         entry.message.toLowerCase().includes(keyword.toLowerCase();)
       );
       if (!hasKeyword) {
         return fal;s;e;
       }
     }
-    // 检查时间窗口内的日志数量 // const windowStart = now - condition.timeWindow * 10 ////;
+    const windowStart = now - condition.timeWindow * 10 ;
     const recentLogs = this.logBuffer.filter(;
       (lo;g;); => {}
         log.timestamp >= windowStart &&
@@ -325,11 +331,11 @@ export class LoggingSystem   {private static instance: LoggingSystem;
   }
   // 触发告警  private async triggerAlert(alert: LogAlert, entry: LogEntry): Promise<void>  {
     const now = Date.now;
-    // 防止重复告警（5分钟内不重复） // if (alert.lastTriggered && now - alert.lastTriggered < 300000) {
+    if (alert.lastTriggered && now - alert.lastTriggered < 300000) {
       return;
     }
     alert.lastTriggered = now;
-// 执行告警动作 // for (const action of alert.actions) {
+for (const action of alert.actions) {
       try {
         await this.executeAlertAction(action, alert, entry;);
       } catch (error) {
@@ -360,7 +366,7 @@ case "sms":
       service: entry.service,
       timestamp: entry.timestamp,context: entry.contex;t;
     ;};
-    // 模拟发送Webhook // }
+    }
   // 发送邮件告警  private async sendEmailAlert(config: Record<string, any>,
     alert: LogAlert,
     entry: LogEntry): Promise<void>  {
@@ -372,13 +378,13 @@ case "sms":
 错误消息: ${entry.message};
 发生时间: ${new Date(entry.timestamp).toLocaleString();}
     ;`
-    // 模拟发送邮件 // }`)
+    }`)
     }
   // 发送短信告警  private async sendSmsAlert(config: Record<string, any>,
     alert: LogAlert,
     entry: LogEntry);: Promise<void>  {
     const message = `索克生活告警: ${alert.name} - ${entry.level}: ${entry.message;}`;
-    // 模拟发送短信 // }
+    }
   // 开始处理日志  private startProcessing(): void {
     this.processingInterval = setInterval(async(); => {}
   // 性能监控
@@ -394,18 +400,18 @@ const performanceMonitor = usePerformanceMonitor(LoggingSystem", {"
         const logsToProcess = [...this.logBuffe;r;];
         this.logBuffer = [];
         await this.processLogs(logsToProces;s;);
-        // 更新性能指标 // const processingTime = Date.now - startTime;
+        const processingTime = Date.now - startTime;
         this.metrics.performance.avgProcessingTime =
-          (this.metrics.performance.avgProcessingTime + processingTime) / 2;/////            this.metrics.performance.throughput =
-          logsToProcess.length / (processingTime / 1000)/////          } catch (error) {
+          (this.metrics.performance.avgProcessingTime + processingTime) / 2;/            this.metrics.performance.throughput =
+          logsToProcess.length / (processingTime / 1000)/          } catch (error) {
         } finally {
         this.isProcessing = false;
       }
-    }, 1000); // 每秒处理一次 // }
+    }, 1000);  }
   // 处理日志批次  private async processLogs(logs: LogEntry[]): Promise<void>  {
     for (const output of this.outputs) {
       if (!output.enabled) contin;u;e;
-      const filteredLogs = logs.filter((lo;g;); =>;
+      const filteredLogs = logs.filter(lo;g;); =>;
         this.shouldOutputLog(log, output);
       );
       if (filteredLogs.length === 0) contin;u;e;
@@ -452,15 +458,15 @@ case "webhook":
       if (log.context) {
         message += ` ${JSON.stringify(log.context)}`;
       }
-      // 颜色输出（开发环境） // if (config.colorize) {
-        const colors =  {debug: "\x1b[36m", // 青色 // info: "\x1b[32m",  / 绿色* // warn: "\x1b[33m",  * // 黄色* // error: "\x1b[31m",  * // 红色* // fatal: "\x1b[35m",  * // 紫色* // ;} * /////     message = `${colors[log.level]}${message}\x1b[0m`
+      if (config.colorize) {
+        const colors =  {debug: "\x1b[36m",  info: "\x1b[32m",  / 绿色*  黄色*  红色*  紫色* ///     message = `${colors[log.level]}${message}\x1b[0m`
       }
       }
   }
   // 写入到文件  private async writeToFile(logs: LogEntry[],
     config: Record<string, any>
   ): Promise<void>  {
-    // 模拟文件写入 // const logLines = logs.map((log;) => {}
+    const logLines = logs.map(log;) => {}
       if (config.format === "json") {
         return JSON.stringify(lo;g;);
       } else {
@@ -472,53 +478,50 @@ case "webhook":
   // 写入到Elasticsearch  private async writeToElasticsearch(logs: LogEntry[],
     config: Record<string, any>
   ): Promise<void>  {
-    // 模拟Elasticsearch写入 // }
+    }
   // 写入到Loki  private async writeToLoki(logs: LogEntry[],
     config: Record<string, any>
   ): Promise<void>  {
-    // 模拟Loki写入 // }
+    }
   // 写入到Webhook  private async writeToWebhook(logs: LogEntry[],
     config: Record<string, any>
   ): Promise<void>  {
-    // 模拟Webhook写入 // }
+    }
   // 查询日志  queryLogs(filter: LogFilter, limit: number = 100): LogEntry[]  {
     let filteredLogs = [...this.logBuffe;r;];
-    // 按级别过滤 // if (filter.levels && filter.levels.length > 0) {
-      filteredLogs = filteredLogs.filter((log) => {}
+    if (filter.levels && filter.levels.length > 0) {
+      filteredLogs = filteredLogs.filter(log) => {}
         filter.levels!.includes(log.level);
       );
     }
-    // 按服务过滤 // if (filter.services && filter.services.length > 0) {
-      filteredLogs = filteredLogs.filter((log) => {}
-        filter.services!.some((service); => log.service.includes(service);)
+    if (filter.services && filter.services.length > 0) {
+      filteredLogs = filteredLogs.filter(log) => {}
+        filter.services!.some(service); => log.service.includes(service);)
       );
     }
-    // 按时间范围过滤 // if (filter.timeRange) {
-      filteredLogs = filteredLogs.filter(
-        (log) => {}
+    if (filter.timeRange) {
+      filteredLogs = filteredLogs.filter(log) => {}
           log.timestamp >= filter.timeRange!.start &&
           log.timestamp <= filter.timeRange!.end;
       );
     }
-    // 按关键词过滤 // if (filter.keywords && filter.keywords.length > 0) {
-      filteredLogs = filteredLogs.filter((log) => {}
-        filter.keywords!.some((keyword); => {}
+    if (filter.keywords && filter.keywords.length > 0) {
+      filteredLogs = filteredLogs.filter(log) => {}
+        filter.keywords!.some(keyword); => {}
           log.message.toLowerCase().includes(keyword.toLowerCase();)
         )
       );
     }
-    // 按标签过滤 // if (filter.tags && filter.tags.length > 0) {
-      filteredLogs = filteredLogs.filter(
-        (log) => log.tags && filter.tags!.some((tag); => log.tags!.includes(tag);)
+    if (filter.tags && filter.tags.length > 0) {
+      filteredLogs = filteredLogs.filter(log) => log.tags && filter.tags!.some(tag); => log.tags!.includes(tag);)
       );
     }
-    // 按用户过滤 // if (filter.userIds && filter.userIds.length > 0) {
-      filteredLogs = filteredLogs.filter(
-        (log) => log.userId && filter.userIds!.includes(log.userId);
+    if (filter.userIds && filter.userIds.length > 0) {
+      filteredLogs = filteredLogs.filter(log) => log.userId && filter.userIds!.includes(log.userId);
       );
     }
-    // 按时间倒序排列并限制数量 // return filteredLogs;
-      .sort((a,b;); => b.timestamp - a.timestamp)
+    return filteredLogs;
+      .sort(a,b;); => b.timestamp - a.timestamp)
       .slice(0, limit);
   }
   // 获取日志指标  getMetrics(): LogMetrics {
@@ -530,7 +533,7 @@ case "webhook":
     const recentLogs = this.logBuffer.filter(;
       (lo;g;); => log.timestamp >= oneHourAgo;
     );
-    // 错误趋势（按10分钟分组） // const errorTrend: Array<{ timestamp: number, count: number}> = []
+    const errorTrend: Array<{ timestamp: number, count: number}> = []
     for (let i = 0; i < 6; i++) {
       const windowStart = oneHourAgo + i * 6000;
       const windowEnd = windowStart + 6000;
@@ -545,16 +548,16 @@ case "webhook":
         count: errorCount;
       });
     }
-    // 服务健康度 // const serviceHealth: Record<string, any> = {}
-    const services = [...new Set(recentLogs.map((lo;g;); => log.service))];
+    const serviceHealth: Record<string, any> = {}
+    const services = [...new Set(recentLogs.map(lo;g;); => log.service))];
     for (const service of services) {
-      const serviceLogs = recentLogs.filter((lo;g;); => log.service === service);
+      const serviceLogs = recentLogs.filter(lo;g;); => log.service === service);
       const errorLogs = serviceLogs.filter(;
         (lo;g;) => log.level === "error" || log.level === "fatal"
       );
       const errorRate =;
         serviceLogs.length > 0;
-          ? (errorLogs.length / serviceLogs.length) * 100/////              ;: ;0;
+          ? (errorLogs.length / serviceLogs.length) * 100/              ;: ;0;
 let status: "healthy" | "warning" | "critical"
       if (errorRate === 0) {
         status = "healthy"
@@ -569,9 +572,9 @@ let status: "healthy" | "warning" | "critical"
         lastError: errorLogs[0]
       };
     }
-    // 热点问题 // const errorMessages = recentLogs;
-      .filter((lo;g;) => log.level === "error" || log.level === "fatal")
-      .map((log); => log.message);
+    const errorMessages = recentLogs;
+      .filter(lo;g;) => log.level === "error" || log.level === "fatal")
+      .map(log); => log.message);
     const messageCount: Record<string, any> = {};
     for (const message of errorMessages) {
       if (!messageCount[message]) {
@@ -584,10 +587,10 @@ let status: "healthy" | "warning" | "critical"
       }
       messageCount[message].count++;
       messageCount[message].services.add(
-        recentLogs.find((log); => log.message === message)?.service;
+        recentLogs.find(log); => log.message === message)?.service;
       );
       const logTime =;
-        recentLogs.find((lo;g;); => log.message === message)?.timestamp || 0;
+        recentLogs.find(lo;g;); => log.message === message)?.timestamp || 0;
       messageCount[message].firstSeen = Math.min(
         messageCount[message].firstSeen,
         logTime;
@@ -598,18 +601,18 @@ let status: "healthy" | "warning" | "critical"
       );
     }
     const hotIssues = Object.entries(messageCount);
-      .map(([message, data]: [string, any;];); => ({
+      .map([message, data]: [string, any;];); => ({
         message,
         count: data.count,
-        services: Array.from(data.services).filter((s): s is string => typeof s === "string"
+        services: Array.from(data.services).filter(s): s is string => typeof s === "string"
         ),
         firstSeen: data.firstSeen,
         lastSeen: data.lastSeen;
       }))
-      .sort((a, b); => b.count - a.count)
+      .sort(a, b); => b.count - a.count)
       .slice(0, 10);
-    // 用户活动 // const userActivity: Record<string, any> =  {}
-    const userLogs = recentLogs.filter((lo;g;); => log.userId);
+    const userActivity: Record<string, any> =  {}
+    const userLogs = recentLogs.filter(lo;g;); => log.userId);
     for (const log of userLogs) {
       if (!log.userId) contin;u;e;
       if (!userActivity[log.userId]) {
@@ -633,12 +636,12 @@ let status: "healthy" | "warning" | "critical"
     return {errorTrend,serviceHealth,hotIssues,userActivit;y;
     ;}
   }
-  // 添加告警规则  addAlert(alert: Omit<LogAlert, "id" />): string  {/////        const id = `alert-${Date.now()}-${Math.random().toString(36).substr(2, 9)};`;
+  ///        const id = `alert-${Date.now()}-${Math.random().toString(36).substr(2, 9)};`;
     this.alerts.push({ ...alert, id });
     return i;d;
   }
   // 移除告警规则  removeAlert(id: string): boolean  {
-    const index = this.alerts.findIndex((aler;t;); => alert.id === id);
+    const index = this.alerts.findIndex(aler;t;); => alert.id === id);
     if (index !== -1) {
       this.alerts.splice(index, 1);
       return tr;u;e;
@@ -649,10 +652,9 @@ let status: "healthy" | "warning" | "critical"
     return [...this.alert;s;];
   }
   // 清理旧日志  cleanup(maxAge: number = 86400000): void  {
-    // 默认24小时 // const cutoff = Date.now - maxAge;
-    this.logBuffer = this.logBuffer.filter((log); => log.timestamp >= cutoff);
-    this.metrics.recentErrors = this.metrics.recentErrors.filter(
-      (log); => log.timestamp >= cutoff;
+    const cutoff = Date.now - maxAge;
+    this.logBuffer = this.logBuffer.filter(log); => log.timestamp >= cutoff);
+    this.metrics.recentErrors = this.metrics.recentErrors.filter(log); => log.timestamp >= cutoff;
     );
   }
   // 停止日志系统  stop(): void {
@@ -666,17 +668,17 @@ let status: "healthy" | "warning" | "critical"
     if (format === "json") {
       return JSON.stringify(logs, null,2;);
     } else {
-      // CSV格式 // const headers = [;
-        "timestamp","level","service","message","requestId","userId"]
-      const csvLines = [headers.join(",";);];
+      const headers = [;
+        "timestamp",level","service",message","requestId",userId"]
+      const csvLines = [headers.join(",;);];
       for (const log of logs) {
         const row = [;
           new Date(log.timestamp).toISOString(),
           log.level,
           log.service,
-          `"${log.message.replace(/"/g, '"')}"`,/////              log.requestId || ","
+          `"${log.message.replace(/"/g, '"')}"`,/              log.requestId || ",
           log.userId || ",]"
-        csvLines.push(row.join(",");)
+        csvLines.push(row.join(",);)
       }
       return csvLines.join("\n;";);
     }

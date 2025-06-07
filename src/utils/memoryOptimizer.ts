@@ -1,21 +1,24 @@
 import React from 'react';
-import { performanceMonitor } from "./////    performanceMonitor";
-
-// // 内存优化工具   提供内存监控、垃圾回收建议、内存泄漏检测等功能
-export interface MemorySnapshot  {
-  timestamp: number,
-  usedJSHeapSize: number,
+import { performanceMonitor } from "./    performanceMonitor";
+内存优化工具   提供内存监控、垃圾回收建议、内存泄漏检测等功能
+export interface MemorySnapshot {
+  timestamp: number;
+  usedJSHeapSize: number;
   totalJSHeapSize: number,jsHeapSizeLimit: number,components: Map<string, number>;
   listeners: Map<string, number>
 }
-export interface MemoryLeak { type: "component" | "listener" | "timer" | "memory",
-  name: string,
-  count: number,
-  growth: number,
-  severity: "low" | "medium" | "high" | "critical",
-  suggestion: string}
-export interface MemoryOptimizationSuggestion { type: "cleanup" | "optimization" | "warning",priority: "low" | "medium" | "high" | "critical",message: string;
-  action?: () => void}
+export interface MemoryLeak {
+  type: "component" | "listener" | "timer" | "memory";
+  name: string;
+  count: number;
+  growth: number;
+  severity: "low" | "medium" | "high" | "critical";
+  suggestion: string;
+}
+export interface MemoryOptimizationSuggestion {
+  type: "cleanup" | "optimization" | "warning",priority: "low" | "medium" | "high" | "critical",message: string;
+  action?: () => void
+}
 // 内存优化器类export class MemoryOptimizer  {private static instance: MemoryOptimizer;
   private snapshots: MemorySnapshot[] = [];
   private componentRegistry: Map<string, number> = new Map();
@@ -37,7 +40,7 @@ export interface MemoryOptimizationSuggestion { type: "cleanup" | "optimization"
     if (this.monitoringInterval) {
       clearInterval(this.monitoringInterval);
     }
-    this.monitoringInterval = setInterval((); => {}
+    this.monitoringInterval = setInterval(); => {}
       this.takeSnapshot();
       this.detectLeaks();
     }, interval);
@@ -55,16 +58,16 @@ export interface MemoryOptimizationSuggestion { type: "cleanup" | "optimization"
       jsHeapSizeLimit: 0,
       components: new Map(this.componentRegistry),
       listeners: new Map(this.listenerRegistry)}
-    // 在支持的环境中获取内存信息 // if (typeof performance !== "undefined" && performance.memory) {
+    if (typeof performance !== "undefined" && performance.memory) {
       snapshot.usedJSHeapSize = performance.memory.usedJSHeapSize;
       snapshot.totalJSHeapSize = performance.memory.totalJSHeapSize;
       snapshot.jsHeapSizeLimit = performance.memory.jsHeapSizeLimit;
     }
     this.snapshots.push(snapshot);
-    // 限制快照数量 // if (this.snapshots.length > this.maxSnapshots) {
+    if (this.snapshots.length > this.maxSnapshots) {
       this.snapshots = this.snapshots.slice(-this.maxSnapshots);
     }
-    // 记录性能指标 // performanceMonitor.recordMemoryUsage();
+    performanceMonitor.recordMemoryUsage();
     return snapsh;o;t;
   }
   // 注册组件  registerComponent(name: string): void  {
@@ -105,9 +108,9 @@ export interface MemoryOptimizationSuggestion { type: "cleanup" | "optimization"
   }
   // 检测内存泄漏  detectLeaks(): MemoryLeak[] {
     const leaks: MemoryLeak[] = [];
-    // 检测组件泄漏 // this.componentRegistry.forEach((count, name) => {}
+    this.componentRegistry.forEach(count, name) => {}
       if (count > 10) {
-        // 阈值可配置 // leaks.push({
+        leaks.push({
           type: "component",
           name,
           count,
@@ -117,9 +120,9 @@ export interface MemoryOptimizationSuggestion { type: "cleanup" | "optimization"
         });
       }
     });
-    // 检测监听器泄漏 // this.listenerRegistry.forEach((count, name) => {}
+    this.listenerRegistry.forEach(count, name) => {}
       if (count > 20) {
-        // 阈值可配置 // leaks.push({
+        leaks.push({
           type: "listener",
           name,
           count,
@@ -129,21 +132,21 @@ export interface MemoryOptimizationSuggestion { type: "cleanup" | "optimization"
         });
       }
     });
-    // 检测定时器泄漏 // if (this.timerRegistry.size > 50) {
+    if (this.timerRegistry.size > 50) {
       leaks.push({
-        type: "timer",
-        name: "timers",
+      type: "timer",
+      name: "timers",
         count: this.timerRegistry.size,
         growth: 0,
         severity: this.timerRegistry.size > 200 ? "critical" : "high",
         suggestion: `活跃定时器过多 (${this.timerRegistry.size})，检查是否正确清理`
       });
     }
-    // 检测内存增长 // const memoryGrowth = this.calculateMemoryGrowth;
+    const memoryGrowth = this.calculateMemoryGrowth;
     if (memoryGrowth > 0.5) {
-      // 50%增长阈值 // leaks.push({
-        type: "memory",
-        name: "heap",
+      leaks.push({
+      type: "memory",
+      name: "heap",
         count: 0,
         growth: memoryGrowth,
         severity:
@@ -160,14 +163,14 @@ export interface MemoryOptimizationSuggestion { type: "cleanup" | "optimization"
     if (this.snapshots.length < 2) {
       return 0;
     }
-    const recent = this.snapshots.slice(-;5;) // 最近5个快照 // const registry = type === "component" ? "components" : "listeners"; /////
-    const values = recent.map((snapsho;t;); => snapshot[registry].get(name); || 0);
+    const recent = this.snapshots.slice(-;5;)  const registry = type === "component" ? "components" : "listeners"; /
+    const values = recent.map(snapsho;t;); => snapshot[registry].get(name); || 0);
     if (values.length < 2) {
       return 0;
     }
     const first = values[0];
     const last = values[values.length - ;1;];
-    return first > 0 ? (last - first) / first ;: ;0;/////      }
+    return first > 0 ? (last - first) / first ;: ;0;/      }
   // 计算内存增长  private calculateMemoryGrowth(): number {
     if (this.snapshots.length < 10) {
       return 0;
@@ -175,43 +178,43 @@ export interface MemoryOptimizationSuggestion { type: "cleanup" | "optimization"
     const recent = this.snapshots.slice(-1;0;);
     const first = recent[0].usedJSHeapSi;z;e;
     const last = recent[recent.length - 1].usedJSHeapSi;z;e;
-    return first > 0 ? (last - first) / first ;: ;0;/////      }
+    return first > 0 ? (last - first) / first ;: ;0;/      }
   // 获取优化建议  getOptimizationSuggestions(): MemoryOptimizationSuggestion[] {
     const suggestions: MemoryOptimizationSuggestion[] = [];
     const leaks = this.detectLeaks;
-    // 基于泄漏检测的建议 // leaks.forEach((leak) => {}
+    leaks.forEach(leak) => {}
       suggestions.push({
-        type: "warning",
-        priority: leak.severity as any,
+      type: "warning",
+      priority: leak.severity as any,
         message: leak.suggestion;
       });
     });
-    // 内存使用率建议 // const latestSnapshot = this.snapshots[this.snapshots.length - 1;];
+    const latestSnapshot = this.snapshots[this.snapshots.length - 1;];
     if (latestSnapshot && latestSnapshot.jsHeapSizeLimit > 0) {
       const usageRate =;
-        latestSnapshot.usedJSHeapSize / latestSnapshot.jsHeapSizeLim;i;t/////
+        latestSnapshot.usedJSHeapSize / latestSnapshot.jsHeapSizeLim;i;t/
       if (usageRate > 0.8) {
         suggestions.push({
-          type: "warning",
-          priority: "high",
+      type: "warning",
+      priority: "high",
           message: `内存使用率过高 (${(usageRate * 100).toFixed(
             1;
           )}%)，建议清理缓存或优化代码`,
           action: () => this.suggestCleanup()});
       } else if (usageRate > 0.6) {
         suggestions.push({
-          type: "optimization",
-          priority: "medium",
+      type: "optimization",
+      priority: "medium",
           message: `内存使用率较高 (${(usageRate * 100).toFixed(
             1;
           )}%)，建议监控内存使用情况`
         });
       }
     }
-    // 定时器清理建议 // if (this.timerRegistry.size > 20) {
+    if (this.timerRegistry.size > 20) {
       suggestions.push({
-        type: "cleanup",
-        priority: "medium",
+      type: "cleanup",
+      priority: "medium",
         message: `检测到 ${this.timerRegistry.size} 个活跃定时器，建议检查是否需要清理`,
         action: () => this.cleanupTimers();
       });
@@ -219,12 +222,12 @@ export interface MemoryOptimizationSuggestion { type: "cleanup" | "optimization"
     return suggestio;n;s;
   }
   // 建议清理操作  private suggestCleanup(): void {
-    // 这里可以实现自动清理逻辑 // }
+    }
   // 清理定时器  private cleanupTimers(): void {
-    // 清理已完成的定时器 // this.timerRegistry.forEach((timer) => {}
-      // 在实际实现中，这里需要更复杂的逻辑来判断定时器是否仍然需要 // / 这里只是示例* // }) * /////     }
+    this.timerRegistry.forEach(timer) => {}
+      / 这里只是示例* ///     }
   // 强制垃圾回收（如果支持）  forceGarbageCollection(): boolean {
-    // 在React Native环境中，垃圾回收由系统自动管理 // / 这个方法主要用于开发和调试目的，实际上在RN中无法手动触发GC* // return fals;e; * /////     }
+    / 这个方法主要用于开发和调试目的，实际上在RN中无法手动触发GC* ///     }
   // 获取内存统计  getMemoryStats(): { current: MemorySnapshot | null,
     trend: "increasing" | "decreasing" | "stable",
     leaks: MemoryLeak[],
@@ -245,7 +248,7 @@ export interface MemoryOptimizationSuggestion { type: "cleanup" | "optimization"
       return "stable";
     }
     const recent = this.snapshots.slice(-;5;);
-    const values = recent.map((s); => s.usedJSHeapSize);
+    const values = recent.map(s); => s.usedJSHeapSize);
     let increasing = 0;
     let decreasing = 0;
     for (let i = ;1; i < values.length; i++) {
@@ -264,8 +267,8 @@ export interface MemoryOptimizationSuggestion { type: "cleanup" | "optimization"
     return "stabl;e";
   }
   // 导出内存数据  exportMemoryData(): { snapshots: MemorySnapshot[],
-    stats: {
-      current: MemorySnapshot | null,
+    stats: {,
+  current: MemorySnapshot | null,
       trend: "increasing" | "decreasing" | "stable",
       leaks: MemoryLeak[],
       suggestions: MemoryOptimizationSuggestion[],
@@ -285,9 +288,9 @@ export interface MemoryOptimizationSuggestion { type: "cleanup" | "optimization"
     this.intervalRegistry.clear();
   }
 }
-// 导出单例实例 * export const memoryOptimizer = MemoryOptimizer.getInstance ////   ;
-// 便捷函数 * export const registerComponent = (name: string) =////   ;
-> ;{/////
+//   ;
+//   ;
+> ;{/
   memoryOptimizer.registerComponent(name);
 };
 export const unregisterComponent = (name: string) =;

@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Challenge, ChallengeQuestion } from '../../types/maze';
-
 /**
- * 挑战模态框组件
- * Challenge Modal Component
- */
-
+* 挑战模态框组件
+* Challenge Modal Component;
+*/
   View,
   Text,
   StyleSheet,
@@ -16,23 +14,20 @@ import { Challenge, ChallengeQuestion } from '../../types/maze';
   Dimensions,
   Alert,
   Animated,
-  Image
+  Image;
 } from 'react-native';
-
 interface ChallengeModalProps {
   challenge: Challenge;
   visible: boolean;
   onClose: () => void;
   onComplete: (score: number) => void;
 }
-
 const { width: screenWidth } = Dimensions.get('window');
-
 const ChallengeModal: React.FC<ChallengeModalProps> = ({
   challenge,
   visible,
   onClose,
-  onComplete
+  onComplete;
 }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: number }>({});
@@ -40,18 +35,15 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(0);
   const [isTimerActive, setIsTimerActive] = useState(false);
-
   // 动画值
   const progressAnim = new Animated.Value(0);
   const scoreAnim = new Animated.Value(0);
-
   const currentQuestion = challenge.questions[currentQuestionIndex];
   const totalQuestions = challenge.questions.length;
-
   /**
-   * 初始化挑战
-   */
-  useEffect(() => {
+  * 初始化挑战
+  */
+  useEffect() => {
     if (visible) {
       setCurrentQuestionIndex(0);
       setSelectedAnswers({});
@@ -59,21 +51,18 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
       setScore(0);
       setTimeLeft(challenge.timeLimit || 300); // 默认5分钟
       setIsTimerActive(true);
-
       // 重置动画
       progressAnim.setValue(0);
       scoreAnim.setValue(0);
     }
   }, [visible, challenge]);
-
   /**
-   * 计时器
-   */
-  useEffect(() => {
+  * 计时器
+  */
+  useEffect() => {
     let interval: NodeJS.Timeout;
-
     if (isTimerActive && timeLeft > 0) {
-      interval = setInterval(() => {
+      interval = setInterval() => {
         setTimeLeft(prev => {
           if (prev <= 1) {
             setIsTimerActive(false);
@@ -84,115 +73,101 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
         });
       }, 1000);
     }
-
     return () => {if (interval) {clearInterval(interval);
       }
     };
   }, [isTimerActive, timeLeft]);
-
   /**
-   * 时间到处理
-   */
-  const handleTimeUp = () => {Alert.alert('时间到', '挑战时间已结束，将自动提交答案。', [;
-      { text: '确定', onPress: handleSubmit };
+  * 时间到处理
+  */
+  const handleTimeUp = () => {Alert.alert("时间到",挑战时间已结束，将自动提交答案。', [;
+      {
+      text: "确定",
+      onPress: handleSubmit };
     ]);
   };
-
   /**
-   * 选择答案
-   */
+  * 选择答案
+  */
   const handleAnswerSelect = (answerIndex: number) => {setSelectedAnswers(prev => ({...prev,[currentQuestionIndex]: answerIndex;
     }));
   };
-
   /**
-   * 下一题
-   */
+  * 下一题
+  */
   const handleNextQuestion = () => {if (currentQuestionIndex < totalQuestions - 1) {setCurrentQuestionIndex(prev => prev + 1);
-
       // 更新进度动画
       Animated.timing(progressAnim, {
         toValue: (currentQuestionIndex + 1) / totalQuestions,
         duration: 300,
-        useNativeDriver: false
+        useNativeDriver: false;
       }).start();
     } else {
       handleSubmit();
     }
   };
-
   /**
-   * 上一题
-   */
+  * 上一题
+  */
   const handlePreviousQuestion = () => {if (currentQuestionIndex > 0) {setCurrentQuestionIndex(prev => prev - 1);
-
       // 更新进度动画
       Animated.timing(progressAnim, {
         toValue: (currentQuestionIndex - 1) / totalQuestions,
         duration: 300,
-        useNativeDriver: false
+        useNativeDriver: false;
       }).start();
     }
   };
-
   /**
-   * 提交挑战
-   */
+  * 提交挑战
+  */
   const handleSubmit = () => {setIsTimerActive(false);
-
     // 计算分数
     let correctAnswers = 0;
-    challenge.questions.forEach((question, index) => {
+    challenge.questions.forEach(question, index) => {
       const selectedAnswer = selectedAnswers[index];
       if (selectedAnswer !== undefined && selectedAnswer === parseInt(String(question.correctAnswer))) {
         correctAnswers++;
       }
     });
-
-    const finalScore = Math.round((correctAnswers / totalQuestions) * 100);
+    const finalScore = Math.round(correctAnswers / totalQuestions) * 100);
     setScore(finalScore);
     setShowResults(true);
-
     // 分数动画
     Animated.timing(scoreAnim, {
       toValue: finalScore,
       duration: 1000,
-      useNativeDriver: false
+      useNativeDriver: false;
     }).start();
   };
-
   /**
-   * 完成挑战
-   */
+  * 完成挑战
+  */
   const handleComplete = () => {onComplete(score);
     onClose();
   };
-
   /**
-   * 格式化时间
-   */
+  * 格式化时间
+  */
   const formatTime = (seconds: number): string => {const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
-
   /**
-   * 渲染问题选项
-   */
+  * 渲染问题选项
+  */
   const renderAnswerOptions = () => {if (!currentQuestion) return null;
-
     return currentQuestion.options.map((option, index) => {const isSelected = selectedAnswers[currentQuestionIndex] === index;
       const isCorrect = showResults && index === parseInt(String(currentQuestion.correctAnswer));
       const isWrong = showResults && isSelected && index !== parseInt(String(currentQuestion.correctAnswer));
-
       return (
-        <TouchableOpacity
+        <TouchableOpacity;
           key={index}
           style={[
             styles.answerOption,
             isSelected && styles.selectedOption,
             showResults && isCorrect && styles.correctOption,
-            showResults && isWrong && styles.wrongOption
+            showResults && isWrong && styles.wrongOption;
           ]}
           onPress={() => !showResults && handleAnswerSelect(index)}
           disabled={showResults}
@@ -202,13 +177,13 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
               styles.optionIndicator,
               isSelected && styles.selectedIndicator,
               showResults && isCorrect && styles.correctIndicator,
-              showResults && isWrong && styles.wrongIndicator
+              showResults && isWrong && styles.wrongIndicator;
             ]}>
               <Text style={[
                 styles.optionLetter,
                 isSelected && styles.selectedLetter,
                 showResults && isCorrect && styles.correctLetter,
-                showResults && isWrong && styles.wrongLetter
+                showResults && isWrong && styles.wrongLetter;
               ]}>
                 {String.fromCharCode(65 + index)}
               </Text>
@@ -229,17 +204,14 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
       );
     });
   };
-
   /**
-   * 渲染结果页面
-   */
+  * 渲染结果页面
+  */
   const renderResults = () => {const correctCount = Object.keys(selectedAnswers).filter(key => {const questionIndex = parseInt(key);
       const selectedAnswer = selectedAnswers[questionIndex];
       return selectedAnswer === parseInt(String(challenge.questions[questionIndex].correctAnswer));
     }).length;
-
-    const accuracy = Math.round((correctCount / totalQuestions) * 100);
-
+    const accuracy = Math.round(correctCount / totalQuestions) * 100);
     return (;
       <View style={styles.resultsContainer}>;
         <View style={styles.scoreDisplay}>;
@@ -253,16 +225,14 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
             正确率: {accuracy}% ({correctCount}/{totalQuestions})
           </Text>
         </View>
-
         <View style={styles.resultDetails}>
           <View style={styles.resultItem}>
             <Icon name="timer" size={20} color="#81C784" />
             <Text style={styles.resultLabel}>用时</Text>
             <Text style={styles.resultValue}>
-              {formatTime((challenge.timeLimit || 300) - timeLeft)}
+              {formatTime(challenge.timeLimit || 300) - timeLeft)}
             </Text>
           </View>
-
           <View style={styles.resultItem}>
             <Icon name="star" size={20} color="#FFB74D" />
             <Text style={styles.resultLabel}>评级</Text>
@@ -271,17 +241,15 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
             </Text>
           </View>
         </View>
-
         <View style={styles.resultActions}>
-          <TouchableOpacity
+          <TouchableOpacity;
             style={styles.reviewButton}
             onPress={() => setShowResults(false)}
           >
             <Icon name="replay" size={20} color="#2196F3" />
             <Text style={styles.reviewButtonText}>查看答案</Text>
           </TouchableOpacity>
-
-          <TouchableOpacity
+          <TouchableOpacity;
             style={styles.completeButton}
             onPress={handleComplete}
           >
@@ -292,11 +260,9 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
       </View>;
     );
   };
-
   if (!visible) return null;
-
   return (
-    <Modal
+    <Modal;
       visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
@@ -309,7 +275,6 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
             <Icon name="quiz" size={24} color="#FF5722" />
             <Text style={styles.headerTitle}>健康挑战</Text>
           </View>
-
           <View style={styles.headerRight}>
             <View style={styles.timerContainer}>
               <Icon name="access-time" size={16} color={timeLeft < 60 ? "#F44336" : "#4CAF50"} />
@@ -320,7 +285,6 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
                 {formatTime(timeLeft)}
               </Text>
             </View>
-
             <TouchableOpacity style={styles.closeButton} onPress={onClose}>
               <Icon name="close" size={24} color="#666" />
             </TouchableOpacity>;
@@ -333,7 +297,7 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
             <View style={styles.progressBar}>;
               <Animated.View;
                 style={[;
-                  styles.progressFill,{width: progressAnim.interpolate({inputRange: [0, 1],outputRange: ['0%', '100%'];
+                  styles.progressFill,{width: progressAnim.interpolate({inputRange: [0, 1],outputRange: ["0%",100%'];
                     });
                   }
                 ]}
@@ -344,7 +308,6 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
             </Text>
           </View>
         )}
-
         {// 内容区域}
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
           {showResults ? renderResults() : (
@@ -354,30 +317,26 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
                 <Text style={styles.challengeTitle}>{challenge.title}</Text>
                 <Text style={styles.challengeDescription}>{challenge.description}</Text>
               </View>
-
               {// 当前问题}
               {currentQuestion && (
-                <View style={styles.questionContainer}>
+        <View style={styles.questionContainer}>
                   <Text style={styles.questionText}>{currentQuestion.question}</Text>
-
                   {// 问题图片 - 暂时注释掉，因为类型定义中没有imageUrl属性}
                   {/* {currentQuestion.imageUrl && (
-                    <View style={styles.questionImageContainer}>
-                      <Image source={{ uri: currentQuestion.imageUrl }}
+        <View style={styles.questionImageContainer}>
+                      <Image source={ uri: currentQuestion.imageUrl }}
                         style={styles.questionImage}
                         resizeMode="contain"
                       / loading="lazy" decoding="async" />
                     </View>
                   )} */}
-
                   {// 答案选项}
                   <View style={styles.answersContainer}>
                     {renderAnswerOptions()}
                   </View>
-
                   {// 解释}
                   {showResults && currentQuestion.explanation && (
-                    <View style={styles.explanationContainer}>
+        <View style={styles.explanationContainer}>
                       <Text style={styles.explanationTitle}>解释</Text>
                       <Text style={styles.explanationText}>
                         {currentQuestion.explanation}
@@ -389,11 +348,10 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
             </>
           )}
         </ScrollView>
-
         {// 底部操作栏}
         {!showResults && (
-          <View style={styles.footer}>
-            <TouchableOpacity
+        <View style={styles.footer}>
+            <TouchableOpacity;
               style={[styles.navButton, currentQuestionIndex === 0 && styles.disabledButton]}
               onPress={handlePreviousQuestion}
               disabled={currentQuestionIndex === 0}
@@ -403,12 +361,11 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
                 上一题
               </Text>
             </TouchableOpacity>
-
-            <TouchableOpacity
+            <TouchableOpacity;
               style={[
                 styles.navButton,
                 styles.primaryButton,
-                selectedAnswers[currentQuestionIndex] === undefined && styles.disabledButton
+                selectedAnswers[currentQuestionIndex] === undefined && styles.disabledButton;
               ]}
               onPress={currentQuestionIndex === totalQuestions - 1 ? handleSubmit : handleNextQuestion}
               disabled={selectedAnswers[currentQuestionIndex] === undefined}
@@ -416,14 +373,14 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
               <Text style={[
                 styles.navButtonText,
                 styles.primaryButtonText,
-                selectedAnswers[currentQuestionIndex] === undefined && styles.disabledText
+                selectedAnswers[currentQuestionIndex] === undefined && styles.disabledText;
               ]}>
                 {currentQuestionIndex === totalQuestions - 1 ? '提交答案' : '下一题'}
               </Text>
-              <Icon 
-                name={currentQuestionIndex === totalQuestions - 1 ? "send" : "chevron-right"} 
-                size={24} 
-                color={selectedAnswers[currentQuestionIndex] === undefined ? "#CCC" : "#FFFFFF"} 
+              <Icon;
+                name={currentQuestionIndex === totalQuestions - 1 ? "send" : "chevron-right"}
+                size={24}
+                color={selectedAnswers[currentQuestionIndex] === undefined ? "#CCC" : "#FFFFFF"}
               />
             </TouchableOpacity>
           </View>
@@ -432,14 +389,13 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
     </Modal>;
   );
 };
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  container: {,
+  flex: 1,
     backgroundColor: '#FFFFFF'
   },
-  header: {
-    flexDirection: 'row',
+  header: {,
+  flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 16,
@@ -448,195 +404,195 @@ const styles = StyleSheet.create({
     borderBottomColor: '#E0E0E0',
     backgroundColor: '#F8F9FA'
   },
-  headerLeft: {
-    flexDirection: 'row',
+  headerLeft: {,
+  flexDirection: 'row',
     alignItems: 'center'
   },
-  headerTitle: {
-    fontSize: 18,
+  headerTitle: {,
+  fontSize: 18,
     fontWeight: 'bold',
     color: '#FF5722',
-    marginLeft: 8
+    marginLeft: 8;
   },
-  headerRight: {
-    flexDirection: 'row',
+  headerRight: {,
+  flexDirection: 'row',
     alignItems: 'center'
   },
-  timerContainer: {
-    flexDirection: 'row',
+  timerContainer: {,
+  flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'rgba(76, 175, 80, 0.1)',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
-    marginRight: 12
+    marginRight: 12;
   },
-  timerText: {
-    fontSize: 14,
+  timerText: {,
+  fontSize: 14,
     fontWeight: 'bold',
     marginLeft: 4,
     fontFamily: 'monospace'
   },
-  closeButton: {
-    padding: 8
+  closeButton: {,
+  padding: 8;
   },
-  progressContainer: {
-    paddingHorizontal: 16,
+  progressContainer: {,
+  paddingHorizontal: 16,
     paddingVertical: 12,
     backgroundColor: '#F8F9FA'
   },
-  progressBar: {
-    height: 6,
+  progressBar: {,
+  height: 6,
     backgroundColor: '#E0E0E0',
     borderRadius: 3,
     overflow: 'hidden',
-    marginBottom: 8
+    marginBottom: 8;
   },
-  progressFill: {
-    height: '100%',
+  progressFill: {,
+  height: '100%',
     backgroundColor: '#4CAF50',
-    borderRadius: 3
+    borderRadius: 3;
   },
-  progressText: {
-    fontSize: 12,
+  progressText: {,
+  fontSize: 12,
     color: '#666',
     textAlign: 'center'
   },
-  content: {
-    flex: 1,
-    paddingHorizontal: 16
+  content: {,
+  flex: 1,
+    paddingHorizontal: 16;
   },
-  challengeInfo: {
-    paddingVertical: 16,
+  challengeInfo: {,
+  paddingVertical: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#F0F0F0'
   },
-  challengeTitle: {
-    fontSize: 20,
+  challengeTitle: {,
+  fontSize: 20,
     fontWeight: 'bold',
     color: '#FF5722',
-    marginBottom: 8
+    marginBottom: 8;
   },
-  challengeDescription: {
-    fontSize: 14,
+  challengeDescription: {,
+  fontSize: 14,
     color: '#666',
-    lineHeight: 20
+    lineHeight: 20;
   },
-  questionContainer: {
-    paddingVertical: 16
+  questionContainer: {,
+  paddingVertical: 16;
   },
-  questionText: {
-    fontSize: 18,
+  questionText: {,
+  fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
     lineHeight: 26,
-    marginBottom: 16
+    marginBottom: 16;
   },
-  questionImageContainer: {
-    alignItems: 'center',
-    marginBottom: 16
+  questionImageContainer: {,
+  alignItems: 'center',
+    marginBottom: 16;
   },
-  questionImage: {
-    width: screenWidth - 32,
+  questionImage: {,
+  width: screenWidth - 32,
     height: 200,
-    borderRadius: 8
+    borderRadius: 8;
   },
-  answersContainer: {
-    marginTop: 8
+  answersContainer: {,
+  marginTop: 8;
   },
-  answerOption: {
-    borderWidth: 2,
+  answerOption: {,
+  borderWidth: 2,
     borderColor: '#E0E0E0',
     borderRadius: 12,
     marginBottom: 12,
     backgroundColor: '#FFFFFF'
   },
-  selectedOption: {
-    borderColor: '#2196F3',
+  selectedOption: {,
+  borderColor: '#2196F3',
     backgroundColor: '#E3F2FD'
   },
-  correctOption: {
-    borderColor: '#4CAF50',
+  correctOption: {,
+  borderColor: '#4CAF50',
     backgroundColor: '#E8F5E9'
   },
-  wrongOption: {
-    borderColor: '#F44336',
+  wrongOption: {,
+  borderColor: '#F44336',
     backgroundColor: '#FFEBEE'
   },
-  optionContent: {
-    flexDirection: 'row',
+  optionContent: {,
+  flexDirection: 'row',
     alignItems: 'center',
-    padding: 16
+    padding: 16;
   },
-  optionIndicator: {
-    width: 32,
+  optionIndicator: {,
+  width: 32,
     height: 32,
     borderRadius: 16,
     backgroundColor: '#F5F5F5',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 12
+    marginRight: 12;
   },
-  selectedIndicator: {
-    backgroundColor: '#2196F3'
+  selectedIndicator: {,
+  backgroundColor: '#2196F3'
   },
-  correctIndicator: {
-    backgroundColor: '#4CAF50'
+  correctIndicator: {,
+  backgroundColor: '#4CAF50'
   },
-  wrongIndicator: {
-    backgroundColor: '#F44336'
+  wrongIndicator: {,
+  backgroundColor: '#F44336'
   },
-  optionLetter: {
-    fontSize: 16,
+  optionLetter: {,
+  fontSize: 16,
     fontWeight: 'bold',
     color: '#666'
   },
-  selectedLetter: {
-    color: '#FFFFFF'
+  selectedLetter: {,
+  color: '#FFFFFF'
   },
-  correctLetter: {
-    color: '#FFFFFF'
+  correctLetter: {,
+  color: '#FFFFFF'
   },
-  wrongLetter: {
-    color: '#FFFFFF'
+  wrongLetter: {,
+  color: '#FFFFFF'
   },
-  optionText: {
-    flex: 1,
+  optionText: {,
+  flex: 1,
     fontSize: 16,
     color: '#333',
-    lineHeight: 22
+    lineHeight: 22;
   },
-  selectedText: {
-    color: '#1976D2',
+  selectedText: {,
+  color: '#1976D2',
     fontWeight: '500'
   },
-  correctText: {
-    color: '#2E7D32',
+  correctText: {,
+  color: '#2E7D32',
     fontWeight: '500'
   },
-  wrongText: {
-    color: '#C62828',
+  wrongText: {,
+  color: '#C62828',
     fontWeight: '500'
   },
-  explanationContainer: {
-    marginTop: 16,
+  explanationContainer: {,
+  marginTop: 16,
     padding: 16,
     backgroundColor: '#F1F8E9',
-    borderRadius: 8
+    borderRadius: 8;
   },
-  explanationTitle: {
-    fontSize: 16,
+  explanationTitle: {,
+  fontSize: 16,
     fontWeight: 'bold',
     color: '#2E7D32',
-    marginBottom: 8
+    marginBottom: 8;
   },
-  explanationText: {
-    fontSize: 14,
+  explanationText: {,
+  fontSize: 14,
     color: '#388E3C',
-    lineHeight: 20
+    lineHeight: 20;
   },
-  footer: {
-    flexDirection: 'row',
+  footer: {,
+  flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 16,
@@ -645,8 +601,8 @@ const styles = StyleSheet.create({
     borderTopColor: '#E0E0E0',
     backgroundColor: '#F8F9FA'
   },
-  navButton: {
-    flexDirection: 'row',
+  navButton: {,
+  flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 12,
     paddingHorizontal: 20,
@@ -654,74 +610,74 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#4CAF50'
   },
-  primaryButton: {
-    backgroundColor: '#4CAF50'
+  primaryButton: {,
+  backgroundColor: '#4CAF50'
   },
-  disabledButton: {
-    borderColor: '#E0E0E0',
+  disabledButton: {,
+  borderColor: '#E0E0E0',
     backgroundColor: '#F5F5F5'
   },
-  navButtonText: {
-    fontSize: 16,
+  navButtonText: {,
+  fontSize: 16,
     color: '#4CAF50',
     fontWeight: '500',
-    marginHorizontal: 4
+    marginHorizontal: 4;
   },
-  primaryButtonText: {
-    color: '#FFFFFF'
+  primaryButtonText: {,
+  color: '#FFFFFF'
   },
-  disabledText: {
-    color: '#CCC'
+  disabledText: {,
+  color: '#CCC'
   },
-  resultsContainer: {
-    paddingVertical: 32,
+  resultsContainer: {,
+  paddingVertical: 32,
     alignItems: 'center'
   },
-  scoreDisplay: {
-    alignItems: 'center',
-    marginBottom: 32
+  scoreDisplay: {,
+  alignItems: 'center',
+    marginBottom: 32;
   },
-  scoreText: {
-    fontSize: 48,
+  scoreText: {,
+  fontSize: 48,
     fontWeight: 'bold',
     color: '#4CAF50',
-    marginVertical: 16
+    marginVertical: 16;
   },
-  accuracyText: {
-    fontSize: 16,
+  accuracyText: {,
+  fontSize: 16,
     color: '#666'
   },
-  resultDetails: {
-    width: '100%',
-    marginBottom: 32
+  resultDetails: {,
+  width: '100%',
+    marginBottom: 32;
   },
-  resultItem: {
-    flexDirection: 'row',
+  resultItem: {,
+  flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 12,
     paddingHorizontal: 16,
     backgroundColor: '#F8F9FA',
     borderRadius: 8,
-    marginBottom: 8
+    marginBottom: 8;
   },
-  resultLabel: {
-    fontSize: 14,
+  resultLabel: {,
+  fontSize: 14,
     color: '#666',
     marginLeft: 8,
-    flex: 1
+    flex: 1;
   },
-  resultValue: {
-    fontSize: 14,
+  resultValue: {,
+  fontSize: 14,
     fontWeight: 'bold',
     color: '#333'
   },
-  resultActions: {
-    flexDirection: 'row',
+  resultActions: {,
+  flexDirection: 'row',
     justifyContent: 'space-around',
     width: '100%'
   },
-  reviewButton: {
-    flexDirection: 'row',
+  reviewButton: {,
+  flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 12,
     paddingHorizontal: 24,
@@ -729,14 +685,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#2196F3'
   },
-  reviewButtonText: {
-    fontSize: 16,
+  reviewButtonText: {,
+  fontSize: 16,
     color: '#2196F3',
     marginLeft: 8,
     fontWeight: '500';
-  },completeButton: {flexDirection: 'row',alignItems: 'center',paddingVertical: 12,paddingHorizontal: 24,borderRadius: 8,backgroundColor: '#4CAF50';
+  },completeButton: {
+      flexDirection: "row",
+      alignItems: 'center',paddingVertical: 12,paddingHorizontal: 24,borderRadius: 8,backgroundColor: '#4CAF50';
   },completeButtonText: {fontSize: 16,color: '#FFFFFF',marginLeft: 8,fontWeight: '500';
   };
 });
-
-export default ChallengeModal; 
+export default ChallengeModal;

@@ -1,5 +1,4 @@
 import { performance } from "perf_hooks";
-
 import React from "react";
 // Mock store for testing * const mockStore = configureStore({ reducer: { */;
     // Add your reducers here *     } */;
@@ -17,7 +16,7 @@ describe("ChatChannelItem", () => {
   it("should handle state updates correctly, async (); => {", () => {
     const { result   } = renderHook((); => ChatChannelItem(), { wrapper });
     await act(async  => {
-      // Trigger state updates *        */// result.current.someFunction() *     }) */;
+      / result.current.someFunction() *     }) */;
     // Add assertions for state changes *     expect(result.current).toBeDefined() */
   });
   it("should handle side effects properly", async (); => {
@@ -43,13 +42,13 @@ describe("ChatChannelItem Performance Tests, () => {", () => {
     const iterations = 10;
     const startTime = performance.now();
     for (let i = 0; i < iterations; i++) {
-      // Execute performance-critical functions *       ChatChannelItem( */// test params )/    });
+      / test params )/    });
     const endTime = performance.now();
     const averageTime = (endTime - startTime) / iterations/;
     // Should execute within 1ms on average *     expect(averageTime).toBeLessThan(1) */
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset *     ChatChannelItem(largeDataset) */
     const endTime = performance.now();

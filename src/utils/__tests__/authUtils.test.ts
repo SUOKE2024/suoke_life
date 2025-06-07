@@ -1,6 +1,5 @@
 import { validateEmail, validatePhone, validatePassword, getPasswordStrength, validateUsername, validateVerificationCode, validateLoginForm, validateRegisterForm, validateForgotPasswordForm, storeAuthTokens, getAuthToken, getRefreshToken, clearAuthTokens, isAuthenticated, formatAuthError, generateDeviceId, storeDeviceId, getDeviceId } from "../authUtils";
 import { validateEmail, validatePhone, validatePassword, getPasswordStrength, validateUsername, validateVerificationCode, validateLoginForm, validateRegisterForm, validateForgotPasswordForm, storeAuthTokens, getAuthToken, getRefreshToken, clearAuthTokens, isAuthenticated, formatAuthError, generateDeviceId, storeDeviceId, getDeviceId } from "../authUtils";
-
 describe("authUtils", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -433,7 +432,7 @@ validateEmail(// test params);
 expect(averageTime).toBeLessThan(1);
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
 validateEmail(largeDataset);

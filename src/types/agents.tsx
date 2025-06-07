@@ -1,5 +1,4 @@
 import React from 'react';
-
 // 索克生活四智能体系统类型定义   基于README.md第1013-1063行的智能体描述
 // 智能体类型枚举
 export enum AgentType {
@@ -54,7 +53,7 @@ export interface Agent {
 }
 // 小艾智能体接口 - 首页聊天频道版主 & 四诊协调智能体
 export interface XiaoaiAgent extends Agent {
-  type: AgentType.XIAOAI;
+  type: AgentType.XIAOAI,
   capabilities: [
     'voice_interaction', // 实时语音交互与多语种支持
     'dialect_recognition', // 方言识别与地域化交流
@@ -67,8 +66,8 @@ export interface XiaoaiAgent extends Agent {
     'patient_education', // 患者教育与健康科普
     'appointment_scheduling' // 预约挂号与就医引导
   ];
-  technicalFeatures: {
-    realTimeVoiceProcessing: boolean; // 实时语音处理,
+  technicalFeatures: {,
+  realTimeVoiceProcessing: boolean; // 实时语音处理,
     multiLanguageSupport: boolean; // 多语言支持,
     dialectRecognition: boolean; // 方言识别,
     tcmDiagnosisAI: boolean; // 中医诊断AI,
@@ -80,7 +79,7 @@ export interface XiaoaiAgent extends Agent {
 }
 // 小克智能体接口 - SUOKE频道版主 & 服务管理智能体
 export interface XiaokeAgent extends Agent {
-  type: AgentType.XIAOKE;
+  type: AgentType.XIAOKE,
   capabilities: [
     'service_subscription_management', // 服务订阅管理
     'agricultural_product_customization', // 农产品个性化定制
@@ -93,8 +92,8 @@ export interface XiaokeAgent extends Agent {
     'inventory_management', // 库存管理
     'quality_assurance' // 质量保证
   ];
-  technicalFeatures: {
-    subscriptionManagement: boolean; // 订阅管理系统,
+  technicalFeatures: {,
+  subscriptionManagement: boolean; // 订阅管理系统,
     agriculturalDataAnalysis: boolean; // 农业数据分析,
     supplyChainTracking: boolean; // 供应链追踪,
     blockchainTraceability: boolean; // 区块链溯源,
@@ -106,7 +105,7 @@ export interface XiaokeAgent extends Agent {
 }
 // 老克智能体接口 - 探索频道版主 & 知识传播智能体
 export interface LaokeAgent extends Agent {
-  type: AgentType.LAOKE;
+  type: AgentType.LAOKE,
   capabilities: [
     'knowledge_retrieval', // 知识检索与问答
     'educational_content_creation', // 教育内容创作
@@ -119,8 +118,8 @@ export interface LaokeAgent extends Agent {
     'knowledge_graph_navigation', // 知识图谱导航
     'personalized_learning_paths' // 个性化学习路径
   ];
-  technicalFeatures: {
-    knowledgeGraphProcessing: boolean; // 知识图谱处理,
+  technicalFeatures: {,
+  knowledgeGraphProcessing: boolean; // 知识图谱处理,
     naturalLanguageGeneration: boolean; // 自然语言生成,
     interactiveLearningPlatforms: boolean; // 互动学习平台,
     gameEngineIntegration: boolean; // 游戏引擎集成,
@@ -132,7 +131,7 @@ export interface LaokeAgent extends Agent {
 }
 // 索儿智能体接口 - LIFE频道版主 & 生活健康管理智能体
 export interface SoerAgent extends Agent {
-  type: AgentType.SOER;
+  type: AgentType.SOER,
   capabilities: [
     'lifestyle_health_management', // 生活方式健康管理
     'sensor_data_integration', // 传感器数据整合
@@ -145,8 +144,8 @@ export interface SoerAgent extends Agent {
     'stress_management', // 压力管理
     'social_wellness_coordination' // 社交健康协调
   ];
-  technicalFeatures: {
-    iotSensorIntegration: boolean; // IoT传感器集成,
+  technicalFeatures: {,
+  iotSensorIntegration: boolean; // IoT传感器集成,
     healthDataAnalytics: boolean; // 健康数据分析,
     emotionalAISupport: boolean; // 情感AI支持,
     personalizedWellnessPlans: boolean; // 个性化健康计划,
@@ -210,11 +209,11 @@ export interface ApiResponse<T> {
   success: boolean;
   data?: T;
   error?: {
-    code: string;
-    message: string;
+    code: string,
+  message: string;
     details?: unknown;
   };
-  timestamp: Date;
+  timestamp: Date,
   requestId: string;
   agentType?: AgentType;
 }
@@ -224,32 +223,32 @@ export interface AgentConfiguration {
   settings: Record<string, any>;
   capabilities: string[];
   technicalFeatures: Record<string, boolean>;
-  resourceLimits: {
-    maxConcurrentSessions: number;
+  resourceLimits: {;
+  maxConcurrentSessions: number;
     maxMemoryUsage: number;
-    maxCpuUsage: number;
-  };
+  maxCpuUsage: number;
+};
   lastUpdated: Date;
 }
 // 智能体性能指标接口
 export interface AgentMetrics {
   agentType: AgentType;
   timestamp: Date;
-  performance: {
-    responseTime: number;
+  performance: {;
+  responseTime: number;
     throughput: number;
-    errorRate: number;
+  errorRate: number;
     successRate: number;
+};
+  resources: {,
+  cpuUsage: number;
+    memoryUsage: number,
+  networkUsage: number;
   };
-  resources: {
-    cpuUsage: number;
-    memoryUsage: number;
-    networkUsage: number;
-  };
-  sessions: {
-    active: number;
-    total: number;
-    averageDuration: number;
+  sessions: {,
+  active: number;
+    total: number,
+  averageDuration: number;
   };
 }
 // 四诊聚合结果接口
@@ -257,42 +256,42 @@ export interface FourDiagnosisAggregationResult {
   sessionId: string;
   userId: string;
   timestamp: Date;
-  diagnosisResults: {
-    looking: {
-      faceColor: string;
+  diagnosisResults: {;
+    looking: {;
+  faceColor: string;
       tongueImage: string;
-      bodyPosture: string;
+  bodyPosture: string;
+      confidence: number;
+};
+    listening: {,
+  voiceQuality: string;
+      breathingPattern: string,
+  heartRate: number;
       confidence: number;
     };
-    listening: {
-      voiceQuality: string;
-      breathingPattern: string;
-      heartRate: number;
+    inquiry: {,
+  symptoms: string[];
+      medicalHistory: string[],
+  lifestyle: Record<string, any>;
       confidence: number;
     };
-    inquiry: {
-      symptoms: string[];
-      medicalHistory: string[];
-      lifestyle: Record<string, any>;
-      confidence: number;
-    };
-    palpation: {
-      pulseType: string;
-      pulseRate: number;
-      bodyTemperature: number;
+    palpation: {,
+  pulseType: string;
+      pulseRate: number,
+  bodyTemperature: number;
       confidence: number;
     };
   };
-  syndromeAnalysis: {
-    primarySyndrome: string;
-    secondarySyndromes: string[];
-    confidence: number;
+  syndromeAnalysis: {,
+  primarySyndrome: string;
+    secondarySyndromes: string[],
+  confidence: number;
     recommendations: string[];
   };
-  overallAssessment: {
-    healthScore: number;
-    riskLevel: 'low' | 'medium' | 'high';
-    urgency: 'routine' | 'priority' | 'urgent';
+  overallAssessment: {,
+  healthScore: number;
+    riskLevel: 'low' | 'medium' | 'high',
+  urgency: 'routine' | 'priority' | 'urgent';
     followUpRequired: boolean;
   };
 }

@@ -1,5 +1,4 @@
-import {import { usePerformanceMonitor } from ../../hooks/////    usePerformanceMonitor
-
+import {import { usePerformanceMonitor } from ../../hooks/    usePerformanceMonitor;
 import React, { useRef, useEffect, useCallback } from "react";
   TouchableOpacity,
   Text,
@@ -10,7 +9,7 @@ import React, { useRef, useEffect, useCallback } from "react";
   Animated,
   Platform,
   AccessibilityRole;
-} from "../../placeholder";react-native
+} from "../../placeholder";react-native;
 // 按钮变体类型
 export type ButtonVariant = "primary | "secondary" | outline" | "ghost | "danger" | success" | "warnin;g;";
 // 按钮尺寸类型
@@ -20,7 +19,6 @@ export type ButtonShape = rounded" | "square | "circle;";
 // 按钮属性接口
 export interface ButtonProps {
   // 基础属性;
-;
 title?: string;
   onPress?: () => void;
   disabled?: boolean;
@@ -35,7 +33,7 @@ leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   iconOnly?: boolean;
   // 动画属性
-animationType?: none" | "scale | "bounce" | pulse
+animationType?: none" | "scale | "bounce" | pulse;
   hapticFeedback?: boolean;
   // 无障碍属性
 accessibilityLabel?: string;
@@ -55,7 +53,7 @@ export const Button: React.FC<ButtonProps>  = ({
   loading = false,
   variant = "primary,"
   size = "medium",
-  shape = rounded","
+  shape = rounded",
   fullWidth = false,
   leftIcon,
   rightIcon,
@@ -69,7 +67,7 @@ export const Button: React.FC<ButtonProps>  = ({
   textStyle,testID,children;
 }) => {}
   // 性能监控
-const performanceMonitor = usePerformanceMonitor({componentName: Button","
+const performanceMonitor = usePerformanceMonitor({componentName: Button",
     trackRender: true,
     trackMemory: true,
     warnThreshold: 50, // ms;
@@ -78,7 +76,7 @@ const performanceMonitor = usePerformanceMonitor({componentName: Button","
 const scaleValue = useRef(new Animated.Value(1)).current;
   const opacityValue = useRef(new Animated.Value(1)).current;
   // 处理按钮按下
-const handlePressIn = useCallback(() => {
+const handlePressIn = useCallback() => {
     if (disabled || loading) return;
     // 动画效果
 switch (animationType) {
@@ -107,7 +105,7 @@ switch (animationType) {
     }
   }, [disabled, loading, animationType, scaleValue, opacityValue]);
   // 处理按钮释放
-const handlePressOut = useCallback(() => {
+const handlePressOut = useCallback() => {
     if (disabled || loading) return;
     // 恢复动画
 if (animationType === "scale || animationType === "bounce") {"
@@ -118,13 +116,13 @@ if (animationType === "scale || animationType === "bounce") {"
     }
   }, [disabled, loading, animationType, scaleValue]);
   // 处理按钮点击
-const handlePress = useCallback(() => {
+const handlePress = useCallback() => {
     if (disabled || loading) return;
     onPress?.();
   }, [disabled, loading, onPress]);
   // 获取按钮样式
 const getButtonStyles = (): ViewStyle => {}
-    const baseStyles: ViewStyle = {flexDirection: row","
+    const baseStyles: ViewStyle = {flexDirection: row",
       alignItems: "center,",
       justifyContent: "center",
       borderWidth: 1,borderColor: transparent"};"
@@ -144,90 +142,92 @@ const disabledStyles: ViewStyle = disabled ? { opacity: 0.5 } : {};
   };
   // 获取尺寸样式
 const getSizeStyles = (): ViewStyle => {}
-    const sizes = {small: {
-        paddingHorizontal: 12,
+    const sizes = {small: {,
+  paddingHorizontal: 12,
         paddingVertical: 8,
         minHeight: 32,
         minWidth: 64},
-      medium: {
-        paddingHorizontal: 16,
+      medium: {,
+  paddingHorizontal: 16,
         paddingVertical: 12,
         minHeight: 44,
         minWidth: 88},
-      large: {
-        paddingHorizontal: 20,
+      large: {,
+  paddingHorizontal: 20,
         paddingVertical: 16,
         minHeight: 52,
         minWidth: 112},
-      xlarge: {
-        paddingHorizontal: 24,
+      xlarge: {,
+  paddingHorizontal: 24,
         paddingVertical: 20,
         minHeight: 60,minWidth: 136}};
     return sizes[size];
   };
   // 获取变体样式
 const getVariantStyles = (): ViewStyle => {}
-    const variants = {primary: {
-        backgroundColor: #007AFF","
+    const variants = {primary: {,
+  backgroundColor: #007AFF",
         borderColor: "#007AFF},",
-      secondary: {
-        backgroundColor: "#5856D6",
+      secondary: {,
+  backgroundColor: "#5856D6",
         borderColor: #5856D6"},"
-      outline: {
-        backgroundColor: "transparent,",
+      outline: {,
+  backgroundColor: "transparent,",
         borderColor: "#007AFF",
         borderWidth: 1},
-      ghost: {
-        backgroundColor: transparent","
+      ghost: {,
+  backgroundColor: transparent",
         borderColor: "transparent},",
-      danger: {
-        backgroundColor: "#FF3B30",
+      danger: {,
+  backgroundColor: "#FF3B30",
         borderColor: #FF3B30"},"
-      success: {
-        backgroundColor: "#34C759,",
+      success: {,
+  backgroundColor: "#34C759,",
         borderColor: "#34C759"},
-      warning: {
-        backgroundColor: #FF9500","
+      warning: {,
+  backgroundColor: #FF9500",
         borderColor: "#FF9500}};"
     return variants[variant];
   };
   // 获取形状样式
 const getShapeStyles = (): ViewStyle => {}
-    const shapes = {rounded: {
-        borderRadius: 8},
-      square: {
-        borderRadius: 0},
+    const shapes = {rounded: {,
+  borderRadius: 8},
+      square: {,
+  borderRadius: 0},
       circle: {borderRadius: 50}};
     return shapes[shape];
   };
   // 获取文本样式
 const getTextStyles = (): TextStyle => {}
-    const baseStyles: TextStyle = {fontWeight: "600",textAlign: center"};"
+    const baseStyles: TextStyle = {
+      fontWeight: "600",
+      textAlign: center"};"
     // 尺寸文本样式
-const sizeTextStyles = {small: {
-        fontSize: 14,
+const sizeTextStyles = {small: {,
+  fontSize: 14,
         lineHeight: 20},
-      medium: {
-        fontSize: 16,
+      medium: {,
+  fontSize: 16,
         lineHeight: 24},
-      large: {
-        fontSize: 18,
+      large: {,
+  fontSize: 18,
         lineHeight: 28},
-      xlarge: {
-        fontSize: 20,lineHeight: 32}};
+      xlarge: {,
+  fontSize: 20,lineHeight: 32}};
     // 变体文本样式
-const variantTextStyles = {primary: {
-        color: "#FFFFFF},",
-      secondary: {
-        color: "#FFFFFF"},
-      outline: {
-        color: #007AFF"},"
-      ghost: {
-        color: "#007AFF},",
-      danger: {
-        color: "#FFFFFF"},
-      success: {
-        color: #FFFFFF"},"
+const variantTextStyles = {primary: {,
+  color: "#FFFFFF},",
+      secondary: {,
+  color: "#FFFFFF"},
+      outline: {,
+  color: #007AFF"},"
+      ghost: {,
+  color: "#007AFF},",
+      danger: {,
+  color: "#FFFFFF"},
+      success: {,
+  color: #FFFFFF"},"
       warning: {color: "#FFFFFF}};"
     return {...baseStyles,...sizeTextStyles[size],...variantTextStyles[variant]};
   };
@@ -238,20 +238,20 @@ const renderContent = () => {}
         <ActivityIndicator;
 size="small"
           color={variant === "outline" || variant === ghost" ? "#007AFF : "#FFFFFF'}"'
-        /////    >
+        /    >
       );
     }
     return (;
       <>;
-        {leftIcon && <Text style={styles.icon}>{leftIcon}</////    Text>};
+        {leftIcon && <Text style={styles.icon}>{leftIcon}</    Text>};
         {!iconOnly && title && (;
           <Text style={[getTextStyles(), textStyle]}>;
             {title};
-          </////    Text>;
+          </    Text>;
         )};
         {children};
-        {rightIcon && <Text style={styles.icon}>{rightIcon}</////    Text>};
-      </////    >;
+        {rightIcon && <Text style={styles.icon}>{rightIcon}</    Text>};
+      </    >;
     );
   };
   return (;
@@ -274,8 +274,8 @@ style={[getButtonStyles(), style]}
         activeOpacity={0.8}
       >
         {renderContent()}
-      </////    TouchableOpacity>
-    </////    Animated.View>
+      </    TouchableOpacity>
+    </    Animated.View>
   );
 };
 const styles = StyleSheet.create({icon: {marginHorizontal: 4}});

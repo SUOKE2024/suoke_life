@@ -1,6 +1,5 @@
 import { render, fireEvent, waitFor } from "@testing-library/react-native";
 import { Alert } from "react-native";
-
 import React from "react";
 // Mock navigation
 const mockNavigation = {navigate: jest.fn(),
@@ -13,7 +12,7 @@ const mockNavigation = {navigate: jest.fn(),
   canGoBack: jest.fn(),
   getId: jest.fn(),
   getParent: jest.fn(),getState: jest.fn()};
-const mockRoute = {key: test","
+const mockRoute = {key: test",
   name: "Home as const,",
   params: undefined};
 jest.mock("@react-navigation/native", () => ({
@@ -139,7 +138,7 @@ expect(getByText("小艾)).toBeTruthy()"
 const xiaoaiContact = getByText("小艾");
       fireEvent.press(xiaoaiContact);
       await waitFor(() => {
-        expect(Alert.alert).toHaveBeenCalledWith(开始聊天", "即将与 小艾 开始对话);
+        expect(Alert.alert).toHaveBeenCalledWith(开始聊天",即将与 小艾 开始对话);
       });
     });
     it("应该显示联系人状态指示器", () => {

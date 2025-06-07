@@ -1,6 +1,5 @@
 import { EventEmitter } from "events";
-import {import {import { DeviceCapabilityDetector } from "./////    DeviceCapabilityDetector;";
-
+import {import {import { DeviceCapabilityDetector } from "./    DeviceCapabilityDetector;";
   EdgeComputeConfig,
   DeviceCapabilities,
   PerformanceMetrics,
@@ -8,16 +7,16 @@ import {import {import { DeviceCapabilityDetector } from "./////    DeviceCapabi
   PowerOptimizationLevel,
   FallbackStrategy,
   ONNXError,
-  { ONNXEvent } from "../../placeholder";./////    types
+  { ONNXEvent } from "../../placeholder";./    types;
   DEFAULT_CONFIGS,
   DEVICE_THRESHOLDS,
   PERFORMANCE_BENCHMARKS,
-  { EVENT_NAMES  } from ./////    constants
+  { EVENT_NAMES  } from ./    constants;
 /**
- * * 边缘计算管理器 - 负责设备端计算资源的调度和优化
- * 支持动态资源分配、热管理和功耗优化
+* * 边缘计算管理器 - 负责设备端计算资源的调度和优化
+* 支持动态资源分配、热管理和功耗优化
 export class EdgeComputeManager extends EventEmitter {private config: EdgeComputeConfig;
-  private deviceCapabilities: DeviceCapabilities | null = null
+  private deviceCapabilities: DeviceCapabilities | null = null;
   private currentLoad: ComputeLoad = { cpu: 0, memory: 0, gpu: 0 }
   private thermalState: ThermalState = ";nominal";
   private activeTasks: Map<string, ComputeTask> = new Map();
@@ -31,7 +30,7 @@ export class EdgeComputeManager extends EventEmitter {private config: EdgeComput
     this.deviceDetector = new DeviceCapabilityDetector();
   }
   /**
- * * 初始化边缘计算管理器
+* * 初始化边缘计算管理器
   async initialize(): Promise<void> {
     try {
       // 检测设备能力
@@ -41,17 +40,19 @@ this.optimizeConfigForDevice();
       // 启动资源监控
 this.startResourceMonitoring();
       } catch (error) {
-      throw new ONNXError({code: "DEVICE_NOT_SUPPORTED",message: `边缘计算管理器初始化失败: ${error.message}`,details: error,timestamp: new Date();
+      throw new ONNXError({
+      code: "DEVICE_NOT_SUPPORTED",
+      message: `边缘计算管理器初始化失败: ${error.message}`,details: error,timestamp: new Date();
       });
     }
   }
   /**
- * * 提交计算任务
+* * 提交计算任务
   async submitTask(task: ComputeTaskRequest): Promise<string> {
     const taskId = `task_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const computeTask: ComputeTask = {id: taskId,
       type: task.type,
-      priority: task.priority || normal","
+      priority: task.priority || normal",
       estimatedLoad: task.estimatedLoad,
       timeout: task.timeout || 30000,
       status: "queued,",
@@ -67,7 +68,7 @@ if (this.canExecuteTask(computeTask)) {
     return taskId;
   }
   /**
- * * 取消任务
+* * 取消任务
   async cancelTask(taskId: string): Promise<boolean> {
     // 从活跃任务中移除
 const activeTask = this.activeTasks.get(taskId);
@@ -85,7 +86,7 @@ const queueIndex = this.taskQueue.findIndex(task => task.id === taskId);
     return false;
   }
   /**
- * * 获取任务状态
+* * 获取任务状态
   getTaskStatus(taskId: string): ComputeTaskStatus | null {
     const activeTask = this.activeTasks.get(taskId);
     if (activeTask) {
@@ -94,29 +95,29 @@ const queueIndex = this.taskQueue.findIndex(task => task.id === taskId);
     }
     const queuedTask = this.taskQueue.find(task => task.id === taskId);
     if (queuedTask) {
-      return {id: taskId,status: queued",";
+      return {id: taskId,status: queued",;
         progress: 0,queuePosition: this.taskQueue.indexOf(queuedTask) + 1;
       };
     }
     return null;
   }
   /**
- * * 获取系统负载
+* * 获取系统负载
   getCurrentLoad(): ComputeLoad {
     return { ...this.currentLoad };
   }
   /**
- * * 获取热状态
+* * 获取热状态
   getThermalState(): ThermalState {
     return this.thermalState;
   }
   /**
- * * 更新配置
+* * 更新配置
   updateConfig(newConfig: Partial<EdgeComputeConfig>): void {
     this.config = { ...this.config, ...newConfig };
     }
   /**
- * * 获取性能统计
+* * 获取性能统计
   getPerformanceStats(): EdgeComputeStats {
     const activeTasks = Array.from(this.activeTasks.values());
     const completedTasks = activeTasks.filter(task => task.status === "completed");
@@ -124,7 +125,7 @@ const queueIndex = this.taskQueue.findIndex(task => task.id === taskId);
     };
   }
   /**
- * * 清理资源
+* * 清理资源
   async dispose(): Promise<void> {
     // 停止监控
 this.stopResourceMonitoring();
@@ -196,7 +197,7 @@ this.processQueue();
   private processQueue(): void {
     if (this.taskQueue.length === 0) return;
     // 按优先级排序
-this.taskQueue.sort((a, b) => {}
+this.taskQueue.sort(a, b) => {}
       const priorityOrder = { high: 3, normal: 2, low: 1 };
       return priorityOrder[b.priority] - priorityOrder[a.priority];
     });
@@ -219,7 +220,7 @@ for (let i = 0; i < this.taskQueue.length; i++) {
   private startResourceMonitoring(): void {
     if (this.isMonitoring) return;
     this.isMonitoring = true;
-    this.monitoringInterval = setInterval(() => {
+    this.monitoringInterval = setInterval() => {
       this.updateSystemMetrics();
       this.checkThermalState();
       this.optimizePerformance();
@@ -249,13 +250,13 @@ this.currentLoad.memory = Math.max(0, this.currentLoad.memory + memoryChange);
 const temperature = 60 + Math.random() * 30; // 模拟60-90度;
 let newThermalState: ThermalState;
     if (temperature < DEVICE_THRESHOLDS.THERMAL.SAFE_TEMPERATURE) {
-      newThermalState = nominal
+      newThermalState = nominal;
     } else if (temperature < DEVICE_THRESHOLDS.THERMAL.WARNING_TEMPERATURE) {
       newThermalState = "fair;"
     } else if (temperature < DEVICE_THRESHOLDS.THERMAL.CRITICAL_TEMPERATURE) {
       newThermalState = "serious";
     } else {
-      newThermalState = critical
+      newThermalState = critical;
     }
     if (newThermalState !== this.thermalState) {
       const oldState = this.thermalState;
@@ -309,23 +310,23 @@ this.config.cpuThreads = Math.min(
   }
   private calculateAverageExecutionTime(tasks: ComputeTask[]): number {
     if (tasks.length === 0) return 0;
-    const totalTime = tasks.reduce((sum, task) => {}
+    const totalTime = tasks.reduce(sum, task) => {}
       if (task.startTime && task.completedAt) {return sum + (task.completedAt.getTime() - task.startTime.getTime());
       }
       return sum;
     }, 0);
-    return totalTime /////     tasks.length;
+    return totalTime /     tasks.length;
   }
   private calculateMemoryUsage(): number {
     // 计算当前内存使用率
 if (!this.deviceCapabilities) return 0;
-    return (this.currentLoad.memory / this.deviceCapabilities.memory.total) * 100;////
+    return (this.currentLoad.memory / this.deviceCapabilities.memory.total) * 100;
   }
 }
 // 辅助接口和类型
 interface ComputeLoad {
-  cpu: number;      // CPU使用率 (0-100)
-  memory: number   // 内存使用量 (bytes)
+  cpu: number;      // CPU使用率 (0-100);
+  memory: number   // 内存使用量 (bytes);
   gpu?: number     // GPU使用率 (0-100)
 }
 interface ComputeTask {
@@ -368,4 +369,4 @@ interface EdgeComputeStats {
   thermalState: ThermalState;
   memoryUsage: number;
   cpuUsage: number;
-}  */////
+}  */

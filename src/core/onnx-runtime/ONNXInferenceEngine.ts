@@ -1,10 +1,9 @@
 import { InferenceSession, Tensor } from "onnxruntime-react-native";
-import { EventEmitter } from "../../placeholder";events
-import {import {import { DeviceCapabilityDetector } from "../../placeholder";./////    DeviceCapabilityDetector
-import { InferenceCache } from ./////    InferenceCache
-import { ModelLoader } from "./////    ModelLoader";
-import { TensorProcessor } from "../../placeholder";./////    TensorProcessor
-
+import { EventEmitter } from "../../placeholder";events;
+import {import {import { DeviceCapabilityDetector } from "../../placeholder";./    DeviceCapabilityDetector;
+import { InferenceCache } from ./    InferenceCache;
+import { ModelLoader } from "./    ModelLoader";
+import { TensorProcessor } from "../../placeholder";./    TensorProcessor;
   ONNXModel,
   InferenceSession as CustomInferenceSession,
   TensorData,
@@ -14,15 +13,15 @@ import { TensorProcessor } from "../../placeholder";./////    TensorProcessor
   ONNXError,
   ONNXEvent,
   ExecutionProvider,
-  { ModelOptimizationOptions } from ./////    types
+  { ModelOptimizationOptions } from ./    types;
   DEFAULT_CONFIGS,
   PROVIDER_PRIORITY,
   ERROR_MESSAGES,
   TIMEOUTS,
-  { EVENT_NAMES  } from "./////    constants";
+  { EVENT_NAMES  } from "./    constants";
 /**
- * * ONNX推理引擎 - 设备端AI推理的核心组件
- * 支持多种执行提供者、模型优化、缓存和性能监控
+* * ONNX推理引擎 - 设备端AI推理的核心组件
+* 支持多种执行提供者、模型优化、缓存和性能监控
 export class ONNXInferenceEngine extends EventEmitter {private sessions: Map<string, InferenceSession> = new Map();
   private sessionMetadata: Map<string, CustomInferenceSession> = new Map();
   private models: Map<string, ONNXModel> = new Map();
@@ -40,7 +39,7 @@ export class ONNXInferenceEngine extends EventEmitter {private sessions: Map<str
     this.tensorProcessor = new TensorProcessor();
   }
   /**
- * * 初始化推理引擎
+* * 初始化推理引擎
   async initialize(): Promise<void> {
     try {
       // 检测设备能力
@@ -51,12 +50,12 @@ await this.cache.initialize();
 await this.warmupEngine();
       this.isInitialized = true;
       this.emit(EVENT_NAMES.DEVICE_CAPABILITY_DETECTED, {
-        type: "device_capability_detected,",
-        timestamp: new Date(),
+      type: "device_capability_detected,",
+      timestamp: new Date(),
         data: this.deviceDetector.getCapabilities();
       } as ONNXEvent);
       } catch (error) {
-      const onnxError: ONNXError = {code: DEVICE_NOT_SUPPORTED","
+      const onnxError: ONNXError = {code: DEVICE_NOT_SUPPORTED",
         message: `引擎初始化失败: ${error.message}`,
         details: error,
         timestamp: new Date();
@@ -65,7 +64,7 @@ await this.warmupEngine();
     }
   }
   /**
- * * 加载ONNX模型
+* * 加载ONNX模型
   async loadModel(
     model: ONNXModel,
     options?: ModelLoadOptions;
@@ -81,7 +80,7 @@ const cachedSession = await this.cache.getModel(model.id);
       if (cachedSession) {
         this.sessions.set(sessionId, cachedSession);
         this.emit(EVENT_NAMES.CACHE_HIT, {
-          type: cache_hit","
+          type: cache_hit",
           timestamp: new Date(),
           data: { modelId: model.id, sessionId }
         } as ONNXEvent);
@@ -92,8 +91,8 @@ const session = await this.createSession(model, options);
         // 缓存模型
 await this.cache.setModel(model.id, session);
         this.emit(EVENT_NAMES.CACHE_MISS, {
-          type: "cache_miss,",
-          timestamp: new Date(),
+      type: "cache_miss,",
+      timestamp: new Date(),
           data: { modelId: model.id, sessionId }
         } as ONNXEvent);
       }
@@ -117,15 +116,15 @@ if (options?.warmupRuns && options.warmupRuns > 0) {
         await this.warmupModel(sessionId, options.warmupRuns, options.preloadInputs);
       }
       this.emit(EVENT_NAMES.MODEL_LOADED, {
-        type: "model_loaded",
-        timestamp: new Date(),
+      type: "model_loaded",
+      timestamp: new Date(),
         data: { modelId: model.id, sessionId, loadTime },
         sessionId,
         modelId: model.id;
       } as ONNXEvent);
       return sessionId;
     } catch (error) {
-      const onnxError: ONNXError = {code: MODEL_LOAD_FAILED","
+      const onnxError: ONNXError = {code: MODEL_LOAD_FAILED",
         message: `模型加载失败: ${error.message}`,
         details: error,
         timestamp: new Date(),
@@ -136,7 +135,7 @@ if (options?.warmupRuns && options.warmupRuns > 0) {
     }
   }
   /**
- * * 执行推理
+* * 执行推理
   async runInference(
     sessionId: string,
     inputs: Map<string, TensorData>
@@ -150,8 +149,8 @@ if (options?.warmupRuns && options.warmupRuns > 0) {
     const memoryBefore = await this.getMemoryUsage();
     try {
       this.emit(EVENT_NAMES.INFERENCE_STARTED, {
-        type: "inference_started",
-        timestamp: new Date(),
+      type: "inference_started",
+      timestamp: new Date(),
         data: { sessionId, inputCount: inputs.size },
         sessionId,
         modelId: metadata.modelId;
@@ -161,7 +160,7 @@ const cacheKey = this.generateInferenceCacheKey(sessionId, inputs);
       const cachedResult = await this.cache.getInference(cacheKey);
       if (cachedResult) {
         this.emit(EVENT_NAMES.CACHE_HIT, {
-          type: cache_hit","
+          type: cache_hit",
           timestamp: new Date(),
           data: { sessionId, cacheKey }
         } as ONNXEvent);
@@ -202,23 +201,24 @@ this.updatePerformanceMetrics(sessionId, {
       // 更新会话最后使用时间
 metadata.lastUsed = new Date();
       this.emit(EVENT_NAMES.INFERENCE_COMPLETED, {
-        type: "inference_completed,",
-        timestamp: new Date(),
+      type: "inference_completed,",
+      timestamp: new Date(),
         data: { sessionId, latency, memoryUsage },
         sessionId,
         modelId: metadata.modelId;
       } as ONNXEvent);
       return result;
     } catch (error) {
-      const onnxError: ONNXError = {code: "INFERENCE_FAILED",
-        message: `推理执行失败: ${error.message}`,
+      const onnxError: ONNXError = {
+      code: "INFERENCE_FAILED",
+      message: `推理执行失败: ${error.message}`,
         details: error,
         timestamp: new Date(),
         sessionId,
         modelId: metadata.modelId;
       };
       this.emit(EVENT_NAMES.INFERENCE_FAILED, {
-        type: inference_failed","
+        type: inference_failed",
         timestamp: new Date(),
         data: onnxError,
         sessionId,
@@ -228,7 +228,7 @@ metadata.lastUsed = new Date();
     }
   }
   /**
- * * 卸载模型
+* * 卸载模型
   async unloadModel(sessionId: string): Promise<void> {
     const session = this.sessions.get(sessionId);
     const metadata = this.sessionMetadata.get(sessionId);
@@ -243,8 +243,8 @@ this.sessions.delete(sessionId);
       this.sessionMetadata.delete(sessionId);
       this.performanceMetrics.delete(sessionId);
       this.emit(EVENT_NAMES.MODEL_UNLOADED, {
-        type: "model_unloaded,",
-        timestamp: new Date(),
+      type: "model_unloaded,",
+      timestamp: new Date(),
         data: { sessionId },
         sessionId,
         modelId: metadata.modelId;
@@ -253,17 +253,17 @@ this.sessions.delete(sessionId);
       }
   }
   /**
- * * 获取性能指标
+* * 获取性能指标
   getPerformanceMetrics(sessionId: string): PerformanceMetrics | undefined {
     return this.performanceMetrics.get(sessionId);
   }
   /**
- * * 获取所有活跃会话
+* * 获取所有活跃会话
   getActiveSessions(): CustomInferenceSession[] {
     return Array.from(this.sessionMetadata.values()).filter(session => session.isActive);
   }
   /**
- * * 清理资源
+* * 清理资源
   async dispose(): Promise<void> {
     // 卸载所有模型
 const sessionIds = Array.from(this.sessions.keys());
@@ -315,7 +315,7 @@ private async createSession(
     for (const [name, tensor] of Object.entries(outputs)) {
       const tensorData: TensorData = {data: (tensor as any).data,
         dims: (tensor as any).dims,
-        type: (tensor as any).type
+        type: (tensor as any).type;
       };
       const processedTensor = await this.tensorProcessor.postprocess(tensorData);
       processed.set(name, processedTensor);
@@ -328,7 +328,7 @@ private async createSession(
   }
   private hashInputs(inputs: Map<string, TensorData>): string {
     // 简单的哈希实现，实际应用中可以使用更复杂的哈希算法
-let hash = 
+let hash =
     for (const [name, tensor] of inputs) {
       hash += `${name}_${tensor.dims.join("x")}_${tensor.type}`;
     }
@@ -370,4 +370,4 @@ return performance.memory?.usedJSHeapSize || 0;
     };
     return levelMap[level] || 2;
   }
-}  */////
+}  */

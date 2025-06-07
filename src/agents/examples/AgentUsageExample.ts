@@ -1,19 +1,21 @@
-import { AgentFactory } from "../factory/AgentFactory";/import { AgentApiService } from "../../services/api/agentApiService";/import { AgentType, MessageType } from "../../types/////    agents";
-
-// // 索克生活四智能体系统使用示例   基于README.md第1013-1063行的智能体描述展示具体使用方法
-export class AgentUsageExample  {// 示例1: 小艾智能体 - 四诊协调与健康咨询  public static async xiaoaiHealthConsultationExample() {// 1. 创建小艾智能体 // const agentFactory = AgentFactory.getInstance;
+import { AgentFactory } from "../factory/AgentFactory";/import { AgentApiService } from "../../services/api/agentApiService";/import { AgentType, MessageType } from "../../types/    agents";
+索克生活四智能体系统使用示例   基于README.md第1013-1063行的智能体描述展示具体使用方法
+export class AgentUsageExample  { 1. 创建小艾智能体 // const agentFactory = AgentFactory.getInstance;
     const xiaoai = await agentFactory.createXiaoaiAgen;t;(;);
     `);
-    .join(", ")}...`);
-    // 2. 语音交互示例 // const apiService = AgentApiService.getInstance(;);
-    const chatResponse = await apiService.xiaoaiChat({message: "你好小艾，我最近感觉疲劳，能帮我分析一下吗？",
+    .join(",)}...`);
+    const apiService = AgentApiService.getInstance(;);
+    const chatResponse = await apiService.xiaoaiChat({
+      message: "你好小艾，我最近感觉疲劳，能帮我分析一下吗？",
       messageType: MessageType.TEXT,
       userId: "user123",sessionId: "session45;6"
     ;};);
-    // 3. 四诊协调示例 // const diagnosisResponse = await apiService.xiaoaiFourDiagnosis({userId: "user123",sessionId: "session4;5;6",
+    const diagnosisResponse = await apiService.xiaoaiFourDiagnosis({
+      userId: "user123",
+      sessionId: "session4;5;6",
       diagnosisType: "inquiry",
-      data: {
-        symptoms: ["疲劳", "头晕", "食欲不振"],
+      data: {,
+  symptoms: ["疲劳",头晕", "食欲不振"],
         duration: "2周"
       }
     });
@@ -23,7 +25,11 @@ export class AgentUsageExample  {// 示例1: 小艾智能体 - 四诊协调与�
     const xiaoke = await agentFactory.createXiaokeAge;n;t;(;);
     `);
     const apiService = AgentApiService.getInstance;
-    // 1. 服务订阅管理 // const subscriptionResponse = await apiService.xiaokeServiceManagement({userId: "user123",serviceType: "health_subscription",parameters: {plan: "premium",duration: "monthly"};
+    const subscriptionResponse = await apiService.xiaokeServiceManagement({
+      userId: "user123",
+      serviceType: "health_subscription",parameters: {
+      plan: "premium",
+      duration: "monthly"};
     ;};);
     }
   // 运行所有示例  public static async runAllExamples() {

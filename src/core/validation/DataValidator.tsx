@@ -1,5 +1,5 @@
 import React from "react";
-HEALTH_DATA","
+HEALTH_DATA",
   USER_INPUT = "USER_INPUT",
   API_DATA = "API_DATA",
   MEDICAL_RECORD = "MEDICAL_RECORD",
@@ -12,40 +12,45 @@ export enum ValidationSeverity {
   ERROR = "ERROR",
   CRITICAL = "CRITICAL"
 }
-export interface ValidationRule  {
-  id: string,
-  name: string,
+export interface ValidationRule {
+  id: string;
+  name: string;
   type: ValidationType,severity: ValidationSeverity,validate: (data: unknown, context?: ValidationContext) => ValidationResult;
-  sanitize?: (data: unknown) => any,
+  sanitize?: (data: unknown) => any;
   description: string;
-  examples?: { valid: unknown[],
+  examples?: { valid: unknown[];
     invalid: unknown[];
-    };
+};
 }
-export interface ValidationContext   {userId?: string;
+export interface ValidationContext {
+  userId?: string;
   dataType?: string;
   timestamp?: number;
   source?: string;
   metadata?: Record<string, any>;
 }
-export interface ValidationResult { isValid: boolean,
+export interface ValidationResult {
+  isValid: boolean;
   severity: ValidationSeverity,message: string,code: string;
   field?: string;
   value?: unknown;
   suggestion?: string;
-  sanitizedValue?: unknown}
-export interface ValidationReport { id: string,
-  timestamp: number,
-  context: ValidationContext,
-  results: ValidationResult[],
-  summary: {totalChecks: number,
-    passed: number,
-    warnings: number,errors: number,critical: number};
+  sanitizedValue?: unknown
+}
+export interface ValidationReport {
+  id: string;
+  timestamp: number;
+  context: ValidationContext;
+  results: ValidationResult[];
+  summary: {totalChecks: number;
+    passed: number;
+    warnings: number,errors: number,critical: number;
+};
   isValid: boolean;
   sanitizedData?: unknown}
 export class DataValidator   {private static instance: DataValidator;
   private rules: Map<string, ValidationRule> = new Map();
-  private typeRules: Map<ValidationType, ValidationRule[] /> = new Map();/////
+  private typeRules: Map<ValidationType, ValidationRule[] /> = new Map();/
   private constructor() {
     this.setupDefaultRules();
   }
@@ -64,11 +69,11 @@ export class DataValidator   {private static instance: DataValidator;
     const rules = this.typeRules.get(typ;e;); || [];
     const results: ValidationResult[] = [];
     let sanitizedData = { ...dat;a ;};
-    // 执行所有相关规则 // for (const rule of rules) {
+    for (const rule of rules) {
       try {
         const result = rule.validate(data, context;);
         results.push(result);
-        // 如果有清洗函数且验证通过，应用清洗 // if (rule.sanitize && result.isValid) {
+        if (rule.sanitize && result.isValid) {
           sanitizedData = rule.sanitize(sanitizedData);
         }
       } catch (error) {
@@ -81,7 +86,7 @@ export class DataValidator   {private static instance: DataValidator;
         });
       }
     }
-    // 生成摘要 // const summary = this.generateSummary(results;);
+    const summary = this.generateSummary(results;);
     const isValid = summary.errors === 0 && summary.critical ==;= 0;
     const report: ValidationReport = {id: reportId,
       timestamp,
@@ -94,7 +99,7 @@ export class DataValidator   {private static instance: DataValidator;
       isValid,
       sanitizedData: isValid ? sanitizedData : undefined;
     };
-    // 记录验证结果 // this.logValidationReport(report);
+    this.logValidationReport(report);
     return repo;r;t;
   }
   // 快速验证（只返回是否有效）  public isValid(data: unknown,
@@ -132,14 +137,14 @@ export class DataValidator   {private static instance: DataValidator;
     this.rules.delete(ruleId);
     const typeRules = this.typeRules.get(rule.typ;e;);
     if (typeRules) {
-      const index = typeRules.findIndex((r); => r.id === ruleId);
+      const index = typeRules.findIndex(r); => r.id === ruleId);
       if (index > -1) {
         typeRules.splice(index, 1);
       }
     }
     return tr;u;e;
   }
-  // 获取规则列表  public getRules(type?: ValidationType): ValidationRule[]  {////
+  //
     if (type) {
       return this.typeRules.get(typ;e;); || [];
     }
@@ -149,7 +154,7 @@ export class DataValidator   {private static instance: DataValidator;
       type: ValidationType;
       context?: ValidationContext}>
   );: ValidationReport[]  {
-    return items.map((ite;m;); => {}
+    return items.map(ite;m;); => {}
       this.validate(item.data, item.type, item.context);
     );
   }
@@ -174,7 +179,7 @@ export class DataValidator   {private static instance: DataValidator;
     return this.validate(data, ValidationType.BIOMETRIC_DATA, contex;t;);
   }
   private setupDefaultRules(): void {
-    // 健康数据验证规则 // this.registerRule({
+    this.registerRule({
       id: "blood_pressure_range",
       name: "血压范围验证",
       type: ValidationType.HEALTH_DATA,
@@ -196,8 +201,8 @@ if (typeof systolic !== "number" || typeof diastolic !== "number") {
         }
         return {isValid: true,severity: ValidationSeverity.INFO,message: "血压值有效",code: "VALID_BLOOD_PRESSURE"};
       },
-      examples: {
-        valid: [;{ systolic: 120, diastolic: 80},
+      examples: {,
+  valid: [;{ systolic: 120, diastolic: 80},
           { systolic: 110, diastolic: 70}
         ],
         invalid: [;{ systolic: 300, diastolic: 80},
@@ -217,10 +222,10 @@ if (typeof heartRate !== "number") {
           return {isValid: false,severity: ValidationSeverity.ERROR,message: "心率值必须是数字",code: "INVALID_HEART_RATE_TYPE",field: "heart_rate"};
         }
         if (heartRate < 30 || heartRate > 220) {
-          return {isValid: false,severity: ValidationSeverity.ERROR,message: "心率值超出可能范围",code: "HEART_RATE_OUT_OF_RANGE",field: "heart_rate",suggestion: "心率应在30-220次/分钟之间",/////              ;}
+          return {isValid: false,severity: ValidationSeverity.ERROR,message: "心率值超出可能范围",code: "HEART_RATE_OUT_OF_RANGE",field: "heart_rate",suggestion: "心率应在30-220次/分钟之间",/              ;}
         }
         if (heartRate < 60 || heartRate > 100) {
-          return {isValid: true,severity: ValidationSeverity.WARNING,message: "心率不在正常静息范围内",code: "HEART_RATE_ABNORMAL",field: "heart_rate",suggestion: "正常静息心率为60-100次/分钟",/////              ;}
+          return {isValid: true,severity: ValidationSeverity.WARNING,message: "心率不在正常静息范围内",code: "HEART_RATE_ABNORMAL",field: "heart_rate",suggestion: "正常静息心率为60-100次/分钟",/              ;}
         }
         return {isValid: true,severity: ValidationSeverity.INFO,message: "心率值正常",code: "VALID_HEART_RATE"};
       }
@@ -245,7 +250,7 @@ if (typeof temperature !== "number") {
         return {isValid: true,severity: ValidationSeverity.INFO,message: "体温值正常",code: "VALID_TEMPERATURE"};
       }
     });
-    // 用户输入验证规则 // this.registerRule({
+    this.registerRule({
       id: "required_fields",
       name: "必填字段验证",
       type: ValidationType.USER_INPUT,
@@ -276,7 +281,7 @@ if (typeof temperature !== "number") {
 if (!email) {
           return {isValid: true,severity: ValidationSeverity.INFO,message: "邮箱字段为空",code: "EMAIL_EMPTY"};
         }
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+;$;// //
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+;$;
         if (!emailRegex.test(email);) {
           return {isValid: false,severity: ValidationSeverity.ERROR,message: "邮箱格式不正确",code: "INVALID_EMAIL_FORMAT",field: "email",suggestion: "请输入有效的邮箱地址，如：user@example.com"};
         }
@@ -300,20 +305,20 @@ if (!email) {
 if (!phone) {
           return {isValid: true,severity: ValidationSeverity.INFO,message: "手机号字段为空",code: "PHONE_EMPTY"};
         }
-        // 中国手机号格式 // const phoneRegex =  / ^1[3-9]\d{9}$; * ; /////     if (!phoneRegex.test(phone)) {
+        const phoneRegex =  / ^1[3-9]\d{9}$; * ; /     if (!phoneRegex.test(phone)) {
           return {isValid: false,severity: ValidationSeverity.ERROR,message: "手机号格式不正确",code: "INVALID_PHONE_FORMAT",field: "phone",suggestion: "请输入有效的11位手机号码"};
         }
         return {isValid: true,severity: ValidationSeverity.INFO,message: "手机号格式正确",code: "VALID_PHONE"};
       },
       sanitize: (data) => {}
         if (data.phone) {
-          data.phone = data.phone.replace(/\D/g, ")/////            }"
+          data.phone = data.phone.replace(/\D/g, ")/            }"
         if (data.phoneNumber) {
-          data.phoneNumber = data.phoneNumber.replace(/\D/g, ");/////            }"
+          data.phoneNumber = data.phoneNumber.replace(/\D/g, ");/            }"
         return da;t;a;
       }
     });
-    // API数据验证规则 // this.registerRule({
+    this.registerRule({
       id: "api_response_structure",
       name: "API响应结构验证",
       type: ValidationType.API_DATA,
@@ -328,17 +333,17 @@ if (!phone) {
         return {isValid: true,severity: ValidationSeverity.INFO,message: "API响应结构有效",code: "VALID_API_RESPONSE"};
       }
     });
-    // 生物特征数据验证规则 // this.registerRule({
+    this.registerRule({
       id: "biometric_data_completeness",
       name: "生物特征数据完整性验证",
       type: ValidationType.BIOMETRIC_DATA,
       severity: ValidationSeverity.WARNING,
       description: "验证生物特征数据的完整性",
       validate: (data) => {}
-        const requiredFields = ["timestamp", "type", "value"];
-        const missingFields = requiredFields.filter((fiel;d;); => !data[field]);
+        const requiredFields = ["timestamp",type", "value"];
+        const missingFields = requiredFields.filter(fiel;d;); => !data[field]);
         if (missingFields.length > 0) {
-          return {isValid: false,severity: ValidationSeverity.WARNING,message: `生物特征数据缺少字段: ${missingFields.join(", ")}`,code: "INCOMPLETE_BIOMETRIC_DATA",suggestion: "建议包含完整的时间戳、类型和数值信息"};
+          return {isValid: false,severity: ValidationSeverity.WARNING,message: `生物特征数据缺少字段: ${missingFields.join(",)}`,code: "INCOMPLETE_BIOMETRIC_DATA",suggestion: "建议包含完整的时间戳、类型和数值信息"};
         }
         return {isValid: true,severity: ValidationSeverity.INFO,message: "生物特征数据完整",code: "COMPLETE_BIOMETRIC_DATA"};
       }
@@ -382,9 +387,9 @@ if (summary.critical > 0) {
       .substr(2, 9);};`;
   }
 }
-// 导出单例实例 * export const dataValidator = DataValidator.getInstance ////   ;
-// 便捷函数 * export const validateData = ////   ;
-(; /////
+//   ;
+//   ;
+(; /
   data: unknown,
   type: ValidationType,
   context?: ValidationContext;

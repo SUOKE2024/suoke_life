@@ -1,15 +1,15 @@
 import React from 'react';
 /**
- * * 健康上下文接口
+* * 健康上下文接口
 export interface HealthContext {
 };
 };
-  userId: string;
+  userId: string,
   timestamp: Date;
   sessionId?: string;
-  vitalSigns: VitalSigns;
+  vitalSigns: VitalSigns,
   symptoms: Symptom[];
-  medicalHistory: MedicalHistory;
+  medicalHistory: MedicalHistory,
   lifestyle: LifestyleData;
   environment: EnvironmentData;
   biometrics?: BiometricData;
@@ -18,59 +18,59 @@ export interface HealthContext {
   metadata?: Record<string, any>;
 }
 /**
- * * 生命体征接口
+* * 生命体征接口
 export interface VitalSigns {
 }
 };
-  bloodPressure: {systolic: number;
-    diastolic: number;
+  bloodPressure: {systolic: number,
+  diastolic: number;
     timestamp: Date;
   };
-  heartRate: {
-    value: number;
+  heartRate: {,
+  value: number;
     timestamp: Date;
     variability?: number;
   };
-  temperature: {
-    value: number;
-    timestamp: Date;
-    location: "oral | "axillary" | rectal" | "tympanic;"
+  temperature: {,
+  value: number;
+    timestamp: Date,
+  location: "oral | "axillary" | rectal" | "tympanic;"
   };
-  respiratoryRate: {
-    value: number;
+  respiratoryRate: {,
+  value: number;
     timestamp: Date;
   };
   oxygenSaturation?: {
-    value: number;
-    timestamp: Date;
+    value: number,
+  timestamp: Date;
   };
   weight?: {
-    value: number;
-    timestamp: Date;
-    unit: "kg" | lb
+    value: number,
+  timestamp: Date;
+    unit: "kg" | lb;
   };
   height?: {
-    value: number;
-    timestamp: Date;
-    unit: "cm | "in
+    value: number,
+  timestamp: Date;
+    unit: "cm | "in;
   };
   bmi?: {
-    value: number;
-    category: underweight" | "normal | "overweight" | obese
+    value: number,
+  category: underweight" | "normal | "overweight" | obese;
     timestamp: Date;
   };
 }
 /**
- * * 症状接口
+* * 症状接口
 export interface Symptom {
 };
 };
-  id: string;
+  id: string,
   name: string;
   description?: string;
-  severity: number; // 1-10 scale;
-duration: string;
-  frequency: string;
+  severity: number; // 1-10 scale,
+  duration: string;
+  frequency: string,
   onset: Date;
   triggers?: string[];
   location?: BodyLocation;
@@ -81,7 +81,7 @@ duration: string;
   timestamp: Date;
 }
 /**
- * * 身体部位接口
+* * 身体部位接口
 export interface BodyLocation {
 };
 };
@@ -89,46 +89,46 @@ export interface BodyLocation {
   side?: "left | "right" | bilateral";
   specific?: string;
   coordinates?: {
-    x: number;
-    y: number;
+    x: number,
+  y: number;
     z?: number;
   };
 }
 /**
- * * 病史接口
+* * 病史接口
 export interface MedicalHistory {
 };
 };
-  chronicConditions: ChronicCondition[];
+  chronicConditions: ChronicCondition[],
   pastIllnesses: PastIllness[];
-  surgeries: Surgery[];
+  surgeries: Surgery[],
   allergies: Allergy[];
-  medications: Medication[];
+  medications: Medication[],
   familyHistory: FamilyHistory[];
-  immunizations: Immunization[];
+  immunizations: Immunization[],
   hospitalizations: Hospitalization[];
 }
 /**
- * * 慢性疾病接口
+* * 慢性疾病接口
 export interface ChronicCondition {
 };
 };
-  id: string;
+  id: string,
   name: string;
   icdCode?: string;
-  diagnosisDate: Date;
+  diagnosisDate: Date,
   severity: "mild | "moderate" | severe";
-  status: "active | "inactive" | resolved";
+  status: "active | "inactive" | resolved",
   treatment: string[];
   complications?: string[];
   lastReview: Date;
 }
 /**
- * * 既往病史接口
+* * 既往病史接口
 export interface PastIllness {
 };
 };
-  id: string;
+  id: string,
   name: string;
   icdCode?: string;
   onsetDate: Date;
@@ -138,11 +138,11 @@ export interface PastIllness {
   severity: "mild | "moderate" | severe";
 }
 /**
- * * 手术史接口
+* * 手术史接口
 export interface Surgery {
 };
 };
-  id: string;
+  id: string,
   procedure: string;
   date: Date;
   surgeon?: string;
@@ -152,30 +152,30 @@ export interface Surgery {
   notes?: string;
 }
 /**
- * * 过敏史接口
+* * 过敏史接口
 export interface Allergy {
 };
 };
-  id: string;
+  id: string,
   allergen: string;
-  type: "food | "drug" | environmental" | "contact | "other
+  type: "food | "drug" | environmental" | "contact | "other,
   reaction: string[];
-  severity: mild" | "moderate | "severe" | life-threatening
+  severity: mild" | "moderate | "severe" | life-threatening;
   onsetDate?: Date;
   lastReaction?: Date;
   treatment?: string[];
 }
 /**
- * * 药物接口
+* * 药物接口
 export interface Medication {
 };
 };
-  id: string;
+  id: string,
   name: string;
   genericName?: string;
-  dosage: string;
+  dosage: string,
   frequency: string;
-  route: "oral | "topical" | injection" | "inhalation | "other
+  route: "oral | "topical" | injection" | "inhalation | "other,
   startDate: Date;
   endDate?: Date;
   prescriber?: string;
@@ -185,11 +185,11 @@ export interface Medication {
   adherence?: number; // 0-100%
 }
 /**
- * * 家族史接口
+* * 家族史接口
 export interface FamilyHistory {
 };
 };
-  id: string;
+  id: string,
   relationship: string;
   condition: string;
   ageOfOnset?: number;
@@ -198,11 +198,11 @@ export interface FamilyHistory {
   notes?: string;
 }
 /**
- * * 免疫接种接口
+* * 免疫接种接口
 export interface Immunization {
 };
 };
-  id: string;
+  id: string,
   vaccine: string;
   date: Date;
   provider?: string;
@@ -212,14 +212,14 @@ export interface Immunization {
   nextDue?: Date;
 }
 /**
- * * 住院史接口
+* * 住院史接口
 export interface Hospitalization {
 };
 };
-  id: string;
+  id: string,
   admissionDate: Date;
   dischargeDate?: Date;
-  reason: string;
+  reason: string,
   hospital: string;
   department?: string;
   procedures?: string[];
@@ -227,151 +227,151 @@ export interface Hospitalization {
   outcome: string;
 }
 /**
- * * 生活方式数据接口
+* * 生活方式数据接口
 export interface LifestyleData {
 };
 };
-  diet: DietData;
+  diet: DietData,
   exercise: ExerciseData;
-  sleep: SleepData;
+  sleep: SleepData,
   stress: StressData;
-  socialFactors: SocialFactors;
+  socialFactors: SocialFactors,
   habits: Habits;
   workEnvironment: WorkEnvironment;
 }
 /**
- * * 饮食数据接口
+* * 饮食数据接口
 export interface DietData {
 };
 };
   dailyCalories?: number;
-  macronutrients: {
-    carbohydrates: number; // grams;
-proteins: number; // grams;
-fats: number; // grams;
+  macronutrients: {,
+  carbohydrates: number; // grams;
+proteins: number; // grams,
+  fats: number; // grams;
   }
   micronutrients?: {
     vitamins: Record<string, number>;
     minerals: Record<string, number>;
   };
-  waterIntake: number; // liters;
-mealTiming: MealTiming[];
-  dietaryRestrictions: string[];
+  waterIntake: number; // liters,
+  mealTiming: MealTiming[];
+  dietaryRestrictions: string[],
   supplements: Supplement[];
-  foodAllergies: string[];
+  foodAllergies: string[],
   eatingPatterns: string[];
 }
 /**
- * * 用餐时间接口
+* * 用餐时间接口
 export interface MealTiming {
 };
 };
-  meal: breakfast" | "lunch | "dinner" | snack
+  meal: breakfast" | "lunch | "dinner" | snack,
   time: string;
   calories?: number;
   foods: string[];
   portion?: string;
 }
 /**
- * * 补充剂接口
+* * 补充剂接口
 export interface Supplement {
 };
 };
-  name: string;
+  name: string,
   dosage: string;
-  frequency: string;
+  frequency: string,
   startDate: Date;
   endDate?: Date;
   purpose: string;
 }
 /**
- * * 运动数据接口
+* * 运动数据接口
 export interface ExerciseData {
 };
 };
-  weeklyMinutes: number;
+  weeklyMinutes: number,
   activities: ExerciseActivity[];
-  fitnessLevel: "sedentary | "low" | moderate" | "high | "very_high
+  fitnessLevel: "sedentary | "low" | moderate" | "high | "very_high,
   goals: string[];
-  limitations: string[];
+  limitations: string[],
   preferences: string[];
 }
 /**
- * * 运动活动接口
+* * 运动活动接口
 export interface ExerciseActivity {
 };
 };
-  type: string;
+  type: string,
   duration: number; // minutes;
-intensity: low" | "moderate | "high";
+intensity: low" | "moderate | "high",
   frequency: number; // times per week;
 caloriesBurned?: number;
   heartRateZone?: string;
   enjoymentLevel?: number; // 1-10;
 }
 /**
- * * 睡眠数据接口
+* * 睡眠数据接口
 export interface SleepData {
 };
 };
-  averageHours: number;
+  averageHours: number,
   bedtime: string;
-  wakeTime: string;
+  wakeTime: string,
   sleepQuality: number; // 1-10;
-sleepLatency: number; // minutes to fall asleep;
-nightAwakenings: number;
+sleepLatency: number; // minutes to fall asleep,
+  nightAwakenings: number;
   sleepEfficiency: number; // percentage;
 sleepStages?: {
-    deep: number; // minutes;
-rem: number; // minutes;
+    deep: number; // minutes,
+  rem: number; // minutes;
 light: number; // minutes;
   }
-  sleepDisorders: string[];
+  sleepDisorders: string[],
   sleepAids: string[];
 }
 /**
- * * 压力数据接口
+* * 压力数据接口
 export interface StressData {
 };
 };
   perceivedStressLevel: number;
- // 1-10;
-stressSources: string[];
+// 1-10;
+stressSources: string[],
   copingMechanisms: string[];
-  stressSymptoms: string[];
+  stressSymptoms: string[],
   relaxationTechniques: string[];
-  workStress: number; // 1-10;
-personalStress: number; // 1-10;
+  workStress: number; // 1-10,
+  personalStress: number; // 1-10;
 financialStress: number; // 1-10;
 }
 /**
- * * 社会因素接口
+* * 社会因素接口
 export interface SocialFactors {
 };
 };
-  maritalStatus: string;
+  maritalStatus: string,
   livingArrangement: string;
-  socialSupport: number; // 1-10;
-socialActivities: string[];
-  communityInvolvement: string[];
+  socialSupport: number; // 1-10,
+  socialActivities: string[];
+  communityInvolvement: string[],
   culturalFactors: string[];
   religiousBeliefs?: string;
   socioeconomicStatus: string;
 }
 /**
- * * 习惯接口
+* * 习惯接口
 export interface Habits {
 };
 };
-  smoking: SmokingHistory;
+  smoking: SmokingHistory,
   alcohol: AlcoholConsumption;
-  substanceUse: SubstanceUse[];
+  substanceUse: SubstanceUse[],
   screenTime: number; // hours per day;
-hobbies: string[];
+hobbies: string[],
   routines: DailyRoutine[];
 }
 /**
- * * 吸烟史接口
+* * 吸烟史接口
 export interface SmokingHistory {
 };
 };
@@ -385,11 +385,11 @@ export interface SmokingHistory {
   cessationAids?: string[];
 }
 /**
- * * 饮酒情况接口
+* * 饮酒情况接口
 export interface AlcoholConsumption {
 };
 };
-  status: never" | "former | "current" | occasional
+  status: never" | "former | "current" | occasional;
   drinksPerWeek?: number;
   drinkType?: string[];
   bingeDrinking?: boolean;
@@ -397,11 +397,11 @@ export interface AlcoholConsumption {
   quitDate?: Date;
 }
 /**
- * * 物质使用接口
+* * 物质使用接口
 export interface SubstanceUse {
 };
 };
-  substance: string;
+  substance: string,
   status: "never | "former" | current" | "occasional;"
   frequency?: string;
   lastUse?: Date;
@@ -409,143 +409,143 @@ export interface SubstanceUse {
   problems?: string[];
 }
 /**
- * * 日常作息接口
+* * 日常作息接口
 export interface DailyRoutine {
 };
 };
-  activity: string;
+  activity: string,
   time: string;
   duration?: number;
-  frequency: string;
+  frequency: string,
   importance: number; // 1-10;
 }
 /**
- * * 工作环境接口
+* * 工作环境接口
 export interface WorkEnvironment {
 };
 };
-  occupation: string;
+  occupation: string,
   workSchedule: string;
-  physicalDemands: string;
+  physicalDemands: string,
   mentalDemands: string;
-  hazardExposure: string[];
+  hazardExposure: string[],
   workSatisfaction: number; // 1-10;
-workLifeBalance: number; // 1-10;
-commute: {
-    duration: number; // minutes;
-method: string;
+workLifeBalance: number; // 1-10,
+  commute: {
+    duration: number; // minutes,
+  method: string;
     stress: number; // 1-10;
   }
 }
 /**
- * * 环境数据接口
+* * 环境数据接口
 export interface EnvironmentData {
 };
 };
-  location: GeographicLocation;
+  location: GeographicLocation,
   airQuality: AirQualityData;
-  climate: ClimateData;
+  climate: ClimateData,
   housing: HousingData;
-  exposures: EnvironmentalExposure[];
+  exposures: EnvironmentalExposure[],
   seasonalFactors: SeasonalFactors;
 }
 /**
- * * 地理位置接口
+* * 地理位置接口
 export interface GeographicLocation {
 };
 };
-  latitude: number;
+  latitude: number,
   longitude: number;
   altitude?: number;
-  city: string;
+  city: string,
   region: string;
-  country: string;
+  country: string,
   timezone: string;
   urbanRural: "urban" | suburban" | "rural;
 }
 /**
- * * 空气质量数据接口
+* * 空气质量数据接口
 export interface AirQualityData {
 };
 };
-  aqi: number;
+  aqi: number,
   pm25: number;
-  pm10: number;
+  pm10: number,
   ozone: number;
-  no2: number;
+  no2: number,
   so2: number;
-  co: number;
+  co: number,
   timestamp: Date;
   source: string;
 }
 /**
- * * 气候数据接口
+* * 气候数据接口
 export interface ClimateData {
 };
 };
-  temperature: number;
+  temperature: number,
   humidity: number;
-  pressure: number;
+  pressure: number,
   uvIndex: number;
-  windSpeed: number;
+  windSpeed: number,
   precipitation: number;
-  season: "spring" | summer" | "autumn | "winter";
+  season: "spring" | summer" | "autumn | "winter",
   timestamp: Date;
 }
 /**
- * * 住房数据接口
+* * 住房数据接口
 export interface HousingData {
 };
 };
-  type: string;
+  type: string,
   age: number;
-  size: number; // square meters;
-ventilation: string;
-  heating: string;
+  size: number; // square meters,
+  ventilation: string;
+  heating: string,
   cooling: string;
-  waterQuality: string;
+  waterQuality: string,
   mold: boolean;
-  pets: Pet[];
+  pets: Pet[],
   indoorPlants: number;
   smokingIndoors: boolean;
 }
 /**
- * * 宠物接口
+* * 宠物接口
 export interface Pet {
 };
 };
   type: string;
   breed?: string;
-  age: number;
+  age: number,
   vaccinated: boolean;
   allergenRisk: low" | "medium | "high";
 }
 /**
- * * 环境暴露接口
+* * 环境暴露接口
 export interface EnvironmentalExposure {
 };
 };
-  type: string;
+  type: string,
   source: string;
-  duration: string;
+  duration: string,
   intensity: low" | "medium | "high";
-  frequency: string;
+  frequency: string,
   protectiveMeasures: string[];
   healthEffects?: string[];
 }
 /**
- * * 季节因素接口
+* * 季节因素接口
 export interface SeasonalFactors {
 };
 };
-  seasonalAffectiveDisorder: boolean;
+  seasonalAffectiveDisorder: boolean,
   seasonalAllergies: string[];
-  seasonalActivityChanges: string[];
+  seasonalActivityChanges: string[],
   lightExposure: number; // hours per day;
 vitaminDStatus: string;
 }
 /**
- * * 生物识别数据接口
+* * 生物识别数据接口
 export interface BiometricData {
 };
 };
@@ -554,109 +554,109 @@ export interface BiometricData {
   voicePrint?: VoicePrintData;
   retinalScan?: RetinalScanData;
   dnaProfile?: DNAProfileData;
-  biometricConsent: boolean;
+  biometricConsent: boolean,
   dataRetentionPeriod: number; // days;
 }
 /**
- * * 指纹数据接口
+* * 指纹数据接口
 export interface FingerprintData {
 };
 };
-  finger: string;
+  finger: string,
   template: string; // encrypted template;
-quality: number;
+quality: number,
   timestamp: Date;
 }
 /**
- * * 人脸识别数据接口
+* * 人脸识别数据接口
 export interface FaceRecognitionData {
 };
 };
   template: string;
- // encrypted template;
-confidence: number;
+// encrypted template;
+confidence: number,
   landmarks: number[];
   timestamp: Date;
 }
 /**
- * * 声纹数据接口
+* * 声纹数据接口
 export interface VoicePrintData {
 };
 };
   template: string;
- // encrypted template;
-duration: number; // seconds;
-quality: number;
-  language: string;
+// encrypted template;
+duration: number; // seconds,
+  quality: number;
+  language: string,
   timestamp: Date;
 }
 /**
- * * 视网膜扫描数据接口
+* * 视网膜扫描数据接口
 export interface RetinalScanData {
 };
 };
-  eye: left" | "right;
+  eye: left" | "right,
   template: string; // encrypted template;
-quality: number;
+quality: number,
   timestamp: Date;
 }
 /**
- * * DNA档案数据接口
+* * DNA档案数据接口
 export interface DNAProfileData {
 };
 };
-  markers: string[];
+  markers: string[],
   ancestry: string[];
-  healthRisks: GeneticRisk[];
+  healthRisks: GeneticRisk[],
   pharmacogenomics: PharmacogeneticProfile[];
   consent: GeneticConsent;
 }
 /**
- * * 遗传风险接口
+* * 遗传风险接口
 export interface GeneticRisk {
 };
 };
-  condition: string;
+  condition: string,
   risk: "low" | moderate" | "high;
-  confidence: number;
+  confidence: number,
   genes: string[];
   recommendations: string[];
 }
 /**
- * * 药物基因组学档案接口
+* * 药物基因组学档案接口
 export interface PharmacogeneticProfile {
 };
 };
-  drug: string;
-  metabolism: "poor" | intermediate" | "normal | "rapid" | ultra-rapid
-  recommendations: string[];
+  drug: string,
+  metabolism: "poor" | intermediate" | "normal | "rapid" | ultra-rapid;
+  recommendations: string[],
   genes: string[];
 }
 /**
- * * 遗传同意书接口
+* * 遗传同意书接口
 export interface GeneticConsent {
 };
 };
-  researchParticipation: boolean;
+  researchParticipation: boolean,
   dataSharing: boolean;
-  familyNotification: boolean;
+  familyNotification: boolean,
   incidentalFindings: boolean;
-  dataRetention: number; // years;
-withdrawalRights: boolean;
+  dataRetention: number; // years,
+  withdrawalRights: boolean;
 }
 /**
- * * 实验室检查结果接口
+* * 实验室检查结果接口
 export interface LabResult {
 };
 };
-  id: string;
+  id: string,
   testName: string;
   testCode?: string;
-  value: number | string;
+  value: number | string,
   unit: string;
-  referenceRange: string;
-  status: "normal | "high" | low" | "critical | "abnormal
-  flagged: boolean;
+  referenceRange: string,
+  status: "normal | "high" | low" | "critical | "abnormal;
+  flagged: boolean,
   date: Date;
   laboratory: string;
   orderingPhysician?: string;
@@ -664,15 +664,15 @@ export interface LabResult {
   notes?: string;
 }
 /**
- * * 设备数据接口
+* * 设备数据接口
 export interface DeviceData {
 };
 };
-  deviceId: string;
+  deviceId: string,
   deviceType: string;
-  manufacturer: string;
+  manufacturer: string,
   model: string;
-  firmwareVersion: string;
+  firmwareVersion: string,
   dataType: string;
   measurements: DeviceMeasurement[];
   batteryLevel?: number;
@@ -681,40 +681,40 @@ export interface DeviceData {
   calibrationDate?: Date;
 }
 /**
- * * 设备测量接口
+* * 设备测量接口
 export interface DeviceMeasurement {
 };
 };
-  timestamp: Date;
+  timestamp: Date,
   value: number | string;
-  unit: string;
+  unit: string,
   quality: good" | "fair | "poor";
   confidence?: number;
   context?: string;
   metadata?: Record<string, any>;
 }
 /**
- * * 健康评估结果接口
+* * 健康评估结果接口
 export interface HealthAssessment {
 };
 };
-  id: string;
+  id: string,
   userId: string;
-  assessmentType: string;
+  assessmentType: string,
   date: Date;
-  scores: AssessmentScore[];
+  scores: AssessmentScore[],
   recommendations: HealthRecommendation[];
-  riskFactors: RiskFactor[];
+  riskFactors: RiskFactor[],
   overallScore: number;
-  category: excellent" | "good | "fair" | poor
+  category: excellent" | "good | "fair" | poor;
   nextAssessmentDate?: Date;
 }
 /**
- * * 评估分数接口
+* * 评估分数接口
 export interface AssessmentScore {
 };
 };
-  domain: string;
+  domain: string,
   score: number;
   maxScore: number;
   percentile?: number;
@@ -722,78 +722,78 @@ export interface AssessmentScore {
   trend?: "improving | "stable" | declining";
 }
 /**
- * * 健康建议接口
+* * 健康建议接口
 export interface HealthRecommendation {
 };
 };
-  id: string;
+  id: string,
   category: string;
-  priority: "high | "medium" | low";
+  priority: "high | "medium" | low",
   title: string;
-  description: string;
+  description: string,
   actionItems: string[];
-  timeline: string;
+  timeline: string,
   evidence: string;
   personalizedFactors: string[];
 }
 /**
- * * 风险因素接口
+* * 风险因素接口
 export interface RiskFactor {
 };
 };
-  factor: string;
+  factor: string,
   level: "low | "moderate" | high" | "very_high;"
-  modifiable: boolean;
+  modifiable: boolean,
   impact: string;
-  interventions: string[];
+  interventions: string[],
   timeline: string;
 }
 /**
- * * 健康目标接口
+* * 健康目标接口
 export interface HealthGoal {
 };
 };
-  id: string;
+  id: string,
   userId: string;
-  title: string;
+  title: string,
   description: string;
-  category: string;
+  category: string,
   targetValue: number;
-  currentValue: number;
+  currentValue: number,
   unit: string;
-  startDate: Date;
+  startDate: Date,
   targetDate: Date;
-  status: "active" | completed" | "paused | "cancelled";
+  status: "active" | completed" | "paused | "cancelled",
   progress: number; // 0-100%
-  milestones: Milestone[]
+  milestones: Milestone[],
   barriers: string[];
   motivations: string[];
 }
 /**
- * * 里程碑接口
+* * 里程碑接口
 export interface Milestone {
 };
 };
-  id: string;
+  id: string,
   title: string;
-  description: string;
+  description: string,
   targetDate: Date;
   completedDate?: Date;
   status: pending" | "completed | "overdue";
   reward?: string;
 }
 /**
- * * 健康事件接口
+* * 健康事件接口
 export interface HealthEvent {
 };
 };
-  id: string;
+  id: string,
   userId: string;
-  type: string;
+  type: string,
   title: string;
-  description: string;
+  description: string,
   date: Date;
-  severity: low" | "medium | "high" | critical
+  severity: low" | "medium | "high" | critical,
   category: string;
   location?: string;
   duration?: number;
@@ -813,4 +813,4 @@ export default {
   BiometricData,
   LabResult,DeviceData,HealthAssessment,HealthGoal,HealthEvent;
 };
-  */////
+  */

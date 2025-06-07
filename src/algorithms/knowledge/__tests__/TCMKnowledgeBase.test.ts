@@ -1,15 +1,13 @@
 import React from 'react';
 import TCMKnowledgeBase from '../TCMKnowledgeBase';
-
 beforeEach(() => {
   jest.clearAllMocks();
 });
-
 describe('TCMKnowledgeBase', () => {
   it('should work with valid inputs', () => {
     // Add test cases
     const config = {
-      version: '1.0.0',
+      version: "1.0.0",
       updateInterval: 3600000,
       sources: ['test'],
       caching: {
@@ -21,11 +19,10 @@ describe('TCMKnowledgeBase', () => {
     const result = new TCMKnowledgeBase(config);
     expect(result).toBeDefined();
   });
-
   it('should handle edge cases', () => {
     // Add test cases
     const config = {
-      version: '1.0.0',
+      version: "1.0.0",
       updateInterval: 3600000,
       sources: [],
       caching: {
@@ -37,13 +34,12 @@ describe('TCMKnowledgeBase', () => {
     const result = new TCMKnowledgeBase(config);
     expect(result).toBeDefined();
   });
-
   it('should handle invalid inputs gracefully', () => {
     // Add test cases
     expect(() => {
       const config = {
-        version: '1.0.0',
-        updateInterval: 3600000,
+      version: "1.0.0",
+      updateInterval: 3600000,
         sources: ['test'],
         caching: {
           enabled: true,
@@ -54,11 +50,10 @@ describe('TCMKnowledgeBase', () => {
       new TCMKnowledgeBase(config);
     }).not.toThrow();
   });
-
   it('should return correct output format', () => {
     // Add test cases;
     const config = {
-      version: '1.0.0',
+      version: "1.0.0",
       updateInterval: 3600000,
       sources: ['test'],
       caching: {
@@ -70,11 +65,10 @@ describe('TCMKnowledgeBase', () => {
     const result = new TCMKnowledgeBase(config);
     expect(result).toBeDefined();
   });
-
   it('should handle performance requirements', () => {
     const start = performance.now();
     const config = {
-      version: '1.0.0',
+      version: "1.0.0",
       updateInterval: 3600000,
       sources: ['test'],
       caching: {
@@ -85,12 +79,10 @@ describe('TCMKnowledgeBase', () => {
     };
     const result = new TCMKnowledgeBase(config);
     const end = performance.now();
-
     expect(result).toBeDefined();
     expect(end - start).toBeLessThan(1000); // Should complete within 1 second
   });
 });
-
 describe('TCMKnowledgeBase Performance Tests', () => {
   it('should execute within performance thresholds', () => {
     const iterations = 10;
@@ -98,8 +90,8 @@ describe('TCMKnowledgeBase Performance Tests', () => {
     for (let i = 0; i < iterations; i++) {
       // Execute performance-critical functions
       const config = {
-        version: '1.0.0',
-        updateInterval: 3600000,
+      version: "1.0.0",
+      updateInterval: 3600000,
         sources: ['test'],
         caching: {
           enabled: true,
@@ -114,13 +106,12 @@ describe('TCMKnowledgeBase Performance Tests', () => {
     // Should execute within 100ms on average
     expect(averageTime).toBeLessThan(100);
   });
-
   it('should handle large datasets efficiently', () => {
-    const largeDataset = new Array(1000).fill(0).map((_, i) => `source-${i}`);
+    const largeDataset = new Array(1000).fill(0).map(((_, i) => `source-${i}`);
     const startTime = performance.now();
     // Test with large dataset
     const config = {
-      version: '1.0.0',
+      version: "1.0.0",
       updateInterval: 3600000,
       sources: largeDataset,
       caching: {
@@ -134,14 +125,13 @@ describe('TCMKnowledgeBase Performance Tests', () => {
     // Should handle large datasets within 1000ms
     expect(endTime - startTime).toBeLessThan(1000);
   });
-
   it('should not cause memory leaks', () => {
     const initialMemory = process.memoryUsage().heapUsed;
     // Execute function multiple times
     for (let i = 0; i < 100; i++) {
       const config = {
-        version: '1.0.0',
-        updateInterval: 3600000,
+      version: "1.0.0",
+      updateInterval: 3600000,
         sources: ['test'],
         caching: {
           enabled: true,

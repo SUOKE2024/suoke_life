@@ -1,6 +1,5 @@
 import { ArchitectureOptimizer } from "../ArchitectureOptimizer";
 import { ArchitectureOptimizer } from "../ArchitectureOptimizer";
-
 describe("ArchitectureOptimizer", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -42,7 +41,7 @@ ArchitectureOptimizer(// test params);
 expect(averageTime).toBeLessThan(1);
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
 ArchitectureOptimizer(largeDataset);

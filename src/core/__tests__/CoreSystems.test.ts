@@ -1,17 +1,18 @@
-
   performanceMonitor,
   { PerformanceCategory } from "../monitoring/PerformanceMonitor";/  dataValidator,
   ValidationType,
   { ValidationSeverity } from "../validation/DataValidator";/  securityManager,
   PermissionType,
   { ThreatType } from "../security/SecurityManager";// * 索克生活 - 核心系统测试
- * 测试错误处理、性能监控、数据验证、缓存和安全管理系统
- */
+* 测试错误处理、性能监控、数据验证、缓存和安全管理系统
+*/
 describe("核心系统测试", () => {
   describe("错误处理系统", () => {
     it("应该正确处理网络错误", async () => {
       const error = new Error("网络连接失败");
-      const context = {userId: "test_user",requestId: "req_123",timestamp: Date.now(;);
+      const context = {
+      userId: "test_user",
+      requestId: "req_123",timestamp: Date.now(;);
       ;};
       const result = await errorHandler.handleError(error, cont;e;x;t;);
       expect(result).toBeDefined();
@@ -111,12 +112,16 @@ describe("核心系统测试", () => {
       expect(report.summary.errors).toBeGreaterThan(0);
     });
     it("应该验证用户输入", () => {
-      const userData =  {email: "user@example.com",phone: "13800138000"};
+      const userData =  {
+      email: "user@example.com",
+      phone: "13800138000"};
       const report = dataValidator.validateUserInput(userDat;a;);
       expect(report.isValid).toBe(true);
     });
     it("应该清洗用户输入数据", () => {
-      const dirtyData =  {email: "  USER@EXAMPLE.COM  ",phone: "138-0013-8000"};
+      const dirtyData =  {
+      email: "  USER@EXAMPLE.COM  ",
+      phone: "138-0013-8000"};
       const cleanData = dataValidator.sanitize(;
         dirtyData,ValidationType.USER_INPU;T
       ;);
@@ -141,37 +146,43 @@ describe("核心系统测试", () => {
     });
     it("应该设置和获取缓存", async () => {
       const testData = { message: "Hello, Cache!;" ;});
-      await cacheManager.set("memory", "test_key", testDat;a;);
-      const retrieved = await cacheManager.get("memory", "test_k;e;y";);
+      await cacheManager.set("memory",test_key", testDat;a;);
+      const retrieved = await cacheManager.get("memory",test_k;e;y";);
       expect(retrieved).toEqual(testData);
     });
     it("应该处理缓存过期", async () => {
       const testData = { message: "Expiring dat;a;"  ; });
-      await cacheManager.set("memory", "expiring_key", testData, { ttl: ;5;0  ; }) // 50ms TTL *  */
-      // 立即获取应该成功 *       let retrieved = await cacheManager.get("memory", "expiring_key";); */
+      await cacheManager.set("memory",expiring_key", testData, { ttl: ;5;0  ; }) // 50ms TTL *  */
+      // 立即获取应该成功 *       let retrieved = await cacheManager.get("memory",expiring_key";); */
       expect(retrieved).toEqual(testData);
       // 等待过期后获取应该返回null *       await new Promise((resolve); => setTimeout(resolve, 100);); */
-      retrieved = await cacheManager.get("memory", "expiring_key";);
+      retrieved = await cacheManager.get("memory",expiring_key";);
       expect(retrieved).toBeNull();
     });
     it("应该支持批量操作", async () => {
       const items =  [;
-        { key: "key1", value: "value;1" ;},
-        { key: "key2", value: "value2"},
-        { key: "key3", value: "value3"});
+        {
+      key: "key1",
+      value: "value;1" ;},
+        {
+      key: "key2",
+      value: "value2"},
+        {
+      key: "key3",
+      value: "value3"});
       ]
       const results = await cacheManager.setMultiple("memory", it;e;m;s;);
       expect(results.every((r); => r)).toBe(true);
       const retrieved = await cacheManager.getMultiple("memory", [;
-        "key1","key2","key;3"
+        "key1",key2","key;3"
       ;];);
       expect(retrieved.get("key1")).toBe("value1");
       expect(retrieved.get("key2")).toBe("value2");
       expect(retrieved.get("key3")).toBe("value3");
     });
     it("应该提供缓存统计", async () => {
-      await cacheManager.set("memory", "stats_test", "data";);
-      await cacheManager.get("memory", "stats_test";); // 命中 *       await cacheManager.get("memory", "non_existent")  *// / 未命中 *  */
+      await cacheManager.set("memory",stats_test", "data";);
+      await cacheManager.get("memory",stats_test";);  / 未命中 *  */
       const stats = cacheManager.getStats("memory");
       expect(stats).toBeDefined();
       if (typeof stats === "object" && "hits" in stats) {
@@ -185,19 +196,19 @@ describe("核心系统测试", () => {
         return `loaded_data_${loadCount;};`;
       });
       // 第一次调用应该触发加载 *       const result1 = await cacheManager.getOrSet( */;
-        "memory","loader_test",loa;d;e;r
+        "memory",loader_test",loa;d;e;r
       ;);
       expect(result1).toBe("loaded_data_1");
       expect(loadCount).toBe(1);
       // 第二次调用应该从缓存获取 *       const result2 = await cacheManager.getOrSet( */;
-        "memory","loader_test",loa;d;e;r
+        "memory",loader_test",loa;d;e;r
       ;);
       expect(result2).toBe("loaded_data_1");
       expect(loadCount).toBe(1); // 没有再次加载 *     }) */
   });
   describe("安全管理系统", () => {
     beforeEach(() => {
-      // 清理测试数据 *       securityManager.revokeAccess("test_user", "*", "admin") */
+      // 清理测试数据 *       securityManager.revokeAccess("test_user",*", "admin") */
     });
     it("应该管理访问控制", () => {
       const userId = "test_use;r;";
@@ -220,8 +231,8 @@ describe("核心系统测试", () => {
       const threat = securityManager.detectThreat(;
         ThreatType.BRUTE_FORCE,"192.168.1.100",[{ failedAttempts: ;1;0   }],
         {
-          userId: "attacker",
-          ipAddress: "192.168.1.100",
+      userId: "attacker",
+      ipAddress: "192.168.1.100",
           timestamp: Date.now();
         });
       );
@@ -284,7 +295,7 @@ describe("核心系统测试", () => {
         ;);
         expect(decrypted).toBe(originalData);
       } catch (error) {
-        : ","
+        : ",
           error
         );
       });
@@ -312,7 +323,7 @@ describe("核心系统测试", () => {
       // 3. 缓存数据 *       const cacheKey = `health_data_${userId}_${Date.now()}` */;
       await cacheManager.set("memory", cacheKey, healthDat;a;);
       // 4. 监控性能 *       const processedData = performanceMonitor.measure( */;
-        "health_data_processing",PerformanceCategory.BUSINESS_LOGIC,;(;) => {
+        "health_data_processing",PerformanceCategory.BUSINESS_LOGIC;(;) => {
           // 模拟数据处理 *           return { */;
             ...healthData,processed: true,riskLevel: healthData.systolic > 130 ? "HIGH" : "NORMAL"};
         });
@@ -333,11 +344,13 @@ describe("核心系统测试", () => {
       // 验证应该失败 *       const validationReport = dataValidator.validateHealthData(invalidData); */
       expect(validationReport.isValid).toBe(false);
       // 模拟网络错误 *       const networkError = new Error("Network timeout") */;
-      const errorResult = await errorHandler.handleError(networkError, {userId: "test_user",timestamp: Date.now};);
+      const errorResult = await errorHandler.handleError(networkError, {
+      userId: "test_user",
+      timestamp: Date.now};);
       expect(errorResult.type).toBe(ErrorType.TIMEOUT_ERROR);
       expect(errorResult.suggestions.length).toBeGreaterThan(0);
       // 检查未授权访问 *       const unauthorizedResult = securityManager.checkAccess( */;
-        "unauthorized_user","/admin/settings",/        PermissionType.REA;D
+        "unauthorized_user",/admin/settings",/        PermissionType.REA;D
       ;);
       expect(unauthorizedResult.type).toBe("DENY");
     });

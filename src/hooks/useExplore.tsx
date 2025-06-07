@@ -1,11 +1,10 @@
-import { usePerformanceMonitor } from "../hooks/////    usePerformanceMonitor";
-
+import { usePerformanceMonitor } from "../hooks/    usePerformanceMonitor";
 import React from "react";
-import { LAOKE_WISDOM, HOT_TOPICS, CATEGORIES } from "../data/exploreData";/////    import { useState, useCallback, useMemo } from "react";
+import { LAOKE_WISDOM, HOT_TOPICS, CATEGORIES } from "../data/exploreData";/    import { useState, useCallback, useMemo } from "react";
   ContentItem,
   CategoryType,
   SearchFilters,
-  { HotTopic } from ";../types/explore";/////    export const useExplore = () =;
+  { HotTopic } from ";../types/explore";/    export const useExplore = () =;
 > ;{
   // 性能监控
 const performanceMonitor = usePerformanceMonitor("useExplore', {"'
@@ -18,8 +17,8 @@ const performanceMonitor = usePerformanceMonitor("useExplore', {"'
   const [isLoading, setIsLoading] = useState<boolean>(fals;e;);
   const [error, setError] = useState<string | null>(nul;l;);
   const [refreshing, setRefreshing] = useState<boolean>(fals;e;);
-  // 过滤内容 // const filteredContent = useMemo(() => {;
-    return LAOKE_WISDOM.filter((ite;m;) => {}
+  const filteredContent = useMemo() => {;
+    return LAOKE_WISDOM.filter(ite;m;) => {}
       if (selectedCategory !== "all" && item.category !== selectedCategory) {
         return fal;s;e;
       }
@@ -27,7 +26,7 @@ const performanceMonitor = usePerformanceMonitor("useExplore', {"'
         searchQuery &&
         !item.title.toLowerCase().includes(searchQuery.toLowerCase) &&
         !item.subtitle.toLowerCase().includes(searchQuery.toLowerCase();) &&
-        !item.tags.some((tag); => {}
+        !item.tags.some(tag); => {}
           tag.toLowerCase().includes(searchQuery.toLowerCase();)
         )
       ) {
@@ -36,14 +35,14 @@ const performanceMonitor = usePerformanceMonitor("useExplore', {"'
       return tr;u;e;
     });
   }, [selectedCategory, searchQuery]);
-  // 精选内容 // const featuredContent = useMemo(() => {;
-    // TODO: Implement memo body // return nul;l;
-  }, []); // TODO: 检查依赖项  * // TODO: 检查依赖项  * / TODO: 检查依赖项* * * // TODO: 检查依赖项  * * * // TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项// , TODO: 检查依赖项// , TODO: 检查依赖项// //  // 热门话题 // const hotTopics = useMemo(() => HOT_TOPICS, []);
-  // 搜索内容 // const searchContent = useCallback(() => {;
-    // TODO: Implement function body *}, [])  / TODO: 检查依赖项* * // TODO: 检查依赖项  * * // TODO: 检查依赖项* * * // TODO: 检查依赖项  * * * // TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项// , TODO: 检查依赖项// , TODO: 检查依赖项// //  // 选择分类 // const selectCategory = useCallback(() => {;
-    // TODO: Implement function body *}, [])  / TODO: 检查依赖项* * // TODO: 检查依赖项  * * // TODO: 检查依赖项* * * // TODO: 检查依赖项  * * * // TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项// , TODO: 检查依赖项// , TODO: 检查依赖项// //  // 刷新内容 // const refreshContent = useCallback(async  => {};
+  const featuredContent = useMemo() => {;
+    return nul;l;
+  }, []);  TODO: 检查依赖项  * / TODO: 检查依赖项* * *  TODO: 检查依赖项 TODO: 检查依赖项 , TODO: 检查依赖项  热门话题 // const hotTopics = useMemo() => HOT_TOPICS, []);
+  const searchContent = useCallback() => {;
+    TODO: 检查依赖项  * *  TODO: 检查依赖项  * * *  TODO: 检查依赖项 TODO: 检查依赖项 , TODO: 检查依赖项   const selectCategory = useCallback() => {;
+    TODO: 检查依赖项  * *  TODO: 检查依赖项  * * *  TODO: 检查依赖项 TODO: 检查依赖项 , TODO: 检查依赖项   const refreshContent = useCallback(async  => {};
     setRefreshing(true);
-    try {// 模拟API调用 // await new Promise<void>((resolve) => setTimeout(() => resolve(), 1000));
+    try { await new Promise<void>(resolve) => setTimeout() => resolve(), 1000));
       setError(null);
     } catch (err) {
       setError("刷新失败，请重试");
@@ -54,16 +53,16 @@ const performanceMonitor = usePerformanceMonitor("useExplore', {"'
   return {selectedCategory,searchQuery,isLoading,error,refreshing,filteredContent,featuredContent,hotTopics,searchContent,selectCategory,refreshContent,setSearchQuer;y;
   ;};
 };
-// 内容交互Hook * export const useContentInteraction = () =////   ;
-> ;{/////
-  const [bookmarkedItems, setBookmarkedItems] = useState<Set<string />>(/////        new Set;
+//   ;
+> ;{/
+  const [bookmarkedItems, setBookmarkedItems] = useState<Set<string />>(/        new Set;
   );
-  const [likedItems, setLikedItems] = useState<Set<string />>(new Set);/  const [viewedItems, setViewedItems] = useState<Set<string />>(new Set);// const toggleBookmark = useCallback((); => {}
-    // TODO: Implement function body *}, []) ////
-  const toggleLike = useCallback((); => {}
-    // TODO: Implement function body *}, []) ////
-  const recordView = useCallback((); => {}
-    // TODO: Implement function body *}, [])  / TODO: 检查依赖项* * // TODO: 检查依赖项  * * // TODO: 检查依赖项* * * // TODO: 检查依赖项  * * * // TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项// TODO: 检查依赖项// , TODO: 检查依赖项// , TODO: 检查依赖项// // const isBookmarked = useCallback(;
+  const [likedItems, setLikedItems] = useState<Set<string />>(new Set);/  const [viewedItems, setViewedItems] = useState<Set<string />>(new Set);// const toggleBookmark = useCallback(); => {}
+    //
+  const toggleLike = useCallback(); => {}
+    //
+  const recordView = useCallback(); => {}
+    TODO: 检查依赖项  * *  TODO: 检查依赖项  * * *  TODO: 检查依赖项 TODO: 检查依赖项 , TODO: 检查依赖项 const isBookmarked = useCallback(;
     (itemId: strin;g;); => {}
       return bookmarkedItems.has(itemI;d;);
     },

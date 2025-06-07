@@ -1,22 +1,21 @@
+#!/usr/bin/env python3
 """
 cache_manager - 索克生活项目模块
 """
 
-from typing import Any
 import time
+from typing import Any
 
 """
 缓存管理模块 - 提供智能缓存管理功能
 """
-
-
 
 class SmartCacheManager:
     """智能缓存管理器"""
 
     def __init__(self, config: dict[str, Any] | None = None):
         self.config = config or {}
-        self.memory_cache = {}
+        self.memory_cache: dict[str, dict[str, Any]] = {}
         self.stats = {
             "memory_hits": 0,
             "memory_misses": 0,
@@ -48,7 +47,7 @@ class SmartCacheManager:
             self.memory_cache[cache_key] = {
                 "value": value,
                 "timestamp": time.time(),
-                "ttl": ttl
+                "ttl": ttl,
             }
 
             self.stats["memory_sets"] += 1
@@ -136,10 +135,8 @@ class SmartCacheManager:
         """清理资源"""
         self.memory_cache.clear()
 
-
 # 全局缓存管理器实例
 _cache_manager: SmartCacheManager | None = None
-
 
 def get_cache_manager(config: dict[str, Any] | None = None) -> SmartCacheManager:
     """获取缓存管理器实例"""
@@ -149,6 +146,3 @@ def get_cache_manager(config: dict[str, Any] | None = None) -> SmartCacheManager
         _cache_manager = SmartCacheManager(config)
 
     return _cache_manager
-
-
-

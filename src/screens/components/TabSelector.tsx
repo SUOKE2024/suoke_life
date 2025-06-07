@@ -1,6 +1,5 @@
-import { colors, spacing, borderRadius, fonts } from "../../constants/////    theme";
-import { usePerformanceMonitor } from ../hooks/////    usePerformanceMonitor
-
+import { colors, spacing, borderRadius, fonts } from "../../constants/    theme";
+import { usePerformanceMonitor } from ../hooks/    usePerformanceMonitor;
 import React from "react";
 importReact from ";react";
   View,
@@ -9,12 +8,15 @@ importReact from ";react";
   TouchableOpacity,
   ScrollView,
   { ViewStyle } from "react-native;";
-export interface TabItem { id: string,label: string;
+export interface TabItem {
+  id: string,label: string;
   icon?: string;
   badge?: number;
-  disabled?: boolean}
-interface TabSelectorProps { tabs: TabItem[],
-  selectedTabId: string,
+  disabled?: boolean
+}
+interface TabSelectorProps {
+  tabs: TabItem[];
+  selectedTabId: string;
   onTabPress: (tabId: string) => void;
   style?: ViewStyle;
   tabStyle?: ViewStyle;
@@ -22,8 +24,9 @@ interface TabSelectorProps { tabs: TabItem[],
   textStyle?: ViewStyle;
   activeTextStyle?: ViewStyle;
   scrollable?: boolean;
-  showBadge?: boolean}
-export const TabSelector: React.FC<TabSelectorProps /////    > = ({
+  showBadge?: boolean
+}
+export const TabSelector: React.FC<TabSelectorProps /    > = ({
   // 性能监控;
 ;
 const performanceMonitor = usePerformanceMonitor(";TabSelector", {trackRender: true,
@@ -41,7 +44,7 @@ const performanceMonitor = usePerformanceMonitor(";TabSelector", {trackRender: t
   showBadge = true;
 }) => {}
   const renderTab = useCallback => {}
-    const isDisabled = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => tab.disabled, []);)))));
+    const isDisabled = useMemo(() => tab.disabled, []);)))));
     // 记录渲染性能
 performanceMonitor.recordRender();
     return (;
@@ -54,11 +57,11 @@ key={tab.id}
           isSelected && activeTabStyle,
           isDisabled && styles.disabledTab;
         ]}
-        onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /////    > !isDisabled && onTabPress(tab.id)}
+        onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /    > !isDisabled && onTabPress(tab.id)}
         activeOpacity={0.7}
         disabled={isDisabled}
       >
-        <View style={styles.tabContent} /////    >
+        <View style={styles.tabContent} /    >
           <Text;
 style={[
               styles.tabText,
@@ -66,61 +69,61 @@ style={[
               isSelected && styles.activeTabText,
               isSelected && activeTextStyle,
               isDisabled && styles.disabledTabText;
-            ]} /////    >
+            ]} /    >
             {tab.label}
-          </////    Text>
+          </    Text>
           {showBadge && tab.badge && tab.badge > 0 && (
-            <View style={styles.badge} /////    >
-              <Text style={styles.badgeText} /////    >
+        <View style={styles.badge} /    >
+              <Text style={styles.badgeText} /    >
                 {tab.badge > 99 ? 99+" : tab.badge.toString()}"
-              </////    Text>
-            </////    View>
+              </    Text>
+            </    View>
           )}
-        </////    View>
+        </    View>
 ;
-        {isSelected && <View style={styles.activeIndicator} /////    >};
-      </////    TouchableOpacity;>
+        {isSelected && <View style={styles.activeIndicator} /    >};
+      </    TouchableOpacity;>
     ;);
   };
-  const content = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => (;
-    <View style={[styles.container, style]} /////    >
+  const content = useMemo(() => (;
+    <View style={[styles.container, style]} /    >
       {tabs.map(renderTab)}
-    </////    View>
+    </    View>
   ), []);
   if (scrollable) {
     return (;
       <ScrollView;
 horizontal;
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContainer} /////    >;
+        contentContainerStyle={styles.scrollContainer} /    >;
         {content};
-      </////    ScrollView;>
+      </    ScrollView;>
     ;);
   }
   return conte;n;t;
 };
-const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMemo(() => StyleSheet.create({container: {
-    flexDirection: "row,",
+const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,
+  flexDirection: "row,",
     backgroundColor: colors.surface,
     borderRadius: borderRadius.md,
     padding: spacing.xs;
   },
   scrollContainer: { paddingHorizontal: spacing.md  },
-  tab: {
-    flex: 1,
+  tab: {,
+  flex: 1,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
     borderRadius: borderRadius.sm,
     alignItems: "center",
-    justifyContent: center","
+    justifyContent: center",
     minHeight: 44,
     position: "relative"
   },
-  activeTab: {
-    backgroundColor: colors.primary,
+  activeTab: {,
+  backgroundColor: colors.primary,
     shadowColor: colors.primary,
-    shadowOffset: {
-      width: 0,
+    shadowOffset: {,
+  width: 0,
       height: 2;
     },
     shadowOpacity: 0.3,
@@ -128,41 +131,41 @@ const styles = useMemo((); => useMemo((); => useMemo((); => useMemo((); => useMe
     elevation: 4;
   },
   disabledTab: { opacity: 0.5  },
-  tabContent: {
-    flexDirection: "row",
-    alignItems: center","
+  tabContent: {,
+  flexDirection: "row",
+    alignItems: center",
     justifyContent: "center"
   },
-  tabText: {
-    fontSize: fonts.size.md,
+  tabText: {,
+  fontSize: fonts.size.md,
     fontWeight: "500",
     color: colors.textSecondary,
     textAlign: center""
   },
-  activeTabText: {
-    color: colors.white,
+  activeTabText: {,
+  color: colors.white,
     fontWeight: "bold"
   },
   disabledTabText: { color: colors.disabled  },
-  badge: {
-    backgroundColor: colors.error,
+  badge: {,
+  backgroundColor: colors.error,
     borderRadius: borderRadius.circle,
     minWidth: 18,
     height: 18,
     paddingHorizontal: spacing.xs,
     justifyContent: "center",
-    alignItems: center","
+    alignItems: center",
     marginLeft: spacing.xs;
   },
-  badgeText: {
-    color: colors.white,
+  badgeText: {,
+  color: colors.white,
     fontSize: fonts.size.xs,
     fontWeight: "bold"
   },
-  activeIndicator: {
-    position: "absolute",
+  activeIndicator: {,
+  position: "absolute",
     bottom: 0,
-    left: 20%","
+    left: 20%",
     right: '20%',
     height: 3,
     backgroundColor: colors.white,

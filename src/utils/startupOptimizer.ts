@@ -1,5 +1,6 @@
 // 启动任务接口
-export interface StartupTask {name: string;
+export interface StartupTask {
+  name: string;
   priority: number;
   dependencies: string[];
   execute: () => Promise<void>;
@@ -32,7 +33,7 @@ async executeAll(): Promise<void> {
 await this.executeBatch(criticalTasks);
     // 延迟执行非关键任务
 if (nonCriticalTasks.length > 0) {
-      setTimeout(() => this.executeBatch(nonCriticalTasks), 100);
+      setTimeout() => this.executeBatch(nonCriticalTasks), 100);
     }
   }
   private async executeBatch(tasks: StartupTask[]): Promise<void> {
@@ -53,7 +54,7 @@ if (nonCriticalTasks.length > 0) {
     if (task.dependencies.length === 0) {
       return true;
     }
-    return task.dependencies.every((dep) => this.completed.has(dep));
+    return task.dependencies.every(dep) => this.completed.has(dep));
   }
   private async executeTask(task: StartupTask): Promise<void> {
     this.running.add(task.name);

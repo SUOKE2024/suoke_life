@@ -1,39 +1,32 @@
 import React, { useState, useCallback } from 'react';
 import {import { Topic } from '../../services/messageBusService';
-const TopicManager = React.lazy(() => import('../../components/messaging/TopicManager'));
-const MessagePublisher = React.lazy(() => import('../../components/messaging/MessagePublisher'));
-const MessageSubscriber = React.lazy(() => import('../../components/messaging/MessageSubscriber'));
-
+const TopicManager = React.lazy() => import('../../components/messaging/TopicManager'));
+const MessagePublisher = React.lazy() => import('../../components/messaging/MessagePublisher'));
+const MessageSubscriber = React.lazy() => import('../../components/messaging/MessageSubscriber'));
 /**
- * 消息总线主界面
- * 集成发布、订阅、主题管理功能
- */
-
+* 消息总线主界面
+* 集成发布、订阅、主题管理功能
+*/
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   SafeAreaView,
-  StatusBar
+  StatusBar;
 } from 'react-native';
-
 type TabType = 'topics' | 'publish' | 'subscribe';
-
 export const MessageBusScreen: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('topics');
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
-
-  const handleTopicSelect = useCallback((topic: Topic) => {setSelectedTopic(topic);
+  const handleTopicSelect = useCallback(topic: Topic) => {setSelectedTopic(topic);
     setActiveTab('publish'); // 选择主题后切换到发布页面
   }, []);
-
   const renderTabContent = () => {switch (activeTab) {case 'topics':return (;
           <TopicManager;
             onTopicSelect={handleTopicSelect};
             style={styles.tabContent};
           />;
         );
-
       case 'publish':
         if (!selectedTopic) {
           return (;
@@ -59,7 +52,6 @@ export const MessageBusScreen: React.FC = () => {
             }}
           />
         );
-
       case 'subscribe':
         if (!selectedTopic) {
           return (;
@@ -85,63 +77,57 @@ export const MessageBusScreen: React.FC = () => {
             }}
           />
         );
-
       default:
         return null;
     }
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
-
       {// 头部}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>消息总线</Text>
         {selectedTopic && (
-          <View style={styles.selectedTopicContainer}>
+        <View style={styles.selectedTopicContainer}>
             <Text style={styles.selectedTopicLabel}>当前主题:</Text>
             <Text style={styles.selectedTopicName}>{selectedTopic.name}</Text>
           </View>
         )}
       </View>
-
       {// 标签页导航}
       <View style={styles.tabBar}>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[
             styles.tabButton,
-            activeTab === 'topics' && styles.activeTabButton
+            activeTab === 'topics' && styles.activeTabButton;
           ]}
           onPress={() => setActiveTab('topics')}
         >
           <Text style={[
             styles.tabButtonText,
-            activeTab === 'topics' && styles.activeTabButtonText
+            activeTab === 'topics' && styles.activeTabButtonText;
           ]}>
             主题管理
           </Text>
         </TouchableOpacity>
-
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[
             styles.tabButton,
-            activeTab === 'publish' && styles.activeTabButton
+            activeTab === 'publish' && styles.activeTabButton;
           ]}
           onPress={() => setActiveTab('publish')}
         >
           <Text style={[
             styles.tabButtonText,
-            activeTab === 'publish' && styles.activeTabButtonText
+            activeTab === 'publish' && styles.activeTabButtonText;
           ]}>
             发布消息
           </Text>
         </TouchableOpacity>
-
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[
             styles.tabButton,
-            activeTab === 'subscribe' && styles.activeTabButton
+            activeTab === 'subscribe' && styles.activeTabButton;
           ]}
           onPress={() => setActiveTab('subscribe')};
         >;
@@ -160,85 +146,87 @@ export const MessageBusScreen: React.FC = () => {
     </SafeAreaView>;
   );
 };
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  container: {,
+  flex: 1,
     backgroundColor: '#f5f5f5'
   },
-  header: {
-    backgroundColor: '#fff',
+  header: {,
+  backgroundColor: '#fff',
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: '#e9ecef'
   },
-  headerTitle: {
-    fontSize: 20,
+  headerTitle: {,
+  fontSize: 20,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 4
+    marginBottom: 4;
   },
-  selectedTopicContainer: {
-    flexDirection: 'row',
+  selectedTopicContainer: {,
+  flexDirection: 'row',
     alignItems: 'center'
   },
-  selectedTopicLabel: {
-    fontSize: 12,
+  selectedTopicLabel: {,
+  fontSize: 12,
     color: '#6c757d',
-    marginRight: 8
+    marginRight: 8;
   },
-  selectedTopicName: {
-    fontSize: 12,
+  selectedTopicName: {,
+  fontSize: 12,
     color: '#007bff',
     fontWeight: '600',
     backgroundColor: '#e7f3ff',
     paddingHorizontal: 8,
     paddingVertical: 2,
-    borderRadius: 4
+    borderRadius: 4;
   },
-  tabBar: {
-    flexDirection: 'row',
+  tabBar: {,
+  flexDirection: 'row',
     backgroundColor: '#fff',
     borderBottomWidth: 1,
     borderBottomColor: '#e9ecef'
   },
-  tabButton: {
-    flex: 1,
+  tabButton: {,
+  flex: 1,
     paddingVertical: 12,
     alignItems: 'center',
     borderBottomWidth: 2,
     borderBottomColor: 'transparent'
   },
-  activeTabButton: {
-    borderBottomColor: '#007bff'
+  activeTabButton: {,
+  borderBottomColor: '#007bff'
   },
-  tabButtonText: {
-    fontSize: 14,
+  tabButtonText: {,
+  fontSize: 14,
     color: '#6c757d',
     fontWeight: '500'
   },
-  activeTabButtonText: {
-    color: '#007bff',
+  activeTabButtonText: {,
+  color: '#007bff',
     fontWeight: '600'
   },
-  content: {
-    flex: 1
+  content: {,
+  flex: 1;
   },
-  tabContent: {
-    flex: 1
+  tabContent: {,
+  flex: 1;
   },
-  noTopicContainer: {
-    flex: 1,
+  noTopicContainer: {,
+  flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 32
+    padding: 32;
   },
-  noTopicText: {
-    fontSize: 16,color: '#6c757d',textAlign: 'center',marginBottom: 24;
-  },selectTopicButton: {backgroundColor: '#007bff',paddingHorizontal: 24,paddingVertical: 12,borderRadius: 8;
-  },selectTopicButtonText: {color: '#fff',fontSize: 16,fontWeight: '600';
+  noTopicText: {,
+  fontSize: 16,color: '#6c757d',textAlign: 'center',marginBottom: 24;
+  },selectTopicButton: {
+      backgroundColor: "#007bff",
+      paddingHorizontal: 24,paddingVertical: 12,borderRadius: 8;
+  },selectTopicButtonText: {
+      color: "#fff",
+      fontSize: 16,fontWeight: '600';
   };
 });
-
-export default MessageBusScreen; 
+export default MessageBusScreen;

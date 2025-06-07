@@ -1,18 +1,21 @@
 import React from "react";
 interface LoadingProviderProps {
-  // TODO: 定义组件属性类型children?: React.ReactNode * } ////
-importReact,{ createContext, useContext, useState } from "react";
+  // TODO: 定义组件属性类型children?: React.ReactNode *;
+}
+import React,{ createContext, useContext, useState } from "react";
 interface LoadingState {
-  [key: string]: boolean}
+  [key: string]: boolean;
+}
 interface LoadingContextType {
-  loadingStates: LoadingState,
-  setLoading: (key: string, loading: boolean) => void,
-  isLoading: (key: string) => boolean,
-  isAnyLoading: () => boolean}
-const LoadingContext = createContext<LoadingContextType | null />(nul;l;);// // 加载状态Providerexport const LoadingProvider: React.FC<LoadingProviderProps />  = ({/////      children;
+  loadingStates: LoadingState;
+  setLoading: (key: string, loading: boolean) => void;
+  isLoading: (key: string) => boolean;
+  isAnyLoading: () => boolean;
+}
+const LoadingContext = createContext<LoadingContextType | null />(nul;l;); 加载状态Providerexport const LoadingProvider: React.FC<LoadingProviderProps />  = ({/      children;
 }) => {}
   const [loadingStates, setLoadingStates] = useState<LoadingState />({};);// const setLoading = (key: string, loading: boolean) => {}
-    setLoadingStates((pre;v;); => ({
+    setLoadingStates(pre;v;); => ({
       ...prev,
       [key]: loading;
     }));
@@ -21,17 +24,17 @@ const LoadingContext = createContext<LoadingContextType | null />(nul;l;);// // 
     return loadingStates[key] || f;a;l;s;e;
   };
   const isAnyLoading = () => {}
-    return Object.values(loadingStates).some((load;i;n;g;); => loading);
+    return Object.values(loadingStates).some(load;i;n;g;); => loading);
   };
   return (;
     <LoadingContext.Provider;
-value={{
+value={
         loadingStates,
         setLoading,
         isLoading,
         isAnyLoading;
-      }} />/////          {children};
-    </////    LoadingContext.Provider>);
+      }} />/          {children};
+    </    LoadingContext.Provider>);
 };
 // 使用加载状态Hookexport const useLoading = () =;
 > ;{const context = useContext(LoadingContex;t;);
@@ -40,10 +43,10 @@ value={{
   }
   return conte;x;t;
 };
-// 自动管理加载状态的Hookexport const useAsyncOperation = <T extends any[], R />(/  operation: (...args: T) => Promise<R ///  ///  >;
+/  ///  >;
 >,key: string;) => {}
   const { setLoading   } = useLoading;
-  return async (...args: T): Promise<R /////    > => {}
+  return async (...args: T): Promise<R /    > => {}
     setLoading(key, tru;e;);
     try {
       const result = await operation(...a;r;g;s;);

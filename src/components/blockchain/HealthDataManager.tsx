@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {import { useHealthDataOperations } from '../../hooks/useBlockchainService';
 import { HealthDataRecord } from '../../types/blockchain';
-
   View,
   Text,
   StyleSheet,
@@ -11,13 +10,11 @@ import { HealthDataRecord } from '../../types/blockchain';
   ActivityIndicator,
   TextInput,
   Modal,
-  ScrollView
+  ScrollView;
 } from 'react-native';
-
 interface HealthDataManagerProps {
   userId: string;
 }
-
 export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) => {
   const {
     records,
@@ -25,31 +22,26 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
     verifyData,
     loadRecords,
     isLoading,
-    error
+    error;
   } = useHealthDataOperations(userId);
-
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState<HealthDataRecord | null>(null);
   const [filterType, setFilterType] = useState<string>('');
-
   // 过滤记录
   const filteredRecords = records.filter(record => ;
     !filterType || record.dataType.includes(filterType);
   );
-
   // 数据类型统计
-  const dataTypeStats = records.reduce((acc, record) => {acc[record.dataType] = (acc[record.dataType] || 0) + 1;
+  const dataTypeStats = records.reduce(acc, record) => {acc[record.dataType] = (acc[record.dataType] || 0) + 1;
     return acc;
   }, {} as Record<string, number>);
-
   const handleStoreData = async (dataType: string, data: any, metadata?: Record<string, string>) => {try {await storeData(dataType, data, metadata);
-      Alert.alert('成功', '健康数据已成功存储到区块链');
+      Alert.alert("成功",健康数据已成功存储到区块链');
       setShowAddModal(false);
     } catch (error) {
       Alert.alert('错误', `存储失败: ${error instanceof Error ? error.message : '未知错误'}`);
     }
   };
-
   const handleVerifyData = async (record: HealthDataRecord) => {try {// 这里需要原始数据来验证，实际应用中可能需要从其他地方获取;
       const result = await verifyData(record.transactionId, {});
       Alert.alert(
@@ -61,17 +53,14 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
       Alert.alert('错误', `验证失败: ${error instanceof Error ? error.message : '未知错误'}`);
     }
   };
-
   const formatTimestamp = (timestamp: number) => {return new Date(timestamp).toLocaleString('zh-CN');
   };
-
   const formatDataHash = (hash: Uint8Array) => {return Array.from(hash.slice(0, 8));
       .map(b => b.toString(16).padStart(2, '0'));
       .join('') + '...';
   };
-
   const renderRecord = ({ item }: { item: HealthDataRecord }) => (
-    <TouchableOpacity
+    <TouchableOpacity;
       style={styles.recordCard}
       onPress={() => setSelectedRecord(item)}
     >
@@ -79,7 +68,6 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
         <Text style={styles.recordType}>{item.dataType}</Text>
         <Text style={styles.recordTime}>{formatTimestamp(item.timestamp)}</Text>
       </View>
-
       <View style={styles.recordContent}>
         <Text style={styles.recordLabel}>交易ID:</Text>
         <Text style={styles.recordValue}>{item.transactionId.slice(0, 16)}...</Text>
@@ -100,10 +88,9 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
       </View>;
     </TouchableOpacity>;
   );
-
   const renderDataTypeFilter = () => (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterContainer}>
-      <TouchableOpacity
+      <TouchableOpacity;
         style={[styles.filterChip, !filterType && styles.filterChipActive]}
         onPress={() => setFilterType('')}
       >
@@ -125,7 +112,6 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
       ))};
     </ScrollView>;
   );
-
   return (
     <View style={styles.container}>
       {// 头部统计}
@@ -145,17 +131,15 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
           <Text style={styles.statLabel}>最新记录</Text>
         </View>
       </View>
-
       {// 操作按钮}
       <View style={styles.actionContainer}>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.addButton}
           onPress={() => setShowAddModal(true)}
         >
           <Text style={styles.addButtonText}>+ 添加健康数据</Text>
         </TouchableOpacity>
-
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.refreshButton}
           onPress={() => loadRecords()}
           disabled={isLoading}
@@ -167,19 +151,16 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
           )}
         </TouchableOpacity>
       </View>
-
       {// 数据类型过滤器}
       {renderDataTypeFilter()}
-
       {// 错误显示}
       {error && (
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>{error.message}</Text>
         </View>
       )}
-
       {// 记录列表}
-      <FlatList
+      <FlatList;
         data={filteredRecords}
         renderItem={renderRecord}
         keyExtractor={(item) => item.transactionId}
@@ -210,35 +191,30 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
     </View>;
   );
 };
-
 // 添加数据模态框
-const AddDataModal: React.FC<{
+const AddDataModal: React.FC<{,
   visible: boolean;
-  onClose: () => void;
+  onClose: () => void,
   onSubmit: (dataType: string, data: any, metadata?: Record<string, string>) => void;
 }> = ({ visible, onClose, onSubmit }) => {
   const [dataType, setDataType] = useState('');
   const [dataContent, setDataContent] = useState('');
   const [metadata, setMetadata] = useState('');
-
-  const handleSubmit = () => {if (!dataType.trim() || !dataContent.trim()) {Alert.alert('错误', '请填写数据类型和内容');
+  const handleSubmit = () => {if (!dataType.trim() || !dataContent.trim()) {Alert.alert("错误",请填写数据类型和内容');
       return;
     }
-
     try {
       const data = JSON.parse(dataContent);
       const metadataObj = metadata.trim() ? JSON.parse(metadata) : {};
       onSubmit(dataType.trim(), data, metadataObj);
-
       // 重置表单
       setDataType('');
       setDataContent('');
       setMetadata('');
     } catch (error) {
-      Alert.alert('错误', '数据格式不正确，请输入有效的JSON');
+      Alert.alert("错误",数据格式不正确，请输入有效的JSON');
     }
   };
-
   return (
     <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
       <View style={styles.modalContainer}>
@@ -248,37 +224,34 @@ const AddDataModal: React.FC<{
             <Text style={styles.modalCloseText}>取消</Text>
           </TouchableOpacity>
         </View>
-
         <ScrollView style={styles.modalContent}>
           <View style={styles.inputGroup}>
             <Text style={styles.inputLabel}>数据类型</Text>
-            <TextInput
+            <TextInput;
               style={styles.textInput}
               value={dataType}
               onChangeText={setDataType}
               placeholder="例如: blood_pressure, heart_rate"
             />
           </View>
-
           <View style={styles.inputGroup}>
             <Text style={styles.inputLabel}>数据内容 (JSON格式)</Text>
-            <TextInput
+            <TextInput;
               style={[styles.textInput, styles.textArea]}
               value={dataContent}
               onChangeText={setDataContent}
               placeholder='例如: {"systolic": 120, "diastolic": 80}'
-              multiline
+              multiline;
               numberOfLines={6}
             />
           </View>
-
           <View style={styles.inputGroup}>
             <Text style={styles.inputLabel}>元数据 (可选, JSON格式)</Text>
             <TextInput;
               style={[styles.textInput, styles.textArea]};
               value={metadata};
               onChangeText={setMetadata};
-              placeholder='例如: {"device": "smart_watch", "location": "home"}';
+              placeholder='例如: {"device": "smart_watch",location": "home"}';
               multiline;
               numberOfLines={4};
             />;
@@ -292,15 +265,13 @@ const AddDataModal: React.FC<{
     </Modal>;
   );
 };
-
 // 记录详情模态框
-const RecordDetailModal: React.FC<{
+const RecordDetailModal: React.FC<{,
   record: HealthDataRecord | null;
-  onClose: () => void;
+  onClose: () => void,
   onVerify: (record: HealthDataRecord) => void;
 }> = ({ record, onClose, onVerify }) => {
   if (!record) return null;
-
   return (
     <Modal visible={!!record} animationType="slide" presentationStyle="pageSheet">
       <View style={styles.modalContainer}>
@@ -310,37 +281,31 @@ const RecordDetailModal: React.FC<{
             <Text style={styles.modalCloseText}>关闭</Text>
           </TouchableOpacity>
         </View>
-
         <ScrollView style={styles.modalContent}>
           <View style={styles.detailGroup}>
             <Text style={styles.detailLabel}>数据类型</Text>
             <Text style={styles.detailValue}>{record.dataType}</Text>
           </View>
-
           <View style={styles.detailGroup}>
             <Text style={styles.detailLabel}>交易ID</Text>
             <Text style={styles.detailValue}>{record.transactionId}</Text>
           </View>
-
           <View style={styles.detailGroup}>
             <Text style={styles.detailLabel}>区块哈希</Text>
             <Text style={styles.detailValue}>{record.blockHash}</Text>
           </View>
-
           <View style={styles.detailGroup}>
             <Text style={styles.detailLabel}>数据哈希</Text>
             <Text style={styles.detailValue}>
               {Array.from(record.dataHash).map(b => b.toString(16).padStart(2, '0')).join('')}
             </Text>
           </View>
-
           <View style={styles.detailGroup}>
             <Text style={styles.detailLabel}>时间戳</Text>
             <Text style={styles.detailValue}>
               {new Date(record.timestamp).toLocaleString('zh-CN')}
             </Text>
           </View>
-
           <View style={styles.detailGroup}>;
             <Text style={styles.detailLabel}>元数据</Text>;
             <Text style={styles.detailValue}>;
@@ -359,53 +324,52 @@ const RecordDetailModal: React.FC<{
     </Modal>;
   );
 };
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  container: {,
+  flex: 1,
     backgroundColor: '#F8F9FA'
   },
-  statsContainer: {
-    flexDirection: 'row',
+  statsContainer: {,
+  flexDirection: 'row',
     backgroundColor: '#FFFFFF',
     padding: 16,
-    marginBottom: 8
+    marginBottom: 8;
   },
-  statItem: {
-    flex: 1,
+  statItem: {,
+  flex: 1,
     alignItems: 'center'
   },
-  statValue: {
-    fontSize: 18,
+  statValue: {,
+  fontSize: 18,
     fontWeight: '700',
     color: '#2C3E50',
-    marginBottom: 4
+    marginBottom: 4;
   },
-  statLabel: {
-    fontSize: 12,
+  statLabel: {,
+  fontSize: 12,
     color: '#6C757D',
     textAlign: 'center'
   },
-  actionContainer: {
-    flexDirection: 'row',
+  actionContainer: {,
+  flexDirection: 'row',
     paddingHorizontal: 16,
     paddingVertical: 8,
-    gap: 12
+    gap: 12;
   },
-  addButton: {
-    flex: 1,
+  addButton: {,
+  flex: 1,
     backgroundColor: '#007AFF',
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center'
   },
-  addButtonText: {
-    color: '#FFFFFF',
+  addButtonText: {,
+  color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '600'
   },
-  refreshButton: {
-    paddingHorizontal: 16,
+  refreshButton: {,
+  paddingHorizontal: 16,
     paddingVertical: 12,
     backgroundColor: '#F8F9FA',
     borderRadius: 8,
@@ -414,16 +378,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  refreshButtonText: {
-    color: '#6C757D',
-    fontSize: 14
+  refreshButtonText: {,
+  color: '#6C757D',
+    fontSize: 14;
   },
-  filterContainer: {
-    paddingHorizontal: 16,
-    paddingVertical: 8
+  filterContainer: {,
+  paddingHorizontal: 16,
+    paddingVertical: 8;
   },
-  filterChip: {
-    paddingHorizontal: 12,
+  filterChip: {,
+  paddingHorizontal: 12,
     paddingVertical: 6,
     backgroundColor: '#F8F9FA',
     borderRadius: 16,
@@ -431,34 +395,34 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#DEE2E6'
   },
-  filterChipActive: {
-    backgroundColor: '#007AFF',
+  filterChipActive: {,
+  backgroundColor: '#007AFF',
     borderColor: '#007AFF'
   },
-  filterChipText: {
-    fontSize: 12,
+  filterChipText: {,
+  fontSize: 12,
     color: '#6C757D'
   },
-  filterChipTextActive: {
-    color: '#FFFFFF'
+  filterChipTextActive: {,
+  color: '#FFFFFF'
   },
-  errorContainer: {
-    backgroundColor: '#FFE6E6',
+  errorContainer: {,
+  backgroundColor: '#FFE6E6',
     padding: 12,
     marginHorizontal: 16,
     marginVertical: 8,
-    borderRadius: 8
+    borderRadius: 8;
   },
-  errorText: {
-    color: '#D32F2F',
-    fontSize: 14
+  errorText: {,
+  color: '#D32F2F',
+    fontSize: 14;
   },
-  recordsList: {
-    flex: 1,
-    paddingHorizontal: 16
+  recordsList: {,
+  flex: 1,
+    paddingHorizontal: 16;
   },
-  recordCard: {
-    backgroundColor: '#FFFFFF',
+  recordCard: {,
+  backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
     marginVertical: 4,
@@ -466,125 +430,125 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
-    elevation: 2
+    elevation: 2;
   },
-  recordHeader: {
-    flexDirection: 'row',
+  recordHeader: {,
+  flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12
+    marginBottom: 12;
   },
-  recordType: {
-    fontSize: 16,
+  recordType: {,
+  fontSize: 16,
     fontWeight: '600',
     color: '#2C3E50'
   },
-  recordTime: {
-    fontSize: 12,
+  recordTime: {,
+  fontSize: 12,
     color: '#6C757D'
   },
-  recordContent: {
-    flexDirection: 'row',
+  recordContent: {,
+  flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 8
+    marginBottom: 8;
   },
-  recordLabel: {
-    fontSize: 14,
+  recordLabel: {,
+  fontSize: 14,
     color: '#6C757D',
-    flex: 1
+    flex: 1;
   },
-  recordValue: {
-    fontSize: 14,
+  recordValue: {,
+  fontSize: 14,
     color: '#2C3E50',
     flex: 2,
     textAlign: 'right',
     fontFamily: 'monospace'
   },
-  recordActions: {
-    flexDirection: 'row',
+  recordActions: {,
+  flexDirection: 'row',
     justifyContent: 'flex-end',
-    marginTop: 12
+    marginTop: 12;
   },
-  verifyButton: {
-    paddingHorizontal: 16,
+  verifyButton: {,
+  paddingHorizontal: 16,
     paddingVertical: 8,
     backgroundColor: '#28A745',
-    borderRadius: 6
+    borderRadius: 6;
   },
-  verifyButtonText: {
-    color: '#FFFFFF',
+  verifyButtonText: {,
+  color: '#FFFFFF',
     fontSize: 14,
     fontWeight: '500'
   },
-  emptyContainer: {
-    padding: 32,
+  emptyContainer: {,
+  padding: 32,
     alignItems: 'center'
   },
-  emptyText: {
-    fontSize: 16,
+  emptyText: {,
+  fontSize: 16,
     color: '#6C757D'
   },
-  modalContainer: {
-    flex: 1,
+  modalContainer: {,
+  flex: 1,
     backgroundColor: '#FFFFFF'
   },
-  modalHeader: {
-    flexDirection: 'row',
+  modalHeader: {,
+  flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#DEE2E6'
   },
-  modalTitle: {
-    fontSize: 18,
+  modalTitle: {,
+  fontSize: 18,
     fontWeight: '600',
     color: '#2C3E50'
   },
-  modalCloseText: {
-    fontSize: 16,
+  modalCloseText: {,
+  fontSize: 16,
     color: '#007AFF'
   },
-  modalContent: {
-    flex: 1,
-    padding: 16
+  modalContent: {,
+  flex: 1,
+    padding: 16;
   },
-  inputGroup: {
-    marginBottom: 20
+  inputGroup: {,
+  marginBottom: 20;
   },
-  inputLabel: {
-    fontSize: 14,
+  inputLabel: {,
+  fontSize: 14,
     fontWeight: '500',
     color: '#2C3E50',
-    marginBottom: 8
+    marginBottom: 8;
   },
-  textInput: {
-    borderWidth: 1,
+  textInput: {,
+  borderWidth: 1,
     borderColor: '#DEE2E6',
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
     backgroundColor: '#FFFFFF'
   },
-  textArea: {
-    height: 120,
+  textArea: {,
+  height: 120,
     textAlignVertical: 'top'
   },
-  submitButton: {
-    backgroundColor: '#007AFF',
+  submitButton: {,
+  backgroundColor: '#007AFF',
     paddingVertical: 16,
     borderRadius: 8,
     alignItems: 'center',
-    marginTop: 20
+    marginTop: 20;
   },
-  submitButtonText: {
-    color: '#FFFFFF',
+  submitButtonText: {,
+  color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '600'
   },
-  detailGroup: {
-    marginBottom: 20;
+  detailGroup: {,
+  marginBottom: 20;
   },detailLabel: {fontSize: 14,fontWeight: '500',color: '#6C757D',marginBottom: 8;
   },detailValue: {fontSize: 14,color: '#2C3E50',fontFamily: 'monospace',backgroundColor: '#F8F9FA',padding: 12,borderRadius: 6;
   };
-}); 
+});

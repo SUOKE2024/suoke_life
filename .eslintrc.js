@@ -3,13 +3,19 @@ module.exports = {
   extends: [
     "@react-native",
     "eslint:recommended",
+    "plugin:prettier/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript",
     "prettier" // 确保prettier规则在最后
   ],
   plugins: [
     "@typescript-eslint",
     "react",
     "react-hooks",
-    "react-native"
+    "react-native",
+    "prettier",
+    "import"
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: {

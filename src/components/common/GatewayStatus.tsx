@@ -1,8 +1,7 @@
 /**
- * API网关状态监控组件
- * 显示网关健康状态、性能指标和服务状态
- */
-
+* API网关状态监控组件
+* 显示网关健康状态、性能指标和服务状态
+*/
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -17,7 +16,6 @@ import { performanceMonitor, PerformanceMetrics } from '../../services/performan
 import { securityService } from '../../services/securityService';
 import { configService } from '../../services/configService';
 import { gatewayApiClient } from '../../services/apiClient';
-
 interface ServiceHealth {
   name: string;
   status: 'healthy' | 'unhealthy' | 'unknown';
@@ -25,12 +23,10 @@ interface ServiceHealth {
   lastCheck?: string;
   instances?: number;
 }
-
 interface GatewayStatusProps {
   onServiceSelect?: (serviceName: string) => void;
   showDetailedMetrics?: boolean;
 }
-
 export const GatewayStatus: React.FC<GatewayStatusProps> = ({
   onServiceSelect,
   showDetailedMetrics = true,
@@ -40,34 +36,26 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   const [gatewayHealth, setGatewayHealth] = useState<'healthy' | 'degraded' | 'unhealthy'>('unknown');
-
-  useEffect(() => {
+  useEffect() => {
     loadGatewayStatus();
-
     // 每30秒自动刷新
     const interval = setInterval(loadGatewayStatus, 30000);
-
     return () => clearInterval(interval);
   }, []);  // 检查是否需要添加依赖项;
-
   const loadGatewayStatus = async () => {
     try {
       // 获取性能指标
       const currentMetrics = performanceMonitor.getCurrentMetrics();
       setMetrics(currentMetrics);
-
       // 获取服务状态
       await loadServicesStatus();
-
       // 评估网关整体健康状态
       evaluateGatewayHealth(currentMetrics);
-
       setLastUpdate(new Date());
     } catch (error) {
       console.error('加载网关状态失败:', error);
     }
   };
-
   const loadServicesStatus = async () => {
     try {
       const response = await gatewayApiClient.getServices();
@@ -78,17 +66,23 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
       console.error('获取服务状态失败:', error);
       // 设置默认服务列表
       setServices([
-        { name: 'xiaoai-service', status: 'unknown' },
-        { name: 'xiaoke-service', status: 'unknown' },
-        { name: 'laoke-service', status: 'unknown' },
-        { name: 'soer-service', status: 'unknown' },
+        {
+      name: "xiaoai-service",
+      status: 'unknown' },
+        {
+      name: "xiaoke-service",
+      status: 'unknown' },
+        {
+      name: "laoke-service",
+      status: 'unknown' },
+        {
+      name: "soer-service",
+      status: 'unknown' },
       ]);
     }
   };
-
   const evaluateGatewayHealth = (metrics: PerformanceMetrics) => {
     const healthScore = calculateHealthScore(metrics);
-
     if (healthScore >= 80) {
       setGatewayHealth('healthy');
     } else if (healthScore >= 60) {
@@ -97,35 +91,27 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
       setGatewayHealth('unhealthy');
     }
   };
-
   const calculateHealthScore = (metrics: PerformanceMetrics): number => {
     let score = 100;
-
     // API响应时间评分
     if (metrics.apiResponseTime > 2000) score -= 20;
     else if (metrics.apiResponseTime > 1000) score -= 10;
-
     // API成功率评分
     if (metrics.apiSuccessRate < 95) score -= 30;
     else if (metrics.apiSuccessRate < 98) score -= 15;
-
     // 错误率评分
     if (metrics.apiErrorRate > 5) score -= 25;
     else if (metrics.apiErrorRate > 2) score -= 10;
-
     // 网络延迟评分
     if (metrics.networkLatency > 1000) score -= 15;
     else if (metrics.networkLatency > 500) score -= 5;
-
     return Math.max(0, score);
   };
-
   const onRefresh = async () => {
     setIsRefreshing(true);
     await loadGatewayStatus();
     setIsRefreshing(false);
   };
-
   const handleServicePress = (service: ServiceHealth) => {
     if (onServiceSelect) {
       onServiceSelect(service.name);
@@ -137,7 +123,6 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
       );
     }
   };
-
   const getStatusColor = (status: string): string => {
     switch (status) {
       case 'healthy': return '#4CAF50';
@@ -146,7 +131,6 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
       default: return '#9E9E9E';
     }
   };
-
   const getStatusText = (status: string): string => {
     switch (status) {
       case 'healthy': return '健康';
@@ -156,7 +140,6 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
       default: return status;
     }
   };
-
   const formatResponseTime = (time: number): string => {
     if (time < 1000) {
       return `${Math.round(time)}ms`;
@@ -164,11 +147,9 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
       return `${(time / 1000).toFixed(1)}s`;
     }
   };
-
   const formatPercentage = (value: number): string => {
     return `${value.toFixed(1)}%`;
   };
-
   if (!metrics) {
     return (
       <View style={styles.container}>
@@ -176,15 +157,14 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
       </View>
     );
   }
-
   return (
-    <ScrollView
+    <ScrollView;
       style={styles.container}
       refreshControl={
         <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
       }
     >
-      {/* 网关整体状态 */}
+      {}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>网关状态</Text>
         <View style={[styles.statusCard, { borderLeftColor: getStatusColor(gatewayHealth) }]}>
@@ -199,12 +179,10 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
           </Text>
         </View>
       </View>
-
-      {/* 性能指标 */}
+      {}
       {showDetailedMetrics && (
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>性能指标</Text>
-
           <View style={styles.metricsGrid}>
             <View style={styles.metricCard}>
               <Text style={styles.metricLabel}>API响应时间</Text>
@@ -212,28 +190,24 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
                 {formatResponseTime(metrics.apiResponseTime)}
               </Text>
             </View>
-
             <View style={styles.metricCard}>
               <Text style={styles.metricLabel}>成功率</Text>
               <Text style={[styles.metricValue, { color: metrics.apiSuccessRate >= 95 ? '#4CAF50' : '#F44336' }]}>
                 {formatPercentage(metrics.apiSuccessRate)}
               </Text>
             </View>
-
             <View style={styles.metricCard}>
               <Text style={styles.metricLabel}>错误率</Text>
               <Text style={[styles.metricValue, { color: metrics.apiErrorRate <= 5 ? '#4CAF50' : '#F44336' }]}>
                 {formatPercentage(metrics.apiErrorRate)}
               </Text>
             </View>
-
             <View style={styles.metricCard}>
               <Text style={styles.metricLabel}>网络延迟</Text>
               <Text style={styles.metricValue}>
                 {formatResponseTime(metrics.networkLatency)}
               </Text>
             </View>
-
             <View style={styles.metricCard}>
               <Text style={styles.metricLabel}>连接质量</Text>
               <Text style={[styles.metricValue, { color: getStatusColor(
@@ -242,11 +216,10 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
                 metrics.connectionQuality === 'fair' ? 'degraded' : 'unhealthy',
               ) }]}>
                 {metrics.connectionQuality === 'excellent' ? '优秀' :
-                 metrics.connectionQuality === 'good' ? '良好' :
-                 metrics.connectionQuality === 'fair' ? '一般' : '较差'}
+                metrics.connectionQuality === 'good' ? '良好' :
+                metrics.connectionQuality === 'fair' ? '一般' : '较差'}
               </Text>
             </View>
-
             <View style={styles.metricCard}>
               <Text style={styles.metricLabel}>错误数量</Text>
               <Text style={styles.metricValue}>
@@ -256,12 +229,11 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
           </View>
         </View>
       )}
-
-      {/* 服务状态 */}
+      {}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>服务状态</Text>
         {services.map((service, index) => (
-          <TouchableOpacity
+          <TouchableOpacity;
             key={index}
             style={[styles.serviceCard, { borderLeftColor: getStatusColor(service.status) }]}
             onPress={() => handleServicePress(service)}
@@ -272,7 +244,6 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
                 <Text style={styles.statusBadgeText}>{getStatusText(service.status)}</Text>
               </View>
             </View>
-
             <View style={styles.serviceDetails}>
               {service.responseTime && (
                 <Text style={styles.serviceDetailText}>
@@ -293,17 +264,15 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
           </TouchableOpacity>
         ))}
       </View>
-
-      {/* 系统资源 */}
+      {}
       {showDetailedMetrics && (
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>系统资源</Text>
-
           <View style={styles.resourceCard}>
             <View style={styles.resourceItem}>
               <Text style={styles.resourceLabel}>内存使用率</Text>
               <View style={styles.progressBar}>
-                <View
+                <View;
                   style={[
                     styles.progressFill,
                     {
@@ -315,11 +284,10 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
               </View>
               <Text style={styles.resourceValue}>{formatPercentage(metrics.memoryUsage)}</Text>
             </View>
-
             <View style={styles.resourceItem}>
               <Text style={styles.resourceLabel}>CPU使用率</Text>
               <View style={styles.progressBar}>
-                <View
+                <View;
                   style={[
                     styles.progressFill,
                     {
@@ -331,11 +299,10 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
               </View>
               <Text style={styles.resourceValue}>{formatPercentage(metrics.cpuUsage)}</Text>
             </View>
-
             <View style={styles.resourceItem}>
               <Text style={styles.resourceLabel}>存储使用率</Text>
               <View style={styles.progressBar}>
-                <View
+                <View;
                   style={[
                     styles.progressFill,
                     {
@@ -347,11 +314,10 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
               </View>
               <Text style={styles.resourceValue}>{formatPercentage(metrics.storageUsage)}</Text>
             </View>
-
             <View style={styles.resourceItem}>
               <Text style={styles.resourceLabel}>电池电量</Text>
               <View style={styles.progressBar}>
-                <View
+                <View;
                   style={[
                     styles.progressFill,
                     {
@@ -369,29 +335,28 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
     </ScrollView>
   );
 };
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  container: {,
+  flex: 1,
     backgroundColor: '#f5f5f5',
   },
-  loadingText: {
-    textAlign: 'center',
+  loadingText: {,
+  textAlign: 'center',
     marginTop: 50,
     fontSize: 16,
     color: '#666',
   },
-  section: {
-    margin: 16,
+  section: {,
+  margin: 16,
   },
-  sectionTitle: {
-    fontSize: 18,
+  sectionTitle: {,
+  fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 12,
     color: '#333',
   },
-  statusCard: {
-    backgroundColor: '#fff',
+  statusCard: {,
+  backgroundColor: '#fff',
     borderRadius: 8,
     padding: 16,
     borderLeftWidth: 4,
@@ -401,38 +366,38 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
-  statusHeader: {
-    flexDirection: 'row',
+  statusHeader: {,
+  flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 8,
   },
-  statusTitle: {
-    fontSize: 16,
+  statusTitle: {,
+  fontSize: 16,
     fontWeight: '600',
     color: '#333',
   },
-  statusBadge: {
-    paddingHorizontal: 8,
+  statusBadge: {,
+  paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
   },
-  statusBadgeText: {
-    color: '#fff',
+  statusBadgeText: {,
+  color: '#fff',
     fontSize: 12,
     fontWeight: '600',
   },
-  lastUpdateText: {
-    fontSize: 12,
+  lastUpdateText: {,
+  fontSize: 12,
     color: '#666',
   },
-  metricsGrid: {
-    flexDirection: 'row',
+  metricsGrid: {,
+  flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
   },
-  metricCard: {
-    backgroundColor: '#fff',
+  metricCard: {,
+  backgroundColor: '#fff',
     borderRadius: 8,
     padding: 16,
     width: '48%',
@@ -443,18 +408,18 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
-  metricLabel: {
-    fontSize: 12,
+  metricLabel: {,
+  fontSize: 12,
     color: '#666',
     marginBottom: 4,
   },
-  metricValue: {
-    fontSize: 18,
+  metricValue: {,
+  fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
   },
-  serviceCard: {
-    backgroundColor: '#fff',
+  serviceCard: {,
+  backgroundColor: '#fff',
     borderRadius: 8,
     padding: 16,
     marginBottom: 8,
@@ -465,29 +430,29 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
-  serviceHeader: {
-    flexDirection: 'row',
+  serviceHeader: {,
+  flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 8,
   },
-  serviceName: {
-    fontSize: 16,
+  serviceName: {,
+  fontSize: 16,
     fontWeight: '600',
     color: '#333',
   },
-  serviceDetails: {
-    flexDirection: 'row',
+  serviceDetails: {,
+  flexDirection: 'row',
     flexWrap: 'wrap',
   },
-  serviceDetailText: {
-    fontSize: 12,
+  serviceDetailText: {,
+  fontSize: 12,
     color: '#666',
     marginRight: 16,
     marginBottom: 4,
   },
-  resourceCard: {
-    backgroundColor: '#fff',
+  resourceCard: {,
+  backgroundColor: '#fff',
     borderRadius: 8,
     padding: 16,
     elevation: 2,
@@ -496,35 +461,34 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
-  resourceItem: {
-    flexDirection: 'row',
+  resourceItem: {,
+  flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 16,
   },
-  resourceLabel: {
-    flex: 1,
+  resourceLabel: {,
+  flex: 1,
     fontSize: 14,
     color: '#333',
   },
-  progressBar: {
-    flex: 2,
+  progressBar: {,
+  flex: 2,
     height: 8,
     backgroundColor: '#e0e0e0',
     borderRadius: 4,
     marginHorizontal: 12,
     overflow: 'hidden',
   },
-  progressFill: {
-    height: '100%',
+  progressFill: {,
+  height: '100%',
     borderRadius: 4,
   },
-  resourceValue: {
-    width: 50,
+  resourceValue: {,
+  width: 50,
     textAlign: 'right',
     fontSize: 12,
     fontWeight: '600',
     color: '#333',
   },
 });
-
 export default GatewayStatus;

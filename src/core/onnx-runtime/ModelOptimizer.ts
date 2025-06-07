@@ -6,14 +6,14 @@ import {import {ONNXModel,
   ExecutionMode,
   ONNXError,
   ONNXEvent,
-  { PerformanceMetrics } from "../../placeholder";./////    types
+  { PerformanceMetrics } from "../../placeholder";./    types;
   OPTIMIZATION_LEVELS,
   ERROR_MESSAGES,
   EVENT_NAMES,
-  { PERFORMANCE_BENCHMARKS  } from ./////    constants
+  { PERFORMANCE_BENCHMARKS  } from ./    constants;
 /**
- * * 模型优化器 - 优化ONNX模型的性能和内存使用
- * 支持图优化、内存模式优化和执行优化
+* * 模型优化器 - 优化ONNX模型的性能和内存使用
+* 支持图优化、内存模式优化和执行优化
 export class ModelOptimizer extends EventEmitter {private isOptimizing: boolean = false;
   private optimizationQueue: OptimizationTask[] = [];
   private optimizationHistory: Map<string, OptimizationResult[]> = new Map();
@@ -21,7 +21,7 @@ export class ModelOptimizer extends EventEmitter {private isOptimizing: boolean 
     super();
   }
   /**
- * * 优化ONNX模型
+* * 优化ONNX模型
   async optimizeModel(
     model: ONNXModel,
     options: ModelOptimizationOptions;
@@ -50,10 +50,10 @@ const result = await this.validateOptimizationResult(model, optimizedModel, opti
       // 记录优化历史
 this.recordOptimizationHistory(model.id, result);
       this.emit(EVENT_NAMES.OPTIMIZATION_COMPLETED, {
-        type: optimization_completed","
+        type: optimization_completed",
         timestamp: new Date(),
-        data: {
-          originalModel: model,
+        data: {,
+  originalModel: model,
           optimizedModel,
           options,
           result,
@@ -62,8 +62,9 @@ this.recordOptimizationHistory(model.id, result);
       } as ONNXEvent);
       return optimizedModel;
     } catch (error) {
-      const onnxError: ONNXError = {code: "OPTIMIZATION_FAILED,",
-        message: `模型优化失败: ${error.message}`,
+      const onnxError: ONNXError = {
+      code: "OPTIMIZATION_FAILED,",
+      message: `模型优化失败: ${error.message}`,
         details: error,
         timestamp: new Date(),
         modelId: model.id;
@@ -76,7 +77,7 @@ this.recordOptimizationHistory(model.id, result);
     }
   }
   /**
- * * 批量优化模型
+* * 批量优化模型
   async optimizeModels(
     models: ONNXModel[],
     options: ModelOptimizationOptions[]
@@ -96,7 +97,7 @@ this.recordOptimizationHistory(model.id, result);
     return results;
   }
   /**
- * * 获取优化建议
+* * 获取优化建议
   getOptimizationRecommendation(
     model: ONNXModel,
     targetPerformance: "speed | "memory" | balanced"
@@ -112,21 +113,21 @@ this.recordOptimizationHistory(model.id, result);
     // 根据目标性能调整配置
 switch (targetPerformance) {
       case "speed:"
-        return {...baseOptions,executionMode: "parallel",graphOptimizationLevel: all",";
+        return {...baseOptions,executionMode: "parallel",graphOptimizationLevel: all",;
           enableMemoryPattern: false, // 可能影响速度;
 enableProfiling: false;
         };
       case "memory:"
-        return {...baseOptions,executionMode: "sequential",graphOptimizationLevel: basic",";
+        return {...baseOptions,executionMode: "sequential",graphOptimizationLevel: basic",;
           enableMemoryPattern: true,enableCPUMemArena: true;
         };
-      case "balanced:"
-      default:
+      case "balanced:",
+  default:
         return baseOptions;
     }
   }
   /**
- * * 分析模型性能瓶颈
+* * 分析模型性能瓶颈
   analyzePerformanceBottlenecks(
     model: ONNXModel,
     metrics: PerformanceMetrics;
@@ -157,12 +158,12 @@ if (metrics.thermalState && metrics.thermalState !== "nominal") {
     };
   }
   /**
- * * 获取优化历史
+* * 获取优化历史
   getOptimizationHistory(modelId: string): OptimizationResult[] {
     return this.optimizationHistory.get(modelId) || [];
   }
   /**
- * * 清除优化历史
+* * 清除优化历史
   clearOptimizationHistory(modelId?: string): void {
     if (modelId) {
       this.optimizationHistory.delete(modelId);
@@ -175,7 +176,7 @@ private validateOptimizationOptions(options: ModelOptimizationOptions): void {
     if (!options) {
       throw new Error("优化选项不能为空");
     }
-    const validGraphLevels: GraphOptimizationLevel[] = [disabled", "basic, "extended", all"];"
+    const validGraphLevels: GraphOptimizationLevel[] = [disabled",basic, "extended", all"];"
     if (!validGraphLevels.includes(options.graphOptimizationLevel)) {
       throw new Error(`无效的图优化级别: ${options.graphOptimizationLevel}`);
     }
@@ -185,7 +186,7 @@ private validateOptimizationOptions(options: ModelOptimizationOptions): void {
     }
   }
   private async executeOptimization(task: OptimizationTask): Promise<ONNXModel> {
-    task.status = running
+    task.status = running;
     const { model, options } = task;
     try {
       // 应用图优化
@@ -197,7 +198,7 @@ const finalOptimizedModel = await this.applyExecutionOptimization(memoryOptimize
       task.status = "completed";
       return finalOptimizedModel;
     } catch (error) {
-      task.status = failed
+      task.status = failed;
       task.error = error.message;
       throw error;
     }
@@ -269,8 +270,8 @@ await this.simulateOptimizationProcess(500);
     const result: OptimizationResult = {originalModelId: originalModel.id,
       optimizedModelId: optimizedModel.id,
       options,
-      improvements: {
-        inferenceSpeedGain: 1.2, // 20%提升
+      improvements: {,
+  inferenceSpeedGain: 1.2, // 20%提升
 memoryReduction: 0.15,   // 15%减少
 modelSizeChange: 0.05    // 5%增加（优化元数据）
       },
@@ -326,7 +327,7 @@ interface OptimizationTask {
   id: string;
   model: ONNXModel;
   options: ModelOptimizationOptions;
-  status: pending" | "running | "completed" | failed
+  status: pending" | "running | "completed" | failed;
   createdAt: Date;
   completedAt?: Date;
   error?: string;
@@ -335,12 +336,12 @@ interface OptimizationResult {
   originalModelId: string;
   optimizedModelId: string;
   options: ModelOptimizationOptions;
-  improvements: {
-    inferenceSpeedGain: number;  // 推理速度提升倍数
-memoryReduction: number;     // 内存减少比例
+  improvements: {;
+    inferenceSpeedGain: number;  // 推理速度提升倍数;
+  memoryReduction: number;     // 内存减少比例
 modelSizeChange: number;     // 模型大小变化比例
-  }
-  timestamp: Date;
+}
+  timestamp: Date,
   success: boolean;
   error?: string;
 }
@@ -350,4 +351,4 @@ interface BottleneckAnalysis {
   recommendations: string[];
   overallScore: number;
   metrics: PerformanceMetrics;
-}  */////
+}  */

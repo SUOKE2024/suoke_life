@@ -10,166 +10,146 @@ const path = require("path");
 const { execSync } = require("child_process");
 const glob = require("glob");
 
-// 修复规则
+// 常见语法错误修复规则
 const fixRules = [
-  // 修复未闭合的字符串引号 - 更精确的匹配
+  // 修复缺少分号
   {
-    name: '未闭合的import字符串',
-    pattern: /import\s+([^"']+)\s+from\s+"([^"]*);/g,
-    replacement: 'import $1 from "$2";'
+    pattern: /(\w+)\s*$/gm,
+    replacement: '$1;',
+    description: '添加缺少的分号'
   },
+  
+  // 修复缺少逗号的对象属性
   {
-    name: '未闭合的import字符串(单引号)',
-    pattern: /import\s+([^"']+)\s+from\s+'([^']*);/g,
-    replacement: 'import $1 from \'$2\';'
+    pattern: /(\w+:\s*[^,}\n]+)\s*\n\s*(\w+:)/g,
+    replacement: '$1,\n  $2',
+    description: '添加缺少的逗号'
   },
-  // 修复正则表达式错误
+  
+  // 修复字符串引号问题
   {
-    name: '错误的正则表达式',
-    pattern: /\/;/g,
-    replacement: '//'
+    pattern: /([^"'])"([^"']*)"([^"'])/g,
+    replacement: '$1"$2"$3',
+    description: '修复字符串引号'
   },
-  // 修复对象语法错误
+  
+  // 修复导入语句
   {
-    name: '对象开始语法错误',
-    pattern: /\{,/g,
-    replacement: '{'
+    pattern: /import\s*{\s*([^}]+)\s*}\s*from\s*["']([^"']+)["']\s*["']([^"']+)["']/g,
+    replacement: 'import { $1 } from "$2";',
+    description: '修复导入语句'
   },
+  
+  // 修复多余的分号
   {
-    name: '对象结束语法错误',
-    pattern: /,\s*\}/g,
-    replacement: '}'
-  },
-  // 修复分号问题
-  {
-    name: '重复分号',
     pattern: /;;+/g,
-    replacement: ';'
+    replacement: ';',
+    description: '移除多余的分号'
   },
-  // 修复分号逗号混用
+  
+  // 修复括号问题
   {
-    name: '分号逗号混用',
-    pattern: /;,/g,
-    replacement: ','
+    pattern: /\(\s*\(\s*/g,
+    replacement: '(',
+    description: '修复多余的括号'
   },
-  // 修复链式调用语法
+  
+  // 修复花括号问题
   {
-    name: '链式调用语法',
-    pattern: /(\w+)\s*\.\s*\(/g,
-    replacement: '$1.('
-  },
-  // 修复箭头函数语法
-  {
-    name: '箭头函数语法',
-    pattern: /=>\s*\{([^}]*?)$/gm,
-    replacement: (match, content) => `=> {${content.trim()}}`
-  },
-  // 修复函数调用语法
-  {
-    name: '函数调用语法',
-    pattern: /(\w+)\s*\(\s*\)/g,
-    replacement: '$1()'
+    pattern: /{\s*{/g,
+    replacement: '{',
+    description: '修复多余的花括号'
   }
 ];
 
-// 获取所有需要修复的文件
-function getFilesToFix() {
-  const patterns = [
-    'src/**/*.ts',
-    'src/**/*.tsx',
-    'src/**/*.js',
-    'src/**/*.jsx'
-  ];
-  
-  let files = [];
-  patterns.forEach(pattern => {
-    const matched = glob.sync(pattern, { 
-      ignore: ['**/node_modules/**', '**/*.test.*', '**/*.spec.*'] 
-    });
-    files = files.concat(matched);
+// 获取所有TypeScript文件
+function getTypeScriptFiles() {
+  return glob.sync('src/**/*.{ts,tsx}', {
+    ignore: ['src/**/*.test.{ts,tsx}', 'src/**/__tests__/**/*']
   });
-  
-  return [...new Set(files)]; // 去重
 }
 
-// 修复单个文件
+// 应用修复规则
+function applyFixes(content, filePath) {
+  let fixedContent = content;
+  let appliedFixes = [];
+  
+  fixRules.forEach(rule => {
+    const beforeLength = fixedContent.length;
+    fixedContent = fixedContent.replace(rule.pattern, rule.replacement);
+    const afterLength = fixedContent.length;
+    
+    if (beforeLength !== afterLength) {
+      appliedFixes.push(rule.description);
+    }
+  });
+  
+  return { content: fixedContent, fixes: appliedFixes };
+}
+
+// 备份文件
+function backupFile(filePath) {
+  const backupPath = filePath + '.backup';
+  fs.copyFileSync(filePath, backupPath);
+  return backupPath;
+}
+
+// 主修复函数
 function fixFile(filePath) {
   try {
-    let content = fs.readFileSync(filePath, "utf8");
-    let originalContent = content;
-    let fixCount = 0;
-    let appliedRules = [];
+    const content = fs.readFileSync(filePath, 'utf8');
+    const { content: fixedContent, fixes } = applyFixes(content, filePath);
     
-    // 应用所有修复规则
-    fixRules.forEach(rule => {
-      const beforeContent = content;
-      content = content.replace(rule.pattern, rule.replacement);
+    if (fixes.length > 0) {
+      // 备份原文件
+      backupFile(filePath);
       
-      if (content !== beforeContent) {
-        const matches = beforeContent.match(rule.pattern);
-        if (matches) {
-          fixCount += matches.length;
-          appliedRules.push(`${rule.name}: ${matches.length}个`);
-        }
-      }
-    });
-    
-    // 如果有修改，写回文件
-    if (content !== originalContent) {
-      fs.writeFileSync(filePath, content, "utf8");
-      console.log(`✅ 修复 ${filePath}:`);
-      appliedRules.forEach(rule => console.log(`   - ${rule}`));
-      return fixCount;
+      // 写入修复后的内容
+      fs.writeFileSync(filePath, fixedContent, 'utf8');
+      
+      console.log(`✅ 修复文件: ${filePath}`);
+      fixes.forEach(fix => console.log(`   - ${fix}`));
+      
+      return true;
     }
     
-    return 0;
+    return false;
   } catch (error) {
-    console.error(`❌ 修复 ${filePath} 失败:`, error.message);
-    return 0;
+    console.error(`❌ 修复文件失败: ${filePath}`, error.message);
+    return false;
   }
 }
 
 // 主函数
 function main() {
-  console.log("🔧 开始修复前端语法错误...\n");
+  console.log('🔧 开始自动修复语法错误...\n');
   
-  const files = getFilesToFix();
-  console.log(`📁 找到 ${files.length} 个文件需要检查\n`);
+  const files = getTypeScriptFiles();
+  let fixedCount = 0;
+  let totalFiles = files.length;
   
-  let totalFixes = 0;
-  let fixedFiles = 0;
+  console.log(`📁 找到 ${totalFiles} 个TypeScript文件\n`);
   
-  files.forEach(file => {
-    const fixes = fixFile(file);
-    if (fixes > 0) {
-      totalFixes += fixes;
-      fixedFiles++;
+  files.forEach(filePath => {
+    if (fixFile(filePath)) {
+      fixedCount++;
     }
   });
   
-  console.log("\n📊 修复统计:");
-  console.log(`- 检查文件: ${files.length}`);
-  console.log(`- 修复文件: ${fixedFiles}`);
-  console.log(`- 修复问题: ${totalFixes}`);
+  console.log(`\n📊 修复完成:`);
+  console.log(`   - 总文件数: ${totalFiles}`);
+  console.log(`   - 修复文件数: ${fixedCount}`);
+  console.log(`   - 修复率: ${((fixedCount / totalFiles) * 100).toFixed(1)}%`);
   
-  if (totalFixes > 0) {
-    console.log("\n✨ 修复完成！建议运行 npm run lint 验证结果");
-  } else {
-    console.log("\n✅ 没有发现需要修复的语法错误");
+  if (fixedCount > 0) {
+    console.log(`\n💡 提示: 原文件已备份为 .backup 后缀`);
+    console.log(`   如需恢复，请运行: find src -name "*.backup" -exec bash -c 'mv "$1" "\${1%.backup}"' _ {} \\;`);
   }
 }
 
-// 检查是否安装了glob
-try {
-  require("glob");
-} catch (error) {
-  console.error("❌ 缺少依赖: glob");
-  console.log("请运行: npm install glob");
-  process.exit(1);
-}
-
+// 运行脚本
 if (require.main === module) {
   main();
 }
 
-module.exports = { fixFile, getFilesToFix };
+module.exports = { fixFile, applyFixes };

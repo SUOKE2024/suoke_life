@@ -1,21 +1,30 @@
 import {   View, Text, StyleSheet, TouchableOpacity, Alert   } from "react-native";
-import { usePerformanceMonitor } from "../hooks/////    usePerformanceMonitor";
-
+import { usePerformanceMonitor } from "../hooks/    usePerformanceMonitor";
 import React from "react";
-import { useNavigation  } from "../../placeholder";@react-navigation/native";/////    importReact from "react
-/////    const NavigationTest: React.FC  = () => {}
-  // 性能监控 // const performanceMonitor = usePerformanceMonitor(NavigationTest", { ";
-    trackRender: true,trackMemory: false,warnThreshold: 50, // ms // };);
+import { useNavigation  } from "../../placeholder";@react-navigation/native";/    importReact from "react;
+/    const NavigationTest: React.FC  = () => {}
+  const performanceMonitor = usePerformanceMonitor(NavigationTest", { ";
+    trackRender: true,trackMemory: false,warnThreshold: 50,  };);
   const navigation = useNavigation;
   const testNavigations =  [;
-    { name: "Home", label: "主;页" ;},
-    { name: "Suoke", label: "SUOKE"},
-    { name: "Explore", label: "探索"},
-    { name: "Life", label: "LIFE"},
-    { name: "Profile", label: "我的"}
+    {
+      name: "Home",
+      label: "主;页" ;},
+    {
+      name: "Suoke",
+      label: "SUOKE"},
+    {
+      name: "Explore",
+      label: "探索"},
+    {
+      name: "Life",
+      label: "LIFE"},
+    {
+      name: "Profile",
+      label: "我的"}
   ];
-  const testNavigation = useCallback((); => {}
-    // TODO: Implement function body *}, []) ////
+  const testNavigation = useCallback(); => {}
+    //
     try {
       navigation.navigate(screenName as never);
       Alert.alert("成功", `成功导航到 ${screenName}`);
@@ -23,60 +32,60 @@ import { useNavigation  } from "../../placeholder";@react-navigation/native";///
       Alert.alert("错误", `导航到 ${screenName} 失败: ${error.message}`);
     }
   };
-  // 记录渲染性能 // performanceMonitor.recordRender();
+  performanceMonitor.recordRender();
   return (;
-    <View style={styles.container} />/      <Text style={styles.title} />导航测试</Text>/      <Text style={styles.subtitle} />点击按钮测试各个页面的导航</Text>// {testNavigations.map((na;v;) => (
+    <View style={styles.container}>/      <Text style={styles.title}>导航测试</Text>/      <Text style={styles.subtitle}>点击按钮测试各个页面的导航</Text>// {testNavigations.map(na;v;) => (
         <TouchableOpacity,
           key={nav.name}
           style={styles.button}
-          onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> testNavigation(nav.name)}/////            >
-          <Text style={styles.buttonText} />测试 {nav.label}</Text>/        </TouchableOpacity>/////          ))}
+          onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> testNavigation(nav.name)}/            >
+          <Text style={styles.buttonText}>测试 {nav.label}</Text>/        </TouchableOpacity>/          ))}
       <TouchableOpacity;
 style={[styles.button, styles.resetButton]}
-        onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> {/////              try {
+        onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> {/              try {
             navigation.reset({
               index: 0,
               routes: [{ name: "Home" as never   }]
             });
-            Alert.alert("成功", "导航已重置到主页");
+            Alert.alert("成功",导航已重置到主页");
           } catch (error) {
             Alert.alert("错误", `重置导航失败: ${error.message}`);
           }
         }}
       >
-        <Text style={styles.buttonText} />重置导航</Text>/      </TouchableOpacity>/    </View>/////      );
+        <Text style={styles.buttonText}>重置导航</Text>/      </TouchableOpacity>/    </View>/      );
 }
-const styles = StyleSheet.create({container: {
-    flex: 1,
+const styles = StyleSheet.create({container: {,
+  flex: 1,
     padding: 20,
     backgroundColor: "#f5f5f5",
     justifyContent: "center"
   },
-  title: {
-    fontSize: 24,
+  title: {,
+  fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 10,
     color: "#333"
   },
-  subtitle: {
-    fontSize: 16,
+  subtitle: {,
+  fontSize: 16,
     textAlign: "center",
     marginBottom: 30,
     color: "#666"
   },
-  button: {
-    backgroundColor: "#007AFF",
+  button: {,
+  backgroundColor: "#007AFF",
     padding: 15,
     borderRadius: 8,
     marginBottom: 10,
     alignItems: "center"
   },
-  resetButton: {
-    backgroundColor: "#FF3B30",
+  resetButton: {,
+  backgroundColor: "#FF3B30",
     marginTop: 20;
   },
-  buttonText: {
-    color: "white",
+  buttonText: {,
+  color: "white",
     fontSize: 16,fontWeight: "600"};};);
 export default React.memo(NavigationTest);

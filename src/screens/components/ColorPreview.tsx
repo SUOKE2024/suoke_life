@@ -1,127 +1,129 @@
 import {   ScrollView, StyleSheet, View   } from "react-native";
-import { usePerformanceMonitor } from "../hooks/////    usePerformanceMonitor";
-
+import { usePerformanceMonitor } from "../hooks/    usePerformanceMonitor";
 import React from "react";
-import { Text, Card, Container, Button  } from "../../placeholder";../../components/ui";/import { colors, spacing } from "../../constants/theme";/////    importReact from "react
+import { Text, Card, Container, Button  } from "../../placeholder";../../components/ui";/import { colors, spacing } from "../../constants/theme";/    importReact from "react;
 // * 索克生活 - 颜色预览组件;
- * 展示更新后的品牌色彩系统
-interface ColorItemProps { name: string,
-  color: string,
-  description?: string}
+* 展示更新后的品牌色彩系统
+interface ColorItemProps {
+  name: string;
+  color: string;
+  description?: string
+}
 interface ColorPreviewProps {
-  onBack?: () => void}
-const ColorItem: React.FC<ColorItemProps /> = ({/  // 性能监控 // const performanceMonitor = usePerformanceMonitor(ColorPreview", { /////    ";
-    trackRender: true,trackMemory: false,warnThreshold: 100, // ms // };);
- name, color, description }) => (
-  <View style={styles.colorItem} />/    <View style={[styles.colorSwatch, { backgroundColor: color}]} />/    <View style={styles.colorInfo} />/      <Text variant="body1" style={styles.colorName} />/////            {name}
-      </Text>/      <Text variant="caption" style={styles.colorValue} />/////            {color}
-      </Text>/////          {description && (
-        <Text variant="caption" style={styles.colorDescription} />/////              {description}
-        </Text>/////    )}
-    </View>/  </View>/////    );
-const ColorPreview: React.FC<ColorPreviewProps />  = ({ onBack }) => {/  // 记录渲染性能 // /////    }
+  onBack?: () => void
+}
+const ColorItem: React.FC<ColorItemProps /> = ({/   const performanceMonitor = usePerformanceMonitor(ColorPreview", { /    ";
+    trackRender: true,trackMemory: false,warnThreshold: 100,  };);
+name, color, description }) => (
+  <View style={styles.colorItem}>/    <View style={[styles.colorSwatch, { backgroundColor: color}]} />/    <View style={styles.colorInfo}>/      <Text variant="body1" style={styles.colorName}>/            {name}
+      </Text>/      <Text variant="caption" style={styles.colorValue}>/            {color}
+      </Text>/          {description && (
+        <Text variant="caption" style={styles.colorDescription}>/              {description}
+        </Text>/    )}
+    </View>/  </View>/    );
+const ColorPreview: React.FC<ColorPreviewProps />  = ({ onBack }) => {/   /    }
   performanceMonitor.recordRender();
   return (;
-    <ScrollView style={styles.container} />/      <Container padding="lg" />/        {// 返回按钮 }/////            {onBack && (;
-          <View style={styles.backButtonContainer} />/////                <Button;
+    <ScrollView style={styles.container}>/      <Container padding="lg" />/        {///            {onBack && (;
+          <View style={styles.backButtonContainer}>/                <Button;
 title="← 返回组件库"
               variant="outline"
               onPress={onBack};
               style={styles.backButton}
-            / accessibilityLabel="TODO: 添加无障碍标签" />/          </View>/////            ;)}
-        <Text variant="h1" style={styles.title} />/////              索克生活品牌色彩
-        </Text>/////
-        {// 主要品牌色 }/        <Card style={styles.section} />/          <Text variant="h3" style={styles.sectionTitle} />/////                主要品牌色
-          </Text>/////              <ColorItem;
+            / accessibilityLabel="TODO: 添加无障碍标签" />/          </View>/            ;)}
+        <Text variant="h1" style={styles.title}>/              索克生活品牌色彩
+        </Text>/
+        {///                主要品牌色
+          </Text>/              <ColorItem;
 name="索克绿 (Primary)"
             color={colors.primary}
             description="健康、自然、生机的象征"
-          />/////              <ColorItem;
+          />/              <ColorItem;
 name="索克橙 (Secondary)"
             color={colors.secondary}
             description="活力、温暖、积极的体现"
-          />/        </Card>/////
-        {// 主色调变体 }/        <Card style={styles.section} />/          <Text variant="h3" style={styles.sectionTitle} />/////                主色调变体
-          </Text>/          <ColorItem name="浅索克绿" color={colors.primaryLight} />/          <ColorItem name="索克绿" color={colors.primary} />/          <ColorItem name="深索克绿" color={colors.primaryDark} />/        </Card>/////
-        {// 辅助色变体 }/        <Card style={styles.section} />/          <Text variant="h3" style={styles.sectionTitle} />/////                辅助色变体
-          </Text>/          <ColorItem name="浅索克橙" color={colors.secondaryLight} />/          <ColorItem name="索克橙" color={colors.secondary} />/          <ColorItem name="深索克橙" color={colors.secondaryDark} />/        </Card>/////
-        {// 功能色 }/        <Card style={styles.section} />/          <Text variant="h3" style={styles.sectionTitle} />/////                功能色
-          </Text>/          <ColorItem name="成功" color={colors.success} />/          <ColorItem name="警告" color={colors.warning} />/          <ColorItem name="错误" color={colors.error} />/          <ColorItem name="信息" color={colors.info} description="使用索克绿" />/        </Card>/////
-        {// 中医特色色彩 }/        <Card style={styles.section} />/          <Text variant="h3" style={styles.sectionTitle} />/////                中医特色色彩
-          </Text>/          <ColorItem name="金" color={colors.tcm.gold} />/////              <ColorItem;
+          />/        </Card>/
+        {///                主色调变体
+          </Text>/          <ColorItem name="浅索克绿" color={colors.primaryLight} />/          <ColorItem name="索克绿" color={colors.primary} />/          <ColorItem name="深索克绿" color={colors.primaryDark} />/        </Card>/
+        {///                辅助色变体
+          </Text>/          <ColorItem name="浅索克橙" color={colors.secondaryLight} />/          <ColorItem name="索克橙" color={colors.secondary} />/          <ColorItem name="深索克橙" color={colors.secondaryDark} />/        </Card>/
+        {///                功能色
+          </Text>/          <ColorItem name="成功" color={colors.success} />/          <ColorItem name="警告" color={colors.warning} />/          <ColorItem name="错误" color={colors.error} />/          <ColorItem name="信息" color={colors.info} description="使用索克绿" />/        </Card>/
+        {///                中医特色色彩
+          </Text>/          <ColorItem name="金" color={colors.tcm.gold} />/              <ColorItem;
 name="玉"
             color={colors.tcm.jade}
             description="使用索克绿"
-          />/          <ColorItem name="朱砂" color={colors.tcm.cinnabar} />/          <ColorItem name="靛青" color={colors.tcm.indigo} />/          <ColorItem name="土" color={colors.tcm.earth} />/        </Card>/////
-        {// 健康状态色彩 }/        <Card style={styles.section} />/          <Text variant="h3" style={styles.sectionTitle} />/////                健康状态色彩
-          </Text>/////              <ColorItem;
+          />/          <ColorItem name="朱砂" color={colors.tcm.cinnabar} />/          <ColorItem name="靛青" color={colors.tcm.indigo} />/          <ColorItem name="土" color={colors.tcm.earth} />/        </Card>/
+        {///                健康状态色彩
+          </Text>/              <ColorItem;
 name="优秀"
             color={colors.health.excellent}
             description="使用索克绿"
-          />/          <ColorItem name="良好" color={colors.health.good} />/          <ColorItem name="一般" color={colors.health.fair} />/          <ColorItem name="较差" color={colors.health.poor} />/          <ColorItem name="危险" color={colors.health.critical} />/        </Card>/////
-        {// 色彩应用示例 }/        <Card style={styles.section} />/          <Text variant="h3" style={styles.sectionTitle} />/////                应用示例
-          </Text>/          <View style={styles.exampleContainer} />/////                <View;
+          />/          <ColorItem name="良好" color={colors.health.good} />/          <ColorItem name="一般" color={colors.health.fair} />/          <ColorItem name="较差" color={colors.health.poor} />/          <ColorItem name="危险" color={colors.health.critical} />/        </Card>/
+        {///                应用示例
+          </Text>/          <View style={styles.exampleContainer}>/                <View;
 style={[
                 styles.exampleButton,
                 { backgroundColor: colors.primary}
-              ]} />/              <Text style={styles.buttonText} />主要按钮</Text>/            </View>/////                <View;
+              ]} />/              <Text style={styles.buttonText}>主要按钮</Text>/            </View>/                <View;
 style={[
                 styles.exampleButton,
                 { backgroundColor: colors.secondary}
-              ]} />/              <Text style={styles.buttonText} />次要按钮</Text>/            </View>/            <View style={[styles.exampleCard, { borderColor: colors.primary}]} />/              <Text style={styles.cardTitle} />健康卡片</Text>/              <Text style={styles.cardContent} />/////                    使用索克绿作为主题色的卡片示例
-              </Text>/            </View>/          </View>/        </Card>/      </Container>/    </ScrollView>/////    );
+              ]} />/              <Text style={styles.buttonText}>次要按钮</Text>/            </View>/            <View style={[styles.exampleCard, { borderColor: colors.primary}]} />/              <Text style={styles.cardTitle}>健康卡片</Text>/              <Text style={styles.cardContent}>/                    使用索克绿作为主题色的卡片示例
+              </Text>/            </View>/          </View>/        </Card>/      </Container>/    </ScrollView>/    );
 }
-const styles = StyleSheet.create({container: {
-    flex: 1,
+const styles = StyleSheet.create({container: {,
+  flex: 1,
     backgroundColor: colors.background},
   backButtonContainer: { marginBottom: spacing.md  },
   backButton: { alignSelf: "flex-start"  },
-  title: {
-    textAlign: "center",
+  title: {,
+  textAlign: "center",
     marginBottom: spacing.lg,
     color: colors.primary},
   section: { marginBottom: spacing.lg  },
-  sectionTitle: {
-    marginBottom: spacing.md,
+  sectionTitle: {,
+  marginBottom: spacing.md,
     color: colors.textPrimary},
-  colorItem: {
-    flexDirection: "row",
+  colorItem: {,
+  flexDirection: "row",
     alignItems: "center",
     marginBottom: spacing.sm},
-  colorSwatch: {
-    width: 40,
+  colorSwatch: {,
+  width: 40,
     height: 40,
     borderRadius: 8,
     marginRight: spacing.md,
     borderWidth: 1,
     borderColor: colors.border},
   colorInfo: { flex: 1 },
-  colorName: {
-    fontWeight: "600",
+  colorName: {,
+  fontWeight: "600",
     marginBottom: 2},
-  colorValue: {
-    color: colors.textSecondary,
+  colorValue: {,
+  color: colors.textSecondary,
     fontFamily: "monospace",
     marginBottom: 2},
-  colorDescription: {
-    color: colors.textTertiary,
+  colorDescription: {,
+  color: colors.textTertiary,
     fontStyle: "italic"},
   exampleContainer: { gap: spacing.md  },
-  exampleButton: {
-    paddingVertical: spacing.sm,
+  exampleButton: {,
+  paddingVertical: spacing.sm,
     paddingHorizontal: spacing.md,
     borderRadius: 8,
     alignItems: "center"},
-  buttonText: {
-    color: colors.white,
+  buttonText: {,
+  color: colors.white,
     fontWeight: "600"},
-  exampleCard: {
-    padding: spacing.md,
+  exampleCard: {,
+  padding: spacing.md,
     borderWidth: 2,
     borderRadius: 12,
     backgroundColor: colors.surface},
-  cardTitle: {
-    fontSize: 18,
+  cardTitle: {,
+  fontSize: 18,
     fontWeight: "600",
     marginBottom: spacing.xs,
     color: colors.primary},cardContent: { color: colors.textSecondary  };};);

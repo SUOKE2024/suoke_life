@@ -1,5 +1,4 @@
 import { apiClient } from './apiClient';
-
 // 数据类型定义
 export interface Constitution {
   id: string;
@@ -9,16 +8,15 @@ export interface Constitution {
   description: string;
   recommendations: string[];
   symptoms: string[];
-  lifestyle: {
+  lifestyle: {;
     diet: string[];
-    exercise: string[];
+  exercise: string[];
     sleep: string[];
-    emotion: string[];
-  };
-  created_at: string;
+  emotion: string[];
+};
+  created_at: string,
   updated_at: string;
 }
-
 export interface Symptom {
   id: string;
   name: string;
@@ -31,7 +29,6 @@ export interface Symptom {
   created_at: string;
   updated_at: string;
 }
-
 export interface Acupoint {
   id: string;
   name: string;
@@ -44,33 +41,31 @@ export interface Acupoint {
   precautions: string[];
   coordinates?: {
     x: number;
-    y: number;
+  y: number;
     z?: number;
-  };
-  created_at: string;
+};
+  created_at: string,
   updated_at: string;
 }
-
 export interface Herb {
   id: string;
   name: string;
   chinese_name: string;
   latin_name: string;
   category: string;
-  properties: {
-    nature: string; // 性
-    flavor: string; // 味
+  properties: {;
+    nature: string; // 性;
+  flavor: string; // 味
     meridian: string[]; // 归经
-  };
-  functions: string[];
+};
+  functions: string[],
   indications: string[];
-  dosage: string;
+  dosage: string,
   contraindications: string[];
-  interactions: string[];
+  interactions: string[],
   created_at: string;
   updated_at: string;
 }
-
 export interface Syndrome {
   id: string;
   name: string;
@@ -84,7 +79,6 @@ export interface Syndrome {
   created_at: string;
   updated_at: string;
 }
-
 export interface KnowledgeQuery {
   query: string;
   type: 'symptom' | 'treatment' | 'medicine' | 'general' | 'constitution' | 'acupoint';
@@ -94,14 +88,13 @@ export interface KnowledgeQuery {
     constitution?: string;
     age?: number;
     gender?: string;
-  };
+};
   filters?: {
     category?: string;
     severity?: string;
     meridian?: string;
   };
 }
-
 export interface KnowledgeResult {
   id: string;
   title: string;
@@ -111,34 +104,32 @@ export interface KnowledgeResult {
   source: string;
   category: string;
   tags: string[];
-  related_items: {
+  related_items: {;
     constitutions?: Constitution[];
     symptoms?: Symptom[];
     acupoints?: Acupoint[];
     herbs?: Herb[];
-  };
+};
   last_updated: string;
 }
-
 export interface GraphData {
   nodes: GraphNode[];
   edges: GraphEdge[];
-  statistics: {
-    total_nodes: number;
+  statistics: {;
+  total_nodes: number;
     total_edges: number;
-    node_types: Record<string, number>;
+  node_types: Record<string, number>;
     edge_types: Record<string, number>;
-  };
+};
 }
-
 export interface GraphNode {
   id: string;
   label: string;
   type: string;
   properties: Record<string, any>;
-  position?: { x: number; y: number };
+  position?: { x: number; y: number;
+};
 }
-
 export interface GraphEdge {
   id: string;
   source: string;
@@ -147,7 +138,6 @@ export interface GraphEdge {
   weight?: number;
   properties?: Record<string, any>;
 }
-
 export interface RecommendationRequest {
   userId: string;
   constitution_id?: string;
@@ -155,9 +145,8 @@ export interface RecommendationRequest {
   preferences?: {
     treatment_type?: 'traditional' | 'modern' | 'integrated';
     lifestyle_focus?: string[];
-  };
+};
 }
-
 export interface HealthRecommendation {
   id: string;
   type: 'lifestyle' | 'diet' | 'exercise' | 'treatment' | 'prevention';
@@ -165,19 +154,17 @@ export interface HealthRecommendation {
   description: string;
   priority: 'low' | 'medium' | 'high';
   evidence_level: number;
-  implementation: {
-    frequency: string;
+  implementation: {;
+  frequency: string;
     duration: string;
-    instructions: string[];
-  };
+  instructions: string[];
+};
   contraindications?: string[];
 }
-
 // API客户端类
 export class MedKnowledgeService {
   private baseUrl: string;
   private timeout: number;
-
   constructor() {
     this.baseUrl =
       process.env.NODE_ENV === 'production'
@@ -185,8 +172,7 @@ export class MedKnowledgeService {
         : 'http://localhost:8007/api/v1';
     this.timeout = 30000;
   }
-
-  // 体质相关API
+  // 体质相关API;
   async getConstitutions(): Promise<Constitution[]> {
     try {
       const response = await apiClient.get(`${this.baseUrl}/constitutions`);
@@ -196,7 +182,6 @@ export class MedKnowledgeService {
       throw new Error('获取体质信息失败');
     }
   }
-
   async getConstitutionById(id: string): Promise<Constitution> {
     try {
       const response = await apiClient.get(`${this.baseUrl}/constitutions/${id}`);
@@ -206,7 +191,6 @@ export class MedKnowledgeService {
       throw new Error('获取体质详情失败');
     }
   }
-
   async getConstitutionRecommendations(constitutionId: string): Promise<HealthRecommendation[]> {
     try {
       const response = await apiClient.get(;
@@ -218,8 +202,7 @@ export class MedKnowledgeService {
       throw new Error('获取体质建议失败');
     }
   }
-
-  // 症状相关API
+  // 症状相关API;
   async getSymptoms(): Promise<Symptom[]> {
     try {
       const response = await apiClient.get(`${this.baseUrl}/symptoms`);
@@ -229,7 +212,6 @@ export class MedKnowledgeService {
       throw new Error('获取症状信息失败');
     }
   }
-
   async getSymptomById(id: string): Promise<Symptom> {
     try {
       const response = await apiClient.get(`${this.baseUrl}/symptoms/${id}`);
@@ -239,7 +221,6 @@ export class MedKnowledgeService {
       throw new Error('获取症状详情失败');
     }
   }
-
   async searchSymptoms(query: string): Promise<Symptom[]> {
     try {
       const response = await apiClient.get(;
@@ -251,8 +232,7 @@ export class MedKnowledgeService {
       throw new Error('搜索症状失败');
     }
   }
-
-  // 穴位相关API
+  // 穴位相关API;
   async getAcupoints(): Promise<Acupoint[]> {
     try {
       const response = await apiClient.get(`${this.baseUrl}/acupoints`);
@@ -262,7 +242,6 @@ export class MedKnowledgeService {
       throw new Error('获取穴位信息失败');
     }
   }
-
   async getAcupointById(id: string): Promise<Acupoint> {
     try {
       const response = await apiClient.get(`${this.baseUrl}/acupoints/${id}`);
@@ -272,7 +251,6 @@ export class MedKnowledgeService {
       throw new Error('获取穴位详情失败');
     }
   }
-
   async getAcupointsByConstitution(constitutionId: string): Promise<Acupoint[]> {
     try {
       const response = await apiClient.get(;
@@ -284,8 +262,7 @@ export class MedKnowledgeService {
       throw new Error('获取体质相关穴位失败');
     }
   }
-
-  // 中药相关API
+  // 中药相关API;
   async getHerbs(): Promise<Herb[]> {
     try {
       const response = await apiClient.get(`${this.baseUrl}/herbs`);
@@ -295,7 +272,6 @@ export class MedKnowledgeService {
       throw new Error('获取中药信息失败');
     }
   }
-
   async getHerbById(id: string): Promise<Herb> {
     try {
       const response = await apiClient.get(`${this.baseUrl}/herbs/${id}`);
@@ -305,7 +281,6 @@ export class MedKnowledgeService {
       throw new Error('获取中药详情失败');
     }
   }
-
   async getHerbsBySymptom(symptomId: string): Promise<Herb[]> {
     try {
       const response = await apiClient.get(;
@@ -317,8 +292,7 @@ export class MedKnowledgeService {
       throw new Error('获取症状相关中药失败');
     }
   }
-
-  // 证型相关API
+  // 证型相关API;
   async getSyndromes(): Promise<Syndrome[]> {
     try {
       const response = await apiClient.get(`${this.baseUrl}/syndromes`);
@@ -328,7 +302,6 @@ export class MedKnowledgeService {
       throw new Error('获取证型信息失败');
     }
   }
-
   async getSyndromeById(id: string): Promise<Syndrome> {
     try {
       const response = await apiClient.get(`${this.baseUrl}/syndromes/${id}`);
@@ -338,8 +311,7 @@ export class MedKnowledgeService {
       throw new Error('获取证型详情失败');
     }
   }
-
-  // 知识搜索API
+  // 知识搜索API;
   async searchKnowledge(query: KnowledgeQuery): Promise<KnowledgeResult[]> {
     try {
       const response = await apiClient.post(`${this.baseUrl}/search`, query);
@@ -349,7 +321,6 @@ export class MedKnowledgeService {
       throw new Error('知识搜索失败');
     }
   }
-
   async getRecommendedKnowledge(userId: string, context?: any): Promise<KnowledgeResult[]> {
     try {
       const contextParam = context ? `?context=${encodeURIComponent(JSON.stringify(context))}` : '';
@@ -362,8 +333,7 @@ export class MedKnowledgeService {
       throw new Error('获取推荐知识失败');
     }
   }
-
-  // 知识图谱API
+  // 知识图谱API;
   async getKnowledgeGraph(): Promise<GraphData> {
     try {
       const response = await apiClient.get(`${this.baseUrl}/graph/visualization`);
@@ -373,7 +343,6 @@ export class MedKnowledgeService {
       throw new Error('获取知识图谱失败');
     }
   }
-
   async getGraphStatistics(): Promise<any> {
     try {
       const response = await apiClient.get(`${this.baseUrl}/graph/statistics`);
@@ -383,7 +352,6 @@ export class MedKnowledgeService {
       throw new Error('获取图谱统计失败');
     }
   }
-
   async getEntityRelationships(entityType: string, entityId: string): Promise<any> {
     try {
       const response = await apiClient.get(;
@@ -395,7 +363,6 @@ export class MedKnowledgeService {
       throw new Error('获取实体关系失败');
     }
   }
-
   async getEntityNeighbors(entityType: string, entityId: string): Promise<any> {
     try {
       const response = await apiClient.get(;
@@ -407,7 +374,6 @@ export class MedKnowledgeService {
       throw new Error('获取相邻实体失败');
     }
   }
-
   async findGraphPaths(fromId: string, toId: string): Promise<any> {
     try {
       const response = await apiClient.get(;
@@ -421,10 +387,9 @@ export class MedKnowledgeService {
       throw new Error('查找图谱路径失败');
     }
   }
-
-  // 个性化推荐API
+  // 个性化推荐API;
   async getPersonalizedRecommendations(
-    request: RecommendationRequest
+    request: RecommendationRequest;
   ): Promise<HealthRecommendation[]> {
     try {
       const response = await apiClient.post(`${this.baseUrl}/recommendations`, request);
@@ -434,8 +399,7 @@ export class MedKnowledgeService {
       throw new Error('获取个性化推荐失败');
     }
   }
-
-  // 健康检查API
+  // 健康检查API;
   async healthCheck(): Promise<{ status: string; timestamp: string }> {
     try {
       const response = await apiClient.get(`${this.baseUrl}/health`);
@@ -446,6 +410,5 @@ export class MedKnowledgeService {
     }
   }
 }
-
 // 导出单例实例
 export const medKnowledgeService = new MedKnowledgeService();

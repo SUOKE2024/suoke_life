@@ -1,5 +1,4 @@
 import React from 'react';
-
 // API相关的类型定义   替换any类型，提供类型安全
 // 基础API响应类型
 export interface ApiResponse<T = unknown> {
@@ -90,16 +89,16 @@ export interface UserPreferences {
 }
 export interface NotificationSettings {
   enabled: boolean;
-  types: {
+  types: {;
     health_reminders: boolean;
-    agent_messages: boolean;
+  agent_messages: boolean;
     system_updates: boolean;
-    emergency_alerts: boolean;
-  };
-  schedule: {
-    start_time: string;
-    end_time: string;
-    timezone: string;
+  emergency_alerts: boolean;
+};
+  schedule: {,
+  start_time: string;
+    end_time: string,
+  timezone: string;
   };
 }
 export interface PrivacySettings {

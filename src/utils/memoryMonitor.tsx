@@ -1,12 +1,14 @@
 import React from "react";
 import { useEffect, useRef } from "react";
 // 内存监控工具   索克生活APP - 性能优化
-interface MemoryInfo { usedJSHeapSize: number,
-  totalJSHeapSize: number,
-  jsHeapSizeLimit: number}
+interface MemoryInfo {
+  usedJSHeapSize: number;
+  totalJSHeapSize: number;
+  jsHeapSizeLimit: number;
+}
 class MemoryMonitor {
   private static instance: MemoryMonitor;
-  private listeners: ((info: MemoryInfo) => void)[] = [];
+  private listeners: (info: MemoryInfo) => void)[] = [];
   private intervalId: NodeJS.Timeout | null = null;
   static getInstance(): MemoryMonitor {
     if (!MemoryMonitor.instance) {
@@ -16,7 +18,7 @@ class MemoryMonitor {
   }
   startMonitoring(interval: number = 5000) {
     if (this.intervalId) retu;r;n;
-    this.intervalId = setInterval((); => {}
+    this.intervalId = setInterval(); => {}
       const memoryInfo = this.getMemoryInfo;
       if (memoryInfo) {
         this.notifyListeners(memoryInfo);
@@ -34,7 +36,7 @@ class MemoryMonitor {
     this.listeners.push(callback);
   }
   removeListener(callback: (info: MemoryInfo); => void) {
-    this.listeners = this.listeners.filter((listener); => listener !== callback);
+    this.listeners = this.listeners.filter(listener); => listener !== callback);
   }
   private getMemoryInfo(): MemoryInfo | null {
     if ("memory" in performance) {
@@ -45,10 +47,10 @@ class MemoryMonitor {
     return nu;l;l;
   }
   private notifyListeners(info: MemoryInfo) {
-    this.listeners.forEach((listener); => listener(info););
+    this.listeners.forEach(listener); => listener(info););
   }
   private checkMemoryThreshold(info: MemoryInfo) {
-    const usagePercentage = (info.usedJSHeapSize / info.jsHeapSizeLimit) * 1;////
+    const usagePercentage = (info.usedJSHeapSize / info.jsHeapSizeLimit) * 1;
 if (usagePercentage > 80) {
       + "%");
       // 触发垃圾回收建议
@@ -63,11 +65,11 @@ this.suggestGarbageCollection();
 }
 // React Hook for memory monitoring;
 export const useMemoryMonitor = (enabled: boolean = true) =;
-> ;{const memoryInfoRef = useRef<MemoryInfo | null /////    >(nul;l;);
-  useEffect((); => {}
+> ;{const memoryInfoRef = useRef<MemoryInfo | null /    >(nul;l;);
+  useEffect(); => {}
     if (!enabled) retu;r;n;
     const monitor = MemoryMonitor.getInstance;
-    const handleMemoryUpdate = useCallback((info: MemoryInf;o;); => {}
+    const handleMemoryUpdate = useCallback(info: MemoryInf;o;); => {}
       memoryInfoRef.current = info;
     };
     monitor.addListener(handleMemoryUpdate);

@@ -1,5 +1,4 @@
 import { unifiedApiService } from './unifiedApiService';
-
 // 五诊数据类型定义
 export interface LookDiagnosisData {
   faceImage?: string;
@@ -10,9 +9,8 @@ export interface LookDiagnosisData {
     timestamp: number;
     lighting?: string;
     cameraInfo?: any;
-  };
+};
 }
-
 export interface ListenDiagnosisData {
   voiceRecording?: string;
   breathingSound?: string;
@@ -20,11 +18,10 @@ export interface ListenDiagnosisData {
   heartSound?: string;
   metadata?: {
     timestamp: number;
-    duration: number;
+  duration: number;
     quality?: string;
-  };
+};
 }
-
 export interface InquiryDiagnosisData {
   symptoms: string[];
   medicalHistory?: string[];
@@ -34,19 +31,18 @@ export interface InquiryDiagnosisData {
     exercise?: string;
     sleep?: string;
     stress?: string;
-  };
+};
   chiefComplaint?: string;
   presentIllness?: string;
   familyHistory?: string[];
 }
-
 export interface PalpationDiagnosisData {
   pulseData?: {
     rate?: number;
     rhythm?: string;
     strength?: string;
     quality?: string;
-  };
+};
   abdominalPalpation?: {
     tenderness?: string[];
     masses?: string[];
@@ -58,16 +54,15 @@ export interface PalpationDiagnosisData {
     texture?: string;
   };
 }
-
 export interface CalculationDiagnosisData {
-  personalInfo: {
-    birthYear: number;
+  personalInfo: {;
+  birthYear: number;
     birthMonth: number;
-    birthDay: number;
+  birthDay: number;
     birthHour: number;
-    gender: string;
+  gender: string;
     location?: string;
-  };
+};
   analysisTypes: {
     ziwuLiuzhu?: boolean;
     constitution?: boolean;
@@ -78,7 +73,6 @@ export interface CalculationDiagnosisData {
   currentTime?: string;
   healthConcerns?: string[];
 }
-
 export interface FiveDiagnosisInput {
   userId: string;
   sessionId?: string;
@@ -91,9 +85,8 @@ export interface FiveDiagnosisInput {
     language?: string;
     detailLevel?: 'basic' | 'detailed' | 'comprehensive';
     focusAreas?: string[];
-  };
+};
 }
-
 export interface DiagnosisResult {
   type: 'look' | 'listen' | 'inquiry' | 'palpation' | 'calculation';
   confidence: number;
@@ -104,28 +97,27 @@ export interface DiagnosisResult {
   severity?: 'low' | 'medium' | 'high';
   timestamp: number;
 }
-
 export interface FiveDiagnosisResult {
   sessionId: string;
   userId: string;
   timestamp: number;
-  individualResults: {
+  individualResults: {;
     look?: DiagnosisResult;
     listen?: DiagnosisResult;
     inquiry?: DiagnosisResult;
     palpation?: DiagnosisResult;
     calculation?: DiagnosisResult;
-  };
-  comprehensiveAnalysis: {
-    overallAssessment: string;
-    tcmSyndrome: string;
-    constitution: string;
-    healthRisk: 'low' | 'medium' | 'high';
-    confidence: number;
-    keyFindings: string[];
-    recommendations: {
-      immediate: string[];
-      shortTerm: string[];
+};
+  comprehensiveAnalysis: {,
+  overallAssessment: string;
+    tcmSyndrome: string,
+  constitution: string;
+    healthRisk: 'low' | 'medium' | 'high',
+  confidence: number;
+    keyFindings: string[],
+  recommendations: {
+      immediate: string[],
+  shortTerm: string[];
       longTerm: string[];
     };
     lifestyle: {
@@ -140,8 +132,8 @@ export interface FiveDiagnosisResult {
       focus?: string[];
     };
   };
-  metadata: {
-    processingTime: number;
+  metadata: {,
+  processingTime: number;
     dataQuality: {
       look?: number;
       listen?: number;
@@ -152,28 +144,23 @@ export interface FiveDiagnosisResult {
     version: string;
   };
 }
-
 export interface FiveDiagnosisError {
   code: string;
   message: string;
   details?: any;
   timestamp: number;
 }
-
 // 五诊服务类
 class FiveDiagnosisService {
   private isInitialized = false;
   private sessionCache = new Map<string, any>();
-
   async initialize(): Promise<void> {
     try {
       // 检查所有五诊服务的健康状态
       const healthCheck = await unifiedApiService.getServiceHealth('diagnostic-services');
-      
-      if (healthCheck && typeof healthCheck.status === 'string' && healthCheck.status !== 'healthy') {
+            if (healthCheck && typeof healthCheck.status === 'string' && healthCheck.status !== 'healthy') {
         throw new Error('五诊服务不可用');
       }
-
       this.isInitialized = true;
       console.log('五诊服务初始化成功');
     } catch (error) {
@@ -181,18 +168,15 @@ class FiveDiagnosisService {
       throw error;
     }
   }
-
   // 执行单项诊断
   async performSingleDiagnosis(
     type: 'look' | 'listen' | 'inquiry' | 'palpation' | 'calculation',
-    data: any
+    data: any;
   ): Promise<DiagnosisResult> {
     this.ensureInitialized();
-
     try {
       let result;
-      
-      switch (type) {
+            switch (type) {
         case 'look':
           result = await unifiedApiService.performLookDiagnosis(data);
           break;
@@ -211,25 +195,21 @@ class FiveDiagnosisService {
         default:
           throw new Error(`不支持的诊断类型: ${type}`);
       }
-
       return this.formatDiagnosisResult(type, result.data);
     } catch (error) {
       console.error(`${type}诊断失败:`, error);
       throw this.createError('DIAGNOSIS_FAILED', `${type}诊断失败`, error);
     }
   }
-
   // 执行算诊专项分析
   async performCalculationAnalysis(
     type: 'ziwu' | 'constitution' | 'bagua' | 'wuyun' | 'comprehensive',
-    data: any
+    data: any;
   ): Promise<DiagnosisResult> {
     this.ensureInitialized();
-
     try {
       let result;
-      
-      switch (type) {
+            switch (type) {
         case 'ziwu':
           result = await unifiedApiService.performZiwuAnalysis(data);
           break;
@@ -248,72 +228,60 @@ class FiveDiagnosisService {
         default:
           throw new Error(`不支持的算诊类型: ${type}`);
       }
-
       return this.formatDiagnosisResult('calculation', result.data);
     } catch (error) {
       console.error(`算诊${type}分析失败:`, error);
       throw this.createError('CALCULATION_FAILED', `算诊${type}分析失败`, error);
     }
   }
-
   // 执行五诊综合分析
   async performComprehensiveDiagnosis(input: FiveDiagnosisInput): Promise<FiveDiagnosisResult> {
     this.ensureInitialized();
-
     const startTime = Date.now();
     const sessionId = input.sessionId || this.generateSessionId();
-
     try {
       // 缓存会话数据
       this.sessionCache.set(sessionId, input);
-
       // 并行执行各项诊断
       const diagnosticPromises: Promise<DiagnosisResult | null>[] = [];
-
       if (input.lookingData) {
         diagnosticPromises.push(
-          this.performSingleDiagnosis('look', input.lookingData).catch(() => null)
+          this.performSingleDiagnosis('look', input.lookingData).catch() => null)
         );
       } else {
         diagnosticPromises.push(Promise.resolve(null));
       }
-
       if (input.listeningData) {
         diagnosticPromises.push(
-          this.performSingleDiagnosis('listen', input.listeningData).catch(() => null)
+          this.performSingleDiagnosis('listen', input.listeningData).catch() => null)
         );
       } else {
         diagnosticPromises.push(Promise.resolve(null));
       }
-
       if (input.inquiryData) {
         diagnosticPromises.push(
-          this.performSingleDiagnosis('inquiry', input.inquiryData).catch(() => null)
+          this.performSingleDiagnosis('inquiry', input.inquiryData).catch() => null)
         );
       } else {
         diagnosticPromises.push(Promise.resolve(null));
       }
-
       if (input.palpationData) {
         diagnosticPromises.push(
-          this.performSingleDiagnosis('palpation', input.palpationData).catch(() => null)
+          this.performSingleDiagnosis('palpation', input.palpationData).catch() => null)
         );
       } else {
         diagnosticPromises.push(Promise.resolve(null));
       }
-
       if (input.calculationData) {
         diagnosticPromises.push(
-          this.performSingleDiagnosis('calculation', input.calculationData).catch(() => null)
+          this.performSingleDiagnosis('calculation', input.calculationData).catch() => null)
         );
       } else {
         diagnosticPromises.push(Promise.resolve(null));
       }
-
       // 等待所有诊断完成
-      const [lookResult, listenResult, inquiryResult, palpationResult, calculationResult] = 
+      const [lookResult, listenResult, inquiryResult, palpationResult, calculationResult] =
         await Promise.all(diagnosticPromises);
-
       // 执行综合分析
       const comprehensiveResult = await unifiedApiService.performFiveDiagnosisComprehensive({
         lookData: input.lookingData,
@@ -324,9 +292,7 @@ class FiveDiagnosisService {
         userId: input.userId,
         sessionId,
       });
-
       const processingTime = Date.now() - startTime;
-
       // 构建最终结果
       const result: FiveDiagnosisResult = {
         sessionId,
@@ -342,8 +308,8 @@ class FiveDiagnosisService {
         comprehensiveAnalysis: comprehensiveResult.data,
         metadata: {
           processingTime,
-          dataQuality: this.calculateDataQuality({
-            look: lookResult,
+          dataQuality: this.calculateDataQuality({,
+  look: lookResult,
             listen: listenResult,
             inquiry: inquiryResult,
             palpation: palpationResult,
@@ -352,38 +318,32 @@ class FiveDiagnosisService {
           version: '1.0.0',
         },
       };
-
       return result;
     } catch (error) {
       console.error('五诊综合分析失败:', error);
-      throw this.createError('COMPREHENSIVE_DIAGNOSIS_FAILED', '五诊综合分析失败', error);
+      throw this.createError("COMPREHENSIVE_DIAGNOSIS_FAILED",五诊综合分析失败', error);
     }
   }
-
   // 获取诊断历史
   async getDiagnosisHistory(userId?: string): Promise<FiveDiagnosisResult[]> {
     this.ensureInitialized();
-
     try {
       const result = await unifiedApiService.getDiagnosisHistory(userId);
       return result.data;
     } catch (error) {
       console.error('获取诊断历史失败:', error);
-      throw this.createError('HISTORY_FETCH_FAILED', '获取诊断历史失败', error);
+      throw this.createError("HISTORY_FETCH_FAILED",获取诊断历史失败', error);
     }
   }
-
   // 工具方法
   private ensureInitialized(): void {
     if (!this.isInitialized) {
       throw new Error('五诊服务未初始化，请先调用 initialize()');
     }
   }
-
   private generateSessionId(): string {
     return `five_diagnosis_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
-
   private formatDiagnosisResult(type: string, data: any): DiagnosisResult {
     return {
       type: type as any,
@@ -396,19 +356,15 @@ class FiveDiagnosisService {
       timestamp: Date.now(),
     };
   }
-
   private calculateDataQuality(results: Record<string, DiagnosisResult | null>): Record<string, number> {
     const quality: Record<string, number> = {};
-    
-    Object.entries(results).forEach(([key, result]) => {
+        Object.entries(results).forEach([key, result]) => {
       if (result) {
         quality[key] = result.confidence;
       }
     });
-
     return quality;
   }
-
   private createError(code: string, message: string, details?: any): FiveDiagnosisError {
     return {
       code,
@@ -417,7 +373,6 @@ class FiveDiagnosisService {
       timestamp: Date.now(),
     };
   }
-
   // 清理会话缓存
   clearSessionCache(sessionId?: string): void {
     if (sessionId) {
@@ -426,18 +381,17 @@ class FiveDiagnosisService {
       this.sessionCache.clear();
     }
   }
-
   // 获取服务状态
   async getServiceStatus(): Promise<any> {
     try {
       return await unifiedApiService.getServiceHealth('diagnostic-services');
     } catch (error) {
-      return { status: 'error', error: error instanceof Error ? error.message : String(error) };
+      return {
+      status: "error",
+      error: error instanceof Error ? error.message : String(error) };
     }
   }
 }
-
 // 导出单例实例
 export const fiveDiagnosisService = new FiveDiagnosisService();
-
-// 类型已在上面定义并导出 
+// 类型已在上面定义并导出

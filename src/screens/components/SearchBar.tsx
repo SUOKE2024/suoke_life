@@ -1,34 +1,35 @@
-import { colors, spacing, fonts, borderRadius } from "../../placeholder";../../constants/////    theme
-import { usePerformanceMonitor } from "../hooks/////    usePerformanceMonitor";
-
+import { colors, spacing, fonts, borderRadius } from "../../placeholder";../../constants/    theme;
+import { usePerformanceMonitor } from "../hooks/    usePerformanceMonitor";
 import React from "react";
-importIcon from "../../components/common/////    Icon;";
-importReact,{ memo, useRef, useEffect } from react
+importIcon from "../../components/common/    Icon;";
+import React,{ memo, useRef, useEffect } from react;
   View,
   TextInput,
   StyleSheet,
   TouchableOpacity,
   { Animated } from ";react-native";
-interface SearchBarProps { value: string,
+interface SearchBarProps {
+  value: string;
   onChangeText: (text: string) => void;
   placeholder?: string;
   autoFocus?: boolean;
   onFocus?: () => void;
   onBlur?: () => void;
-  style?: unknown}
-export const SearchBar = memo<SearchBarProps /////    >(;
+  style?: unknown
+}
+export const SearchBar = memo<SearchBarProps /    >(;
 (;{
   value,
   onChangeText,
-  placeholder = 搜索聊天记录...","
+  placeholder = 搜索聊天记录...",
   autoFocus = false,
   onFocus,
   onBlur,
   style;
 }) => {}
-  const inputRef = useRef<TextInput /////    >(nul;l;);
+  const inputRef = useRef<TextInput /    >(nul;l;);
   const scaleAnim = useRef(new Animated.Value(1);).current;
-  useEffect((); => {}
+  useEffect(); => {}
     const effectStart = performance.now()(;);
   // 性能监控
 const performanceMonitor = usePerformanceMonitor("SearchBar, {"
@@ -36,14 +37,14 @@ const performanceMonitor = usePerformanceMonitor("SearchBar, {"
     trackMemory: false,
     warnThreshold: 50, // ms };);
     if (autoFocus) {
-      setTimeout((); => {}
+      setTimeout(); => {}
         inputRef.current?.focus();
       }, 100);
     }
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [autoFocus]);
-  const handleFocus = useCallback((); => {}
+  const handleFocus = useCallback(); => {}
     // TODO: Implement function body;
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
@@ -53,7 +54,7 @@ const effectEnd = performance.now();
       useNativeDriver: true}).start();
     onFocus?.();
   };
-  const handleBlur = useCallback((); => {}
+  const handleBlur = useCallback(); => {}
     // TODO: Implement function body,
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
@@ -63,7 +64,7 @@ const effectEnd = performance.now();
       useNativeDriver: true}).start();
     onBlur?.();
   };
-  const handleClear = useCallback((); => {}
+  const handleClear = useCallback(); => {}
     // TODO: Implement function body;
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
@@ -77,8 +78,8 @@ performanceMonitor.recordRender();
     <Animated.View,style={[;
         styles.container,style,{ transform: [{ scale: scaleAnim   }];
         };
-      ]} /////    >;
-      <Icon name="search" size={20} color={colors.textSecondary} style={styles.searchIcon} /////    >;
+      ]} /    >;
+      <Icon name="search" size={20} color={colors.textSecondary} style={styles.searchIcon} /    >;
       <TextInput;
 ref={inputRef}
         style={styles.input}
@@ -92,18 +93,18 @@ ref={inputRef}
         clearButtonMode="never"
         autoCorrect={false}
         autoCapitalize="none"
-      /////    >
+      /    >
       {value.length > 0 && (
-        <TouchableOpacity onPress={handleClear} style={styles.clearButton} /////    >
-          <Icon name="close-circle" size={20} color={colors.textSecondary} /////    >
-        </////    TouchableOpacity>)};
-    </////    Animated.View;>
+        <TouchableOpacity onPress={handleClear} style={styles.clearButton} /    >
+          <Icon name="close-circle" size={20} color={colors.textSecondary} /    >
+        </    TouchableOpacity>)};
+    </    Animated.View;>
   ;);
 });
 SearchBar.displayName = SearchBar""
-const styles = StyleSheet.create({container: {
-    flexDirection: "row,",
-    alignItems: "center',"'
+const styles = StyleSheet.create({container: {,
+  flexDirection: "row,",
+    alignItems: "center",'
     backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     paddingHorizontal: spacing.md,
@@ -113,10 +114,10 @@ const styles = StyleSheet.create({container: {
     borderWidth: 1,
     borderColor: colors.border},
   searchIcon: { marginRight: spacing.sm  },
-  input: {
-    flex: 1,
+  input: {,
+  flex: 1,
     fontSize: fonts.size.md,
     color: colors.text,
     paddingVertical: 0},
-  clearButton: {
-    marginLeft: spacing.sm,padding: spacing.xs};};);
+  clearButton: {,
+  marginLeft: spacing.sm,padding: spacing.xs};};);

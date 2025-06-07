@@ -1,6 +1,5 @@
 import { XIAOAI_CONFIG, XIAOKE_CONFIG, LAOKE_CONFIG, SOER_CONFIG, AGENT_CONFIGS, COLLABORATION_SCENARIOS, DEFAULT_AGENT_CONFIG } from "../agents.config";
 import { XIAOAI_CONFIG, XIAOKE_CONFIG, LAOKE_CONFIG, SOER_CONFIG, AGENT_CONFIGS, COLLABORATION_SCENARIOS, DEFAULT_AGENT_CONFIG } from "../agents.config";
-
 describe("agents.config", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -180,7 +179,7 @@ XIAOAI_CONFIG(// test params);
 expect(averageTime).toBeLessThan(1);
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
     const startTime = performance.now();
     // Test with large dataset
 XIAOAI_CONFIG(largeDataset);

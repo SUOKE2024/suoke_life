@@ -1,15 +1,16 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import React from "react";
 // ScreenHeader.tsx   索克生活APP - 自动生成的类型安全文件     @description TODO: 添加文件描述 @author 索克生活开发团队   @version 1.0.0;
-importIcon from ";../../components/common/Icon"/import { colors, spacing, fonts } from ../../constants/theme"// ";
+import Icon from "../../components/common/Icon";
+import { colors, spacing, fonts } from ../../constants/theme"// ";
 importReact from "react";
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   StatusBar,{ ViewStyle } from ";react-native";
-interface ScreenHeaderProps { title: string;
+interface ScreenHeaderProps {
+  title: string;
   subtitle?: string;
   leftIcon?: string;
   rightIcon?: string;
@@ -20,8 +21,9 @@ interface ScreenHeaderProps { title: string;
   showBackButton?: boolean;
   style?: ViewStyle;
   centerComponent?: React.ReactNode;
-  rightComponent?: React.ReactNode}
-export const ScreenHeader: React.FC<ScreenHeaderProps />  = ({/////      title,
+  rightComponent?: React.ReactNode
+}
+export const ScreenHeader: React.FC<ScreenHeaderProps />  = ({/      title,
   subtitle,
   leftIcon,
   rightIcon,
@@ -35,91 +37,90 @@ export const ScreenHeader: React.FC<ScreenHeaderProps />  = ({/////      title,
   const isDark = backgroundColor === colors.primary || backgroundColor === colors.primaryDa;
 r;k;
 return (;
-    <SafeAreaView style={[styles.container, { backgroundColor }, style]} />/////          <StatusBar;
+    <SafeAreaView style={[styles.container, { backgroundColor }, style]} />/          <StatusBar;
 barStyle={isDark ? light-content" : "dark-content}
-        backgroundColor={backgroundColor} />/////
-      <View style={styles.header} />/        {// 左侧按钮 }/        <View style={styles.leftSection} />/////              {(showBackButton || leftIcon || onLeftPress) && (
+        backgroundColor={backgroundColor} />/
+      <View style={styles.header}>/        {///              {(showBackButton || leftIcon || onLeftPress) && (
             <TouchableOpacity;
 style={styles.iconButton}
               onPress={onLeftPress};
               activeOpacity={0.7}
-             accessibilityLabel="TODO: 添加无障碍标签" />/              <Ic;o;nname={leftIcon || (showBackButton ? "arrow-left" : menu")}"////
+            accessibilityLabel="TODO: 添加无障碍标签" />/              <Ic;o;nname={leftIcon || (showBackButton ? "arrow-left" : menu")}"
                 size={24}
-                color={isDark ? colors.white: textColor} />/            </TouchableOpacity>/////              )}
-        </View>/////
-        {// 中间内容 }/        <View style={styles.centerSection} />/////              {centerComponent || (
-            <View style={styles.titleContainer} />/////                  <Text;
+                color={isDark ? colors.white: textColor} />/            </TouchableOpacity>/              )}
+        </View>/
+        {///              {centerComponent || (
+            <View style={styles.titleContainer}>/                  <Text;
 style={[
                   styles.title,
                   { color: isDark ? colors.white : textColor}
                 ]}
-                numberOfLines={1} />/////                    {title}
-              </Text>/////                  {subtitle && (
+                numberOfLines={1} />/                    {title}
+              </Text>/                  {subtitle && (
                 <Text;
 style={[
                     styles.subtitle,
                     { color: isDark ? colors.white : colors.textSecondary}
                   ]}
-                  numberOfLines={1} />/////                      {subtitle}
-                </Text>/////                  )}
-            </View>/////              )}
-        </View>/////
-        {// 右侧按钮 }/        <View style={styles.rightSection} />/////              {rightComponent || (
-            (rightIcon || onRightPress) && (
+                  numberOfLines={1} />/                      {subtitle}
+                </Text>/                  )}
+            </View>/              )}
+        </View>/
+        {///              {rightComponent || (rightIcon || onRightPress) && (
               <TouchableOpacity;
 style={styles.iconButton}
                 onPress={onRightPress}
                 activeOpacity={0.7}
-               accessibilityLabel="TODO: 添加无障碍标签" />/////                    <Iconname={rightIcon || "dots-vertical}"
+              accessibilityLabel="TODO: 添加无障碍标签" />/                    <Iconname={rightIcon || "dots-vertical}"
                   size={24}
-                  color={isDark ? colors.white: textColor} />/              </TouchableOpacity>/////                )
+                  color={isDark ? colors.white: textColor} />/              </TouchableOpacity>/                )
           )}
-        </View>/      </View>/    </SafeAreaView>/////      );
+        </View>/      </View>/    </SafeAreaView>/      );
 }
-const styles = StyleSheet.create({container: {
-    shadowColor: colors.black,
-    shadowOffset: {
-      width: 0,
+const styles = StyleSheet.create({container: {,
+  shadowColor: colors.black,
+    shadowOffset: {,
+  width: 0,
       height: 2;
     },
     shadowOpacity: 0.1,
     shadowRadius: 3,
     elevation: 4;
   },
-  header: {
-    flexDirection: "row",
-    alignItems: center","
+  header: {,
+  flexDirection: "row",
+    alignItems: center",
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
     minHeight: 56;
   },
-  leftSection: {
-    width: 48,
+  leftSection: {,
+  width: 48,
     alignItems: "flex-start"
   },
-  centerSection: {
-    flex: 1,
+  centerSection: {,
+  flex: 1,
     alignItems: "center",
     paddingHorizontal: spacing.sm;
   },
-  rightSection: {
-    width: 48,
+  rightSection: {,
+  width: 48,
     alignItems: flex-end""
   },
-  iconButton: {
-    width: 40,
+  iconButton: {,
+  width: 40,
     height: 40,
     borderRadius: 20,
     justifyContent: "center,",
     alignItems: "center"
   },
   titleContainer: { alignItems: center"  },"
-  title: {
-    fontSize: fonts.size.lg,
+  title: {,
+  fontSize: fonts.size.lg,
     fontWeight: "bold,",
     textAlign: "center"
   },
-  subtitle: {
-    fontSize: fonts.size.sm,
-    textAlign: center","
+  subtitle: {,
+  fontSize: fonts.size.sm,
+    textAlign: center",
     marginTop: 2};};);

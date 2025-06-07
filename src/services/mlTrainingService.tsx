@@ -1,14 +1,15 @@
-import { usePerformanceMonitor } from "../../placeholder";../hooks/////    usePerformanceMonitor
-import { apiClient } from "./////    apiClient";
-
+import { usePerformanceMonitor } from "../../placeholder";../hooks/    usePerformanceMonitor;
+import { apiClient } from "./    apiClient";
 import React from "react";
-// // 机器学习模型训练和优化服务   为五诊算法系统提供模型训练、优化和管理功能
-// 训练数据接口 * export interface TrainingData { id: string, ////
+机器学习模型训练和优化服务   为五诊算法系统提供模型训练、优化和管理功能
+// 训练数据接口 * export interface TrainingData {
+  id: string,
   userId: string,sessionId: string,inputData: {lookingData?: unknown;
     listeningData?: unknown;
     inquiryData?: unknown;
     palpationData?: unknown;
-    calculationData?: unknown};
+    calculationData?: unknown
+};
   expectedOutput: { syndrome: string,
     constitution: string,
     confidence: number,
@@ -19,14 +20,15 @@ import React from "react";
     tags: string[];
     }
 }
-// 模型配置接口 * export interface ModelConfig { modelType: "neural_network" | "random_forest" | "svm" | "ensemble", ////  ;
-;
+// 模型配置接口 * export interface ModelConfig {
+  modelType: "neural_network" | "random_forest" | "svm" | "ensemble",   ;
   hyperparameters: {learningRate?: number;
     epochs?: number;
     batchSize?: number;
     hiddenLayers?: number[];
     regularization?: number;
-    [key: string]: unknown};
+    [key: string]: unknown;
+};
   features: { looking: string[],
     listening: string[],
     inquiry: string[],
@@ -35,25 +37,29 @@ import React from "react";
     };
   targetVariables: string[];
 }
-// 训练任务接口 * export interface TrainingTask { id: string, ,////
-  name: string,
-  description: string,
-  modelConfig: ModelConfig,
-  datasetId: string,
+// 训练任务接口 * export interface TrainingTask {
+  id: string, ,
+  name: string;
+  description: string;
+  modelConfig: ModelConfig;
+  datasetId: string;
   status: "pending" | "running" | "completed" | "failed" | "cancelled",progress: number,metrics: {accuracy?: number;
     precision?: number;
     recall?: number;
     f1Score?: number;
     loss?: number;
-    validationAccuracy?: number};
+    validationAccuracy?: number
+};
   startTime?: number;
   endTime?: number;
   errorMessage?: string}
-// 模型评估结果接口 * export interface ModelEvaluation { modelId: string, ////
-  taskId: string,
-  metrics: {overall: {accuracy: number,
-      precision: number,
-      recall: number,f1Score: number,auc: number};
+// 模型评估结果接口 * export interface ModelEvaluation {
+  modelId: string,
+  taskId: string;
+  metrics: {overall: {accuracy: number;
+      precision: number;
+      recall: number,f1Score: number,auc: number;
+};
     byDiagnosis: {
       [diagnosis: string]: { accuracy: number,
         precision: number,
@@ -71,14 +77,16 @@ import React from "react";
     scores: number[];
     };
   timestamp: number}
-// 模型部署状态接口 * export interface ModelDeployment { modelId: string, ,////
-  version: string,
-  status: "staging" | "production" | "deprecated",
-  deploymentTime: number,
-  performance: {averageResponseTime: number,
-    throughput: number,
-    errorRate: number,
-    accuracy: number}
+// 模型部署状态接口 * export interface ModelDeployment {
+  modelId: string, ,
+  version: string;
+  status: "staging" | "production" | "deprecated";
+  deploymentTime: number;
+  performance: {averageResponseTime: number;
+    throughput: number;
+    errorRate: number;
+    accuracy: number;
+}
   rollbackInfo?: { previousVersion: string,rollbackTime: number,reason: string};
 }
 // 机器学习训练服务类export class MLTrainingService  {private isInitialized: boolean = false;
@@ -89,8 +97,8 @@ import React from "react";
   }
   // 初始化ML训练服务  async initialize(): Promise<void> {
     try {
-      // 检查后端ML服务状态 // await this.checkMLServiceStatus;
-      // 加载现有训练任务 // await this.loadActiveTrainingTasks;
+      await this.checkMLServiceStatus;
+      await this.loadActiveTrainingTasks;
       this.isInitialized = true;
       } catch (error) {
       throw new Error(`ML训练服务初始化失败: ${error}`;);
@@ -100,10 +108,10 @@ import React from "react";
     description: string,
     trainingData: TrainingData[]): Promise<string>  {
     try {
-      const response = await apiClient.post("/ml/datasets", {/////            name,description,
+      const response = await apiClient.post("/ml/datasets", {/            name,description,
         data: trainingData,
-        metadata: {
-          createdAt: Date.now(),
+        metadata: {,
+  createdAt: Date.now(),
           dataCount: trainingData.length,sources: this.analyzeDataSources(trainingData;);}
       ;};);
       const datasetId = response.data.dataset;I;d;
@@ -117,12 +125,12 @@ import React from "react";
     modelConfig: ModelConfig,
     datasetId: string): Promise<string>  {
     try {
-      const response = await apiClient.post("/ml/training/start", {/////            name,description,
+      const response = await apiClient.post("/ml/training/start", {/            name,description,
         modelConfig,
         datasetId,timestamp: Date.now};);
       const taskId = response.data.task;I;d;
-      // 创建本地训练任务记录 // const trainingTask: TrainingTask = {
-        id: taskId,
+      const trainingTask: TrainingTask = {,
+  id: taskId,
         name,
         description,
         modelConfig,
@@ -132,17 +140,17 @@ import React from "react";
         metrics: {},
         startTime: Date.now()}
       this.activeTrainingTasks.set(taskId, trainingTask);
-      // 开始监控训练进度 // this.monitorTrainingProgress(taskId);
+      this.monitorTrainingProgress(taskId);
       return task;I;d;
     } catch (error) {
       throw new Error(`启动模型训练失败: ${error};`;);
     }
   }
-  // 获取训练任务状态  async getTrainingStatus(taskId: string): Promise<TrainingTask | null /////    >  {
+  ///    >  {
     try {
       const localTask = this.activeTrainingTasks.get(taskI;d;);
       if (!localTask) {
-        // 从后端获取任务状态 // const response = await apiClient.get(` / ml * training /status/${taskId;};`;);/////            return response.da;t;a;
+        const response = await apiClient.get(` / ml * training /status/${taskId;};`;);/            return response.da;t;a;
       }
       return localTa;s;k;
     } catch (error) {
@@ -151,7 +159,7 @@ import React from "react";
   }
   // 停止训练任务  async stopTraining(taskId: string): Promise<void>  {
     try {
-      await apiClient.post(`/ml/training/stop/${taskId}`;);/////
+      await apiClient.post(`/ml/training/stop/${taskId}`;);/
       const task = this.activeTrainingTasks.get(taskI;d;);
       if (task) {
         task.status = "cancelled";
@@ -162,9 +170,9 @@ import React from "react";
     }
   }
   // 评估模型性能  async evaluateModel(modelId: string,
-    testDatasetId: string): Promise<ModelEvaluation /////    >  {
+    testDatasetId: string): Promise<ModelEvaluation /    >  {
     try {
-      const response = await apiClient.post("/ml/evaluation/start", {/////            modelId,testDatasetId,timestamp: Date.now};);
+      const response = await apiClient.post("/ml/evaluation/start", {/            modelId,testDatasetId,timestamp: Date.now};);
       const evaluation = response.da;t;a;
       return evaluati;o;n;
     } catch (error) {
@@ -173,9 +181,9 @@ import React from "react";
   }
   // 部署模型到生产环境  async deployModel(modelId: string,
     version: string,
-    environment: "staging" | "production"): Promise<ModelDeployment /////    >  {
+    environment: "staging" | "production"): Promise<ModelDeployment /    >  {
     try {
-      const response = await apiClient.post("/ml/deployment/deploy", {/////            modelId,version,
+      const response = await apiClient.post("/ml/deployment/deploy", {/            modelId,version,
         environment,timestamp: Date.now};);
       const deployment = response.da;t;a;
       return deployme;n;t;
@@ -187,7 +195,7 @@ import React from "react";
     targetVersion: string,
     reason: string): Promise<void>  {
     try {
-      await apiClient.post("/ml/deployment/rollback", {/////            modelId,
+      await apiClient.post("/ml/deployment/rollback", {/            modelId,
         targetVersion,
         reason,
         timestamp: Date.now()};)
@@ -197,8 +205,8 @@ import React from "react";
   }
   // 获取模型性能监控数据  async getModelPerformance(modelId: string,
     timeRange: { start: number, end: number}
-  ): Promise< { metrics: Array<{
-      timestamp: number,
+  ): Promise< { metrics: Array<{,
+  timestamp: number,
       accuracy: number,
       responseTime: number,
       throughput: number,
@@ -210,7 +218,7 @@ import React from "react";
   }> {
     try {
       const response = await apiClient.get(;
-        `/ml/monitoring/performance/${modelId}?start=${timeRange.start}&end=${timeRange.end;};`);////
+        `/ml/monitoring/performance/${modelId}?start=${timeRange.start}&end=${timeRange.end;};`);
       return response.da;t;a;
     } catch (error) {
       throw err;o;r;
@@ -222,22 +230,22 @@ import React from "react";
       maxTrials: number,
       metric: "accuracy" | "f1_score" | "auc",
       parameterRanges: {
-        [parameter: string]: {
-          type: "continuous" | "discrete" | "categorical",
+        [parameter: string]: {,
+  type: "continuous" | "discrete" | "categorical",
           range: unknown[]
           };
       };
     }
   );: Promise< { bestConfig: ModelConfig,
     bestScore: number,
-    trials: Array<{
-      config: ModelConfig,
+    trials: Array<{,
+  config: ModelConfig,
       score: number,
       duration: number}>
   }> {
     try {
       const response = await apiClient.post(;
-        "/ml/optimization/hyperparameters",/////            {
+        "/ml/optimization/hyperparameters",/            {
           baseConfig,
           datasetId,
           optimizationConfig,timestamp: Date.now}
@@ -248,8 +256,8 @@ import React from "react";
       throw new Error(`超参数优化失败: ${error};`;);
     }
   }
-  // 获取特征重要性分析  async getFeatureImportance(modelId: string): Promise< { features: Array<{
-      name: string,
+  // 获取特征重要性分析  async getFeatureImportance(modelId: string): Promise< { features: Array<{,
+  name: string,
 importance: number,
       category: | "looking"| "listening",
         | "inquiry"
@@ -261,7 +269,7 @@ importance: number,
   }> {
     try {
       const response = await apiClient.get(;
-        `/ml/analysis/feature-importance/////    ${modelId;};`);
+        `/ml/analysis/feature-importance/    ${modelId;};`);
       return response.da;t;a;
     } catch (error) {
       throw error;
@@ -276,7 +284,7 @@ importance: number,
       comments?: string}
   ): Promise<void>  {
     try {
-      await apiClient.post("/ml/feedback/add", {/////            sessionId,
+      await apiClient.post("/ml/feedback/add", {/            sessionId,
         actualOutcome,
         userFeedback,
         timestamp: Date.now()};)
@@ -297,7 +305,7 @@ importance: number,
         ? completedTasks.reduce(;
             (sum, tas;k;); => sum + (task.metrics.accuracy || 0),
             0;
-          ) / completedTasks.length/////            : 0;
+          ) / completedTasks.length/            : 0;
     return {isInitialized: this.isInitialized,activeTrainingTasks: activeTasks.filter(;
         (tas;k;) => task.status === "running"
       ).length,
@@ -305,17 +313,17 @@ importance: number,
       averageAccuracy;
     };
   }
-  // 私有方法 // private async checkMLServiceStatus(): Promise<void> {
+  private async checkMLServiceStatus(): Promise<void> {
     try {
-      const response = await apiClient.get("/ml/healt;h;";)/////          if (!response.data.healthy) {throw new Error("ML服务不健康;";);
+      const response = await apiClient.get("/ml/healt;h;";)/          if (!response.data.healthy) {throw new Error("ML服务不健康;";);
       }
     } catch (error) {
       }
   }
   private async loadActiveTrainingTasks(): Promise<void> {
     try {
-      const response = await apiClient.get("/ml/training/acti;v;e;";);/////          const tasks = response.data.tasks || ;[;];
-      tasks.forEach((task: TrainingTask); => {}
+      const response = await apiClient.get("/ml/training/acti;v;e;";);/          const tasks = response.data.tasks || ;[;];
+      tasks.forEach(task: TrainingTask); => {}
         this.activeTrainingTasks.set(task.id, task);
         if (task.status === "running") {
           this.monitorTrainingProgress(task.id);
@@ -331,7 +339,7 @@ const performanceMonitor = usePerformanceMonitor(mlTrainingService", {"
     trackRender: true,
     trackMemory: false,warnThreshold: 100, // ms };);
       try {
-        const response = await apiClient.get(`/ml/training/progress/${taskI;d;};`;);/////            const progress = response.da;t;a;
+        const response = await apiClient.get(`/ml/training/progress/${taskI;d;};`;);/            const progress = response.da;t;a;
         const task = this.activeTrainingTasks.get(taskI;d;);
         if (task) {
           task.status = progress.status;
@@ -342,9 +350,9 @@ if (progress.status === "completed" || progress.status === "failed") {
             if (progress.status === "failed") {
               task.errorMessage = progress.error;
             }
-            return; // 停止监控 // }
+            return;  }
         }
-        // 继续监控 // setTimeout(checkProgress, 5000);
+        setTimeout(checkProgress, 5000);
       } catch (error) {
         }
     };
@@ -353,7 +361,7 @@ if (progress.status === "completed" || progress.status === "failed") {
   private analyzeDataSources(trainingData: TrainingData[]);:   {
     [source: string]: number} {
     const sources: { [source: string]: number } = {};
-    trainingData.forEach((data); => {}
+    trainingData.forEach(data); => {}
       const source = data.metadata.sour;c;e;
       sources[source] = (sources[source] || 0) + 1;
     });
@@ -366,8 +374,8 @@ if (progress.status === "completed" || progress.status === "failed") {
     status: string,
     datasetSize: number}> {
     try {
-      // 创建数据集 // const datasetId = await this.createDataset(;
-        `${modelName}_dataset`,`训练数据集 for ${modelName}`,trainingData.map((d;a;t;a;) => ({
+      const datasetId = await this.createDataset(;
+        `${modelName}_dataset`,`训练数据集 for ${modelName}`,trainingData.map(d;a;t;a;) => ({
           id: data.id,
           userId: "system",
           sessionId: "training",
@@ -375,22 +383,22 @@ if (progress.status === "completed" || progress.status === "failed") {
           expectedOutput: data.expectedOutput,
           metadata: data.metadata}))
       )
-      // 构建模型配置 // const config: ModelConfig = {
-        modelType: modelConfig.type || "neural_network",
-        hyperparameters: modelConfig.hyperparameters || {
-          learningRate: 0.001,
+      const config: ModelConfig = {,
+  modelType: modelConfig.type || "neural_network",
+        hyperparameters: modelConfig.hyperparameters || {,
+  learningRate: 0.001,
           epochs: 50,
           batchSize: 32},
-        features: {
-          looking: ["tongueColor", "coating", "texture"],
-          listening: ["voicePattern", "breathingRate"],
-          inquiry: ["symptoms", "lifestyle"],
-          palpation: ["pulseRate", "strength"],
-          calculation: ["birthDate", "currentTime", "location"]
+        features: {,
+  looking: ["tongueColor",coating", "texture"],
+          listening: ["voicePattern",breathingRate"],
+          inquiry: ["symptoms",lifestyle"],
+          palpation: ["pulseRate",strength"],
+          calculation: ["birthDate",currentTime", "location"]
         },
-        targetVariables: ["syndrome", "constitution", "confidence"]
+        targetVariables: ["syndrome",constitution", "confidence"]
       }
-      // 开始训练 // const taskId = await this.startTraining(;
+      const taskId = await this.startTraining(;
         modelName,`训练模型: ${modelName}`,config,datase;t;I;d;
       ;);
       return {id: taskId,modelName,status: "pending",datasetSize: trainingData.lengt;h;
@@ -400,4 +408,4 @@ if (progress.status === "completed" || progress.status === "failed") {
     }
   }
 }
-// 导出单例实例 * export const mlTrainingService = new MLTrainingService ////   ;
+//   ;

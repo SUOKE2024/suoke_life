@@ -2,22 +2,19 @@ import {import { AgentType } from "../../types/agents";
 import { agentApiService } from "../../services/api/agentApiService";
 import AgentMonitor from "./AgentMonitor";
 import AgentAnalytics from "./AgentAnalytics";
-
 import React, { useState, useEffect } from "react";
-  View, 
-  Text, 
-  StyleSheet, 
-  ScrollView, 
-  TouchableOpacity, 
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
   Dimensions,
   RefreshControl,
-  Alert
+  Alert;
 } from "react-native";
-
 interface AgentDashboardProps {
   initialTab?: "monitor" | "analytics" | "chat";
 }
-
 interface QuickAction {
   id: string;
   title: string;
@@ -27,19 +24,15 @@ interface QuickAction {
   icon: string;
   color: string;
 }
-
 const { width } = Dimensions.get("window");
-
-const AgentDashboard: React.FC<AgentDashboardProps> = ({ 
-  initialTab = "monitor" 
+const AgentDashboard: React.FC<AgentDashboardProps> = ({
+  initialTab = "monitor"
 }) => {
   const [activeTab, setActiveTab] = useState(initialTab);
   const [refreshing, setRefreshing] = useState(false);
   const [systemStatus, setSystemStatus] = useState<"healthy" | "warning" | "error">("healthy");
-
   const agentNames = {[AgentType.XIAOAI]: "小艾",[AgentType.XIAOKE]: "小克",[AgentType.LAOKE]: "老克",[AgentType.SOER]: "索儿";
   };
-
   const quickActions: QuickAction[] = [
     {
       id: "xiaoai-chat",
@@ -78,17 +71,19 @@ const AgentDashboard: React.FC<AgentDashboardProps> = ({
       color: "#FF3B30"
     }
   ];
-
   const handleQuickAction = (actionType: string, agentType: AgentType) => {Alert.alert(;
       `${agentNames[agentType]}服务`,`即将启动${actionType}功能`,[;
-        { text: "取消", style: "cancel" },{text: "确定",onPress: () => {// 这里可以导航到具体的功能页面;
+        {
+      text: "取消",
+      style: "cancel" },{
+      text: "确定",
+      onPress: () => {// 这里可以导航到具体的功能页面;
             console.log(`启动${agentNames[agentType]}的${actionType}功能`);
           }
         }
       ]
     );
   };
-
   const checkSystemHealth = async () => {try {const healthCheck = await agentApiService.healthCheck();
       if (healthCheck.success) {
         setSystemStatus("healthy");
@@ -99,23 +94,24 @@ const AgentDashboard: React.FC<AgentDashboardProps> = ({
       setSystemStatus("error");
     }
   };
-
   const onRefresh = async () => {setRefreshing(true);
     await checkSystemHealth();
     setRefreshing(false);
   };
-
-  useEffect(() => {
+  useEffect() => {
     checkSystemHealth();
     const interval = setInterval(checkSystemHealth, 60000); // 每分钟检查一次
     return () => clearInterval(interval);
   }, [])  // 检查是否需要添加依赖项;
-
-  const renderSystemStatus = () => {const statusConfig = {healthy: { color: "#34C759", text: "系统正常", icon: "✅" },warning: { color: "#FF9500", text: "系统警告", icon: "⚠️" },error: { color: "#FF3B30", text: "系统异常", icon: "❌" };
+  const renderSystemStatus = () => {const statusConfig = {healthy: {
+      color: "#34C759",
+      text: "系统正常", icon: "✅" },warning: {
+      color: "#FF9500",
+      text: "系统警告", icon: "⚠️" },error: {
+      color: "#FF3B30",
+      text: "系统异常", icon: "❌" };
     };
-
     const config = statusConfig[systemStatus];
-
     return (;
       <View style={[styles.statusCard, { borderLeftColor: config.color }]}>;
         <View style={styles.statusHeader}>;
@@ -130,12 +126,11 @@ const AgentDashboard: React.FC<AgentDashboardProps> = ({
       </View>;
     );
   };
-
   const renderQuickActions = () => (
     <View style={styles.quickActionsContainer}>
       <Text style={styles.sectionTitle}>快速操作</Text>
       <View style={styles.actionsGrid}>
-        {quickActions.map((action) => (;
+        {quickActions.map(action) => (;
           <TouchableOpacity;
             key={action.id};
             style={[styles.actionCard, { borderLeftColor: action.color }]};
@@ -152,27 +147,26 @@ const AgentDashboard: React.FC<AgentDashboardProps> = ({
       </View>;
     </View>;
   );
-
   const renderTabBar = () => (
     <View style={styles.tabBar}>
-      <TouchableOpacity
+      <TouchableOpacity;
         style={[styles.tab, activeTab === "monitor" && styles.activeTab]}
         onPress={() => setActiveTab("monitor")}
       >
         <Text style={[
           styles.tabText,
-          activeTab === "monitor" && styles.activeTabText
+          activeTab === "monitor" && styles.activeTabText;
         ]}>
           监控
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity
+      <TouchableOpacity;
         style={[styles.tab, activeTab === "analytics" && styles.activeTab]}
         onPress={() => setActiveTab("analytics")}
       >
         <Text style={[
           styles.tabText,
-          activeTab === "analytics" && styles.activeTabText
+          activeTab === "analytics" && styles.activeTabText;
         ]}>;
           分析;
         </Text>;
@@ -189,7 +183,6 @@ const AgentDashboard: React.FC<AgentDashboardProps> = ({
       </TouchableOpacity>;
     </View>;
   );
-
   const renderTabContent = () => {switch (activeTab) {case "monitor":return <AgentMonitor />;
       case "analytics":
         return <AgentAnalytics />;
@@ -207,7 +200,6 @@ const AgentDashboard: React.FC<AgentDashboardProps> = ({
         return null;
     }
   };
-
   return (
     <View style={styles.container}>
       <ScrollView;
@@ -227,33 +219,32 @@ const AgentDashboard: React.FC<AgentDashboardProps> = ({
     </View>;
   );
 };
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  container: {,
+  flex: 1,
     backgroundColor: "#f5f5f5"
   },
-  scrollView: {
-    flex: 1
+  scrollView: {,
+  flex: 1;
   },
-  header: {
-    backgroundColor: "#fff",
+  header: {,
+  backgroundColor: "#fff",
     padding: 20,
     borderBottomWidth: 1,
     borderBottomColor: "#e0e0e0"
   },
-  title: {
-    fontSize: 28,
+  title: {,
+  fontSize: 28,
     fontWeight: "bold",
     color: "#333",
-    marginBottom: 4
+    marginBottom: 4;
   },
-  subtitle: {
-    fontSize: 16,
+  subtitle: {,
+  fontSize: 16,
     color: "#666"
   },
-  statusCard: {
-    backgroundColor: "#fff",
+  statusCard: {,
+  backgroundColor: "#fff",
     margin: 16,
     padding: 16,
     borderRadius: 12,
@@ -262,27 +253,27 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3
+    elevation: 3;
   },
-  statusHeader: {
-    flexDirection: "row",
+  statusHeader: {,
+  flexDirection: "row",
     alignItems: "center",
-    marginBottom: 8
+    marginBottom: 8;
   },
-  statusIcon: {
-    fontSize: 20,
-    marginRight: 8
+  statusIcon: {,
+  fontSize: 20,
+    marginRight: 8;
   },
-  statusText: {
-    fontSize: 18,
+  statusText: {,
+  fontSize: 18,
     fontWeight: "600"
   },
-  statusTime: {
-    fontSize: 14,
+  statusTime: {,
+  fontSize: 14,
     color: "#666"
   },
-  tabBar: {
-    flexDirection: "row",
+  tabBar: {,
+  flexDirection: "row",
     backgroundColor: "#fff",
     marginHorizontal: 16,
     marginBottom: 16,
@@ -292,27 +283,27 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3
+    elevation: 3;
   },
-  tab: {
-    flex: 1,
+  tab: {,
+  flex: 1,
     paddingVertical: 12,
     alignItems: "center",
-    borderRadius: 8
+    borderRadius: 8;
   },
-  activeTab: {
-    backgroundColor: "#007AFF"
+  activeTab: {,
+  backgroundColor: "#007AFF"
   },
-  tabText: {
-    fontSize: 16,
+  tabText: {,
+  fontSize: 16,
     fontWeight: "600",
     color: "#666"
   },
-  activeTabText: {
-    color: "#fff"
+  activeTabText: {,
+  color: "#fff"
   },
-  quickActionsContainer: {
-    backgroundColor: "#fff",
+  quickActionsContainer: {,
+  backgroundColor: "#fff",
     margin: 16,
     padding: 16,
     borderRadius: 12,
@@ -320,49 +311,49 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3
+    elevation: 3;
   },
-  sectionTitle: {
-    fontSize: 20,
+  sectionTitle: {,
+  fontSize: 20,
     fontWeight: "bold",
     color: "#333",
-    marginBottom: 16
+    marginBottom: 16;
   },
-  actionsGrid: {
-    flexDirection: "row",
+  actionsGrid: {,
+  flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between"
   },
-  actionCard: {
-    width: "48%",
+  actionCard: {,
+  width: "48%",
     backgroundColor: "#f8f9fa",
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
-    borderLeftWidth: 4
+    borderLeftWidth: 4;
   },
-  actionHeader: {
-    flexDirection: "row",
+  actionHeader: {,
+  flexDirection: "row",
     alignItems: "center",
-    marginBottom: 8
+    marginBottom: 8;
   },
-  actionIcon: {
-    fontSize: 24,
-    marginRight: 8
+  actionIcon: {,
+  fontSize: 24,
+    marginRight: 8;
   },
-  actionTitle: {
-    fontSize: 16,
+  actionTitle: {,
+  fontSize: 16,
     fontWeight: "600",
     color: "#333",
-    flex: 1
+    flex: 1;
   },
-  actionDescription: {
-    fontSize: 14,
+  actionDescription: {,
+  fontSize: 14,
     color: "#666",
-    lineHeight: 20
+    lineHeight: 20;
   },
-  chatContainer: {
-    backgroundColor: "#fff",
+  chatContainer: {,
+  backgroundColor: "#fff",
     margin: 16,
     padding: 20,
     borderRadius: 12,
@@ -373,5 +364,4 @@ const styles = StyleSheet.create({
   },chatDescription: {fontSize: 16,color: "#666",lineHeight: 24,marginBottom: 20;
   };
 });
-
-export default AgentDashboard; 
+export default AgentDashboard;
