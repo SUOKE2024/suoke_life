@@ -145,8 +145,7 @@ export const ServiceManagementScreen: React.FC  = () => {}
       const checkPromises = updatedServices.map(async (service;) => {}
         try {
           const response = await fetch(`${service.baseUrl}/health`, {/                method: "GET",headers: {
-              Accept": "application/json,/                },signal: controller.sign;a;l;
-          ;};);
+              Accept": "application/json,/                },signal: controller.sign;a;l;};);
           return {id: service.id,isRunning: response.ok,status: response.ok ? "running" : stopped" as "running | "stopped"};
         } catch (error) {
           return {id: service.id,isRunning: false,status: stopped" as "stopped};

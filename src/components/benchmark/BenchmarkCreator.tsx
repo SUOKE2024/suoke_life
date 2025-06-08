@@ -332,7 +332,6 @@ export const BenchmarkCreator: React.FC<BenchmarkCreatorProps> = ({
             </Text>;
           </TouchableOpacity>;
         </View>;
-;
         <ScrollView style={styles.content}>;
           {renderBenchmarkTypeSelector()};
           {renderModelConfig()};

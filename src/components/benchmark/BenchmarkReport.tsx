@@ -247,7 +247,6 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
           </Card.Content>
         </Card>;
       )};
-;
       {// 元数据};
       {result.metadata && Object.keys(result.metadata).length > 0 && (;
         <Card style={styles.card}>;

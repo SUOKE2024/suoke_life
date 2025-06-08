@@ -29,28 +29,28 @@ class TestIPFSClient:
     async def test_upload_data_success(self, ipfs_client):
         """测试成功上传数据"""
         test_data = {"test": "data", "number": 123}
-        
+
         with patch('httpx.AsyncClient.post') as mock_post:
             mock_response = MagicMock()
             mock_response.status_code = 200
             mock_response.json.return_value = {"Hash": "QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG"}
             mock_post.return_value = mock_response
-            
+
             result = await ipfs_client.upload_data(test_data)
-            
+
             assert result == "QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG"
 
     @pytest.mark.asyncio
     async def test_upload_data_failure(self, ipfs_client):
         """测试上传数据失败"""
         test_data = {"test": "data"}
-        
+
         with patch('httpx.AsyncClient.post') as mock_post:
             mock_response = MagicMock()
             mock_response.status_code = 500
             mock_response.text = "Internal Server Error"
             mock_post.return_value = mock_response
-            
+
             with pytest.raises(IPFSError, match="IPFS上传失败"):
                 await ipfs_client.upload_data(test_data)
 
@@ -59,28 +59,28 @@ class TestIPFSClient:
         """测试成功获取数据"""
         test_hash = "QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG"
         expected_data = {"test": "data", "number": 123}
-        
+
         with patch('httpx.AsyncClient.post') as mock_post:
             mock_response = MagicMock()
             mock_response.status_code = 200
             mock_response.content = json.dumps(expected_data).encode()
             mock_post.return_value = mock_response
-            
+
             result = await ipfs_client.get_data(test_hash)
-            
+
             assert result == json.dumps(expected_data).encode()
 
     @pytest.mark.asyncio
     async def test_get_data_not_found(self, ipfs_client):
         """测试获取不存在的数据"""
         test_hash = "QmInvalidHash"
-        
+
         with patch('httpx.AsyncClient.post') as mock_post:
             mock_response = MagicMock()
             mock_response.status_code = 404
             mock_response.text = "Not Found"
             mock_post.return_value = mock_response
-            
+
             with pytest.raises(IPFSError, match="IPFS数据获取失败"):
                 await ipfs_client.get_data(test_hash)
 
@@ -88,30 +88,30 @@ class TestIPFSClient:
     async def test_pin_data_success(self, ipfs_client):
         """测试成功固定数据"""
         test_hash = "QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG"
-        
+
         with patch('httpx.AsyncClient.post') as mock_post:
             mock_response = MagicMock()
             mock_response.status_code = 200
             mock_response.json.return_value = {"Pins": [test_hash]}
             mock_post.return_value = mock_response
-            
+
             result = await ipfs_client.pin_data(test_hash)
-            
+
             assert result is True
 
     @pytest.mark.asyncio
     async def test_unpin_data_success(self, ipfs_client):
         """测试成功取消固定数据"""
         test_hash = "QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG"
-        
+
         with patch('httpx.AsyncClient.post') as mock_post:
             mock_response = MagicMock()
             mock_response.status_code = 200
             mock_response.json.return_value = {"Pins": [test_hash]}
             mock_post.return_value = mock_response
-            
+
             result = await ipfs_client.unpin_data(test_hash)
-            
+
             assert result is True
 
     @pytest.mark.asyncio
@@ -124,15 +124,15 @@ class TestIPFSClient:
             "AgentVersion": "go-ipfs/0.12.0",
             "ProtocolVersion": "ipfs/0.1.0"
         }
-        
+
         with patch('httpx.AsyncClient.post') as mock_post:
             mock_response = MagicMock()
             mock_response.status_code = 200
             mock_response.json.return_value = expected_info
             mock_post.return_value = mock_response
-            
+
             result = await ipfs_client.get_node_info()
-            
+
             assert result == expected_info
 
     @pytest.mark.asyncio
@@ -143,9 +143,9 @@ class TestIPFSClient:
             mock_response.status_code = 200
             mock_response.json.return_value = {"ID": "QmNodeId"}
             mock_post.return_value = mock_response
-            
+
             result = await ipfs_client.check_connection()
-            
+
             assert result is True
 
     @pytest.mark.asyncio
@@ -153,9 +153,9 @@ class TestIPFSClient:
         """测试连接检查失败"""
         with patch('httpx.AsyncClient.post') as mock_post:
             mock_post.side_effect = Exception("Connection failed")
-            
+
             result = await ipfs_client.check_connection()
-            
+
             assert result is False
 
     @pytest.mark.asyncio
@@ -163,30 +163,30 @@ class TestIPFSClient:
         """测试上传大数据"""
         # 创建大数据对象
         large_data = {"data": "x" * (1024 * 1024)}  # 1MB数据
-        
+
         with patch('httpx.AsyncClient.post') as mock_post:
             mock_response = MagicMock()
             mock_response.status_code = 200
             mock_response.json.return_value = {"Hash": "QmLargeDataHash"}
             mock_post.return_value = mock_response
-            
+
             result = await ipfs_client.upload_data(large_data)
-            
+
             assert result == "QmLargeDataHash"
 
     @pytest.mark.asyncio
     async def test_upload_binary_data(self, ipfs_client):
         """测试上传二进制数据"""
         binary_data = b"binary_test_data"
-        
+
         with patch('httpx.AsyncClient.post') as mock_post:
             mock_response = MagicMock()
             mock_response.status_code = 200
             mock_response.json.return_value = {"Hash": "QmBinaryDataHash"}
             mock_post.return_value = mock_response
-            
+
             result = await ipfs_client.upload_binary_data(binary_data)
-            
+
             assert result == "QmBinaryDataHash"
 
     @pytest.mark.asyncio
@@ -200,15 +200,15 @@ class TestIPFSClient:
             "Blocks": 1,
             "Type": "file"
         }
-        
+
         with patch('httpx.AsyncClient.post') as mock_post:
             mock_response = MagicMock()
             mock_response.status_code = 200
             mock_response.json.return_value = expected_stats
             mock_post.return_value = mock_response
-            
+
             result = await ipfs_client.get_data_stats(test_hash)
-            
+
             assert result == expected_stats
 
     @pytest.mark.asyncio
@@ -217,7 +217,7 @@ class TestIPFSClient:
         # 有效的IPFS哈希
         valid_hash = "QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG"
         assert ipfs_client._validate_hash(valid_hash) is True
-        
+
         # 无效的哈希
         invalid_hashes = [
             "",
@@ -226,7 +226,7 @@ class TestIPFSClient:
             "QmInvalidHashTooLong" * 10,  # 太长
             "123456789012345678901234567890123456789012345678"  # 不是base58
         ]
-        
+
         for invalid_hash in invalid_hashes:
             assert ipfs_client._validate_hash(invalid_hash) is False
 
@@ -234,9 +234,9 @@ class TestIPFSClient:
     async def test_timeout_handling(self, ipfs_client):
         """测试超时处理"""
         test_data = {"test": "data"}
-        
+
         with patch('httpx.AsyncClient.post') as mock_post:
             mock_post.side_effect = Exception("Timeout")
-            
+
             with pytest.raises(IPFSError, match="IPFS操作超时或连接失败"):
                 await ipfs_client.upload_data(test_data) 

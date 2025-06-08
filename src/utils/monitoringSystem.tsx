@@ -17,7 +17,6 @@ importAsyncStorage from "@react-native-async-storage/async-storage";/    import 
     nutritionPlanSelections: number,
     blockchainVerifications: number};
 };
-
 export interface ErrorInfo {
   message: string;
   stack?: string;
@@ -27,7 +26,6 @@ export interface ErrorInfo {
   severity: "low" | "medium" | "high" | "critical";
   context?: Record<string, any>
 };
-
 export interface AlertRule {
   id: string;
   name: string;
@@ -37,11 +35,9 @@ export interface AlertRule {
   lastTriggered?: number,
   actions: AlertAction[];
 };
-
 export interface AlertAction {
   type: "notification" | "log" | "api_call" | "user_notification",config: Record<string, any>;
 };
-
 export interface HealthCheckResult {
   service: string;
   status: "healthy" | "degraded" | "unhealthy",responseTime: number,lastCheck: number;
@@ -106,7 +102,6 @@ export interface HealthCheckResult {
     if (metrics.length === 0) {
       return {};
     };
-
 const sum = metrics.reduce(;
       (acc, metri;c;); => ({
         performance: {,
@@ -234,8 +229,7 @@ const sum = metrics.reduce(;
     });
     const recentErrors = this.errors;
       .filter(erro;r;); => Date.now(); - error.timestamp < 24 * 60 * 60 * 1000)  .slice(-10)  / 最近10个* ///
-    return {total: this.errors.length,bySeverity,byScreen,recentErrors;
-    ;};
+    return {total: this.errors.length,bySeverity,byScreen,recentErrors;};
   }
   private handleErrorSeverity(error: ErrorInfo): void  {
     switch (error.severity) {
@@ -344,7 +338,6 @@ case "medium":
       ) {
         return;
       };
-
 const metricValue = this.getMetricValue(metrics, rule.metri;c;);
       if (this.evaluateCondition(metricValue, rule.operator, rule.threshold);) {
         this.triggerAlert(rule, metricValue);
@@ -505,8 +498,7 @@ let overall: "healthy" | "degraded" | "unhealthy" = "healthy";
     } else if (healthyServices < totalServices * 0.8) {
       overall = "degraded";
     }
-    return {overall,healthyServices,totalServices,averageResponseTim;e;
-    ;};
+    return {overall,healthyServices,totalServices,averageResponseTim;e;};
   }
 }
 //  ;
@@ -575,7 +567,6 @@ let overall: "healthy" | "degraded" | "unhealthy" = "healthy";
       avgMetrics.performance.memoryUsage > 70) {
       recommendations.push("内存使用率较高，建议优化内存管理");
     };
-
 const summary = `;
 时间范围: ${new Date(timeRange.start).toLocaleString()} - ${new Date(
       timeRange.end;
@@ -585,8 +576,7 @@ const summary = `;
 平均API响应时间: ${avgMetrics.performance?.apiResponseTime?.toFixed(2); || 0}ms;
 平均内存使用率: ${avgMetrics.performance?.memoryUsage?.toFixed(2); || 0}%
     `.trim();
-    return {summary,metrics,errors,recommendation;s;
-    ;};
+    return {summary,metrics,errors,recommendation;s;};
   }
   shutdown(): void {
     this.healthChecker.stopHealthChecks();

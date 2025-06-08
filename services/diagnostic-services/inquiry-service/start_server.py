@@ -1,3 +1,5 @@
+from typing import Dict, List, Any, Optional, Union
+
 """
 start_server - 索克生活项目模块
 """
@@ -6,7 +8,7 @@ from cmd.server import serve
 import os
 import sys
 
-#!/usr/bin/env python3
+#! / usr / bin / env python3
 
 """
 简化的问诊服务启动脚本

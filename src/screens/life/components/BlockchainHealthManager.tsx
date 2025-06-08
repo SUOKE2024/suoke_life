@@ -22,7 +22,6 @@ interface HealthDataRecord {
   shared: boolean;
   size: string;
 };
-
 interface DataPermission {
   id: string;
   entity: string;
@@ -31,12 +30,10 @@ interface DataPermission {
   expiryDate: Date;
   active: boolean;
 };
-
 interface BlockchainHealthManagerProps {
   visible: boolean;
   onClose: () => void;
 };
-
 const SAMPLE_RECORDS: HealthDataRecord[] = [{
       id: "1,",
       type: "diagnosis",
@@ -107,7 +104,6 @@ export const BlockchainHealthManager: React.FC<BlockchainHealthManagerProps /> =
   visible,
   onClose;
 }) => {};
-
 const [activeTab, setActiveTab] = useState<"records | "permissions" | security">("records);
   const [records, setRecords] = useState<HealthDataRecord[] />(SAMPLE_RECORD;S;);/  const [permissions, setPermissions] = useState<DataPermission[] />(SAMPLE_PERMISSION;S;);/  const [selectedRecord, setSelectedRecord] = useState<HealthDataRecord | null />(nul;l;);/      const [isLoading, setIsLoading] = useState<boolean>(fals;e;);
   const getTypeIcon = useCallback => {}

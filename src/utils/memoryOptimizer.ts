@@ -240,8 +240,7 @@ export interface MemoryOptimizationSuggestion {
     const trend = this.calculateMemoryTrend;
     const leaks = this.detectLeaks;
     const suggestions = this.getOptimizationSuggestions;
-    return {current,trend,leaks,suggestions,components: this.componentRegistry.size,listeners: this.listenerRegistry.size,timers: this.timerRegistry.size,intervals: this.intervalRegistry.siz;e;
-    ;};
+    return {current,trend,leaks,suggestions,components: this.componentRegistry.size,listeners: this.listenerRegistry.size,timers: this.timerRegistry.size,intervals: this.intervalRegistry.siz;e;};
   }
   // 计算内存趋势  private calculateMemoryTrend(): "increasing" | "decreasing" | "stable" {
     if (this.snapshots.length < 5) {

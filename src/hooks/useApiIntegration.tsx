@@ -527,6 +527,5 @@ performanceMonitor.recordRender();
     getModelPrediction,
     getModelPerformance,
     getAccessibilitySettings,
-    updateAccessibilitySettings,generateAccessibilityReport, getEcoServices,subscribeToEcoService,getEcoServiceUsage, submitFeedback,getFeedbackHistory,getSupportTickets,createSupportTicket, getSystemHealth,getSystemMetrics,reportPerformanceMetrics, batchRequest,healthCheck,getApiVersion, addEventListener,removeEventListene;r;
-  ;};
+    updateAccessibilitySettings,generateAccessibilityReport, getEcoServices,subscribeToEcoService,getEcoServiceUsage, submitFeedback,getFeedbackHistory,getSupportTickets,createSupportTicket, getSystemHealth,getSystemMetrics,reportPerformanceMetrics, batchRequest,healthCheck,getApiVersion, addEventListener,removeEventListene;r;};
 };

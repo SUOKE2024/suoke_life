@@ -2,7 +2,6 @@
  * 健康数据隐私管理组件
  * 提供用户友好的隐私控制界面，集成零知识证明和区块链验证
  */
-
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
@@ -20,9 +19,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-
 const { width, height } = Dimensions.get('window');
-
 interface HealthDataRecord {
   record_id: string;
   user_id: string;
@@ -42,7 +39,6 @@ interface HealthDataRecord {
   access_permissions: string[];
   is_verified: boolean;
 }
-
 interface PrivacySettings {
   data_sharing_enabled: boolean;
   anonymization_level: 'none' | 'basic' | 'advanced';
@@ -52,7 +48,6 @@ interface PrivacySettings {
   auto_approve_research: boolean;
   retention_period_days: number;
 }
-
 interface ZKPProofInfo {
   proof_id: string;
   statement: string;
@@ -62,7 +57,6 @@ interface ZKPProofInfo {
   verification_key: string;
   public_inputs_count: number;
 }
-
 const HealthDataPrivacyManager: React.FC = () => {
   const { t } = useTranslation();
   const [healthRecords, setHealthRecords] = useState<HealthDataRecord[]>([]);
@@ -81,12 +75,10 @@ const HealthDataPrivacyManager: React.FC = () => {
   const [showProofModal, setShowProofModal] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [animatedValue] = useState(new Animated.Value(0));
-
   useEffect(() => {
     loadHealthRecords();
     loadPrivacySettings();
     loadZKPProofs();
-    
     // 启动动画
     Animated.timing(animatedValue, {
       toValue: 1,
@@ -94,7 +86,6 @@ const HealthDataPrivacyManager: React.FC = () => {
       useNativeDriver: true,
     }).start();
   }, []);
-
   const loadHealthRecords = async () => {
     try {
       setLoading(true);
@@ -139,7 +130,6 @@ const HealthDataPrivacyManager: React.FC = () => {
           is_verified: true,
         },
       ];
-      
       setHealthRecords(mockRecords);
     } catch (error) {
       console.error('加载健康记录失败:', error);
@@ -148,7 +138,6 @@ const HealthDataPrivacyManager: React.FC = () => {
       setLoading(false);
     }
   };
-
   const loadPrivacySettings = async () => {
     try {
       // 模拟从API加载隐私设置
@@ -157,7 +146,6 @@ const HealthDataPrivacyManager: React.FC = () => {
       console.error('加载隐私设置失败:', error);
     }
   };
-
   const loadZKPProofs = async () => {
     try {
       // 模拟加载零知识证明信息
@@ -181,21 +169,17 @@ const HealthDataPrivacyManager: React.FC = () => {
           public_inputs_count: 4,
         },
       ];
-      
       setZkpProofs(mockProofs);
     } catch (error) {
       console.error('加载ZKP证明失败:', error);
     }
   };
-
   const updatePrivacySetting = useCallback(async (key: keyof PrivacySettings, value: any) => {
     try {
       const newSettings = { ...privacySettings, [key]: value };
       setPrivacySettings(newSettings);
-      
       // 模拟API调用保存设置
       console.log('更新隐私设置:', key, value);
-      
       // 显示成功提示
       Alert.alert('成功', '隐私设置已更新');
     } catch (error) {
@@ -203,21 +187,17 @@ const HealthDataPrivacyManager: React.FC = () => {
       Alert.alert('错误', '更新隐私设置失败');
     }
   }, [privacySettings]);
-
   const verifyZKPProof = async (proofId: string) => {
     try {
       setLoading(true);
-      
       // 模拟验证零知识证明
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
       // 更新证明状态
-      setZkpProofs(prev => prev.map(proof => 
-        proof.proof_id === proofId 
+      setZkpProofs(prev => prev.map(proof =>
+        proof.proof_id === proofId
           ? { ...proof, is_valid: true }
           : proof
       ));
-      
       Alert.alert('验证成功', '零知识证明验证通过');
     } catch (error) {
       console.error('验证ZKP证明失败:', error);
@@ -226,7 +206,6 @@ const HealthDataPrivacyManager: React.FC = () => {
       setLoading(false);
     }
   };
-
   const revokeDataAccess = async (recordId: string) => {
     try {
       Alert.alert(
@@ -239,12 +218,11 @@ const HealthDataPrivacyManager: React.FC = () => {
             style: 'destructive',
             onPress: async () => {
               // 模拟撤销访问权限
-              setHealthRecords(prev => prev.map(record => 
+              setHealthRecords(prev => prev.map(record =>
                 record.record_id === recordId
                   ? { ...record, access_permissions: [record.user_id] }
                   : record
               ));
-              
               Alert.alert('成功', '访问权限已撤销');
             },
           },
@@ -255,7 +233,6 @@ const HealthDataPrivacyManager: React.FC = () => {
       Alert.alert('错误', '撤销访问权限失败');
     }
   };
-
   const getDataTypeIcon = (dataType: string) => {
     switch (dataType) {
       case 'tongue_analysis':
@@ -268,7 +245,6 @@ const HealthDataPrivacyManager: React.FC = () => {
         return 'folder-outline';
     }
   };
-
   const getDataTypeName = (dataType: string) => {
     switch (dataType) {
       case 'tongue_analysis':
@@ -281,7 +257,6 @@ const HealthDataPrivacyManager: React.FC = () => {
         return '其他数据';
     }
   };
-
   const getPrivacyLevelColor = (level: string) => {
     switch (level) {
       case 'high':
@@ -294,7 +269,6 @@ const HealthDataPrivacyManager: React.FC = () => {
         return '#9E9E9E';
     }
   };
-
   const renderHealthRecord = (record: HealthDataRecord) => (
     <Animated.View
       key={record.record_id}
@@ -327,7 +301,6 @@ const HealthDataPrivacyManager: React.FC = () => {
             </Text>
           </View>
         </View>
-        
         <View style={styles.recordStatus}>
           <View style={[
             styles.privacyBadge,
@@ -337,13 +310,11 @@ const HealthDataPrivacyManager: React.FC = () => {
               {record.metadata.privacy_level === 'high' ? '高隐私' : '标准'}
             </Text>
           </View>
-          
           {record.is_verified && (
             <Ionicons name="shield-checkmark" size={20} color="#4CAF50" />
           )}
         </View>
       </View>
-
       <View style={styles.recordDetails}>
         <View style={styles.detailRow}>
           <Text style={styles.detailLabel}>存储位置:</Text>
@@ -356,7 +327,6 @@ const HealthDataPrivacyManager: React.FC = () => {
             )}
           </View>
         </View>
-        
         {record.zkp_proof_id && (
           <View style={styles.detailRow}>
             <Text style={styles.detailLabel}>零知识证明:</Text>
@@ -372,7 +342,6 @@ const HealthDataPrivacyManager: React.FC = () => {
           </View>
         )}
       </View>
-
       <View style={styles.recordActions}>
         <TouchableOpacity
           style={styles.actionButton}
@@ -381,7 +350,6 @@ const HealthDataPrivacyManager: React.FC = () => {
           <Ionicons name="lock-closed" size={16} color="#F44336" />
           <Text style={styles.actionButtonText}>撤销访问</Text>
         </TouchableOpacity>
-        
         <TouchableOpacity
           style={[styles.actionButton, styles.primaryAction]}
           onPress={() => {
@@ -395,11 +363,9 @@ const HealthDataPrivacyManager: React.FC = () => {
       </View>
     </Animated.View>
   );
-
   const renderPrivacySettings = () => (
     <View style={styles.settingsContainer}>
       <Text style={styles.sectionTitle}>隐私设置</Text>
-      
       <View style={styles.settingItem}>
         <View style={styles.settingInfo}>
           <Text style={styles.settingLabel}>数据分享</Text>
@@ -412,7 +378,6 @@ const HealthDataPrivacyManager: React.FC = () => {
           thumbColor={privacySettings.data_sharing_enabled ? '#FFFFFF' : '#FFFFFF'}
         />
       </View>
-
       <View style={styles.settingItem}>
         <View style={styles.settingInfo}>
           <Text style={styles.settingLabel}>零知识证明验证</Text>
@@ -425,7 +390,6 @@ const HealthDataPrivacyManager: React.FC = () => {
           thumbColor={privacySettings.zkp_verification_required ? '#FFFFFF' : '#FFFFFF'}
         />
       </View>
-
       <View style={styles.settingItem}>
         <View style={styles.settingInfo}>
           <Text style={styles.settingLabel}>区块链存储</Text>
@@ -438,7 +402,6 @@ const HealthDataPrivacyManager: React.FC = () => {
           thumbColor={privacySettings.blockchain_storage_enabled ? '#FFFFFF' : '#FFFFFF'}
         />
       </View>
-
       <View style={styles.settingItem}>
         <View style={styles.settingInfo}>
           <Text style={styles.settingLabel}>IPFS分布式存储</Text>
@@ -453,7 +416,6 @@ const HealthDataPrivacyManager: React.FC = () => {
       </View>
     </View>
   );
-
   const renderZKPProofModal = () => (
     <Modal
       visible={showProofModal}
@@ -472,7 +434,6 @@ const HealthDataPrivacyManager: React.FC = () => {
               <Ionicons name="close" size={24} color="#666" />
             </TouchableOpacity>
           </View>
-
           {selectedRecord && (
             <ScrollView style={styles.modalBody}>
               {zkpProofs
@@ -486,9 +447,7 @@ const HealthDataPrivacyManager: React.FC = () => {
                         <Text style={styles.proofId}>ID: {proof.proof_id}</Text>
                       </View>
                     </View>
-
                     <Text style={styles.proofStatement}>{proof.statement}</Text>
-
                     <View style={styles.proofMetadata}>
                       <View style={styles.metadataRow}>
                         <Text style={styles.metadataLabel}>创建时间:</Text>
@@ -496,20 +455,17 @@ const HealthDataPrivacyManager: React.FC = () => {
                           {new Date(proof.created_at).toLocaleString('zh-CN')}
                         </Text>
                       </View>
-                      
                       <View style={styles.metadataRow}>
                         <Text style={styles.metadataLabel}>过期时间:</Text>
                         <Text style={styles.metadataValue}>
                           {new Date(proof.expires_at).toLocaleString('zh-CN')}
                         </Text>
                       </View>
-                      
                       <View style={styles.metadataRow}>
                         <Text style={styles.metadataLabel}>公开输入数量:</Text>
                         <Text style={styles.metadataValue}>{proof.public_inputs_count}</Text>
                       </View>
                     </View>
-
                     <TouchableOpacity
                       style={styles.verifyButton}
                       onPress={() => verifyZKPProof(proof.proof_id)}
@@ -532,7 +488,6 @@ const HealthDataPrivacyManager: React.FC = () => {
       </View>
     </Modal>
   );
-
   return (
     <View style={styles.container}>
       <LinearGradient
@@ -543,7 +498,6 @@ const HealthDataPrivacyManager: React.FC = () => {
         <Text style={styles.headerSubtitle}>
           零知识证明 • 区块链存储 • 隐私保护
         </Text>
-        
         <TouchableOpacity
           style={styles.settingsButton}
           onPress={() => setShowSettingsModal(true)}
@@ -551,7 +505,6 @@ const HealthDataPrivacyManager: React.FC = () => {
           <Ionicons name="settings" size={24} color="#FFFFFF" />
         </TouchableOpacity>
       </LinearGradient>
-
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {loading ? (
           <View style={styles.loadingContainer}>
@@ -565,35 +518,29 @@ const HealthDataPrivacyManager: React.FC = () => {
                 <Text style={styles.statNumber}>{healthRecords.length}</Text>
                 <Text style={styles.statLabel}>健康记录</Text>
               </View>
-              
               <View style={styles.statCard}>
                 <Text style={styles.statNumber}>
                   {healthRecords.filter(r => r.zkp_proof_id).length}
                 </Text>
                 <Text style={styles.statLabel}>ZKP保护</Text>
               </View>
-              
               <View style={styles.statCard}>
                 <Text style={styles.statNumber}>
                   {Math.round(
-                    (healthRecords.filter(r => r.zkp_proof_id).length / 
+                    (healthRecords.filter(r => r.zkp_proof_id).length /
                      Math.max(healthRecords.length, 1)) * 100
                   )}%
                 </Text>
                 <Text style={styles.statLabel}>隐私保护率</Text>
               </View>
             </View>
-
             <Text style={styles.sectionTitle}>我的健康数据</Text>
             {healthRecords.map(renderHealthRecord)}
-
             {renderPrivacySettings()}
           </>
         )}
       </ScrollView>
-
       {renderZKPProofModal()}
-
       <Modal
         visible={showSettingsModal}
         animationType="slide"
@@ -611,7 +558,6 @@ const HealthDataPrivacyManager: React.FC = () => {
                 <Ionicons name="close" size={24} color="#666" />
               </TouchableOpacity>
             </View>
-            
             <ScrollView style={styles.modalBody}>
               {renderPrivacySettings()}
             </ScrollView>
@@ -621,7 +567,6 @@ const HealthDataPrivacyManager: React.FC = () => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -934,5 +879,4 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
 });
-
 export default HealthDataPrivacyManager;

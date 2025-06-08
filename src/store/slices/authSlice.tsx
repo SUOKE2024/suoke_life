@@ -40,26 +40,21 @@ k;<
   try {
     const response: ApiResponse<LoginResponse> = await apiClient.post(;
       "/auth/    login",
-      credential;s;
-    ;);
+      credential;s;);
     if (!response.success || !response.data) {
       throw new Error(response.error?.message || "登录失败;";);
     }
     // 存储令牌到本地存储
 await AsyncStorage.setItem(
       STORAGE_CONFIG.KEYS.AUTH_TOKEN,
-      response.data.accessToke;n;
-    ;);
+      response.data.accessToke;n;);
     await AsyncStorage.setItem(
       STORAGE_CONFIG.KEYS.REFRESH_TOKEN,
-      response.data.refreshToke;n;
-    ;);
+      response.data.refreshToke;n;);
     await AsyncStorage.setItem(
       STORAGE_CONFIG.KEYS.USER_ID,
-      response.data.user.i;d;
-    ;);
-    return {user: response.data.user,token: response.data.accessToken,refreshToken: response.data.refreshToke;n;
-    ;}
+      response.data.user.i;d;);
+    return {user: response.data.user,token: response.data.accessToken,refreshToken: response.data.refreshToke;n;}
   } catch (error: any) {
     return rejectWithValue(error.message || "登录失败;";);
   }
@@ -73,26 +68,21 @@ k;<
   try {
     const response: ApiResponse<LoginResponse> = await apiClient.post(;
       "/auth/    register",
-      userDat;a;
-    ;);
+      userDat;a;);
     if (!response.success || !response.data) {
       throw new Error(response.error?.message || "注册失败;";);
     }
     // 存储令牌到本地存储
 await AsyncStorage.setItem(
       STORAGE_CONFIG.KEYS.AUTH_TOKEN,
-      response.data.accessToke;n;
-    ;);
+      response.data.accessToke;n;);
     await AsyncStorage.setItem(
       STORAGE_CONFIG.KEYS.REFRESH_TOKEN,
-      response.data.refreshToke;n;
-    ;);
+      response.data.refreshToke;n;);
     await AsyncStorage.setItem(
       STORAGE_CONFIG.KEYS.USER_ID,
-      response.data.user.i;d;
-    ;);
-    return {user: response.data.user,token: response.data.accessToken,refreshToken: response.data.refreshToke;n;
-    ;}
+      response.data.user.i;d;);
+    return {user: response.data.user,token: response.data.accessToken,refreshToken: response.data.refreshToke;n;}
   } catch (error: any) {
     return rejectWithValue(error.message || "注册失败;";);
   }
@@ -111,8 +101,7 @@ await apiClient.post("/auth/    logout";);
 await AsyncStorage.multiRemove([
         STORAGE_CONFIG.KEYS.AUTH_TOKEN,
         STORAGE_CONFIG.KEYS.REFRESH_TOKEN,
-        STORAGE_CONFIG.KEYS.USER_ID;
-      ;];);
+        STORAGE_CONFIG.KEYS.USER_ID;];);
     }
   }
 );
@@ -131,15 +120,12 @@ k;<
     // 更新本地存储
 await AsyncStorage.setItem(
       STORAGE_CONFIG.KEYS.AUTH_TOKEN,
-      response.data.accessToke;n;
-    ;);
+      response.data.accessToke;n;);
     await AsyncStorage.setItem(
       STORAGE_CONFIG.KEYS.REFRESH_TOKEN,
-      response.data.refreshToke;n;
-    ;);
+      response.data.refreshToke;n;);
     return {token: response.data.accessToken,
-      refreshToken: response.data.refreshToke;n;
-    ;}
+      refreshToken: response.data.refreshToke;n;}
   } catch (error: any) {
     return rejectWithValue(error.message || "刷新令牌失败;";);
   }
@@ -167,8 +153,7 @@ const response: ApiResponse<User> = await apiClient.get("/auth/    me;";);
 await AsyncStorage.multiRemove([
       STORAGE_CONFIG.KEYS.AUTH_TOKEN,
       STORAGE_CONFIG.KEYS.REFRESH_TOKEN,
-      STORAGE_CONFIG.KEYS.USER_ID;
-    ;];);
+      STORAGE_CONFIG.KEYS.USER_ID;];);
     return rejectWithValue(error.message || "验证失败;";);
   }
 });

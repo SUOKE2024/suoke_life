@@ -83,8 +83,7 @@ k;<;
   { dataIds: string[]   },
   { rejectValue: string}
 >("health/analyzeData", async ({ dataIds }, { rejectWithValue }) => {/      try {}
-    const response: ApiResponse<HealthSummary /> = await apiClient.post(/      "/health/analyze",/          {dataIds;
-      ;}
+    const response: ApiResponse<HealthSummary /> = await apiClient.post(/      "/health/analyze",/          {dataIds;}
     ;);
     if (!response.success) {
       throw new Error(response.error?.message || "分析健康数据失败;";);

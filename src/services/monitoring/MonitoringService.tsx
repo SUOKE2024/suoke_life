@@ -204,8 +204,7 @@ const userEvent: UserEvent = { id: `event-${Date.now()  }-${Math.random().toStri
       const avgValue =
         recentMetrics.reduce(sum,m;); => sum + m.value, 0) // recentMetrics.length;
       const conditionMet = this.evaluateCondition(;
-        avgValue,rule.condition,rule.threshol;d;
-      ;);
+        avgValue,rule.condition,rule.threshol;d;);
       if (conditionMet) {
         this.handleAlertCondition(rule, avgValue, recentMetrics);
       } else {
@@ -412,8 +411,7 @@ issues.push(`${criticalAlerts.length}个严重告警`);
         latestMetrics[name] = metricHistory[metricHistory.length - 1].value;
       }
     }
-    return {status,score: Math.max(0, score),issues,metrics: latestMetric;s;
-    ;};
+    return {status,score: Math.max(0, score),issues,metrics: latestMetric;s;};
   }
   ///        this.config = { ...this.config, ...newConfig }
   }

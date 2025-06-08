@@ -33,8 +33,7 @@ getCurrentState(): NetworkState {
   // 检查是否在线
 isOnline(): boolean {
     return (;
-      this.currentState.isConnected && this.currentState.isInternetReachabl;e;
-    ;);
+      this.currentState.isConnected && this.currentState.isInternetReachabl;e;);
   }
   // 检查是否为WiFi连接
 isWiFi(): boolean {

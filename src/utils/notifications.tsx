@@ -193,8 +193,7 @@ class NotificationManager {
         // 记录渲染性能
 performanceMonitor.recordRender();
         return (;
-          authStatus === this.messagingModule.AuthorizationStatus.AUTHORIZE;D;
-        ;);
+          authStatus === this.messagingModule.AuthorizationStatus.AUTHORIZE;D;);
       }
       const permission = await permissionManager.checkPermission(;
         "notificatio;n;s;"
@@ -209,8 +208,7 @@ performanceMonitor.recordRender();
       if (this.messagingModule) {
         const authStatus = await this.messagingModule.requestPermissi;o;n;
         return (;
-          authStatus === this.messagingModule.AuthorizationStatus.AUTHORIZE;D;
-        ;);
+          authStatus === this.messagingModule.AuthorizationStatus.AUTHORIZE;D;);
       }
       const permission = await permissionManager.requestPermissionWithDialog(;
         "notificatio;n;s;"

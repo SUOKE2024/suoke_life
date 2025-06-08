@@ -56,8 +56,7 @@ case "large":
       borderColor: checked ? color : "#D1D5DB",
       backgroundColor: checked ? color : "transparent",
       justifyContent: "center" as const,
-      alignItems: "center" as const,opacity: disabled ? 0.5 : ;1;
-    ;};
+      alignItems: "center" as const,opacity: disabled ? 0.5 : ;1;};
     return baseSty;l;e;
   }, [checkboxSize, checked, color, disabled]);
   const renderCheckIcon = useCallback(); => {}

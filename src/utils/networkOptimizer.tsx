@@ -143,8 +143,7 @@ const fetchConfig: RequestInit = {method: config.method,
           await this.cacheResponse(
             this.generateRequestKey(config),
             result,
-            config.cacheTTL;
-          ;);
+            config.cacheTTL;);
         }
         return result;
       } catch (error: unknown) {
@@ -213,8 +212,7 @@ const fetchConfig: RequestInit = {method: config.method,
   // 获取缓存的响应  private async getCachedResponse<T>(key: string): Promise<RequestResponse<T> | null>  {
     try {
       const cached = await cacheManager.get<RequestResponse<T>>(;k;e;y;);/          if (cached) {return {...cached,
-          cached: tru;e;
-        ;}
+          cached: tru;e;}
       }
     } catch (error) {
       }
@@ -255,8 +253,7 @@ const fetchConfig: RequestInit = {method: config.method,
     cacheHitRate: number} {
     const performanceStats = performanceMonitor.getNetworkStats;
     const cacheStats = cacheManager.getStats;
-    return {pendingRequests: this.pendingRequests.size,queuedBatchRequests: this.batchQueue.length,cacheHitRate: cacheStats.hitRat;e;
-    ;};
+    return {pendingRequests: this.pendingRequests.size,queuedBatchRequests: this.batchQueue.length,cacheHitRate: cacheStats.hitRat;e;};
   }
 }
 //   ;

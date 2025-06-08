@@ -18,8 +18,8 @@ MAZE_MAX_SIZE: Final[int] = 50
 MAZE_DEFAULT_SIZE: Final[int] = 10
 
 # 迷宫结束位置（相对于大小）
-MAZE_END_X: Final[int] = -1  # 表示 size-1
-MAZE_END_Y: Final[int] = -1  # 表示 size-1
+MAZE_END_X: Final[int] = - 1  # 表示 size - 1
+MAZE_END_Y: Final[int] = - 1  # 表示 size - 1
 
 # 分页常量
 DEFAULT_PAGE_SIZE: Final[int] = 10
@@ -39,10 +39,10 @@ class Direction(Enum):
 
 # 方向偏移量 (dx, dy)
 DIRECTION_OFFSETS: Final[dict[Direction, tuple[int, int]]] = {
-    Direction.NORTH: (0, -1),
+    Direction.NORTH: (0, - 1),
     Direction.EAST: (1, 0),
     Direction.SOUTH: (0, 1),
-    Direction.WEST: (-1, 0),
+    Direction.WEST: ( - 1, 0),
 }
 
 # 事件类型
@@ -98,10 +98,10 @@ TIME_LIMITS: Final[dict[str, int]] = {
 
 # API版本
 API_VERSION: Final[str] = "v1"
-API_PREFIX: Final[str] = f"/api/{API_VERSION}"
+API_PREFIX: Final[str] = f" / api / {API_VERSION}"
 
 # 服务信息
-SERVICE_NAME: Final[str] = "corn-maze-service"
+SERVICE_NAME: Final[str] = "corn - maze - service"
 SERVICE_VERSION: Final[str] = "1.0.0"
 SERVICE_DESCRIPTION: Final[str] = "Corn Maze Service for Health Education"
 

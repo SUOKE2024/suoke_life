@@ -2,7 +2,6 @@
  * 迷宫组件导出文件
  * Maze Components Export;
  */
-
 export { default as MazeGameScreen } from './MazeGameScreen';
 export { default as MazeRenderer } from './MazeRenderer';
 export { default as GameControls } from './GameControls';

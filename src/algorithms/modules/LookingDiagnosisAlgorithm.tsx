@@ -128,8 +128,7 @@ export interface UserProfile {
       stage: "analysis",
       progress: 0.6});
       const analyses = await this.performAnalyses(;
-        processedData,features,userProf;i;l;e;
-      ;);
+        processedData,features,userProf;i;l;e;);
       this.emit("algorithm:progress", {
       stage: "integration",
       progress: 0.8});
@@ -171,18 +170,18 @@ export interface UserProfile {
   }
   ///    >  {
     const features: LookingFeatures = {tongue: {,
-  bodyColor: ",,
+  bodyColor: ",
         bodyTexture: ","
-        bodySize: ",,
+        bodySize: ",
         coatingColor: ","
-        coatingThickness: ",,
+        coatingThickness: ",
         coatingMoisture: ","
         movement: ""
       },
       face: {,
-  complexion: ",,
+  complexion: ",
         luster: ","
-        expression: ",,
+        expression: ",
         eyeCondition: ","
         lipCondition: ""
       },
@@ -192,8 +191,7 @@ export interface UserProfile {
     };
     if (data.tongueImage) {
       features.tongue = await this.tongueAnalyzer.extractFeatures(
-        data.tongueImage;
-      ;);
+        data.tongueImage;);
     }
     if (data.faceImage) {
       features.face = await this.faceAnalyzer.extractFeatures(data.faceImage;);
@@ -211,20 +209,17 @@ export interface UserProfile {
     if (data.tongueImage) {
       results.tongueAnalysis = await this.tongueAnalyzer.analyze(
         features.tongue,
-        userProfile;
-      ;);
+        userProfile;);
     }
     if (data.faceImage) {
       results.faceAnalysis = await this.faceAnalyzer.analyze(
         features.face,
-        userProfile;
-      ;);
+        userProfile;);
     }
     if (data.bodyImage) {
       results.bodyAnalysis = await this.bodyAnalyzer.analyze(
         features.body,
-        userProfile;
-      ;);
+        userProfile;);
     }
     return resul;t;s;
   }
@@ -232,8 +227,7 @@ export interface UserProfile {
     analyses: AnalysisResults);: Promise<LookingResult /    >  {
     const confidence = this.calculateOverallConfidence(analyses;);
     const analysis = await this.generateComprehensiveAnalysis(analys;e;s;);
-    return {confidence,features,analysis,tongueAnalysis: analyses.tongueAnalysis,faceAnalysis: analyses.faceAnalysis,bodyAnalysis: analyses.bodyAnalysi;s;
-    ;};
+    return {confidence,features,analysis,tongueAnalysis: analyses.tongueAnalysis,faceAnalysis: analyses.faceAnalysis,bodyAnalysis: analyses.bodyAnalysi;s;};
   }
   // 计算整体置信度  private calculateOverallConfidence(analyses: AnalysisResults): number  {
     const confidences: number[] = [];
@@ -347,8 +341,7 @@ class FaceAnalyzer {
       },organReflection: {
       heart: "正常",
       liver: "正常",spleen: "正常",lung: "正常",kidney: "正常";
-      },spiritAssessment: "神气充足，精神状态良好",syndromeIndications: ["气血充足"];
-    ;};
+      },spiritAssessment: "神气充足，精神状态良好",syndromeIndications: ["气血充足"];};
   }
   async cleanup(): Promise<void> {}
 }
@@ -363,8 +356,7 @@ class BodyAnalyzer {
   );: Promise<BodyAnalysis /    >  {
     return {
       constitutionAssessment: "体质适中，发育正常",
-      postureAnalysis: "姿态端正，无明显异常",movementAnalysis: "动作自然，协调性良好",overallVitality: "整体活力充沛",syndromeIndications: ["体质正常"];
-    ;};
+      postureAnalysis: "姿态端正，无明显异常",movementAnalysis: "动作自然，协调性良好",overallVitality: "整体活力充沛",syndromeIndications: ["体质正常"];};
   }
   async cleanup(): Promise<void> {}
 }

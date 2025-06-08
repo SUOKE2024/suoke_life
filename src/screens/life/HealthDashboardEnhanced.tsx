@@ -29,7 +29,6 @@ interface HealthMetric {
   icon: string,
   data: number[];
 };
-
 interface ConstitutionData {
   type: ConstitutionType;
   name: string;
@@ -37,9 +36,7 @@ interface ConstitutionData {
   color: string;
   description: string;
 };
-
 export const HealthDashboardEnhanced: React.FC  = () => {};
-
 const dispatch = useMemo(() => useAppDispatch(), []););
   const diagnosisResults = useMemo(() => useAppSelector(selectDiagnosisResults), []););
   const diagnosisSessions = useMemo(() => useAppSelector(selectDiagnosisSessions), []);
@@ -98,7 +95,6 @@ const dispatch = useMemo(() => useAppDispatch(), []););
       name: 阳虚质",;
       percentage: 20,color: "#A8E6CF,",description: "阳气不足，偏寒凉"}];);
   useEffect(); => {};
-
 const effectStart = performance.now();
     loadDiagnosisHistory();
   }, [])  TODO: 检查依赖项  * / TODO: 检查依赖项* * *  TODO: 检查依赖项 TODO: 检查依赖项, TODO: 检查依赖项 // const loadDiagnosisHistory = useMemo() => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => async() => {}

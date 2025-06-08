@@ -95,7 +95,7 @@ class DeviceInfo:
 
 class EdgeAIInference:
     """边缘AI推理框架Python接口"""
-    
+
     def __init__(self):
         """初始化推理框架"""
         self.logger = logging.getLogger(__name__)
@@ -105,28 +105,28 @@ class EdgeAIInference:
         self.active_requests: Dict[str, InferenceRequest] = {}
         self.model_configs: Dict[str, ModelConfig] = {}
         self.is_initialized = False
-        
+
     async def initialize(self) -> None:
         """初始化推理框架"""
         try:
             self.logger.info("正在初始化边缘AI推理框架...")
-            
+
             # 检测可用设备
             await self._detect_devices()
-            
+
             # 初始化推理引擎
             await self._initialize_inference_engines()
-            
+
             # 启动请求处理器
             self._start_request_processor()
-            
+
             self.is_initialized = True
             self.logger.info("边缘AI推理框架初始化完成")
-            
+
         except Exception as e:
             self.logger.error(f"初始化失败: {e}")
             raise
-    
+
     async def _detect_devices(self) -> None:
         """检测可用设备"""
         try:
@@ -141,7 +141,7 @@ class EdgeAIInference:
                 is_available=True
             )
             self.device_info["cpu-0"] = cpu_device
-            
+
             # GPU设备检测（模拟）
             if await self._is_gpu_available():
                 gpu_device = DeviceInfo(
@@ -154,13 +154,13 @@ class EdgeAIInference:
                     is_available=True
                 )
                 self.device_info["gpu-0"] = gpu_device
-            
+
             self.logger.info(f"检测到 {len(self.device_info)} 个可用设备")
-            
+
         except Exception as e:
             self.logger.error(f"设备检测失败: {e}")
             raise
-    
+
     async def _initialize_inference_engines(self) -> None:
         """初始化推理引擎"""
         try:
@@ -169,98 +169,98 @@ class EdgeAIInference:
                     await self._initialize_cpu_engine(device_id)
                 elif device.device_type == DeviceType.GPU:
                     await self._initialize_gpu_engine(device_id)
-                    
+
         except Exception as e:
             self.logger.error(f"推理引擎初始化失败: {e}")
             raise
-    
+
     def _start_request_processor(self) -> None:
         """启动请求处理器"""
         # 在实际实现中，这里会启动异步任务处理请求队列
         self.logger.info("请求处理器已启动")
-    
+
     async def load_model(self, config: ModelConfig) -> None:
         """加载模型"""
         try:
             if config.model_id in self.loaded_models:
                 self.logger.warning(f"模型已加载: {config.model_id}")
                 return
-            
+
             self.logger.info(f"正在加载模型: {config.model_id}")
-            
+
             # 选择最适合的设备
             selected_device = self._select_optimal_device(config)
             if not selected_device:
                 raise RuntimeError("没有可用的设备来加载模型")
-            
+
             # 模拟模型加载
             model = await self._load_model_on_device(config, selected_device)
-            
+
             # 模型预热
             await self._warmup_model(model, config)
-            
+
             self.loaded_models[config.model_id] = {
                 "model": model,
                 "config": config,
                 "device_id": selected_device.device_id,
                 "load_time": 0  # 实际实现中记录加载时间
             }
-            
+
             self.model_configs[config.model_id] = config
-            
+
             self.logger.info(f"模型加载完成: {config.model_id}")
-            
+
         except Exception as e:
             self.logger.error(f"模型加载失败: {e}")
             raise
-    
+
     async def inference(self, request: InferenceRequest) -> InferenceResult:
         """执行推理"""
         try:
             if not self.is_initialized:
                 raise RuntimeError("推理框架未初始化")
-            
+
             if request.model_id not in self.loaded_models:
                 raise RuntimeError(f"模型未加载: {request.model_id}")
-            
+
             self.logger.debug(f"执行推理请求: {request.request_id}")
-            
+
             # 模拟推理执行
             result = await self._execute_inference(request)
-            
+
             return result
-            
+
         except Exception as e:
             self.logger.error(f"推理执行失败: {e}")
             raise
-    
+
     def _select_optimal_device(self, config: ModelConfig) -> Optional[DeviceInfo]:
         """选择最优设备"""
         # 简单的设备选择逻辑
         for device in self.device_info.values():
             if device.is_available and device.device_type == config.device_type:
                 return device
-        
+
         # 如果指定设备不可用，返回CPU设备
         return self.device_info.get("cpu-0")
-    
+
     async def _load_model_on_device(self, config: ModelConfig, device: DeviceInfo) -> Any:
         """在设备上加载模型"""
         # 模拟模型加载
         await asyncio.sleep(0.1)  # 模拟加载时间
         return {"model_path": config.model_path, "device": device.device_id}
-    
+
     async def _warmup_model(self, model: Any, config: ModelConfig) -> None:
         """模型预热"""
         # 模拟预热过程
         for _ in range(config.warmup_iterations):
             await asyncio.sleep(0.01)
-    
+
     async def _execute_inference(self, request: InferenceRequest) -> InferenceResult:
         """执行推理"""
         # 模拟推理执行
         await asyncio.sleep(0.05)  # 模拟推理时间
-        
+
         return InferenceResult(
             request_id=request.request_id,
             model_id=request.model_id,
@@ -274,41 +274,41 @@ class EdgeAIInference:
                 "memory_usage": 1024
             }
         )
-    
+
     # 辅助方法（模拟实现）
     def _get_system_memory(self) -> int:
         """获取系统内存"""
         return 8 * 1024 * 1024 * 1024  # 8GB
-    
+
     def _get_available_memory(self) -> int:
         """获取可用内存"""
         return 4 * 1024 * 1024 * 1024  # 4GB
-    
+
     def _get_cpu_cores(self) -> int:
         """获取CPU核心数"""
         import os
         return os.cpu_count() or 4
-    
+
     async def _is_gpu_available(self) -> bool:
         """检查GPU是否可用"""
         return False  # 模拟GPU不可用
-    
+
     async def _get_gpu_memory(self) -> int:
         """获取GPU内存"""
         return 0
-    
+
     async def _get_available_gpu_memory(self) -> int:
         """获取可用GPU内存"""
         return 0
-    
+
     async def _get_gpu_cores(self) -> int:
         """获取GPU核心数"""
         return 0
-    
+
     async def _initialize_cpu_engine(self, device_id: str) -> None:
         """初始化CPU推理引擎"""
         self.logger.debug(f"初始化CPU推理引擎: {device_id}")
-    
+
     async def _initialize_gpu_engine(self, device_id: str) -> None:
         """初始化GPU推理引擎"""
         self.logger.debug(f"初始化GPU推理引擎: {device_id}")

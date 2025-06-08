@@ -32,7 +32,7 @@ export const AdvancedFeaturesDemo: React.FC  = () => {}
 AdvancedFeaturesDemo", { ";
     trackRender: true,trackMemory: true,warnThreshold: 50,  };);
   const [state, setState] = useState<DemoState />({/        graphqlConnected: false,graphqlLoading: false,
-    graphqlResult: ",,
+    graphqlResult: ",
     offlineInitialized: false,
     syncStatus: "idle,",
     operationCount: 0,

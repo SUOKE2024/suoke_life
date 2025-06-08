@@ -150,8 +150,7 @@ export interface CacheStats {
       leastAccessed = sortedByAccess[sortedByAccess.length - 1][0];
     }
     return {totalItems: this.cache.size,totalSize,hitRate: totalRequests > 0 ? (this.stats.hits / totalRequests) * 100 : 0,/          missRate:;
-        totalRequests > 0 ? (this.stats.misses / totalRequests) * 100 : 0,/          oldestItem,newestItem,mostAccessed,leastAccesse;d;
-    ;};
+        totalRequests > 0 ? (this.stats.misses / totalRequests) * 100 : 0,/          oldestItem,newestItem,mostAccessed,leastAccesse;d;};
   }
   // 获取详细统计信息  getDetailedStats(): { stats: CacheStats,
     operations: typeof this.stats,
@@ -172,8 +171,7 @@ export interface CacheStats {
       lastAccessed: item.lastAccessed,
       expiresIn: item.expiresAt ? item.expiresAt - now : undefined;
     }));
-    return {stats,operations: { ...this.stats },item;s;
-    ;};
+    return {stats,operations: { ...this.stats },item;s;};
   }
   // 确保有足够的空间  private async ensureSpace(requiredSize: number,
     options: Required<CacheOptions />/      ): Promise<void>  {

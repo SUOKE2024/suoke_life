@@ -104,8 +104,7 @@ class DeviceInfoManager {
   // 性能监控
 const performanceMonitor = usePerformanceMonitor('deviceInfo', {trackRender: true,
     trackMemory: false,warnThreshold: 100, // ms };);
-      return {camera: false,microphone: false,location: false,biometrics: false,nfc: false,bluetooth: fals;e;
-      ;};
+      return {camera: false,microphone: false,location: false,biometrics: false,nfc: false,bluetooth: fals;e;};
     }
   }
   ///    > {
@@ -177,8 +176,7 @@ const performanceMonitor = usePerformanceMonitor('deviceInfo', {trackRender: tru
     if (!deviceSpecs.capabilities.microphone) {
       issues.push("设备不支持麦克风功能");
     }
-    return {compatible: issues.length === 0,issues,recommendation;s;
-    ;};
+    return {compatible: issues.length === 0,issues,recommendation;s;};
   }
   // 生成设备报告  async generateDeviceReport(): Promise<string> {
     const deviceSpecs = await this.getDeviceSpe;c;s;

@@ -28,10 +28,10 @@ class TestIPFSClient:
     async def test_upload_data_success(self, ipfs_client):
         """测试成功上传数据"""
         test_data = b"test data for upload"
-        
+
         with patch.object(ipfs_client, '_upload_to_ipfs', return_value="QmTest123") as mock_upload:
             result = await ipfs_client.upload_data(test_data)
-            
+
             assert result == "QmTest123"
             mock_upload.assert_called_once_with(test_data)
 
@@ -40,10 +40,10 @@ class TestIPFSClient:
         """测试成功获取数据"""
         test_hash = "QmTest123"
         expected_data = b"test data"
-        
+
         with patch.object(ipfs_client, '_get_from_ipfs', return_value=expected_data) as mock_get:
             result = await ipfs_client.get_data(test_hash)
-            
+
             assert result == expected_data
             mock_get.assert_called_once_with(test_hash)
 
@@ -64,7 +64,7 @@ class TestIPFSClient:
         """测试上传大数据"""
         # 创建超过最大限制的数据
         large_data = b"x" * (100 * 1024 * 1024 + 1)  # 100MB + 1 byte
-        
+
         with pytest.raises(IPFSError, match="数据大小超过限制"):
             await ipfs_client.upload_data(large_data)
 
@@ -72,7 +72,7 @@ class TestIPFSClient:
     async def test_connection_error(self, ipfs_client):
         """测试连接错误"""
         test_data = b"test data"
-        
+
         with patch.object(ipfs_client, '_upload_to_ipfs', side_effect=Exception("Connection failed")):
             with pytest.raises(IPFSError, match="IPFS上传失败"):
                 await ipfs_client.upload_data(test_data)

@@ -68,7 +68,6 @@ export const BlockchainScreen: React.FC<BlockchainScreenProps> = ({ userId = 'de
           ))};
         </ScrollView>;
       </View>;
-;
       {// 内容区域};
       <View style={styles.content}>;
         {renderTabContent()};
@@ -115,7 +114,6 @@ const OverviewTab: React.FC<{ userId: string }> = ({ userId }) => {
           />;
         </View>;
       </View>;
-;
       {// 最近活动};
       <View style={styles.recentActivityContainer}>;
         <Text style={styles.sectionTitle}>最近活动</Text>;
@@ -211,13 +209,11 @@ const RecentActivityList: React.FC<{ userId: string }> = ({ userId }) => {
           <View style={styles.activityIconContainer}>
             <Text style={styles.activityIcon}>{getActivityIcon(activity.type)}</Text>;
           </View>;
-          ;
           <View style={styles.activityContent}>;
             <Text style={styles.activityTitle}>{activity.title}</Text>;
             <Text style={styles.activityDescription}>{activity.description}</Text>;
             <Text style={styles.activityTime}>{formatTimeAgo(activity.timestamp)}</Text>;
           </View>;
-          ;
           <View style={[;
             styles.activityStatus,{ backgroundColor: getStatusColor(activity.status) };
           ]} />;

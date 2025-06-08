@@ -7,7 +7,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any
 
-#!/usr/bin/env python
+#! / usr / bin / env python
 
 """
 领域模型

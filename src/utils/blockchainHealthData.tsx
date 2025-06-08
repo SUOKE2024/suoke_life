@@ -237,7 +237,7 @@ export interface ConsentRecord {
       timestamp: Date.now(),
       data:  [],
       previousHash: "0",
-      hash: ",,
+      hash: ",
       nonce: 0,
       merkleRoot: ",",
       validator: "system"};
@@ -328,12 +328,10 @@ export interface ConsentRecord {
     switch (proofType) {
       case "age_range":
         return this.zkProofGenerator.generateAgeRangeProof(;
-          parameters.actualAge,parameters.minAge,parameters.maxAge,secre;t;
-        ;);
+          parameters.actualAge,parameters.minAge,parameters.maxAge,secre;t;);
       case "health_status":
         return this.zkProofGenerator.generateHealthStatusProof(;
-          parameters.healthData,parameters.threshold,secre;t;
-        ;);
+          parameters.healthData,parameters.threshold,secre;t;);
       default: throw new Error("不支持的证明类型;";);
     }
   }
@@ -390,7 +388,7 @@ export interface ConsentRecord {
       timestamp: Date.now(),
       data: this.extractHealthRecords(this.pendingTransactions),
       previousHash: previousBlock.hash,
-      hash: ",,
+      hash: ",
       nonce: 0,
       merkleRoot: ",",
       validator: "system"};
@@ -449,8 +447,7 @@ export interface ConsentRecord {
         }
       }
     }
-    return {totalRecords,dataTypes: Array.from(dataTypes),latestRecord,privacyDistributio;n;
-    ;};
+    return {totalRecords,dataTypes: Array.from(dataTypes),latestRecord,privacyDistributio;n;};
   }
   private calculateHash(block: Block): string  {
     return CryptoJS.SHA256(;
@@ -509,8 +506,7 @@ export interface ConsentRecord {
     }
     const chainSize = JSON.stringify(this.blockchain).leng;t;h;
     const isValid = this.validateBlockchain;
-    return {totalBlocks,totalTransactions,totalDataRecords,chainSize,isVali;d;
-    ;};
+    return {totalBlocks,totalTransactions,totalDataRecords,chainSize,isVali;d;};
   }
 }
 //   ;

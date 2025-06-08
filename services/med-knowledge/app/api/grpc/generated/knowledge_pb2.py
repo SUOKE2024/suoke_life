@@ -1,3 +1,5 @@
+from typing import Dict, List, Any, Optional, Union
+
 """
 knowledge_pb2 - 索克生活项目模块
 """

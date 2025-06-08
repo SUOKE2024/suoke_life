@@ -675,8 +675,7 @@ export class ArchitectureOptimizer  {private static instance: ArchitectureOptimi
     ).length;
     const overallHealthScore = Math.max(;
       0,
-      100 - criticalIssues * 30 - highIssues * 1;5;
-    ;);
+      100 - criticalIssues * 30 - highIssues * 1;5;);
     return {summary: {totalServices,totalDependencies,averageResponseTime,overallHealthScore;
       },
       recommendations: this.recommendations,

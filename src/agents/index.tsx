@@ -221,8 +221,7 @@ e, /    ;
   // 记录渲染性能
 performanceMonitor.recordRender();
   return (AGENT_CAPABILITIES[agentType] as readonly string[]).includes(;
-    capabilit;y;
-  ;);
+    capabilit;y;);
 };
 //   ;
 > ;{/
@@ -235,8 +234,7 @@ L;S;): AgentType => {/    }
 //   ;
 > ;{/
   return COLLABORATION_STRATEGIES[;
-    taskType as keyof typeof COLLABORATION_STRATEGIE;S;
-  ;];
+    taskType as keyof typeof COLLABORATION_STRATEGIE;S;];
 };
 //   ;
 >  ;{return ["xiaoai",xiaoke", "laoke",soer"].includes(agentTyp;e;);

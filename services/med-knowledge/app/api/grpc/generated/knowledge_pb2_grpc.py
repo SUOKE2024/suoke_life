@@ -1,3 +1,4 @@
+from typing import Dict, List, Any, Optional, Union
 
 """
 临时 gRPC 服务存根文件
@@ -13,6 +14,7 @@ class KnowledgeServiceServicer:
 
 
 class MedKnowledgeServiceServicer:
+    """TODO: 添加文档字符串"""
     pass
 
 
@@ -22,4 +24,5 @@ def add_KnowledgeServiceServicer_to_server(servicer, server):
 
 
 def add_MedKnowledgeServiceServicer_to_server(servicer, server):
+    """TODO: 添加文档字符串"""
     pass

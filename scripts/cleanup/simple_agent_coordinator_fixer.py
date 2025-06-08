@@ -15,181 +15,181 @@ import os
 class SimpleAgentCoordinatorFixer:
     def __init__(self, project_root: str):
         self.project_root = Path(project_root)
-        
+
     def fix_agent_coordinator_test(self) -> bool:
         """修复AgentCoordinator.test.tsx文件"""
         file_path = 'src/core/coordination/__tests__/AgentCoordinator.test.tsx'
-        
+
         if not os.path.exists(file_path):
             print(f"文件不存在: {file_path}")
             return False
-        
+
         # 创建简化的测试文件内容
         fixed_content = '''import { performance } from "perf_hooks";
 
 describe("AgentCoordinator", () => {
-  beforeEach(() => {
+beforeEach(() => {
     jest.clearAllMocks();
-  });
+});
 
-  describe("AgentCoordinator Component", () => {
+describe("AgentCoordinator Component", () => {
     it("should initialize properly", () => {
-      const coordinator = new AgentCoordinator();
-      expect(coordinator).toBeDefined();
+    const coordinator = new AgentCoordinator();
+    expect(coordinator).toBeDefined();
     });
 
     it("should handle agent coordination", () => {
-      const result = agentCoordinator(/* test params */);
-      expect(result).toBeDefined();
+    const result = agentCoordinator(/* test params */);
+    expect(result).toBeDefined();
     });
-  });
+});
 
-  describe("agentCoordinator Function", () => {
+describe("agentCoordinator Function", () => {
     it("should coordinate agents properly", () => {
-      const mockAgents = [
+    const mockAgents = [
         { id: "xiaoai", status: "active" },
         { id: "xiaoke", status: "active" },
         { id: "laoke", status: "active" },
         { id: "soer", status: "active" }
-      ];
-      
-      const result = agentCoordinator(mockAgents);
-      expect(result).toBeDefined();
-      expect(result.success).toBe(true);
+    ];
+
+    const result = agentCoordinator(mockAgents);
+    expect(result).toBeDefined();
+    expect(result.success).toBe(true);
     });
 
     it("should handle coordination errors", () => {
-      const invalidAgents = null;
-      const result = agentCoordinator(invalidAgents);
-      expect(result.success).toBe(false);
+    const invalidAgents = null;
+    const result = agentCoordinator(invalidAgents);
+    expect(result.success).toBe(false);
     });
-  });
+});
 
-  describe("submitTask Function", () => {
+describe("submitTask Function", () => {
     it("should submit tasks successfully", () => {
-      const mockTask = {
+    const mockTask = {
         id: "task-1",
         type: "diagnosis",
         priority: "high"
-      };
-      
-      const result = submitTask(mockTask);
-      expect(result).toBeDefined();
-      expect(result.taskId).toBe("task-1");
+    };
+
+    const result = submitTask(mockTask);
+    expect(result).toBeDefined();
+    expect(result.taskId).toBe("task-1");
     });
 
     it("should handle task submission errors", () => {
-      const invalidTask = {};
-      const result = submitTask(invalidTask);
-      expect(result.success).toBe(false);
+    const invalidTask = {};
+    const result = submitTask(invalidTask);
+    expect(result.success).toBe(false);
     });
-  });
+});
 
-  describe("getTaskStatus Function", () => {
+describe("getTaskStatus Function", () => {
     it("should get task status correctly", () => {
-      const taskId = "task-1";
-      const result = getTaskStatus(taskId);
-      expect(result).toBeDefined();
-      expect(result.taskId).toBe(taskId);
+    const taskId = "task-1";
+    const result = getTaskStatus(taskId);
+    expect(result).toBeDefined();
+    expect(result.taskId).toBe(taskId);
     });
 
     it("should handle invalid task IDs", () => {
-      const invalidTaskId = "";
-      const result = getTaskStatus(invalidTaskId);
-      expect(result.success).toBe(false);
+    const invalidTaskId = "";
+    const result = getTaskStatus(invalidTaskId);
+    expect(result.success).toBe(false);
     });
-  });
+});
 
-  describe("cancelTask Function", () => {
+describe("cancelTask Function", () => {
     it("should cancel tasks successfully", () => {
-      const taskId = "task-1";
-      const result = cancelTask(taskId);
-      expect(result).toBeDefined();
-      expect(result.cancelled).toBe(true);
+    const taskId = "task-1";
+    const result = cancelTask(taskId);
+    expect(result).toBeDefined();
+    expect(result.cancelled).toBe(true);
     });
 
     it("should handle cancellation errors", () => {
-      const invalidTaskId = null;
-      const result = cancelTask(invalidTaskId);
-      expect(result.success).toBe(false);
+    const invalidTaskId = null;
+    const result = cancelTask(invalidTaskId);
+    expect(result.success).toBe(false);
     });
-  });
+});
 
-  describe("Performance Tests", () => {
+describe("Performance Tests", () => {
     it("should execute within performance thresholds", () => {
-      const startTime = performance.now();
-      for (let i = 0; i < 100; i++) {
+    const startTime = performance.now();
+    for (let i = 0; i < 100; i++) {
         agentCoordinator(/* test params */);
-      }
-      const endTime = performance.now();
-      const averageTime = (endTime - startTime) / 100;
-      expect(averageTime).toBeLessThan(10);
+    }
+    const endTime = performance.now();
+    const averageTime = (endTime - startTime) / 100;
+    expect(averageTime).toBeLessThan(10);
     });
 
     it("should handle large datasets efficiently", () => {
-      const largeDataset = new Array(1000).fill(0).map((_, i) => ({
+    const largeDataset = new Array(1000).fill(0).map((_, i) => ({
         id: `agent-${i}`,
         status: "active"
-      }));
-      
-      const startTime = performance.now();
-      agentCoordinator(largeDataset);
-      const endTime = performance.now();
-      expect(endTime - startTime).toBeLessThan(1000);
+    }));
+
+    const startTime = performance.now();
+    agentCoordinator(largeDataset);
+    const endTime = performance.now();
+    expect(endTime - startTime).toBeLessThan(1000);
     });
 
     it("should not cause memory leaks", () => {
-      const initialMemory = process.memoryUsage().heapUsed;
-      for (let i = 0; i < 1000; i++) {
+    const initialMemory = process.memoryUsage().heapUsed;
+    for (let i = 0; i < 1000; i++) {
         agentCoordinator(/* test params */);
-      }
-      if (global.gc) {
+    }
+    if (global.gc) {
         global.gc();
-      }
-      const finalMemory = process.memoryUsage().heapUsed;
-      const memoryIncrease = finalMemory - initialMemory;
-      expect(memoryIncrease).toBeLessThan(10 * 1024 * 1024);
+    }
+    const finalMemory = process.memoryUsage().heapUsed;
+    const memoryIncrease = finalMemory - initialMemory;
+    expect(memoryIncrease).toBeLessThan(10 * 1024 * 1024);
     });
-  });
+});
 });
 
 // Mock AgentCoordinator class
 class AgentCoordinator {
-  constructor() {
+constructor() {
     // Mock implementation
-  }
+}
 }
 
 // Mock functions for testing
 function agentCoordinator(agents: any) {
-  if (!agents) {
+if (!agents) {
     return { success: false, error: "Invalid agents" };
-  }
-  return { success: true, agents };
+}
+return { success: true, agents };
 }
 
 function submitTask(task: any) {
-  if (!task || !task.id) {
+if (!task || !task.id) {
     return { success: false, error: "Invalid task" };
-  }
-  return { success: true, taskId: task.id };
+}
+return { success: true, taskId: task.id };
 }
 
 function getTaskStatus(taskId: string) {
-  if (!taskId) {
+if (!taskId) {
     return { success: false, error: "Invalid task ID" };
-  }
-  return { success: true, taskId, status: "running" };
+}
+return { success: true, taskId, status: "running" };
 }
 
 function cancelTask(taskId: any) {
-  if (!taskId) {
+if (!taskId) {
     return { success: false, error: "Invalid task ID" };
-  }
-  return { success: true, cancelled: true, taskId };
+}
+return { success: true, cancelled: true, taskId };
 }
 '''
-        
+
         try:
             with open(file_path, 'w', encoding='utf-8') as f:
                 f.write(fixed_content)
@@ -201,12 +201,12 @@ function cancelTask(taskId: any) {
 
 def main():
     print("🔧 开始修复简化AgentCoordinator测试文件...")
-    
+
     fixer = SimpleAgentCoordinatorFixer('.')
-    
+
     # 执行修复
     success = fixer.fix_agent_coordinator_test()
-    
+
     print(f"✅ 简化AgentCoordinator测试文件修复完成！")
     print(f"📊 修复状态: {'成功' if success else '失败'}")
 

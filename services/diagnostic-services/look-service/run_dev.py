@@ -1,3 +1,5 @@
+from typing import Dict, List, Any, Optional, Union
+
 """
 run_dev - 索克生活项目模块
 """
@@ -6,7 +8,7 @@ from look_service.cmd.server import main
 from pathlib import Path
 import sys
 
-#!/usr/bin/env python3
+#! / usr / bin / env python3
 """Development server runner for look service."""
 
 

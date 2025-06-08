@@ -154,7 +154,6 @@ export const ZKProofManager: React.FC<ZKProofManagerProps> = ({ userId }) => {
         onSubmit={handleGenerateProof};
         isLoading={isLoading};
       />;
-;
       {// 验证证明模态框};
       <VerifyProofModal;
         visible={showVerifyModal};
@@ -216,7 +215,6 @@ const GenerateProofModal: React.FC<{,
               numberOfLines={8}
             />
           </View>;
-;
           <TouchableOpacity;
             style={[styles.submitButton, isLoading && styles.submitButtonDisabled]};
             onPress={handleSubmit};
@@ -313,7 +311,6 @@ const VerifyProofModal: React.FC<{,
               numberOfLines={4}
             />
           </View>;
-;
           <TouchableOpacity;
             style={[styles.submitButton, isLoading && styles.submitButtonDisabled]};
             onPress={handleSubmit};

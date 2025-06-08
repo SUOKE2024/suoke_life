@@ -134,7 +134,6 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
           </TouchableOpacity>;
         )};
       </View>;
-      ;
       <TouchableOpacity;
         style={styles.filterButton};
         onPress={toggleFiltersPanel};
@@ -239,7 +238,6 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
             {item.availability.isOpen ? '营业中' : '已关闭'};
           </Text>;
         </View>;
-        ;
         {item.consultationFee && (;
           <Text style={styles.priceText}>¥{item.consultationFee}</Text>;
         )};
@@ -256,7 +254,6 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
             <Icon name="my-location" size={20} color="#007AFF" />;
           </TouchableOpacity>;
         </View>;
-        ;
         <FlatList;
           horizontal;
           data={nearbyResources.slice(0, 5)};
@@ -346,7 +343,6 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
       {renderSearchBar()};
       {renderCategorySelector()};
       {renderSearchHistory()};
-      ;
       <ScrollView;
         style={styles.content};
         refreshControl={<RefreshControl refreshing={isLoading} onRefresh={handleRefresh} />;

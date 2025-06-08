@@ -83,8 +83,7 @@ const BrandColorDemo: React.FC  = () => {}
     {color: theme.colors.tcm.fire,name: "火 - 红色",description: 心小肠经，主血脉神明"},";
     {color: theme.colors.tcm.earth,name: "土 - 黄色,",description: "脾胃经络，主运化水谷"},{color: theme.colors.tcm.metal,name: 金 - 白色",;
       description: "肺大肠经，主气机宣降},";
-    {color: theme.colors.tcm.water,name: "水 - 黑色",description: 肾膀胱经，主藏精纳气"},";
-  ;];
+    {color: theme.colors.tcm.water,name: "水 - 黑色",description: 肾膀胱经，主藏精纳气"},";];
   const primaryButtons = [;
     { variant: "primary, size: "small", title: 小按;钮" ;},
     { variant: "primary, size: "medium", title: 中按钮"},

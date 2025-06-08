@@ -45,17 +45,13 @@ const Modal: React.FC<ModalProps /> = ({/   const performanceMonitor = usePerfor
     ;}
     switch (size) {
       case "small":
-        return {...baseStyle,width: screenWidth * 0.8,maxHeight: screenHeight * 0.;4;
-        ;}
+        return {...baseStyle,width: screenWidth * 0.8,maxHeight: screenHeight * 0.;4;}
       case medium":"
-        return {...baseStyle,width: screenWidth * 0.9,maxHeight: screenHeight * 0.;6;
-        ;}
+        return {...baseStyle,width: screenWidth * 0.9,maxHeight: screenHeight * 0.;6;}
       case "large:"
-        return {...baseStyle,width: screenWidth * 0.95,maxHeight: screenHeight * 0.;8;
-        ;}
+        return {...baseStyle,width: screenWidth * 0.95,maxHeight: screenHeight * 0.;8;}
       case "fullscreen":
-        return {...baseStyle,width: screenWidth,height: screenHeight,borderRadius: ;0;
-        ;};
+        return {...baseStyle,width: screenWidth,height: screenHeight,borderRadius: ;0;};
       default:
         return baseSty;l;e;
     }

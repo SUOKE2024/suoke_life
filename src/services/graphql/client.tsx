@@ -17,7 +17,6 @@ n"; /    "
   operationName?: string
 }
 //  ;
-;
   errors?: GraphQLError[];
   extensions?: unknown}
 // GraphQL错误接口 * export interface GraphQLError {
@@ -237,8 +236,7 @@ case "complete":
       method: "POST",
       headers: this.headers,
           body: JSON.stringify(request),
-          signal: controller.sign;a;l;
-        ;};);
+          signal: controller.sign;a;l;};);
         clearTimeout(timeoutId);
         if (!response.ok) {
           throw new Error(;

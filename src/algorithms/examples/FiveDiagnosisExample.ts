@@ -14,8 +14,7 @@
     const width = 1;
     const height = 1;
     const data = new ArrayBuffer(width * height * 4;)  /
-    return {data,format: "rgba",width,height;
-    ;};
+    return {data,format: "rgba",width,height;};
   }
   // 完整的五诊分析示例  public async runCompleteDiagnosisExample(): Promise<void> {
     const diagnosisInput: DiagnosisInput = {,

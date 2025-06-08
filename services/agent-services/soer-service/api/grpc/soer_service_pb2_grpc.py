@@ -1,3 +1,5 @@
+from typing import Dict, List, Any, Optional, Union
+
 """
 soer_service_pb2_grpc - 索克生活项目模块
 """
@@ -20,44 +22,44 @@ class SoerServiceStub:
             channel: 用于gRPC通信的Channel
         """
         self.GenerateHealthPlan = channel.unary_unary(
-'/suoke.soer.v1.SoerService/GenerateHealthPlan',
-request_serializer=soer_service_pb2.HealthPlanRequest.SerializeToString,
-response_deserializer=soer_service_pb2.HealthPlanResponse.FromString,
+' / suoke.soer.v1.SoerService / GenerateHealthPlan',
+request_serializer = soer_service_pb2.HealthPlanRequest.SerializeToString,
+response_deserializer = soer_service_pb2.HealthPlanResponse.FromString,
 )
 self.GetLifestyleRecommendation = channel.unary_unary(
-'/suoke.soer.v1.SoerService/GetLifestyleRecommendation',
-request_serializer=soer_service_pb2.LifestyleRequest.SerializeToString,
-response_deserializer=soer_service_pb2.LifestyleResponse.FromString,
+' / suoke.soer.v1.SoerService / GetLifestyleRecommendation',
+request_serializer = soer_service_pb2.LifestyleRequest.SerializeToString,
+response_deserializer = soer_service_pb2.LifestyleResponse.FromString,
 )
 self.AnalyzeSensorData = channel.unary_unary(
-'/suoke.soer.v1.SoerService/AnalyzeSensorData',
-request_serializer=soer_service_pb2.SensorDataRequest.SerializeToString,
-response_deserializer=soer_service_pb2.SensorDataResponse.FromString,
+' / suoke.soer.v1.SoerService / AnalyzeSensorData',
+request_serializer = soer_service_pb2.SensorDataRequest.SerializeToString,
+response_deserializer = soer_service_pb2.SensorDataResponse.FromString,
 )
 self.TrackNutrition = channel.unary_unary(
-'/suoke.soer.v1.SoerService/TrackNutrition',
-request_serializer=soer_service_pb2.NutritionRequest.SerializeToString,
-response_deserializer=soer_service_pb2.NutritionResponse.FromString,
+' / suoke.soer.v1.SoerService / TrackNutrition',
+request_serializer = soer_service_pb2.NutritionRequest.SerializeToString,
+response_deserializer = soer_service_pb2.NutritionResponse.FromString,
 )
 self.DetectAbnormalPattern = channel.unary_unary(
-'/suoke.soer.v1.SoerService/DetectAbnormalPattern',
-request_serializer=soer_service_pb2.AbnormalPatternRequest.SerializeToString,
-response_deserializer=soer_service_pb2.AbnormalPatternResponse.FromString,
+' / suoke.soer.v1.SoerService / DetectAbnormalPattern',
+request_serializer = soer_service_pb2.AbnormalPatternRequest.SerializeToString,
+response_deserializer = soer_service_pb2.AbnormalPatternResponse.FromString,
 )
 self.PredictHealthTrend = channel.unary_unary(
-'/suoke.soer.v1.SoerService/PredictHealthTrend',
-request_serializer=soer_service_pb2.HealthTrendRequest.SerializeToString,
-response_deserializer=soer_service_pb2.HealthTrendResponse.FromString,
+' / suoke.soer.v1.SoerService / PredictHealthTrend',
+request_serializer = soer_service_pb2.HealthTrendRequest.SerializeToString,
+response_deserializer = soer_service_pb2.HealthTrendResponse.FromString,
 )
 self.GetSleepRecommendation = channel.unary_unary(
-'/suoke.soer.v1.SoerService/GetSleepRecommendation',
-request_serializer=soer_service_pb2.SleepRequest.SerializeToString,
-response_deserializer=soer_service_pb2.SleepResponse.FromString,
+' / suoke.soer.v1.SoerService / GetSleepRecommendation',
+request_serializer = soer_service_pb2.SleepRequest.SerializeToString,
+response_deserializer = soer_service_pb2.SleepResponse.FromString,
 )
 self.AnalyzeEmotionalState = channel.unary_unary(
-'/suoke.soer.v1.SoerService/AnalyzeEmotionalState',
-request_serializer=soer_service_pb2.EmotionalStateRequest.SerializeToString,
-response_deserializer=soer_service_pb2.EmotionalStateResponse.FromString,
+' / suoke.soer.v1.SoerService / AnalyzeEmotionalState',
+request_serializer = soer_service_pb2.EmotionalStateRequest.SerializeToString,
+response_deserializer = soer_service_pb2.EmotionalStateResponse.FromString,
 )
 
 
@@ -118,43 +120,43 @@ def add_SoerServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
         'GenerateHealthPlan': grpc.unary_unary_rpc_method_handler(
 servicer.GenerateHealthPlan,
-request_deserializer=soer_service_pb2.HealthPlanRequest.FromString,
-response_serializer=soer_service_pb2.HealthPlanResponse.SerializeToString,
+request_deserializer = soer_service_pb2.HealthPlanRequest.FromString,
+response_serializer = soer_service_pb2.HealthPlanResponse.SerializeToString,
 ),
 'GetLifestyleRecommendation': grpc.unary_unary_rpc_method_handler(
 servicer.GetLifestyleRecommendation,
-request_deserializer=soer_service_pb2.LifestyleRequest.FromString,
-response_serializer=soer_service_pb2.LifestyleResponse.SerializeToString,
+request_deserializer = soer_service_pb2.LifestyleRequest.FromString,
+response_serializer = soer_service_pb2.LifestyleResponse.SerializeToString,
 ),
 'AnalyzeSensorData': grpc.unary_unary_rpc_method_handler(
 servicer.AnalyzeSensorData,
-request_deserializer=soer_service_pb2.SensorDataRequest.FromString,
-response_serializer=soer_service_pb2.SensorDataResponse.SerializeToString,
+request_deserializer = soer_service_pb2.SensorDataRequest.FromString,
+response_serializer = soer_service_pb2.SensorDataResponse.SerializeToString,
 ),
 'TrackNutrition': grpc.unary_unary_rpc_method_handler(
 servicer.TrackNutrition,
-request_deserializer=soer_service_pb2.NutritionRequest.FromString,
-response_serializer=soer_service_pb2.NutritionResponse.SerializeToString,
+request_deserializer = soer_service_pb2.NutritionRequest.FromString,
+response_serializer = soer_service_pb2.NutritionResponse.SerializeToString,
 ),
 'DetectAbnormalPattern': grpc.unary_unary_rpc_method_handler(
 servicer.DetectAbnormalPattern,
-request_deserializer=soer_service_pb2.AbnormalPatternRequest.FromString,
-response_serializer=soer_service_pb2.AbnormalPatternResponse.SerializeToString,
+request_deserializer = soer_service_pb2.AbnormalPatternRequest.FromString,
+response_serializer = soer_service_pb2.AbnormalPatternResponse.SerializeToString,
 ),
 'PredictHealthTrend': grpc.unary_unary_rpc_method_handler(
 servicer.PredictHealthTrend,
-request_deserializer=soer_service_pb2.HealthTrendRequest.FromString,
-response_serializer=soer_service_pb2.HealthTrendResponse.SerializeToString,
+request_deserializer = soer_service_pb2.HealthTrendRequest.FromString,
+response_serializer = soer_service_pb2.HealthTrendResponse.SerializeToString,
 ),
 'GetSleepRecommendation': grpc.unary_unary_rpc_method_handler(
 servicer.GetSleepRecommendation,
-request_deserializer=soer_service_pb2.SleepRequest.FromString,
-response_serializer=soer_service_pb2.SleepResponse.SerializeToString,
+request_deserializer = soer_service_pb2.SleepRequest.FromString,
+response_serializer = soer_service_pb2.SleepResponse.SerializeToString,
 ),
 'AnalyzeEmotionalState': grpc.unary_unary_rpc_method_handler(
 servicer.AnalyzeEmotionalState,
-request_deserializer=soer_service_pb2.EmotionalStateRequest.FromString,
-response_serializer=soer_service_pb2.EmotionalStateResponse.SerializeToString,
+request_deserializer = soer_service_pb2.EmotionalStateRequest.FromString,
+response_serializer = soer_service_pb2.EmotionalStateResponse.SerializeToString,
 ),
 }
 generic_handler = grpc.method_handlers_generic_handler(

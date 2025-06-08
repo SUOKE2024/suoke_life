@@ -25,8 +25,7 @@ caring",         tone: warm",           / 温暖的语调*  生活方式专业* 
     try {
       const response = await apiClient.post(`${this.serviceEndpoint}/message`, {/            text: message,context,
         user_id: userId,
-        session_id: session;I;d;
-      ;};);
+        session_id: session;I;d;};);
       response.data.text = this.applyPersonalityToResponse(response.data.text, context);
       return response.da;t;a;
     } catch (error) {
@@ -42,8 +41,7 @@ caring",         tone: warm",           / 温暖的语调*  生活方式专业* 
     try {
       const response = await apiClient.post(`${this.serviceEndpoint}/analyze-health-data`, {/            user_id: userId,data_sources: dataSources,
         time_range: timeRange,
-        analysis_type: analysisTy;p;e;
-      ;};);
+        analysis_type: analysisTy;p;e;};);
       return {id: response.data.id,userId: response.data.user_id,analysisType: response.data.analysis_type,timeRange: {start: new Date(response.data.time_range.start),end: new Date(response.data.time_range.end)},dataSources: response.data.data_sources,metrics: response.data.metrics,insights: response.data.insights,recommendations: response.data.recommendations,riskFactors: response.data.risk_factors,createdAt: new Date(response.data.created_at),nextAnalysis: new Date(response.data.next_analysis;);}
     } catch (error) {
       throw error;
@@ -57,8 +55,7 @@ caring",         tone: warm",           / 温暖的语调*  生活方式专业* 
     try {
       const response = await apiClient.post(`${this.serviceEndpoint}/create-lifestyle-plan`, {/            user_profile: userProfile,health_goals: healthGoals,
         constraints,
-        preferenc;e;s;
-      ;};);
+        preferenc;e;s;};);
       return {id: response.data.id,userId: response.data.user_id,title: response.data.title,description: response.data.description,goals: response.data.goals.map(goal: unknow;n;); => ({
           ...goal,
           deadline: new Date(goal.deadline)})),
@@ -116,8 +113,7 @@ caring",         tone: warm",           / 温暖的语调*  生活方式专业* 
     try {
       const response = await apiClient.post(`${this.serviceEndpoint}/companion-chat`, {/            user_id: userId,message,
         mood,
-        conte;x;t;
-      ;};);
+        conte;x;t;};);
       return {id: response.data.id,userId: response.data.user_id,message: response.data.message,emotion: response.data.emotion,suggestions: response.data.suggestions,followUp: {scheduled: response.data.follow_up.scheduled,time: response.data.follow_up.time ? new Date(response.data.follow_up.tim;e;);: undefined,
           topic: response.data.follow_up.topic;
         },
@@ -151,17 +147,14 @@ caring",         tone: warm",           / 温暖的语调*  生活方式专业* 
   // 评估情绪状态  async assessEmotionalState(userId: string,
     indicators: unknown): Promise<EmotionalState /    >  {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/assess-emotional-state`, {/            user_id: userId,indicato;r;s;
-      ;};);
-      return {userId: response.data.user_id,timestamp: new Date(response.data.timestamp),mood: response.data.mood,intensity: response.data.intensity,triggers: response.data.triggers,context: response.data.context,physicalSymptoms: response.data.physical_symptoms,copingStrategies: response.data.coping_strategies,supportNeeded: response.data.support_needed,notes: response.data.note;s;
-      ;}
+      const response = await apiClient.post(`${this.serviceEndpoint}/assess-emotional-state`, {/            user_id: userId,indicato;r;s;};);
+      return {userId: response.data.user_id,timestamp: new Date(response.data.timestamp),mood: response.data.mood,intensity: response.data.intensity,triggers: response.data.triggers,context: response.data.context,physicalSymptoms: response.data.physical_symptoms,copingStrategies: response.data.coping_strategies,supportNeeded: response.data.support_needed,notes: response.data.note;s;}
     } catch (error) {
       return {userId,timestamp: new Date(),mood: "neutral,",intensity: 5,triggers: [],context: {
       activity: "unknown",
       location: unknown",;
           socialSituation: "unknown,",timeOfDay: "unknown";
-        },physicalSymptoms: [],copingStrategies: [],supportNeeded: fals;e;
-      ;};
+        },physicalSymptoms: [],copingStrategies: [],supportNeeded: fals;e;};
     }
   }
   // 协调智能设备  async coordinateDevices(userId: string,
@@ -172,8 +165,7 @@ caring",         tone: warm",           / 温暖的语调*  生活方式专业* 
     try {
       const response = await apiClient.post(`${this.serviceEndpoint}/coordinate-devices`, {/            user_id: userId,devices,
         scenario,
-        preferenc;e;s;
-      ;};);
+        preferenc;e;s;};);
       return {id: response.data.id,userId: response.data.user_id,scenario: response.data.scenario,devices: response.data.devices,overallStatus: response.data.overall_status,executionTime: response.data.execution_time,energyImpact: response.data.energy_impact,userSatisfaction: response.data.user_satisfaction,timestamp: new Date(response.data.timestamp),nextOptimization: response.data.next_optimization ? new Date(response.data.next_optimizatio;n;);: undefined;
       }
     } catch (error)  {
@@ -214,11 +206,9 @@ caring",         tone: warm",           / 温暖的语调*  生活方式专业* 
     goals: string[]): Promise< { recommendations: unknown[],
     estimatedImpact: unknown}> {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/devices/optimize`, {/            user_id: userId,goa;l;s;
-      ;};);
+      const response = await apiClient.post(`${this.serviceEndpoint}/devices/optimize`, {/            user_id: userId,goa;l;s;};);
       return {recommendations: response.data.recommendations,
-        estimatedImpact: response.data.estimated_impac;t;
-      ;}
+        estimatedImpact: response.data.estimated_impac;t;}
     } catch (error) {
       return {recommendations: [],
         estimatedImpact: {}
@@ -270,10 +260,8 @@ caring",         tone: warm",           / 温暖的语调*  生活方式专业* 
     recommendations: string[]
     }> {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/integrate-health-data`, {/            user_id: userId,sourc;e;s;
-      ;};);
-      return {success: response.data.success,integratedData: response.data.integrated_data,conflicts: response.data.conflicts,recommendations: response.data.recommendation;s;
-      ;}
+      const response = await apiClient.post(`${this.serviceEndpoint}/integrate-health-data`, {/            user_id: userId,sourc;e;s;};);
+      return {success: response.data.success,integratedData: response.data.integrated_data,conflicts: response.data.conflicts,recommendations: response.data.recommendation;s;}
     } catch (error) {
       return {success: false,integratedData: {},conflicts: [],recommendations: [;]
       ;};
@@ -285,8 +273,7 @@ caring",         tone: warm",           / 温暖的语调*  生活方式专业* 
     } catch (error) {
       return {
       status: "offline,",
-      capabilities: [],performance: {accuracy: 0,responseTime: 0,userSatisfaction: 0};
-      ;};
+      capabilities: [],performance: {accuracy: 0,responseTime: 0,userSatisfaction: 0};};
     }
   }
   // 设置个性化特征  setPersonality(traits: unknown): void  {

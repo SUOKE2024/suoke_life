@@ -16,11 +16,11 @@ from pathlib import Path
 
 class AppStatusDisplay:
     """应用状态展示器"""
-    
+
     def __init__(self):
         self.project_root = Path(__file__).parent.parent
         self.metro_url = "http://localhost:8081"
-        
+
     def check_metro_status(self):
         """检查Metro服务器状态"""
         try:
@@ -30,7 +30,7 @@ class AppStatusDisplay:
             return False, "未响应"
         except Exception as e:
             return False, f"连接失败: {str(e)}"
-    
+
     def get_app_info(self):
         """获取应用信息"""
         package_json_path = self.project_root / "package.json"
@@ -48,7 +48,7 @@ class AppStatusDisplay:
                 "version": "1.0.0", 
                 "description": "AI中医健康管理平台"
             }
-    
+
     def check_simulators(self):
         """检查可用的模拟器"""
         try:
@@ -63,7 +63,7 @@ class AppStatusDisplay:
                 for line in lines:
                     if "iPhone" in line and "available" in line:
                         ios_simulators.append(line.strip())
-            
+
             # 检查Android模拟器
             android_result = subprocess.run(
                 ["emulator", "-list-avds"],
@@ -72,18 +72,18 @@ class AppStatusDisplay:
             android_simulators = []
             if android_result.returncode == 0:
                 android_simulators = [line.strip() for line in android_result.stdout.split('\n') if line.strip()]
-            
+
             return ios_simulators[:3], android_simulators[:3]  # 只显示前3个
         except Exception:
             return [], []
-    
+
     def display_status(self):
         """显示应用状态"""
         print("🎉" + "="*60 + "🎉")
         print("🚀          索克生活 (Suoke Life) 应用状态          🚀")
         print("🎉" + "="*60 + "🎉")
         print()
-        
+
         # 应用信息
         app_info = self.get_app_info()
         print("📱 应用信息:")
@@ -91,7 +91,7 @@ class AppStatusDisplay:
         print(f"   版本: {app_info['version']}")
         print(f"   描述: {app_info['description']}")
         print()
-        
+
         # Metro服务器状态
         metro_running, metro_status = self.check_metro_status()
         status_icon = "✅" if metro_running else "❌"
@@ -100,7 +100,7 @@ class AppStatusDisplay:
             print(f"   URL: {self.metro_url}")
             print(f"   状态页面: {self.metro_url}/status")
         print()
-        
+
         # 可用模拟器
         ios_sims, android_sims = self.check_simulators()
         print("📱 可用模拟器:")
@@ -115,7 +115,7 @@ class AppStatusDisplay:
         if not ios_sims and not android_sims:
             print("   ⚠️  未检测到可用模拟器")
         print()
-        
+
         # 启动命令
         print("🚀 启动命令:")
         print("   Metro服务器:")
@@ -129,7 +129,7 @@ class AppStatusDisplay:
             print("   Android应用:")
             print("     npx react-native run-android")
         print()
-        
+
         # 项目特色
         print("🌟 项目特色:")
         print("   • 四智能体协同系统 (小艾、小克、老克、索儿)")
@@ -140,7 +140,7 @@ class AppStatusDisplay:
         print("   • AI中医辨证论治")
         print("   • 现代化UI/UX设计")
         print()
-        
+
         # 访问方式
         if metro_running:
             print("🌐 访问方式:")
@@ -148,7 +148,7 @@ class AppStatusDisplay:
             print("   • 通过Metro DevTools调试")
             print(f"   • 访问 {self.metro_url} 查看开发服务器")
             print()
-        
+
         print("🎊 索克生活项目已达到100%完成度！🎊")
         print("🏆 准备投入生产环境使用！🏆")
         print()

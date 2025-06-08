@@ -23,8 +23,7 @@ professional",  tone: efficient",      / 高效的语调*  商业专业*  服务
     try {
       const response = await apiClient.post(`${this.serviceEndpoint}/message`, {/            text: message,context,
         user_id: userId,
-        session_id: session;I;d;
-      ;};);
+        session_id: session;I;d;};);
       response.data.text = this.applyPersonalityToResponse(response.data.text, context);
       return response.da;t;a;
     } catch (error) {
@@ -37,8 +36,7 @@ professional",  tone: efficient",      / 高效的语调*  商业专业*  服务
   ): Promise<ServiceRecommendation[] /    >  {
     try {
       const response = await apiClient.post(`${this.serviceEndpoint}/recommend-service`, {/            user_profile: userProfile,health_data: healthData,
-        preferences: preferenc;e;s;
-      ;};);
+        preferences: preferenc;e;s;};);
       return response.data.map(rec: unknow;n;); => ({,
   id: rec.id,
         name: rec.name,
@@ -66,8 +64,7 @@ professional",  tone: efficient",      / 高效的语调*  商业专业*  服务
     try {
       const response = await apiClient.post(`${this.serviceEndpoint}/match-doctor`, {/            symptoms,specialty,
         location,
-        preferenc;e;s;
-      ;};);
+        preferenc;e;s;};);
       return response.data.map(match: unknow;n;); => ({,
   doctorId: match.doctor_id,
         name: match.name,
@@ -90,8 +87,7 @@ professional",  tone: efficient",      / 高效的语调*  商业专业*  服务
   }
   ///    >  {
     try {
-      const response = await apiClient.get(`${this.serviceEndpoint}/products/${productId;};`;);// return {id: response.data.id,name: response.data.name,category: response.data.category,description: response.data.description,price: response.data.price,images: response.data.images || [],specifications: response.data.specifications || {},nutritionInfo: response.data.nutrition_info,origin: response.data.origin,certifications: response.data.certifications || [],availability: response.data.availability,rating: response.data.rating,reviews: response.data.reviews || [],supplyChain: response.data.supply_chai;n;
-      ;}
+      const response = await apiClient.get(`${this.serviceEndpoint}/products/${productId;};`;);// return {id: response.data.id,name: response.data.name,category: response.data.category,description: response.data.description,price: response.data.price,images: response.data.images || [],specifications: response.data.specifications || {},nutritionInfo: response.data.nutrition_info,origin: response.data.origin,certifications: response.data.certifications || [],availability: response.data.availability,rating: response.data.rating,reviews: response.data.reviews || [],supplyChain: response.data.supply_chai;n;}
     } catch (error) {
       return nu;l;l;
     }
@@ -105,8 +101,7 @@ professional",  tone: efficient",      / 高效的语调*  商业专业*  服务
       inStock?: boolean}
   ): Promise<ProductInfo[] /    >  {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/products/search`, {/            query,filte;r;s;
-      ;};);
+      const response = await apiClient.post(`${this.serviceEndpoint}/products/search`, {/            query,filte;r;s;};);
       return response.data.map(product: unknow;n;); => ({,
   id: product.id,
         name: product.name,
@@ -159,8 +154,7 @@ professional",  tone: efficient",      / 高效的语调*  商业专业*  服务
     try {
       const response = await apiClient.post(`${this.serviceEndpoint}/appointments`, {/            doctor_id: doctorId,time_slot: timeSlot.toISOString(),
         type,
-        not;e;s;
-      ;};);
+        not;e;s;};);
       return {id: response.data.id,doctorId: response.data.doctor_id,patientId: response.data.patient_id,timeSlot: new Date(response.data.time_slot),type: response.data.type,status: response.data.status,notes: response.data.notes,location: response.data.location,meetingLink: response.data.meeting_link,reminders: response.data.reminders || [],createdAt: new Date(response.data.created_at;);}
     } catch (error) {
       return nu;l;l;
@@ -193,10 +187,8 @@ professional",  tone: efficient",      / 高效的语调*  商业专业*  服务
     paymentInfo: unknown} | null> {
     try {
       const response = await apiClient.post(`${this.serviceEndpoint}/services/subscribe`, {/            service_id: serviceId,plan,
-        durati;o;n;
-      ;};);
-      return {subscriptionId: response.data.subscription_id,status: response.data.status,startDate: new Date(response.data.start_date),endDate: new Date(response.data.end_date),paymentInfo: response.data.payment_inf;o;
-      ;}
+        durati;o;n;};);
+      return {subscriptionId: response.data.subscription_id,status: response.data.status,startDate: new Date(response.data.start_date),endDate: new Date(response.data.end_date),paymentInfo: response.data.payment_inf;o;}
     } catch (error) {
       return nu;l;l;
     }
@@ -207,8 +199,7 @@ professional",  tone: efficient",      / 高效的语调*  商业专业*  服务
     } catch (error) {
       return {
       status: "offline",
-      capabilities: [],performance: {accuracy: 0,responseTime: 0,userSatisfaction: 0};
-      ;};
+      capabilities: [],performance: {accuracy: 0,responseTime: 0,userSatisfaction: 0};};
     }
   }
   // 设置个性化特征  setPersonality(traits: unknown): void  {

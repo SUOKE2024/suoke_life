@@ -129,14 +129,12 @@ export const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({ userId }) 
           <Text style={styles.addButtonText}>+</Text>
         </TouchableOpacity>;
       </View>;
-      ;
       <View style={styles.cardContent}>;
         <Text style={[styles.vitalValue, { color: getStatusColor(status) }]}>;
           {value};
         </Text>;
         <Text style={styles.vitalUnit}>{unit}</Text>;
       </View>;
-      ;
       <View style={[styles.statusIndicator, { backgroundColor: getStatusColor(status) }]}>;
         <Text style={styles.statusText}>;
           {status === 'normal' ? '正常' : status === 'warning' ? '注意' : '异常'};
@@ -222,7 +220,6 @@ export const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({ userId }) 
           {latestVitalSigns ? `最后更新: ${formatDate(latestVitalSigns.timestamp)}` : '暂无数据'}
         </Text>
       </View>;
-;
       <ScrollView;
         style={styles.scrollView};
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />;

@@ -641,7 +641,7 @@ class ArchitectureGapAnalyzer:
         for action in self.analysis_result["recommendations"]["immediate_actions"]:
             report += f"""
 - **{action['action']}**: {action['description']}
-  - 工作量: {action['effort']}, 影响: {action['impact']}
+- 工作量: {action['effort']}, 影响: {action['impact']}
 """
 
         report += f"""
@@ -651,7 +651,7 @@ class ArchitectureGapAnalyzer:
         for goal in self.analysis_result["recommendations"]["short_term_goals"]:
             report += f"""
 - **{goal['goal']}**: {goal['description']}
-  - 工作量: {goal['effort']}, 影响: {goal['impact']}
+- 工作量: {goal['effort']}, 影响: {goal['impact']}
 """
 
         report += f"""
@@ -661,7 +661,7 @@ class ArchitectureGapAnalyzer:
         for vision in self.analysis_result["recommendations"]["long_term_vision"]:
             report += f"""
 - **{vision['vision']}**: {vision['description']}
-  - 工作量: {vision['effort']}, 影响: {vision['impact']}
+- 工作量: {vision['effort']}, 影响: {vision['impact']}
 """
 
         return report

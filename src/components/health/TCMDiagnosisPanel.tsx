@@ -227,7 +227,6 @@ export const TCMDiagnosisPanel: React.FC<TCMDiagnosisPanelProps> = ({ userId }) 
             <Text style={styles.modalTitle}>;
               {getDiagnosisTypeLabel(selectedDiagnosisType)}记录;
             </Text>;
-;
             {// 观察记录};
             <View style={styles.section}>;
               <View style={styles.sectionHeader}>;
@@ -236,7 +235,6 @@ export const TCMDiagnosisPanel: React.FC<TCMDiagnosisPanelProps> = ({ userId }) 
                   <Text style={styles.addObservationButtonText}>+ 添加观察</Text>;
                 </TouchableOpacity>;
               </View>;
-;
               {formData.observations.map((observation, index) =>;
                 renderObservationForm(observation, index);
               )}
@@ -330,7 +328,6 @@ export const TCMDiagnosisPanel: React.FC<TCMDiagnosisPanelProps> = ({ userId }) 
               {diagnosis.conclusion && (;
                 <Text style={styles.diagnosisConclusion}>{diagnosis.conclusion}</Text>;
               )};
-              ;
               <View style={styles.diagnosisStats}>;
                 <Text style={styles.diagnosisStat}>;
                   观察: {diagnosis.observations.length} 项;
@@ -360,11 +357,9 @@ export const TCMDiagnosisPanel: React.FC<TCMDiagnosisPanelProps> = ({ userId }) 
         <View style={styles.diagnosisGrid}>;
           {Object.values(TCMDiagnosisType).map(renderDiagnosisTypeCard)};
         </View>;
-;
         {// 最近诊断记录};
         {renderRecentDiagnosis()};
       </ScrollView>;
-;
       {// 诊断记录模态框};
       {renderDiagnosisModal()};
     </View>;

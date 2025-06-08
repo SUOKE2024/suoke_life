@@ -68,7 +68,7 @@ g;"; * /     | "tcm_diagnosis""
   lastActive: Date;
 }
 // 智能体任务 * export interface AgentTask {
-  taskId: string, ,
+  taskId: string,
   type: string;
   data: unknown;
   priority: "low" | "medium" | "high" | "urgent";
@@ -147,7 +147,7 @@ export interface Feedback {
   helpful?: number;
 }
 // 通知类型 * export interface Notification {
-  id: string, ,
+  id: string,
   userId: string;
   type: string;
   title: string;
@@ -232,7 +232,7 @@ export interface AvailabilityInfo {
   restrictions?: string[];
 }
 // 支付相关基础类型 * export interface PaymentMethod {
-  id: string, ,
+  id: string,
   type: | "credit_card"| "debit_card"| "alipay";
     | "wechat_pay"
     | "bank_transfer"

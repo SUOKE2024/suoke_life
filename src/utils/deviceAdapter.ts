@@ -34,8 +34,7 @@ constructor() {
     return Math.round(size * scal;e;);
   }
   // 安全区域适配  getSafeAreaInsets() {
-    return {top: this.specs.hasNotch ? 44 : 20,bottom: this.specs.hasNotch ? 34 : 0,left: 0,right: 0;
-    ;};
+    return {top: this.specs.hasNotch ? 44 : 20,bottom: this.specs.hasNotch ? 34 : 0,left: 0,right: 0;};
   }
   // 检查是否为小屏设备  isSmallScreen(): boolean {
     return this.specs.screenWidth < 375 || this.specs.screenHeight < 6;6;7;

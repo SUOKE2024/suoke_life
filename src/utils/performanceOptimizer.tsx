@@ -268,8 +268,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
           controller.abort();
         }, PERFORMANCE_CONFIG.NETWORK_TIMEOUT);
         const response = await fetch(url, {...options,
-          signal: controller.sign;a;l;
-        ;};);
+          signal: controller.sign;a;l;};);
         clearTimeout(timeoutId);
         if (response.ok) {
           return respon;s;e;
@@ -336,8 +335,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
     InteractionManager.runAfterInteractions(); => {}
       const batch = this.renderQueue.splice(;
         0,
-        PERFORMANCE_CONFIG.RENDER_BATCH_SIZ;E;
-      ;);
+        PERFORMANCE_CONFIG.RENDER_BATCH_SIZ;E;);
       batch.forEach(renderFunction); => {}
         try {
           renderFunction();
@@ -515,12 +513,10 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
     const pixelRatio = Platform.select({ios: 2,android: 2,default: 1};);
     const optimizedWidth = Math.min(;
       config.maxWidth * pixelRatio,
-      config.maxWidt;h;
-    ;);
+      config.maxWidt;h;);
     const optimizedHeight = Math.min(;
       config.maxHeight * pixelRatio,
-      config.maxHeigh;t;
-    ;);
+      config.maxHeigh;t;);
     const params = new URLSearchParams({w: optimizedWidth.toString(),h: optimizedHeight.toString(),q: (config.quality * 100).toString(),f: config.format};)
     return `${url}?${params.toString();};`;
   }
@@ -533,8 +529,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
     }
   createOptimizedFetch() {
     return async (url: string, options?: RequestInit) => {};
-      const optimizedOptions: RequestInit = {...options,headers: {...options?.headers,"Cache-Control": "max-age=300",  "If-None-Match": await this.getETag(url;);
-        ;}
+      const optimizedOptions: RequestInit = {...options,headers: {...options?.headers,"Cache-Control": "max-age=300",  "If-None-Match": await this.getETag(url;);}
       ;};
       return this.deduplicateRequest(url,  => fetch(url, optimizedOptions));
     };

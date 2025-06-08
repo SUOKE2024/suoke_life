@@ -213,6 +213,5 @@ performanceMonitor.recordRender();
     t,
     tn,
     formatDate,
-    formatTime,formatDateTime,formatCurrency,formatNumber,formatPercentage,formatRelativeTime,formatFileSize,formatDistance,formatTemperature, setLanguage,setRegion,setCulturalPreferences, getFirstDayOfWeek,getTimezone,getHolidays,isHoliday,reset;
-  ;};
+    formatTime,formatDateTime,formatCurrency,formatNumber,formatPercentage,formatRelativeTime,formatFileSize,formatDistance,formatTemperature, setLanguage,setRegion,setCulturalPreferences, getFirstDayOfWeek,getTimezone,getHolidays,isHoliday,reset;};
 };

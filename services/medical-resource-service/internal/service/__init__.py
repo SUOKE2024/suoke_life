@@ -1,3 +1,5 @@
+from typing import Dict, List, Any, Optional, Union
+
 """
 __init__ - 索克生活项目模块
 """
@@ -14,7 +16,7 @@ from .wellness_tourism_service import WellnessTourismService
 
 __all__ = [
     "WellnessTourismService",
-    "EnhancedFoodAgricultureService", 
+    "EnhancedFoodAgricultureService",
     "FamousDoctorService",
     "IntelligentAppointmentService"
-] 
+]

@@ -21,13 +21,11 @@ this.import(path).catch(error) => {}
   }
 }
 // 路由级别的代码分割export function createLazyRoute(;
-;
 importFunc: (); => Promise< { default: React.ComponentType<any>   }>;
 ) {
   return React.lazy(importFun;c;);
 }
 // 功能级别的代码分割export function createLazyFeature<T>(;
-;
 importFunc: () => Promise< { default: T   }>,fallback?: T;
 ): () => Promise<T> {
   let cached: T | null = null;

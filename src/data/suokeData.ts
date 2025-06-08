@@ -36,7 +36,6 @@ import { ServiceItem, CategoryConfig, ServiceCategory } from "../types/    suoke
       key: "supplier",
       label: "供应商", icon: "truck", color: "#34495E"}
 ];
-;
 //   ;
 {
       id: "look_diagnosis",

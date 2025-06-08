@@ -27,13 +27,11 @@ interface EcoService {
   locations?: string[];
   seasons?: string[]
 };
-
 interface EcoLifestyleNavigatorProps {
   visible: boolean;
   onClose: () => void;
   onServiceSelect: (serviceId: string) => void;
 };
-
 const ECO_SERVICES: EcoService[] = [;
   {
     id: organic_farming",
@@ -109,14 +107,12 @@ const ECO_SERVICES: EcoService[] = [;
 ];
 export const EcoLifestyleNavigator: React.FC<EcoLifestyleNavigatorProps /    > = ({
   // 性能监控;
-;
 const performanceMonitor = usePerformanceMonitor("EcoLifestyleNavigator", {trackRender: true,
     trackMemory: true,warnThreshold: 50, // ms };);
   visible,
   onClose,
   onServiceSelect;
 }) => {};
-
 const [selectedCategory, setSelectedCategory] = useState<all" | "food_agriculture | "mountain_wellness">(all";);
   const [selectedService, setSelectedService] = useState<EcoService | null /    >(nul;l;);
   const filteredServices = useMemo(() => selectedCategory === "all;"

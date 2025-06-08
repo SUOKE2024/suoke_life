@@ -48,7 +48,6 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps /> = ({/   con
   autoOptimize = false,
   showDetailedMetrics = false;
 }) => {};
-
 const [metrics, setMetrics] = useState<PerformanceMetrics  / >({ * fps: 60, ;
     memoryUsage: 0,renderTime: 0,jsHeapSize: 0,networkLatency: 0,cpuUsage: 0});
   const [warnings, setWarnings] = useState<PerformanceWarning[] />([;];);/      const [isMonitoring, setIsMonitoring] = useState<boolean>(fals;e;);
@@ -74,7 +73,6 @@ const [metrics, setMetrics] = useState<PerformanceMetrics  / >({ * fps: 60, ;
         duration: 300,
         useNativeDriver: true}).start();
     };
-
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [visible, slideAnim]);
@@ -97,7 +95,6 @@ const effectEnd = performance.now();
       pulseAnim.stopAnimation();
       pulseAnim.setValue(1);
     };
-
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [warnings.length, pulseAnim]);
@@ -117,7 +114,6 @@ const effectEnd = performance.now();
           timestamp: Date.now()});
       }
     };
-
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
@@ -140,7 +136,6 @@ const effectEnd = performance.now();
       }
     } catch (error) {
       };
-
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [performanceOptimizer, autoOptimize]);
@@ -175,13 +170,11 @@ const effectEnd = performance.now();
       }
     } catch (error) {
       };
-
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
   const addWarning = useCallback(warning: PerformanceWarning;); => {}
     setWarnings(prev => {};
-
 const exists = prev.some(w => {};
         w.type === warning.type &&;
         Date.now - w.timestamp < 5000;
@@ -210,7 +203,6 @@ case "render:"
         setOptimizationLevel("low");
         break;
     };
-
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [visualEffectManager]);

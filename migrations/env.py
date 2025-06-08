@@ -43,7 +43,7 @@ target_metadata = UserBase.metadata
 def run_migrations_offline():
     """
     在离线模式下运行迁移
-    
+
     这种模式不需要实际连接数据库，而是通过配置中的URL
     生成SQL语句而不执行它们。
     """
@@ -76,7 +76,7 @@ async def run_async_migrations():
     """在异步模式下运行迁移"""
     configuration = config.get_section(config.config_ini_section)
     configuration["sqlalchemy.url"] = db_config.primary_url
-    
+
     connectable = AsyncEngine(
         engine_from_config(
             configuration,

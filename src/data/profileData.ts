@@ -22,7 +22,6 @@
   location: "北京市朝阳区",
   bio: "热爱健康生活，追求身心平衡的都市白领"
 };
-;
 //   ;
 {
       id: "xiaoai",
@@ -333,7 +332,6 @@
   weeklyProgress: 5,
   monthlyTrend: "up"
 };
-;
 //   ;
 {
       id: "activity_001",

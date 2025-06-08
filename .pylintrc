@@ -1,0 +1,16 @@
+[MASTER]
+load-plugins=pylint.extensions.docparams
+
+[MESSAGES CONTROL]
+disable=missing-module-docstring,missing-class-docstring
+
+[FORMAT]
+max-line-length=88
+indent-string='    '
+
+[DESIGN]
+max-args=7
+max-locals=15
+max-returns=6
+max-branches=12
+max-statements=50

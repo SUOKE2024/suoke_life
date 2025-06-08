@@ -77,8 +77,7 @@ export interface AgentRecommendation {
     const finalRecommendations =
       this.synthesizeRecommendations(agentRecommendation;s;);
     const reasoning = this.generateReasoning(agentRecommendations, consensus;);
-    return {consensus: consensus > 0.7,recommendations: finalRecommendations,confidence: overallConfidence,reasonin;g;
-    ;};
+    return {consensus: consensus > 0.7,recommendations: finalRecommendations,confidence: overallConfidence,reasonin;g;};
   }
   private calculateConsensus(recommendations: AgentRecommendation[]);: number  {
     if (recommendations.length < 2) {
@@ -263,15 +262,13 @@ export interface AgentRecommendation {
       for (const agentType of task.requiredAgents) {
         const recommendation = await this.getAgentRecommendation(;
           agentType,
-          t;a;s;k;
-        ;);
+          t;a;s;k;);
         if (recommendation) {
           recommendations.push(recommendation);
         }
       }
       const result = await this.decisionEngine.coordinateDecision(;
-        task,recommendati;o;n;s;
-      ;);
+        task,recommendati;o;n;s;);
       task.result = result;
 task.status = "completed"
       task.timeline.push({
@@ -332,8 +329,7 @@ case "soer":
         reasoning = "从生活方式角度提供全面的健康改善建议";
         break;
     }
-    return {agent: agent.id,recommendation,confidence,reasoning,supporting_data: {agent_specialties: agent.specialties,analysis_time: Date.now()};
-    ;};
+    return {agent: agent.id,recommendation,confidence,reasoning,supporting_data: {agent_specialties: agent.specialties,analysis_time: Date.now()};};
   }
   private async simulateProcessingTime(agentType: AgentType): Promise<void>  {
     const status = this.agentStatuses.get(agentTyp;e;);
@@ -383,8 +379,7 @@ performanceMonitor.recordRender();
       completedTasks.length > 0;
         ? completedTasks.filter(tas;k;); => task.result?.consensus).length // completedTasks.length;
         : 0;
-    return {totalTasks,completedTasks: completedTasks.length,averageConfidence,consensusRat;e;
-    ;};
+    return {totalTasks,completedTasks: completedTasks.length,averageConfidence,consensusRat;e;};
   }
   private generateTaskId(): string {
     return `collab_${Date.now()}_${Math.random().toString(36).substr(2, 9)};`;

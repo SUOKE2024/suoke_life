@@ -131,7 +131,6 @@ export const MessagePublisher: React.FC<MessagePublisherProps> = ({
         >
           <Text style={styles.clearButtonText}>清空</Text>;
         </TouchableOpacity>;
-;
         <TouchableOpacity;
           style={[styles.button, styles.publishButton, isPublishing && styles.disabledButton]};
           onPress={handlePublish};

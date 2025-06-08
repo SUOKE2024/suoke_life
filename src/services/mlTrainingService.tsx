@@ -38,7 +38,7 @@ import React from "react";
   targetVariables: string[];
 }
 // 训练任务接口 * export interface TrainingTask {
-  id: string, ,
+  id: string,
   name: string;
   description: string;
   modelConfig: ModelConfig;
@@ -78,7 +78,7 @@ import React from "react";
     };
   timestamp: number}
 // 模型部署状态接口 * export interface ModelDeployment {
-  modelId: string, ,
+  modelId: string,
   version: string;
   status: "staging" | "production" | "deprecated";
   deploymentTime: number;
@@ -399,10 +399,8 @@ if (progress.status === "completed" || progress.status === "failed") {
         targetVariables: ["syndrome",constitution", "confidence"]
       }
       const taskId = await this.startTraining(;
-        modelName,`训练模型: ${modelName}`,config,datase;t;I;d;
-      ;);
-      return {id: taskId,modelName,status: "pending",datasetSize: trainingData.lengt;h;
-      ;}
+        modelName,`训练模型: ${modelName}`,config,datase;t;I;d;);
+      return {id: taskId,modelName,status: "pending",datasetSize: trainingData.lengt;h;}
     } catch (error) {
       throw new Error(`创建训练任务失败: ${error};`;);
     }

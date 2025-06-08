@@ -125,26 +125,19 @@ export interface DataQualityReport {
       const dataQuality = await this.assessDataQuality(inp;u;t;);
       const evidence = await this.extractEvidence(inp;u;t;);
       const syndromes = await this.identifySyndromes(;
-        evidence,input.userProf;i;l;e;
-      ;);
+        evidence,input.userProf;i;l;e;);
       const constitution = await this.analyzeConstitution(;
-        evidence,input.userProf;i;l;e;
-      ;);
+        evidence,input.userProf;i;l;e;);
       const riskFactors = await this.assessRiskFactors(;
-        syndromes,constitution,input.userProf;i;l;e;
-      ;);
+        syndromes,constitution,input.userProf;i;l;e;);
       const recommendations = await this.generateRecommendations(;
-        syndromes,constitution,riskFact;o;r;s;
-      ;);
+        syndromes,constitution,riskFact;o;r;s;);
       const confidence = this.calculateOverallConfidence(;
-        evidence,syndromes,dataQualit;y;
-      ;);
+        evidence,syndromes,dataQualit;y;);
       const overallAssessment = await this.generateOverallAssessment(;
-        syndromes,constitution,evide;n;c;e;
-      ;);
+        syndromes,constitution,evide;n;c;e;);
       const followUpAdvice = await this.generateFollowUpAdvice(;
-        syndromes,constitution,dataQual;i;t;y;
-      ;);
+        syndromes,constitution,dataQual;i;t;y;);
       const result: FusionResult = {confidence,
         overallAssessment,
         primarySyndromes: syndromes.filter(s); => s.confidence > 0.7),
@@ -206,8 +199,7 @@ export interface DataQualityReport {
     if (reliability < 0.8) {
       issues.push("部分数据质量较低，建议重新采集");
     }
-    return {completeness,consistency,reliability,issues,suggestion;s;
-    ;};
+    return {completeness,consistency,reliability,issues,suggestion;s;};
   }
   ///    >  {
     const evidence: Evidence[] = [];
@@ -264,8 +256,7 @@ export interface DataQualityReport {
     for (const type of constitutionTypes) {
       const score = this.calculateConstitutionScore(;
         evidence,
-        type,userProfil;e;
-      ;);
+        type,userProfil;e;);
       constitutionScores.set(type, score);
     }
     const sortedTypes = Array.from(constitutionScores.entries).sort(;
@@ -415,8 +406,7 @@ performanceMonitor.recordRender();
     return (;
       evidenceScore * evidenceWeight +;
       syndromeScore * syndromeWeight +;
-      qualityScore * qualityWeigh;t;
-    ;);
+      qualityScore * qualityWeigh;t;);
   }
   private async generateOverallAssessment(syndromes: SyndromeResult[],
     constitution: ConstitutionResult,

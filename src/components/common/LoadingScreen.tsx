@@ -11,7 +11,6 @@ size?: "small" | "large";
 }
 export const LoadingScreen: React.FC<LoadingScreenProps /    > = ({
   // 性能监控;
-;
 const performanceMonitor = usePerformanceMonitor(LoadingScreen", {"
     trackRender: true,
     trackMemory: false,warnThreshold: 50, // ms };);

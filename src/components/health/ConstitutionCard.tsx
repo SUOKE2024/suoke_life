@@ -82,7 +82,6 @@ export const ConstitutionCard: React.FC<ConstitutionCardProps> = ({
           </View>;
         </View>;
       )};
-;
       <View style={styles.footer}>;
         <Text style={styles.timestamp}>;
           更新时间: {new Date(constitution.updated_at).toLocaleDateString()};

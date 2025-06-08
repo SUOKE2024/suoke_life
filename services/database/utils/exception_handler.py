@@ -13,9 +13,9 @@ logger = logging.getLogger(__name__)
 
 class GlobalExceptionHandler:
     """全局异常处理器"""
-    
+
     @staticmethod
-    def handle_exception(exc: Exception, context: Dict[str, Any] = None) -> Dict[str, Any]:
+    def handle_exception(exc: Exception, context: Dict[str, Any] = None) - > Dict[str, Any]:
         """处理异常"""
         error_info = {
             "error_type": type(exc).__name__,
@@ -24,9 +24,9 @@ class GlobalExceptionHandler:
             "context": context or {},
             "traceback": traceback.format_exc()
         }
-        
+
         logger.error(f"全局异常: {error_info}")
-        
+
         return {
             "success": False,
             "error": error_info["error_message"],

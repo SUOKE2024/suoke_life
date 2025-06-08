@@ -1,3 +1,5 @@
+from typing import Dict, List, Any, Optional, Union
+
 """
 __init__ - 索克生活项目模块
 """
@@ -9,13 +11,13 @@ from .services import *
 """
 Accessibility Service Package
 
-AI-powered accessibility service for Suoke Life platform.
+AI - powered accessibility service for Suoke Life platform.
 Provides comprehensive accessibility features including:
 - Visual accessibility analysis
 - Audio accessibility processing
 - Motor accessibility assistance
 - Cognitive accessibility support
-- Multi-modal accessibility integration
+- Multi - modal accessibility integration
 """
 
 __version__ = "1.0.0"

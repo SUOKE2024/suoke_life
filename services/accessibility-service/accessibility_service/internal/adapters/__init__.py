@@ -1,3 +1,5 @@
+from typing import Dict, List, Any, Optional, Union
+
 """
 __init__ - 索克生活项目模块
 """
@@ -13,7 +15,7 @@ from .wechat import WeChatAdapter
 from .xiaomi import XiaomiAdapter
 
 """
-Platform Adapters for Third-party Health Platforms
+Platform Adapters for Third - party Health Platforms
 """
 
 

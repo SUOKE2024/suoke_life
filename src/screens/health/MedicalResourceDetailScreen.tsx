@@ -145,12 +145,10 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
       >;
         <Icon name="arrow-back" size={24} color="#333" />;
       </TouchableOpacity>;
-      ;
       <View style={styles.headerInfo}>;
         <Text style={styles.resourceName}>{selectedResource.name}</Text>;
         <Text style={styles.resourceType}>{getTypeLabel(selectedResource.type)}</Text>;
       </View>;
-      ;
       <View style={styles.ratingContainer}>;
         <Icon name="star" size={20} color="#FFD700" />;
         <Text style={styles.rating}>{selectedResource.rating.toFixed(1)}</Text>;
@@ -201,14 +199,12 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
           <Text style={styles.infoText}>专科：{selectedResource.specialty}</Text>
         </View>
       )};
-      ;
       {selectedResource.experience && (;
         <View style={styles.infoRow}>;
           <Icon name="work" size={20} color="#666" />;
           <Text style={styles.infoText}>从业经验：{selectedResource.experience}年</Text>;
         </View>;
       )};
-      ;
       {selectedResource.consultationFee && (;
         <View style={styles.infoRow}>;
           <Icon name="attach-money" size={20} color="#666" />;
@@ -239,7 +235,6 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
           <Icon name="chevron-right" size={20} color="#ccc" />;
         </TouchableOpacity>;
       )};
-      ;
       {selectedResource.contact.email && (;
         <View style={styles.contactItem}>;
           <Icon name="email" size={20} color="#666" />;
@@ -326,7 +321,6 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
             <Text style={styles.reviewDate}>{review.date}</Text>;
           </View>;
         ))};
-        ;
         {selectedResource.reviews.length > 3 && (;
           <TouchableOpacity style={styles.moreReviews}>;
             <Text style={styles.moreReviewsText}>查看更多评价</Text>;
@@ -371,7 +365,6 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
             >;
               <Text style={styles.cancelButtonText}>取消</Text>;
             </TouchableOpacity>;
-            ;
             <TouchableOpacity;
               style={[styles.modalButton, styles.confirmButton]};
               onPress={handleConfirmBooking};
@@ -425,7 +418,6 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
   return (
     <SafeAreaView style={styles.container}>;
       {renderHeader()};
-      ;
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>;
         {renderImages()};
         {renderBasicInfo()};
@@ -435,7 +427,6 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
         {renderDescription()};
         {renderReviews()};
       </ScrollView>;
-      ;
       {renderBookingModal()};
       {renderImageModal()};
     </SafeAreaView>;

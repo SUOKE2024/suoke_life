@@ -16,20 +16,17 @@ import { Middleware } from "@reduxjs/toolkit";/importAsyncStorage from "@react-n
       case "auth/login/fulfilled":/         if (state.auth.token) {
           await AsyncStorage.setItem(
             STORAGE_CONFIG.KEYS.AUTH_TOKEN,
-            state.auth.token;
-          ;);
+            state.auth.token;);
         }
         if (state.auth.refreshToken) {
           await AsyncStorage.setItem(
             STORAGE_CONFIG.KEYS.REFRESH_TOKEN,
-            state.auth.refreshToke;n;
-          ;);
+            state.auth.refreshToke;n;);
         }
         if (state.auth.user?.id) {
           await AsyncStorage.setItem(
             STORAGE_CONFIG.KEYS.USER_ID,
-            state.auth.user.i;d;
-          ;);
+            state.auth.user.i;d;);
         }
         break;
 case "auth/logout/fulfilled":/         await AsyncStorage.multiRemove([
@@ -42,8 +39,7 @@ case "ui/setTheme":/         await AsyncStorage.setItem(STORAGE_CONFIG.KEYS.THEM
         break;
 case "ui/setLanguage":/         await AsyncStorage.setItem(
           STORAGE_CONFIG.KEYS.LANGUAGE,
-          state.ui.language;
-        ;);
+          state.ui.language;);
         break;
 case "user/updateProfile/fulfilled":/         if (state.user.profile) {
           await AsyncStorage.setItem(
@@ -63,8 +59,7 @@ default: break}
         STORAGE_CONFIG.KEYS.LANGUAGE,
         STORAGE_CONFIG.KEYS.AUTH_TOKEN,
         STORAGE_CONFIG.KEYS.REFRESH_TOKEN,
-        STORAGE_CONFIG.KEYS.USER_;I;D;
-      ;];);
+        STORAGE_CONFIG.KEYS.USER_;I;D;];);
     const persistedState: unknown = {};
     if (theme[1]) {
       persistedState.ui = {

@@ -1,3 +1,5 @@
+from typing import Dict, List, Any, Optional, Union
+
 """
 router - 索克生活项目模块
 """
@@ -19,10 +21,10 @@ router = APIRouter()
 
 # 注册新的模块化路由
 router.include_router(health.router)
-router.include_router(constitutions.router, prefix="/api/v1")
-router.include_router(symptoms.router, prefix="/api/v1")
-router.include_router(search.router, prefix="/api/v1")
-router.include_router(graph.router, prefix="/api/v1")
+router.include_router(constitutions.router, prefix = " / api / v1")
+router.include_router(symptoms.router, prefix = " / api / v1")
+router.include_router(search.router, prefix = " / api / v1")
+router.include_router(graph.router, prefix = " / api / v1")
 
 # 保留原有路由作为兼容(可以逐步迁移)
-router.include_router(legacy_routes.router, prefix="/api/v1")
+router.include_router(legacy_routes.router, prefix = " / api / v1")

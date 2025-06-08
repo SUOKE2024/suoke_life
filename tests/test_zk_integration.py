@@ -29,14 +29,14 @@ class TestZKProofGenerator:
         """测试成功生成证明"""
         test_data = {"user_id": "test123", "heart_rate": 72}
         circuit_name = "health_data_heart_rate"
-        
+
         with patch('suoke_blockchain_service.zk_integration.subprocess.run') as mock_run:
             # Mock成功的证明生成
             mock_run.return_value.returncode = 0
             mock_run.return_value.stdout = '{"proof": {"a": [1, 2]}, "public_inputs": [1, 2, 3]}'
-            
+
             result = await zk_generator.generate_proof(test_data, circuit_name)
-            
+
             assert "proof" in result
             assert "public_inputs" in result
             assert result["proof"]["a"] == [1, 2]
@@ -46,12 +46,12 @@ class TestZKProofGenerator:
         """测试证明生成失败"""
         test_data = {"user_id": "test123", "heart_rate": 72}
         circuit_name = "invalid_circuit"
-        
+
         with patch('suoke_blockchain_service.zk_integration.subprocess.run') as mock_run:
             # Mock失败的证明生成
             mock_run.return_value.returncode = 1
             mock_run.return_value.stderr = "Circuit not found"
-            
+
             with pytest.raises(ZKProofError, match="零知识证明生成失败"):
                 await zk_generator.generate_proof(test_data, circuit_name)
 
@@ -63,9 +63,9 @@ class TestZKProofGenerator:
             "heart_rate": 72,
             "timestamp": 1234567890
         }
-        
+
         result = zk_generator._prepare_witness_data(test_data)
-        
+
         assert isinstance(result, dict)
         assert "user_id_hash" in result
         assert "heart_rate" in result
@@ -80,10 +80,10 @@ class TestZKProofGenerator:
             "health_data_blood_pressure",
             "health_data_temperature"
         ]
-        
+
         for circuit in valid_circuits:
             assert zk_generator._validate_circuit_name(circuit) is True
-        
+
         # 无效的电路名称
         invalid_circuits = [
             "",
@@ -91,7 +91,7 @@ class TestZKProofGenerator:
             "health_data_unknown",
             None
         ]
-        
+
         for circuit in invalid_circuits:
             assert zk_generator._validate_circuit_name(circuit) is False
 
@@ -104,13 +104,13 @@ class TestZKProofGenerator:
             "metadata": {"device": "test", "version": "1.0"}
         }
         circuit_name = "health_data_heart_rate"
-        
+
         with patch('suoke_blockchain_service.zk_integration.subprocess.run') as mock_run:
             mock_run.return_value.returncode = 0
             mock_run.return_value.stdout = '{"proof": {"a": [1, 2]}, "public_inputs": [1, 2, 3]}'
-            
+
             result = await zk_generator.generate_proof(large_data, circuit_name)
-            
+
             assert "proof" in result
             assert "public_inputs" in result
 
@@ -130,16 +130,16 @@ class TestZKProofVerifier:
         public_inputs = [1, 2, 3]
         verification_key = {"alpha": [1, 2], "beta": [3, 4]}
         circuit_name = "health_data_heart_rate"
-        
+
         with patch('suoke_blockchain_service.zk_integration.subprocess.run') as mock_run:
             # Mock成功的证明验证
             mock_run.return_value.returncode = 0
             mock_run.return_value.stdout = "true"
-            
+
             result = await zk_verifier.verify_proof(
                 proof, public_inputs, verification_key, circuit_name
             )
-            
+
             assert result is True
 
     @pytest.mark.asyncio
@@ -149,16 +149,16 @@ class TestZKProofVerifier:
         public_inputs = [1, 2, 3]
         verification_key = {"alpha": [1, 2], "beta": [3, 4]}
         circuit_name = "health_data_heart_rate"
-        
+
         with patch('suoke_blockchain_service.zk_integration.subprocess.run') as mock_run:
             # Mock失败的证明验证
             mock_run.return_value.returncode = 0
             mock_run.return_value.stdout = "false"
-            
+
             result = await zk_verifier.verify_proof(
                 proof, public_inputs, verification_key, circuit_name
             )
-            
+
             assert result is False
 
     @pytest.mark.asyncio
@@ -168,12 +168,12 @@ class TestZKProofVerifier:
         public_inputs = [1, 2, 3]
         verification_key = {"alpha": [1, 2]}
         circuit_name = "invalid_circuit"
-        
+
         with patch('suoke_blockchain_service.zk_integration.subprocess.run') as mock_run:
             # Mock验证过程错误
             mock_run.return_value.returncode = 1
             mock_run.return_value.stderr = "Verification failed"
-            
+
             with pytest.raises(ZKProofError, match="零知识证明验证失败"):
                 await zk_verifier.verify_proof(
                     proof, public_inputs, verification_key, circuit_name
@@ -185,7 +185,7 @@ class TestZKProofVerifier:
         # 有效的证明格式
         valid_proof = {"a": [1, 2], "b": [3, 4], "c": [5, 6]}
         assert zk_verifier._validate_proof_format(valid_proof) is True
-        
+
         # 无效的证明格式
         invalid_proofs = [
             {},
@@ -193,7 +193,7 @@ class TestZKProofVerifier:
             {"a": [1, 2], "b": [3, 4], "c": "invalid"},  # 错误类型
             None
         ]
-        
+
         for invalid_proof in invalid_proofs:
             assert zk_verifier._validate_proof_format(invalid_proof) is False
 
@@ -203,7 +203,7 @@ class TestZKProofVerifier:
         # 有效的公共输入
         valid_inputs = [1, 2, 3, 4, 5]
         assert zk_verifier._validate_public_inputs(valid_inputs) is True
-        
+
         # 无效的公共输入
         invalid_inputs = [
             [],
@@ -211,7 +211,7 @@ class TestZKProofVerifier:
             [1, 2, "invalid"],  # 包含非数字
             ["a", "b", "c"]  # 全部非数字
         ]
-        
+
         for invalid_input in invalid_inputs:
             assert zk_verifier._validate_public_inputs(invalid_input) is False
 
@@ -232,14 +232,14 @@ class TestZKProofVerifier:
                 "circuit_name": "health_data_blood_pressure"
             }
         ]
-        
+
         with patch('suoke_blockchain_service.zk_integration.subprocess.run') as mock_run:
             # Mock所有验证都成功
             mock_run.return_value.returncode = 0
             mock_run.return_value.stdout = "true"
-            
+
             results = await zk_verifier.batch_verify_proofs(proofs)
-            
+
             assert len(results) == 2
             assert all(result is True for result in results)
 
@@ -247,7 +247,7 @@ class TestZKProofVerifier:
     async def test_get_circuit_info(self, zk_verifier):
         """测试获取电路信息"""
         circuit_name = "health_data_heart_rate"
-        
+
         with patch('builtins.open', create=True) as mock_open:
             mock_open.return_value.__enter__.return_value.read.return_value = '''
             {
@@ -257,9 +257,9 @@ class TestZKProofVerifier:
                 "constraints": 1000
             }
             '''
-            
+
             result = await zk_verifier.get_circuit_info(circuit_name)
-            
+
             assert result["name"] == circuit_name
             assert "inputs" in result
             assert "constraints" in result
@@ -271,16 +271,16 @@ class TestZKProofVerifier:
         public_inputs = [1, 2, 3]
         verification_key = {"alpha": [1, 2]}
         circuit_name = "health_data_heart_rate"
-        
+
         with patch('suoke_blockchain_service.zk_integration.subprocess.run') as mock_run:
             mock_run.return_value.returncode = 0
             mock_run.return_value.stdout = "true"
-            
+
             # 启用性能监控
             result = await zk_verifier.verify_proof(
                 proof, public_inputs, verification_key, circuit_name,
                 collect_metrics=True
             )
-            
+
             assert result is True
             # 验证性能指标被收集（这里可以检查日志或指标存储） 

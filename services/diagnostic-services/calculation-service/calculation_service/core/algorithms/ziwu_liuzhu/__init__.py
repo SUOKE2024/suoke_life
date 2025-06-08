@@ -1,3 +1,5 @@
+from typing import Dict, List, Any, Optional, Union
+
 """
 __init__ - 索克生活项目模块
 """
@@ -14,6 +16,6 @@ from .data import MERIDIAN_TIME_MAP, ACUPOINT_TIME_MAP
 
 __all__ = [
     "ZiwuLiuzhuCalculator",
-    "MERIDIAN_TIME_MAP", 
+    "MERIDIAN_TIME_MAP",
     "ACUPOINT_TIME_MAP",
-] 
+]

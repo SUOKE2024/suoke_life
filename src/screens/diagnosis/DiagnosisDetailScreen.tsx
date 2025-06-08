@@ -64,17 +64,13 @@ export default React.memo(function DiagnosisDetailScreen() {
   // 分享诊断结果
   const shareResult = async () => {try {const shareContent = `;
 索克生活 - 五诊检测报告;
-;
 🏥 主要证型: ${result.primarySyndrome.name};
 🎯 置信度: ${Math.round(result.overallConfidence * 100)}%;
 🧬 体质类型: ${result.constitutionType.type};
-;
 📊 数据质量: ${Math.round(result.qualityMetrics.dataQuality * 100)}%;
 🔬 结果可靠性: ${Math.round(result.qualityMetrics.resultReliability * 100)}%;
 📈 完整性: ${Math.round(result.qualityMetrics.completeness * 100)}%;
-;
 🕐 检测时间: ${new Date(result.timestamp).toLocaleString()};
-;
 通过索克生活App获取您的专属健康报告;
       `.trim();
       await Share.share({
@@ -240,7 +236,6 @@ export default React.memo(function DiagnosisDetailScreen() {
                 {isExpanded ? '▼' : '▶'};
               </Text>;
             </TouchableOpacity>;
-            ;
             {isExpanded && (;
               <View style={styles.expandableContent}>;
                 {renderMethodDetails(method, data)};
@@ -333,14 +328,12 @@ export default React.memo(function DiagnosisDetailScreen() {
             </Text>;
           </View>;
         )};
-        ;
         {data.overallAssessment && (;
           <View style={styles.detailItem}>;
             <Text style={styles.detailLabel}>总体评估</Text>;
             <Text style={styles.detailValue}>{data.overallAssessment}</Text>;
           </View>;
         )};
-        ;
         {data.analysisId && (;
           <View style={styles.detailItem}>;
             <Text style={styles.detailLabel}>分析ID</Text>;

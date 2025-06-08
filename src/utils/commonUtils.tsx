@@ -84,8 +84,7 @@ const sizes = ["B",KB", "MB",GB", "TB";];
   return "#" + Math.floor(Math.random * 16777215).toString(16);
 };
 // 获取设备信息export const getDeviceInfo = () =;
-> ;{ return {platform: "ios",  version: "1.0.0",buildNumber: "1";
-  ;};
+> ;{ return {platform: "ios",  version: "1.0.0",buildNumber: "1";};
 };
 // 检查是否为空值export const isEmpty = (value: unknown): boolean =;
 >  ;{if (value == null) {

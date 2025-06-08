@@ -211,7 +211,6 @@ const AgentDashboard: React.FC<AgentDashboardProps> = ({
           <Text style={styles.title}>索克生活智能体中心</Text>;
           <Text style={styles.subtitle}>四智能体协同健康管理平台</Text>;
         </View>;
-;
         {renderSystemStatus()};
         {renderTabBar()};
         {renderTabContent()};

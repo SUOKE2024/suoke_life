@@ -1,14 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-
 export type AgentType = 'xiaoai' | 'xiaoke' | 'laoke' | 'soer';
-
 interface AgentAvatarProps {
   agentType: AgentType;
   emotion?: string;
   size?: number;
 }
-
 const AGENT_META = {
   xiaoai: {,
   name: '小艾',
@@ -31,14 +28,12 @@ const AGENT_META = {
     avatar: '🌟',
   },
 };
-
 export const AgentAvatar: React.FC<AgentAvatarProps> = ({
   agentType,
   emotion = 'neutral',
   size = 64,
 }) => {
   const meta = AGENT_META[agentType];
-
   const getEmotionIcon = (emotion: string) => {
     switch (emotion) {
       case 'happy':
@@ -51,7 +46,6 @@ export const AgentAvatar: React.FC<AgentAvatarProps> = ({
         return '';
     }
   };
-
   return (
     <View;
       style={[
@@ -78,7 +72,6 @@ export const AgentAvatar: React.FC<AgentAvatarProps> = ({
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {,
   alignItems: 'center',

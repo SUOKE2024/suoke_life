@@ -164,8 +164,7 @@ export interface HealthAlertResponse {
   ///    >  {
     try {
       const response = await this.makeRequest(;
-        "/api/accessible-content",/            requ;e;s;t;
-      ;);
+        "/api/accessible-content",/            requ;e;s;t;);
       return respon;s;e;
     } catch (error) {
       throw new Error("内容转换服务暂时不可用，请稍后重试;";);
@@ -174,8 +173,7 @@ export interface HealthAlertResponse {
   ///    >  {
     try {
       const response = await this.makeRequest(;
-        "/api/speech-translation",/            requ;e;s;t;
-      ;);
+        "/api/speech-translation",/            requ;e;s;t;);
       return respon;s;e;
     } catch (error) {
       throw new Error("语音翻译服务暂时不可用，请稍后重试;";);
@@ -184,8 +182,7 @@ export interface HealthAlertResponse {
   ///    >  {
     try {
       const response = await this.makeRequest(;
-        "/api/background-collection",/            requ;e;s;t;
-      ;);
+        "/api/background-collection",/            requ;e;s;t;);
       return respon;s;e;
     } catch (error) {
       throw new Error("后台数据收集服务暂时不可用，请稍后重试;";);
@@ -206,16 +203,14 @@ export interface HealthAlertResponse {
     } catch (error) {
       return {
       fontSize: "medium",
-      highContrast: false,voiceType: "female",speechRate: 1.0,language: "zh_CN",screenReader: false,signLanguage: false,enabledFeatures: [];
-      ;};
+      highContrast: false,voiceType: "female",speechRate: 1.0,language: "zh_CN",screenReader: false,signLanguage: false,enabledFeatures: [];};
     }
   }
   // 更新用户无障碍设置  async updateUserPreferences(userId: string,
     preferences: Partial<UserPreferences />/    ): Promise<boolean>  {
     try {
       const response = await this.makeRequest("/api/user-preferences", {/            userId,action: "update",
-        preferenc;e;s;
-      ;};);
+        preferenc;e;s;};);
       return response.succe;s;s;
     } catch (error) {
       return fal;s;e;
@@ -283,7 +278,6 @@ const performanceMonitor = usePerformanceMonitor(accessibilityService", {"
 //,
   serviceUrl: "http: accessibility-service的默认地址 * / timeout: 30000,* *  retryAttempts: 3/
 };
-;
 //   ;
 e;(; /
   defaultAccessibilityConfig);
@@ -335,8 +329,7 @@ e;(; /
     try {
       const response = await this.service.accessibleContent({ contentId: `${this.agentType  }_${Date.now()}`,contentType: "text",
         userId,
-        targetForm;a;t;
-      ;};);
+        targetForm;a;t;};);
       return respon;s;e;
     } catch (error) {
       throw error;
@@ -362,8 +355,7 @@ e;(; /
       if (hasAbnormalData) {
         const response = await this.service.triggerHealthAlert({userId,
           alertType: "warning",
-          healthDa;t;a;
-        ;};);
+          healthDa;t;a;};);
         return respon;s;e;
       }
       return nu;l;l;

@@ -294,8 +294,7 @@ const performanceMonitor = usePerformanceMonitor('nativeModules', {trackRender: 
   // 检查所有原生模块状态  getModulesStatus(): { camera: boolean,
     voice: boolean,
     location: boolean} {
-    return {camera: !!this.cameraModule,voice: !!this.voiceModule,location: !!this.locationModul;e;
-    ;};
+    return {camera: !!this.cameraModule,voice: !!this.voiceModule,location: !!this.locationModul;e;};
   }
   // 健康应用专用：启动五诊相关的原生功能  async initializeHealthFeatures(): Promise<{ camera: boolean,
     voice: boolean,
@@ -304,8 +303,7 @@ const performanceMonitor = usePerformanceMonitor('nativeModules', {trackRender: 
     const modules = this.getModulesStatus;
     const permissions = await permissionManager.checkHealthAppPermission;s;
     return {...modules,
-      permission;s;
-    ;};
+      permission;s;};
   }
   // 健康应用专用：请求所有必要权限  async requestHealthPermissions(): Promise<boolean> {
     try {

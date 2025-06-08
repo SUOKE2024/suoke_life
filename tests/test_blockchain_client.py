@@ -33,7 +33,7 @@ class TestBlockchainClient:
         """测试成功初始化"""
         with patch('suoke_blockchain_service.blockchain_client.Web3') as mock_web3:
             mock_web3.return_value.is_connected.return_value = True
-            
+
             client = BlockchainClient()
             assert client.w3 is not None
             assert client.is_connected() is True
@@ -45,7 +45,7 @@ class TestBlockchainClient:
         mock_contract = MagicMock()
         mock_function = MagicMock()
         mock_contract.functions.storeHealthData.return_value = mock_function
-        
+
         # Mock交易构建和发送
         mock_function.build_transaction.return_value = {
             'to': '0x1234567890123456789012345678901234567890',
@@ -54,21 +54,21 @@ class TestBlockchainClient:
             'gasPrice': 20000000000,
             'nonce': 1
         }
-        
+
         blockchain_client.health_data_storage_contract = mock_contract
         blockchain_client.w3.eth.get_transaction_count = MagicMock(return_value=1)
         blockchain_client.w3.eth.send_raw_transaction = MagicMock(return_value=b'tx_hash')
         blockchain_client.w3.to_hex = MagicMock(return_value='0x1234567890abcdef')
-        
+
         # Mock私钥签名
         with patch('suoke_blockchain_service.blockchain_client.Account') as mock_account:
             mock_account.sign_transaction.return_value.rawTransaction = b'signed_tx'
-            
+
             result = await blockchain_client.store_health_data(
                 data_hash="test_hash",
                 data_type="heart_rate",
                 ipfs_hash="QmTest",
                 encryption_key_hash="key_hash"
             )
-            
+
             assert result == '0x1234567890abcdef'

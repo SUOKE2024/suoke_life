@@ -1,3 +1,5 @@
+from typing import Dict, List, Any, Optional, Union
+
 """
 graphql_types - 索克生活项目模块
 """
@@ -5,7 +7,7 @@ graphql_types - 索克生活项目模块
 from internal.delivery.graphql.pagination import Connection, Edge
 import strawberry
 
-#!/usr/bin/env python
+#! / usr / bin / env python
 
 """
 老克智能体服务 - GraphQL 类型定义
@@ -19,6 +21,7 @@ import strawberry
 # 基本类型
 @strawberry.type
 class User:
+    """TODO: 添加文档字符串"""
     id: str
     username: str
     display_name: str
@@ -30,6 +33,7 @@ class User:
 
 @strawberry.type
 class KnowledgeArticle:
+    """TODO: 添加文档字符串"""
     id: str
     title: str
     content: str
@@ -42,10 +46,11 @@ class KnowledgeArticle:
     rating: float | None = None
     rating_count: int = 0
     view_count: int = 0
-    related_topics: list["KnowledgeArticle"] = strawberry.field(default_factory=list)
+    related_topics: list["KnowledgeArticle"] = strawberry.field(default_factory = list)
 
 @strawberry.input
 class KnowledgeArticleInput:
+    """TODO: 添加文档字符串"""
     title: str
     content: str
     category: str
@@ -54,6 +59,7 @@ class KnowledgeArticleInput:
 
 @strawberry.type
 class Resource:
+    """TODO: 添加文档字符串"""
     id: str
     title: str
     type: str
@@ -62,6 +68,7 @@ class Resource:
 
 @strawberry.type
 class QuizQuestion:
+    """TODO: 添加文档字符串"""
     id: str
     question: str
     options: list[str]
@@ -70,6 +77,7 @@ class QuizQuestion:
 
 @strawberry.type
 class Quiz:
+    """TODO: 添加文档字符串"""
     id: str
     title: str
     questions: list[QuizQuestion]
@@ -77,6 +85,7 @@ class Quiz:
 
 @strawberry.type
 class LearningModule:
+    """TODO: 添加文档字符串"""
     id: str
     title: str
     description: str
@@ -87,6 +96,7 @@ class LearningModule:
 
 @strawberry.type
 class LearningPath:
+    """TODO: 添加文档字符串"""
     id: str
     title: str
     description: str
@@ -100,15 +110,17 @@ class LearningPath:
 
 @strawberry.type
 class Comment:
+    """TODO: 添加文档字符串"""
     id: str
     content: str
     author: User
     created_at: str
     like_count: int = 0
-    replies: list["Comment"] = strawberry.field(default_factory=list)
+    replies: list["Comment"] = strawberry.field(default_factory = list)
 
 @strawberry.type
 class CommunityPost:
+    """TODO: 添加文档字符串"""
     id: str
     title: str
     content: str
@@ -124,6 +136,7 @@ class CommunityPost:
 
 @strawberry.input
 class CommunityPostInput:
+    """TODO: 添加文档字符串"""
     title: str
     content: str
     category: str
@@ -131,6 +144,7 @@ class CommunityPostInput:
 
 @strawberry.type
 class Lesson:
+    """TODO: 添加文档字符串"""
     id: str
     title: str
     content: str
@@ -140,6 +154,7 @@ class Lesson:
 
 @strawberry.type
 class CourseModule:
+    """TODO: 添加文档字符串"""
     id: str
     title: str
     description: str
@@ -149,6 +164,7 @@ class CourseModule:
 
 @strawberry.enum
 class CourseLevel:
+    """TODO: 添加文档字符串"""
     BEGINNER = "BEGINNER"
     INTERMEDIATE = "INTERMEDIATE"
     ADVANCED = "ADVANCED"
@@ -156,6 +172,7 @@ class CourseLevel:
 
 @strawberry.type
 class EducationCourse:
+    """TODO: 添加文档字符串"""
     id: str
     title: str
     description: str
@@ -170,6 +187,7 @@ class EducationCourse:
 
 @strawberry.type
 class NPCAction:
+    """TODO: 添加文档字符串"""
     id: str
     type: str
     description: str
@@ -178,6 +196,7 @@ class NPCAction:
 
 @strawberry.enum
 class ActionType:
+    """TODO: 添加文档字符串"""
     QUEST = "QUEST"
     CHALLENGE = "CHALLENGE"
     REWARD = "REWARD"
@@ -186,6 +205,7 @@ class ActionType:
 
 @strawberry.type
 class GameNPC:
+    """TODO: 添加文档字符串"""
     id: str
     name: str
     role: str
@@ -196,6 +216,7 @@ class GameNPC:
 
 @strawberry.type
 class NPCInteractionResponse:
+    """TODO: 添加文档字符串"""
     message: str
     emotion: str
     actions: list[NPCAction] | None = None

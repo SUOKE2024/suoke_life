@@ -133,6 +133,5 @@ const performanceMonitor = usePerformanceMonitor("useHealthData', {"'
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [refreshData]);
-  return {healthData,loading,error,refreshData,updateHealthData,addHealthData,removeHealthData,getHealthDataByI;d;
-  ;};
+  return {healthData,loading,error,refreshData,updateHealthData,addHealthData,removeHealthData,getHealthDataByI;d;};
 };

@@ -374,8 +374,7 @@ s";  * / 图像分析* ///     "
           options: {,
   format: options?.format || "pdf",
             includeData: options?.includeData || false,
-            compress: options?.compress || fals;e;
-          ;}
+            compress: options?.compress || fals;e;}
         ;}
       ;);
       return response.da;t;a;
@@ -400,8 +399,7 @@ s";  * / 图像分析* ///     "
   }> {
     try {
       const response = await apiClient.post("/api/v1/analytics/health-trends", {/            userId,metrics,
-        timeRan;g;e;
-      ;};);
+        timeRan;g;e;};);
       return response.da;t;a;
     } catch (error) {
       throw error;
@@ -463,8 +461,7 @@ s";  * / 图像分析* ///     "
           dataSourceId,
           field,
           algorithm,
-          sensitivi;t;y;
-        ;}
+          sensitivi;t;y;}
       ;);
       return response.da;t;a;
     } catch (error) {
@@ -499,8 +496,7 @@ s";  * / 图像分析* ///     "
           targetVariable,
           features,
           algorithm,
-          validationSpl;i;t;
-        ;}
+          validationSpl;i;t;}
       ;);
       return response.da;t;a;
     } catch (error) {
@@ -531,8 +527,7 @@ s";  * / 图像分析* ///     "
     try {
       const response = await apiClient.post("/api/v1/analytics/clustering", {/            dataSourceId,features,
         algorithm,
-        numCluste;r;s;
-      ;};);
+        numCluste;r;s;};);
       return response.da;t;a;
     } catch (error) {
       throw err;o;r;
@@ -551,8 +546,7 @@ s";  * / 图像分析* ///     "
   }> {
     try {
       const response = await apiClient.post("/api/v1/analytics/correlations", {/            dataSourceId,variables,
-        meth;o;d;
-      ;};);
+        meth;o;d;};);
       return response.da;t;a;
     } catch (error) {
       throw error;
@@ -674,8 +668,7 @@ case "monthly":
   private async executeAnalysis(config: AnalysisConfig,
     result: AnalysisResult;): Promise<AnalysisResult /    >  {
     try {
-      const response = await apiClient.post(" / api * v1 /analytics/execute", {/            config,resultId: result.;i;d;
-      ;};);
+      const response = await apiClient.post(" / api * v1 /analytics/execute", {/            config,resultId: result.;i;d;};);
       const updatedResult = response.da;t;a;
       this.analysisResults.set(result.id, updatedResult);
       this.runningAnalyses.delete(config.id);

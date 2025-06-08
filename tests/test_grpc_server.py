@@ -43,7 +43,7 @@ class TestBlockchainServicer:
             data='{"heart_rate": 72, "timestamp": "2024-01-01T00:00:00Z"}',
             data_type="heart_rate"
         )
-        
+
         with patch.object(servicer.blockchain_service, 'store_health_data') as mock_store:
             mock_store.return_value = {
                 "record_id": "record-123",
@@ -51,9 +51,9 @@ class TestBlockchainServicer:
                 "transaction_hash": "0x1234567890abcdef",
                 "status": "pending"
             }
-            
+
             response = await servicer.StoreHealthData(request, mock_context)
-            
+
             assert response.record_id == "record-123"
             assert response.transaction_id == "tx-456"
             assert response.transaction_hash == "0x1234567890abcdef"
@@ -67,12 +67,12 @@ class TestBlockchainServicer:
             data='{"heart_rate": 72}',
             data_type="heart_rate"
         )
-        
+
         with patch.object(servicer.blockchain_service, 'store_health_data') as mock_store:
             mock_store.side_effect = ValidationError("用户ID不能为空")
-            
+
             response = await servicer.StoreHealthData(request, mock_context)
-            
+
             # 验证错误响应
             mock_context.set_code.assert_called_with(grpc.StatusCode.INVALID_ARGUMENT)
             mock_context.set_details.assert_called_with("用户ID不能为空")
@@ -84,7 +84,7 @@ class TestBlockchainServicer:
             record_id="record-123",
             user_id="test-user-123"
         )
-        
+
         with patch.object(servicer.blockchain_service, 'verify_health_data') as mock_verify:
             mock_verify.return_value = {
                 "blockchain_valid": True,
@@ -96,9 +96,9 @@ class TestBlockchainServicer:
                     "block_number": 12345
                 }
             }
-            
+
             response = await servicer.VerifyHealthData(request, mock_context)
-            
+
             assert response.blockchain_valid is True
             assert response.zkp_valid is True
             assert response.ipfs_valid is True
@@ -111,12 +111,12 @@ class TestBlockchainServicer:
             record_id="nonexistent-record",
             user_id="test-user-123"
         )
-        
+
         with patch.object(servicer.blockchain_service, 'verify_health_data') as mock_verify:
             mock_verify.side_effect = NotFoundError("健康数据记录不存在")
-            
+
             response = await servicer.VerifyHealthData(request, mock_context)
-            
+
             # 验证错误响应
             mock_context.set_code.assert_called_with(grpc.StatusCode.NOT_FOUND)
             mock_context.set_details.assert_called_with("健康数据记录不存在")
@@ -131,16 +131,16 @@ class TestBlockchainServicer:
             access_level="read",
             expires_at=1234567890
         )
-        
+
         with patch.object(servicer.blockchain_service, 'grant_access') as mock_grant:
             mock_grant.return_value = {
                 "grant_id": "grant-123",
                 "transaction_hash": "0x1234567890abcdef",
                 "expires_at": "2024-01-01T00:00:00Z"
             }
-            
+
             response = await servicer.GrantAccess(request, mock_context)
-            
+
             assert response.grant_id == "grant-123"
             assert response.transaction_hash == "0x1234567890abcdef"
             assert response.expires_at == "2024-01-01T00:00:00Z"
@@ -154,16 +154,16 @@ class TestBlockchainServicer:
             record_id="record-789",
             reason="测试撤销"
         )
-        
+
         with patch.object(servicer.blockchain_service, 'revoke_access') as mock_revoke:
             mock_revoke.return_value = {
                 "grant_id": "grant-123",
                 "revoked_at": "2024-01-01T00:00:00Z",
                 "reason": "测试撤销"
             }
-            
+
             response = await servicer.RevokeAccess(request, mock_context)
-            
+
             assert response.grant_id == "grant-123"
             assert response.revoked_at == "2024-01-01T00:00:00Z"
             assert response.reason == "测试撤销"
@@ -177,7 +177,7 @@ class TestBlockchainServicer:
             limit=10,
             offset=0
         )
-        
+
         with patch.object(servicer.blockchain_service, 'get_health_records') as mock_get:
             mock_get.return_value = {
                 "total_count": 2,
@@ -203,9 +203,9 @@ class TestBlockchainServicer:
                     }
                 ]
             }
-            
+
             response = await servicer.GetHealthRecords(request, mock_context)
-            
+
             assert response.total_count == 2
             assert response.has_more is False
             assert len(response.records) == 2
@@ -220,7 +220,7 @@ class TestBlockchainServicer:
             as_owner=True,
             active_only=True
         )
-        
+
         with patch.object(servicer.blockchain_service, 'get_access_grants') as mock_get:
             mock_get.return_value = [
                 {
@@ -233,9 +233,9 @@ class TestBlockchainServicer:
                     "is_active": True
                 }
             ]
-            
+
             response = await servicer.GetAccessGrants(request, mock_context)
-            
+
             assert len(response.grants) == 1
             grant = response.grants[0]
             assert grant.id == "grant-1"
@@ -247,7 +247,7 @@ class TestBlockchainServicer:
     async def test_health_check_success(self, servicer, mock_context):
         """测试健康检查成功"""
         request = blockchain_pb2.HealthCheckRequest()
-        
+
         with patch.object(servicer.blockchain_service, 'health_check') as mock_health:
             mock_health.return_value = {
                 "status": "healthy",
@@ -259,9 +259,9 @@ class TestBlockchainServicer:
                     "ipfs": "healthy"
                 }
             }
-            
+
             response = await servicer.HealthCheck(request, mock_context)
-            
+
             assert response.status == "healthy"
             assert response.version == "1.0.0"
             assert len(response.components) == 3
@@ -274,12 +274,12 @@ class TestBlockchainServicer:
             data='{"heart_rate": 72}',
             data_type="heart_rate"
         )
-        
+
         with patch.object(servicer.blockchain_service, 'store_health_data') as mock_store:
             mock_store.side_effect = Exception("Internal error")
-            
+
             response = await servicer.StoreHealthData(request, mock_context)
-            
+
             # 验证内部错误响应
             mock_context.set_code.assert_called_with(grpc.StatusCode.INTERNAL)
             mock_context.set_details.assert_called_with("内部服务器错误")
@@ -289,17 +289,17 @@ class TestBlockchainServicer:
         """测试请求验证"""
         # 测试空请求
         empty_request = blockchain_pb2.StoreHealthDataRequest()
-        
+
         result = servicer._validate_store_request(empty_request)
         assert result is False
-        
+
         # 测试有效请求
         valid_request = blockchain_pb2.StoreHealthDataRequest(
             user_id="test-user-123",
             data='{"heart_rate": 72}',
             data_type="heart_rate"
         )
-        
+
         result = servicer._validate_store_request(valid_request)
         assert result is True
 
@@ -316,9 +316,9 @@ class TestBlockchainServicer:
             "has_zkp": True,
             "transaction_status": "confirmed"
         }
-        
+
         response = servicer._format_health_record_response(record_data)
-        
+
         assert isinstance(response, blockchain_pb2.HealthRecord)
         assert response.id == "record-123"
         assert response.data_type == "heart_rate"
@@ -334,18 +334,18 @@ class TestBlockchainServicer:
             (PermissionError("权限错误"), grpc.StatusCode.PERMISSION_DENIED),
             (Exception("未知错误"), grpc.StatusCode.INTERNAL)
         ]
-        
+
         for exception, expected_code in test_cases:
             with patch.object(servicer.blockchain_service, 'store_health_data') as mock_store:
                 mock_store.side_effect = exception
-                
+
                 request = blockchain_pb2.StoreHealthDataRequest(
                     user_id="test-user-123",
                     data='{"heart_rate": 72}',
                     data_type="heart_rate"
                 )
-                
+
                 await servicer.StoreHealthData(request, mock_context)
-                
+
                 # 验证正确的错误码被设置
                 mock_context.set_code.assert_called_with(expected_code) 

@@ -50,8 +50,7 @@ const performanceMonitor = usePerformanceMonitor("useExplore', {"'
       setRefreshing(false);
     }
   }, []);
-  return {selectedCategory,searchQuery,isLoading,error,refreshing,filteredContent,featuredContent,hotTopics,searchContent,selectCategory,refreshContent,setSearchQuer;y;
-  ;};
+  return {selectedCategory,searchQuery,isLoading,error,refreshing,filteredContent,featuredContent,hotTopics,searchContent,selectCategory,refreshContent,setSearchQuer;y;};
 };
 //   ;
 > ;{/
@@ -80,6 +79,5 @@ const performanceMonitor = usePerformanceMonitor("useExplore', {"'
     },
     [viewedItems]
   );
-  return {toggleBookmark,toggleLike,recordView,isBookmarked,isLiked,isViewe;d;
-  ;};
+  return {toggleBookmark,toggleLike,recordView,isBookmarked,isLiked,isViewe;d;};
 };

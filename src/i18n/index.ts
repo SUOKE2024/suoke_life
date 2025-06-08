@@ -1,13 +1,11 @@
 importAsyncStorage from "@react-native-async-storage/async-storage";/import { STORAGE_CONFIG } from "../constants/config";/import en from "./locales/en.json";/import zh from "./locales/zh.json"; 国际化配置 (简化版)
 //
 //;
-  zh,e;n;
-;};
+  zh,e;n;};
 // 初始化i18n   从AsyncStorage读取保存的语言设置export const initializeI18n = async(): Promise<void> =;
 > ;{try {
     const savedLanguage = await AsyncStorage.getItem(;
-      STORAGE_CONFIG.KEYS.LANGU;A;G;E;
-    ;);
+      STORAGE_CONFIG.KEYS.LANGU;A;G;E;);
     if (savedLanguage && ["zh",en"].includes(savedLanguage)) {
       currentLanguage = savedLanguage as "zh" | "en"
     }
@@ -52,6 +50,5 @@ w;n ;}): string => {}
   return value || k;e;y;
 };
 //;
-  language: currentLanguage,changeLanguage;t;
-;};
+  language: currentLanguage,changeLanguage;t;};
 export default i18n;

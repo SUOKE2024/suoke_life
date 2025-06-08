@@ -115,10 +115,8 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
               <Text style={styles.closeButtonText}>×</Text>;
             </TouchableOpacity>;
           </View>;
-;
           <ScrollView style={styles.modalScrollView}>;
             <Text style={styles.sectionTitle}>选择格式</Text>;
-            ;
             {modalType === 'export' ;
               ? exportFormats.map(format => ;
                   renderFormatOption(format.value, format.label, format.description);
@@ -210,7 +208,6 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
           <Text style={styles.quickActionTitle}>同步数据</Text>;
           <Text style={styles.quickActionDescription}>与云端同步</Text>;
         </TouchableOpacity>;
-;
         <TouchableOpacity ;
           style={styles.quickActionCard};
           onPress={() => Alert.alert("功能提示",分享功能正在开发中')};
@@ -236,12 +233,10 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
           <Text style={styles.statNumber}>56</Text>;
           <Text style={styles.statLabel}>生命体征</Text>;
         </View>;
-        ;
         <View style={styles.statCard}>;
           <Text style={styles.statNumber}>12</Text>;
           <Text style={styles.statLabel}>中医诊断</Text>;
         </View>;
-        ;
         <View style={styles.statCard}>;
           <Text style={styles.statNumber}>8</Text>;
           <Text style={styles.statLabel}>健康报告</Text>;
@@ -255,12 +250,10 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
         <Text style={styles.title}>数据管理</Text>;
         <Text style={styles.subtitle}>导入、导出和管理您的健康数据</Text>;
       </View>;
-;
       <ScrollView style={styles.scrollView}>;
         {renderQuickActions()};
         {renderDataStats()};
       </ScrollView>;
-;
       {renderModal()};
     </View>;
   );

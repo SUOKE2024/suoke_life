@@ -139,8 +139,7 @@ const performanceMonitor = usePerformanceMonitor("useChat', {"'
     [channels, addMessage]
   );
   return {
-    channels: filteredChannels,messages,activeChannelId,activeChannel,searchQuery,isLoading,error,totalUnreadCount, setChannels,setActiveChannelId,setSearchQuery,addMessage,markAsRead,updateChannelLastMessage,startAgentChat,sendMessage,getChannelMessages;
-  ;};
+    channels: filteredChannels,messages,activeChannelId,activeChannel,searchQuery,isLoading,error,totalUnreadCount, setChannels,setActiveChannelId,setSearchQuery,addMessage,markAsRead,updateChannelLastMessage,startAgentChat,sendMessage,getChannelMessages;};
 };
 export const useContacts = () =;
 > ;{const [contacts] = useState<Contact[] />(MOCK_CONTACT;S;)/      const [searchQuery, setSearchQuery] = useState<string>(;);
@@ -164,6 +163,5 @@ export const useContacts = () =;
     };
     return grou;p;s;
   }, [filteredContacts]);
-  return {contacts: filteredContacts,groupedContacts,searchQuery,setSearchQuer;y;
-  ;};
+  return {contacts: filteredContacts,groupedContacts,searchQuery,setSearchQuer;y;};
 };

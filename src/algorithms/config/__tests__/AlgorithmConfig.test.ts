@@ -1,45 +1,37 @@
 import React from 'react';
 import AlgorithmConfig from '../AlgorithmConfig';
-
 beforeEach(() => {
   jest.clearAllMocks();
 });
-
 describe('AlgorithmConfig', () => {
   it('should work with valid inputs', () => {
     // Add test cases
     const config = new AlgorithmConfig();
     expect(config).toBeDefined();
   });
-
   it('should handle edge cases', () => {
     // Add test cases
     const config = new AlgorithmConfig({});
     expect(config).toBeDefined();
   });
-
   it('should handle invalid inputs gracefully', () => {
     // Add test cases
     expect(() => {
       new AlgorithmConfig({});
     }).not.toThrow();
   });
-
   it('should return correct output format', () => {// Add test cases;
     const config = new AlgorithmConfig();
     expect(typeof config).toBe('object');
   });
-
   it('should handle performance requirements', () => {
     const start = performance.now();
     const config = new AlgorithmConfig();
     const end = performance.now();
-
     expect(config).toBeDefined();
     expect(end - start).toBeLessThan(1000); // Should complete within 1 second
   });
 });
-
 describe('AlgorithmConfig Performance Tests', () => {
   it('should execute within performance thresholds', () => {
     const iterations = 10;
@@ -53,7 +45,6 @@ describe('AlgorithmConfig Performance Tests', () => {
     // Should execute within 100ms on average
     expect(averageTime).toBeLessThan(100);
   });
-
   it('should handle large datasets efficiently', () => {
     const largeConfig = {looking: { enabled: true },listening: { enabled: true },inquiry: { enabled: true },palpation: { enabled: true },calculation: { enabled: true };
     };
@@ -64,7 +55,6 @@ describe('AlgorithmConfig Performance Tests', () => {
     // Should handle large datasets within 1000ms
     expect(endTime - startTime).toBeLessThan(1000);
   });
-
   it('should not cause memory leaks', () => {
     const initialMemory = process.memoryUsage().heapUsed;
     // Execute function multiple times

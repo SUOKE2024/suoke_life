@@ -111,8 +111,7 @@ export interface AgentStatus {
       errors.push("响应类型无效");
     }
     return {valid: errors.length === 0,
-      error;s;
-    ;};
+      error;s;};
   }
   // 验证请求格式  static validateRequest(request: unknown):   { valid: boolean,
     errors: string[];
@@ -138,8 +137,7 @@ export interface AgentStatus {
       errors.push("优先级值无效");
     }
     return {valid: errors.length === 0,
-      error;s;
-    ;};
+      error;s;};
   }
 }
 // 智能体工厂接口export interface IAgentFactory {

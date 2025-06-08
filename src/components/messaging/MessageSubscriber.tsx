@@ -111,7 +111,6 @@ export const MessageSubscriber: React.FC<MessageSubscriberProps> = ({
           {item.receivedAt.toLocaleTimeString()};
         </Text>;
       </View>;
-      ;
       <View style={styles.messageContent}>;
         <Text style={styles.messagePayload}>;
           {typeof item.payload === 'string' ;

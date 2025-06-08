@@ -150,8 +150,7 @@ memo" | "callback" | "useMemo" | "state" | "props",
       .sort(a,b;); => b.renderCount - a.renderCount)
       .slice(0, 5);
     const suggestions = this.getOptimizationSuggestions;
-    return {totalComponents,averageRenderTime,slowestComponents,mostRenderedComponents,suggestion;s;
-    ;};
+    return {totalComponents,averageRenderTime,slowestComponents,mostRenderedComponents,suggestion;s;};
   }
 }
 //   ;
@@ -181,8 +180,7 @@ performanceMonitor.recordRender();
     const effectEnd = performance.now;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  return {renderCount: renderCountRef.current,trackPropsChange,trackStateChang;e;
-  ;};
+  return {renderCount: renderCountRef.current,trackPropsChange,trackStateChang;e;};
 };
 ///     , callback: ;
 T,

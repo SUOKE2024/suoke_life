@@ -28,7 +28,6 @@ interface TabSelectorProps {
 }
 export const TabSelector: React.FC<TabSelectorProps /    > = ({
   // 性能监控;
-;
 const performanceMonitor = usePerformanceMonitor(";TabSelector", {trackRender: true,
     trackMemory: false,
     warnThreshold: 100, // ms };);

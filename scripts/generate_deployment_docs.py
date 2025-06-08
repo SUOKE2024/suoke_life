@@ -21,29 +21,29 @@ logger = logging.getLogger(__name__)
 
 class DeploymentDocGenerator:
     """部署文档生成器"""
-    
+
     def __init__(self, project_root: str):
         self.project_root = Path(project_root)
         self.docs_dir = self.project_root / "docs" / "deployment"
         self.docs_dir.mkdir(parents=True, exist_ok=True)
-        
+
     def generate_all_docs(self) -> bool:
         """生成所有部署文档"""
         logger.info("🚀 开始生成部署文档...")
-        
+
         try:
             self.generate_docker_guide()
             self.generate_k8s_guide()
             self.generate_production_guide()
             self.generate_monitoring_guide()
-            
+
             logger.info("🎉 部署文档生成完成！")
             return True
-            
+
         except Exception as e:
             logger.error(f"❌ 部署文档生成失败: {e}")
             return False
-    
+
     def generate_docker_guide(self):
         """生成Docker部署指南"""
         content = """# Docker 部署指南
@@ -142,10 +142,10 @@ docker-compose restart [service-name]
 
 ```yaml
 volumes:
-  postgres_data:
-  redis_data:
-  mongodb_data:
-  blockchain_data:
+postgres_data:
+redis_data:
+mongodb_data:
+blockchain_data:
 ```
 
 ## 备份与恢复
@@ -158,12 +158,12 @@ volumes:
 ./scripts/backup/restore_all.sh
 ```
 """
-        
+
         with open(self.docs_dir / "docker-guide.md", 'w', encoding='utf-8') as f:
             f.write(content)
-        
+
         logger.info("✅ Docker部署指南生成完成")
-    
+
     def generate_k8s_guide(self):
         """生成Kubernetes部署指南"""
         content = """# Kubernetes 部署指南
@@ -264,19 +264,19 @@ kubectl get deployment xiaoai-service
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: xiaoai-service-hpa
+name: xiaoai-service-hpa
 spec:
-  scaleTargetRef:
+scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
     name: xiaoai-service
-  minReplicas: 2
-  maxReplicas: 10
-  metrics:
-  - type: Resource
+minReplicas: 2
+maxReplicas: 10
+metrics:
+- type: Resource
     resource:
-      name: cpu
-      target:
+    name: cpu
+    target:
         type: Utilization
         averageUtilization: 70
 ```
@@ -348,12 +348,12 @@ kubectl rollout status deployment/xiaoai-service
 kubectl rollout undo deployment/xiaoai-service
 ```
 """
-        
+
         with open(self.docs_dir / "kubernetes-guide.md", 'w', encoding='utf-8') as f:
             f.write(content)
-        
+
         logger.info("✅ Kubernetes部署指南生成完成")
-    
+
     def generate_production_guide(self):
         """生成生产环境部署指南"""
         content = """# 生产环境部署指南
@@ -365,8 +365,8 @@ kubectl rollout undo deployment/xiaoai-service
 │   Load Balancer │    │   API Gateway   │    │  Microservices  │
 │    (Nginx)      │────│   (Kong/Envoy)  │────│   (17 services) │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
-         │                       │                       │
-         │                       │                       │
+        │                       │                       │
+        │                       │                       │
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Monitoring    │    │   Databases     │    │   Message Bus   │
 │ (Prometheus)    │    │ (PostgreSQL)    │    │   (RabbitMQ)    │
@@ -474,12 +474,12 @@ kubectl apply -f k8s/monitoring/logging/
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: deny-all
+name: deny-all
 spec:
-  podSelector: {}
-  policyTypes:
-  - Ingress
-  - Egress
+podSelector: {}
+policyTypes:
+- Ingress
+- Egress
 ```
 
 ### 2. RBAC配置
@@ -488,21 +488,21 @@ spec:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: suoke-service-account
+name: suoke-service-account
 ---
 # 角色绑定
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: suoke-cluster-role-binding
+name: suoke-cluster-role-binding
 subjects:
 - kind: ServiceAccount
-  name: suoke-service-account
-  namespace: suoke-life
+name: suoke-service-account
+namespace: suoke-life
 roleRef:
-  kind: ClusterRole
-  name: cluster-admin
-  apiGroup: rbac.authorization.k8s.io
+kind: ClusterRole
+name: cluster-admin
+apiGroup: rbac.authorization.k8s.io
 ```
 
 ### 3. 密钥管理
@@ -512,8 +512,8 @@ kubectl create secret tls suoke-tls --cert=cert.pem --key=key.pem
 
 # 创建数据库密钥
 kubectl create secret generic db-secrets \
-  --from-literal=postgres-password=secure-password \
-  --from-literal=redis-password=secure-password
+--from-literal=postgres-password=secure-password \
+--from-literal=redis-password=secure-password
 ```
 
 ## 性能优化
@@ -521,10 +521,10 @@ kubectl create secret generic db-secrets \
 ### 1. 资源限制
 ```yaml
 resources:
-  requests:
+requests:
     memory: "512Mi"
     cpu: "250m"
-  limits:
+limits:
     memory: "1Gi"
     cpu: "500m"
 ```
@@ -533,9 +533,9 @@ resources:
 ```yaml
 # Redis配置
 redis:
-  maxmemory: 2gb
-  maxmemory-policy: allkeys-lru
-  save: "900 1 300 10 60 10000"
+maxmemory: 2gb
+maxmemory-policy: allkeys-lru
+save: "900 1 300 10 60 10000"
 ```
 
 ### 3. 数据库优化
@@ -581,14 +581,14 @@ kubectl get secrets --all-namespaces -o yaml > secrets-backup.yaml
 # Prometheus告警规则
 groups:
 - name: suoke-life-alerts
-  rules:
-  - alert: HighCPUUsage
+rules:
+- alert: HighCPUUsage
     expr: cpu_usage_percent > 80
     for: 5m
     labels:
-      severity: warning
+    severity: warning
     annotations:
-      summary: "High CPU usage detected"
+    summary: "High CPU usage detected"
 ```
 
 ## 故障恢复
@@ -631,12 +631,12 @@ kubectl exec -it redis-0 -- redis-cli --rdb dump.rdb
 - 灰度发布
 - 回滚准备
 """
-        
+
         with open(self.docs_dir / "production-guide.md", 'w', encoding='utf-8') as f:
             f.write(content)
-        
+
         logger.info("✅ 生产环境部署指南生成完成")
-    
+
     def generate_monitoring_guide(self):
         """生成监控指南"""
         content = """# 监控运维指南
@@ -648,8 +648,8 @@ kubectl exec -it redis-0 -- redis-cli --rdb dump.rdb
 │   Prometheus    │────│     Grafana     │────│   AlertManager  │
 │   (指标收集)     │    │   (可视化)      │    │   (告警通知)     │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
-         │                       │                       │
-         │                       │                       │
+        │                       │                       │
+        │                       │                       │
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │      ELK        │    │     Jaeger      │    │   Node Exporter │
 │   (日志分析)     │    │   (链路追踪)     │    │   (系统监控)     │
@@ -682,30 +682,30 @@ kubectl exec -it redis-0 -- redis-cli --rdb dump.rdb
 ```yaml
 # prometheus.yml
 global:
-  scrape_interval: 15s
-  evaluation_interval: 15s
+scrape_interval: 15s
+evaluation_interval: 15s
 
 rule_files:
-  - "rules/*.yml"
+- "rules/*.yml"
 
 scrape_configs:
-  - job_name: 'kubernetes-pods'
+- job_name: 'kubernetes-pods'
     kubernetes_sd_configs:
     - role: pod
     relabel_configs:
     - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
-      action: keep
-      regex: true
+    action: keep
+    regex: true
 ```
 
 ### 2. 服务发现
 ```yaml
 # 自动发现Kubernetes服务
 - job_name: 'kubernetes-services'
-  kubernetes_sd_configs:
-  - role: service
-  relabel_configs:
-  - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
+kubernetes_sd_configs:
+- role: service
+relabel_configs:
+- source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
     action: keep
     regex: true
 ```
@@ -737,60 +737,60 @@ scrape_configs:
 # alerts.yml
 groups:
 - name: system-alerts
-  rules:
-  - alert: HighCPUUsage
+rules:
+- alert: HighCPUUsage
     expr: cpu_usage_percent > 80
     for: 5m
     labels:
-      severity: warning
+    severity: warning
     annotations:
-      summary: "CPU使用率过高"
-      description: "{{ $labels.instance }} CPU使用率超过80%"
+    summary: "CPU使用率过高"
+    description: "{{ $labels.instance }} CPU使用率超过80%"
 
-  - alert: HighMemoryUsage
+- alert: HighMemoryUsage
     expr: memory_usage_percent > 85
     for: 5m
     labels:
-      severity: warning
+    severity: warning
     annotations:
-      summary: "内存使用率过高"
-      description: "{{ $labels.instance }} 内存使用率超过85%"
+    summary: "内存使用率过高"
+    description: "{{ $labels.instance }} 内存使用率超过85%"
 
-  - alert: ServiceDown
+- alert: ServiceDown
     expr: up == 0
     for: 1m
     labels:
-      severity: critical
+    severity: critical
     annotations:
-      summary: "服务不可用"
-      description: "{{ $labels.job }} 服务已停止"
+    summary: "服务不可用"
+    description: "{{ $labels.job }} 服务已停止"
 ```
 
 ### 2. 通知配置
 ```yaml
 # alertmanager.yml
 global:
-  smtp_smarthost: 'smtp.gmail.com:587'
-  smtp_from: 'alerts@suoke.life'
+smtp_smarthost: 'smtp.gmail.com:587'
+smtp_from: 'alerts@suoke.life'
 
 route:
-  group_by: ['alertname']
-  group_wait: 10s
-  group_interval: 10s
-  repeat_interval: 1h
-  receiver: 'web.hook'
+group_by: ['alertname']
+group_wait: 10s
+group_interval: 10s
+repeat_interval: 1h
+receiver: 'web.hook'
 
 receivers:
 - name: 'web.hook'
-  email_configs:
-  - to: 'admin@suoke.life'
+email_configs:
+- to: 'admin@suoke.life'
     subject: '索克生活告警: {{ .GroupLabels.alertname }}'
     body: |
-      {{ range .Alerts }}
-      告警: {{ .Annotations.summary }}
-      描述: {{ .Annotations.description }}
-      时间: {{ .StartsAt }}
-      {{ end }}
+    {{ range .Alerts }}
+    告警: {{ .Annotations.summary }}
+    描述: {{ .Annotations.description }}
+    时间: {{ .StartsAt }}
+    {{ end }}
 ```
 
 ## 日志管理
@@ -800,33 +800,33 @@ receivers:
 # filebeat配置
 filebeat.inputs:
 - type: container
-  paths:
+paths:
     - /var/log/containers/*.log
-  processors:
-  - add_kubernetes_metadata:
-      host: ${NODE_NAME}
-      matchers:
-      - logs_path:
-          logs_path: "/var/log/containers/"
+processors:
+- add_kubernetes_metadata:
+    host: ${NODE_NAME}
+    matchers:
+    - logs_path:
+        logs_path: "/var/log/containers/"
 
 output.elasticsearch:
-  hosts: ["elasticsearch:9200"]
+hosts: ["elasticsearch:9200"]
 ```
 
 ### 2. 日志分析
 ```json
 // Elasticsearch索引模板
 {
-  "template": "suoke-logs-*",
-  "mappings": {
+"template": "suoke-logs-*",
+"mappings": {
     "properties": {
-      "@timestamp": {"type": "date"},
-      "level": {"type": "keyword"},
-      "message": {"type": "text"},
-      "service": {"type": "keyword"},
-      "pod": {"type": "keyword"}
+    "@timestamp": {"type": "date"},
+    "level": {"type": "keyword"},
+    "message": {"type": "text"},
+    "service": {"type": "keyword"},
+    "pod": {"type": "keyword"}
     }
-  }
+}
 }
 ```
 
@@ -838,19 +838,19 @@ output.elasticsearch:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: jaeger
+name: jaeger
 spec:
-  replicas: 1
-  selector:
+replicas: 1
+selector:
     matchLabels:
-      app: jaeger
-  template:
+    app: jaeger
+template:
     metadata:
-      labels:
+    labels:
         app: jaeger
     spec:
-      containers:
-      - name: jaeger
+    containers:
+    - name: jaeger
         image: jaegertracing/all-in-one:latest
         ports:
         - containerPort: 16686
@@ -993,23 +993,23 @@ kubectl delete pods --field-selector=status.phase=Succeeded
 - [ ] 安全审计
 - [ ] 灾难恢复演练
 """
-        
+
         with open(self.docs_dir / "monitoring-guide.md", 'w', encoding='utf-8') as f:
             f.write(content)
-        
+
         logger.info("✅ 监控运维指南生成完成")
 
 def main():
     """主函数"""
     project_root = os.getcwd()
-    
+
     logger.info("🚀 启动部署文档生成器")
-    
+
     generator = DeploymentDocGenerator(project_root)
-    
+
     try:
         success = generator.generate_all_docs()
-        
+
         if success:
             logger.info("🎉 部署文档生成完成！")
             logger.info(f"📁 文档目录: {generator.docs_dir}")
@@ -1017,7 +1017,7 @@ def main():
         else:
             logger.warning("⚠️ 部署文档生成失败")
             return 1
-            
+
     except Exception as e:
         logger.error(f"❌ 部署文档生成失败: {e}")
         return 1

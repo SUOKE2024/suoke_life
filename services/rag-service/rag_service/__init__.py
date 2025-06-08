@@ -1,6 +1,7 @@
+from typing import Dict, List, Any, Optional, Union
 
 """
-rag-service - 索克生活平台微服务
+rag - service - 索克生活平台微服务
 """
 
 __version__ = "1.0.0"

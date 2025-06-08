@@ -138,7 +138,6 @@ export const MessageBusScreen: React.FC = () => {
           </Text>;
         </TouchableOpacity>;
       </View>;
-;
       {// 内容区域};
       <View style={styles.content}>;
         {renderTabContent()};

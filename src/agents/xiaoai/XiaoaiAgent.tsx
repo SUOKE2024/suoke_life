@@ -201,8 +201,7 @@ private personality: unknown = {,
       const accessibilityNeeds = {visual: disability.type === "visual",hearing: disability.type === hearing",;
         motor: disability.type === "motor,";
         cognitive: disability.type === "cognitive",preferences: {fontSize: disability.fontSize || large",;
-          highContrast: disability.highContrast || true,voiceOutput: disability.voiceOutput || true,simplifiedInterface: disability.simplifiedInterface || true};
-      ;};
+          highContrast: disability.highContrast || true,voiceOutput: disability.voiceOutput || true,simplifiedInterface: disability.simplifiedInterface || true};};
       const adaptations = await accessibilityServiceClient.adaptInterfaceForAccessibility(accessibilityNe;e;d;s;);
       switch (disability.type) {
         case "visual:"

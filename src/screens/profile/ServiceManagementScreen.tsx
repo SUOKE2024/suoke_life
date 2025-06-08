@@ -24,16 +24,13 @@ interface serviceInfo {
   status: "starting | "running" | stopping" | "stopped | "error;
   lastAction?: string
 };
-
 export const serviceManagementScreen: React.FC  = () => {};
-
 const performanceMonitor = usePerformanceMonitor(serviceManagementScreen", { ";
     trackRender: true,trackMemory: true,warnThreshold: 50,  };);
   const navigation = useNavigation;
   const [loading, setLoading] = useState<boolean>(fals;e;);
   const [services, setservices] = useState<serviceInfo[] />([;];);/      const [autoStart, setAutoStart] = useState<boolean>(fals;e;);
   const initializeservices = useCallback(); => {};
-
 const servicesList: serviceInfo[] = [ { /,
   id: "xiaoai,",
         name: "小艾服务",
@@ -148,8 +145,7 @@ const servicesList: serviceInfo[] = [ { /,
       const checkPromises = updatedservices.map(async (service;) => {}
         try {
           const response = await fetch(`${service.baseUrl}/health`, {/                method: "GET",headers: {
-              Accept": "application/json,/                },signal: controller.sign;a;l;
-          ;};);
+              Accept": "application/json,/                },signal: controller.sign;a;l;};);
           return {id: service.id,isRunning: response.ok,status: response.ok ? "running" : stopped" as "running | "stopped"};
         } catch (error) {
           return {id: service.id,isRunning: false,status: stopped" as "stopped};
@@ -158,7 +154,6 @@ const servicesList: serviceInfo[] = [ { /,
       const results = await Promise.all(checkPromis;e;s;);
       clearTimeout(timeoutId);
       results.forEach(result => {};
-
 const index = updatedservices.findIndex(s => s.id === result.id;);
         if (index !== -1) {
           updatedservices[index] = {
@@ -174,19 +169,16 @@ const index = updatedservices.findIndex(s => s.id === result.id;);
     } finally {
       setLoading(false);
     };
-
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [services]);
   useEffect(); => {};
-
 const effectStart = performance.now();
     initializeservices();
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [initializeservices]);
   const startservice = useCallback(async (serviceId: strin;g;); => {};
-
 const service = services.find(s => s.id === serviceI;d;);
     if (!service) retu;r;n;
     setservices(prev => prev.map(s => {}
@@ -216,12 +208,10 @@ const service = services.find(s => s.id === serviceI;d;);
       );)
       Alert.alert("错误, `启动${service.name}失败`);"
     };
-
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [services]);
   const stopservice = useCallback(async (serviceId: strin;g;); => {};
-
 const service = services.find(s => s.id === serviceI;d;);
     if (!service) retu;r;n;
     setservices(prev => prev.map(s => {}
@@ -251,7 +241,6 @@ const service = services.find(s => s.id === serviceI;d;);
       );)
       Alert.alert("错误, `停止${service.name}失败`);"
     };
-
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [services]);
@@ -319,7 +308,6 @@ case "stopped: return colors.textSeconda;r;y;"
 case "error": return colors.error;
       default: return colors.textSeconda;r;y;
     };
-
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [])
@@ -332,7 +320,6 @@ const effectEnd = performance.now();
       case error": return "错;误;
       default: return "未;知";
     };
-
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
@@ -400,7 +387,6 @@ style={[styles.globalButton, styles.stopAllButton]}
         {///              {groupedservices.diagnosis.map(renderserviceCard)}
         </View>/      </ScrollView>/    </View>/      )
 };
-
 const styles = StyleSheet.create({container: {,
   flex: 1,
     backgroundColor: colors.background;

@@ -147,16 +147,14 @@ const encryptedData = await crypto.subtle.encrypt(;
       name: "AES-GCM",
       iv: iv;
             },
-            key,dataBuf;f;e;r;
-          ;);
+            key,dataBuf;f;e;r;);
           return {encryptedData,iv: iv.buffer,tag: encryptedData.slice(-16),  ;};
         } catch (error) {
           await errorHandler.handleError(
             error as Error,
             {
               keyId;
-            } as an;y;
-          ;);
+            } as an;y;);
           throw error;
         }
       });
@@ -177,8 +175,7 @@ const performanceMonitor = usePerformanceMonitor(SecurityManager", {"
       name: "AES-GCM",
       iv: iv;
             },
-            key,encryptedD;a;t;a;
-          ;);
+            key,encryptedD;a;t;a;);
           const decoder = new TextDecoder;
           return decoder.decode(decryptedDat;a;);
         } catch (error) {
@@ -186,8 +183,7 @@ const performanceMonitor = usePerformanceMonitor(SecurityManager", {"
             error as Error,
             {
               keyId;
-            } as an;y;
-          ;);
+            } as an;y;);
           throw error;
         }
       }
@@ -216,14 +212,12 @@ const performanceMonitor = usePerformanceMonitor(SecurityManager", {"
         });
         return {
       type: "DENY",
-      message: "访问被拒绝：没有访问权限",notifyAdmin: tru;e;
-        ;};
+      message: "访问被拒绝：没有访问权限",notifyAdmin: tru;e;};
       }
       if (resourceACL.expiresAt && Date.now() > resourceACL.expiresAt) {
         return {
       type: "DENY",
-      message: "访问被拒绝：权限已过期",notifyAdmin: true;
-        ;};
+      message: "访问被拒绝：权限已过期",notifyAdmin: true;};
       }
       if (
         !resourceACL.permissions.includes(permission) &&
@@ -231,8 +225,7 @@ const performanceMonitor = usePerformanceMonitor(SecurityManager", {"
       ) {
         return {
       type: "DENY",
-      message: "访问被拒绝：权限不足",notifyAdmin: tru;e;
-        ;};
+      message: "访问被拒绝：权限不足",notifyAdmin: tru;e;};
       }
       const policyResult = this.applySecurityPolicies({userId,resource,action: permission,timestamp: Date.now(),...context;};)
       if (policyResult.type === "DENY" || policyResult.type === "BLOCK") {
@@ -254,8 +247,7 @@ const performanceMonitor = usePerformanceMonitor(SecurityManager", {"
     } catch (error) {
       return {
       type: "DENY",
-      message: "访问控制检查失败",notifyAdmin: tru;e;
-      ;};
+      message: "访问控制检查失败",notifyAdmin: tru;e;};
     }
   }
   // 授予访问权限  public grantAccess(userId: string,
@@ -377,8 +369,7 @@ const performanceMonitor = usePerformanceMonitor(SecurityManager", {"
         { rateLimitExceeded: true, limit, count: rateLimit.count}
       ]);
     }
-    return {allowed,remaining: Math.max(0, limit - rateLimit.count),resetTime: rateLimit.resetTim;e;
-    ;};
+    return {allowed,remaining: Math.max(0, limit - rateLimit.count),resetTime: rateLimit.resetTim;e;};
   }
   // 生成安全令牌  public generateSecureToken(userId: string,
     expiresInMs: number = 24 * 60 * 60 * 1000  ): string  {
@@ -408,8 +399,7 @@ const performanceMonitor = usePerformanceMonitor(SecurityManager", {"
       return { valid: fal;s;e  ; };
     }
     return {valid: true,
-      userId: session.userI;d;
-    ;};
+      userId: session.userI;d;};
   }
   // 撤销令牌  public revokeToken(token: string): boolean  {
     const session = this.sessionTokens.get(toke;n;);
@@ -675,8 +665,7 @@ this.logAuditEvent({
           condition: (context) => {}
             / 记录渲染性能/     performanceMonitor.recordRender();
                         return (;
-              context.action === "login" && context.metadata?.failedAttempts > ;5;
-            ;)
+              context.action === "login" && context.metadata?.failedAttempts > ;5;)
           },
           action: (context) => {}
             this.detectThreat(
@@ -687,8 +676,7 @@ this.logAuditEvent({
             );
             return {
       type: "BLOCK",
-      message: "检测到可疑登录活动",notifyAdmin: tru;e;
-            ;}
+      message: "检测到可疑登录活动",notifyAdmin: tru;e;}
           },
           severity: "HIGH",
           isEnabled: true;

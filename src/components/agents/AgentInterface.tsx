@@ -243,7 +243,6 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
     <Animated.View style={[styles.container, { opacity: fadeAnim }, style]}>;
       {// 智能体选择器};
       {renderAgentSelector()};
-;
       {// 消息列表};
       <ScrollView;
         ref={scrollViewRef};

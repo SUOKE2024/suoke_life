@@ -1,281 +1,53 @@
-name: 索克生活 CI/CD 流水线
+name: Suoke Life CI
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
-
-env:
-  NODE_VERSION: '20'
-  PYTHON_VERSION: '3.13'
+    branches: [main, develop]
 
 jobs:
-  # 前端测试和构建
-  frontend-test:
-    name: 前端测试
+  quality-check:
     runs-on: ubuntu-latest
-    
-    steps:
-    - name: 检出代码
-      uses: actions/checkout@v4
-      
-    - name: 设置 Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-        cache: 'npm'
-        
-    - name: 安装依赖
-      run: npm ci
-      
-    - name: 运行 ESLint
-      run: npm run lint
-      
-    - name: 运行 TypeScript 检查
-      run: npm run type-check
-      
-    - name: 运行单元测试
-      run: npm test -- --coverage --watchAll=false
-      
-    - name: 上传测试覆盖率
-      uses: codecov/codecov-action@v3
-      with:
-        file: ./coverage/lcov.info
-        flags: frontend
-        name: frontend-coverage
-        
-    - name: 构建应用
-      run: npm run build
-      
-    - name: 缓存构建产物
-      uses: actions/cache@v3
-      with:
-        path: |
-          ./dist
-          ./build
-        key: frontend-build-${{ github.sha }}
-
-  # 后端服务测试
-  backend-test:
-    name: 后端服务测试
-    runs-on: ubuntu-latest
-    
     strategy:
       matrix:
-        service: 
-          - auth-service
-          - user-service
-          - health-data-service
-          - xiaoai-service
-          - xiaoke-service
-          - laoke-service
-          - soer-service
+        python-version: [3.8, 3.9, '3.10']
     
     steps:
-    - name: 检出代码
-      uses: actions/checkout@v4
-      
-    - name: 设置 Python
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
-        python-version: ${{ env.PYTHON_VERSION }}
-        
-    - name: 安装 UV
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install dependencies
       run: |
-        curl -LsSf https://astral.sh/uv/install.sh | sh
-        echo "$HOME/.cargo/bin" >> $GITHUB_PATH
-        
-    - name: 检查服务目录
-      run: |
-        if [ -d "services/${{ matrix.service }}" ]; then
-          echo "Testing service: ${{ matrix.service }}"
-          cd services/${{ matrix.service }}
-        elif [ -d "services/agent-services/${{ matrix.service }}" ]; then
-          echo "Testing agent service: ${{ matrix.service }}"
-          cd services/agent-services/${{ matrix.service }}
-        else
-          echo "Service directory not found: ${{ matrix.service }}"
-          exit 1
-        fi
-        
-    - name: 安装依赖
-      run: |
-        SERVICE_DIR=""
-        if [ -d "services/${{ matrix.service }}" ]; then
-          SERVICE_DIR="services/${{ matrix.service }}"
-        elif [ -d "services/agent-services/${{ matrix.service }}" ]; then
-          SERVICE_DIR="services/agent-services/${{ matrix.service }}"
-        fi
-        
-        if [ -n "$SERVICE_DIR" ]; then
-          cd "$SERVICE_DIR"
-          if [ -f "pyproject.toml" ]; then
-            uv sync
-          elif [ -f "requirements.txt" ]; then
-            uv pip install -r requirements.txt
-          fi
-        fi
-        
-    - name: 运行代码检查
-      run: |
-        SERVICE_DIR=""
-        if [ -d "services/${{ matrix.service }}" ]; then
-          SERVICE_DIR="services/${{ matrix.service }}"
-        elif [ -d "services/agent-services/${{ matrix.service }}" ]; then
-          SERVICE_DIR="services/agent-services/${{ matrix.service }}"
-        fi
-        
-        if [ -n "$SERVICE_DIR" ]; then
-          cd "$SERVICE_DIR"
-          if [ -f "pyproject.toml" ]; then
-            uv run ruff check . || true
-            uv run mypy . || true
-          fi
-        fi
-        
-    - name: 运行测试
-      run: |
-        SERVICE_DIR=""
-        if [ -d "services/${{ matrix.service }}" ]; then
-          SERVICE_DIR="services/${{ matrix.service }}"
-        elif [ -d "services/agent-services/${{ matrix.service }}" ]; then
-          SERVICE_DIR="services/agent-services/${{ matrix.service }}"
-        fi
-        
-        if [ -n "$SERVICE_DIR" ]; then
-          cd "$SERVICE_DIR"
-          if [ -f "pyproject.toml" ]; then
-            uv run pytest tests/ --cov=. --cov-report=xml || true
-          elif [ -d "tests" ]; then
-            python -m pytest tests/ || true
-          fi
-        fi
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Run quality checks
+      run: python scripts/quality_checker.py
+    
+    - name: Run tests
+      run: pytest --cov=src --cov-report=xml
+    
+    - name: Upload coverage
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
 
-  # 安全扫描
   security-scan:
-    name: 安全扫描
     runs-on: ubuntu-latest
-    
     steps:
-    - name: 检出代码
-      uses: actions/checkout@v4
-      
-    - name: 运行 Trivy 漏洞扫描
-      uses: aquasecurity/trivy-action@master
-      with:
-        scan-type: 'fs'
-        scan-ref: '.'
-        format: 'sarif'
-        output: 'trivy-results.sarif'
-        
-    - name: 上传 Trivy 扫描结果
-      uses: github/codeql-action/upload-sarif@v2
-      if: always()
-      with:
-        sarif_file: 'trivy-results.sarif'
-        
-    - name: 运行 npm audit
+    - uses: actions/checkout@v3
+    
+    - name: Run security scan
       run: |
-        npm audit --audit-level=high || true
-
-  # Docker 构建
-  docker-build:
-    name: Docker 构建
-    runs-on: ubuntu-latest
-    needs: [frontend-test, backend-test]
-    if: github.event_name == 'push'
+        pip install safety
+        safety check
     
-    steps:
-    - name: 检出代码
-      uses: actions/checkout@v4
-      
-    - name: 设置 Docker Buildx
-      uses: docker/setup-buildx-action@v3
-      
-    - name: 登录 Docker Hub
-      if: github.ref == 'refs/heads/main'
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-        
-    - name: 构建并推送 Docker 镜像
-      uses: docker/build-push-action@v5
-      with:
-        context: .
-        file: ./Dockerfile.optimized
-        push: ${{ github.ref == 'refs/heads/main' }}
-        tags: |
-          suokelife/app:latest
-          suokelife/app:${{ github.sha }}
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
-
-  # 部署到测试环境
-  deploy-staging:
-    name: 部署到测试环境
-    runs-on: ubuntu-latest
-    needs: [docker-build]
-    if: github.ref == 'refs/heads/develop'
-    environment: staging
-    
-    steps:
-    - name: 检出代码
-      uses: actions/checkout@v4
-      
-    - name: 部署到 Kubernetes
+    - name: Run dependency audit
       run: |
-        echo "部署到测试环境..."
-        # 这里添加实际的部署脚本
-        
-  # 部署到生产环境
-  deploy-production:
-    name: 部署到生产环境
-    runs-on: ubuntu-latest
-    needs: [docker-build, security-scan]
-    if: github.ref == 'refs/heads/main'
-    environment: production
-    
-    steps:
-    - name: 检出代码
-      uses: actions/checkout@v4
-      
-    - name: 部署到生产环境
-      run: |
-        echo "部署到生产环境..."
-        # 这里添加实际的部署脚本
-
-  # 性能测试
-  performance-test:
-    name: 性能测试
-    runs-on: ubuntu-latest
-    needs: [deploy-staging]
-    if: github.ref == 'refs/heads/develop'
-    
-    steps:
-    - name: 检出代码
-      uses: actions/checkout@v4
-      
-    - name: 运行性能测试
-      run: |
-        echo "运行性能测试..."
-        # 这里添加性能测试脚本
-        
-  # 通知
-  notify:
-    name: 通知
-    runs-on: ubuntu-latest
-    needs: [frontend-test, backend-test, security-scan]
-    if: always()
-    
-    steps:
-    - name: 发送通知
-      run: |
-        if [ "${{ needs.frontend-test.result }}" == "success" ] && \
-           [ "${{ needs.backend-test.result }}" == "success" ] && \
-           [ "${{ needs.security-scan.result }}" == "success" ]; then
-          echo "✅ 所有测试通过！"
-        else
-          echo "❌ 部分测试失败，请检查日志"
-        fi 
+        pip install pip-audit
+        pip-audit

@@ -177,8 +177,7 @@ const performanceMonitor = usePerformanceMonitor(websocketManager", {"
   }
   // 获取消息队列统计  getQueueStats(): { size: number, maxSize: number} {
     return {size: this.messageQueue.length,
-      maxSize: this.config.messageQueue.maxSiz;e;
-    ;};
+      maxSize: this.config.messageQueue.maxSiz;e;};
   }
   // 设置事件监听器  private setupEventListeners(): void {
     if (!this.ws) retu;r;n;
@@ -331,8 +330,7 @@ this.emit("pong", { latency: this.latency});
           this.config.reconnect.backoffMultiplier,
           this.reconnectAttempts;
         ),
-      this.config.reconnect.maxDela;y;
-    ;)
+      this.config.reconnect.maxDela;y;)
     this.setState("reconnecting");
     this.emit("reconnecting", { attempt: this.reconnectAttempts + 1, delay });
     this.reconnectTimer = setTimeout(); => {}

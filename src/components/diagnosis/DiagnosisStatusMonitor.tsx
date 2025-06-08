@@ -151,7 +151,6 @@ export default React.memo(function DiagnosisStatusMonitor({
             {Math.round(performanceMetrics.successRate * 100)}%;
           </Text>;
         </View>;
-        ;
         <View style={styles.metricItem}>;
           <Text style={styles.metricLabel}>总会话数</Text>;
           <Text style={styles.metricValue}>;
@@ -203,7 +202,6 @@ export default React.memo(function DiagnosisStatusMonitor({
           </Text>
         </View>;
       </TouchableOpacity>;
-;
       {// 详细信息};
       {showDetails && (;
         <Animated.View ;

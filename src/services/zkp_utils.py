@@ -44,26 +44,26 @@ def generate_health_zkp_real(user_id: str, health_data: dict) -> dict:
     import hashlib
     import json
     import time
-    
+
     # 构建证明电路的公共输入
     public_inputs = {
         "user_id_hash": hashlib.sha256(user_id.encode()).hexdigest()[:16],
         "timestamp": int(time.time()),
         "health_score_threshold": 80
     }
-    
+
     # 私有输入（不会暴露的敏感数据）
     private_inputs = {
         "actual_health_score": health_data.get("score", 0),
         "detailed_metrics": health_data.get("metrics", {})
     }
-    
+
     # 生成零知识证明（模拟实现）
     # 实际应使用：proof = circom.generate_proof(circuit, public_inputs, private_inputs)
     proof_hash = hashlib.sha256(
         json.dumps({**public_inputs, "proof_valid": True}, sort_keys=True).encode()
     ).hexdigest()
-    
+
     return {
         "proof": proof_hash,
         "public_inputs": public_inputs,
@@ -80,19 +80,19 @@ def verify_health_zkp_real(proof: dict) -> bool:
         required_fields = ["proof", "public_inputs", "verification_key", "circuit_id"]
         if not all(field in proof for field in required_fields):
             return False
-        
+
         # 验证时间戳有效性（24小时内）
         timestamp = proof["public_inputs"].get("timestamp", 0)
         current_time = int(time.time())
         if current_time - timestamp > 86400:  # 24小时
             return False
-        
+
         # 验证proof哈希（模拟实现）
         # 实际应使用：return circom.verify_proof(proof, verification_key)
         expected_hash = hashlib.sha256(
             json.dumps({**proof["public_inputs"], "proof_valid": True}, sort_keys=True).encode()
         ).hexdigest()
-        
+
         return proof["proof"] == expected_hash
     except Exception:
         return False
@@ -110,13 +110,13 @@ def store_zkp_on_chain_real(proof: dict):
             "timestamp": int(time.time()),
             "contract_method": "storeHealthProof"
         }
-        
+
         # 模拟区块链交易
         # 实际应使用：tx_hash = web3.eth.sendTransaction(transaction_data)
         tx_hash = hashlib.sha256(
             json.dumps(transaction_data, sort_keys=True).encode()
         ).hexdigest()
-        
+
         return {
             "success": True,
             "transaction_hash": tx_hash,

@@ -107,7 +107,6 @@ const ECO_SERVICES: EcoService[] = [;
 ];
 export const EcoLifestyleNavigator: React.FC<EcoLifestyleNavigatorProps /    > = ({
   // 性能监控;
-;
 const performanceMonitor = usePerformanceMonitor("EcoLifestyleNavigator", {trackRender: true,
     trackMemory: true,warnThreshold: 50, // ms };);
   visible,

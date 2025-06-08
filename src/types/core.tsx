@@ -16,7 +16,6 @@ id: string,
 }
 page: number,
 };
-;
   limit: number;
   sortBy?: string;
   sortOrder?: "asc" | "desc"}
@@ -54,7 +53,6 @@ id: string,
   recommendations: string[],
   timestamp: Date}
 //  ;
-;
   email: string;
   avatar?: string,
   preferences: UserPreferences,

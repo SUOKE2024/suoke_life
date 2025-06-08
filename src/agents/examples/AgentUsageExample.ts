@@ -29,8 +29,7 @@ export class AgentUsageExample  { 1. 创建小艾智能体 // const agentFactory
       userId: "user123",
       serviceType: "health_subscription",parameters: {
       plan: "premium",
-      duration: "monthly"};
-    ;};);
+      duration: "monthly"};};);
     }
   // 运行所有示例  public static async runAllExamples() {
     try {

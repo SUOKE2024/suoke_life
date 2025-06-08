@@ -134,13 +134,11 @@ const StatusCard: React.FC<StatusCardProps> = ({
           )};
         </View>;
       </View>;
-;
       {status.status === "unhealthy" && onRestart && (;
         <TouchableOpacity style={styles.restartButton} onPress={onRestart}>;
           <Text style={styles.restartButtonText}>重启</Text>;
         </TouchableOpacity>;
       )};
-;
       <Text style={styles.lastCheck}>;
         最后检查: {status.lastCheck.toLocaleTimeString()};
       </Text>;
@@ -278,7 +276,6 @@ export const AgentMonitor: React.FC<AgentMonitorProps> = ({
           </View>;
           <View style={[styles.statusIndicator, { backgroundColor: getStatusColor(agent.status) }]} />;
         </View>;
-;
         <View style={styles.metricsContainer}>;
           <View style={styles.metricRow}>;
             <Text style={styles.metricLabel}>负载:</Text>;
@@ -381,9 +378,7 @@ export const AgentMonitor: React.FC<AgentMonitorProps> = ({
           最后更新: {state.lastUpdate.toLocaleTimeString()};
         </Text>;
       </View>;
-;
       {renderCollaborationStats()};
-;
       <View style={styles.agentsContainer}>;
         <Text style={styles.sectionTitle}>智能体状态</Text>;
         {state.isLoading ? (;

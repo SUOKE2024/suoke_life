@@ -174,7 +174,6 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
           <Text style={styles.addButtonText}>+ 添加数据</Text>;
         </TouchableOpacity>;
       </View>;
-;
       <ScrollView;
         style={styles.scrollView};
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />;

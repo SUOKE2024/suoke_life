@@ -1,5 +1,4 @@
 import React from 'react';
-
 describe('offlineManager', () => {
   beforeEach(() => {
     jest.clearAllMocks();

@@ -18,7 +18,6 @@ API服务配置接口 * interface ApiServiceConfig {
     stressLevel: number,
     activityLevel: number,
     nutritionScore: number};
-
 constitution: { type: string,
     percentage: number,
     description: string}[]
@@ -103,7 +102,6 @@ constitution: { type: string,
     constitution?: string
 }
 };
-
 interface KnowledgeResult {
   id: string;
   title: string;
@@ -129,7 +127,6 @@ interface KnowledgeResult {
   errorCount: number;
   userSatisfaction: number;
 };
-
 export class ApiIntegrationService  {private eventEmitter: EventEmitter;
   private config: ApiServiceConfig;
 constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
@@ -151,8 +148,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
   async login(credentials: { username: string, password: string}) {
     try {
       const response = await authService.login({email: credentials.username,
-        password: credentials.passwo;r;d;
-      ;};);
+        password: credentials.passwo;r;d;};);
       this.eventEmitter.emit("api: login:success", response);
       return respon;s;e;
     } catch (error) {
@@ -187,8 +183,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
   async getHealthData(userId: string,
     timeRange?:  { start: string, end: string}): Promise<HealthData[] /    >  {
     try {
-      const response = await apiClient.get("/health-data", {/            userId,...timeRan;g;e;
-      ;};);
+      const response = await apiClient.get("/health-data", {/            userId,...timeRan;g;e;};);
       return response.da;t;a;
     } catch (error) {
       throw err;o;r;
@@ -205,8 +200,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
   }
   async getHealthMetrics(userId: string, metric: string, period: string) {
     try {
-      const response = await apiClient.get(`/health-data/metrics/${metric}`, {/            userId,peri;o;d;
-      ;};);
+      const response = await apiClient.get(`/health-data/metrics/${metric}`, {/            userId,peri;o;d;};);
       return response.da;t;a;
     } catch (error) {
       throw err;o;r;
@@ -216,8 +210,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
     userId: string,
     format: "json" | "csv" | "pdf" = "json") {
     try {
-      const response = await apiClient.get(`/health-data/export`, {/            userId,form;a;t;
-      ;};);
+      const response = await apiClient.get(`/health-data/export`, {/            userId,form;a;t;};);
       return response.da;t;a;
     } catch (error) {
       throw error;
@@ -258,8 +251,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
     timeRange?:  { start: string, end: string}) {
     try {
       const response = await apiClient.get(;
-        `/agents/${agentId}/performance`,/            timeRa;n;g;e;
-      ;);
+        `/agents/${agentId}/performance`,/            timeRa;n;g;e;);
       return response.da;t;a;
     } catch (error) {
       throw error;
@@ -268,8 +260,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
   async updateAgentSettings(agentId: string, settings: unknown) {
     try {
       const response = await apiClient.put(;
-        `/agents/${agentId}/settings`,/            setti;n;g;s;
-      ;);
+        `/agents/${agentId}/settings`,/            setti;n;g;s;);
       this.eventEmitter.emit("agent: settings:updated", { agentId, settings });
       return response.da;t;a;
     } catch (error) {
@@ -289,8 +280,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
   async getDiagnosisHistory(userId: string,
     limit: number = 10;): Promise<DiagnosisResult[] /    >  {
     try {
-      const response = await apiClient.get("/diagnosis/history", {/            userId,lim;i;t;
-      ;};);
+      const response = await apiClient.get("/diagnosis/history", {/            userId,lim;i;t;};);
       return response.da;t;a;
     } catch (error) {
       throw error;
@@ -321,8 +311,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
     settings: Partial<UserSettings />/);: Promise<UserSettings /    >  {
     try {
       const response = await apiClient.put(;
-        `/users/${userId}/settings`,/            setti;n;g;s;
-      ;);
+        `/users/${userId}/settings`,/            setti;n;g;s;);
       this.eventEmitter.emit("user: settings:updated", {
         userId,
         settings: response.data});
@@ -462,8 +451,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
   async updateAccessibilitySettings(userId: string, settings: unknown) {
     try {
       const response = await apiClient.put(;
-        `/accessibility/settings/${userId}`,/            setti;n;g;s;
-      ;);
+        `/accessibility/settings/${userId}`,/            setti;n;g;s;);
       this.eventEmitter.emit("accessibility: settings:updated", {
         userId,
         settings;
@@ -595,8 +583,7 @@ const performanceMonitor = usePerformanceMonitor(ApiIntegrationService", {"
         if (result.status === "fulfilled") {
           return result.val;u;e;
         } else {
-          return {name: requests[index].name,success: false,error: result.reaso;n;
-          ;};
+          return {name: requests[index].name,success: false,error: result.reaso;n;};
         }
       });
     } catch (error) {

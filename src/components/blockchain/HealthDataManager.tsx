@@ -72,12 +72,10 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
         <Text style={styles.recordLabel}>交易ID:</Text>
         <Text style={styles.recordValue}>{item.transactionId.slice(0, 16)}...</Text>
       </View>;
-      ;
       <View style={styles.recordContent}>;
         <Text style={styles.recordLabel}>数据哈希:</Text>;
         <Text style={styles.recordValue}>{formatDataHash(item.dataHash)}</Text>;
       </View>;
-;
       <View style={styles.recordActions}>;
         <TouchableOpacity;
           style={styles.verifyButton};
@@ -98,7 +96,6 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
           全部 ({records.length});
         </Text>;
       </TouchableOpacity>;
-      ;
       {Object.entries(dataTypeStats).map(([type, count]) => (;
         <TouchableOpacity;
           key={type};
@@ -174,14 +171,12 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
           </View>
         }
       />;
-;
       {// 添加数据模态框};
       <AddDataModal;
         visible={showAddModal};
         onClose={() => setShowAddModal(false)};
         onSubmit={handleStoreData};
       />;
-;
       {// 记录详情模态框};
       <RecordDetailModal;
         record={selectedRecord};
@@ -256,7 +251,6 @@ const AddDataModal: React.FC<{,
               numberOfLines={4};
             />;
           </View>;
-;
           <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>;
             <Text style={styles.submitButtonText}>存储到区块链</Text>;
           </TouchableOpacity>;
@@ -312,7 +306,6 @@ const RecordDetailModal: React.FC<{,
               {JSON.stringify(record.metadata, null, 2)};
             </Text>;
           </View>;
-;
           <TouchableOpacity;
             style={styles.verifyButton};
             onPress={() => onVerify(record)};

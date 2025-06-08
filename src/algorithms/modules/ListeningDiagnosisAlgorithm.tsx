@@ -140,8 +140,7 @@ export interface UserProfile {
       stage: "analysis",
       progress: 0.6});
       const analyses = await this.performAnalyses(;
-        processedData,features,userProf;i;l;e;
-      ;);
+        processedData,features,userProf;i;l;e;);
       this.emit("algorithm:progress", {
       stage: "integration",
       progress: 0.8});
@@ -182,16 +181,15 @@ export interface UserProfile {
     const denoised = await this.denoiseAudio(aud;i;o;);
     const normalized = await this.normalizeAudio(denois;e;d;);
     const segmented = await this.segmentAudio(normalized, ty;p;e;);
-    return {original: audio,processed: segmented,type,metadata: {originalDuration: audio.duration,processedDuration: segmented.duration,processingTime: Date.now()};
-    ;};
+    return {original: audio,processed: segmented,type,metadata: {originalDuration: audio.duration,processedDuration: segmented.duration,processingTime: Date.now()};};
   }
   ///    >  {
     const features: ListeningFeatures = {voice: {,
   pitch: 0,
         volume: 0,
-        tone: ",,
+        tone: ",
         clarity: ","
-        rhythm: ",,
+        rhythm: ",
         emotion: ""
       },
       breathing: { rate: 0, depth: ", rhythm: ", sound: ", effort: "},
@@ -199,18 +197,15 @@ export interface UserProfile {
     };
     if (data.voiceRecording) {
       features.voice = await this.voiceAnalyzer.extractFeatures(
-        data.voiceRecording;
-      ;);
+        data.voiceRecording;);
     }
     if (data.breathingRecording) {
       features.breathing = await this.breathingAnalyzer.extractFeatures(
-        data.breathingRecording;
-      ;);
+        data.breathingRecording;);
     }
     if (data.coughRecording) {
       features.cough = await this.coughAnalyzer.extractFeatures(
-        data.coughRecording;
-      ;);
+        data.coughRecording;);
     }
     return featur;e;s;
   }
@@ -222,20 +217,17 @@ export interface UserProfile {
     if (data.voiceRecording) {
       results.voiceAnalysis = await this.voiceAnalyzer.analyze(
         features.voice,
-        userProfile;
-      ;);
+        userProfile;);
     }
     if (data.breathingRecording) {
       results.breathingAnalysis = await this.breathingAnalyzer.analyze(
         features.breathing,
-        userProfile;
-      ;);
+        userProfile;);
     }
     if (data.coughRecording) {
       results.coughAnalysis = await this.coughAnalyzer.analyze(
         features.cough,
-        userProfile;
-      ;);
+        userProfile;);
     }
     return resul;t;s;
   }
@@ -243,8 +235,7 @@ export interface UserProfile {
     analyses: AnalysisResults);: Promise<ListeningResult /    >  {
     const confidence = this.calculateOverallConfidence(analyses;);
     const analysis = await this.generateComprehensiveAnalysis(analys;e;s;);
-    return {confidence,features,analysis,voiceAnalysis: analyses.voiceAnalysis,breathingAnalysis: analyses.breathingAnalysis,coughAnalysis: analyses.coughAnalysi;s;
-    ;};
+    return {confidence,features,analysis,voiceAnalysis: analyses.voiceAnalysis,breathingAnalysis: analyses.breathingAnalysis,coughAnalysis: analyses.coughAnalysi;s;};
   }
   // 计算整体置信度  private calculateOverallConfidence(analyses: AnalysisResults): number  {
     const confidences: number[] = [];

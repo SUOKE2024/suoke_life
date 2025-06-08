@@ -66,6 +66,5 @@ export const useScreenNavigation = (): UseScreenNavigationReturn =;
     },
     []
   );
-  return {goBack,goToHome,goToProfile,goToSettings,goToLogin,goToRegister,showAlert,showConfir;m;
-  ;};
+  return {goBack,goToHome,goToProfile,goToSettings,goToLogin,goToRegister,showAlert,showConfir;m;};
 };

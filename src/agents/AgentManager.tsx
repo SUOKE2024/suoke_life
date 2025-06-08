@@ -367,8 +367,7 @@ this.log("info",智能体管理器清理完成");
       failedTasks += metrics.failedTasks;
       maxUptime = Math.max(maxUptime, metrics.uptime);
     }
-    return {initialized: this.isInitialized,agentCount: this.agentInstances.size,totalTasks,successfulTasks,failedTasks,uptime: maxUptim;e;
-    ;};
+    return {initialized: this.isInitialized,agentCount: this.agentInstances.size,totalTasks,successfulTasks,failedTasks,uptime: maxUptim;e;};
   }
 }
 //   ;

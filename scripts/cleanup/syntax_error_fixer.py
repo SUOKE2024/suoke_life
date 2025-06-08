@@ -22,21 +22,21 @@ class SyntaxErrorFixer:
         self.project_root = Path(project_root)
         self.fixed_files = []
         self.failed_files = []
-        
+
     def fix_python_syntax_errors(self) -> Dict:
         """修复Python语法错误"""
         print("🐍 修复Python语法错误...")
-        
+
         python_files = list(self.project_root.rglob("*.py"))
         python_files = [f for f in python_files if not self._should_skip_file(f)]
-        
+
         syntax_errors = []
-        
+
         for py_file in python_files:
             try:
                 with open(py_file, 'r', encoding='utf-8') as f:
                     content = f.read()
-                
+
                 # 尝试解析AST
                 try:
                     ast.parse(content)
@@ -53,28 +53,28 @@ class SyntaxErrorFixer:
                             'error': e.msg
                         })
                         print(f"  ❌ 修复失败: {py_file}")
-                        
+
             except Exception as e:
                 print(f"  ⚠️  处理文件时出错 {py_file}: {e}")
-        
+
         return {
             'fixed_files': self.fixed_files,
             'failed_files': self.failed_files,
             'syntax_errors': syntax_errors
         }
-    
+
     def _fix_python_file(self, file_path: Path, content: str, error: SyntaxError) -> bool:
         """修复单个Python文件的语法错误"""
         lines = content.split('\n')
         error_line_idx = error.lineno - 1
-        
+
         if error_line_idx >= len(lines):
             return False
-        
+
         error_line = lines[error_line_idx]
         original_line = error_line
         fixed = False
-        
+
         # 常见语法错误修复模式
         fixes = [
             # 修复缺失的冒号
@@ -90,17 +90,17 @@ class SyntaxErrorFixer:
             # 修复缩进问题（简单情况）
             (r'^(\s*)([^\s].*)', lambda m: '    ' + m.group(2) if len(m.group(1)) % 4 != 0 else m.group(0)),
         ]
-        
+
         for pattern, replacement in fixes:
             if isinstance(replacement, str):
                 new_line = re.sub(pattern, replacement, error_line)
             else:
                 new_line = re.sub(pattern, replacement, error_line)
-            
+
             if new_line != error_line:
                 lines[error_line_idx] = new_line
                 new_content = '\n'.join(lines)
-                
+
                 # 验证修复是否有效
                 try:
                     ast.parse(new_content)
@@ -113,7 +113,7 @@ class SyntaxErrorFixer:
                     # 这个修复无效，恢复原行
                     lines[error_line_idx] = original_line
                     continue
-        
+
         # 尝试特殊修复
         if 'invalid syntax' in error.msg.lower():
             # 尝试删除问题字符
@@ -123,7 +123,7 @@ class SyntaxErrorFixer:
                     new_line = error_line[:error.offset-1] + error_line[error.offset:]
                     lines[error_line_idx] = new_line
                     new_content = '\n'.join(lines)
-                    
+
                     try:
                         ast.parse(new_content)
                         with open(file_path, 'w', encoding='utf-8') as f:
@@ -132,21 +132,21 @@ class SyntaxErrorFixer:
                         return True
                     except SyntaxError:
                         lines[error_line_idx] = original_line
-        
+
         return False
-    
+
     def fix_javascript_syntax_errors(self) -> Dict:
         """修复JavaScript/TypeScript语法错误"""
         print("📱 修复JavaScript/TypeScript语法错误...")
-        
+
         js_files = []
         for pattern in ["*.js", "*.jsx", "*.ts", "*.tsx"]:
             js_files.extend(self.project_root.rglob(pattern))
-        
+
         js_files = [f for f in js_files if not self._should_skip_file(f)]
-        
+
         fixed_count = 0
-        
+
         for js_file in js_files:
             try:
                 if self._fix_javascript_file(js_file):
@@ -155,20 +155,20 @@ class SyntaxErrorFixer:
             except Exception as e:
                 print(f"  ⚠️  处理文件时出错 {js_file}: {e}")
                 self.failed_files.append(str(js_file))
-        
+
         return {
             'fixed_files': fixed_count,
             'total_files': len(js_files)
         }
-    
+
     def _fix_javascript_file(self, file_path: Path) -> bool:
         """修复单个JavaScript/TypeScript文件"""
         try:
             with open(file_path, 'r', encoding='utf-8') as f:
                 content = f.read()
-            
+
             original_content = content
-            
+
             # JavaScript/TypeScript常见语法错误修复
             fixes = [
                 # 修复多余的分号
@@ -186,22 +186,22 @@ class SyntaxErrorFixer:
                 # 修复TypeScript类型注解
                 (r':\s*([A-Z][a-zA-Z]*)\s*=', r': \1 ='),
             ]
-            
+
             for pattern, replacement in fixes:
                 content = re.sub(pattern, replacement, content, flags=re.MULTILINE)
-            
+
             if content != original_content:
                 with open(file_path, 'w', encoding='utf-8') as f:
                     f.write(content)
                 print(f"  ✅ 已修复: {file_path}")
                 return True
-            
+
         except Exception as e:
             print(f"  ❌ 修复失败 {file_path}: {e}")
             return False
-        
+
         return False
-    
+
     def _should_skip_file(self, file_path: Path) -> bool:
         """判断是否应该跳过某个文件"""
         skip_patterns = [
@@ -219,10 +219,10 @@ class SyntaxErrorFixer:
             'coverage',
             'cleanup_backup'
         ]
-        
+
         file_str = str(file_path)
         return any(pattern in file_str for pattern in skip_patterns)
-    
+
     def run_eslint_fix(self):
         """运行ESLint自动修复"""
         print("🔧 运行ESLint自动修复...")
@@ -233,14 +233,14 @@ class SyntaxErrorFixer:
                 'scripts/**/*.js',
                 '--quiet'
             ], capture_output=True, text=True, cwd=self.project_root)
-            
+
             if result.returncode == 0:
                 print("  ✅ ESLint修复完成")
             else:
                 print(f"  ⚠️  ESLint修复部分完成: {result.stderr}")
         except Exception as e:
             print(f"  ❌ ESLint修复失败: {e}")
-    
+
     def run_autopep8_fix(self):
         """运行autopep8自动修复"""
         print("🐍 运行autopep8自动修复...")
@@ -248,7 +248,7 @@ class SyntaxErrorFixer:
             # 只修复明显的格式问题
             python_files = list(self.project_root.rglob("*.py"))
             python_files = [f for f in python_files if not self._should_skip_file(f)]
-            
+
             for py_file in python_files[:100]:  # 限制处理数量
                 try:
                     subprocess.run([
@@ -256,11 +256,11 @@ class SyntaxErrorFixer:
                     ], capture_output=True, check=False)
                 except:
                     continue
-            
+
             print("  ✅ autopep8修复完成（前100个文件）")
         except Exception as e:
             print(f"  ❌ autopep8修复失败: {e}")
-    
+
     def generate_report(self) -> str:
         """生成修复报告"""
         report = f"""# 🔧 语法错误修复报告
@@ -276,13 +276,13 @@ class SyntaxErrorFixer:
 ## ✅ 成功修复的文件
 
 """
-        
+
         for file in self.fixed_files[:20]:  # 只显示前20个
             report += f"- {file}\n"
-        
+
         if len(self.fixed_files) > 20:
             report += f"\n... 还有 {len(self.fixed_files) - 20} 个文件\n"
-        
+
         if self.failed_files:
             report += f"""
 
@@ -291,10 +291,10 @@ class SyntaxErrorFixer:
 """
             for file in self.failed_files[:10]:  # 只显示前10个
                 report += f"- {file}\n"
-            
+
             if len(self.failed_files) > 10:
                 report += f"\n... 还有 {len(self.failed_files) - 10} 个文件\n"
-        
+
         report += f"""
 
 ## 🎯 修复建议
@@ -313,7 +313,7 @@ class SyntaxErrorFixer:
 - 代码可维护性提升
 
 """
-        
+
         return report
 
 def main():
@@ -322,29 +322,29 @@ def main():
     parser.add_argument('--output', default='syntax_fix_report.md', help='输出报告文件名')
     parser.add_argument('--python-only', action='store_true', help='只修复Python文件')
     parser.add_argument('--js-only', action='store_true', help='只修复JavaScript/TypeScript文件')
-    
+
     args = parser.parse_args()
-    
+
     print("🔧 开始语法错误修复...")
-    
+
     fixer = SyntaxErrorFixer(args.project_root)
-    
+
     # 执行修复
     if not args.js_only:
         fixer.fix_python_syntax_errors()
         fixer.run_autopep8_fix()
-    
+
     if not args.python_only:
         fixer.fix_javascript_syntax_errors()
         fixer.run_eslint_fix()
-    
+
     # 生成报告
     report = fixer.generate_report()
-    
+
     # 保存报告
     with open(args.output, 'w', encoding='utf-8') as f:
         f.write(report)
-    
+
     print(f"✅ 语法错误修复完成！报告已保存到: {args.output}")
     print(f"📊 修复文件数: {len(fixer.fixed_files)}")
 

@@ -23,7 +23,6 @@ interface HealthMetric {
   icon: string;
   color: string;
 };
-
 interface ChartData {
   labels: string[];
   datasets: Array<{data: number[];
@@ -31,12 +30,10 @@ interface ChartData {
     strokeWidth?: number
 }>;
 };
-
 interface AdvancedHealthDashboardProps {
   visible: boolean;
   onClose: () => void;
 };
-
 const HEALTH_METRICS: HealthMetric[] = [{id: heart_rate",
     name: "心率,",
     value: 72,
@@ -99,7 +96,6 @@ export const AdvancedHealthDashboard: React.FC<AdvancedHealthDashboardProps /> =
   visible,
   onClose;
 }) => {};
-
 const [selectedPeriod, setSelectedPeriod] = useState<"day | "week" | month" | "year>("week");
   const [selectedMetric, setSelectedMetric] = useState<HealthMetric | null />(nul;l;); 模拟图表数据 // const heartRateData: ChartData = {,
   labels: [周一",周二, "周三", 周四",周五, "周六", 周日"],"
@@ -109,14 +105,12 @@ const [selectedPeriod, setSelectedPeriod] = useState<"day | "week" | month" | "y
         strokeWidth: 2}
     ]
   };
-
 const sleepData: ChartData = {labels: ["深睡, "浅睡", REM",清醒],"
     datasets: [;{,
   data: [4.5, 2.8, 1.2, 0.5]
       }
     ]
   };
-
 const activityData: ChartData = {labels: ["周一", 周二",周三, "周四", 周五",周六, "周日"],
     datasets: [{,
   data: [8200, 9500, 7800, 10200, 8500, 12000, 6500],

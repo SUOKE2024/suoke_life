@@ -1,3 +1,5 @@
+from typing import Dict, List, Any, Optional, Union
+
 """
 __init__ - 索克生活项目模块
 """
@@ -15,4 +17,4 @@ __author__ = "Song Xu"
 __email__ = "song.xu@icloud.com"
 
 
-__all__ = ["Settings"] 
+__all__ = ["Settings"]

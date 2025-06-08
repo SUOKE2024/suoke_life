@@ -1,3 +1,5 @@
+from typing import Dict, List, Any, Optional, Union
+
 """
 __init__ - 索克生活项目模块
 """
@@ -10,8 +12,8 @@ from auth_service.core.redis import RedisManager, get_redis_manager
 
 __all__ = [
     "DatabaseManager",
-    "get_db_manager", 
+    "get_db_manager",
     "get_db_session",
     "RedisManager",
     "get_redis_manager",
-] 
+]

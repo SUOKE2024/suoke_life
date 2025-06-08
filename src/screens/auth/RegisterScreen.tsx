@@ -23,9 +23,9 @@ type AuthStackParamList = {Welcome: undefine;d,
 type RegisterScreenNavigationProp = NativeStackNavigationProp<AuthStackParamList, Register";>;"
 const RegisterScreen: React.FC  = () => {}
   const navigation = useNavigation<RegisterScreenNavigationProp>();
-  const [formData, setFormData] = useState({username: ",,
+  const [formData, setFormData] = useState({username: ",
     email: ","
-    phone: ",,
+    phone: ",
     password: ","
     confirmPassword: "});"
   const [loading, setLoading] = useState(false);

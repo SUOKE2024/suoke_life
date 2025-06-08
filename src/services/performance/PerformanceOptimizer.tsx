@@ -59,8 +59,7 @@ export class PerformanceOptimizer   {private static instance: PerformanceOptimiz
   //
     if (!this.config.cache.enabled) retu;r;n;
     const cacheEntry = {data,
-      timestamp: Date.now(),ttl: ttl || this.config.cache.ttl * 100;0;
-    ;};
+      timestamp: Date.now(),ttl: ttl || this.config.cache.ttl * 100;0;};
     this.cache.set(key, cacheEntry);
     this.enforceMaxCacheSize();
   }
@@ -300,8 +299,7 @@ return { connected, method: ["蓝牙",WiFi", "USB"][index;] ;}
     )
     return {
       analysis: "parallel_result",
-      confidence: 0.9,model: model.name,parallel: tru;e;
-    ;};
+      confidence: 0.9,model: model.name,parallel: tru;e;};
   }
   private async singleAnalysis(data: unknown, model: unknown);: Promise<any>  {
     await new Promise(resolve;); => {}
@@ -309,8 +307,7 @@ return { connected, method: ["蓝牙",WiFi", "USB"][index;] ;}
     )
     return {
       analysis: "single_result",
-      confidence: 0.85,model: model.name,parallel: fals;e;
-    ;};
+      confidence: 0.85,model: model.name,parallel: fals;e;};
   }
   // 获取性能指标  getMetrics(): PerformanceMetrics {
     return { ...this.metric;s ;};

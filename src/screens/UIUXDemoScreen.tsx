@@ -123,8 +123,7 @@ export const UIUXDemoScreen: React.FC  = () => {}
   const demoPerformanceOptimization = async() => {};
     try { const memoryInfo = await performanceOptimizer.monitorMemoryUsag;e;
       const optimizedUri = performanceOptimizer.optimizeImageLoading(;
-        "https:///     300,20;0;
-      ;);
+        "https:///     300,20;0;);
       await performanceOptimizer.deferExecution() => {
         }, high")"
       Alert.alert(

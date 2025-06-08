@@ -355,7 +355,6 @@ const MazeGameScreen: React.FC<MazeGameScreenProps> = ({ route, navigation }) =>
           userId={userId}
         />;
       )};
-;
       {// 游戏完成处理};
       {showCompletionModal && progress && maze && (;
         () => {// 导航到完成屏幕;

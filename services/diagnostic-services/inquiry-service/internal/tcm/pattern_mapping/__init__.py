@@ -1,10 +1,12 @@
+from typing import Dict, List, Any, Optional, Union
+
 """
 __init__ - 索克生活项目模块
 """
 
 from .pattern_mapper import PatternMapper
 
-#!/usr/bin/env python
+#! / usr / bin / env python
 
 """
 中医证型映射包

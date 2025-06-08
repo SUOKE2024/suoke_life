@@ -1,5 +1,4 @@
 import React from 'react';
-
 describe('i18nManager', () => {
   beforeEach(() => {
     jest.clearAllMocks();

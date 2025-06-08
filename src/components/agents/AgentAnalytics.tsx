@@ -224,7 +224,6 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
           <Text style={styles.refreshButtonText}>刷新</Text>;
         </TouchableOpacity>;
       </View>;
-;
       {renderTimeRangeSelector()};
       {renderAgentOverview()};
       {renderDetailedMetrics()};

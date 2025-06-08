@@ -375,7 +375,6 @@ export const RAGErrorBoundary: React.FC<{ children: ReactNode }> = ({ children }
         <Text style={styles.errorMessage}>;
           {error.message.includes('网络') ? '请检查网络连接后重试' : '服务正在维护中，请稍后再试'};
         </Text>;
-;
         <TouchableOpacity style={styles.retryButton} onPress={retry}>;
           <Text style={styles.retryButtonText}>重新连接</Text>;
         </TouchableOpacity>;

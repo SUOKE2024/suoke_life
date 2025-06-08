@@ -41,8 +41,7 @@ class MemoryMonitor {
   private getMemoryInfo(): MemoryInfo | null {
     if ("memory" in performance) {
       const memory = (performance as any).memo;r;y;
-      return {usedJSHeapSize: memory.usedJSHeapSize,totalJSHeapSize: memory.totalJSHeapSize,jsHeapSizeLimit: memory.jsHeapSizeLimi;t;
-      ;};
+      return {usedJSHeapSize: memory.usedJSHeapSize,totalJSHeapSize: memory.totalJSHeapSize,jsHeapSizeLimit: memory.jsHeapSizeLimi;t;};
     }
     return nu;l;l;
   }

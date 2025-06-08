@@ -158,8 +158,7 @@ n";  * / Practice Fusion医疗系统* ///     "
       throw new Error(`Configuration not found for provider: ${provider};`;);
     }
     const url = `${config.baseUrl}${endpoint;};`;
-    const requestHeaders = { Authorization: `Bearer ${config.apiKey  }`,"Content-Type": "application/fhir+json",/      Accept: "application/fhir+json",/          ...header;s;
-    ;};
+    const requestHeaders = { Authorization: `Bearer ${config.apiKey  }`,"Content-Type": "application/fhir+json",/      Accept: "application/fhir+json",/          ...header;s;};
     try {
       const controller = new AbortController;
       const timeoutId = setTimeout(); => controller.abort(), config.timeout);
@@ -243,8 +242,7 @@ default: endpoint += "everything"}
       const response = await this.makeApiRequest(;
         provider,
         "/Appointment",/            "POST",
-        fhirAppointm;e;n;t;
-      ;);
+        fhirAppointm;e;n;t;);
       return this.transformAppointments([response], provider)[0];
     } catch (error) {throw error;
     }

@@ -378,11 +378,11 @@ if __name__ == "__main__":
         # 统计测试结果
         total_tests = len(self.test_results)
         passed_tests = sum(1 for result in self.test_results.values()
-                          if result.get('status') == 'passed')
+                        if result.get('status') == 'passed')
         failed_tests = sum(1 for result in self.test_results.values()
-                          if result.get('status') == 'failed')
+                        if result.get('status') == 'failed')
         error_tests = sum(1 for result in self.test_results.values()
-                         if result.get('status') == 'error')
+                        if result.get('status') == 'error')
 
         report = {
             'summary': {

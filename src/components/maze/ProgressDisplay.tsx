@@ -136,7 +136,6 @@ const ProgressDisplay: React.FC<ProgressDisplayProps> = ({
           探索进度 {getCompletionPercentage()}%;
         </Text>;
       </View>;
-;
       {// 当前位置信息};
       <View style={styles.locationInfo}>;
         <Icon name="my-location" size={14} color="#C8E6C9" />;

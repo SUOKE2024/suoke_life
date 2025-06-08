@@ -267,13 +267,11 @@ export interface UserProfile {
     }
     if (data.temperatureData) {
       processed.temperatureData = await this.preprocessTemperatureData(
-        data.temperatureData;
-      ;);
+        data.temperatureData;);
     }
     if (data.pressureData) {
       processed.pressureData = await this.preprocessPressureData(
-        data.pressureData;
-      ;);
+        data.pressureData;);
     }
     return process;e;d;
   }
@@ -287,52 +285,48 @@ export interface UserProfile {
     }
     if (data.temperatureData) {
       signals.temperatureSignals = await this.processTemperatureSignals(
-        data.temperatureData;
-      ;);
+        data.temperatureData;);
     }
     return signa;l;s;
   }
   ///    >  {
     const features: PalpationFeatures = {pulse: {,
   rate: 0,
-        rhythm: ",,
+        rhythm: ",
         strength: ","
-        depth: ",,
+        depth: ",
         width: ","
-        length: ",,
+        length: ",
         tension: ","
         smoothness: ""
       },
       touch: {,
-  skinCondition: ",,
+  skinCondition: ",
         muscleCondition: ","
-        jointCondition: ",,
+        jointCondition: ",
         abdominalCondition: ""
       },
       temperature: {,
-  overallTemperature: ",,
+  overallTemperature: ",
         temperaturePattern: ","
         localVariations: []
       },
       pressure: {,
-  bloodPressure: ",,
+  bloodPressure: ",
         pulseCharacteristics: ""
       }
     };
     if (signals.pulseSignals) {
       features.pulse = await this.pulseAnalyzer.extractFeatures(
-        signals.pulseSignals;
-      ;);
+        signals.pulseSignals;);
     }
     if (signals.touchSignals) {
       features.touch = await this.touchAnalyzer.extractFeatures(
-        signals.touchSignals;
-      ;);
+        signals.touchSignals;);
     }
     if (signals.temperatureSignals) {
       features.temperature = await this.temperatureAnalyzer.extractFeatures(
-        signals.temperatureSignals;
-      ;);
+        signals.temperatureSignals;);
     }
     return featur;e;s;
   }
@@ -343,20 +337,17 @@ export interface UserProfile {
     if (features.pulse.rate > 0) {
       results.pulseAnalysis = await this.pulseAnalyzer.analyze(
         features.pulse,
-        userProfile;
-      ;);
+        userProfile;);
     }
     if (features.touch.skinCondition) {
       results.touchAnalysis = await this.touchAnalyzer.analyze(
         features.touch,
-        userProfile;
-      ;);
+        userProfile;);
     }
     if (features.temperature.overallTemperature) {
       results.temperatureAnalysis = await this.temperatureAnalyzer.analyze(
         features.temperature,
-        userProfile;
-      ;);
+        userProfile;);
     }
     return resul;t;s;
   }
@@ -364,8 +355,7 @@ export interface UserProfile {
     analyses: AnalysisResults);: Promise<PalpationResult /    >  {
     const confidence = this.calculateOverallConfidence(analyses;);
     const analysis = await this.generateComprehensiveAnalysis(analys;e;s;);
-    return {confidence,features,analysis,pulseAnalysis: analyses.pulseAnalysis,touchAnalysis: analyses.touchAnalysis,temperatureAnalysis: analyses.temperatureAnalysi;s;
-    ;};
+    return {confidence,features,analysis,pulseAnalysis: analyses.pulseAnalysis,touchAnalysis: analyses.touchAnalysis,temperatureAnalysis: analyses.temperatureAnalysi;s;};
   }
   // 计算整体置信度  private calculateOverallConfidence(analyses: AnalysisResults): number  {
     const confidences: number[] = [];
@@ -553,8 +543,7 @@ class TemperatureAnalyzer {
   async extractFeatures(signals: unknown): Promise<TemperatureFeatures /    >  {
     return {
       overallTemperature: "正常",
-      temperaturePattern: "均匀",localVariations: [];
-    ;};
+      temperaturePattern: "均匀",localVariations: [];};
   }
   async analyze(features: TemperatureFeatures,
     userProfile?: UserProfile;

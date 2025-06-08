@@ -1,5 +1,4 @@
 import React from 'react';
-
 describe('MonitoringService', () => {
   beforeEach(() => {
     jest.clearAllMocks();

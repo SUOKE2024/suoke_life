@@ -1,3 +1,5 @@
+from typing import Dict, List, Any, Optional, Union
+
 """
 __init__ - 索克生活项目模块
 """
@@ -16,7 +18,7 @@ from .ziwu_liuzhu import ZiwuLiuzhuCalculator
 
 __all__ = [
     "WuyunLiuqiCalculator",
-    "ZiwuLiuzhuCalculator", 
+    "ZiwuLiuzhuCalculator",
     "ConstitutionCalculator",
     "BaguaCalculator",
-] 
+]

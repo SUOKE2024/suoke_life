@@ -156,8 +156,7 @@ const performanceMonitor = usePerformanceMonitor(offlineManager", {"
         (a, b) => a.priority - b.priority;
       );
       const batches = this.createBatches(;
-        sortedOperations,this.syncConfig.batchSiz;e;
-      ;);
+        sortedOperations,this.syncConfig.batchSiz;e;);
       for (const batch of batches) {
         await this.processBatch(batc;h;);
       }

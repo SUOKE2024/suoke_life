@@ -68,7 +68,6 @@ const TopicItem: React.FC<TopicItemProps> = ({
         >;
           <Text style={styles.detailButtonText}>详情</Text>;
         </TouchableOpacity>;
-        ;
         <TouchableOpacity;
           style={[styles.actionButton, styles.deleteButton]};
           onPress={handleDelete};
@@ -291,7 +290,6 @@ const TopicManager: React.FC<TopicManagerProps> = ({
                 </View>;
               </View>;
             )};
-            ;
             <View style={styles.modalActions}>;
               <TouchableOpacity;
                 style={[styles.modalButton, styles.confirmButton]};

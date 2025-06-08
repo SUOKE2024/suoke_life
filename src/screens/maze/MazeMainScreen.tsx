@@ -211,7 +211,6 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
             <Text style={styles.statText}>{template.challengeCount}个挑战</Text>;
           </View>;
         </View>;
-        ;
         {template.isPopular && (;
           <View style={styles.popularBadge}>;
             <Icon name="fire" size={12} color="#FF5722" />;
@@ -255,7 +254,6 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
             ]} ;
           />;
         </View>;
-        ;
         <View style={styles.progressStats}>;
           <Text style={styles.progressStatText}>;
             完成度: {completionRate.toFixed(1)}%;
@@ -307,7 +305,6 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
           </Text>;
         </TouchableOpacity>;
       </View>;
-;
       <ScrollView;
         style={styles.content};
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />;

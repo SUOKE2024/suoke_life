@@ -5,8 +5,8 @@ config - 索克生活项目模块
 from pydantic import BaseModel, Field, field_validator
 from typing import Dict, List, Optional, Set, Union
 
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+#! / usr / bin / env python
+# - * - coding: utf - 8 - * -
 
 """
 API网关配置模型
@@ -22,7 +22,7 @@ class RouteConfig(BaseModel):
     name: str
     prefix: str
     service: str
-    methods: List[str] = Field(default_factory=lambda: ["GET", "POST", "PUT", "DELETE", "PATCH"])
+    methods: List[str] = Field(default_factory = lambda: ["GET", "POST", "PUT", "DELETE", "PATCH"])
     strip_prefix: bool = True
     rewrite_path: Optional[str] = None
     timeout: float = 30.0
@@ -42,7 +42,7 @@ class ServiceHealthCheckConfig(BaseModel):
     """
     服务健康检查配置
     """
-    path: str = "/health"
+    path: str = " / health"
     interval: int = 30  # 秒
     timeout: int = 5  # 秒
     retries: int = 3
@@ -66,20 +66,20 @@ class ServiceDiscoveryConfig(BaseModel):
     """
     type: str = "static"  # static, consul, kubernetes
     refresh_interval: int = 30  # 秒
-    
+
     # 静态服务列表
-    services: Dict[str, ServiceConfig] = Field(default_factory=dict)
-    
+    services: Dict[str, ServiceConfig] = Field(default_factory = dict)
+
     # Consul配置
     consul_host: Optional[str] = None
     consul_port: int = 8500
-    
+
     # Kubernetes配置
     kubernetes_namespace: str = "default"
-    kubernetes_label_selector: str = "app=suoke"
-    
+    kubernetes_label_selector: str = "app = suoke"
+
     # 默认健康检查配置
-    default_health_check: ServiceHealthCheckConfig = Field(default_factory=ServiceHealthCheckConfig)
+    default_health_check: ServiceHealthCheckConfig = Field(default_factory = ServiceHealthCheckConfig)
 
 
 class JwtConfig(BaseModel):
@@ -97,7 +97,7 @@ class AuthConfig(BaseModel):
     认证配置
     """
     enabled: bool = True
-    public_paths: List[str] = Field(default_factory=list)
+    public_paths: List[str] = Field(default_factory = list)
     jwt: JwtConfig
 
 
@@ -116,9 +116,9 @@ class CorsConfig(BaseModel):
     CORS配置
     """
     enabled: bool = True
-    allow_origins: List[str] = Field(default_factory=lambda: ["*"])
-    allow_methods: List[str] = Field(default_factory=lambda: ["*"])
-    allow_headers: List[str] = Field(default_factory=lambda: ["*"])
+    allow_origins: List[str] = Field(default_factory = lambda: [" * "])
+    allow_methods: List[str] = Field(default_factory = lambda: [" * "])
+    allow_headers: List[str] = Field(default_factory = lambda: [" * "])
     allow_credentials: bool = False
     max_age: int = 600  # 10分钟
 
@@ -132,7 +132,7 @@ class CacheConfig(BaseModel):
     ttl: int = 60  # 秒
     max_size: int = 1000  # 内存缓存最大条目数
     redis_url: Optional[str] = None  # Redis连接URL
-    include_headers: List[str] = Field(default_factory=list)  # 要包含在缓存键中的请求头
+    include_headers: List[str] = Field(default_factory = list)  # 要包含在缓存键中的请求头
 
 
 class CircuitBreakerConfig(BaseModel):
@@ -152,7 +152,7 @@ class RetryConfig(BaseModel):
     enabled: bool = False
     max_retries: int = 3
     retry_delay: float = 0.5  # 重试延迟（秒）
-    retry_status_codes: List[int] = Field(default_factory=lambda: [500, 502, 503, 504])
+    retry_status_codes: List[int] = Field(default_factory = lambda: [500, 502, 503, 504])
 
 
 class LoadBalancerConfig(BaseModel):
@@ -184,8 +184,8 @@ class ObservabilityConfig(BaseModel):
     tracing_exporter: str = "jaeger"
     tracing_endpoint: Optional[str] = None
     metrics_enabled: bool = True
-    metrics_endpoint: str = "/metrics"
-    health_endpoint: str = "/health"
+    metrics_endpoint: str = " / metrics"
+    health_endpoint: str = " / health"
 
 
 class MiddlewareConfig(BaseModel):
@@ -214,8 +214,8 @@ class ServerConfig(BaseModel):
     """
     服务器配置
     """
-    rest: RestServerConfig = Field(default_factory=RestServerConfig)
-    grpc: GrpcServerConfig = Field(default_factory=GrpcServerConfig)
+    rest: RestServerConfig = Field(default_factory = RestServerConfig)
+    grpc: GrpcServerConfig = Field(default_factory = GrpcServerConfig)
     production: bool = False
     debug: bool = True
 
@@ -224,39 +224,40 @@ class GatewayConfig(BaseModel):
     """
     API网关主配置
     """
-    app_name: str = "suoke-api-gateway"
-    server: ServerConfig = Field(default_factory=ServerConfig)
-    
+    app_name: str = "suoke - api - gateway"
+    server: ServerConfig = Field(default_factory = ServerConfig)
+
     # 路由配置
-    routes: List[RouteConfig] = Field(default_factory=list)
-    
+    routes: List[RouteConfig] = Field(default_factory = list)
+
     # 服务发现
-    service_discovery: ServiceDiscoveryConfig = Field(default_factory=ServiceDiscoveryConfig)
-    
+    service_discovery: ServiceDiscoveryConfig = Field(default_factory = ServiceDiscoveryConfig)
+
     # 中间件
-    middleware: MiddlewareConfig = Field(default_factory=MiddlewareConfig)
-    
+    middleware: MiddlewareConfig = Field(default_factory = MiddlewareConfig)
+
     # 缓存
-    cache: CacheConfig = Field(default_factory=CacheConfig)
-    
+    cache: CacheConfig = Field(default_factory = CacheConfig)
+
     # 熔断器
-    circuit_breaker: CircuitBreakerConfig = Field(default_factory=CircuitBreakerConfig)
-    
+    circuit_breaker: CircuitBreakerConfig = Field(default_factory = CircuitBreakerConfig)
+
     # 重试
-    retry: RetryConfig = Field(default_factory=RetryConfig)
-    
+    retry: RetryConfig = Field(default_factory = RetryConfig)
+
     # 负载均衡
-    load_balancer: LoadBalancerConfig = Field(default_factory=LoadBalancerConfig)
-    
+    load_balancer: LoadBalancerConfig = Field(default_factory = LoadBalancerConfig)
+
     # 日志
-    logging: LoggingConfig = Field(default_factory=LoggingConfig)
-    
+    logging: LoggingConfig = Field(default_factory = LoggingConfig)
+
     # 可观测性
-    observability: ObservabilityConfig = Field(default_factory=ObservabilityConfig)
-    
-    @field_validator("middleware", mode="before")
+    observability: ObservabilityConfig = Field(default_factory = ObservabilityConfig)
+
+    @field_validator("middleware", mode = "before")
     @classmethod
     def set_default_middleware(cls, v):
+        """TODO: 添加文档字符串"""
         if v is None:
             return MiddlewareConfig()
         return v

@@ -277,7 +277,7 @@ export interface CalculationResult {
   prognosisAssessment: PrognosisAssessment;
 }
 // 智能体协作相关类型 * export interface AgentTask {
-  taskId: string, ,
+  taskId: string,
   type: "diagnosis" | "recommendation" | "education" | "service" | "lifestyle";
   priority: "low" | "medium" | "high" | "urgent";
   requiredAgents: AgentType[];
@@ -295,7 +295,7 @@ export interface AgentCoordinationResult {
 export type AgentType = "xiaoai" | "xiaoke" | "laoke" | "so;e;";
 r;
 // 其他支持类型 * export interface PersonalityTraits {
-  style: "caring" | "professional" | "friendly" | "authoritative", ,
+  style: "caring" | "professional" | "friendly" | "authoritative",
   tone: "warm" | "neutral" | "energetic" | "calm";
   expertise: "health" | "medical" | "wellness" | "general";
   patience: "low" | "medium" | "high";

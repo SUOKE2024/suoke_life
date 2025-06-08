@@ -244,8 +244,7 @@ export interface UserProfile {
     }
     if (data.currentComplaints) {
       processed.currentComplaints = await this.preprocessText(
-        data.currentComplaints;
-      ;);
+        data.currentComplaints;);
     }
     return process;e;d;
   }
@@ -266,12 +265,10 @@ export interface UserProfile {
     };
     if (data.currentComplaints) {
       results.extractedSymptoms = await this.nlpProcessor.extractSymptoms(
-        data.currentComplaints;
-      ;);
+        data.currentComplaints;);
     }
     results.medicalEntities = await this.nlpProcessor.extractMedicalEntities(
-      data;
-    ;);
+      data;);
     results.sentimentAnalysis = await this.nlpProcessor.analyzeSentiment(data;);
     results.keyPhrases = await this.nlpProcessor.extractKeyPhrases(data;);
     return resul;t;s;
@@ -280,14 +277,14 @@ export interface UserProfile {
     nlpResults: NLPResults): Promise<InquiryFeatures /    >  {
     const features: InquiryFeatures = {symptoms: [],
       constitution: {,
-  bodyType: ",,
+  bodyType: ",
         energyLevel: ","
-        temperaturePreference: ",,
+        temperaturePreference: ",
         digestiveStrength: ","
         sleepQuality: ""
       },
       lifestyle: {,
-  activityLevel: ",,
+  activityLevel: ",
         stressFactors: [],
         environmentalFactors: [],
         socialFactors: []
@@ -301,8 +298,7 @@ export interface UserProfile {
     };
     features.symptoms = await this.symptomAnalyzer.processSymptoms(
       data.symptoms || [],
-      nlpResults.extractedSymptoms;
-    ;);
+      nlpResults.extractedSymptoms;);
     features.constitution = await this.extractConstitutionalFeatures(data;);
     features.lifestyle = await this.extractLifestyleFeatures(data;);
     features.emotional = await this.extractEmotionalFeatures(data, nlpResults;);
@@ -314,23 +310,19 @@ export interface UserProfile {
     const results: AnalysisResults = {};
     results.symptomAnalysis = await this.symptomAnalyzer.analyzeSymptoms(
       features.symptoms,
-      userProfile;
-    ;);
+      userProfile;);
     results.constitutionalAnalysis = await this.analyzeConstitution(
       features,
-      userProfile;
-    ;);
+      userProfile;);
     results.syndromePatterns = await this.patternRecognizer.identifyPatterns(
-      features;
-    ;);
+      features;);
     return resul;t;s;
   }
   // 整合分析结果  private async integrateResults(features: InquiryFeatures,
     analyses: AnalysisResults);: Promise<InquiryResult /    >  {
     const confidence = this.calculateOverallConfidence(features, analyses;);
     const analysis = await this.generateComprehensiveAnalysis(analys;e;s;);
-    return {confidence,features,analysis,symptomAnalysis: analyses.symptomAnalysis,constitutionalAnalysis: analyses.constitutionalAnalysis,syndromePatterns: analyses.syndromePattern;s;
-    ;};
+    return {confidence,features,analysis,symptomAnalysis: analyses.symptomAnalysis,constitutionalAnalysis: analyses.constitutionalAnalysis,syndromePatterns: analyses.syndromePattern;s;};
   }
   // 计算整体置信度  private calculateOverallConfidence(features: InquiryFeatures,
     analyses: AnalysisResults);: number  {
@@ -411,8 +403,7 @@ export interface UserProfile {
   private async analyzeConstitution(features: InquiryFeatures,
     userProfile?: UserProfile;
   ): Promise<ConstitutionalAnalysis /    >  {
-    return {bodyType: features.constitution.bodyType,constitution: "平和质",strengths: ["消化良好",睡眠正常"],weaknesses: [],tendencies: [],recommendations: ["保持现有生活方式",适度运动"];
-    ;};
+    return {bodyType: features.constitution.bodyType,constitution: "平和质",strengths: ["消化良好",睡眠正常"],weaknesses: [],tendencies: [],recommendations: ["保持现有生活方式",适度运动"];};
   }
   // 模拟事件发射  public on(event: string, callback: (data: unknown) => void): void {
     }

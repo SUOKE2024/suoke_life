@@ -1,3 +1,5 @@
+from typing import Dict, List, Any, Optional, Union
+
 """
 __init__ - 索克生活项目模块
 """
@@ -15,6 +17,6 @@ API v1版本
 
 __all__ = [
     "calculation_router",
-    "calendar_router", 
+    "calendar_router",
     "constitution_router",
-] 
+]

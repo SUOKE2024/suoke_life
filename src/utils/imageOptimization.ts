@@ -9,8 +9,7 @@ export const imageOptimizationConfig = ;
 export class ImageOptimizer  {
   static optimizeImage(imagePath: string, options = {}) {// 图片优化逻辑;
 const defaultOptions = {quality: 80,
-      format: "webp",progressive: tru;e;
-    ;};
+      format: "webp",progressive: tru;e;};
     return { ...defaultOptions, ...option;s ;};
   }
   static generateResponsiveImages(imagePath: string) {

@@ -263,8 +263,7 @@ if (typeof temperature !== "number") {
             !data[field] ||
             (typeof data[field] === "string" && data[field].trim() === ")"
           ) {
-            return {isValid: false,severity: ValidationSeverity.ERROR,message: `必填字段缺失: ${field}`,code: "REQUIRED_FIELD_MISSING",fiel;d;
-            ;}
+            return {isValid: false,severity: ValidationSeverity.ERROR,message: `必填字段缺失: ${field}`,code: "REQUIRED_FIELD_MISSING",fiel;d;}
           }
         }
         return {isValid: true,severity: ValidationSeverity.INFO,message: "所有必填字段已填写",code: "REQUIRED_FIELDS_VALID"};
@@ -353,8 +352,7 @@ if (!phone) {
     const summary = {totalChecks: results.length,
       passed: 0,
       warnings: 0,
-      errors: 0,critical: ;0;
-    ;};
+      errors: 0,critical: ;0;};
     for (const result of results) {
       if (result.isValid) {
         summary.passed++;

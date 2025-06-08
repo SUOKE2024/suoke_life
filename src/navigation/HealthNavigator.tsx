@@ -81,7 +81,6 @@ const HealthTabNavigator: React.FC = () => {
           );
         }};
       />;
-;
       <Tab.Screen;
         name='MedKnowledge';
         component={MedKnowledgeScreen};

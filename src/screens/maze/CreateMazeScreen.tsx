@@ -277,7 +277,6 @@ const CreateMazeScreen: React.FC<CreateMazeScreenProps> = ({ navigation }) => {
           </View>
         )};
       </ScrollView>;
-;
       {// 创建按钮};
       <View style={styles.footer}>;
         <TouchableOpacity;

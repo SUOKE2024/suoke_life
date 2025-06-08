@@ -49,7 +49,6 @@ export interface ScreenReadingResponse {
       width: number;
       height: number;
 };
-;
   }>;
   audio_description: string;  , success: boolean;
   error?: string}
@@ -99,13 +98,11 @@ export interface AccessibilitySettingsResponse {
       return {recognized_text: result.recognized_text || ",;
         response_text: result.response_text || ",";
         response_audio: result.response_audio || ",;
-        confidence: result.confidence || 0.0,success: tru;e;
-      ;}
+        confidence: result.confidence || 0.0,success: tru;e;}
     } catch (error) {
       return {
       recognized_text: ",",
-      response_text: `语音处理失败: ${(error as Error).message}`,response_audio: ",,confidence: 0.0,success: false,error: (error as Error).messag;e;
-      ;}
+      response_text: `语音处理失败: ${(error as Error).message}`,response_audio: ",confidence: 0.0,success: false,error: (error as Error).messag;e;}
     }
   }
   // 处理图像输入，支持图像识别和描述  async processImageInput(imageData: ImageData,
@@ -144,11 +141,9 @@ export interface AccessibilitySettingsResponse {
       return {scene_description: result.scene_description || ",;
         medical_features: result.medical_features || [],navigation_guidance: result.navigation_guidance || ",";
         confidence: result.confidence || 0.0,audio_guidance: result.audio_guidance || ",;
-        success: tru;e;
-      ;}
+        success: tru;e;}
     } catch (error) {
-      return { scene_description: `图像处理失败: ${(error as Error).message  }`,medical_features: [],navigation_guidance: ",",confidence: 0.0,audio_guidance: ",,success: false,error: (error as Error).messag;e;
-      ;}
+      return { scene_description: `图像处理失败: ${(error as Error).message  }`,medical_features: [],navigation_guidance: ",",confidence: 0.0,audio_guidance: ",success: false,error: (error as Error).messag;e;}
     }
   }
   // 处理手语输入，支持手语识别  async processSignLanguageInput(videoData: Blob,
@@ -169,11 +164,9 @@ export interface AccessibilitySettingsResponse {
       }
       const result = await response.js;o;n;(;);
       return {recognized_text: result.recognized_text || ",;
-        confidence: result.confidence || 0.0,segments: result.segments || [],success: tru;e;
-      ;}
+        confidence: result.confidence || 0.0,segments: result.segments || [],success: tru;e;}
     } catch (error) {
-      return { recognized_text: `手语处理失败: ${(error as Error).message  }`,confidence: 0.0,segments: [],success: false,error: (error as Error).messag;e;
-      ;}
+      return { recognized_text: `手语处理失败: ${(error as Error).message  }`,confidence: 0.0,segments: [],success: false,error: (error as Error).messag;e;}
     }
   }
   // 生成无障碍健康内容  async generateAccessibleHealthContent(content: string,
@@ -204,12 +197,10 @@ export interface AccessibilitySettingsResponse {
         content_url: result.content_url || ",";
         audio_content: result.audio_content || ",;
         tactile_content: result.tactile_content || ",";
-        success: tru;e;
-      ;}
+        success: tru;e;}
     } catch (error) {
-      return { accessible_content: `内容转换失败: ${(error as Error).message  }`,content_url: ",,audio_content: ",";
-        tactile_content: ",,success: false,error: (error as Error).messag;e;
-      ;}
+      return { accessible_content: `内容转换失败: ${(error as Error).message  }`,content_url: ",audio_content: ",";
+        tactile_content: ",success: false,error: (error as Error).messag;e;}
     }
   }
   base64编码的屏幕截图 // userId: string,
@@ -234,11 +225,9 @@ export interface AccessibilitySettingsResponse {
       const result = await response.js;o;n;(;);
       return {screen_description: result.screen_description || ",;
         ui_elements: result.ui_elements || [],audio_description: result.audio_description || ",";
-        success: tru;e;
-      ;}
+        success: tru;e;}
     } catch (error) {
-      return { screen_description: `屏幕阅读失败: ${(error as Error).message  }`,ui_elements: [],audio_description: ",,success: false,error: (error as Error).messag;e;
-      ;}
+      return { screen_description: `屏幕阅读失败: ${(error as Error).message  }`,ui_elements: [],audio_description: ",success: false,error: (error as Error).messag;e;}
     }
   }
   // 管理用户的无障碍设置  async manageAccessibilitySettings(userId: string,
@@ -264,8 +253,7 @@ export interface AccessibilitySettingsResponse {
       return {current_preferences: {
       language: "zh-CN",
       voice_type: "female",speech_rate: 1.0,high_contrast: false,screen_reader: false,font_size: "medium";
-        },success: false,message: `设置管理失败: ${(error as Error).message}`,error: (error as Error).messag;e;
-      ;};
+        },success: false,message: `设置管理失败: ${(error as Error).message}`,error: (error as Error).messag;e;};
     }
   }
   // 健康检查  async healthCheck(): Promise<boolean> {

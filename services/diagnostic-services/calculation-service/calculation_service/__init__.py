@@ -1,3 +1,5 @@
+from typing import Dict, List, Any, Optional, Union
+
 """
 __init__ - 索克生活项目模块
 """
@@ -18,7 +20,7 @@ __description__ = "Traditional Chinese Medicine Calculation Service"
 
 __all__ = [
     "__version__",
-    "__author__", 
+    "__author__",
     "__description__",
     "settings",
-] 
+]

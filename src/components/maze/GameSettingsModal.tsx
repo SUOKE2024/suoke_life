@@ -269,7 +269,6 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
             >;
               <Text style={styles.cancelButtonText}>取消</Text>;
             </TouchableOpacity>;
-;
             <TouchableOpacity;
               style={styles.saveButton};
               onPress={handleSave};

@@ -134,8 +134,7 @@ export class MonitoringDeployment  {private static instance: MonitoringDeploymen
       type: "memory",
       config: {};
         };
-      },alertManager: {enabled: config.monitoring.alerting.enabled,endpoint: "http: routes: this.generateAlertRoutes(),receivers: this.generateAlertReceivers()},nodeExporter: {enabled: true,port: 9100,collectors: ["cpu",memory", "disk",network", "filesystem"]};
-    ;};
+      },alertManager: {enabled: config.monitoring.alerting.enabled,endpoint: "http: routes: this.generateAlertRoutes(),receivers: this.generateAlertReceivers()},nodeExporter: {enabled: true,port: 9100,collectors: ["cpu",memory", "disk",network", "filesystem"]};};
   }
   // 生成Prometheus抓取配置  private generateScrapeConfigs(): ScrapeConfig[] {
     const config = this.envManager.getConfig;

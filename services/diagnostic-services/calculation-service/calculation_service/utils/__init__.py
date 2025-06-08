@@ -1,3 +1,5 @@
+from typing import Dict, List, Any, Optional, Union
+
 """
 __init__ - 索克生活项目模块
 """
@@ -15,9 +17,9 @@ from .validators import validate_birth_info, validate_time_format
 __all__ = [
     "validate_birth_info",
     "validate_time_format",
-    "format_analysis_result", 
+    "format_analysis_result",
     "format_health_advice",
     "CacheManager",
     "calculate_age",
     "get_zodiac_sign"
-] 
+]

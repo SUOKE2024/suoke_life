@@ -191,7 +191,6 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSe
             <Text style={styles.taskTime}>
               创建时间: {new Date(task.created_at).toLocaleString()};
             </Text>;
-;
             {task.status === 'running' && (;
               <View style={styles.progressContainer}>;
                 <Text style={styles.progressText}>进度: {Math.round(task.progress * 100)}%</Text>;
@@ -200,7 +199,6 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSe
                 </View>;
               </View>;
             )};
-;
             {task.error_message && <Text style={styles.errorText}>错误: {task.error_message}</Text>};
           </View>;
         ))};

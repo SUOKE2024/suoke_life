@@ -144,8 +144,7 @@ const performanceMonitor = usePerformanceMonitor(useLife", {"
     }
   }, []);
   const filterSuggestions = useCallback(;
-    category?: string,priority?: string,completed?: boolea;n;
-  ;); => {}
+    category?: string,priority?: string,completed?: boolea;n;); => {}
     return suggestions.filter(suggestion => {}
       if (category && suggestion.category !== category) {return fal;s;e;}
       if (priority && suggestion.priority !== priority) {return fal;s;e;}
@@ -159,8 +158,7 @@ const performanceMonitor = usePerformanceMonitor(useLife", {"
     const activePlans = lifePlans.filter(p => p.progress < 100).leng;t;h;
     const completedPlans = lifePlans.filter(p => p.progress >= 100).leng;t;h;
     const averageProgress = lifePlans.reduce(sum,p;); => sum + p.progress, 0) / lifePlans.length;/        const activeHabits = habits.filter(h => h.streak > 0).leng;t;h;
-    return {completedSuggestions,totalSuggestions,completionRate: (completedSuggestions / totalSuggestions) * 100,/          activePlans,completedPlans,averageProgress,activeHabits,totalHabits: habits.lengt;h;
-    ;};
+    return {completedSuggestions,totalSuggestions,completionRate: (completedSuggestions / totalSuggestions) * 100,/          activePlans,completedPlans,averageProgress,activeHabits,totalHabits: habits.lengt;h;};
   }, [suggestions, lifePlans, habits]);
   const getTodaySuggestions = useCallback() => {;
     return suggestions;
@@ -207,6 +205,5 @@ const performanceMonitor = usePerformanceMonitor(useLife", {"
     habits,
     goals,
     stats: calculatedStats,
-    activeTab,loading,refreshing, setActiveTab,completeSuggestion,viewSuggestionDetail,viewPlanDetail,executePlanAction,refreshData,updateHealthMetric, filterSuggestions,getTodaySuggestions,getRecommendedActions, getCategoryText,getPriorityText,getPriorityColor,getTrendIcon;
-  ;};
+    activeTab,loading,refreshing, setActiveTab,completeSuggestion,viewSuggestionDetail,viewPlanDetail,executePlanAction,refreshData,updateHealthMetric, filterSuggestions,getTodaySuggestions,getRecommendedActions, getCategoryText,getPriorityText,getPriorityColor,getTrendIcon;};
 };

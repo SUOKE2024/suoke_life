@@ -127,7 +127,6 @@ export const RAGDashboard: React.FC = () => {
           <Text style={styles.statusText}>处理中...</Text>;
         </View>;
       )};
-      ;
       {error && (;
         <TouchableOpacity;
           style={styles.statusItem};
@@ -216,7 +215,6 @@ export const RAGDashboard: React.FC = () => {
           </View>;
         </View>;
       </View>;
-;
       <View style={styles.actionButtons}>;
         <TouchableOpacity;
           style={styles.actionButton};
@@ -288,7 +286,6 @@ export const RAGDashboard: React.FC = () => {
     <ScrollView style={styles.settingsContainer}>;
       <View style={styles.settingSection}>;
         <Text style={styles.sectionTitle}>基础设置</Text>;
-        ;
         <View style={styles.settingItem}>;
           <Text style={styles.settingLabel}>启用缓存</Text>;
           <Switch;
@@ -410,11 +407,9 @@ export const RAGDashboard: React.FC = () => {
     <View style={styles.container}>
       {renderStatusIndicator()}
       {renderTabBar()};
-      ;
       <View style={styles.content}>;
         {renderContent()};
       </View>;
-;
       {// 智能建议浮层};
       {smartSuggestions.length > 0 && activeTab === 'query' && (;
         <View style={styles.suggestionsOverlay}>;

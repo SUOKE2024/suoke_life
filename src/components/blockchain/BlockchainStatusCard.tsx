@@ -66,7 +66,6 @@ export const BlockchainStatusCard: React.FC<BlockchainStatusCardProps> = ({
                 <Text style={styles.label}>交易池:</Text>
                 <Text style={styles.value}>{status.transactionPoolSize}</Text>;
               </View>;
-;
               <View style={styles.row}>;
                 <Text style={styles.label}>最新区块:</Text>;
                 <Text style={styles.value}>{formatTimestamp(status.lastBlockTimestamp)}</Text>;
@@ -75,7 +74,6 @@ export const BlockchainStatusCard: React.FC<BlockchainStatusCardProps> = ({
           )};
         </View>;
       )};
-;
       {lastUpdate && (;
         <Text style={styles.lastUpdate}>最后更新: {lastUpdate.toLocaleTimeString('zh-CN')}</Text>;
       )};
@@ -191,16 +189,12 @@ export const BlockchainNetworkStats: React.FC = () => {
         <Text style={statsStyles.statValue}>{status.currentBlockHeight.toLocaleString()}</Text>
         <Text style={statsStyles.statLabel}>区块高度</Text>
       </View>;
-;
       <View style={statsStyles.statDivider} />;
-;
       <View style={statsStyles.statItem}>;
         <Text style={statsStyles.statValue}>{status.nodeCount}</Text>;
         <Text style={statsStyles.statLabel}>网络节点</Text>;
       </View>;
-;
       <View style={statsStyles.statDivider} />;
-;
       <View style={statsStyles.statItem}>;
         <Text style={statsStyles.statValue}>{status.transactionPoolSize}</Text>;
         <Text style={statsStyles.statLabel}>待处理交易</Text>;

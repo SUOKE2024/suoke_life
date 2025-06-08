@@ -52,7 +52,6 @@ export type TCMConstitution = | "qi-deficiency"      // 气虚质
 /**
 * ;
 * 中医证候类型;
-;
 export interface TCMSyndrome {
 }
 };
@@ -158,7 +157,6 @@ export interface InspectionData {
   /** 面色
   complexion: {,
   color: "red" | yellow" | "white | "black" | blue"";
-;
     luster: "lustrous | "dull,
   description: string;
   };

@@ -95,8 +95,7 @@ k;<;
   "diagnosis/uploadTongueImage",/      async ({ sessionId: _sessionId, imageFile }, { rejectWithValue }) => {}
     try {
       const response: ApiResponse<{ imageUrl: string, analysis: unknown}> = await apiClient.uploadFile(;
-          "/diagnosis/look/upload-tongue-image",/              imageFil;e;
-        ;);
+          "/diagnosis/look/upload-tongue-image",/              imageFil;e;);
       if (!response.success) {
         throw new Error(response.error?.message || "上传舌象图片失败;";);
       }

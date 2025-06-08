@@ -185,7 +185,6 @@ export const MedKnowledgeScreen: React.FC = () => {
             了解您的体质特点，获得个性化健康建议
           </Text>
         </View>;
-;
         {constitutions.map(constitution) => (;
           <ConstitutionCard;
             key={constitution.id};
@@ -193,7 +192,6 @@ export const MedKnowledgeScreen: React.FC = () => {
             onPress={() => handleConstitutionPress(constitution)};
           />;
         ))};
-;
         {constitutions.length === 0 && (;
           <View style={styles.emptyContainer}>;
             <Text style={styles.emptyText}>暂无体质信息</Text>;
@@ -242,13 +240,11 @@ export const MedKnowledgeScreen: React.FC = () => {
             <Text style={styles.loadingText}>正在搜索...</Text>;
           </View>;
         )};
-;
         {errors.search && (;
           <View style={styles.errorContainer}>;
             <Text style={styles.errorText}>{errors.search}</Text>;
           </View>;
         )};
-;
         {searchResults.map(result) => (;
           <View key={result.id} style={styles.searchResultCard}>;
             <Text style={styles.searchResultTitle}>{result.title}</Text>;
@@ -263,7 +259,6 @@ export const MedKnowledgeScreen: React.FC = () => {
             </View>;
           </View>;
         ))};
-;
         {searchResults.length === 0 && !loading.search && !errors.search && (;
           <View style={styles.emptyContainer}>;
             <Text style={styles.emptyText}>请使用上方搜索栏查找医疗知识</Text>;
@@ -310,7 +305,6 @@ export const MedKnowledgeScreen: React.FC = () => {
           </View>;
         </ScrollView>;
       </View>;
-;
       {// 内容区域};
       <View style={styles.content}>;
         {renderTabContent()};

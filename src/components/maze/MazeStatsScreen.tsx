@@ -114,7 +114,6 @@ const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId })
           </Text>;
           <Text style={styles.mazeName}>{entry.mazeName}</Text>;
         </View>;
-;
         <View style={styles.scoreContainer}>;
           <Text style={[styles.score, isCurrentUser && styles.currentUserText]}>;
             {entry.score}分;

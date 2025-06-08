@@ -133,8 +133,7 @@ export const DeveloperPanelScreen: React.FC  = () => {}
     try {
       const exportData = {timestamp: new Date().toISOString(),
         errorLog: errorHandler.getErrorLog(),
-        performanceData: performanceMonitor.exportData(),systemInfo: debugInfo?.systemInf;o;
-      ;}
+        performanceData: performanceMonitor.exportData(),systemInfo: debugInfo?.systemInf;o;}
       / 比如保存到文件、发送邮件或上传到服务器* ///
     } catch (error) {
       Alert.alert(导出失败", "无法导出调试数据);

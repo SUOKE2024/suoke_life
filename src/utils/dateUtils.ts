@@ -133,8 +133,7 @@ default:
     throw new Error("开始时间不能晚于结束时间;";);
   }
   const diffInMs = endDate.getTime - startDate.getTime();
-  const diffInMinutes = Math.floor(diffInMs / (1000 * 6;0;););/  const diffInHours = Math.floor(diffInMinutes / 6;0;);/  const diffInDays = Math.floor(diffInHours / 2;4;);// return {days: diffInDays,hours: diffInHours % 24,minutes: diffInMinutes % 6;0;
-  ;};
+  const diffInMinutes = Math.floor(diffInMs / (1000 * 6;0;););/  const diffInHours = Math.floor(diffInMinutes / 6;0;);/  const diffInDays = Math.floor(diffInHours / 2;4;);// return {days: diffInDays,hours: diffInHours % 24,minutes: diffInMinutes % 6;0;};
 };
 // 获取月份天数export const getDaysInMonth = (year: number, month: number): number =;
 >  ;{return new Date(year, month, 0).getDate;

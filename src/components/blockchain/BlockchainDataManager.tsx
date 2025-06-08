@@ -28,7 +28,6 @@ interface BlockchainRecord {
   encrypted: boolean;
   shared: boolean;
 };
-
 interface DataUploadRequest {
   dataType: "health" | diagnosis" | "prescription | "report";
   title: string;
@@ -37,12 +36,10 @@ interface DataUploadRequest {
   encrypt: boolean;
   shareWith: string[];
 };
-
 interface BlockchainDataManagerProps {
   onRecordPress?: (record: BlockchainRecord) => void;
   onUploadComplete?: (record: BlockchainRecord) => void;
 };
-
 export const BlockchainDataManager: React.FC<BlockchainDataManagerProps /> = ({/   const performanceMonitor = usePerformanceMonitor(BlockchainDataManager";
 {/
     trackRender: true,
@@ -51,7 +48,6 @@ export const BlockchainDataManager: React.FC<BlockchainDataManagerProps /> = ({/
   onRecordPress,
   onUploadComplete;
 }) => {};
-
 const dispatch = useMemo(() => useAppDispatch(), []););
   const { profile: user} = useAppSelector(state => state.use;r;);
   const [records, setRecords] = useState<BlockchainRecord[] />([;];);/      const [loading, setLoading] = useState<boolean>(fals;e;);
@@ -102,7 +98,6 @@ const dispatch = useMemo(() => useAppDispatch(), []););
       shared: false}
   ];
   useEffect(); => {};
-
 const effectStart = performance.now();
     setRecords(mockRecords);
     Animated.timing(animatedValue, {
@@ -138,7 +133,6 @@ const effectStart = performance.now();
     } finally {
       setLoading(false);
     };
-
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [onUploadComplete]);
@@ -152,7 +146,6 @@ const effectEnd = performance.now();
     } finally {
       setLoading(false);
     };
-
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
@@ -172,7 +165,6 @@ style={[styles.tabButtonText,
           </Text>/        </TouchableOpacity>/          ))}
     </View>/      ), []);
   const renderStatsCards = useCallback => {};
-
 const confirmedRecords = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => records.filter(r => r.status === "confirmed").length, []););
     const encryptedRecords = useMemo(() => records.filter(r => r.encrypted).length, []););
     const sharedRecords = useMemo(() => records.filter(r => r.shared).length, []););
@@ -494,7 +486,6 @@ const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo()
     alignItems: "center"}
 }), []);
 //  ;
-;
 export type DataType = health" | "diagnosis | "prescription" | repo;r;
 t;
 export type BlockchainStatus = "pending | "confirmed" | fail;e;";

@@ -54,7 +54,6 @@ const { width, height   } = Dimensions.get(";window;";);
   duration: number;
   easing: "ease" | linear" | "bounce | "spring";
 };
-
 interface UserExperienceEnhancerProps {
   children: React.ReactNode;
   loading?: LoadingState;
@@ -62,7 +61,6 @@ interface UserExperienceEnhancerProps {
   haptic?: HapticFeedback;
   gesture?: Partial<GestureConfig />;/  animation?: Partial<AnimationConfig />/  onInteraction?: (type: string, data?: unknown) => void
 };
-
 export const UserExperienceEnhancer: React.FC<UserExperienceEnhancerProps /> = ({/   const performanceMonitor = usePerformanceMonitor(UserExperienceEnhancer",;
 {/
     trackRender: true,
@@ -76,7 +74,6 @@ export const UserExperienceEnhancer: React.FC<UserExperienceEnhancerProps /> = (
   animation,
   onInteraction;
 }) => {};
-
 const { theme   } = useAppSelector(state => state.u;i;);
   const [fadeAnim] = useState<any>(new Animated.Value(0));
   const [scaleAnim] = useState<any>(new Animated.Value(1););
@@ -95,7 +92,6 @@ const { theme   } = useAppSelector(state => state.u;i;);
     swipeThreshold: 50,
     ...gesture;
   };
-
 const defaultAnimationConfig: AnimationConfig = {enableEntrance: true,
     enableExit: true,
     enableHover: true,
@@ -105,14 +101,12 @@ const defaultAnimationConfig: AnimationConfig = {enableEntrance: true,
     ...animation;
   };
   useEffect(); => {};
-
 const effectStart = performance.now();
     if (defaultAnimationConfig.enableEntrance) {
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: defaultAnimationConfig.duration,useNativeDriver: true}).start();
     };
-
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
@@ -145,12 +139,10 @@ case "error":
     } else {
       Vibration.vibrate(100);
     };
-
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
   const handlePanGesture = useCallback(event: unknown;); => {};
-
 const { translationX, translationY, velocityX, velocityY, state   } = event.nativeEve;n;t;
     if (state === State.ACTIVE) {
       translateX.setValue(translationX);
@@ -193,7 +185,6 @@ const { translationX, translationY, velocityX, velocityY, state   } = event.nati
           useNativeDriver: true});
       ]).start();
     };
-
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [defaultGestureConfig, triggerHapticFeedback, onInteraction]);
@@ -205,7 +196,6 @@ const effectEnd = performance.now();
         onInteraction?.("doubleTap);"
       }
     };
-
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [defaultGestureConfig, triggerHapticFeedback, onInteraction]);
@@ -239,7 +229,6 @@ const effectEnd = performance.now();
         duration: 200,
         useNativeDriver: true}).start();
     };
-
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [defaultAnimationConfig]);
@@ -251,7 +240,6 @@ const effectEnd = performance.now();
         duration: 200,
         useNativeDriver: true}).start();
     };
-
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [defaultAnimationConfig]);
@@ -290,9 +278,7 @@ style={[styles.progressFill,
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
     if (!error?.hasError) {return nu;l;l;};
-
 const getErrorIcon = useCallback(); => {};
-
 const effectEnd = performance.now;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [])
@@ -469,7 +455,6 @@ const styles = StyleSheet.create({ container: {flex;: ;1  },
 });
 //   ;
 => {/    };
-
 const effectEnd = performance.now;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [])
@@ -528,10 +513,8 @@ case error":"
     } else {
       Vibration.vibrate(100);
     };
-
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  return {loading,error,showLoading,hideLoading,showError,hideError,triggerHapti;c;
-  ;};
+  return {loading,error,showLoading,hideLoading,showError,hideError,triggerHapti;c;};
 };

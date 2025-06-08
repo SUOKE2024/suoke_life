@@ -59,7 +59,7 @@ class SimplifiedTaskScheduler:
         self.task_counter = 0
 
     async def submit_task(self, task_type: str, agent_type: str,
-                         input_data: Dict[str, Any], priority: str = "normal") -> str:
+                        input_data: Dict[str, Any], priority: str = "normal") -> str:
         """提交任务"""
         task_id = f"task_{self.task_counter}"
         self.task_counter += 1
@@ -197,8 +197,8 @@ class SimplifiedHybridArchitecture:
         self.completed_tasks = {}
 
     async def submit_task(self, function, args=(), kwargs=None,
-                         task_type: str = "mixed", processing_mode: str = "hybrid",
-                         priority: str = "normal") -> str:
+                        task_type: str = "mixed", processing_mode: str = "hybrid",
+                        priority: str = "normal") -> str:
         """提交任务"""
         kwargs = kwargs or {}
         task_id = f"hybrid_task_{len(self.tasks)}"

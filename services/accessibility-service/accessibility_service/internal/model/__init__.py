@@ -1,3 +1,5 @@
+from typing import Dict, List, Any, Optional, Union
+
 """
 __init__ - 索克生活项目模块
 """
@@ -12,7 +14,7 @@ from .user_integration import PlatformAuth, UserIntegration
 
 定义无障碍服务的数据模型和结构：
 - 用户配置模型
-- 服务请求/响应模型
+- 服务请求 / 响应模型
 - 数据传输对象
 """
 

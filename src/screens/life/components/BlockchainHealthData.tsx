@@ -23,7 +23,6 @@ interface HealthDataRecord {
   shared: boolean;
   permissions: string[];
 };
-
 interface DataSharingRequest {
   id: string;
   requester: string;
@@ -32,12 +31,10 @@ interface DataSharingRequest {
   duration: string;
   status: pending" | "approved | "denied";
 };
-
 interface blockchainHealthDataProps {
   visible: boolean;
   onClose: () => void;
 };
-
 export const blockchainHealthData: React.FC<blockchainHealthDataProps /> = ({/   const performanceMonitor = usePerformanceMonitor(blockchainHealthData";
 {/
     trackRender: true,
@@ -46,7 +43,6 @@ export const blockchainHealthData: React.FC<blockchainHealthDataProps /> = ({/  
   visible,
   onClose;
 }) => {};
-
 const [activeTab, setActiveTab] = useState<"records | "sharing" | privacy" | "backup>("records");
   const [loading, setLoading] = useState<boolean>(fals;e;);
   const [encryptionEnabled, setEncryptionEnabled] = useState<boolean>(tru;e;);

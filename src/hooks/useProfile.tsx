@@ -162,6 +162,5 @@ case "developer":
     userProfile,
     agentInteractions,
     achievements,
-    benefits,settingsSections,healthStats,activityRecords,activeTab,loading,stats, setActiveTab,chatWithAgent,viewAchievement,useBenefit,handleSettingPress,updateProfile,filterAchievements,getRecommendedActions, getHealthScoreColor,getMemberLevelTex;t;
-  ;};
+    benefits,settingsSections,healthStats,activityRecords,activeTab,loading,stats, setActiveTab,chatWithAgent,viewAchievement,useBenefit,handleSettingPress,updateProfile,filterAchievements,getRecommendedActions, getHealthScoreColor,getMemberLevelTex;t;};
 };

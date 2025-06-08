@@ -1,5 +1,4 @@
 import React from 'react';
-
 describe('cacheManager', () => {
   beforeEach(() => {
     jest.clearAllMocks();

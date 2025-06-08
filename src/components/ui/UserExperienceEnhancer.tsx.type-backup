@@ -518,6 +518,5 @@ case error":"
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  return {loading,error,showLoading,hideLoading,showError,hideError,triggerHapti;c;
-  ;};
+  return {loading,error,showLoading,hideLoading,showError,hideError,triggerHapti;c;};
 };

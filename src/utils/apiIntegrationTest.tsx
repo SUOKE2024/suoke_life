@@ -229,13 +229,11 @@ const result: TestResult = {service,
         "小克服务",
         xiaokeBaseUrl,"/health",/            "G;E;T"
       ;);
-      const servicesStatus = {auth: authHealth.success,user: userHealth.success,xiaoai: xiaoaiHealth.success,xiaoke: xiaokeHealth.succes;s;
-      ;};
+      const servicesStatus = {auth: authHealth.success,user: userHealth.success,xiaoai: xiaoaiHealth.success,xiaoke: xiaokeHealth.succes;s;};
       const allServicesUp = Object.values(servicesStatus).every(;
         (statu;s;); => status;
       );
-      return {success: allServicesUp,message: allServicesUp ? "所有核心服务正常运行" : "部分服务不可用",services: servicesStatu;s;
-      ;}
+      return {success: allServicesUp,message: allServicesUp ? "所有核心服务正常运行" : "部分服务不可用",services: servicesStatu;s;}
     } catch (error: unknown) {
       return {success: false,message: `健康检查失败: ${error.message}`,services: {}
       ;};

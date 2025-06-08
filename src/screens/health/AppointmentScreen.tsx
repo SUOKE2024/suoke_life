@@ -86,7 +86,6 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
           即将到来 ({upcomingAppointments.length});
         </Text>;
       </TouchableOpacity>;
-      ;
       <TouchableOpacity;
         style={[styles.tab, activeTab === 'past' && styles.activeTab]};
         onPress={() => setActiveTab('past')};
@@ -153,7 +152,6 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
               <Text style={[styles.actionButtonText, styles.cancelActionText]}>取消</Text>;
             </TouchableOpacity>;
           )};
-          ;
           {isUpcoming && item.status === 'confirmed' && (;
             <TouchableOpacity;
               style={styles.actionButton};
@@ -189,7 +187,6 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
       <Text style={styles.emptySubtext}>;
         {activeTab === 'upcoming' ? '去搜索医疗资源并预约吧' : '完成预约后会在这里显示'};
       </Text>;
-      ;
       {activeTab === 'upcoming' && (;
         <TouchableOpacity;
           style={styles.searchButton};
@@ -232,7 +229,6 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
             numberOfLines={3};
             textAlignVertical="top";
           />;
-          ;
           <View style={styles.modalButtons}>;
             <TouchableOpacity;
               style={[styles.modalButton, styles.cancelButton]};
@@ -338,7 +334,6 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
         </TouchableOpacity>
       </View>
       {renderTabs()};
-      ;
       <FlatList;
         data={currentAppointments};
         renderItem={renderAppointmentCard};
@@ -349,7 +344,6 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
         ListEmptyComponent={renderEmptyState};
         showsVerticalScrollIndicator={false};
       />;
-      ;
       {renderCancelModal()};
     </SafeAreaView>;
   );

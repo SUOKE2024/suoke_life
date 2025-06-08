@@ -17,9 +17,9 @@ logger = logging.getLogger(__name__)
 
 # 创建路由器
 router = APIRouter(
-    prefix="/health-plans",
-    tags=["健康计划"],
-    responses={404: {"description": "未找到"}},
+    prefix = " / health - plans",
+    tags = ["健康计划"],
+    responses = {404: {"description": "未找到"}},
 )
 
 # 请求和响应模型
@@ -28,7 +28,7 @@ class HealthPlanRequest(BaseModel):
     user_id: str
     constitution_type: str
     health_goals: list[str]
-    health_data: dict[str, Any] = Field(default_factory=dict)
+    health_data: dict[str, Any] = Field(default_factory = dict)
     preferences: dict[str, Any] | None = None
     current_season: str | None = None
 
@@ -64,7 +64,7 @@ class HealthPlanProgressResponse(BaseModel):
 # 健康计划生成器实例
 plan_generator = PlanGenerator()
 
-@router.post("/", response_model=HealthPlanResponse, status_code=status.HTTP_201_CREATED)
+@router.post(" / ", response_model = HealthPlanResponse, status_code = status.HTTP_201_CREATED)
 async def create_health_plan(plan_request: HealthPlanRequest, background_tasks: BackgroundTasks):
     """
     创建新的健康计划
@@ -91,11 +91,11 @@ async def create_health_plan(plan_request: HealthPlanRequest, background_tasks: 
     except Exception as e:
         logger.error(f"创建健康计划失败: {str(e)}")
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"创建健康计划失败: {str(e)}"
+            status_code = status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail = f"创建健康计划失败: {str(e)}"
         )
 
-@router.get("/{plan_id}", response_model=HealthPlanResponse)
+@router.get(" / {plan_id}", response_model = HealthPlanResponse)
 async def get_health_plan(plan_id: str, user_id: str):
     """
     获取特定健康计划
@@ -116,7 +116,7 @@ async def get_health_plan(plan_id: str, user_id: str):
             "diet_recommendations": ["保持清淡饮食", "多摄入蔬菜水果"],
             "exercise_recommendations": ["每天30分钟中等强度有氧运动", "适当进行力量训练"],
             "lifestyle_recommendations": ["保持规律作息", "减少电子设备使用时间"],
-            "supplement_recommendations": ["根据需要补充维生素D", "适量补充Omega-3脂肪酸"],
+            "supplement_recommendations": ["根据需要补充维生素D", "适量补充Omega - 3脂肪酸"],
             "schedule": {
                 "早晨": "6:30起床，热水泡脚",
                 "上午": "适当运动，保持活力",
@@ -130,17 +130,17 @@ async def get_health_plan(plan_id: str, user_id: str):
         return plan
     except ValueError as ve:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(ve)
+            status_code = status.HTTP_400_BAD_REQUEST,
+            detail = str(ve)
         )
     except Exception as e:
         logger.error(f"获取健康计划失败: {str(e)}")
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"获取健康计划失败: {str(e)}"
+            status_code = status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail = f"获取健康计划失败: {str(e)}"
         )
 
-@router.post("/progress", response_model=HealthPlanProgressResponse)
+@router.post(" / progress", response_model = HealthPlanProgressResponse)
 async def update_health_plan_progress(progress: HealthPlanProgressRequest):
     """
     更新健康计划进度
@@ -150,19 +150,19 @@ async def update_health_plan_progress(progress: HealthPlanProgressRequest):
         # 并计算完成百分比
         # 模拟响应数据
         response = HealthPlanProgressResponse(
-            user_id=progress.user_id,
-            plan_id=progress.plan_id,
-            progress_percentage=75.5,  # 计算的进度百分比
-            next_steps=["完成今天的有氧运动", "记录今日的饮食情况"],
-            encouragement_message="做得很好！你已经完成了75%的计划内容，继续保持！"
+            user_id = progress.user_id,
+            plan_id = progress.plan_id,
+            progress_percentage = 75.5,  # 计算的进度百分比
+            next_steps = ["完成今天的有氧运动", "记录今日的饮食情况"],
+            encouragement_message = "做得很好！你已经完成了75%的计划内容，继续保持！"
         )
 
         return response
     except Exception as e:
         logger.error(f"更新健康计划进度失败: {str(e)}")
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"更新健康计划进度失败: {str(e)}"
+            status_code = status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail = f"更新健康计划进度失败: {str(e)}"
         )
 
 async def log_health_plan_creation(user_id: str, plan_id: str):

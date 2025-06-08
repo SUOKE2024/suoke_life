@@ -290,7 +290,6 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
             </TouchableOpacity>;
           </View>;
         </View>;
-;
         {// 进度条};
         {!showResults && (;
           <View style={styles.progressContainer}>;

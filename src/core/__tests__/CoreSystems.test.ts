@@ -12,8 +12,7 @@ describe("核心系统测试", () => {
       const error = new Error("网络连接失败");
       const context = {
       userId: "test_user",
-      requestId: "req_123",timestamp: Date.now(;);
-      ;};
+      requestId: "req_123",timestamp: Date.now(;);};
       const result = await errorHandler.handleError(error, cont;e;x;t;);
       expect(result).toBeDefined();
       expect(result.type).toBe(ErrorType.NETWORK_ERROR);
@@ -306,8 +305,7 @@ describe("核心系统测试", () => {
       // 模拟一个复杂的健康数据处理流程 *       const userId = "integration_test_user"; */
       const healthData = {systolic: 140,
         diastolic: 90,
-        heartRate: 85,temperature: 37.2,timestamp: Date.now(;);
-      ;};
+        heartRate: 85,temperature: 37.2,timestamp: Date.now(;);};
       // 1. 验证数据 *       const validationReport = dataValidator.validateHealthData(healthData); */
       expect(validationReport.isValid).toBe(true);
       // 2. 检查访问权限 *       securityManager.grantAccess( */
@@ -339,8 +337,7 @@ describe("核心系统测试", () => {
     });
     it("应该处理错误场景", async () => {
       // 模拟错误场景 *       const invalidData = { */;
-        systolic: "invalid", // 无效类型 *         diastolic: 80 */;
-      ;};
+        systolic: "invalid", // 无效类型 *         diastolic: 80 */;};
       // 验证应该失败 *       const validationReport = dataValidator.validateHealthData(invalidData); */
       expect(validationReport.isValid).toBe(false);
       // 模拟网络错误 *       const networkError = new Error("Network timeout") */;

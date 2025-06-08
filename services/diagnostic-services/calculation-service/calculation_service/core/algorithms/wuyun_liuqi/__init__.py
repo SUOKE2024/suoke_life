@@ -1,3 +1,5 @@
+from typing import Dict, List, Any, Optional, Union
+
 """
 __init__ - 索克生活项目模块
 """
@@ -17,4 +19,4 @@ __all__ = [
     "WUYUN_DATA",
     "LIUQI_DATA",
     "YUNQI_DISEASE_MAP",
-] 
+]

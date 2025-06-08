@@ -47,8 +47,7 @@ const Divider: React.FC<DividerProps />  = ({/      orientation = "horizontal",v
       [orientation === "horizontal" ? "marginVertical" : "marginHorizontal"]:;
         getMargin(margin);
     }),
-    ...styl;e;
-  ;}
+    ...styl;e;}
   if (text && orientation === "horizontal") {
     return (;
       <View,style={[;

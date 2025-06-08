@@ -113,7 +113,7 @@ class UVMigrator:
             if (service_path / "poetry.lock").exists():
                 self.run_command(
                     ["poetry", "export", "-f", "requirements.txt",
-                     "--output", "requirements.txt", "--without-hashes"],
+                    "--output", "requirements.txt", "--without-hashes"],
                     cwd=service_path
                 )
 

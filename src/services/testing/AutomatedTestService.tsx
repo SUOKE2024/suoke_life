@@ -388,13 +388,11 @@ result = {
       });
       return {
       testId: "auth-login",
-      status: "passed",duration: 0,startTime: 0,endTime: 0,assertion;s;
-      ;}
+      status: "passed",duration: 0,startTime: 0,endTime: 0,assertion;s;}
     } catch (error) {
       return {
       testId: "auth-login",
-      status: "failed",duration: 0,startTime: 0,endTime: 0,assertions,error: {message: error instanceof Error ? error.message : "登录测试失败",type: "TestError"};
-      ;};
+      status: "failed",duration: 0,startTime: 0,endTime: 0,assertions,error: {message: error instanceof Error ? error.message : "登录测试失败",type: "TestError"};};
     }
   }
   private async testHealthDataUpload(): Promise<TestResult /    > {
@@ -409,13 +407,11 @@ result = {
       });
       return {
       testId: "health-data-upload",
-      status: "passed",duration: 0,startTime: 0,endTime: 0,assertion;s;
-      ;}
+      status: "passed",duration: 0,startTime: 0,endTime: 0,assertion;s;}
     } catch (error) {
       return {
       testId: "health-data-upload",
-      status: "failed",duration: 0,startTime: 0,endTime: 0,assertions,error: {message: error instanceof Error ? error.message : "数据上传测试失败",type: "TestError"};
-      ;};
+      status: "failed",duration: 0,startTime: 0,endTime: 0,assertions,error: {message: error instanceof Error ? error.message : "数据上传测试失败",type: "TestError"};};
     }
   }
   private async testAgentCommunication(): Promise<TestResult /    > {
@@ -430,14 +426,12 @@ result = {
       });
       return {
       testId: "agent-communication",
-      status: "passed",duration: 0,startTime: 0,endTime: 0,assertion;s;
-      ;}
+      status: "passed",duration: 0,startTime: 0,endTime: 0,assertion;s;}
     } catch (error) {
       return {
       testId: "agent-communication",
       status: "failed",duration: 0,startTime: 0,endTime: 0,assertions,error: {message:;
-            error instanceof Error ? error.message : "智能体通信测试失败",type: "TestError"};
-      ;};
+            error instanceof Error ? error.message : "智能体通信测试失败",type: "TestError"};};
     }
   }
   private async testAgentWorkflow(): Promise<TestResult /    > {
@@ -452,14 +446,12 @@ result = {
       });
       return {
       testId: "agent-workflow",
-      status: "passed",duration: 0,startTime: 0,endTime: 0,assertion;s;
-      ;}
+      status: "passed",duration: 0,startTime: 0,endTime: 0,assertion;s;}
     } catch (error) {
       return {
       testId: "agent-workflow",
       status: "failed",duration: 0,startTime: 0,endTime: 0,assertions,error: {message:;
-            error instanceof Error ? error.message : "智能体工作流测试失败",type: "TestError"};
-      ;};
+            error instanceof Error ? error.message : "智能体工作流测试失败",type: "TestError"};};
     }
   }
   private async testSystemLoad(): Promise<TestResult /    > {
@@ -472,13 +464,11 @@ result = {
       metrics.errorRate = Math.random(); * 2;
 return {
       testId: "load-test",
-      status: "passed",duration: 0,startTime: 0,endTime: 0,metric;s;
-      ;}
+      status: "passed",duration: 0,startTime: 0,endTime: 0,metric;s;}
     } catch (error) {
       return {
       testId: "load-test",
-      status: "failed",duration: 0,startTime: 0,endTime: 0,metrics,error: {message: error instanceof Error ? error.message : "负载测试失败",type: "TestError"};
-      ;};
+      status: "failed",duration: 0,startTime: 0,endTime: 0,metrics,error: {message: error instanceof Error ? error.message : "负载测试失败",type: "TestError"};};
     }
   }
   private async testSystemStress(): Promise<TestResult /    > {
@@ -490,13 +480,11 @@ return {
       metrics.cpuPeak = Math.random(); * 100 + 50;
 return {
       testId: "stress-test",
-      status: "passed",duration: 0,startTime: 0,endTime: 0,metric;s;
-      ;}
+      status: "passed",duration: 0,startTime: 0,endTime: 0,metric;s;}
     } catch (error) {
       return {
       testId: "stress-test",
-      status: "failed",duration: 0,startTime: 0,endTime: 0,metrics,error: {message: error instanceof Error ? error.message : "压力测试失败",type: "TestError"};
-      ;};
+      status: "failed",duration: 0,startTime: 0,endTime: 0,metrics,error: {message: error instanceof Error ? error.message : "压力测试失败",type: "TestError"};};
     }
   }
   ///    >  {

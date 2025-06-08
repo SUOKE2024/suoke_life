@@ -1,3 +1,4 @@
+from typing import Dict, List, Any, Optional, Union
 
 """
 用户存储层异常类定义
@@ -41,4 +42,4 @@ class DeviceAlreadyBoundError(DeviceError):
 
 class DatabaseError(RepositoryError):
     """数据库错误"""
-    pass 
+    pass

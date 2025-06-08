@@ -308,7 +308,6 @@ export const HealthReportGenerator: React.FC<HealthReportGeneratorProps> = ({ us
       >;
         {// 生成报告按钮};
         {renderGenerateButtons()};
-;
         {// 历史报告};
         <View style={styles.historySection}>;
           <Text style={styles.sectionTitle}>历史报告</Text>;

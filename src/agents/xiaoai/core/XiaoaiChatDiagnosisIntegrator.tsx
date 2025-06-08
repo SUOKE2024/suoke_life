@@ -44,8 +44,7 @@ export class XiaoaiChatDiagnosisIntegrator   {private activeSessions: Map<string
   // 分析用户消息的四诊意图  private async analyzeDiagnosisIntent(message: string,
     context: ChatContext): Promise<DiagnosisIntent /    >  {
     const symptomKeywords = [;
-      咳嗽",胸闷, "头痛", 发热",乏力, "失眠", 腹痛",恶心, "呕吐",腹泻",便秘, "心悸", 气短",眩晕, "耳鸣", 视力模糊",关节痛,"肌肉痛", 皮疹",瘙痒, "出汗", 怕冷",怕热, "口干", 口苦",食欲不振, "消化不良", 月经不调",痛经,";
-    ;];
+      咳嗽",胸闷, "头痛", 发热",乏力, "失眠", 腹痛",恶心, "呕吐",腹泻",便秘, "心悸", 气短",眩晕, "耳鸣", 视力模糊",关节痛,"肌肉痛", 皮疹",瘙痒, "出汗", 怕冷",怕热, "口干", 口苦",食欲不振, "消化不良", 月经不调",痛经,";];
     const extractedSymptoms = symptomKeywords.filter(keyword => {};
       message.includes(keywor;d;);
     )
@@ -72,8 +71,7 @@ export class XiaoaiChatDiagnosisIntegrator   {private activeSessions: Map<string
                                   message.includes(按压") ||"
                                   message.includes("触诊);"
     const confidence = this.calculateIntentConfidence(;
-      extractedSymptoms.length,needsInquiry,needsLookDiagnosis,needsListenDiagnosis,needsPalpationDiagnosi;s;
-    ;);
+      extractedSymptoms.length,needsInquiry,needsLookDiagnosis,needsListenDiagnosis,needsPalpationDiagnosi;s;);
     return {needsInquiry,needsLookDiagnosis,needsListenDiagnosis,needsPalpationDiagnosis,confidence,extractedSymptoms,urgencyLevel: urgencyLevel as "low" | medium" | "high | "emergency"};
   }
   ///    >  {

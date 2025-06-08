@@ -56,17 +56,17 @@ class TestBlockchainService:
     async def test_store_health_data_success(self, blockchain_service, sample_user_id, sample_health_data):
         """测试成功存储健康数据"""
         with patch('suoke_blockchain_service.service.get_db_session') as mock_db, \
-             patch('suoke_blockchain_service.service.get_blockchain_client') as mock_blockchain:
-            
+            patch('suoke_blockchain_service.service.get_blockchain_client') as mock_blockchain:
+
             # Mock数据库会话
             mock_session = AsyncMock()
             mock_db.return_value.__aenter__.return_value = mock_session
-            
+
             # Mock区块链客户端
             mock_client = AsyncMock()
             mock_client.store_health_data.return_value = "0x1234567890abcdef"
             mock_blockchain.return_value = mock_client
-            
+
             # Mock加密和IPFS服务
             blockchain_service.encryption_service.encrypt_data = AsyncMock(
                 return_value=(b"encrypted_data", "encryption_key")
@@ -77,13 +77,13 @@ class TestBlockchainService:
             blockchain_service.zk_proof_generator.generate_proof = AsyncMock(
                 return_value={"proof": {"a": [1, 2]}, "public_inputs": [1, 2, 3]}
             )
-            
+
             result = await blockchain_service.store_health_data(
                 user_id=sample_user_id,
                 data=sample_health_data,
                 data_type="heart_rate"
             )
-            
+
             assert "record_id" in result
             assert "transaction_id" in result
             assert "transaction_hash" in result
@@ -104,10 +104,10 @@ class TestBlockchainService:
     async def test_verify_health_data_success(self, blockchain_service, sample_user_id):
         """测试成功验证健康数据"""
         record_id = str(uuid.uuid4())
-        
+
         with patch('suoke_blockchain_service.service.get_db_session') as mock_db, \
-             patch('suoke_blockchain_service.service.get_blockchain_client') as mock_blockchain:
-            
+            patch('suoke_blockchain_service.service.get_blockchain_client') as mock_blockchain:
+
             # Mock健康数据记录
             mock_record = MagicMock()
             mock_record.id = record_id
@@ -121,28 +121,28 @@ class TestBlockchainService:
             mock_record.record_metadata = {"zkp_circuit": "health_data_heart_rate"}
             mock_record.transaction = MagicMock()
             mock_record.transaction.transaction_hash = "0x1234567890abcdef"
-            
+
             # Mock数据库查询
             mock_session = AsyncMock()
             mock_result = AsyncMock()
             mock_result.scalar_one_or_none.return_value = mock_record
             mock_session.execute.return_value = mock_result
             mock_db.return_value.__aenter__.return_value = mock_session
-            
+
             # Mock区块链验证
             mock_client = AsyncMock()
             mock_client.verify_health_data.return_value = True
             mock_blockchain.return_value = mock_client
-            
+
             # Mock ZK证明验证和IPFS验证
             blockchain_service.zk_proof_verifier.verify_proof = AsyncMock(return_value=True)
             blockchain_service.ipfs_client.get_data = AsyncMock(return_value=b"encrypted_data")
-            
+
             result = await blockchain_service.verify_health_data(
                 record_id=record_id,
                 user_id=sample_user_id
             )
-            
+
             assert result["blockchain_valid"] is True
             assert result["zkp_valid"] is True
             assert result["ipfs_valid"] is True
@@ -174,27 +174,27 @@ class TestBlockchainService:
         """测试成功授权访问"""
         record_id = str(uuid.uuid4())
         grantee_id = str(uuid.uuid4())
-        
+
         with patch('suoke_blockchain_service.service.get_db_session') as mock_db, \
-             patch('suoke_blockchain_service.service.get_blockchain_client') as mock_blockchain:
-            
+            patch('suoke_blockchain_service.service.get_blockchain_client') as mock_blockchain:
+
             # Mock健康数据记录
             mock_health_record = MagicMock()
             mock_health_record.id = record_id
             mock_health_record.user_id = sample_user_id
-            
+
             # Mock数据库查询
             mock_session = AsyncMock()
             mock_result = AsyncMock()
             mock_result.scalar_one_or_none.side_effect = [mock_health_record, None]  # 记录存在，授权不存在
             mock_session.execute.return_value = mock_result
             mock_db.return_value.__aenter__.return_value = mock_session
-            
+
             # Mock区块链客户端
             mock_client = AsyncMock()
             mock_client.grant_access.return_value = "0x1234567890abcdef"
             mock_blockchain.return_value = mock_client
-            
+
             result = await blockchain_service.grant_access(
                 owner_id=sample_user_id,
                 grantee_id=grantee_id,
@@ -202,7 +202,7 @@ class TestBlockchainService:
                 access_level="read",
                 expires_at=datetime.now() + timedelta(hours=24)
             )
-            
+
             assert "grant_id" in result
             assert "transaction_hash" in result
             assert result["expires_at"] is not None
@@ -212,10 +212,10 @@ class TestBlockchainService:
         """测试成功撤销访问"""
         record_id = str(uuid.uuid4())
         grantee_id = str(uuid.uuid4())
-        
+
         with patch('suoke_blockchain_service.service.get_db_session') as mock_db, \
-             patch('suoke_blockchain_service.service.get_blockchain_client') as mock_blockchain:
-            
+            patch('suoke_blockchain_service.service.get_blockchain_client') as mock_blockchain:
+
             # Mock访问授权记录
             mock_grant = MagicMock()
             mock_grant.id = str(uuid.uuid4())
@@ -223,26 +223,26 @@ class TestBlockchainService:
             mock_grant.grantee_id = grantee_id
             mock_grant.health_record_id = record_id
             mock_grant.is_active = True
-            
+
             # Mock数据库查询
             mock_session = AsyncMock()
             mock_result = AsyncMock()
             mock_result.scalar_one_or_none.return_value = mock_grant
             mock_session.execute.return_value = mock_result
             mock_db.return_value.__aenter__.return_value = mock_session
-            
+
             # Mock区块链客户端
             mock_client = AsyncMock()
             mock_client.revoke_access.return_value = "0x1234567890abcdef"
             mock_blockchain.return_value = mock_client
-            
+
             result = await blockchain_service.revoke_access(
                 owner_id=sample_user_id,
                 grantee_id=grantee_id,
                 record_id=record_id,
                 reason="测试撤销"
             )
-            
+
             assert "grant_id" in result
             assert "revoked_at" in result
             assert result["reason"] == "测试撤销"
@@ -263,7 +263,7 @@ class TestBlockchainService:
             mock_record1.transaction = MagicMock()
             mock_record1.transaction.transaction_hash = "0x1234567890abcdef"
             mock_record1.transaction.status = TransactionStatus.confirmed
-            
+
             mock_record2 = MagicMock()
             mock_record2.id = str(uuid.uuid4())
             mock_record2.data_type = DataType.heart_rate
@@ -273,25 +273,25 @@ class TestBlockchainService:
             mock_record2.zkp_proof = None
             mock_record2.record_metadata = {"original_size": 456}
             mock_record2.transaction = None
-            
+
             # Mock数据库查询
             mock_session = AsyncMock()
             mock_result = AsyncMock()
             mock_result.scalars.return_value.all.return_value = [mock_record1, mock_record2]
             mock_session.execute.return_value = mock_result
             mock_db.return_value.__aenter__.return_value = mock_session
-            
+
             result = await blockchain_service.get_health_records(
                 user_id=sample_user_id,
                 data_type="heart_rate",
                 limit=10,
                 offset=0
             )
-            
+
             assert result["total_count"] == 2
             assert len(result["records"]) == 2
             assert result["has_more"] is False
-            
+
             # 验证记录内容
             record1 = result["records"][0]
             assert record1["id"] == mock_record1.id
@@ -314,26 +314,26 @@ class TestBlockchainService:
             mock_grant.is_active = True
             mock_grant.revoked_at = None
             mock_grant.revocation_reason = None
-            
+
             # Mock关联的健康记录
             mock_grant.health_record = MagicMock()
             mock_grant.health_record.id = str(uuid.uuid4())
             mock_grant.health_record.data_type = DataType.heart_rate
             mock_grant.health_record.created_at = datetime.now()
-            
+
             # Mock数据库查询
             mock_session = AsyncMock()
             mock_result = AsyncMock()
             mock_result.scalars.return_value.all.return_value = [mock_grant]
             mock_session.execute.return_value = mock_result
             mock_db.return_value.__aenter__.return_value = mock_session
-            
+
             result = await blockchain_service.get_access_grants(
                 user_id=sample_user_id,
                 as_owner=True,
                 active_only=True
             )
-            
+
             assert len(result) == 1
             grant = result[0]
             assert grant["grantee_id"] == mock_grant.grantee_id
@@ -356,11 +356,11 @@ class TestBlockchainService:
         # 测试空用户ID
         with pytest.raises(ValidationError, match="用户ID不能为空"):
             blockchain_service._validate_store_request("", {"test": "data"}, "heart_rate")
-        
+
         # 测试空数据
         with pytest.raises(ValidationError, match="数据不能为空"):
             blockchain_service._validate_store_request("user123", {}, "heart_rate")
-        
+
         # 测试空数据类型
         with pytest.raises(ValidationError, match="数据类型不能为空"):
             blockchain_service._validate_store_request("user123", {"test": "data"}, "")
@@ -371,11 +371,11 @@ class TestBlockchainService:
         data = {"test": "data", "number": 123}
         hash1 = blockchain_service._generate_data_hash(data)
         hash2 = blockchain_service._generate_data_hash(data)
-        
+
         # 相同数据应该生成相同哈希
         assert hash1 == hash2
         assert len(hash1) == 64  # SHA-256哈希长度
-        
+
         # 不同数据应该生成不同哈希
         different_data = {"test": "different", "number": 456}
         hash3 = blockchain_service._generate_data_hash(different_data)
@@ -387,7 +387,7 @@ class TestBlockchainService:
         with patch('suoke_blockchain_service.service.get_db_session') as mock_db:
             mock_session = AsyncMock()
             mock_db.return_value.__aenter__.return_value = mock_session
-            
+
             await blockchain_service._create_audit_log(
                 session=mock_session,
                 user_id=sample_user_id,
@@ -398,6 +398,6 @@ class TestBlockchainService:
                 new_values={"new": "value"},
                 audit_metadata={"meta": "data"}
             )
-            
+
             # 验证session.add被调用
             mock_session.add.assert_called_once() 

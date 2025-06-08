@@ -56,8 +56,7 @@ onTestComplete }) => {}
     setCurrentTest(准备测试环境...")"
     try {
       const testSteps = [;
-        "检查设备兼容性...,测试权限系统...",测试原生模块...",测试通知系统...,测试性能指标...",测试网络连接...",生成测试报告...,";
-      ;];
+        "检查设备兼容性...,测试权限系统...",测试原生模块...",测试通知系统...,测试性能指标...",测试网络连接...",生成测试报告...,";];
       for (let i = 0; i < testSteps.length; i++) {
         setCurrentTest(testSteps[i]);
         await new Promise<void>(resolve => setTimeout(resolve, 100;0;););

@@ -23,8 +23,7 @@ scholarly",       tone: wise",            / 睿智的语调*  知识专业*  教
     try {
       const response = await apiClient.post(`${this.serviceEndpoint}/message`, {/            text: message,context,
         user_id: userId,
-        session_id: session;I;d;
-      ;};);
+        session_id: session;I;d;};);
       response.data.text = this.applyPersonalityToResponse(response.data.text, context);
       return response.da;t;a;
     } catch (error) {
@@ -39,8 +38,7 @@ scholarly",       tone: wise",            / 睿智的语调*  知识专业*  教
     try {
       const response = await apiClient.post(`${this.serviceEndpoint}/search-knowledge`, {/            query,category,
         filters,
-        user_level: userLev;e;l;
-      ;};);
+        user_level: userLev;e;l;};);
       return response.data.map(result: unknow;n;); => ({,
   id: result.id,
         title: result.title,
@@ -69,8 +67,7 @@ scholarly",       tone: wise",            / 睿智的语调*  知识专业*  教
     try {
       const response = await apiClient.post(`${this.serviceEndpoint}/create-learning-path`, {/            user_profile: userProfile,learning_goals: learningGoals,
         preferences,
-        time_constraints: timeConstrain;t;s;
-      ;};);
+        time_constraints: timeConstrain;t;s;};);
       return {id: response.data.id,title: response.data.title,description: response.data.description,difficulty: response.data.difficulty,estimatedDuration: response.data.estimated_duration,modules: response.data.modules.map(module: unknow;n;); => ({,
   id: module.id,
           title: module.title,
@@ -145,8 +142,7 @@ scholarly",       tone: wise",            / 睿智的语调*  知识专业*  教
     try {
       const response = await apiClient.post(`${this.serviceEndpoint}/maze-interaction`, {/            player_id: playerId,action,
         location,
-        conte;x;t;
-      ;};);
+        conte;x;t;};);
       return {id: response.data.id,playerId: response.data.player_id,npcResponse: response.data.npc_response,action: response.data.action,location: response.data.location,rewards: response.data.rewards || [],hints: response.data.hints || [],challenges: response.data.challenges || [],storyProgression: response.data.story_progression,nextActions: response.data.next_actions || [],timestamp: new Date(response.data.timestamp;);}
     } catch (error) {
       return {id: "error,";
@@ -158,8 +154,7 @@ scholarly",       tone: wise",            / 睿智的语调*  知识专业*  教
       const response = await apiClient.get(`${this.serviceEndpoint}/progress/${userId}`, { params: { path_id: pathId   },/          };);
       return response.da;t;a;
     } catch (error) {
-      return {totalProgress: 0,completedModules: 0,totalModules: 0,achievements: [],timeSpent: 0,lastActivity: nul;l;
-      ;};
+      return {totalProgress: 0,completedModules: 0,totalModules: 0,achievements: [],timeSpent: 0,lastActivity: nul;l;};
     }
   }
   // 提交学习评估  async submitAssessment(userId: string,
@@ -170,8 +165,7 @@ scholarly",       tone: wise",            / 睿智的语调*  知识专业*  教
     recommendations: string[]
     }> {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/assessment/submit`, {/            user_id: userId,assessment_id: assessmentId,answe;r;s;
-      ;};);
+      const response = await apiClient.post(`${this.serviceEndpoint}/assessment/submit`, {/            user_id: userId,assessment_id: assessmentId,answe;r;s;};);
       return {score: response.data.score,passed: response.data.passed,feedback: response.data.feedback || [],recommendations: response.data.recommendations || [;]
       ;}
     } catch (error) {
@@ -185,8 +179,7 @@ scholarly",       tone: wise",            / 睿智的语调*  知识专业*  教
       const response = await apiClient.get(`${this.serviceEndpoint}/statu;s;`;);/          return response.da;t;a;
     } catch (error) {
       return {status: offline",;
-        capabilities: [],performance: {accuracy: 0,responseTime: 0,userSatisfaction: 0};
-      ;};
+        capabilities: [],performance: {accuracy: 0,responseTime: 0,userSatisfaction: 0};};
     }
   }
   // 设置个性化特征  setPersonality(traits: unknown): void  {

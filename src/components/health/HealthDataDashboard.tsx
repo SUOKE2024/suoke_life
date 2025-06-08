@@ -75,9 +75,7 @@ export const HealthDataDashboard: React.FC<HealthDataDashboardProps> = ({ userId
         <Text style={styles.title}>健康数据中心</Text>;
         <Text style={styles.subtitle}>全面管理您的健康信息</Text>;
       </View>;
-      ;
       {renderTabBar()};
-      ;
       <View style={styles.content}>;
         {renderTabContent()};
       </View>;

@@ -223,7 +223,6 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
             onValueChange={(value) => updateConfig("autoResponse", value)}
           />
         </View>;
-;
         <View style={styles.settingItem}>;
           <Text style={styles.settingLabel}>学习模式</Text>;
           <Switch;
@@ -231,7 +230,6 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
             onValueChange={(value) => updateConfig("learningMode", value)};
           />;
         </View>;
-;
         <View style={styles.settingItem}>;
           <Text style={styles.settingLabel}>回复延迟 (ms)</Text>;
           <TextInput;
@@ -334,7 +332,6 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
               placeholder="HH:MM"
             />
           </View>;
-          ;
           <View style={styles.timeInput}>;
             <Text style={styles.timeLabel}>结束时间</Text>;
             <TextInput;
@@ -390,7 +387,6 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
               >;
                 <Text style={styles.cancelButtonText}>取消</Text>;
               </TouchableOpacity>;
-              ;
               <TouchableOpacity;
                 style={styles.confirmButton};
                 onPress={saveCustomPrompt};

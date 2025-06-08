@@ -177,7 +177,6 @@ d";  * / 已过期* ///     " // 支付订单信息 * export interface PaymentOr
       if (!order) {
         throw new Error("Order not found;";);
       };
-
 const config = this.configs.get(provide;r;);
       if (!config) {
         throw new Error(`Payment provider ${provider} not configured;`;);
@@ -209,11 +208,9 @@ order.status = "processing";
       if (!order) {
         throw new Error("Order not found;";);
       };
-
 const response = await apiClient.get(;
         `/api/v1/payments/orders/${orderId}/    statu;s;`);
-      return {success: response.data.status === "completed",orderId: order.id,transactionId: response.data.transactionId,amount: order.amount,currency: order.currency,status: response.data.status,provider: order.provider!,paymentMethod: order.paymentMethod!,timestamp: response.data.updatedAt,receipt: response.data.receip;t;
-      ;}
+      return {success: response.data.status === "completed",orderId: order.id,transactionId: response.data.transactionId,amount: order.amount,currency: order.currency,status: response.data.status,provider: order.provider!,paymentMethod: order.paymentMethod!,timestamp: response.data.updatedAt,receipt: response.data.receip;t;}
     } catch (error) {
       throw error;
     }
@@ -249,12 +246,9 @@ const response = await apiClient.get(;
       if (order.status !== "completed") {
         throw new Error("Can only refund completed orders";);
       };
-
 const response = await apiClient.post(;
-        "/api/v1/payments/refunds",/            refundRequ;e;s;t;
-      ;);
-      return {success: true,refundId: response.data.refundId,amount: refundRequest.amount,status: response.data.status,estimatedProcessingTime: response.data.estimatedProcessingTim;e;
-      ;}
+        "/api/v1/payments/refunds",/            refundRequ;e;s;t;);
+      return {success: true,refundId: response.data.refundId,amount: refundRequest.amount,status: response.data.status,estimatedProcessingTime: response.data.estimatedProcessingTim;e;}
     } catch (error) {
       throw err;o;r;
     }
@@ -303,7 +297,6 @@ const response = await apiClient.post(;
           }
         });
       };
-
 const response = await apiClient.get(;
         `/api/v1/payments/history?${params.toString();};`);
       return response.da;t;a;
@@ -324,8 +317,7 @@ const response = await apiClient.get(;
     try {
       const response = await apiClient.post(;
         "/api/v1/payments/security/validate",/            {orderId,
-          ...securityDa;t;a;
-        ;}
+          ...securityDa;t;a;}
       ;);
       return response.da;t;a;
     } catch (error) {
@@ -384,8 +376,7 @@ const response = await apiClient.get(;
     return {nativePaymentData: {merchantIdentifier: config.merchantId,paymentRequest: {
       countryCode: "US",
       currencyCode: order.currency,total: {label: order.description,amount: order.amount.toString()};
-        }};
-    ;};
+        }};};
   }
   ///    >  {
     / 更新订单状态*  返回支付结果* ///;

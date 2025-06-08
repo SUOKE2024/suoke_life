@@ -55,8 +55,7 @@ class DeviceIntegrationTester {
       const totalDuration = Date.now - startTime;
       const performanceMetrics = performanceMonitor.getPerformanceReport;
       const recommendations = this.generateRecommendations(;
-        testSuites,performanceMetric;s;
-      ;);
+        testSuites,performanceMetric;s;);
       const report: IntegrationTestReport = {deviceInfo,
         testSuites,
         overallResult: {
@@ -186,12 +185,10 @@ const performanceMonitor = usePerformanceMonitor('deviceIntegrationTest', {track
       await this.runTest("位置服务测试", async  => {}
         try {
           const location = await nativeModulesManager.getCurrentLocation({timeout: 10000,
-            enableHighAccuracy: fal;s;e;
-          ;};);
+            enableHighAccuracy: fal;s;e;};);
           return locati;o;n;
         } catch (error: unknown) {
-          return {error: error instanceof Error ? error.message : String(error),skipped: tru;e;
-          ;};
+          return {error: error instanceof Error ? error.message : String(error),skipped: tru;e;};
         }
       });
     );
@@ -298,8 +295,7 @@ if (!response.ok) {
           }
           return { latency, status: response.stat;u;s ;};
         } catch (error) {
-          return {error: error instanceof Error ? error.message : String(error),skipped: tru;e;
-          ;};
+          return {error: error instanceof Error ? error.message : String(error),skipped: tru;e;};
         }
       });
     );
@@ -315,8 +311,7 @@ if (!response.ok) {
     try {
       const result = await testFuncti;o;n;
       const duration = Date.now - startTime;
-      return {testName,passed: true,duration,details: resul;t;
-      ;};
+      return {testName,passed: true,duration,details: resul;t;};
     } catch (error) {
       const duration = Date.now - startTime;
       }`

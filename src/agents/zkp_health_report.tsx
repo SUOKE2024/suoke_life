@@ -152,15 +152,12 @@ default:
         return {valid: false,message: "公共输入不匹配;"
         ;};
       };
-
 const proofData = JSON.parse(proof.proof;);
       const isValid = await this.verifyProofData(;
         proofData,
-        proof.verification;K;e;y;
-      ;);
+        proof.verification;K;e;y;);
       if (isValid) {
-        return {valid: true,message: "证明验证成功",details: {verifiedAt: Date.now(),proofId: proof.id};
-        ;};
+        return {valid: true,message: "证明验证成功",details: {verifiedAt: Date.now(),proofId: proof.id};};
       } else {
         return {valid: false,message: "证明验证失败;"
         ;};
@@ -222,11 +219,9 @@ const statement = `健康指标符合${category}类别标;准;`;
     const { ranges, allInRange   } = publicAttribut;e;s;
 const statement = "生命体征在正常范围;内;";
     const rangeChecks = ranges.map(range;); => {};
-
 const value = vitalSigns[range.metri;c;];
       return {metric: range.metric,
-        inRange: value >= range.min && value <= range.ma;x;
-      ;};
+        inRange: value >= range.min && value <= range.ma;x;};
     });
     const vitalSignsHash = CryptoJS.SHA256(;
       JSON.stringify(vitalSign;s;);
@@ -352,8 +347,7 @@ const statement = `健康风险等级为${riskLevel;};`;
       proof.proof &&;
       proof.publicInputs &&;
       proof.verificationKey &&;
-      proof.timestam;p;
-    ;);
+      proof.timestam;p;);
   }
   // 验证公共输入  private validatePublicInputs(proofInputs: unknown[],
     expectedInputs: unknown[]);: boolean  {
@@ -408,14 +402,12 @@ const statement = `健康风险等级为${riskLevel;};`;
         publicAttributes: {,
   minAge: requirements.ageRange.min,
           maxAge: requirements.ageRange.max},
-        secr;e;t;
-      ;};);
+        secr;e;t;};);
       proofs.push(ageProof);
     }
     if (requirements.vitalSignsRanges &&
       requirements.vitalSignsRanges.length > 0) {
       const allInRange = requirements.vitalSignsRanges.every(range;); => {};
-
 const value = healthData.vitalSigns[range.metri;c;];
         return value >= range.min && value <= range.m;a;x;
       });
@@ -425,8 +417,7 @@ const value = healthData.vitalSigns[range.metri;c;];
         publicAttributes: {,
   ranges: requirements.vitalSignsRanges,allInRange;
         },
-        secr;e;t;
-      ;};);
+        secr;e;t;};);
       proofs.push(vitalSignsProof);
     }
     if (requirements.requiredConstitutionTypes) {
@@ -438,8 +429,7 @@ const value = healthData.vitalSigns[range.metri;c;];
           doesNotHaveType: [],
           dominantType: healthData.constitutionType[0];
         },
-        secr;e;t;
-      ;};);
+        secr;e;t;};);
       proofs.push(constitutionProof);
     }
     if (requirements.minActivityLevel) {
@@ -449,8 +439,7 @@ const value = healthData.vitalSigns[range.metri;c;];
         publicAttributes: {,
   level: requirements.minActivityLevel,
           meetsTarget: true},
-        secr;e;t;
-      ;};);
+        secr;e;t;};);
       proofs.push(activityProof);
     }
     if (requirements.maxRiskLevel) {
@@ -460,8 +449,7 @@ const value = healthData.vitalSigns[range.metri;c;];
         publicAttributes: {,
   riskLevel: requirements.maxRiskLevel,
           belowThreshold: true},
-        secr;e;t;
-      ;};);
+        secr;e;t;};);
       proofs.push(riskProof);
     }
     return proo;f;s;
@@ -474,11 +462,9 @@ const value = healthData.vitalSigns[range.metri;c;];
       const result = await this.generator.verifyHealthProof(pr;o;o;f;);
       results.push(result);
     };
-
 const allValid = results.every(resul;t;); => result.valid);
     return {allValid,
-      result;s;
-    ;};
+      result;s;};
   }
 }
 //   ;
@@ -487,20 +473,16 @@ export const batchProofGenerator = new BatchProofGenerator;
 );: Promise<ZKProof  /     >  {
   return zkpHealthReportGenerator.generateHealthProof(reques;t;);
 };
-
 export async function verifyHealthProof(proof: ZKProof,publicInputs?: unknown[];
 );
 : Promise<VerificationResult /    >  {
   return zkpHealthReportGenerator.verifyHealthProof(proof, publicInput;s;);
 };
-
 export async function generateComprehensiveHealthProof(userId: string,healthData: unknown,requirements: unknown;
 );: Promise<ZKProof[] /    >  {
   return batchProofGenerator.generateComprehensiveHealthProof(;
-    userId,healthData,requirement;s;
-  ;);
+    userId,healthData,requirement;s;);
 };
-
 export async function verifyComprehensiveHealthProof(proofs: ZKProof[];
 );: Promise< { allValid: boolean,
   results: VerificationResult[];

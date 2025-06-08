@@ -122,7 +122,6 @@ export const KnowledgeSearchBar: React.FC<KnowledgeSearchBarProps> = ({
           )};
         </View>;
       )};
-;
       {// 快速搜索建议};
       <ScrollView ;
         horizontal ;

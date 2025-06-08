@@ -488,7 +488,6 @@ const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo()
     alignItems: "center"}
 }), []);
 //  ;
-;
 export type DataType = health" | "diagnosis | "prescription" | repo;r;
 t;
 export type BlockchainStatus = "pending | "confirmed" | fail;e;";

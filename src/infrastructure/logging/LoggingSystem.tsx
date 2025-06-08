@@ -364,8 +364,7 @@ case "sms":
       level: entry.level,
       message: entry.message,
       service: entry.service,
-      timestamp: entry.timestamp,context: entry.contex;t;
-    ;};
+      timestamp: entry.timestamp,context: entry.contex;t;};
     }
   // 发送邮件告警  private async sendEmailAlert(config: Record<string, any>,
     alert: LogAlert,
@@ -425,8 +424,7 @@ const performanceMonitor = usePerformanceMonitor(LoggingSystem", {"
     const levelPriority = {debug: 0,
       info: 1,
       warn: 2,
-      error: 3,fatal: ;4;
-    ;};
+      error: 3,fatal: ;4;};
     return levelPriority[log.level] >= levelPriority[output.minLeve;l;];
   }
   // 写入到输出  private async writeToOutput(output: LogOutput,
@@ -633,8 +631,7 @@ let status: "healthy" | "warning" | "critical"
         log.timestamp;
       );
     }
-    return {errorTrend,serviceHealth,hotIssues,userActivit;y;
-    ;}
+    return {errorTrend,serviceHealth,hotIssues,userActivit;y;}
   }
   ///        const id = `alert-${Date.now()}-${Math.random().toString(36).substr(2, 9)};`;
     this.alerts.push({ ...alert, id });

@@ -1,3 +1,5 @@
+from typing import Dict, List, Any, Optional, Union
+
 """
 test_http_api - 索克生活项目模块
 """
@@ -21,7 +23,7 @@ class TestHealthAPI:
 
     def test_health_check(self, client: TestClient):
         """测试健康检查端点"""
-        response = client.get("/health")
+        response = client.get(" / health")
         assert response.status_code == 200
 
         data = response.json()
@@ -31,7 +33,7 @@ class TestHealthAPI:
 
     def test_readiness_check(self, client: TestClient):
         """测试就绪检查端点"""
-        response = client.get("/ready")
+        response = client.get(" / ready")
         assert response.status_code == 200
 
         data = response.json()
@@ -52,7 +54,7 @@ class TestMazeAPI:
             "size": 5
         }
 
-        response = client.post("/api/v1/mazes", json=maze_data)
+        response = client.post(" / api / v1 / mazes", json = maze_data)
         assert response.status_code == 201
 
         data = response.json()
@@ -66,7 +68,7 @@ class TestMazeAPI:
     def test_create_maze_validation(self, client: TestClient):
         """测试创建迷宫的验证"""
         # 测试缺少必需字段
-        response = client.post("/api/v1/mazes", json={})
+        response = client.post(" / api / v1 / mazes", json = {})
         assert response.status_code == 422
 
         # 测试无效的主题
@@ -76,7 +78,7 @@ class TestMazeAPI:
             "difficulty": MazeDifficulty.EASY.value,
             "size": 5
         }
-        response = client.post("/api/v1/mazes", json=invalid_data)
+        response = client.post(" / api / v1 / mazes", json = invalid_data)
         assert response.status_code == 400  # 我们的自定义验证返回400
 
         # 测试无效的大小
@@ -86,7 +88,7 @@ class TestMazeAPI:
             "difficulty": MazeDifficulty.EASY.value,
             "size": 1  # 太小
         }
-        response = client.post("/api/v1/mazes", json=invalid_size_data)
+        response = client.post(" / api / v1 / mazes", json = invalid_size_data)
         assert response.status_code == 422
 
     def test_get_maze(self, client: TestClient):
@@ -100,13 +102,13 @@ class TestMazeAPI:
             "size": 5
         }
 
-        create_response = client.post("/api/v1/mazes", json=maze_data)
+        create_response = client.post(" / api / v1 / mazes", json = maze_data)
         assert create_response.status_code == 201
 
         maze_id = create_response.json()["id"]
 
         # 获取迷宫
-        response = client.get(f"/api/v1/mazes/{maze_id}")
+        response = client.get(f" / api / v1 / mazes / {maze_id}")
         assert response.status_code == 200
 
         data = response.json()
@@ -116,12 +118,12 @@ class TestMazeAPI:
     def test_get_maze_not_found(self, client: TestClient):
         """测试获取不存在的迷宫"""
         fake_id = str(uuid4())
-        response = client.get(f"/api/v1/mazes/{fake_id}")
+        response = client.get(f" / api / v1 / mazes / {fake_id}")
         assert response.status_code == 404
 
     def test_list_mazes(self, client: TestClient):
         """测试列出迷宫"""
-        response = client.get("/api/v1/mazes")
+        response = client.get(" / api / v1 / mazes")
         assert response.status_code == 200
 
         data = response.json()
@@ -134,15 +136,15 @@ class TestMazeAPI:
     def test_list_mazes_with_filters(self, client: TestClient):
         """测试带过滤器的迷宫列表"""
         # 测试主题过滤
-        response = client.get(f"/api/v1/mazes?theme={MazeTheme.HEALTH.value}")
+        response = client.get(f" / api / v1 / mazes?theme = {MazeTheme.HEALTH.value}")
         assert response.status_code == 200
 
         # 测试难度过滤
-        response = client.get(f"/api/v1/mazes?difficulty={MazeDifficulty.EASY.value}")
+        response = client.get(f" / api / v1 / mazes?difficulty = {MazeDifficulty.EASY.value}")
         assert response.status_code == 200
 
         # 测试分页
-        response = client.get("/api/v1/mazes?page=1&size=10")
+        response = client.get(" / api / v1 / mazes?page = 1&size = 10")
         assert response.status_code == 200
 
         data = response.json()
@@ -160,7 +162,7 @@ class TestMazeAPI:
             "size": 5
         }
 
-        create_response = client.post("/api/v1/mazes", json=maze_data)
+        create_response = client.post(" / api / v1 / mazes", json = maze_data)
         maze_id = create_response.json()["id"]
 
         # 更新迷宫
@@ -170,7 +172,7 @@ class TestMazeAPI:
             "difficulty": MazeDifficulty.NORMAL.value
         }
 
-        response = client.put(f"/api/v1/mazes/{maze_id}", json=update_data)
+        response = client.put(f" / api / v1 / mazes / {maze_id}", json = update_data)
         assert response.status_code == 200
 
         data = response.json()
@@ -189,15 +191,15 @@ class TestMazeAPI:
             "size": 5
         }
 
-        create_response = client.post("/api/v1/mazes", json=maze_data)
+        create_response = client.post(" / api / v1 / mazes", json = maze_data)
         maze_id = create_response.json()["id"]
 
         # 删除迷宫
-        response = client.delete(f"/api/v1/mazes/{maze_id}")
+        response = client.delete(f" / api / v1 / mazes / {maze_id}")
         assert response.status_code == 204
 
         # 验证迷宫已被删除
-        get_response = client.get(f"/api/v1/mazes/{maze_id}")
+        get_response = client.get(f" / api / v1 / mazes / {maze_id}")
         assert get_response.status_code == 404
 
 
@@ -215,12 +217,12 @@ class TestProgressAPI:
             "size": 5
         }
 
-        create_response = client.post("/api/v1/mazes", json=maze_data)
+        create_response = client.post(" / api / v1 / mazes", json = maze_data)
         maze_id = create_response.json()["id"]
 
         # 开始迷宫
         user_id = str(uuid4())
-        response = client.post(f"/api/v1/mazes/{maze_id}/start", json={"user_id": user_id})
+        response = client.post(f" / api / v1 / mazes / {maze_id} / start", json = {"user_id": user_id})
         assert response.status_code == 201
 
         data = response.json()
@@ -240,11 +242,11 @@ class TestProgressAPI:
             "size": 5
         }
 
-        create_response = client.post("/api/v1/mazes", json=maze_data)
+        create_response = client.post(" / api / v1 / mazes", json = maze_data)
         maze_id = create_response.json()["id"]
 
         user_id = str(uuid4())
-        start_response = client.post(f"/api/v1/mazes/{maze_id}/start", json={"user_id": user_id})
+        start_response = client.post(f" / api / v1 / mazes / {maze_id} / start", json = {"user_id": user_id})
         assert start_response.status_code == 201
 
         # 移动
@@ -253,7 +255,7 @@ class TestProgressAPI:
             "direction": "right"
         }
 
-        response = client.post(f"/api/v1/mazes/{maze_id}/move", json=move_data)
+        response = client.post(f" / api / v1 / mazes / {maze_id} / move", json = move_data)
         assert response.status_code == 200
 
         data = response.json()
@@ -271,15 +273,15 @@ class TestProgressAPI:
             "size": 5
         }
 
-        create_response = client.post("/api/v1/mazes", json=maze_data)
+        create_response = client.post(" / api / v1 / mazes", json = maze_data)
         maze_id = create_response.json()["id"]
 
         user_id = str(uuid4())
-        start_response = client.post(f"/api/v1/mazes/{maze_id}/start", json={"user_id": user_id})
+        start_response = client.post(f" / api / v1 / mazes / {maze_id} / start", json = {"user_id": user_id})
         assert start_response.status_code == 201
 
         # 获取进度
-        response = client.get(f"/api/v1/mazes/{maze_id}/progress/{user_id}")
+        response = client.get(f" / api / v1 / mazes / {maze_id} / progress / {user_id}")
         assert response.status_code == 200
 
         data = response.json()
@@ -295,17 +297,17 @@ class TestErrorHandling:
 
     def test_404_error(self, client: TestClient):
         """测试404错误"""
-        response = client.get("/api/v1/nonexistent")
+        response = client.get(" / api / v1 / nonexistent")
         assert response.status_code == 404
 
     def test_method_not_allowed(self, client: TestClient):
         """测试方法不允许错误"""
-        response = client.patch("/api/v1/mazes")
+        response = client.patch(" / api / v1 / mazes")
         assert response.status_code == 405
 
     def test_validation_error(self, client: TestClient):
         """测试验证错误"""
-        response = client.post("/api/v1/mazes", json={"invalid": "data"})
+        response = client.post(" / api / v1 / mazes", json = {"invalid": "data"})
         assert response.status_code == 422
 
         data = response.json()

@@ -7,8 +7,8 @@ from datetime import datetime
 from enum import Enum
 from typing import List, Dict, Any, Optional
 
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+#! / usr / bin / env python
+# - * - coding: utf - 8 - * -
 
 """
 中医数据模型 - 定义中医相关的数据结构
@@ -83,12 +83,12 @@ class Syndrome:
     type: Any  # SyndromeType enum
     confidence: float
     description: str
-    primary_symptoms: List[str] = field(default_factory=list)
-    secondary_symptoms: List[str] = field(default_factory=list)
+    primary_symptoms: List[str] = field(default_factory = list)
+    secondary_symptoms: List[str] = field(default_factory = list)
     tongue_manifestation: Optional[str] = None
     pulse_manifestation: Optional[str] = None
-    pathological_factors: List[PathologicalFactor] = field(default_factory=list)
-    affected_organs: List[OrganSystem] = field(default_factory=list)
+    pathological_factors: List[PathologicalFactor] = field(default_factory = list)
+    affected_organs: List[OrganSystem] = field(default_factory = list)
 
 
 @dataclass
@@ -110,19 +110,19 @@ class TreatmentPrinciple:
     name: str
     description: str
     priority: int
-    methods: List[str] = field(default_factory=list)
-    contraindications: List[str] = field(default_factory=list)
+    methods: List[str] = field(default_factory = list)
+    contraindications: List[str] = field(default_factory = list)
 
 
 @dataclass
 class HerbFormula:
     """方剂"""
     name: str
-    composition: Dict[str, str]  # 药物名称 -> 用量
+    composition: Dict[str, str]  # 药物名称 - > 用量
     functions: List[str]
     indications: List[str]
     contraindications: List[str]
-    modifications: Dict[str, Dict[str, str]] = field(default_factory=dict)
+    modifications: Dict[str, Dict[str, str]] = field(default_factory = dict)
     source: Optional[str] = None
 
 
@@ -136,8 +136,8 @@ class SingleHerb:
     functions: List[str]
     dosage: str
     contraindications: List[str]
-    incompatibilities: List[str] = field(default_factory=list)
-    processing_methods: List[str] = field(default_factory=list)
+    incompatibilities: List[str] = field(default_factory = list)
+    processing_methods: List[str] = field(default_factory = list)
 
 
 @dataclass
@@ -152,7 +152,7 @@ class Acupoint:
     indications: List[str]
     needling_method: str
     depth: str
-    contraindications: List[str] = field(default_factory=list)
+    contraindications: List[str] = field(default_factory = list)
 
 
 @dataclass
@@ -207,20 +207,20 @@ class TCMDiagnosis:
     lifestyle_guidance: Dict[str, List[str]]
     prognosis: str
     follow_up_recommendations: List[str]
-    created_at: datetime = field(default_factory=datetime.now)
+    created_at: datetime = field(default_factory = datetime.now)
 
 
 @dataclass
 class SymptomRecord:
     """症状记录"""
     symptom: str
-    severity: int  # 1-10
+    severity: int  # 1 - 10
     duration: str
     frequency: str
-    triggers: List[str] = field(default_factory=list)
-    relieving_factors: List[str] = field(default_factory=list)
-    associated_symptoms: List[str] = field(default_factory=list)
-    recorded_at: datetime = field(default_factory=datetime.now)
+    triggers: List[str] = field(default_factory = list)
+    relieving_factors: List[str] = field(default_factory = list)
+    associated_symptoms: List[str] = field(default_factory = list)
+    recorded_at: datetime = field(default_factory = datetime.now)
 
 
 @dataclass
@@ -229,11 +229,11 @@ class PatientProfile:
     age: int
     gender: str
     constitution_type: Optional[ConstitutionType]
-    medical_history: List[str] = field(default_factory=list)
-    current_medications: List[str] = field(default_factory=list)
-    allergies: List[str] = field(default_factory=list)
-    lifestyle_factors: Dict[str, Any] = field(default_factory=dict)
-    family_history: List[str] = field(default_factory=list)
+    medical_history: List[str] = field(default_factory = list)
+    current_medications: List[str] = field(default_factory = list)
+    allergies: List[str] = field(default_factory = list)
+    lifestyle_factors: Dict[str, Any] = field(default_factory = dict)
+    family_history: List[str] = field(default_factory = list)
 
 
 @dataclass
@@ -258,7 +258,7 @@ class KnowledgeGraphNode:
     type: str  # syndrome, herb, formula, acupoint, etc.
     name: str
     properties: Dict[str, Any]
-    relationships: List[Dict[str, Any]] = field(default_factory=list)
+    relationships: List[Dict[str, Any]] = field(default_factory = list)
 
 
 @dataclass
@@ -267,22 +267,22 @@ class KnowledgeGraphRelation:
     source_id: str
     target_id: str
     relation_type: str
-    properties: Dict[str, Any] = field(default_factory=dict)
+    properties: Dict[str, Any] = field(default_factory = dict)
     confidence: float = 1.0
 
 
 @dataclass
 class TCMKnowledgeBase:
     """中医知识库"""
-    syndromes: Dict[str, Syndrome] = field(default_factory=dict)
-    herbs: Dict[str, SingleHerb] = field(default_factory=dict)
-    formulas: Dict[str, HerbFormula] = field(default_factory=dict)
-    acupoints: Dict[str, Acupoint] = field(default_factory=dict)
-    pulse_patterns: Dict[str, PulsePattern] = field(default_factory=dict)
-    tongue_patterns: Dict[str, TonguePattern] = field(default_factory=dict)
-    constitution_types: Dict[str, ConstitutionAssessment] = field(default_factory=dict)
-    knowledge_graph: Dict[str, KnowledgeGraphNode] = field(default_factory=dict)
-    relations: List[KnowledgeGraphRelation] = field(default_factory=list)
+    syndromes: Dict[str, Syndrome] = field(default_factory = dict)
+    herbs: Dict[str, SingleHerb] = field(default_factory = dict)
+    formulas: Dict[str, HerbFormula] = field(default_factory = dict)
+    acupoints: Dict[str, Acupoint] = field(default_factory = dict)
+    pulse_patterns: Dict[str, PulsePattern] = field(default_factory = dict)
+    tongue_patterns: Dict[str, TonguePattern] = field(default_factory = dict)
+    constitution_types: Dict[str, ConstitutionAssessment] = field(default_factory = dict)
+    knowledge_graph: Dict[str, KnowledgeGraphNode] = field(default_factory = dict)
+    relations: List[KnowledgeGraphRelation] = field(default_factory = list)
 
 
 # 常用的中医术语映射
@@ -307,10 +307,10 @@ TCM_TERMINOLOGY = {
         "气虚质": ["qi deficiency constitution", "气虚体质"],
         "阳虚质": ["yang deficiency constitution", "阳虚体质"],
         "阴虚质": ["yin deficiency constitution", "阴虚体质"],
-        "痰湿质": ["phlegm-dampness constitution", "痰湿体质"],
-        "湿热质": ["damp-heat constitution", "湿热体质"],
+        "痰湿质": ["phlegm - dampness constitution", "痰湿体质"],
+        "湿热质": ["damp - heat constitution", "湿热体质"],
         "血瘀质": ["blood stasis constitution", "血瘀体质"],
         "气郁质": ["qi stagnation constitution", "气郁体质"],
         "特禀质": ["special diathesis constitution", "特禀体质"]
     }
-} 
+}

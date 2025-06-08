@@ -1,5 +1,4 @@
 import React from 'react';
-
 describe('websocketManager', () => {
   beforeEach(() => {
     jest.clearAllMocks();

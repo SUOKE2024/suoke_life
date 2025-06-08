@@ -9,7 +9,7 @@ import logging
 import os
 import sys
 
-#!/usr/bin/env python3
+#! / usr / bin / env python3
 
 """
 无障碍服务 gRPC 服务器实现
@@ -19,7 +19,7 @@ import sys
 # 导入protobuf生成的类
 
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '.. / ..')))
 
 logger = logging.getLogger(__name__)
 
