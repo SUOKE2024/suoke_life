@@ -21,7 +21,7 @@ expect(() => {
         validateEmail(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = validateEmail(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -43,7 +43,7 @@ expect(() => {
         validatePhone(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = validatePhone(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -65,7 +65,7 @@ expect(() => {
         validatePassword(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = validatePassword(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -87,7 +87,7 @@ expect(() => {
         validateUsername(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = validateUsername(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -109,7 +109,7 @@ expect(() => {
         validateIdCard(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = validateIdCard(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -131,7 +131,7 @@ expect(() => {
         validateRequired(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = validateRequired(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -153,7 +153,7 @@ expect(() => {
         validateNumberRange(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = validateNumberRange(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -175,7 +175,7 @@ expect(() => {
         validateAgeNumber(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = validateAgeNumber(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -197,7 +197,7 @@ expect(() => {
         validateAge(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = validateAge(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -219,7 +219,7 @@ expect(() => {
         validateHeight(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = validateHeight(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -241,7 +241,7 @@ expect(() => {
         validateWeight(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = validateWeight(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -263,7 +263,7 @@ expect(() => {
         validateUrl(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = validateUrl(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -285,7 +285,7 @@ expect(() => {
         validateField(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = validateField(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -317,7 +317,7 @@ validateEmail(// test params);
 expect(averageTime).toBeLessThan(1);
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);)
     const startTime = performance.now();
     // Test with large dataset
 validateEmail(largeDataset);

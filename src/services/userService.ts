@@ -107,7 +107,7 @@ class UserService {
     try {
       const formData = new FormData();
       formData.append('avatar', imageFile);
-      const response: ApiResponse<{ avatarUrl: string }> = await apiClient.post(
+      const response: ApiResponse<{ avatarUrl: string }> = await apiClient.post()
         '/users/me/avatar',
         formData,
         {
@@ -139,7 +139,7 @@ class UserService {
   // 更新用户偏好设置
   async updateUserPreferences(preferences: Partial<UserPreferences>): Promise<UserPreferences> {
     try {
-      const response: ApiResponse<UserPreferences> = await apiClient.put(
+      const response: ApiResponse<UserPreferences> = await apiClient.put()
         '/users/me/preferences',
         preferences;
       );
@@ -164,11 +164,11 @@ class UserService {
     }
   }
   // 注册新设备
-  async registerDevice(
+  async registerDevice()
     deviceInfo: Omit<DeviceInfo, 'id' | 'lastActive' | 'isActive'>
   ): Promise<DeviceInfo> {
     try {
-      const response: ApiResponse<DeviceInfo> = await apiClient.post(
+      const response: ApiResponse<DeviceInfo> = await apiClient.post()
         '/users/me/devices',
         deviceInfo;
       );
@@ -192,7 +192,7 @@ class UserService {
     }
   }
   // 获取健康记录
-  async getHealthRecords(
+  async getHealthRecords()
     type?: string,
     startDate?: string,
     endDate?: string,
@@ -206,7 +206,7 @@ class UserService {
       if (endDate) params.append('endDate', endDate);
       if (limit) params.append('limit', limit.toString());
       if (offset) params.append('offset', offset.toString());
-      const response: ApiResponse<{ records: HealthRecord[]; total: number }> = await apiClient.get(
+      const response: ApiResponse<{ records: HealthRecord[]; total: number }> = await apiClient.get()
         `/users/me/health-records?${params.toString()}`
       );
       if (!response.success || !response.data) {
@@ -218,11 +218,11 @@ class UserService {
     }
   }
   // 添加健康记录
-  async addHealthRecord(
+  async addHealthRecord()
     record: Omit<HealthRecord, 'id' | 'timestamp' | 'verified'>
   ): Promise<HealthRecord> {
     try {
-      const response: ApiResponse<HealthRecord> = await apiClient.post(
+      const response: ApiResponse<HealthRecord> = await apiClient.post()
         '/users/me/health-records',
         record;
       );
@@ -235,12 +235,12 @@ class UserService {
     }
   }
   // 更新健康记录
-  async updateHealthRecord(
+  async updateHealthRecord()
     recordId: string,
     updates: Partial<HealthRecord>
   ): Promise<HealthRecord> {
     try {
-      const response: ApiResponse<HealthRecord> = await apiClient.put(
+      const response: ApiResponse<HealthRecord> = await apiClient.put()
         `/users/me/health-records/${recordId}`,
         updates;
       );
@@ -278,7 +278,7 @@ class UserService {
   // 导出用户数据
   async exportUserData(format: 'json' | 'csv' | 'pdf' = 'json'): Promise<Blob> {
     try {
-      const response = await apiClient.get(`/users/me/export?format=${format}`, {responseType: 'blob';
+      const response = await apiClient.get(`/users/me/export?format=${format}`, {responseType: 'blob';)
       });
       return response as Blob;
     } catch (error: any) {
@@ -299,7 +299,7 @@ class UserService {
     }
   }
   // 获取用户活动日志
-  async getActivityLog(
+  async getActivityLog()
     startDate?: string,
     endDate?: string,
     limit?: number,
@@ -311,7 +311,7 @@ class UserService {
       if (endDate) params.append('endDate', endDate);
       if (limit) params.append('limit', limit.toString());
       if (offset) params.append('offset', offset.toString());
-      const response: ApiResponse<{ activities: any[]; total: number }> = await apiClient.get(
+      const response: ApiResponse<{ activities: any[]; total: number }> = await apiClient.get()
         `/users/me/activity-log?${params.toString()}`
       );
       if (!response.success || !response.data) {
@@ -334,7 +334,7 @@ class UserService {
   // 检查用户名是否可用
   async checkUsernameAvailability(username: string): Promise<boolean> {
     try {
-      const response: ApiResponse<{ available: boolean }> = await apiClient.get(
+      const response: ApiResponse<{ available: boolean }> = await apiClient.get()
         `/users/check-username?username=${encodeURIComponent(username)}`
       );
       if (!response.success) {
@@ -348,7 +348,7 @@ class UserService {
   // 检查邮箱是否可用
   async checkEmailAvailability(email: string): Promise<boolean> {
     try {
-      const response: ApiResponse<{ available: boolean }> = await apiClient.get(
+      const response: ApiResponse<{ available: boolean }> = await apiClient.get()
         `/users/check-email?email=${encodeURIComponent(email)}`
       );
       if (!response.success) {

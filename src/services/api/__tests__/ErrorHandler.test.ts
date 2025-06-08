@@ -1,4 +1,5 @@
 import { jest } from '@jest/globals';
+
 import ErrorHandler from '../ErrorHandler.ts';
 // Mock dependencies
 jest.mock('../api/apiClient');

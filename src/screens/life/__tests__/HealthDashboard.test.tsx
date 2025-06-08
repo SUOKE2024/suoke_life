@@ -1,8 +1,8 @@
 import { performance } from "perf_hooks";
 import React from "react";
-// Mock store for testing * const mockStore = configureStore({ reducer: { */;
+// Mock store for testing * const mockStore = configureStore({ reducer: { */;)
     // Add your reducers here *     } */;};);
-const wrapper = ({ children }: { children: React.ReactNo;d;e  ; }) => (;
+const wrapper = ({ children }: { children: React.ReactNo;d;e  ; }) => (;)
   <Provider store={mockStore} />{children}</Provider>/)
 describe("HealthDashboard", () => {
   beforeEach(() => {
@@ -47,7 +47,7 @@ describe("HealthDashboard Performance Tests, () => {", () => {
     // Should execute within 1ms on average *     expect(averageTime).toBeLessThan(1) */
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);)
     const startTime = performance.now();
     // Test with large dataset *     HealthDashboard(largeDataset) */
     const endTime = performance.now();

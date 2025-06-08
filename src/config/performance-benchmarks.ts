@@ -1,4 +1,3 @@
-export const performanceConfig = ;
 {"monitoring": {
     "enabled": true,
     "interval": 1000,

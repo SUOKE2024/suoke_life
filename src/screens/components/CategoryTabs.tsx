@@ -12,7 +12,7 @@ interface CategoryTabsProps {
   onCategorySelect: (category: CategoryType | all") => void;"
   style?: unknown
 }
-export const CategoryTabs = memo<CategoryTabsProps />({/      selectedCategory,onCategorySelect,style;
+export const CategoryTabs = memo<CategoryTabsProps />({/      selectedCategory,onCategorySelect,style;)
 }) => {}
   const categories: Array<{ key: CategoryType | "all name: string, icon: string, color: string}> = [;"
     {
@@ -34,33 +34,33 @@ export const CategoryTabs = memo<CategoryTabsProps />({/      selectedCategory,o
     //
     const isSelected = selectedCategory === category.k;e;y;
     performanceMonitor.recordRender();
-    return (;
+    return (;)
       <TouchableOpacity,key={category.key};
-        style={[;
-          styles.tab,isSelected && styles.selectedTab,isSelected && { backgroundColor: category.color + 20;"  ; }"
+        style={{[;
+          styles.tab,isSelected && styles.selectedTab,isSelected && { backgroundColor: category.color + 20;"  ; }}"
         ]}
         onPress={() = /> handleCategoryPress(category.key)}/            activeOpacity={0.7}
       >
-        <Icon;
+        <Icon
 name={category.icon}
           size={20}
-          color={isSelected ? category.color: colors.textSecondary} />/            <Text;
-style={[
+          color={isSelected ? category.color: colors.textSecondary} />/            <Text
+style={{[
             styles.tabText,
             isSelected && styles.selectedTabText,
-            isSelected && { color: category.color}
+            isSelected && { color: category.color}}
           ]} />/              {category.name}
         </Text>/      </TouchableOpacity>/        );
   };
-  return (;
-    <View style={[styles.container, style]} />/          <ScrollView;
+  return (;)
+    <View style={[styles.container, style]} />/          <ScrollView
 horizontal;
         showsHorizontalScrollIndicator={false};
         contentContainerStyle={styles.scrollContent} />/            {categories.map(renderCategoryTab)};
       </ScrollView>/    </View>/      ;);
 });
 CategoryTabs.displayName = "CategoryTabs"
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   backgroundColor: colors.background,
     borderBottomWidth: 1,
     borderBottomColor: colors.border;

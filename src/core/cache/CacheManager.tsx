@@ -96,7 +96,7 @@ export class CacheManager {
       this.cleanupIntervals.set(name, interval);
     }
   }
-  public async set<T>(
+  public async set<T>()
     layerName: string,
     key: string,
     value: T,
@@ -105,13 +105,13 @@ export class CacheManager {
       metadata?: Record<string, any>;
     } = {}
   ): Promise<boolean> {
-    return performanceMonitor.measureAsync(;
+    return performanceMonitor.measureAsync(;)
       "cache_set",PerformanceCategory.MEMORY,async () => {const layer = this.layers.get(layerName);
         if (!layer) {
           return false;
         }
         const now = Date.now();
-        const serializedValue = await this.serializeValue(;
+        const serializedValue = await this.serializeValue(;)
           value,layer.config.compression && this.compressionEnabled;
         );
         const size = this.calculateSize(serializedValue);
@@ -139,7 +139,7 @@ export class CacheManager {
     );
   }
   public async get<T>(layerName: string, key: string): Promise<T | null> {
-    return performanceMonitor.measureAsync(;
+    return performanceMonitor.measureAsync(;)
       "cache_get",PerformanceCategory.MEMORY,async () => {const layer = this.layers.get(layerName);
         if (!layer) {
           return null;
@@ -219,7 +219,7 @@ export class CacheManager {
     }
     return await this.getLayerKeys(layer);
   }
-  public async setMultiple<T>(layerName: string,
+  public async setMultiple<T>(layerName: string,)
     items: Array<{ key: string, value: T, options?: unknown }>
   ): Promise<boolean[]> {
     const results: boolean[] = [];
@@ -229,7 +229,7 @@ export class CacheManager {
     }
     return results;
   }
-  public async getMultiple<T>(layerName: string,
+  public async getMultiple<T>(layerName: string,)
     keys: string[]): Promise<Map<string, T | null>> {
     const results = new Map<string, T | null>();
     for (const key of keys) {
@@ -238,21 +238,21 @@ export class CacheManager {
     }
     return results;
   }
-  public async warmup<T>(
+  public async warmup<T>()
     layerName: string,
     dataLoader: () => Promise<Map<string, T>>,
     options: { ttl?: number } = {}
   ): Promise<void> {
     try {
       const data = await dataLoader();
-      const items = Array.from(data.entries()).map(([key, value]) => ({key,value,options;
+      const items = Array.from(data.entries()).map(([key, value]) => ({key,value,options;))
       }));
       await this.setMultiple(layerName, items);
     } catch (error) {
       // Handle error;
     }
   }
-  public async getOrSet<T>(
+  public async getOrSet<T>()
     layerName: string,
     key: string,
     loader: () => Promise<T>,
@@ -282,7 +282,7 @@ export class CacheManager {
     await this.clearLayer(layer);
     return true;
   }
-  private async storeItem(layer: CacheLayer,
+  private async storeItem(layer: CacheLayer,)
     key: string,
     item: CacheItem<any>): Promise<boolean> {
     try {
@@ -292,7 +292,7 @@ export class CacheManager {
           return true;
         case CacheType.LOCAL_STORAGE:
           if (typeof localStorage !== "undefined") {
-            localStorage.setItem(
+            localStorage.setItem()
               `cache_${layer.name}_${key}`,
               JSON.stringify(item);
             );
@@ -301,7 +301,7 @@ export class CacheManager {
           break;
         case CacheType.SESSION_STORAGE:
           if (typeof sessionStorage !== "undefined") {
-            sessionStorage.setItem(
+            sessionStorage.setItem()
               `cache_${layer.name}_${key}`,
               JSON.stringify(item);
             );
@@ -317,7 +317,7 @@ export class CacheManager {
     }
     return false;
   }
-  private async retrieveItem(layer: CacheLayer,
+  private async retrieveItem(layer: CacheLayer,)
     key: string): Promise<CacheItem<any> | null> {
     try {
       switch (layer.config.type) {
@@ -380,7 +380,7 @@ export class CacheManager {
           const keys = Object.keys(localStorage).filter(key) =>;
             key.startsWith(`cache_${layer.name}_`);
           );
-          keys.forEach(key) => localStorage.removeItem(key));
+          keys.forEach(((key) => localStorage.removeItem(key));)
         }
         break;
       case CacheType.SESSION_STORAGE:
@@ -388,7 +388,7 @@ export class CacheManager {
           const keys = Object.keys(sessionStorage).filter(key) =>;
             key.startsWith(`cache_${layer.name}_`);
           );
-          keys.forEach(key) => sessionStorage.removeItem(key));
+          keys.forEach(((key) => sessionStorage.removeItem(key));)
         }
         break;
       case CacheType.INDEXED_DB:
@@ -426,7 +426,7 @@ export class CacheManager {
     if (currentSize >= layer.config.maxSize) {
       return true;
     }
-    if (
+    if ()
       layer.config.maxMemory &&
       currentMemory + newItemSize > layer.config.maxMemory;
     ) {
@@ -495,7 +495,7 @@ export class CacheManager {
       // Handle cleanup logic;
     }
   }
-  private updateStats(layer: CacheLayer,
+  private updateStats(layer: CacheLayer,)
     operation: "hit" | "miss" | "set" | "delete",
     size?: number): void {
     const stats = layer.stats;
@@ -540,7 +540,7 @@ export class CacheManager {
       return 0;
     }
   }
-  private async serializeValue(value: unknown,
+  private async serializeValue(value: unknown,)
     compression?: boolean): Promise<any> {
     if (!compression) {
       return value;
@@ -548,7 +548,7 @@ export class CacheManager {
     // 这里可以实现压缩逻辑
     return value;
   }
-  private async deserializeValue(value: unknown,
+  private async deserializeValue(value: unknown,)
     compression?: boolean): Promise<any> {
     if (!compression) {
       return value;

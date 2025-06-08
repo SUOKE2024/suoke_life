@@ -59,10 +59,10 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
     height: 0;
   });
   // 初始化动画
-  useEffect() => {
+  useEffect(() => {
     if (loading) {
       // 加载动画
-      Animated.loop(
+      Animated.loop()
         Animated.timing(loadingAnim, {
           toValue: 1,
           duration: 1000,
@@ -75,10 +75,10 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
     }
   }, [loading, loadingAnim]);
   // 呼吸脉冲效果
-  useEffect() => {
+  useEffect(() => {
     if (glowEffect && !disabled && !loading) {
-      Animated.loop(
-        Animated.sequence([
+      Animated.loop()
+        Animated.sequence([)
           Animated.timing(glowAnim, {
             toValue: 1,
             duration: 1500,
@@ -207,8 +207,8 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
     if (animationType !== 'rippleEffect' || !isPressed) return null;
     const rippleSize = Math.max(buttonLayout.width, buttonLayout.height) * 2;
     return (
-      <Animated.View;
-        style={[
+  <Animated.View;
+        style={{[
           styles.ripple,
           {
             width: rippleSize,
@@ -216,13 +216,13 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
             borderRadius: rippleSize / 2,
             transform: [
               {
-                scale: rippleAnim.interpolate({,
+                scale: rippleAnim.interpolate({,)
   inputRange: [0, 1],
                   outputRange: [0, 1],
-                }),
+                }}),
               },
             ],
-            opacity: rippleAnim.interpolate({,
+            opacity: rippleAnim.interpolate({,)
   inputRange: [0, 1],
               outputRange: [0.3, 0],
             }),
@@ -235,17 +235,17 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
   const renderGlowEffect = useCallback() => {
     if (!glowEffect || disabled || loading) return null;
     return (
-      <Animated.View;
-        style={[
+  <Animated.View;
+        style={{[
           styles.glow,
           {
-            opacity: glowAnim.interpolate({,
+            opacity: glowAnim.interpolate({,)
   inputRange: [0, 1],
               outputRange: [0, 0.6],
-            }),
+            }}),
             transform: [
               {
-                scale: glowAnim.interpolate({,
+                scale: glowAnim.interpolate({,)
   inputRange: [0, 1],
                   outputRange: [1, 1.1],
                 }),
@@ -260,16 +260,16 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
   const renderLoadingEffect = useCallback() => {
     if (!loading) return null;
     return (
-      <Animated.View;
-        style={[
+  <Animated.View;
+        style={{[
           styles.loading,
           {
             transform: [
               {
-                rotate: loadingAnim.interpolate({,
+                rotate: loadingAnim.interpolate({,)
   inputRange: [0, 1],
                   outputRange: ["0deg",360deg'],
-                }),
+                }}),
               },
             ],
           },
@@ -280,9 +280,9 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
   // 渲染内容
   const renderContent = useCallback() => {
     return (
-      <View style={styles.content}>
+  <View style={styles.content}>
         {leftIcon && <View style={styles.leftIcon}>{leftIcon}</View>}
-        <Text style={getTextStyle()}>{title}</Text>
+        <Text style={{getTextStyle()}}>{title}</Text>
         {rightIcon && <View style={styles.rightIcon}>{rightIcon}</View>}
       </View>
     );
@@ -294,7 +294,7 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
     //   return renderGradientButton();
     // }
     return (
-      <TouchableOpacity;
+  <TouchableOpacity
         onPress={handlePress}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
@@ -304,10 +304,10 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
         accessibilityLabel="TODO: 添加无障碍标签"
       >
         <Animated.View;
-          style={[
+          style={{[
             getButtonStyle(),
             {
-              transform: [{ scale: scaleAnim }],
+              transform: [{ scale: scaleAnim }}],
               opacity: opacityAnim,
             },
           ]}

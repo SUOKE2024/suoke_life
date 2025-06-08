@@ -153,7 +153,7 @@ export class BenchmarkService {
   */
   async predictWithModel(modelId: string, data: any): Promise<ModelPrediction> {
     try {
-      const response = await apiClient.post(`${this.baseUrl}/api/v1/models/${modelId}/predict`, {input_data: data;
+      const response = await apiClient.post(`${this.baseUrl}/api/v1/models/${modelId}/predict`, {input_data: data;)
       });
       return response.data;
     } catch (error) {
@@ -178,7 +178,7 @@ export class BenchmarkService {
   */
   async runPluginBenchmark(pluginName: string, config: any): Promise<string> {
     try {
-      const response = await apiClient.post(;
+      const response = await apiClient.post(;)
         `${this.baseUrl}/api/v1/plugins/${pluginName}/benchmark`,config;
       );
       return response.data.task_id;

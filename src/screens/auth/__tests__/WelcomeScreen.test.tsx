@@ -1,4 +1,3 @@
-
 import WelcomeScreen from '../WelcomeScreen.tsx';
 describe('WelcomeScreen', () => {
   it('应该正确导出', () => {

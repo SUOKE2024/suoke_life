@@ -15,13 +15,13 @@ professional",  tone: efficient",      / 高效的语调*  商业专业*  服务
   private serviceEndpoint = /api/agents/xiaoke"/    "
   constructor() {
     }
-  // 核心消息处理功能  async processMessage(message: string,
+  // 核心消息处理功能  async processMessage(message: string,)
     context: ServiceContext,
     userId?: string,
     sessionId?: string;
   ): Promise<any>  {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/message`, {/            text: message,context,
+      const response = await apiClient.post(`${this.serviceEndpoint}/message`, {/            text: message,context,)
         user_id: userId,
         session_id: session;I;d;};);
       response.data.text = this.applyPersonalityToResponse(response.data.text, context);
@@ -30,14 +30,14 @@ professional",  tone: efficient",      / 高效的语调*  商业专业*  服务
       return this.generateFallbackResponse(message, contex;t;);
     }
   }
-  // 推荐服务  async recommendServices(userProfile: UserProfile,
+  // 推荐服务  async recommendServices(userProfile: UserProfile,)
     healthData?: unknown,
     preferences?: unknown;
   ): Promise<ServiceRecommendation[] /    >  {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/recommend-service`, {/            user_profile: userProfile,health_data: healthData,
+      const response = await apiClient.post(`${this.serviceEndpoint}/recommend-service`, {/            user_profile: userProfile,health_data: healthData,)
         preferences: preferenc;e;s;};);
-      return response.data.map(rec: unknow;n;); => ({,
+      return response.data.map(rec: unknow;n;); => ({,)
   id: rec.id,
         name: rec.name,
         category: rec.category,
@@ -56,16 +56,16 @@ professional",  tone: efficient",      / 高效的语调*  商业专业*  服务
       return [;];
     }
   }
-  // 匹配医生  async matchDoctors(symptoms: string[],
+  // 匹配医生  async matchDoctors(symptoms: string[],)
     specialty?: string,
     location?: string,
     preferences?: unknown;
   ): Promise<DoctorMatch[] /    >  {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/match-doctor`, {/            symptoms,specialty,
+      const response = await apiClient.post(`${this.serviceEndpoint}/match-doctor`, {/            symptoms,specialty,)
         location,
         preferenc;e;s;};);
-      return response.data.map(match: unknow;n;); => ({,
+      return response.data.map(match: unknow;n;); => ({,)
   doctorId: match.doctor_id,
         name: match.name,
         specialty: match.specialty,
@@ -92,7 +92,7 @@ professional",  tone: efficient",      / 高效的语调*  商业专业*  服务
       return nu;l;l;
     }
   }
-  // 搜索产品  async searchProducts(query: string,
+  // 搜索产品  async searchProducts(query: string,)
     filters?: {
       category?: string;
       priceRange?: [number, number];
@@ -102,7 +102,7 @@ professional",  tone: efficient",      / 高效的语调*  商业专业*  服务
   ): Promise<ProductInfo[] /    >  {
     try {
       const response = await apiClient.post(`${this.serviceEndpoint}/products/search`, {/            query,filte;r;s;};);
-      return response.data.map(product: unknow;n;); => ({,
+      return response.data.map(product: unknow;n;); => ({,)
   id: product.id,
         name: product.name,
         category: product.category,
@@ -125,7 +125,7 @@ professional",  tone: efficient",      / 高效的语调*  商业专业*  服务
   ///    >  {
     try {
       const response = await apiClient.get(`${this.serviceEndpoint}/supply-chain/${productId;};`;);// return {productId: response.data.product_id,
-        stages: response.data.stages.map(stage: unknow;n;); => ({,
+        stages: response.data.stages.map(stage: unknow;n;); => ({,)
   id: stage.id,
           name: stage.name,
           description: stage.description,
@@ -146,13 +146,13 @@ professional",  tone: efficient",      / 高效的语调*  商业专业*  服务
       return nu;l;l;
     }
   }
-  // 创建预约  async createAppointment(doctorId: string,
+  // 创建预约  async createAppointment(doctorId: string,)
     timeSlot: Date,
     type: "consultation | "checkup" | follow-up",
     notes?: string;
   ): Promise<AppointmentInfo | null /    >  {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/appointments`, {/            doctor_id: doctorId,time_slot: timeSlot.toISOString(),
+      const response = await apiClient.post(`${this.serviceEndpoint}/appointments`, {/            doctor_id: doctorId,time_slot: timeSlot.toISOString(),)
         type,
         not;e;s;};);
       return {id: response.data.id,doctorId: response.data.doctor_id,patientId: response.data.patient_id,timeSlot: new Date(response.data.time_slot),type: response.data.type,status: response.data.status,notes: response.data.notes,location: response.data.location,meetingLink: response.data.meeting_link,reminders: response.data.reminders || [],createdAt: new Date(response.data.created_at;);}
@@ -162,7 +162,7 @@ professional",  tone: efficient",      / 高效的语调*  商业专业*  服务
   }
   ///    >  {
     try {
-      const response = await apiClient.get(`${this.serviceEndpoint}/appointments/user/${userId;};`;);// return response.data.map(appointment: unknow;n;); => ({,
+      const response = await apiClient.get(`${this.serviceEndpoint}/appointments/user/${userId;};`;);// return response.data.map(appointment: unknow;n;); => ({,)
   id: appointment.id,
         doctorId: appointment.doctor_id,
         patientId: appointment.patient_id,
@@ -178,7 +178,7 @@ professional",  tone: efficient",      / 高效的语调*  商业专业*  服务
       return [;]
     }
   }
-  // 订阅服务  async subscribeToService(serviceId: string,
+  // 订阅服务  async subscribeToService(serviceId: string,)
     plan: basic" | "premium | "enterprise",
     duration: number  ): Promise< { subscriptionId: string,
     status: string,
@@ -186,7 +186,7 @@ professional",  tone: efficient",      / 高效的语调*  商业专业*  服务
     endDate: Date,
     paymentInfo: unknown} | null> {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/services/subscribe`, {/            service_id: serviceId,plan,
+      const response = await apiClient.post(`${this.serviceEndpoint}/services/subscribe`, {/            service_id: serviceId,plan,)
         durati;o;n;};);
       return {subscriptionId: response.data.subscription_id,status: response.data.status,startDate: new Date(response.data.start_date),endDate: new Date(response.data.end_date),paymentInfo: response.data.payment_inf;o;}
     } catch (error) {
@@ -220,7 +220,7 @@ professional",  tone: efficient",      / 高效的语调*  商业专业*  服务
   // 生成备用响应  private generateFallbackResponse(message: string, context: ServiceContext): unknown  {
     return {
       text: "抱歉，我暂时无法处理您的请求。作为您的专业服务顾问，我建议您稍后重试，或者我可以为您转接人工客服。,",
-      type: "fallback",suggestions: ;[查看热门服务",浏览推荐产品,联系客服",
+      type: "fallback",suggestions: ;[查看热门服务", "浏览推荐产品,联系客服", "
         查看我的订单""
       ],
       timestamp: Date.now()};

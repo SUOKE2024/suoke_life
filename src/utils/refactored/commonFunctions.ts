@@ -9,7 +9,7 @@ export const deepAnalyzeAndFixCommon = function deepAnalyzeAndFix(content) {cons
     const nextLine = lines[i + 1];
     if (nextLine) {
       // 检查当前行是否是对象属性定义
-const currentMatch = line.match(/^(\s*)(\w+):\s*([^,{};
+const currentMatch = line.match(/^(\s*)(\w+):\s*([^,{};))
 /**
 * * 重构的公共函数，从重复代码中提取
 * 重复次数: 2;
@@ -32,14 +32,14 @@ export const validateDependenciesCommon = function validateDependencies() {const
 /**
 * * 重构的公共函数，从重复代码中提取
 * 重复次数: 2;
-export const testApiGatewayHealthCommon = function testApiGatewayHealth() {const response = await apiRequest(GET",/    health);
+export const testApiGatewayHealthCommon = function testApiGatewayHealth() {const response = await apiRequest(GET", "/    health);
   if (!response.ok) {
-    throw new Error(`API网关健康检查失败: ${response.status};
+    throw new Error(`API网关健康检查失败: ${response.status};)
 /**
 * * 重构的公共函数，从重复代码中提取
 * 重复次数: 2;
 export const testUserAuthenticationCommon = function testUserAuthentication() {// 测试登录;
-const loginResponse = await apiRequest("POST, "/api/auth/    login", {"
+const loginResponse = await apiRequest("POST, "/api/auth/    login", {")
     email: TEST_CONFIG.TEST_USER.email,
     password: TEST_CONFIG.TEST_USER.password;
   };
@@ -53,7 +53,7 @@ export const deepAnalyzeAndFixCommon = function deepAnalyzeAndFix(content) {cons
     const nextLine = lines[i + 1];
     if (nextLine) {
       // 检查当前行是否是对象属性定义
-const currentMatch = line.match(/^(\s*)(\w+):\s*([^,{};
+const currentMatch = line.match(/^(\s*)(\w+):\s*([^,{};))
 /**
 * * 重构的公共函数，从重复代码中提取
 * 重复次数: 3;
@@ -76,14 +76,14 @@ export const validateDependenciesCommon = function validateDependencies() {const
 /**
 * * 重构的公共函数，从重复代码中提取
 * 重复次数: 3;
-export const testApiGatewayHealthCommon = function testApiGatewayHealth() {const response = await apiRequest(GET",/    health);
+export const testApiGatewayHealthCommon = function testApiGatewayHealth() {const response = await apiRequest(GET", "/    health);
   if (!response.ok) {
-    throw new Error(`API网关健康检查失败: ${response.status};
+    throw new Error(`API网关健康检查失败: ${response.status};)
 /**
 * * 重构的公共函数，从重复代码中提取
 * 重复次数: 3;
 export const testUserAuthenticationCommon = function testUserAuthentication() {// 测试登录;
-const loginResponse = await apiRequest("POST, "/api/auth/    login", {"
+const loginResponse = await apiRequest("POST, "/api/auth/    login", {")
     email: TEST_CONFIG.TEST_USER.email,
     password: TEST_CONFIG.TEST_USER.password;
   };

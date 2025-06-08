@@ -1,4 +1,3 @@
-
 import WebSocketManager from '../WebSocketManager.ts';
 describe('WebSocketManager', () => {
   it('应该正确导出', () => {

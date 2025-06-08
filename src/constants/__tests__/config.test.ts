@@ -21,7 +21,7 @@ expect(() => {
         Environment(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = Environment(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -43,7 +43,7 @@ expect(() => {
         currentEnv(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = currentEnv(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -65,7 +65,7 @@ expect(() => {
         API_CONFIG(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = API_CONFIG(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -87,7 +87,7 @@ expect(() => {
         CACHE_CONFIG(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = CACHE_CONFIG(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -109,7 +109,7 @@ expect(() => {
         STORAGE_CONFIG(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = STORAGE_CONFIG(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -131,7 +131,7 @@ expect(() => {
         APP_CONFIG(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = APP_CONFIG(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -153,7 +153,7 @@ expect(() => {
         AGENT_INFO(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = AGENT_INFO(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -175,7 +175,7 @@ expect(() => {
         CONSTITUTION_INFO(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = CONSTITUTION_INFO(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -197,7 +197,7 @@ expect(() => {
         ERROR_CODES(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = ERROR_CODES(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -219,7 +219,7 @@ expect(() => {
         EVENTS(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = EVENTS(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -248,7 +248,7 @@ Environment(// test params);
 expect(averageTime).toBeLessThan(1);
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);)
     const startTime = performance.now();
     // Test with large dataset
 Environment(largeDataset);

@@ -251,7 +251,7 @@ class PerformanceCollector {
   }
 }
 // 增强的性能监控Hook;
-export const useEnhancedPerformanceMonitor = (
+export const useEnhancedPerformanceMonitor = ()
   componentName: string,
   config: Partial<PerformanceMonitorConfig> = {}
 ) => {
@@ -264,7 +264,7 @@ export const useEnhancedPerformanceMonitor = (
   const collector = useRef<PerformanceCollector>();
   const reportTimer = useRef<NodeJS.Timeout>();
   // 初始化收集器
-  useEffect() => {
+  useEffect(() => {
     const mergedConfig = { ...DEFAULT_CONFIG, ...config };
     collector.current = PerformanceCollector.getInstance(mergedConfig);
   }, [config]);
@@ -294,7 +294,7 @@ export const useEnhancedPerformanceMonitor = (
     return collector.current?.getPerformanceReport() || { metrics: [], averages: {}, suggestions: [] };
   }, []);
   // 定期更新性能数据
-  useEffect() => {
+  useEffect(() => {
     const mergedConfig = { ...DEFAULT_CONFIG, ...config };
         if (mergedConfig.enabled) {
       reportTimer.current = setInterval() => {
@@ -309,7 +309,7 @@ export const useEnhancedPerformanceMonitor = (
     };
   }, [config, getPerformanceReport]);
   // 组件挂载时开始测量
-  useEffect() => {
+  useEffect(() => {
     startRenderMeasurement();
         // 使用 InteractionManager 确保在交互完成后测量
     const handle = InteractionManager.runAfterInteractions() => {
@@ -330,14 +330,14 @@ export const useEnhancedPerformanceMonitor = (
   };
 };
 // 性能监控装饰器
-export const withPerformanceMonitoring = <P extends object>(
+export const withPerformanceMonitoring = <P extends object>()
   WrappedComponent: React.ComponentType<P>,
   componentName?: string;
 ) => {
   const MonitoredComponent = (props: P) => {
     const name = componentName || WrappedComponent.displayName || WrappedComponent.name || 'Unknown';
     const { startRenderMeasurement, endRenderMeasurement } = useEnhancedPerformanceMonitor(name);
-    useEffect() => {
+    useEffect(() => {
       startRenderMeasurement();
       return () => {
         endRenderMeasurement();

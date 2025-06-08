@@ -68,7 +68,7 @@ export const RAGDashboard: React.FC = () => {
   const [filteredHistory, setFilteredHistory] = useState(queryHistory);
   const [smartSuggestions, setSmartSuggestions] = useState<string[]>([]);
   // 更新过滤后的历史记录
-  useEffect() => {
+  useEffect(() => {
     if (searchKeyword.trim()) {
       setFilteredHistory(searchHistory(searchKeyword));
     } else {
@@ -76,29 +76,29 @@ export const RAGDashboard: React.FC = () => {
     }
   }, [searchKeyword, queryHistory, searchHistory]);
   // 获取智能建议
-  useEffect() => {
+  useEffect(() => {
     if (activeTab === 'query') {
       getSmartSuggestions('健康咨询').then(setSmartSuggestions);
     }
   }, [activeTab, getSmartSuggestions]);
   // 渲染标签栏
   const renderTabBar = () => (
-    <View style={styles.tabBar}>
+  <View style={styles.tabBar}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {tabs.map(tab) => (
-          <TouchableOpacity;
+        {tabs.map(tab) => ()
+          <TouchableOpacity
             key={tab.id}
-            style={[
+            style={{[
               styles.tab,
               activeTab === tab.id && styles.activeTab;
-            ]};
+            ]}};
             onPress={() => setActiveTab(tab.id)};
           >;
             <Text style={styles.tabIcon}>{tab.icon}</Text>;
-            <Text;
-              style={[;
+            <Text
+              style={{[;
                 styles.tabText,activeTab === tab.id && styles.activeTabText;
-              ]};
+              ]}};
             >;
               {tab.title};
             </Text>;
@@ -109,37 +109,36 @@ export const RAGDashboard: React.FC = () => {
   );
   // 渲染状态指示器
   const renderStatusIndicator = () => (
-    <View style={styles.statusBar}>
+  <View style={styles.statusBar}>
       <View style={styles.statusItem}>
-        <View;
-          style={[
+        <View
+          style={{[
             styles.statusDot,
-            { backgroundColor: offlineStatus.isOffline ? '#ff4444' : '#44ff44' }
+            { backgroundColor: offlineStatus.isOffline ? '#ff4444' : '#44ff44' }}
           ]}
         />
         <Text style={styles.statusText}>
           {offlineStatus.isOffline ? '离线' : '在线'}
         </Text>
       </View>
-      {(isQuerying || isStreaming || isAnalyzing || isRecommending) && (
-        <View style={styles.statusItem}>;
-          <View style={[styles.statusDot, { backgroundColor: '#ffaa00' }]} />;
+      {(isQuerying || isStreaming || isAnalyzing || isRecommending)  && <View style={styles.statusItem}>;
+          <View style={{[styles.statusDot, { backgroundColor: '#ffaa00' }}]} />;
           <Text style={styles.statusText}>处理中...</Text>;
         </View>;
       )};
-      {error && (;
-        <TouchableOpacity;
+      {error && (;)
+        <TouchableOpacity
           style={styles.statusItem};
           onPress={clearError};
         >;
-          <View style={[styles.statusDot, { backgroundColor: '#ff4444' }]} />;
+          <View style={{[styles.statusDot, { backgroundColor: '#ff4444' }}]} />;
           <Text style={styles.statusText}>错误</Text>;
         </TouchableOpacity>;
       )};
     </View>;
   );
   // 渲染历史记录
-  const renderHistoryItem = ({ item }: { item: any }) => (
+  const renderHistoryItem = ({ item }: { item: any }) => ()
     <View style={styles.historyItem}>
       <Text style={styles.historyTime}>
         {new Date(item.timestamp).toLocaleString()}
@@ -162,7 +161,7 @@ export const RAGDashboard: React.FC = () => {
   );
   // 渲染统计信息
   const renderStats = () => (
-    <ScrollView style={styles.statsContainer}>
+  <ScrollView style={styles.statsContainer}>
       <View style={styles.statsSection}>
         <Text style={styles.sectionTitle}>性能指标</Text>
         <View style={styles.statsGrid}>
@@ -216,14 +215,14 @@ export const RAGDashboard: React.FC = () => {
         </View>;
       </View>;
       <View style={styles.actionButtons}>;
-        <TouchableOpacity;
+        <TouchableOpacity
           style={styles.actionButton};
-          onPress={() => {Alert.alert(;
-              "清理缓存",确定要清理所有缓存吗？',[;
+          onPress={() => {Alert.alert(;)
+              "清理缓存", "确定要清理所有缓存吗？',[;
                 {
       text: "取消",
       style: 'cancel' },{
-      text: "确定",
+      text: "确定", "
       onPress: clearQueryCache };
               ];
             );
@@ -231,17 +230,16 @@ export const RAGDashboard: React.FC = () => {
         >
           <Text style={styles.actionButtonText}>清理缓存</Text>
         </TouchableOpacity>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={styles.actionButton}
           onPress={() => {
-            Alert.alert(
-              "重置统计",确定要重置性能统计吗？',
+            Alert.alert("重置统计", "确定要重置性能统计吗？',
               [
                 {
       text: "取消",
       style: 'cancel' },
                 {
-      text: "确定",
+      text: "确定", "
       onPress: resetMetrics }
               ]
             );
@@ -249,13 +247,13 @@ export const RAGDashboard: React.FC = () => {
         >
           <Text style={styles.actionButtonText}>重置统计</Text>
         </TouchableOpacity>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={styles.actionButton}
           onPress={handleExportData}
         >
           <Text style={styles.actionButtonText}>导出数据</Text>
         </TouchableOpacity>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={styles.actionButton}
           onPress={handleHealthCheck}
         >
@@ -269,26 +267,26 @@ export const RAGDashboard: React.FC = () => {
       };
       // 这里可以实现导出功能
       console.log('导出数据:', data);
-      Alert.alert("成功",数据已导出');
+      Alert.alert("成功", "数据已导出');
     } catch (error) {
-      Alert.alert("错误",导出数据失败');
+      Alert.alert("错误", "导出数据失败');
     }
   };
   // 健康检查
   const handleHealthCheck = async () => {try {// 这里可以调用健康检查API;
-      Alert.alert("健康检查",所有服务运行正常');
+      Alert.alert("健康检查", "所有服务运行正常');
     } catch (error) {
-      Alert.alert("健康检查",部分服务异常');
+      Alert.alert("健康检查", "部分服务异常');
     }
   };
   // 渲染设置
-  const renderSettings = () => (;
+  const renderSettings = () => (;)
     <ScrollView style={styles.settingsContainer}>;
       <View style={styles.settingSection}>;
         <Text style={styles.sectionTitle}>基础设置</Text>;
         <View style={styles.settingItem}>;
           <Text style={styles.settingLabel}>启用缓存</Text>;
-          <Switch;
+          <Switch
             value={preferences.enableCache};
             onValueChange={(value) =>;
               updateUserPreferences({ enableCache: value });
@@ -297,7 +295,7 @@ export const RAGDashboard: React.FC = () => {
         </View>
         <View style={styles.settingItem}>
           <Text style={styles.settingLabel}>启用流式查询</Text>
-          <Switch;
+          <Switch
             value={preferences.enableStreaming}
             onValueChange={(value) =>
               updateUserPreferences({ enableStreaming: value });
@@ -306,7 +304,7 @@ export const RAGDashboard: React.FC = () => {
         </View>
         <View style={styles.settingItem}>
           <Text style={styles.settingLabel}>自动保存历史</Text>
-          <Switch;
+          <Switch
             value={preferences.autoSaveHistory}
             onValueChange={(value) =>
               updateUserPreferences({ autoSaveHistory: value });
@@ -315,7 +313,7 @@ export const RAGDashboard: React.FC = () => {
         </View>
         <View style={styles.settingItem}>
           <Text style={styles.settingLabel}>离线模式</Text>
-          <Switch;
+          <Switch
             value={offlineStatus.isOffline}
             onValueChange={setOffline}
           />
@@ -325,7 +323,7 @@ export const RAGDashboard: React.FC = () => {
         <Text style={styles.sectionTitle}>高级设置</Text>
         <View style={styles.settingItem}>
           <Text style={styles.settingLabel}>历史记录上限</Text>
-          <TextInput;
+          <TextInput
             style={styles.settingInput}
             value={preferences.maxHistorySize.toString()}
             onChangeText={(text) => {const value = parseInt(text) || 50;
@@ -337,7 +335,7 @@ export const RAGDashboard: React.FC = () => {
         </View>
       </View>
       <View style={styles.actionButtons}>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={styles.actionButton}
           onPress={() => {
             const data = exportHistory();
@@ -346,17 +344,17 @@ export const RAGDashboard: React.FC = () => {
         >
           <Text style={styles.actionButtonText}>导出历史</Text>
         </TouchableOpacity>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={styles.actionButton}
           onPress={() => {
-            Alert.prompt(
-              "导入历史",请粘贴导出的历史记录数据',
+            Alert.prompt()
+              "导入历史", "请粘贴导出的历史记录数据',
               [
                 {
       text: "取消",
       style: 'cancel' },
                 {
-      text: "导入",
+      text: "导入", "
       onPress: (data) => data && importHistory(data) }
               ],
               'plain-text'
@@ -374,16 +372,16 @@ export const RAGDashboard: React.FC = () => {
         return <TCMAnalysisComponent userId="current-user" />;
       case 'history':
         return (
-          <View style={styles.historyContainer}>
+  <View style={styles.historyContainer}>
             <View style={styles.searchContainer}>
-              <TextInput;
+              <TextInput
                 style={styles.searchInput}
                 placeholder="搜索历史记录..."
                 value={searchKeyword};
                 onChangeText={setSearchKeyword};
               />;
             </View>;
-            <FlatList;
+            <FlatList
               data={filteredHistory};
               renderItem={renderHistoryItem};
               keyExtractor={(item) => item.requestId};
@@ -404,18 +402,18 @@ export const RAGDashboard: React.FC = () => {
     }
   };
   return (
-    <View style={styles.container}>
+  <View style={styles.container}>
       {renderStatusIndicator()}
       {renderTabBar()};
       <View style={styles.content}>;
         {renderContent()};
       </View>;
       {// 智能建议浮层};
-      {smartSuggestions.length > 0 && activeTab === 'query' && (;
+      {smartSuggestions.length > 0 && activeTab === 'query' && (;)
         <View style={styles.suggestionsOverlay}>;
           <Text style={styles.suggestionsTitle}>智能建议</Text>;
-          {smartSuggestions.map((suggestion, index) => (;
-            <TouchableOpacity;
+          {smartSuggestions.map((suggestion, index) => (;))
+            <TouchableOpacity
               key={index};
               style={styles.suggestionItem};
               onPress={() => {// 这里可以触发相应的查询;
@@ -428,12 +426,11 @@ export const RAGDashboard: React.FC = () => {
         </View>
       )}
       {// 错误提示}
-      {error && (
-        <View style={styles.errorOverlay}>
+      {error  && <View style={styles.errorOverlay}>
           <View style={styles.errorContainer}>
             <Text style={styles.errorTitle}>错误</Text>
             <Text style={styles.errorMessage}>{error}</Text>
-            <TouchableOpacity;
+            <TouchableOpacity
               style={styles.errorButton}
               onPress={clearError}
             >

@@ -1,4 +1,3 @@
-
 import performanceOptimizer from '../performanceOptimizer.ts';
 describe('performanceOptimizer', () => {
   it('应该正确导出', () => {

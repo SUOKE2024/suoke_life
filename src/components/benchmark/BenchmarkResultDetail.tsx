@@ -23,26 +23,26 @@ export const BenchmarkResultDetail: React.FC<BenchmarkResultDetailProps> = ({
   const [result, setResult] = useState<BenchmarkResult | null>(null);
   const [loading, setLoading] = useState(false);
   // 加载基准测试结果
-  const loadBenchmarkResult = useCallback(async () => {if (!taskId) return;
+  const loadBenchmarkResult = useCallback(async () => {if (!taskId) return;)
     setLoading(true);
     try {
       const resultData = await benchmarkService.getBenchmarkResult(taskId);
       setResult(resultData);
     } catch (error) {
       console.error('Failed to load benchmark result:', error);
-      Alert.alert("错误",加载基准测试结果失败');
+      Alert.alert("错误", "加载基准测试结果失败');
     } finally {
       setLoading(false);
     }
   }, [taskId]);
   // 当taskId变化时重新加载数据
-  useEffect() => {
+  useEffect(() => {
     if (visible && taskId) {
       loadBenchmarkResult();
     }
   }, [visible, taskId, loadBenchmarkResult]);
   if (loading) {
-    return (;
+    return (;)
       <Modal visible={visible} animationType="slide" onRequestClose={onClose}>;
         <View style={styles.loadingContainer}>;
           <ActivityIndicator size="large" color="#2196F3" />;
@@ -52,7 +52,7 @@ export const BenchmarkResultDetail: React.FC<BenchmarkResultDetailProps> = ({
     );
   }
   return (
-    <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
+  <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={onClose}>
@@ -63,7 +63,7 @@ export const BenchmarkResultDetail: React.FC<BenchmarkResultDetailProps> = ({
         </View>
 ;
         <ScrollView style={styles.content}>;
-          {result && (;
+          {result && (;)
             <View style={styles.section}>;
               <Text style={styles.sectionTitle}>基本信息</Text>;
               <View style={styles.infoCard}>;

@@ -50,7 +50,7 @@ const advancedFixRules = [
   },
   {
     name: 对象属性数组值后缺少逗号",
-    pattern: /(\w+:\s*\[[^\]]*\])(\n\s*)(\w+:)/g,
+    pattern: /(\w+:\s*[[^]]*\])(\n\s*)(\w+:)/g,
     replacement: "$1,$2$3
   },
   // 修复对象末尾多余逗号

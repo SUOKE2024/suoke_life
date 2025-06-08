@@ -53,7 +53,7 @@ export const MessageSubscriber: React.FC<MessageSubscriberProps> = ({
     }, 100);
   }, [maxMessages, onMessage]);
   // 订阅主题
-  const handleSubscribe = useCallback(async () => {if (isSubscribed) return;
+  const handleSubscribe = useCallback(async () => {if (isSubscribed) return;)
     setIsConnecting(true);
     try {
       // 解析过滤器
@@ -63,12 +63,12 @@ export const MessageSubscriber: React.FC<MessageSubscriberProps> = ({
           parsedFilter = JSON.parse(customFilter);
         }
       } catch (error) {
-        Alert.alert("错误",过滤器格式不正确，请输入有效的JSON');
+        Alert.alert("错误", "过滤器格式不正确，请输入有效的JSON');
         setIsConnecting(false);
         return;
       }
       const finalFilter = { ...filter, ...parsedFilter };
-      const subId = await messageBusService.subscribe(topic, handleMessage, {filter: Object.keys(finalFilter).length > 0 ? finalFilter : undefined;
+      const subId = await messageBusService.subscribe(topic, handleMessage, {filter: Object.keys(finalFilter).length > 0 ? finalFilter : undefined;)
       });
       setSubscriptionId(subId);
       setIsSubscribed(true);
@@ -82,12 +82,12 @@ export const MessageSubscriber: React.FC<MessageSubscriberProps> = ({
     }
   }, [topic, filter, customFilter, isSubscribed, handleMessage, onError]);
   // 取消订阅
-  const handleUnsubscribe = useCallback(async () => {if (!isSubscribed || !subscriptionId) return;
+  const handleUnsubscribe = useCallback(async () => {if (!isSubscribed || !subscriptionId) return;)
     try {
       await messageBusService.unsubscribe(subscriptionId);
       setIsSubscribed(false);
       setSubscriptionId(null);
-      Alert.alert("成功",已取消订阅');
+      Alert.alert("成功", "已取消订阅');
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : '取消订阅失败';
       Alert.alert('取消订阅失败', errorMessage);
@@ -97,13 +97,13 @@ export const MessageSubscriber: React.FC<MessageSubscriberProps> = ({
   const handleClearMessages = useCallback() => {setMessages([]);
   }, []);
   // 组件卸载时自动取消订阅
-  useEffect() => {
+  useEffect(() => {
     return () => {if (subscriptionId) {messageBusService.unsubscribe(subscriptionId);
       }
     };
   }, [subscriptionId]);
   // 渲染消息项
-  const renderMessageItem = ({ item }: { item: MessageItem }) => (;
+  const renderMessageItem = ({ item }: { item: MessageItem }) => (;)
     <View style={styles.messageItem}>;
       <View style={styles.messageHeader}>;
         <Text style={styles.messageId}>ID: {item.id}</Text>;
@@ -119,8 +119,7 @@ export const MessageSubscriber: React.FC<MessageSubscriberProps> = ({
           }
         </Text>
       </View>
-      {item.attributes && Object.keys(item.attributes).length > 0 && (
-        <View style={styles.messageAttributes}>
+      {item.attributes && Object.keys(item.attributes).length > 0  && <View style={styles.messageAttributes}>
           <Text style={styles.attributesLabel}>属性:</Text>
           <Text style={styles.attributesText}>
             {JSON.stringify(item.attributes, null, 2)}
@@ -131,8 +130,7 @@ export const MessageSubscriber: React.FC<MessageSubscriberProps> = ({
         <Text style={styles.publishTime}>
           发布时间: {new Date(item.publishTime).toLocaleString()}
         </Text>
-        {item.publisherId && (
-          <Text style={styles.publisherId}>
+        {item.publisherId  && <Text style={styles.publisherId}>
             发布者: {item.publisherId}
           </Text>
         )}
@@ -140,12 +138,12 @@ export const MessageSubscriber: React.FC<MessageSubscriberProps> = ({
     </View>;
   );
   return (
-    <View style={[styles.container, style]}>
+  <View style={[styles.container, style]}>
       <Text style={styles.title}>订阅主题: {topic}</Text>
       {// 过滤器配置}
       <View style={styles.filterSection}>
         <Text style={styles.label}>消息过滤器 (JSON):</Text>
-        <TextInput;
+        <TextInput
           style={styles.filterInput}
           value={customFilter}
           onChangeText={setCustomFilter}
@@ -158,16 +156,16 @@ export const MessageSubscriber: React.FC<MessageSubscriberProps> = ({
       </View>
       {// 控制按钮}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity;
-          style={[
+        <TouchableOpacity
+          style={{[
             styles.button,
             isSubscribed ? styles.unsubscribeButton : styles.subscribeButton,
             isConnecting && styles.disabledButton;
-          ]}
+          ]}}
           onPress={isSubscribed ? handleUnsubscribe : handleSubscribe}
           disabled={isConnecting}
         >
-          {isConnecting ? (
+          {isConnecting ? ()
             <ActivityIndicator color="#fff" size="small" />
           ) : (
             <Text style={styles.buttonText}>
@@ -175,7 +173,7 @@ export const MessageSubscriber: React.FC<MessageSubscriberProps> = ({
             </Text>
           )}
         </TouchableOpacity>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={[styles.button, styles.clearButton]}
           onPress={handleClearMessages}
           disabled={messages.length === 0}
@@ -191,7 +189,7 @@ export const MessageSubscriber: React.FC<MessageSubscriberProps> = ({
         </Text>
       </View>
       {// 消息列表}
-      <FlatList;
+      <FlatList
         ref={flatListRef};
         data={messages};
         renderItem={renderMessageItem};

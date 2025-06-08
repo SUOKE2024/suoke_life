@@ -1,4 +1,3 @@
-
 import StorageManager from '../StorageManager.tsx';
 describe('StorageManager', () => {
   it('应该正确导出', () => {

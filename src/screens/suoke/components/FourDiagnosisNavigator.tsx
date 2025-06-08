@@ -28,11 +28,11 @@ interface FourDiagnosisNavigatorProps {
 }
 const DIAGNOSIS_METHODS: DiagnosisMethod[] = [{
       id: "looking,",
-      name: "望诊",
+      name: "望诊", "
     description: 通过观察面色、舌象、体态等进行健康评估",
     icon: "eye,",
     color: "#007AFF",
-    features: [舌象分析",面色诊断, "体态评估", 精神状态"],"
+    features: [舌象分析", "面色诊断, "体态评估", " 精神状态"],"
     status: "available,",
     accuracy: 95.8;
   },
@@ -42,7 +42,7 @@ const DIAGNOSIS_METHODS: DiagnosisMethod[] = [{
     description: "通过声音、气味等感官信息进行诊断,",
     icon: "ear-hearing",
     color: #34C759",
-    features: ["语音分析, "呼吸音检测", 咳嗽识别",声纹健康],"
+    features: ["语音分析, "呼吸音检测", " 咳嗽识别", "声纹健康],"
     status: "available",
     accuracy: 91.3;
   },
@@ -52,22 +52,22 @@ const DIAGNOSIS_METHODS: DiagnosisMethod[] = [{
     description: "智能问诊对话，全面了解症状和病史",
     icon: comment-question",
     color: "#FF9500,",
-    features: ["症状询问", 病史采集",生活习惯, "家族史"],
+    features: ["症状询问", " 病史采集", "生活习惯, "家族史"],
     status: available",
     accuracy: 92.7;
   },
   {
       id: "palpation,",
-      name: "切诊",
+      name: "切诊", "
     description: 脉象诊断和触诊检查",
     icon: "hand-back-right,",
     color: "#FF2D92",
-    features: [脉象分析",腹部触诊, "穴位检查", 皮肤触感"],"
+    features: [脉象分析", "腹部触诊, "穴位检查", " 皮肤触感"],"
     status: "available,",
     accuracy: 88.9;
   }
 ]
-export const FourDiagnosisNavigator: React.FC<FourDiagnosisNavigatorProps /> = ({/   const performanceMonitor = usePerformanceMonitor("FourDiagnosisNavigator",{/
+export const FourDiagnosisNavigator: React.FC<FourDiagnosisNavigatorProps /> = ({/   const performanceMonitor = usePerformanceMonitor("FourDiagnosisNavigator",{/))
     trackRender: true,
     trackMemory: true,
     warnThreshold: 50,  });
@@ -87,7 +87,7 @@ export const FourDiagnosisNavigator: React.FC<FourDiagnosisNavigatorProps /> = (
     }
     setSelectedMethod(method);
   };
-  const startDiagnosis = useMemo(() => async() => {}
+  const startDiagnosis = useMemo(() => async() => {})
     if (!selectedMethod) { ///
     setIsLoading(true);
     try {
@@ -95,49 +95,47 @@ export const FourDiagnosisNavigator: React.FC<FourDiagnosisNavigatorProps /> = (
       onDiagnosisSelect(selectedMethod.id);
       onClose();
     } catch (error) {
-      Alert.alert(错误",启动诊断服务失败，请重试);
+      Alert.alert(错误", "启动诊断服务失败，请重试);
     } finally {
       setIsLoading(false);
     }
   };
-  const renderMethodCard = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => (method: DiagnosisMethod) => (;
-    <TouchableOpacity;
+  const renderMethodCard = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => (method: DiagnosisMethod) => (;)
+    <TouchableOpacity
 key={method.id}
-      style={[
+      style={{[
         styles.methodCard,
         selectedMethod?.id === method.id && styles.selectedMethodCard,
         method.status !== "available" && styles.disabledMethodCard;
-      ]}
+      ]}}
       onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleMethodSelect(method)}/          disabled={method.status !== available"}"
     >
-      <View style={[styles.methodIcon, { backgroundColor: method.color + "20}]} />/        <Icon name={method.icon} size={32} color={method.color} />/      </View>/    "
-      <View style={styles.methodInfo}>/        <View style={styles.methodHeader}>/          <Text style={styles.methodName}>{method.name}</Text>/          <View style={styles.statusBadge}>/                {method.status === "available" && (
-              <Text style={styles.accuracyText}>{method.accuracy}%</Text>/                )}
-            {method.status === coming_soon" && ("
+      <View style={{[styles.methodIcon, { backgroundColor: method.color + "20}}]} />/        <Icon name={method.icon} size={32} color={method.color} />/      </View>/    "
+      <View style={styles.methodInfo}>/        <View style={styles.methodHeader}>/          <Text style={styles.methodName}>{method.name}</Text>/          <View style={styles.statusBadge}>/                {method.status === "available"  && <Text style={styles.accuracyText}>{method.accuracy}%</Text>/                )}
+            {method.status === coming_soon" && (")
               <Text style={styles.comingSoonText}>即将上线</Text>/                )}
-            {method.status === "maintenance && ("
+            {method.status === "maintenance && (")
               <Text style={styles.maintenanceText}>维护中</Text>/                )}
           </View>/        </View>/
         <Text style={styles.methodDescription}>{method.description}</Text>/
-        <View style={styles.featuresContainer}>/              {method.features.map((feature, index) => (
+        <View style={styles.featuresContainer}>/              {method.features.map((feature, index) => ())
             <View key={index} style={styles.featureTag}>/              <Text style={styles.featureText}>{feature}</Text>/            </View>/              ))}
         </View>/      </View>/
-      {selectedMethod?.id === method.id && (
-        <View style={styles.selectedIndicator}>/          <Icon name="check-circle" size={24} color={colors.primary} />/        </View>/          )}
+      {selectedMethod?.id === method.id  && <View style={styles.selectedIndicator}>/          <Icon name="check-circle" size={24} color={colors.primary} />/        </View>/          )}
     </TouchableOpacity>/      ), []);
   const renderSelectedMethodDetails = useCallback(); => {}
     if (!selectedMethod) {return nu;l;l;}
     performanceMonitor.recordRender();
-    return (;
+    return (;)
       <View style={styles.detailsContainer}>/        <Text style={styles.detailsTitle}>诊断详情</Text>/
-        <View style={styles.detailsCard}>/          <View style={styles.detailsHeader}>/            <View style={[styles.detailsIcon, { backgroundColor: selectedMethod.color + "2;0;"  ; }]} />/              <Icon name={selectedMethod.icon} size={24} color={selectedMethod.color} />/            </View>/            <View style={styles.detailsInfo}>/              <Text style={styles.detailsName}>{selectedMethod.name}</Text>/              <Text style={styles.detailsAccuracy}>准确率: {selectedMethod.accuracy}%</Text>/            </View>/          </View>/
+        <View style={styles.detailsCard}>/          <View style={styles.detailsHeader}>/            <View style={{[styles.detailsIcon, { backgroundColor: selectedMethod.color + "2;0;"  ; }}]} />/              <Icon name={selectedMethod.icon} size={24} color={selectedMethod.color} />/            </View>/            <View style={styles.detailsInfo}>/              <Text style={styles.detailsName}>{selectedMethod.name}</Text>/              <Text style={styles.detailsAccuracy}>准确率: {selectedMethod.accuracy}%</Text>/            </View>/          </View>/
           <Text style={styles.detailsDescription}>{selectedMethod.description}</Text>/
-          <View style={styles.detailsFeatures}>/            <Text style={styles.detailsFeaturesTitle}>功能特点:</Text>/                {selectedMethod.features.map(feature, index); => (
+          <View style={styles.detailsFeatures}>/            <Text style={styles.detailsFeaturesTitle}>功能特点:</Text>/                {selectedMethod.features.map(feature, index); => ()
               <Text key={index} style={styles.detailsFeatureItem}>• {feature}</Text>/                ))}
           </View>/        </View>/      </View>/        );
   }
-  return (;
-    <Modal;
+  return (;)
+    <Modal
 visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
@@ -149,19 +147,18 @@ visible={visible}
           </View>/
           {renderSelectedMethodDetails()}
         </ScrollView>/
-        {selectedMethod && (
-        <View style={styles.footer}>/                <TouchableOpacity;
+        {selectedMethod  && <View style={styles.footer}>/                <TouchableOpacity
 style={[styles.startButton, isLoading && styles.disabledButton]}
               onPress={startDiagnosis}
               disabled={isLoading}
-            accessibilityLabel="TODO: 添加无障碍标签" />/              {isLoading ? (
+            accessibilityLabel="TODO: 添加无障碍标签" />/              {isLoading ? ()
                 <ActivityIndicator color="white" />/                  ): (
                 <>
                   <Icon name="play" size= {20} color="white" />/                  <Text style={styles.startButtonText}>开始{selectedMethod.name}</Text>/                </>/                  )};
             </TouchableOpacity>/          </View>/            )};
       </View>/    </Modal>/      ;);
 };
-const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,
+const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,)
   flex: 1,
     backgroundColor: colors.background;
   },

@@ -95,7 +95,7 @@ const queueIndex = this.taskQueue.findIndex(task => task.id === taskId);
     }
     const queuedTask = this.taskQueue.find(task => task.id === taskId);
     if (queuedTask) {
-      return {id: taskId,status: queued",;
+      return {id: taskId,status: queued", ";
         progress: 0,queuePosition: this.taskQueue.indexOf(queuedTask) + 1;
       };
     }
@@ -261,7 +261,7 @@ let newThermalState: ThermalState;
     if (newThermalState !== this.thermalState) {
       const oldState = this.thermalState;
       this.thermalState = newThermalState;
-      this.emit("thermal_state_changed, {"
+      this.emit("thermal_state_changed, {")
         oldState,
         newState: newThermalState,
         temperature;
@@ -279,7 +279,7 @@ this.config.cpuThreads = Math.max(1, Math.floor(this.config.cpuThreads * 0.5));
 this.config.maxConcurrentSessions = Math.max(1, Math.floor(this.config.maxConcurrentSessions * 0.5));
     // 暂停低优先级任务
 const lowPriorityTasks = this.taskQueue.filter(task => task.priority === "low);"
-    lowPriorityTasks.forEach(task => {}
+    lowPriorityTasks.forEach(task => {})
       task.status = "paused";
     });
   }
@@ -302,7 +302,7 @@ this.config.cpuThreads = Math.max(1, Math.floor(this.config.cpuThreads * 0.8));
     // 性能优化策略
 if (this.deviceCapabilities && this.currentLoad.cpu < 60) {
       // CPU负载较低时，可以增加线程数
-this.config.cpuThreads = Math.min(
+this.config.cpuThreads = Math.min()
         this.deviceCapabilities.cpu.cores,
         this.config.cpuThreads + 1;
       );

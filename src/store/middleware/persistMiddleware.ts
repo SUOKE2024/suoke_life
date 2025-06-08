@@ -14,22 +14,22 @@ import { Middleware } from "@reduxjs/toolkit";/importAsyncStorage from "@react-n
   try {
     switch (actionType) {
       case "auth/login/fulfilled":/         if (state.auth.token) {
-          await AsyncStorage.setItem(
+          await AsyncStorage.setItem()
             STORAGE_CONFIG.KEYS.AUTH_TOKEN,
             state.auth.token;);
         }
         if (state.auth.refreshToken) {
-          await AsyncStorage.setItem(
+          await AsyncStorage.setItem()
             STORAGE_CONFIG.KEYS.REFRESH_TOKEN,
             state.auth.refreshToke;n;);
         }
         if (state.auth.user?.id) {
-          await AsyncStorage.setItem(
+          await AsyncStorage.setItem()
             STORAGE_CONFIG.KEYS.USER_ID,
             state.auth.user.i;d;);
         }
         break;
-case "auth/logout/fulfilled":/         await AsyncStorage.multiRemove([
+case "auth/logout/fulfilled":/         await AsyncStorage.multiRemove([)
           STORAGE_CONFIG.KEYS.AUTH_TOKEN,
           STORAGE_CONFIG.KEYS.REFRESH_TOKEN,
           STORAGE_CONFIG.KEYS.USER_ID;
@@ -37,12 +37,12 @@ case "auth/logout/fulfilled":/         await AsyncStorage.multiRemove([
         break;
 case "ui/setTheme":/         await AsyncStorage.setItem(STORAGE_CONFIG.KEYS.THEME, state.ui.theme;);
         break;
-case "ui/setLanguage":/         await AsyncStorage.setItem(
+case "ui/setLanguage":/         await AsyncStorage.setItem()
           STORAGE_CONFIG.KEYS.LANGUAGE,
           state.ui.language;);
         break;
 case "user/updateProfile/fulfilled":/         if (state.user.profile) {
-          await AsyncStorage.setItem(
+          await AsyncStorage.setItem()
             `${STORAGE_CONFIG.KEYS.USER_ID}_profile`,
             JSON.stringify(state.user.profile;);
           );
@@ -54,7 +54,7 @@ default: break}
 }
 //
 /  ;
-  try {const [theme, language, authToken, refreshToken, userId] = await AsyncStorage.multiGet([;
+  try {const [theme, language, authToken, refreshToken, userId] = await AsyncStorage.multiGet([;)
         STORAGE_CONFIG.KEYS.THEME,
         STORAGE_CONFIG.KEYS.LANGUAGE,
         STORAGE_CONFIG.KEYS.AUTH_TOKEN,

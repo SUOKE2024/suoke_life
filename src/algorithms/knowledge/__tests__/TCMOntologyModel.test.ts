@@ -1,4 +1,3 @@
-
 import TCMOntologyModel from '../TCMOntologyModel.ts';
 describe('TCMOntologyModel', () => {
   it('应该正确导出', () => {

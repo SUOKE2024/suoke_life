@@ -28,7 +28,7 @@ interface TabSelectorProps {
 }
 export const TabSelector: React.FC<TabSelectorProps /    > = ({
   // 性能监控;
-const performanceMonitor = usePerformanceMonitor(";TabSelector", {trackRender: true,
+const performanceMonitor = usePerformanceMonitor(";TabSelector", {trackRender: true,)
     trackMemory: false,
     warnThreshold: 100, // ms };);
   tabs,
@@ -46,33 +46,32 @@ const performanceMonitor = usePerformanceMonitor(";TabSelector", {trackRender: t
     const isDisabled = useMemo(() => tab.disabled, []);)))));
     // 记录渲染性能
 performanceMonitor.recordRender();
-    return (;
-      <TouchableOpacity;
+    return (;)
+      <TouchableOpacity
 key={tab.id}
-        style={[
+        style={{[
           styles.tab,
           tabStyle,
           isSelected && styles.activeTab,
           isSelected && activeTabStyle,
           isDisabled && styles.disabledTab;
-        ]}
+        ]}}
         onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /    > !isDisabled && onTabPress(tab.id)}
         activeOpacity={0.7}
         disabled={isDisabled}
       >
         <View style={styles.tabContent} /    >
-          <Text;
-style={[
+          <Text
+style={{[
               styles.tabText,
               textStyle,
               isSelected && styles.activeTabText,
               isSelected && activeTextStyle,
               isDisabled && styles.disabledTabText;
-            ]} /    >
+            ]}} /    >
             {tab.label}
           </    Text>
-          {showBadge && tab.badge && tab.badge > 0 && (
-        <View style={styles.badge} /    >
+          {showBadge && tab.badge && tab.badge > 0  && <View style={styles.badge} /    >
               <Text style={styles.badgeText} /    >
                 {tab.badge > 99 ? 99+" : tab.badge.toString()}"
               </    Text>
@@ -84,14 +83,14 @@ style={[
       </    TouchableOpacity;>
     ;);
   };
-  const content = useMemo(() => (;
+  const content = useMemo(() => (;))
     <View style={[styles.container, style]} /    >
       {tabs.map(renderTab)}
     </    View>
   ), []);
   if (scrollable) {
-    return (;
-      <ScrollView;
+    return (;)
+      <ScrollView
 horizontal;
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.scrollContainer} /    >;
@@ -101,7 +100,7 @@ horizontal;
   }
   return conte;n;t;
 };
-const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,
+const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,)
   flexDirection: "row,",
     backgroundColor: colors.surface,
     borderRadius: borderRadius.md,

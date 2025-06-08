@@ -55,20 +55,20 @@ const ChatDetailScreen: React.FC = () => {
   const generateAgentReply = (agentId: string, userMessage: string): string => {
     const replies: Record<string, string[]> = {
       xiaoai: [
-        "我正在分析您的健康数据，请稍等...",根据您的描述，建议您注意休息和饮食调理。',
-        "我为您推荐一些适合的健康建议，您可以参考一下。",您的健康状况看起来不错，继续保持良好的生活习惯。',
+        "我正在分析您的健康数据，请稍等...", "根据您的描述，建议您注意休息和饮食调理。',
+        "我为您推荐一些适合的健康建议，您可以参考一下。", "您的健康状况看起来不错，继续保持良好的生活习惯。',
       ],
       xiaoke: [
-        "从中医角度来看，您的症状可能与体质有关。",建议您进行四诊合参的全面检查。',
-        "根据中医理论，这种情况需要辨证论治。",我建议您调整作息，配合适当的中医调理。',
+        "从中医角度来看，您的症状可能与体质有关。", "建议您进行四诊合参的全面检查。',
+        "根据中医理论，这种情况需要辨证论治。", "我建议您调整作息，配合适当的中医调理。',
       ],
       laoke: [
-        "让我为您制定一个个性化的健康管理方案。",根据您的年龄和体质，我推荐以下康复训练。',
-        "健康管理是一个长期过程，需要坚持和耐心。",您的康复进展很好，继续按照计划执行。',
+        "让我为您制定一个个性化的健康管理方案。", "根据您的年龄和体质，我推荐以下康复训练。',
+        "健康管理是一个长期过程，需要坚持和耐心。", "您的康复进展很好，继续按照计划执行。',
       ],
       soer: [
-        "生活方式的改变需要循序渐进，不要急于求成。",我为您推荐一些简单易行的日常保健方法。',
-        "保持积极的心态对健康很重要。",今天的运动目标完成得如何？记得适量运动。',
+        "生活方式的改变需要循序渐进，不要急于求成。", "我为您推荐一些简单易行的日常保健方法。',
+        "保持积极的心态对健康很重要。", "今天的运动目标完成得如何？记得适量运动。',
       ],
     };
     const agentReplies = replies[agentId] || replies.xiaoai;
@@ -77,8 +77,8 @@ const ChatDetailScreen: React.FC = () => {
   // 生成医生回复
   const generateDoctorReply = (userMessage: string): string => {
     const replies = [
-      "感谢您的咨询，我会仔细查看您的情况。",根据您的描述，建议您到医院进行进一步检查。',
-      "请按时服药，有任何不适及时联系我。",您的恢复情况良好，继续按照治疗方案执行。',
+      "感谢您的咨询，我会仔细查看您的情况。", "根据您的描述，建议您到医院进行进一步检查。',
+      "请按时服药，有任何不适及时联系我。", "您的恢复情况良好，继续按照治疗方案执行。',
       '建议您注意饮食和作息，配合药物治疗。',
     ];
     return replies[Math.floor(Math.random() * replies.length)];
@@ -129,7 +129,7 @@ const ChatDetailScreen: React.FC = () => {
       setMessages(mockMessages);
     } catch (error) {
       console.error('加载聊天历史失败:', error);
-      Alert.alert("错误",加载聊天历史失败');
+      Alert.alert("错误", "加载聊天历史失败');
     } finally {
       setLoading(false);
     }
@@ -154,7 +154,7 @@ const ChatDetailScreen: React.FC = () => {
       // 模拟发送延迟
       await new Promise(resolve => setTimeout(resolve, 500));
       // 更新消息状态为已发送
-      setMessages(prev => prev.map(msg =>
+      setMessages(prev => prev.map(msg =>))
         msg.id === userMessage.id ? { ...msg, status: 'sent' } : msg,
       ));
       // 生成回复（仅对智能体和医生）
@@ -178,20 +178,20 @@ const ChatDetailScreen: React.FC = () => {
     } catch (error) {
       console.error('发送消息失败:', error);
       // 更新消息状态为失败
-      setMessages(prev => prev.map(msg =>
+      setMessages(prev => prev.map(msg =>))
         msg.id === userMessage.id ? { ...msg, status: 'failed' } : msg,
       ));
-      Alert.alert("错误",发送消息失败，请重试');
+      Alert.alert("错误", "发送消息失败，请重试');
     } finally {
       setSending(false);
     }
   }, [inputText, sending, chatType, chatId, chatName]);
   // 初始化加载
-  useEffect() => {
+  useEffect(() => {
     loadChatHistory();
   }, [loadChatHistory]);
   // 自动滚动到底部
-  useEffect() => {
+  useEffect(() => {
     if (messages.length > 0) {
       setTimeout() => {
         flatListRef.current?.scrollToEnd({ animated: true });
@@ -235,9 +235,8 @@ const ChatDetailScreen: React.FC = () => {
   const renderMessage = ({ item }: { item: ChatMessage }) => {
     const isUser = item.sender === 'user';
     return (
-      <View style={[styles.messageContainer, isUser ? styles.userMessage : styles.otherMessage]}>
-        {!isUser && item.senderName && (
-          <Text style={styles.senderName}>{item.senderName}</Text>
+  <View style={[styles.messageContainer, isUser ? styles.userMessage : styles.otherMessage]}>
+        {!isUser && item.senderName  && <Text style={styles.senderName}>{item.senderName}</Text>
         )}
         <View style={[styles.messageBubble, isUser ? styles.userBubble : styles.otherBubble]}>
           <Text style={[styles.messageText, isUser ? styles.userText : styles.otherText]}>
@@ -253,7 +252,7 @@ const ChatDetailScreen: React.FC = () => {
   };
   if (loading) {
     return (
-      <SafeAreaView style={styles.container}>
+  <SafeAreaView style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
             <Icon name="arrow-left" size={24} color="#333" />
@@ -271,7 +270,7 @@ const ChatDetailScreen: React.FC = () => {
     );
   }
   return (
-    <SafeAreaView style={styles.container}>
+  <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       {}
       <View style={styles.header}>
@@ -283,12 +282,12 @@ const ChatDetailScreen: React.FC = () => {
           <Icon name="dots-vertical" size={24} color="#333" />
         </TouchableOpacity>
       </View>
-      <KeyboardAvoidingView;
+      <KeyboardAvoidingView
         style={styles.content}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         {}
-        <FlatList;
+        <FlatList
           ref={flatListRef}
           data={messages}
           renderItem={renderMessage}
@@ -299,7 +298,7 @@ const ChatDetailScreen: React.FC = () => {
         />
         {}
         <View style={styles.inputContainer}>
-          <TextInput;
+          <TextInput
             style={styles.textInput}
             placeholder="输入消息..."
             value={inputText}
@@ -308,12 +307,12 @@ const ChatDetailScreen: React.FC = () => {
             maxLength={500}
             placeholderTextColor="#999"
           />
-          <TouchableOpacity;
+          <TouchableOpacity
             style={[styles.sendButton, (!inputText.trim() || sending) && styles.sendButtonDisabled]}
             onPress={sendMessage}
             disabled={!inputText.trim() || sending}
           >
-            {sending ? (
+            {sending ? ()
               <ActivityIndicator size="small" color="#fff" />
             ) : (
               <Icon name="send" size={20} color="#fff" />

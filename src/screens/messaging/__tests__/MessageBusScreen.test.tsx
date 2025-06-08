@@ -1,4 +1,3 @@
-
 import MessageBusScreen from '../MessageBusScreen.tsx';
 describe('MessageBusScreen', () => {
   it('应该正确导出', () => {

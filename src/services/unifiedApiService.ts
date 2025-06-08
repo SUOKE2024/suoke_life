@@ -69,7 +69,7 @@ export class UnifiedApiService {
     async getHealthData(params?: { type?: string; startDate?: string; endDate?: string; limit?: number }) {
     const queryParams = new URLSearchParams();
     if (params) {
-      Object.entries(params).forEach([key, value]) => {
+      Object.entries(params).forEach((([key, value]) => {
         if (value !== undefined) {
           queryParams.append(key, value.toString());
         }
@@ -142,7 +142,7 @@ export class UnifiedApiService {
   async performZiwuAnalysis(birthData: { birthTime: string; currentTime?: string }) {
     return apiClient.post("DIAGNOSIS",/ziwu', birthData);
   }
-  async performConstitutionAnalysis(personalData: { ,
+  async performConstitutionAnalysis(personalData: { ,)
   birthYear: number;
     birthMonth: number,
   birthDay: number;
@@ -152,14 +152,14 @@ export class UnifiedApiService {
   }) {
     return apiClient.post("DIAGNOSIS",/constitution', personalData);
   }
-  async performBaguaAnalysis(baguaData: {,
+  async performBaguaAnalysis(baguaData: {,)
   birthDate: string;
     gender: string;
     question?: string;
   }) {
     return apiClient.post("DIAGNOSIS",/bagua', baguaData);
   }
-  async performWuyunAnalysis(timeData: {,
+  async performWuyunAnalysis(timeData: {,)
   year: number;
     month: number,
   day: number;
@@ -167,7 +167,7 @@ export class UnifiedApiService {
   }) {
     return apiClient.post("DIAGNOSIS",/wuyun', timeData);
   }
-  async performCalculationComprehensive(comprehensiveData: {,
+  async performCalculationComprehensive(comprehensiveData: {,)
   personalInfo: any;
     healthData?: any;
     preferences?: any;
@@ -309,7 +309,7 @@ export class UnifiedApiService {
   */
   async healthCheckAllServices() {
     const services = Object.keys(API_GATEWAY_CONFIG.SERVICES);
-    const healthChecks = services.map(service =>
+    const healthChecks = services.map(service =>)
       this.getServiceHealth(service).catch(error => ({ service, error: error.message }))
     );
     return Promise.allSettled(healthChecks);

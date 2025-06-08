@@ -46,7 +46,7 @@ export abstract class MazeAgentBase {
   /**
   * 生成迷宫交互响应
   */
-  async generateMazeInteraction(
+  async generateMazeInteraction()
     input: string,
     context: MazeContext;
   ): Promise<MazeInteraction> {
@@ -234,7 +234,7 @@ export class XiaoaiMazeAgent extends MazeAgentBase {
     return [;
       {
       questionId: "xiaoai_q1",
-      question: '每天应该喝多少水？',options: ["1-2杯",4-6杯', "8-10杯",12杯以上'],correctAnswer: '2',explanation: '成年人每天应该喝8-10杯水，约2升左右。';
+      question: '每天应该喝多少水？',options: ["1-2杯", "4-6杯', "8-10杯", "12杯以上'],correctAnswer: '2',explanation: '成年人每天应该喝8-10杯水，约2升左右。';
       };
     ];
   }
@@ -266,7 +266,7 @@ export class XiaokeMazeAgent extends MazeAgentBase {
     return [;
       {
       questionId: "xiaoke_q1",
-      question: '人体基础代谢率主要受哪些因素影响？',options: ["年龄和性别",体重和身高', "肌肉量和甲状腺功能",以上都是'],correctAnswer: '3',explanation: '基础代谢率受多种因素影响，包括年龄、性别、体重、身高、肌肉量和甲状腺功能等。';
+      question: '人体基础代谢率主要受哪些因素影响？',options: ["年龄和性别", "体重和身高', "肌肉量和甲状腺功能", "以上都是'],correctAnswer: '3',explanation: '基础代谢率受多种因素影响，包括年龄、性别、体重、身高、肌肉量和甲状腺功能等。';
       };
     ];
   }
@@ -298,7 +298,7 @@ export class LaokeMazeAgent extends MazeAgentBase {
     return [;
       {
       questionId: "laoke_q1",
-      question: '中医理论中，"春夏养阳，秋冬养阴"的含义是什么？',options: ["春夏多运动，秋冬多休息",顺应自然规律调养身体', "春夏吃热食，秋冬吃凉食",春夏早起，秋冬晚起'],correctAnswer: '1',explanation: '这是中医顺应自然规律的养生理念，春夏阳气生发时要养护阳气，秋冬阴气收藏时要滋养阴精。';
+      question: '中医理论中，"春夏养阳，秋冬养阴"的含义是什么？',options: ["春夏多运动，秋冬多休息", "顺应自然规律调养身体', "春夏吃热食，秋冬吃凉食", "春夏早起，秋冬晚起'],correctAnswer: '1',explanation: '这是中医顺应自然规律的养生理念，春夏阳气生发时要养护阳气，秋冬阴气收藏时要滋养阴精。';
       };
     ];
   }
@@ -330,7 +330,7 @@ export class SoerMazeAgent extends MazeAgentBase {
     return [;
       {
       questionId: "soer_q1",
-      question: '如果要设计一个创新的健康生活方案，你会优先考虑什么？',options: ["个性化定制",科技辅助', "社交互动",以上都重要'],correctAnswer: '3',explanation: '现代健康管理需要综合考虑个性化、科技手段和社交因素，形成全方位的解决方案。';
+      question: '如果要设计一个创新的健康生活方案，你会优先考虑什么？',options: ["个性化定制", "科技辅助', "社交互动",以上都重要'],correctAnswer: '3',explanation: '现代健康管理需要综合考虑个性化、科技手段和社交因素，形成全方位的解决方案。';
       };
     ];
   }

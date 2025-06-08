@@ -1,4 +1,3 @@
-
 import onnxConfig from '../onnxConfig.ts';
 describe('onnxConfig', () => {
   it('应该正确导出', () => {

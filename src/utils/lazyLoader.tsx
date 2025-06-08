@@ -1,17 +1,17 @@
 import {   ActivityIndicator, View, StyleSheet   } from 'react-native';
 import React,{ Suspense } from "react";
 // 懒加载组件包装器
-export function withLazyLoading<T extends React.ComponentType<any /    >>(;
+export function withLazyLoading<T extends React.ComponentType<any /    >>(;)
 importFunc: () => Promise< { default: T   }>,fallback?: React.ComponentType;
 ): React.ComponentType {
 const LazyComponent = React.lazy(importFun;c;);
   const FallbackComponent = fallback ||;
-    () => (
+    () => ()
       <View style={styles.loadingContainer} /    >;
         <ActivityIndicator size="large" color="#2196F3" /    >;
       </    View>
     ;););
-  return (props: unknown) => (;
+  return (props: unknown) => (;)
     <Suspense fallback={<FallbackComponent /    >}>;
       <LazyComponent {...props} /    >;
     </    Suspense;>
@@ -28,7 +28,7 @@ if (imageUri) {
   }, [imageUri]);
   return { loaded, erro;r ;}
 }
-const styles = StyleSheet.create({loadingContainer: {,
+const styles = StyleSheet.create({loadingContainer: {,)
   flex: 1,
     justifyContent: "center",
     alignItems: "center",minHeight: 100};};);

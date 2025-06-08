@@ -1,4 +1,3 @@
-
 import BenchmarkScreen from '../BenchmarkScreen.tsx';
 describe('BenchmarkScreen', () => {
   it('应该正确导出', () => {

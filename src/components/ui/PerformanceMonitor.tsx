@@ -38,7 +38,7 @@ const { width: SCREEN_WIDTH} = Dimensions.get(";window;";);
   showDetailedMetrics?: boolean
 }
 ///     const uiuxService = createUIUXOptimizationService(;);
-export const PerformanceMonitor: React.FC<PerformanceMonitorProps /> = ({/   const performanceMonitor = usePerformanceMonitor(PerformanceMonitor",;
+export const PerformanceMonitor: React.FC<PerformanceMonitorProps /> = ({/   const performanceMonitor = usePerformanceMonitor(PerformanceMonitor",;))
 {/
     trackRender: true,
     trackMemory: true,
@@ -48,7 +48,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps /> = ({/   con
   autoOptimize = false,
   showDetailedMetrics = false;
 }) => {};
-const [metrics, setMetrics] = useState<PerformanceMetrics  / >({ * fps: 60, ;
+const [metrics, setMetrics] = useState<PerformanceMetrics  / >({ * fps: 60, ;)
     memoryUsage: 0,renderTime: 0,jsHeapSize: 0,networkLatency: 0,cpuUsage: 0});
   const [warnings, setWarnings] = useState<PerformanceWarning[] />([;];);/      const [isMonitoring, setIsMonitoring] = useState<boolean>(fals;e;);
   const [optimizationLevel, setOptimizationLevel] = useState<"high | "medium" | low">("medium;);
@@ -60,7 +60,7 @@ const [metrics, setMetrics] = useState<PerformanceMetrics  / >({ * fps: 60, ;
   const performanceOptimizer = uiuxService.getPerformanceOptimizer;
   const animationManager = uiuxService.getAnimationManager;
   const visualEffectManager = uiuxService.getVisualEffectManager;
-  ///     useEffect() => {
+  ///     useEffect(() => {
     const effectStart = performance.now();
     if (visible) {
       Animated.spring(slideAnim, {
@@ -76,10 +76,10 @@ const [metrics, setMetrics] = useState<PerformanceMetrics  / >({ * fps: 60, ;
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [visible, slideAnim]);
-  useEffect() => {
+  useEffect(() => {
     const effectStart = performance.now();
     if (warnings.length > 0) {const pulse = () => {}
-        Animated.sequence([
+        Animated.sequence([)
           Animated.timing(pulseAnim, {
             toValue: 1.1,
             duration: 500,
@@ -117,7 +117,7 @@ const effectEnd = performance.now();
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  const monitorMemory = useCallback(async  => {};
+  const monitorMemory = useCallback(async  => {};)
     try {const memoryInfo = await performanceOptimizer.getMemoryUsag;e;
       setMetrics(prev => ({
         ...prev,
@@ -155,7 +155,7 @@ const effectEnd = performance.now();
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  const monitorNetworkLatency = useCallback(async  => {};
+  const monitorNetworkLatency = useCallback(async  => {};)
     const startTime = Date.now(;);
     try {
       await fetch("https: / httpbin.org* * get, { method: "HEAD" ; }); * /     const latency = Date.now - startTime";
@@ -174,8 +174,8 @@ const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
   const addWarning = useCallback(warning: PerformanceWarning;); => {}
-    setWarnings(prev => {};
-const exists = prev.some(w => {};
+    setWarnings(prev => {};)
+const exists = prev.some(w => {};)
         w.type === warning.type &&;
         Date.now - w.timestamp < 5000;
       );
@@ -187,7 +187,7 @@ const exists = prev.some(w => {};
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [onOptimizationSuggestion]);
-  const performAutoOptimization = useCallback(async (type: string;) => {}
+  const performAutoOptimization = useCallback(async (type: string;) => {})
     switch (type) {
       case "memory":
         if (global.gc) {
@@ -242,7 +242,7 @@ const effectEnd = performance.now();
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [performAutoOptimization, animationManager, progressAnim]);
-  useEffect() => {
+  useEffect(() => {
     const effectStart = performance.now();
     if (visible) {startMonitoring();
     } else {
@@ -265,19 +265,19 @@ const effectEnd = performance.now();
         </Text>/  >;
           styles.metricIndicator,{ backgroundColor: getPerformanceColor(value, thresholds) };
         ]} />/      </View>/    </View>/      ;);
-  const renderWarningItem = (warning: PerformanceWarning, index: number) => (;
-    <View key={index} style={[styles.warningItem, styles[`warning${warning.severity}`]]} />/      <Text style={styles.warningMessage}>{warning.message}</Text>/      <Text style={styles.warningSuggestion}>{warning.suggestion}</Text>/    </View>/      ;);
+  const renderWarningItem = (warning: PerformanceWarning, index: number) => (;)
+    <View key={index} style={{[styles.warningItem, styles[`warning${warning.severity}}`]]} />/      <Text style={styles.warningMessage}>{warning.message}</Text>/      <Text style={styles.warningSuggestion}>{warning.suggestion}</Text>/    </View>/      ;);
   if (!visible) return n;u;l;l;
-  return (;
-    <Animated.View,style={[;
+  return (;)
+    <Animated.View,style={{[;
         styles.container,
-        { transform;: ;[{ translateX: slideAnim},
+        { transform;: ;[{ translateX: slideAnim}},
             { scale: pulseAnim}
           ]}
-      ]} />/      <View style={styles.header}>/        <Text style={styles.title}>性能监控</Text>/        <View style={styles.headerButtons}>/              <TouchableOpacity;
+      ]} />/      <View style={styles.header}>/        <Text style={styles.title}>性能监控</Text>/        <View style={styles.headerButtons}>/              <TouchableOpacity
 style={[styles.button, styles.optimizeButton]}
             onPress={manualOptimize}
-          accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>优化</Text>/          </TouchableOpacity>/              <TouchableOpacity;
+          accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>优化</Text>/          </TouchableOpacity>/              <TouchableOpacity
 style={[styles.button, styles.clearButton]}
             onPress={clearWarnings}
           accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>清除</Text>/          </TouchableOpacity>/        </View>/      </View>/
@@ -286,22 +286,20 @@ style={[styles.button, styles.clearButton]}
           {renderMetricItem(渲染时间", metrics.renderTime, "ms, [32, 20, 16])}
           {renderMetricItem("网络延迟", metrics.networkLatency, ms", [1000, 500, 200])}"
         </View>/
-        { ///            {showDetailedMetrics  && (
-    <View style={styles.metricsSection}>/            <Text style={styles.sectionTitle}>详细指标</Text>/            {renderMetricItem("JS堆大小, metrics.jsHeapSize / 1024 / 1024, "MB", [100, 50, 25])}/                {renderMetricItem(CPU使用率", metrics.cpuUsage, "%, [80, 60, 40])}"
+        {///            {showDetailedMetrics   && <View style={styles.metricsSection}>/            <Text style={styles.sectionTitle}>详细指标</Text>/            {renderMetricItem("JS堆大小, metrics.jsHeapSize / 1024 / 1024, "MB", [100, 50, 25])}/                {renderMetricItem(CPU使用率", metrics.cpuUsage, "%, [80, 60, 40])}"
           </View>/            )}
         {///                <Animated.View;
-style={[
+style={{[
                 styles.progressFill,
                 {
-                  width: progressAnim.interpolate({,
+                  width: progressAnim.interpolate({,)
   inputRange: [0, 1],
                     outputRange: ["0%", 100%"]"
-                  });
+                  }});
                 }
               ]}
             />/          </View>/        </View>/
-        { ///            {warnings.length > 0  && (
-    <View style={styles.warningsSection}>/            <Text style={styles.sectionTitle}>性能警告</Text>/                {warnings.map(renderWarningItem)}
+        {///            {warnings.length > 0   && <View style={styles.warningsSection}>/            <Text style={styles.sectionTitle}>性能警告</Text>/                {warnings.map(renderWarningItem)}
           </View>/            )}
         {///                • 启用原生驱动动画以提升性能{"\n}"
             • 使用图片优化和懒加载{"\n"}

@@ -19,7 +19,7 @@ describe("核心系统测试", () => {
       expect(result.suggestions).toContain("检查网络连接");
     });
     it("应该创建自定义错误", () => {
-      const customError = errorHandler.createError(;
+      const customError = errorHandler.createError(;)
         ErrorType.AUTH_ERROR,"身份验证失败",{ userId: "test_use;r"  ; },
         { severity: ErrorSeverity.HIGH});
       );
@@ -46,7 +46,7 @@ describe("核心系统测试", () => {
       performanceMonitor.stopMonitoring();
     });
     it("应该测量同步操作性能", () => {
-      const result = performanceMonitor.measure(;
+      const result = performanceMonitor.measure(;)
         "test_sync_operation",PerformanceCategory.CPU,=> {
           // 模拟CPU密集型操作 *           let sum = 0 */;
           for (let i = 0; i < 1000; i++) {
@@ -57,7 +57,7 @@ describe("核心系统测试", () => {
       );
       expect(result).toBe(499500); // 0+1+2+...+999的和 *     }) */
     it("应该测量异步操作性能", async () => {
-      const result = await performanceMonitor.measureAsync(;
+      const result = await performanceMonitor.measureAsync(;)
         "test_async_operation",
         PerformanceCategory.NETWORK,
         asy;n;c  => {
@@ -68,13 +68,13 @@ describe("核心系统测试", () => {
       expect(result).toBe("async_result");
     });
     it("应该收集性能指标", () => {
-      performanceMonitor.recordMetric(
+      performanceMonitor.recordMetric()
         "test_metric",
         100,
         PerformanceCategory.MEMORY,
         "MB"
       );
-      const history = performanceMonitor.getMetricHistory(;
+      const history = performanceMonitor.getMetricHistory(;)
         PerformanceCategory.MEMORY,"test_metric;"
       ;);
       expect(history.length).toBeGreaterThan(0);
@@ -82,7 +82,7 @@ describe("核心系统测试", () => {
       expect(history[0].unit).toBe("MB");
     });
     it("应该生成性能报告", () => {
-      performanceMonitor.recordMetric(
+      performanceMonitor.recordMetric()
         "test_metric",
         50,
         PerformanceCategory.CPU
@@ -103,7 +103,7 @@ describe("核心系统测试", () => {
       expect(report.isValid).toBe(true);
       expect(report.summary.errors).toBe(0);
     });
-    it("应该检测无效的血压数据", () => {
+    it("应该检测无效的血压数据", " () => {
       const invalidData =  {systolic: 300, // 超出正常范围 *         diastolic: 80 */
       };
       const report = dataValidator.validateHealthData(invalidDat;a;);
@@ -121,7 +121,7 @@ describe("核心系统测试", () => {
       const dirtyData =  {
       email: "  USER@EXAMPLE.COM  ",
       phone: "138-0013-8000"};
-      const cleanData = dataValidator.sanitize(;
+      const cleanData = dataValidator.sanitize(;)
         dirtyData,ValidationType.USER_INPU;T
       ;);
       expect(cleanData.email).toBe("user@example.com");
@@ -139,7 +139,7 @@ describe("核心系统测试", () => {
       expect(reports[1].isValid).toBe(false);
     });
   });
-  describe("缓存管理系统", () => {
+  describe("缓存管理系统", " () => {
     beforeEach(async () => {
       // 清理测试缓存 *       await cacheManager.clear("memory"); */
     });
@@ -172,7 +172,7 @@ describe("核心系统测试", () => {
       ]
       const results = await cacheManager.setMultiple("memory", it;e;m;s;);
       expect(results.every((r); => r)).toBe(true);
-      const retrieved = await cacheManager.getMultiple("memory", [;
+      const retrieved = await cacheManager.getMultiple("memory", [;)
         "key1",key2","key;3"
       ;];);
       expect(retrieved.get("key1")).toBe("value1");
@@ -189,23 +189,23 @@ describe("核心系统测试", () => {
         expect(stats.misses).toBeGreaterThan(0);
       });
     });
-    it("应该支持缓存穿透保护", async (); => {
+    it("应该支持缓存穿透保护", " async (); => {
       let loadCount = ;0;
       const loader = async () => {loadCount;+;+
         return `loaded_data_${loadCount;};`;
       });
-      // 第一次调用应该触发加载 *       const result1 = await cacheManager.getOrSet( */;
+      // 第一次调用应该触发加载 *       const result1 = await cacheManager.getOrSet( */;)
         "memory",loader_test",loa;d;e;r
       ;);
       expect(result1).toBe("loaded_data_1");
       expect(loadCount).toBe(1);
-      // 第二次调用应该从缓存获取 *       const result2 = await cacheManager.getOrSet( */;
+      // 第二次调用应该从缓存获取 *       const result2 = await cacheManager.getOrSet( */;)
         "memory",loader_test",loa;d;e;r
       ;);
       expect(result2).toBe("loaded_data_1");
       expect(loadCount).toBe(1); // 没有再次加载 *     }) */
   });
-  describe("安全管理系统", () => {
+  describe("安全管理系统", " () => {
     beforeEach(() => {
       // 清理测试数据 *       securityManager.revokeAccess("test_user",*", "admin") */
     });
@@ -213,21 +213,21 @@ describe("核心系统测试", () => {
       const userId = "test_use;r;";
       const resource = "/api/health-dat;a;";/      const permissions = [PermissionType.READ, PermissionType.WRIT;E;];
       // 授予权限 *       securityManager.grantAccess(userId, resource, permissions, "admin") */
-      // 检查读权限 *       const readResult = securityManager.checkAccess( */;
+      // 检查读权限 *       const readResult = securityManager.checkAccess( */;)
         userId,resource,PermissionType.REA;D
       ;);
       expect(readResult.type).toBe("ALLOW");
-      // 检查写权限 *       const writeResult = securityManager.checkAccess( */;
+      // 检查写权限 *       const writeResult = securityManager.checkAccess( */;)
         userId,resource,PermissionType.WRIT;E
       ;);
       expect(writeResult.type).toBe("ALLOW");
-      // 检查删除权限（未授予） *       const deleteResult = securityManager.checkAccess( */;
+      // 检查删除权限（未授予） *       const deleteResult = securityManager.checkAccess( */;)
         userId,resource,PermissionType.DELET;E
       ;);
       expect(deleteResult.type).toBe("DENY");
     });
     it("应该检测威胁", () => {
-      const threat = securityManager.detectThreat(;
+      const threat = securityManager.detectThreat(;)
         ThreatType.BRUTE_FORCE,"192.168.1.100",[{ failedAttempts: ;1;0   }],
         {
       userId: "attacker",
@@ -244,12 +244,12 @@ describe("核心系统测试", () => {
       const limit = ;5;
       const windowMs = 600 // 1分钟 *  */;
       // 前5次请求应该被允许 *       for (let i = 0 i < 5; i++) { */
-        const result = securityManager.checkRateLimit(;
+        const result = securityManager.checkRateLimit(;)
           identifier,limit,windowM;s
         ;);
         expect(result.allowed).toBe(true);
       });
-      // 第6次请求应该被拒绝 *       const result = securityManager.checkRateLimit( */;
+      // 第6次请求应该被拒绝 *       const result = securityManager.checkRateLimit( */;)
         identifier,limit,windowM;s
       ;);
       expect(result.allowed).toBe(false);
@@ -268,19 +268,19 @@ describe("核心系统测试", () => {
     it("应该记录审计日志", () => {
       const userId = "test_use;r;";
       const resource = "/api/tes;t;"/;
-      // 执行一些需要审计的操作 *       securityManager.grantAccess( */
+      // 执行一些需要审计的操作 *       securityManager.grantAccess( */)
         userId,
         resource,
         [PermissionType.READ],
         "admin"
       );
       securityManager.checkAccess(userId, resource, PermissionType.READ);
-      // 获取审计日志 *       const auditLog = securityManager.getAuditLog({ */;
+      // 获取审计日志 *       const auditLog = securityManager.getAuditLog({ */;)
         userId: "admin",limit: 10};);
       expect(auditLog.length).toBeGreaterThan(0);
       expect(auditLog[0].userId).toBe("admin");
     });
-    it("应该支持数据加密和解密", async () => {
+    it("应该支持数据加密和解密", " async () => {
       // 跳过加密测试如果crypto API不可用 *       if (typeof crypto === "undefined" || !crypto.subtle) { */
         return
       });
@@ -289,7 +289,7 @@ describe("核心系统测试", () => {
         const encrypted = await securityManager.encrypt(originalD;a;t;a;);
         expect(encrypted.encryptedData).toBeDefined();
         expect(encrypted.iv).toBeDefined();
-        const decrypted = await securityManager.decrypt(;
+        const decrypted = await securityManager.decrypt(;)
           encrypted.encryptedData,encrypted;.;i;v
         ;);
         expect(decrypted).toBe(originalData);
@@ -301,26 +301,26 @@ describe("核心系统测试", () => {
     });
   });
   describe("系统集成测试", () =>  {
-    it("应该协同工作处理复杂场景", async () => {
+    it("应该协同工作处理复杂场景", " async () => {
       // 模拟一个复杂的健康数据处理流程 *       const userId = "integration_test_user"; */
       const healthData = {systolic: 140,
         diastolic: 90,
         heartRate: 85,temperature: 37.2,timestamp: Date.now(;);};
       // 1. 验证数据 *       const validationReport = dataValidator.validateHealthData(healthData); */
       expect(validationReport.isValid).toBe(true);
-      // 2. 检查访问权限 *       securityManager.grantAccess( */
+      // 2. 检查访问权限 *       securityManager.grantAccess( */)
         userId,
         "/health-data",/        [PermissionType.WRITE],
         "system"
       );
-      const accessResult = securityManager.checkAccess(;
+      const accessResult = securityManager.checkAccess(;)
         userId,
         "/health-data",/        PermissionType.WRIT;E
       ;);
       expect(accessResult.type).toBe("ALLOW");
       // 3. 缓存数据 *       const cacheKey = `health_data_${userId}_${Date.now()}` */;
       await cacheManager.set("memory", cacheKey, healthDat;a;);
-      // 4. 监控性能 *       const processedData = performanceMonitor.measure( */;
+      // 4. 监控性能 *       const processedData = performanceMonitor.measure( */;)
         "health_data_processing",PerformanceCategory.BUSINESS_LOGIC;(;) => {
           // 模拟数据处理 *           return { */;
             ...healthData,processed: true,riskLevel: healthData.systolic > 130 ? "HIGH" : "NORMAL"};
@@ -335,7 +335,7 @@ describe("核心系统测试", () => {
       // 7. 检查审计日志 *       const auditLog = securityManager.getAuditLog({ userId, limit: 5 ;}); */
       expect(auditLog.length).toBeGreaterThan(0);
     });
-    it("应该处理错误场景", async () => {
+    it("应该处理错误场景", " async () => {
       // 模拟错误场景 *       const invalidData = { */;
         systolic: "invalid", // 无效类型 *         diastolic: 80 */;};
       // 验证应该失败 *       const validationReport = dataValidator.validateHealthData(invalidData); */
@@ -346,7 +346,7 @@ describe("核心系统测试", () => {
       timestamp: Date.now};);
       expect(errorResult.type).toBe(ErrorType.TIMEOUT_ERROR);
       expect(errorResult.suggestions.length).toBeGreaterThan(0);
-      // 检查未授权访问 *       const unauthorizedResult = securityManager.checkAccess( */;
+      // 检查未授权访问 *       const unauthorizedResult = securityManager.checkAccess( */;)
         "unauthorized_user",/admin/settings",/        PermissionType.REA;D
       ;);
       expect(unauthorizedResult.type).toBe("DENY");

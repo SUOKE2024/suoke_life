@@ -95,20 +95,18 @@ const Input: React.FC<InputProps> = ({
         return baseStyle;
   };
   return (
-    <View style={[styles.wrapper, style]}>
-      {label && (
-        <Text style={styles.label}>
+  <View style={[styles.wrapper, style]}>
+      {label  && <Text style={styles.label}>
           {label}
         </Text>
       )}
-      <View style={getContainerStyle()}>
-        {leftIcon && (
-        <View style={styles.leftIcon}>
+      <View style={{getContainerStyle()}}>
+        {leftIcon  && <View style={styles.leftIcon}>
             {leftIcon}
           </View>
         )}
-        <TextInput;
-          style={getInputStyle()}
+        <TextInput
+          style={{getInputStyle()}}
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
@@ -125,8 +123,7 @@ const Input: React.FC<InputProps> = ({
           testID={testID}
           {...props}
         />
-        {type === "password" && (
-          <TouchableOpacity;
+        {type === "password"  && <TouchableOpacity
             style={styles.rightIcon}
             onPress={togglePasswordVisibility}
             accessibilityLabel={isPasswordVisible ? "隐藏密码" : "显示密码"}
@@ -134,14 +131,12 @@ const Input: React.FC<InputProps> = ({
             <Text>{isPasswordVisible ? "🙈" : "👁️"}</Text>
           </TouchableOpacity>
         )}
-        {rightIcon && type !== "password" && (
-        <View style={styles.rightIcon}>
+        {rightIcon && type !== "password"  && <View style={styles.rightIcon}>
             {rightIcon}
           </View>
         )}
       </View>
-      {(errorMessage || helperText) && (
-        <Text style={error ? [styles.helperText, styles.errorText] : styles.helperText}>
+      {(errorMessage || helperText)  && <Text style={{error ? [styles.helperText, styles.errorText] : styles.helperText}}>
           {error ? errorMessage : helperText}
         </Text>
       )}

@@ -21,7 +21,7 @@ expect(() => {
         ErrorHandler(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = ErrorHandler(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -43,7 +43,7 @@ expect(() => {
         errorHandler(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = errorHandler(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -65,7 +65,7 @@ expect(() => {
         handleError(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = handleError(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -87,7 +87,7 @@ expect(() => {
         getErrorStats(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = getErrorStats(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -109,7 +109,7 @@ expect(() => {
         clearErrorLog(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = clearErrorLog(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -133,7 +133,7 @@ ErrorHandler(// test params);
 expect(averageTime).toBeLessThan(1);
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);)
     const startTime = performance.now();
     // Test with large dataset
 ErrorHandler(largeDataset);

@@ -16,17 +16,17 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
   const [syncStatus, setSyncStatus] = useState<SyncStatus>(getSyncStatus());
   const [fadeAnim] = useState(new Animated.Value(0));
   const [slideAnim] = useState(new Animated.Value(-100));
-  useEffect() => {
+  useEffect(() => {
     // 监听同步状态变化
     const unsubscribe = addSyncListener(status) => {
       setSyncStatus(status);
     });
     return unsubscribe;
   }, []);
-  useEffect() => {
+  useEffect(() => {
     // 当离线时显示指示器
     if (!syncStatus.isOnline || syncStatus.pendingOperations > 0) {
-      Animated.parallel([
+      Animated.parallel([)
         Animated.timing(fadeAnim, {
           toValue: 1,
           duration: 300,
@@ -39,7 +39,7 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
         }),
       ]).start();
     } else {
-      Animated.parallel([
+      Animated.parallel([)
         Animated.timing(fadeAnim, {
           toValue: 0,
           duration: 300,
@@ -88,10 +88,10 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
     }
   };
   const renderBasicIndicator = () => (
-    <Animated.View;
-      style={[
+  <Animated.View;
+      style={{[
         styles.basicIndicator,
-        { backgroundColor: getStatusColor() },
+        { backgroundColor: getStatusColor() }},
         {
           opacity: fadeAnim,
           transform: [{ translateY: slideAnim }],
@@ -99,15 +99,14 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
         style,
       ]}
     >
-      <TouchableOpacity;
+      <TouchableOpacity
         style={styles.basicContent}
         onPress={handlePress}
         activeOpacity={0.8}
       >
         <Icon name={getStatusIcon()} size={16} color="#fff" />
         <Text style={styles.basicText}>{getStatusText()}</Text>
-        {syncStatus.pendingOperations > 0 && (
-        <View style={styles.badge}>
+        {syncStatus.pendingOperations > 0  && <View style={styles.badge}>
             <Text style={styles.badgeText}>{syncStatus.pendingOperations}</Text>
           </View>
         )}
@@ -115,50 +114,47 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
     </Animated.View>
   );
   const renderDetailedIndicator = () => (
-    <Animated.View;
-      style={[
+  <Animated.View;
+      style={{[
         styles.detailedIndicator,
         {
           opacity: fadeAnim,
-          transform: [{ translateY: slideAnim }],
+          transform: [{ translateY: slideAnim }}],
         },
         style,
       ]}
     >
-      <TouchableOpacity;
+      <TouchableOpacity
         style={styles.detailedContent}
         onPress={handlePress}
         activeOpacity={0.8}
       >
         <View style={styles.statusHeader}>
           <Icon name={getStatusIcon()} size={24} color={getStatusColor()} />
-          <Text style={[styles.statusTitle, { color: getStatusColor() }]}>
+          <Text style={{[styles.statusTitle, { color: getStatusColor() }}]}>
             {getStatusText()}
           </Text>
         </View>
         <View style={styles.statusDetails}>
           <View style={styles.statusRow}>
             <Text style={styles.statusLabel}>网络状态:</Text>
-            <Text style={[styles.statusValue, { color: syncStatus.isOnline ? '#4CAF50' : '#f44336' }]}>
+            <Text style={{[styles.statusValue, { color: syncStatus.isOnline ? '#4CAF50' : '#f44336' }}]}>
               {syncStatus.isOnline ? '在线' : '离线'}
             </Text>
           </View>
-          {syncStatus.pendingOperations > 0 && (
-        <View style={styles.statusRow}>
+          {syncStatus.pendingOperations > 0  && <View style={styles.statusRow}>
               <Text style={styles.statusLabel}>待同步操作:</Text>
               <Text style={styles.statusValue}>{syncStatus.pendingOperations}</Text>
             </View>
           )}
-          {syncStatus.failedOperations > 0 && (
-        <View style={styles.statusRow}>
+          {syncStatus.failedOperations > 0  && <View style={styles.statusRow}>
               <Text style={styles.statusLabel}>失败操作:</Text>
-              <Text style={[styles.statusValue, { color: '#f44336' }]}>
+              <Text style={{[styles.statusValue, { color: '#f44336' }}]}>
                 {syncStatus.failedOperations}
               </Text>
             </View>
           )}
-          {syncStatus.lastSyncTime && (
-        <View style={styles.statusRow}>
+          {syncStatus.lastSyncTime  && <View style={styles.statusRow}>
               <Text style={styles.statusLabel}>上次同步:</Text>
               <Text style={styles.statusValue}>
                 {new Date(syncStatus.lastSyncTime).toLocaleTimeString()}
@@ -166,8 +162,7 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
             </View>
           )}
         </View>
-        {syncStatus.isOnline && syncStatus.pendingOperations > 0 && (
-        <View style={styles.actionButton}>
+        {syncStatus.isOnline && syncStatus.pendingOperations > 0  && <View style={styles.actionButton}>
             <Text style={styles.actionButtonText}>点击同步</Text>
           </View>
         )}
@@ -183,7 +178,7 @@ interface SyncStatusCardProps {
 export const SyncStatusCard: React.FC<SyncStatusCardProps> = ({ style }) => {
   const [syncStatus, setSyncStatus] = useState<SyncStatus>(getSyncStatus());
   const [cacheStats, setCacheStats] = useState<any>(null);
-  useEffect() => {
+  useEffect(() => {
     const unsubscribe = addSyncListener(setSyncStatus);
     // 获取缓存统计
     const stats = offlineService.getCacheStats();
@@ -210,7 +205,7 @@ export const SyncStatusCard: React.FC<SyncStatusCardProps> = ({ style }) => {
     }
   };
   return (
-    <View style={[styles.syncCard, style]}>
+  <View style={[styles.syncCard, style]}>
       <View style={styles.syncCardHeader}>
         <Icon name="sync" size={24} color="#2196F3" />
         <Text style={styles.syncCardTitle}>同步状态</Text>
@@ -219,9 +214,9 @@ export const SyncStatusCard: React.FC<SyncStatusCardProps> = ({ style }) => {
         <View style={styles.statusGrid}>
           <View style={styles.statusItem}>
             <Text style={styles.statusItemLabel}>网络</Text>
-            <Text style={[
+            <Text style={{[
               styles.statusItemValue,
-              { color: syncStatus.isOnline ? '#4CAF50' : '#f44336' },
+              { color: syncStatus.isOnline ? '#4CAF50' : '#f44336' }},
             ]}>
               {syncStatus.isOnline ? '在线' : '离线'}
             </Text>
@@ -232,25 +227,24 @@ export const SyncStatusCard: React.FC<SyncStatusCardProps> = ({ style }) => {
           </View>
           <View style={styles.statusItem}>
             <Text style={styles.statusItemLabel}>失败</Text>
-            <Text style={[
+            <Text style={{[
               styles.statusItemValue,
-              { color: syncStatus.failedOperations > 0 ? '#f44336' : '#666' },
+              { color: syncStatus.failedOperations > 0 ? '#f44336' : '#666' }},
             ]}>
               {syncStatus.failedOperations}
             </Text>
           </View>
           <View style={styles.statusItem}>
             <Text style={styles.statusItemLabel}>同步中</Text>
-            <Text style={[
+            <Text style={{[
               styles.statusItemValue,
-              { color: syncStatus.syncInProgress ? '#ff9800' : '#666' },
+              { color: syncStatus.syncInProgress ? '#ff9800' : '#666' }},
             ]}>
               {syncStatus.syncInProgress ? '是' : '否'}
             </Text>
           </View>
         </View>
-        {cacheStats && (
-        <View style={styles.cacheStats}>
+        {cacheStats  && <View style={styles.cacheStats}>
             <Text style={styles.cacheStatsTitle}>缓存统计</Text>
             <Text style={styles.cacheStatsText}>
               缓存项: {cacheStats.totalItems} |
@@ -260,8 +254,7 @@ export const SyncStatusCard: React.FC<SyncStatusCardProps> = ({ style }) => {
           </View>
         )}
         <View style={styles.syncCardActions}>
-          {syncStatus.isOnline && syncStatus.pendingOperations > 0 && (
-            <TouchableOpacity style={styles.syncButton} onPress={handleForcSync}>
+          {syncStatus.isOnline && syncStatus.pendingOperations > 0  && <TouchableOpacity style={styles.syncButton} onPress={handleForcSync}>
               <Icon name="sync" size={16} color="#fff" />
               <Text style={styles.syncButtonText}>立即同步</Text>
             </TouchableOpacity>

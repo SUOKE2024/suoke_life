@@ -33,18 +33,17 @@ export const Input: React.FC<InputProps> = ({
     setIsPasswordVisible(!isPasswordVisible);
   }, [isPasswordVisible]);
   return (
-    <View style={[styles.container, containerStyle]}>
+  <View style={[styles.container, containerStyle]}>
       {label && <Text style={styles.label}>{label}</Text>}
       <View style={[styles.inputContainer, error ? styles.inputError : undefined]}>
         {leftIcon && <View style={styles.leftIcon}>{leftIcon}</View>}
-        <TextInput;
+        <TextInput
           style={[styles.input, inputStyle]}
           secureTextEntry={secureTextEntry && !isPasswordVisible}
           placeholderTextColor="#999"
           {...props}
         />
-        {showPassword && secureTextEntry && (
-          <TouchableOpacity;
+        {showPassword && secureTextEntry  && <TouchableOpacity
             style={styles.rightIcon}
             onPress={togglePasswordVisibility}
             accessibilityLabel={isPasswordVisible ? "隐藏密码" : "显示密码"}
@@ -54,8 +53,7 @@ export const Input: React.FC<InputProps> = ({
             </Text>
           </TouchableOpacity>
         )}
-        {rightIcon && !showPassword && (
-        <View style={styles.rightIcon}>{rightIcon}</View>
+        {rightIcon && !showPassword  && <View style={styles.rightIcon}>{rightIcon}</View>
         )}
       </View>
       {error && <Text style={styles.errorText}>{error}</Text>}

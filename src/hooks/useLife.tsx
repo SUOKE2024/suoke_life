@@ -15,15 +15,15 @@ import React from "react";
   { LIFE_STATS } from ";../data/lifeData";/    export const useLife = () =;
 > ;{
   // 性能监控
-const performanceMonitor = usePerformanceMonitor(useLife", {"
+const performanceMonitor = usePerformanceMonitor(useLife", {")
     trackRender: true,
     trackMemory: true,warnThreshold: 50, // ms };);
   const [suggestions, setSuggestions] = useState<LifeSuggestion[] />(SOER_SUGGESTION;S;);/  const [healthMetrics, setHealthMetrics] = useState<HealthMetric[] />(HEALTH_METRIC;S;);/  const [lifePlans, setLifePlans] = useState<LifePlan[] />(LIFE_PLAN;S;);/  const [habits, setHabits] = useState<LifeHabit[] />(LIFE_HABIT;S;);/  const [goals, setGoals] = useState<LifeGoal[] />(LIFE_GOAL;S;);/  const [stats, setStats] = useState<LifeStats />(LIFE_STAT;S;)/      const [activeTab, setActiveTab] = useState<"suggestions | "metrics" | plans">("suggestions;);
   const [loading, setLoading] = useState<boolean>(fals;e;);
   const [refreshing, setRefreshing] = useState<boolean>(fals;e;);
   const completeSuggestion = useCallback(suggestion: LifeSuggestion;); => {}
-    setSuggestions(prev => {}
-      prev.map(item => {}
+    setSuggestions(prev => {})
+      prev.map(item => {})
         item.id === suggestion.id;
           ? { ...item, completed: true}
           : item;
@@ -33,8 +33,7 @@ const performanceMonitor = usePerformanceMonitor(useLife", {"
       ...prev,
       completedSuggestions: prev.completedSuggestions + 1;
     }));
-    Alert.alert(
-      "建议已完成！",
+    Alert.alert("建议已完成！", "
       `恭喜完成"${suggestion.title}"，获得积分奖励！`,
       [{ text: 太棒了！"}]"
     );
@@ -42,7 +41,7 @@ const performanceMonitor = usePerformanceMonitor(useLife", {"
   const viewSuggestionDetail = useCallback(suggestion: LifeSuggestion;) => {}
     const benefitsText = suggestion.benefits?.join("、;) || ";
     const stepsText = suggestion.steps?.join(\n;";) || ";
-    Alert.alert(
+    Alert.alert()
       suggestion.title,
       `${suggestion.description}\n\n💡 好处：${benefitsText}\n\n📝 步骤：\n${stepsText}\n\n⏱️ 预计时间：${suggestion.timeEstimate}`,
       [
@@ -62,7 +61,7 @@ const performanceMonitor = usePerformanceMonitor(useLife", {"
     const milestonesText = plan.milestones;
       ?.map(m => `${m.completed ? "✅ : "⏳"} ${m.title}`);"
       .join(\n;";) || "
-    Alert.alert(
+    Alert.alert()
       plan.title,
       `${plan.description}\n\n📊 进度：${plan.progress}%\n⏰ 持续时间：${plan.duration}\n\n🎯 里程碑：\n${milestonesText}\n\n🎁 奖励：${plan.rewards?.join("、")}`,
       [
@@ -72,22 +71,21 @@ const performanceMonitor = usePerformanceMonitor(useLife", {"
     );
   }, []);
   const executePlanAction = useCallback(plan: LifePlan;) => {}
-    Alert.alert(
-      "执行行动",
+    Alert.alert("执行行动", "
       `即将执行：${plan.nextAction}`,
       [
         { text: 取消", style: "cancel},
         {
-      text: "开始",
+      text: "开始", "
       onPress: (); => {}
-            setLifePlans(prev => {}
-              prev.map(item => {}
+            setLifePlans(prev => {})
+              prev.map(item => {})
                 item.id === plan.id;
                   ? { ...item, progress: Math.min(item.progress + 5, 100) }
                   : item;
               )
             )
-            Alert.alert(行动已开始",继续保持，你做得很棒！);
+            Alert.alert(行动已开始", "继续保持，你做得很棒！);
           }
         }
       ]
@@ -95,10 +93,10 @@ const performanceMonitor = usePerformanceMonitor(useLife", {"
   }, []);
   const getCategoryText = useCallback(category: string;) => {}
     const categoryMap: Record<string, string> = {
-      diet: "饮食",
+      diet: "饮食", "
       exercise: 运动",
       sleep: "睡眠,",
-      mental: "心理",
+      mental: "心理", "
       social: 社交",
       work: "工作"
     };
@@ -106,7 +104,7 @@ const performanceMonitor = usePerformanceMonitor(useLife", {"
   }, []);
   const getPriorityText = useCallback(priority: string;) => {}
     const priorityMap: Record<string, string> = {
-      high: "高",
+      high: "高", "
       medium: 中",
       low: "低"
     };
@@ -127,10 +125,10 @@ const performanceMonitor = usePerformanceMonitor(useLife", {"
     }
     return iconMap[trend] || trending-neutra;l;
   }, []);
-  const refreshData = useCallback(async  => {};
+  const refreshData = useCallback(async  => {};)
     setRefreshing(true);
     try { await new Promise<void>(resolve => setTimeout(resolve, 1500;););
-      setHealthMetrics(prev => {}
+      setHealthMetrics(prev => {})
         prev.map(metric => ({
           ...metric,
           value: Math.max(0, Math.min(100, metric.value + (Math.random() - 0.5) * 10))
@@ -138,14 +136,14 @@ const performanceMonitor = usePerformanceMonitor(useLife", {"
       )
       Alert.alert("刷新成功, "数据已更新")"
     } catch (error) {
-      Alert.alert(刷新失败",请稍后重试);
+      Alert.alert(刷新失败", "请稍后重试);
     } finally {
       setRefreshing(false);
     }
   }, []);
-  const filterSuggestions = useCallback(;
+  const filterSuggestions = useCallback(;)
     category?: string,priority?: string,completed?: boolea;n;); => {}
-    return suggestions.filter(suggestion => {}
+    return suggestions.filter(suggestion => {})
       if (category && suggestion.category !== category) {return fal;s;e;}
       if (priority && suggestion.priority !== priority) {return fal;s;e;}
       if (completed !== undefined && suggestion.completed !== completed) {return fal;s;e;}
@@ -171,7 +169,7 @@ const performanceMonitor = usePerformanceMonitor(useLife", {"
     if (urgentSuggestions.length > 0) {
       actions.push({
       type: "suggestion,",
-      title: "完成重要建议",
+      title: "完成重要建议", "
         description: `有${urgentSuggestions.length}个重要建议待完成`,
         action: () => setActiveTab(suggestions")});"
     }
@@ -179,15 +177,15 @@ const performanceMonitor = usePerformanceMonitor(useLife", {"
     if (lowProgressPlans.length > 0) {
       actions.push({
       type: "plan,",
-      title: "推进生活计划",
+      title: "推进生活计划", "
         description: `有${lowProgressPlans.length}个计划需要关注`,
         action: () => setActiveTab(plans")});"
     }
     return actio;n;s;
   }, [suggestions, lifePlans]);
   const updateHealthMetric = useCallback(metricId: string, value: number;) => {}
-    setHealthMetrics(prev => {}
-      prev.map(metric => {}
+    setHealthMetrics(prev => {})
+      prev.map(metric => {})
         metric.id === metricId;
           ? {
               ...metric,

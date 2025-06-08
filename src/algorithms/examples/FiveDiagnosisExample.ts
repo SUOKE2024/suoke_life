@@ -95,7 +95,7 @@
         gender: "male",
         height: 175,
         weight: 70,
-        occupation: "软件工程师",
+        occupation: "软件工程师", "
         medicalHistory: [],
         allergies: [],
         medications: []
@@ -122,7 +122,7 @@
     if (result.fusionResult) {
       .toFixed(1)}%`
       )
-      if (result.fusionResult.primarySyndromes &&
+      if (result.fusionResult.primarySyndromes &&)
         result.fusionResult.primarySyndromes.length > 0) {
         result.fusionResult.primarySyndromes.forEach(syndrome: unknown, index: number); => {}
             .toFixed(1)}%)`
@@ -133,21 +133,21 @@
       }
     if (result.fusionResult?.constitutionAnalysis) {
       const constitution = result.fusionResult.constitutionAnalysi;s;
-if (constitution.secondaryTypes &&
+if (constitution.secondaryTypes &&)
         constitution.secondaryTypes.length > 0) {
         }`);
       }
       .toFixed(1)}%`);
       }
-    if (result.fusionResult?.recommendations &&
+    if (result.fusionResult?.recommendations &&)
       result.fusionResult.recommendations.length > 0) {
-      result.fusionResult.recommendations.forEach(recommendation: unknown, index: number) => {}
+      result.fusionResult.recommendations.forEach(((recommendation: unknown, index: number) => {}))
           }
       );
       }
-    if (result.qualityReport?.warnings &&
+    if (result.qualityReport?.warnings &&)
       result.qualityReport.warnings.length > 0) {
-      result.qualityReport.warnings.forEach(warning: string, index: number) => {}
+      result.qualityReport.warnings.forEach(((warning: string, index: number) => {}))
           });
       }
     if (result.qualityReport) {

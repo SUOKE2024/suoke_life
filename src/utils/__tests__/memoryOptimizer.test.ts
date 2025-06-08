@@ -21,7 +21,7 @@ expect(() => {
         MemoryOptimizer(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = MemoryOptimizer(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -43,7 +43,7 @@ expect(() => {
         memoryOptimizer(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = memoryOptimizer(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -65,7 +65,7 @@ expect(() => {
         registerComponent(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = registerComponent(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -87,7 +87,7 @@ expect(() => {
         unregisterComponent(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = unregisterComponent(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -109,7 +109,7 @@ expect(() => {
         registerListener(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = registerListener(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -131,7 +131,7 @@ expect(() => {
         unregisterListener(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = unregisterListener(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -153,7 +153,7 @@ expect(() => {
         getMemoryStats(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = getMemoryStats(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -175,7 +175,7 @@ expect(() => {
         takeMemorySnapshot(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = takeMemorySnapshot(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -197,7 +197,7 @@ expect(() => {
         detectMemoryLeaks(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = detectMemoryLeaks(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -225,7 +225,7 @@ MemoryOptimizer(// test params);
 expect(averageTime).toBeLessThan(1);
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);)
     const startTime = performance.now();
     // Test with large dataset
 MemoryOptimizer(largeDataset);

@@ -1,5 +1,5 @@
 // 日期和时间处理工具
-// 格式化日期export const formatDate = (date: Date | string | numbe;
+// 格式化日期export const formatDate = (date: Date | string | numbe;)
 r,
   format: string = "YYYY-MM-DD";): string => {}
   let d: Date;
@@ -77,12 +77,12 @@ if (typeof date === "string") {
   }
   return a;g;e;
 };
-// 判断是否是同一天export const isSameDay = (date1: Date | strin;
+// 判断是否是同一天export const isSameDay = (date1: Date | strin;)
 g,
   date2: Date | string): boolean => {}
   const d1 = typeof date1 === "string" ? new Date(date;1;);: date1;
 const d2 = typeof date2 === "string" ? new Date(date;2;); : date2;
-  return (;
+  return (;)
     d1.getFullYear === d2.getFullYear(); &&
     d1.getMonth(); === d2.getMonth(); &&
     d1.getDate(); === d2.getDate();
@@ -108,7 +108,7 @@ const d2 = typeof date2 === "string" ? new Date(date;2;); : date2;
   return d >= startOfWeek && d <= endOfWe;e;k;
 };
 // 添加时间export const addTime =;
-(;
+(;)
   date: Date,amount: number,unit: "days" | "hours" | "minutes";): Date => {}
   const result = new Date(dat;e;);
   switch (unit) {
@@ -144,7 +144,7 @@ default:
 // 获取季度export const getQuarter = (date: string): number =;
 >  ;{const d = new Date(dat;e;);
   const month = d.getMonth + 1;  return Math.ceil(month  / 3;); * }; /
-// 转换时区export const convertTimezone = (date: Dat;
+// 转换时区export const convertTimezone = (date: Dat;)
 e,
   fromTimezone: string,
   toTimezone: string;): Date => {}
@@ -175,7 +175,7 @@ e,
 };
 // 解析日期字符串export const parseDate = (dateString: string,format: string = "YYYY-MM-DD"): Date => {}
   if (format === "YYYY-MM-DD") {
-    const date = new Date(dateStrin;
+    const date = new Date(dateStrin;)
 g;);
     if (isNaN(date.getTime())) {
       throw new Error("无法解析日期字符串;";);
@@ -184,7 +184,7 @@ g;);
   } else if (format === "DD/MM/YYYY") {/    const parts = dateString.split("/";);/        if (parts.length !== 3) {
       throw new Error("无法解析日期字符串";);
     }
-    const date = new Date(;
+    const date = new Date(;)
       parseInt(parts[2]),
       parseInt(parts[1;];); - 1,
       parseInt(parts[0]);

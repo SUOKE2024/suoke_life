@@ -47,22 +47,22 @@ const ProgressDisplay: React.FC<ProgressDisplayProps> = ({
     return Math.min(100, Math.floor(totalNodes / 50) * 100)); // 假设50个节点为满分
   };
   return (
-    <View style={styles.container}>
+  <View style={styles.container}>
       {// 顶部状态栏}
       <View style={styles.topBar}>
         {// 左侧：游戏控制}
         <View style={styles.leftSection}>
-          <TouchableOpacity;
+          <TouchableOpacity
             style={styles.controlButton}
             onPress={isPaused ? onResume : onPause}
           >
-            <Icon;
+            <Icon
               name={isPaused ? 'play-arrow' : 'pause'}
               size={24}
               color="#FFFFFF"
             />
           </TouchableOpacity>
-          <TouchableOpacity;
+          <TouchableOpacity
             style={styles.controlButton}
             onPress={onSettings}
           >
@@ -75,13 +75,12 @@ const ProgressDisplay: React.FC<ProgressDisplayProps> = ({
             <Icon name="access-time" size={16} color="#C8E6C9" />
             <Text style={styles.timeText}>{formatTime(gameTime)}</Text>
           </View>
-          {isPaused && (
-            <Text style={styles.pausedText}>已暂停</Text>
+          {isPaused  && <Text style={styles.pausedText}>已暂停</Text>
           )}
         </View>
         {// 右侧：退出按钮}
         <View style={styles.rightSection}>
-          <TouchableOpacity;
+          <TouchableOpacity
             style={styles.exitButton}
             onPress={onExit}
           >
@@ -125,10 +124,10 @@ const ProgressDisplay: React.FC<ProgressDisplayProps> = ({
       {// 进度条}
       <View style={styles.progressBarContainer}>
         <View style={styles.progressBarBackground}>
-          <View;
-            style={[
+          <View
+            style={{[
               styles.progressBarFill,
-              { width: `${getCompletionPercentage()}%` }
+              { width: `${getCompletionPercentage()}}%` }
             ]};
           />;
         </View>;

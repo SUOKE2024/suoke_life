@@ -22,14 +22,14 @@ export const IntegrationdemoScreen: React.FC  = () => {};
 const performanceMonitor = usePerformanceMonitor("IntegrationdemoScreen", {trackRender: true,trackMemory: true,warnThreshold: 50,  };);
   const [isRunning, setIsRunning] = useState<boolean>(fals;e;);
   const [currentStep, setCurrentStep] = useState<number>(0);
-  const [demoSteps, setdemoSteps] = useState<demoStep[] />([/        {id: init_services",
+  const [demoSteps, setdemoSteps] = useState<demoStep[] />([/        {id: init_services",)
       title: "初始化服务,",
       description: "初始化五诊算法、机器学习和智能体协调服务",
       status: pending""
     },
     {
       id: "five_diagnosis,",
-      title: "五诊算法演示",
+      title: "五诊算法演示", "
       description: 执行完整的五诊分析流程",
       status: "pending"
     },
@@ -47,10 +47,10 @@ const performanceMonitor = usePerformanceMonitor("IntegrationdemoScreen", {track
     },
     {
       id: "integration_analysis,",
-      title: "集成分析",
+      title: "集成分析", "
       description: 综合所有系统的分析结果",
       status: "pending};];);
-  const [serviceStatus, setServiceStatus] = useState<object>({ fiveDiagnosis: { isInitialized: false   },mlTraining: { isInitialized: false   },
+  const [serviceStatus, setServiceStatus] = useState<object>({ fiveDiagnosis: { isInitialized: false   },mlTraining: { isInitialized: false   },)
     agentCoordination: { isInitialized: false   };};);
   useEffect(); => {};
 const effectStart = performance.now();
@@ -64,7 +64,7 @@ const effectStart = performance.now();
     } catch (error) {
       }
   };
-  const runCompletedemo = useMemo(() => async() => {}
+  const runCompletedemo = useMemo(() => async() => {})
     if (isRunning) { ///
     try {
       setIsRunning(true);
@@ -83,7 +83,7 @@ const effectStart = performance.now();
       setIsRunning(false);
     }
   };
-  const executeStep = useMemo(() => async (stepIndex: number, stepFunction: () => Promise<any>) => {}
+  const executeStep = useMemo(() => async (stepIndex: number, stepFunction: () => Promise<any>) => {})
     setCurrentStep(stepIndex), []);
     const updatedSteps = useMemo() => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => [...demoSteps], []))
     updatedSteps[stepIndex].status = "running";
@@ -142,11 +142,11 @@ const effectStart = performance.now();
         }
       },
       inquiryData: {,
-  symptoms: ["疲劳乏力, "气短懒言", 食欲不振",睡眠质量差],"
-        medicalHistory: ["无重大疾病史", 偶有感冒"],"
+  symptoms: ["疲劳乏力, "气短懒言", " 食欲不振", "睡眠质量差],"
+        medicalHistory: ["无重大疾病史", " 偶有感冒"],"
         lifestyle: { ,
           exercise: "轻度运动,",
-          sleep: "6-7小时",
+          sleep: "6-7小时", "
           diet: 偏素食",
           stress: "中等压力"
         }
@@ -158,10 +158,10 @@ const effectStart = performance.now();
     return {sessionId: result.sessionId,overallConfidence: result.overallConfidence,primarySyndrome: result.primarySyndrome,constitutionType: result.constitutionType,summary: `诊断完成，主要证候: ${result.primarySyndrome.name}，体质类型: ${result.constitutionType.type};`
     ;};
   };
-  const demonstrateAgentCollaboration = useMemo(() => async() => {};
+  const demonstrateAgentCollaboration = useMemo(() => async() => {};)
 const diagnosisData = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => {
       userId: "demo_user_001",
-      symptoms: [疲劳乏力",气短懒言, "食欲不振"],
+      symptoms: [疲劳乏力", "气短懒言, "食欲不振"],
       diagnosisResult: {,
   primarySyndrome: 气虚证",
         confidence: 0.85;
@@ -169,14 +169,14 @@ const diagnosisData = useMemo(); => useMemo(); => useMemo(); => useMemo(); => us
         const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-    const collaboration = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => await agentCoordinationService.performCollaborativeDiagnosis(;
+    const collaboration = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => await agentCoordinationService.performCollaborativeDiagnosis(;)
       "demo_user_001,"
       diagnosisData;
     ), [;];)
     return {sessionId: collaboration.session.id,participants: collaboration.session.participants,finalRecommendation: collaboration.result,summary: `四大智能体协作完成，共识度: ${(collaboration.result.consensus * 100).toFixed(1)}%;`
     ;};
   };
-  const demonstrateMLTraining = useMemo(() => async() => {};
+  const demonstrateMLTraining = useMemo(() => async() => {};)
 const trainingData = useMemo() => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => [
       {
       id: "train_001",
@@ -227,7 +227,7 @@ const trainingData = useMemo() => useMemo(); => useMemo(); => useMemo(); => useM
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
     try {
-      const trainingTask = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => await mlTrainingService.createTrainingTask(;
+      const trainingTask = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => await mlTrainingService.createTrainingTask(;)
         "demo_five_diagnosis_model",
         modelConfig,
         trainingData;
@@ -241,7 +241,7 @@ const trainingData = useMemo() => useMemo(); => useMemo(); => useMemo(); => useM
         datasetSize: trainingData.length,summary: "训练任务模拟完成（演示模式）};"
     }
   };
-  const performIntegrationAnalysis = useMemo(() => const async = () => {}
+  const performIntegrationAnalysis = useMemo(() => const async = () => {})
   TODO: 检查依赖项     TODO: 检查依赖项* *  TODO: 检查依赖项 TODO: 检查依赖项 , TODO: 检查依赖项, []), []), [])   const integrationResult = useMemo() => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => {}
       systemHealth: {,
   overall: "excellent",
@@ -249,12 +249,12 @@ const trainingData = useMemo() => useMemo(); => useMemo(); => useMemo(); => useM
         agentCollaborationEfficiency: 0.88,
         mlModelPerformance: 0.85;
       },
-      recommendations: [五诊算法系统运行正常，准确率达到92%",智能体协作效率良好，建议优化任务分配算法,机器学习模型性能稳定，可考虑增加训练数据",
+      recommendations: [五诊算法系统运行正常，准确率达到92%", "智能体协作效率良好，建议优化任务分配算法,机器学习模型性能稳定，可考虑增加训练数据", "
         整体系统集成度高，建议定期进行性能监控""
       ],
       nextSteps: [
-        "部署到生产环境,收集真实用户数据",
-        持续优化算法模型",扩展智能体功能"
+        "部署到生产环境,收集真实用户数据", "
+        持续优化算法模型", "扩展智能体功能"
       ],
         const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
@@ -279,14 +279,13 @@ const getStatusColor = useCallback() => {
       }
     };
     performanceMonitor.recordRender();
-    return (;
-      <View key={step.id} style={[///  >;
-        styles.stepCard,currentStep === index && styles.activeStepCard,{ borderLeftColor: getStatusColor(step.status)   };
-      ]} />/        <View style={styles.stepHeader}>/          <Text style={styles.stepIcon}>{getStatusIcon(step.status)}</Text>/          <View style={styles.stepInfo}>/            <Text style={styles.stepTitle}>{step.title}</Text>/            <Text style={styles.stepDescription}>{step.description}</Text>/          </View>/              {step.status === "running && (";
+    return (;)
+      <View key={step.id} style={{[///  >;
+        styles.stepCard,currentStep === index && styles.activeStepCard,{ borderLeftColor: getStatusColor(step.status)   }};
+      ]} />/        <View style={styles.stepHeader}>/          <Text style={styles.stepIcon}>{getStatusIcon(step.status)}</Text>/          <View style={styles.stepInfo}>/            <Text style={styles.stepTitle}>{step.title}</Text>/            <Text style={styles.stepDescription}>{step.description}</Text>/          </View>/              {step.status === "running && (";)
             <ActivityIndicator size="small" color="#2196F3" />/              )};
         </View>/;
-        { step.result  && (
-    <View style={styles.stepResult}>/            <Text style={styles.resultTitle}>结果:</Text>/            <Text style={styles.resultText}>/                  {typeof step.result === "object";
+        {step.result   && <View style={styles.stepResult}>/            <Text style={styles.resultTitle}>结果:</Text>/            <Text style={styles.resultText}>/                  {typeof step.result === "object";
                 ? step.result.summary || JSON.stringify(step.result, null,2;);: step.result.toString()}
             </Text>/          </View>/            )}
       </View>/        );
@@ -305,19 +304,19 @@ const getStatusColor = useCallback() => {
             { color: serviceStatus.agentCoordination.isInitialized ? "#4CAF50" : #F44336"}"
           ]} />/            {serviceStatus.agentCoordination.isInitialized ? "已就绪 : "未初始化"}"
           </Text>/        </View>/      </View>/    </View>/      ), [])
-  return (;
+  return (;)
     <SafeAreaView style={styles.container}>/      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false} />/        <View style={styles.header}>/          <Text style={styles.title}>索克生活集成演示</Text>/          <Text style={styles.subtitle}>五诊算法 + 机器学习 + 智能体协作</Text>/        </View>/;
         {renderServiceStatus()};
-        <View style={styles.actionContainer}>/              <TouchableOpacity;
+        <View style={styles.actionContainer}>/              <TouchableOpacity
 style={[styles.demoButton, isRunning && styles.disabledButton]}
             onPress={runCompletedemo}
             disabled={isRunning}
-          accessibilityLabel="TODO: 添加无障碍标签"/            {isRunning ? (<View style={styles.buttonContent}>/                <ActivityIndicator size="small" color="#FFFFFF" />/                <Text style={styles.buttonText}>演示进行中...</Text>/              </View>/                ): (
+          accessibilityLabel="TODO: 添加无障碍标签"/            {isRunning ? (<View style={styles.buttonContent}>/                <ActivityIndicator size="small" color="#FFFFFF" />/                <Text style={styles.buttonText}>演示进行中...</Text>/              </View>/                ): ()
               <Text style= {styles.buttonText} />开始完整演示</Text>/                )};
           </TouchableOpacity>/        </View>///              {demoSteps.map(step, inde;x;); => renderStepCard(step, index);)}
         </View>/      </ScrollView>/    </SafeAreaView>/      );
 };
-const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,
+const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,)
   flex: 1,
     backgroundColor: #F5F5F5""
   },

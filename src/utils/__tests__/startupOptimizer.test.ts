@@ -1,4 +1,3 @@
-
 import startupOptimizer from '../startupOptimizer.ts';
 describe('startupOptimizer', () => {
   it('应该正确导出', () => {

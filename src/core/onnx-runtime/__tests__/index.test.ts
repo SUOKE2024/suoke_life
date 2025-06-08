@@ -1,4 +1,3 @@
-
 import index from '../index.ts';
 describe('index', () => {
   it('应该正确导出', () => {

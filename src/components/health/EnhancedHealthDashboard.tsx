@@ -113,7 +113,7 @@ unit: mmHg",
             }],
             relatedSyndromes: [],
             tcmInterpretation: 血压正常，心肝功能协调，气血运行平稳",
-            tcmIndicators: ["心气, "肝气", 血脉"]
+            tcmIndicators: ["心气, "肝气", " 血脉"]
           },
           quality: {,
   reliability: 0.92,
@@ -144,7 +144,7 @@ const sampleCalculation: CalculationData = {
             {
               time: 09:00-11:00",
               point: "太白,",
-              meridian: "脾经",
+              meridian: "脾经", "
               function: 健脾益气""
             }
           ],
@@ -153,17 +153,17 @@ const sampleCalculation: CalculationData = {
             end: mcpTimestamp.fromDate(new Date(Date.now() + 4 * 60 * 60 * 1000)),
             reason: "脾经当令，治疗效果最佳"
           },
-          recommendations: ["此时宜健脾养胃", 避免过度思虑",适量运动]
+          recommendations: ["此时宜健脾养胃", " 避免过度思虑", "适量运动]
         },
         constitutionAnalysis: {,
   fourPillars: {
             year: {
-      heavenly: "庚",
+      heavenly: "庚", "
       earthly: 午" },"
             month: { heavenly: "辛, earthly: "巳" },"
             day: { heavenly: 甲", earthly: "子 },
             hour: {
-      heavenly: "己",
+      heavenly: "己", "
       earthly: 巳" }"
           },
           fiveElements: {,
@@ -175,14 +175,14 @@ const sampleCalculation: CalculationData = {
           },
           constitutionType: "balanced,",
           elementStrength: {,
-  strongest: "火",
+  strongest: "火", "
             weakest: 水",
             balance: 0.75;
           },
           adjustmentAdvice: {,
   strengthen: ["滋阴养水, "润燥生津"],"
-            reduce: [清热降火",平肝潜阳],
-            methods: ["食疗调养", 作息规律",情志调节]
+            reduce: [清热降火", "平肝潜阳],
+            methods: ["食疗调养", " 作息规律", "情志调节]
           }
         },
         baguaAnalysis: {,
@@ -193,27 +193,27 @@ const sampleCalculation: CalculationData = {
             direction: "西北"
           },
           healthAnalysis: {,
-  strengths: [意志坚强",领导能力, "抗压能力强"],
-            weaknesses: [易过度劳累",情绪紧张, "肝气郁结"],
-            risks: [心血管疾病",高血压, "失眠"]
+  strengths: [意志坚强", "领导能力, "抗压能力强"],
+            weaknesses: [易过度劳累", "情绪紧张, "肝气郁结"],
+            risks: [心血管疾病", "高血压, "失眠"]
           },
           directionalGuidance: {,
-  favorable: [西北方",正西方],
-            unfavorable: ["东南方", 正南方"],"
-            livingAdvice: ["卧室宜在西北, "办公桌面向西北", 多到西北方活动"]
+  favorable: [西北方", "正西方],
+            unfavorable: ["东南方", " 正南方"],"
+            livingAdvice: ["卧室宜在西北, "办公桌面向西北", " 多到西北方活动"]
           }
         },
         wuyunLiuqi: {,
   annualQi: {
             year: 2024,
             mainQi: "太阴湿土,",
-            guestQi: "厥阴风木",
+            guestQi: "厥阴风木", "
             hostHeaven: 少阳相火",
             hostEarth: "厥阴风木"
           },
           diseasePrediction: {,
-  susceptibleDiseases: ["脾胃疾病", 湿邪困脾",肝郁脾虚],
-            preventionMethods: ["健脾祛湿", 疏肝理气",调节情志],
+  susceptibleDiseases: ["脾胃疾病", " 湿邪困脾", "肝郁脾虚],
+            preventionMethods: ["健脾祛湿", " 疏肝理气", "调节情志],
             criticalPeriods: [
               {
       period: "春季",
@@ -228,10 +228,10 @@ const sampleCalculation: CalculationData = {
             ]
           },
           seasonalGuidance: {,
-  spring: ["疏肝理气", 少酸多甘",适量运动],
-            summer: ["清心降火", 养心安神",避免贪凉],
-            autumn: ["润肺养阴", 收敛神气",早睡早起],
-            winter: ["温肾助阳", 藏精纳气",避寒就温]
+  spring: ["疏肝理气", " 少酸多甘", "适量运动],
+            summer: ["清心降火", " 养心安神", "避免贪凉],
+            autumn: ["润肺养阴", " 收敛神气", "早睡早起],
+            winter: ["温肾助阳", " 藏精纳气", "避寒就温]
           }
         },
         comprehensiveResult: {,
@@ -241,23 +241,23 @@ const sampleCalculation: CalculationData = {
       risk: "脾胃虚弱",
       severity: medium",
               probability: 0.65,
-              prevention: ["规律饮食, "健脾食疗", 适量运动"]
+              prevention: ["规律饮食, "健脾食疗", " 适量运动"]
             }
           ],
           personalizedPlan: {,
-  immediate: ["调整作息, "清淡饮食", 情志调节"],
-            shortTerm: ["健脾益气, "疏肝理气", 规律运动"],
-            longTerm: ["体质调理, "预防保健", 定期检查"]
+  immediate: ["调整作息, "清淡饮食", " 情志调节"],
+            shortTerm: ["健脾益气, "疏肝理气", " 规律运动"],
+            longTerm: ["体质调理, "预防保健", " 定期检查"]
           },
           optimalTimings: [
             {
       activity: "服药,",
-      timing: "上午9-11点",
+      timing: "上午9-11点", "
               reason: 脾经当令，吸收最佳""
             },
             {
       activity: "运动,",
-      timing: "下午3-5点",
+      timing: "下午3-5点", "
               reason: 膀胱经当令，利于排毒""
             }
           ]
@@ -295,12 +295,12 @@ const sampleAgentDiagnoses: AgentDiagnosisResult[] = [;
             organStates: sampleBiomarkers[0].tcmAssociation.relatedOrgans;
           },
           treatment: {,
-  principle: "调和气血，养心安神",
+  principle: "调和气血，养心安神", "
             lifestyle: {,
-  diet: [清淡饮食",多食新鲜蔬果],
-              exercise: ["适量有氧运动", 太极拳"],"
+  diet: [清淡饮食", "多食新鲜蔬果],
+              exercise: ["适量有氧运动", " 太极拳"],"
               sleep: ["规律作息, "晚上11点前入睡"],"
-              emotion: [保持心情愉悦",避免过度紧张]
+              emotion: [保持心情愉悦", "避免过度紧张]
             }
           },
           confidence: 0.85,
@@ -333,13 +333,13 @@ const comprehensiveData: ComprehensiveHealthData = {userId,
       };
       setHealthData(comprehensiveData);
     } catch (error) {
-      Alert.alert("错误", 加载健康数据失败，请重试");"
+      Alert.alert("错误", " 加载健康数据失败，请重试");"
     } finally {
       setLoading(false);
       setRefreshing(false);
     }
   };
-  useEffect() => {
+  useEffect(() => {
     loadHealthData();
   }, [userId]);
   const handleRefresh = () => {}
@@ -352,14 +352,14 @@ const validateTimestamps = useMemo() => {
     let validCount = 0;
     let totalCount = 0;
     // 验证生物标志物时间戳
-healthData.biomarkers.forEach(biomarker => {}
+healthData.biomarkers.forEach(biomarker => {})
       totalCount++;
       if (validateMCPTimestamp(biomarker.timestamp)) {
         validCount++;
       }
     });
     // 验证算诊时间戳
-healthData.fiveDiagnoses.calculation.forEach(calculation => {}
+healthData.fiveDiagnoses.calculation.forEach(calculation => {})
       totalCount++;
       if (validateMCPTimestamp(calculation.timestamp)) {
         validCount++;
@@ -371,8 +371,8 @@ healthData.fiveDiagnoses.calculation.forEach(calculation => {}
 const renderBiomarkerCard = (biomarker: BiomarkerData) => {}
     const isNormal = biomarker.value >= biomarker.referenceRange.min && ;
                     biomarker.value <= biomarker.referenceRange.max;
-    return (;
-      <TouchableOpacity;
+    return (;)
+      <TouchableOpacity
 key={biomarker.id}
         style={[styles.biomarkerCard, !isNormal && styles.abnormalCard]}
         onPress={() => onBiomarkerPress?.(biomarker)}
@@ -394,12 +394,11 @@ key={biomarker.id}
             <Text style={styles.qualityText}>
               可靠性: {Math.round(biomarker.quality.reliability * 100)}%
             </    Text>
-            {biomarker.trend && (
-              <Text style={[ ///  >
+            {biomarker.trend  && <Text style={{[ ///  >
                 styles.trendText,
                 biomarker.trend.direction === "increasing && styles.increasingTrend,"
                 biomarker.trend.direction === "decreasing" && styles.decreasingTrend;
-              ]}>
+              ]}}>
                 {biomarker.trend.direction === increasing" ? "↗ :
                 biomarker.trend.direction === "decreasing" ? ↘" : "→}
               </    Text>
@@ -411,8 +410,8 @@ key={biomarker.id}
   };
   // 渲染算诊结果卡片
 const renderCalculationCard = (calculation: CalculationData) => {}
-    return (;
-      <TouchableOpacity;
+    return (;)
+      <TouchableOpacity
 key={calculation.id}
         style={styles.calculationCard}
         onPress={() => onCalculationPress?.(calculation)}
@@ -452,14 +451,13 @@ key={calculation.id}
             </    Text>
           </    View>
           {/* 主要风险 }
-          {calculation.comprehensiveResult.primaryRisks.length > 0 && (
-        <View style={styles.riskSection}>
+          {calculation.comprehensiveResult.primaryRisks.length > 0  && <View style={styles.riskSection}>
               <Text style={styles.sectionLabel}>主要风险:</    Text>
-              <Text style={[ ///  >
+              <Text style={{[ ///  >
                 styles.riskText,
                 calculation.comprehensiveResult.primaryRisks[0].severity === "high && styles.highRisk,"
                 calculation.comprehensiveResult.primaryRisks[0].severity === "medium" && styles.mediumRisk;
-              ]}>
+              ]}}>
                 {calculation.comprehensiveResult.primaryRisks[0].risk}
               </    Text>
             </    View>
@@ -476,8 +474,8 @@ key={calculation.id}
   };
   // 渲染智能体诊断结果
 const renderAgentDiagnosis = (diagnosis: AgentDiagnosisResult) => {}
-    return (;
-      <TouchableOpacity;
+    return (;)
+      <TouchableOpacity
 key={`${diagnosis.agentId}-${diagnosis.timestamp.unix}`}
         style={styles.diagnosisCard}
         onPress={() => onAgentDiagnosisPress?.(diagnosis)}
@@ -510,24 +508,24 @@ key={`${diagnosis.agentId}-${diagnosis.timestamp.unix}`}
     );
   };
   if (loading) {
-    return (;
+    return (;)
       <View style={styles.loadingContainer}>;
         <Text style={styles.loadingText}>加载健康数据中...</    Text>;
       </    View>;
     );
   }
   if (!healthData) {
-    return (;
+    return (;)
       <View style={styles.errorContainer}>;
         <Text style={styles.errorText}>暂无健康数据</    Text>;
       </    View>;
     );
   }
-  return (;
-    <ScrollView;
+  return (;)
+    <ScrollView
 style={styles.container}
       refreshControl={
-        <RefreshControl;
+        <RefreshControl
 refreshing={refreshing}
           onRefresh={handleRefresh}
           colors={[colors.primary]}
@@ -574,7 +572,7 @@ refreshing={refreshing}
     </    ScrollView>
   );
 };
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flex: 1,
     backgroundColor: colors.background;
   },

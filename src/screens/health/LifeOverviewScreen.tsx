@@ -77,14 +77,14 @@ export const LifeOverviewScreen: React.FC<LifeOverviewScreenProps> = ({ navigati
   // 简化状态管理
   const authState = useSelector(state: RootState) => state.auth);
   const user = {
-      name: "用户",
+      name: "用户", "
       id: '1' };
   const [refreshing, setRefreshing] = useState(false);
   const [selectedTimeRange, setSelectedTimeRange] = useState<'day' | 'week' | 'month' | 'year'>('week');
   const [showDetailedView, setShowDetailedView] = useState(false);
   const [loading, setLoading] = useState(false);
   // 模拟健康指标数据
-  const [healthMetrics] = useState<HealthMetric[]>([
+  const [healthMetrics] = useState<HealthMetric[]>([)
     {
       id: "1",
       name: '心率',
@@ -127,7 +127,7 @@ export const LifeOverviewScreen: React.FC<LifeOverviewScreenProps> = ({ navigati
     },
   ]);
   // 模拟智能体推荐数据
-  const [recommendations] = useState<AgentRecommendation[]>([
+  const [recommendations] = useState<AgentRecommendation[]>([)
     {
       id: "1",
       agentName: '小艾',
@@ -146,7 +146,7 @@ export const LifeOverviewScreen: React.FC<LifeOverviewScreenProps> = ({ navigati
     },
   ]);
   // 模拟健康目标数据
-  const [healthGoals, setHealthGoals] = useState<HealthGoal[]>([
+  const [healthGoals, setHealthGoals] = useState<HealthGoal[]>([)
     {
       id: "1",
       title: '每日步数目标',
@@ -178,14 +178,14 @@ export const LifeOverviewScreen: React.FC<LifeOverviewScreenProps> = ({ navigati
       console.log('Loading life overview data...');
     } catch (error) {
       console.error('Failed to load data:', error);
-      Alert.alert("加载失败",无法加载生活概览数据，请稍后重试');
+      Alert.alert("加载失败", "无法加载生活概览数据，请稍后重试');
     } finally {
       setRefreshing(false);
       setLoading(false);
     }
   }, [selectedTimeRange]);
   // 页面聚焦时刷新数据
-  useFocusEffect(
+  useFocusEffect()
     useCallback() => {
       loadData();
     }, [loadData]),
@@ -196,7 +196,7 @@ export const LifeOverviewScreen: React.FC<LifeOverviewScreenProps> = ({ navigati
   }, [loadData]);
   // 处理健康目标更新
   const handleUpdateGoal = (goalId: string, newValue: number) => {
-    setHealthGoals(prev => prev.map(goal =>
+    setHealthGoals(prev => prev.map(goal =>))
       goal.id === goalId;
         ? { ...goal, currentValue: newValue, progress: (newValue / goal.targetValue) * 100 }
         : goal,
@@ -232,21 +232,21 @@ export const LifeOverviewScreen: React.FC<LifeOverviewScreenProps> = ({ navigati
   };
   // 渲染健康指标卡片
   const renderHealthMetrics = () => (
-    <Card style={styles.card}>
+  <Card style={styles.card}>
       <Card.Content>
         <View style={styles.cardHeader}>
           <Title>健康指标</Title>
-          <IconButton;
+          <IconButton
             icon={showDetailedView ? 'chevron-up' : 'chevron-down'}
             onPress={() => setShowDetailedView(!showDetailedView)}
           />
         </View>
         <View style={styles.metricsGrid}>
-          {healthMetrics.slice(0, showDetailedView ? healthMetrics.length : 4).map(metric) => (
-            <Surface key={metric.id} style={[styles.metricCard, { backgroundColor: metric.color + '20' }]}>
+          {healthMetrics.slice(0, showDetailedView ? healthMetrics.length : 4).map(metric) => ()
+            <Surface key={metric.id} style={{[styles.metricCard, { backgroundColor: metric.color + '20' }}]}>
               <View style={styles.metricHeader}>
                 <Icon name={metric.icon} size={24} color={metric.color} />
-                <Icon;
+                <Icon
                   name={getTrendIcon(metric.trend)}
                   size={16}
                   color={getHealthStatusColor(metric.status)}
@@ -256,9 +256,9 @@ export const LifeOverviewScreen: React.FC<LifeOverviewScreenProps> = ({ navigati
                 {metric.value} {metric.unit}
               </Text>
               <Text style={styles.metricName}>{metric.name}</Text>
-              <Chip;
+              <Chip
                 mode="outlined"
-                style={[styles.statusChip, { borderColor: getHealthStatusColor(metric.status) }]}
+                style={{[styles.statusChip, { borderColor: getHealthStatusColor(metric.status) }}]}
                 textStyle={ color: getHealthStatusColor(metric.status) }}
               >
                 {metric.status}
@@ -266,8 +266,7 @@ export const LifeOverviewScreen: React.FC<LifeOverviewScreenProps> = ({ navigati
             </Surface>
           ))}
         </View>
-        {!showDetailedView && healthMetrics.length > 4 && (
-          <Button;
+        {!showDetailedView && healthMetrics.length > 4  && <Button
             mode="text"
             onPress={() => setShowDetailedView(true)}
             style={styles.showMoreButton}
@@ -280,10 +279,10 @@ export const LifeOverviewScreen: React.FC<LifeOverviewScreenProps> = ({ navigati
   );
   // 渲染智能体推荐
   const renderRecommendations = () => (
-    <Card style={styles.card}>
+  <Card style={styles.card}>
       <Card.Content>
         <Title>智能体建议</Title>
-        {recommendations.map(rec) => (
+        {recommendations.map(rec) => ()
           <Surface key={rec.id} style={styles.recommendationCard}>
             <View style={styles.recommendationHeader}>
               <Avatar.Text;
@@ -297,9 +296,9 @@ export const LifeOverviewScreen: React.FC<LifeOverviewScreenProps> = ({ navigati
                   {formatTime(new Date())}
                 </Text>
               </View>
-              <Chip;
+              <Chip
                 mode="outlined"
-                style={[styles.priorityChip, { borderColor: getPriorityColor(rec.priority) }]}
+                style={{[styles.priorityChip, { borderColor: getPriorityColor(rec.priority) }}]}
                 textStyle={ color: getPriorityColor(rec.priority) }}
               >
                 {rec.priority}
@@ -309,8 +308,7 @@ export const LifeOverviewScreen: React.FC<LifeOverviewScreenProps> = ({ navigati
             <Paragraph style={styles.recommendationDescription}>
               {rec.description}
             </Paragraph>
-            {rec.actionRequired && (
-              <Button;
+            {rec.actionRequired  && <Button
                 mode="contained"
                 style={styles.actionButton}
                 onPress={() => navigation.navigate('AgentChat', { agentId: rec.agentName })}
@@ -320,7 +318,7 @@ export const LifeOverviewScreen: React.FC<LifeOverviewScreenProps> = ({ navigati
             )}
           </Surface>
         ))}
-        <Button;
+        <Button
           mode="text"
           onPress={() => navigation.navigate('AgentList')}
           style={styles.viewAllButton}
@@ -332,10 +330,10 @@ export const LifeOverviewScreen: React.FC<LifeOverviewScreenProps> = ({ navigati
   );
   // 渲染健康目标
   const renderHealthGoals = () => (
-    <Card style={styles.card}>
+  <Card style={styles.card}>
       <Card.Content>
         <Title>健康目标</Title>
-        {healthGoals.map(goal) => (
+        {healthGoals.map(goal) => ()
           <Surface key={goal.id} style={styles.goalCard}>
             <View style={styles.goalHeader}>
               <Text style={styles.goalTitle}>{goal.title}</Text>
@@ -343,7 +341,7 @@ export const LifeOverviewScreen: React.FC<LifeOverviewScreenProps> = ({ navigati
                 {Math.round(goal.progress)}%
               </Text>
             </View>
-            <ProgressBar;
+            <ProgressBar
               progress={goal.progress / 100}
               color={theme.colors.primary}
               style={styles.progressBar}>
@@ -360,7 +358,7 @@ export const LifeOverviewScreen: React.FC<LifeOverviewScreenProps> = ({ navigati
             </Paragraph>
           </Surface>
         ))}
-        <Button;
+        <Button
           mode="outlined"
           onPress={() => navigation.navigate('HealthGoals')}
           style={styles.manageGoalsButton}
@@ -372,9 +370,9 @@ export const LifeOverviewScreen: React.FC<LifeOverviewScreenProps> = ({ navigati
   );
   // 渲染时间范围选择器
   const renderTimeRangeSelector = () => (
-    <View style={styles.timeRangeContainer}>
-      {(["day",week', "month",year'] as const).map(range) => (
-        <Chip;
+  <View style={styles.timeRangeContainer}>
+      {(["day",week', "month",year'] as const).map(range) => ()
+        <Chip
           key={range}
           mode={selectedTimeRange === range ? 'flat' : 'outlined'}
           selected={selectedTimeRange === range}
@@ -388,14 +386,14 @@ export const LifeOverviewScreen: React.FC<LifeOverviewScreenProps> = ({ navigati
   );
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
+  <View style={styles.loadingContainer}>
         <Text>加载生活概览中...</Text>
       </View>
     );
   }
   return (
-    <ErrorBoundary>
-      <ScrollView;
+  <ErrorBoundary>
+      <ScrollView
         style={styles.container}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -434,7 +432,7 @@ export const LifeOverviewScreen: React.FC<LifeOverviewScreenProps> = ({ navigati
           <Card.Content>
             <Title>快速操作</Title>
             <View style={styles.quickActions}>
-              <Button;
+              <Button
                 mode="contained"
                 icon="heart-pulse"
                 onPress={() => navigation.navigate('HealthDataEntry')}
@@ -442,7 +440,7 @@ export const LifeOverviewScreen: React.FC<LifeOverviewScreenProps> = ({ navigati
               >
                 记录健康数据
               </Button>
-              <Button;
+              <Button
                 mode="outlined"
                 icon="robot"
                 onPress={() => navigation.navigate('AgentChat')}
@@ -450,7 +448,7 @@ export const LifeOverviewScreen: React.FC<LifeOverviewScreenProps> = ({ navigati
               >
                 咨询智能体
               </Button>
-              <Button;
+              <Button
                 mode="outlined"
                 icon="file-document"
                 onPress={() => navigation.navigate('HealthReport')}

@@ -15,7 +15,7 @@ import { useState, useEffect, useCallback } from "react;"
   regionConfig: RegionConfig;
   supportedLanguages: LanguageConfig[];
   supportedRegions: RegionConfig[];
-  t: (key: string, options?: { [key: string]: unknown;
+  t: (key: string, options?: { [key: string]: unknown;)
 }) => string ,
   tn: (key: string, count: number, options?: { [key: string]: unknown}) => string;
   formatDate: (date: Date | string | number, format?: string) => string ,
@@ -38,13 +38,13 @@ import { useState, useEffect, useCallback } from "react;"
   reset: () => Promise<void>}
 // 国际化Hookexport const useI18n = (): UseI18nReturn =;
 > ;{const [language, setLanguageState] = useState<SupportedLanguage />(i18nManager.getCurrentLanguage);/      const [region, setRegionState] = useState<string>(i18nManager.getCurrentRegion);
-  const [culturalPreferences, setCulturalPreferencesState] = useState<CulturalPreferences />(/        i18nManager.getCulturalPreferences;
+  const [culturalPreferences, setCulturalPreferencesState] = useState<CulturalPreferences />(/        i18nManager.getCulturalPreferences;)
   );
   const [isInitialized, setIsInitialized] = useState<boolean>(fals;e;);
-  useEffect() => {
+  useEffect(() => {
     const effectStart = performance.now()(;);
   // 性能监控
-const performanceMonitor = usePerformanceMonitor(useI18n", {"
+const performanceMonitor = usePerformanceMonitor(useI18n", {")
     trackRender: true,
     trackMemory: true,warnThreshold: 50, // ms };);
     const initialize = async() => {}
@@ -60,7 +60,7 @@ const performanceMonitor = usePerformanceMonitor(useI18n", {"
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  useEffect() => {
+  useEffect(() => {
     const effectStart = performance.now();
     const handleLanguageChange = (data: { language: SupportedLangua;g;e, previousLanguage: SupportedLanguage}) => {}
       setLanguageState(data.language);
@@ -145,7 +145,7 @@ performanceMonitor.recordRender();
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [language, region]);
-  const setLanguage = useCallback(async (newLanguage: SupportedLanguage;); => {}
+  const setLanguage = useCallback(async (newLanguage: SupportedLanguage;); => {})
     try {
       await i18nManager.setLanguage(newLanguag;e;);
     } catch (error) {
@@ -154,7 +154,7 @@ performanceMonitor.recordRender();
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  const setRegion = useCallback(async (newRegion: strin;g;); => {}
+  const setRegion = useCallback(async (newRegion: strin;g;); => {})
     try {
       await i18nManager.setRegion(newRegio;n;);
     } catch (error) {
@@ -163,7 +163,7 @@ performanceMonitor.recordRender();
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  const setCulturalPreferences = useCallback(async (preferences: Partial<CulturalPreferences ///        try {}
+  const setCulturalPreferences = useCallback(async (preferences: Partial<CulturalPreferences ///        try {}))
       await i18nManager.setCulturalPreferences(preference;s;);
     } catch (error) {
       throw error;
@@ -191,7 +191,7 @@ performanceMonitor.recordRender();
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [region]);
-  const reset = useCallback(async  => {}
+  const reset = useCallback(async  => {})
     try {
       await i18nManager.reset;(;);
     } catch (error) {

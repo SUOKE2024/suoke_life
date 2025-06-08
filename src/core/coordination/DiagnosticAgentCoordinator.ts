@@ -171,7 +171,7 @@ export class DiagnosticAgentCoordinator extends EventEmitter {
   /**
   * 计算智能体共识
   */
-  private async calculateConsensus(
+  private async calculateConsensus()
     session: CoordinationSession;
   ): Promise<{ result: any; confidence: number }> {
     const responses = session.agentResponses;
@@ -199,7 +199,7 @@ export class DiagnosticAgentCoordinator extends EventEmitter {
     const confidence = totalWeight / responses.length;
     // 生成最终共识结果
     const finalResult: any = {};
-    Object.keys(consensusData).forEach(key => {
+    Object.keys(consensusData).forEach(((key => {
       const items = consensusData[key];
       const weightedAvg =
         items.reduce(sum: number, item: any) => sum + item.value * item.weight, 0) /;

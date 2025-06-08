@@ -54,10 +54,10 @@ export const KnowledgeSearchBar: React.FC<KnowledgeSearchBarProps> = ({
     }
   };
   return (
-    <View style={styles.container}>
+  <View style={styles.container}>
       {// 搜索输入框}
       <View style={styles.searchContainer}>
-        <TextInput;
+        <TextInput
           style={styles.searchInput}
           value={searchText}
           onChangeText={setSearchText}
@@ -67,12 +67,12 @@ export const KnowledgeSearchBar: React.FC<KnowledgeSearchBarProps> = ({
           onSubmitEditing={handleSearch}
           editable={!loading}
         />
-        <TouchableOpacity;
+        <TouchableOpacity
           style={[styles.searchButton, loading && styles.searchButtonDisabled]}
           onPress={handleSearch}
           disabled={loading || !searchText.trim()}
         >
-          {loading ? (
+          {loading ? ()
             <ActivityIndicator size="small" color="#FFFFFF" />
           ) : (
             <Text style={styles.searchButtonText}>搜索</Text>
@@ -80,9 +80,8 @@ export const KnowledgeSearchBar: React.FC<KnowledgeSearchBarProps> = ({
         </TouchableOpacity>
       </View>
       {// 搜索类型选择器}
-      {showFilters && (
-        <View style={styles.filtersContainer}>
-          <TouchableOpacity;
+      {showFilters  && <View style={styles.filtersContainer}>
+          <TouchableOpacity
             style={styles.typeSelector}
             onPress={() => setShowTypeSelector(!showTypeSelector)}
           >
@@ -93,24 +92,23 @@ export const KnowledgeSearchBar: React.FC<KnowledgeSearchBarProps> = ({
               {showTypeSelector ? '▲' : '▼'}
             </Text>
           </TouchableOpacity>
-          {showTypeSelector && (
-        <View style={styles.typeDropdown}>
+          {showTypeSelector  && <View style={styles.typeDropdown}>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <View style={styles.typeList}>
-                  {searchTypes.map(type) => (
-                    <TouchableOpacity;
+                  {searchTypes.map(type) => ()
+                    <TouchableOpacity
                       key={type.key}
-                      style={[
+                      style={{[
                         styles.typeOption,
                         selectedType === type.key && styles.typeOptionSelected;
-                      ]}
+                      ]}}
                       onPress={() => handleTypeSelect(type.key)}
                     >
-                      <Text;
-                        style={[
+                      <Text
+                        style={{[
                           styles.typeOptionText,
                           selectedType === type.key && styles.typeOptionTextSelected;
-                        ]}
+                        ]}}
                       >
                         {type.label}
                       </Text>
@@ -129,8 +127,8 @@ export const KnowledgeSearchBar: React.FC<KnowledgeSearchBarProps> = ({
         style={styles.suggestionsContainer};
       >;
         <View style={styles.suggestions}>;
-          {["头痛",失眠', "消化不良",疲劳', "焦虑",感冒'].map((suggestion, index) => (;
-            <TouchableOpacity;
+          {["头痛", "失眠', "消化不良", "疲劳', "焦虑", "感冒'].map((suggestion, index) => (;))
+            <TouchableOpacity
               key={index};
               style={styles.suggestionChip};
               onPress={() => {setSearchText(suggestion);

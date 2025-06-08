@@ -1,4 +1,3 @@
-
 import MultimodalEmbeddingFusion from '../MultimodalEmbeddingFusion.ts';
 describe('MultimodalEmbeddingFusion', () => {
   it('应该正确导出', () => {

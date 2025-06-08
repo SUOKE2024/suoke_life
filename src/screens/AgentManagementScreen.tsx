@@ -19,7 +19,7 @@ interface AgentCardProps {
   status: AgentStatus;
   onPress: () => void;
 }
-const AgentCard: React.FC<AgentCardProps /> = ({/   const performanceMonitor = usePerformanceMonitor("AgentManagementScreen", { /;
+const AgentCard: React.FC<AgentCardProps /> = ({/   const performanceMonitor = usePerformanceMonitor("AgentManagementScreen", { /;))
     trackRender: true,trackMemory: true,warnThreshold: 50,  };);
 agentId, status, onPress }) => {}
   const getAgentInfo = useCallback(); => {}
@@ -52,18 +52,17 @@ agentId, status, onPress }) => {}
   const info = getAgentInfo(agentI;d;);
   const isOnline = status.isOnli;n;e;
   performanceMonitor.recordRender();
-  return (;
-    <TouchableOpacity style={styles.agentCard} onPress={onPress} accessibilityLabel="TODO: 添加无障碍标签" />/      <View style={styles.agentHeader}>/        <View style={[styles.agentIcon, { backgroundColor: info.col;o;r   }]} />/          <Ionicons name={info.icon as any} size={24} color="white" />/        </View>/        <View style={styles.agentInfo}>/          <Text style={styles.agentName}>{info.name}</Text>/          <Text style={styles.agentDescription}>{info.description}</Text>/        </View>/        <View style={[styles.statusIndicator, { backgroundColor: isOnline ? "#4CAF50 : "#F44336"}]} />/      </View>/    "
+  return (;)
+    <TouchableOpacity style={styles.agentCard} onPress={onPress} accessibilityLabel="TODO: 添加无障碍标签" />/      <View style={styles.agentHeader}>/        <View style={{[styles.agentIcon, { backgroundColor: info.col;o;r   }}]} />/          <Ionicons name={info.icon as any} size={24} color="white" />/        </View>/        <View style={styles.agentInfo}>/          <Text style={styles.agentName}>{info.name}</Text>/          <Text style={styles.agentDescription}>{info.description}</Text>/        </View>/        <View style={{[styles.statusIndicator, { backgroundColor: isOnline ? "#4CAF50 : "#F44336"}}]} />/      </View>/    "
       <View style={styles.agentMetrics}>/        <View style={styles.metric}>/          <Text style={styles.metricLabel}>工作负载</Text>/          <View style={styles.progressBar}>/                <View,
-              style={[
+              style={{[
                 styles.progressFill,
-                { width: `${status.workload  }%`,
+                { width: `${status.workload  }}%`,
                   backgroundColor: status.workload /> 80 ? #F44336" : status.workload > 60 ? "#FF9800 : "#4CAF50",/                    }
               ]}
             />/          </View>/          <Text style={styles.metricValue}>{status.workload}%</Text>/        </View>/
         <View style={styles.metricsRow}>/          <View style={styles.smallMetric}>/            <Text style={styles.smallMetricLabel}>准确率</Text>/            <Text style={styles.smallMetricValue}>{(status.performance.accuracy * 100).toFixed(1)}%</Text>/          </View>/          <View style={styles.smallMetric}>/            <Text style={styles.smallMetricLabel}>响应时间</Text>/            <Text style={styles.smallMetricValue}>{status.performance.responseTime}ms</Text>/          </View>/          <View style={styles.smallMetric}>/            <Text style={styles.smallMetricLabel}>满意度</Text>/            <Text style={styles.smallMetricValue}>{(status.performance.userSatisfaction * 100).toFixed(1)}%</Text>/          </View>/        </View>/      </View>/
-      {status.currentTask && (
-        <View style={styles.currentTask}>/          <Text style={styles.currentTaskLabel}>当前任务:</Text>/          <Text style={styles.currentTaskText}>{status.currentTask}</Text>/        </View>/          )}
+      {status.currentTask  && <View style={styles.currentTask}>/          <Text style={styles.currentTaskLabel}>当前任务:</Text>/          <Text style={styles.currentTaskText}>{status.currentTask}</Text>/        </View>/          )}
     </TouchableOpacity>/      );
 };
 const AgentManagementScreen: React.FC  = () => {}
@@ -97,12 +96,12 @@ const AgentManagementScreen: React.FC  = () => {}
     const effectEnd = performance.now;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [])
-    Alert.alert(
+    Alert.alert()
       `智能体 ${agentId}`,
       "选择操作,"
       [
         {
-      text: "发送测试消息",
+      text: "发送测试消息", "
       onPress: () => sendTestMessage(agentId) },
         { text: 查看详细状态", onPress: () => showAgentDetails(agentId) },"
         { text: "重启智能体, onPress: () => restartAgent(agentId) },"
@@ -113,18 +112,17 @@ const AgentManagementScreen: React.FC  = () => {}
   }
   const sendTestMessage = async (agentId: AgentType) => {}
     try {
-      const response = await coordinationService.sendMessageToAgent(;
+      const response = await coordinationService.sendMessageToAgent(;)
         agentId,
         "这是一条测试消息，请回复确认你的状态。,"
         {
       type: "test",
       userId: ad;m;i;n" ;});"
-      Alert.alert(
-        "测试响应,"
+      Alert.alert("测试响应,"
         `${agentId} 回复: ${response.content.text}`,
         [{ text: "确定"}]);
     } catch (error) {
-      Alert.alert(错误", `发送测试消息失败: ${error}`);"
+      Alert.alert(错误", " `发送测试消息失败: ${error}`);"
     }
   };
   const showAgentDetails = useCallback(); => {}
@@ -148,8 +146,7 @@ const AgentManagementScreen: React.FC  = () => {}
     const effectEnd = performance.now;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [])
-    Alert.alert(
-      "重启智能体,"
+    Alert.alert("重启智能体,"
       `确定要重启 ${agentId} 吗？这将中断当前任务。`,
       [
         {
@@ -159,7 +156,7 @@ const AgentManagementScreen: React.FC  = () => {}
       text: "确定,",
       style: "destructive",
           onPress: () => {}
-            Alert.alert(提示", `${agentId} 重启请求已发送`) "
+            Alert.alert(提示", " `${agentId} 重启请求已发送`) "
           }
         }
       ]
@@ -169,8 +166,7 @@ const AgentManagementScreen: React.FC  = () => {}
     const effectEnd = performance.now;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [])
-    Alert.alert(
-      "创建协作任务,选择任务类型",
+    Alert.alert("创建协作任务,选择任务类型", "
       [
         { text: 诊断任务", onPress: () => createTask("diagnosis) },
         {
@@ -185,7 +181,7 @@ const AgentManagementScreen: React.FC  = () => {}
   }
   const createTask = async (type: CollaborationTask["type]) => {}"
     try {
-      const taskId = await coordinationService.createCollaborationTask(;
+      const taskId = await coordinationService.createCollaborationTask(;)
         type,
         "admin",
         `session_${Date.now()}`,
@@ -194,30 +190,29 @@ const AgentManagementScreen: React.FC  = () => {}
       ;);
       Alert.alert("成功, `协作任务已创建: ${taskId}`);"
       await loadData;(;)  } catch (error) {
-      Alert.alert("错误", `创建任务失败: ${error}`);
+      Alert.alert("错误", " `创建任务失败: ${error}`);
     }
   }
-  return (;
+  return (;)
     <SafeAreaView style={styles.container}>/      <View style={styles.header}>/        <Text style={styles.title}>智能体管理中心</Text>/        <TouchableOpacity style={styles.addButton} onPress={startCollaborativeTask} accessibilityLabel="TODO: 添加无障碍标签" />/          <Ionicons name="add" size={24} color="white" />/        </TouchableOpacity>/      </View>/;
-      {serviceStatus && (;
+      {serviceStatus && (;)
         <View style={styles.serviceStatus}>/          <Text style={styles.serviceStatusTitle}>服务状态</Text>/          <View style={styles.statusRow}>/            <Text style={styles.statusItem}>在线智能体: {serviceStatus.activeAgents}/4</Text>/            <Text style={styles.statusItem}>活跃任务: {serviceStatus.activeTasks}</Text>/            <Text style={styles.statusItem}>队列任务: {serviceStatus.queuedTasks}</Text>/          </View>/        </View>/    )};
       <ScrollView,style={styles.scrollView};
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />/            };
       >;
-        <View style={styles.agentsGrid}>/              {agentStatuses.map(statu;s;); => (
-            <AgentCard;
+        <View style={styles.agentsGrid}>/              {agentStatuses.map(statu;s;); => ()
+            <AgentCard
 key={status.id}
               agentId={status.id}
               status={status}
               onPress={() = /> handleAgentPress(status.id)}/            />/              ))}
         </View>/
-        {activeTasks.length > 0 && (
-        <View style={styles.tasksSection}>/            <Text style={styles.sectionTitle}>活跃任务</Text>/                {activeTasks.map(task); => (
+        {activeTasks.length > 0  && <View style={styles.tasksSection}>/            <Text style={styles.sectionTitle}>活跃任务</Text>/                {activeTasks.map(task); => ()
               <View key={task.id} style={styles.taskCard}>/                <Text style={styles.taskType}>{task.type}</Text>/                <Text style={styles.taskDescription}>{task.description}</Text>/                <Text style={styles.taskStatus}>状态: {task.status}</Text>/              </View>/                ))}
           </View>/            )}
       </ScrollView>/    </SafeAreaView>/      );
 }
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flex: 1,
     backgroundColor: #f5f5f5"},"
   header: {,

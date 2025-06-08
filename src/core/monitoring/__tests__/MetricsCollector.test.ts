@@ -1,4 +1,3 @@
-
 import MetricsCollector from '../MetricsCollector.ts';
 describe('MetricsCollector', () => {
   it('应该正确导出', () => {

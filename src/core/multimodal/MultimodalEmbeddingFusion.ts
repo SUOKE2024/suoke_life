@@ -52,7 +52,7 @@ class CrossModalAttention {
   /**
   * 计算注意力权重
   */
-  computeAttention(
+  computeAttention()
     query: number[],
     keys: number[][],
     values: number[][]
@@ -156,7 +156,7 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
   /**
   * 融合多模态嵌入向量
   */
-  async fuseEmbeddings(
+  async fuseEmbeddings()
     embeddings: Embedding[],
     strategyName: string = 'tcm_diagnosis'
   ): Promise<FusionResult> {
@@ -215,7 +215,7 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
     };
     // 缓存结果
     this.fusionCache.set(cacheKey, result);
-    this.emit('fusionCompleted", result);
+    this.emit('fusionCompleted", " result);
     return result;
   }
   /**
@@ -244,7 +244,7 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
   /**
   * 注意力融合
   */
-  private attentionFusion(
+  private attentionFusion()
     embeddings: Embedding[],
     strategy: FusionStrategy;
   ): { embedding: number[]; weights: Record<ModalityType, number> } {
@@ -259,7 +259,7 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
     const values = embeddings.map(e => e.vector);
     const { weights, output } = this.crossModalAttention.computeAttention(query, keys, values);
     const modalityWeights: Record<ModalityType, number> = {};
-    embeddings.forEach(embedding, index) => {
+    embeddings.forEach(((embedding, index) => {
       modalityWeights[embedding.modality] = weights[index];
     });
     return { embedding: output, weights: modalityWeights };
@@ -267,7 +267,7 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
   /**
   * 跨模态注意力融合
   */
-  private crossModalAttentionFusion(
+  private crossModalAttentionFusion()
     embeddings: Embedding[],
     strategy: FusionStrategy;
   ): { embedding: number[]; weights: Record<ModalityType, number> } {
@@ -277,7 +277,7 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
   /**
   * 计算融合置信度
   */
-  private calculateFusionConfidence(
+  private calculateFusionConfidence()
     embeddings: Embedding[],
     modalityWeights: Record<ModalityType, number>
   ): number {

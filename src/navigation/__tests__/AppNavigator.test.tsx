@@ -1,4 +1,3 @@
-
 import AppNavigator from '../AppNavigator.tsx';
 describe('AppNavigator', () => {
   it('应该正确导出', () => {

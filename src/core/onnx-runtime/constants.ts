@@ -7,7 +7,7 @@ import {EdgeComputeConfig,
 // 支持的模型类型
 export const SUPPORTED_MODELS = {TCM_DIAGNOSIS: {,
   id:
-tcm-diagnosis-v1",
+tcm-diagnosis-v1", "
     name: 中医诊断模型","
     inputShape: [1, 224, 224, 3],
     outputShape: [1, 100],
@@ -153,13 +153,13 @@ HIGH: 1024 * 1024 * 1024   // 1GB;
 } as const;
 // 错误消息
 export const ERROR_MESSAGES = {MODEL_LOAD_FAILED: 模型加载失败",;
-  INFERENCE_FAILED: "推理执行失败,",MEMORY_INSUFFICIENT: "内存不足",PROVIDER_NOT_AVAILABLE: 执行提供者不可用",;
-  INVALID_INPUT: "输入数据无效,",QUANTIZATION_FAILED: "模型量化失败",OPTIMIZATION_FAILED: 模型优化失败",;
+  INFERENCE_FAILED: "推理执行失败,",MEMORY_INSUFFICIENT: "内存不足", "PROVIDER_NOT_AVAILABLE: 执行提供者不可用",;
+  INVALID_INPUT: "输入数据无效,",QUANTIZATION_FAILED: "模型量化失败", "OPTIMIZATION_FAILED: 模型优化失败",;
   CACHE_ERROR: "缓存操作失败,";
   DEVICE_NOT_SUPPORTED: "设备不支持";
 } as const;
 // 模型文件扩展名
-export const MODEL_EXTENSIONS = [.onnx",.ort] as const;
+export const MODEL_EXTENSIONS = [.onnx", ".ort] as const;
 // 支持的张量类型
 export const SUPPORTED_TENSOR_TYPES = [;
   "float32",int32",uint8,int64",bool;

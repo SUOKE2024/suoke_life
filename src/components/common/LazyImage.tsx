@@ -164,7 +164,7 @@ export const LazyImage: React.FC<LazyImageProps> = ({
     onLoadEnd?.();
   }, [onLoadEnd]);
   // 预加载图片
-  useEffect() => {
+  useEffect(() => {
     const uri = getImageUri();
     if (uri && config.cachePolicy !== 'none') {
       cacheManager.preloadImage(uri);
@@ -174,7 +174,7 @@ export const LazyImage: React.FC<LazyImageProps> = ({
   const renderPlaceholder = () => {
     if (config.placeholder) {
       return (
-        <Image;
+  <Image
           source={config.placeholder}
           style={[styles.placeholder, style]}
           resizeMode={resizeMode}
@@ -182,7 +182,7 @@ export const LazyImage: React.FC<LazyImageProps> = ({
       );
     }
     return (
-      <View style={[styles.placeholderContainer, style]}>
+  <View style={[styles.placeholderContainer, style]}>
         <ActivityIndicator size="small" color="#999" />
       </View>
     );
@@ -191,7 +191,7 @@ export const LazyImage: React.FC<LazyImageProps> = ({
   const renderErrorImage = () => {
     if (config.errorImage) {
       return (
-        <Image;
+  <Image
           source={config.errorImage}
           style={[styles.errorImage, style]}
           resizeMode={resizeMode}
@@ -199,23 +199,21 @@ export const LazyImage: React.FC<LazyImageProps> = ({
       );
     }
     return (
-      <View style={[styles.errorContainer, style]}>
+  <View style={[styles.errorContainer, style]}>
         <View style={styles.errorIcon}>
       </View>
     );
   };
   return (
-    <View style={[styles.container, containerStyle]} testID={testID}>
+  <View style={[styles.container, containerStyle]} testID={testID}>
       {}
-      {(loading || error) && (
-        <View style={styles.overlayContainer}>
+      {(loading || error)  && <View style={styles.overlayContainer}>
           {error ? renderErrorImage() : renderPlaceholder()}
         </View>
       )}
       {}
-      {!error && (
-        <Animated.View style={ opacity: fadeAnim }}>
-          <Image;
+      {!error  && <Animated.View style={ opacity: fadeAnim }}>
+          <Image
             source={source}
             style={[styles.image, style]}
             resizeMode={resizeMode}
@@ -265,11 +263,10 @@ export const ProgressiveImage: React.FC<LazyImageProps & {
         props.onLoad?.();
   }, [imageFade, thumbnailFade, props.onLoad]);
   return (
-    <View style={[styles.container, props.containerStyle]}>
+  <View style={[styles.container, props.containerStyle]}>
       {}
-      {thumbnailSource && (
-        <Animated.View style={[styles.thumbnailContainer, { opacity: thumbnailFade }]}>
-          <Image;
+      {thumbnailSource  && <Animated.View style={{[styles.thumbnailContainer, { opacity: thumbnailFade }}]}>
+          <Image
             source={thumbnailSource}
             style={[styles.thumbnail, props.style]}
             resizeMode={props.resizeMode}
@@ -280,7 +277,7 @@ export const ProgressiveImage: React.FC<LazyImageProps & {
       )}
       {}
       <Animated.View style={ opacity: imageFade }}>
-        <LazyImage;
+        <LazyImage
           {...props}
           onLoad={handleImageLoad}
         />
@@ -308,19 +305,19 @@ export const ImageGrid: React.FC<{,
   const imageHeight = imageWidth / aspectRatio;
   const renderImage = useCallback(image: any, index: number) => {
     return (
-      <View;
+  <View
         key={image.id}
-        style={[
+        style={{[
           styles.gridItem,
           {
             width: imageWidth,
             height: imageHeight,
             marginLeft: spacing,
             marginBottom: spacing,
-          },
+          }},
         ]}
       >
-        <ProgressiveImage;
+        <ProgressiveImage
           source={image.source}
           thumbnailSource={image.thumbnail}
           style={styles.gridImage}
@@ -331,7 +328,7 @@ export const ImageGrid: React.FC<{,
     );
   }, [imageWidth, imageHeight, spacing]);
   return (
-    <View style={[styles.gridContainer, { paddingTop: spacing }, style]}>
+  <View style={{[styles.gridContainer, { paddingTop: spacing }}, style]}>
       {images.map(renderImage)}
     </View>
   );
@@ -341,7 +338,7 @@ export const useImagePreloader = (imageUris: string[]) => {
   const [preloadedCount, setPreloadedCount] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const cacheManager = useRef(ImageCacheManager.getInstance()).current;
-  useEffect() => {
+  useEffect(() => {
     const preloadImages = async () => {
       let count = 0;
             for (const uri of imageUris) {

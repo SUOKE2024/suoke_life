@@ -1,4 +1,3 @@
-
 import DiagnosisDetailScreen from '../DiagnosisDetailScreen.tsx';
 describe('DiagnosisDetailScreen', () => {
   it('应该正确导出', () => {

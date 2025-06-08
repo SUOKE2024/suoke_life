@@ -1,4 +1,3 @@
-
 import mcpTimestamp from '../mcpTimestamp.ts';
 describe('mcpTimestamp', () => {
   it('应该正确导出', () => {

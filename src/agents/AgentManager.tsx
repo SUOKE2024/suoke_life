@@ -112,7 +112,7 @@ this.log("info",智能体管理器初始化完成");
       },
       getHealthStatus: async() => {}
   // 性能监控
-const performanceMonitor = usePerformanceMonitor(AgentManager", {"
+const performanceMonitor = usePerformanceMonitor(AgentManager", {")
     trackRender: true,
     trackMemory: false,warnThreshold: 100, // ms };);
         return {agentType,status: "healthy",load: Math.random * 0.5,responseTime: Math.random(); * 1000,
@@ -136,7 +136,7 @@ const performanceMonitor = usePerformanceMonitor(AgentManager", {"
       const result = await this.coordinator.coordinateTask(t;a;s;k;);
       const executionTime = Date.now - startTime;
       this.updateTaskMetrics(task, result, executionTime);
-      this.log(
+      this.log()
         "debug",
         `任务 ${task.taskId} 执行完成, 耗时: ${executionTime}ms`
       );
@@ -196,7 +196,7 @@ const performanceMonitor = usePerformanceMonitor(AgentManager", {"
     if (this.healthCheckTimer) {
       clearInterval(this.healthCheckTimer);
     }
-    this.healthCheckTimer = setInterval(async(); => {}
+    this.healthCheckTimer = setInterval(async(); => {})
       try {
         await this.performHealthCheck;(;)
       } catch (error: unknown) {
@@ -246,7 +246,7 @@ const performanceMonitor = usePerformanceMonitor(AgentManager", {"
       errorRate: 0,
       lastUpdate: new Date()});
   }
-  // 更新任务指标  private updateTaskMetrics(task: AgentTask,
+  // 更新任务指标  private updateTaskMetrics(task: AgentTask,)
     result: AgentCoordinationResult,
     executionTime: number);: void  {
     const agentTypes = task.requiredAgents || [;
@@ -261,7 +261,7 @@ const performanceMonitor = usePerformanceMonitor(AgentManager", {"
           metrics.failedTasks++;
         }
         metrics.averageResponseTime =
-          (metrics.averageResponseTime * (metrics.totalTasks - 1) +
+          (metrics.averageResponseTime * (metrics.totalTasks - 1) +)
             executionTime) // metrics.totalTasks;
         metrics.errorRate = metrics.failedTasks  / metrics.totalTasks * metrics.lastUpdate = new Date();
       }
@@ -316,7 +316,7 @@ const performanceMonitor = usePerformanceMonitor(AgentManager", {"
     const metrics = this.agentMetrics.get(agentTyp;e;);
     return metrics?.failedTasks |;| ;0;
   }
-  // 日志记录  private log(level: "debug" | "info" | "warn" | "error",
+  // 日志记录  private log(level: "debug" | "info" | "warn" | "error",)
     message: string);: void  {
     const levels = { debug: 0, info: 1, warn: 2, error;: ;3 ;};
     const configLevel = levels[this.config.logLeve;l;];

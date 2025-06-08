@@ -37,9 +37,9 @@ export default React.memo(function DiagnosisDetailScreen() {
   const slideAnimation = useRef(new Animated.Value(50)).current;
   // 性能监控
   // const performanceMonitor = usePerformanceMonitor('DiagnosisDetailScreen');
-  useEffect() => {
+  useEffect(() => {
     // 页面加载动画
-    Animated.parallel([
+    Animated.parallel([)
       Animated.timing(fadeAnimation, {
         toValue: 1,
         duration: 500,
@@ -79,25 +79,25 @@ export default React.memo(function DiagnosisDetailScreen() {
       });
     } catch (error) {
       console.error('分享失败:', error);
-      Alert.alert("分享失败",无法分享诊断结果，请稍后重试');
+      Alert.alert("分享失败", "无法分享诊断结果，请稍后重试');
     }
   };
   // 保存报告
-  const saveReport = () => {Alert.alert(;
-      "保存报告",报告已保存到您的健康档案中',[{
-      text: "确定",
+  const saveReport = () => {Alert.alert(;)
+      "保存报告", "报告已保存到您的健康档案中',[{
+      text: "确定", "
       style: 'default' }];
     );
   };
   // 预约咨询
-  const bookConsultation = () => {Alert.alert(;
-      "预约咨询",是否要预约专业中医师进行详细咨询？',[;
+  const bookConsultation = () => {Alert.alert(;)
+      "预约咨询", "是否要预约专业中医师进行详细咨询？',[;
         {
       text: "取消",
       style: 'cancel' },{
-      text: "预约",
+      text: "预约", "
       style: 'default',onPress: () => {// 这里应该导航到预约页面;
-            Alert.alert("功能开发中",预约功能正在开发中，敬请期待');
+            Alert.alert("功能开发中", "预约功能正在开发中，敬请期待');
           }
         }
       ]
@@ -105,7 +105,7 @@ export default React.memo(function DiagnosisDetailScreen() {
   };
   // 渲染标签栏
   const renderTabBar = () => (
-    <View style={styles.tabBar}>
+  <View style={styles.tabBar}>
       {[
         {
       key: "overview",
@@ -116,17 +116,17 @@ export default React.memo(function DiagnosisDetailScreen() {
         {
       key: "recommendations",
       title: '建议' }
-      ].map((tab => (
-        <TouchableOpacity;
+      ].map((tab => ()))
+        <TouchableOpacity
           key={tab.key};
-          style={[;
+          style={{[;
             styles.tabItem, activeTab === tab.key && styles.tabItemActive;
-          ]};
+          ]}};
           onPress={() => setActiveTab(tab.key as any)};
         >;
-          <Text style={[;
+          <Text style={{[;
             styles.tabText,activeTab === tab.key && styles.tabTextActive;
-          ]}>;
+          ]}}>;
             {tab.title};
           </Text>;
         </TouchableOpacity>;
@@ -135,14 +135,14 @@ export default React.memo(function DiagnosisDetailScreen() {
   );
   // 渲染概览页面
   const renderOverview = () => (
-    <View style={styles.tabContent}>
+  <View style={styles.tabContent}>
       {// 主要诊断结果}
       <View style={styles.resultCard}>
         <View style={styles.cardHeader}>
           <Text style={styles.cardTitle}>诊断结果</Text>
-          <View style={[
+          <View style={{[
             styles.confidenceBadge,
-            { backgroundColor: getConfidenceColor(result.overallConfidence) }
+            { backgroundColor: getConfidenceColor(result.overallConfidence) }}
           ]}>
             <Text style={styles.confidenceText}>
               {Math.round(result.overallConfidence * 100)}%
@@ -150,9 +150,9 @@ export default React.memo(function DiagnosisDetailScreen() {
           </View>
         </View>
         <View style={styles.syndromeContainer}>
-          <View style={[
+          <View style={{[
             styles.syndromeIndicator,
-            { backgroundColor: SYNDROME_COLORS[result.primarySyndrome.name] || '#6c757d' }
+            { backgroundColor: SYNDROME_COLORS[result.primarySyndrome.name] || '#6c757d' }}
           ]} />
           <View style={styles.syndromeInfo}>
             <Text style={styles.syndromeName}>
@@ -176,7 +176,7 @@ export default React.memo(function DiagnosisDetailScreen() {
               {result.constitutionType.type}
             </Text>
             <View style={styles.characteristicsContainer}>
-              {result.constitutionType.characteristics.slice(0, 3).map((char, index) => (
+              {result.constitutionType.characteristics.slice(0, 3).map((char, index) => ())
                 <View key={index} style={styles.characteristicTag}>
                   <Text style={styles.characteristicText}>{char}</Text>
                 </View>
@@ -195,15 +195,15 @@ export default React.memo(function DiagnosisDetailScreen() {
       value: result.qualityMetrics.dataQuality },{
       label: "结果可靠性",
       value: result.qualityMetrics.resultReliability },{
-      label: "完整性",
+      label: "完整性", "
       value: result.qualityMetrics.completeness };
-          ].map((metric, index) => (;
+          ].map((metric, index) => (;))
             <View key={index} style={styles.metricItem}>;
               <Text style={styles.metricLabel}>{metric.label}</Text>;
               <View style={styles.metricBar}>;
                 <View ;
-                  style={[;
-                    styles.metricFill,{width: `${metric.value * 100}%`,backgroundColor: getQualityColor(metric.value);
+                  style={{[;
+                    styles.metricFill,{width: `${metric.value * 100}}%`,backgroundColor: getQualityColor(metric.value);
                     }
                   ]}
                 />
@@ -218,14 +218,14 @@ export default React.memo(function DiagnosisDetailScreen() {
     </View>;
   );
   // 渲染详情页面
-  const renderDetails = () => (;
+  const renderDetails = () => (;)
     <View style={styles.tabContent}>;
       {// 五诊结果详情};
-      {Object.entries(result.diagnosticResults).map(([method, data]) => {if (!data) return null;
+      {Object.entries(result.diagnosticResults).map(([method, data]) => {if (!data) return null;)
         const isExpanded = expandedSections.has(method);
         return (
-          <View key={method} style={styles.resultCard}>
-            <TouchableOpacity;
+  <View key={method} style={styles.resultCard}>
+            <TouchableOpacity
               style={styles.expandableHeader}
               onPress={() => toggleSection(method)};
             >;
@@ -236,7 +236,7 @@ export default React.memo(function DiagnosisDetailScreen() {
                 {isExpanded ? '▼' : '▶'};
               </Text>;
             </TouchableOpacity>;
-            {isExpanded && (;
+            {isExpanded && (;)
               <View style={styles.expandableContent}>;
                 {renderMethodDetails(method, data)};
               </View>;
@@ -246,7 +246,7 @@ export default React.memo(function DiagnosisDetailScreen() {
       })}
       {// 融合分析}
       <View style={styles.resultCard}>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={styles.expandableHeader}
           onPress={() => toggleSection('fusion')}
         >
@@ -255,19 +255,18 @@ export default React.memo(function DiagnosisDetailScreen() {
             {expandedSections.has('fusion') ? '▼' : '▶'}
           </Text>
         </TouchableOpacity>
-        {expandedSections.has('fusion') && (
-        <View style={styles.expandableContent}>
+        {expandedSections.has('fusion')  && <View style={styles.expandableContent}>
             <Text style={styles.sectionSubtitle}>证据强度</Text>
-            {Object.entries(result.fusionAnalysis.evidenceStrength).map(([method, strength]) => (
+            {Object.entries(result.fusionAnalysis.evidenceStrength).map(([method, strength]) => ())
               <View key={method} style={styles.evidenceItem}>
                 <Text style={styles.evidenceMethod}>
                   {getMethodDisplayName(method)}
                 </Text>
                 <View style={styles.evidenceBar}>
-                  <View;
-                    style={[
+                  <View
+                    style={{[
                       styles.evidenceFill,
-                      { width: `${strength * 100}%` }
+                      { width: `${strength * 100}}%` }
                     ]}
                   />
                 </View>
@@ -276,10 +275,9 @@ export default React.memo(function DiagnosisDetailScreen() {
                 </Text>
               </View>
             ))}
-            {result.fusionAnalysis.riskFactors.length > 0 && (
-              <>
+            {result.fusionAnalysis.riskFactors.length > 0  && <>
                 <Text style={styles.sectionSubtitle}>风险因素</Text>
-                {result.fusionAnalysis.riskFactors.map((factor, index) => (
+                {result.fusionAnalysis.riskFactors.map((factor, index) => ())
                   <View key={index} style={styles.riskFactorItem}>
                     <Text style={styles.riskFactorText}>⚠️ {factor}</Text>
                   </View>
@@ -292,15 +290,15 @@ export default React.memo(function DiagnosisDetailScreen() {
     </View>
   );
   // 渲染建议页面
-  const renderRecommendations = () => (;
+  const renderRecommendations = () => (;)
     <View style={styles.tabContent}>;
-      {Object.entries(result.healthRecommendations).map(([category, recommendations]) => {if (!recommendations || recommendations.length === 0) return null;
-        return (;
+      {Object.entries(result.healthRecommendations).map(([category, recommendations]) => {if (!recommendations || recommendations.length === 0) return null;)
+        return (;)
           <View key={category} style={styles.resultCard}>;
             <Text style={styles.cardTitle}>;
               {getRecommendationCategoryName(category)};
             </Text>;
-            {recommendations.map((recommendation, index) => (;
+            {recommendations.map((recommendation, index) => (;))
               <View key={index} style={styles.recommendationItem}>;
                 <Text style={styles.recommendationIcon}>;
                   {getRecommendationIcon(category)};
@@ -318,9 +316,9 @@ export default React.memo(function DiagnosisDetailScreen() {
   // 渲染方法详情
   const renderMethodDetails = (method: string, data: any) => {// 这里应该根据不同的诊断方法渲染不同的详情;
     // 暂时使用通用格式;
-    return (;
+    return (;)
       <View>;
-        {data.confidence && (;
+        {data.confidence && (;)
           <View style={styles.detailItem}>;
             <Text style={styles.detailLabel}>置信度</Text>;
             <Text style={styles.detailValue}>;
@@ -328,13 +326,13 @@ export default React.memo(function DiagnosisDetailScreen() {
             </Text>;
           </View>;
         )};
-        {data.overallAssessment && (;
+        {data.overallAssessment && (;)
           <View style={styles.detailItem}>;
             <Text style={styles.detailLabel}>总体评估</Text>;
             <Text style={styles.detailValue}>{data.overallAssessment}</Text>;
           </View>;
         )};
-        {data.analysisId && (;
+        {data.analysisId && (;)
           <View style={styles.detailItem}>;
             <Text style={styles.detailLabel}>分析ID</Text>;
             <Text style={styles.detailValue}>{data.analysisId}</Text>;
@@ -353,13 +351,13 @@ export default React.memo(function DiagnosisDetailScreen() {
     return '#dc3545';
   };
   const getMethodDisplayName = (method: string): string => {const names: Record<string, string> = {
-      looking: "望诊",
+      looking: "望诊", "
       listening: '闻诊',inquiry: '问诊',palpation: '切诊',calculation: '算诊';
     };
     return names[method] || method;
   };
   const getRecommendationCategoryName = (category: string): string => {const names: Record<string, string> = {
-      lifestyle: "生活方式建议",
+      lifestyle: "生活方式建议", "
       diet: '饮食建议',exercise: '运动建议',treatment: '治疗建议',prevention: '预防建议';
     };
     return names[category] || category;
@@ -371,17 +369,17 @@ export default React.memo(function DiagnosisDetailScreen() {
     return icons[category] || '📝';
   };
   return (
-    <SafeAreaView style={styles.container}>
+  <SafeAreaView style={styles.container}>
       {// 头部}
       <View style={styles.header}>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
           <Text style={styles.backButtonText}>←</Text>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>诊断报告</Text>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={styles.shareButton}
           onPress={shareResult}
         >
@@ -392,15 +390,15 @@ export default React.memo(function DiagnosisDetailScreen() {
       {renderTabBar()}
       {// 内容区域}
       <Animated.View;
-        style={[
+        style={{[
           styles.content,
           {
             opacity: fadeAnimation,
-            transform: [{ translateY: slideAnimation }]
+            transform: [{ translateY: slideAnimation }}]
           }
         ]}
       >
-        <ScrollView;
+        <ScrollView
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}

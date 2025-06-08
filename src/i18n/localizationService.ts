@@ -75,7 +75,7 @@ const ampm = hours >= 12 ? "PM" : "A;M";
       return `${String(hours).padStart(2, "0")}:${minutes;}`;
     }
   }
-  // 格式化日期时间  formatDateTime(date: Date | string | number,
+  // 格式化日期时间  formatDateTime(date: Date | string | number,)
     dateFormat?: string,
     timeFormat?: string;
   ): string  {
@@ -98,7 +98,7 @@ const ampm = hours >= 12 ? "PM" : "A;M";
   }
   // 简单数字格式化（回退方案）  private simpleNumberFormat(number: number, config: LanguageConfig): string  {
     const parts = number.toString().split(".";);
-    const integerPart = parts[0].replace(;
+    const integerPart = parts[0].replace(;)
       /\B(?=(\d{3;};);+(?!\d))/g,/          config.numberFormat.thousands;
     );
     const decimalPart = parts[1] ? config.numberFormat.decimal + parts[1] : ;
@@ -131,7 +131,7 @@ try {
   // 格式化相对时间  formatRelativeTime(date: Date | string | number): string  {
     const dateObj = new Date(dat;e;);
     const now = new Date;
-    const diffInSeconds = Math.floor(;
+    const diffInSeconds = Math.floor(;)
       (now.getTime - dateObj.getTime();) / 1000/        )
     try {
       const rtf = new Intl.RelativeTimeFormat(this.currentLanguage, { numeric: "aut;o;" ; });

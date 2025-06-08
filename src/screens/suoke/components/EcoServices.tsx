@@ -15,13 +15,13 @@ export interface EcoServicesProps {
 /**
 * * 索克生活 - 生态服务组件
 * 展示平台提供的各种生态服务
-export const EcoServices: React.FC<EcoServicesProps>  = ({services = [],onServicePress;
+export const EcoServices: React.FC<EcoServicesProps>  = ({services = [],onServicePress;)
 }) => {}
   const defaultServices: EcoService[] = [;
     {
       id: health-consultation",
       name: "健康咨询,",
-      description: "专业中医健康咨询服务",
+      description: "专业中医健康咨询服务", "
       category: 健康",
       icon: "🏥,",
       available: true;
@@ -36,7 +36,7 @@ export const EcoServices: React.FC<EcoServicesProps>  = ({services = [],onServic
     },
     {
       id: "mountain-wellness,",
-      name: "山水养生",
+      name: "山水养生", "
       description: 自然环境下的养生体验",
       category: "养生,",
       icon: "🏔️",
@@ -45,7 +45,7 @@ export const EcoServices: React.FC<EcoServicesProps>  = ({services = [],onServic
     {
       id: tcm-diagnosis",
       name: "中医诊断,",
-      description: "四诊合参智能诊断",
+      description: "四诊合参智能诊断", "
       category: 诊断",
       icon: "🔍,",
       available: true;
@@ -56,13 +56,13 @@ export const EcoServices: React.FC<EcoServicesProps>  = ({services = [],onServic
     if (service.available && onServicePress) {onServicePress(service);
     }
   };
-  const renderService = (service: EcoService) => (;
-    <TouchableOpacity;
+  const renderService = (service: EcoService) => (;)
+    <TouchableOpacity
 key={service.id}
-      style={[
+      style={{[
         styles.serviceCard,
         !service.available && styles.serviceCardDisabled;
-      ]}
+      ]}}
       onPress={() => handleServicePress(service)}
       disabled={!service.available}
     >
@@ -74,17 +74,16 @@ key={service.id}
         <Text style={styles.serviceDescription}>{service.description}</    Text>
         <Text style={styles.serviceCategory}>{service.category}</    Text>
       </    View>
-      {!service.available && (
-        <View style={styles.unavailableBadge}>
+      {!service.available  && <View style={styles.unavailableBadge}>
           <Text style={styles.unavailableText}>暂不可用</    Text>
         </    View>
       )}
     </    TouchableOpacity>
   );
-  return (;
+  return (;)
     <View style={styles.container}>;
       <Text style={styles.title}>生态服务</    Text>;
-      <ScrollView;
+      <ScrollView
 style={styles.scrollView}
         showsVerticalScrollIndicator={false}
       >
@@ -93,7 +92,7 @@ style={styles.scrollView}
     </    View>
   );
 };
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flex: 1,
     padding: 16,
     backgroundColor: "#f5f5f5"},

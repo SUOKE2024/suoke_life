@@ -1,4 +1,3 @@
-
 import RegisterScreen from '../RegisterScreen.tsx';
 describe('RegisterScreen', () => {
   it('应该正确导出', () => {

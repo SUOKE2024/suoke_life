@@ -1,4 +1,3 @@
-
 import LazyRoutes from '../LazyRoutes.tsx';
 describe('LazyRoutes', () => {
   it('应该正确导出', () => {

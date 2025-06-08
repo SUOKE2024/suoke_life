@@ -16,7 +16,7 @@ k;<;
   DiagnosisSession,
   void,
   { rejectValue: string}
->("diagnosis/startSession", async (_, { rejectWithValue }) => {/      try {}
+>("diagnosis/startSession", async (_, { rejectWithValue }) => {/      try {})
     const response: ApiResponse<DiagnosisSession /> = await apiClient.post(/      "/diagnosis/session/    start");
     if (!response.success) {
       throw new Error(response.error?.message || "开始诊断会话失败;";);
@@ -31,7 +31,7 @@ k;<;
   DiagnosisData,
   { sessionId: string, type: DiagnosisType, data: unknown},
   { rejectValue: string}
->(
+>()
   "diagnosis/submitData",/      async ({ sessionId, type, data }, { rejectWithValue }) => {}
     try {
       const response: ApiResponse<DiagnosisData  / > = await apiClient.post( * ` /diagnosis/${type}/diagnose`,/            {
@@ -54,7 +54,7 @@ k;<;
   DiagnosisResult,
   string,
   { rejectValue: string}
->("diagnosis/completeSession", async (sessionId, { rejectWithValue }) => {/      try {}
+>("diagnosis/completeSession", async (sessionId, { rejectWithValue }) => {/      try {})
     const response: ApiResponse<DiagnosisResult /> = await apiClient.post(/      `/diagnosis/session/${sessionId}/    complete`);
     if (!response.success) {
       throw new Error(response.error?.message || "完成诊断会话失败;";);
@@ -69,7 +69,7 @@ k;<;
   DiagnosisSession[],
   { limit?: number offset?: number },
   { rejectValue: string}
->("diagnosis/fetchHistory", async (params = {}, { rejectWithValue }) => {/      try {}
+>("diagnosis/fetchHistory", async (params = {}, { rejectWithValue }) => {/      try {})
     const queryParams = new URLSearchParams;(;);
     if (params.limit) {
       queryParams.append(limit", params.limit.toString();)"
@@ -91,10 +91,10 @@ k;<;
   { imageUrl: string, analysis: unknown},
   { sessionId: string, imageFile: FormData},
   { rejectValue: string}
->(
+>()
   "diagnosis/uploadTongueImage",/      async ({ sessionId: _sessionId, imageFile }, { rejectWithValue }) => {}
     try {
-      const response: ApiResponse<{ imageUrl: string, analysis: unknown}> = await apiClient.uploadFile(;
+      const response: ApiResponse<{ imageUrl: string, analysis: unknown}> = await apiClient.uploadFile(;)
           "/diagnosis/look/upload-tongue-image",/              imageFil;e;);
       if (!response.success) {
         throw new Error(response.error?.message || "上传舌象图片失败;";);
@@ -110,7 +110,7 @@ k;<;
   { voiceUrl: string, analysis: unknown},
   { sessionId: string, audioFile: FormData},
   { rejectValue: string}
->(
+>()
   "diagnosis/recordVoice",/      async ({ sessionId: _sessionId, audioFile }, { rejectWithValue }) => {}
     try {
       const response: ApiResponse<{ voiceUrl: string, analysis: unknown}> =;
@@ -127,7 +127,7 @@ k;<;
   name: "diagnosis",initialState,reducers: {setCurrentSession: (state, action: PayloadAction<string | undefined;>;); => {}
       state.currentSession = action.payload;
     },
-    updateSessionData: (,
+    updateSessionData: (,)
       state,
       action: PayloadAction<{ sessionId: string,
         type: DiagnosisType,
@@ -143,7 +143,7 @@ k;<;
     },
     cancelSession: (state) => {}
       if (state.currentSession) {
-        const session = state.sessions.find(;
+        const session = state.sessions.find(;)
           (s); => s.id === state.currentSession;
         )
         if (session) {
@@ -156,28 +156,28 @@ k;<;
   },
   extraReducers: (builder) => {}
     builder;
-      .addCase(startDiagnosisSession.pending, (state) => {}
+      .addCase(startDiagnosisSession.pending, (state) => {})
         state.loading = true;
         state.error = undefined;
       });
-      .addCase(startDiagnosisSession.fulfilled, (state, action); => {}
+      .addCase(startDiagnosisSession.fulfilled, (state, action); => {})
         state.loading = false;
         state.currentSession = action.payload.id;
         state.sessions.unshift(action.payload);
         state.error = undefined;
       });
-      .addCase(startDiagnosisSession.rejected, (state, action); => {}
+      .addCase(startDiagnosisSession.rejected, (state, action); => {})
         state.loading = false;
         state.error = action.payload;
       });
     builder;
-      .addCase(submitDiagnosisData.pending, (state) => {}
+      .addCase(submitDiagnosisData.pending, (state) => {})
         state.loading = true;
         state.error = undefined;
       });
-      .addCase(submitDiagnosisData.fulfilled, (state, action); => {}
+      .addCase(submitDiagnosisData.fulfilled, (state, action); => {})
         state.loading = false;
-        const session = state.sessions.find(;
+        const session = state.sessions.find(;)
           (s); => s.id === action.payload.sessionId;
         );
         if (session) {
@@ -185,19 +185,19 @@ k;<;
         }
         state.error = undefined;
       });
-      .addCase(submitDiagnosisData.rejected, (state, action); => {}
+      .addCase(submitDiagnosisData.rejected, (state, action); => {})
         state.loading = false;
         state.error = action.payload;
       });
     builder;
-      .addCase(completeDiagnosisSession.pending, (state) => {}
+      .addCase(completeDiagnosisSession.pending, (state) => {})
         state.loading = true;
         state.error = undefined;
       });
-      .addCase(completeDiagnosisSession.fulfilled, (state, action); => {}
+      .addCase(completeDiagnosisSession.fulfilled, (state, action); => {})
         state.loading = false;
         if (state.currentSession) {
-          const session = state.sessions.find(;
+          const session = state.sessions.find(;)
             (s); => s.id === state.currentSession;
           )
           if (session) {
@@ -209,47 +209,47 @@ k;<;
         state.results.unshift(action.payload);
         state.error = undefined;
       });
-      .addCase(completeDiagnosisSession.rejected, (state, action); => {}
+      .addCase(completeDiagnosisSession.rejected, (state, action); => {})
         state.loading = false;
         state.error = action.payload;
       });
     builder;
-      .addCase(fetchDiagnosisHistory.pending, (state) => {}
+      .addCase(fetchDiagnosisHistory.pending, (state) => {})
         state.loading = true;
         state.error = undefined;
       });
-      .addCase(fetchDiagnosisHistory.fulfilled, (state, action); => {}
+      .addCase(fetchDiagnosisHistory.fulfilled, (state, action); => {})
         state.loading = false;
         state.sessions = action.payload;
         state.error = undefined;
       });
-      .addCase(fetchDiagnosisHistory.rejected, (state, action); => {}
+      .addCase(fetchDiagnosisHistory.rejected, (state, action); => {})
         state.loading = false;
         state.error = action.payload;
       });
     builder;
-      .addCase(uploadTongueImage.pending, (state) => {}
+      .addCase(uploadTongueImage.pending, (state) => {})
         state.loading = true;
         state.error = undefined;
       });
-      .addCase(uploadTongueImage.fulfilled, (state, _action); => {}
+      .addCase(uploadTongueImage.fulfilled, (state, _action); => {})
         state.loading = false;
         state.error = undefined;
       });
-      .addCase(uploadTongueImage.rejected, (state, action); => {}
+      .addCase(uploadTongueImage.rejected, (state, action); => {})
         state.loading = false;
         state.error = action.payload;
       });
     builder;
-      .addCase(recordVoiceData.pending, (state) => {}
+      .addCase(recordVoiceData.pending, (state) => {})
         state.loading = true;
         state.error = undefined;
       });
-      .addCase(recordVoiceData.fulfilled, (state, _action); => {}
+      .addCase(recordVoiceData.fulfilled, (state, _action); => {})
         state.loading = false;
         state.error = undefined;
       });
-      .addCase(recordVoiceData.rejected, (state, action); => {}
+      .addCase(recordVoiceData.rejected, (state, action); => {})
         state.loading = false;
         state.error = action.payload;
       });

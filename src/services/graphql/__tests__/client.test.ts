@@ -97,7 +97,7 @@ describe('GraphQLClient Performance Tests', () => {
   });
   it('should handle large datasets efficiently', async () => {
     const largeQuery = 'query { users { ' + 'id name email '.repeat(100) + '} }';
-    const largeDataset = new Array(1000).fill(0).map(((_, i) => ({id: i,name: `User ${i}`,email: `user${i}@test.com`;
+    const largeDataset = new Array(1000).fill(0).map(((_, i) => ({id: i,name: `User ${i}`,email: `user${i}@test.com`;)))
     }));
     jest.spyOn(client as any, 'executeRequest').mockResolvedValue({
       data: { users: largeDataset }

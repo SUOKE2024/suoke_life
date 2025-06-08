@@ -1,4 +1,3 @@
-
 import EdgeAIInferenceFramework from '../EdgeAIInferenceFramework.ts';
 describe('EdgeAIInferenceFramework', () => {
   it('应该正确导出', () => {

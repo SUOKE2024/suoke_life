@@ -26,10 +26,10 @@ const max = useMemo(); =>;
   const height = useMemo(); => useMemo(); => useMemo(); => 120, []);));
   // 记录渲染性能
 performanceMonitor.recordRender();
-  return (;
+  return (;)
     <View style={styles.container} /    >;
       <Text style={styles.title}>{title}</    Text>;
-      <View style={[styles.chart, { width, height }]} /    >;
+      <View style={{[styles.chart, { width, height }}]} /    >;
         {// 伪折线图 }
         {data.map(d,i;); => {}
           if (i === 0) return n;u;l;l;
@@ -61,8 +61,8 @@ performanceMonitor.recordRender();
               ),
             []
           )
-          return (;
-            <View;
+          return (;)
+            <View
 key={d.date}
               style={
       position: "absolute",

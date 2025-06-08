@@ -36,7 +36,7 @@ const manualFixRules = [
   // 修复数组中的错误分号
   {
     name: 修复数组错误分号",
-    pattern: /\[\s*([^;\]]*)\s*;\s*\]/g,
+    pattern: /[\s*([^;]]*)\s*;\s*\]/g,
     replacement: "[$1]
   },
 
@@ -83,7 +83,7 @@ content = content.replace(/conflict\.vote;s;/g, conflict.votes");
     content = content.replace(/capabilities: \[;/g, "capabilities: [");
     content = content.replace(/return \{ response: `([^`]+)`, contex;t ;\}/g, return { response: `$1`, context }");
     content = content.replace(/confidence: 0\.;(\d+);/g, "confidence: 0.$1);
-    content = content.replace(/recommendations: ;\[;\]/g, "recommendations: []");
+    content = content.replace(/recommendations: ;[;]/g, "recommendations: []");
     content = content.replace(/recordId: "([^"]+);";/g, recordId: "$1");
     content = content.replace(/total;: ;(\d+)/g, "total: $1);
     content = content.replace(/generated: tr;u;e/g, "generated: true");

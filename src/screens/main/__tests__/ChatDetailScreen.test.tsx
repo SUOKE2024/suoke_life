@@ -1,4 +1,3 @@
-
 import ChatDetailScreen from '../ChatDetailScreen.tsx';
 describe('ChatDetailScreen', () => {
   it('应该正确导出', () => {

@@ -19,7 +19,7 @@ describe('usePerformanceMonitor', () => {
     mockPerformance.now.mockReturnValue(Date.now());
   });
   it('应该正确初始化性能监控', () => {
-    const { result } = renderHook(() =>
+    const { result } = renderHook(() =>)
       usePerformanceMonitor('TestComponent')
     );
     expect(result.current.isMonitoring).toBe(true);
@@ -27,7 +27,7 @@ describe('usePerformanceMonitor', () => {
     expect(result.current.config.enableLogging).toBe(true);
   });
   it('应该能够记录渲染性能', () => {
-    const { result } = renderHook(() =>
+    const { result } = renderHook(() =>)
       usePerformanceMonitor('TestComponent')
     );
     act(() => {
@@ -37,7 +37,7 @@ describe('usePerformanceMonitor', () => {
     expect(metrics.updateCount).toBeGreaterThan(0);
   });
   it('应该能够记录内存使用', () => {
-    const { result } = renderHook(() =>
+    const { result } = renderHook(() =>)
       usePerformanceMonitor('TestComponent', { trackMemory: true })
     );
     act(() => {
@@ -47,7 +47,7 @@ describe('usePerformanceMonitor', () => {
     expect(metrics.memoryUsage).toBeGreaterThan(0);
   });
   it('应该能够记录网络性能', () => {
-    const { result } = renderHook(() =>
+    const { result } = renderHook(() =>)
       usePerformanceMonitor('TestComponent', { trackNetwork: true })
     );
     act(() => {
@@ -57,7 +57,7 @@ describe('usePerformanceMonitor', () => {
     expect(metrics.networkLatency).toBe(150);
   });
   it('应该能够记录自定义指标', () => {
-    const { result } = renderHook(() =>
+    const { result } = renderHook(() =>)
       usePerformanceMonitor('TestComponent')
     );
     act(() => {
@@ -68,7 +68,7 @@ describe('usePerformanceMonitor', () => {
     expect(events[0].metadata?.metricName).toBe('custom_metric');
   });
   it('应该能够记录错误', () => {
-    const { result } = renderHook(() =>
+    const { result } = renderHook(() =>)
       usePerformanceMonitor('TestComponent')
     );
     const testError = new Error('Test error');
@@ -83,7 +83,7 @@ describe('usePerformanceMonitor', () => {
     expect(errorEvent?.metadata?.error.message).toBe('Test error');
   });
   it('应该正确处理性能阈值', () => {
-    const { result } = renderHook(() =>
+    const { result } = renderHook(() =>)
       usePerformanceMonitor('TestComponent', {
         warnThreshold: 10,
         errorThreshold: 50
@@ -115,7 +115,7 @@ describe('usePerformanceMonitor', () => {
     expect(errorEvent).toBeDefined();
   });
   it('应该能够获取性能摘要', () => {
-    const { result } = renderHook(() =>
+    const { result } = renderHook(() =>)
       usePerformanceMonitor('TestComponent')
     );
     // 记录一些性能数据
@@ -131,7 +131,7 @@ describe('usePerformanceMonitor', () => {
     expect(summary.metrics).toBeDefined();
   });
   it('应该能够清除性能数据', () => {
-    const { result } = renderHook(() =>
+    const { result } = renderHook(() =>)
       usePerformanceMonitor('TestComponent')
     );
     // 记录一些数据
@@ -151,7 +151,7 @@ describe('usePerformanceMonitor', () => {
     expect(metrics.errorCount).toBe(0);
   });
   it('应该能够启动和停止监控', () => {
-    const { result } = renderHook(() =>
+    const { result } = renderHook(() =>)
       usePerformanceMonitor('TestComponent')
     );
     expect(result.current.isMonitoring).toBe(true);
@@ -165,7 +165,7 @@ describe('usePerformanceMonitor', () => {
     expect(result.current.isMonitoring).toBe(true);
   });
   it('应该正确处理采样率', () => {
-    const { result } = renderHook(() =>
+    const { result } = renderHook(() =>)
       usePerformanceMonitor('TestComponent', { sampleRate: 0 })
     );
     // 记录事件，但由于采样率为0，不应该被记录
@@ -180,7 +180,7 @@ describe('usePerformanceMonitor', () => {
     expect(events).toHaveLength(0);
   });
   it('应该正确处理配置更新', () => {
-    const { result, rerender } = renderHook(
+    const { result, rerender } = renderHook()
       ({ config }) => usePerformanceMonitor('TestComponent', config),
       {
         initialProps: { config: { trackRender: true, trackMemory: false } }

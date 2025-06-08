@@ -20,7 +20,7 @@ describe('AlgorithmConfig', () => {
       new AlgorithmConfig({});
     }).not.toThrow();
   });
-  it('should return correct output format', () => {// Add test cases;
+  it('should return correct output format', () => {// Add test cases;)
     const config = new AlgorithmConfig();
     expect(typeof config).toBe('object');
   });

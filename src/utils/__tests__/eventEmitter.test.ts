@@ -1,4 +1,3 @@
-
 import eventEmitter from '../eventEmitter.ts';
 describe('eventEmitter', () => {
   it('应该正确导出', () => {

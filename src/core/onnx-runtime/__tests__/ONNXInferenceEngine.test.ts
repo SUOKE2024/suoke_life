@@ -1,4 +1,3 @@
-
 import ONNXInferenceEngine from '../ONNXInferenceEngine.ts';
 describe('ONNXInferenceEngine', () => {
   it('应该正确导出', () => {

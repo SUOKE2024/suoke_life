@@ -1,4 +1,3 @@
-
 import benchmarkSlice from '../benchmarkSlice.ts';
 describe('benchmarkSlice', () => {
   it('应该正确导出', () => {

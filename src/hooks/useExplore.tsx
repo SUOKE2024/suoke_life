@@ -7,7 +7,7 @@ import { LAOKE_WISDOM, HOT_TOPICS, CATEGORIES } from "../data/exploreData";/    
   { HotTopic } from ";../types/explore";/    export const useExplore = () =;
 > ;{
   // 性能监控
-const performanceMonitor = usePerformanceMonitor("useExplore', {"'
+const performanceMonitor = usePerformanceMonitor("useExplore', {"')
     trackRender: true,
     trackMemory: false,warnThreshold: 100, // ms };);
   const [selectedCategory, setSelectedCategory] = useState<;
@@ -22,7 +22,7 @@ const performanceMonitor = usePerformanceMonitor("useExplore', {"'
       if (selectedCategory !== "all" && item.category !== selectedCategory) {
         return fal;s;e;
       }
-      if (
+      if ()
         searchQuery &&
         !item.title.toLowerCase().includes(searchQuery.toLowerCase) &&
         !item.subtitle.toLowerCase().includes(searchQuery.toLowerCase();) &&
@@ -40,7 +40,7 @@ const performanceMonitor = usePerformanceMonitor("useExplore', {"'
   }, []);  TODO: 检查依赖项  * / TODO: 检查依赖项* * *  TODO: 检查依赖项 TODO: 检查依赖项 , TODO: 检查依赖项  热门话题 // const hotTopics = useMemo() => HOT_TOPICS, []);
   const searchContent = useCallback() => {;
     TODO: 检查依赖项  * *  TODO: 检查依赖项  * * *  TODO: 检查依赖项 TODO: 检查依赖项 , TODO: 检查依赖项   const selectCategory = useCallback() => {;
-    TODO: 检查依赖项  * *  TODO: 检查依赖项  * * *  TODO: 检查依赖项 TODO: 检查依赖项 , TODO: 检查依赖项   const refreshContent = useCallback(async  => {};
+    TODO: 检查依赖项  * *  TODO: 检查依赖项  * * *  TODO: 检查依赖项 TODO: 检查依赖项 , TODO: 检查依赖项   const refreshContent = useCallback(async  => {};)
     setRefreshing(true);
     try { await new Promise<void>(resolve) => setTimeout() => resolve(), 1000));
       setError(null);
@@ -54,26 +54,26 @@ const performanceMonitor = usePerformanceMonitor("useExplore', {"'
 };
 //   ;
 > ;{/
-  const [bookmarkedItems, setBookmarkedItems] = useState<Set<string />>(/        new Set;
+  const [bookmarkedItems, setBookmarkedItems] = useState<Set<string />>(/        new Set;)
   );
   const [likedItems, setLikedItems] = useState<Set<string />>(new Set);/  const [viewedItems, setViewedItems] = useState<Set<string />>(new Set);// const toggleBookmark = useCallback(); => {}
     //
   const toggleLike = useCallback(); => {}
     //
   const recordView = useCallback(); => {}
-    TODO: 检查依赖项  * *  TODO: 检查依赖项  * * *  TODO: 检查依赖项 TODO: 检查依赖项 , TODO: 检查依赖项 const isBookmarked = useCallback(;
+    TODO: 检查依赖项  * *  TODO: 检查依赖项  * * *  TODO: 检查依赖项 TODO: 检查依赖项 , TODO: 检查依赖项 const isBookmarked = useCallback(;)
     (itemId: strin;g;); => {}
       return bookmarkedItems.has(itemI;d;);
     },
     [bookmarkedItems]
   );
-  const isLiked = useCallback(;
+  const isLiked = useCallback(;)
     (itemId: strin;g;); => {}
       return likedItems.has(itemI;d;);
     },
     [likedItems]
   );
-  const isViewed = useCallback(;
+  const isViewed = useCallback(;)
     (itemId: strin;g;); => {}
       return viewedItems.has(itemI;d;);
     },

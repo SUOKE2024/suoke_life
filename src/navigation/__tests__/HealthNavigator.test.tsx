@@ -1,4 +1,3 @@
-
 import HealthNavigator from '../HealthNavigator.tsx';
 describe('HealthNavigator', () => {
   it('应该正确导出', () => {

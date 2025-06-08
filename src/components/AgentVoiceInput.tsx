@@ -25,14 +25,14 @@ import React,{ useState } from "react";
     setRecording(fals;e;);
     setLoading(false);
   };
-  return (;
-    <View style={styles.container}>/          <TouchableOpacity;
+  return (;)
+    <View style={styles.container}>/          <TouchableOpacity
         style={[styles.button, recording && styles.buttonActive]};
         onPress={recording ? stopRecording: startRecordi;n;g}
         disabled={loading}
       accessibilityLabel="TODO: 添加无障碍标签" />/        <Text style={styles.icon}>{recording ? "🛑" : "🎤"}</Text>/        <Text style={styles.text}>{recording ? "录音中..." : "按下说话"}</Text>/      </TouchableOpacity>/      {loading && <ActivityIndicator style={ marginLeft: 12}} />}/    </View>/      );
 }
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flexDirection: "row",
     alignItems: "center",
     marginVertical: 12;

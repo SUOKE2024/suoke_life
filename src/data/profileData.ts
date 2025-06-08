@@ -33,7 +33,7 @@
     emoji: "🤖",
     color: "#4A90E2",
     satisfaction: 4.8,
-    lastTopics: ["睡眠质量",运动建议", "营养搭配"]
+    lastTopics: ["睡眠质量", "运动建议", "营养搭配"]
   },
   {
       id: "xiaoke",
@@ -45,7 +45,7 @@
     emoji: "👨‍⚕️",
     color: "#34C759",
     satisfaction: 4.6,
-    lastTopics: ["脉象分析",舌诊结果", "体质调理"]
+    lastTopics: ["脉象分析", "舌诊结果", "体质调理"]
   },
   {
       id: "laoke",
@@ -57,7 +57,7 @@
     emoji: "👴",
     color: "#FF9500",
     satisfaction: 4.9,
-    lastTopics: ["养生茶饮",经络按摩", "季节养生"]
+    lastTopics: ["养生茶饮", "经络按摩", "季节养生"]
   },
   {
       id: "soer",
@@ -69,7 +69,7 @@
     emoji: "👧",
     color: "#FF2D92",
     satisfaction: 4.7,
-    lastTopics: ["生活规划",情绪管理", "社交建议"]
+    lastTopics: ["生活规划", "情绪管理", "社交建议"]
   }
 ];
 //   ;

@@ -71,7 +71,7 @@ export interface AgentStatus {
   // 智能体类型  readonly type: string;
   // 智能体版本  readonly version: string;
   ///    >;
-  // 处理协作请求  processCollaboration(
+  // 处理协作请求  processCollaboration()
     request: AgentRequest;
     collaborationContext: CollaborationContext): Promise<AgentResponse /    >;
   ///    >;
@@ -90,21 +90,21 @@ export interface AgentStatus {
         errors.push(`缺少必需字段: ${field}`);
       }
     }
-    if (
+    if ()
       response.confidence &&
       (response.confidence < 0 || response.confidence > 1)
     ) {
       errors.push("置信度必须在0-1之间");
     }
-    if (
+    if ()
       response.status &&
       !["success",error", "partial"].includes(response.status);
     ) {
       errors.push("状态值无效");
     }
-    if (
+    if ()
       response.responseType &&
-      !["text",voice", "image",data", "action"].includes(
+      !["text",voice", "image",data", "action"].includes()
         response.responseType;
       );
     ) {
@@ -124,13 +124,13 @@ export interface AgentStatus {
         errors.push(`缺少必需字段: ${field}`);
       }
     }
-    if (
+    if ()
       request.messageType &&
       !["text",voice", "image",data"].includes(request.messageType);
     ) {
       errors.push("消息类型无效");
     }
-    if (
+    if ()
       request.priority &&
       !["low",normal", "high",urgent"].includes(request.priority);
     ) {

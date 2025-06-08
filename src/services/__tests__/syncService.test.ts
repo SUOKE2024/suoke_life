@@ -1,4 +1,5 @@
 import { jest } from '@jest/globals';
+
 import syncService from '../syncService.ts';
 // Mock dependencies
 jest.mock('../api/apiClient');

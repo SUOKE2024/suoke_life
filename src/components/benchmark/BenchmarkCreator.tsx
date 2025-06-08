@@ -50,12 +50,12 @@ export const BenchmarkCreator: React.FC<BenchmarkCreatorProps> = ({
   const testDataTemplates = {
     tcm_diagnosis: [
       {
-        symptoms: ["头痛",发热', '咳嗽'],
+        symptoms: ["头痛", "发热', '咳嗽'],
         expected_diagnosis: '风热感冒',
         severity: 'mild'
       },
       {
-        symptoms: ["胸闷",气短', '心悸'],
+        symptoms: ["胸闷", "气短', '心悸'],
         expected_diagnosis: '心气虚',
         severity: 'moderate'
       }
@@ -85,7 +85,7 @@ export const BenchmarkCreator: React.FC<BenchmarkCreatorProps> = ({
     ];
   };
   // 加载插件列表
-  useEffect() => {
+  useEffect(() => {
     if (visible) {
       loadPlugins();
     }
@@ -107,28 +107,28 @@ export const BenchmarkCreator: React.FC<BenchmarkCreatorProps> = ({
     }
   };
   // 验证表单
-  const validateForm = (): boolean => {if (!benchmarkId.trim()) {Alert.alert("错误",请选择基准测试类型');
+  const validateForm = (): boolean => {if (!benchmarkId.trim()) {Alert.alert("错误", "请选择基准测试类型');
       return false;
     }
     if (!modelId.trim()) {
-      Alert.alert("错误",请输入模型ID');
+      Alert.alert("错误", "请输入模型ID');
       return false;
     }
     if (!modelVersion.trim()) {
-      Alert.alert("错误",请输入模型版本');
+      Alert.alert("错误", "请输入模型版本');
       return false;
     }
     try {
       JSON.parse(testDataText);
     } catch (error) {
-      Alert.alert("错误",测试数据格式不正确，请输入有效的JSON');
+      Alert.alert("错误", "测试数据格式不正确，请输入有效的JSON');
       return false;
     }
     if (useCustomConfig) {
       try {
         JSON.parse(customConfig);
       } catch (error) {
-        Alert.alert("错误",自定义配置格式不正确，请输入有效的JSON');
+        Alert.alert("错误", "自定义配置格式不正确，请输入有效的JSON');
         return false;
       }
     }
@@ -153,7 +153,7 @@ export const BenchmarkCreator: React.FC<BenchmarkCreatorProps> = ({
         // 使用标准基准测试
         taskId = await benchmarkService.submitBenchmark(config);
       }
-      Alert.alert("成功",基准测试任务已创建', [
+      Alert.alert("成功", "基准测试任务已创建', [)
         {
       text: "确定",
       onPress: () => {
@@ -164,7 +164,7 @@ export const BenchmarkCreator: React.FC<BenchmarkCreatorProps> = ({
       ]);
     } catch (error) {
       console.error('Failed to submit benchmark:', error);
-      Alert.alert("错误",创建基准测试任务失败');
+      Alert.alert("错误", "创建基准测试任务失败');
     } finally {
       setLoading(false);
     }
@@ -181,26 +181,26 @@ export const BenchmarkCreator: React.FC<BenchmarkCreatorProps> = ({
   };
   // 渲染基准测试类型选择
   const renderBenchmarkTypeSelector = () => (
-    <View style={styles.section}>
+  <View style={styles.section}>
       <Text style={styles.sectionTitle}>基准测试类型</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {benchmarkTypes.map(type) => (
-          <TouchableOpacity;
+        {benchmarkTypes.map(type) => ()
+          <TouchableOpacity
             key={type.id}
-            style={[
+            style={{[
               styles.typeCard,
               benchmarkId === type.id && styles.typeCardSelected;
-            ]}
+            ]}}
             onPress={() => handleBenchmarkTypeSelect(type.id)}
           >
-            <Text style={[;
+            <Text style={{[;
               styles.typeCardTitle,benchmarkId === type.id && styles.typeCardTitleSelected;
-            ]}>;
+            ]}}>;
               {type.name};
             </Text>;
-            <Text style={[;
+            <Text style={{[;
               styles.typeCardDescription,benchmarkId === type.id && styles.typeCardDescriptionSelected;
-            ]}>;
+            ]}}>;
               {type.description};
             </Text>;
           </TouchableOpacity>;
@@ -210,11 +210,11 @@ export const BenchmarkCreator: React.FC<BenchmarkCreatorProps> = ({
   );
   // 渲染模型配置
   const renderModelConfig = () => (
-    <View style={styles.section}>
+  <View style={styles.section}>
       <Text style={styles.sectionTitle}>模型配置</Text>
       <View style={styles.inputGroup}>
         <Text style={styles.inputLabel}>模型ID *</Text>
-        <TextInput;
+        <TextInput
           style={styles.textInput}
           value={modelId}
           onChangeText={setModelId};
@@ -224,7 +224,7 @@ export const BenchmarkCreator: React.FC<BenchmarkCreatorProps> = ({
       </View>;
       <View style={styles.inputGroup}>;
         <Text style={styles.inputLabel}>模型版本 *</Text>;
-        <TextInput;
+        <TextInput
           style={styles.textInput};
           value={modelVersion};
           onChangeText={setModelVersion};
@@ -236,34 +236,34 @@ export const BenchmarkCreator: React.FC<BenchmarkCreatorProps> = ({
   );
   // 渲染插件选择
   const renderPluginSelector = () => (
-    <View style={styles.section}>
+  <View style={styles.section}>
       <Text style={styles.sectionTitle}>插件选择（可选）</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <TouchableOpacity;
-          style={[
+        <TouchableOpacity
+          style={{[
             styles.pluginOption,
             selectedPlugin === '' && styles.pluginOptionSelected;
-          ]}
+          ]}}
           onPress={() => setSelectedPlugin('')}
         >
-          <Text style={[
+          <Text style={{[
             styles.pluginOptionText,
             selectedPlugin === '' && styles.pluginOptionTextSelected;
-          ]}>
+          ]}}>
             不使用插件
           </Text>
         </TouchableOpacity>
-        {plugins.map(plugin) => (
-          <TouchableOpacity;
+        {plugins.map(plugin) => ()
+          <TouchableOpacity
             key={plugin.name}
-            style={[;
+            style={{[;
               styles.pluginOption,selectedPlugin === plugin.name && styles.pluginOptionSelected;
-            ]};
+            ]}};
             onPress={() => setSelectedPlugin(plugin.name)};
           >;
-            <Text style={[;
+            <Text style={{[;
               styles.pluginOptionText,selectedPlugin === plugin.name && styles.pluginOptionTextSelected;
-            ]}>;
+            ]}}>;
               {plugin.name} v{plugin.version};
             </Text>;
           </TouchableOpacity>;
@@ -272,10 +272,10 @@ export const BenchmarkCreator: React.FC<BenchmarkCreatorProps> = ({
     </View>;
   );
   // 渲染测试数据配置
-  const renderTestDataConfig = () => (;
+  const renderTestDataConfig = () => (;)
     <View style={styles.section}>;
       <Text style={styles.sectionTitle}>测试数据</Text>;
-      <TextInput;
+      <TextInput
         style={styles.textArea};
         value={testDataText};
         onChangeText={setTestDataText};
@@ -288,16 +288,16 @@ export const BenchmarkCreator: React.FC<BenchmarkCreatorProps> = ({
   );
   // 渲染自定义配置
   const renderCustomConfig = () => (
-    <View style={styles.section}>
+  <View style={styles.section}>
       <View style={styles.switchRow}>
         <Text style={styles.sectionTitle}>自定义配置</Text>
-        <Switch;
+        <Switch
           value={useCustomConfig};
           onValueChange={setUseCustomConfig};
         />;
       </View>;
-      {useCustomConfig && (;
-        <TextInput;
+      {useCustomConfig && (;)
+        <TextInput
           style={styles.textArea};
           value={customConfig};
           onChangeText={setCustomConfig};
@@ -310,7 +310,7 @@ export const BenchmarkCreator: React.FC<BenchmarkCreatorProps> = ({
     </View>;
   );
   return (
-    <Modal;
+  <Modal
       visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
@@ -322,7 +322,7 @@ export const BenchmarkCreator: React.FC<BenchmarkCreatorProps> = ({
             <Text style={styles.cancelButton}>取消</Text>
           </TouchableOpacity>
           <Text style={styles.title}>创建基准测试</Text>
-          <TouchableOpacity;
+          <TouchableOpacity
             onPress={handleSubmit}
             disabled={loading}
             style={[styles.submitButton, loading && styles.submitButtonDisabled]}

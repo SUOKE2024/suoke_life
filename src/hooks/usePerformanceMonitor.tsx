@@ -19,7 +19,7 @@ interface UsePerformanceMonitorReturn {
   clearMetrics: () => void;
   averageRenderTime: number;
 }
-export const usePerformanceMonitor = (
+export const usePerformanceMonitor = ()
   componentName: string,
   config: PerformanceConfig = {},
 ): UsePerformanceMonitorReturn => {
@@ -33,13 +33,13 @@ export const usePerformanceMonitor = (
   const [metrics, setMetrics] = useState<PerformanceMetrics[]>([]);
   const metricsRef = useRef<PerformanceMetrics[]>([]);
   // 记录渲染开始时间
-  useEffect() => {
+  useEffect(() => {
     if (trackRender && Math.random() < sampleRate) {
       renderStartTime.current = performance.now();
     }
   });
   // 记录渲染结束时间
-  useEffect() => {
+  useEffect(() => {
     if (trackRender && renderStartTime.current > 0) {
       const renderTime = performance.now() - renderStartTime.current;
       const metric: PerformanceMetrics = {
@@ -57,7 +57,7 @@ export const usePerformanceMonitor = (
       setMetrics(metricsRef.current);
       // 性能警告
       if (renderTime > warnThreshold) {
-        console.warn(
+        console.warn()
           `🐌 Performance Warning: ${componentName} render took ${renderTime.toFixed(2)}ms (threshold: ${warnThreshold}ms)`,
         );
       }
@@ -96,7 +96,7 @@ export const usePerformanceMonitor = (
     ? metrics.reduce(sum, metric) => sum + metric.renderTime, 0) / metrics.length;
     : 0;
   // 开发环境下的性能报告
-  useEffect() => {
+  useEffect(() => {
     if (__DEV__ && metrics.length > 0 && metrics.length % 10 === 0) {
       const recentMetrics = metrics.slice(-10);
       const avgRenderTime = recentMetrics.reduce(sum, m) => sum + m.renderTime, 0) / 10;
@@ -119,7 +119,7 @@ export const usePerformanceMonitor = (
   };
 };
 // 高阶组件版本
-export const withPerformanceMonitor = <P extends object>(
+export const withPerformanceMonitor = <P extends object>()
   WrappedComponent: React.ComponentType<P>,
   componentName: string,
   config: PerformanceConfig = {},

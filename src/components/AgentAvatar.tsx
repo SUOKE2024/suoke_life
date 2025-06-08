@@ -47,25 +47,24 @@ export const AgentAvatar: React.FC<AgentAvatarProps> = ({
     }
   };
   return (
-    <View;
-      style={[
+  <View
+      style={{[
         styles.container,
         {
           backgroundColor: meta.color,
           width: size + 16,
           height: size + 16,
-        },
+        }},
       ]}
     >
-      <Text;
-        style={[styles.avatar, { fontSize: size * 0.6 }]}
+      <Text
+        style={{[styles.avatar, { fontSize: size * 0.6 }}]}
         accessibilityLabel={`${meta.name}的头像`}
       >
         {meta.avatar}
       </Text>
       <Text style={styles.name}>{meta.name}</Text>
-      {emotion !== 'neutral' && (
-        <Text style={styles.emotion}>
+      {emotion !== 'neutral'  && <Text style={styles.emotion}>
           {getEmotionIcon(emotion)}
         </Text>
       )}

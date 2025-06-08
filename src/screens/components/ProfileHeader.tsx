@@ -14,8 +14,8 @@ interface ProfileHeaderProps {
   getHealthScoreColor: (score: number) => string;
   getMemberLevelText: (level: string) => string;
 }
-const ProfileHeader: React.FC<ProfileHeaderProps /    > = ({// 性能监控
-const performanceMonitor = usePerformanceMonitor(ProfileHeader", {"
+const ProfileHeader: React.FC<ProfileHeaderProps /    > = ({// 性能监控)
+const performanceMonitor = usePerformanceMonitor(ProfileHeader", {")
     trackRender: true,
     trackMemory: false,warnThreshold: 50, // ms };);
   userProfile,
@@ -26,7 +26,7 @@ const performanceMonitor = usePerformanceMonitor(ProfileHeader", {"
   // 记录渲染性能
 performanceMonitor.recordRender();
   return (
-    <View style={styles.container} /    >
+  <View style={styles.container} /    >
       <View style={styles.header} /    >
         <View style={styles.avatarContainer} /    >
           <Text style={styles.avatar}>{userProfile.avatar}</    Text>
@@ -46,10 +46,10 @@ performanceMonitor.recordRender();
       </    View>;
       <View style={styles.statsContainer} /    >;
         <View style={styles.statItem} /    >;
-          <Text;
-style={[
+          <Text
+style={{[
               styles.statValue,
-              { color: getHealthScoreColor(userProfile.healthScore)   }
+              { color: getHealthScoreColor(userProfile.healthScore)   }}
             ]} /    >
             {userProfile.healthScore}
           </    Text>
@@ -71,7 +71,7 @@ style={[
     </    View;>
   ;);
 }
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   backgroundColor: colors.white,
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.xl,

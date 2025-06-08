@@ -43,7 +43,7 @@ const TestWrapper: React.FC<{ children: React.ReactNode; store?: any }> = ({
 }) => {
   const Stack = createNativeStackNavigator();
   return (
-    <Provider store={store}>
+  <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name="Home" component={() => children} />
@@ -58,7 +58,7 @@ describe('HomeScreen', () => {
   });
   describe('渲染测试', () => {
     it('应该正确渲染基本组件', async () => {
-      const { getByText, getByPlaceholderText } = render(
+      const { getByText, getByPlaceholderText } = render()
         <TestWrapper>
           <HomeScreen />
         </TestWrapper>,
@@ -75,13 +75,13 @@ describe('HomeScreen', () => {
         auth: {
           isAuthenticated: true,
           user: {
-      name: "张三",
+      name: "张三", "
       id: '123' },
           loading: false,
           error: null,
         },
       });
-      const { getByText } = render(
+      const { getByText } = render()
         <TestWrapper store={store}>
           <HomeScreen />
         </TestWrapper>,
@@ -91,7 +91,7 @@ describe('HomeScreen', () => {
       });
     });
     it('应该显示智能体聊天列表', async () => {
-      const { getByText } = render(
+      const { getByText } = render()
         <TestWrapper>
           <HomeScreen />
         </TestWrapper>,
@@ -104,7 +104,7 @@ describe('HomeScreen', () => {
       });
     });
     it('应该显示智能体标签', async () => {
-      const { getByText } = render(
+      const { getByText } = render()
         <TestWrapper>
           <HomeScreen />
         </TestWrapper>,
@@ -119,7 +119,7 @@ describe('HomeScreen', () => {
   });
   describe('交互测试', () => {
     it('应该能够搜索聊天记录', async () => {
-      const { getByPlaceholderText, getByText, queryByText } = render(
+      const { getByPlaceholderText, getByText, queryByText } = render()
         <TestWrapper>
           <HomeScreen />
         </TestWrapper>,
@@ -136,7 +136,7 @@ describe('HomeScreen', () => {
       });
     });
     it('应该能够清除搜索内容', async () => {
-      const { getByPlaceholderText, getByText, queryByTestId } = render(
+      const { getByPlaceholderText, getByText, queryByTestId } = render()
         <TestWrapper>
           <HomeScreen />
         </TestWrapper>,
@@ -156,7 +156,7 @@ describe('HomeScreen', () => {
       });
     });
     it('应该能够点击聊天项导航到详情页', async () => {
-      const { getByText } = render(
+      const { getByText } = render()
         <TestWrapper>
           <HomeScreen />
         </TestWrapper>,
@@ -172,7 +172,7 @@ describe('HomeScreen', () => {
       });
     });
     it('应该支持下拉刷新', async () => {
-      const { getByTestId } = render(
+      const { getByTestId } = render()
         <TestWrapper>
           <HomeScreen />
         </TestWrapper>,
@@ -192,7 +192,7 @@ describe('HomeScreen', () => {
       const LoadingHomeScreen = () => {
         return <HomeScreen />;
       };
-      const { getByText } = render(
+      const { getByText } = render()
         <TestWrapper>
           <LoadingHomeScreen />
         </TestWrapper>,
@@ -208,7 +208,7 @@ describe('HomeScreen', () => {
       // Mock a failing API call
       const originalFetch = global.fetch;
       global.fetch = jest.fn().mockRejectedValue(new Error('Network error'));
-      const { getByText } = render(
+      const { getByText } = render()
         <TestWrapper>
           <HomeScreen />
         </TestWrapper>,
@@ -224,7 +224,7 @@ describe('HomeScreen', () => {
   });
   describe('数据格式测试', () => {
     it('应该正确格式化时间显示', async () => {
-      const { getByText } = render(
+      const { getByText } = render()
         <TestWrapper>
           <HomeScreen />
         </TestWrapper>,
@@ -235,7 +235,7 @@ describe('HomeScreen', () => {
       });
     });
     it('应该正确显示未读消息数量', async () => {
-      const { queryByText } = render(
+      const { queryByText } = render()
         <TestWrapper>
           <HomeScreen />
         </TestWrapper>,
@@ -251,7 +251,7 @@ describe('HomeScreen', () => {
   });
   describe('可访问性测试', () => {
     it('应该有正确的可访问性标签', async () => {
-      const { getByText } = render(
+      const { getByText } = render()
         <TestWrapper>
           <HomeScreen />
         </TestWrapper>,
@@ -266,7 +266,7 @@ describe('HomeScreen', () => {
   describe('性能测试', () => {
     it('应该在合理时间内完成渲染', async () => {
       const startTime = Date.now();
-      const { getByText } = render(
+      const { getByText } = render()
         <TestWrapper>
           <HomeScreen />
         </TestWrapper>,
@@ -283,7 +283,7 @@ describe('HomeScreen', () => {
   describe('边界情况测试', () => {
     it('应该处理空聊天列表', async () => {
       // 这个测试需要mock数据为空的情况
-      const { getByText } = render(
+      const { getByText } = render()
         <TestWrapper>
           <HomeScreen />
         </TestWrapper>,
@@ -294,7 +294,7 @@ describe('HomeScreen', () => {
       });
     });
     it('应该处理长文本消息', async () => {
-      const { getByText } = render(
+      const { getByText } = render()
         <TestWrapper>
           <HomeScreen />
         </TestWrapper>,
@@ -305,7 +305,7 @@ describe('HomeScreen', () => {
       });
     });
     it('应该处理特殊字符', async () => {
-      const { getByPlaceholderText } = render(
+      const { getByPlaceholderText } = render()
         <TestWrapper>
           <HomeScreen />
         </TestWrapper>,
@@ -322,7 +322,7 @@ describe('HomeScreen', () => {
   describe('状态管理测试', () => {
     it('应该正确响应Redux状态变化', async () => {
       const store = createTestStore();
-      const { getByText, rerender } = render(
+      const { getByText, rerender } = render()
         <TestWrapper store={store}>
           <HomeScreen />
         </TestWrapper>,
@@ -340,7 +340,7 @@ describe('HomeScreen', () => {
         });
       });
       // 重新渲染后应该显示用户名
-      rerender(
+      rerender()
         <TestWrapper store={store}>
           <HomeScreen />
         </TestWrapper>,

@@ -1,4 +1,5 @@
 import React from 'react';
+
 import AlgorithmConfig from '../AlgorithmConfig';
 describe('AlgorithmConfig', () => {
   beforeEach(() => {

@@ -22,7 +22,7 @@ expect(() => {
         EcoServicesAPI(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = EcoServicesAPI(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -44,7 +44,7 @@ expect(() => {
         ecoServicesAPI(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = ecoServicesAPI(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -65,7 +65,7 @@ EcoServicesAPI(// test params);
 expect(averageTime).toBeLessThan(1);
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);)
     const startTime = performance.now();
     // Test with large dataset
 EcoServicesAPI(largeDataset);

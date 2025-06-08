@@ -77,56 +77,56 @@ const initialState: BenchmarkState = {,
   }
 };
 // 异步操作
-export const fetchBenchmarkTasks = createAsyncThunk(;
+export const fetchBenchmarkTasks = createAsyncThunk(;)
   'benchmark/fetchTasks',
   async (status?: string) => {
     const tasks = await benchmarkService.listBenchmarks(status);
     return tasks;
   }
 );
-export const fetchBenchmarkResult = createAsyncThunk(;
+export const fetchBenchmarkResult = createAsyncThunk(;)
   'benchmark/fetchResult',
   async (taskId: string) => {
     const result = await benchmarkService.getBenchmarkResult(taskId);
     return result;
   }
 );
-export const fetchHealthStatus = createAsyncThunk(;
+export const fetchHealthStatus = createAsyncThunk(;)
   'benchmark/fetchHealth',
   async () => {
     const status = await benchmarkService.getHealthStatus();
     return status;
   }
 );
-export const fetchPlugins = createAsyncThunk(;
+export const fetchPlugins = createAsyncThunk(;)
   'benchmark/fetchPlugins',
   async () => {
     const plugins = await benchmarkService.listPlugins();
     return plugins;
   }
 );
-export const submitBenchmark = createAsyncThunk(;
+export const submitBenchmark = createAsyncThunk(;)
   'benchmark/submit',
   async (config: BenchmarkConfig) => {
     const taskId = await benchmarkService.submitBenchmark(config);
     return taskId;
   }
 );
-export const submitPluginBenchmark = createAsyncThunk(;
+export const submitPluginBenchmark = createAsyncThunk(;)
   'benchmark/submitPlugin',
   async ({ pluginName, config }: { pluginName: string; config: any }) => {
     const taskId = await benchmarkService.runPluginBenchmark(pluginName, config);
     return taskId;
   }
 );
-export const cancelBenchmark = createAsyncThunk(;
+export const cancelBenchmark = createAsyncThunk(;)
   'benchmark/cancel',
   async (taskId: string) => {
     await benchmarkService.cancelBenchmark(taskId);
     return taskId;
   }
 );
-export const generateReport = createAsyncThunk(;
+export const generateReport = createAsyncThunk(;)
   'benchmark/generateReport',
   async ({ taskId, format }: { taskId: string; format: 'html' | 'json' }) => {
     const reportUrl = await benchmarkService.generateReport(taskId, format);
@@ -134,7 +134,7 @@ export const generateReport = createAsyncThunk(;
   }
 );
 // Slice定义
-const benchmarkSlice = createSlice({name: 'benchmark',initialState,reducers: {// 设置当前任务,
+const benchmarkSlice = createSlice({name: 'benchmark',initialState,reducers: {// 设置当前任务,)
   setCurrentTask: (state, action: PayloadAction<BenchmarkTask | null>) => {state.currentTask = action.payload;
     },
     // 设置当前结果
@@ -324,7 +324,7 @@ export const selectBenchmarkFilters = (state: { benchmark: BenchmarkState }) => 
 export const selectStreamingStatus = (state: { benchmark: BenchmarkState }) => state.benchmark.streaming;
 // 过滤后的任务列表
 export const selectFilteredTasks = (state: { benchmark: BenchmarkState }) => {const { tasks, filters } = state.benchmark;
-  return tasks.filter(task => {if (filters.status && task.status !== filters.status) return false;
+  return tasks.filter(task => {if (filters.status && task.status !== filters.status) return false;)
     if (filters.modelId && task.model_id !== filters.modelId) return false;
     if (filters.benchmarkId && task.benchmark_id !== filters.benchmarkId) return false;
     return true;

@@ -26,7 +26,7 @@ export const GatewayMonitor: React.FC = () => {
     try {
       setError(null);
       // 获取网关状态
-      const [healthResponse, statsResponse] = await Promise.allSettled([
+      const [healthResponse, statsResponse] = await Promise.allSettled([)
         unifiedApiService.getServiceHealth(),
         unifiedApiService.getApiStats(),
       ]);
@@ -74,7 +74,7 @@ export const GatewayMonitor: React.FC = () => {
     apiClient.clearCache();
     loadGatewayStatus();
   };
-  useEffect() => {
+  useEffect(() => {
     loadGatewayStatus();
     // 每30秒自动刷新
     const interval = setInterval(loadGatewayStatus, 30000);
@@ -106,13 +106,13 @@ export const GatewayMonitor: React.FC = () => {
   };
   if (loading && !refreshing) {
     return (
-      <View style={styles.container}>
+  <View style={styles.container}>
         <Text style={styles.loadingText}>加载网关状态中...</Text>
       </View>
     );
   }
   return (
-    <ScrollView;
+  <ScrollView
       style={styles.container}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -124,29 +124,27 @@ export const GatewayMonitor: React.FC = () => {
           <Text style={styles.clearButtonText}>清除缓存</Text>
         </TouchableOpacity>
       </View>
-      {error && (
-        <View style={styles.errorContainer}>
+      {error  && <View style={styles.errorContainer}>
           <Text style={styles.errorText}>⚠️ {error}</Text>
         </View>
       )}
       {}
-      {gatewayStats && (
-        <View style={styles.statsContainer}>
+      {gatewayStats  && <View style={styles.statsContainer}>
           <Text style={styles.sectionTitle}>网关统计</Text>
           <View style={styles.statRow}>
             <Text style={styles.statLabel}>网关状态:</Text>
-            <View style={[styles.statusDot, {
+            <View style={{[styles.statusDot, {
               backgroundColor: gatewayStats.gatewayHealth ? '#4CAF50' : '#F44336',
-            }]} />
+            }}]} />
             <Text style={styles.statValue}>
               {gatewayStats.gatewayHealth ? '在线' : '离线'}
             </Text>
           </View>
           <View style={styles.statRow}>
             <Text style={styles.statLabel}>熔断器状态:</Text>
-            <View style={[styles.statusDot, {
+            <View style={{[styles.statusDot, {
               backgroundColor: getCircuitBreakerColor(gatewayStats.circuitBreakerState),
-            }]} />
+            }}]} />
             <Text style={styles.statValue}>{gatewayStats.circuitBreakerState}</Text>
           </View>
           <View style={styles.statRow}>
@@ -158,27 +156,24 @@ export const GatewayMonitor: React.FC = () => {
       {}
       <View style={styles.servicesContainer}>
         <Text style={styles.sectionTitle}>微服务状态</Text>
-        {services.map((service, index) => (
+        {services.map((service, index) => ())
           <View key={index} style={styles.serviceItem}>
             <View style={styles.serviceHeader}>
-              <View style={[styles.statusDot, { backgroundColor: getStatusColor(service.status) }]} />
+              <View style={{[styles.statusDot, { backgroundColor: getStatusColor(service.status) }}]} />
               <Text style={styles.serviceName}>{service.name}</Text>
-              <Text style={[styles.serviceStatus, { color: getStatusColor(service.status) }]}>
+              <Text style={{[styles.serviceStatus, { color: getStatusColor(service.status) }}]}>
                 {getStatusText(service.status)}
               </Text>
             </View>
             <View style={styles.serviceDetails}>
               <Text style={styles.serviceDetail}>实例数: {service.instances}</Text>
-              {service.responseTime && (
-                <Text style={styles.serviceDetail}>响应时间: {service.responseTime}ms</Text>
+              {service.responseTime  && <Text style={styles.serviceDetail}>响应时间: {service.responseTime}ms</Text>
               )}
-              {service.lastCheck && (
-                <Text style={styles.serviceDetail}>
+              {service.lastCheck  && <Text style={styles.serviceDetail}>
                   最后检查: {new Date(service.lastCheck).toLocaleTimeString()}
                 </Text>
               )}
-              {service.error && (
-                <Text style={styles.errorDetail}>错误: {service.error}</Text>
+              {service.error  && <Text style={styles.errorDetail}>错误: {service.error}</Text>
               )}
             </View>
           </View>

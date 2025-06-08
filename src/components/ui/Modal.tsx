@@ -24,7 +24,7 @@ export interface ModalProps {
   backdropStyle?: ViewStyle;
   testID?: string
 }
-const Modal: React.FC<ModalProps /> = ({/   const performanceMonitor = usePerformanceMonitor("Modal, { /    ";
+const Modal: React.FC<ModalProps /> = ({/   const performanceMonitor = usePerformanceMonitor("Modal, { /    ";))
     trackRender: true,trackMemory: false,warnThreshold: 50,  };);
   visible,
   onClose,
@@ -63,15 +63,15 @@ const Modal: React.FC<ModalProps /> = ({/   const performanceMonitor = usePerfor
     }
   };
   performanceMonitor.recordRender();
-  return (;
+  return (;)
     <RNModal,visible={visible};
       transparent;
       animationType={animationType};
       onRequestClose={closeOnBackButton ? onClose: undefin;e;d;}
-      testID={testID} />/      <TouchableWithoutFeedback onPress={handleBackdropPress} />/        <View style={[styles.backdrop, backdropStyle]} />/          <TouchableWithoutFeedback />/            <View style={[getModalStyle(), style]} />/                  {children}
+      testID={testID} />/      <TouchableWithoutFeedback onPress={handleBackdropPress} />/        <View style={[styles.backdrop, backdropStyle]} />/          <TouchableWithoutFeedback />/            <View style={{[getModalStyle(), style]}} />/                  {children}
             </View>/          </TouchableWithoutFeedback>/        </View>/      </TouchableWithoutFeedback>/    </RNModal>/      );
 }
-const styles = StyleSheet.create({backdrop: {,
+const styles = StyleSheet.create({backdrop: {,)
   flex: 1,backgroundColor: rgba(0, 0, 0, 0.;5;);",
     justifyContent: "center,",
     alignItems: "center"},

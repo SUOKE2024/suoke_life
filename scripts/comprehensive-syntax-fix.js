@@ -93,7 +93,7 @@ const fixRules = [
   
   // 修复数组语法
   {
-    pattern: /\[\s*([^\]]+),\s*;\s*\]/g,
+    pattern: /[\s*([^]]+),\s*;\s*\]/g,
     replacement: '[$1]'
   },
   
@@ -195,7 +195,7 @@ const fixRules = [
   
   // 修复数组类型
   {
-    pattern: /([a-zA-Z_$][a-zA-Z0-9_$]*)\[\s*\],\s*;\s*/g,
+    pattern: /([a-zA-Z_$][a-zA-Z0-9_$]*)[\s*],\s*;\s*/g,
     replacement: '$1[],'
   },
   

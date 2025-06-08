@@ -21,7 +21,7 @@ expect(() => {
         SecurityManager(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = SecurityManager(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -43,7 +43,7 @@ expect(() => {
         securityManager(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = securityManager(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -65,7 +65,7 @@ expect(() => {
         encrypt(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = encrypt(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -87,7 +87,7 @@ expect(() => {
         decrypt(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = decrypt(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -109,7 +109,7 @@ expect(() => {
         checkAccess(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = checkAccess(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -131,7 +131,7 @@ expect(() => {
         grantAccess(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = grantAccess(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -153,7 +153,7 @@ expect(() => {
         checkRateLimit(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = checkRateLimit(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -175,7 +175,7 @@ expect(() => {
         generateSecureToken(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = generateSecureToken(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -197,7 +197,7 @@ expect(() => {
         validateToken(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = validateToken(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -225,7 +225,7 @@ SecurityManager(// test params);
 expect(averageTime).toBeLessThan(1);
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);)
     const startTime = performance.now();
     // Test with large dataset
 SecurityManager(largeDataset);

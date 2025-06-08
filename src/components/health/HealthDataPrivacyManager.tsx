@@ -193,7 +193,7 @@ const HealthDataPrivacyManager: React.FC = () => {
       // 模拟验证零知识证明
       await new Promise(resolve => setTimeout(resolve, 2000));
       // 更新证明状态
-      setZkpProofs(prev => prev.map(proof =>
+      setZkpProofs(prev => prev.map(proof =>))
         proof.proof_id === proofId
           ? { ...proof, is_valid: true }
           : proof
@@ -208,8 +208,7 @@ const HealthDataPrivacyManager: React.FC = () => {
   };
   const revokeDataAccess = async (recordId: string) => {
     try {
-      Alert.alert(
-        '确认撤销',
+      Alert.alert('确认撤销',
         '确定要撤销对此数据的所有访问权限吗？',
         [
           { text: '取消', style: 'cancel' },
@@ -218,7 +217,7 @@ const HealthDataPrivacyManager: React.FC = () => {
             style: 'destructive',
             onPress: async () => {
               // 模拟撤销访问权限
-              setHealthRecords(prev => prev.map(record =>
+              setHealthRecords(prev => prev.map(record =>))
                 record.record_id === recordId
                   ? { ...record, access_permissions: [record.user_id] }
                   : record
@@ -269,10 +268,10 @@ const HealthDataPrivacyManager: React.FC = () => {
         return '#9E9E9E';
     }
   };
-  const renderHealthRecord = (record: HealthDataRecord) => (
+  const renderHealthRecord = (record: HealthDataRecord) => ()
     <Animated.View
       key={record.record_id}
-      style={[
+      style={{[
         styles.recordCard,
         {
           opacity: animatedValue,
@@ -280,7 +279,7 @@ const HealthDataPrivacyManager: React.FC = () => {
             translateY: animatedValue.interpolate({
               inputRange: [0, 1],
               outputRange: [50, 0],
-            }),
+            }}),
           }],
         },
       ]}
@@ -302,16 +301,15 @@ const HealthDataPrivacyManager: React.FC = () => {
           </View>
         </View>
         <View style={styles.recordStatus}>
-          <View style={[
+          <View style={{[
             styles.privacyBadge,
-            { backgroundColor: getPrivacyLevelColor(record.metadata.privacy_level) }
+            { backgroundColor: getPrivacyLevelColor(record.metadata.privacy_level) }}
           ]}>
             <Text style={styles.privacyText}>
               {record.metadata.privacy_level === 'high' ? '高隐私' : '标准'}
             </Text>
           </View>
-          {record.is_verified && (
-            <Ionicons name="shield-checkmark" size={20} color="#4CAF50" />
+          {record.is_verified  && <Ionicons name="shield-checkmark" size={20} color="#4CAF50" />
           )}
         </View>
       </View>
@@ -319,16 +317,13 @@ const HealthDataPrivacyManager: React.FC = () => {
         <View style={styles.detailRow}>
           <Text style={styles.detailLabel}>存储位置:</Text>
           <View style={styles.storageIcons}>
-            {record.metadata.storage_locations.includes('blockchain') && (
-              <MaterialIcons name="link" size={16} color="#FF9800" />
+            {record.metadata.storage_locations.includes('blockchain')  && <MaterialIcons name="link" size={16} color="#FF9800" />
             )}
-            {record.metadata.storage_locations.includes('ipfs') && (
-              <MaterialIcons name="cloud" size={16} color="#2196F3" />
+            {record.metadata.storage_locations.includes('ipfs')  && <MaterialIcons name="cloud" size={16} color="#2196F3" />
             )}
           </View>
         </View>
-        {record.zkp_proof_id && (
-          <View style={styles.detailRow}>
+        {record.zkp_proof_id  && <View style={styles.detailRow}>
             <Text style={styles.detailLabel}>零知识证明:</Text>
             <TouchableOpacity
               style={styles.proofButton}
@@ -364,7 +359,7 @@ const HealthDataPrivacyManager: React.FC = () => {
     </Animated.View>
   );
   const renderPrivacySettings = () => (
-    <View style={styles.settingsContainer}>
+  <View style={styles.settingsContainer}>
       <Text style={styles.sectionTitle}>隐私设置</Text>
       <View style={styles.settingItem}>
         <View style={styles.settingInfo}>
@@ -417,7 +412,7 @@ const HealthDataPrivacyManager: React.FC = () => {
     </View>
   );
   const renderZKPProofModal = () => (
-    <Modal
+  <Modal
       visible={showProofModal}
       animationType="slide"
       transparent={true}
@@ -434,11 +429,10 @@ const HealthDataPrivacyManager: React.FC = () => {
               <Ionicons name="close" size={24} color="#666" />
             </TouchableOpacity>
           </View>
-          {selectedRecord && (
-            <ScrollView style={styles.modalBody}>
+          {selectedRecord  && <ScrollView style={styles.modalBody}>
               {zkpProofs
                 .filter(proof => proof.proof_id === selectedRecord.zkp_proof_id)
-                .map(proof => (
+                .map(proof => ())
                   <View key={proof.proof_id} style={styles.proofDetails}>
                     <View style={styles.proofHeader}>
                       <Ionicons name="shield-checkmark" size={32} color="#4CAF50" />
@@ -471,7 +465,7 @@ const HealthDataPrivacyManager: React.FC = () => {
                       onPress={() => verifyZKPProof(proof.proof_id)}
                       disabled={loading}
                     >
-                      {loading ? (
+                      {loading ? ()
                         <ActivityIndicator color="#FFFFFF" />
                       ) : (
                         <>
@@ -489,7 +483,7 @@ const HealthDataPrivacyManager: React.FC = () => {
     </Modal>
   );
   return (
-    <View style={styles.container}>
+  <View style={styles.container}>
       <LinearGradient
         colors={['#667eea', '#764ba2']}
         style={styles.header}
@@ -506,7 +500,7 @@ const HealthDataPrivacyManager: React.FC = () => {
         </TouchableOpacity>
       </LinearGradient>
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {loading ? (
+        {loading ? ()
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color="#2196F3" />
             <Text style={styles.loadingText}>加载中...</Text>
@@ -526,8 +520,8 @@ const HealthDataPrivacyManager: React.FC = () => {
               </View>
               <View style={styles.statCard}>
                 <Text style={styles.statNumber}>
-                  {Math.round(
-                    (healthRecords.filter(r => r.zkp_proof_id).length /
+                  {Math.round()
+                    (healthRecords.filter(r => r.zkp_proof_id).length /)
                      Math.max(healthRecords.length, 1)) * 100
                   )}%
                 </Text>

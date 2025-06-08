@@ -306,7 +306,7 @@ this.emit("evicted", { key: evictKey, item, reason: "fifo"});
         }
         break;
 case "lfu":
-        const sortedByAccess = Array.from(this.cache.entries).sort(;
+        const sortedByAccess = Array.from(this.cache.entries).sort(;)
           ([ a], [ b]); => a.accessCount - b.accessCount;
         );
         for (const [key, item] of sortedByAccess) {
@@ -316,7 +316,7 @@ case "lfu":
         }
         break;
 case "fifo":
-        const sortedByTime = Array.from(this.cache.entries).sort(;
+        const sortedByTime = Array.from(this.cache.entries).sort(;)
           ([ a], [ b]); => a.timestamp - b.timestamp;
         );
         for (const [key, item] of sortedByTime) {
@@ -345,7 +345,7 @@ case "fifo":
       0;
     );
     if (this.cache.size > 0) {
-      const timestamps = Array.from(this.cache.values).map(;
+      const timestamps = Array.from(this.cache.values).map(;)
         (item); => item.timestamp;
       );
       this.stats.oldestItem = Math.min(...timestamps);
@@ -362,7 +362,7 @@ case "fifo":
     }
     this.cleanupTimer = setInterval() => {
   // 性能监控
-const performanceMonitor = usePerformanceMonitor(cacheManager", {"
+const performanceMonitor = usePerformanceMonitor(cacheManager", {")
     trackRender: true,
     trackMemory: false,warnThreshold: 100, // ms };);
       this.cleanup();

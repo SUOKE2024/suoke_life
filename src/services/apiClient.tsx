@@ -51,7 +51,7 @@ class ApiClient {
   // 设置请求和响应拦截器
   private setupInterceptors() {
     // 请求拦截器
-    this.client.interceptors.request.use(
+    this.client.interceptors.request.use()
       async config => {
         // 添加认证token;
         const token = await AsyncStorage.getItem(STORAGE_CONFIG.KEYS.AUTH_TOKEN);
@@ -102,7 +102,7 @@ class ApiClient {
           return Promise.reject(this.createApiError(ERROR_CODES.NETWORK_ERROR, '网络连接失败'));
         }
         // 处理服务器错误
-        const apiError = this.createApiError(;
+        const apiError = this.createApiError(;)
           error.response.data?.code || ERROR_CODES.OPERATION_FAILED,error.response.data?.message || error.message,error.response.data;
         );
         return Promise.reject(apiError);
@@ -125,7 +125,7 @@ class ApiClient {
       console.error('刷新token失败:', error);
     }
     // 清除认证信息并触发登出事件
-    await AsyncStorage.multiRemove([
+    await AsyncStorage.multiRemove([)
       STORAGE_CONFIG.KEYS.AUTH_TOKEN,
       STORAGE_CONFIG.KEYS.REFRESH_TOKEN,
       STORAGE_CONFIG.KEYS.USER_ID;
@@ -134,7 +134,7 @@ class ApiClient {
   }
   // 刷新token;
   private async refreshToken(refreshToken: string): Promise<ApiResponse> {
-    const response = await axios.post(`${API_CONFIG.SERVICES.AUTH}/auth/refresh`, {refreshToken;
+    const response = await axios.post(`${API_CONFIG.SERVICES.AUTH}/auth/refresh`, {refreshToken;)
     });
     return response.data;
   }
@@ -197,7 +197,7 @@ class ApiClient {
         lastError = error;
         if (attempt < retries) {
           const delay = API_CONFIG.RETRY_DELAY * Math.pow(2, attempt - 1); // 指数退避
-          console.log(
+          console.log()
             `请求失败，${delay}ms后重试 (${attempt}/${retries}):`,
             (error as Error).message || error;
           );
@@ -208,59 +208,59 @@ class ApiClient {
     throw lastError;
   }
   // GET请求
-  async get<T = any>(
+  async get<T = any>()
     url: string,
     params?: unknown,
     config?: Partial<ApiRequest>
   ): Promise<ApiResponse<T>> {
-    return this.request<T>({url,method: 'GET',params,...config;
+    return this.request<T>({url,method: 'GET',params,...config;)
     });
   }
   // POST请求
-  async post<T = any>(
+  async post<T = any>()
     url: string,
     data?: unknown,
     config?: Partial<ApiRequest>
   ): Promise<ApiResponse<T>> {
-    return this.request<T>({url,method: 'POST',data,...config;
+    return this.request<T>({url,method: 'POST',data,...config;)
     });
   }
   // PUT请求
-  async put<T = any>(
+  async put<T = any>()
     url: string,
     data?: unknown,
     config?: Partial<ApiRequest>
   ): Promise<ApiResponse<T>> {
-    return this.request<T>({url,method: 'PUT',data,...config;
+    return this.request<T>({url,method: 'PUT',data,...config;)
     });
   }
   // DELETE请求
   async delete<T = any>(url: string, config?: Partial<ApiRequest>): Promise<ApiResponse<T>> {
-    return this.request<T>({url,method: 'DELETE',...config;
+    return this.request<T>({url,method: 'DELETE',...config;)
     });
   }
   // PATCH请求
-  async patch<T = any>(
+  async patch<T = any>()
     url: string,
     data?: unknown,
     config?: Partial<ApiRequest>
   ): Promise<ApiResponse<T>> {
-    return this.request<T>({url,method: 'PATCH',data,...config;
+    return this.request<T>({url,method: 'PATCH',data,...config;)
     });
   }
   // 上传文件
-  async upload<T = any>(
+  async upload<T = any>()
     url: string,
     formData: FormData,
     config?: Partial<ApiRequest>
   ): Promise<ApiResponse<T>> {
-    return this.request<T>({url,method: 'POST',data: formData,headers: {'Content-Type': 'multipart/form-data';
+    return this.request<T>({url,method: 'POST',data: formData,headers: {'Content-Type': 'multipart/form-data';)
       },...config;
     });
   }
   // 下载文件
   async download(url: string, config?: Partial<ApiRequest>): Promise<Blob> {
-    const response = await this.client.get(url, {responseType: 'blob',...config;
+    const response = await this.client.get(url, {responseType: 'blob',...config;)
     });
     return response.data;
   }

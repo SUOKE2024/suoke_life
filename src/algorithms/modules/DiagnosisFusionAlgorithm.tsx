@@ -97,7 +97,7 @@ export interface DataQualityReport {
     this.weightMatrix.set("palpation", 0.2);
     this.weightMatrix.set("calculation", 0.1);
     if (this.config.weights) {
-      Object.entries(this.config.weights).forEach([key, value]) => {}
+      Object.entries(this.config.weights).forEach((([key, value]) => {}))
         this.weightMatrix.set(key, value);
       });
     }
@@ -124,19 +124,19 @@ export interface DataQualityReport {
       this.emit("fusion:started", { sessionId: input.sessionContext?.sessionId});
       const dataQuality = await this.assessDataQuality(inp;u;t;);
       const evidence = await this.extractEvidence(inp;u;t;);
-      const syndromes = await this.identifySyndromes(;
+      const syndromes = await this.identifySyndromes(;)
         evidence,input.userProf;i;l;e;);
-      const constitution = await this.analyzeConstitution(;
+      const constitution = await this.analyzeConstitution(;)
         evidence,input.userProf;i;l;e;);
-      const riskFactors = await this.assessRiskFactors(;
+      const riskFactors = await this.assessRiskFactors(;)
         syndromes,constitution,input.userProf;i;l;e;);
-      const recommendations = await this.generateRecommendations(;
+      const recommendations = await this.generateRecommendations(;)
         syndromes,constitution,riskFact;o;r;s;);
-      const confidence = this.calculateOverallConfidence(;
+      const confidence = this.calculateOverallConfidence(;)
         evidence,syndromes,dataQualit;y;);
-      const overallAssessment = await this.generateOverallAssessment(;
+      const overallAssessment = await this.generateOverallAssessment(;)
         syndromes,constitution,evide;n;c;e;);
-      const followUpAdvice = await this.generateFollowUpAdvice(;
+      const followUpAdvice = await this.generateFollowUpAdvice(;)
         syndromes,constitution,dataQual;i;t;y;);
       const result: FusionResult = {confidence,
         overallAssessment,
@@ -216,17 +216,17 @@ export interface DataQualityReport {
       evidence.push(...this.extractPalpationEvidence(input.palpationResult));
     }
     if (input.calculationResult) {
-      evidence.push(
+      evidence.push()
         ...this.extractCalculationEvidence(input.calculationResult);
       );
     }
     return eviden;c;e;
   }
-  // 识别证候  private async identifySyndromes(evidence: Evidence[],
+  // 识别证候  private async identifySyndromes(evidence: Evidence[],)
     userProfile?: UserProfile;
   ): Promise<SyndromeResult[] /    >  {
     const syndromes: SyndromeResult[] = [];
-    for (const [syndromeId, pattern] of Array.from(
+    for (const [syndromeId, pattern] of Array.from())
       this.syndromePatterns.entries();
     )) {
       const confidence = this.calculateSyndromeConfidence(evidence, patter;n;);
@@ -247,19 +247,19 @@ export interface DataQualityReport {
     }
     return syndromes.sort(a,b;); => b.confidence - a.confidence);
   }
-  // 分析体质  private async analyzeConstitution(evidence: Evidence[],
+  // 分析体质  private async analyzeConstitution(evidence: Evidence[],)
     userProfile?: UserProfile;
   ): Promise<ConstitutionResult /    >  {
     const constitutionScores = new Map<string, number>(;)
     const constitutionTypes = [;
       "balanced",qi_deficiency","yang_deficiency",yin_deficiency","phlegm_dampness"];
     for (const type of constitutionTypes) {
-      const score = this.calculateConstitutionScore(;
+      const score = this.calculateConstitutionScore(;)
         evidence,
         type,userProfil;e;);
       constitutionScores.set(type, score);
     }
-    const sortedTypes = Array.from(constitutionScores.entries).sort(;
+    const sortedTypes = Array.from(constitutionScores.entries).sort(;)
       (a, b) => b[1] - a[1];
     );
     const primaryType = sortedTypes[0][0];
@@ -268,7 +268,7 @@ export interface DataQualityReport {
     return {primaryType,secondaryTypes,confidence: sortedTypes[0][1],characteristics: constitution?.characteristics.physical || [],tendencies: constitution?.characteristics.pathological || [],recommendations: constitution?.recommendations.lifestyle || [;]
     ;};
   }
-  // 评估风险因素  private async assessRiskFactors(syndromes: SyndromeResult[],
+  // 评估风险因素  private async assessRiskFactors(syndromes: SyndromeResult[],)
     constitution: ConstitutionResult,
     userProfile?: UserProfile;
   ): Promise<RiskFactor[] /    >  {
@@ -279,7 +279,7 @@ export interface DataQualityReport {
       type: "syndrome_risk",
       level: "high",
           description: `${syndrome.name}证候较重，需要及时调理`,
-          prevention: ["定期复查",遵医嘱用药", "调整生活方式"]
+          prevention: ["定期复查", "遵医嘱用药", "调整生活方式"]
         });
       }
     }
@@ -296,18 +296,18 @@ export interface DataQualityReport {
       type: "age_risk",
       level: "medium",
         description: "年龄较大，需要重点关注肾气不足等问题",
-        prevention: ["适度运动",合理饮食", "规律作息"]
+        prevention: ["适度运动", "合理饮食", "规律作息"]
       });
     }
     return riskFacto;r;s;
   }
-  // 生成建议  private async generateRecommendations(syndromes: SyndromeResult[],
+  // 生成建议  private async generateRecommendations(syndromes: SyndromeResult[],)
     constitution: ConstitutionResult,
     riskFactors: RiskFactor[]);: Promise<Recommendation[] /    >  {
     const recommendations: Recommendation[] = [];
     for (const syndrome of syndromes.slice(0, 2)) {
       if (syndrome.confidence > 0.7) {
-        const treatments = await this.knowledgeBase.getTreatmentRecommendations(;
+        const treatments = await this.knowledgeBase.getTreatmentRecommendations(;)
           [syndrome.;i;d;]
         ;);
         for (const treatment of treatments) {
@@ -325,7 +325,7 @@ export interface DataQualityReport {
     recommendations.push({
       category: "lifestyle",
       priority: "medium",
-      title: "体质调理建议",
+      title: "体质调理建议", "
       description: `针对${constitution.primaryType}体质的调理方案`,
       duration: "长期坚持"
     });
@@ -366,22 +366,22 @@ export interface DataQualityReport {
   private extractCalculationEvidence(result: unknown);: Evidence[]  {
     return [];
   }
-  private calculateSyndromeConfidence(evidence: Evidence[],
+  private calculateSyndromeConfidence(evidence: Evidence[],)
     pattern: unknown;);: number  {
     return 0.;7;
   }
   private getRelevantEvidence(evidence: Evidence[], pattern: unknown);: Evidence[]  {
     return evidence.slice(0, 3;);
   }
-  private assessSeverity(evidence: Evidence[],
+  private assessSeverity(evidence: Evidence[],)
     pattern: unknown;): "mild" | "moderate" | "severe"  {
     return "moderate";
   }
-  private assessUrgency(evidence: Evidence[],
+  private assessUrgency(evidence: Evidence[],)
     pattern: unknown;);: "low" | "medium" | "high"  {
     return "medium";
   }
-  private calculateConstitutionScore(evidence: Evidence[],
+  private calculateConstitutionScore(evidence: Evidence[],)
     type: string,
     userProfile?: UserProfile;
   );: number  {
@@ -398,24 +398,24 @@ export interface DataQualityReport {
       syndromes.length > 0;
         ? syndromes.reduce(sum,s;); => sum + s.confidence, 0) / syndromes.length/            : 0.5;
     const qualityScore =;
-      (dataQuality.completeness +;
+      (dataQuality.completeness +;)
         dataQuality.consistency +;
         dataQuality.reliability)      ;3;
     // 记录渲染性能
 performanceMonitor.recordRender();
-    return (;
+    return (;)
       evidenceScore * evidenceWeight +;
       syndromeScore * syndromeWeight +;
       qualityScore * qualityWeigh;t;);
   }
-  private async generateOverallAssessment(syndromes: SyndromeResult[],
+  private async generateOverallAssessment(syndromes: SyndromeResult[],)
     constitution: ConstitutionResult,
     evidence: Evidence[];);: Promise<string>  {
     const assessmentParts: string[] = [];
     if (syndromes.length > 0) {
       const primarySyndrome = syndromes[0];
-      assessmentParts.push(
-        `主要证候为${primarySyndrome.name}，置信度${(
+      assessmentParts.push()
+        `主要证候为${primarySyndrome.name}，置信度${()
           primarySyndrome.confidence * 100;
         ).toFixed(1)}%`
       )
@@ -424,11 +424,11 @@ performanceMonitor.recordRender();
     if (evidence.length > 0) {
       assessmentParts.push(`基于${evidence.length}项诊断证据进行综合分析`);
     }
-    return (;
+    return (;)
       assessmentParts.join("。;";) + "。建议结合专业医师意见进行进一步诊疗。"
     );
   }
-  private async generateFollowUpAdvice(syndromes: SyndromeResult[],
+  private async generateFollowUpAdvice(syndromes: SyndromeResult[],)
     constitution: ConstitutionResult,
     dataQuality: DataQualityReport;);: Promise<string[]>  {
     const advice: string[] = [];

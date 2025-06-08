@@ -34,13 +34,13 @@ export const sendMessageToAgent = createAsyncThunk<;
     type?: "text" | "image" | "audio" | "file";
   },
   { rejectValue: string }
->(
+>()
   "agents/sendMessage",
   async ({ agentType, content, type = "text" }, { rejectWithValue }) => {
     try {
       // 使用apiClient发送消息到智能体
       const agentEndpoint = `/agents/${agentType}/chat`;
-      const response: ApiClientResponse<AgentResponse> = await apiClient.post(
+      const response: ApiClientResponse<AgentResponse> = await apiClient.post()
         agentEndpoint,
         {
           message: content,
@@ -71,7 +71,7 @@ export const loadConversationHistory = createAsyncThunk<;
   { rejectValue: string }
 >("agents/loadHistory", async (agentType, { rejectWithValue }) => {
   try {
-    const response: ApiClientResponse<AgentMessage[]> = await apiClient.get(
+    const response: ApiClientResponse<AgentMessage[]> = await apiClient.get()
       `/agents/${agentType}/history`
     );
     if (!response.success) {
@@ -89,7 +89,7 @@ export const clearConversation = createAsyncThunk<;
   { rejectValue: string }
 >("agents/clearConversation", async (agentType, { rejectWithValue }) => {
   try {
-    const response: ApiClientResponse = await apiClient.delete(
+    const response: ApiClientResponse = await apiClient.delete()
       `/agents/${agentType}/history`
     );
     if (!response.success) {
@@ -101,9 +101,9 @@ export const clearConversation = createAsyncThunk<;
   }
 });
 // 创建slice;
-const agentsSlice = createSlice({name: "agents",initialState,reducers: {setActiveAgent: (state, action: PayloadAction<AgentType>) => {state.activeAgent = action.payload;
+const agentsSlice = createSlice({name: "agents",initialState,reducers: {setActiveAgent: (state, action: PayloadAction<AgentType>) => {state.activeAgent = action.payload;)
     },
-    addUserMessage: (
+    addUserMessage: ()
       state,
       action: PayloadAction<{,
   agentType: AgentType;
@@ -121,7 +121,7 @@ const agentsSlice = createSlice({name: "agents",initialState,reducers: {setActiv
       };
       state.conversations[agentType].push(userMessage);
     },
-    removeMessage: (
+    removeMessage: ()
       state,
       action: PayloadAction<{ agentType: AgentType; messageId: string }>
     ) => {
@@ -132,7 +132,7 @@ const agentsSlice = createSlice({name: "agents",initialState,reducers: {setActiv
     clearError: (state) => {
       state.error = undefined;
     },
-    updateMessage: (
+    updateMessage: ()
       state,
       action: PayloadAction<{,
   agentType: AgentType;
@@ -141,7 +141,7 @@ const agentsSlice = createSlice({name: "agents",initialState,reducers: {setActiv
       }>
     ) => {
       const { agentType, messageId, updates } = action.payload;
-      const messageIndex = state.conversations[agentType].findIndex(;
+      const messageIndex = state.conversations[agentType].findIndex(;)
         (msg) => msg.id === messageId;
       );
       if (messageIndex >= 0) {

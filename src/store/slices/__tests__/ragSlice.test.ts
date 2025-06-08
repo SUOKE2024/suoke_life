@@ -10,7 +10,7 @@ import ragReducer, {queryRAG,
 } from '../ragSlice';
 // Mock API responses
 const mockSuccessResponse = {success: true,data: {
-      answer: "测试回答",
+      answer: "测试回答", "
       confidence: 0.95,sources: ['测试来源'];
   };
 };
@@ -44,7 +44,7 @@ describe('ragSlice', () => {
     it('应该清除缓存', () => {
       // 先添加一些缓存数据
       store.dispatch(queryRAG.fulfilled(mockSuccessResponse, 'requestId', {
-      query: "测试查询",
+      query: "测试查询", "
       type: 'consultation'
       }));
       // 清除缓存
@@ -57,7 +57,7 @@ describe('ragSlice', () => {
     it('应该清除历史记录', () => {
       // 先添加历史记录
       store.dispatch(queryRAG.fulfilled(mockSuccessResponse, 'requestId', {
-      query: "测试查询",
+      query: "测试查询", "
       type: 'consultation'
       }));
       // 清除历史
@@ -83,7 +83,7 @@ describe('ragSlice', () => {
   describe('异步操作 - queryRAG', () => {
     it('应该处理查询开始状态', () => {
       store.dispatch(queryRAG.pending('requestId', {
-      query: "测试查询",
+      query: "测试查询", "
       type: 'consultation'
       }));
       const state = store.getState().rag;
@@ -93,7 +93,7 @@ describe('ragSlice', () => {
     });
     it('应该处理查询成功状态', () => {
       const queryRequest = {
-      query: "测试查询",
+      query: "测试查询", "
       type: 'consultation' as const;
       };
       store.dispatch(queryRAG.fulfilled(mockSuccessResponse, 'requestId', queryRequest));
@@ -110,7 +110,7 @@ describe('ragSlice', () => {
       query: "测试查询",
       type: 'consultation' as const;
       };
-      store.dispatch(queryRAG.rejected(
+      store.dispatch(queryRAG.rejected())
         {
       name: "Error",
       message: '网络错误' },
@@ -126,7 +126,7 @@ describe('ragSlice', () => {
   describe('异步操作 - streamQueryRAG', () => {
     it('应该处理流式查询开始状态', () => {
       store.dispatch(streamQueryRAG.pending('requestId', {
-      query: "流式查询测试",
+      query: "流式查询测试", "
       type: 'consultation'
       }));
       const state = store.getState().rag;
@@ -153,11 +153,11 @@ describe('ragSlice', () => {
   });
   describe('异步操作 - analyzeTCMSyndrome', () => {
     it('应该处理中医分析成功状态', () => {
-      const analysisRequest = {symptoms: ["头痛",失眠'],constitution: '气虚质';
+      const analysisRequest = {symptoms: ["头痛", "失眠'],constitution: '气虚质';
       };
       const analysisResponse = {success: true,data: {
-      syndrome: "心脾两虚证",
-      confidence: 0.88,description: '心脾两虚，气血不足',recommendations: ["补益心脾",养血安神'];
+      syndrome: "心脾两虚证", "
+      confidence: 0.88,description: '心脾两虚，气血不足',recommendations: ["补益心脾", "养血安神'];
         };
       };
       store.dispatch(analyzeTCMSyndrome.fulfilled(analysisResponse, 'requestId', analysisRequest));
@@ -170,13 +170,13 @@ describe('ragSlice', () => {
   describe('异步操作 - recommendHerbs', () => {
     it('应该处理中药推荐成功状态', () => {
       const recommendRequest = {
-      syndrome: "肝郁气滞证",
+      syndrome: "肝郁气滞证", "
       constitution: '气郁质';
       };
       const recommendResponse = {success: true,data: {formulas: [;
             {
       name: "逍遥散",
-      ingredients: ["柴胡",当归', '白芍'],dosage: '每日两次，每次6g',duration: '2-4周';
+      ingredients: ["柴胡", "当归', '白芍'],dosage: '每日两次，每次6g',duration: '2-4周';
             };
           ],precautions: ['孕妇慎用'];
         };
@@ -191,13 +191,13 @@ describe('ragSlice', () => {
   describe('性能指标', () => {
     it('应该正确更新性能指标', () => {
       const queryRequest = {
-      query: "性能测试",
+      query: "性能测试", "
       type: 'consultation' as const;
       };
       // 成功查询
       store.dispatch(queryRAG.fulfilled(mockSuccessResponse, 'requestId1', queryRequest));
       // 失败查询
-      store.dispatch(queryRAG.rejected(
+      store.dispatch(queryRAG.rejected())
         {
       name: "Error",
       message: '错误' },
@@ -212,7 +212,7 @@ describe('ragSlice', () => {
     });
     it('应该记录响应时间', () => {
       const queryRequest = {
-      query: "响应时间测试",
+      query: "响应时间测试", "
       type: 'consultation' as const;
       };
       // 模拟查询开始
@@ -238,7 +238,7 @@ describe('ragSlice', () => {
     });
     it('应该计算缓存命中率', () => {
       const queryRequest = {
-      query: "缓存测试",
+      query: "缓存测试", "
       type: 'consultation' as const;
       };
       // 第一次查询（缓存未命中）
@@ -253,7 +253,7 @@ describe('ragSlice', () => {
   describe('离线模式', () => {
     it('应该在离线时使用缓存', () => {
       const queryRequest = {
-      query: "离线测试",
+      query: "离线测试", "
       type: 'consultation' as const;
       };
       // 在线时添加到缓存

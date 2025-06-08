@@ -17,11 +17,11 @@ export const AgentChatBubble: React.FC<AgentChatBubbleProps> = ({
   onPlayVoice,
 }) => {
   return (
-    <View style={styles.row}>
+  <View style={styles.row}>
       <AgentAvatar agentType={agentType} emotion={emotion} size={40} />
       <View style={styles.bubble}>
-        {isVoice ? (
-          <TouchableOpacity;
+        {isVoice ? ()
+          <TouchableOpacity
             onPress={onPlayVoice}
             style={styles.voiceBtn}
             accessibilityLabel="播放智能体语音回复"

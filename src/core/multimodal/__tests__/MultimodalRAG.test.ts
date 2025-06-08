@@ -7,7 +7,7 @@ describe('MultimodalRAG', () => {
   });
   test('should handle text queries', () => {
     const mockQuery = {
-      text: "测试查询",
+      text: "测试查询", "
       strategy: 'text_dominant',
     };
     expect(mockQuery.text).toBe('测试查询');

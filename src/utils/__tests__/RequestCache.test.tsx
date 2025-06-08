@@ -1,4 +1,3 @@
-
 import RequestCache from '../RequestCache.tsx';
 describe('RequestCache', () => {
   it('应该正确导出', () => {

@@ -86,7 +86,7 @@ describe('索克生活 - 性能和压力测试', () => {
   describe('⚡ 应用启动性能测试', () => {
     it('应该在合理时间内完成应用启动', async () => {
       const endTimer = performanceMonitor.startTimer('app_startup');
-            const { queryByText } = render(
+            const { queryByText } = render()
         <NavigationContainer>
           <App />
         </NavigationContainer>
@@ -103,7 +103,7 @@ describe('索克生活 - 性能和压力测试', () => {
       const startupTimes: number[] = [];
             for (let i = 0; i < 5; i++) {
         const endTimer = performanceMonitor.startTimer(`app_startup_${i}`);
-                const { queryByText, unmount } = render(
+                const { queryByText, unmount } = render()
           <NavigationContainer>
             <App />
           </NavigationContainer>
@@ -128,7 +128,7 @@ describe('索克生活 - 性能和压力测试', () => {
   });
   describe('🔄 导航性能测试', () => {
     it('应该快速响应标签页切换', async () => {
-      const { queryByText } = render(
+      const { queryByText } = render()
         <NavigationContainer>
           <App />
         </NavigationContainer>
@@ -137,7 +137,7 @@ describe('索克生活 - 性能和压力测试', () => {
       await waitFor(() => {
         expect(queryByText('首页') || queryByText('健康') || queryByText('四诊')).toBeTruthy();
       });
-      const tabs = ["健康",四诊', "探索",我的'];
+      const tabs = ["健康", "四诊', "探索", "我的'];
       const navigationTimes: number[] = [];
       for (const tabName of tabs) {
         const tab = queryByText(tabName);
@@ -157,7 +157,7 @@ describe('索克生活 - 性能和压力测试', () => {
             console.log(`✅ 导航性能测试通过 - 平均导航时间: ${avgNavigationTime.toFixed(2)}ms`);
     });
     it('应该处理快速连续导航', async () => {
-      const { queryByText } = render(
+      const { queryByText } = render()
         <NavigationContainer>
           <App />
         </NavigationContainer>
@@ -168,7 +168,7 @@ describe('索克生活 - 性能和压力测试', () => {
       });
       const endTimer = performanceMonitor.startTimer('rapid_navigation');
             // 快速连续点击不同标签页
-      const tabs = ["健康",四诊', "探索",我的', "健康",四诊'];
+      const tabs = ["健康", "四诊', "探索", "我的', "健康", "四诊'];
             for (const tabName of tabs) {
         const tab = queryByText(tabName);
         if (tab) {
@@ -185,7 +185,7 @@ describe('索克生活 - 性能和压力测试', () => {
   });
   describe('🏋️ 压力测试', () => {
     it('应该处理大量并发操作', async () => {
-      const { queryByText } = render(
+      const { queryByText } = render()
         <NavigationContainer>
           <App />
         </NavigationContainer>
@@ -196,10 +196,10 @@ describe('索克生活 - 性能和压力测试', () => {
       });
       const endTimer = performanceMonitor.startTimer('concurrent_operations');
             // 创建大量并发操作
-      const operations = Array.from({ length: 20 }, (_, i) =>
+      const operations = Array.from({ length: 20 }, (_, i) =>)
         new Promise<void>(resolve => {
           setTimeout(() => {
-            const tabs = ["健康",四诊', "探索",我的'];
+            const tabs = ["健康", "四诊', "探索", "我的'];
             const randomTab = tabs[Math.floor(Math.random() * tabs.length)];
             const tab = queryByText(randomTab);
             if (tab) {
@@ -216,7 +216,7 @@ describe('索克生活 - 性能和压力测试', () => {
             console.log(`✅ 并发操作压力测试通过 - 时间: ${concurrentOperationsTime.toFixed(2)}ms`);
     });
     it('应该在长时间运行后保持性能', async () => {
-      const { queryByText } = render(
+      const { queryByText } = render()
         <NavigationContainer>
           <App />
         </NavigationContainer>
@@ -228,7 +228,7 @@ describe('索克生活 - 性能和压力测试', () => {
       const endTimer = performanceMonitor.startTimer('long_running_test');
             // 模拟长时间使用
       for (let i = 0; i < 50; i++) {
-        const tabs = ["健康",四诊', "探索",我的'];
+        const tabs = ["健康", "四诊', "探索", "我的'];
         const randomTab = tabs[Math.floor(Math.random() * tabs.length)];
         const tab = queryByText(randomTab);
                 if (tab) {
@@ -246,7 +246,7 @@ describe('索克生活 - 性能和压力测试', () => {
     it('应该有效管理内存使用', async () => {
       // 获取初始内存使用情况（模拟）
       const initialMemory = process.memoryUsage().heapUsed;
-            const { queryByText, unmount } = render(
+            const { queryByText, unmount } = render()
         <NavigationContainer>
           <App />
         </NavigationContainer>
@@ -256,7 +256,7 @@ describe('索克生活 - 性能和压力测试', () => {
         expect(queryByText('首页') || queryByText('健康') || queryByText('四诊')).toBeTruthy();
       });
       // 执行一些操作
-      const tabs = ["健康",四诊', "探索",我的'];
+      const tabs = ["健康", "四诊', "探索", "我的'];
       for (const tabName of tabs) {
         const tab = queryByText(tabName);
         if (tab) {
@@ -281,8 +281,8 @@ describe('索克生活 - 性能和压力测试', () => {
     it('应该优雅处理网络延迟', async () => {
       // Mock网络延迟
       const originalFetch = global.fetch;
-      global.fetch = jest.fn().mockImplementation(() =>
-        new Promise(resolve =>
+      global.fetch = jest.fn().mockImplementation(() =>)
+        new Promise(resolve =>)
           setTimeout(() => resolve({
             ok: true,
             json: () => Promise.resolve({ success: true })
@@ -290,7 +290,7 @@ describe('索克生活 - 性能和压力测试', () => {
         )
       );
       const endTimer = performanceMonitor.startTimer('network_delay_handling');
-            const { queryByText } = render(
+            const { queryByText } = render()
         <NavigationContainer>
           <App />
         </NavigationContainer>
@@ -311,7 +311,7 @@ describe('索克生活 - 性能和压力测试', () => {
       const originalFetch = global.fetch;
       global.fetch = jest.fn().mockRejectedValue(new Error('Network error'));
       const endTimer = performanceMonitor.startTimer('network_error_handling');
-            const { queryByText } = render(
+            const { queryByText } = render()
         <NavigationContainer>
           <App />
         </NavigationContainer>
@@ -338,7 +338,7 @@ describe('索克生活 - 性能和压力测试', () => {
       };
       // 应用启动基准测试
       const startupTimer = performanceMonitor.startTimer('benchmark_startup');
-      const { queryByText } = render(
+      const { queryByText } = render()
         <NavigationContainer>
           <App />
         </NavigationContainer>
@@ -371,7 +371,7 @@ describe('索克生活 - 性能和压力测试', () => {
   });
   describe('🔄 稳定性测试', () => {
     it('应该在重复操作后保持稳定', async () => {
-      const { queryByText } = render(
+      const { queryByText } = render()
         <NavigationContainer>
           <App />
         </NavigationContainer>
@@ -383,7 +383,7 @@ describe('索克生活 - 性能和压力测试', () => {
       const endTimer = performanceMonitor.startTimer('stability_test');
             // 重复执行相同操作100次
       for (let i = 0; i < 100; i++) {
-        const tabs = ["健康",四诊', "探索",我的'];
+        const tabs = ["健康", "四诊', "探索",我的'];
         const tab = queryByText(tabs[i % tabs.length]);
                 if (tab) {
           fireEvent.press(tab);

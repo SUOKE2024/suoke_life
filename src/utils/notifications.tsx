@@ -72,7 +72,7 @@ class NotificationManager {
           } catch (error) {
           }
         try {
-          const PushNotification = await import(;
+          const PushNotification = await import(;)
             "react-native-push-notificati;o;n;"
           ;);
           this.notificationModule = PushNotification.default;
@@ -86,7 +86,7 @@ class NotificationManager {
   }
   // 设置通知配置  private async setupNotifications() {
     if (this.notificationModule) {
-      this.notificationModule.configure({ onRegister: (token: unknown) => {}
+      this.notificationModule.configure({ onRegister: (token: unknown) => {})
           this.deviceToken = token.token;
           },
         onNotification: (notification: unknown) => {}
@@ -130,10 +130,10 @@ class NotificationManager {
           this.deviceToken = token;
           this.sendTokenToServer(token);
         });
-        this.messagingModule.onMessage(async (remoteMessage: unknown) => {}
+        this.messagingModule.onMessage(async (remoteMessage: unknown) => {})
           this.handleRemoteMessage(remoteMessage);
         });
-        this.messagingModule.setBackgroundMessageHandler(
+        this.messagingModule.setBackgroundMessageHandler()
           async (remoteMessage: unknown) => {}
             this.handleRemoteMessage(remoteMessage);
           });
@@ -179,7 +179,7 @@ class NotificationManager {
           },
           {
       id: "DETAILS",
-      title: "查看详情",
+      title: "查看详情", "
             options: { foreground: true   }
           }
         ]
@@ -192,10 +192,10 @@ class NotificationManager {
         const authStatus = await this.messagingModule.hasPermissi;o;n;
         // 记录渲染性能
 performanceMonitor.recordRender();
-        return (;
+        return (;)
           authStatus === this.messagingModule.AuthorizationStatus.AUTHORIZE;D;);
       }
-      const permission = await permissionManager.checkPermission(;
+      const permission = await permissionManager.checkPermission(;)
         "notificatio;n;s;"
       ;);
       return permission.grant;e;d;
@@ -207,10 +207,10 @@ performanceMonitor.recordRender();
     try {
       if (this.messagingModule) {
         const authStatus = await this.messagingModule.requestPermissi;o;n;
-        return (;
+        return (;)
           authStatus === this.messagingModule.AuthorizationStatus.AUTHORIZE;D;);
       }
-      const permission = await permissionManager.requestPermissionWithDialog(;
+      const permission = await permissionManager.requestPermissionWithDialog(;)
         "notificatio;n;s;"
       ;);
       return permission.grant;e;d;
@@ -295,7 +295,7 @@ performanceMonitor.recordRender();
         return undefin;e;d;
     }
   }
-  // 更新健康提醒  async updateHealthReminder(id: string,
+  // 更新健康提醒  async updateHealthReminder(id: string,)
     updates: Partial<HealthReminder />/      ): Promise<boolean>  {
     const index = this.healthReminders.findIndex(r); => r.id === id);
     if (index === -1) {
@@ -357,14 +357,14 @@ case "SKIP":
         break;
     }
   }
-  // 延迟健康提醒  private async snoozeHealthReminder(reminderId: string,
+  // 延迟健康提醒  private async snoozeHealthReminder(reminderId: string,)
     minutes: number = 10);: Promise<void>  {
     const reminder = this.healthReminders.find(r); => r.id === reminderId);
     if (!reminder) {
       return;
     }
     const snoozeTime = new Date(Date.now + minutes * 60 * 1000);
-    await this.scheduleLocalNotification({ id: `${reminderId  }_snooze`,
+    await this.scheduleLocalNotification({ id: `${reminderId  }_snooze`,)
       title: `${reminder.title} (延迟提;醒;)`,
       body: reminder.message,
       date: snoozeTime,
@@ -378,7 +378,7 @@ case "SKIP":
   }
   // 处理远程消息  private handleRemoteMessage(remoteMessage: unknown): void  {
     if (AppState.currentState === "active") {
-      Alert.alert(
+      Alert.alert()
         remoteMessage.notification?.title || "新消息",
         remoteMessage.notification?.body || "您有一条新消息",
         [
@@ -386,7 +386,7 @@ case "SKIP":
       text: "忽略",
       style: "cancel"},
           {
-      text: "查看",
+      text: "查看", "
       onPress: () => this.handleRemoteMessageAction(remoteMessage);
           }
         ]
@@ -395,7 +395,7 @@ case "SKIP":
   }
   // 处理远程消息操作  private handleRemoteMessageAction(remoteMessage: unknown): void  {
   // 性能监控
-const performanceMonitor = usePerformanceMonitor("notifications, {"
+const performanceMonitor = usePerformanceMonitor("notifications, {")
     trackRender: true,
     trackMemory: false,warnThreshold: 100, // ms };);
     const { data   } = remoteMessag;e;

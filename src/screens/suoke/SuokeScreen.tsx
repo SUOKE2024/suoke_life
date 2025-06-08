@@ -72,7 +72,7 @@ const SuokeScreen: React.FC = () => {
         rating: 4.8,
         reviews: 256,
         description: '宁夏有机枸杞，富含花青素和维生素',
-        tags: ["有机",养肝明目', '抗氧化'],
+        tags: ["有机", "养肝明目', '抗氧化'],
         isRecommended: true,
         discount: 30,
       },
@@ -86,7 +86,7 @@ const SuokeScreen: React.FC = () => {
         rating: 4.9,
         reviews: 189,
         description: '长白山野生灵芝，增强免疫力',
-        tags: ["野生",免疫调节', '安神'],
+        tags: ["野生", "免疫调节', '安神'],
         isRecommended: true,
         discount: 25,
       },
@@ -99,7 +99,7 @@ const SuokeScreen: React.FC = () => {
         rating: 4.6,
         reviews: 432,
         description: '天然蜂蜜配柠檬，清热润燥',
-        tags: ["天然",润燥', '维C'],
+        tags: ["天然", "润燥', '维C'],
       },
       {
       id: "4",
@@ -111,7 +111,7 @@ const SuokeScreen: React.FC = () => {
         rating: 4.7,
         reviews: 98,
         description: '精选药食同源食材，滋补养生',
-        tags: ["药膳",滋补', '调理'],
+        tags: ["药膳", "滋补', '调理'],
         discount: 23,
       },
       {
@@ -123,7 +123,7 @@ const SuokeScreen: React.FC = () => {
         rating: 4.5,
         reviews: 167,
         description: '便携式艾灸贴，温经散寒',
-        tags: ["艾灸",温经', '便携'],
+        tags: ["艾灸", "温经', '便携'],
       },
       {
       id: "6",
@@ -135,7 +135,7 @@ const SuokeScreen: React.FC = () => {
         rating: 4.8,
         reviews: 234,
         description: '天然牛角刮痧板，疏通经络',
-        tags: ["刮痧",经络', '天然'],
+        tags: ["刮痧", "经络', '天然'],
         discount: 24,
       },
     ];
@@ -235,7 +235,7 @@ const SuokeScreen: React.FC = () => {
       setCategories(categoriesData);
     } catch (error) {
       console.error('加载数据失败:', error);
-      Alert.alert("错误",加载数据失败，请稍后重试');
+      Alert.alert("错误", "加载数据失败，请稍后重试');
     } finally {
       setLoading(false);
     }
@@ -247,7 +247,7 @@ const SuokeScreen: React.FC = () => {
     setRefreshing(false);
   }, [loadData]);
   // 初始化
-  useEffect() => {
+  useEffect(() => {
     loadData();
   }, [loadData]);
   // 过滤产品
@@ -256,7 +256,7 @@ const SuokeScreen: React.FC = () => {
     : products.filter(product => product.category === selectedCategory);
   // 处理产品点击
   const handleProductPress = (product: Product) => {
-    Alert.alert(
+    Alert.alert()
       product.name,
       `${product.description}\n\n价格: ¥${product.price}`,
       [
@@ -264,17 +264,17 @@ const SuokeScreen: React.FC = () => {
       text: "取消",
       style: 'cancel' },
         {
-      text: "立即购买",
+      text: "立即购买", "
       onPress: () => console.log('购买:', product.name) },
         {
-      text: "加入购物车",
+      text: "加入购物车", "
       onPress: () => console.log('加入购物车:', product.name) },
       ],
     );
   };
   // 处理服务点击
   const handleServicePress = (service: Service) => {
-    Alert.alert(
+    Alert.alert()
       service.title,
       `${service.description}\n\n${service.price ? `价格: ¥${service.price}` : '免费服务'}`,
       [
@@ -282,31 +282,31 @@ const SuokeScreen: React.FC = () => {
       text: "取消",
       style: 'cancel' },
         {
-      text: "立即预约",
+      text: "立即预约", "
       onPress: () => console.log('预约:', service.title) },
       ],
     );
   };
   // 渲染轮播图
   const renderBanner = () => (
-    <View style={styles.bannerContainer}>
-      <ScrollView;
+  <View style={styles.bannerContainer}>
+      <ScrollView
         horizontal;
         pagingEnabled;
         showsHorizontalScrollIndicator={false}
         style={styles.bannerScroll}
       >
-        <View style={[styles.bannerItem, { backgroundColor: '#FF6B6B' }]}>
+        <View style={{[styles.bannerItem, { backgroundColor: '#FF6B6B' }}]}>
           <Text style={styles.bannerTitle}>春季养生特惠</Text>
           <Text style={styles.bannerSubtitle}>精选中药材 限时8折</Text>
           <Icon name="leaf" size={40} color="#FFFFFF" style={styles.bannerIcon}>
         </View>
-        <View style={[styles.bannerItem, { backgroundColor: '#4ECDC4' }]}>
+        <View style={{[styles.bannerItem, { backgroundColor: '#4ECDC4' }}]}>
           <Text style={styles.bannerTitle}>名医在线问诊</Text>
           <Text style={styles.bannerSubtitle}>三甲医院专家 24小时服务</Text>
           <Icon name="doctor" size={40} color="#FFFFFF" style={styles.bannerIcon}>
         </View>
-        <View style={[styles.bannerItem, { backgroundColor: '#45B7D1' }]}>
+        <View style={{[styles.bannerItem, { backgroundColor: '#45B7D1' }}]}>
           <Text style={styles.bannerTitle}>AI体质检测</Text>
           <Text style={styles.bannerSubtitle}>智能分析 精准调理</Text>
           <Icon name="brain" size={40} color="#FFFFFF" style={styles.bannerIcon}>
@@ -316,31 +316,30 @@ const SuokeScreen: React.FC = () => {
   );
   // 渲染分类选择器
   const renderCategorySelector = () => (
-    <View style={styles.categoryContainer}>
+  <View style={styles.categoryContainer}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {categories.map(category) => (
-          <TouchableOpacity;
+        {categories.map(category) => ()
+          <TouchableOpacity
             key={category.id}
-            style={[
+            style={{[
               styles.categoryItem,
               selectedCategory === category.id && styles.categoryItemActive,
-              { borderColor: category.color },
+              { borderColor: category.color }},
             ]}
             onPress={() => setSelectedCategory(category.id)}
           >
-            <Icon;
+            <Icon
               name={category.icon}
               size={20}
               color={selectedCategory === category.id ? '#FFFFFF' : category.color}
             />
-            <Text style={[
+            <Text style={{[
               styles.categoryText,
               selectedCategory === category.id && styles.categoryTextActive,
-            ]}>
+            ]}}>
               {category.name}
             </Text>
-            {category.count > 0 && (
-        <View style={styles.categoryBadge}>
+            {category.count > 0  && <View style={styles.categoryBadge}>
                 <Text style={styles.categoryBadgeText}>{category.count}</Text>
               </View>
             )}
@@ -350,17 +349,16 @@ const SuokeScreen: React.FC = () => {
     </View>
   );
   // 渲染服务卡片
-  const renderServiceCard = ({ item }: { item: Service }) => (
-    <TouchableOpacity;
-      style={[styles.serviceCard, { borderLeftColor: item.color }]}
+  const renderServiceCard = ({ item }: { item: Service }) => ()
+    <TouchableOpacity
+      style={{[styles.serviceCard, { borderLeftColor: item.color }}]}
       onPress={() => handleServicePress(item)}
     >
       <View style={styles.serviceHeader}>
-        <View style={[styles.serviceIcon, { backgroundColor: item.color + '20' }]}>
+        <View style={{[styles.serviceIcon, { backgroundColor: item.color + '20' }}]}>
           <Icon name={item.icon} size={24} color={item.color} />
         </View>
-        {item.isPopular && (
-        <View style={styles.popularBadge}>
+        {item.isPopular  && <View style={styles.popularBadge}>
             <Text style={styles.popularText}>热门</Text>
           </View>
         )}
@@ -371,7 +369,7 @@ const SuokeScreen: React.FC = () => {
         {item.description}
       </Text>
       <View style={styles.serviceFooter}>
-        {item.price ? (
+        {item.price ? ()
           <Text style={styles.servicePrice}>¥{item.price}</Text>
         ) : (
           <Text style={styles.serviceFree}>免费</Text>
@@ -381,18 +379,16 @@ const SuokeScreen: React.FC = () => {
     </TouchableOpacity>
   );
   // 渲染产品卡片
-  const renderProductCard = ({ item }: { item: Product }) => (
-    <TouchableOpacity;
+  const renderProductCard = ({ item }: { item: Product }) => ()
+    <TouchableOpacity
       style={styles.productCard}
       onPress={() => handleProductPress(item)}
     >
-      {item.isRecommended && (
-        <View style={styles.recommendedBadge}>
+      {item.isRecommended  && <View style={styles.recommendedBadge}>
           <Text style={styles.recommendedText}>推荐</Text>
         </View>
       )}
-      {item.discount && (
-        <View style={styles.discountBadge}>
+      {item.discount  && <View style={styles.discountBadge}>
           <Text style={styles.discountText}>-{item.discount}%</Text>
         </View>
       )}
@@ -405,7 +401,7 @@ const SuokeScreen: React.FC = () => {
           {item.description}
         </Text>
         <View style={styles.productTags}>
-          {item.tags.slice(0, 2).map((tag, index) => (
+          {item.tags.slice(0, 2).map((tag, index) => ())
             <View key={index} style={styles.productTag}>
               <Text style={styles.productTagText}>{tag}</Text>
             </View>
@@ -418,8 +414,7 @@ const SuokeScreen: React.FC = () => {
         </View>
         <View style={styles.productPricing}>
           <Text style={styles.productPrice}>¥{item.price}</Text>
-          {item.originalPrice && (
-            <Text style={styles.originalPrice}>¥{item.originalPrice}</Text>
+          {item.originalPrice  && <Text style={styles.originalPrice}>¥{item.originalPrice}</Text>
           )}
         </View>
       </View>
@@ -428,7 +423,7 @@ const SuokeScreen: React.FC = () => {
   // 渲染加载状态
   if (loading) {
     return (
-      <SafeAreaView style={styles.container}>
+  <SafeAreaView style={styles.container}>
         <StatusBar barStyle="dark-content" backgroundColor="#F8F9FA" />
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#4A90E2" />
@@ -438,12 +433,12 @@ const SuokeScreen: React.FC = () => {
     );
   }
   return (
-    <SafeAreaView style={styles.container}>
+  <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#F8F9FA" />
-      <ScrollView;
+      <ScrollView
         style={styles.scrollView}
         refreshControl={
-          <RefreshControl;
+          <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
             colors={['#4A90E2']}
@@ -467,7 +462,7 @@ const SuokeScreen: React.FC = () => {
               <Text style={styles.sectionMore}>查看全部</Text>
             </TouchableOpacity>
           </View>
-          <FlatList;
+          <FlatList
             data={services}
             renderItem={renderServiceCard}
             keyExtractor={(item) => item.id}
@@ -487,7 +482,7 @@ const SuokeScreen: React.FC = () => {
           {}
           {renderCategorySelector()}
           {}
-          <FlatList;
+          <FlatList
             data={filteredProducts}
             renderItem={renderProductCard}
             keyExtractor={(item) => item.id}

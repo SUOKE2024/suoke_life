@@ -1,41 +1,8 @@
-import { SafeAreaView } from "react-native-safe-area-context";
-import { usePerformanceMonitor  } from "../../placeholder";../hooks/usePerformanceMonitor";/      View,"
+import { SafeAreaView } from MESSAGE_74;
+import { usePerformanceMonitor  } from "../../placeholderMESSAGE_23;/      View,"
 import React from "react";
-import Icon from "../../../components/common/Icon";
-import { colors, spacing } from ../../../constants/theme" // ";
-import React,{ useState } from "react";
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Alert,
-  Modal,
-  ActivityIndicator,
-  { Switch } from react-native""
-interface HealthDataRecord {
-  id: string;
-  type: "diagnosis | "vitals" | medication" | "exercise | "diet";
-  title: string;
-  data: unknown;
-  timestamp: string;
-  hash: string;
-  encrypted: boolean;
-  shared: boolean;
-  permissions: string[];
-};
-interface DataSharingRequest {
-  id: string;
-  requester: string;
-  dataTypes: string[];
-  purpose: string;
-  duration: string;
-  status: pending" | "approved | "denied";
-};
-interface blockchainHealthDataProps {
-  visible: boolean;
-  onClose: () => void;
-};
-export const blockchainHealthData: React.FC<blockchainHealthDataProps /> = ({/   const performanceMonitor = usePerformanceMonitor(blockchainHealthData";
+import Icon from MESSAGE_35;
+import { colors, spacing } from ../../../constants/theme" // MESSAGE_67reactMESSAGE_85MESSAGE_11diagnosis | "vitals" | medication" | "exercise | "dietMESSAGE_32 | "approved | "deniedMESSAGE_61;))
 {/
     trackRender: true,
     trackMemory: true,
@@ -43,191 +10,61 @@ export const blockchainHealthData: React.FC<blockchainHealthDataProps /> = ({/  
   visible,
   onClose;
 }) => {};
-const [activeTab, setActiveTab] = useState<"records | "sharing" | privacy" | "backup>("records");
-  const [loading, setLoading] = useState<boolean>(fals;e;);
-  const [encryptionEnabled, setEncryptionEnabled] = useState<boolean>(tru;e;);
-  const [autoBackup, setAutoBackup] = useState<boolean>(tru;e;);
-  const [dataRetention] = useState<string>(5年";);
-  const [healthRecords] = useState<HealthDataRecord[]  / >([ * { ;
-      id: "record_1,",type: "diagnosis",title: 五诊检查结果";
-      data: { constitution: "平和质, symptoms: ["轻微疲劳"] ;},"
-      timestamp: 2024-01-15T10:30:00Z",
-      hash: "0x1a2b3c4d5e6f...,",
-      encrypted: true,
-      shared: false,
-      permissions: []
-    },
-    {
-      id: "record_2",
+const [activeTab, setActiveTab] = useState<"records | "sharing" | privacy" | "backup>("recordsMESSAGE_4;);
+  const [healthRecords] = useState<HealthDataRecord[]  / >([ * { ;)
+      id: "record_1,",type: "diagnosis",title: 五诊检查结果MESSAGE_66平和质, symptoms: ["轻微疲劳"] ;},"
+      timestamp: CONSTANT_2024-01-15T10:30:00Z",
+      hash: "0x1a2b3c4d5e6f...,MESSAGE_5record_2",
       type: vitals",
-      title: "生命体征监测,",
-      data: { heartRate: 72, bloodPressure: "120/80", temperature: 36.5},/          timestamp: 2024-01-15T08:00:00Z",
-      hash: "0x2b3c4d5e6f7a...,",
-      encrypted: true,
-      shared: true,
-      permissions: ["doctor_zhang", clinic_abc"]"
+      title: "生命体征监测,MESSAGE_20CONSTANT_120/80MESSAGE_3,
+      hash: "0x2b3c4d5e6f7a...,MESSAGE_10doctor_zhang", clinic_abc"]"
     },
     {
       id: "record_3,",
       type: "medication",
       title: 用药记录",
-      data: { medication: "维生素D, dosage: "1000IU", frequency: 每日一次"},
+      data: { medication: "维生素D, dosage: "CONSTANT_1000IU", frequency: 每日一次"},
       timestamp: "2024-01-14T20:00:00Z,",
-      hash: "0x3c4d5e6f7a8b...",
-      encrypted: true,
-      shared: false,
-      permissions: []
-    }
-  ])
-  const [sharingRequests] = useState<DataSharingRequest[]  / >([ * { ;
-      id: req_1";
-      requester: "张医生 - 中医科,",dataTypes: ["五诊结果", 生命体征"],";
+      hash: "0x3c4d5e6f7a8b...MESSAGE_28;
+      requester: "张医生 - 中医科,",dataTypes: ["五诊结果", " 生命体征"],";
       purpose: "制定个性化治疗方案,",duration: "3个月",status: pending"";
     },{
       id: "req_2,",
-      requester: "健康研究院",dataTypes: [运动数据",饮食记录],purpose: "健康生活方式研究",duration: 1年";
+      requester: "健康研究院", "dataTypes: [运动数据", "饮食记录],purpose: "健康生活方式研究", "duration: 1年";
       status: "pending},";
   ];);
-  const encryptData = useMemo(() => async() => {}
+  const encryptData = useMemo(() => async() => {})
     setLoading(true), [])
-    await new Promise<void>(resolve => setTimeout(); => resolve(), 800));
+    await new Promise<void>(resolve => setTimeout(); => resolve(), CONSTANT_800));
     setLoading(false);
-    Alert.alert("加密完成", 数据已使用AES-256加密算法保护");"
+    Alert.alert("加密完成", " 数据已使用AES-256加密算法保护");MESSAGE_94共享成功, "数据已安全共享给授权方");"
   };
-  const shareData = useMemo(() => async() => {}
+  const backupToblockchain = useMemo(() => async() => {})
     setLoading(true), []);
-    await new Promise<void>(resolve => setTimeout(); => resolve(), 1000));
+    await new Promise<void>(resolve => setTimeout(); => resolve(), CONSTANT_2000));
     setLoading(false);
-    Alert.alert("共享成功, "数据已安全共享给授权方");"
-  };
-  const backupToblockchain = useMemo(() => async() => {}
-    setLoading(true), []);
-    await new Promise<void>(resolve => setTimeout(); => resolve(), 2000));
-    setLoading(false);
-    Alert.alert(备份完成",健康数据已备份到区块链网络);
-  };
-  //
-    <ScrollView style={styles.tabContent}>/      <View style={styles.sectionHeader}>/        <Text style={styles.sectionTitle}>健康数据记录</Text>/        <TouchableOpacity onPress={backupToblockchain} disabled={loading} accessibilityLabel="TODO: 添加无障碍标签"/          <Icon name="cloud-upload" size={24} color={colors.primary} />/        </TouchableOpacity>/      </View>/
-      {healthRecords.map(record) => (
-        <View key={record.id} style={styles.recordCard}>/          <View style={styles.recordHeader}>/            <View style={styles.recordInfo}>/                  <Icon;
-name={getRecordIcon(record.type)}
-                size={24}
-                color={getRecordColor(record.type)} />/              <View style={styles.recordDetails}>/                <Text style={styles.recordTitle}>{record.title}</Text>/                <Text style={styles.recordTime}>/                      {new Date(record.timestamp).toLocaleString()}
-                </Text>/              </View>/            </View>/            <View style={styles.recordStatus}>/                  { record.encrypted  && (
-    <Icon name="lock" size={16} color={colors.success} />/                  )},
-{ record.shared  && (
-    <Icon name="share" size={16} color={colors.primary} />/                  )}
-            </View>/          </View>/
-          <View style={styles.recordData}>/            <Text style={styles.dataLabel}>数据哈希:</Text>/            <Text style={styles.dataHash}>{record.hash}</Text>/          </View>/
-          <View style={styles.recordActions}>/                <TouchableOpacity;
-style={styles.actionButton}
-              onPress={() = accessibilityLabel="TODO: 添加无障碍标签" encryptData()}/                >
-              <Icon name="shield-check" size={16} color={colors.primary} />/              <Text style={styles.actionText}>重新加密</Text>/            </TouchableOpacity>/                <TouchableOpacity;
-style={styles.actionButton}
-              onPress={() = accessibilityLabel="TODO: 添加无障碍标签" shareData()}/                >
-              <Icon name="share-variant" size={16} color={colors.primary} />/              <Text style={styles.actionText}>安全共享</Text>/            </TouchableOpacity>/          </View>/        </View>/          ))}
-    </ScrollView>/      ), []);
-  //
-    <ScrollView style={styles.tabContent}>/      <Text style={styles.sectionTitle}>数据共享请求</Text>/
-      {sharingRequests.map(request) => (
-        <View key={request.id} style={styles.requestCard}>/          <View style={styles.requestHeader}>/            <Text style={styles.requesterName}>{request.requester}</Text>/            <View style={[styles.statusBadge, { backgroundColor: request.status === "pending" ? colors.warning : colors.success}]} />/              <Text style={styles.statusBadgeText}>/                {request.status === pending" ? "待审批 : "已批准"}
-              </Text>/            </View>/          </View>/
-          <View style={styles.requestDetails}>/            <Text style={styles.detailLabel}>请求数据类型:</Text>/            <Text style={styles.detailValue}>{request.dataTypes.join(, ")}</Text>/    "
-            <Text style={styles.detailLabel}>使用目的:</Text>/            <Text style={styles.detailValue}>{request.purpose}</Text>/
-            <Text style={styles.detailLabel}>使用期限:</Text>/            <Text style={styles.detailValue}>{request.duration}</Text>/          </View>/
-          {request.status === "pending && ("
-            <View style={styles.requestActions}>/              <TouchableOpacity style={[styles.actionButton, styles.approveButton]} accessibilityLabel="TODO: 添加无障碍标签"/                <Text style={styles.approveText}>批准</Text>/              </TouchableOpacity>/              <TouchableOpacity style={[styles.actionButton, styles.denyButton]} accessibilityLabel="TODO: 添加无障碍标签"/                <Text style={styles.denyText}>拒绝</Text>/              </TouchableOpacity>/            </View>/              )}
-        </View>/          ))}
-    </ScrollView>/      ), []);
-  //
-    <ScrollView style={styles.tabContent}>/      <Text style={styles.sectionTitle}>隐私设置</Text>/
-      <View style={styles.settingCard}>/        <View style={styles.settingItem}>/          <View style={styles.settingInfo}>/            <Text style={styles.settingTitle}>数据加密</Text>/            <Text style={styles.settingDesc}>使用端到端加密保护您的健康数据</Text>/          </View>/              <Switch;
-value={encryptionEnabled}
-            onValueChange={setEncryptionEnabled}
-            trackColor={ false: colors.border, true: colors.primary}}
-          />/        </View>/
-        <View style={styles.settingItem}>/          <View style={styles.settingInfo}>/            <Text style={styles.settingTitle}>自动备份</Text>/            <Text style={styles.settingDesc}>定期将数据备份到区块链网络</Text>/          </View>/              <Switch;
-value={autoBackup}
-            onValueChange={setAutoBackup}
-            trackColor={ false: colors.border, true: colors.primary}}
-          />/        </View>/
-        <View style={styles.settingItem}>/          <View style={styles.settingInfo}>/            <Text style={styles.settingTitle}>数据保留期</Text>/            <Text style={styles.settingDesc}>设置数据在区块链上的保留时间</Text>/          </View>/          <TouchableOpacity style={styles.valueSelector} accessibilityLabel="TODO: 添加无障碍标签"/            <Text style={styles.valueText}>{dataRetention}</Text>/            <Icon name="chevron-down" size={16} color={colors.textSecondary} />/          </TouchableOpacity>/        </View>/      </View>/
-      <View style={styles.privacyInfo}>/        <Icon name="information" size={20} color={colors.primary} />/        <Text style={styles.privacyText}>/              隐私保护：您的健康数据通过区块链技术进行分布式存储，确保数据的安全性、完整性和不可篡改性。
-          只有您授权的医疗机构和研究机构才能访问相关数据。
-        </Text>/      </View>/    </ScrollView>/      ), []);
-  ///
-      <View style={styles.backupCard}>/        <View style={styles.backupInfo}>/          <Icon name="cloud-check" size={32} color={colors.success} />/          <Text style={styles.backupTitle}>最近备份</Text>/          <Text style={styles.backupTime}>2024年1月15日 14:30</Text>/          <Text style={styles.backupSize}>数据大小: 2.3 MB</Text>/        </View>/
-        <TouchableOpacity;
-style={styles.backupButton}
-          onPress={backupToblockchain}
-          disabled={loading}
-        accessibilityLabel="TODO: 添加无障碍标签"/          {loading ? (
-            <ActivityIndicator color="white" />/              ): (
-            <>
-              <Icon name="backup-restore" size= {20} color="white" />/              <Text style={styles.backupButtonText}>立即备份</Text>/            </>/              )}
-        </TouchableOpacity>/      </View>/
-      <View style={styles.restoreSection}>/        <Text style={styles.restoreTitle}>从备份恢复</Text>/        <Text style={styles.restoreDesc}>/              如果您更换设备或重新安装应用，可以从区块链备份中恢复您的健康数据
-        </Text>/        <TouchableOpacity style={styles.restoreButton} accessibilityLabel="TODO: 添加无障碍标签"/          <Icon name="download" size={20} color={colors.primary} />/          <Text style={styles.restoreButtonText}>恢复数据</Text>/        </TouchableOpacity>/      </View>/    </ScrollView>/      ), []);
-  const getRecordIcon = useCallback() => {
-    switch (type) {case "diagnosis": return stethoscop;e;
-      case "vitals: return "heart-puls;e;
-      case medication": return "pil;l;
+    Alert.alert(备份完成", MESSAGE_41TODO: 添加无障碍标签"/          <Icon name="cloud-uploadMESSAGE_13lockMESSAGE_18shareMESSAGE_93TODO: 添加无障碍标签MESSAGE_86shield-checkMESSAGE_51TODO: 添加无障碍标签MESSAGE_33share-variantMESSAGE_37pendingMESSAGE_47 ? "待审批 : "已批准MESSAGE_80)}</Text>/    MESSAGE_49pending && (MESSAGE_21TODO: 添加无障碍标签MESSAGE_38TODO: 添加无障碍标签MESSAGE_25TODO: 添加无障碍标签MESSAGE_58chevron-downMESSAGE_14informationMESSAGE_70cloud-checkMESSAGE_40TODO: 添加无障碍标签MESSAGE_95whiteMESSAGE_83backup-restore" size= {20} color="whiteMESSAGE_71TODO: 添加无障碍标签"/          <Icon name="downloadMESSAGE_16diagnosisMESSAGE_9vitals: return MESSAGE_63: return "pil;l;
       case "exercise": return ru;n;
-      case "diet: return "foo;d,
-  default: return file-documen;t;
-    }
-  };
-  const getRecordColor = useCallback(); => {}
-    switch (type) {
-      case "diagnosis: return colors.prima;r;y;"
-case "vitals": return colors.error;
-case medication": return colors.succe;s;s;"
-case "exercise: return colors.warni;n;g;"
-case "diet": return #8E44A;D;
-      default: return colors.textSeconda;r;y;
-    }
-  };
-  //
-    <View style={styles.tabBar}>/          {[
-        { key: "records, label: "数据记录", icon: database"},
+      case "diet: return MESSAGE_1diagnosis: return colors.prima;r;y;"
+case "vitalsMESSAGE_65: return colors.succe;s;s;"
+case MESSAGE_31
+case "dietMESSAGE_42records, label: "数据记录", icon: database"},
         { key: "sharing, label: "数据共享", icon: share-variant"},
         { key: "privacy, label: "隐私设置", icon: shield-check"},
         { key: "backup, label: "备份恢复", icon: backup-restore"}
-      ].map(tab) => (
-        <TouchableOpacity;
+      ].map(tab) => ()
+        <TouchableOpacity
 key={tab.key}
           style={[styles.tabButton, activeTab === tab.key && styles.activeTabButton]}
-          onPress={() = accessibilityLabel="TODO: 添加无障碍标签" setActiveTab(tab.key as any)}/            >
-          <Icon;
-name={tab.icon}
-            size={20}
-            color={activeTab === tab.key ? colors.primary: colors.textSecondary} />/  >
-            styles.tabText,
-            activeTab === tab.key && styles.activeTabText;
-          ]} />/                {tab.label}
-          </Text>/        </TouchableOpacity>/          ))}
-    </View>/      ), []);
-  const renderContent = useCallback() => {
-    switch (activeTab) {case "records: return renderDataRecords;(;)"
-      case "sharing": return renderDataSharing;(;)
-      case privacy": return renderPrivacySettings;(;)"
-      case "backup: return renderBackupRestore",
+          onPress={() = accessibilityLabel="TODO: 添加无障碍标签MESSAGE_73records: return renderDataRecords;(;)"
+      case "sharingMESSAGE_62: return renderPrivacySettings;(;)"
+      case MESSAGE_53,
   default: return renderDataRecords;
     }
   };
   performanceMonitor.recordRender();
-  return (;
-    <Modal visible={visible} animationType="slide" presentationStyle="pageSheet" />/      <SafeAreaView style={styles.container}>/        {///;
-        {///            {renderTabBar()};
-        {///            {renderContent()};
-      </SafeAreaView>/    </Modal>/      ;);
-};
-const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,
-  flex: 1,
-    backgroundColor: colors.background;
-  },
-  header: {,
-  flexDirection: "row",
+  return (;)
+    <Modal visible={visible} animationType="slide" presentationStyle="pageSheetMESSAGE_26row",
     alignItems: center",
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
@@ -241,39 +78,8 @@ const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo()
   },
   title: {,
   fontSize: 20,
-    fontWeight: "bold,",
-    color: colors.text;
-  },
-  subtitle: {,
-  fontSize: 14,
-    color: colors.textSecondary,
-    marginTop: 2;
-  },
-  blockchainStatus: {,
-  flexDirection: "row",
-    alignItems: center""
-  },
-  statusDot: {,
-  width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: colors.success,
-    marginRight: spacing.xs;
-  },
-  statusText: {,
-  fontSize: 12,
-    color: colors.success,
-    fontWeight: "600"
-  },
-  tabBar: {,
-  flexDirection: "row",
-    backgroundColor: colors.surface,
-    paddingHorizontal: spacing.sm;
-  },
-  tabButton: {,
-  flex: 1,
-    alignItems: center",
-    paddingVertical: spacing.md,
+    fontWeight: "bold,MESSAGE_6row",
+    alignItems: center"MESSAGE_72CONSTANT_600MESSAGE_45rowMESSAGE_43,
     paddingHorizontal: spacing.sm;
   },
   activeTabButton: {,
@@ -287,154 +93,19 @@ const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo()
   },
   activeTabText: {,
   color: colors.primary,
-    fontWeight: "600"
-  },
-  tabContent: {,
-  flex: 1,
-    padding: spacing.lg;
-  },
-  sectionHeader: {,
-  flexDirection: "row",
-    justifyContent: space-between",
-    alignItems: "center,",
-    marginBottom: spacing.lg;
-  },
-  sectionTitle: {,
-  fontSize: 18,
-    fontWeight: "600",
-    color: colors.text;
-  },
-  recordCard: {,
-  backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: spacing.md,
-    marginBottom: spacing.md,
-    borderLeftWidth: 4,
-    borderLeftColor: colors.primary;
-  },
-  recordHeader: {,
-  flexDirection: row",
+    fontWeight: "600MESSAGE_34rowMESSAGE_30,
+    alignItems: "center,MESSAGE_82600MESSAGE_78,
     justifyContent: "space-between,",
-    alignItems: "center",
-    marginBottom: spacing.sm;
-  },
-  recordInfo: {,
-  flexDirection: row",
-    alignItems: "center,",
-    flex: 1;
-  },
-  recordDetails: {,
-  marginLeft: spacing.md,
-    flex: 1;
-  },
-  recordTitle: {,
-  fontSize: 16,
-    fontWeight: "600",
-    color: colors.text;
-  },
-  recordTime: {,
-  fontSize: 12,
-    color: colors.textSecondary,
-    marginTop: 2;
-  },
-  recordStatus: { flexDirection: row"  },"
-  recordData: { marginBottom: spacing.sm  },
-  dataLabel: {,
-  fontSize: 12,
-    color: colors.textSecondary,
-    marginBottom: 2;
-  },
-  dataHash: {,
-  fontSize: 12,
-    fontFamily: "monospace,",
-    color: colors.text,
-    backgroundColor: colors.background,
-    padding: spacing.xs,
-    borderRadius: 4;
-  },
-  recordActions: { flexDirection: "row"  },
-  actionButton: {,
-  flexDirection: row",
-    alignItems: "center,",
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: colors.primary;
-  },
-  actionText: {,
-  fontSize: 12,
-    color: colors.primary,
-    marginLeft: spacing.xs;
-  },
-  requestCard: {,
-  backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: spacing.md,
-    marginBottom: spacing.md;
-  },
-  requestHeader: {,
-  flexDirection: "row",
+    alignItems: "centerMESSAGE_75,
+    alignItems: "center,MESSAGE_60600MESSAGE_27  },MESSAGE_68monospace,MESSAGE_90rowMESSAGE_39,
+    alignItems: "center,MESSAGE_12row",
     justifyContent: space-between",
-    alignItems: "center,",
-    marginBottom: spacing.md;
-  },
-  requesterName: {,
-  fontSize: 16,
-    fontWeight: "600",
-    color: colors.text;
-  },
-  statusBadge: {,
-  paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-    borderRadius: 12;
-  },
-  statusBadgeText: {,
-  fontSize: 12,
-    color: white",
-    fontWeight: "600"
-  },
-  requestDetails: { marginBottom: spacing.md  },
-  detailLabel: {,
-  fontSize: 12,
-    color: colors.textSecondary,
-    marginBottom: 2,
-    marginTop: spacing.sm;
-  },
-  detailValue: {,
-  fontSize: 14,
-    color: colors.text;
-  },
-  requestActions: { flexDirection: "row"  },
-  approveButton: {,
-  backgroundColor: colors.success,
-    borderColor: colors.success;
-  },
-  denyButton: {,
-  backgroundColor: colors.error,
-    borderColor: colors.error;
-  },
-  approveText: {,
-  color: white",
+    alignItems: "center,MESSAGE_55600MESSAGE_17,
+    fontWeight: "600MESSAGE_92rowMESSAGE_84,
     fontSize: 14,
-    fontWeight: "600"
-  },
-  denyText: {,
-  color: "white",
-    fontSize: 14,
-    fontWeight: 600""
-  },
-  settingCard: {,
-  backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: spacing.md,
-    marginBottom: spacing.lg;
-  },
-  settingItem: {,
-  flexDirection: "row,",
+    fontWeight: "600MESSAGE_7whiteMESSAGE_64MESSAGE_87row,",
     justifyContent: "space-between",
     alignItems: center",
-    paddingVertical: spacing.md,
     borderBottomWidth: 1,
     borderBottomColor: colors.border;
   },
@@ -444,16 +115,7 @@ const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo()
   },
   settingTitle: {,
   fontSize: 16,
-    fontWeight: "600,",
-    color: colors.text,
-    marginBottom: 2;
-  },
-  settingDesc: {,
-  fontSize: 12,
-    color: colors.textSecondary;
-  },
-  valueSelector: {,
-  flexDirection: "row",
+    fontWeight: "600,MESSAGE_2row",
     alignItems: center",
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
@@ -466,90 +128,23 @@ const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo()
     marginRight: spacing.sm;
   },
   privacyInfo: {,
-  flexDirection: "row,",
-    backgroundColor: colors.primary + "10",
-    padding: spacing.md,
-    borderRadius: 12,
-    alignItems: flex-start""
-  },
-  privacyText: {,
-  flex: 1,
-    fontSize: 14,
-    color: colors.text,
-    marginLeft: spacing.md,
-    lineHeight: 20;
-  },
-  backupCard: {,
-  backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: spacing.lg,
-    alignItems: "center,",
-    marginBottom: spacing.lg;
-  },
-  backupInfo: {,
-  alignItems: "center",
-    marginBottom: spacing.lg;
-  },
-  backupTitle: {,
-  fontSize: 18,
-    fontWeight: 600",
+  flexDirection: "row,MESSAGE_1910MESSAGE_89MESSAGE_22center,MESSAGE_56centerMESSAGE_76,
     color: colors.text,
     marginTop: spacing.md;
   },
   backupTime: {,
   fontSize: 14,
-    color: colors.textSecondary,
-    marginTop: spacing.xs;
   },
   backupSize: {,
   fontSize: 12,
-    color: colors.textSecondary,
-    marginTop: spacing.xs;
   },
   backupButton: {,
   flexDirection: "row,",
-    alignItems: "center",
-    backgroundColor: colors.primary,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-    borderRadius: 8;
-  },
-  backupButtonText: {,
-  color: white",
+    alignItems: "centerMESSAGE_57,
     fontSize: 16,
-    fontWeight: "600,",
-    marginLeft: spacing.sm;
-  },
-  restoreSection: {,
-  backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: spacing.lg;
-  },
-  restoreTitle: {,
-  fontSize: 16,
-    fontWeight: "600",
-    color: colors.text,
-    marginBottom: spacing.sm;
-  },
-  restoreDesc: {,
-  fontSize: 14,
-    color: colors.textSecondary,
-    lineHeight: 20,
-    marginBottom: spacing.lg;
-  },
-  restoreButton: {,
-  flexDirection: row",
+    fontWeight: "600,MESSAGE_91600MESSAGE_8,
     alignItems: "center,",
-    justifyContent: "center",
-    borderWidth: 1,
-    borderColor: colors.primary,
-    paddingVertical: spacing.md,
-    borderRadius: 8;
-  },
-  restoreButtonText: {,
-  color: colors.primary,
-    fontSize: 16,
-    fontWeight: 600",
+    justifyContent: "centerMESSAGE_54,
     marginLeft: spacing.sm;
   }
 }), []);

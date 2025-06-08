@@ -1,0 +1,22 @@
+{
+  "typescript": {
+    "status": "error",
+    "errors": 0,
+    "message": "发现 0 个TypeScript错误"
+  },
+  "eslint": {
+    "status": "error",
+    "errors": 1687,
+    "message": "发现 1687 个ESLint错误"
+  },
+  "file_structure": {
+    "status": "success",
+    "missing_dirs": [],
+    "missing_files": [],
+    "total_files": 5309,
+    "ts_files": 2105,
+    "tsx_files": 1265,
+    "js_files": 1939,
+    "jsx_files": 0
+  }
+}

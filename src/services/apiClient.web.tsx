@@ -39,7 +39,7 @@ class ApiClient {
     } catch (error) {
       }
   }
-  // 构建请求头  private async buildHeaders(config?: RequestConfig;
+  // 构建请求头  private async buildHeaders(config?: RequestConfig;)
   ): Promise<Record<string, string >>  {
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
@@ -54,7 +54,7 @@ class ApiClient {
     }
     return headers;
   }
-  // 发送HTTP请求  private async request<T = any />(
+  // 发送HTTP请求  private async request<T = any />()
     method: HttpMethod,
     endpoint: string,
     data?: unknown,
@@ -68,7 +68,7 @@ class ApiClient {
       const timeoutId = setTimeout() => controller.abort(), timeout);
       const requestOptions: RequestInit = {
   // 性能监控
-const performanceMonitor = usePerformanceMonitor(apiClient.web", {"
+const performanceMonitor = usePerformanceMonitor(apiClient.web", {")
     trackRender: true,
     trackMemory: false,
     warnThreshold: 100, // ms };);
@@ -101,53 +101,53 @@ const performanceMonitor = usePerformanceMonitor(apiClient.web", {"
       };
     }
   }
-  // GET请求  async get<T = any />(
+  // GET请求  async get<T = any />()
     endpoint: string,
     config?: RequestConfig;
   ): Promise<ApiResponse<T>>  {
     return this.request<T>("GET", endpoint, undefined, config);
   }
-  // POST请求  async post<T = any />(
+  // POST请求  async post<T = any />()
     endpoint: string,
     data?: unknown,
     config?: RequestConfig;
   ): Promise<ApiResponse<T>>  {
     return this.request<T>("POST", endpoint, data, config);
   }
-  // PUT请求  async put<T = any />(
+  // PUT请求  async put<T = any />()
     endpoint: string,
     data?: unknown,
     config?: RequestConfig;
   ): Promise<ApiResponse<T>>  {
     return this.request<T>("PUT", endpoint, data, config);
   }
-  // DELETE请求  async delete<T = any />(
+  // DELETE请求  async delete<T = any />()
     endpoint: string,
     config?: RequestConfig;
   ): Promise<ApiResponse<T>>  {
     return this.request<T>("DELETE", endpoint, undefined, config);
   }
-  // PATCH请求  async patch<T = any />(
+  // PATCH请求  async patch<T = any />()
     endpoint: string,
     data?: unknown,
     config?: RequestConfig;
   ): Promise<ApiResponse<T>>  {
     return this.request<T>("PATCH", endpoint, data, config);
   }
-  // 上传文件  async uploadFile<T = any />(
+  // 上传文件  async uploadFile<T = any />()
     endpoint: string,
     file: unknown,
     config?: RequestConfig;
   ): Promise<ApiResponse<T>>  {
     try {
       const url = `${this.baseURL}${endpoint};`;
-      const headers = await this.buildHeaders({...config,headers: { ...config?.headers;
+      const headers = await this.buildHeaders({...config,headers: { ...config?.headers;)
         };
       });
       delete headers["Content-Type"]
       const formData = new FormData();
       formData.append("file", file);
-      const response = await fetch(url, {method: "POST",headers,body: formData;
+      const response = await fetch(url, {method: "POST",headers,body: formData;)
       });
       const responseData = await response.json();
       if (!response.ok) {

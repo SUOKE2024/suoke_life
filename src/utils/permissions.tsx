@@ -113,8 +113,7 @@ class PermissionManager {
     }
   }
   showSettingsDialog(type: PermissionType): void {
-    Alert.alert(
-      "权限被拒绝",请在设置中开启权限以使用相关功能",
+    Alert.alert("权限被拒绝", "请在设置中开启权限以使用相关功能",
       [
         {
       text: "取消",

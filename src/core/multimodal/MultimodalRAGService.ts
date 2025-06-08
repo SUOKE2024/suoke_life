@@ -62,7 +62,7 @@ export class MultimodalRAGService extends EventEmitter {private encoder: Multimo
   private isInitialized: boolean = false;
   private queryCache: Map<string, RAGResponse>;
   private embeddingCache: Map<string, Embedding[]>;
-  constructor(
+  constructor()
     vectorDB: VectorDatabase,
     languageModel: LanguageModel;
   ) {
@@ -78,13 +78,13 @@ export class MultimodalRAGService extends EventEmitter {private encoder: Multimo
   /**
 * * 设置事件监听器
   private setupEventListeners(): void {
-    this.encoder.on("error, (error) => {}"
+    this.encoder.on("error, (error) => {}")
       this.emit("encodingError", error);
     });
-    this.fusion.on(fusionCompleted", (result) => {}"
+    this.fusion.on(fusionCompleted", (result) => {}")
       this.emit("fusionCompleted, result);"
     });
-    this.encoder.on("multimodalEncoded", (embeddings) => {}
+    this.encoder.on("multimodalEncoded", (embeddings) => {})
       this.emit(embeddingsGenerated", embeddings);"
     });
   }
@@ -133,18 +133,18 @@ if (this.queryCache.has(cacheKey)) {
       // 1. 编码多模态输入
 const embeddings = await this.encodeQuery(query);
       // 2. 融合多模态嵌入
-const fusionResult = await this.fusion.fuseEmbeddings(;
+const fusionResult = await this.fusion.fuseEmbeddings(;)
         embeddings,
         query.strategy || tcm_diagnosis;
       );
       // 3. 向量检索
-const retrievalResults = await this.retrieveRelevantDocuments(;
+const retrievalResults = await this.retrieveRelevantDocuments(;)
         fusionResult,
         query.topK || 5,
         query.threshold || 0.7;
       );
       // 4. 生成回答
-const generationResult = await this.generateAnswer(;
+const generationResult = await this.generateAnswer(;)
         query,
         retrievalResults,
         fusionResult;
@@ -206,14 +206,14 @@ if (query.pulseSignal) {
   }
   /**
 * * 检索相关文档
-  private async retrieveRelevantDocuments(
+  private async retrieveRelevantDocuments()
     fusionResult: FusionResult,
     topK: number,
     threshold: number;
   ): Promise<RetrievalResult[]> {
     try {
       // 使用融合后的嵌入向量进行检索
-const results = await this.vectorDB.search(;
+const results = await this.vectorDB.search(;)
         fusionResult.fusedEmbedding,
         topK,
         { confidence_threshold: threshold };
@@ -233,7 +233,7 @@ const filteredResults = results.filter(result => result.score >= threshold);
   }
   /**
 * * 生成回答
-  private async generateAnswer(
+  private async generateAnswer()
     query: MultimodalQuery,
     retrievalResults: RetrievalResult[],
     fusionResult: FusionResult;
@@ -253,14 +253,14 @@ const result = await this.languageModel.generateWithReasoning(prompt, context);
   }
   /**
 * * 构建上下文
-  private buildContext(
+  private buildContext()
     query: MultimodalQuery,
     retrievalResults: RetrievalResult[],
     fusionResult: FusionResult;
   ): string[] {
     const context: string[] = [];
     // 添加检索到的文档内容
-retrievalResults.forEach(result, index) => {}
+retrievalResults.forEach(((result, index) => {}))
       context.push(`[文档${index + 1}] ${result.content}`);
     });
     // 添加模态信息
@@ -297,7 +297,7 @@ context.push(`[融合策略] ${fusionResult.strategy}`);
   }
   /**
 * * 计算响应置信度
-  private calculateResponseConfidence(
+  private calculateResponseConfidence()
     fusionResult: FusionResult,
     retrievalResults: RetrievalResult[]
   ): number {
@@ -310,7 +310,7 @@ return (fusionConfidence * 0.4 + avgRetrievalScore * 0.4 + resultCountFactor * 0
   }
   /**
 * * 添加文档到向量数据库
-  async addDocument(
+  async addDocument()
     id: string,
     content: string,
     modality: ModalityType,
@@ -334,7 +334,7 @@ await this.vectorDB.insert(id, embedding.vector, {
   }
   /**
 * * 批量添加文档
-  async addDocuments(
+  async addDocuments()
     documents: Array<{,
   id: string;
       content: string,
@@ -342,7 +342,7 @@ await this.vectorDB.insert(id, embedding.vector, {
       metadata?: Record<string, any>;
     }>
   ): Promise<void> {
-    const addPromises = documents.map(doc =>;
+    const addPromises = documents.map(doc =>;)
       this.addDocument(doc.id, doc.content, doc.modality, doc.metadata);
     );
     try {

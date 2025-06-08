@@ -214,7 +214,7 @@ global.WebSocket = jest.fn(() => ({
   readyState: 1,
 })) as any;
 // 模拟fetch
-global.fetch = jest.fn(() =>
+global.fetch = jest.fn(() =>)
   Promise.resolve({
     ok: true,
     status: 200,
@@ -228,7 +228,7 @@ jest.useFakeTimers();
 const originalError = console.error;
 beforeAll(() => {
   console.error = (...args: any[]) => {
-    if (
+    if ()
       typeof args[0] === 'string' &&
       args[0].includes('Warning: ReactDOM.render is no longer supported')
     ) {

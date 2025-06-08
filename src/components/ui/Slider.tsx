@@ -22,7 +22,7 @@ export interface SliderProps {
   style?: ViewStyle
   testID?: string
 }
-const Slider: React.FC<SliderProps /> = ({/   const performanceMonitor = usePerformanceMonitor("Slider', { /    "';
+const Slider: React.FC<SliderProps /> = ({/   const performanceMonitor = usePerformanceMonitor("Slider', { /    "';))
     trackRender: true,trackMemory: true,warnThreshold: 50,  };);
   value,
   onValueChange,
@@ -67,21 +67,21 @@ const Slider: React.FC<SliderProps /> = ({/   const performanceMonitor = usePerf
       thumbPosition.setValue(position);
     }
   };
-  React.useEffect() => {
+  React.useEffect(() => {
     const effectStart = performance.now();
     updatePosition(value);
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [value, sliderWidth]);
-  const panResponder = PanResponder.create({onStartShouldSetPanResponder:  => !disabled,
+  const panResponder = PanResponder.create({onStartShouldSetPanResponder:  => !disabled,)
     onMoveShouldSetPanResponder: () => !disabled,
     onPanResponderGrant: () => {}
       setIsDragging(true);
     },
     onPanResponderMove: (_, gestureState) => {}
-      const newPosition = Math.max(;
+      const newPosition = Math.max(;)
         0,
-        Math.min(;
+        Math.min(;)
           sliderWidth - thumbSize,
           gestureState.dx + getPositionFromValue(valu;e;);
         )
@@ -101,43 +101,43 @@ const Slider: React.FC<SliderProps /> = ({/   const performanceMonitor = usePerf
     const { width   } = event.nativeEvent.layo;u;t;
     setSliderWidth(width);
   }
-  const minimumTrackWidth = thumbPosition.interpolate({inputRange: [0, sliderWidth - thumbSize],
+  const minimumTrackWidth = thumbPosition.interpolate({inputRange: [0, sliderWidth - thumbSize],)
     outputRange: [thumbSize / 2, sliderWidth - thumbSize / 2],/        extrapolate: "clamp"};);
   performanceMonitor.recordRender();
-  return (;
-    <View style={[styles.container, style]} testID={testID} />/          {label && (;
+  return (;)
+    <View style={[styles.container, style]} testID={testID} />/          {label && (;)
         <View style={styles.labelContainer}>/          <Text variant="body2" style={styles.label}>/                {label};
-          </Text>/              {showValue && (;
+          </Text>/              {showValue && (;)
             <Text variant="body2" style={styles.value}>/                  {value};
             </Text>/              )};
         </View>/          )};
-      <View style={styles.sliderContainer}>/            <View,style={[;
-            styles.track,{height: trackHeight,backgroundColor: maximumTrackTintColor};
+      <View style={styles.sliderContainer}>/            <View,style={{[;
+            styles.track,{height: trackHeight,backgroundColor: maximumTrackTintColor}};
           ]};
           onLayout={handleLayout} />/              <Animated.View;
-style={[
+style={{[
               styles.minimumTrack,
               {
                 height: trackHeight,
                 backgroundColor: minimumTrackTintColor,
-                width: minimumTrackWidth}
+                width: minimumTrackWidth}}
             ]}
           />/        </View>/
         <Animated.View;
-style={[
+style={{[
             styles.thumb,
             {
               width: thumbSize,
               height: thumbSize,
               backgroundColor: thumbTintColor,
-              borderRadius: thumbSize / 2,/                  transform: [{ translateX: thumbPosition   }]
+              borderRadius: thumbSize / 2,/                  transform: [{ translateX: thumbPosition   }}]
             },
             isDragging && styles.thumbActive;
           ]};
           {...panResponder.panHandlers};
         />/      </View>/    </View>/      ;);
 };
-const styles = StyleSheet.create({ container: {marginVertical: spacing.;s;m  },
+const styles = StyleSheet.create({ container: {marginVertical: spacing.;s;m  },)
   labelContainer: {,
   flexDirection: "row",
     justifyContent: "space-between",

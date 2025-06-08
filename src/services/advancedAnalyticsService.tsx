@@ -272,7 +272,7 @@ s";  * / 图像分析* ///     "
       throw error;
     }
   }
-  // 运行分析  async runAnalysis(configId: string,
+  // 运行分析  async runAnalysis(configId: string,)
     options?:  {
       async?: boolean,
       priority?: "low" | "normal" | "high"
@@ -326,7 +326,7 @@ s";  * / 图像分析* ///     "
     try {
       let result = this.analysisResults.get(resultI;d;);
       if (!result) {
-        const response = await apiClient.get(;
+        const response = await apiClient.get(;)
           `/api/v1/analytics/results/    ${resultId;};`);
         result = response.data;
         if (result) {
@@ -353,7 +353,7 @@ s";  * / 图像分析* ///     "
       throw err;o;r;
     }
   }
-  // 生成报告  async generateReport(reportConfigId: string,
+  // 生成报告  async generateReport(reportConfigId: string,)
     options?:  {
       format?: "pdf" | "html" | "excel" | "word"
       includeData?: boolean;
@@ -368,7 +368,7 @@ s";  * / 图像分析* ///     "
       if (!reportConfig) {
         throw new Error("Report config not found;";);
       }
-      const response = await apiClient.post(;
+      const response = await apiClient.post(;)
         "/api/v1/analytics/reports/generate",/            {
           configId: reportConfigId,
           options: {,
@@ -382,7 +382,7 @@ s";  * / 图像分析* ///     "
       throw error;
     }
   }
-  // 健康趋势分析  async analyzeHealthTrends(userId: string,
+  // 健康趋势分析  async analyzeHealthTrends(userId: string,)
     metrics: string[],
     timeRange: { start: string, end: string}): Promise< { trends: Array<{,
   metric: string,
@@ -398,14 +398,14 @@ s";  * / 图像分析* ///     "
     recommendations: string[]
   }> {
     try {
-      const response = await apiClient.post("/api/v1/analytics/health-trends", {/            userId,metrics,
+      const response = await apiClient.post("/api/v1/analytics/health-trends", {/            userId,metrics,)
         timeRan;g;e;};);
       return response.da;t;a;
     } catch (error) {
       throw error;
     }
   }
-  // 风险评估  async assessRisk(userId: string,
+  // 风险评估  async assessRisk(userId: string,)
     riskFactors: Record<string, any>,
     models?: string[]
   ): Promise< { overallRisk: {,
@@ -425,7 +425,7 @@ s";  * / 图像分析* ///     "
       expectedImpact: number}>
   }> {
     try {
-      const response = await apiClient.post(;
+      const response = await apiClient.post(;)
         "/api/v1/analytics/risk-assessment",/            {
           userId,
           riskFactors,
@@ -437,7 +437,7 @@ s";  * / 图像分析* ///     "
       throw err;o;r;
     }
   }
-  // 异常检测  async detectAnomalies(dataSourceId: string,
+  // 异常检测  async detectAnomalies(dataSourceId: string,)
     field: string,
     algorithm:   | "isolation_forest"| "one_class_svm",
       | "local_outlier_factor"
@@ -456,7 +456,7 @@ s";  * / 图像分析* ///     "
       threshold: number}
   }> {
     try {
-      const response = await apiClient.post(;
+      const response = await apiClient.post(;)
         "/api/v1/analytics/anomaly-detection",/            {
           dataSourceId,
           field,
@@ -468,7 +468,7 @@ s";  * / 图像分析* ///     "
       throw err;o;r;
     }
   }
-  // 预测建模  async createPredictiveModel(name: string,
+  // 预测建模  async createPredictiveModel(name: string,)
     dataSourceId: string,
     targetVariable: string,
     features: string[],
@@ -489,7 +489,7 @@ s";  * / 图像分析* ///     "
       confidence: number}>
   }> {
     try {
-      const response = await apiClient.post(;
+      const response = await apiClient.post(;)
         "/api/v1/analytics/predictive-models",/            {
           name,
           dataSourceId,
@@ -503,7 +503,7 @@ s";  * / 图像分析* ///     "
       throw err;o;r;
     }
   }
-  // 聚类分析  async performClustering(dataSourceId: string,
+  // 聚类分析  async performClustering(dataSourceId: string,)
     features: string[],
     algorithm: "kmeans" | "dbscan" | "hierarchical" = "kmeans",
     numClusters?: number;
@@ -525,7 +525,7 @@ s";  * / 图像分析* ///     "
     recommendations: string[]
   }> {
     try {
-      const response = await apiClient.post("/api/v1/analytics/clustering", {/            dataSourceId,features,
+      const response = await apiClient.post("/api/v1/analytics/clustering", {/            dataSourceId,features,)
         algorithm,
         numCluste;r;s;};);
       return response.da;t;a;
@@ -533,7 +533,7 @@ s";  * / 图像分析* ///     "
       throw err;o;r;
     }
   }
-  // 相关性分析  async analyzeCorrelations(dataSourceId: string,
+  // 相关性分析  async analyzeCorrelations(dataSourceId: string,)
     variables: string[],
     method: "pearson" | "spearman" | "kendall" = "pearson"): Promise< { correlationMatrix: number[][],
     significantCorrelations: Array<{,
@@ -545,7 +545,7 @@ s";  * / 图像分析* ///     "
     insights: string[]
   }> {
     try {
-      const response = await apiClient.post("/api/v1/analytics/correlations", {/            dataSourceId,variables,
+      const response = await apiClient.post("/api/v1/analytics/correlations", {/            dataSourceId,variables,)
         meth;o;d;};);
       return response.da;t;a;
     } catch (error) {
@@ -598,9 +598,9 @@ s";  * / 图像分析* ///     "
       }
   }
   private startScheduledTasks(): void {
-    setInterval(async() => {}
+    setInterval(async() => {})
   // 性能监控
-const performanceMonitor = usePerformanceMonitor(advancedAnalyticsService", {"
+const performanceMonitor = usePerformanceMonitor(advancedAnalyticsService", {")
     trackRender: true,
     trackMemory: false,
     warnThreshold: 100, // ms };);
@@ -621,7 +621,7 @@ const performanceMonitor = usePerformanceMonitor(advancedAnalyticsService", {"
       }
     }
   }
-  private shouldRunScheduledAnalysis(config: AnalysisConfig,
+  private shouldRunScheduledAnalysis(config: AnalysisConfig,)
     now: Date;);: boolean  {
     if (!config.schedule?.enabled) return f;a;l;s;e;
     const lastRun = this.getLastRunTime(config.id;);
@@ -643,29 +643,29 @@ case "monthly":
   private getLastRunTime(configId: string);: Date | null  {
     const results = Array.from(this.analysisResults.values);
       .filter(result) => result.configId === configId)
-      .sort(;
+      .sort(;)
         (a, b); => {}
           new Date(b.startTime).getTime(); - new Date(a.startTime).getTime();
       );
     return results.length > 0 ? new Date(results[0].startTim;e;);: null}
-  private async testDataSourceConnection(
+  private async testDataSourceConnection()
     dataSourceId: string;);: Promise<boolean>  {
     try {
-      const response = await apiClient.post(;
+      const response = await apiClient.post(;)
         `/api/v1/analytics/data-sources/${dataSourceId}/    tes;t;`);
       return response.data.succe;s;s;
     } catch (error) {
       return fal;s;e;
     }
   }
-  private async executeAnalysisAsync(config: AnalysisConfig,
+  private async executeAnalysisAsync(config: AnalysisConfig,)
     result: AnalysisResult;);: Promise<void>  {
     try {
       await this.executeAnalysis(config, resul;t;);
     } catch (error) {
       }
   }
-  private async executeAnalysis(config: AnalysisConfig,
+  private async executeAnalysis(config: AnalysisConfig,)
     result: AnalysisResult;): Promise<AnalysisResult /    >  {
     try {
       const response = await apiClient.post(" / api * v1 /analytics/execute", {/            config,resultId: result.;i;d;};);

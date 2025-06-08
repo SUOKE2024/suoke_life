@@ -69,7 +69,7 @@ export interface AgentRecommendation {
     }
     return requiredAgent;s;
   }
-  async coordinateDecision(task: CollaborationTask,
+  async coordinateDecision(task: CollaborationTask,)
     agentRecommendations: AgentRecommendation[]);: Promise<CollaborationResult /    >  {
     const consensus = this.calculateConsensus(agentRecommendations;);
     const overallConfidence =
@@ -87,7 +87,7 @@ export interface AgentRecommendation {
     let comparisons = 0;
     for (let i = 0; i < recommendations.length; i++) {
       for (let j = i ;+ ;1; j < recommendations.length; j++) {
-        const similarity = this.calculateRecommendationSimilarity(;
+        const similarity = this.calculateRecommendationSimilarity(;)
           recommendations[i],
           recommendations[j;]
         ;);
@@ -96,7 +96,7 @@ export interface AgentRecommendation {
       }
     }
     return comparisons > 0 ? totalSimilarity / comparisons : 1;.;0;/      }
-  private calculateRecommendationSimilarity(rec1: AgentRecommendation,
+  private calculateRecommendationSimilarity(rec1: AgentRecommendation,)
     rec2: AgentRecommendation;): number  {
     const keywords1 = rec1.recommendation.toLowerCase().split(" ";);
     const keywords2 = rec2.recommendation.toLowerCase().split(;);
@@ -107,7 +107,7 @@ export interface AgentRecommendation {
     if (recommendations.length === 0) {
       return 0;
     }
-    const totalConfidence = recommendations.reduce(;
+    const totalConfidence = recommendations.reduce((acc, item) => acc + item, 0);
       (sum, re;c;); => sum + rec.confidence,
       0;
     );
@@ -116,7 +116,7 @@ export interface AgentRecommendation {
     return recommendations;
       .sort(a,b;); => b.confidence - a.confidence)
       .slice(0, 3);  }
-  private generateReasoning(recommendations: AgentRecommendation[],
+  private generateReasoning(recommendations: AgentRecommendation[],)
     consensus: number);: string  {
     const agentNames = recommendations;
       .map(r); => this.getAgentName(r.agent))
@@ -159,11 +159,11 @@ export interface AgentRecommendation {
       id: "xiaoai",
       name: "小艾",
       description: "AI健康诊断助手，专注于症状分析和初步诊断",
-      capabilities: ["症状分析",健康数据解读",
-        "风险评估",预防建议",
+      capabilities: ["症状分析", "健康数据解读",
+        "风险评估", "预防建议",
         "多模态数据融合"
       ],
-      specialties: ["中医四诊",现代医学诊断", "健康监测",疾病预测"],
+      specialties: ["中医四诊", "现代医学诊断", "健康监测", "疾病预测"],
       personality: {,
   communication_style: "专业、温和、详细",
         empathy_level: 0.8,
@@ -173,11 +173,11 @@ export interface AgentRecommendation {
       id: "xiaoke",
       name: "小克",
       description: "医疗服务管理助手，负责医疗资源协调和服务管理",
-      capabilities: ["医疗服务预约",资源调度",
-        "治疗方案制定",康复指导",
+      capabilities: ["医疗服务预约", "资源调度",
+        "治疗方案制定", "康复指导",
         "紧急响应"
       ],
-      specialties: ["医疗服务管理",治疗计划", "康复医学",急救处理"],
+      specialties: ["医疗服务管理", "治疗计划", "康复医学", "急救处理"],
       personality: {,
   communication_style: "高效、准确、负责",
         empathy_level: 0.7,
@@ -187,11 +187,11 @@ export interface AgentRecommendation {
       id: "laoke",
       name: "老克",
       description: "慢性病和老年健康专家，专注于长期健康管理",
-      capabilities: ["慢性病管理",老年健康评估",
-        "长期护理规划",并发症预防",
+      capabilities: ["慢性病管理", "老年健康评估",
+        "长期护理规划", "并发症预防",
         "家庭护理指导"
       ],
-      specialties: ["慢性病",老年医学", "长期护理",并发症管理"],
+      specialties: ["慢性病", "老年医学", "长期护理", "并发症管理"],
       personality: {,
   communication_style: "耐心、细致、经验丰富",
         empathy_level: 0.9,
@@ -201,17 +201,17 @@ export interface AgentRecommendation {
       id: "soer",
       name: "索儿",
       description: "生活方式和养生顾问，专注于健康生活指导",
-      capabilities: ["营养指导",运动规划",
-        "心理健康",生活习惯优化",
+      capabilities: ["营养指导", "运动规划",
+        "心理健康", "生活习惯优化",
         "环境健康评估"
       ],
-      specialties: ["营养学",运动医学", "心理健康",环境医学"],
+      specialties: ["营养学", "运动医学", "心理健康", "环境医学"],
       personality: {,
   communication_style: "亲切、鼓励、实用",
         empathy_level: 0.85,
         expertise_confidence: 0.8}
     });
-    this.agents.forEach(agent, agentType) => {}
+    this.agents.forEach(((agent, agentType) => {}))
       this.agentStatuses.set(agentType, {
         agent: agentType,
         online: true,
@@ -225,7 +225,7 @@ export interface AgentRecommendation {
         lastUpdate: Date.now()});
     });
   }
-  async createCollaborationTask(type: CollaborationTask["type"],
+  async createCollaborationTask(type: CollaborationTask["type"],)
     data: unknown,
     priority: CollaborationTask["priority"] = "medium");: Promise<string>  {
     const taskId = this.generateTaskId;
@@ -260,14 +260,14 @@ export interface AgentRecommendation {
       task.status = "in_progress";
       const recommendations: AgentRecommendation[] = []
       for (const agentType of task.requiredAgents) {
-        const recommendation = await this.getAgentRecommendation(;
+        const recommendation = await this.getAgentRecommendation(;)
           agentType,
           t;a;s;k;);
         if (recommendation) {
           recommendations.push(recommendation);
         }
       }
-      const result = await this.decisionEngine.coordinateDecision(;
+      const result = await this.decisionEngine.coordinateDecision(;)
         task,recommendati;o;n;s;);
       task.result = result;
 task.status = "completed"
@@ -289,7 +289,7 @@ task.status = "completed"
       });
     }
   }
-  private async getAgentRecommendation(agentType: AgentType,
+  private async getAgentRecommendation(agentType: AgentType,)
     task: CollaborationTask);: Promise<AgentRecommendation | null /    >  {
     const agent = this.agents.get(agentTyp;e;);
     if (!agent) {
@@ -305,7 +305,7 @@ task.status = "completed"
     });
     return recommendati;o;n;
   }
-  private generateMockRecommendation(agent: AgentRole,
+  private generateMockRecommendation(agent: AgentRole,)
     task: CollaborationTask);: AgentRecommendation  {
     const baseConfidence = agent.personality.expertise_confiden;c;e;
     const confidence = baseConfidence * (0.8 + Math.random * 0.2);
@@ -341,7 +341,7 @@ case "soer":
   getTaskStatus(taskId: string): CollaborationTask | null  {
     // 记录渲染性能
 performanceMonitor.recordRender();
-    return (;
+    return (;)
       this.activeTasks.get(taskI;d;); ||
       this.collaborationHistory.find(task); => task.id === taskId) ||
       null;
@@ -355,7 +355,7 @@ performanceMonitor.recordRender();
   }
   getCollaborationHistory(limit: number = 10): CollaborationTask[]  {
     return this.collaborationHistory;
-      .sort(;
+      .sort(;)
         (a,b;); => {}
           (b.timeline[0]?.timestamp || 0) - (a.timeline[0]?.timestamp || 0)
       )
@@ -365,13 +365,13 @@ performanceMonitor.recordRender();
     completedTasks: number,
     averageConfidence: number,
     consensusRate: number} {
-    const completedTasks = this.collaborationHistory.filter(;
+    const completedTasks = this.collaborationHistory.filter(;)
       (tas;k;) => task.status === "completed"
     );
     const totalTasks = this.collaborationHistory.leng;t;h;
     const averageConfidence =;
       completedTasks.length > 0;
-        ? completedTasks.reduce(;
+        ? completedTasks.reduce((acc, item) => acc + item, 0);
             (sum, tas;k;); => sum + (task.result?.confidence || 0),
             0;
           ) / completedTasks.length/            : 0;

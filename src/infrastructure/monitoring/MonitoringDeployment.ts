@@ -148,8 +148,8 @@ export class MonitoringDeployment  {private static instance: MonitoringDeploymen
         }
       ]
     });
-    Object.entries(config.services.agents).forEach([name, agent]) => {}
-      scrapeConfigs.push({ jobName: `agent-${name  }`,
+    Object.entries(config.services.agents).forEach((([name, agent]) => {}))
+      scrapeConfigs.push({ jobName: `agent-${name  }`,)
         scrapeInterval: "15s",
         metricsPath: "/metrics",/            staticConfigs: [{ targets: [`${agent.host  }:${agent.port}`],
             labels: { service: `agent-${name  }`, type: "agent"}
@@ -157,8 +157,8 @@ export class MonitoringDeployment  {private static instance: MonitoringDeploymen
         ]
       });
     });
-    Object.entries(config.services.diagnosis).forEach([name, service]) => {}
-      scrapeConfigs.push({ jobName: `diagnosis-${name  }`,
+    Object.entries(config.services.diagnosis).forEach((([name, service]) => {}))
+      scrapeConfigs.push({ jobName: `diagnosis-${name  }`,)
         scrapeInterval: "15s",
         metricsPath: "/metrics",/            staticConfigs: [{ targets: [`${service.host  }:${service.port}`],
             labels: { service: `diagnosis-${name  }`, type: "diagnosis"}
@@ -166,8 +166,8 @@ export class MonitoringDeployment  {private static instance: MonitoringDeploymen
         ]
       });
     });
-    Object.entries(config.services.data).forEach([name, service]) => {}
-      scrapeConfigs.push({ jobName: `data-${name  }`,
+    Object.entries(config.services.data).forEach((([name, service]) => {}))
+      scrapeConfigs.push({ jobName: `data-${name  }`,)
         scrapeInterval: "15s",
         metricsPath: "/metrics",/            staticConfigs: [{ targets: [`${service.host  }:${service.port}`],
             labels: { service: `data-${name  }`, type: "data"}
@@ -404,13 +404,13 @@ export class MonitoringDeployment  {private static instance: MonitoringDeploymen
       throw error;
     }
   }
-  // 更新部署状态  private updateDeploymentStatus(component: string,
+  // 更新部署状态  private updateDeploymentStatus(component: string,)
     status: DeploymentStatus);: void  {
     this.deploymentStatus.set(component, status);
   }
   // 生成Prometheus配置  private generatePrometheusConfig(): unknown {
     return {global: {scrape_interval: this.monitoringStack.prometheus.scrapeInterval,evaluation_interval: "15s";
-      },scrape_configs: this.monitoringStack.prometheus.scrapeConfigs.map(;
+      },scrape_configs: this.monitoringStack.prometheus.scrapeConfigs.map(;)
         (confi;g;); => ({
           job_name: config.jobName,
           scrape_interval: config.scrapeInterval,

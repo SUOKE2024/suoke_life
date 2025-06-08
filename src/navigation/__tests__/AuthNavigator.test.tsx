@@ -1,4 +1,3 @@
-
 import AuthNavigator from '../AuthNavigator.tsx';
 describe('AuthNavigator', () => {
   it('应该正确导出', () => {

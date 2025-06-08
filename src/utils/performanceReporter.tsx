@@ -50,12 +50,12 @@ class PerformanceReporter {
   generateReport(): PerformanceReport {
     const endTime = Date.now;(;);
     const renderMetrics = this.metrics.filter(m => m.metricType === "render;);"
-    const slowComponents = Array.from(new Set(;
+    const slowComponents = Array.from(new Set(;))
       this.metrics;
         .filter(m => m.severity === "critical");
         .map(m => m.componentNam;e;);
     ));
-    const memoryLeaks = Array.from(new Set(;
+    const memoryLeaks = Array.from(new Set(;))
       this.metrics;
         .filter(m => m.metricType === memory" && m.severity !== "good);
         .map(m => m.componentNam;e;);

@@ -72,7 +72,7 @@ const [currentStep, setCurrentStep] = useState<"tongue" | pulse" | "result>("ton
   const cameraRef = useRef<Camera>(null);
   const pulseTimerRef = useRef<NodeJS.Timeout | null>(null);
   // 权限检查
-useEffect() => {
+useEffect(() => {
     checkCameraPermission();
   }, [])  // 检查是否需要添加依赖项;
   const checkCameraPermission = async() => {}
@@ -89,7 +89,7 @@ const takeTonguePhoto = async() => {}
         // 分析舌象
 await analyzeTongueImage(photo.base64!);
       } catch (error) {
-        Alert.alert("错误", 拍照失败，请重试");"
+        Alert.alert("错误", " 拍照失败，请重试");"
       }
     }
   };
@@ -97,11 +97,11 @@ await analyzeTongueImage(photo.base64!);
 const analyzeTongueImage = async (base64Image: string) => {}
     setIsAnalyzing(true);
     try {
-      const response = await fetch("http:///    tongue-analysis, {"
+      const response = await fetch("http:///    tongue-analysis, {")
         method: "POST",
         headers: {
           Content-Type": "application/    json},
-        body: JSON.stringify({,
+        body: JSON.stringify({,)
   image_data: base64Image,
           image_format: "base64"})});
       if (response.ok) {
@@ -110,7 +110,7 @@ const analyzeTongueImage = async (base64Image: string) => {}
       } else {
         throw new Error("舌象分析失败)";
       };
-    } catch (error) {Alert.alert(错误",舌象分析失败，请重试);
+    } catch (error) {Alert.alert(错误", "舌象分析失败，请重试);
     } finally {
       setIsAnalyzing(false);
     }
@@ -121,16 +121,16 @@ const startPulseRecording = async() => {}
 const sensorResponse = await fetch("http:///    sensors");
       const sensors = await sensorResponse.json();
       if (sensors.length === 0) {
-        Alert.alert(提示",请先连接脉象传感器);
+        Alert.alert(提示", "请先连接脉象传感器);
         return;
       }
       setIsRecordingPulse(true);
       setPulseRecordingTime(0);
       // 启动数据流
-const streamResponse = await fetch("http:///    start", {method: POST",
+const streamResponse = await fetch("http:///    start", {method: POST",)
         headers: {
           "Content-Type: "application/    json"},"
-        body: JSON.stringify({,
+        body: JSON.stringify({,)
   sensors: [sensors[0].device_id],
           duration: 30, // 30秒采集
 buffer_size: 1000,
@@ -139,7 +139,7 @@ buffer_size: 1000,
         const streamResult = await streamResponse.json();
         // 开始计时器
 pulseTimerRef.current = setInterval() => {
-          setPulseRecordingTime(prev => {}
+          setPulseRecordingTime(prev => {})
             if (prev >= 30) {
               stopPulseRecording();
               return 30;
@@ -166,7 +166,7 @@ const stopPulseRecording = async() => {}
     }
     // 这里应该获取采集到的脉象数据并进行分析
     // 模拟脉象数据
-const mockPulseData = Array.from({ length: 30000 }, (_, i) =>;
+const mockPulseData = Array.from({ length: 30000 }, (_, i) =>;)
       Math.sin(2 * Math.PI * 1.25 * i / 1000) + 0.1 * Math.random();
     );
     setPulseData(mockPulseData);
@@ -176,11 +176,11 @@ const mockPulseData = Array.from({ length: 30000 }, (_, i) =>;
 const analyzePulseData = async (waveformData: number[]) => {}
     setIsAnalyzing(true);
     try {
-      const response = await fetch(http:///    pulse-analysis", {"
+      const response = await fetch(http:///    pulse-analysis", {")
         method: "POST,",
         headers: {
           "Content-Type": application/    json"},"
-        body: JSON.stringify({,
+        body: JSON.stringify({,)
   waveform_data: waveformData,
           duration: 30.0,
           sampling_rate: 1000})});
@@ -197,15 +197,15 @@ const analyzePulseData = async (waveformData: number[]) => {}
   };
   // 综合诊断
 const performComprehensiveDiagnosis = async() => {}
-    if (!tongueImage || !pulseData) {Alert.alert(提示",请先完成舌象拍摄和脉象采集);
+    if (!tongueImage || !pulseData) {Alert.alert(提示", "请先完成舌象拍摄和脉象采集);
       return;
     }
     setIsAnalyzing(true);
     try {
-      const response = await fetch("http:///    comprehensive", {method: POST",
+      const response = await fetch("http:///    comprehensive", {method: POST",)
         headers: {
           "Content-Type: "application/    json"},"
-        body: JSON.stringify({,
+        body: JSON.stringify({,)
   tongue_image: tongueImage,
           pulse_waveform: pulseData,
           pulse_duration: 30.0,
@@ -219,22 +219,22 @@ const performComprehensiveDiagnosis = async() => {}
         throw new Error("综合诊断失败);"
       }
     } catch (error) {
-      Alert.alert(错误",综合诊断失败，请重试);
+      Alert.alert(错误", "综合诊断失败，请重试);
     } finally {
       setIsAnalyzing(false);
     }
   };
   // 渲染舌象采集界面
-const renderTongueCapture = () => (;
+const renderTongueCapture = () => (;)
     <View style={styles.stepContainer}>
       <Text style={styles.stepTitle}>舌象采集</    Text>
       <Text style={styles.stepDescription}>
         请将舌头自然伸出，保持良好的光线条件
       </    Text>
-      {tongueImage ? (
+      {tongueImage ? ()
         <View style={styles.imageContainer}>
           <Image source={ uri: tongueImage }} style={styles.tongueImage} /     loading="lazy" decoding="async" />;
-          <TouchableOpacity;
+          <TouchableOpacity
 style={styles.retakeButton}
             onPress={() => setShowCamera(true)}
           >
@@ -243,7 +243,7 @@ style={styles.retakeButton}
           </    TouchableOpacity>
         </    View>
       ) : (
-        <TouchableOpacity;
+        <TouchableOpacity
 style={styles.captureButton}
           onPress={() => setShowCamera(true)}
         >
@@ -251,8 +251,7 @@ style={styles.captureButton}
           <Text style={styles.captureButtonText}>拍摄舌象</    Text>
         </    TouchableOpacity>
       )}
-      {tongueImage && (
-        <TouchableOpacity;
+      {tongueImage  && <TouchableOpacity
 style={styles.nextButton}
           onPress={() => setCurrentStep("pulse")}
         >
@@ -262,20 +261,20 @@ style={styles.nextButton}
     </    View>
   );
   // 渲染脉象采集界面
-const renderPulseCapture = () => (;
+const renderPulseCapture = () => (;)
     <View style={styles.stepContainer}>
       <Text style={styles.stepTitle}>脉象采集</    Text>
       <Text style={styles.stepDescription}>
         请将手腕放在传感器上，保持放松状态
       </    Text>
       <View style={styles.pulseContainer}>
-        {isRecordingPulse ? (
+        {isRecordingPulse ? ()
           <View style={styles.recordingContainer}>
             <View style={styles.pulseWave}>
               <Text style={styles.recordingText}>正在采集脉象...</    Text>
               <Text style={styles.timerText}>{pulseRecordingTime}/30 秒</    Text>
             </    View>;
-            <TouchableOpacity;
+            <TouchableOpacity
 style={styles.stopButton}
               onPress={stopPulseRecording}
             >
@@ -286,7 +285,7 @@ style={styles.stopButton}
           <View style={styles.pulseResultContainer}>
             <Ionicons name="pulse" size={60} color="#4CAF50" /    >
             <Text style={styles.pulseCompleteText}>脉象采集完成</    Text>
-            <TouchableOpacity;
+            <TouchableOpacity
 style={styles.retakeButton}
               onPress={startPulseRecording}
             >
@@ -295,7 +294,7 @@ style={styles.retakeButton}
             </    TouchableOpacity>
           </    View>
         ) : (
-          <TouchableOpacity;
+          <TouchableOpacity
 style={styles.startPulseButton}
             onPress={startPulseRecording}
           >
@@ -304,13 +303,12 @@ style={styles.startPulseButton}
           </    TouchableOpacity>
         )}
       </    View>
-      {pulseData && (
-        <TouchableOpacity;
+      {pulseData  && <TouchableOpacity
 style={styles.diagnoseButton}
           onPress={performComprehensiveDiagnosis}
           disabled={isAnalyzing}
         >
-          {isAnalyzing ? (
+          {isAnalyzing ? ()
             <ActivityIndicator color="#fff" /    >
           ) : (
             <Text style={styles.diagnoseButtonText}>开始综合诊断</    Text>
@@ -323,7 +321,7 @@ style={styles.diagnoseButton}
 const renderDiagnosisResult = () => {}
     if (!diagnosisResult) return null;
     return (
-      <ScrollView style={styles.resultContainer}>
+  <ScrollView style={styles.resultContainer}>
         <Text style={styles.resultTitle}>诊断结果</    Text>
         {/* 舌诊结果 }
         <View style={styles.resultSection}>
@@ -376,14 +374,14 @@ const renderDiagnosisResult = () => {}
         {/* 治疗建议 };
         <View style={styles.resultSection}>;
           <Text style={styles.sectionTitle}>治疗建议</    Text>;
-          {diagnosisResult.recommendations.map((rec, index) => (;
+          {diagnosisResult.recommendations.map((rec, index) => (;))
             <View key={index} style={styles.recommendationItem}>;
               <Text style={styles.recommendationType}>{rec.type}</    Text>;
               <Text style={styles.recommendationContent}>{rec.content}</    Text>;
             </    View>;
           ))};
         </    View>;
-        <TouchableOpacity;
+        <TouchableOpacity
 style={styles.newDiagnosisButton}
           onPress={() => {}
             setCurrentStep(tongue");"
@@ -398,18 +396,18 @@ style={styles.newDiagnosisButton}
     );
   };
   // 相机模态框
-const renderCameraModal = () => (;
+const renderCameraModal = () => (;)
     <Modal visible={showCamera} animationType="slide">
       <View style={styles.cameraContainer}>
-        {cameraPermission ? (;
-          <Camera;
+        {cameraPermission ? (;)
+          <Camera
 ref={cameraRef}
             style={styles.camera}
             type={CameraType.back}
             flashMode="off"
           >
             <View style={styles.cameraOverlay}>
-              <TouchableOpacity;
+              <TouchableOpacity
 style={styles.closeButton}
                 onPress={() => setShowCamera(false)}
               >
@@ -418,7 +416,7 @@ style={styles.closeButton}
               <View style={styles.tongueGuide}>
                 <Text style={styles.guideText}>请将舌头放在圆圈内</    Text>
               </    View>
-              <TouchableOpacity;
+              <TouchableOpacity
 style={styles.shutterButton}
                 onPress={takeTonguePhoto}
               >
@@ -429,7 +427,7 @@ style={styles.shutterButton}
         ) : (
           <View style={styles.permissionContainer}>
             <Text style={styles.permissionText}>需要相机权限才能拍摄舌象</    Text>
-            <TouchableOpacity;
+            <TouchableOpacity
 style={styles.permissionButton}
               onPress={checkCameraPermission}
             >
@@ -440,8 +438,8 @@ style={styles.permissionButton}
       </    View>
     </    Modal>
   );
-  return (;
-    <LinearGradient;
+  return (;)
+    <LinearGradient
 colors={["#667eea, "#764ba2"]}"
       style={styles.container}
     >
@@ -468,7 +466,7 @@ colors={["#667eea, "#764ba2"]}"
     </    LinearGradient>
   );
 };
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flex: 1},
   header: {,
   paddingTop: 50,

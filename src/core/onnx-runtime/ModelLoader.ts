@@ -43,7 +43,7 @@ this.loadedModels.set(model.id, model);
       `);
       return model;
     } catch (error) {
-      const onnxError: ONNXError = {code: MODEL_LOAD_FAILED",
+      const onnxError: ONNXError = {code: MODEL_LOAD_FAILED", "
         message: `从路径加载模型失败: ${error.message}`,
         details: error,
         timestamp: new Date();
@@ -53,7 +53,7 @@ this.loadedModels.set(model.id, model);
   }
   /**
 * * 从URL下载并加载模型
-  async loadFromURL(
+  async loadFromURL()
     modelUrl: string,
     options?: DownloadOptions;
   ): Promise<ONNXModel> {
@@ -97,7 +97,7 @@ const exists = await RNFS.exists(modelPath);
       }
       return await this.loadFromPath(modelPath);
     } catch (error) {
-      const onnxError: ONNXError = {code: MODEL_LOAD_FAILED",
+      const onnxError: ONNXError = {code: MODEL_LOAD_FAILED", "
         message: `加载预定义模型失败: ${error.message}`,
         details: error,
         timestamp: new Date();
@@ -252,7 +252,7 @@ if (Platform.OS === ios") {"
       return `${RNFS.MainBundlePath}/assets/models/    ${modelId}.onnx`;
     }
   }
-  private async downloadModel(
+  private async downloadModel()
     url: string,
     localPath: string,
     options?: DownloadOptions;

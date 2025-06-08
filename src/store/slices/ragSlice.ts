@@ -100,7 +100,7 @@ const initialState: RAGState = {,
   }
 };
 // 异步Thunk：基础RAG查询
-export const queryRAG = createAsyncThunk(;
+export const queryRAG = createAsyncThunk(;)
   'rag/query',
   async (request: RAGQueryRequest, { dispatch, rejectWithValue }) => {
     try {
@@ -122,7 +122,7 @@ export const queryRAG = createAsyncThunk(;
   }
 );
 // 异步Thunk：中医分析
-export const analyzeTCMSyndrome = createAsyncThunk(;
+export const analyzeTCMSyndrome = createAsyncThunk(;)
   'rag/analyzeTCMSyndrome',
   async (request: TCMAnalysisRequest, { rejectWithValue }) => {
     try {
@@ -134,7 +134,7 @@ export const analyzeTCMSyndrome = createAsyncThunk(;
   }
 );
 // 异步Thunk：中药推荐
-export const recommendHerbs = createAsyncThunk(;
+export const recommendHerbs = createAsyncThunk(;)
   'rag/recommendHerbs',
   async (request: HerbRecommendationRequest, { rejectWithValue }) => {
     try {
@@ -146,9 +146,9 @@ export const recommendHerbs = createAsyncThunk(;
   }
 );
 // 异步Thunk：流式查询
-export const streamQueryRAG = createAsyncThunk(;
+export const streamQueryRAG = createAsyncThunk(;)
   'rag/streamQuery',
-  async (
+  async ()
     { request, onChunk }: { request: RAGQueryRequest; onChunk: (chunk: StreamResponse) => void },
     { dispatch, rejectWithValue }
   ) => {
@@ -166,7 +166,7 @@ export const streamQueryRAG = createAsyncThunk(;
   }
 );
 // 异步Thunk：多模态查询
-export const multimodalQuery = createAsyncThunk(;
+export const multimodalQuery = createAsyncThunk(;)
   'rag/multimodalQuery',
   async (request: RAGQueryRequest, { dispatch, rejectWithValue }) => {
     try {
@@ -182,7 +182,7 @@ export const multimodalQuery = createAsyncThunk(;
   }
 );
 // RAG切片
-const ragSlice = createSlice({name: 'rag',initialState,reducers: {// 基础状态管理,
+const ragSlice = createSlice({name: 'rag',initialState,reducers: {// 基础状态管理,)
   setCurrentQuery: (state, action: PayloadAction<string>) => {state.currentQuery = action.payload;
     },
     clearCurrentResult: (state) => {
@@ -219,7 +219,7 @@ const ragSlice = createSlice({name: 'rag',initialState,reducers: {// 基础状�
       state.queryHistory = [];
     },
     removeFromHistory: (state, action: PayloadAction<string>) => {
-      state.queryHistory = state.queryHistory.filter(
+      state.queryHistory = state.queryHistory.filter()
         item => item.requestId !== action.payload;
       );
     },
@@ -251,7 +251,7 @@ const ragSlice = createSlice({name: 'rag',initialState,reducers: {// 基础状�
       };
     },
     // 性能监控
-    updatePerformanceMetrics: (
+    updatePerformanceMetrics: ()
       state,
       action: PayloadAction<{ responseTime: number; success: boolean }>
     ) => {
@@ -297,7 +297,7 @@ const ragSlice = createSlice({name: 'rag',initialState,reducers: {// 基础状�
       state.offline.pendingQueries.push(action.payload);
     },
     removePendingQuery: (state, action: PayloadAction<string>) => {
-      state.offline.pendingQueries = state.offline.pendingQueries.filter(
+      state.offline.pendingQueries = state.offline.pendingQueries.filter()
         query => query.sessionId !== action.payload;
       );
     },

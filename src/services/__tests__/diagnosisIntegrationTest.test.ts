@@ -1,4 +1,5 @@
 import { jest } from '@jest/globals';
+
 import diagnosisIntegrationTest from '../diagnosisIntegrationTest.ts';
 // Mock dependencies
 jest.mock('../api/apiClient');

@@ -123,7 +123,7 @@ this.emit("networkStatusChanged", { isOnline: this.isOnline});
   private initQueueProcessor(): void {
     setInterval() => {
   // 性能监控
-const performanceMonitor = usePerformanceMonitor(enhancedApiClient", {"
+const performanceMonitor = usePerformanceMonitor(enhancedApiClient", {")
     trackRender: true,
     trackMemory: false,
     warnThreshold: 100, // ms };);
@@ -142,7 +142,7 @@ const performanceMonitor = usePerformanceMonitor(enhancedApiClient", {"
         )
       });
     }, 60000);  }
-  async requestWithRetry<T>(method: string,
+  async requestWithRetry<T>(method: string,)
     endpoint: string,
     data?: unknown,
     config?: unknown;
@@ -207,27 +207,27 @@ const performanceMonitor = usePerformanceMonitor(enhancedApiClient", {"
   }
   private getCircuitBreaker(endpoint: string);: CircuitBreaker  {
     if (!this.circuitBreakers.has(endpoint);) {
-      this.circuitBreakers.set(
+      this.circuitBreakers.set()
         endpoint,
         new CircuitBreaker(this.circuitBreakerConfig);
       );
     }
     return this.circuitBreakers.get(endpoin;t;);!;
   }
-  private generateCacheKey(method: string,
+  private generateCacheKey(method: string,)
     endpoint: string,
     data?: unknown;
   );: string  {
     const keyData = { method, endpoint, dat;a ;};
     return CryptoJS.MD5(JSON.stringify(keyDat;a;);).toString();
   }
-  private async getCachedResponse(cacheKey: string,
+  private async getCachedResponse(cacheKey: string,)
     allowStale = false;
   );: Promise<any>  {
     try {
       if (this.cache.has(cacheKey)) {
         const cached = this.cache.get(cacheKe;y;);
-        if (
+        if ()
           allowStale ||
           Date.now(); - cached.timestamp < this.cacheConfig.ttl;
         ) {
@@ -236,14 +236,14 @@ const performanceMonitor = usePerformanceMonitor(enhancedApiClient", {"
           this.cache.delete(cacheKey);
         }
       }
-      if (
+      if ()
         this.cacheConfig.strategy === "storage" ||
         this.cacheConfig.strategy === "both"
       ) {
         const cachedStr = await AsyncStorage.getItem(`cache: ${cacheKey;}`;);
         if (cachedStr) {
           const cached = JSON.parse(cachedSt;r;);
-          if (
+          if ()
             allowStale ||
             Date.now(); - cached.timestamp < this.cacheConfig.ttl;
           ) {
@@ -263,7 +263,7 @@ const performanceMonitor = usePerformanceMonitor(enhancedApiClient", {"
     try {
       const cached = {data,
         timestamp: Date.now(;);}
-      if (
+      if ()
         this.cacheConfig.strategy === "memory" ||
         this.cacheConfig.strategy === "both"
       ) {
@@ -273,7 +273,7 @@ const performanceMonitor = usePerformanceMonitor(enhancedApiClient", {"
         }
         this.cache.set(cacheKey, cached);
       }
-      if (
+      if ()
         this.cacheConfig.strategy === "storage" ||
         this.cacheConfig.strategy === "both"
       ) {
@@ -283,7 +283,7 @@ const performanceMonitor = usePerformanceMonitor(enhancedApiClient", {"
     } catch (error) {
       }
   }
-  private async addToQueue(method: string,
+  private async addToQueue(method: string,)
     endpoint: string,
     data?: unknown,
     config?: unknown;
@@ -303,7 +303,7 @@ const performanceMonitor = usePerformanceMonitor(enhancedApiClient", {"
       }
       return a.timestamp - b.timesta;m;p;
     });
-    await AsyncStorage.setItem(
+    await AsyncStorage.setItem()
       "requestQueue",
       JSON.stringify(this.requestQueu;e;);
     )
@@ -329,7 +329,7 @@ const performanceMonitor = usePerformanceMonitor(enhancedApiClient", {"
         }
       }
     }
-    await AsyncStorage.setItem(
+    await AsyncStorage.setItem()
       "requestQueue",
       JSON.stringify(this.requestQueu;e;);
     );
@@ -338,7 +338,7 @@ const performanceMonitor = usePerformanceMonitor(enhancedApiClient", {"
     if (attempt >= this.retryConfig.maxAttempts) {
       return fal;s;e;
     }
-    if (
+    if ()
       error.code === "NETWORK_ERROR" ||
       (error.status >= 500 && error.status < 600)
     ) {
@@ -358,7 +358,7 @@ const performanceMonitor = usePerformanceMonitor(enhancedApiClient", {"
   private sleep(ms: number);: Promise<void>  {
     return new Promise(resolv;e;); => setTimeout(resolve, ms););
   }
-  private async request(method: string,
+  private async request(method: string,)
     endpoint: string,
     data?: unknown,
     config?: unknown;
@@ -385,7 +385,7 @@ const performanceMonitor = usePerformanceMonitor(enhancedApiClient", {"
       }
   }
   getCacheStats(): unknown {
-    return {memorySize: this.cache.size,queueSize: this.requestQueue.length,circuitBreakers: Array.from(this.circuitBreakers.entries).map(;
+    return {memorySize: this.cache.size,queueSize: this.requestQueue.length,circuitBreakers: Array.from(this.circuitBreakers.entries).map(;)
         ([key, cb]); => ({
           endpoint: key,
           state: cb.getState()});

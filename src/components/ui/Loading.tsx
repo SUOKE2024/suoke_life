@@ -21,8 +21,8 @@ style?: ViewStyle;
   // 其他属性
 testID?: string
 }
-const Loading: React.FC<LoadingProps /    > = ({// 性能监控
-const performanceMonitor = usePerformanceMonitor(Loading", {"
+const Loading: React.FC<LoadingProps /    > = ({// 性能监控)
+const performanceMonitor = usePerformanceMonitor(Loading", {")
     trackRender: true,
     trackMemory: false,warnThreshold: 100, // ms };);
   loading = true,
@@ -62,11 +62,11 @@ const performanceMonitor = usePerformanceMonitor(Loading", {"
   );
   // 记录渲染性能
 performanceMonitor.recordRender();
-  return (;
-    <View style={containerStyle} testID={testID} /    >;
+  return (;)
+    <View style={{containerStyle}} testID={testID} /    >;
       <View style={styles.content} /    >;
         <ActivityIndicator size={size} color={color} style={styles.indicator} /    >;
-        {text && (;
+        {text && (;)
           <Text variant="body2" style={styles.text} color="textSecondary" /    >;
             {text};
           </    Text>;

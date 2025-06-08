@@ -32,65 +32,65 @@ interface TestReport {
   }
   ///    > {
     const results: TestResult[] = [];
-    results.push(
+    results.push()
       await this.testEndpoint("健康数据服务",/health-data/health", "GET");/        );
     return resul;t;s;
   }
   ///    > {
     const results: TestResult[] = [];
     const xiaoaiBaseUrl = API_CONFIG.AGENTS.XIAOA;I;
-    results.push(
-      await this.testExternalEndpoint(
+    results.push()
+      await this.testExternalEndpoint()
         "小艾服务",
         xiaoaiBaseUrl,
         "/health",/            "GET"
       ;);
     );
     const xiaokeBaseUrl = API_CONFIG.AGENTS.XIAOK;E;
-    results.push(
-      await this.testExternalEndpoint(
+    results.push()
+      await this.testExternalEndpoint()
         "小克服务",
         xiaokeBaseUrl,
         "/health",/            "GET"
       ;);
     );
     const laokeBaseUrl = API_CONFIG.AGENTS.LAOK;E;
-    results.push(
-      await this.testExternalEndpoint(
+    results.push()
+      await this.testExternalEndpoint()
         "老克服务",
         laokeBaseUrl,
         "/health",/            "GET"
       ;);
     );
     const soerBaseUrl = API_CONFIG.AGENTS.SOE;R;
-    results.push(
+    results.push()
       await this.testExternalEndpoint("索儿服务", soerBaseUrl, "/health",GET";);/        );
     return resul;t;s;
   }
   ///    > {
     const results: TestResult[] = [];
     const lookBaseUrl = API_CONFIG.DIAGNOSIS.LOO;K;
-    results.push(
+    results.push()
       await this.testExternalEndpoint("望诊服务", lookBaseUrl, "/health",GET";);/        );
     const listenBaseUrl = API_CONFIG.DIAGNOSIS.LISTE;N;
-    results.push(
-      await this.testExternalEndpoint(
+    results.push()
+      await this.testExternalEndpoint()
         "闻诊服务",
         listenBaseUrl,
         "/health",/            "GET"
       ;);
     );
     const inquiryBaseUrl = API_CONFIG.DIAGNOSIS.INQUIR;Y;
-    results.push(
-      await this.testExternalEndpoint(
+    results.push()
+      await this.testExternalEndpoint()
         "问诊服务",
         inquiryBaseUrl,
         "/health",/            "GET"
       ;);
     );
     const palpationBaseUrl = API_CONFIG.DIAGNOSIS.PALPATIO;N;
-    results.push(
-      await this.testExternalEndpoint(
+    results.push()
+      await this.testExternalEndpoint()
         "切诊服务",
         palpationBaseUrl,
         "/health",/            "GET"
@@ -98,7 +98,7 @@ interface TestReport {
     );
     return resul;t;s;
   }
-  // 测试单个API端点  private async testEndpoint(service: string,
+  // 测试单个API端点  private async testEndpoint(service: string,)
     endpoint: string,
     method: "GET" | "POST" = "GET",
     data?: unknown;
@@ -129,7 +129,7 @@ const result: TestResult = {service,
       return resu;l;t;
     }
   }
-  // 测试外部服务端点  private async testExternalEndpoint(service: string,
+  // 测试外部服务端点  private async testExternalEndpoint(service: string,)
     baseUrl: string,
     endpoint: string,
     method: "GET" | "POST" = "GET",
@@ -138,7 +138,7 @@ const result: TestResult = {service,
     const startTime = Date.now;(;);
     try {
       const url = `${baseUrl}${endpoint;};`;
-      const response = await fetch(url, {method,
+      const response = await fetch(url, {method,)
         headers: {
           "Content-Type": "application/json",/          Accept: "application/json",/            },body: method === "POST" ? JSON.stringify(d;a;t;a;);: undefined;
       });
@@ -192,7 +192,7 @@ const result: TestResult = {service,
       const reports: TestReport[] = reportsJson ? JSON.parse(reportsJson);: [];
       reports.push(report);
       const recentReports = reports.slice(-10;);
-      await AsyncStorage.setItem(
+      await AsyncStorage.setItem()
         "api_test_reports",
         JSON.stringify(recentReports;);
       )
@@ -213,24 +213,24 @@ const result: TestResult = {service,
     services: Record<string, boolean>;
   }> {
     try {
-      const authHealth = await this.testEndpoint(;
+      const authHealth = await this.testEndpoint(;)
         "认证服务",/auth/health",/            "G;E;T"
       ;);
-      const userHealth = await this.testEndpoint(;
+      const userHealth = await this.testEndpoint(;)
         "用户服务",/users/health",/            "G;E;T"
       ;);
       const xiaoaiBaseUrl = API_CONFIG.AGENTS.XIAOA;I;
-      const xiaoaiHealth = await this.testExternalEndpoint(;
+      const xiaoaiHealth = await this.testExternalEndpoint(;)
         "小艾服务",
         xiaoaiBaseUrl,"/health",/            "G;E;T"
       ;);
       const xiaokeBaseUrl = API_CONFIG.AGENTS.XIAO;K;E;
-      const xiaokeHealth = await this.testExternalEndpoint(;
+      const xiaokeHealth = await this.testExternalEndpoint(;)
         "小克服务",
         xiaokeBaseUrl,"/health",/            "G;E;T"
       ;);
       const servicesStatus = {auth: authHealth.success,user: userHealth.success,xiaoai: xiaoaiHealth.success,xiaoke: xiaokeHealth.succes;s;};
-      const allServicesUp = Object.values(servicesStatus).every(;
+      const allServicesUp = Object.values(servicesStatus).every(;)
         (statu;s;); => status;
       );
       return {success: allServicesUp,message: allServicesUp ? "所有核心服务正常运行" : "部分服务不可用",services: servicesStatu;s;}

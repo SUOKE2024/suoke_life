@@ -17,12 +17,12 @@ interface ServiceStatus {
   lastChecked: Date;
 }
 export const ServiceStatusScreen: React.FC  = () => {}
-  const performanceMonitor = usePerformanceMonitor("ServiceStatusScreen, { ";
+  const performanceMonitor = usePerformanceMonitor("ServiceStatusScreen, { ";)
     trackRender: true,trackMemory: true,warnThreshold: 50,  };);
   const navigation = useNavigation;
   const [loading, setLoading] = useState<boolean>(tru;e;);
   const [refreshing, setRefreshing] = useState<boolean>(fals;e;);
-  const [services, setServices] = useState<ServiceStatus[] />([;];);/  const [lastUpdate, setLastUpdate] = useState<Date />(new Date); 初始化服务列表 // useEffect() => {
+  const [services, setServices] = useState<ServiceStatus[] />([;];);/  const [lastUpdate, setLastUpdate] = useState<Date />(new Date); 初始化服务列表 // useEffect(() => {
     const effectStart = performance.now();
     const initialServices: ServiceStatus[] = [{
       name: "认证服务",
@@ -53,8 +53,8 @@ export const ServiceStatusScreen: React.FC  = () => {}
     setLoading(tru;e;);
     try {
       const report = await apiIntegrationTest.runAllTest;s;
-      setServices(prevServices => {}
-        return prevServices.map(service => {};
+      setServices(prevServices => {})
+        return prevServices.map(service => {};)
           const result = report.results.find(r => r.service === service.na;m;e;);
           if (result) {
             return {...service,status: result.success ? online" : "offline,responseTime: result.responseTime,lastChecked: new Date(;);};
@@ -64,7 +64,7 @@ export const ServiceStatusScreen: React.FC  = () => {}
       });
       setLastUpdate(new Date();)
     } catch (error) {
-      Alert.alert(错误",服务状态检查失败，请稍后重试。);
+      Alert.alert(错误", "服务状态检查失败，请稍后重试。);
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -87,35 +87,35 @@ export const ServiceStatusScreen: React.FC  = () => {}
     setLoading(tru;e;);
     try {
       const result = await apiIntegrationTest.quickHealthChe;c;k;(;);
-      Alert.alert(
+      Alert.alert()
         result.success ? "检查成功" : 检查警告",
         result.message,
         [{ text: "确定, onPress: (); => }]"
       )
     } catch (error: unknown) {
-      Alert.alert("错误", `快速检查失败: ${error.message}`);
+      Alert.alert("错误", " `快速检查失败: ${error.message}`);
     } finally {
       setLoading(false);
     }
   };
   performanceMonitor.recordRender();
-  return (;
+  return (;)
     <View style={styles.container}>/      <View style={styles.header}>/        <TouchableOpacity onPress={handleBack} style={styles.backButton} accessibilityLabel="TODO: 添加无障碍标签" />/          <Text style={styles.backButtonText}>返回</Text>/        </TouchableOpacity>/        <Text style={styles.headerTitle}>服务状态</Text>/        <View style={styles.placeholder}>/      </View>/;
       <ScrollView,style={styles.content};
-        refreshControl={<RefreshControl;
+        refreshControl={<RefreshControl
 refreshing={refreshing}
             onRefresh={handleRefresh}
             colors={[colors.primary]}
             tintColor={colors.primary} />/            }
       >
         <View style={styles.statusHeader}>/          <Text style={styles.lastUpdateText}>/                最后更新: {lastUpdate.toLocaleTimeString()}
-          </Text>/              <TouchableOpacity;
+          </Text>/              <TouchableOpacity
 style={styles.quickCheckButton}
             onPress={runQuickCheck}
             disabled={loading}
           accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.quickCheckButtonText}>快速检查</Text>/          </TouchableOpacity>/        </View>/
-        {loading && !refreshing ? (<View style={styles.loadingContainer}>/            <ActivityIndicator size="large" color={colors.primary} />/            <Text style={styles.loadingText}>检查服务状态中...</Text>/          </View>/            ): (;
-          <View style= {styles.servicesContainer} />/                {services.map((service, inde;x;) => (
+        {loading && !refreshing ? (<View style={styles.loadingContainer}>/            <ActivityIndicator size="large" color={colors.primary} />/            <Text style={styles.loadingText}>检查服务状态中...</Text>/          </View>/            ): (;)
+          <View style= {styles.servicesContainer} />/                {services.map((service, inde;x;) => ())
               <View key={index} style={styles.serviceItem}>/                <View style={styles.serviceHeader}>/                  <Text style={styles.serviceName}>{service.name}</Text>/  >
                     styles.statusIndicator,
                     service.status === online" ? styles.statusOnline: service.status === "offline ? styles.statusOffline :styles.statusUnknown;
@@ -125,15 +125,14 @@ style={styles.quickCheckButton}
                       service.status === "offline ? "离线" :"
                       未知""
                     }
-                  </Text>/                      {service.responseTime && (
-                    <Text style={styles.serviceResponseTime}>/                          响应时间: {service.responseTime}ms;
+                  </Text>/                      {service.responseTime  && <Text style={styles.serviceResponseTime}>/                          响应时间: {service.responseTime}ms;
                     </Text>/                      )}
                   <Text style={styles.serviceLastChecked}>/                        检查时间: {service.lastChecked.toLocaleTimeString()}
                   </Text>/                </View>/              </View>/                ))}
           </View>/            )}
       </ScrollView>/    </View>/      );
 }
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flex: 1,
     backgroundColor: colors.background;
   },

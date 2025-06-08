@@ -13,7 +13,7 @@ export class ModelQuantizationUtils {private quantizer: ModelQuantizer;
   }
   /**
 * * 快速量化模型 - 使用默认配置
-  async quickQuantize(
+  async quickQuantize()
     model: ONNXModel,
     level: QuantizationLevel = int8""
   ): Promise<ONNXModel> {
@@ -22,7 +22,7 @@ export class ModelQuantizationUtils {private quantizer: ModelQuantizer;
   }
   /**
 * * 自定义量化模型
-  async customQuantize(
+  async customQuantize()
     model: ONNXModel,
     config: QuantizationConfig;
   ): Promise<ONNXModel> {
@@ -30,11 +30,11 @@ export class ModelQuantizationUtils {private quantizer: ModelQuantizer;
   }
   /**
 * * 批量量化模型
-  async batchQuantize(
+  async batchQuantize()
     models: ONNXModel[],
     level: QuantizationLevel = "int8"
   ): Promise<ONNXModel[]> {
-    const configs = models.map(model =>;
+    const configs = models.map(model =>;)
       this.getDefaultQuantizationConfig(model, level);
     );
     return await this.quantizer.quantizeModels(models, configs);
@@ -66,7 +66,7 @@ targetDevice: "cpu",
   /**
 * * 为症状分析模型优化量化
   async quantizeForSymptomAnalysis(model: ONNXModel): Promise<ONNXModel> {
-    const config: QuantizationConfig = {level: dynamic", // 症状分析使用动态量化"
+    const config: QuantizationConfig = {level: dynamic", " // 症状分析使用动态量化"
 outputPath: `${model.path.replace(".onnx, ")}_symptom_quantized.onnx`,
       preserveAccuracy: false, // 可以牺牲一些精度换取速度
 targetDevice: cpu",
@@ -88,7 +88,7 @@ targetDevice: "cpu",
   }
   /**
 * * 获取量化建议
-  getQuantizationRecommendation(
+  getQuantizationRecommendation()
     model: ONNXModel,
     targetDevice: TargetDevice,
     priority: "speed | "accuracy" | size"
@@ -97,7 +97,7 @@ targetDevice: "cpu",
   }
   /**
 * * 估算量化效果
-  estimateQuantizationImpact(
+  estimateQuantizationImpact()
     model: ONNXModel,
     level: QuantizationLevel;
   ) {
@@ -105,7 +105,7 @@ targetDevice: "cpu",
   }
   /**
 * * 添加校准数据
-  async addCalibrationData(
+  async addCalibrationData()
     modelId: string,
     data: Float32Array[]
   ): Promise<void> {
@@ -117,7 +117,7 @@ targetDevice: "cpu",
     this.quantizer.clearCalibrationData(modelId);
   }
   // 私有方法
-private getDefaultQuantizationConfig(
+private getDefaultQuantizationConfig()
     model: ONNXModel,
     level: QuantizationLevel;
   ): QuantizationConfig {
@@ -138,7 +138,7 @@ export function getQuantizationUtils(): ModelQuantizationUtils {if (!quantizatio
 }
 /**
 * * 快速量化模型
-export async function quickQuantizeModel(;
+export async function quickQuantizeModel(;)
   model: ONNXModel,level: QuantizationLevel = int8"";
 ): Promise<ONNXModel> {
   const utils = getQuantizationUtils();
@@ -146,7 +146,7 @@ export async function quickQuantizeModel(;
 }
 /**
 * * 为索克生活项目优化量化
-export async function quantizeForSuokeLife(;
+export async function quantizeForSuokeLife(;)
   model: ONNXModel,modelType: "tcm | "health" | symptom" | "lifestyle";
 ): Promise<ONNXModel> {
   const utils = getQuantizationUtils();
@@ -165,7 +165,7 @@ export async function quantizeForSuokeLife(;
 }
 /**
 * * 批量量化索克生活模型
-export async function batchQuantizeSuokeLifeModels(;
+export async function batchQuantizeSuokeLifeModels(;)
   models: Array<{ model: ONNXModel,
   type: tcm" | "health | "symptom" | lifestyle" }>"
 ): Promise<ONNXModel[]> {
@@ -182,7 +182,7 @@ export async function batchQuantizeSuokeLifeModels(;
 }
 /**
 * * 获取推荐的量化配置
-export function getRecommendedQuantizationConfig(;
+export function getRecommendedQuantizationConfig(;)
   modelType: "tcm | "health" | symptom" | "lifestyle,";
   targetDevice: TargetDevice = "cpu";
 ): Partial<QuantizationConfig> {

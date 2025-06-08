@@ -200,7 +200,7 @@ this.updateTsConfig();
         // 确保Jest支持.tsx文件
 if (!content.includes("tsx")) {
           content = content.replace(
-            /testMatch:\s*\[[^\]]*\]/,
+            /testMatch:\s*[[^]]*\]/,
             `testMatch: [
     **/__tests__/**/*.(ts|tsx|js)",
     "**/*.(test|spec).(ts|tsx|js)
@@ -208,7 +208,7 @@ if (!content.includes("tsx")) {
           );
           
           content = content.replace(
-            /moduleFileExtensions:\s*\[[^\]]*\]/,
+            /moduleFileExtensions:\s*[[^]]*\]/,
             `moduleFileExtensions: ["ts", tsx", "js, "jsx", json", "node]`
           );
           

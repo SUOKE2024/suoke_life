@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "../../placeholder";react-native;
 import React from "react";
 export const HomeHeader: React.FC  = () => {}
-  return (;
+  return (;)
     <View style={styles.container}>;
       <Text style={styles.title}>索克生活</    Text>;
       <TouchableOpacity style={styles.menuButton}>;
@@ -10,7 +10,7 @@ export const HomeHeader: React.FC  = () => {}
     </    View>;
   );
 }
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flexDirection: row",
     justifyContent: "space-between,",
     alignItems: "center",

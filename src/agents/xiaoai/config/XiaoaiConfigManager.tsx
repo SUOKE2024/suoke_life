@@ -251,7 +251,7 @@ private constructor() {
   // 加载配置  private async loadConfig(): Promise<void> {
     try {
       const keys = Object.keys(DEFAULT_CONFI;G;);
-      const promises = keys.map(async (key) => {}
+      const promises = keys.map(async (key) => {})
         const storageKey = `${CONFIG_KEY_PREFIX}${key;};`;
         const value = await AsyncStorage.getItem(storage;K;e;y;);
         if (value !== null) {
@@ -264,7 +264,7 @@ private constructor() {
         return nu;l;l;
       });
       const results = await Promise.all(promi;s;e;s;);
-      results.forEach(result) => {}
+      results.forEach(((result) => {}))
         if (result) {
           this.setConfigValue(result.key, result.value, false);
         }
@@ -277,7 +277,7 @@ private constructor() {
     if (!this.isDirty) retu;r;n;
     try {
       const keys = Object.keys(this.confi;g;);
-      const promises = keys.map(async (key) => {}
+      const promises = keys.map(async (key) => {})
         const storageKey = `${CONFIG_KEY_PREFIX}${key;};`;
         const value = (this.config as any)[key];
         await AsyncStorage.setItem(storageKey, JSON.stringify(valu;e;););
@@ -298,7 +298,7 @@ this.emit("configSaved", this.config);
         throw new Error(`缺少必要配置字段: ${field}`;);
       }
     });
-    if (this.config.diagnosis.integration.minimumDiagnosisTypes < 1 ||
+    if (this.config.diagnosis.integration.minimumDiagnosisTypes < 1 ||)
         this.config.diagnosis.integration.minimumDiagnosisTypes > 4) {
       this.config.diagnosis.integration.minimumDiagnosisTypes = 2;
     }
@@ -331,9 +331,9 @@ this.emit("configSaved", this.config);
   }
   // 启动自动保存  private startAutoSave(): void {
     this.stopAutoSave();
-    this.on(configChanged", () => {}"
+    this.on(configChanged", () => {}")
   // 性能监控
-const performanceMonitor = usePerformanceMonitor("XiaoaiConfigManager, {"
+const performanceMonitor = usePerformanceMonitor("XiaoaiConfigManager, {")
     trackRender: true,
     trackMemory: false,warnThreshold: 100, // ms };);
       this.isDirty = true;
@@ -369,7 +369,7 @@ const performanceMonitor = usePerformanceMonitor("XiaoaiConfigManager, {"
   }
   //
     if (keys) {
-      keys.forEach(key) => {}
+      keys.forEach(((key) => {}))
         this.setConfigValue(key, (DEFAULT_CONFIG as any)[key], false);
       });
     } else {

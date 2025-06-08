@@ -71,7 +71,7 @@ const HEALTH_METRICS: HealthMetric[] = [{id: heart_rate",
     color: #F39C12"},"
   {
       id: "activity_level,",
-      name: "活动量",
+      name: "活动量", "
     value: 8500,
     unit: 步",
     trend: "up,",
@@ -88,7 +88,7 @@ const HEALTH_METRICS: HealthMetric[] = [{id: heart_rate",
     icon: "water,",
     color: "#3498DB"}
 ]
-export const AdvancedHealthDashboard: React.FC<AdvancedHealthDashboardProps /> = ({/   const performanceMonitor = usePerformanceMonitor(AdvancedHealthDashboard",;
+export const AdvancedHealthDashboard: React.FC<AdvancedHealthDashboardProps /> = ({/   const performanceMonitor = usePerformanceMonitor(AdvancedHealthDashboard",;))
 {/
     trackRender: true,
     trackMemory: true,
@@ -98,7 +98,7 @@ export const AdvancedHealthDashboard: React.FC<AdvancedHealthDashboardProps /> =
 }) => {};
 const [selectedPeriod, setSelectedPeriod] = useState<"day | "week" | month" | "year>("week");
   const [selectedMetric, setSelectedMetric] = useState<HealthMetric | null />(nul;l;); 模拟图表数据 // const heartRateData: ChartData = {,
-  labels: [周一",周二, "周三", 周四",周五, "周六", 周日"],"
+  labels: [周一", "周二, "周三", " 周四", "周五, "周六", " 周日"],"
     datasets: [{,
   data: [68, 72, 75, 70, 74, 69, 71],
         color: (opacity = 1) => `rgba(231, 76, 60, ${opacity})`,
@@ -111,14 +111,14 @@ const sleepData: ChartData = {labels: ["深睡, "浅睡", REM",清醒],"
       }
     ]
   };
-const activityData: ChartData = {labels: ["周一", 周二",周三, "周四", 周五",周六, "周日"],
+const activityData: ChartData = {labels: ["周一", " 周二", "周三, "周四", " 周五", "周六, "周日"],
     datasets: [{,
   data: [8200, 9500, 7800, 10200, 8500, 12000, 6500],
         color: (opacity = 1) => `rgba(39, 174, 96, ${opacity});`
       }
     ]
   };
-  const progressData = useMemo(() => {}
+  const progressData = useMemo(() => {})
     return nul;l;
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
@@ -155,39 +155,39 @@ case "poor": return colors.health.po;o;r;
     }
   };
   //
-    <View style={styles.periodSelector}>/          {(["day, "week", month",year] as const).map(period) => ("
-        <TouchableOpacity;
+    <View style={styles.periodSelector}>/          {(["day, "week", month",year] as const).map(period) => (")
+        <TouchableOpacity
 key={period}
           style={[styles.periodButton,
             selectedPeriod === period && styles.activePeriodButton;
           ]}
           onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setSelectedPeriod(period)}/            >
-          <Text;
+          <Text
 style={[styles.periodButtonText,
               selectedPeriod === period && styles.activePeriodButtonText;
             ]} />/            {period === "day" ? 日" : period === "week ? "周" : period === month" ? "月 : "年"}
           </Text>/        </TouchableOpacity>/          ))}
     </View>/      ), []);
-  const renderMetricCard = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => (metric: HealthMetric) => (;
-    <TouchableOpacity;
+  const renderMetricCard = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => (metric: HealthMetric) => (;)
+    <TouchableOpacity
 key={metric.id}
       style={styles.metricCard}
       onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setSelectedMetric(metric)}/        >
-      <View style={[styles.metricIcon, { backgroundColor: metric.color + 20"}]} />/        <Icon name={metric.icon} size={24} color={metric.color} />/      </View>/    "
-      <View style={styles.metricInfo}>/        <Text style={styles.metricName}>{metric.name}</Text>/        <View style={styles.metricValueContainer}>/          <Text style={styles.metricValue}>/            {metric.value} <Text style={styles.metricUnit}>{metric.unit}</Text>/          </Text>/          <View style={styles.metricTrend}>/                <Icon;
+      <View style={{[styles.metricIcon, { backgroundColor: metric.color + 20"}}]} />/        <Icon name={metric.icon} size={24} color={metric.color} />/      </View>/    "
+      <View style={styles.metricInfo}>/        <Text style={styles.metricName}>{metric.name}</Text>/        <View style={styles.metricValueContainer}>/          <Text style={styles.metricValue}>/            {metric.value} <Text style={styles.metricUnit}>{metric.unit}</Text>/          </Text>/          <View style={styles.metricTrend}>/                <Icon
 name={getTrendIcon(metric.trend)}
               size={16}
               color={getStatusColor(metric.status)} />/          </View>/        </View>/      </View>/
-      <View style={[styles.statusIndicator, { backgroundColor: getStatusColor(metric.status)   }]} />/    </TouchableOpacity>/      ), []);
+      <View style={{[styles.statusIndicator, { backgroundColor: getStatusColor(metric.status)   }}]} />/    </TouchableOpacity>/      ), []);
   //
-    <View style={styles.chartsContainer}>/      <View style={styles.chartCard}>/        <Text style={styles.chartTitle}>心率趋势</Text>/            <LineChart;
+    <View style={styles.chartsContainer}>/      <View style={styles.chartCard}>/        <Text style={styles.chartTitle}>心率趋势</Text>/            <LineChart
 data={heartRateData}
           width={width - 48}
           height={200}
           chartConfig={chartConfig}
           bezier;
 style={styles.chart}>/      </View>/
-      <View style={styles.chartCard}>/        <Text style={styles.chartTitle}>睡眠分析</Text>/            <PieChart;
+      <View style={styles.chartCard}>/        <Text style={styles.chartTitle}>睡眠分析</Text>/            <PieChart
 data={[
             { name: "深睡, population: 4.5, color: "#3498DB", legendFontColor: colors.textSecondary},"
             { name: 浅睡", population: 2.8, color: "#9B59B6, legendFontColor: colors.textSecondary},
@@ -203,7 +203,7 @@ data={[
           backgroundColor="transparent"
           paddingLeft="15"
           style={styles.chart}>/      </View>/
-      <View style={styles.chartCard}>/        <Text style={styles.chartTitle}>活动量统计</Text>/            <BarChart;
+      <View style={styles.chartCard}>/        <Text style={styles.chartTitle}>活动量统计</Text>/            <BarChart
 data={activityData}
           width={width - 48}
           height={200}
@@ -211,7 +211,7 @@ data={activityData}
           yAxisLabel=""
           yAxisSuffix="步"
           style={styles.chart}>/      </View>/
-      <View style={styles.chartCard}>/        <Text style={styles.chartTitle}>健康评分</Text>/            <ProgressChart;
+      <View style={styles.chartCard}>/        <Text style={styles.chartTitle}>健康评分</Text>/            <ProgressChart
 data={progressData}
           width={width - 48}
           height={200}
@@ -221,19 +221,19 @@ data={progressData}
   const renderMetricDetail = useCallback(); => {}
     if (!selectedMetric) {return nu;l;l;}
     performanceMonitor.recordRender();
-    return (;
-      <Modal;
+    return (;)
+      <Modal
 visible={!!selectedMetric}
         animationType="slide"
         presentationStyle="pageSheet"
         onRequestClose={() = /> setSelectedMetric(null)}/          >
         <View style={styles.detailContainer}>/          <View style={styles.detailHeader}>/            <TouchableOpacity onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setSelectedMetric(null)}>/              <Icon name="close" size={24} color={colors.textPrimary} />/            </TouchableOpacity>/            <Text style={styles.detailTitle}>{selectedMetric.name}详情</Text>/            <View style={styles.placeholder}>/          </View>/
-          <ScrollView style={styles.detailContent}>/            <View style={styles.detailMetricCard}>/              <View style={[styles.detailMetricIcon, { backgroundColor: selectedMetric.color + 2;0;"   }]} />/                <Icon name={selectedMetric.icon} size={32} color={selectedMetric.color} />/              </View>/              <Text style={styles.detailMetricValue}>/                    {selectedMetric.value} {selectedMetric.unit}"
-              </Text>/              <Text style={[styles.detailMetricStatus, { color: getStatusColor(selectedMetric.status)   }]} />/                {selectedMetric.status === "excellent ? "优秀" :"
+          <ScrollView style={styles.detailContent}>/            <View style={styles.detailMetricCard}>/              <View style={{[styles.detailMetricIcon, { backgroundColor: selectedMetric.color + 2;0;"   }}]} />/                <Icon name={selectedMetric.icon} size={32} color={selectedMetric.color} />/              </View>/              <Text style={styles.detailMetricValue}>/                    {selectedMetric.value} {selectedMetric.unit}"
+              </Text>/              <Text style={{[styles.detailMetricStatus, { color: getStatusColor(selectedMetric.status)   }}]} />/                {selectedMetric.status === "excellent ? "优秀" :"
                 selectedMetric.status === good" ? "良好 :
                 selectedMetric.status === "fair" ? 一般" : "需改善}
               </Text>/            </View>/
-            <View style={styles.detailChart}>/              <Text style={styles.detailChartTitle}>7天趋势</Text>/                  <LineChart;
+            <View style={styles.detailChart}>/              <Text style={styles.detailChartTitle}>7天趋势</Text>/                  <LineChart
 data={heartRateData}
                 width={width - 48}
                 height={200}
@@ -246,8 +246,8 @@ style={styles.chart}>/            </View>/
                 </Text>/              </View>/              <View style={styles.insightItem}>/                <Icon name="target" size={20} color={colors.primary} />/                <Text style={styles.insightText}>/                      建议目标：保持当前水平，适当增加有氧运动。
                 </Text>/              </View>/            </View>/          </ScrollView>/        </View>/      </Modal>/        );
   }
-  return (;
-    <Modal;
+  return (;)
+    <Modal
 visible={visible}
       animationType="slide"
       presentationStyle="fullScreen"
@@ -259,7 +259,7 @@ visible={visible}
           </View>/        </ScrollView>// {renderMetricDetail()};
       </View>/    </Modal>/      ;);
 };
-const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,
+const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,)
   flex: 1,
     backgroundColor: colors.background},
   header: {,

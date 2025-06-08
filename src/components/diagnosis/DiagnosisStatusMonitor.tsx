@@ -25,10 +25,10 @@ export default React.memo(function DiagnosisStatusMonitor({
   showDetails = false,
   refreshInterval = 30000 // 30秒刷新一次
 }: DiagnosisStatusMonitorProps) {
-  const [status, setStatus] = useState<FiveDiagnosisServiceStatus>({isInitialized: false,isProcessing: false,performanceMetrics: {averageResponseTime: 0,successRate: 0,totalSessions: 0;
+  const [status, setStatus] = useState<FiveDiagnosisServiceStatus>({isInitialized: false,isProcessing: false,performanceMetrics: {averageResponseTime: 0,successRate: 0,totalSessions: 0;)
     };
   });
-  const [serviceHealth, setServiceHealth] = useState<ServiceHealth>({inquiry: false,look: false,listen: false,palpation: false,calculation: false;
+  const [serviceHealth, setServiceHealth] = useState<ServiceHealth>({inquiry: false,look: false,listen: false,palpation: false,calculation: false;)
   });
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastUpdateTime, setLastUpdateTime] = useState<Date>(new Date());
@@ -36,7 +36,7 @@ export default React.memo(function DiagnosisStatusMonitor({
   const pulseAnimation = React.useRef(new Animated.Value(1)).current;
   const fadeAnimation = React.useRef(new Animated.Value(1)).current;
   // 更新状态
-  const updateStatus = useCallback(async () => {try {setIsRefreshing(true);
+  const updateStatus = useCallback(async () => {try {setIsRefreshing(true);)
       // 获取服务状态
       const serviceStatus = fiveDiagnosisService.getServiceStatus();
       setStatus(serviceStatus);
@@ -63,17 +63,17 @@ export default React.memo(function DiagnosisStatusMonitor({
     }
   }, [onStatusChange]);
   // 定期更新状态
-  useEffect() => {
+  useEffect(() => {
     updateStatus();
     const interval = setInterval(updateStatus, refreshInterval);
     return () => clearInterval(interval);
   }, [updateStatus, refreshInterval]);
   // 状态变化时的动画效果
-  useEffect() => {
+  useEffect(() => {
     if (status.isProcessing) {
       // 处理中的脉冲动画
-      Animated.loop(
-        Animated.sequence([
+      Animated.loop()
+        Animated.sequence([)
           Animated.timing(pulseAnimation, {
             toValue: 1.2,
             duration: 1000,
@@ -112,15 +112,15 @@ export default React.memo(function DiagnosisStatusMonitor({
   // 渲染服务健康状态
   const renderServiceHealth = () => {if (!showDetails) return null;
     return (
-      <View style={styles.serviceHealthContainer}>
+  <View style={styles.serviceHealthContainer}>
         <Text style={styles.sectionTitle}>服务状态</Text>
-        {Object.entries(serviceHealth).map(([service, isHealthy]) => (;
+        {Object.entries(serviceHealth).map(([service, isHealthy]) => (;))
           <View key={service} style={styles.serviceItem}>;
             <Text style={styles.serviceName}>;
               {getServiceDisplayName(service)};
             </Text>;
-            <View style={[;
-              styles.serviceStatus,{ backgroundColor: isHealthy ? '#28a745' : '#dc3545' };
+            <View style={{[;
+              styles.serviceStatus,{ backgroundColor: isHealthy ? '#28a745' : '#dc3545' }};
             ]}>;
               <Text style={styles.serviceStatusText}>;
                 {isHealthy ? '正常' : '异常'};
@@ -135,7 +135,7 @@ export default React.memo(function DiagnosisStatusMonitor({
   const renderPerformanceMetrics = () => {if (!showDetails) return null;
     const { performanceMetrics } = status;
     return (
-      <View style={styles.metricsContainer}>
+  <View style={styles.metricsContainer}>
         <Text style={styles.sectionTitle}>性能指标</Text>
         <View style={styles.metricItem}>
           <Text style={styles.metricLabel}>平均响应时间</Text>
@@ -145,8 +145,8 @@ export default React.memo(function DiagnosisStatusMonitor({
         </View>
         <View style={styles.metricItem}>
           <Text style={styles.metricLabel}>成功率</Text>;
-          <Text style={[;
-            styles.metricValue,{ color: performanceMetrics.successRate > 0.9 ? '#28a745' : '#ffc107' };
+          <Text style={{[;
+            styles.metricValue,{ color: performanceMetrics.successRate > 0.9 ? '#28a745' : '#ffc107' }};
           ]}>;
             {Math.round(performanceMetrics.successRate * 100)}%;
           </Text>;
@@ -162,7 +162,7 @@ export default React.memo(function DiagnosisStatusMonitor({
   };
   // 获取服务显示名称
   const getServiceDisplayName = (service: string): string => {const names: Record<string, string> = {
-      inquiry: "问诊服务",
+      inquiry: "问诊服务", "
       look: '望诊服务',listen: '闻诊服务',palpation: '切诊服务',calculation: '算诊服务';
     };
     return names[service] || service;
@@ -171,23 +171,23 @@ export default React.memo(function DiagnosisStatusMonitor({
   const statusColor = getStatusColor(overallHealth);
   const statusIcon = getStatusIcon(overallHealth);
   return (
-    <View style={styles.container}>
+  <View style={styles.container}>
       {// 主状态指示器}
-      <TouchableOpacity;
+      <TouchableOpacity
         style={styles.mainStatus}
         onPress={updateStatus}
         disabled={isRefreshing}
       >
         <Animated.View;
-          style={[
+          style={{[
             styles.statusIndicator,
             {
               backgroundColor: statusColor,
-              transform: [{ scale: pulseAnimation }]
+              transform: [{ scale: pulseAnimation }}]
             }
           ]}
         >
-          {isRefreshing ? (
+          {isRefreshing ? ()
             <ActivityIndicator size="small" color="#ffffff" />
           ) : (
             <Text style={styles.statusIcon}>{statusIcon}</Text>
@@ -203,10 +203,10 @@ export default React.memo(function DiagnosisStatusMonitor({
         </View>;
       </TouchableOpacity>;
       {// 详细信息};
-      {showDetails && (;
+      {showDetails && (;)
         <Animated.View ;
-          style={[;
-            styles.detailsContainer,{ opacity: fadeAnimation };
+          style={{[;
+            styles.detailsContainer,{ opacity: fadeAnimation }};
           ]};
         >;
           {renderServiceHealth()};

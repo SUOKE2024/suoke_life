@@ -1,4 +1,3 @@
-
 import DIContainer from '../DIContainer.tsx';
 describe('DIContainer', () => {
   it('应该正确导出', () => {

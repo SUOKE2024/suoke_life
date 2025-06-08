@@ -85,14 +85,14 @@ export class BlockchainServiceClient {
   */
   async getHealthDataRecords(request: GetHealthDataRecordsRequest): Promise<GetHealthDataRecordsResponse> {
     try {
-      const params = new URLSearchParams({user_id: request.userId,page: request.page.toString(),page_size: request.pageSize.toString();
+      const params = new URLSearchParams({user_id: request.userId,page: request.page.toString(),page_size: request.pageSize.toString();)
       });
       if (request.dataType) params.append('data_type', request.dataType);
       if (request.startTime) params.append('start_time', request.startTime.toString());
       if (request.endTime) params.append('end_time', request.endTime.toString());
-      const response = await this.makeRequest(`/api/v1/blockchain/health-records?${params}`, {method: 'GET';
+      const response = await this.makeRequest(`/api/v1/blockchain/health-records?${params}`, {method: 'GET';)
       });
-      return {records: response.records.map(record: any) => ({transactionId: record.transaction_id,dataType: record.data_type,dataHash: new Uint8Array(record.data_hash),metadata: record.metadata,timestamp: record.timestamp,blockHash: record.block_hash;
+      return {records: response.records.map(record: any) => ({transactionId: record.transaction_id,dataType: record.data_type,dataHash: new Uint8Array(record.data_hash),metadata: record.metadata,timestamp: record.timestamp,blockHash: record.block_hash;)
         })),totalCount: response.total_count,page: response.page,pageSize: response.page_size;
       };
     } catch (error) {
@@ -136,9 +136,9 @@ export class BlockchainServiceClient {
   */
   async getBlockchainStatus(request: GetBlockchainStatusRequest): Promise<GetBlockchainStatusResponse> {
     try {
-      const params = new URLSearchParams({include_node_info: request.includeNodeInfo.toString();
+      const params = new URLSearchParams({include_node_info: request.includeNodeInfo.toString();)
       });
-      const response = await this.makeRequest(`/api/v1/blockchain/status?${params}`, {method: 'GET';
+      const response = await this.makeRequest(`/api/v1/blockchain/status?${params}`, {method: 'GET';)
       });
       return {currentBlockHeight: response.current_block_height,connectedNodes: response.connected_nodes,consensusStatus: response.consensus_status,syncPercentage: response.sync_percentage,nodeInfo: response.node_info,lastBlockTimestamp: response.last_block_timestamp;
       };
@@ -149,7 +149,7 @@ export class BlockchainServiceClient {
   /**
   * 生成零知识证明
   */
-  async generateZKProof(
+  async generateZKProof()
     userId: string,
     dataType: string,
     privateInputs: Record<string, any>,
@@ -172,9 +172,9 @@ export class BlockchainServiceClient {
   */
   async getAccessGrants(userId: string): Promise<AccessGrant[]> {
     try {
-      const response = await this.makeRequest(`/api/v1/blockchain/access-grants/${userId}`, {method: 'GET';
+      const response = await this.makeRequest(`/api/v1/blockchain/access-grants/${userId}`, {method: 'GET';)
       });
-      return response.grants.map(grant: any) => ({id: grant.id,userId: grant.user_id,authorizedId: grant.authorized_id,dataTypes: grant.data_types,permissions: grant.permissions,expirationTime: grant.expiration_time,createdAt: grant.created_at,status: grant.status;
+      return response.grants.map(grant: any) => ({id: grant.id,userId: grant.user_id,authorizedId: grant.authorized_id,dataTypes: grant.data_types,permissions: grant.permissions,expirationTime: grant.expiration_time,createdAt: grant.created_at,status: grant.status;)
       }));
     } catch (error) {
       throw this.handleError(error, '获取访问授权列表失败');
@@ -185,7 +185,7 @@ export class BlockchainServiceClient {
   */
   async getNetworkStats(): Promise<BlockchainStatus> {
     try {
-      const response = await this.makeRequest('/api/v1/blockchain/network-stats', {method: 'GET';
+      const response = await this.makeRequest('/api/v1/blockchain/network-stats', {method: 'GET';)
       });
       return {isConnected: response.is_connected,currentBlockHeight: response.current_block_height,networkId: response.network_id,consensusStatus: response.consensus_status,syncPercentage: response.sync_percentage,lastBlockTimestamp: response.last_block_timestamp,nodeCount: response.node_count,transactionPoolSize: response.transaction_pool_size;
       };
@@ -200,11 +200,11 @@ export class BlockchainServiceClient {
     try {
       const response = await this.makeRequest('/api/v1/blockchain/batch-store', {
       method: "POST",
-      body: {requests: requests.map(req => ({user_id: req.userId,data_type: req.dataType,data_hash: Array.from(req.dataHash),encrypted_data: Array.from(req.encryptedData),metadata: req.metadata,timestamp: req.timestamp;
+      body: {requests: requests.map(req => ({user_id: req.userId,data_type: req.dataType,data_hash: Array.from(req.dataHash),encrypted_data: Array.from(req.encryptedData),metadata: req.metadata,timestamp: req.timestamp;))
           }));
         };
       });
-      return response.results.map(result: any) => ({transactionId: result.transaction_id,blockHash: result.block_hash,success: result.success,message: result.message;
+      return response.results.map(result: any) => ({transactionId: result.transaction_id,blockHash: result.block_hash,success: result.success,message: result.message;)
       }));
     } catch (error) {
       throw this.handleError(error, '批量存储健康数据失败');
@@ -213,7 +213,7 @@ export class BlockchainServiceClient {
   /**
   * 发起HTTP请求的通用方法
   */
-  private async makeRequest(endpoint: string, options: {,
+  private async makeRequest(endpoint: string, options: {,)
   method: string;
     body?: any;
     headers?: Record<string, string>;
@@ -226,12 +226,12 @@ export class BlockchainServiceClient {
       try {
         const controller = new AbortController();
         const timeoutId = setTimeout() => controller.abort(), this.timeout);
-        const response = await fetch(url, {method: options.method,headers,body: options.body ? JSON.stringify(options.body) : undefined,signal: controller.signal;
+        const response = await fetch(url, {method: options.method,headers,body: options.body ? JSON.stringify(options.body) : undefined,signal: controller.signal;)
         });
         clearTimeout(timeoutId);
         if (!response.ok) {
           const errorData = await response.json().catch() => ({}));
-          throw new BlockchainError(;
+          throw new BlockchainError(;)
             errorData.message || `HTTP ${response.status}: ${response.statusText}`,this.mapHttpStatusToErrorCode(response.status),errorData;
           );
         }
@@ -257,16 +257,16 @@ export class BlockchainServiceClient {
       return error;
     }
     if (error.name === 'AbortError') {
-      return new BlockchainError(;
+      return new BlockchainError(;)
         `${context}: 请求超时`,BlockchainErrorCode.NETWORK_ERROR,{ timeout: this.timeout };
       );
     }
     if (error.name === 'TypeError' && error.message.includes('fetch')) {
-      return new BlockchainError(;
+      return new BlockchainError(;)
         `${context}: 网络连接失败`,BlockchainErrorCode.NETWORK_ERROR,error;
       );
     }
-    return new BlockchainError(;
+    return new BlockchainError(;)
       `${context}: ${error.message}`,BlockchainErrorCode.UNKNOWN,error;
     );
   }

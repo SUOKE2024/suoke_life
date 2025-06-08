@@ -32,7 +32,7 @@ export class AgentCoordinator {
       const laoke = new LaokeAgentImpl();
       const soer = new SoerAgentImpl();
       // 初始化所有智能体
-      await Promise.all([
+      await Promise.all([)
         xiaoai.initialize(),
         xiaoke.initialize(),
         laoke.initialize(),
@@ -46,14 +46,14 @@ export class AgentCoordinator {
       this.isInitialized = true;
       this.log("info",智能体协调器初始化完成");
     } catch (error) {
-      this.log("error",智能体协调器初始化失败", error);
+      this.log("error",智能体协调器初始化失败", " error);
       throw error;
     }
   }
   /**
   * 协调处理用户任务
   */
-  async coordinateTask(
+  async coordinateTask()
     message: string,
     context: AgentContext;
   ): Promise<AgentResponse> {
@@ -66,39 +66,39 @@ export class AgentCoordinator {
       // 根据任务类型选择协作模式
       switch (taskAnalysis.collaborationMode) {
         case "single":
-          return await this.handleSingleAgentTask(;
+          return await this.handleSingleAgentTask(;)
             taskAnalysis,message,context;
           );
         case "sequential":
-          return await this.handleSequentialCollaboration(;
+          return await this.handleSequentialCollaboration(;)
             taskAnalysis,message,context;
           );
         case "parallel":
-          return await this.handleParallelCollaboration(;
+          return await this.handleParallelCollaboration(;)
             taskAnalysis,message,context;
           );
         case "consensus":
-          return await this.handleConsensusCollaboration(;
+          return await this.handleConsensusCollaboration(;)
             taskAnalysis,message,context;
           );
         default:
           return await this.handleDefaultTask(message, context);
       }
     } catch (error) {
-      this.log("error",任务协调失败", error);
+      this.log("error",任务协调失败", " error);
       throw error;
     }
   }
   /**
   * 分析任务类型和协作需求
   */
-  private async analyzeTask(
+  private async analyzeTask()
     message: string,
     context: AgentContext;
   ): Promise<any> {
     const keywords = message.toLowerCase();
     // 健康诊断类任务 - 需要多智能体协作
-    if (
+    if ()
       keywords.includes("诊断") ||
       keywords.includes("症状") ||
       keywords.includes("健康分析");
@@ -109,7 +109,7 @@ export class AgentCoordinator {
       };
     }
     // 生活方式优化 - 需要索儿主导，其他支持
-    if (
+    if ()
       keywords.includes("生活方式") ||
       keywords.includes("习惯") ||
       keywords.includes("改善");
@@ -120,7 +120,7 @@ export class AgentCoordinator {
       };
     }
     // 知识学习类 - 老克主导
-    if (
+    if ()
       keywords.includes("学习") ||
       keywords.includes("知识") ||
       keywords.includes("教育");
@@ -131,7 +131,7 @@ export class AgentCoordinator {
       };
     }
     // 服务推荐类 - 小克主导
-    if (
+    if ()
       keywords.includes("推荐") ||
       keywords.includes("服务") ||
       keywords.includes("预约");
@@ -142,7 +142,7 @@ export class AgentCoordinator {
       };
     }
     // 紧急情况 - 需要所有智能体协作
-    if (
+    if ()
       keywords.includes("紧急") ||
       keywords.includes("急救") ||
       keywords.includes("危险");
@@ -161,7 +161,7 @@ export class AgentCoordinator {
   /**
   * 处理单智能体任务
   */
-  private async handleSingleAgentTask(
+  private async handleSingleAgentTask()
     taskAnalysis: any,
     message: string,
     context: AgentContext;
@@ -175,7 +175,7 @@ export class AgentCoordinator {
   /**
   * 处理顺序协作任务
   */
-  private async handleSequentialCollaboration(
+  private async handleSequentialCollaboration()
     taskAnalysis: any,
     message: string,
     context: AgentContext;
@@ -191,7 +191,7 @@ export class AgentCoordinator {
       if (agent) {
         const supportContext = {...context,previousResults: results,collaborationMode: "supporting";
         };
-        const supportResult = await agent.processMessage(;
+        const supportResult = await agent.processMessage(;)
           `协作支持: ${message}`,supportContext;
         );
         results.push(supportResult);
@@ -203,7 +203,7 @@ export class AgentCoordinator {
   /**
   * 处理并行协作任务
   */
-  private async handleParallelCollaboration(
+  private async handleParallelCollaboration()
     taskAnalysis: any,
     message: string,
     context: AgentContext;
@@ -218,7 +218,7 @@ export class AgentCoordinator {
       if (agent) {
         const supportContext = {...context,collaborationMode: "parallel_supporting";
         };
-        agentPromises.push(
+        agentPromises.push()
           agent.processMessage(`并行协作: ${message}`, supportContext);
         );
       }
@@ -231,7 +231,7 @@ export class AgentCoordinator {
   /**
   * 处理共识协作任务
   */
-  private async handleConsensusCollaboration(
+  private async handleConsensusCollaboration()
     taskAnalysis: any,
     message: string,
     context: AgentContext;
@@ -260,7 +260,7 @@ export class AgentCoordinator {
   /**
   * 处理默认任务
   */
-  private async handleDefaultTask(
+  private async handleDefaultTask()
     message: string,
     context: AgentContext;
   ): Promise<AgentResponse> {
@@ -290,7 +290,7 @@ export class AgentCoordinator {
   /**
   * 整合协作结果
   */
-  private integrateCollaborationResults(
+  private integrateCollaborationResults()
     results: AgentResponse[],
     taskAnalysis: any;
   ): AgentResponse {
@@ -306,7 +306,7 @@ export class AgentCoordinator {
         taskType: taskAnalysis.type,collaborationMode: taskAnalysis.collaborationMode;
       },context: primaryResult.context,metadata: {...primaryResult.metadata,collaborationType: taskAnalysis.collaborationMode,participatingAgents: [;
           taskAnalysis.primaryAgent,...taskAnalysis.supportingAgents;
-        ],totalExecutionTime: results.reduce(;
+        ],totalExecutionTime: results.reduce((acc, item) => acc + item, 0);
           (sum, r) => sum + (r.metadata?.executionTime || 0),0;
         );
       };
@@ -315,12 +315,12 @@ export class AgentCoordinator {
   /**
   * 获取智能体决策
   */
-  private async getAgentDecision(
+  private async getAgentDecision()
     agent: any,
     message: string,
     context: AgentContext;
   ): Promise<AgentDecisionResult> {
-    const response = await agent.processMessage(;
+    const response = await agent.processMessage(;)
       `决策请求: ${message}`,context;
     );
     return {decision: response.response,confidence: response.metadata?.confidence || 0.5,reasoning: [response.response],alternatives: [],recommendedActions: [],metadata: {agentType: agent.getAgentType(),executionTime: response.metadata?.executionTime;
@@ -383,7 +383,7 @@ export class AgentCoordinator {
   /**
   * 记录日志
   */
-  private log(
+  private log()
     level: "info" | "warn" | "error",
     message: string,
     data?: any;

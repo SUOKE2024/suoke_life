@@ -11,7 +11,7 @@ export interface AgentAvatarProps {
   style?: ViewStyle
   testID?: string
 }
-const AgentAvatar: React.FC<AgentAvatarProps /> = ({/   const performanceMonitor = usePerformanceMonitor(AgentAvatar", { /    ";
+const AgentAvatar: React.FC<AgentAvatarProps /> = ({/   const performanceMonitor = usePerformanceMonitor(AgentAvatar", { /    ";))
     trackRender: true,trackMemory: false,warnThreshold: 100,  };);
   agent,
   size = "medium",
@@ -45,7 +45,7 @@ const AgentAvatar: React.FC<AgentAvatarProps /> = ({/   const performanceMonitor
     }
   };
   const agentConfig = useMemo(() => getAgentConfig(), []);)))));
-  const avatarStyle = useMemo(() => [;
+  const avatarStyle = useMemo(() => [;)
     styles.base,
     {
       width: avatarSize,
@@ -55,27 +55,26 @@ const AgentAvatar: React.FC<AgentAvatarProps /> = ({/   const performanceMonitor
     style;
   ].filter(Boolean); as ViewStyle[], []);
   performanceMonitor.recordRender();
-  return (;
-    <View style={styles.container} testID={testID} />/      <View style={avatarStyle} />/            <Text;
+  return (;)
+    <View style={styles.container} testID={testID} />/      <View style={{avatarStyle}} />/            <Text
 style={
             fontSize: avatarSize * 0.4,
             textAlign: "center"}} />/              {agentConfig.emoji}
         </Text>/      </View>/
-      {online !== undefined && (
-        <View;
-style={[
+      {online !== undefined  && <View
+style={{[
             styles.statusIndicator,
             {
               width: avatarSize * 0.25,
               height: avatarSize * 0.25,
               borderRadius: (avatarSize * 0.25) / 2,/              backgroundColor: online ? colors.success : colors.gray400,
               right: avatarSize * 0.05,
-              bottom: avatarSize * 0.05}
+              bottom: avatarSize * 0.05}}
           ]};
         />/          )};
     </View>/      ;);
 };
-const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({ container: {position: "relative"},
+const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({ container: {position: "relative"},)
   base: {,
   alignItems: "center",
     justifyContent: "center",

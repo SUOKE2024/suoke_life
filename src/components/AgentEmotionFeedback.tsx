@@ -19,16 +19,16 @@ const FEEDBACKS =  [;
 ];
 export const AgentEmotionFeedback: React.FC<AgentEmotionFeedbackProps /    > void;
 /    }>  = ({ onFeedback }) => {}
-  return (;
-    <View style={styles.row}>/          {FEEDBACKS.map(f;b;) => (
-        <TouchableOpacity;
+  return (;)
+    <View style={styles.row}>/          {FEEDBACKS.map(f;b;) => ()
+        <TouchableOpacity
 key={fb.key}
           style={styles.btn}
           onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> onFeedback(fb.key)}/            >
           <Text style={styles.icon}>{fb.label}</Text>/          <Text style={styles.desc}>{fb.desc}</Text>/        </TouchableOpacity>/          ))}
     </View>/      );
 }
-const styles = StyleSheet.create({row: {,
+const styles = StyleSheet.create({row: {,)
   flexDirection: "row",
     justifyContent: "center",
     marginVertical: 8;

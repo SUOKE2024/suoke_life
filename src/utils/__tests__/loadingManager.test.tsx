@@ -1,4 +1,3 @@
-
 import loadingManager from '../loadingManager.tsx';
 describe('loadingManager', () => {
   it('应该正确导出', () => {

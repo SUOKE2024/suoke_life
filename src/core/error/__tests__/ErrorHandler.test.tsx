@@ -1,4 +1,3 @@
-
 import ErrorHandler from '../ErrorHandler.tsx';
 describe('ErrorHandler', () => {
   it('应该正确导出', () => {

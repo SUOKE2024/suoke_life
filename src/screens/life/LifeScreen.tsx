@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { HealthNavigator } from '../../navigation/HealthNavigator';
 /**
  * Life屏幕 - 健康生活管理

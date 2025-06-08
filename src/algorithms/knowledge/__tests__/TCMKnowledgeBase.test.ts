@@ -107,7 +107,7 @@ describe('TCMKnowledgeBase Performance Tests', () => {
     expect(averageTime).toBeLessThan(100);
   });
   it('should handle large datasets efficiently', () => {
-    const largeDataset = new Array(1000).fill(0).map(((_, i) => `source-${i}`);
+    const largeDataset = new Array(1000).fill(0).map(((_, i) => `source-${i}`);)
     const startTime = performance.now();
     // Test with large dataset
     const config = {

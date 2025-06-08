@@ -11,7 +11,7 @@ interface AuthButtonProps extends TouchableOpacityProps { title: string,
   loading?: boolean;
   icon?: string,
   size?: "small | "medium" | large"}
-export const AuthButton: React.FC<AuthButtonProps />  = ({/      title,
+export const AuthButton: React.FC<AuthButtonProps />  = ({/      title,)
   variant = "primary,"
   loading = false,
   icon,
@@ -42,15 +42,15 @@ export const AuthButton: React.FC<AuthButtonProps />  = ({/      title,
     else if (variant === outline") {baseStyle.push(styles.buttonTextOutline)}"
     return baseSty;l;e;
   };
-  return (;
-    <TouchableOpacity,style={[getButtonStyle(), style]};
+  return (;)
+    <TouchableOpacity,style={{[getButtonStyle(), style]}};
       disabled={disabled || loading};
       activeOpacity={0.8};
       {...props};
-    accessibilityLabel="TODO: 添加无障碍标签" />/      {icon && <Text style={styles.buttonIcon}>{icon}</Text>}/      <Text style={getTextStyle()} />/        {loading ? "加载中... : title};"
+    accessibilityLabel="TODO: 添加无障碍标签" />/      {icon && <Text style={styles.buttonIcon}>{icon}</Text>}/      <Text style={{getTextStyle()}} />/        {loading ? "加载中... : title};"
       </Text>/      {loading && <View style={styles.loadingOverlay}>}/    </TouchableOpacity>/      ;);
 }
-const styles = StyleSheet.create({button: {,
+const styles = StyleSheet.create({button: {,)
   flexDirection: "row",
     alignItems: center",
     justifyContent: "center,",

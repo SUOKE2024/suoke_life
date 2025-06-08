@@ -1,12 +1,12 @@
 import {   ActivityIndicator, View   } from 'react-native';
 import React,{ Suspense, lazy } from "react";
 // 懒加载组件工厂   索克生活APP - 性能优化
-* / TODO: 将内联组件移到组件外部* *  , TODO: 将内联组件移到组件外部// const LoadingIndicator = () => (;
+* / TODO: 将内联组件移到组件外部* *  , TODO: 将内联组件移到组件外部// const LoadingIndicator = () => (;)
   <View style={ flex: 1, justifyContent: "center", alignItems: "cente;r" ;}} />/    <ActivityIndicator size="large" color="#007AFF" />/  </View>/    );
 //   ;
 > ;{/
   const LazyComponent = lazy(importFun;c;);
-  return (props: unknown) => (;
+  return (props: unknown) => (;)
     <Suspense fallback={<LoadingIndicator />}>/      <LazyComponent {...props} />/    </Suspense>/      );
 };
 //   ;

@@ -176,27 +176,27 @@ export class FiveDiagnosisEngine {
   private initializeAlgorithms(): void {
     try {
       // 初始化各诊法算法
-      this.calculationAlgorithm = new CalculationDiagnosisAlgorithm(
+      this.calculationAlgorithm = new CalculationDiagnosisAlgorithm()
         this.config.calculation,
         this.knowledgeBase;
       );
-      this.lookingAlgorithm = new LookingDiagnosisAlgorithm(
+      this.lookingAlgorithm = new LookingDiagnosisAlgorithm()
         this.config.looking,
         this.knowledgeBase;
       );
-      this.listeningAlgorithm = new ListeningDiagnosisAlgorithm(
+      this.listeningAlgorithm = new ListeningDiagnosisAlgorithm()
         this.config.listening,
         this.knowledgeBase;
       );
-      this.inquiryAlgorithm = new InquiryDiagnosisAlgorithm(
+      this.inquiryAlgorithm = new InquiryDiagnosisAlgorithm()
         this.config.inquiry,
         this.knowledgeBase;
       );
-      this.palpationAlgorithm = new PalpationDiagnosisAlgorithm(
+      this.palpationAlgorithm = new PalpationDiagnosisAlgorithm()
         this.config.palpation,
         this.knowledgeBase;
       );
-      this.fusionAlgorithm = new DiagnosisFusionAlgorithm(
+      this.fusionAlgorithm = new DiagnosisFusionAlgorithm()
         this.config.fusion,
         this.knowledgeBase;
       );
@@ -234,7 +234,7 @@ export class FiveDiagnosisEngine {
       stage: "looking_analysis",
       progress: 0.3;
         });
-        diagnosisResults.looking = await this.lookingAlgorithm.analyze(
+        diagnosisResults.looking = await this.lookingAlgorithm.analyze()
           input.lookingData,
           input.userProfile;
         );
@@ -245,7 +245,7 @@ export class FiveDiagnosisEngine {
       stage: "listening_analysis",
       progress: 0.4;
         });
-        diagnosisResults.listening = await this.listeningAlgorithm.analyze(
+        diagnosisResults.listening = await this.listeningAlgorithm.analyze()
           input.listeningData,
           input.userProfile;
         );
@@ -256,7 +256,7 @@ export class FiveDiagnosisEngine {
       stage: "inquiry_analysis",
       progress: 0.5;
         });
-        diagnosisResults.inquiry = await this.inquiryAlgorithm.analyze(
+        diagnosisResults.inquiry = await this.inquiryAlgorithm.analyze()
           input.inquiryData,
           input.userProfile;
         );
@@ -267,7 +267,7 @@ export class FiveDiagnosisEngine {
       stage: "palpation_analysis",
       progress: 0.6;
         });
-        diagnosisResults.palpation = await this.palpationAlgorithm.analyze(
+        diagnosisResults.palpation = await this.palpationAlgorithm.analyze()
           input.palpationData,
           input.userProfile;
         );
@@ -278,7 +278,7 @@ export class FiveDiagnosisEngine {
       stage: "calculation_analysis",
       progress: 0.7;
         });
-        diagnosisResults.calculation = await this.calculationAlgorithm.analyze(
+        diagnosisResults.calculation = await this.calculationAlgorithm.analyze()
           input.calculationData,
           input.userProfile;
         );
@@ -406,7 +406,7 @@ export class FiveDiagnosisEngine {
   // 事件系统
   private emit(event: string, data?: any): void {
     const listeners = this.eventListeners.get(event) || [];
-    listeners.forEach(listener) => {
+    listeners.forEach(((listener) => {
       try {
         listener(data);
       } catch (error) {

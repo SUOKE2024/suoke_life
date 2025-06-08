@@ -36,7 +36,7 @@ const API_CONFIG = {
 };
 // 错误类型定义
 export class DiagnosisApiError extends Error {
-  constructor(
+  constructor()
     message: string,
     public statusCode?: number,
     public service?: string,
@@ -71,7 +71,7 @@ class CacheManager {
 }
 const cacheManager = new CacheManager();
 // 增强的API请求函数
-async function apiRequest<T>(
+async function apiRequest<T>()
   url: string,
   options: RequestInit = {},
   timeout: number = 30000,
@@ -83,14 +83,14 @@ async function apiRequest<T>(
   let lastError: Error;
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
-      const response = await fetch(url, {...options,signal: controller.signal,headers: {"Content-Type": "application/json",X-Request-ID": `${service}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,...options.headers;
+      const response = await fetch(url, {...options,signal: controller.signal,headers: {"Content-Type": "application/json",X-Request-ID": `${service}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,...options.headers;)
         };
       });
       clearTimeout(timeoutId);
       if (!response.ok) {
         const errorText = await response.text();
         const isRetryable = response.status >= 500 || response.status === 429;
-        throw new DiagnosisApiError(;
+        throw new DiagnosisApiError(;)
           `HTTP ${response.status}: ${errorText || response.statusText}`,response.status,service,isRetryable;
         );
       }
@@ -158,10 +158,10 @@ export class InquiryServiceClientImpl implements InquiryServiceClient {
     const cached = cacheManager.get(cacheKey);
     if (cached) return cached;
     const url = `${this.baseUrl}/api/v1/inquiry/session/start`;
-    const response = await apiRequest<any>(;
+    const response = await apiRequest<any>(;)
       url,{
       method: "POST",
-      body: JSON.stringify({user_id: userId,session_type: "comprehensive",language: "zh-CN";
+      body: JSON.stringify({user_id: userId,session_type: "comprehensive",language: "zh-CN";)
         });
       },
       this.timeout,
@@ -174,10 +174,10 @@ export class InquiryServiceClientImpl implements InquiryServiceClient {
   }
   async askQuestion(sessionId: string, question: string): Promise<InquiryResult> {
     const url = `${this.baseUrl}/api/v1/inquiry/interact`;
-    const response = await apiRequest<any>(;
+    const response = await apiRequest<any>(;)
       url,{
       method: "POST",
-      body: JSON.stringify({session_id: sessionId,user_input: question,interaction_type: "question";
+      body: JSON.stringify({session_id: sessionId,user_input: question,interaction_type: "question";)
         });
       },
       this.timeout,
@@ -189,10 +189,10 @@ export class InquiryServiceClientImpl implements InquiryServiceClient {
   }
   async getSymptomAnalysis(sessionId: string): Promise<any> {
     const url = `${this.baseUrl}/api/v1/inquiry/analysis`;
-    const response = await apiRequest<any>(;
+    const response = await apiRequest<any>(;)
       url,{
       method: "POST",
-      body: JSON.stringify({session_id: sessionId,analysis_type: "comprehensive";
+      body: JSON.stringify({session_id: sessionId,analysis_type: "comprehensive";)
         });
       },
       this.timeout,
@@ -219,10 +219,10 @@ export class LookServiceClientImpl implements LookServiceClient {
         // 转换图像数据为base64;
     const uint8Array = new Uint8Array(imageData.data);
     const base64Data = btoa(String.fromCharCode.apply(null, Array.from(uint8Array)));
-    const response = await apiRequest<any>(;
+    const response = await apiRequest<any>(;)
       url,{
       method: "POST",
-      body: JSON.stringify({image_data: base64Data,image_format: imageData.format,analysis_type: "comprehensive",metadata: {width: imageData.width,height: imageData.height,timestamp: Date.now();
+      body: JSON.stringify({image_data: base64Data,image_format: imageData.format,analysis_type: "comprehensive",metadata: {width: imageData.width,height: imageData.height,timestamp: Date.now();)
           }
         })
       },
@@ -238,17 +238,17 @@ export class LookServiceClientImpl implements LookServiceClient {
         const url = `${this.baseUrl}/api/v1/look/tongue`;
     const uint8Array = new Uint8Array(imageData.data);
     const base64Data = btoa(String.fromCharCode.apply(null, Array.from(uint8Array)));
-    const response = await apiRequest<any>(;
+    const response = await apiRequest<any>(;)
       url,{
       method: "POST",
-      body: JSON.stringify({image_data: base64Data,image_format: imageData.format,analysis_type: "tongue_diagnosis";
+      body: JSON.stringify({image_data: base64Data,image_format: imageData.format,analysis_type: "tongue_diagnosis";)
         });
       },
       this.timeout,
       this.retries,
       'look';
     );
-    return {analysisId: response.analysis_id,tongueAnalysis: response.tongue_analysis || {},overallAssessment: response.overall_assessment || "舌诊分析完成",confidence: response.confidence || 0.8;
+    return {analysisId: response.analysis_id,tongueAnalysis: response.tongue_analysis || {},overallAssessment: response.overall_assessment || "舌诊分析完成", "confidence: response.confidence || 0.8;
     };
   }
 }
@@ -267,10 +267,10 @@ export class ListenServiceClientImpl implements ListenServiceClient {
         const url = `${this.baseUrl}/api/v1/listen/voice`;
     const uint8Array = new Uint8Array(audioData.data);
     const base64Data = btoa(String.fromCharCode.apply(null, Array.from(uint8Array)));
-    const response = await apiRequest<any>(;
+    const response = await apiRequest<any>(;)
       url,{
       method: "POST",
-      body: JSON.stringify({audio_data: base64Data,audio_format: audioData.format,duration: audioData.duration,sample_rate: audioData.sampleRate,analysis_type: "comprehensive";
+      body: JSON.stringify({audio_data: base64Data,audio_format: audioData.format,duration: audioData.duration,sample_rate: audioData.sampleRate,analysis_type: "comprehensive";)
         });
       },
       this.timeout,
@@ -284,17 +284,17 @@ export class ListenServiceClientImpl implements ListenServiceClient {
     DataValidator.validateAudioData(audioData);
     const url = `${this.baseUrl}/api/v1/listen/breath`;
     const base64Data = btoa(String.fromCharCode(...new Uint8Array(audioData.data)));
-    const response = await apiRequest<any>(;
+    const response = await apiRequest<any>(;)
       url,{
       method: "POST",
-      body: JSON.stringify({audio_data: base64Data,audio_format: audioData.format,analysis_type: "breathing_pattern";
+      body: JSON.stringify({audio_data: base64Data,audio_format: audioData.format,analysis_type: "breathing_pattern";)
         });
       },
       this.timeout,
       this.retries,
       'listen';
     );
-    return {analysisId: response.analysis_id,breathingPattern: response.breathing_analysis || {},overallAssessment: response.overall_assessment || "呼吸音分析完成",confidence: response.confidence || 0.8;
+    return {analysisId: response.analysis_id,breathingPattern: response.breathing_analysis || {},overallAssessment: response.overall_assessment || "呼吸音分析完成", "confidence: response.confidence || 0.8;
     };
   }
 }
@@ -311,10 +311,10 @@ export class PalpationServiceClientImpl implements PalpationServiceClient {
   async analyzePalpation(data: PalpationData): Promise<PalpationResult> {
     DataValidator.validatePalpationData(data);
     const url = `${this.baseUrl}/api/v1/palpation/analyze`;
-    const response = await apiRequest<any>(;
+    const response = await apiRequest<any>(;)
       url,{
       method: "POST",
-      body: JSON.stringify({palpation_type: data.type,sensor_data: data.sensorData,user_id: "current_user",metadata: data.metadata || {};
+      body: JSON.stringify({palpation_type: data.type,sensor_data: data.sensorData,user_id: "current_user",metadata: data.metadata || {};)
         });
       },
       this.timeout,
@@ -326,10 +326,10 @@ export class PalpationServiceClientImpl implements PalpationServiceClient {
   }
   async startRealTimeMonitoring(userId: string): Promise<string> {
     const url = `${this.baseUrl}/api/v1/palpation/monitor/start`;
-    const response = await apiRequest<any>(;
+    const response = await apiRequest<any>(;)
       url,{
       method: "POST",
-      body: JSON.stringify({user_id: userId,monitoring_type: "real_time";
+      body: JSON.stringify({user_id: userId,monitoring_type: "real_time";)
         });
       },
       this.timeout,
@@ -355,7 +355,7 @@ export class DiagnosisServiceClientImpl implements DiagnosisServiceClient {
   async healthCheck(): Promise<{ [key: string]: boolean }> {
     const services = ["inquiry",look", "listen",palpation"];
     const results: { [key: string]: boolean } = {};
-    const healthChecks = services.map(async (service) => {try {const config = API_CONFIG[service as keyof typeof API_CONFIG];
+    const healthChecks = services.map(async (service) => {try {const config = API_CONFIG[service as keyof typeof API_CONFIG];)
         const controller = new AbortController();
         const timeoutId = setTimeout() => controller.abort(), 5000);
         const response = await fetch(`${config.baseUrl}/health`, {
@@ -373,7 +373,7 @@ export class DiagnosisServiceClientImpl implements DiagnosisServiceClient {
     return results;
   }
   // 综合诊断
-  async comprehensiveDiagnosis(data: {,
+  async comprehensiveDiagnosis(data: {,)
   userId: string;
     imageData?: ImageData;
     audioData?: AudioData;
@@ -385,28 +385,28 @@ export class DiagnosisServiceClientImpl implements DiagnosisServiceClient {
       // 并行执行各项诊断
       const promises: Promise<any>[] = [];
       if (data.imageData) {
-        promises.push(
+        promises.push()
           this.look.analyzeFace(data.imageData).then(result => {
             results.look = result;
           });
         );
       }
       if (data.audioData) {
-        promises.push(
+        promises.push()
           this.listen.analyzeVoice(data.audioData).then(result => {
             results.listen = result;
           });
         );
       }
       if (data.palpationData) {
-        promises.push(
+        promises.push()
           this.palpation.analyzePalpation(data.palpationData).then(result => {
             results.palpation = result;
           });
         );
       }
       if (data.symptoms && data.symptoms.length > 0) {
-        promises.push(
+        promises.push()
           this.inquiry.startSession(data.userId).then(async sessionId => {
             // 模拟问诊过程
             for (const symptom of data.symptoms) {
@@ -420,10 +420,10 @@ export class DiagnosisServiceClientImpl implements DiagnosisServiceClient {
       await Promise.allSettled(promises);
       // 调用算诊服务进行综合分析
       const calculationUrl = `${API_CONFIG.calculation.baseUrl}/api/v1/calculation/comprehensive`;
-      const comprehensiveResult = await apiRequest<any>(;
+      const comprehensiveResult = await apiRequest<any>(;)
         calculationUrl,{
       method: "POST",
-      body: JSON.stringify({user_id: data.userId,diagnosis_results: results,timestamp: Date.now();
+      body: JSON.stringify({user_id: data.userId,diagnosis_results: results,timestamp: Date.now();)
           })
         },
         API_CONFIG.calculation.timeout,
@@ -433,14 +433,14 @@ export class DiagnosisServiceClientImpl implements DiagnosisServiceClient {
       return {...results,comprehensive: comprehensiveResult,timestamp: Date.now(),confidence: this.calculateOverallConfidence(results);
       };
     } catch (error) {
-      throw new DiagnosisApiError(;
+      throw new DiagnosisApiError(;)
         `综合诊断失败: ${error instanceof Error ? error.message : '未知错误'}`,undefined,'comprehensive',true;
       );
     }
   }
   private calculateOverallConfidence(results: any): number {
     const confidences: number[] = [];
-    Object.values(results).forEach(result: any) => {
+    Object.values(results).forEach(((result: any) => {
       if (result && typeof result.confidence === 'number') {
         confidences.push(result.confidence);
       }

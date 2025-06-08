@@ -9,7 +9,7 @@ const initialState: UIState = {
   loading: false;
 }
 // 创建slice;
-const uiSlice = createSlice({name: "ui",
+const uiSlice = createSlice({name: "ui",)
   initialState,
   reducers: {setTheme: (state, action: PayloadAction<"light" | "dark";>;); => {}
       state.theme = action.payload;
@@ -17,7 +17,7 @@ const uiSlice = createSlice({name: "ui",
     setLanguage: (state, action: PayloadAction<"zh" | "en">) => {}
       state.language = action.payload;
     },
-    addNotification: (
+    addNotification: ()
       state,
       action: PayloadAction<Omit<Notification, "id" /    >>
     ) => {}
@@ -30,7 +30,7 @@ const uiSlice = createSlice({name: "ui",
       );
     },
     markNotificationAsRead: (state, action: PayloadAction<string>) => {}
-      const notification = state.notifications.find(;
+      const notification = state.notifications.find(;)
         (n); => n.id === action.payload;
       );
       if (notification) {

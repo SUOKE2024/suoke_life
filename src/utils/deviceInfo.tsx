@@ -102,7 +102,7 @@ class DeviceInfoManager {
       }
     } catch (error) {
   // 性能监控
-const performanceMonitor = usePerformanceMonitor('deviceInfo', {trackRender: true,
+const performanceMonitor = usePerformanceMonitor('deviceInfo', {trackRender: true,)
     trackMemory: false,warnThreshold: 100, // ms };);
       return {camera: false,microphone: false,location: false,biometrics: false,nfc: false,bluetooth: fals;e;};
     }
@@ -138,7 +138,7 @@ const performanceMonitor = usePerformanceMonitor('deviceInfo', {trackRender: tru
   // 测试网络延迟  private async getNetworkLatency(): Promise<number> {
     try {
       const startTime = Date.now;(;);
-      await fetch("https: return Date.now - startTime;
+      await fetch("https: return Date.now - startTime;)
     } catch (error) {
       return -;1;  }
   }
@@ -157,7 +157,7 @@ const performanceMonitor = usePerformanceMonitor('deviceInfo', {trackRender: tru
     } else if (Platform.OS === "android") {
       const androidVersion = parseInt(deviceSpecs.systemVersio;n;);
       if (androidVersion < 21) {
-        issues.push(
+        issues.push()
           "Android版本过低，建议升级到Android 5.0 (API 21);或更高版本"
         );
       }
@@ -188,7 +188,7 @@ const performanceMonitor = usePerformanceMonitor('deviceInfo', {trackRender: tru
 - 品牌: ${deviceSpecs.brand}
 - 型号: ${deviceSpecs.model}
 - 系统: ${deviceSpecs.systemName} ${deviceSpecs.systemVersion}
-- 内存: ${(deviceSpecs.totalMemory / (1024 * 1024 * 1024)).toFixed(2)}GB/- 存储: ${(deviceSpecs.freeDiskStorage / (1024 * 1024 * 1024)).toFixed(/          2;
+- 内存: ${(deviceSpecs.totalMemory / (1024 * 1024 * 1024)).toFixed(2)}GB/- 存储: ${(deviceSpecs.freeDiskStorage / (1024 * 1024 * 1024)).toFixed(/          2;)
     )}GB 可用
 - 屏幕: ${deviceSpecs.screenWidth}x${deviceSpecs.screenHeight} (${
       deviceSpecs.pixelRatio;

@@ -66,7 +66,7 @@ export class AgentManager {
   */
   async initialize(): Promise<void> {
     try {
-      this.log("info",智能体管理器开始初始化...");
+      this.log("info", "智能体管理器开始初始化...");
       // 初始化协调器
       await this.coordinator.initialize();
       // 启动健康检查
@@ -76,9 +76,9 @@ export class AgentManager {
         this.startPerformanceMonitoring();
       }
       this.isRunning = true;
-      this.log("info",智能体管理器初始化完成");
+      this.log("info", "智能体管理器初始化完成");
     } catch (error) {
-      this.log("error",智能体管理器初始化失败", error);
+      this.log("error",智能体管理器初始化失败", " error);
       throw error;
     }
   }
@@ -101,7 +101,7 @@ export class AgentManager {
       this.updateMetrics(result, Date.now() - startTime);
       return result;
     } catch (error) {
-      this.log("error",任务处理失败", error);
+      this.log("error",任务处理失败", " error);
       this.updateErrorMetrics();
       throw error;
     }
@@ -109,12 +109,12 @@ export class AgentManager {
   /**
   * 获取智能体状态
   */
-  async getAgentStatus(
+  async getAgentStatus()
     agentType?: AgentType;
   ): Promise<Map<AgentType, AgentHealthStatus> | AgentHealthStatus> {
     const allStatus = await this.coordinator.getAllAgentStatus();
     if (agentType) {
-      return (;
+      return (;)
         allStatus.get(agentType) || {agentType,status: "error",load: 0,responseTime: 0,errorRate: 1,lastCheck: new Date(),capabilities: [],version: "0.0.0";
         };
       );
@@ -124,7 +124,7 @@ export class AgentManager {
   /**
   * 获取性能指标
   */
-  getMetrics(
+  getMetrics()
     agentType?: AgentType;
   ): Map<AgentType, AgentMetrics> | AgentMetrics | undefined {
     if (agentType) {
@@ -150,15 +150,25 @@ export class AgentManager {
   * 获取系统概览
   */
   getSystemOverview(): any {
-    const totalTasks = Array.from(this.metrics.values()).reduce(;
+    const totalTasks = Array.from(this.metrics.values()).reduce((sum, metrics) => sum + metrics.errors, 0);
       (sum, m) => sum + m.tasksProcessed,0;
     );
-    const totalErrors = Array.from(this.metrics.values()).reduce(;
+    const totalErrors = Array.from(this.metrics.values()).reduce((sum, metrics) => sum + metrics.errors, 0);
       (sum, m) => sum + m.errorCount,0;
     );
     const avgResponseTime = this.calculateAverageResponseTime();
     const systemUptime = this.getSystemUptime();
-    return {totalAgents: this.metrics.size,totalTasksProcessed: totalTasks,totalErrors,overallSuccessRate:;
+    return {
+      totalAgents: this.metrics.size,
+      totalTasksProcessed: totalTasks,
+      totalErrors,
+      overallSuccessRate: totalTasks > 0 ? (totalTasks - totalErrors) / totalTasks : 0,
+      averageResponseTime: avgResponseTime,
+      systemUptime,
+      isHealthy: this.isSystemHealthy(),
+      config: this.config,
+      lastUpdate: new Date()
+    };
         totalTasks > 0 ? (totalTasks - totalErrors) / totalTasks : 0,averageResponseTime: avgResponseTime,systemUptime,isHealthy: this.isSystemHealthy(),config: this.config,lastUpdate: new Date();
     };
   }
@@ -166,7 +176,7 @@ export class AgentManager {
   * 关闭管理器
   */
   async shutdown(): Promise<void> {
-    this.log("info",智能体管理器正在关闭...");
+    this.log("info", "智能体管理器正在关闭...");
     this.isRunning = false;
     // 停止健康检查
     if (this.healthCheckTimer) {
@@ -175,7 +185,7 @@ export class AgentManager {
     }
     // 关闭协调器
     await this.coordinator.shutdown();
-    this.log("info",智能体管理器已关闭");
+    this.log("info", "智能体管理器已关闭");
   }
   /**
   * 初始化性能指标
@@ -184,7 +194,7 @@ export class AgentManager {
     const agentTypes = [;
       AgentType.XIAOAI,AgentType.XIAOKE,AgentType.LAOKE,AgentType.SOER;
     ];
-    agentTypes.forEach(agentType) => {
+    agentTypes.forEach(((agentType) => {
       this.metrics.set(agentType, {
         tasksProcessed: 0,
         successRate: 1.0,
@@ -205,7 +215,7 @@ export class AgentManager {
       try {
         await this.performHealthCheck();
       } catch (error) {
-        this.log("error",健康检查失败", error);
+        this.log("error",健康检查失败", " error);
       }
     }, this.config.healthCheckInterval);
   }
@@ -296,7 +306,7 @@ export class AgentManager {
   private calculateAverageResponseTime(): number {
     const metrics = Array.from(this.metrics.values());
     if (metrics.length === 0) {return 0;}
-    const totalTime = metrics.reduce(;
+    const totalTime = metrics.reduce((sum, metrics) => sum + metrics.errors, 0);
       (sum, m) => sum + m.averageResponseTime,0;
     );
     return totalTime / metrics.length;
@@ -314,14 +324,14 @@ export class AgentManager {
   */
   private isSystemHealthy(): boolean {
     const metrics = Array.from(this.metrics.values());
-    return metrics.every(;
+    return metrics.every(;)
       (m) => m.successRate > 0.8 && m.averageResponseTime < 5000;
     );
   }
   /**
   * 记录日志
   */
-  private log(
+  private log()
     level: "debug" | "info" | "warn" | "error",
     message: string,
     data?: any;

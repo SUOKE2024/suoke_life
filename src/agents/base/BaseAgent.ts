@@ -22,7 +22,7 @@ export abstract class BaseAgent implements Agent {
   protected successfulTasks: number = 0;
   protected totalResponseTime: number = 0;
   protected lastActive: Date = new Date();
-  constructor(params: {,
+  constructor(params: {,)
   id: string;
     name: string,
   description: string;

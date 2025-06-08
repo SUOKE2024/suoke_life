@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from "../../placeholder";rea
 import React from "react";
 export const AgentCard: React.FC  = () => {}
   return (
-    <View style={styles.container}>
+  <View style={styles.container}>
       <Text style={styles.title}>智能体助手</    Text>
       <View style={styles.agents}>
         <TouchableOpacity style={styles.agent}>;
@@ -25,7 +25,7 @@ export const AgentCard: React.FC  = () => {}
     </    View>;
   );
 }
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   backgroundColor: white",
     borderRadius: 12,
     padding: 16,

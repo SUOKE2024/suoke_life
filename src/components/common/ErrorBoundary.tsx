@@ -47,14 +47,13 @@ export class ErrorBoundary extends Component<Props, State> {
   }
   handleRetry = () => {
     if (this.state.retryCount >= this.maxRetries) {
-      Alert.alert(
-        "重试次数已达上限",请刷新应用或联系技术支持',
+      Alert.alert("重试次数已达上限", "请刷新应用或联系技术支持',
         [
           {
       text: "刷新应用",
       onPress: this.handleRefresh },
           {
-      text: "联系客服",
+      text: "联系客服", "
       onPress: this.handleContactSupport },
         ]
       );
@@ -77,8 +76,7 @@ export class ErrorBoundary extends Component<Props, State> {
   };
   handleContactSupport = () => {
     // 这里可以集成客服系统或发送错误报告
-    Alert.alert(
-      "联系客服",请通过以下方式联系我们：\n\n客服电话：400-123-4567\n邮箱：support@suokelife.com',
+    Alert.alert("联系客服", "请通过以下方式联系我们：\n\n客服电话：400-123-4567\n邮箱：support@suokelife.com',
       [{ text: '确定' }]
     );
   };
@@ -92,8 +90,7 @@ export class ErrorBoundary extends Component<Props, State> {
     };
     // 发送错误报告
     console.log('Error report:', errorReport);
-        Alert.alert(
-      "错误报告已发送",感谢您的反馈，我们会尽快处理此问题',
+        Alert.alert("错误报告已发送", "感谢您的反馈，我们会尽快处理此问题',
       [{ text: '确定' }]
     );
   };
@@ -102,9 +99,9 @@ export class ErrorBoundary extends Component<Props, State> {
     const recovery = getRecoveryAdvice(error);
     const isCritical = errorHandler.isCriticalError(error);
     return (
-      <View style={styles.errorContainer}>
+  <View style={styles.errorContainer}>
         <View style={styles.errorHeader}>
-          <Icon;
+          <Icon
             name={isCritical ? 'error' : 'warning'}
             size={48}
             color={isCritical ? '#f44336' : '#ff9800'}
@@ -113,20 +110,17 @@ export class ErrorBoundary extends Component<Props, State> {
         </View>
         <View style={styles.errorBody}>
           <Text style={styles.errorMessage}>{errorDisplay.message}</Text>
-                    {error.requestId && (
-            <Text style={styles.errorId}>错误ID: {error.requestId}</Text>
+                    {error.requestId  && <Text style={styles.errorId}>错误ID: {error.requestId}</Text>
           )}
           <Text style={styles.recoveryMessage}>{recovery.message}</Text>
         </View>
         <View style={styles.errorActions}>
-          {recovery.action === 'retry' && (
-            <TouchableOpacity style={styles.primaryButton} onPress={retry}>
+          {recovery.action === 'retry'  && <TouchableOpacity style={styles.primaryButton} onPress={retry}>
               <Icon name="refresh" size={20} color="#fff" />
               <Text style={styles.primaryButtonText}>重试</Text>
             </TouchableOpacity>
           )}
-          {recovery.action === 'refresh' && (
-            <TouchableOpacity style={styles.primaryButton} onPress={this.handleRefresh}>
+          {recovery.action === 'refresh'  && <TouchableOpacity style={styles.primaryButton} onPress={this.handleRefresh}>
               <Icon name="refresh" size={20} color="#fff" />
               <Text style={styles.primaryButtonText}>刷新应用</Text>
             </TouchableOpacity>
@@ -135,21 +129,18 @@ export class ErrorBoundary extends Component<Props, State> {
             <Icon name="bug-report" size={20} color="#2196F3" />
             <Text style={styles.secondaryButtonText}>报告问题</Text>
           </TouchableOpacity>
-          {isCritical && (
-            <TouchableOpacity style={styles.secondaryButton} onPress={this.handleContactSupport}>
+          {isCritical  && <TouchableOpacity style={styles.secondaryButton} onPress={this.handleContactSupport}>
               <Icon name="support-agent" size={20} color="#2196F3" />
               <Text style={styles.secondaryButtonText}>联系客服</Text>
             </TouchableOpacity>
           )}
         </View>
-        {__DEV__ && (
-        <View style={styles.debugInfo}>
+        {__DEV__  && <View style={styles.debugInfo}>
             <Text style={styles.debugTitle}>调试信息</Text>
             <Text style={styles.debugText}>错误代码: {error.code}</Text>
             <Text style={styles.debugText}>服务: {error.service || 'unknown'}</Text>
             <Text style={styles.debugText}>时间: {error.timestamp}</Text>
-            {error.stack && (
-              <Text style={styles.debugText} numberOfLines={3}>
+            {error.stack  && <Text style={styles.debugText} numberOfLines={3}>
                 堆栈: {error.stack}
               </Text>
             )}
@@ -187,24 +178,22 @@ export const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
   const recovery = getRecoveryAdvice(error);
   const isCritical = errorHandler.isCriticalError(error);
   return (
-    <View style={[styles.errorDisplay, style]}>
+  <View style={[styles.errorDisplay, style]}>
       <View style={styles.errorDisplayHeader}>
-        <Icon;
+        <Icon
           name={isCritical ? 'error' : 'warning'}
           size={24}
           color={isCritical ? '#f44336' : '#ff9800'}
         />
         <Text style={styles.errorDisplayTitle}>{errorDisplay.title}</Text>
-        {onDismiss && (
-          <TouchableOpacity onPress={onDismiss}>
+        {onDismiss  && <TouchableOpacity onPress={onDismiss}>
             <Icon name="close" size={24} color="#666" />
           </TouchableOpacity>
         )}
       </View>
       <Text style={styles.errorDisplayMessage}>{errorDisplay.message}</Text>
-      {(onRetry || recovery.autoRetry) && (
-        <View style={styles.errorDisplayActions}>
-          <TouchableOpacity;
+      {(onRetry || recovery.autoRetry)  && <View style={styles.errorDisplayActions}>
+          <TouchableOpacity
             style={styles.retryButton}
             onPress={onRetry}
           >
@@ -368,7 +357,7 @@ export const RAGErrorBoundary: React.FC<{ children: ReactNode }> = ({ children }
     // 可以在这里添加错误上报逻辑
     // errorReportingService.report(error, { context: 'RAG', errorInfo });
   };
-  const ragFallback = (error: Error, retry: () => void) => (;
+  const ragFallback = (error: Error, retry: () => void) => (;)
     <View style={styles.container}>;
       <View style={styles.errorContainer}>;
         <Text style={styles.errorTitle}>RAG服务暂时不可用</Text>;
@@ -381,7 +370,7 @@ export const RAGErrorBoundary: React.FC<{ children: ReactNode }> = ({ children }
       </View>;
     </View>;
   );
-  return (;
+  return (;)
     <ErrorBoundary fallback={ragFallback} onError={handleRAGError}>;
       {children};
     </ErrorBoundary>;

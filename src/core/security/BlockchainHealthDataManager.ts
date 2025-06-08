@@ -76,7 +76,7 @@ const nodes = [;
   }
   /**
 * * 存储健康数据
-  async storeHealthData(
+  async storeHealthData()
     userId: string,
     healthData: HealthContext,
     permissions: DataPermissions;
@@ -114,7 +114,7 @@ await this.logDataOperation(store", userId, dataBlock.hash);"
   }
   /**
 * * 检索健康数据
-  async retrieveHealthData(
+  async retrieveHealthData()
     userId: string,
     dataHash: string,
     requesterCredentials: RequesterCredentials;
@@ -141,7 +141,7 @@ const isValidProof = await this.zkpManager.verifyProof(dataBlock.zkProof);
       // 4. 从分布式存储获取加密数据
 const encryptedData = await this.retrieveFromStorage(dataHash);
       // 5. 解密数据
-const healthData = await this.encryptionManager.decryptHealthData(;
+const healthData = await this.encryptionManager.decryptHealthData(;)
         encryptedData,
         requesterCredentials.decryptionKey;
       );
@@ -155,7 +155,7 @@ await this.logDataOperation("retrieve, userId, dataHash, requesterCredentials.re
   }
   /**
 * * 共享健康数据
-  async shareHealthData(
+  async shareHealthData()
     ownerId: string,
     dataHash: string,
     recipientId: string,
@@ -171,7 +171,7 @@ const isOwner = await this.verifyOwnership(ownerId, dataHash);
       // 2. 生成共享密钥
 const sharingKey = await this.encryptionManager.generateSharingKey(ownerId, recipientId);
       // 3. 创建共享合约
-const sharingContract = await this.createSharingContract(;
+const sharingContract = await this.createSharingContract(;)
         ownerId,
         recipientId,
         dataHash,
@@ -199,7 +199,7 @@ await this.logDataOperation("share", ownerId, dataHash, recipientId);
   }
   /**
 * * 撤销数据共享
-  async revokeDataSharing(
+  async revokeDataSharing()
     ownerId: string,
     sharingId: string;
   ): Promise<boolean> {
@@ -258,7 +258,7 @@ const storageValid = await this.verifyStorageConsistency(dataHash);
   }
   /**
 * * 获取数据访问历史
-  async getDataAccessHistory(
+  async getDataAccessHistory()
     userId: string,
     dataHash: string;
   ): Promise<DataAccessRecord[]> {
@@ -271,7 +271,7 @@ const storageValid = await this.verifyStorageConsistency(dataHash);
   }
   /**
 * * 生成数据使用报告
-  async generateDataUsageReport(
+  async generateDataUsageReport()
     userId: string,
     timeRange: TimeRange;
   ): Promise<DataUsageReport> {
@@ -294,7 +294,7 @@ const storageValid = await this.verifyStorageConsistency(dataHash);
   }
   /**
 * * 创建数据块
-  private async createDataBlock(
+  private async createDataBlock()
     userId: string,
     encryptedData: EncryptedData,
     zkProof: ZKProof;
@@ -308,7 +308,7 @@ const storageValid = await this.verifyStorageConsistency(dataHash);
 * * 分布式数据存储
   private async distributeData(dataBlock: DataBlock): Promise<DistributionResult> {
     const nodes = Array.from(this.dataNodes.values());
-    const storagePromises = nodes.map(node =>;
+    const storagePromises = nodes.map(node =>;)
       node.store(dataBlock.hash, dataBlock.data);
     );
     const results = await Promise.allSettled(storagePromises);
@@ -340,7 +340,7 @@ const storageValid = await this.verifyStorageConsistency(dataHash);
   }
   /**
 * * 验证访问权限
-  private async verifyAccess(
+  private async verifyAccess()
     userId: string,
     dataHash: string,
     credentials: RequesterCredentials;
@@ -356,7 +356,7 @@ const storageValid = await this.verifyStorageConsistency(dataHash);
   }
   /**
 * * 更新访问控制
-  private async updateAccessControl(
+  private async updateAccessControl()
     userId: string,
     dataHash: string,
     permissions: DataPermissions;
@@ -366,19 +366,19 @@ const storageValid = await this.verifyStorageConsistency(dataHash);
   }
   /**
 * * 创建共享合约
-  private async createSharingContract(
+  private async createSharingContract()
     ownerId: string,
     recipientId: string,
     dataHash: string,
     permissions: SharingPermissions,
     duration?: number;
   ): Promise<SharingContract> {
-    return new SharingContract({id: this.generateContractId(),ownerId,recipientId,dataHash,permissions,duration,createdAt: new Date();
+    return new SharingContract({id: this.generateContractId(),ownerId,recipientId,dataHash,permissions,duration,createdAt: new Date();)
     });
   }
   /**
 * * 记录数据操作
-  private async logDataOperation(
+  private async logDataOperation()
     operation: string,
     userId: string,
     dataHash: string,
@@ -428,7 +428,7 @@ return "SuokeLife/    1.0";
 * * 验证存储一致性
   private async verifyStorageConsistency(dataHash: string): Promise<boolean> {
     const nodes = Array.from(this.dataNodes.values());
-    const dataPromises = nodes.map(async node => {}
+    const dataPromises = nodes.map(async node => {})
       try {const data = await node.retrieve(dataHash);
         return { nodeId: node.getId(), data, hash: await this.computeDataHash(data) };
       } catch (error) {
@@ -447,7 +447,7 @@ return "SuokeLife/    1.0";
 * * 分析数据类型
   private analyzeDataTypes(records: DataAccessRecord[]): Record<string, number> {
     const dataTypes: Record<string, number> = {};
-    records.forEach(record => {}
+    records.forEach(record => {})
       const type = record.dataType || unknown;
       dataTypes[type] = (dataTypes[type] || 0) + 1;
     });
@@ -467,7 +467,7 @@ return [];
   }
   /**
 * * 更新共享访问控制列表
-  private async updateSharingACL(
+  private async updateSharingACL()
     dataHash: string,
     recipientId: string,
     permissions: SharingPermissions;
@@ -849,12 +849,12 @@ return null;
     this.accessRecords.push(fullRecord);
   }
   async getAccessHistory(userId: string, dataHash: string): Promise<DataAccessRecord[]> {
-    return this.accessRecords.filter(record => {};
+    return this.accessRecords.filter(record => {};)
       record.userId === userId && record.dataHash === dataHash;
     );
   }
   async getAccessRecordsByTimeRange(userId: string, timeRange: TimeRange): Promise<DataAccessRecord[]> {
-    return this.accessRecords.filter(record => {};
+    return this.accessRecords.filter(record => {};)
       record.userId === userId &&;
       record.timestamp >= timeRange.startTime &&;
       record.timestamp <= timeRange.endTime;
@@ -870,7 +870,7 @@ class SharingContract {
   public duration?: number;
   public createdAt: Date;
   private terminated: boolean = false;
-  constructor(params: {,
+  constructor(params: {,)
   id: string;
     ownerId: string,
   recipientId: string;

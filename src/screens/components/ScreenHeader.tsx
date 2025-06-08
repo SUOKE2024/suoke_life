@@ -23,7 +23,7 @@ interface ScreenHeaderProps {
   centerComponent?: React.ReactNode;
   rightComponent?: React.ReactNode
 }
-export const ScreenHeader: React.FC<ScreenHeaderProps />  = ({/      title,
+export const ScreenHeader: React.FC<ScreenHeaderProps />  = ({/      title,)
   subtitle,
   leftIcon,
   rightIcon,
@@ -36,38 +36,35 @@ export const ScreenHeader: React.FC<ScreenHeaderProps />  = ({/      title,
 }) => {}
   const isDark = backgroundColor === colors.primary || backgroundColor === colors.primaryDa;
 r;k;
-return (;
-    <SafeAreaView style={[styles.container, { backgroundColor }, style]} />/          <StatusBar;
+return (;)
+    <SafeAreaView style={{[styles.container, { backgroundColor }}, style]} />/          <StatusBar
 barStyle={isDark ? light-content" : "dark-content}
         backgroundColor={backgroundColor} />/
-      <View style={styles.header}>/        {///              {(showBackButton || leftIcon || onLeftPress) && (
-            <TouchableOpacity;
+      <View style={styles.header}>/        {///              {(showBackButton || leftIcon || onLeftPress)  && <TouchableOpacity
 style={styles.iconButton}
               onPress={onLeftPress};
               activeOpacity={0.7}
-            accessibilityLabel="TODO: 添加无障碍标签" />/              <Ic;o;nname={leftIcon || (showBackButton ? "arrow-left" : menu")}"
+            accessibilityLabel="TODO: 添加无障碍标签" />/              <Iconname={leftIcon || (showBackButton ? "arrow-left" : menu")}"
                 size={24}
                 color={isDark ? colors.white: textColor} />/            </TouchableOpacity>/              )}
         </View>/
-        {///              {centerComponent || (
-            <View style={styles.titleContainer}>/                  <Text;
-style={[
+        {///              {centerComponent || ()
+            <View style={styles.titleContainer}>/                  <Text
+style={{[
                   styles.title,
-                  { color: isDark ? colors.white : textColor}
+                  { color: isDark ? colors.white : textColor}}
                 ]}
                 numberOfLines={1} />/                    {title}
-              </Text>/                  {subtitle && (
-                <Text;
-style={[
+              </Text>/                  {subtitle  && <Text
+style={{[
                     styles.subtitle,
-                    { color: isDark ? colors.white : colors.textSecondary}
+                    { color: isDark ? colors.white : colors.textSecondary}}
                   ]}
                   numberOfLines={1} />/                      {subtitle}
                 </Text>/                  )}
             </View>/              )}
         </View>/
-        {///              {rightComponent || (rightIcon || onRightPress) && (
-              <TouchableOpacity;
+        {///              {rightComponent || (rightIcon || onRightPress)  && <TouchableOpacity
 style={styles.iconButton}
                 onPress={onRightPress}
                 activeOpacity={0.7}
@@ -77,7 +74,7 @@ style={styles.iconButton}
           )}
         </View>/      </View>/    </SafeAreaView>/      );
 }
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   shadowColor: colors.black,
     shadowOffset: {,
   width: 0,

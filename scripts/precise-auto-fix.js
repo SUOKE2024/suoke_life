@@ -146,7 +146,7 @@ class PreciseAutoFixer {
 
       // 修复明确的数组解构缺少分号
       {
-        pattern: /(const\s*\[\s*[^\]]+\s*\]\s*=\s*[^;]+)(\s*$)/gm,
+        pattern: /(const\s*[\s*[^]]+\s*\]\s*=\s*[^;]+)(\s*$)/gm,
         replacement: "$1;$2",
         description: "修复数组解构分号"
       }

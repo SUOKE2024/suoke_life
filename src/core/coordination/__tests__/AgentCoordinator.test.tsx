@@ -1,4 +1,3 @@
-
 import AgentCoordinator from '../AgentCoordinator.tsx';
 describe('AgentCoordinator', () => {
   it('应该正确导出', () => {

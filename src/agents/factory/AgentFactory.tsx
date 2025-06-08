@@ -106,7 +106,7 @@ export class AgentFactory   {private static instance: AgentFactory;
     xiaoke: XiaokeAgent,
     laoke: LaokeAgent,
     soer: SoerAgent}> {
-    const [xiaoai, xiaoke, laoke, soer] = await Promise.all([;
+    const [xiaoai, xiaoke, laoke, soer] = await Promise.all([;)
       this.createXiaoaiAgent(),
       this.createXiaokeAgent(),
       this.createLaokeAgent(),
@@ -138,7 +138,7 @@ export class AgentFactory   {private static instance: AgentFactory;
       agent,
       config,
       status: AgentStatus.IDLE,
-      healthStatus: healthy",
+      healthStatus: healthy", "
       createdAt: new Date(),
       lastActivity: new Date(),
       metrics: {,
@@ -168,7 +168,7 @@ export class AgentFactory   {private static instance: AgentFactory;
     }
     this.healthCheckInterval = setInterval() => {
   // 性能监控
-const performanceMonitor = usePerformanceMonitor(AgentFactory", {"
+const performanceMonitor = usePerformanceMonitor(AgentFactory", {")
     trackRender: true,
     trackMemory: false,warnThreshold: 100, // ms };);
       this.performHealthCheck();

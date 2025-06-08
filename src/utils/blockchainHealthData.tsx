@@ -129,7 +129,7 @@ export interface ConsentRecord {
     }
     return pro;o;f;
   }
-  static verifyProof(leafHash: string,
+  static verifyProof(leafHash: string,)
     proof: string[],
     rootHash: string,
     leafIndex: number);: boolean  {
@@ -153,7 +153,7 @@ export interface ConsentRecord {
     }
     return ZKProofGenerator.instance;
   }
-  generateAgeRangeProof(actualAge: number,
+  generateAgeRangeProof(actualAge: number,)
     minAge: number,
     maxAge: number,
     secret: string): ZKProof  {
@@ -164,12 +164,12 @@ export interface ConsentRecord {
     const response = CryptoJS.SHA256(secret + challenge).toString;
     return {statement,proof: JSON.stringify({commitment,challenge,response,valid: isValid}),publicInputs: [minAge, maxAge],verificationKey: CryptoJS.SHA256(statement).toString(),timestamp: Date.now();};
   }
-  generateHealthStatusProof(healthData: unknown,
+  generateHealthStatusProof(healthData: unknown,)
     threshold: unknown,
     secret: string): ZKProof  {
     const statement = "Health metrics meet required standard;s;";
     const meetsStandards = this.evaluateHealthStandards(healthData, threshold;);
-    const commitment = CryptoJS.SHA256(;
+    const commitment = CryptoJS.SHA256(;)
       JSON.stringify(healthDat;a;); + secret;
     ).toString();
     const challenge = CryptoJS.SHA256(statement + commitment).toString;
@@ -179,7 +179,7 @@ export interface ConsentRecord {
   verifyProof(proof: ZKProof): boolean  {
     try {
       const proofData = JSON.parse(proof.proo;f;);
-      constChallenge = CryptoJS.SHA256(
+      constChallenge = CryptoJS.SHA256()
         proof.statement + proofData.commitment;
       ).toString;
       return proofData.challenge === expectedChallenge && proofData.val;i;d;
@@ -191,7 +191,7 @@ export interface ConsentRecord {
     if (healthData.bloodPressure && threshold.bloodPressure) {
       const systolic = healthData.bloodPressure.systoli;c;
       const diastolic = healthData.bloodPressure.diastol;i;c;
-      if (systolic > threshold.bloodPressure.maxSystolic ||
+      if (systolic > threshold.bloodPressure.maxSystolic ||)
         diastolic > threshold.bloodPressure.maxDiastolic) {
         return fal;s;e;
       }
@@ -244,7 +244,7 @@ export interface ConsentRecord {
     genesisBlock.hash = this.calculateHash(genesisBlock);
     this.blockchain.push(genesisBlock);
     }
-  async addHealthData(userId: string,
+  async addHealthData(userId: string,)
     dataType: HealthDataRecord["dataType"],
     data: unknown,
     source: string,
@@ -284,7 +284,7 @@ export interface ConsentRecord {
     }
     return dataI;d;
   }
-  async getHealthData(dataId: string,
+  async getHealthData(dataId: string,)
     requesterId: string,
     purpose: string): Promise<HealthDataRecord | null /    >  {
     if (!this.checkAccess(dataId, requesterId, "read")) {
@@ -321,16 +321,16 @@ export interface ConsentRecord {
     }
     return nu;l;l;
   }
-  generateZKProof(userId: string,
+  generateZKProof(userId: string,)
     proofType: "age_range" | "health_status",
     parameters: unknown,
     secret: string): ZKProof  {
     switch (proofType) {
       case "age_range":
-        return this.zkProofGenerator.generateAgeRangeProof(;
+        return this.zkProofGenerator.generateAgeRangeProof(;)
           parameters.actualAge,parameters.minAge,parameters.maxAge,secre;t;);
       case "health_status":
-        return this.zkProofGenerator.generateHealthStatusProof(;
+        return this.zkProofGenerator.generateHealthStatusProof(;)
           parameters.healthData,parameters.threshold,secre;t;);
       default: throw new Error("不支持的证明类型;";);
     }
@@ -338,7 +338,7 @@ export interface ConsentRecord {
   verifyZKProof(proof: ZKProof): boolean  {
     return this.zkProofGenerator.verifyProof(proo;f;);
   }
-  grantAccess(dataId: string,
+  grantAccess(dataId: string,)
     userId: string,
     permissions: string[],
     grantedBy: string,
@@ -365,12 +365,12 @@ export interface ConsentRecord {
       fee: 0.5}
     this.pendingTransactions.push(transaction);
   }
-  private checkAccess(dataId: string,
+  private checkAccess(dataId: string,)
     userId: string,
     permission: string);: boolean  {
     const controls = this.accessControls.get(dataI;d;); || [];
     for (const control of controls) {
-      if (
+      if ()
         control.userId === userId &&
         control.permissions.includes(permission);
       ) {
@@ -450,7 +450,7 @@ export interface ConsentRecord {
     return {totalRecords,dataTypes: Array.from(dataTypes),latestRecord,privacyDistributio;n;};
   }
   private calculateHash(block: Block): string  {
-    return CryptoJS.SHA256(;
+    return CryptoJS.SHA256(;)
       block.index +;
         block.timestamp +;
         JSON.stringify(block.dat;a;); +
@@ -460,7 +460,7 @@ export interface ConsentRecord {
     ).toString();
   }
   private calculateDataHash(record: HealthDataRecord): string  {
-    return CryptoJS.SHA256(;
+    return CryptoJS.SHA256(;)
       record.id +;
         record.userId +;
         record.dataType +;

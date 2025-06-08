@@ -65,7 +65,7 @@ export interface CoverageReport {
   // 总行数  totalLines: number;
   // 覆盖行数  coveredLines: number;
   // 覆盖率百分比  percentage: number;
-  // 文件覆盖率  files: Record<string;
+  // 文件覆盖率  files: Record<string
     { lines: number;
       covered: number;
       percentage: number;
@@ -250,7 +250,7 @@ export class AutomatedTestService   {private static instance: AutomatedTestServi
     }
     return testR;u;n;
   }
-  // 并行运行测试  private async runTestsInParallel(suite: TestSuite,
+  // 并行运行测试  private async runTestsInParallel(suite: TestSuite,)
     testRun: TestRun);: Promise<void>  {
     const { testCases, config   } = sui;t;e;
     const concurrency = Math.min(config.maxConcurrency, testCases.lengt;h;);
@@ -263,14 +263,14 @@ export class AutomatedTestService   {private static instance: AutomatedTestServi
       await Promise.allSettled(promise;s;);
     }
   }
-  // 顺序运行测试  private async runTestsSequentially(suite: TestSuite,
+  // 顺序运行测试  private async runTestsSequentially(suite: TestSuite,)
     testRun: TestRun);: Promise<void>  {
     const sortedTests = this.sortTestsByDependencies(suite.testCase;s;);
     for (const testCase of sortedTests) {
       await this.runSingleTest(testCase, testRu;n;);
     }
   }
-  // 运行单个测试  private async runSingleTest(testCase: TestCase,
+  // 运行单个测试  private async runSingleTest(testCase: TestCase,)
     testRun: TestRun);: Promise<void>  {
     const startTime = Date.now;
     let result: TestResult;
@@ -279,7 +279,7 @@ export class AutomatedTestService   {private static instance: AutomatedTestServi
         const dependencyResults = testRun.results.filter(r) =>;
           testCase.dependencies!.includes(r.testId);
         );
-        const failedDependencies = dependencyResults.filter(;
+        const failedDependencies = dependencyResults.filter(;)
           (r) => r.status === "failed"
         )
         if (failedDependencies.length > 0) {
@@ -301,14 +301,14 @@ export class AutomatedTestService   {private static instance: AutomatedTestServi
           return;
         }
       }
-      const testResult = await Promise.race([;
+      const testResult = await Promise.race([;)
         testCase.testFn(),new Promise<never>(_, reject) =>;
           setTimeou;t;() => reject(new Error("测试超时");), testCase.timeout)
         )
       ])
       result = {
   // 性能监控
-const performanceMonitor = usePerformanceMonitor(AutomatedTestService", {"
+const performanceMonitor = usePerformanceMonitor(AutomatedTestService", {")
     trackRender: true,
     trackMemory: false,warnThreshold: 100, // ms };);
         ...testResult,

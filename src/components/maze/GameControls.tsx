@@ -25,7 +25,7 @@ const GameControls: React.FC<GameControlsProps> = ({
   gameSettings;
 }) => {
   // 动画引用
-  const buttonScales = useRef({[Direction.NORTH]: new Animated.Value(1),[Direction.EAST]: new Animated.Value(1),[Direction.SOUTH]: new Animated.Value(1),[Direction.WEST]: new Animated.Value(1);
+  const buttonScales = useRef({[Direction.NORTH]: new Animated.Value(1),[Direction.EAST]: new Animated.Value(1),[Direction.SOUTH]: new Animated.Value(1),[Direction.WEST]: new Animated.Value(1);)
   }).current;
   /**
   * 处理按钮按下
@@ -45,7 +45,7 @@ const GameControls: React.FC<GameControlsProps> = ({
   * 处理按钮释放
   */
   const handlePressOut = (direction: Direction) => {// 恢复按钮大小;
-    Animated.spring(buttonScales[direction], {toValue: 1,useNativeDriver: true;
+    Animated.spring(buttonScales[direction], {toValue: 1,useNativeDriver: true;)
     }).start();
     if (!disabled) {
       onMove(direction);
@@ -54,16 +54,16 @@ const GameControls: React.FC<GameControlsProps> = ({
   /**
   * 渲染方向按钮
   */
-  const renderDirectionButton = (
+  const renderDirectionButton = ()
     direction: Direction,iconName: string,style: any,label: string;
   ) => {return (;
       <Animated.View;
-        style={[;
-          styles.directionButton,style,{transform: [{ scale: buttonScales[direction] }],opacity: disabled ? 0.5 : 1;
+        style={{[;
+          styles.directionButton,style,{transform: [{ scale: buttonScales[direction] }}],opacity: disabled ? 0.5 : 1;
           };
         ]};
       >;
-        <TouchableOpacity;
+        <TouchableOpacity
           style={styles.buttonTouchable};
           onPressIn={() => handlePressIn(direction)};
           onPressOut={() => handlePressOut(direction)};
@@ -77,7 +77,7 @@ const GameControls: React.FC<GameControlsProps> = ({
     );
   };
   return (
-    <View style={styles.container}>
+  <View style={styles.container}>
       {// 控制说明}
       <View style={styles.instructionContainer}>
         <Text style={styles.instructionText}>
@@ -87,7 +87,7 @@ const GameControls: React.FC<GameControlsProps> = ({
       {// 方向控制器}
       <View style={styles.controlsContainer}>
         {// 上方向键}
-        {renderDirectionButton(
+        {renderDirectionButton()
           Direction.NORTH,
           'keyboard-arrow-up',
           styles.northButton,
@@ -95,7 +95,7 @@ const GameControls: React.FC<GameControlsProps> = ({
         )}
         {// 中间行：左、右方向键}
         <View style={styles.middleRow}>
-          {renderDirectionButton(
+          {renderDirectionButton()
             Direction.WEST,
             'keyboard-arrow-left',
             styles.westButton,
@@ -105,7 +105,7 @@ const GameControls: React.FC<GameControlsProps> = ({
           <View style={styles.centerIndicator}>
             <Icon name="my-location" size={24} color="#4CAF50" />
           </View>
-          {renderDirectionButton(
+          {renderDirectionButton()
             Direction.EAST,
             'keyboard-arrow-right',
             styles.eastButton,
@@ -113,7 +113,7 @@ const GameControls: React.FC<GameControlsProps> = ({
           )}
         </View>
         {// 下方向键}
-        {renderDirectionButton(
+        {renderDirectionButton()
           Direction.SOUTH,
           'keyboard-arrow-down',
           styles.southButton,
@@ -130,7 +130,7 @@ const GameControls: React.FC<GameControlsProps> = ({
           <Icon name="swipe" size={16} color="#81C784" />;
           <Text style={styles.hintText}>滑动控制</Text>;
         </View>;
-        {gameSettings?.vibrationEnabled && (;
+        {gameSettings?.vibrationEnabled && (;)
           <View style={styles.hintItem}>;
             <Icon name="vibration" size={16} color="#81C784" />;
             <Text style={styles.hintText}>触觉反馈</Text>;

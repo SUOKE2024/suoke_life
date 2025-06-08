@@ -68,7 +68,7 @@ class AuthService {
     try {
       // 获取设备ID;
       const deviceId = await getDeviceId();
-      const response: ApiResponse<LoginResponse> = await apiClient.post(
+      const response: ApiResponse<LoginResponse> = await apiClient.post()
         "AUTH",/login",
         {
           ...credentials,
@@ -79,7 +79,7 @@ class AuthService {
         throw new Error(response.error?.message || "登录失败");
       }
       // 存储认证令牌
-      await storeAuthTokens(
+      await storeAuthTokens()
         response.data.accessToken,
         response.data.refreshToken;
       );
@@ -93,7 +93,7 @@ class AuthService {
     try {
       // 获取设备ID;
       const deviceId = await getDeviceId();
-      const response: ApiResponse<RegisterResponse> = await apiClient.post(
+      const response: ApiResponse<RegisterResponse> = await apiClient.post()
         "AUTH",/register",
         {
           ...userData,
@@ -104,7 +104,7 @@ class AuthService {
         throw new Error(response.error?.message || "注册失败");
       }
       // 存储认证令牌
-      await storeAuthTokens(
+      await storeAuthTokens()
         response.data.accessToken,
         response.data.refreshToken;
       );
@@ -120,7 +120,7 @@ class AuthService {
       await apiClient.post("AUTH",/logout");
     } catch (error) {
       // 即使服务端登出失败，也要清除本地令牌
-      console.warn("服务端登出失败，但将清除本地令牌", error);
+      console.warn("服务端登出失败，但将清除本地令牌", " error);
     } finally {
       // 清除本地存储的认证信息
       await clearAuthTokens();
@@ -133,7 +133,7 @@ class AuthService {
       if (!refreshToken) {
         throw new Error("No refresh token available");
       }
-      const response: ApiResponse<RefreshTokenResponse> = await apiClient.post(
+      const response: ApiResponse<RefreshTokenResponse> = await apiClient.post()
         "AUTH",/refresh",
         {
           refreshToken;
@@ -143,7 +143,7 @@ class AuthService {
         throw new Error(response.error?.message || "刷新令牌失败");
       }
       // 更新存储的令牌
-      await storeAuthTokens(
+      await storeAuthTokens()
         response.data.accessToken,
         response.data.refreshToken;
       );
@@ -169,7 +169,7 @@ class AuthService {
   // 发送忘记密码邮件
   async forgotPassword(request: ForgotPasswordRequest): Promise<void> {
     try {
-      const response: ApiResponse = await apiClient.post(
+      const response: ApiResponse = await apiClient.post()
         "AUTH",/forgot-password",
         request;
       );
@@ -183,7 +183,7 @@ class AuthService {
   // 验证重置密码验证码
   async verifyResetCode(request: VerifyResetCodeRequest): Promise<void> {
     try {
-      const response: ApiResponse = await apiClient.post(
+      const response: ApiResponse = await apiClient.post()
         "AUTH",/verify-reset-code",
         request;
       );
@@ -197,7 +197,7 @@ class AuthService {
   // 重置密码
   async resetPassword(request: ResetPasswordRequest): Promise<void> {
     try {
-      const response: ApiResponse = await apiClient.post(
+      const response: ApiResponse = await apiClient.post()
         "AUTH",/reset-password",
         request;
       );
@@ -211,7 +211,7 @@ class AuthService {
   // 修改密码
   async changePassword(oldPassword: string, newPassword: string): Promise<void> {
     try {
-      const response: ApiResponse = await apiClient.post(
+      const response: ApiResponse = await apiClient.post()
         "AUTH",/change-password",
         {
           oldPassword,
@@ -228,7 +228,7 @@ class AuthService {
   // 验证当前密码
   async verifyPassword(password: string): Promise<boolean> {
     try {
-      const response: ApiResponse<{ valid: boolean }> = await apiClient.post(
+      const response: ApiResponse<{ valid: boolean }> = await apiClient.post()
         "AUTH",/verify-password",
         {
           password;
@@ -245,7 +245,7 @@ class AuthService {
   // 检查邮箱是否已存在
   async checkEmailExists(email: string): Promise<boolean> {
     try {
-      const response: ApiResponse<{ exists: boolean }> = await apiClient.get(
+      const response: ApiResponse<{ exists: boolean }> = await apiClient.get()
         "AUTH",
         `/check-email?email=${encodeURIComponent(email)}`
       );
@@ -260,7 +260,7 @@ class AuthService {
   // 检查用户名是否已存在
   async checkUsernameExists(username: string): Promise<boolean> {
     try {
-      const response: ApiResponse<{ exists: boolean }> = await apiClient.get(
+      const response: ApiResponse<{ exists: boolean }> = await apiClient.get()
         "AUTH",
         `/check-username?username=${encodeURIComponent(username)}`
       );
@@ -275,7 +275,7 @@ class AuthService {
   // 发送邮箱验证码
   async sendEmailVerification(email: string): Promise<void> {
     try {
-      const response: ApiResponse = await apiClient.post(
+      const response: ApiResponse = await apiClient.post()
         "AUTH",/send-email-verification",
         {
           email;
@@ -291,7 +291,7 @@ class AuthService {
   // 验证邮箱验证码
   async verifyEmailCode(email: string, code: string): Promise<void> {
     try {
-      const response: ApiResponse = await apiClient.post(
+      const response: ApiResponse = await apiClient.post()
         "AUTH",/verify-email-code",
         {
           email,

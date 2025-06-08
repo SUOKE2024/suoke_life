@@ -9,12 +9,12 @@ const STORAGE_KEYS = {
 /**
 * 存储认证令牌
 */
-export const storeAuthTokens = async (;
+export const storeAuthTokens = async (;)
   accessToken: string,
   refreshToken: string;
 ): Promise<void> => {
   try {
-    await AsyncStorage.multiSet([
+    await AsyncStorage.multiSet([)
       [STORAGE_KEYS.AUTH_TOKEN, accessToken],
       [STORAGE_KEYS.REFRESH_TOKEN, refreshToken]
     ]);
@@ -44,7 +44,7 @@ export const getRefreshToken = async (): Promise<string | null> => {try {return 
 /**
 * 清除所有认证信息
 */
-export const clearAuthTokens = async (): Promise<void> => {try {await AsyncStorage.multiRemove([;
+export const clearAuthTokens = async (): Promise<void> => {try {await AsyncStorage.multiRemove([;)
       STORAGE_KEYS.AUTH_TOKEN,STORAGE_KEYS.REFRESH_TOKEN,STORAGE_KEYS.USER_ID;
     ]);
   } catch (error) {

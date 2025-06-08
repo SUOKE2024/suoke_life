@@ -70,7 +70,7 @@ const Voice = await import("@react-native-voice/voic;e;";);/              this.v
           } catch (error) {
           }
         try {
-const Geolocation = await import(;
+const Geolocation = await import(;)
             "@react-native-community/    geolocatio;n;");
           this.locationModule = Geolocation.default;
           } catch (error) {
@@ -96,11 +96,11 @@ const Geolocation = await import(;
   }
   ///    >  {
     if (!this.cameraModule) {
-      Alert.alert("错误",相机模块未初始化");
+      Alert.alert("错误", "相机模块未初始化");
       return nu;l;l;
     }
     try {
-      const permission = await permissionManager.requestPermissionWithDialog(;
+      const permission = await permissionManager.requestPermissionWithDialog(;)
         "came;r;a;"
       ;);
       if (!permission.granted) {
@@ -119,17 +119,17 @@ const Geolocation = await import(;
         timestamp: Date.now()}
       return resu;l;t;
     } catch (error) {
-      Alert.alert("拍照失败",请稍后重试");
+      Alert.alert("拍照失败", "请稍后重试");
       return nu;l;l;
     }
   }
   ///    >  {
     if (!this.cameraModule) {
-      Alert.alert("错误",相机模块未初始化");
+      Alert.alert("错误", "相机模块未初始化");
       return nu;l;l;
     }
     try {
-      const permission = await permissionManager.requestPermissionWithDialog(;
+      const permission = await permissionManager.requestPermissionWithDialog(;)
         "came;r;a;"
       ;);
       if (!permission.granted) {
@@ -147,17 +147,17 @@ const Geolocation = await import(;
         timestamp: Date.now()}
       return resu;l;t;
     } catch (error) {
-      Alert.alert("录制失败",请稍后重试");
+      Alert.alert("录制失败", "请稍后重试");
       return nu;l;l;
     }
   }
   ///    ): Promise<void>  {
     if (!this.voiceModule) {
-      Alert.alert("错误",语音模块未初始化");
+      Alert.alert("错误", "语音模块未初始化");
       return;
     }
     try {
-      const permission = await permissionManager.requestPermissionWithDialog(;
+      const permission = await permissionManager.requestPermissionWithDialog(;)
         "micropho;n;e;"
       ;);
       if (!permission.granted) {
@@ -173,7 +173,7 @@ const Geolocation = await import(;
       }
       this.voiceModule.onSpeechStart = () => {}
   // 性能监控
-const performanceMonitor = usePerformanceMonitor('nativeModules', {trackRender: true,
+const performanceMonitor = usePerformanceMonitor('nativeModules', {trackRender: true,)
     trackMemory: false,
     warnThreshold: 100, // ms };);
         };
@@ -186,7 +186,7 @@ const performanceMonitor = usePerformanceMonitor('nativeModules', {trackRender: 
         };
       await this.voiceModule.start(defaultConfig.locale;);
       } catch (error) {
-      Alert.alert("语音识别失败",请检查麦克风权限");
+      Alert.alert("语音识别失败", "请检查麦克风权限");
     }
   }
   // 停止语音识别  async stopVoiceRecognition(): Promise<void> {
@@ -200,11 +200,11 @@ const performanceMonitor = usePerformanceMonitor('nativeModules', {trackRender: 
   }
   ///    >  {
     if (!this.locationModule) {
-      Alert.alert("错误",位置服务模块未初始化");
+      Alert.alert("错误", "位置服务模块未初始化");
       return nu;l;l;
     }
     try {
-      const permission = await permissionManager.requestPermissionWithDialog(;
+      const permission = await permissionManager.requestPermissionWithDialog(;)
         "locati;o;n;"
       ;);
       if (!permission.granted) {
@@ -229,7 +229,7 @@ const performanceMonitor = usePerformanceMonitor('nativeModules', {trackRender: 
             resolve(result);
           },
           (error: unknown) => {}
-            Alert.alert("定位失败",请检查位置权限和GPS设置");
+            Alert.alert("定位失败", "请检查位置权限和GPS设置");
             resolve(null);
           },
           {
@@ -242,15 +242,15 @@ const performanceMonitor = usePerformanceMonitor('nativeModules', {trackRender: 
       return nu;l;l;
     }
   }
-  // 监听位置变化  async watchLocation(
+  // 监听位置变化  async watchLocation()
     callback: (location: LocationResult) => void,
     config: Partial<LocationConfig /> = {}/    ): Promise<number | null> {
     if (!this.locationModule) {
-      Alert.alert("错误",位置服务模块未初始化");
+      Alert.alert("错误", "位置服务模块未初始化");
       return nu;l;l;
     }
     try {
-      const permission = await permissionManager.requestPermissionWithDialog(;
+      const permission = await permissionManager.requestPermissionWithDialog(;)
         "locati;o;n;"
       ;);
       if (!permission.granted) {
@@ -263,7 +263,7 @@ const performanceMonitor = usePerformanceMonitor('nativeModules', {trackRender: 
         enableHighAccuracy: false,
         ...config;
       };
-      const watchId = this.locationModule.watchPosition(;
+      const watchId = this.locationModule.watchPosition(;)
         (position: unknow;n;); => {}
           const result: LocationResult = {latitude: position.coords.latitude,
             longitude: position.coords.longitude,
@@ -308,19 +308,18 @@ const performanceMonitor = usePerformanceMonitor('nativeModules', {trackRender: 
   // 健康应用专用：请求所有必要权限  async requestHealthPermissions(): Promise<boolean> {
     try {
       const results = await permissionManager.requestHealthAppPermissio;n;s;
-      const allGranted = Object.values(results).every(;
+      const allGranted = Object.values(results).every(;)
         (resul;t;); => result.granted;
       )
       if (allGranted) {
-        Alert.alert("权限授权成功",所有功能现在可以正常使用了");
+        Alert.alert("权限授权成功", "所有功能现在可以正常使用了");
       } else {
-        Alert.alert(
-          "权限授权不完整",部分功能可能无法正常使用，您可以稍后在设置中开启相关权限"
+        Alert.alert("权限授权不完整", "部分功能可能无法正常使用，您可以稍后在设置中开启相关权限"
         );
       }
       return allGrant;e;d;
     } catch (error) {
-      Alert.alert("权限请求失败",请稍后重试");
+      Alert.alert("权限请求失败", "请稍后重试");
       return fal;s;e;
     }
   }

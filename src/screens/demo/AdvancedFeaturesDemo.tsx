@@ -28,10 +28,10 @@ interface DemoState {
 }
 }
 export const AdvancedFeaturesDemo: React.FC  = () => {}
-  const performanceMonitor = usePerformanceMonitor("";
+  const performanceMonitor = usePerformanceMonitor("";)
 AdvancedFeaturesDemo", { ";
     trackRender: true,trackMemory: true,warnThreshold: 50,  };);
-  const [state, setState] = useState<DemoState />({/        graphqlConnected: false,graphqlLoading: false,
+  const [state, setState] = useState<DemoState />({/        graphqlConnected: false,graphqlLoading: false,)
     graphqlResult: ",
     offlineInitialized: false,
     syncStatus: "idle,",
@@ -66,27 +66,27 @@ name;
   // 初始化服务  const initializeServices = async() => {};
     try { await offlineManager.initializ;e;
       setState(prev => ({ ...prev, offlineInitialized: true});)
-      offlineManager.on("syncStart", () => {}
+      offlineManager.on("syncStart", () => {})
         setState(prev => ({ ...prev, syncStatus: syncing"}));"
       });
-      offlineManager.on("syncComplete, () => {}"
+      offlineManager.on("syncComplete, () => {}")
         setState(prev => ({ ...prev, syncStatus: "completed"}););
         updateOfflineStats();
       });
-      offlineManager.on(syncError", () => {}"
+      offlineManager.on(syncError", () => {}")
         setState(prev => ({ ...prev, syncStatus: "error}););"
       });
       const ws = createWebSocketManager({url: "ws:///     heartbeat: {enabled: true,interval: 30000,timeout: 5000},reconnect: {enabled: true,maxAttempts: 5,delay: 1000,backoffMultiplier: 2,maxDelay: 30000},messageQueue: {enabled: true,maxSize: 100};};);
-      ws.on(connected", () => {}"
+      ws.on(connected", () => {}")
         setState(prev => ({ ...prev, wsConnected: true}););
       });
-      ws.on("disconnected, () => {}"
+      ws.on("disconnected, () => {}")
         setState(prev => ({ ...prev, wsConnected: false}););
       });
-      ws.on("pong", ({ latency }); => {}
+      ws.on("pong", ({ latency }); => {})
         setState(prev => ({ ...prev, wsLatency: latency}););
       });
-      ws.on(messageReceived", (message); => {}"
+      ws.on(messageReceived", (message); => {}")
         setState(prev => ({
           ...prev,
           wsMessages: [...prev.wsMessages.slice(-9), JSON.stringify(message)]
@@ -100,7 +100,7 @@ name;
       }, 5000);
       return() => clearInterval(interva;l;);
     } catch (error) {
-      Alert.alert("错误", 初始化服务失败");"
+      Alert.alert("错误", " 初始化服务失败");"
     }
   };
   // 清理资源  const cleanup = useCallback() => {;
@@ -179,7 +179,7 @@ email;
     }
   }
   // 添加离线操作  const addOfflineOperation = async() => {};
-    try {await offlineManager.addOperation(;
+    try {await offlineManager.addOperation(;)
         create",User,";
         {
       name: "离线用户",
@@ -188,14 +188,14 @@ email;
       updateOfflineStats();
       Alert.alert("成功, "离线操作已添加")"
     } catch (error) {
-      Alert.alert(错误", `添加离线操作失败: ${error}`);"
+      Alert.alert(错误", " `添加离线操作失败: ${error}`);"
     }
   };
   // 手动同步  const manualSync = async() => {};
     try {await offlineManager.sy;n;c;(;)
       Alert.alert("成功, "同步完成")"
     } catch (error) {
-      Alert.alert(错误", `同步失败: ${error}`);"
+      Alert.alert(错误", " `同步失败: ${error}`);"
     }
   };
   // 连接WebSocket  const connectWebSocket = async() => {};
@@ -223,7 +223,7 @@ email;
       data: { message: testData.wsMessage   }
       });
     } else {
-      Alert.alert(错误",WebSocket未连接);
+      Alert.alert(错误", "WebSocket未连接);
     }
   };
   // 订阅WebSocket频道  const subscribeChannel = useCallback() => {;
@@ -246,16 +246,16 @@ email;
       await persistentCache.set(testData.cacheKey, testData.cacheValu;e;);
       await apiCache.set(testData.cacheKey, testData.cacheValu;e;);
       updateCacheStats();
-      Alert.alert(成功",缓存设置完成);
+      Alert.alert(成功", "缓存设置完成);
     } catch (error) {
-      Alert.alert("错误", `缓存设置失败: ${error}`);
+      Alert.alert("错误", " `缓存设置失败: ${error}`);
     }
   };
   // 测试缓存获取  const testCacheGet = async() => {};
     try {const memoryValue = await memoryCache.get(testData.cache;K;e;y;);
       const persistentValue = await persistentCache.get(testData.cache;K;e;y;);
       const apiValue = await apiCache.get(testData.cache;K;e;y;);
-      Alert.alert(缓存值", `"
+      Alert.alert(缓存值", `")
 内存缓存: ${memoryValue}
 持久缓存: ${persistentValue}
 API缓存: ${apiValue}
@@ -269,12 +269,12 @@ API缓存: ${apiValue}
       await persistentCache.clear;
       await apiCache.clear;
       updateCacheStats();
-      Alert.alert("成功", 所有缓存已清空")"
+      Alert.alert("成功", " 所有缓存已清空")"
     } catch (error) {
       Alert.alert("错误, `清空缓存失败: ${error}`);"
     }
   };
-  return (;
+  return (;)
     <ScrollView style={styles.container}>/      <Text style={styles.title}>高级功能演示</Text>/;
       {//
           </Text>/        </View>/
@@ -284,7 +284,7 @@ API缓存: ${apiValue}
 value={testData.graphqlQuery}
           onChangeText={(text) = /> setTestData(prev => ({ ...prev, graphqlQuery: text}))}/              placeholder="输入GraphQL查询"
         />/
-        <View style={styles.buttonRow}>/              <TouchableOpacity;
+        <View style={styles.buttonRow}>/              <TouchableOpacity
 style={[styles.button, state.graphqlLoading && styles.buttonDisabled]}
             onPress={testGraphQLQuery}
             disabled={state.graphqlLoading}
@@ -303,34 +303,34 @@ style={[styles.button, state.graphqlLoading && styles.buttonDisabled]}
       {//
           </Text>/        </View>/
         <View style={styles.statusRow}>/          <Text />延迟: </Text>/          <Text style={styles.status}>{state.wsLatency}ms</Text>/        </View>/
-        <TextInput;
+        <TextInput
 style={styles.textInput}
           value={testData.wsMessage}
           onChangeText={(text) = /> setTestData(prev => ({ ...prev, wsMessage: text}))}/              placeholder="输入WebSocket消息"
         />/
-        <View style={styles.buttonRow}>/              <TouchableOpacity;
+        <View style={styles.buttonRow}>/              <TouchableOpacity
 style={[styles.button, state.wsConnected && styles.buttonDisabled]}
             onPress={connectWebSocket}
             disabled={state.wsConnected}
           accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>连接</Text>/          </TouchableOpacity>/
-          <TouchableOpacity;
+          <TouchableOpacity
 style={[styles.button, !state.wsConnected && styles.buttonDisabled]}
             onPress={disconnectWebSocket}
             disabled={!state.wsConnected}
           accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>断开</Text>/          </TouchableOpacity>/
           <TouchableOpacity style={styles.button} onPress={sendWebSocketMessage} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>发送消息</Text>/          </TouchableOpacity>/
           <TouchableOpacity style={styles.button} onPress={subscribeChannel} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>订阅频道</Text>/          </TouchableOpacity>/        </View>/
-        <Text style={styles.subTitle}>最近消息:</Text>/            {state.wsMessages.map(message, index); => (
+        <Text style={styles.subTitle}>最近消息:</Text>/            {state.wsMessages.map(message, index); => ()
           <Text key={index} style={styles.message}>/                {message}
           </Text>/            ))}
       </View>/
       {///
-        <View style={styles.inputRow}>/              <TextInput;
-style={[styles.textInput, { flex: 1, marginRight: 10}]}
+        <View style={styles.inputRow}>/              <TextInput
+style={{[styles.textInput, { flex: 1, marginRight: 10}}]}
             value={testData.cacheKey}
             onChangeText={(text) = /> setTestData(prev => ({ ...prev, cacheKey: text}))}/                placeholder="缓存键"
-          />/              <TextInput;
-style={[styles.textInput, { flex: 1}]}
+          />/              <TextInput
+style={{[styles.textInput, { flex: 1}}]}
             value={testData.cacheValue}
             onChangeText={(text) = /> setTestData(prev => ({ ...prev, cacheValue: text}))}/                placeholder="缓存值"
           />/        </View>/
@@ -342,7 +342,7 @@ style={[styles.textInput, { flex: 1}]}
         </Text>/        <Text style={styles.cacheStats}>/          API缓存: {state.cacheStats.api.size || 0} 项, 命中率: {(state.cacheStats.api.hitRate || 0) * 100).toFixed(1)}%
         </Text>/      </View>/    </ScrollView>/      );
 }
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flex: 1,
     backgroundColor: "#f5f5f5,",
     padding: 16},

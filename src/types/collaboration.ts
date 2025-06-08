@@ -1,4 +1,5 @@
 import { HealthContext } from './    health";
+
 /**
 * * 任务优先级枚举
 export enum TaskPriority {
@@ -220,10 +221,10 @@ export enum ConstitutionType {
 }
   BALANCED = "balanced, // 平和质"
 QI_DEFICIENCY = "qi_deficiency", // 气虚质
-YANG_DEFICIENCY = yang_deficiency", // 阳虚质"
+YANG_DEFICIENCY = yang_deficiency", " // 阳虚质"
 YIN_DEFICIENCY = "yin_deficiency, // 阴虚质"
 PHLEGM_DAMPNESS = "phlegm_dampness", // 痰湿质
-DAMP_HEAT = damp_heat", // 湿热质"
+DAMP_HEAT = damp_heat", " // 湿热质"
 BLOOD_STASIS = "blood_stasis, // 血瘀质"
 QI_STAGNATION = "qi_stagnation", // 气郁质
 SPECIAL_CONSTITUTION = special_constitution" // 特禀质"
@@ -401,7 +402,7 @@ LIFESTYLE_SERVICES = lifestyle_services",
 export enum CollaborationMode {
 }
 }
-  SEQUENTIAL = sequential", // 顺序协作"
+  SEQUENTIAL = sequential", " // 顺序协作"
 PARALLEL = "parallel, // 并行协作"
 CONSENSUS = "consensus", // 共识协作
 HIERARCHICAL = hierarchical" // 层次协作"

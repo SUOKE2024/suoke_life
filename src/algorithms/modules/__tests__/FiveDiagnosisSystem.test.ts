@@ -1,4 +1,3 @@
-
 import FiveDiagnosisSystem from '../FiveDiagnosisSystem.ts';
 describe('FiveDiagnosisSystem', () => {
   it('应该正确导出', () => {

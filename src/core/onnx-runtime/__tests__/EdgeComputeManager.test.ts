@@ -1,4 +1,3 @@
-
 import EdgeComputeManager from '../EdgeComputeManager.ts';
 describe('EdgeComputeManager', () => {
   it('应该正确导出', () => {

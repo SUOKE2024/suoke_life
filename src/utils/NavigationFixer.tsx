@@ -17,7 +17,7 @@ const Stack = createNativeStackNavigator;
       await navigation.navigate(screenNam;e;);
       return tr;u;e;
     } catch (error) {
-      Alert.alert("导航错误", `无法导航到 ${screenName}: ${error.message}`);
+      Alert.alert("导航错误", " `无法导航到 ${screenName}: ${error.message}`);
       return fal;s;e;
     }
   }

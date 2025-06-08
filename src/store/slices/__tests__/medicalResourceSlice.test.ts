@@ -1,4 +1,3 @@
-
 import medicalResourceSlice from '../medicalResourceSlice.ts';
 describe('medicalResourceSlice', () => {
   it('应该正确导出', () => {

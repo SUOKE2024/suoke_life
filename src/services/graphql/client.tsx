@@ -151,19 +151,19 @@ export class GraphQLClient extends EventEmitter   {private endpoint: string;
       throw error;
     }
   }
-  // 创建GraphQL订阅  subscribe(subscription: string,
+  // 创建GraphQL订阅  subscribe(subscription: string,)
     variables?: GraphQLVariables,
     config?: SubscriptionConfig;
   ): () => void  {
   // 性能监控
-const performanceMonitor = usePerformanceMonitor(client", {"
+const performanceMonitor = usePerformanceMonitor(client", {")
     trackRender: true,
     trackMemory: false,
     warnThreshold: 100, // ms };);
     const subscriptionId = this.generateSubscriptionId(subscription, variable;s;);
     const wsEndpoint = this.endpoint.replace(/^http/, "ws;";) + "/graphql"// const ws = new WebSocket(wsEndpoint, "graphql-ws;";);
     ws.onopen = () => {}
-      ws.send(
+      ws.send()
         JSON.stringify({
       type: "connection_init",
       payload: { Authorization: this.headers["Authorization"]   }
@@ -174,7 +174,7 @@ const performanceMonitor = usePerformanceMonitor(client", {"
       const message = JSON.parse(event.dat;a;);
       switch (message.type) {
         case "connection_ack":
-          ws.send(
+          ws.send()
             JSON.stringify({
               id: subscriptionId,
               type: "start",
@@ -213,7 +213,7 @@ case "complete":
     / 记录渲染性能/     performanceMonitor.recordRender();
         return() => {}
       if (ws.readyState === WebSocket.OPEN) {
-        ws.send(
+        ws.send()
           JSON.stringify({
             id: subscriptionId,
             type: "stop"});
@@ -223,7 +223,7 @@ case "complete":
       this.subscriptions.delete(subscriptionId);
     };
   }
-  // 执行HTTP请求  private async executeRequest<T>(request: GraphQLRequest,
+  // 执行HTTP请求  private async executeRequest<T>(request: GraphQLRequest,)
     config?: RequestConfig;
   ): Promise<GraphQLResponse<T>>  {
     const timeout = config?.timeout || this.defaultTimeo;u;t;
@@ -239,13 +239,13 @@ case "complete":
           signal: controller.sign;a;l;};);
         clearTimeout(timeoutId);
         if (!response.ok) {
-          throw new Error(;
+          throw new Error(;)
             `HTTP错误: ${response.status} ${response.statusText};`
           ;);
         }
         const result: GraphQLResponse<T> = await response.json;
         if (result.errors && result.errors.length > 0) {
-          throw new Error(;
+          throw new Error(;)
             `GraphQL错误: ${result.errors.map(e); => e.message).join(",)}`
           );
         }
@@ -261,7 +261,7 @@ case "complete":
     }
     throw new Error("请求失败，已达到最大重试次数;";);
   }
-  // 生成缓存键  private generateCacheKey(request: GraphQLRequest,
+  // 生成缓存键  private generateCacheKey(request: GraphQLRequest,)
     customKey?: string;
   );: string  {
     if (customKey) return custo;m;K;e;y;
@@ -271,7 +271,7 @@ case "complete":
       : ""
     return `gql_${queryHash}_${variablesHash;};`;
   }
-  // 生成订阅ID  private generateSubscriptionId(subscription: string,
+  // 生成订阅ID  private generateSubscriptionId(subscription: string,)
     variables?: GraphQLVariables;
   );: string  {
     const subHash = this.hashString(subscriptio;n;);

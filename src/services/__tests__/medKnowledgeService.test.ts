@@ -1,4 +1,5 @@
 import { jest } from '@jest/globals';
+
 import medKnowledgeService from '../medKnowledgeService.ts';
 // Mock dependencies
 jest.mock('../api/apiClient');

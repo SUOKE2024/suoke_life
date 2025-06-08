@@ -193,7 +193,7 @@ export class MedKnowledgeService {
   }
   async getConstitutionRecommendations(constitutionId: string): Promise<HealthRecommendation[]> {
     try {
-      const response = await apiClient.get(;
+      const response = await apiClient.get(;)
         `${this.baseUrl}/recommendations/constitutions/${constitutionId}`;
       );
       return response.data;
@@ -223,7 +223,7 @@ export class MedKnowledgeService {
   }
   async searchSymptoms(query: string): Promise<Symptom[]> {
     try {
-      const response = await apiClient.get(;
+      const response = await apiClient.get(;)
         `${this.baseUrl}/symptoms?search=${encodeURIComponent(query)}`;
       );
       return response.data;
@@ -253,7 +253,7 @@ export class MedKnowledgeService {
   }
   async getAcupointsByConstitution(constitutionId: string): Promise<Acupoint[]> {
     try {
-      const response = await apiClient.get(;
+      const response = await apiClient.get(;)
         `${this.baseUrl}/acupoints?constitution_id=${encodeURIComponent(constitutionId)}`;
       );
       return response.data;
@@ -283,7 +283,7 @@ export class MedKnowledgeService {
   }
   async getHerbsBySymptom(symptomId: string): Promise<Herb[]> {
     try {
-      const response = await apiClient.get(;
+      const response = await apiClient.get(;)
         `${this.baseUrl}/herbs?symptom_id=${encodeURIComponent(symptomId)}`;
       );
       return response.data;
@@ -324,7 +324,7 @@ export class MedKnowledgeService {
   async getRecommendedKnowledge(userId: string, context?: any): Promise<KnowledgeResult[]> {
     try {
       const contextParam = context ? `?context=${encodeURIComponent(JSON.stringify(context))}` : '';
-      const response = await apiClient.get(;
+      const response = await apiClient.get(;)
         `${this.baseUrl}/knowledge/recommendations/${userId}${contextParam}`;
       );
       return response.data;
@@ -354,7 +354,7 @@ export class MedKnowledgeService {
   }
   async getEntityRelationships(entityType: string, entityId: string): Promise<any> {
     try {
-      const response = await apiClient.get(;
+      const response = await apiClient.get(;)
         `${this.baseUrl}/graph/entities/${entityType}/${entityId}/relationships`;
       );
       return response.data;
@@ -365,7 +365,7 @@ export class MedKnowledgeService {
   }
   async getEntityNeighbors(entityType: string, entityId: string): Promise<any> {
     try {
-      const response = await apiClient.get(;
+      const response = await apiClient.get(;)
         `${this.baseUrl}/graph/entities/${entityType}/${entityId}/neighbors`;
       );
       return response.data;
@@ -376,8 +376,8 @@ export class MedKnowledgeService {
   }
   async findGraphPaths(fromId: string, toId: string): Promise<any> {
     try {
-      const response = await apiClient.get(;
-        `${this.baseUrl}/graph/paths?from=${encodeURIComponent(fromId)}&to=${encodeURIComponent(;
+      const response = await apiClient.get(;)
+        `${this.baseUrl}/graph/paths?from=${encodeURIComponent(fromId)}&to=${encodeURIComponent(;)
           toId;
         )}`;
       );
@@ -388,7 +388,7 @@ export class MedKnowledgeService {
     }
   }
   // 个性化推荐API;
-  async getPersonalizedRecommendations(
+  async getPersonalizedRecommendations()
     request: RecommendationRequest;
   ): Promise<HealthRecommendation[]> {
     try {

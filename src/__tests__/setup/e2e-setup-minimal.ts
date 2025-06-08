@@ -80,7 +80,7 @@ jest.mock('react-redux', () => ({
   Provider: ({ children }: { children: React.ReactNode }) => children,
 }));
 // 模拟fetch
-global.fetch = jest.fn(() =>
+global.fetch = jest.fn(() =>)
   Promise.resolve({
     ok: true,
     status: 200,
@@ -90,7 +90,7 @@ global.fetch = jest.fn(() =>
 ) as jest.Mock;
 // 确保fetch在每个测试前都被重置
 beforeEach(() => {
-  global.fetch = jest.fn(() =>
+  global.fetch = jest.fn(() =>)
     Promise.resolve({
       ok: true,
       status: 200,

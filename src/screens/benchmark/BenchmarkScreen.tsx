@@ -17,24 +17,24 @@ export const BenchmarkScreen: React.FC = () => {
     // 可以在这里添加导航到任务详情或显示成功消息
   };
   return (
-    <View style={styles.container}>
+  <View style={styles.container}>
       {// 主要内容}
       <BenchmarkDashboard onTaskSelect={handleTaskSelect} />
       {// 浮动操作按钮}
-      <TouchableOpacity;
+      <TouchableOpacity
         style={styles.fab}
         onPress={() => setShowCreator(true)}
       >;
         <Text style={styles.fabText}>+</Text>;
       </TouchableOpacity>;
       {// 创建基准测试模态框};
-      <BenchmarkCreator;
+      <BenchmarkCreator
         visible={showCreator};
         onClose={() => setShowCreator(false)};
         onSubmit={handleTaskCreated};
       />;
       {// 结果详情模态框};
-      <BenchmarkResultDetail;
+      <BenchmarkResultDetail
         visible={showResultDetail};
         taskId={selectedTaskId};
         onClose={() => {setShowResultDetail(false);

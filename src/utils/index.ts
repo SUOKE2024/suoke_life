@@ -14,19 +14,19 @@
 . * validationUtils'; /     '
 //   ;
 {measure: (name: string, category: string, fn: () => any) => fn(),
-  measureAsync: async (,
+  measureAsync: async (,)
     name: string,
     category: string,
     fn: () => Promise<any>
   ) => await fn(),
-  recordMetric: (,
+  recordMetric: (,)
     name: string,
     value: number,
     category: string,
     unit?: string;
   ) => {},
   getMetricHistory: (category: string, name: string) => [],
-  generateReport: () => ({,
+  generateReport: () => ({,)
   id: "test",
     timestamp: Date.now(),
     metrics: [],

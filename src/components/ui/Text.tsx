@@ -54,7 +54,7 @@ weight?: "300" | "400" | "500" | "600" | "700";
   onPress?: () => void;
   onLongPress?: () => void
 }
-const Text: React.FC<TextProps /> = ({/   const performanceMonitor = usePerformanceMonitor("Text', { /    "';
+const Text: React.FC<TextProps /> = ({/   const performanceMonitor = usePerformanceMonitor("Text', { /    "';))
     trackRender: true,trackMemory: false,warnThreshold: 100,  };);
   children,
   variant = "body1",
@@ -80,70 +80,70 @@ const Text: React.FC<TextProps /> = ({/   const performanceMonitor = usePerforma
     const variantStyles: Record<string, TextStyle> = {h1: {,
   fontSize: responsive.fontSize(theme.typography.fontSize["5xl"]),
         fontWeight: "700" as const,
-        lineHeight: responsive.fontSize(,
+        lineHeight: responsive.fontSize(,)
           theme.typography.fontSize["5xl"] * theme.typography.lineHeight.tight;
         ),
         color: theme.colors.onSurface},
       h2: {,
   fontSize: responsive.fontSize(theme.typography.fontSize["4xl"]),
         fontWeight: "700" as const,
-        lineHeight: responsive.fontSize(,
+        lineHeight: responsive.fontSize(,)
           theme.typography.fontSize["4xl"] * theme.typography.lineHeight.tight;
         ),
         color: theme.colors.onSurface},
       h3: {,
   fontSize: responsive.fontSize(theme.typography.fontSize["3xl"]),
         fontWeight: "600" as const,
-        lineHeight: responsive.fontSize(,
+        lineHeight: responsive.fontSize(,)
           theme.typography.fontSize["3xl"] * theme.typography.lineHeight.tight;
         ),
         color: theme.colors.onSurface},
       h4: {,
   fontSize: responsive.fontSize(theme.typography.fontSize["2xl"]),
         fontWeight: "600" as const,
-        lineHeight: responsive.fontSize(,
+        lineHeight: responsive.fontSize(,)
           theme.typography.fontSize["2xl"] * theme.typography.lineHeight.normal;
         ),
         color: theme.colors.onSurface},
       h5: {,
   fontSize: responsive.fontSize(theme.typography.fontSize.xl),
         fontWeight: "600" as const,
-        lineHeight: responsive.fontSize(,
+        lineHeight: responsive.fontSize(,)
           theme.typography.fontSize.xl * theme.typography.lineHeight.normal;
         ),
         color: theme.colors.onSurface},
       h6: {,
   fontSize: responsive.fontSize(theme.typography.fontSize.lg),
         fontWeight: "600" as const,
-        lineHeight: responsive.fontSize(,
+        lineHeight: responsive.fontSize(,)
           theme.typography.fontSize.lg * theme.typography.lineHeight.normal;
         ),
         color: theme.colors.onSurface},
       body1: {,
   fontSize: responsive.fontSize(theme.typography.fontSize.base),
         fontWeight: "400" as const,
-        lineHeight: responsive.fontSize(,
+        lineHeight: responsive.fontSize(,)
           theme.typography.fontSize.base * theme.typography.lineHeight.normal;
         ),
         color: theme.colors.onSurface},
       body2: {,
   fontSize: responsive.fontSize(theme.typography.fontSize.sm),
         fontWeight: "400" as const,
-        lineHeight: responsive.fontSize(,
+        lineHeight: responsive.fontSize(,)
           theme.typography.fontSize.sm * theme.typography.lineHeight.normal;
         ),
         color: theme.colors.onSurfaceVariant},
       caption: {,
   fontSize: responsive.fontSize(theme.typography.fontSize.xs),
         fontWeight: "400" as const,
-        lineHeight: responsive.fontSize(,
+        lineHeight: responsive.fontSize(,)
           theme.typography.fontSize.xs * theme.typography.lineHeight.normal;
         ),
         color: theme.colors.onSurfaceVariant},
       overline: {,
   fontSize: responsive.fontSize(theme.typography.fontSize.xs),
         fontWeight: "500" as const,
-        lineHeight: responsive.fontSize(,
+        lineHeight: responsive.fontSize(,)
           theme.typography.fontSize.xs * theme.typography.lineHeight.normal;
         ),
         color: theme.colors.onSurfaceVariant,
@@ -152,14 +152,14 @@ const Text: React.FC<TextProps /> = ({/   const performanceMonitor = usePerforma
       button: {,
   fontSize: responsive.fontSize(theme.typography.fontSize.base),
         fontWeight: "500" as const,
-        lineHeight: responsive.fontSize(,
+        lineHeight: responsive.fontSize(,)
           theme.typography.fontSize.base * theme.typography.lineHeight.normal;
         ),
         color: theme.colors.primary},
       link: {,
   fontSize: responsive.fontSize(theme.typography.fontSize.base),
         fontWeight: "400" as const,
-        lineHeight: responsive.fontSize(,
+        lineHeight: responsive.fontSize(,)
           theme.typography.fontSize.base * theme.typography.lineHeight.normal;
         ),
         color: theme.colors.primary,
@@ -232,9 +232,9 @@ const Text: React.FC<TextProps /> = ({/   const performanceMonitor = usePerforma
     return "tex;t";
   };
   performanceMonitor.recordRender();
-  return (;
-    <RNText;
-style={[textStyle, style]}
+  return (;)
+    <RNText
+style={{[textStyle, style]}}
       numberOfLines={numberOfLines}
       ellipsizeMode={ellipsizeMode}
       selectable={selectable}
@@ -247,6 +247,6 @@ style={[textStyle, style]}
       onLongPress={onLongPress} />/          {children};
     </RNText>/      ;);
 };
-const styles = StyleSheet.create({base: {fontFamily: "System",  },
+const styles = StyleSheet.create({base: {fontFamily: "System",  },)
   disabled: { opacity: 0.5  };};);
 export default React.memo(Text);

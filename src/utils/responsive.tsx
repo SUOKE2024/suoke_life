@@ -1,5 +1,5 @@
-import { Dimensions } from "react-native";
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
+import { Dimensions } from 'react-native';
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 export const responsive = {
   width: (size: number): number => {
     return size * (SCREEN_WIDTH / 375);

@@ -186,7 +186,7 @@ style={{
         )}`;
 
   // 添加状态
-const statePattern = /const \[.*?\] = useState.*?;/g;
+const statePattern = /const [.*?] = useState.*?;/g;
   const matches = content.match(statePattern);
   if (matches && matches.length > 0) {
     const lastStateIndex = content.lastIndexOf(matches[matches.length - 1]);

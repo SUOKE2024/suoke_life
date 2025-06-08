@@ -8,7 +8,7 @@ import {WelcomeScreen,
 } from "../screens/    auth";
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 export const AuthNavigator: React.FC  = () => {};
-  return (;
+  return (;)
     <AuthStack.Navigator;
 initialRouteName="Welcome"
       screenOptions={

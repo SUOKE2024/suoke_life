@@ -3,10 +3,10 @@ import { View, Text } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-const LifeScreen = React.lazy() => import('../screens/life/LifeScreen'));
-const MedicalResourceScreen = React.lazy() => import('../screens/health/MedicalResourceScreen'));
-const MedicalResourceDetailScreen = React.lazy() => import('../screens/health/MedicalResourceDetailScreen'));
-const AppointmentScreen = React.lazy() => import('../screens/health/AppointmentScreen'));
+const LifeScreen = React.lazy(() => import('../screens/life/LifeScreen'));
+const MedicalResourceScreen = React.lazy(() => import('../screens/health/MedicalResourceScreen'));
+const MedicalResourceDetailScreen = React.lazy(() => import('../screens/health/MedicalResourceDetailScreen'));
+const AppointmentScreen = React.lazy(() => import('../screens/health/AppointmentScreen'));
 import { MedKnowledgeScreen } from '../screens/health/MedKnowledgeScreen';
 // 导入屏幕组件
 // 类型定义
@@ -29,7 +29,7 @@ const Stack = createStackNavigator<HealthStackParamList>();
 // 健康标签页导航器
 const HealthTabNavigator: React.FC = () => {
   return (
-    <Tab.Navigator;
+  <Tab.Navigator;
       screenOptions={
         headerShown: false,
         tabBarActiveTintColor: '#007AFF',
@@ -56,7 +56,7 @@ const HealthTabNavigator: React.FC = () => {
         component={LifeScreen}
         options={
       tabBarLabel: "生活",
-      tabBarIcon: ({ color, focused }) => (
+      tabBarIcon: ({ color, focused }) => ()
             <Icon name={focused ? 'favorite' : 'favorite-border'} size={20} color={color} />
           )
         }}
@@ -66,7 +66,7 @@ const HealthTabNavigator: React.FC = () => {
         component={MedicalResourceScreen}
         options={
       tabBarLabel: "医疗资源",
-      tabBarIcon: ({ color, focused }) => (
+      tabBarIcon: ({ color, focused }) => ()
             <Icon name={focused ? 'local-hospital' : 'local-hospital'} size={20} color={color} />
           )
         }}
@@ -76,7 +76,7 @@ const HealthTabNavigator: React.FC = () => {
         component={AppointmentScreen}
         options={
       tabBarLabel: "我的预约",
-      tabBarIcon: ({ color, focused }) => (
+      tabBarIcon: ({ color, focused }) => ()
             <Icon name={focused ? 'event' : 'event-note'} size={20} color={color} />;
           );
         }};
@@ -86,7 +86,7 @@ const HealthTabNavigator: React.FC = () => {
         component={MedKnowledgeScreen};
         options={
       tabBarLabel: "医学知识",
-      tabBarIcon: ({ color, focused }) => (;
+      tabBarIcon: ({ color, focused }) => (;)
             <Icon name={focused ? 'menu-book' : 'book'} size={20} color={color} />;
           );
         }};
@@ -96,10 +96,10 @@ const HealthTabNavigator: React.FC = () => {
 };
 // 健康堆栈导航器
 export const HealthNavigator: React.FC = () => {
-  return (;
+  return (;)
     <Stack.Navigator;
       screenOptions={headerShown: false,cardStyleInterpolator: ({ current, layouts }) => {return {cardStyle: {transform: [;
-                {translateX: current.progress.interpolate({inputRange: [0, 1],outputRange: [layouts.screen.width, 0];
+                {translateX: current.progress.interpolate({inputRange: [0, 1],outputRange: [layouts.screen.width, 0];)
                   });
                 }
               ]
@@ -170,7 +170,7 @@ const AppointmentDetailScreen: React.FC<{ navigation: any; route: any }> = ({
   route;
 }) => {
   const { appointmentId } = route.params;
-  return (;
+  return (;)
     <View style={ flex: 1, justifyContent: 'center', alignItems: 'center' }}>;
       <Text>预约详情屏幕</Text>;
       <Text>预约ID: {appointmentId}</Text>;

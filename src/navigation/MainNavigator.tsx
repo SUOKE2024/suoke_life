@@ -1,12 +1,12 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-const Icon = React.lazy() => import('../components/common/Icon'));
+const Icon = React.lazy(() => import('../components/common/Icon'));
 import { HomeScreen } from '../screens/main';
-const SuokeScreen = React.lazy() => import('../screens/suoke/SuokeScreen'));
-const LifeScreen = React.lazy() => import('../screens/life/LifeScreen'));
-const ProfileScreen = React.lazy() => import('../screens/profile/ProfileScreen'));
-const ExploreScreen = React.lazy() => import('../screens/explore/ExploreScreen'));
+const SuokeScreen = React.lazy(() => import('../screens/suoke/SuokeScreen'));
+const LifeScreen = React.lazy(() => import('../screens/life/LifeScreen'));
+const ProfileScreen = React.lazy(() => import('../screens/profile/ProfileScreen'));
+const ExploreScreen = React.lazy(() => import('../screens/explore/ExploreScreen'));
 import { MazeNavigator } from './MazeNavigator';
 import { SettingsScreen } from '../screens/profile/SettingsScreen';
 import { ServiceStatusScreen } from '../screens/profile/ServiceStatusScreen';
@@ -37,7 +37,7 @@ export type MainStackParamList = {MainTabs: undefined,
 const Tab = createBottomTabNavigator<MainTabParamList>();
 const Stack = createNativeStackNavigator<MainStackParamList>();
 // 图标渲染函数
-const getTabBarIcon = ({route,focused,color,size;
+const getTabBarIcon = ({route,focused,color,size;)
 }: {route: any,
   focused: boolean;
   color: string,
@@ -79,7 +79,7 @@ const MainTabNavigator: React.FC = () => {
       enableMemoryMonitoring: false,threshold: 100;
   });
   return (
-    <Tab.Navigator;
+  <Tab.Navigator;
       initialRouteName='Home'
       screenOptions={({ route }) => ({
         headerShown: false,
@@ -119,7 +119,7 @@ const MainTabNavigator: React.FC = () => {
 // 主导航器
 export const MainNavigator: React.FC = () => {
   return (
-    <Stack.Navigator;
+  <Stack.Navigator;
       initialRouteName='MainTabs'
       screenOptions={
         headerShown: false,

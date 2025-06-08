@@ -1,82 +1,38 @@
-# 依赖目录
+# Dependencies
 node_modules/
-venv/
-.venv/
 
-# 构建输出
+# Build outputs
+android/
+ios/
 dist/
 build/
-.expo/
-android/build/
-ios/build/
-ios/Pods/
-
-# 缓存目录
-.jest-cache/
-.pytest_cache/
-__pycache__/
 coverage/
 
-# 生成的文件
-*.d.ts
+# Generated files
+*.generated.*
 *.min.js
 *.min.css
 
-# 配置文件
+# Package files
 package-lock.json
 yarn.lock
-uv.lock
 
-# 日志文件
+# Environment files
+.env*
+
+# Logs
 *.log
-logs/
 
-# 临时文件
-.tmp/
-temp/
+# Metro bundler cache
+.metro-cache/
 
-# 系统文件
-.DS_Store
-Thumbs.db
+# React Native packager cache
+.react-native-packager-cache/
 
-# IDE文件
+# IDE files
 .vscode/
 .idea/
 
-# Git相关
-.git/
-.gitignore
-
-# 特殊格式文件
-*.svg
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.ico
-
-# 数据文件
-*.json
-*.csv
-*.xml
-
-# 文档文件（保持原格式）
-CHANGELOG.md
-LICENSE
-README.md
-
-# 脚本文件（某些需要保持特定格式）
-scripts/cleanup/
-scripts/deploy/
-
-# 服务配置文件
-services/*/config/
-deploy/
-k8s/
-
-# 测试快照
-**/__snapshots__/
-
-# 环境配置
-.env*
-env.example 
+# OS generated files
+.DS_Store
+Thumbs.db

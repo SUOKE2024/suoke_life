@@ -32,19 +32,19 @@ const TopicItem: React.FC<TopicItemProps> = ({
   onDelete,
   onViewDetails;
 }) => {
-  const handleDelete = () => {Alert.alert(;
+  const handleDelete = () => {Alert.alert(;)
       '确认删除',`确定要删除主题 "${topic.name}" 吗？`,[;
         {
       text: "取消",
       style: 'cancel' },{
-      text: "删除",
+      text: "删除", "
       style: 'destructive',onPress: () => onDelete(topic.name);
         }
       ];
     );
   };
   return (
-    <View style={styles.topicItem}>
+  <View style={styles.topicItem}>
       <View style={styles.topicInfo}>
         <Text style={styles.topicName}>{topic.name}</Text>
         <Text style={styles.topicDescription}>
@@ -55,20 +55,20 @@ const TopicItem: React.FC<TopicItemProps> = ({
         </Text>
       </View>
       <View style={styles.topicActions}>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={[styles.actionButton, styles.selectButton]}
           onPress={() => onSelect(topic)}
         >
           <Text style={styles.selectButtonText}>选择</Text>
         </TouchableOpacity>
         ;
-        <TouchableOpacity;
+        <TouchableOpacity
           style={[styles.actionButton, styles.detailButton]};
           onPress={() => onViewDetails(topic)};
         >;
           <Text style={styles.detailButtonText}>详情</Text>;
         </TouchableOpacity>;
-        <TouchableOpacity;
+        <TouchableOpacity
           style={[styles.actionButton, styles.deleteButton]};
           onPress={handleDelete};
         >;
@@ -91,21 +91,21 @@ const TopicManager: React.FC<TopicManagerProps> = ({
   const [newTopicName, setNewTopicName] = useState('');
   const [newTopicDescription, setNewTopicDescription] = useState('');
   const [creating, setCreating] = useState(false);
-  const loadTopics = useCallback(async () => {try {setLoading(true);
+  const loadTopics = useCallback(async () => {try {setLoading(true);)
       const response = await messageBusService.listTopics();
       setTopics(response.topics);
     } catch (error) {
       console.error('Failed to load topics:', error);
-      Alert.alert("错误",加载主题列表失败');
+      Alert.alert("错误", "加载主题列表失败');
     } finally {
       setLoading(false);
     }
   }, []);
-  const handleRefresh = useCallback(async () => {setRefreshing(true);
+  const handleRefresh = useCallback(async () => {setRefreshing(true);)
     await loadTopics();
     setRefreshing(false);
   }, [loadTopics]);
-  const handleCreateTopic = useCallback(async () => {if (!newTopicName.trim()) {Alert.alert("错误",请输入主题名称');
+  const handleCreateTopic = useCallback(async () => {if (!newTopicName.trim()) {Alert.alert("错误", "请输入主题名称');)
       return;
     }
     try {
@@ -118,37 +118,37 @@ const TopicManager: React.FC<TopicManagerProps> = ({
       setNewTopicDescription('');
       setShowCreateModal(false);
       await loadTopics();
-      Alert.alert("成功",主题创建成功');
+      Alert.alert("成功", "主题创建成功');
     } catch (error) {
       console.error('Failed to create topic:', error);
-      Alert.alert("错误",创建主题失败');
+      Alert.alert("错误", "创建主题失败');
     } finally {
       setCreating(false);
     }
   }, [newTopicName, newTopicDescription, loadTopics]);
-  const handleDeleteTopic = useCallback(async (topicName: string) => {try {await messageBusService.deleteTopic(topicName);
+  const handleDeleteTopic = useCallback(async (topicName: string) => {try {await messageBusService.deleteTopic(topicName);)
       await loadTopics();
-      Alert.alert("成功",主题删除成功');
+      Alert.alert("成功", "主题删除成功');
     } catch (error) {
       console.error('Failed to delete topic:', error);
-      Alert.alert("错误",删除主题失败');
+      Alert.alert("错误", "删除主题失败');
     }
   }, [loadTopics]);
   const handleTopicSelect = useCallback(topic: Topic) => {onTopicSelect?.(topic);
   }, [onTopicSelect]);
-  const handleViewDetails = useCallback(async (topic: Topic) => {try {const detailTopic = await messageBusService.getTopic(topic.name);
+  const handleViewDetails = useCallback(async (topic: Topic) => {try {const detailTopic = await messageBusService.getTopic(topic.name);)
       setSelectedTopic(detailTopic);
       setShowDetailModal(true);
     } catch (error) {
       console.error('Failed to get topic details:', error);
-      Alert.alert("错误",获取主题详情失败');
+      Alert.alert("错误", "获取主题详情失败');
     }
   }, []);
-  useEffect() => {
+  useEffect(() => {
     loadTopics();
   }, [loadTopics]);
-  const renderTopicItem = ({ item }: { item: Topic }) => (;
-    <TopicItem;
+  const renderTopicItem = ({ item }: { item: Topic }) => (;)
+    <TopicItem
       topic={item};
       onSelect={handleTopicSelect};
       onDelete={handleDeleteTopic};
@@ -156,11 +156,11 @@ const TopicManager: React.FC<TopicManagerProps> = ({
     />;
   );
   return (
-    <View style={[styles.container, style]}>
+  <View style={[styles.container, style]}>
       {// 头部操作栏}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>主题列表</Text>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={styles.createButton}
           onPress={() => setShowCreateModal(true)}
         >
@@ -168,20 +168,20 @@ const TopicManager: React.FC<TopicManagerProps> = ({
         </TouchableOpacity>
       </View>
       {// 主题列表}
-      {loading && topics.length === 0 ? (
+      {loading && topics.length === 0 ? ()
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#007bff" />
           <Text style={styles.loadingText}>加载中...</Text>
         </View>
       ) : (
-        <FlatList;
+        <FlatList
           data={topics}
           renderItem={renderTopicItem}
           keyExtractor={(item) => item.name}
           style={styles.list}
           contentContainerStyle={styles.listContent}
           refreshControl={
-            <RefreshControl;
+            <RefreshControl
               refreshing={refreshing}
               onRefresh={handleRefresh}
               colors={['#007bff']}
@@ -190,7 +190,7 @@ const TopicManager: React.FC<TopicManagerProps> = ({
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
               <Text style={styles.emptyText}>暂无主题</Text>
-              <TouchableOpacity;
+              <TouchableOpacity
                 style={styles.createFirstButton}
                 onPress={() => setShowCreateModal(true)}
               >
@@ -201,7 +201,7 @@ const TopicManager: React.FC<TopicManagerProps> = ({
         />
       )}
       {// 创建主题模态框}
-      <Modal;
+      <Modal
         visible={showCreateModal}
         animationType="slide"
         transparent={true}
@@ -210,14 +210,14 @@ const TopicManager: React.FC<TopicManagerProps> = ({
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>创建新主题</Text>
-            <TextInput;
+            <TextInput
               style={styles.input}
               placeholder="主题名称 (必填)"
               value={newTopicName}
               onChangeText={setNewTopicName}
               autoFocus;
             />
-            <TextInput;
+            <TextInput
               style={[styles.input, styles.textArea]}
               placeholder="主题描述 (可选)"
               value={newTopicDescription}
@@ -226,19 +226,19 @@ const TopicManager: React.FC<TopicManagerProps> = ({
               numberOfLines={3}
             />
             <View style={styles.modalActions}>
-              <TouchableOpacity;
+              <TouchableOpacity
                 style={[styles.modalButton, styles.cancelButton]}
                 onPress={() => setShowCreateModal(false)}
                 disabled={creating}
               >
                 <Text style={styles.cancelButtonText}>取消</Text>
               </TouchableOpacity>
-              <TouchableOpacity;
+              <TouchableOpacity
                 style={[styles.modalButton, styles.confirmButton]}
                 onPress={handleCreateTopic}
                 disabled={creating}
               >
-                {creating ? (
+                {creating ? ()
                   <ActivityIndicator size="small" color="#fff" />
                 ) : (
                   <Text style={styles.confirmButtonText}>创建</Text>
@@ -249,7 +249,7 @@ const TopicManager: React.FC<TopicManagerProps> = ({
         </View>
       </Modal>
       {// 主题详情模态框}
-      <Modal;
+      <Modal
         visible={showDetailModal}
         animationType="slide"
         transparent={true}
@@ -258,8 +258,7 @@ const TopicManager: React.FC<TopicManagerProps> = ({
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>主题详情</Text>
-            {selectedTopic && (
-        <View style={styles.detailContent}>
+            {selectedTopic  && <View style={styles.detailContent}>
                 <View style={styles.detailRow}>
                   <Text style={styles.detailLabel}>名称:</Text>
                   <Text style={styles.detailValue}>{selectedTopic.name}</Text>
@@ -291,7 +290,7 @@ const TopicManager: React.FC<TopicManagerProps> = ({
               </View>;
             )};
             <View style={styles.modalActions}>;
-              <TouchableOpacity;
+              <TouchableOpacity
                 style={[styles.modalButton, styles.confirmButton]};
                 onPress={() => setShowDetailModal(false)};
               >;

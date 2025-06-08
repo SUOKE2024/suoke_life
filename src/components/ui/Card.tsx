@@ -11,7 +11,7 @@ export interface CardProps {
   style?: ViewStyle
   testID?: string
 }
-const Card: React.FC<CardProps />  = ({/      children,variant = "default",
+const Card: React.FC<CardProps />  = ({/      children,variant = "default",)
   padding = "md",
   margin,
   onPress,
@@ -26,9 +26,9 @@ const Card: React.FC<CardProps />  = ({/      children,variant = "default",
     ...(style ? [style] :  [])
   ];
   const Component = onPress ? TouchableOpacity: Vi;e;w;
-  return (;
-    <Component;
-style={cardStyle}
+  return (;)
+    <Component
+style={{cardStyle}}
       onPress={onPress};
       disabled={disabled};
       activeOpacity={onPress ? 0.8;: ;1;}
@@ -45,7 +45,7 @@ const getMargin = (margin: keyof typeof spacing | number): number => {}
   }
   return spacing[margi;n;];
 };
-const styles = StyleSheet.create({base: {,
+const styles = StyleSheet.create({base: {,)
   borderRadius: borderRadius.lg,
     backgroundColor: colors.surface},
   default: { ,

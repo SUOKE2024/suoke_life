@@ -71,12 +71,12 @@ const AgentDashboard: React.FC<AgentDashboardProps> = ({
       color: "#FF3B30"
     }
   ];
-  const handleQuickAction = (actionType: string, agentType: AgentType) => {Alert.alert(;
+  const handleQuickAction = (actionType: string, agentType: AgentType) => {Alert.alert(;)
       `${agentNames[agentType]}服务`,`即将启动${actionType}功能`,[;
         {
       text: "取消",
       style: "cancel" },{
-      text: "确定",
+      text: "确定", "
       onPress: () => {// 这里可以导航到具体的功能页面;
             console.log(`启动${agentNames[agentType]}的${actionType}功能`);
           }
@@ -98,7 +98,7 @@ const AgentDashboard: React.FC<AgentDashboardProps> = ({
     await checkSystemHealth();
     setRefreshing(false);
   };
-  useEffect() => {
+  useEffect(() => {
     checkSystemHealth();
     const interval = setInterval(checkSystemHealth, 60000); // 每分钟检查一次
     return () => clearInterval(interval);
@@ -112,11 +112,11 @@ const AgentDashboard: React.FC<AgentDashboardProps> = ({
       text: "系统异常", icon: "❌" };
     };
     const config = statusConfig[systemStatus];
-    return (;
-      <View style={[styles.statusCard, { borderLeftColor: config.color }]}>;
+    return (;)
+      <View style={{[styles.statusCard, { borderLeftColor: config.color }}]}>;
         <View style={styles.statusHeader}>;
           <Text style={styles.statusIcon}>{config.icon}</Text>;
-          <Text style={[styles.statusText, { color: config.color }]}>;
+          <Text style={{[styles.statusText, { color: config.color }}]}>;
             {config.text};
           </Text>;
         </View>;
@@ -127,13 +127,13 @@ const AgentDashboard: React.FC<AgentDashboardProps> = ({
     );
   };
   const renderQuickActions = () => (
-    <View style={styles.quickActionsContainer}>
+  <View style={styles.quickActionsContainer}>
       <Text style={styles.sectionTitle}>快速操作</Text>
       <View style={styles.actionsGrid}>
-        {quickActions.map(action) => (;
-          <TouchableOpacity;
+        {quickActions.map(action) => (;)
+          <TouchableOpacity
             key={action.id};
-            style={[styles.actionCard, { borderLeftColor: action.color }]};
+            style={{[styles.actionCard, { borderLeftColor: action.color }}]};
             onPress={action.action};
             activeOpacity={0.7};
           >;
@@ -148,36 +148,36 @@ const AgentDashboard: React.FC<AgentDashboardProps> = ({
     </View>;
   );
   const renderTabBar = () => (
-    <View style={styles.tabBar}>
-      <TouchableOpacity;
+  <View style={styles.tabBar}>
+      <TouchableOpacity
         style={[styles.tab, activeTab === "monitor" && styles.activeTab]}
         onPress={() => setActiveTab("monitor")}
       >
-        <Text style={[
+        <Text style={{[
           styles.tabText,
           activeTab === "monitor" && styles.activeTabText;
-        ]}>
+        ]}}>
           监控
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity;
+      <TouchableOpacity
         style={[styles.tab, activeTab === "analytics" && styles.activeTab]}
         onPress={() => setActiveTab("analytics")}
       >
-        <Text style={[
+        <Text style={{[
           styles.tabText,
           activeTab === "analytics" && styles.activeTabText;
-        ]}>;
+        ]}}>;
           分析;
         </Text>;
       </TouchableOpacity>;
-      <TouchableOpacity;
+      <TouchableOpacity
         style={[styles.tab, activeTab === "chat" && styles.activeTab]};
         onPress={() => setActiveTab("chat")};
       >;
-        <Text style={[;
+        <Text style={{[;
           styles.tabText,activeTab === "chat" && styles.activeTabText;
-        ]}>;
+        ]}}>;
           对话;
         </Text>;
       </TouchableOpacity>;
@@ -187,7 +187,7 @@ const AgentDashboard: React.FC<AgentDashboardProps> = ({
       case "analytics":
         return <AgentAnalytics />;
       case "chat":
-        return (;
+        return (;)
           <View style={styles.chatContainer}>;
             <Text style={styles.chatTitle}>智能体对话</Text>;
             <Text style={styles.chatDescription}>;
@@ -201,8 +201,8 @@ const AgentDashboard: React.FC<AgentDashboardProps> = ({
     }
   };
   return (
-    <View style={styles.container}>
-      <ScrollView;
+  <View style={styles.container}>
+      <ScrollView
         style={styles.scrollView};
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />;
         };

@@ -178,7 +178,7 @@ N;
     timezone: "Asia/Shanghai",/        currency: "CNY",
     measurementSystem: "metric",
     firstDayOfWeek: 1,
-    holidays: ["春节",清明节", "劳动节",端午节", "中秋节",国庆节"]
+    holidays: ["春节", "清明节", "劳动节", "端午节", "中秋节", "国庆节"]
   },
   TW: {,
   code: "TW",
@@ -186,7 +186,7 @@ N;
     timezone: "Asia/Taipei",/        currency: "TWD",
     measurementSystem: "metric",
     firstDayOfWeek: 1,
-    holidays: ["春节",清明节", "端午节",中秋节", "国庆节"]
+    holidays: ["春节", "清明节", "端午节", "中秋节", "国庆节"]
   },
   US: {,
   code: "US",

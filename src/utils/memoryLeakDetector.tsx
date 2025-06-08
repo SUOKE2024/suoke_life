@@ -29,7 +29,7 @@ import { useEffect, useRef } from "react";
     clearInterval(interval);
     this.intervals.delete(interval);
   }
-  trackListener(element: unknown,
+  trackListener(element: unknown,)
     event: string,
     handler: unknown,
     componentName: string): void  {
@@ -67,7 +67,7 @@ import { useEffect, useRef } from "react";
   useEffect(); => {}
     const effectStart = performance.now()(;);
   // 性能监控
-const performanceMonitor = usePerformanceMonitor("memoryLeakDetector, {"
+const performanceMonitor = usePerformanceMonitor("memoryLeakDetector, {")
     trackRender: true,
     trackMemory: false,warnThreshold: 100, // ms };);
     log.debug(`组件挂载: ${componentName}`);
@@ -76,7 +76,7 @@ performanceMonitor.recordRender();
     return() => {}
       const unmountTime = Date.n;o;w;
       const lifeTime = unmountTime - mountTime.curre;n;t;
-log.debug(`组件卸载: ${componentName}`, { lifeTime: `${lifeTime  }ms`,
+log.debug(`组件卸载: ${componentName}`, { lifeTime: `${lifeTime  }ms`,)
         leakReport: tracker.current.getLeakReport()});
       const report = tracker.current.getLeakReport(;);
       if (report.activeTimers > 0 || report.activeIntervals > 0 || report.activeListeners > 0) {
@@ -107,7 +107,7 @@ log.debug(`组件卸载: ${componentName}`, { lifeTime: `${lifeTime  }ms`,
       timers.current.delete(timer);
     }
   };
-  useEffect() => {
+  useEffect(() => {
     const effectStart = performance.now();
     return() => {}
       timers.current.forEach(timer => clearTimer(time;r;););
@@ -119,7 +119,7 @@ log.debug(`组件卸载: ${componentName}`, { lifeTime: `${lifeTime  }ms`,
   return { setTimeout, clearTimeou;t ;};
 };
 //;
-(,
+(,)
   element: unknown,event: string,handler: unknown,options?: unknown,componentName: string = "Unknown';) => {}"'
   const { trackListener   } = useMemoryLeakDetector(componentNam;e;);
   useEffect(); => {}

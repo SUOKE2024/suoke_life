@@ -58,14 +58,14 @@ const cleanupRules = [
   // 清理错误的变量声明
   {
     name: 清理错误变量声明",
-    pattern: /return\s+labels\[key\]\s*\|\|\s*ke;y;/g,
+    pattern: /return\s+labels[key]\s*\|\|\s*ke;y;/g,
     replacement: "return labels[key] || key;
   },
   
   // 清理错误的返回语句
   {
     name: "清理错误返回语句",
-    pattern: /return\s+descriptions\[key\]\s*\|\|\s*";/g,
+    pattern: /return\s+descriptions[key]\s*\|\|\s*";/g,
     replacement: "return descriptions[key] || ";"
   },
   

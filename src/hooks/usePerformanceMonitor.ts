@@ -50,7 +50,7 @@ const DEFAULT_CONFIG: PerformanceMonitorConfig = {,
 * 性能监控Hook;
 * 提供组件级别的性能监控和分析功能
 */
-export const usePerformanceMonitor = (
+export const usePerformanceMonitor = ()
   componentName: string,
   config: Partial<PerformanceMonitorConfig> = {},
 ) => {
@@ -273,14 +273,14 @@ export const usePerformanceMonitor = (
     setIsMonitoring(false);
   }, [isMonitoring]);
   // 组件挂载时启动监控
-  useEffect() => {
+  useEffect(() => {
     startMonitoring();
     return () => {
       stopMonitoring();
     };
   }, [startMonitoring, stopMonitoring]);
   // 每次渲染时记录性能
-  useEffect() => {
+  useEffect(() => {
     recordRender();
   });
   // 返回监控接口

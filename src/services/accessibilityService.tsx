@@ -163,7 +163,7 @@ export interface HealthAlertResponse {
   }
   ///    >  {
     try {
-      const response = await this.makeRequest(;
+      const response = await this.makeRequest(;)
         "/api/accessible-content",/            requ;e;s;t;);
       return respon;s;e;
     } catch (error) {
@@ -172,7 +172,7 @@ export interface HealthAlertResponse {
   }
   ///    >  {
     try {
-      const response = await this.makeRequest(;
+      const response = await this.makeRequest(;)
         "/api/speech-translation",/            requ;e;s;t;);
       return respon;s;e;
     } catch (error) {
@@ -181,7 +181,7 @@ export interface HealthAlertResponse {
   }
   ///    >  {
     try {
-      const response = await this.makeRequest(;
+      const response = await this.makeRequest(;)
         "/api/background-collection",/            requ;e;s;t;);
       return respon;s;e;
     } catch (error) {
@@ -197,7 +197,7 @@ export interface HealthAlertResponse {
   }
   ///    >  {
     try {
-      const response = await this.makeRequest("/api/user-preferences", {/            userId,action: "ge;t"
+      const response = await this.makeRequest("/api/user-preferences", {/            userId,action: "ge;t")
       ;};);
       return response.preferenc;e;s;
     } catch (error) {
@@ -206,10 +206,10 @@ export interface HealthAlertResponse {
       highContrast: false,voiceType: "female",speechRate: 1.0,language: "zh_CN",screenReader: false,signLanguage: false,enabledFeatures: [];};
     }
   }
-  // 更新用户无障碍设置  async updateUserPreferences(userId: string,
+  // 更新用户无障碍设置  async updateUserPreferences(userId: string,)
     preferences: Partial<UserPreferences />/    ): Promise<boolean>  {
     try {
-      const response = await this.makeRequest("/api/user-preferences", {/            userId,action: "update",
+      const response = await this.makeRequest("/api/user-preferences", {/            userId,action: "update",)
         preferenc;e;s;};);
       return response.succe;s;s;
     } catch (error) {
@@ -225,7 +225,7 @@ export interface HealthAlertResponse {
       return [;
         {
       code: "zh_CN",
-      name: "中文（简体）",dialects: ["普通话",粤语", "闽南语",上海话"];
+      name: "中文（简体）",dialects: ["普通话", "粤语", "闽南语", "上海话"];
         },{
       code: "en_US",
       name: "English (US)" },{
@@ -244,15 +244,15 @@ export interface HealthAlertResponse {
         const controller = new AbortController;
         const timeoutId = setTimeout(); => controller.abort(),this.config.timeout;
         )
-        const response = await fetch(url, {// 性能监控
-const performanceMonitor = usePerformanceMonitor(accessibilityService", {"
+        const response = await fetch(url, {// 性能监控)
+const performanceMonitor = usePerformanceMonitor(accessibilityService", {")
     trackRender: true,
     trackMemory: false,
     warnThreshold: 100, ///
   ;};);
           method: "POST",
           headers: {
-            "Content-Type": "application/json",/                ...(this.config.apiKey && { Authorization: `Bearer ${this.config.apiKey  }`
+            "Content-Type": "application/json",/                ...(this.config.apiKey && { Authorization: `Bearer ${this.config.apiKey  }`)
             });
           },
           body: JSON.stringify(data),
@@ -279,7 +279,7 @@ const performanceMonitor = usePerformanceMonitor(accessibilityService", {"
   serviceUrl: "http: accessibility-service的默认地址 * / timeout: 30000,* *  retryAttempts: 3/
 };
 //   ;
-e;(; /
+e;(; /)
   defaultAccessibilityConfig);
 //  ;
 /    ;
@@ -289,11 +289,11 @@ e;(; /
     this.service = service;
     this.agentType = agentType;
   }
-  // 为智能体提供语音输入处理  async processVoiceInput(audioData: string,
+  // 为智能体提供语音输入处理  async processVoiceInput(audioData: string,)
     userId: string,
     language: string = "zh_CN"): Promise<string>  {
     try {
-      const response = await this.service.voiceAssistance({audioData,
+      const response = await this.service.voiceAssistance({audioData,)
         userId,
         language,
         context: `agent_${this.agentType;};`
@@ -303,7 +303,7 @@ e;(; /
       throw err;o;r;
     }
   }
-  // 为智能体提供语音输出生成  async generateVoiceOutput(text: string,
+  // 为智能体提供语音输出生成  async generateVoiceOutput(text: string,)
     userId: string,
     language: string = "zh_CN");: Promise<string | null>  {
     try {
@@ -312,7 +312,7 @@ e;(; /
       return nu;l;l;
     }
   }
-  // 为智能体提供多语言翻译  async translateMessage(text: string,
+  // 为智能体提供多语言翻译  async translateMessage(text: string,)
     userId: string,
     targetLanguage: string): Promise<string>  {
     try {
@@ -323,11 +323,11 @@ e;(; /
       return te;x;t;
     }
   }
-  // 为智能体提供内容无障碍转换  async makeContentAccessible(content: string,
+  // 为智能体提供内容无障碍转换  async makeContentAccessible(content: string,)
     userId: string,
     targetFormat: "audio" | "braille" | "large-text" | "high-contrast"): Promise<AccessibleContentResponse /    >  {
     try {
-      const response = await this.service.accessibleContent({ contentId: `${this.agentType  }_${Date.now()}`,contentType: "text",
+      const response = await this.service.accessibleContent({ contentId: `${this.agentType  }_${Date.now()}`,contentType: "text",)
         userId,
         targetForm;a;t;};);
       return respon;s;e;
@@ -335,10 +335,10 @@ e;(; /
       throw error;
     }
   }
-  // 为智能体提供健康数据监控  async monitorHealthData(userId: string,
+  // 为智能体提供健康数据监控  async monitorHealthData(userId: string,)
     dataTypes: string[]): Promise<string>  {
     try {
-      const response = await this.service.configureBackgroundCollection({userId,
+      const response = await this.service.configureBackgroundCollection({userId,)
         dataTypes,
         collectionInterval: 300000,  privacyLevel: "standard" *;/
       ;};);
@@ -347,13 +347,13 @@ e;(; /
       throw error;
     }
   }
-  // 为智能体提供危机报警功能  async checkHealthAlert(userId: string,
+  // 为智能体提供危机报警功能  async checkHealthAlert(userId: string,)
     healthData: Record<string, any>
   ): Promise<HealthAlertResponse | null /    >  {
     try {
       const hasAbnormalData = this.detectAbnormalHealthData(healthData;);
       if (hasAbnormalData) {
-        const response = await this.service.triggerHealthAlert({userId,
+        const response = await this.service.triggerHealthAlert({userId,)
           alertType: "warning",
           healthDa;t;a;};);
         return respon;s;e;

@@ -16,7 +16,7 @@ import React from "react";
   { PalpationResult } from "../types;//
 * 负责在聊天过程中智能识别并调用相应的四诊服务
 export class XiaoaiChatDiagnosisIntegrator   {private activeSessions: Map<string, any> = new Map();
-  // 处理聊天消息，智能调用四诊服务  async processChatMessage(message: string,
+  // 处理聊天消息，智能调用四诊服务  async processChatMessage(message: string,)
     context: ChatContext);: Promise<ChatResponse /    >  {
     try {
       const diagnosisIntent = await this.analyzeDiagnosisIntent(message, conte;x;t;);
@@ -41,14 +41,14 @@ export class XiaoaiChatDiagnosisIntegrator   {private activeSessions: Map<string
       return this.generateErrorResponse(message, erro;r;);
     }
   }
-  // 分析用户消息的四诊意图  private async analyzeDiagnosisIntent(message: string,
+  // 分析用户消息的四诊意图  private async analyzeDiagnosisIntent(message: string,)
     context: ChatContext): Promise<DiagnosisIntent /    >  {
     const symptomKeywords = [;
-      咳嗽",胸闷, "头痛", 发热",乏力, "失眠", 腹痛",恶心, "呕吐",腹泻",便秘, "心悸", 气短",眩晕, "耳鸣", 视力模糊",关节痛,"肌肉痛", 皮疹",瘙痒, "出汗", 怕冷",怕热, "口干", 口苦",食欲不振, "消化不良", 月经不调",痛经,";];
-    const extractedSymptoms = symptomKeywords.filter(keyword => {};
+      咳嗽", "胸闷, "头痛", " 发热", "乏力, "失眠", " 腹痛", "恶心, "呕吐", "腹泻", "便秘, "心悸", " 气短", "眩晕, "耳鸣", " 视力模糊", "关节痛,"肌肉痛", " 皮疹", "瘙痒, "出汗", " 怕冷", "怕热, "口干", " 口苦", "食欲不振, "消化不良", " 月经不调", "痛经,";];
+    const extractedSymptoms = symptomKeywords.filter(keyword => {};)
       message.includes(keywor;d;);
     )
-    const emergencyKeywords = ["急性", 剧烈",严重, "突然", 无法忍受",呼吸困难];
+    const emergencyKeywords = ["急性", " 剧烈", "严重, "突然", " 无法忍受", "呼吸困难];
     const urgencyLevel = emergencyKeywords.some(keyword => message.includes(keywor;d;););
       ? "high" : extractedSymptoms.length > 0 ? medium" : "low;
     const needsInquiry = extractedSymptoms.length > 0 ||;
@@ -70,7 +70,7 @@ export class XiaoaiChatDiagnosisIntegrator   {private activeSessions: Map<string
                                   message.includes("脉搏;";) ||
                                   message.includes(按压") ||"
                                   message.includes("触诊);"
-    const confidence = this.calculateIntentConfidence(;
+    const confidence = this.calculateIntentConfidence(;)
       extractedSymptoms.length,needsInquiry,needsLookDiagnosis,needsListenDiagnosis,needsPalpationDiagnosi;s;);
     return {needsInquiry,needsLookDiagnosis,needsListenDiagnosis,needsPalpationDiagnosis,confidence,extractedSymptoms,urgencyLevel: urgencyLevel as "low" | medium" | "high | "emergency"};
   }
@@ -136,7 +136,7 @@ export class XiaoaiChatDiagnosisIntegrator   {private activeSessions: Map<string
     return { overallAssessment: `综合四诊分析：${evidences.join(；")  }`,";
       tcmDiagnosis: {
       syndrome: "待进一步分析,",
-      pathogenesis: "基于四诊合参的病机分析",treatment: 个性化治疗方案",;
+      pathogenesis: "基于四诊合参的病机分析", "treatment: 个性化治疗方案",;
         prognosis: "良好},";
       healthRecommendations;: ;[{
       category: "lifestyle",
@@ -157,7 +157,7 @@ export class XiaoaiChatDiagnosisIntegrator   {private activeSessions: Map<string
       confidence: 0.85;
     };
   }
-  // 生成包含诊断结果的聊天回复  private generateChatResponseWithDiagnosis(originalMessage: string,
+  // 生成包含诊断结果的聊天回复  private generateChatResponseWithDiagnosis(originalMessage: string,)
     diagnosisResults: FourDiagnosisResults,
     context: ChatContext,
     intent: DiagnosisIntent);: ChatResponse  {
@@ -175,7 +175,7 @@ export class XiaoaiChatDiagnosisIntegrator   {private activeSessions: Map<string
       responseText += `\n\n${diagnosisResults.integrated.overallAssessment}`
       if (diagnosisResults.integrated.healthRecommendations.length > 0) {
         responseText += "\n\n我的建议："
-        diagnosisResults.integrated.healthRecommendations.forEach(rec, index) => {}
+        diagnosisResults.integrated.healthRecommendations.forEach(((rec, index) => {}))
           responseText += `\n${index + 1}. ${rec.title}：${rec.description}`;
         });
       }
@@ -225,10 +225,10 @@ export class XiaoaiChatDiagnosisIntegrator   {private activeSessions: Map<string
   }
   // 生成错误回复  private generateErrorResponse(message: string, error: unknown): ChatResponse  {
     return {
-      text: "抱歉，我在分析你的情况时遇到了一些技术问题。请稍后再试，或者换个方式描述你的症状。",
-      suggestions: [重新描述症状",稍后再试, "联系技术支持"],timestamp: Date.now();};
+      text: "抱歉，我在分析你的情况时遇到了一些技术问题。请稍后再试，或者换个方式描述你的症状。", "
+      suggestions: [重新描述症状", "稍后再试, "联系技术支持"],timestamp: Date.now();};
   }
-  // 辅助方法  private calculateIntentConfidence(symptomCount: number,
+  // 辅助方法  private calculateIntentConfidence(symptomCount: number,)
     needsInquiry: boolean,
     needsLook: boolean,
     needsListen: boolean,
@@ -275,7 +275,7 @@ export class XiaoaiChatDiagnosisIntegrator   {private activeSessions: Map<string
   }
   // 获取活跃会话状态  getActiveSessionsStatus(userId: string):   { [key: string]: unknown } {
     const userSessions: { [key: string]: unknown } = {};
-    this.activeSessions.forEach(sessionId, key) => {}
+    this.activeSessions.forEach(((sessionId, key) => {}))
       if (key.endsWith(`_${userId}`)) {
         const sessionType = key.replace(`_${userId}`, "';);"'
         userSessions[sessionType] = sessionId;

@@ -132,7 +132,7 @@ getAdvancedFixRules() {
       
       // 修复数组定义错误
       {
-        pattern: /\[([^\]]*),(\s*\])/g,
+        pattern: /[([^]]*),(\s*\])/g,
         replacement: "[$1$2",
         description: 修复数组末尾逗号"
       },
@@ -195,7 +195,7 @@ getAdvancedFixRules() {
       
       // 修复数组解构错误
       {
-        pattern: /const\s*\[\s*([^\]]+)\s*\]\s*=\s*([^]+)(?!\s*;)/g,
+        pattern: /const\s*[\s*([^]]+)\s*\]\s*=\s*([^]+)(?!\s*;)/g,
         replacement: "const [$1] = $2;",
         description: 修复数组解构分号"
       },

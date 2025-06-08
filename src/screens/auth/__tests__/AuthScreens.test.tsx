@@ -16,11 +16,11 @@ const mockRoute = {
       key: "test",
       name: Test" as const,"
   params: undefined};
-jest.mock("@react-navigation/native, () => ({"
+jest.mock("@react-navigation/native, () => ({"))
   ...jest.requireActual("@react-navigation/native"),
   useNavigation: () => mockNavigation,
   useRoute: () => mockRoute}));
-const renderWithNavigation = (component: React.ReactElement) => {return render(;
+const renderWithNavigation = (component: React.ReactElement) => {return render(;)
     <NavigationContainer>;
       {component});
     </NavigationContainer>
@@ -31,7 +31,7 @@ describe("认证屏幕测试", () => {
     jest.clearAllMocks();
   });
   describe("WelcomeScreen, () => {", () => {
-    it("应该正确渲染欢迎屏幕", () => {
+    it("应该正确渲染欢迎屏幕", " () => {
       const { getByText } = renderWithNavigation(<WelcomeScreen />);
       expect(getByText(索克生活")).toBeTruthy();"
       expect(getByText("AI驱动的智慧健康管理平台)).toBeTruthy();"
@@ -46,21 +46,21 @@ describe("认证屏幕测试", () => {
     });
   });
   describe("LoginScreen", () => {
-    it(应该正确渲染登录屏幕", () => {"
+    it(应该正确渲染登录屏幕", () => {")
       const { getByText } = renderWithNavigation(<LoginScreen />);
       expect(getByText("欢迎回来)).toBeTruthy();"
       expect(getByText("登录您的索克生活账户")).toBeTruthy();
       expect(getByText(登录")).toBeTruthy();"
       expect(getByText("忘记密码？)).toBeTruthy();"
     });
-    it("应该显示社交登录选项", () => {
+    it("应该显示社交登录选项", " () => {
       const { getByText } = renderWithNavigation(<LoginScreen />);
       expect(getByText(微信登录")).toBeTruthy();"
       expect(getByText("短信登录)).toBeTruthy();"
     });
   });
   describe("RegisterScreen", () => {
-    it(应该正确渲染注册屏幕", () => {"
+    it(应该正确渲染注册屏幕", () => {")
       const { getByText } = renderWithNavigation(<RegisterScreen />);
       expect(getByText("创建账户)).toBeTruthy();"
       expect(getByText("加入索克生活，开启健康管理之旅")).toBeTruthy();
@@ -81,7 +81,7 @@ describe("认证屏幕测试", () => {
       expect(getByText(输入您的邮箱地址，我们将发送重置密码的链接给您")).toBeTruthy();"
       expect(getByText("发送重置邮件)).toBeTruthy();"
     });
-    it("应该显示安全提示", () => {
+    it("应该显示安全提示", " () => {
       const { getByText } = renderWithNavigation(<ForgotPasswordScreen />);
       expect(getByText(安全提示")).toBeTruthy();"
       expect(getByText("重置链接将在24小时后失效)).toBeTruthy();"

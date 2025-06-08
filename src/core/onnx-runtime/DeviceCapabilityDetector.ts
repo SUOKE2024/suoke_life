@@ -20,7 +20,7 @@ export class DeviceCapabilityDetector {private capabilities: DeviceCapabilities 
       return this.capabilities;
     }
     try {
-      const [cpu, memory, gpu, npu] = await Promise.all([;
+      const [cpu, memory, gpu, npu] = await Promise.all([;)
         this.detectCPUCapabilities(),
         this.detectMemoryCapabilities(),
         this.detectGPUCapabilities(),
@@ -64,7 +64,7 @@ this.capabilities = this.getDefaultCapabilities();
 * * 检查设备是否适合运行特定模型
   isModelCompatible(modelRequirements: ModelRequirements): CompatibilityResult {
     if (!this.capabilities) {
-      return {compatible: false,reason: "设备能力未检测,",recommendations: [];
+      return {compatible: false,reason: "设备能力未检测,", "recommendations: [];
       };
     }
     const issues: string[] = [];
@@ -80,7 +80,7 @@ if (modelRequirements.minCpuCores > this.capabilities.cpu.cores) {
       recommendations.push("降低并发会话数");
     }
     // 检查执行提供者支持
-const hasRequiredProvider = modelRequirements.requiredProviders?.some(;
+const hasRequiredProvider = modelRequirements.requiredProviders?.some(;)
       provider => this.capabilities!.supportedProviders.includes(provider);
     );
     if (modelRequirements.requiredProviders && !hasRequiredProvider) {
@@ -202,7 +202,7 @@ if (await this.checkQNNSupport()) {
       return ["cpu];"
     }
   }
-  private generateRecommendedConfig(
+  private generateRecommendedConfig()
     cpu: CPUCapabilities,
     memory: MemoryCapabilities,
     gpu?: GPUCapabilities,
@@ -256,7 +256,7 @@ const cpuRatio = requirements.minCpuCores /     this.capabilities.cpu.cores;
       bottlenecks.push(CPU负载较高");"
     }
     // 执行提供者评估
-const hasOptimalProvider = requirements.preferredProviders?.some(;
+const hasOptimalProvider = requirements.preferredProviders?.some(;)
       provider => this.capabilities!.supportedProviders.includes(provider);
     );
     if (!hasOptimalProvider) {

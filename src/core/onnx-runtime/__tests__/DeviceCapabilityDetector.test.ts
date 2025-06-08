@@ -1,4 +1,3 @@
-
 import DeviceCapabilityDetector from '../DeviceCapabilityDetector.ts';
 describe('DeviceCapabilityDetector', () => {
   it('应该正确导出', () => {

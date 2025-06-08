@@ -1,4 +1,5 @@
 import React from 'react';
+
 // chat.ts   索克生活APP - 自动生成的类型安全文件     @description TODO: 添加文件描述 @author 索克生活开发团队   @version 1.0.0;
 export type AgentType = "xiaoai" | "xiaoke" | "laoke" | "so;e;";
 r;
@@ -57,5 +58,5 @@ export interface ChatActions {
   setActiveChannel: (channelId: string | null) => void,
   setSearchQuery: (query: string) => void,
   markAsRead: (channelId: string) => void,
-  updateChannelLastMessage: (channelId: string,
+  updateChannelLastMessage: (channelId: string,)
     message: string,timestamp: string) => void};

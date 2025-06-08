@@ -1,4 +1,3 @@
-
 import types from '../types.ts';
 describe('types', () => {
   it('应该正确导出', () => {

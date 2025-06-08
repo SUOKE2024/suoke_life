@@ -9,7 +9,7 @@ export interface UseScreenNavigationReturn {
   goToLogin: () => void;
   goToRegister: () => void;
   showAlert: (title: string, message: string, onConfirm?: () => void) => void;
-  showConfirm: (title: string;
+  showConfirm: (title: string;)
     message: string,onConfirm: () => void,onCancel?: () => void;
   ) => void;
 }
@@ -35,9 +35,9 @@ export const useScreenNavigation = (): UseScreenNavigationReturn =;
   const goToRegister = useCallback() => {
     navigation.navigate("Register" as never);
   }, [navigation]);
-  const showAlert = useCallback(;
+  const showAlert = useCallback(;)
     (title: string, message: string, onConfirm?: ;(;) => void) => {}
-      Alert.alert(title, message, [
+      Alert.alert(title, message, [)
         {
       text: "确定",
       onPress: onConfirm;
@@ -46,13 +46,13 @@ export const useScreenNavigation = (): UseScreenNavigationReturn =;
     },
     []
   );
-  const showConfirm = useCallback(;
-    (
+  const showConfirm = useCallback(;)
+    ()
       title: string,
       message: string,onConfirm: ;(;) => void,
       onCancel?: () => void;
     ) => {}
-      Alert.alert(title, message, [
+      Alert.alert(title, message, [)
         {
       text: "取消",
       style: "cancel",

@@ -411,10 +411,10 @@ export class AlgorithmConfig {
 },
       analysis: {,
   constitutionTypes: config?.analysis?.constitutionTypes || [
-          "平和质",气虚质',
-          "阳虚质",阴虚质',
-          "痰湿质",湿热质',
-          "血瘀质",气郁质',
+          "平和质", "气虚质',
+          "阳虚质", "阴虚质',
+          "痰湿质", "湿热质',
+          "血瘀质", "气郁质',
           '特禀质'
         ],
         adaptiveWeighting: config?.analysis?.adaptiveWeighting ?? true,
@@ -442,7 +442,7 @@ export class AlgorithmConfig {
 }
 }
   // 初始化知识库配置
-  private initializeKnowledgeBaseConfig(
+  private initializeKnowledgeBaseConfig()
     config?: Partial<KnowledgeBaseConfig>
   ): KnowledgeBaseConfig {
     return {
@@ -457,7 +457,7 @@ export class AlgorithmConfig {
 }
 }
   // 初始化质量控制配置
-  private initializeQualityControlConfig(
+  private initializeQualityControlConfig()
     config?: Partial<QualityControlConfig>
   ): QualityControlConfig {
     return {

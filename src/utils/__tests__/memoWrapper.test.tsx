@@ -1,4 +1,3 @@
-
 import memoWrapper from '../memoWrapper.tsx';
 describe('memoWrapper', () => {
   it('应该正确导出', () => {

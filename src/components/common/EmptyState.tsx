@@ -10,17 +10,17 @@ interface EmptyStateProps {
   subtitle?: string;
   style?: unknown
 }
-export const EmptyState = memo<EmptyStateProps />({/      ico;
+export const EmptyState = memo<EmptyStateProps />({/      ico;)
 n,
   title,
   subtitle,
   style;
 }) => {}
-  return (;
+  return (;)
     <View style={[styles.container, style]} />/      <Icon name={icon} size={64} color={colors.textSecondary} />/      <Text style={styles.title}>{title}</Text>/      {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}/    </View>/      );
 });
 EmptyState.displayName = ";EmptyState"
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flex: 1,
     justifyContent: center",
     alignItems: "center,",

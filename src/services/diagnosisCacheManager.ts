@@ -228,7 +228,7 @@ export class DiagnosisCacheManager {
   async cleanupExpiredCache(): Promise<void> {
     try {
       const keys = await AsyncStorage.getAllKeys();
-      const cacheKeys = keys.filter(;
+      const cacheKeys = keys.filter(;)
         key => key.startsWith(SESSION_PREFIX) || key.startsWith(RESULT_PREFIX);
       );
       let cleanedCount = 0;
@@ -252,7 +252,7 @@ export class DiagnosisCacheManager {
   async clearAllCache(): Promise<void> {
     try {
       const keys = await AsyncStorage.getAllKeys();
-      const cacheKeys = keys.filter(;
+      const cacheKeys = keys.filter(;)
         key => key.startsWith(SESSION_PREFIX) || key.startsWith(RESULT_PREFIX);
       );
       await AsyncStorage.multiRemove(cacheKeys);
@@ -282,7 +282,7 @@ export class DiagnosisCacheManager {
   async getCacheSizeInfo() {
     try {
       const keys = await AsyncStorage.getAllKeys();
-      const cacheKeys = keys.filter(;
+      const cacheKeys = keys.filter(;)
         key => key.startsWith(SESSION_PREFIX) || key.startsWith(RESULT_PREFIX);
       );
       let totalSize = 0;

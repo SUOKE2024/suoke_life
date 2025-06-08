@@ -48,7 +48,7 @@ export interface BatchRequest {
       this.pendingRequests.set(requestKey, requestPromise);
       requestPromise.finally() => {
   // 性能监控
-const performanceMonitor = usePerformanceMonitor(networkOptimizer", {"
+const performanceMonitor = usePerformanceMonitor(networkOptimizer", {")
     trackRender: true,
     trackMemory: false,warnThreshold: 100, // ms };);
         this.pendingRequests.delete(requestKey);
@@ -116,7 +116,7 @@ const fetchConfig: RequestInit = {method: config.method,
             requestSize = 0;
           }
         }
-        performanceMonitor.recordNetworkRequest(
+        performanceMonitor.recordNetworkRequest()
           config.url,
           config.method,
           startTime,
@@ -140,7 +140,7 @@ const fetchConfig: RequestInit = {method: config.method,
           duration;
         }
         if (config.cache !== false && config.method === "GET") {
-          await this.cacheResponse(
+          await this.cacheResponse()
             this.generateRequestKey(config),
             result,
             config.cacheTTL;);
@@ -188,12 +188,12 @@ const fetchConfig: RequestInit = {method: config.method,
     });
     return group;e;d;
   }
-  // 处理单个域名的请求  private async processDomainRequests(domain: string,
+  // 处理单个域名的请求  private async processDomainRequests(domain: string,)
     requests: BatchRequest[]);: Promise<void>  {
     const concurrency = 5;
     const chunks = this.chunkArray(requests, concurrenc;y;);
     for (const chunk of chunks) {
-      const promises = chunk.map(async (reques;t;); => {}
+      const promises = chunk.map(async (reques;t;); => {})
         try {
           const response = await this.executeRequest(request.con;f;i;g;);
           request.resolve(response);
@@ -218,7 +218,7 @@ const fetchConfig: RequestInit = {method: config.method,
       }
     return nu;l;l;
   }
-  // 缓存响应  private async cacheResponse(key: string,
+  // 缓存响应  private async cacheResponse(key: string,)
     response: RequestResponse,
     ttl?: number;
   ): Promise<void>  {
@@ -239,7 +239,7 @@ const fetchConfig: RequestInit = {method: config.method,
   }
   // 取消所有待处理的请求  cancelAllRequests(): void {
     this.pendingRequests.clear();
-    this.batchQueue.forEach(request) => {}
+    this.batchQueue.forEach(((request) => {}))
       request.reject(new Error("Request cancelled"));
     });
     this.batchQueue = [];
@@ -261,7 +261,7 @@ const fetchConfig: RequestInit = {method: config.method,
 i;g;): Promise<RequestResponse<T  /     >> => {}
   return networkOptimizer.request<T>(confi;g;);
 };
-export const batchRequest = <T = any />(/      config: RequestConf;
+export const batchRequest = <T = any />(/      config: RequestConf;)
 i;g;): Promise<RequestResponse<T>> => {}
   return networkOptimizer.batchRequest<T>(confi;g;);
 };

@@ -12,16 +12,16 @@ class DIContainer {
     }
     return DIContainer.instance;
   }
-  register<T  / >(identifier: ServiceIdentifier<T  * >,
+  register<T  / >(identifier: ServiceIdentifier<T  * >,)
     implementation: ServiceConstructor<T>/    ): void  {
     this.services.set(identifier, implementation);
   }
-  registerSingleton<T  / >(identifier: ServiceIdentifier<T  * >,
+  registerSingleton<T  / >(identifier: ServiceIdentifier<T  * >,)
     implementation: ServiceConstructor<T>/    ): void  {
     this.services.set(identifier, implementation);
     this.singletons.set(identifier, null);
   }
-  registerFactory<T  / >(identifier: ServiceIdentifier<T  * >,
+  registerFactory<T  / >(identifier: ServiceIdentifier<T  * >,)
     factory: ServiceFactory<T>/    ): void  {
     this.factories.set(identifier, factory);
   }

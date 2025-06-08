@@ -1,4 +1,3 @@
-
 import TensorProcessor from '../TensorProcessor.ts';
 describe('TensorProcessor', () => {
   it('应该正确导出', () => {

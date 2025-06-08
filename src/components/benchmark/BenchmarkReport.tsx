@@ -41,19 +41,18 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
   }>({ html: false, json: false });
   // 生成报告
   const handleGenerateReport = async (format: 'html' | 'json') => {try {setGeneratingReport(prev => ({ ...prev, [format]: true }));
-      const response = await dispatch(generateReport({taskId,format ;
+      const response = await dispatch(generateReport({taskId,format ;))
       })).unwrap();
       setReportUrls(prev => ({
         ...prev,
         [format]: response.reportUrl;
       }));
-      Alert.alert(
-        '报告生成成功',
+      Alert.alert('报告生成成功',
         `${format.toUpperCase()}格式报告已生成`,
         [
           { text: '确定' },
           {
-      text: "打开报告",
+      text: "打开报告", "
       onPress: () => openReport(response.reportUrl);
           }
         ]
@@ -69,14 +68,14 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
       if (supported) {
         await Linking.openURL(url);
       } else {
-        Alert.alert("无法打开",无法打开报告链接');
+        Alert.alert("无法打开", "无法打开报告链接');
       }
     } catch (error) {
-      Alert.alert("打开失败",打开报告时发生错误');
+      Alert.alert("打开失败", "打开报告时发生错误');
     }
   };
   // 分享报告
-  const shareReport = async (url: string, format: string) => {try {await Share.share({message: `基准测试报告 (${format.toUpperCase()}): ${url}`,url: url,title: '基准测试报告';
+  const shareReport = async (url: string, format: string) => {try {await Share.share({message: `基准测试报告 (${format.toUpperCase()}): ${url}`,url: url,title: '基准测试报告';)
       });
     } catch (error) {
       console.error('分享失败:', error);
@@ -95,7 +94,7 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
     }
   };
   if (!result) {
-    return (;
+    return (;)
       <View style={styles.container}>;
         <Card style={styles.card}>;
           <Card.Content>;
@@ -111,21 +110,20 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
     ? metricsValues.reduce(sum, val) => sum + val, 0) / metricsValues.length ;
     : 0;
   return (
-    <ScrollView style={styles.container}>
+  <ScrollView style={styles.container}>
       {// 报告头部}
       <Card style={styles.card}>
         <Card.Title;
           title="基准测试报告"
           subtitle={`任务ID: ${taskId}`}
-          right={() => onClose && (
-            <IconButton icon="close" onPress={onClose} />
+          right={() => onClose  && <IconButton icon="close" onPress={onClose} />
           )}
         />
         <Card.Content>
           <View style={styles.headerInfo}>
             <View style={styles.statusRow}>
-              <Chip;
-                style={[styles.statusChip, { backgroundColor: '#4CAF50' }]}
+              <Chip
+                style={{[styles.statusChip, { backgroundColor: '#4CAF50' }}]}
                 textStyle={ color: 'white' }}
               >
                 已完成
@@ -168,19 +166,18 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
         </Card.Content>
       </Card>
       {// 性能指标}
-      {result.metrics && Object.keys(result.metrics).length > 0 && (
-        <Card style={styles.card}>
+      {result.metrics && Object.keys(result.metrics).length > 0  && <Card style={styles.card}>
           <Card.Title title="性能指标" />
           <Card.Content>
             <View style={styles.scoreContainer}>
               <View style={styles.scoreCircle}>
-                <Text style={[styles.scoreText, { color: '#4CAF50' }]}>
+                <Text style={{[styles.scoreText, { color: '#4CAF50' }}]}>
                   {averageScore.toFixed(1)}
                 </Text>
                 <Text style={styles.scoreLabel}>平均分</Text>
               </View>
             </View>
-            <ProgressBar;
+            <ProgressBar
               progress={Math.min(averageScore / 100, 1)}
               color="#4CAF50"
               style={styles.scoreProgress}>
@@ -189,7 +186,7 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
                 <DataTable.Title>指标名称</DataTable.Title>
                 <DataTable.Title numeric>数值</DataTable.Title>
               </DataTable.Header>
-              {Object.entries(result.metrics).map(([key, value]) => (
+              {Object.entries(result.metrics).map(([key, value]) => ())
                 <DataTable.Row key={key}>
                   <DataTable.Cell>{key}</DataTable.Cell>
                   <DataTable.Cell numeric>
@@ -202,8 +199,7 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
         </Card>
       )}
       {// 预测结果}
-      {result.predictions && result.predictions.length > 0 && (
-        <Card style={styles.card}>
+      {result.predictions && result.predictions.length > 0  && <Card style={styles.card}>
           <Card.Title title="预测结果" />
           <Card.Content>
             <Text style={styles.predictionsCount}>
@@ -216,7 +212,7 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
                 <DataTable.Title numeric>置信度</DataTable.Title>
                 <DataTable.Title numeric>处理时间(ms)</DataTable.Title>
               </DataTable.Header>
-              {result.predictions.slice(0, 5).map((prediction, index) => (
+              {result.predictions.slice(0, 5).map((prediction, index) => ())
                 <DataTable.Row key={index}>
                   <DataTable.Cell>
                     {typeof prediction.input_data === 'string'
@@ -239,8 +235,7 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
                 </DataTable.Row>
               ))}
             </DataTable>
-            {result.predictions.length > 5 && (
-              <Text style={styles.moreResultsText}>
+            {result.predictions.length > 5  && <Text style={styles.moreResultsText}>
                 还有 {result.predictions.length - 5} 个结果...
               </Text>
             )}
@@ -248,12 +243,12 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
         </Card>;
       )};
       {// 元数据};
-      {result.metadata && Object.keys(result.metadata).length > 0 && (;
+      {result.metadata && Object.keys(result.metadata).length > 0 && (;)
         <Card style={styles.card}>;
           <Card.Title title="元数据" />;
           <Card.Content>;
             <DataTable>;
-              {Object.entries(result.metadata).map(([key, value]) => (;
+              {Object.entries(result.metadata).map(([key, value]) => (;))
                 <DataTable.Row key={key}>;
                   <DataTable.Cell>{key}</DataTable.Cell>;
                   <DataTable.Cell>;
@@ -274,7 +269,7 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
         <Card.Content>
           <View style={styles.exportContainer}>
             <View style={styles.exportRow}>
-              <Button;
+              <Button
                 mode="contained"
                 onPress={() => handleGenerateReport('html')}
                 loading={generatingReport.html}
@@ -283,13 +278,12 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
               >
                 生成HTML报告
               </Button>
-              {reportUrls.html && (
-        <View style={styles.reportActions}>
-                  <IconButton;
+              {reportUrls.html  && <View style={styles.reportActions}>
+                  <IconButton
                     icon="open-in-new"
                     onPress={() => openReport(reportUrls.html!)}
                   />
-                  <IconButton;
+                  <IconButton
                     icon="share"
                     onPress={() => shareReport(reportUrls.html!, 'html')}
                   />
@@ -298,7 +292,7 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
             </View>
             <Divider style={styles.divider}>
             <View style={styles.exportRow}>
-              <Button;
+              <Button
                 mode="outlined"
                 onPress={() => handleGenerateReport('json')}
                 loading={generatingReport.json}
@@ -307,13 +301,12 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
               >
                 生成JSON报告
               </Button>
-              {reportUrls.json && (
-        <View style={styles.reportActions}>
-                  <IconButton;
+              {reportUrls.json  && <View style={styles.reportActions}>
+                  <IconButton
                     icon="open-in-new"
                     onPress={() => openReport(reportUrls.json!)}
                   />
-                  <IconButton;
+                  <IconButton
                     icon="share"
                     onPress={() => shareReport(reportUrls.json!, 'json')}
                   />

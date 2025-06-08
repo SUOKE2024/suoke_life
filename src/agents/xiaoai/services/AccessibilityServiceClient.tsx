@@ -68,7 +68,7 @@ export interface AccessibilitySettingsResponse {
     this.baseUrl = ACCESSIBILITY_API_CONFIG.baseUrl;
     this.timeout = ACCESSIBILITY_API_CONFIG.timeout;
   }
-  // 处理语音输入，支持语音识别和语音辅助  async processVoiceInput(audioData: AudioData,
+  // 处理语音输入，支持语音识别和语音辅助  async processVoiceInput(audioData: AudioData,)
     userId: string,
     context: string = "diagnosis",
     language: string = "zh-CN",
@@ -86,7 +86,7 @@ export interface AccessibilitySettingsResponse {
       formData.append("context", context);
       formData.append("language", language);
       formData.append("dialect", dialect);
-      const response = await fetch(;
+      const response = await fetch(;)
         `${this.baseUrl}/api/v1/accessibility/voice-assistance`,/            {
       method: "POST",
       body: formData,headers: { Accept: "application/json"  },/            ;}
@@ -102,10 +102,10 @@ export interface AccessibilitySettingsResponse {
     } catch (error) {
       return {
       recognized_text: ",",
-      response_text: `语音处理失败: ${(error as Error).message}`,response_audio: ",confidence: 0.0,success: false,error: (error as Error).messag;e;}
+      response_text: `语音处理失败: ${(error as Error).message}`,response_audio: ", "confidence: 0.0,success: false,error: (error as Error).messag;e;}
     }
   }
-  // 处理图像输入，支持图像识别和描述  async processImageInput(imageData: ImageData,
+  // 处理图像输入，支持图像识别和描述  async processImageInput(imageData: ImageData,)
     userId: string,
     imageType: string = "tongue",
     context: string = "looking_diagnosis");: Promise<ImageAssistanceResponse /    >  {
@@ -121,7 +121,7 @@ export interface AccessibilitySettingsResponse {
       formData.append("user_id", userId);
       formData.append("image_type", imageType);
       formData.append("context", context);
-      formData.append(
+      formData.append()
         "preferences",
         JSON.stringify({
       language: "zh-CN",
@@ -129,7 +129,7 @@ export interface AccessibilitySettingsResponse {
           medical_context: true;
         });
       )
-      const response = await fetch(;
+      const response = await fetch(;)
         `${this.baseUrl}/api/v1/accessibility/image-assistance`,/            {
       method: "POST",
       body: formData,headers: { Accept: "application/json"  },/            ;}
@@ -146,7 +146,7 @@ export interface AccessibilitySettingsResponse {
       return { scene_description: `图像处理失败: ${(error as Error).message  }`,medical_features: [],navigation_guidance: ",",confidence: 0.0,audio_guidance: ",success: false,error: (error as Error).messag;e;}
     }
   }
-  // 处理手语输入，支持手语识别  async processSignLanguageInput(videoData: Blob,
+  // 处理手语输入，支持手语识别  async processSignLanguageInput(videoData: Blob,)
     userId: string,
     language: string = "csl");: Promise<SignLanguageResponse /    >  {
     try {
@@ -154,7 +154,7 @@ export interface AccessibilitySettingsResponse {
       formData.append("video_file", videoData);
       formData.append("user_id", userId);
       formData.append("language", language);
-      const response = await fetch(;
+      const response = await fetch(;)
         `${this.baseUrl}/api/v1/accessibility/sign-language`,/            {
       method: "POST",
       body: formData,headers: { Accept: "application/json"  },/            ;}
@@ -169,12 +169,12 @@ export interface AccessibilitySettingsResponse {
       return { recognized_text: `手语处理失败: ${(error as Error).message  }`,confidence: 0.0,segments: [],success: false,error: (error as Error).messag;e;}
     }
   }
-  // 生成无障碍健康内容  async generateAccessibleHealthContent(content: string,
+  // 生成无障碍健康内容  async generateAccessibleHealthContent(content: string,)
     userId: string,
     contentType: string = "diagnosis_result",
     targetFormat: string = "audio"): Promise<AccessibleContentResponse /    >  {
     try {
-      const response = await fetch(;
+      const response = await fetch(;)
         `${this.baseUrl}/api/v1/accessibility/accessible-content`,/            {
       method: "POST",
       headers: {
@@ -206,12 +206,12 @@ export interface AccessibilitySettingsResponse {
   base64编码的屏幕截图 // userId: string,
     context: string = "diagnosis_interface"): Promise<ScreenReadingResponse /    >  {
     try {
-      const response = await fetch(;
+      const response = await fetch(;)
         `${this.baseUrl}/api/v1/accessibility/screen-reading`,/            {
       method: "POST",
       headers: {
             "Content-Type": "application/json",/            Accept: "application/json",/              },
-          body: JSON.stringify({,
+          body: JSON.stringify({,)
   screen_data: screenData,
             user_id: userId,
             context,
@@ -227,19 +227,19 @@ export interface AccessibilitySettingsResponse {
         ui_elements: result.ui_elements || [],audio_description: result.audio_description || ",";
         success: tru;e;}
     } catch (error) {
-      return { screen_description: `屏幕阅读失败: ${(error as Error).message  }`,ui_elements: [],audio_description: ",success: false,error: (error as Error).messag;e;}
+      return { screen_description: `屏幕阅读失败: ${(error as Error).message  }`,ui_elements: [],audio_description: ", "success: false,error: (error as Error).messag;e;}
     }
   }
-  // 管理用户的无障碍设置  async manageAccessibilitySettings(userId: string,
+  // 管理用户的无障碍设置  async manageAccessibilitySettings(userId: string,)
     preferences: unknown,
     action: string = "update"): Promise<AccessibilitySettingsResponse /    >  {
     try {
-      const response = await fetch(;
+      const response = await fetch(;)
         `${this.baseUrl}/api/v1/accessibility/settings`,/            {
       method: "POST",
       headers: {
             "Content-Type": "application/json",/            Accept: "application/json",/              },
-          body: JSON.stringify({,
+          body: JSON.stringify({,)
   user_id: userId,
             preferences,action;};);}
       ;)
@@ -260,8 +260,8 @@ export interface AccessibilitySettingsResponse {
     try {
       const controller = new AbortController;
       const timeoutId = setTimeout(); => controller.abort(), 5000);
-      const response = await fetch(`${// 性能监控
-const performanceMonitor = usePerformanceMonitor(AccessibilityServiceClient", {"
+      const response = await fetch(`${// 性能监控)
+const performanceMonitor = usePerformanceMonitor(AccessibilityServiceClient", {")
     trackRender: true,
     trackMemory: false,warnThreshold: 100, ///
   ;};);

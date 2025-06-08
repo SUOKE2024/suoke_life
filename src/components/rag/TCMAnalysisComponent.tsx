@@ -133,7 +133,7 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
   const handleAnalysis = useCallback(async () => {
     const validSymptoms = symptoms.filter(s => s.trim());
     if (validSymptoms.length === 0) {
-      Alert.alert("提示",请至少输入一个症状');
+      Alert.alert("提示", "请至少输入一个症状');
       return;
     }
     setIsAnalyzing(true);
@@ -143,17 +143,17 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
       const mockResult: TCMAnalysisResponse = {,
   syndromeAnalysis: {
       primarySyndrome: "气虚血瘀",
-      secondarySyndromes: ["脾胃虚弱",肝气郁结'],
+      secondarySyndromes: ["脾胃虚弱", "肝气郁结'],
           confidence: 0.85;
         },
         constitutionAssessment: {,
   constitutionType: constitutionType,
-          characteristics: ["气虚",血瘀', '脾胃虚弱']
+          characteristics: ["气虚", "血瘀', '脾胃虚弱']
         },
         recommendations: {,
-  lifestyle: ["规律作息",适量运动', '保持心情愉悦'],
-          dietary: ["温补脾胃",活血化瘀', '避免生冷'],
-          exercise: ["太极拳",八段锦', '散步']
+  lifestyle: ["规律作息", "适量运动', '保持心情愉悦'],
+          dietary: ["温补脾胃", "活血化瘀', '避免生冷'],
+          exercise: ["太极拳", "八段锦', '散步']
         }
       };
       setAnalysisResult(mockResult);
@@ -169,7 +169,7 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
   // 获取中药推荐
   const handleHerbRecommendation = useCallback(async () => {
     if (!analysisResult) {
-      Alert.alert("提示",请先进行中医分析');
+      Alert.alert("提示", "请先进行中医分析');
       return;
     }
     setIsRecommending(true);
@@ -181,21 +181,21 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
       name: "补中益气汤加减",
       herbs: [
             {
-      name: "黄芪",
+      name: "黄芪", "
       dosage: '30g', function: '补气升阳' },
             {
-      name: "党参",
+      name: "党参", "
       dosage: '15g', function: '补中益气' },
             {
-      name: "白术",
+      name: "白术", "
       dosage: '12g', function: '健脾燥湿' },
             {
-      name: "当归",
+      name: "当归", "
       dosage: '10g', function: '补血活血' }
           ]
         },
-        instructions: ["水煎服，每日一剂",饭后30分钟服用', '连服7-14天'],
-        precautions: ["孕妇慎用",感冒发热时停服', '服药期间忌食生冷']
+        instructions: ["水煎服，每日一剂", "饭后30分钟服用', '连服7-14天'],
+        precautions: ["孕妇慎用", "感冒发热时停服', '服药期间忌食生冷']
       };
       setHerbResult(mockHerbResult);
       onHerbResult?.(mockHerbResult);
@@ -224,21 +224,20 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
     setHerbResult(null);
   }, []);
   return (
-    <ScrollView style={styles.container}>
+  <ScrollView style={styles.container}>
       <Text style={styles.title}>中医智能分析</Text>
       {}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>症状描述</Text>
-        {symptoms.map((symptom, index) => (
+        {symptoms.map((symptom, index) => ())
           <View key={index} style={styles.symptomRow}>
-            <TextInput;
+            <TextInput
               style={styles.symptomInput}
               value={symptom}
               onChangeText={(value) => updateSymptom(index, value)}
               placeholder={`症状 ${index + 1}`}
             />
-            {symptoms.length > 1 && (
-              <TouchableOpacity;
+            {symptoms.length > 1  && <TouchableOpacity
                 style={styles.removeButton}
                 onPress={() => removeSymptom(index)}
               >
@@ -255,20 +254,20 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>体质类型</Text>
         <View style={styles.constitutionGrid}>
-          {constitutionTypes.map(type) => (
-            <TouchableOpacity;
+          {constitutionTypes.map(type) => ()
+            <TouchableOpacity
               key={type.value}
-              style={[
+              style={{[
                 styles.constitutionButton,
                 constitutionType === type.value && styles.constitutionButtonActive;
-              ]}
+              ]}}
               onPress={() => setConstitutionType(type.value)}
             >
-              <Text;
-                style={[
+              <Text
+                style={{[
                   styles.constitutionButtonText,
                   constitutionType === type.value && styles.constitutionButtonTextActive;
-                ]}
+                ]}}
               >
                 {type.label}
               </Text>
@@ -278,31 +277,30 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
       </View>
       {}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={[styles.button, styles.primaryButton]}
           onPress={handleAnalysis}
           disabled={isAnalyzing}
         >
-          {isAnalyzing ? (
+          {isAnalyzing ? ()
             <ActivityIndicator color="#fff" />
           ) : (
             <Text style={styles.buttonText}>开始分析</Text>
           )}
         </TouchableOpacity>
-        {analysisResult && (
-          <TouchableOpacity;
+        {analysisResult  && <TouchableOpacity
             style={[styles.button, styles.secondaryButton]}
             onPress={handleHerbRecommendation}
             disabled={isRecommending}
           >
-            {isRecommending ? (
+            {isRecommending ? ()
               <ActivityIndicator color="#007AFF" />
             ) : (
               <Text style={[styles.buttonText, styles.secondaryButtonText]}>中药推荐</Text>
             )}
           </TouchableOpacity>
         )}
-        <TouchableOpacity;
+        <TouchableOpacity
           style={[styles.button, styles.clearButton]}
           onPress={handleClear}
         >
@@ -310,8 +308,7 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
         </TouchableOpacity>
       </View>
       {}
-      {analysisResult && (
-        <View style={styles.resultSection}>
+      {analysisResult  && <View style={styles.resultSection}>
           <Text style={styles.resultTitle}>分析结果</Text>
           <View style={styles.resultCard}>
             <Text style={styles.resultLabel}>主要证型：</Text>
@@ -319,27 +316,26 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
                         <Text style={styles.resultLabel}>体质评估：</Text>
             <Text style={styles.resultValue}>{analysisResult.constitutionAssessment.constitutionType}</Text>
                         <Text style={styles.resultLabel}>生活建议：</Text>
-            {analysisResult.recommendations.lifestyle.map((item, index) => (
+            {analysisResult.recommendations.lifestyle.map((item, index) => ())
               <Text key={index} style={styles.recommendationItem}>• {item}</Text>
             ))}
           </View>
         </View>
       )}
       {}
-      {herbResult && (
-        <View style={styles.resultSection}>
+      {herbResult  && <View style={styles.resultSection}>
           <Text style={styles.resultTitle}>中药推荐</Text>
           <View style={styles.resultCard}>
             <Text style={styles.resultLabel}>方剂名称：</Text>
             <Text style={styles.resultValue}>{herbResult.formula.name}</Text>
                         <Text style={styles.resultLabel}>药物组成：</Text>
-            {herbResult.formula.herbs.map((herb, index) => (
+            {herbResult.formula.herbs.map((herb, index) => ())
               <Text key={index} style={styles.herbItem}>
                 {herb.name} {herb.dosage} - {herb.function}
               </Text>
             ))}
                         <Text style={styles.resultLabel}>服用方法：</Text>
-            {herbResult.instructions.map((instruction, index) => (
+            {herbResult.instructions.map((instruction, index) => ())
               <Text key={index} style={styles.instructionItem}>• {instruction}</Text>
             ))}
           </View>

@@ -41,10 +41,10 @@ const defaultConfigs: Record<AgentType, AgentConfiguration> = {
     learningMode: true,
     privacyLevel: "high",
     customPrompts: [
-      "您好，我是小艾，您的健康咨询助手",让我为您进行四诊分析",
+      "您好，我是小艾，您的健康咨询助手", "让我为您进行四诊分析",
       "请描述您的症状，我会为您提供专业建议"
     ],
-    specializations: ["四诊合参",健康咨询", "症状分析",中医诊断"],
+    specializations: ["四诊合参", "健康咨询", "症状分析", "中医诊断"],
     workingHours: {,
   start: "00:00",
       end: "23:59",
@@ -60,10 +60,10 @@ const defaultConfigs: Record<AgentType, AgentConfiguration> = {
     learningMode: true,
     privacyLevel: "medium",
     customPrompts: [
-      "您好，我是小克，您的服务管理专家",我可以帮您预约挂号和管理服务",
+      "您好，我是小克，您的服务管理专家", "我可以帮您预约挂号和管理服务",
       "有什么服务需求请告诉我"
     ],
-    specializations: ["预约挂号",服务管理", "资源调度",用户服务"],
+    specializations: ["预约挂号", "服务管理", "资源调度", "用户服务"],
     workingHours: {,
   start: "08:00",
       end: "18:00",
@@ -79,10 +79,10 @@ const defaultConfigs: Record<AgentType, AgentConfiguration> = {
     learningMode: true,
     privacyLevel: "low",
     customPrompts: [
-      "您好，我是老克，您的健康知识导师",让我为您分享健康知识",
+      "您好，我是老克，您的健康知识导师", "让我为您分享健康知识",
       "有什么健康问题想了解吗？"
     ],
-    specializations: ["健康教育",知识传播", "养生指导",中医文化"],
+    specializations: ["健康教育", "知识传播", "养生指导", "中医文化"],
     workingHours: {,
   start: "06:00",
       end: "22:00",
@@ -98,10 +98,10 @@ const defaultConfigs: Record<AgentType, AgentConfiguration> = {
     learningMode: true,
     privacyLevel: "high",
     customPrompts: [
-      "您好，我是索儿，您的生活健康管家",让我帮您管理健康数据和生活方式",
+      "您好，我是索儿，您的生活健康管家", "让我帮您管理健康数据和生活方式",
       "一起打造健康的生活习惯吧"
     ],
-    specializations: ["生活管理",健康数据", "习惯养成",个性化建议"],
+    specializations: ["生活管理", "健康数据", "习惯养成", "个性化建议"],
     workingHours: {,
   start: "05:00",
       end: "23:00",
@@ -124,7 +124,7 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
       low: "低 - 基础隐私保护",
       medium: "中 - 标准隐私保护",high: "高 - 严格隐私保护";
   };
-  useEffect() => {
+  useEffect(() => {
     loadConfigurations();
   }, [])  // 检查是否需要添加依赖项;
   const loadConfigurations = async () => {try {// 这里应该从API加载配置;
@@ -140,9 +140,9 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
         [config.agentType]: config;
       }));
       onConfigChange?.(config);
-      Alert.alert("成功",配置已保存");
+      Alert.alert("成功", "配置已保存");
     } catch (error) {
-      Alert.alert("错误",保存配置失败");
+      Alert.alert("错误", "保存配置失败");
     }
   };
   const updateConfig = (field: keyof AgentConfiguration, value: any) => {const updatedConfig = {...configs[selectedAgent],[field]: value;
@@ -170,8 +170,8 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
     updateConfig("customPrompts", prompts);
     setModalVisible(false);
   };
-  const deleteCustomPrompt = (index: number) => {Alert.alert(;
-      "确认删除",确定要删除这个自定义提示吗？",[;
+  const deleteCustomPrompt = (index: number) => {Alert.alert(;)
+      "确认删除", "确定要删除这个自定义提示吗？",[;
         {
       text: "取消",
       style: "cancel" },{
@@ -184,20 +184,20 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
     );
   };
   const renderAgentSelector = () => (
-    <View style={styles.selectorContainer}>
+  <View style={styles.selectorContainer}>
       <Text style={styles.sectionTitle}>选择智能体</Text>
       <View style={styles.agentButtons}>
-        {Object.values(AgentType).map(type) => (
-          <TouchableOpacity;
+        {Object.values(AgentType).map(type) => ()
+          <TouchableOpacity
             key={type}
-            style={[;
+            style={{[;
               styles.agentButton,selectedAgent === type && styles.selectedAgentButton;
-            ]};
+            ]}};
             onPress={() => setSelectedAgent(type)};
           >;
-            <Text style={[;
+            <Text style={{[;
               styles.agentButtonText,selectedAgent === type && styles.selectedAgentButtonText;
-            ]}>;
+            ]}}>;
               {agentNames[type]};
             </Text>;
           </TouchableOpacity>;
@@ -207,32 +207,32 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
   );
   const renderBasicSettings = () => {const config = configs[selectedAgent];
     return (
-      <View style={styles.settingsSection}>
+  <View style={styles.settingsSection}>
         <Text style={styles.sectionTitle}>基础设置</Text>
         <View style={styles.settingItem}>
           <Text style={styles.settingLabel}>启用智能体</Text>
-          <Switch;
+          <Switch
             value={config.enabled}
             onValueChange={(value) => updateConfig("enabled", value)}
           />
         </View>
         <View style={styles.settingItem}>
           <Text style={styles.settingLabel}>自动回复</Text>
-          <Switch;
+          <Switch
             value={config.autoResponse}
             onValueChange={(value) => updateConfig("autoResponse", value)}
           />
         </View>;
         <View style={styles.settingItem}>;
           <Text style={styles.settingLabel}>学习模式</Text>;
-          <Switch;
+          <Switch
             value={config.learningMode};
             onValueChange={(value) => updateConfig("learningMode", value)};
           />;
         </View>;
         <View style={styles.settingItem}>;
           <Text style={styles.settingLabel}>回复延迟 (ms)</Text>;
-          <TextInput;
+          <TextInput
             style={styles.numberInput};
             value={config.responseDelay.toString()};
             onChangeText={(value) => {const num = parseInt(value) || 500;
@@ -244,7 +244,7 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
         </View>
         <View style={styles.settingItem}>
           <Text style={styles.settingLabel}>最大并发会话</Text>
-          <TextInput;
+          <TextInput
             style={styles.numberInput}
             value={config.maxConcurrentSessions.toString()}
             onChangeText={(value) => {
@@ -260,20 +260,20 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
   };
   const renderPrivacySettings = () => {const config = configs[selectedAgent];
     return (
-      <View style={styles.settingsSection}>
+  <View style={styles.settingsSection}>
         <Text style={styles.sectionTitle}>隐私设置</Text>
         <View style={styles.privacyOptions}>
-          {Object.entries(privacyLevels).map(([level, description]) => (
-            <TouchableOpacity;
+          {Object.entries(privacyLevels).map(([level, description]) => ())
+            <TouchableOpacity
               key={level}
-              style={[;
+              style={{[;
                 styles.privacyOption,config.privacyLevel === level && styles.selectedPrivacyOption;
-              ]};
+              ]}};
               onPress={() => updateConfig("privacyLevel", level)};
             >;
-              <Text style={[;
+              <Text style={{[;
                 styles.privacyOptionText,config.privacyLevel === level && styles.selectedPrivacyOptionText;
-              ]}>;
+              ]}}>;
                 {description};
               </Text>;
             </TouchableOpacity>;
@@ -284,26 +284,26 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
   };
   const renderCustomPrompts = () => {const config = configs[selectedAgent];
     return (
-      <View style={styles.settingsSection}>
+  <View style={styles.settingsSection}>
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>自定义提示</Text>
           <TouchableOpacity style={styles.addButton} onPress={addCustomPrompt}>
             <Text style={styles.addButtonText}>+ 添加</Text>
           </TouchableOpacity>
         </View>
-        {config.customPrompts.map((prompt, index) => (
+        {config.customPrompts.map((prompt, index) => ())
           <View key={index} style={styles.promptItem}>
             <Text style={styles.promptText} numberOfLines={2}>
               {prompt}
             </Text>
             <View style={styles.promptActions}>
-              <TouchableOpacity;
+              <TouchableOpacity
                 style={styles.editButton};
                 onPress={() => editCustomPrompt(index)};
               >;
                 <Text style={styles.editButtonText}>编辑</Text>;
               </TouchableOpacity>;
-              <TouchableOpacity;
+              <TouchableOpacity
                 style={styles.deleteButton};
                 onPress={() => deleteCustomPrompt(index)};
               >;
@@ -317,12 +317,12 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
   };
   const renderWorkingHours = () => {const config = configs[selectedAgent];
     return (
-      <View style={styles.settingsSection}>
+  <View style={styles.settingsSection}>
         <Text style={styles.sectionTitle}>工作时间</Text>
         <View style={styles.timeInputContainer}>
           <View style={styles.timeInput}>
             <Text style={styles.timeLabel}>开始时间</Text>
-            <TextInput;
+            <TextInput
               style={styles.timeField}
               value={config.workingHours.start}
               onChangeText={(value) => updateConfig("workingHours", {
@@ -334,10 +334,10 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
           </View>;
           <View style={styles.timeInput}>;
             <Text style={styles.timeLabel}>结束时间</Text>;
-            <TextInput;
+            <TextInput
               style={styles.timeField};
               value={config.workingHours.end};
-              onChangeText={(value) => updateConfig("workingHours", {...config.workingHours,end: value;
+              onChangeText={(value) => updateConfig("workingHours", {...config.workingHours,end: value;)
               })};
               placeholder="HH:MM";
             />;
@@ -347,21 +347,21 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
     );
   };
   return (
-    <View style={styles.container}>
+  <View style={styles.container}>
       <ScrollView style={styles.scrollView}>
         {renderAgentSelector()}
         {renderBasicSettings()}
         {renderPrivacySettings()}
         {renderCustomPrompts()}
         {renderWorkingHours()}
-        <TouchableOpacity;
+        <TouchableOpacity
           style={styles.saveButton}
           onPress={() => saveConfiguration(configs[selectedAgent])}
         >
           <Text style={styles.saveButtonText}>保存配置</Text>
         </TouchableOpacity>
       </ScrollView>
-      <Modal;
+      <Modal
         visible={modalVisible}
         animationType="slide"
         transparent={true}
@@ -372,7 +372,7 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
             <Text style={styles.modalTitle}>
               {editingIndex >= 0 ? "编辑提示" : "添加提示"}
             </Text>
-            <TextInput;
+            <TextInput
               style={styles.promptInput}
               value={editingPrompt}
               onChangeText={setEditingPrompt}
@@ -381,13 +381,13 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
               numberOfLines={4}
             />
             <View style={styles.modalActions}>
-              <TouchableOpacity;
+              <TouchableOpacity
                 style={styles.cancelButton}
                 onPress={() => setModalVisible(false)};
               >;
                 <Text style={styles.cancelButtonText}>取消</Text>;
               </TouchableOpacity>;
-              <TouchableOpacity;
+              <TouchableOpacity
                 style={styles.confirmButton};
                 onPress={saveCustomPrompt};
               >;

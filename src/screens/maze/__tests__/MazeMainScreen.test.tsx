@@ -1,4 +1,3 @@
-
 import MazeMainScreen from '../MazeMainScreen.tsx';
 describe('MazeMainScreen', () => {
   it('应该正确导出', () => {

@@ -56,7 +56,7 @@ export class PerformanceMonitor {
   /**
   * 记录自定义性能指标
   */
-  public recordMetric(
+  public recordMetric()
     name: string,
     value: number,
     unit: string,
@@ -78,7 +78,7 @@ export class PerformanceMonitor {
   /**
   * 测量函数执行时间
   */
-  public async measureFunction<T>(
+  public async measureFunction<T>()
     name: string,
     fn: () => Promise<T> | T,
   ): Promise<T> {
@@ -86,7 +86,7 @@ export class PerformanceMonitor {
     try {
       const result = await fn();
       const duration = performance.now() - startTime;
-      this.recordMetric(
+      this.recordMetric()
         `function_${name}`,
         duration,
         "ms",cpu',
@@ -95,7 +95,7 @@ export class PerformanceMonitor {
       return result;
     } catch (error) {
       const duration = performance.now() - startTime;
-      this.recordMetric(
+      this.recordMetric()
         `function_${name}_error`,
         duration,
         "ms",cpu',
@@ -107,13 +107,13 @@ export class PerformanceMonitor {
   * 测量API请求性能
   */
   public measureApiRequest(url: string, duration: number, status: number): void {
-    this.recordMetric(
+    this.recordMetric()
       `api_request_${this.getUrlPath(url)}`,
       duration,
       "ms",network',
       2000, // 2s threshold;
     );
-    this.recordMetric(
+    this.recordMetric()
       `api_status_${status}`,
       1,
       "count",network',
@@ -123,7 +123,7 @@ export class PerformanceMonitor {
   * 获取性能报告
   */
   public getPerformanceReport(): PerformanceReport {
-    const recentMetrics = this.metrics.filter(
+    const recentMetrics = this.metrics.filter()
       metric => Date.now() - metric.timestamp < 60000, // 最近1分钟
     );
     const score = this.calculatePerformanceScore(recentMetrics);
@@ -189,7 +189,7 @@ export class PerformanceMonitor {
     // 观察导航时间
     try {
       const navObserver = new PerformanceObserver(list) => {
-        list.getEntries().forEach(entry) => {
+        list.getEntries().forEach(((entry) => {
           if (entry.entryType === 'navigation') {
             const navEntry = entry as PerformanceNavigationTiming;
             this.recordNavigationMetrics(navEntry);
@@ -204,7 +204,7 @@ export class PerformanceMonitor {
     // 观察资源加载时间
     try {
       const resourceObserver = new PerformanceObserver(list) => {
-        list.getEntries().forEach(entry) => {
+        list.getEntries().forEach(((entry) => {
           if (entry.entryType === 'resource') {
             this.recordResourceMetric(entry as PerformanceResourceTiming);
           }
@@ -218,7 +218,7 @@ export class PerformanceMonitor {
     // 观察用户交互
     try {
       const interactionObserver = new PerformanceObserver(list) => {
-        list.getEntries().forEach(entry) => {
+        list.getEntries().forEach(((entry) => {
           if (entry.entryType === 'event') {
             this.recordInteractionMetric(entry as PerformanceEventTiming);
           }
@@ -237,7 +237,7 @@ export class PerformanceMonitor {
     // 收集内存使用情况
     const memoryUsage = this.getMemoryUsage();
     if (memoryUsage.total > 0) {
-      this.recordMetric(
+      this.recordMetric()
         'memory_usage',
         memoryUsage.percentage,
         "%",memory',
@@ -247,7 +247,7 @@ export class PerformanceMonitor {
     // 收集连接信息
     if ('connection' in navigator) {
       const connection = (navigator as any).connection;
-      this.recordMetric(
+      this.recordMetric()
         'network_downlink',
         connection.downlink,
         "Mbps",network',
@@ -279,7 +279,7 @@ export class PerformanceMonitor {
   private recordResourceMetric(entry: PerformanceResourceTiming): void {
     const duration = entry.responseEnd - entry.startTime;
     const resourceType = this.getResourceType(entry.name);
-    this.recordMetric(
+    this.recordMetric()
       `resource_${resourceType}`,
       duration,
       "ms",network',
@@ -290,7 +290,7 @@ export class PerformanceMonitor {
   * 记录交互指标
   */
   private recordInteractionMetric(entry: PerformanceEventTiming): void {
-    this.recordMetric(
+    this.recordMetric()
       `interaction_${entry.name}`,
       entry.duration,
       "ms",user_interaction',

@@ -22,7 +22,7 @@ export const AgentCollaborationDemoScreen: React.FC  = () => {};
   const [agents, setAgents] = useState<Agent[]>([]);
   const [tasks, setTasks] = useState<CollaborationTask[]>([]);
   const [selectedTask, setSelectedTask] = useState<string | null>(null);
-  useEffect() => {
+  useEffect(() => {
     initializeDemo();
   }, [])  // 检查是否需要添加依赖项;
   const initializeDemo = () => {}
@@ -66,7 +66,7 @@ const initialTasks: CollaborationTask[] = [;
         progress: 0},
       {
       id: "preventive-care,",
-      title: "预防性护理计划",
+      title: "预防性护理计划", "
         description: 制定个性化的预防性健康护理方案",
         participants: ["xiaoai, "laoke", soer"],
         status: "pending,",
@@ -77,7 +77,7 @@ const initialTasks: CollaborationTask[] = [;
   const startCollaboration = (taskId: string) => {}
     setSelectedTask(taskId);
     // 更新任务状态
-setTasks(prev => prev.map(task => {}
+setTasks(prev => prev.map(task => {}))
       task.id === taskId;
         ? { ...task, status: "active" as const }
         : task;
@@ -85,7 +85,7 @@ setTasks(prev => prev.map(task => {}
     // 更新参与智能体状态
 const task = tasks.find(t => t.id === taskId);
     if (task) {
-      setAgents(prev => prev.map(agent => {}
+      setAgents(prev => prev.map(agent => {}))
         task.participants.includes(agent.id);
           ? {
               ...agent,
@@ -102,7 +102,7 @@ simulateCollaboration(taskId);
     let progress = 0;
     const interval = setInterval() => {
       progress += 10;
-      setTasks(prev => prev.map(task => {}
+      setTasks(prev => prev.map(task => {}))
         task.id === taskId;
           ? { ...task, progress }
           : task;
@@ -110,7 +110,7 @@ simulateCollaboration(taskId);
       if (progress >= 100) {
         clearInterval(interval);
         // 完成任务
-setTasks(prev => prev.map(task => {}
+setTasks(prev => prev.map(task => {}))
           task.id === taskId;
             ? { ...task, status: "completed as const, progress: 100 }"
             : task;
@@ -118,7 +118,7 @@ setTasks(prev => prev.map(task => {}
         // 重置智能体状态
 const task = tasks.find(t => t.id === taskId);
         if (task) {
-          setAgents(prev => prev.map(agent => {}
+          setAgents(prev => prev.map(agent => {}))
             task.participants.includes(agent.id);
               ? {
                   ...agent,
@@ -169,25 +169,24 @@ const task = tasks.find(t => t.id === taskId);
         return "#757575;"
     }
   };
-  const renderAgent = (agent: Agent) => (;
+  const renderAgent = (agent: Agent) => (;)
     <View key={agent.id} style={styles.agentCard}>
-      <View style={[styles.agentAvatar, { backgroundColor: getAgentColor(agent.type) }]}>
+      <View style={{[styles.agentAvatar, { backgroundColor: getAgentColor(agent.type) }}]}>
         <Text style={styles.agentAvatarText}>{agent.name.charAt(0)}</    Text>
       </    View>
       <Text style={styles.agentName}>{agent.name}</    Text>
-      <View style={[styles.statusBadge, { backgroundColor: getStatusColor(agent.status) }]}>
+      <View style={{[styles.statusBadge, { backgroundColor: getStatusColor(agent.status) }}]}>
         <Text style={styles.statusText}>{agent.status}</    Text>
       </    View>
-      {agent.currentTask && (
-        <Text style={styles.currentTask}>{agent.currentTask}</    Text>
+      {agent.currentTask  && <Text style={styles.currentTask}>{agent.currentTask}</    Text>
       )}
     </    View>;
   );
-  const renderTask = (task: CollaborationTask) => (;
+  const renderTask = (task: CollaborationTask) => (;)
     <View key={task.id} style={styles.taskCard}>
       <View style={styles.taskHeader}>
         <Text style={styles.taskTitle}>{task.title}</    Text>
-        <View style={[styles.taskStatusBadge, { backgroundColor: getTaskStatusColor(task.status) }]}>
+        <View style={{[styles.taskStatusBadge, { backgroundColor: getTaskStatusColor(task.status) }}]}>
           <Text style={styles.taskStatusText}>{task.status}</    Text>
         </    View>
       </    View>
@@ -195,12 +194,12 @@ const task = tasks.find(t => t.id === taskId);
       <View style={styles.participantsContainer}>
         <Text style={styles.participantsLabel}>参与智能体:</    Text>
         <View style={styles.participantsList}>
-          {task.participants.map(participantId => {}
+          {task.participants.map(participantId => {})
             const agent = agents.find(a => a.id === participantId);
-            return agent ? (;
-              <View;
+            return agent ? (;)
+              <View
 key={participantId}
-                style={[styles.participantBadge, { backgroundColor: getAgentColor(agent.type) }]}
+                style={{[styles.participantBadge, { backgroundColor: getAgentColor(agent.type) }}]}
               >
                 <Text style={styles.participantText}>{agent.name}</    Text>
               </    View>
@@ -208,18 +207,17 @@ key={participantId}
           })}
         </    View>
       </    View>
-      {task.status === "active" && (
-        <View style={styles.progressContainer}>
+      {task.status === "active"  && <View style={styles.progressContainer}>
           <Text style={styles.progressLabel}>进度: {task.progress}%</    Text>
           <View style={styles.progressBar}>
-            <View;
-style={[styles.progressFill, { width: `${task.progress}%` }]}
+            <View
+style={{[styles.progressFill, { width: `${task.progress}}%` }]}
             /    >
           </    View>
         </    View>
       )}
-      {task.status === pending" && ("
-        <TouchableOpacity;
+      {task.status === pending" && (")
+        <TouchableOpacity
 style={styles.startButton}
           onPress={() => startCollaboration(task.id)}
           disabled={selectedTask !== null}
@@ -227,7 +225,7 @@ style={styles.startButton}
           <Text style={styles.startButtonText}>开始协作</    Text>
         </    TouchableOpacity>
       )}
-      {task.status === "completed && ("
+      {task.status === "completed && (")
         <View style={styles.completedBadge}>
           <Text style={styles.completedText}>✓ 已完成</    Text>
         </    View>
@@ -235,7 +233,7 @@ style={styles.startButton}
     </    View>
   );
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+  <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <Text style={styles.title}>智能体协作演示</    Text>
       <Text style={styles.subtitle}>
         观察四个智能体如何协作完成复杂的健康管理任务
@@ -260,7 +258,7 @@ style={styles.startButton}
     </    ScrollView>;
   );
 };
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flex: 1,
     backgroundColor: "#f5f5f5",
     padding: 16},

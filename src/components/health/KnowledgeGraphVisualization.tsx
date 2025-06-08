@@ -64,13 +64,13 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
     default: '#757575'
   };
   // 初始化布局
-  useEffect() => {
+  useEffect(() => {
     if (graphData && graphData.nodes.length > 0) {
       initializeLayout();
     }
   }, [graphData]);
   // 力导向布局算法
-  useEffect() => {
+  useEffect(() => {
     if (layoutNodes.length > 0) {
       startForceSimulation();
     }
@@ -115,7 +115,7 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
     };
     return baseRadius * (typeMultipliers[node.type] || 1.0);
   };
-  const startForceSimulation = () => {const simulate = () => {setLayoutNodes(prevNodes => {const newNodes = [...prevNodes];
+  const startForceSimulation = () => {const simulate = () => {setLayoutNodes(prevNodes => {const newNodes = [...prevNodes];)
         const alpha = 0.1;
         const linkDistance = 100;
         const linkStrength = 0.1;
@@ -190,14 +190,14 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
   };
   const renderLegend = () => {const nodeTypes = Object.keys(nodeColors).filter(type => type !== 'default');
     return (
-      <View style={styles.legend}>
+  <View style={styles.legend}>
         <Text style={styles.legendTitle}>图例</Text>
         <View style={styles.legendItems}>
-          {nodeTypes.map(type => (
+          {nodeTypes.map(type => ())
             <View key={type} style={styles.legendItem}>
-              <View;
-                style={[
-                  styles.legendColor,{ backgroundColor: nodeColors[type] };
+              <View
+                style={{[
+                  styles.legendColor,{ backgroundColor: nodeColors[type] }};
                 ]};
               />;
               <Text style={styles.legendText}>;
@@ -215,7 +215,7 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
     );
   };
   const renderStatistics = () => {if (!graphData || !showStatistics) return null;
-    return (;
+    return (;)
       <View style={styles.statistics}>;
         <Text style={styles.statisticsTitle}>图谱统计</Text>;
         <Text style={styles.statisticsText}>;
@@ -225,7 +225,7 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
           边总数: {graphData.statistics.total_edges};
         </Text>;
         <Text style={styles.statisticsText}>节点类型分布:</Text>;
-        {Object.entries(graphData.statistics.node_types).map(([type, count]) => (;
+        {Object.entries(graphData.statistics.node_types).map(([type, count]) => (;))
           <Text key={type} style={styles.statisticsSubText}>;
             • {type}: {count};
           </Text>;
@@ -235,20 +235,19 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
   };
   const renderNodeDetails = () => {if (!selectedNode) return null;
     return (
-      <View style={styles.nodeDetails}>
+  <View style={styles.nodeDetails}>
         <Text style={styles.nodeDetailsTitle}>{selectedNode.label}</Text>
         <Text style={styles.nodeDetailsType}>类型: {selectedNode.type}</Text>
-        {selectedNode.properties && Object.keys(selectedNode.properties).length > 0 && (
-        <View style={styles.nodeProperties}>;
+        {selectedNode.properties && Object.keys(selectedNode.properties).length > 0  && <View style={styles.nodeProperties}>;
             <Text style={styles.nodePropertiesTitle}>属性:</Text>;
-            {Object.entries(selectedNode.properties).slice(0, 3).map(([key, value]) => (;
+            {Object.entries(selectedNode.properties).slice(0, 3).map(([key, value]) => (;))
               <Text key={key} style={styles.nodePropertyText}>;
                 • {key}: {String(value).slice(0, 50)};
               </Text>;
             ))};
           </View>;
         )};
-        <TouchableOpacity;
+        <TouchableOpacity
           style={styles.closeButton};
           onPress={() => setSelectedNode(null)};
         >;
@@ -258,7 +257,7 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
     );
   };
   if (loading) {
-    return (;
+    return (;)
       <View style={[styles.container, styles.loadingContainer]}>;
         <ActivityIndicator size="large" color="#007AFF" />;
         <Text style={styles.loadingText}>正在加载知识图谱...</Text>;
@@ -266,17 +265,17 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
     );
   }
   if (!graphData || graphData.nodes.length === 0) {
-    return (;
+    return (;)
       <View style={[styles.container, styles.emptyContainer]}>;
         <Text style={styles.emptyText}>暂无图谱数据</Text>;
       </View>;
     );
   }
-  return (;
+  return (;)
     <View style={styles.container}>;
       {// 控制栏};
       <View style={styles.controls}>;
-        <TouchableOpacity;
+        <TouchableOpacity
           style={styles.controlButton};
           onPress={() => setShowStatistics(!showStatistics)};
         >;
@@ -284,7 +283,7 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
             {showStatistics ? '隐藏统计' : '显示统计'};
           </Text>;
         </TouchableOpacity>;
-        <TouchableOpacity;
+        <TouchableOpacity
           style={styles.controlButton};
           onPress={() => {if (animationRef.current) {cancelAnimationFrame(animationRef.current);
             } else {
@@ -298,7 +297,7 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
         </TouchableOpacity>
       </View>
       {// SVG 图谱}
-      <ScrollView;
+      <ScrollView
         style={styles.graphContainer}
         horizontal;
         showsHorizontalScrollIndicator={false}
@@ -306,7 +305,7 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
       >
         <Svg width={width} height={height} style={styles.svg}>
           <Defs>
-            <Marker;
+            <Marker
               id="arrowhead"
               markerWidth="10"
               markerHeight="7"
@@ -318,9 +317,9 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
             </Marker>
           </Defs>
           {// 渲染边}
-          {layoutEdges.map((edge, index) => (
+          {layoutEdges.map((edge, index) => ())
             <G key={`edge-${index}`}>
-              <Line;
+              <Line
                 x1={edge.sourceNode.x}
                 y1={edge.sourceNode.y}
                 x2={edge.targetNode.x}
@@ -333,9 +332,9 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
             </G>
           ))}
           {// 渲染节点}
-          {layoutNodes.map((node, index) => (
+          {layoutNodes.map((node, index) => ())
             <G key={`node-${index}`}>
-              <Circle;
+              <Circle
                 cx={node.x}
                 cy={node.y}
                 r={node.radius}
@@ -344,7 +343,7 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
                 strokeWidth={selectedNode?.id === node.id ? 3 : 2}
                 onPress={() => handleNodePress(node)}
               />
-              <SvgText;
+              <SvgText
                 x={node.x}
                 y={node.y + node.radius + 15}
                 fontSize="12"

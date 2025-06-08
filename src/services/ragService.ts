@@ -287,7 +287,7 @@ export class RAGService extends EventEmitter {
     }
   }
   // 流式RAG查询
-  async streamQuery(
+  async streamQuery()
     request: RAGQueryRequest,
     onChunk: (chunk: StreamResponse) => void;
   ): Promise<void> {
@@ -374,7 +374,7 @@ export class RAGService extends EventEmitter {
     }
   }
   // 文档索引
-  async indexDocument(
+  async indexDocument()
     request: DocumentIndexRequest;
   ): Promise<{ documentId: string; success: boolean }> {
     if (!this.isInitialized) {
@@ -391,7 +391,7 @@ export class RAGService extends EventEmitter {
     }
   }
   // 搜索文档
-  async searchDocuments(
+  async searchDocuments()
     query: string,
     options: {
       limit?: number;
@@ -412,7 +412,7 @@ export class RAGService extends EventEmitter {
       await this.initialize();
     }
     try {
-      const params = new URLSearchParams({query,limit: options.limit?.toString() || '10',threshold: options.threshold?.toString() || '0.7',...(options.documentType && { documentType: options.documentType }),...(options.collectionName && { collectionName: options.collectionName });
+      const params = new URLSearchParams({query,limit: options.limit?.toString() || '10',threshold: options.threshold?.toString() || '0.7',...(options.documentType && { documentType: options.documentType }),...(options.collectionName && { collectionName: options.collectionName });)
       });
       const response = await apiClient.get(`/rag/documents/search?${params}`);
       if (!response.data) {
@@ -466,7 +466,7 @@ export class RAGService extends EventEmitter {
     try {
       const envConfig = getCurrentEnvConfig();
       // 并行检查RAG和TCM服务
-      const [ragHealth, tcmHealth] = await Promise.allSettled([;
+      const [ragHealth, tcmHealth] = await Promise.allSettled([;)
         this.checkServiceHealth(envConfig.RAG_SERVICE_URL),this.checkServiceHealth(envConfig.TCM_SERVICE_URL);
       ]);
       const latency = Date.now() - startTime;
@@ -498,7 +498,7 @@ export class RAGService extends EventEmitter {
     }
   }
   // 智能重试机制
-  async queryWithRetry(
+  async queryWithRetry()
     request: RAGQueryRequest,
     maxRetries: number = 3;
   ): Promise<RAGQueryResponse> {
@@ -528,7 +528,7 @@ export class RAGService extends EventEmitter {
       const results = await Promise.allSettled(requests.map(request => this.query(request)));
       const responses: RAGQueryResponse[] = [];
       const errors: Error[] = [];
-      results.forEach(result, index) => {
+      results.forEach(((result, index) => {
         if (result.status === 'fulfilled') {
           responses.push(result.value);
         } else {
@@ -553,7 +553,7 @@ export class RAGService extends EventEmitter {
   async warmupCache(commonQueries: string[]): Promise<void> {
     const startTime = Date.now();
     try {
-      const warmupRequests = commonQueries.map(query => ({query,userId: 'system',taskType: 'consultation' as const,context: { warmup: true };
+      const warmupRequests = commonQueries.map(query => ({query,userId: 'system',taskType: 'consultation' as const,context: { warmup: true };))
       }));
       await this.batchQuery(warmupRequests);
       this.recordPerformance('cache_warmup', Date.now() - startTime);

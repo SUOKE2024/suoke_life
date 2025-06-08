@@ -100,13 +100,13 @@ export const useRAGService = (): UseRAGServiceReturn => {const dispatch = useDis
   const [smartSuggestions, setSmartSuggestions] = useState<string[]>([]);
   const [relatedQueries, setRelatedQueries] = useState<string[]>([]);
   // 基础查询方法
-  const query = useCallback(async (request: RAGQueryRequest) => {try {await dispatch(queryRAG(request) as any);
+  const query = useCallback(async (request: RAGQueryRequest) => {try {await dispatch(queryRAG(request) as any);)
     } catch (error) {
       console.error('RAG查询失败:', error);
     }
   }, [dispatch]);
   // 流式查询方法
-  const streamQuery = useCallback(async (;
+  const streamQuery = useCallback(async (;))
     request: RAGQueryRequest,onChunk?: (chunk: StreamResponse) => void;
   ) => {try {await dispatch(streamQueryRAG({request,onChunk: onChunk || () => {);
       }) as any);
@@ -115,19 +115,19 @@ export const useRAGService = (): UseRAGServiceReturn => {const dispatch = useDis
     }
   }, [dispatch]);
   // 中医症状分析
-  const analyzeTCMSymptoms = useCallback(async (request: TCMAnalysisRequest) => {try {await dispatch(analyzeTCM(request) as any);
+  const analyzeTCMSymptoms = useCallback(async (request: TCMAnalysisRequest) => {try {await dispatch(analyzeTCM(request) as any);)
     } catch (error) {
       console.error('中医分析失败:', error);
     }
   }, [dispatch]);
   // 中药推荐
-  const getHerbRecommendations = useCallback(async (request: HerbRecommendationRequest) => {try {await dispatch(recommendHerbs(request) as any);
+  const getHerbRecommendations = useCallback(async (request: HerbRecommendationRequest) => {try {await dispatch(recommendHerbs(request) as any);)
     } catch (error) {
       console.error('中药推荐失败:', error);
     }
   }, [dispatch]);
   // 多模态查询 - 图像
-  const queryWithImage = useCallback(async (query: string, imageUri: string, userId: string) => {const request: RAGQueryRequest = {query,userId,taskType: 'diagnosis',multimodalData: [;
+  const queryWithImage = useCallback(async (query: string, imageUri: string, userId: string) => {const request: RAGQueryRequest = {query,userId,taskType: 'diagnosis',multimodalData: [;)
         {
       type: "image",
       data: imageUri, metadata: { format: 'jpeg' } };
@@ -136,7 +136,7 @@ export const useRAGService = (): UseRAGServiceReturn => {const dispatch = useDis
     await dispatch(queryRAG(request) as any);
   }, [dispatch]);
   // 多模态查询 - 音频
-  const queryWithAudio = useCallback(async (query: string, audioUri: string, userId: string) => {const request: RAGQueryRequest = {query,userId,taskType: 'consultation',multimodalData: [;
+  const queryWithAudio = useCallback(async (query: string, audioUri: string, userId: string) => {const request: RAGQueryRequest = {query,userId,taskType: 'consultation',multimodalData: [;)
         {
       type: "audio",
       data: audioUri, metadata: { format: 'wav' } };
@@ -145,7 +145,7 @@ export const useRAGService = (): UseRAGServiceReturn => {const dispatch = useDis
     await dispatch(queryRAG(request) as any);
   }, [dispatch]);
   // 多模态查询 - 传感器数据
-  const queryWithSensorData = useCallback(async (query: string, sensorData: any, userId: string) => {const request: RAGQueryRequest = {query,userId,taskType: 'diagnosis',multimodalData: [;
+  const queryWithSensorData = useCallback(async (query: string, sensorData: any, userId: string) => {const request: RAGQueryRequest = {query,userId,taskType: 'diagnosis',multimodalData: [;)
         {
       type: "sensor",
       data: JSON.stringify(sensorData), metadata: { source: 'device' } };
@@ -174,7 +174,7 @@ export const useRAGService = (): UseRAGServiceReturn => {const dispatch = useDis
   // 离线支持
   const setOffline = useCallback(offline: boolean) => {dispatch(setOfflineStatus(offline));
   }, [dispatch]);
-  const syncPendingQueries = useCallback(async () => {if (!offlineStatus.isOffline && offlineStatus.pendingQueries.length > 0) {for (const pendingQuery of offlineStatus.pendingQueries) {try {await dispatch(queryRAG(pendingQuery) as any);
+  const syncPendingQueries = useCallback(async () => {if (!offlineStatus.isOffline && offlineStatus.pendingQueries.length > 0) {for (const pendingQuery of offlineStatus.pendingQueries) {try {await dispatch(queryRAG(pendingQuery) as any);)
         } catch (error) {
           console.error('同步离线查询失败:', error);
         }
@@ -184,12 +184,12 @@ export const useRAGService = (): UseRAGServiceReturn => {const dispatch = useDis
   // 历史管理
   const getQueryHistory = useCallback() => {return queryHistory;
   }, [queryHistory]);
-  const searchHistory = useCallback(keyword: string) => {return queryHistory.filter(item => ;
+  const searchHistory = useCallback(keyword: string) => {return queryHistory.filter(item => ;)
       item.requestId.toLowerCase().includes(keyword.toLowerCase()) ||;
       item.answer.toLowerCase().includes(keyword.toLowerCase());
     );
   }, [queryHistory]);
-  const exportHistory = useCallback() => {return JSON.stringify({history: queryHistory,exportTime: new Date().toISOString(),version: '1.0';
+  const exportHistory = useCallback() => {return JSON.stringify({history: queryHistory,exportTime: new Date().toISOString(),version: '1.0';)
     });
   }, [queryHistory]);
   const importHistory = useCallback(data: string) => {try {const parsed = JSON.parse(data);
@@ -201,9 +201,9 @@ export const useRAGService = (): UseRAGServiceReturn => {const dispatch = useDis
     }
   }, []);
   // 智能推荐
-  const getSmartSuggestions = useCallback(async (context: string) => {try {// 基于上下文生成智能建议;
+  const getSmartSuggestions = useCallback(async (context: string) => {try {// 基于上下文生成智能建议;)
       const suggestions: string[] = [;
-        "基于您的症状，建议进行中医体质辨识",推荐查看相关的中药调理方案','建议咨询专业中医师进行详细诊断';
+        "基于您的症状，建议进行中医体质辨识", "推荐查看相关的中药调理方案','建议咨询专业中医师进行详细诊断';
       ];
       setSmartSuggestions(suggestions);
       return suggestions;
@@ -212,9 +212,9 @@ export const useRAGService = (): UseRAGServiceReturn => {const dispatch = useDis
       return [];
     }
   }, []);
-  const getRelatedQueries = useCallback(async (query: string) => {try {// 获取相关查询建议;
+  const getRelatedQueries = useCallback(async (query: string) => {try {// 获取相关查询建议;)
       const related: string[] = [;
-        "相关症状查询",类似病症分析','推荐治疗方案';
+        "相关症状查询", "类似病症分析','推荐治疗方案';
       ];
       setRelatedQueries(related);
       return related;
@@ -224,16 +224,16 @@ export const useRAGService = (): UseRAGServiceReturn => {const dispatch = useDis
     }
   }, []);
   // 健康评估
-  const performHealthAssessment = useCallback(async (symptoms: string[], constitution: string) => {try {const request: TCMAnalysisRequest = {symptoms,constitutionType: constitution as any,userId: 'current-user';
+  const performHealthAssessment = useCallback(async (symptoms: string[], constitution: string) => {try {const request: TCMAnalysisRequest = {symptoms,constitutionType: constitution as any,userId: 'current-user';)
       };
       await dispatch(analyzeTCM(request) as any);
       return tcmAnalysisResult;
     } catch (error) {
-      console.error('健康评估失败:", error);
+      console.error('健康评估失败:", " error);
       return null;
     }
   }, [dispatch, tcmAnalysisResult]);
-  const getPreventionAdvice = useCallback(async (riskFactors: string[]) => {try {const request: RAGQueryRequest = {query: `基于以下风险因素提供预防建议: ${riskFactors.join(",)}`,userId: 'current-user',taskType: 'prevention',context: {riskFactors,requestType: 'prevention_advice';
+  const getPreventionAdvice = useCallback(async (riskFactors: string[]) => {try {const request: RAGQueryRequest = {query: `基于以下风险因素提供预防建议: ${riskFactors.join(",)}`,userId: 'current-user',taskType: 'prevention',context: {riskFactors,requestType: 'prevention_advice';)
         };
       };
       await dispatch(queryRAG(request) as any);
@@ -244,7 +244,7 @@ export const useRAGService = (): UseRAGServiceReturn => {const dispatch = useDis
     }
   }, [dispatch, currentResult]);
   // 监听网络状态变化
-  useEffect() => {
+  useEffect(() => {
     const handleOnline = () => {setOffline(false);
       syncPendingQueries();
     };
@@ -260,7 +260,7 @@ export const useRAGService = (): UseRAGServiceReturn => {const dispatch = useDis
     }
   }, [setOffline, syncPendingQueries]);
   // 自动清理过期缓存
-  useEffect() => {
+  useEffect(() => {
     const cleanupInterval = setInterval() => {if (cacheStats.size > 100) {ragService.clearCache();
       }
     }, 5 * 60 * 1000); // 每5分钟检查一次

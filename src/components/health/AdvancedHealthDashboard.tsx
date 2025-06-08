@@ -31,7 +31,7 @@ export const AdvancedHealthDashboard: React.FC<AdvancedHealthDashboardProps>  = 
   const [metrics, setMetrics] = useState<HealthMetric[]>([]);
   const [insights, setInsights] = useState<HealthInsight[]>([]);
   const [loading, setLoading] = useState(true);
-  useEffect() => {
+  useEffect(() => {
     loadHealthData();
   }, [userId]);
   const loadHealthData = async() => {}
@@ -91,7 +91,7 @@ const mockMetrics: HealthMetric[] = [;
         },
         {
       id: "exercise-recommendation,",
-      title: "运动建议",
+      title: "运动建议", "
           description: 根据您的健康状况，建议每天进行30分钟的有氧运动。",
           type: "recommendation,",
           priority: "medium"
@@ -139,8 +139,8 @@ const mockMetrics: HealthMetric[] = [;
         return ℹ️
     }
   };
-  const renderMetricCard = (metric: HealthMetric) => (;
-    <TouchableOpacity;
+  const renderMetricCard = (metric: HealthMetric) => (;)
+    <TouchableOpacity
 key={metric.id}
       style={styles.metricCard}
       onPress={() => onMetricPress?.(metric)}
@@ -150,16 +150,16 @@ key={metric.id}
         <Text style={styles.trendIcon}>{getTrendIcon(metric.trend)}</    Text>
       </    View>
       <View style={styles.metricValue}>
-        <Text style={[styles.valueText, { color: getStatusColor(metric.status) }]}>
+        <Text style={{[styles.valueText, { color: getStatusColor(metric.status) }}]}>
           {metric.value}
         </    Text>
         <Text style={styles.unitText}>{metric.unit}</    Text>
       </    View>
-      <View style={[styles.statusIndicator, { backgroundColor: getStatusColor(metric.status) }]} /    >
+      <View style={{[styles.statusIndicator, { backgroundColor: getStatusColor(metric.status) }}]} /    >
     </    TouchableOpacity>
   );
-  const renderInsightCard = (insight: HealthInsight) => (;
-    <TouchableOpacity;
+  const renderInsightCard = (insight: HealthInsight) => (;)
+    <TouchableOpacity
 key={insight.id}
       style={styles.insightCard}
       onPress={() => onInsightPress?.(insight)}
@@ -175,14 +175,14 @@ key={insight.id}
     </    TouchableOpacity>
   );
   if (loading) {
-    return (;
+    return (;)
       <View style={styles.loadingContainer}>;
         <Text style={styles.loadingText}>加载健康数据中...</    Text>;
       </    View>;
     );
   }
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>;
+  <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>;
       <Text style={styles.sectionTitle}>健康指标</    Text>;
       <View style={styles.metricsGrid}>;
         {metrics.map(renderMetricCard)};
@@ -200,7 +200,7 @@ key={insight.id}
     </    ScrollView>;
   );
 };
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flex: 1,
     backgroundColor: "#f5f5f5,",
     padding: 16},

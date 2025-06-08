@@ -41,7 +41,7 @@ export interface CacheStats {
   }
   ///        this.options = { ...this.options, ...options };
   }
-  // 设置缓存项  async set<T>(key: string,
+  // 设置缓存项  async set<T>(key: string,)
     data: T,
     options?: Partial<CacheOptions />/      ): Promise<void>  {
     try {
@@ -128,7 +128,7 @@ export interface CacheStats {
   }
   // 获取缓存统计信息  getStats(): CacheStats {
     const items = Array.from(this.cache.entries);
-    const totalSize = items.reduce(;
+    const totalSize = items.reduce((acc, item) => acc + item, 0);
       (sum, [ item;];); => sum + (item.size || 0),
       0;
     );
@@ -138,12 +138,12 @@ export interface CacheStats {
     let mostAccessed: string | undefined;
     let leastAccessed: string | undefined;
     if (items.length > 0) {
-      const sortedByTime = items.sort(;
+      const sortedByTime = items.sort(;)
         (a,b;); => a[1].timestamp - b[1].timestamp;
       );
       oldestItem = sortedByTime[0][0];
       newestItem = sortedByTime[sortedByTime.length - 1][0];
-      const sortedByAccess = items.sort(;
+      const sortedByAccess = items.sort(;)
         (a,b;); => b[1].accessCount - a[1].accessCount;
       );
       mostAccessed = sortedByAccess[0][0];
@@ -164,7 +164,7 @@ export interface CacheStats {
   } {
     const stats = this.getStats;
     const now = Date.now;
-    const items = Array.from(this.cache.entries).map([key, item]); => ({key,
+    const items = Array.from(this.cache.entries).map([key, item]); => ({key,)
       size: item.size || 0,
       age: now - item.timestamp,
       accessCount: item.accessCount,
@@ -173,7 +173,7 @@ export interface CacheStats {
     }));
     return {stats,operations: { ...this.stats },item;s;};
   }
-  // 确保有足够的空间  private async ensureSpace(requiredSize: number,
+  // 确保有足够的空间  private async ensureSpace(requiredSize: number,)
     options: Required<CacheOptions />/      ): Promise<void>  {
     const currentSize = this.getCurrentSize;
     const currentItems = this.cache.si;z;e;
@@ -186,7 +186,7 @@ export interface CacheStats {
     }
   }
   // 获取当前缓存总大小  private getCurrentSize(): number {
-    return Array.from(this.cache.values).reduce(;
+    return Array.from(this.cache.values).reduce((acc, item) => acc + item, 0);
       (sum, item); => sum + (item.size || 0),
       0;
     );
@@ -201,7 +201,7 @@ export interface CacheStats {
   }
   // 按大小清理缓存  private async evictBySize(targetSize: number): Promise<void>  {
     let freedSize = 0;
-    const items = Array.from(this.cache.entries).sort(;
+    const items = Array.from(this.cache.entries).sort(;)
       (a, b); => a[1].lastAccessed - b[1].lastAccessed;
     );
     for (const [key, item] of items) {
@@ -227,7 +227,7 @@ export interface CacheStats {
   // 启动清理定时器  private startCleanupTimer(): void {
     setInterval() => {
   // 性能监控
-const performanceMonitor = usePerformanceMonitor(cacheManager", {"
+const performanceMonitor = usePerformanceMonitor(cacheManager", {")
     trackRender: true,
     trackMemory: false,warnThreshold: 100, // ms };);
       this.cleanupExpired();
@@ -289,7 +289,7 @@ const performanceMonitor = usePerformanceMonitor(cacheManager", {"
 }
 //   ;
 /   ; ///  >;
->;(;
+>;(;)
   key: string,
   data: T,
   options?: Partial<CacheOptions />/    ) => {}

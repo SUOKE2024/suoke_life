@@ -1,4 +1,3 @@
-
 import BlockchainScreen from '../BlockchainScreen.tsx';
 describe('BlockchainScreen', () => {
   it('应该正确导出', () => {

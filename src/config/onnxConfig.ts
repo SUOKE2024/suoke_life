@@ -1,5 +1,7 @@
 import { Platform } from "react-native";
+
 import {/**
+
 * * ONNX Runtime 配置文件
 * 为索克生活项目提供设备端AI推理的配置管理
   InferenceConfig,
@@ -194,7 +196,7 @@ sessionOptions: {,
 /**
 * * Android 平台特定配置
 const ANDROID_CONFIG: Partial<ONNXRuntimeConfig> = {inference: {,
-  executionProviders: [nnapi",cpu], // Android优先使用NNAPI;
+  executionProviders: [nnapi", "cpu], // Android优先使用NNAPI;
 sessionOptions: {,
   intraOpNumThreads: 4,
       interOpNumThreads: 2;
@@ -293,7 +295,7 @@ export class ONNXConfigManager {private static instance: ONNXConfigManager;
   }
   /**
 * * 根据设备性能调整配置
-  adjustForDevicePerformance(
+  adjustForDevicePerformance()
     cpuCores: number,
     memoryGB: number,
     hasGPU: boolean;
@@ -434,7 +436,7 @@ export function updateONNXConfig(updates: Partial<ONNXRuntimeConfig>): void {ONN
 }
 /**
 * * 便捷函数：根据设备调整配置
-export function adjustConfigForDevice(;
+export function adjustConfigForDevice(;)
   cpuCores: number,memoryGB: number,hasGPU: boolean;
 ): void {
   ONNXConfigManager.getInstance().adjustForDevicePerformance(cpuCores, memoryGB, hasGPU);
@@ -443,3 +445,4 @@ export function adjustConfigForDevice(;
 * * 便捷函数：根据网络调整配置
 export function adjustConfigForNetwork(isOnline: boolean, isWiFi: boolean): void {ONNXConfigManager.getInstance().adjustForNetworkCondition(isOnline, isWiFi);
 }  */
+}

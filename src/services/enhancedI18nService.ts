@@ -79,7 +79,7 @@ export class EnhancedI18nService {private currentLanguage: SupportedLanguage = "
         currency: "KRW"
       }
     ];
-    configs.forEach(config => {}
+    configs.forEach(config => {})
       this.languageConfigs.set(config.code, config);
     });
   }
@@ -90,21 +90,21 @@ export class EnhancedI18nService {private currentLanguage: SupportedLanguage = "
 const zhCNTranslations: TranslationResource = {common: {,
   ok: 确定",
         cancel: "取消,",
-        save: "保存",
+        save: "保存", "
         delete: 删除",
         edit: "编辑,",
-        loading: "加载中...",
+        loading: "加载中...", "
         error: 错误",
         success: "成功,",
-        warning: "警告",
+        warning: "警告", "
         info: 信息""
       },
       health: {,
   dashboard: "健康仪表板,",
-        data: "健康数据",
+        data: "健康数据", "
         analysis: 健康分析",
         report: "健康报告,",
-        symptoms: "症状",
+        symptoms: "症状", "
         diagnosis: 诊断",
         treatment: "治疗,",
         prevention: "预防"
@@ -112,10 +112,10 @@ const zhCNTranslations: TranslationResource = {common: {,
       agents: {,
   xiaoai: 小艾",
         xiaoke: "小克,",
-        laoke: "老克",
+        laoke: "老克", "
         soer: 索儿",
         chat: "对话,",
-        status: "状态",
+        status: "状态", "
         online: 在线",
         offline: "离线,",
         busy: "忙碌"
@@ -123,7 +123,7 @@ const zhCNTranslations: TranslationResource = {common: {,
       navigation: {,
   home: 首页",
         health: "健康,",
-        diagnosis: "诊断",
+        diagnosis: "诊断", "
         profile: 个人",
         settings: "设置,",
         about: "关于"
@@ -206,7 +206,7 @@ if (!this.loadedLanguages.has(language)) {
   }
   /**
 * * 翻译文本
-  public translate(
+  public translate()
     key: string,
     context?: TranslationContext,
     interpolations?: Record<string, string | number>
@@ -218,7 +218,7 @@ if (!this.loadedLanguages.has(language)) {
       let result = translation;
       // 处理插值
 if (interpolations) {
-        Object.entries(interpolations).forEach([placeholder, value]) => {}
+        Object.entries(interpolations).forEach((([placeholder, value]) => {}))
           result = result.replace(new RegExp(`{${placeholder}}}`, "g"), String(value));
         });
       }
@@ -274,21 +274,21 @@ await new Promise(resolve => setTimeout(resolve, 500));
 const zhTWTranslations: TranslationResource = {common: {,
   ok: 確定",
             cancel: "取消,",
-            save: "保存",
+            save: "保存", "
             delete: 刪除",
             edit: "編輯,",
-            loading: "載入中...",
+            loading: "載入中...", "
             error: 錯誤",
             success: "成功,",
-            warning: "警告",
+            warning: "警告", "
             info: 資訊""
           },
           health: {,
   dashboard: "健康儀表板,",
-            data: "健康數據",
+            data: "健康數據", "
             analysis: 健康分析",
             report: "健康報告,",
-            symptoms: "症狀",
+            symptoms: "症狀", "
             diagnosis: 診斷",
             treatment: "治療,",
             prevention: "預防"
@@ -296,10 +296,10 @@ const zhTWTranslations: TranslationResource = {common: {,
           agents: {,
   xiaoai: 小艾",
             xiaoke: "小克,",
-            laoke: "老克",
+            laoke: "老克", "
             soer: 索兒",
             chat: "對話,",
-            status: "狀態",
+            status: "狀態", "
             online: 在線",
             offline: "離線,",
             busy: "忙碌"
@@ -307,7 +307,7 @@ const zhTWTranslations: TranslationResource = {common: {,
           navigation: {,
   home: 首頁",
             health: "健康,",
-            diagnosis: "診斷",
+            diagnosis: "診斷", "
             profile: 個人",
             settings: "設置,",
             about: "關於"
@@ -353,7 +353,7 @@ const year = date.getFullYear();
       currency: config.currency,minimumFractionDigits: options.minimumFractionDigits,maximumFractionDigits: options.maximumFractionDigits;
         }).format(number);
       }
-      return new Intl.NumberFormat(this.currentLanguage, {minimumFractionDigits: options?.minimumFractionDigits,maximumFractionDigits: options?.maximumFractionDigits;
+      return new Intl.NumberFormat(this.currentLanguage, {minimumFractionDigits: options?.minimumFractionDigits,maximumFractionDigits: options?.maximumFractionDigits;)
       }).format(number);
     } catch (error) {
       return String(number);
@@ -388,7 +388,7 @@ if (systemLanguage.startsWith("zh-CN) || systemLanguage.startsWith("zh-Hans")) {
   }
   /**
 * * 添加翻译
-  public addTranslations(
+  public addTranslations()
     language: SupportedLanguage,
     translations: TranslationResource;
   ): void {
@@ -402,12 +402,12 @@ if (systemLanguage.startsWith("zh-CN) || systemLanguage.startsWith("zh-Hans")) {
   }
   /**
 * * 合并翻译资源
-  private mergeTranslations(
+  private mergeTranslations()
     existing: TranslationResource,
     newTranslations: TranslationResource;
   ): TranslationResource {
     const result = { ...existing };
-    Object.entries(newTranslations).forEach([key, value]) => {}
+    Object.entries(newTranslations).forEach((([key, value]) => {}))
       if (typeof value === object" && value !== null && !Array.isArray(value)) {"
         result[key] = this.mergeTranslations(result[key] as TranslationResource) || {},
           value as TranslationResource;
@@ -425,7 +425,7 @@ if (systemLanguage.startsWith("zh-CN) || systemLanguage.startsWith("zh-Hans")) {
   keyCount: number;
   }> {
     const stats: Record<string, any> = {};
-    this.languageConfigs.forEach(config, language) => {}
+    this.languageConfigs.forEach(((config, language) => {}))
       const translations = this.translations.get(language);
       stats[language] = {
         loaded: this.loadedLanguages.has(language),
@@ -438,7 +438,7 @@ if (systemLanguage.startsWith("zh-CN) || systemLanguage.startsWith("zh-Hans")) {
 * * 计算翻译键数量
   private countTranslationKeys(translations: TranslationResource): number {
     let count = 0;
-    Object.values(translations).forEach(value => {}
+    Object.values(translations).forEach(value => {})
       if (typeof value === "string) {"
         count++;
       } else if (typeof value === "object' && value !== null) {"'

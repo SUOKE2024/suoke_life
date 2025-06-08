@@ -1,4 +1,3 @@
-
 import gatewayConfig from '../gatewayConfig.ts';
 describe('gatewayConfig', () => {
   it('应该正确导出', () => {

@@ -1,4 +1,3 @@
-
 import medKnowledgeSlice from '../medKnowledgeSlice.ts';
 describe('medKnowledgeSlice', () => {
   it('应该正确导出', () => {

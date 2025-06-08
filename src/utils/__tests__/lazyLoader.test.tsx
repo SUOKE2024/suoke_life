@@ -1,4 +1,3 @@
-
 import lazyLoader from '../lazyLoader.tsx';
 describe('lazyLoader', () => {
   it('应该正确导出', () => {

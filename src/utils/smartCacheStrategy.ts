@@ -3,7 +3,8 @@ export enum CachePriority {
   LOW = 1,
   MEDIUM = 2,
   HIGH = 3,
-  CRITICAL = 4}
+  CRITICAL = 4,
+}
 // 缓存元数据接口;
 export interface CacheMetadata {
   priority: CachePriority;
@@ -57,7 +58,7 @@ export class SmartCacheStrategy {private cache = new Map<string, unknown>();
     this.startPeriodicOptimization();
   }
   // 设置缓存项
-async set(
+async set()
     key: string,
     data: unknown,
     priority: CachePriority = CachePriority.MEDIUM,
@@ -180,14 +181,14 @@ this.stats.averageAccessTime =
       this.stats.averageAccessTime * (1 - alpha) + accessTime * alpha;
   }
   // 更新预测模型
-private updatePredictionModel(
+private updatePredictionModel()
     key: string,
     context?: string,
     hit: boolean = true;
   ): void {
     // 更新用户行为模式
 const currentCount = this.predictionModel.userBehaviorPattern.get(key) || 0;
-    this.predictionModel.userBehaviorPattern.set(
+    this.predictionModel.userBehaviorPattern.set()
       key,
       currentCount + (hit ? 1 : -0.1);
     );
@@ -202,7 +203,7 @@ if (context) {
       const contextAccess = this.predictionModel.contextualAccess.get(context) || [];
       if (!contextAccess.includes(key)) {
         contextAccess.push(key);
-        this.predictionModel.contextualAccess.set(
+        this.predictionModel.contextualAccess.set()
           context,
           contextAccess.slice(-20);
         );
@@ -211,7 +212,7 @@ if (context) {
   }
   // 开始定期优化
 private startPeriodicOptimization(): void {
-    this.optimizationTimer = setInterval(async() => {}
+    this.optimizationTimer = setInterval(async() => {})
       await this.optimize();
     }, 5 * 60 * 1000); // 每5分钟优化一次
   }

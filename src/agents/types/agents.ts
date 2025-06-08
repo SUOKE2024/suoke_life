@@ -1,26 +1,26 @@
 /**
-* 索克生活智能体类型定义
-*/
+ * 索克生活智能体类型定义
+ */
 // 智能体类型枚举
 export enum AgentType {
   XIAOAI = 'xiaoai',
   XIAOKE = 'xiaoke',
   LAOKE = 'laoke',
-  SOER = 'soer'
+  SOER = 'soer',
 }
 // 智能体状态枚举
 export enum AgentStatus {
   IDLE = 'idle',
   BUSY = 'busy',
   OFFLINE = 'offline',
-  ERROR = 'error'
+  ERROR = 'error',
 }
 // 智能体优先级枚举
 export enum AgentPriority {
   LOW = 'low',
   NORMAL = 'normal',
   HIGH = 'high',
-  CRITICAL = 'critical'
+  CRITICAL = 'critical',
 }
 // 智能体任务类型
 export enum TaskType {
@@ -29,7 +29,7 @@ export enum TaskType {
   RECOMMENDATION = 'recommendation',
   EDUCATION = 'education',
   MONITORING = 'monitoring',
-  COMPANIONSHIP = 'companionship'
+  COMPANIONSHIP = 'companionship',
 }
 // 智能体能力接口
 export interface AgentCapability {

@@ -349,8 +349,8 @@ export class ArchitectureOptimizer  {private static instance: ArchitectureOptimi
           },
           complexity: "medium",
           estimatedEffort: 5,
-          implementationSteps: ["分析性能瓶颈",优化数据库查询",
-            "增加缓存层",代码优化",
+          implementationSteps: ["分析性能瓶颈", "优化数据库查询",
+            "增加缓存层", "代码优化",
             "性能测试验证"
           ]
         });
@@ -368,8 +368,8 @@ export class ArchitectureOptimizer  {private static instance: ArchitectureOptimi
           },
           complexity: "high",
           estimatedEffort: 8,
-          implementationSteps: ["错误日志分析",根因分析",
-            "代码修复",增加监控告警",
+          implementationSteps: ["错误日志分析", "根因分析",
+            "代码修复", "增加监控告警",
             "回归测试"
           ]
         });
@@ -399,8 +399,8 @@ export class ArchitectureOptimizer  {private static instance: ArchitectureOptimi
           },
           complexity: "low",
           estimatedEffort: 2,
-          implementationSteps: ["增加服务实例",配置负载均衡",
-            "监控扩容效果",调整扩容策略"
+          implementationSteps: ["增加服务实例", "配置负载均衡",
+            "监控扩容效果", "调整扩容策略"
           ]
         });
       }
@@ -409,7 +409,7 @@ export class ArchitectureOptimizer  {private static instance: ArchitectureOptimi
       type: "optimization",
       priority: "low",
           title: `${service.name}资源利用率过低`,
-          description: `CPU使用率${avgCpuUsage.toFixed(
+          description: `CPU使用率${avgCpuUsage.toFixed()
             1;
           )}%，内存使用率${avgMemoryUsage.toFixed(1)}%，可以考虑缩容`,
           expectedBenefit: {,
@@ -419,8 +419,8 @@ export class ArchitectureOptimizer  {private static instance: ArchitectureOptimi
           },
           complexity: "low",
           estimatedEffort: 1,
-          implementationSteps: ["分析负载模式",减少服务实例",
-            "监控性能影响",调整资源配置"
+          implementationSteps: ["分析负载模式", "减少服务实例",
+            "监控性能影响", "调整资源配置"
           ]
         });
       }
@@ -443,8 +443,8 @@ export class ArchitectureOptimizer  {private static instance: ArchitectureOptimi
           },
           complexity: "medium",
           estimatedEffort: 6,
-          implementationSteps: ["分析慢查询",优化索引策略",
-            "调整分片策略",增加读副本",
+          implementationSteps: ["分析慢查询", "优化索引策略",
+            "调整分片策略", "增加读副本",
             "性能测试验证"
           ]
         });
@@ -462,8 +462,8 @@ export class ArchitectureOptimizer  {private static instance: ArchitectureOptimi
           },
           complexity: "high",
           estimatedEffort: 12,
-          implementationSteps: ["分析数据分布",设计新的分片策略",
-            "数据迁移计划",逐步迁移数据",
+          implementationSteps: ["分析数据分布", "设计新的分片策略",
+            "数据迁移计划", "逐步迁移数据",
             "验证分片效果"
           ]
         });
@@ -475,7 +475,7 @@ export class ArchitectureOptimizer  {private static instance: ArchitectureOptimi
       const hitRate = Math.random * 0.4 + 0.5  / 50%-90%* ///;
       if (hitRate < avgLevel.hitRateThreshold) {this.recommendations.push({
       type: "optimization",
-      priority: "medium",title: `${cacheName}缓存命中率优化`,description: `缓存命中率${(hitRate * 100).toFixed(1)}%，低于目标值${(;
+      priority: "medium",title: `${cacheName}缓存命中率优化`,description: `缓存命中率${(hitRate * 100).toFixed(1)}%，低于目标值${(;)
             avgLevel.hitRateThreshold * 100;
           ).toFixed(1)}%`,
           expectedBenefit: {,
@@ -485,8 +485,8 @@ export class ArchitectureOptimizer  {private static instance: ArchitectureOptimi
           },
           complexity: "medium",
           estimatedEffort: 4,
-          implementationSteps: ["分析缓存使用模式",调整缓存策略",
-            "优化缓存键设计",增加预热机制",
+          implementationSteps: ["分析缓存使用模式", "调整缓存策略",
+            "优化缓存键设计", "增加预热机制",
             "监控缓存效果"
           ]
         });
@@ -500,8 +500,8 @@ export class ArchitectureOptimizer  {private static instance: ArchitectureOptimi
       this.recommendations.push({
       type: "refactoring",
       priority: "low",
-        title: "微服务架构复杂度过高",
-        description: `服务间依赖关系复杂（比率${complexityRatio.toFixed(
+        title: "微服务架构复杂度过高", "
+        description: `服务间依赖关系复杂（比率${complexityRatio.toFixed()
           1;
         )}），建议简化架构`,
         expectedBenefit: {,
@@ -511,8 +511,8 @@ export class ArchitectureOptimizer  {private static instance: ArchitectureOptimi
         },
         complexity: "high",
         estimatedEffort: 20,
-        implementationSteps: ["分析服务依赖关系",识别可合并的服务",
-          "设计简化方案",逐步重构服务",
+        implementationSteps: ["分析服务依赖关系", "识别可合并的服务",
+          "设计简化方案", "逐步重构服务",
           "验证架构改进"
         ]
       });
@@ -521,7 +521,7 @@ export class ArchitectureOptimizer  {private static instance: ArchitectureOptimi
       this.recommendations.push({
       type: "refactoring",
       priority: "medium",
-        title: "微服务数量过多",
+        title: "微服务数量过多", "
         description: `当前有${serviceCount}个微服务，建议考虑服务合并`,
         expectedBenefit: {,
   performanceImprovement: 5,
@@ -530,8 +530,8 @@ export class ArchitectureOptimizer  {private static instance: ArchitectureOptimi
         },
         complexity: "high",
         estimatedEffort: 15,
-        implementationSteps: ["分析服务职责",识别相似功能服务",
-          "设计合并策略",逐步合并服务",
+        implementationSteps: ["分析服务职责", "识别相似功能服务",
+          "设计合并策略", "逐步合并服务",
           "测试合并效果"
         ]
       });
@@ -551,13 +551,13 @@ export class ArchitectureOptimizer  {private static instance: ArchitectureOptimi
         recentMetrics.reduce(sum,m;); => sum + m.cpuUsage, 0) // recentMetrics.length;
       const avgMemoryUsage =;
         recentMetrics.reduce(sum,m;); => sum + m.memoryUsage, 0) // recentMetrics.length;
-      if (avgCpuUsage > service.scalingConfig.targetCpuUtilization + 10 ||
+      if (avgCpuUsage > service.scalingConfig.targetCpuUtilization + 10 ||)
         avgMemoryUsage > service.scalingConfig.targetMemoryUtilization + 10) {
         if (service.instances.length < service.scalingConfig.maxInstances) {
           this.scaleUp(service);
         }
       }
-      if (avgCpuUsage < service.scalingConfig.targetCpuUtilization - 20 &&
+      if (avgCpuUsage < service.scalingConfig.targetCpuUtilization - 20 &&)
         avgMemoryUsage < service.scalingConfig.targetMemoryUtilization - 20) {
         if (service.instances.length > service.scalingConfig.minInstances) {
           this.scaleDown(service);
@@ -583,7 +583,7 @@ export class ArchitectureOptimizer  {private static instance: ArchitectureOptimi
   // 优化缓存  private optimizeCache(): void {
     for (const [cacheName, strategy] of this.cacheStrategies.entries();) {
       const hitRate = Math.random * 0.4 + 0.5 ;
-      if (hitRate < 0.7) { strategy.levels.forEach(level) => {};
+      if (hitRate < 0.7) { strategy.levels.forEach(((level) => {};))
           level.ttl = Math.min(level.ttl * 1.2, 7200);
         });
         }
@@ -592,11 +592,11 @@ export class ArchitectureOptimizer  {private static instance: ArchitectureOptimi
   // 调整负载均衡  private adjustLoadBalancing(): void {
     for (const service of this.topology.services) {
       if (service.instances.length > 1) {
-        const totalLoad = service.instances.reduce(;
+        const totalLoad = service.instances.reduce((acc, item) => acc + item, 0);
           (sum, instanc;e;); => sum + instance.load,
           0;
         );
-        const avgLoad = totalLoad / service.instances.leng;t;h; 重新分配负载 // service.instances.forEach(instance) => {}
+        const avgLoad = totalLoad / service.instances.leng;t;h; 重新分配负载 // service.instances.forEach(((instance) => {}))
           instance.load = avgLoad + (Math.random(); - 0.5) * 20;
           instance.load = Math.max(0, Math.min(100, instance.load););
         });
@@ -625,7 +625,7 @@ export class ArchitectureOptimizer  {private static instance: ArchitectureOptimi
   // 获取缓存策略  getCacheStrategies(): Map<string, CacheStrategy> {
     return this.cacheStrategi;e;s;
   }
-  // 更新服务配置  updateServiceConfig(serviceId: string,
+  // 更新服务配置  updateServiceConfig(serviceId: string,)
     config: Partial<MicroserviceNode />/      ): boolean  {
     const service = this.topology.services.find(s); => s.id === serviceId);
     if (service) {
@@ -638,7 +638,7 @@ export class ArchitectureOptimizer  {private static instance: ArchitectureOptimi
     this.topology.dependencies.push(dependency);
   }
   // 移除服务依赖  removeServiceDependency(from: string, to: string): boolean  {
-    const index = this.topology.dependencies.findIndex(;
+    const index = this.topology.dependencies.findIndex(;)
       (d); => d.from === from && d.to === to;
     );
     if (index !== -1) {
@@ -667,13 +667,13 @@ export class ArchitectureOptimizer  {private static instance: ArchitectureOptimi
     }
     const averageResponseTime =;
       metricCount > 0 ? totalResponseTime /     metricCount : 0;
-    const criticalIssues = this.recommendations.filter(;
+    const criticalIssues = this.recommendations.filter(;)
       (r) => r.priority === "critical";
     ).length;
-    const highIssues = this.recommendations.filter(;
+    const highIssues = this.recommendations.filter(;)
       (r) => r.priority === "high"
     ).length;
-    const overallHealthScore = Math.max(;
+    const overallHealthScore = Math.max(;)
       0,
       100 - criticalIssues * 30 - highIssues * 1;5;);
     return {summary: {totalServices,totalDependencies,averageResponseTime,overallHealthScore;

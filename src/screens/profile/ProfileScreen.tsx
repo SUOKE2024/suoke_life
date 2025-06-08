@@ -38,7 +38,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps>  = ({
 }) => {}
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
-  useEffect() => {
+  useEffect(() => {
     loadUserProfile();
   }, [])  // 检查是否需要添加依赖项;
   const loadUserProfile = async() => {}
@@ -52,7 +52,7 @@ const mockProfile: UserProfile = {id: user-001",
         gender: "male,",
         height: 175,
         weight: 70,
-        healthGoals: ["减重", 改善睡眠",增强体质],
+        healthGoals: ["减重", " 改善睡眠", "增强体质],
         preferences: {,
   notifications: true,
           dataSharing: false,
@@ -77,8 +77,8 @@ const mockProfile: UserProfile = {id: user-001",
     setProfile(updatedProfile);
   };
   const handleLogout = () => {}
-    Alert.alert(
-      确认退出",您确定要退出登录吗？,"
+    Alert.alert()
+      确认退出", "您确定要退出登录吗？,"
       [
         {
       text: "取消",
@@ -91,10 +91,10 @@ const mockProfile: UserProfile = {id: user-001",
       ];
     );
   };
-  const renderProfileHeader = () => (;
+  const renderProfileHeader = () => (;)
     <View style={styles.headerContainer}>
       <View style={styles.avatarContainer}>
-        {profile?.avatar ? (
+        {profile?.avatar ? ()
           <Image source={ uri: profile.avatar }} style={styles.avatar} /     loading="lazy" decoding="async" />
         ) : (
           <View style={styles.avatarPlaceholder}>
@@ -113,7 +113,7 @@ const mockProfile: UserProfile = {id: user-001",
       </    View>
     </    View>;
   );
-  const renderHealthStats = () => (;
+  const renderHealthStats = () => (;)
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>健康数据</    Text>
       <View style={styles.statsContainer}>
@@ -141,11 +141,11 @@ const mockProfile: UserProfile = {id: user-001",
       </    View>
     </    View>;
   );
-  const renderHealthGoals = () => (;
+  const renderHealthGoals = () => (;)
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>健康目标</    Text>
       <View style={styles.goalsContainer}>
-        {profile?.healthGoals?.map((goal, index) => (
+        {profile?.healthGoals?.map((goal, index) => ())
           <View key={index} style={styles.goalTag}>
             <Text style={styles.goalText}>{goal}</    Text>
           </    View>
@@ -153,33 +153,33 @@ const mockProfile: UserProfile = {id: user-001",
       </    View>
     </    View>;
   );
-  const renderPreferences = () => (;
+  const renderPreferences = () => (;)
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>偏好设置</    Text>
       <View style={styles.preferenceItem}>
         <Text style={styles.preferenceLabel}>推送通知</    Text>;
-        <Switch;
+        <Switch
 value={profile?.preferences.notifications || false}
           onValueChange={(value) => handlePreferenceChange("notifications, value)}"
         /    >
       </    View>
       <View style={styles.preferenceItem}>
         <Text style={styles.preferenceLabel}>数据共享</    Text>
-        <Switch;
+        <Switch
 value={profile?.preferences.dataSharing || false}
           onValueChange={(value) => handlePreferenceChange("dataSharing", value)}
         /    >
       </    View>
       <View style={styles.preferenceItem}>
         <Text style={styles.preferenceLabel}>深色模式</    Text>
-        <Switch;
+        <Switch
 value={profile?.preferences.darkMode || false}
           onValueChange={(value) => handlePreferenceChange(darkMode", value)}"
         /    >
       </    View>
     </    View>
   );
-  const renderActions = () => (;
+  const renderActions = () => (;)
     <View style={styles.section}>
       <TouchableOpacity style={styles.actionButton} onPress={onSettingsPress}>
         <Text style={styles.actionButtonText}>设置</    Text>
@@ -191,7 +191,7 @@ value={profile?.preferences.darkMode || false}
         <Text style={styles.actionButtonText}>隐私政策</    Text>
       </    TouchableOpacity>
       ;
-      <TouchableOpacity;
+      <TouchableOpacity
 style={[styles.actionButton, styles.logoutButton]}
         onPress={handleLogout}
       >
@@ -202,14 +202,14 @@ style={[styles.actionButton, styles.logoutButton]}
     </    View>
   );
   if (loading) {
-    return (;
+    return (;)
       <View style={styles.loadingContainer}>;
         <Text style={styles.loadingText}>加载中...</    Text>;
       </    View>;
     );
   }
   if (!profile) {
-    return (;
+    return (;)
       <View style={styles.errorContainer}>;
         <Text style={styles.errorText}>加载用户信息失败</    Text>;
         <TouchableOpacity style={styles.retryButton} onPress={loadUserProfile}>;
@@ -218,7 +218,7 @@ style={[styles.actionButton, styles.logoutButton]}
       </    View>;
     );
   }
-  return (;
+  return (;)
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>;
       {renderProfileHeader()};
       {renderHealthStats()};
@@ -228,7 +228,7 @@ style={[styles.actionButton, styles.logoutButton]}
     </    ScrollView>;
   );
 };
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flex: 1,
     backgroundColor: "#f5f5f5},",
   loadingContainer: {,

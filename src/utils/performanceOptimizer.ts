@@ -62,14 +62,14 @@ class PerformanceOptimizer {
       const cachedImages = await AsyncStorage.getItem('optimized_images');
       if (cachedImages) {
         const imageData = JSON.parse(cachedImages);
-        Object.entries(imageData).forEach([key, value]) => {
+        Object.entries(imageData).forEach((([key, value]) => {
           this.imageCache.set(key, value as string);
         });
       }
       const cachedNetwork = await AsyncStorage.getItem('network_cache');
       if (cachedNetwork) {
         const networkData = JSON.parse(cachedNetwork);
-        Object.entries(networkData).forEach([key, value]) => {
+        Object.entries(networkData).forEach((([key, value]) => {
           this.networkCache.set(key, value as any);
         });
       }
@@ -152,7 +152,7 @@ class PerformanceOptimizer {
       const entries = Array.from(this.imageCache.entries());
       const toKeep = entries.slice(-50); // 保留最后50个
       this.imageCache.clear();
-      toKeep.forEach([key, value]) => {
+      toKeep.forEach((([key, value]) => {
         this.imageCache.set(key, value);
       });
     }
@@ -161,7 +161,7 @@ class PerformanceOptimizer {
       const entries = Array.from(this.componentCache.entries());
       const toKeep = entries.slice(-25);
       this.componentCache.clear();
-      toKeep.forEach([key, value]) => {
+      toKeep.forEach((([key, value]) => {
         this.componentCache.set(key, value);
       });
     }
@@ -170,13 +170,13 @@ class PerformanceOptimizer {
       const entries = Array.from(this.networkCache.entries());
       const toKeep = entries.slice(-100);
       this.networkCache.clear();
-      toKeep.forEach([key, value]) => {
+      toKeep.forEach((([key, value]) => {
         this.networkCache.set(key, value);
       });
     }
   }
   // 图像优化
-  async optimizeImage(
+  async optimizeImage()
     imageUri: string,
     config: Partial<ImageOptimizationConfig> = {}
   ): Promise<string> {
@@ -201,7 +201,7 @@ class PerformanceOptimizer {
       const optimizedWidth = Math.min(finalConfig.maxWidth, screenData.width * pixelRatio);
       const optimizedHeight = Math.min(finalConfig.maxHeight, screenData.height * pixelRatio);
       // 模拟图像压缩处理
-      const optimizedUri = await this.compressImage(;
+      const optimizedUri = await this.compressImage(;)
         imageUri,optimizedWidth,optimizedHeight,finalConfig.quality,finalConfig.format;
       );
       // 缓存优化后的图像
@@ -215,7 +215,7 @@ class PerformanceOptimizer {
     }
   }
   // 压缩图像
-  private async compressImage(
+  private async compressImage()
     uri: string,
     width: number,
     height: number,
@@ -241,7 +241,7 @@ class PerformanceOptimizer {
     }
   }
   // 网络请求优化
-  async optimizeNetworkRequest(
+  async optimizeNetworkRequest()
     url: string,
     options: RequestInit = {},
     config: Partial<NetworkOptimizationConfig> = {}
@@ -260,7 +260,7 @@ class PerformanceOptimizer {
       const cachedResponse = this.networkCache.get(cacheKey);
       if (this.isCacheValid(cachedResponse)) {
         this.metrics.cacheHitRate += 0.01;
-        return new Response(JSON.stringify(cachedResponse.data), {status: 200,headers: cachedResponse.headers;
+        return new Response(JSON.stringify(cachedResponse.data), {status: 200,headers: cachedResponse.headers;)
         });
       }
     }
@@ -337,7 +337,7 @@ class PerformanceOptimizer {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
   // 代码分割和懒加载
-  createLazyComponent<T extends React.ComponentType<any>>(
+  createLazyComponent<T extends React.ComponentType<any>>()
     importFunction: () => Promise<{ default: T }>,
     fallback?: React.ComponentType;
   ): React.ComponentType {
@@ -348,7 +348,7 @@ class PerformanceOptimizer {
     }
     const LazyComponent = React.lazy(importFunction);
     const WrappedComponent = (props: any) =>;
-      React.createElement(;
+      React.createElement(;)
         React.Suspense,{fallback: fallback;
             ? React.createElement(fallback);
             : React.createElement('div', null, 'Loading...');
@@ -361,7 +361,7 @@ class PerformanceOptimizer {
   }
   // 预加载关键资源
   async preloadCriticalResources(resources: string[]): Promise<void> {
-    const preloadPromises = resources.map(async resource => {try {if (resource.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {// 预加载图像;
+    const preloadPromises = resources.map(async resource => {try {if (resource.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {// 预加载图像;)
           await this.preloadImage(resource);
         } else if (resource.match(/\.(js|ts)$/i)) {
           // 预加载脚本

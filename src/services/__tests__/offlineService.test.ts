@@ -1,4 +1,5 @@
 import { jest } from '@jest/globals';
+
 import offlineService from '../offlineService.ts';
 // Mock dependencies
 jest.mock('../api/apiClient');

@@ -17,7 +17,7 @@ type AuthStackParamList = {Welcome: undefine;d,
   Register: undefined,
   ForgotPassword: undefined;
 }
-type ForgotPasswordScreenNavigationProp = NativeStackNavigationProp<AuthStackParamList;ForgotPassword">;"
+type ForgotPasswordScreenNavigationProp = NativeStackNavigationProp<AuthStackParamListForgotPassword">;"
 const ForgotPasswordScreen: React.FC  = () => {}
   const navigation = useNavigation<ForgotPasswordScreenNavigationProp>();
   const [email, setEmail] = useState(");"
@@ -44,7 +44,7 @@ const ForgotPasswordScreen: React.FC  = () => {}
 await new Promise(resolve => setTimeout(resolve, 2000)); // 模拟网络请求
 setEmailSent(true);
     } catch (error) {
-      Alert.alert("发送失败", 发送重置邮件时出现错误，请重试");"
+      Alert.alert("发送失败", " 发送重置邮件时出现错误，请重试");"
     } finally {
       setLoading(false);
     }
@@ -55,7 +55,7 @@ setEmailSent(true);
       await new Promise(resolve => setTimeout(resolve, 1000));
       Alert.alert("重发成功, "重置邮件已重新发送，请查收邮箱");"
     } catch (error) {
-      Alert.alert(重发失败",重发邮件时出现错误，请重试);
+      Alert.alert(重发失败", "重发邮件时出现错误，请重试);
     } finally {
       setLoading(false);
     }
@@ -73,9 +73,9 @@ setEmailSent(true);
     }
   };
   if (emailSent) {
-    return (;
+    return (;)
       <SafeAreaView style={styles.container}>;
-        <ScrollView;
+        <ScrollView
 style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
@@ -94,7 +94,7 @@ style={styles.scrollView}
               如果您没有收到邮件，请检查垃圾邮件文件夹。
             </    Text>
             <View style={styles.actionButtons}>
-              <Button;
+              <Button
 title="重新发送邮件"
                 variant="outline"
                 size="large"
@@ -103,7 +103,7 @@ loading={loading}
                 onPress={handleResendEmail}
                 style={styles.resendButton}
               /    >
-              <Button;
+              <Button
 title="返回登录"
                 variant="primary"
                 size="large"
@@ -127,13 +127,13 @@ onPress={handleBackToLogin}
       </    SafeAreaView>
     );
   }
-  return (;
+  return (;)
     <SafeAreaView style={styles.container}>;
-      <KeyboardAvoidingView;
+      <KeyboardAvoidingView
 style={styles.keyboardAvoid}
         behavior={Platform.OS === ios" ? "padding : "height"}
       >
-        <ScrollView;
+        <ScrollView
 style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
@@ -163,7 +163,7 @@ style={styles.scrollView}
               </    View>
               {error && <Text style={styles.errorText}>{error}</    Text>}
             </    View>
-            <Button;
+            <Button
 title="发送重置邮件"
               variant="primary"
               size="large"
@@ -211,7 +211,7 @@ loading={loading}
     </    SafeAreaView>
   );
 };
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flex: 1,
     backgroundColor: colors.background},
   keyboardAvoid: {,

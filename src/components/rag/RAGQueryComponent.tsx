@@ -32,11 +32,11 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
   const [isStreaming, setIsStreaming] = useState(false);
   const [taskType, setTaskType] = useState<'consultation' | 'diagnosis' | 'treatment' | 'prevention'>('consultation');
   // 初始化RAG服务
-  useEffect() => {
+  useEffect(() => {
     const initializeService = async () => {try {await ragService.initialize();
       } catch (error) {
         console.error('RAG服务初始化失败:', error);
-        Alert.alert("错误",RAG服务初始化失败');
+        Alert.alert("错误", "RAG服务初始化失败');
       }
     };
     initializeService();
@@ -57,7 +57,7 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
     };
   }, [onResult, onError]);
   // 执行基础查询
-  const handleQuery = useCallback(async () => {if (!query.trim()) {Alert.alert("提示",请输入查询内容');
+  const handleQuery = useCallback(async () => {if (!query.trim()) {Alert.alert("提示", "请输入查询内容');)
       return;
     }
     setIsLoading(true);
@@ -84,7 +84,7 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
     }
   }, [query, userId, taskType, onResult, onError]);
   // 执行流式查询
-  const handleStreamQuery = useCallback(async () => {if (!query.trim()) {Alert.alert("提示",请输入查询内容');
+  const handleStreamQuery = useCallback(async () => {if (!query.trim()) {Alert.alert("提示", "请输入查询内容');)
       return;
     }
     setIsStreaming(true);
@@ -142,11 +142,11 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
     setStreamingText('');
   }, []);
   // 批量查询处理
-  const handleBatchQuery = useCallback(async (queries: string[]) => {if (queries.length === 0 || isLoading || isStreaming) return;
+  const handleBatchQuery = useCallback(async (queries: string[]) => {if (queries.length === 0 || isLoading || isStreaming) return;)
     setIsLoading(true);
     setResult(null);
     try {
-      const requests: RAGQueryRequest[] = queries.map(q => ({,
+      const requests: RAGQueryRequest[] = queries.map(q => ({,))
   query: q.trim(),
         userId,
         taskType,
@@ -187,19 +187,18 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
   }, [userId, taskType, isLoading, isStreaming, onResult, onError]);
   // 清除缓存
   const handleClearCache = useCallback() => {ragService.clearCache();
-    Alert.alert("成功",缓存已清除');
+    Alert.alert("成功", "缓存已清除');
   }, []);
   // 健康检查
-  const handleHealthCheck = useCallback(async () => {try {const health = await ragService.performHealthCheck();
-      Alert.alert(
-        '健康检查结果',
+  const handleHealthCheck = useCallback(async () => {try {const health = await ragService.performHealthCheck();)
+      Alert.alert('健康检查结果',
         `服务状态: ${health.isHealthy ? '正常' : '异常'}\n` +
         `RAG服务: ${health.services.rag ? '正常' : '异常'}\n` +
         `TCM服务: ${health.services.tcm ? '正常' : '异常'}\n` +
         `延迟: ${health.latency}ms`
       );
     } catch (err) {
-      Alert.alert("错误",健康检查失败');
+      Alert.alert("错误", "健康检查失败');
     }
   }, []);
   // 获取性能指标
@@ -208,32 +207,31 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
     const metricsText = Array.from(metrics.entries());
       .map(([key, value]) => `${key}: ${value}ms`);
       .join('\n');
-    Alert.alert(
-      '性能指标',
+    Alert.alert('性能指标',
       `${metricsText}\n\n缓存大小: ${cacheStats.size}\n缓存键数: ${cacheStats.keys.length}`
     );
   }, []);
   return (
-    <View style={styles.container}>
+  <View style={styles.container}>
       <Text style={styles.title}>RAG智能查询</Text>
       {// 任务类型选择}
       <View style={styles.taskTypeContainer}>
         <Text style={styles.label}>查询类型:</Text>
         <View style={styles.taskTypeButtons}>
-          {(["consultation",diagnosis', "treatment",prevention'] as const).map(type) => (
-            <TouchableOpacity;
+          {(["consultation",diagnosis', "treatment",prevention'] as const).map(type) => ()
+            <TouchableOpacity
               key={type}
-              style={[
+              style={{[
                 styles.taskTypeButton,
                 taskType === type && styles.taskTypeButtonActive;
-              ]}
+              ]}}
               onPress={() => setTaskType(type)}
             >
-              <Text;
-                style={[
+              <Text
+                style={{[
                   styles.taskTypeButtonText,
                   taskType === type && styles.taskTypeButtonTextActive;
-                ]}
+                ]}}
               >
                 {type === 'consultation' && '咨询'}
                 {type === 'diagnosis' && '诊断'}
@@ -247,7 +245,7 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
       {// 查询输入}
       <View style={styles.inputContainer}>
         <Text style={styles.label}>查询内容:</Text>
-        <TextInput;
+        <TextInput
           style={styles.textInput}
           value={query}
           onChangeText={setQuery}
@@ -259,29 +257,29 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
       </View>
       {// 操作按钮}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={[styles.button, styles.queryButton]}
           onPress={handleQuery}
           disabled={isLoading || isStreaming}
         >
-          {isLoading ? (
+          {isLoading ? ()
             <ActivityIndicator color="#fff" />
           ) : (
             <Text style={styles.buttonText}>查询</Text>
           )}
         </TouchableOpacity>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={[styles.button, styles.streamButton]}
           onPress={handleStreamQuery}
           disabled={isLoading || isStreaming}
         >
-          {isStreaming ? (
+          {isStreaming ? ()
             <ActivityIndicator color="#fff" />
           ) : (
             <Text style={styles.buttonText}>流式查询</Text>
           )}
         </TouchableOpacity>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={[styles.button, styles.clearButton]}
           onPress={handleClear}
           disabled={isLoading || isStreaming}
@@ -291,21 +289,21 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
       </View>
       {// 高级功能按钮}
       <View style={styles.advancedButtonContainer}>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={[styles.smallButton, styles.healthButton]}
           onPress={handleHealthCheck}
           disabled={isLoading || isStreaming}
         >
           <Text style={styles.smallButtonText}>健康检查</Text>
         </TouchableOpacity>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={[styles.smallButton, styles.metricsButton]}
           onPress={handleGetMetrics}
           disabled={isLoading || isStreaming}
         >
           <Text style={styles.smallButtonText}>性能指标</Text>
         </TouchableOpacity>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={[styles.smallButton, styles.cacheButton]}
           onPress={handleClearCache}
           disabled={isLoading || isStreaming}
@@ -316,16 +314,14 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
       {// 结果显示}
       <ScrollView style={styles.resultContainer}>
         {// 流式结果}
-        {isStreaming && (
-        <View style={styles.streamingContainer}>
+        {isStreaming  && <View style={styles.streamingContainer}>
             <Text style={styles.resultTitle}>实时回答:</Text>
             <Text style={styles.streamingText}>{streamingText}</Text>
             <ActivityIndicator style={styles.streamingIndicator}>
           </View>
         )}
         {// 最终结果}
-        {result && (
-        <View style={styles.resultContent}>
+        {result  && <View style={styles.resultContent}>
             <Text style={styles.resultTitle}>查询结果:</Text>
             {// 回答内容}
             <View style={styles.answerContainer}>
@@ -339,10 +335,9 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
               </Text>
             </View>
             {// 来源文档}
-            {result.sources && result.sources.length > 0 && (
-        <View style={styles.sourcesContainer}>
+            {result.sources && result.sources.length > 0  && <View style={styles.sourcesContainer}>
                 <Text style={styles.sourcesTitle}>参考来源:</Text>
-                {result.sources.map((source, index) => (
+                {result.sources.map((source, index) => ())
                   <View key={source.id || index} style={styles.sourceItem}>
                     <Text style={styles.sourceTitle}>{source.title}</Text>
                     <Text style={styles.sourceSnippet}>{source.snippet}</Text>
@@ -354,11 +349,10 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
               </View>
             )}
             {// 后续问题}
-            {result.followUpQuestions && result.followUpQuestions.length > 0 && (
-        <View style={styles.followUpContainer}>
+            {result.followUpQuestions && result.followUpQuestions.length > 0  && <View style={styles.followUpContainer}>
                 <Text style={styles.followUpTitle}>相关问题:</Text>;
-                {result.followUpQuestions.map((question, index) => (;
-                  <TouchableOpacity;
+                {result.followUpQuestions.map((question, index) => (;))
+                  <TouchableOpacity
                     key={index};
                     style={styles.followUpItem};
                     onPress={() => setQuery(question)};

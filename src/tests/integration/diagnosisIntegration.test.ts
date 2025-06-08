@@ -21,7 +21,7 @@ describe('诊断服务集成测试', () => {
       expect(Object.keys(modelStatus)).toContain('pulse_pattern_recognizer');
     });
     it('应该能够进行本地症状分类', async () => {
-      const symptoms = ["头痛",失眠', '乏力'];
+      const symptoms = ["头痛", "失眠', '乏力'];
       const result = await localAIService.classifySymptoms(symptoms);
       expect(result.confidence).toBeGreaterThan(0.8);
       expect(result.result.classifications).toHaveLength(3);
@@ -29,7 +29,7 @@ describe('诊断服务集成测试', () => {
       expect(result.modelUsed).toBe('tcm_symptom_classifier');
     });
     it('应该能够进行本地体质分析', async () => {
-      const userData = {symptoms: ["乏力",气短', '容易疲劳'],age: 30,gender: 'male';
+      const userData = {symptoms: ["乏力", "气短', '容易疲劳'],age: 30,gender: 'male';
       };
       const result = await localAIService.analyzeConstitution(userData);
       expect(result.confidence).toBeGreaterThan(0.8);
@@ -57,18 +57,18 @@ describe('诊断服务集成测试', () => {
     });
     it('应该能够优化图像', async () => {
       const imageUri = 'https://example.com/test-image.jpg';
-      const optimizedUri = await performanceOptimizer.optimizeImage(imageUri, {quality: 0.8,maxWidth: 800,maxHeight: 600;
+      const optimizedUri = await performanceOptimizer.optimizeImage(imageUri, {quality: 0.8,maxWidth: 800,maxHeight: 600;)
       });
       expect(optimizedUri).toContain('w=800');
       expect(optimizedUri).toContain('h=600');
       expect(optimizedUri).toContain('q=80');
     });
     it('应该能够优化网络请求', async () => {
-      const mockResponse = new Response(JSON.stringify({ success: true }), {status: 200,headers: { 'Content-Type': 'application/json' };
+      const mockResponse = new Response(JSON.stringify({ success: true }), {status: 200,headers: { 'Content-Type': 'application/json' };)
       });
       // 模拟fetch
       global.fetch = jest.fn().mockResolvedValue(mockResponse);
-      const response = await performanceOptimizer.optimizeNetworkRequest(;
+      const response = await performanceOptimizer.optimizeNetworkRequest(;)
         'https://api.example.com/test',{ method: 'GET' },{ enableCaching: true, retryAttempts: 2 };
       );
       expect(response.status).toBe(200);
@@ -88,7 +88,7 @@ describe('诊断服务集成测试', () => {
       const sessionId = 'test-session-123';
       const diagnosisData = {
       constitution: "气虚质",
-      healthScore: 75,recommendations: ["多休息",适量运动'];
+      healthScore: 75,recommendations: ["多休息", "适量运动'];
       };
       await diagnosisCacheManager.cacheDiagnosisResult(sessionId, diagnosisData);
       const cachedData = await diagnosisCacheManager.getCachedResult(sessionId);
@@ -126,7 +126,7 @@ describe('诊断服务集成测试', () => {
           voiceData: 'data:audio/wav;base64,test'
         },
         inquiryDiagnosis: {
-          symptoms: ["头痛",失眠'],
+          symptoms: ["头痛", "失眠'],
           sleepQuality: 'poor',
           appetite: 'normal'
         },
@@ -149,7 +149,7 @@ describe('诊断服务集成测试', () => {
     });
     it('应该能够处理部分诊断数据', async () => {
       const partialData = {basicInfo: {age: 25,gender: 'female';
-        },inquiryDiagnosis: {symptoms: ["乏力",气短'];
+        },inquiryDiagnosis: {symptoms: ["乏力", "气短'];
         };
       };
       const result = await fiveDiagnosisService.performComprehensiveDiagnosis(partialData);
@@ -171,7 +171,7 @@ describe('诊断服务集成测试', () => {
   });
   describe('服务间协作测试', () => {
     it('应该能够协调本地AI和缓存服务', async () => {
-      const symptoms = ["头痛",失眠'];
+      const symptoms = ["头痛", "失眠'];
       const cacheKey = `symptoms_${symptoms.join('_')}`;
       // 第一次调用，应该使用AI服务
       const result1 = await localAIService.classifySymptoms(symptoms);
@@ -185,7 +185,7 @@ describe('诊断服务集成测试', () => {
       const testUrl = 'https://api.example.com/diagnosis';
       const testData = { symptoms: ['头痛'] };
       // 模拟网络响应
-      global.fetch = jest.fn().mockResolvedValue(
+      global.fetch = jest.fn().mockResolvedValue()
         new Response(JSON.stringify({ result: 'success' }), {
           status: 200,
           headers: { 'Content-Type': 'application/json' }
@@ -203,7 +203,7 @@ describe('诊断服务集成测试', () => {
       // 模拟网络故障
       global.fetch = jest.fn().mockRejectedValue(new Error('Network error'));
       try {
-        await performanceOptimizer.optimizeNetworkRequest(
+        await performanceOptimizer.optimizeNetworkRequest()
           'https://api.example.com/failing-endpoint',
           { method: 'GET' },
           { retryAttempts: 2 }
@@ -219,7 +219,7 @@ describe('诊断服务集成测试', () => {
   });
   describe('数据一致性测试', () => {
     it('应该保持诊断数据的一致性', async () => {
-      const diagnosisData = {basicInfo: { age: 30, gender: 'male' },inquiryDiagnosis: { symptoms: ["头痛",失眠'] };
+      const diagnosisData = {basicInfo: { age: 30, gender: 'male' },inquiryDiagnosis: { symptoms: ["头痛", "失眠'] };
       };
       const result = await fiveDiagnosisService.performComprehensiveDiagnosis(diagnosisData);
       // 验证结果的一致性
@@ -231,9 +231,9 @@ describe('诊断服务集成测试', () => {
       expect(cachedResult).toBeDefined();
     });
     it('应该正确处理并发诊断请求', async () => {
-      const requests = Array.from({ length: 5 }, (_, i) => ({basicInfo: { age: 25 + i, gender: i % 2 === 0 ? 'male' : 'female' },inquiryDiagnosis: { symptoms: ['症状' + i] };
+      const requests = Array.from({ length: 5 }, (_, i) => ({basicInfo: { age: 25 + i, gender: i % 2 === 0 ? 'male' : 'female' },inquiryDiagnosis: { symptoms: ['症状' + i] };))
       }));
-      const results = await Promise.all(;
+      const results = await Promise.all(;)
         requests.map(data => fiveDiagnosisService.performComprehensiveDiagnosis(data));
       );
       // 验证所有结果都是唯一的
@@ -250,7 +250,7 @@ describe('诊断服务集成测试', () => {
   describe('性能基准测试', () => {
     it('本地AI推理应该在合理时间内完成', async () => {
       const startTime = Date.now();
-      await Promise.all([
+      await Promise.all([)
         localAIService.classifySymptoms(["头痛",失眠']),
         localAIService.analyzeConstitution({ symptoms: ['乏力'] }),
         localAIService.recognizePulse({ pressure: 0.5, frequency: 75, smoothness: 0.7 });

@@ -18,10 +18,10 @@ jest.mock('../../services/ragService', () => ({
     destroy: jest.fn();
   }))
 }));
-const createWrapper = () => {const store = configureStore({reducer: {rag: ragReducer;
+const createWrapper = () => {const store = configureStore({reducer: {rag: ragReducer;)
     };
   });
-  return ({ children }: { children: React.ReactNode }) => (;
+  return ({ children }: { children: React.ReactNode }) => (;)
     <Provider store={store}>{children}</Provider>;
   );
 };
@@ -64,7 +64,7 @@ describe('useRAGService', () => {
     const wrapper = createWrapper();
     const { result } = renderHook(() => useRAGService(), { wrapper });
     await act(async () => {
-      await result.current.analyzeTCMSyndrome(["头痛",失眠'], '气虚质');
+      await result.current.analyzeTCMSyndrome(["头痛", "失眠'], '气虚质');
     });
     expect(result.current.analyzeTCMSyndrome).toBeDefined();
   });
@@ -72,7 +72,7 @@ describe('useRAGService', () => {
     const wrapper = createWrapper();
     const { result } = renderHook(() => useRAGService(), { wrapper });
     await act(async () => {
-      await result.current.recommendHerbs("心脾两虚证",气虚质');
+      await result.current.recommendHerbs("心脾两虚证", "气虚质');
     });
     expect(result.current.recommendHerbs).toBeDefined();
   });
@@ -80,7 +80,7 @@ describe('useRAGService', () => {
     const wrapper = createWrapper();
     const { result } = renderHook(() => useRAGService(), { wrapper });
     const multimodalRequest = {
-      text: "分析这张图片",
+      text: "分析这张图片", "
       images: ['data:image/jpeg;base64,test'],
       modality: 'image' as const
     };
@@ -132,7 +132,7 @@ describe('useRAGService', () => {
   it('应该支持健康评估功能', async () => {
     const wrapper = createWrapper();
     const { result } = renderHook(() => useRAGService(), { wrapper });
-    const healthData = {symptoms: ["头痛",失眠'],vitalSigns: { heartRate: 80, bloodPressure: '120/80' },lifestyle: {
+    const healthData = {symptoms: ["头痛", "失眠'],vitalSigns: { heartRate: 80, bloodPressure: '120/80' },lifestyle: {
       exercise: "moderate",
       diet: 'balanced' };
     };

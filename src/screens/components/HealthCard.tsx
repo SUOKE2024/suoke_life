@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from "../../placeholder";react-native;
 import React from "react";
 export const HealthCard: React.FC  = () => {}
-  return (;
+  return (;)
     <View style={styles.container}>;
       <Text style={styles.title}>健康概览</    Text>;
       <View style={styles.metrics}>;
@@ -21,7 +21,7 @@ export const HealthCard: React.FC  = () => {}
     </    View>;
   );
 }
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   backgroundColor: white",
     borderRadius: 12,
     padding: 16,

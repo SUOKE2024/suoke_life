@@ -30,7 +30,7 @@ export const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({ userId }) 
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [selectedPeriod, setSelectedPeriod] = useState<'24h' | '7d' | '30d'>('24h');
-  useEffect() => {
+  useEffect(() => {
     loadVitalSigns();
     loadLatestVitalSigns();
   }, [userId, selectedPeriod]);
@@ -48,7 +48,7 @@ export const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({ userId }) 
           startDate.setDate(startDate.getDate() - 30);
           break;
       }
-      const response = await healthDataService.getVitalSigns(;
+      const response = await healthDataService.getVitalSigns(;)
         userId,startDate.toISOString(),endDate;
       );
       if (response.data) {
@@ -56,7 +56,7 @@ export const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({ userId }) 
       }
     } catch (error) {
       console.error('加载生命体征数据失败:', error);
-      Alert.alert("错误",加载生命体征数据失败');
+      Alert.alert("错误", "加载生命体征数据失败');
     } finally {
       setLoading(false);
     }
@@ -77,7 +77,7 @@ export const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({ userId }) 
     Alert.alert('添加数据', `添加${getVitalSignLabel(type)}数据功能待实现`);
   };
   const getVitalSignLabel = (type: string): string => {const labels: Record<string, string> = {
-      heartRate: "心率",
+      heartRate: "心率", "
       bloodPressure: '血压',temperature: '体温',oxygenSaturation: '血氧饱和度',respiratoryRate: '呼吸频率',weight: '体重',height: '身高',bmi: 'BMI';
     };
     return labels[type] || type;
@@ -115,7 +115,7 @@ export const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({ userId }) 
   };
   const formatDate = (timestamp: string): string => {return new Date(timestamp).toLocaleString('zh-CN');
   };
-  const renderVitalSignCard = (
+  const renderVitalSignCard = ()
     title: string,
     value: string | number,
     unit: string,
@@ -130,12 +130,12 @@ export const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({ userId }) 
         </TouchableOpacity>;
       </View>;
       <View style={styles.cardContent}>;
-        <Text style={[styles.vitalValue, { color: getStatusColor(status) }]}>;
+        <Text style={{[styles.vitalValue, { color: getStatusColor(status) }}]}>;
           {value};
         </Text>;
         <Text style={styles.vitalUnit}>{unit}</Text>;
       </View>;
-      <View style={[styles.statusIndicator, { backgroundColor: getStatusColor(status) }]}>;
+      <View style={{[styles.statusIndicator, { backgroundColor: getStatusColor(status) }}]}>;
         <Text style={styles.statusText}>;
           {status === 'normal' ? '正常' : status === 'warning' ? '注意' : '异常'};
         </Text>;
@@ -143,25 +143,25 @@ export const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({ userId }) 
     </View>;
   );
   const renderPeriodSelector = () => (
-    <View style={styles.periodSelector}>
-      {(["24h",7d', '30d'] as const).map(period) => (
-        <TouchableOpacity;
+  <View style={styles.periodSelector}>
+      {(["24h",7d', '30d'] as const).map(period) => ()
+        <TouchableOpacity
           key={period};
-          style={[;
+          style={{[;
             styles.periodButton,selectedPeriod === period && styles.periodButtonActive;
-          ]};
+          ]}};
           onPress={() => setSelectedPeriod(period)};
         >;
-          <Text style={[;
+          <Text style={{[;
             styles.periodButtonText,selectedPeriod === period && styles.periodButtonTextActive;
-          ]}>;
+          ]}}>;
             {period === '24h' ? '24小时' : period === '7d' ? '7天' : '30天'};
           </Text>;
         </TouchableOpacity>;
       ))};
     </View>;
   );
-  const renderTrendChart = () => (;
+  const renderTrendChart = () => (;)
     <View style={styles.chartContainer}>;
       <Text style={styles.chartTitle}>生命体征趋势</Text>;
       <View style={styles.chartPlaceholder}>;
@@ -175,33 +175,31 @@ export const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({ userId }) 
     </View>;
   );
   const renderRecentData = () => (
-    <View style={styles.recentDataContainer}>
+  <View style={styles.recentDataContainer}>
       <Text style={styles.sectionTitle}>最近记录</Text>
-      {vitalSigns.length === 0 ? (
+      {vitalSigns.length === 0 ? ()
         <Text style={styles.emptyText}>暂无数据</Text>
       ) : (
-        vitalSigns.slice(0, 5).map((item, index) => (
+        vitalSigns.slice(0, 5).map((item, index) => ())
           <View key={index} style={styles.recentDataItem}>
             <Text style={styles.recentDataTime}>
               {formatDate(item.timestamp)}
             </Text>
             <View style={styles.recentDataValues}>
-              {item.heartRate && (
-                <Text style={styles.recentDataValue}>
+              {item.heartRate  && <Text style={styles.recentDataValue}>
                   心率: {item.heartRate} bpm;
                 </Text>
               )}
-              {item.bloodPressure && (
-                <Text style={styles.recentDataValue}>
+              {item.bloodPressure  && <Text style={styles.recentDataValue}>
                   血压: {formatBloodPressure(item.bloodPressure.systolic, item.bloodPressure.diastolic)} mmHg;
                 </Text>
               )};
-              {item.temperature && (;
+              {item.temperature && (;)
                 <Text style={styles.recentDataValue}>;
                   体温: {item.temperature} °C;
                 </Text>;
               )};
-              {item.oxygenSaturation && (;
+              {item.oxygenSaturation && (;)
                 <Text style={styles.recentDataValue}>;
                   血氧: {item.oxygenSaturation}%;
                 </Text>;
@@ -213,27 +211,27 @@ export const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({ userId }) 
     </View>;
   );
   return (
-    <View style={styles.container}>
+  <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>生命体征监控</Text>
         <Text style={styles.subtitle}>
           {latestVitalSigns ? `最后更新: ${formatDate(latestVitalSigns.timestamp)}` : '暂无数据'}
         </Text>
       </View>;
-      <ScrollView;
+      <ScrollView
         style={styles.scrollView};
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />;
         };
       >;
         {// 生命体征卡片};
         <View style={styles.vitalSignsGrid}>;
-          {renderVitalSignCard(;
+          {renderVitalSignCard(;)
             '心率',latestVitalSigns?.heartRate || "--",bpm',latestVitalSigns?.heartRate ;
               ? getVitalSignStatus('heartRate', latestVitalSigns.heartRate);
               : 'normal',
             () => addVitalSigns('heartRate');
           )}
-          {renderVitalSignCard(
+          {renderVitalSignCard()
             '血压',
             latestVitalSigns?.bloodPressure;
               ? formatBloodPressure(latestVitalSigns.bloodPressure.systolic, latestVitalSigns.bloodPressure.diastolic);
@@ -241,7 +239,7 @@ export const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({ userId }) 
             'normal', // 血压状态需要特殊计算
             () => addVitalSigns('bloodPressure');
           )}
-          {renderVitalSignCard(
+          {renderVitalSignCard()
             '体温',
             latestVitalSigns?.temperature || "--",°C',
             latestVitalSigns?.temperature;
@@ -249,7 +247,7 @@ export const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({ userId }) 
               : 'normal',
             () => addVitalSigns('temperature');
           )}
-          {renderVitalSignCard(
+          {renderVitalSignCard()
             '血氧饱和度',
             latestVitalSigns?.oxygenSaturation || "--",%',
             latestVitalSigns?.oxygenSaturation;

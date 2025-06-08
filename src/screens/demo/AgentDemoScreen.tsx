@@ -16,9 +16,9 @@ const agents = [;
   {
     id: xiaoai",
     name: "小艾,",
-    title: "AI健康助手",
+    title: "AI健康助手", "
     description: 基于深度学习的智能健康分析师，提供个性化健康建议和预警",
-    features: ["健康数据分析, "疾病风险评估", 个性化建议",健康趋势预测],"
+    features: ["健康数据分析, "疾病风险评估", " 个性化建议", "健康趋势预测],"
     color: "#FF6B6B",
     avatar: 🤖",
     status: "online},"
@@ -26,26 +26,26 @@ const agents = [;
       id: "xiaoke",
       name: 小克",
     title: "中医辨证专家,",
-    description: "传统中医智慧与现代AI技术结合，提供精准的中医辨证论治",
-    features: [中医体质辨识",症状分析, "方剂推荐", 养生指导"],"
+    description: "传统中医智慧与现代AI技术结合，提供精准的中医辨证论治", "
+    features: [中医体质辨识", "症状分析, "方剂推荐", " 养生指导"],"
     color: "#4ECDC4,",
     avatar: "🧘‍♂️",
     status: online"},"
   {
       id: "laoke,",
-      name: "老克",
+      name: "老克", "
     title: 资深健康顾问",
     description: "拥有丰富临床经验的AI医师，提供专业的医疗咨询和建议,",
-    features: ["疾病诊断辅助", 治疗方案建议",用药指导, "康复计划"],
+    features: ["疾病诊断辅助", " 治疗方案建议", "用药指导, "康复计划"],
     color: #45B7D1",
     avatar: "👨‍⚕️,",
     status: "busy"},
   {
     id: soer",
     name: "索儿,",
-    title: "生活方式教练",
+    title: "生活方式教练", "
     description: 专注于生活方式优化的AI教练，帮助用户建立健康的生活习惯",
-    features: ["运动计划, "饮食搭配", 睡眠优化",压力管理],"
+    features: ["运动计划, "饮食搭配", " 睡眠优化", "压力管理],"
     color: "#96CEB4",
     avatar: 🏃‍♀️",
     status: "online}];"
@@ -57,9 +57,9 @@ const AgentDemoScreen: React.FC  = () => {}
 const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(50)).current;
   const scaleAnim = useRef(new Animated.Value(0.9)).current;
-  useEffect() => {
+  useEffect(() => {
     // 页面进入动画
-Animated.parallel([
+Animated.parallel([)
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 800,
@@ -76,7 +76,7 @@ Animated.parallel([
   const handleAgentSelect = (agent: typeof agents[0]) => {}
     setSelectedAgent(agent);
     // 选择动画
-Animated.sequence([
+Animated.sequence([)
       Animated.timing(scaleAnim, {
         toValue: 0.95,
         duration: 100,
@@ -107,12 +107,12 @@ setTimeout() => {
   default: return 未知
     }
   };
-  return (;
+  return (;)
     <SafeAreaView style={styles.container}>;
       <StatusBar barStyle="light-content" backgroundColor="#2E7D32" /    >;
       {/* 头部 };
       <View style={styles.header}>;
-        <TouchableOpacity;
+        <TouchableOpacity
 style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
@@ -124,54 +124,54 @@ style={styles.backButton}
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {/* 智能体选择器 }
         <Animated.View;
-style={[
+style={{[
             styles.agentSelector,
             {
               opacity: fadeAnim,
-              transform: [{ translateY: slideAnim }]
+              transform: [{ translateY: slideAnim }}]
             }
           ]}
         >
           <Text style={styles.sectionTitle}>选择智能体</    Text>
-          <ScrollView;
+          <ScrollView
 horizontal;
             showsHorizontalScrollIndicator={false}
             style={styles.agentList}
           >
-            {agents.map(agent) => (
-              <TouchableOpacity;
+            {agents.map(agent) => ()
+              <TouchableOpacity
 key={agent.id}
-                style={[
+                style={{[
                   styles.agentCard,
-                  { borderColor: agent.color },
+                  { borderColor: agent.color }},
                   selectedAgent.id === agent.id && { backgroundColor: agent.color + "20 }"
                 ]}
                 onPress={() => handleAgentSelect(agent)}
               >
                 <Text style={styles.agentAvatar}>{agent.avatar}</    Text>
                 <Text style={styles.agentName}>{agent.name}</    Text>
-                <View style={[styles.statusDot, { backgroundColor: getStatusColor(agent.status) }]} /    >
+                <View style={{[styles.statusDot, { backgroundColor: getStatusColor(agent.status) }}]} /    >
               </    TouchableOpacity>
             ))}
           </    ScrollView>
         </    Animated.View>
         {/* 选中智能体详情 }
         <Animated.View;
-style={[
+style={{[
             styles.agentDetails,
             {
               opacity: fadeAnim,
-              transform: [{ scale: scaleAnim }]
+              transform: [{ scale: scaleAnim }}]
             }
           ]}
         >
-          <View style={[styles.agentHeader, { backgroundColor: selectedAgent.color }]}>
+          <View style={{[styles.agentHeader, { backgroundColor: selectedAgent.color }}]}>
             <Text style={styles.agentAvatarLarge}>{selectedAgent.avatar}</    Text>
             <View style={styles.agentInfo}>
               <Text style={styles.agentNameLarge}>{selectedAgent.name}</    Text>
               <Text style={styles.agentTitle}>{selectedAgent.title}</    Text>
               <View style={styles.statusContainer}>
-                <View style={[styles.statusDotLarge, { backgroundColor: getStatusColor(selectedAgent.status) }]} /    >
+                <View style={{[styles.statusDotLarge, { backgroundColor: getStatusColor(selectedAgent.status) }}]} /    >
                 <Text style={styles.statusText}>{getStatusText(selectedAgent.status)}</    Text>
               </    View>
             </    View>
@@ -180,15 +180,15 @@ style={[
             <Text style={styles.agentDescription}>{selectedAgent.description}</    Text>
             <Text style={styles.featuresTitle}>核心功能</    Text>
             <View style={styles.featuresList}>
-              {selectedAgent.features.map((feature, index) => (
+              {selectedAgent.features.map((feature, index) => ())
                 <View key={index} style={styles.featureItem}>
-                  <View style={[styles.featureDot, { backgroundColor: selectedAgent.color }]} /    >
+                  <View style={{[styles.featureDot, { backgroundColor: selectedAgent.color }}]} /    >
                   <Text style={styles.featureText}>{feature}</    Text>
                 </    View>
               ))}
             </    View>
-            <TouchableOpacity;
-style={[styles.interactButton, { backgroundColor: selectedAgent.color }]}
+            <TouchableOpacity
+style={{[styles.interactButton, { backgroundColor: selectedAgent.color }}]}
               onPress={handleInteract}
               disabled={isInteracting}
             >
@@ -200,11 +200,11 @@ style={[styles.interactButton, { backgroundColor: selectedAgent.color }]}
         </    Animated.View>
         {/* 使用说明 }
         <Animated.View;
-style={[
+style={{[
             styles.instructionSection,
             {
               opacity: fadeAnim,
-              transform: [{ translateY: slideAnim }]
+              transform: [{ translateY: slideAnim }}]
             }
           ]}
         >
@@ -220,7 +220,7 @@ style={[
     </    SafeAreaView>
   );
 };
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flex: 1,
     backgroundColor: #F5F5F5"},"
   header: {,

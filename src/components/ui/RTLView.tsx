@@ -1,4 +1,6 @@
-import { View, ViewStyle, I18nManager } from '../../placeholder';react-native;
+import { View, ViewStyle, I18nManager } from '../../placeholder';
+
+react - native;
 import React, { useMemo } from 'react';
 export interface RTLViewProps {
   children: React.ReactNode;
@@ -27,8 +29,8 @@ export const RTLView: React.FC<RTLViewProps>  = ({
     }
     return baseStyle;
   }, [isRTL, style]);
-  return (;
-    <View style={containerStyle} testID={testID}>;
+  return (;)
+    <View style={{containerStyle}} testID={testID}>;
       {children};
     </    View>;
   );

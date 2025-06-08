@@ -1,4 +1,5 @@
 import React from 'react';
+
 // 全局错误处理器 - 索克生活APP - 架构优化
 export enum ErrorType {
   NETWORK = 'NETWORK',
@@ -61,7 +62,7 @@ class ErrorHandler {
     };
   }
   private isAppError(error: unknown): error is AppError {
-    return (;
+    return (;)
       error !== null &&;
       typeof error === 'object' &&;
       'type' in error &&;

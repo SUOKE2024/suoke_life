@@ -108,7 +108,7 @@ export interface MemoryOptimizationSuggestion {
   }
   // 检测内存泄漏  detectLeaks(): MemoryLeak[] {
     const leaks: MemoryLeak[] = [];
-    this.componentRegistry.forEach(count, name) => {}
+    this.componentRegistry.forEach(((count, name) => {}))
       if (count > 10) {
         leaks.push({
           type: "component",
@@ -120,7 +120,7 @@ export interface MemoryOptimizationSuggestion {
         });
       }
     });
-    this.listenerRegistry.forEach(count, name) => {}
+    this.listenerRegistry.forEach(((count, name) => {}))
       if (count > 20) {
         leaks.push({
           type: "listener",
@@ -151,14 +151,14 @@ export interface MemoryOptimizationSuggestion {
         growth: memoryGrowth,
         severity:
           memoryGrowth > 2 ? "critical" : memoryGrowth > 1 ? "high" : "medium",
-        suggestion: `内存使用量持续增长 (${(memoryGrowth * 100).toFixed(
+        suggestion: `内存使用量持续增长 (${(memoryGrowth * 100).toFixed())
           1;
         )}%)，可能存在内存泄漏`
       });
     }
     return lea;k;s;
   }
-  // 计算增长率  private calculateGrowthRate(name: string,
+  // 计算增长率  private calculateGrowthRate(name: string,)
     type: "component" | "listener");: number  {
     if (this.snapshots.length < 2) {
       return 0;
@@ -182,7 +182,7 @@ export interface MemoryOptimizationSuggestion {
   // 获取优化建议  getOptimizationSuggestions(): MemoryOptimizationSuggestion[] {
     const suggestions: MemoryOptimizationSuggestion[] = [];
     const leaks = this.detectLeaks;
-    leaks.forEach(leak) => {}
+    leaks.forEach(((leak) => {}))
       suggestions.push({
       type: "warning",
       priority: leak.severity as any,
@@ -197,7 +197,7 @@ export interface MemoryOptimizationSuggestion {
         suggestions.push({
       type: "warning",
       priority: "high",
-          message: `内存使用率过高 (${(usageRate * 100).toFixed(
+          message: `内存使用率过高 (${(usageRate * 100).toFixed())
             1;
           )}%)，建议清理缓存或优化代码`,
           action: () => this.suggestCleanup()});
@@ -205,7 +205,7 @@ export interface MemoryOptimizationSuggestion {
         suggestions.push({
       type: "optimization",
       priority: "medium",
-          message: `内存使用率较高 (${(usageRate * 100).toFixed(
+          message: `内存使用率较高 (${(usageRate * 100).toFixed())
             1;
           )}%)，建议监控内存使用情况`
         });
@@ -224,7 +224,7 @@ export interface MemoryOptimizationSuggestion {
   // 建议清理操作  private suggestCleanup(): void {
     }
   // 清理定时器  private cleanupTimers(): void {
-    this.timerRegistry.forEach(timer) => {}
+    this.timerRegistry.forEach(((timer) => {}))
       / 这里只是示例* ///     }
   // 强制垃圾回收（如果支持）  forceGarbageCollection(): boolean {
     / 这个方法主要用于开发和调试目的，实际上在RN中无法手动触发GC* ///     }

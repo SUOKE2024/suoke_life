@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import {import { Topic } from '../../services/messageBusService';
-const TopicManager = React.lazy() => import('../../components/messaging/TopicManager'));
-const MessagePublisher = React.lazy() => import('../../components/messaging/MessagePublisher'));
-const MessageSubscriber = React.lazy() => import('../../components/messaging/MessageSubscriber'));
+const TopicManager = React.lazy(() => import('../../components/messaging/TopicManager'));
+const MessagePublisher = React.lazy(() => import('../../components/messaging/MessagePublisher'));
+const MessageSubscriber = React.lazy(() => import('../../components/messaging/MessageSubscriber'));
 /**
 * 消息总线主界面
 * 集成发布、订阅、主题管理功能
@@ -21,18 +21,18 @@ export const MessageBusScreen: React.FC = () => {
   const handleTopicSelect = useCallback(topic: Topic) => {setSelectedTopic(topic);
     setActiveTab('publish'); // 选择主题后切换到发布页面
   }, []);
-  const renderTabContent = () => {switch (activeTab) {case 'topics':return (;
-          <TopicManager;
+  const renderTabContent = () => {switch (activeTab) {case 'topics':return (;)
+          <TopicManager
             onTopicSelect={handleTopicSelect};
             style={styles.tabContent};
           />;
         );
       case 'publish':
         if (!selectedTopic) {
-          return (;
+          return (;)
             <View style={styles.noTopicContainer}>;
               <Text style={styles.noTopicText}>请先选择一个主题</Text>;
-              <TouchableOpacity;
+              <TouchableOpacity
                 style={styles.selectTopicButton};
                 onPress={() => setActiveTab('topics')};
               >;
@@ -41,8 +41,8 @@ export const MessageBusScreen: React.FC = () => {
             </View>;
           );
         }
-        return (;
-          <MessagePublisher;
+        return (;)
+          <MessagePublisher
             topic={selectedTopic.name};
             style={styles.tabContent};
             onPublish={(messageId) => {console.log('Message published:', messageId);
@@ -54,10 +54,10 @@ export const MessageBusScreen: React.FC = () => {
         );
       case 'subscribe':
         if (!selectedTopic) {
-          return (;
+          return (;)
             <View style={styles.noTopicContainer}>;
               <Text style={styles.noTopicText}>请先选择一个主题</Text>;
-              <TouchableOpacity;
+              <TouchableOpacity
                 style={styles.selectTopicButton};
                 onPress={() => setActiveTab('topics')};
               >;
@@ -66,8 +66,8 @@ export const MessageBusScreen: React.FC = () => {
             </View>;
           );
         }
-        return (;
-          <MessageSubscriber;
+        return (;)
+          <MessageSubscriber
             topic={selectedTopic.name};
             style={styles.tabContent};
             onMessage={(message) => {console.log('Message received:', message);
@@ -82,13 +82,12 @@ export const MessageBusScreen: React.FC = () => {
     }
   };
   return (
-    <SafeAreaView style={styles.container}>
+  <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       {// 头部}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>消息总线</Text>
-        {selectedTopic && (
-        <View style={styles.selectedTopicContainer}>
+        {selectedTopic  && <View style={styles.selectedTopicContainer}>
             <Text style={styles.selectedTopicLabel}>当前主题:</Text>
             <Text style={styles.selectedTopicName}>{selectedTopic.name}</Text>
           </View>
@@ -96,44 +95,44 @@ export const MessageBusScreen: React.FC = () => {
       </View>
       {// 标签页导航}
       <View style={styles.tabBar}>
-        <TouchableOpacity;
-          style={[
+        <TouchableOpacity
+          style={{[
             styles.tabButton,
             activeTab === 'topics' && styles.activeTabButton;
-          ]}
+          ]}}
           onPress={() => setActiveTab('topics')}
         >
-          <Text style={[
+          <Text style={{[
             styles.tabButtonText,
             activeTab === 'topics' && styles.activeTabButtonText;
-          ]}>
+          ]}}>
             主题管理
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity;
-          style={[
+        <TouchableOpacity
+          style={{[
             styles.tabButton,
             activeTab === 'publish' && styles.activeTabButton;
-          ]}
+          ]}}
           onPress={() => setActiveTab('publish')}
         >
-          <Text style={[
+          <Text style={{[
             styles.tabButtonText,
             activeTab === 'publish' && styles.activeTabButtonText;
-          ]}>
+          ]}}>
             发布消息
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity;
-          style={[
+        <TouchableOpacity
+          style={{[
             styles.tabButton,
             activeTab === 'subscribe' && styles.activeTabButton;
-          ]}
+          ]}}
           onPress={() => setActiveTab('subscribe')};
         >;
-          <Text style={[;
+          <Text style={{[;
             styles.tabButtonText,activeTab === 'subscribe' && styles.activeTabButtonText;
-          ]}>;
+          ]}}>;
             订阅消息;
           </Text>;
         </TouchableOpacity>;

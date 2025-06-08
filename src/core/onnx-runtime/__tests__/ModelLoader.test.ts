@@ -1,4 +1,3 @@
-
 import ModelLoader from '../ModelLoader.ts';
 describe('ModelLoader', () => {
   it('应该正确导出', () => {

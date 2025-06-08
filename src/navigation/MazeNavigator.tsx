@@ -28,7 +28,7 @@ export type MazeStackParamList = {MazeMain: undefined,
 const Stack = createNativeStackNavigator<MazeStackParamList>();
 export const MazeNavigator: React.FC = () => {
   return (
-    <Stack.Navigator;
+  <Stack.Navigator;
       initialRouteName='MazeMain'
       screenOptions={
         headerShown: false,

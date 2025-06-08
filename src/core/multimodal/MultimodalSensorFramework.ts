@@ -63,7 +63,7 @@ this.registerSensor(new PressureSensor());
     this.sensors.set(sensor.getId(), sensor);
     sensor.on(data", (data: SensorData) => this.handleSensorData(data));"
     sensor.on("error, (error: Error) => this.handleSensorError(sensor.getId(), error));"
-    sensor.on("calibration", (calibration: CalibrationData) => {}
+    sensor.on("calibration", (calibration: CalibrationData) => {})
       this.calibrationManager.updateCalibration(sensor.getId(), calibration)
     );
   }
@@ -77,8 +77,8 @@ await this.checkSensorAvailability();
       // 校准传感器
 await this.calibrationManager.calibrateAll(this.sensors);
       // 启动所有传感器
-const startPromises = Array.from(this.sensors.values()).map(sensor =>;
-        sensor.start().catch(error => {}
+const startPromises = Array.from(this.sensors.values()).map(sensor =>;)
+        sensor.start().catch(error => {})
           } 启动失败:`, error);
           return null;
         });
@@ -95,8 +95,8 @@ const startPromises = Array.from(this.sensors.values()).map(sensor =>;
   async stop(): Promise<void> {
     if (!this.isActive) return;
     try {
-      const stopPromises = Array.from(this.sensors.values()).map(sensor =>;
-        sensor.stop().catch(error => {}
+      const stopPromises = Array.from(this.sensors.values()).map(sensor =>;)
+        sensor.stop().catch(error => {})
           } 停止失败:`, error);
           return null;
         });
@@ -111,7 +111,7 @@ const startPromises = Array.from(this.sensors.values()).map(sensor =>;
   /**
 * * 检查传感器可用性
   private async checkSensorAvailability(): Promise<void> {
-    const availabilityChecks = Array.from(this.sensors.values()).map(async sensor => {}
+    const availabilityChecks = Array.from(this.sensors.values()).map(async sensor => {})
       try {const isAvailable = await sensor.isAvailable();
         return { sensorId: sensor.getId(), available: isAvailable };
       } catch (error) {
@@ -221,7 +221,7 @@ const { systolic, diastolic } = vitalSigns.bloodPressure;
         severity: systolic > 160 || diastolic > 100 ? "high" : medium",
         description: "血压偏高,",
         timestamp: new Date(),
-        recommendations: ["减少盐分摄入", 增加运动",定期监测血压]
+        recommendations: ["减少盐分摄入", " 增加运动", "定期监测血压]
       });
     }
     // 体温异常
@@ -233,7 +233,7 @@ if (vitalSigns.temperature.value > 37.5 || vitalSigns.temperature.value < 36.0) 
         severity: vitalSigns.temperature.value > 39.0 || vitalSigns.temperature.value < 35.0 ? "high : "medium",
         description: vitalSigns.temperature.value > 37.5 ? 发热" : "体温偏低,
         timestamp: new Date(),
-        recommendations: ["注意休息", 多喝水",必要时就医]
+        recommendations: ["注意休息", " 多喝水", "必要时就医]
       });
     }
     return anomalies;
@@ -249,9 +249,9 @@ anomalies.push({
       parameter: sedentary_time",
         value: activityData.sedentaryTime,
         severity: "medium,",
-        description: "久坐时间过长",
+        description: "久坐时间过长", "
         timestamp: new Date(),
-        recommendations: [定时起身活动",增加日常运动, "设置提醒"]
+        recommendations: [定时起身活动", "增加日常运动, "设置提醒"]
       });
     }
     // 运动不足检测
@@ -263,7 +263,7 @@ if (activityData.dailySteps < 5000) {
         severity: "low",
         description: 日常活动量不足",
         timestamp: new Date(),
-        recommendations: ["增加步行, "选择楼梯而非电梯", 户外活动"]
+        recommendations: ["增加步行, "选择楼梯而非电梯", " 户外活动"]
       });
     }
     return anomalies;
@@ -279,9 +279,9 @@ if (environmentData.airQuality.aqi > 100) {
       parameter: "air_quality",
         value: environmentData.airQuality.aqi,
         severity: environmentData.airQuality.aqi > 200 ? high" : "medium,
-        description: "空气质量不佳",
+        description: "空气质量不佳", "
         timestamp: new Date(),
-        recommendations: [减少户外活动",使用空气净化器, "佩戴口罩"]
+        recommendations: [减少户外活动", "使用空气净化器, "佩戴口罩"]
       });
     }
     // 噪音水平异常
@@ -293,7 +293,7 @@ if (environmentData.noiseLevel > 70) {
         severity: environmentData.noiseLevel > 85 ? "high" : medium",
         description: "环境噪音过大,",
         timestamp: new Date(),
-        recommendations: ["使用降噪耳机", 寻找安静环境",注意听力保护]
+        recommendations: ["使用降噪耳机", " 寻找安静环境", "注意听力保护]
       });
     }
     return anomalies;
@@ -333,10 +333,10 @@ if (data.nutritionIndicators) {
       return {
       type: "sleep_quality",
       title: 睡眠质量分析",;
-        description: "您的睡眠质量有待改善,",score: Math.round(sleepEfficiency + deepSleepRatio) * 50),insights: [;
+        description: "您的睡眠质量有待改善,", "score: Math.round(sleepEfficiency + deepSleepRatio) * 50),insights: [;
           `睡眠效率: ${Math.round(sleepEfficiency * 100)}%`,`深度睡眠比例: ${Math.round(deepSleepRatio * 100)}%`;
         ],recommendations: [;
-          "保持规律的睡眠时间",睡前避免使用电子设备",创造舒适的睡眠环境,适度运动但避免睡前剧烈运动";
+          "保持规律的睡眠时间", "睡前避免使用电子设备", "创造舒适的睡眠环境,适度运动但避免睡前剧烈运动";
         ],timestamp: new Date();
       };
     }
@@ -350,10 +350,10 @@ if (data.nutritionIndicators) {
     if (hrv < 30 || cortisolLevel > 15) {
       return {
         type: stress_level",;
-        title: "压力水平分析,",description: "检测到较高的压力水平",score: Math.max(0, 100 - (hrv + (20 - cortisolLevel)) * 2),insights: [;
+        title: "压力水平分析,",description: "检测到较高的压力水平", "score: Math.max(0, 100 - (hrv + (20 - cortisolLevel)) * 2),insights: [;
           `心率变异性: ${hrv}ms`,`皮质醇水平: ${cortisolLevel}μg/    dL`;
         ],recommendations: [;
-          练习深呼吸或冥想",进行适度的有氧运动,保证充足的睡眠",寻求社会支持",考虑专业心理咨询";
+          练习深呼吸或冥想", "进行适度的有氧运动,保证充足的睡眠", "寻求社会支持", "考虑专业心理咨询";
         ],timestamp: new Date();
       };
     }
@@ -368,11 +368,11 @@ if (data.nutritionIndicators) {
       return {
       type: "exercise_effectiveness",
       title: 运动效果分析",;
-        description: "您的运动量或强度可能不够充分,",score: Math.min(100, (weeklyMinutes / 150) * 50 + intensityDistribution.moderate * 50),;
+        description: "您的运动量或强度可能不够充分,", "score: Math.min(100, (weeklyMinutes / 150) * 50 + intensityDistribution.moderate * 50),;
         insights: [;
           `每周运动时间: ${weeklyMinutes}分钟`,`中等强度运动比例: ${Math.round(intensityDistribution.moderate * 100)}%`;
         ],recommendations: [;
-          "增加每周运动时间至150分钟以上",包含中等强度的有氧运动",添加力量训练,选择喜欢的运动方式以提高坚持性";
+          "增加每周运动时间至150分钟以上", "包含中等强度的有氧运动", "添加力量训练,选择喜欢的运动方式以提高坚持性";
         ],timestamp: new Date();
       };
     }
@@ -385,10 +385,10 @@ if (data.nutritionIndicators) {
     const glucoseVariability = nutritionIndicators.glucoseVariability;
     if (hydrationLevel < 0.7 || glucoseVariability > 30) {
       return {type: nutrition_status",;
-        title: "营养状态分析,",description: "您的水分摄入或血糖控制需要关注",score: Math.round(hydrationLevel * 50) + Math.max(0, (50 - glucoseVariability))),insights: [;
+        title: "营养状态分析,",description: "您的水分摄入或血糖控制需要关注", "score: Math.round(hydrationLevel * 50) + Math.max(0, (50 - glucoseVariability))),insights: [;
           `水分水平: ${Math.round(hydrationLevel * 100)}%`,`血糖变异性: ${glucoseVariability}%`;
         ],recommendations: [;
-          增加水分摄入",规律进餐时间,选择低升糖指数食物",控制碳水化合物摄入量"";
+          增加水分摄入", "规律进餐时间,选择低升糖指数食物", "控制碳水化合物摄入量"";
         ],timestamp: new Date();
       };
     }
@@ -397,7 +397,7 @@ if (data.nutritionIndicators) {
   /**
 * * 获取传感器状态
   getSensorStatus(): SensorStatus[] {
-    return Array.from(this.sensors.values()).map(sensor => ({id: sensor.getId(),name: sensor.getName(),type: sensor.getType(),status: sensor.getStatus(),lastUpdate: sensor.getLastUpdate(),batteryLevel: sensor.getBatteryLevel(),signalStrength: sensor.getSignalStrength();
+    return Array.from(this.sensors.values()).map(sensor => ({id: sensor.getId(),name: sensor.getName(),type: sensor.getType(),status: sensor.getStatus(),lastUpdate: sensor.getLastUpdate(),batteryLevel: sensor.getBatteryLevel(),signalStrength: sensor.getSignalStrength();))
     }));
   }
   /**
@@ -428,7 +428,7 @@ if (data.nutritionIndicators) {
   getRealtimeDataStream(): NodeJS.ReadableStream {
     // 实现实时数据流
     // 这里返回一个模拟的流对象
-return new (require("stream).Readable)({";
+return new (require("stream).Readable)({";)
       objectMode: true,read() {// 实现数据读取逻辑;
       };
     });

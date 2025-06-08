@@ -1,4 +1,3 @@
-
 import PerformanceMonitor from '../PerformanceMonitor.tsx';
 describe('PerformanceMonitor', () => {
   it('应该正确导出', () => {

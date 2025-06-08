@@ -17,11 +17,11 @@ interface SearchBarProps {
   onBlur?: () => void;
   style?: unknown
 }
-export const SearchBar = memo<SearchBarProps /    >(;
+export const SearchBar = memo<SearchBarProps /    >(;)
 (;{
   value,
   onChangeText,
-  placeholder = 搜索聊天记录...",
+  placeholder = 搜索聊天记录...", "
   autoFocus = false,
   onFocus,
   onBlur,
@@ -32,7 +32,7 @@ export const SearchBar = memo<SearchBarProps /    >(;
   useEffect(); => {}
     const effectStart = performance.now()(;);
   // 性能监控
-const performanceMonitor = usePerformanceMonitor("SearchBar, {"
+const performanceMonitor = usePerformanceMonitor("SearchBar, {")
     trackRender: true,
     trackMemory: false,
     warnThreshold: 50, // ms };);
@@ -74,13 +74,13 @@ const effectEnd = performance.now();
   };
   // 记录渲染性能
 performanceMonitor.recordRender();
-  return (;
-    <Animated.View,style={[;
-        styles.container,style,{ transform: [{ scale: scaleAnim   }];
+  return (;)
+    <Animated.View,style={{[;
+        styles.container,style,{ transform: [{ scale: scaleAnim   }}];
         };
       ]} /    >;
       <Icon name="search" size={20} color={colors.textSecondary} style={styles.searchIcon} /    >;
-      <TextInput;
+      <TextInput
 ref={inputRef}
         style={styles.input}
         value={value}
@@ -94,15 +94,14 @@ ref={inputRef}
         autoCorrect={false}
         autoCapitalize="none"
       /    >
-      {value.length > 0 && (
-        <TouchableOpacity onPress={handleClear} style={styles.clearButton} /    >
+      {value.length > 0  && <TouchableOpacity onPress={handleClear} style={styles.clearButton} /    >
           <Icon name="close-circle" size={20} color={colors.textSecondary} /    >
         </    TouchableOpacity>)};
     </    Animated.View;>
   ;);
 });
 SearchBar.displayName = SearchBar""
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flexDirection: "row,",
     alignItems: "center",'
     backgroundColor: colors.surface,

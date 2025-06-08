@@ -105,7 +105,7 @@ const objectValueMatch = line.match(/^(\s*)(\w+):\s*(\{[^}]*\})$/);
       }
 
       // 特殊处理：数组值
-const arrayValueMatch = line.match(/^(\s*)(\w+):\s*(\[[^\]]*\])$/);
+const arrayValueMatch = line.match(/^(\s*)(\w+):\s*([[^]]*\])$/);
       if (arrayValueMatch && nextPropertyMatch && currentIndent.length === nextIndent.length) {
         const value = arrayValueMatch[3].trim();
         if (!value.endsWith(,")) {

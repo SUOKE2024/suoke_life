@@ -56,7 +56,7 @@ const mockAgentServices = {
       query: "test query",
       results: [
           {
-      title: "中医基础理论",
+      title: "中医基础理论", "
       content: '中医理论内容...',
             relevance: 0.9
           }
@@ -100,7 +100,7 @@ describe('索克生活 - 智能体协作端到端测试', () => {
   });
   describe('🤖 小艾智能体测试', () => {
     it('应该能够与小艾进行对话交互', async () => {
-      const { queryByText, getByTestId } = render(
+      const { queryByText, getByTestId } = render()
         <NavigationContainer>
           <App />
         </NavigationContainer>
@@ -120,7 +120,7 @@ describe('索克生活 - 智能体协作端到端测试', () => {
       console.log('✅ 小艾智能体交互测试通过');
     });
     it('应该能够协调四诊流程', async () => {
-      const { queryByText } = render(
+      const { queryByText } = render()
         <NavigationContainer>
           <App />
         </NavigationContainer>
@@ -142,7 +142,7 @@ describe('索克生活 - 智能体协作端到端测试', () => {
   });
   describe('🛠️ 小克智能体测试', () => {
     it('应该能够处理服务管理请求', async () => {
-      const { queryByText } = render(
+      const { queryByText } = render()
         <NavigationContainer>
           <App />
         </NavigationContainer>
@@ -160,7 +160,7 @@ describe('索克生活 - 智能体协作端到端测试', () => {
   });
   describe('📚 老克智能体测试', () => {
     it('应该能够进行知识检索', async () => {
-      const { queryByText } = render(
+      const { queryByText } = render()
         <NavigationContainer>
           <App />
         </NavigationContainer>
@@ -182,7 +182,7 @@ describe('索克生活 - 智能体协作端到端测试', () => {
   });
   describe('🌱 索儿智能体测试', () => {
     it('应该能够提供生活方式建议', async () => {
-      const { queryByText } = render(
+      const { queryByText } = render()
         <NavigationContainer>
           <App />
         </NavigationContainer>
@@ -204,7 +204,7 @@ describe('索克生活 - 智能体协作端到端测试', () => {
   });
   describe('🔄 智能体协作流程测试', () => {
     it('应该能够完成多智能体协作任务', async () => {
-      const { queryByText } = render(
+      const { queryByText } = render()
         <NavigationContainer>
           <App />
         </NavigationContainer>
@@ -239,7 +239,7 @@ describe('索克生活 - 智能体协作端到端测试', () => {
       console.log('✅ 多智能体协作测试通过');
     });
     it('应该能够处理智能体间的数据传递', async () => {
-      const { queryByText } = render(
+      const { queryByText } = render()
         <NavigationContainer>
           <App />
         </NavigationContainer>
@@ -259,7 +259,7 @@ describe('索克生活 - 智能体协作端到端测试', () => {
     it('应该能够处理单个智能体服务异常', async () => {
       // 模拟小艾服务异常
       mockAgentServices.xiaoai.chat.mockRejectedValue(new Error('Service unavailable'));
-      const { queryByText } = render(
+      const { queryByText } = render()
         <NavigationContainer>
           <App />
         </NavigationContainer>
@@ -277,7 +277,7 @@ describe('索克生活 - 智能体协作端到端测试', () => {
     it('应该能够在智能体服务恢复后重新连接', async () => {
       // 先模拟服务异常
       mockAgentServices.xiaoai.chat.mockRejectedValue(new Error('Service unavailable'));
-      const { queryByText } = render(
+      const { queryByText } = render()
         <NavigationContainer>
           <App />
         </NavigationContainer>
@@ -299,7 +299,7 @@ describe('索克生活 - 智能体协作端到端测试', () => {
   });
   describe('📊 智能体性能测试', () => {
     it('应该在合理时间内响应智能体请求', async () => {
-      const { queryByText } = render(
+      const { queryByText } = render()
         <NavigationContainer>
           <App />
         </NavigationContainer>
@@ -318,7 +318,7 @@ describe('索克生活 - 智能体协作端到端测试', () => {
       console.log(`✅ 智能体性能测试通过 - 响应时间: ${responseTime}ms`);
     });
     it('应该能够处理并发的智能体请求', async () => {
-      const { queryByText } = render(
+      const { queryByText } = render()
         <NavigationContainer>
           <App />
         </NavigationContainer>
@@ -328,7 +328,7 @@ describe('索克生活 - 智能体协作端到端测试', () => {
         expect(queryByText('首页') || queryByText('健康') || queryByText('四诊')).toBeTruthy();
       });
       // 模拟并发请求
-      const concurrentRequests = Array.from({ length: 5 }, (_, i) =>
+      const concurrentRequests = Array.from({ length: 5 }, (_, i) =>)
         new Promise(resolve => setTimeout(resolve, Math.random() * 100))
       );
       const results = await Promise.allSettled(concurrentRequests);
@@ -339,7 +339,7 @@ describe('索克生活 - 智能体协作端到端测试', () => {
   });
   describe('🔐 智能体安全测试', () => {
     it('应该保护智能体间的数据传输安全', async () => {
-      const { queryByText } = render(
+      const { queryByText } = render()
         <NavigationContainer>
           <App />
         </NavigationContainer>

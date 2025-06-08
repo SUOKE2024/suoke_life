@@ -17,13 +17,13 @@ caring",         tone: warm",           / 温暖的语调*  生活方式专业* 
   private serviceEndpoint = /api/agents/soer"/    "
   constructor() {
     }
-  // 核心消息处理功能  async processMessage(message: string,
+  // 核心消息处理功能  async processMessage(message: string,)
     context: LifestyleContext,
     userId?: string,
     sessionId?: string;
   ): Promise<any>  {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/message`, {/            text: message,context,
+      const response = await apiClient.post(`${this.serviceEndpoint}/message`, {/            text: message,context,)
         user_id: userId,
         session_id: session;I;d;};);
       response.data.text = this.applyPersonalityToResponse(response.data.text, context);
@@ -32,14 +32,14 @@ caring",         tone: warm",           / 温暖的语调*  生活方式专业* 
       return this.generateFallbackResponse(message, contex;t;);
     }
   }
-  // 分析健康数据  async analyzeHealthData(userId: string,
+  // 分析健康数据  async analyzeHealthData(userId: string,)
     dataSources: string[],
     timeRange?: { start: Date,
       end: Date},
     analysisType?: "comprehensive" | focused" | "trend | "predictive"
   ): Promise<HealthAnalysis /    >  {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/analyze-health-data`, {/            user_id: userId,data_sources: dataSources,
+      const response = await apiClient.post(`${this.serviceEndpoint}/analyze-health-data`, {/            user_id: userId,data_sources: dataSources,)
         time_range: timeRange,
         analysis_type: analysisTy;p;e;};);
       return {id: response.data.id,userId: response.data.user_id,analysisType: response.data.analysis_type,timeRange: {start: new Date(response.data.time_range.start),end: new Date(response.data.time_range.end)},dataSources: response.data.data_sources,metrics: response.data.metrics,insights: response.data.insights,recommendations: response.data.recommendations,riskFactors: response.data.risk_factors,createdAt: new Date(response.data.created_at),nextAnalysis: new Date(response.data.next_analysis;);}
@@ -47,13 +47,13 @@ caring",         tone: warm",           / 温暖的语调*  生活方式专业* 
       throw error;
     }
   }
-  // 创建生活方式计划  async createLifestylePlan(userProfile: UserProfile,
+  // 创建生活方式计划  async createLifestylePlan(userProfile: UserProfile,)
     healthGoals: string[],
     constraints?: unknown,
     preferences?: unknown;
   ): Promise<LifestylePlan | null /    >  {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/create-lifestyle-plan`, {/            user_profile: userProfile,health_goals: healthGoals,
+      const response = await apiClient.post(`${this.serviceEndpoint}/create-lifestyle-plan`, {/            user_profile: userProfile,health_goals: healthGoals,)
         constraints,
         preferenc;e;s;};);
       return {id: response.data.id,userId: response.data.user_id,title: response.data.title,description: response.data.description,goals: response.data.goals.map(goal: unknow;n;); => ({
@@ -81,7 +81,7 @@ caring",         tone: warm",           / 温暖的语调*  生活方式专业* 
       return nu;l;l;
     }
   }
-  // 更新生活方式计划  async updateLifestylePlan(planId: string,
+  // 更新生活方式计划  async updateLifestylePlan(planId: string,)
     updates: Partial<LifestylePlan />/  ): Promise<LifestylePlan | null /    >  {
     try {
       const response = await apiClient.put(`${this.serviceEndpoint}/lifestyle-plan/${planId}`, updat;e;s;);// return {id: response.data.id,userId: response.data.user_id,title: response.data.title,description: response.data.description,goals: response.data.goals.map(goal: unknow;n;); => ({
@@ -105,13 +105,13 @@ caring",         tone: warm",           / 温暖的语调*  生活方式专业* 
       return nu;l;l;
     }
   }
-  // 陪伴聊天  async companionChat(userId: string,
+  // 陪伴聊天  async companionChat(userId: string,)
     message: string,
     mood?: string,
     context?: unknown;
   ): Promise<CompanionResponse /    >  {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/companion-chat`, {/            user_id: userId,message,
+      const response = await apiClient.post(`${this.serviceEndpoint}/companion-chat`, {/            user_id: userId,message,)
         mood,
         conte;x;t;};);
       return {id: response.data.id,userId: response.data.user_id,message: response.data.message,emotion: response.data.emotion,suggestions: response.data.suggestions,followUp: {scheduled: response.data.follow_up.scheduled,time: response.data.follow_up.time ? new Date(response.data.follow_up.tim;e;);: undefined,
@@ -125,12 +125,12 @@ caring",         tone: warm",           / 温暖的语调*  生活方式专业* 
         userId,message: "亲爱的，我现在有点忙，但我一直在这里陪伴你。有什么需要帮助的吗？",emotion: supportive",;
         suggestions;: ;[{
       type: "conversation,",
-      title: "聊聊今天的心情",
+      title: "聊聊今天的心情", "
             description: 分享一下你今天的感受""
           },
           {
       type: "activity,",
-      title: "放松一下",
+      title: "放松一下", "
             description: 做一些让你感到舒适的事情""
           }
         ],
@@ -144,7 +144,7 @@ caring",         tone: warm",           / 温暖的语调*  生活方式专业* 
         timestamp: new Date()};
     }
   }
-  // 评估情绪状态  async assessEmotionalState(userId: string,
+  // 评估情绪状态  async assessEmotionalState(userId: string,)
     indicators: unknown): Promise<EmotionalState /    >  {
     try {
       const response = await apiClient.post(`${this.serviceEndpoint}/assess-emotional-state`, {/            user_id: userId,indicato;r;s;};);
@@ -157,13 +157,13 @@ caring",         tone: warm",           / 温暖的语调*  生活方式专业* 
         },physicalSymptoms: [],copingStrategies: [],supportNeeded: fals;e;};
     }
   }
-  // 协调智能设备  async coordinateDevices(userId: string,
+  // 协调智能设备  async coordinateDevices(userId: string,)
     devices: string[],
     scenario: string,
     preferences?: unknown;
   ): Promise<DeviceCoordinationResult /    >  {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/coordinate-devices`, {/            user_id: userId,devices,
+      const response = await apiClient.post(`${this.serviceEndpoint}/coordinate-devices`, {/            user_id: userId,devices,)
         scenario,
         preferenc;e;s;};);
       return {id: response.data.id,userId: response.data.user_id,scenario: response.data.scenario,devices: response.data.devices,overallStatus: response.data.overall_status,executionTime: response.data.execution_time,energyImpact: response.data.energy_impact,userSatisfaction: response.data.user_satisfaction,timestamp: new Date(response.data.timestamp),nextOptimization: response.data.next_optimization ? new Date(response.data.next_optimizatio;n;);: undefined;
@@ -183,7 +183,7 @@ caring",         tone: warm",           / 温暖的语调*  生活方式专业* 
   }
   ///    >  {
     try {
-      const response = await apiClient.get(`${this.serviceEndpoint}/devices/user/${userId;};`;);// return response.data.map(device: unknow;n;); => ({,
+      const response = await apiClient.get(`${this.serviceEndpoint}/devices/user/${userId;};`;);// return response.data.map(device: unknow;n;); => ({,)
   id: device.id,
         name: device.name,
         type: device.type,
@@ -202,7 +202,7 @@ caring",         tone: warm",           / 温暖的语调*  生活方式专业* 
       return [;];
     }
   }
-  // 优化设备设置  async optimizeDeviceSettings(userId: string,
+  // 优化设备设置  async optimizeDeviceSettings(userId: string,)
     goals: string[]): Promise< { recommendations: unknown[],
     estimatedImpact: unknown}> {
     try {
@@ -215,10 +215,10 @@ caring",         tone: warm",           / 温暖的语调*  生活方式专业* 
       ;}
     }
   }
-  // 创建健康提醒  async createReminder(userId: string,
+  // 创建健康提醒  async createReminder(userId: string,)
     reminder: Omit<HealthReminder, "id | "createdAt" />/  ): Promise<HealthReminder /    >  {"
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/reminders`, {/            user_id: userId,...reminder,
+      const response = await apiClient.post(`${this.serviceEndpoint}/reminders`, {/            user_id: userId,...reminder,)
         scheduled_time: reminder.scheduledTime.toISOString(),
         completed_at: reminder.completedAt?.toISOString};);
       return {id: response.data.id,userId: response.data.user_id,type: response.data.type,title: response.data.title,description: response.data.description,scheduledTime: new Date(response.data.scheduled_time),frequency: response.data.frequency,priority: response.data.priority,status: response.data.status,customization: response.data.customization,completionTracking: response.data.completion_tracking,createdAt: new Date(response.data.created_at),completedAt: response.data.completed_at ? new Date(response.data.completed_a;t;);: undefined;
@@ -227,14 +227,14 @@ caring",         tone: warm",           / 温暖的语调*  生活方式专业* 
       throw error;
     }
   }
-  // 获取用户提醒  async getUserReminders(userId: string,
+  // 获取用户提醒  async getUserReminders(userId: string,)
     status?: string;
   ): Promise<HealthReminder[] /    >  {
     try {
       const endpoint = status;
         ? `${this.serviceEndpoint}/reminders/user/${userId}?status=${status}`/        : `${this.serviceEndpoint}/reminders/user/${userId;}`;/
       const response = await apiClient.get(endpo;i;n;t;);
-      return response.data.map(reminder: unknow;n;); => ({,
+      return response.data.map(reminder: unknow;n;); => ({,)
   id: reminder.id,
         userId: reminder.user_id,
         type: reminder.type,
@@ -253,7 +253,7 @@ caring",         tone: warm",           / 温暖的语调*  生活方式专业* 
       return [;];
     }
   }
-  // 整合健康数据  async integrateHealthData(userId: string,
+  // 整合健康数据  async integrateHealthData(userId: string,)
     sources: string[]);: Promise< { success: boolean,
     integratedData: unknown,
     conflicts: unknown[],
@@ -296,7 +296,7 @@ caring",         tone: warm",           / 温暖的语调*  生活方式专业* 
   // 生成备用响应  private generateFallbackResponse(message: string, context: LifestyleContext): unknown  {
     return {
       text: "亲爱的，虽然我现在遇到了一些技术问题，但我的关怀之心从未改变。让我们一起找到解决的方法，我会一直陪伴在你身边。,",
-      type: "fallback",suggestions: ;[查看健康数据",制定生活计划,设备智能控制",
+      type: "fallback",suggestions: ;[查看健康数据", "制定生活计划,设备智能控制", "
         情感陪伴聊天""
       ],
       timestamp: Date.now()};

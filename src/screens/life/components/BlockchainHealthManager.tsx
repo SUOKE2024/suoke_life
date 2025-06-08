@@ -61,7 +61,7 @@ const SAMPLE_RECORDS: HealthDataRecord[] = [{
   {
     id: 3",
     type: "medication,",
-    title: "用药记录",
+    title: "用药记录", "
     description: 中药处方和西药用药记录",
     timestamp: new Date("2024-01-25),"
     hash: "0x3c4d5e6f7a8b...",
@@ -96,7 +96,7 @@ const SAMPLE_PERMISSIONS: DataPermission[] = [{
     active: false;
   }
 ]
-export const BlockchainHealthManager: React.FC<BlockchainHealthManagerProps /> = ({/   const performanceMonitor = usePerformanceMonitor(BlockchainHealthManager",;
+export const BlockchainHealthManager: React.FC<BlockchainHealthManagerProps /> = ({/   const performanceMonitor = usePerformanceMonitor(BlockchainHealthManager",;))
 {/
     trackRender: true,
     trackMemory: true,
@@ -109,77 +109,75 @@ const [activeTab, setActiveTab] = useState<"records | "permissions" | security">
   const getTypeIcon = useCallback => {}
     try {
       await new Promise<void>(resolve => setTimeout() => resolve(), 1000));
-      setRecords(prev => prev.map(record => {}
+      setRecords(prev => prev.map(record => {}))
         record.id === recordId;
           ? { ...record, shared: !record.shared}
           : record;
       ););
-      Alert.alert("成功", 数据共享状态已更新")"
+      Alert.alert("成功", " 数据共享状态已更新")"
     } catch (error) {
       Alert.alert("错误, "更新失败，请重试");"
     } finally {
       setIsLoading(false);
     }
   };
-  const togglePermission = useMemo(() => async (permissionId: string) => {}
+  const togglePermission = useMemo(() => async (permissionId: string) => {})
     setIsLoading(true), []);
     try {
       await new Promise<void>(resolve => setTimeout(); => resolve(), 1000));
-      setPermissions(prev => prev.map(permission => {}
+      setPermissions(prev => prev.map(permission => {}))
         permission.id === permissionId;
           ? { ...permission, active: !permission.active}
           : permission;
       );)
-      Alert.alert(成功",权限状态已更新);
+      Alert.alert(成功", "权限状态已更新);
     } catch (error) {
-      Alert.alert("错误", 更新失败，请重试");"
+      Alert.alert("错误", " 更新失败，请重试");"
     } finally {
       setIsLoading(false);
     }
   };
   //
-    <View style={styles.tabBar}>/          <TouchableOpacity;
+    <View style={styles.tabBar}>/          <TouchableOpacity
 style={[styles.tab, activeTab === "records && styles.activeTab]}"
         onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setActiveTab("records")}/          >
-        <Icon;
+        <Icon
 name="database"
           size={20}
           color={activeTab === records" ? colors.primary: colors.textSecondary} />/        <Text style={[styles.tabText, activeTab === "records && styles.activeTabText]} />/              数据记录
         </Text>/      </TouchableOpacity>/
-      <TouchableOpacity;
+      <TouchableOpacity
 style={[styles.tab, activeTab === "permissions" && styles.activeTab]}
         onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setActiveTab(permissions")}/          >"
-        <Icon;
+        <Icon
 name="key"
           size={20}
           color={activeTab === "permissions ? colors.primary: colors.textSecondary} />/        <Text style={[styles.tabText, activeTab === "permissions" && styles.activeTabText]} />/              访问权限"
         </Text>/      </TouchableOpacity>/
-      <TouchableOpacity;
+      <TouchableOpacity
 style={[styles.tab, activeTab === security" && styles.activeTab]}"
         onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setActiveTab("security)}/          >"
-        <Icon;
+        <Icon
 name="shield-check"
           size={20}
           color={activeTab === "security" ? colors.primary: colors.textSecondary} />/        <Text style={[styles.tabText, activeTab === security" && styles.activeTabText]} />/              安全设置"
         </Text>/      </TouchableOpacity>/    </View>/      ), []);
-  const renderRecordCard = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => (record: HealthDataRecord) => (;
-    <TouchableOpacity;
+  const renderRecordCard = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => (record: HealthDataRecord) => (;)
+    <TouchableOpacity
 key={record.id}
       style={styles.recordCard}
       onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setSelectedRecord(record)}/        >
-      <View style={styles.recordHeader}>/        <View style={[styles.recordIcon, { backgroundColor: getTypeColor(record.type) + "20   }]} />/          <Icon name={getTypeIcon(record.type)} size={24} color={getTypeColor(record.type)} />/        </View>/    "
+      <View style={styles.recordHeader}>/        <View style={{[styles.recordIcon, { backgroundColor: getTypeColor(record.type) + "20   }}]} />/          <Icon name={getTypeIcon(record.type)} size={24} color={getTypeColor(record.type)} />/        </View>/    "
         <View style={styles.recordInfo}>/          <Text style={styles.recordTitle}>{record.title}</Text>/          <Text style={styles.recordDescription}>{record.description}</Text>/          <Text style={styles.recordTimestamp}>/                {record.timestamp.toLocaleDateString("zh-CN")}
           </Text>/        </View>/
-        <View style={styles.recordStatus}>/              { record.verified  && (
-    <View style={styles.statusBadge}>/              <Icon name="check-circle" size={16} color={colors.success} />/              <Text style={styles.statusText}>已验证</Text>/            </View>/              )}
-          { record.encrypted  && (
-    <View style={styles.statusBadge}>/              <Icon name="lock" size={16} color={colors.primary} />/              <Text style={styles.statusText}>已加密</Text>/            </View>/              )}
+        <View style={styles.recordStatus}>/              {record.verified   && <View style={styles.statusBadge}>/              <Icon name="check-circle" size={16} color={colors.success} />/              <Text style={styles.statusText}>已验证</Text>/            </View>/              )}
+          {record.encrypted   && <View style={styles.statusBadge}>/              <Icon name="lock" size={16} color={colors.primary} />/              <Text style={styles.statusText}>已加密</Text>/            </View>/              )}
         </View>/      </View>/
-      <View style={styles.recordFooter}>/        <Text style={styles.recordHash}>哈希: {record.hash}</Text>/        <View style={styles.recordActions}>/          <Text style={styles.recordSize}>{record.size}</Text>/              <Switch;
+      <View style={styles.recordFooter}>/        <Text style={styles.recordHash}>哈希: {record.hash}</Text>/        <View style={styles.recordActions}>/          <Text style={styles.recordSize}>{record.size}</Text>/              <Switch
 value={record.shared}
             onValueChange={() = /> toggleRecordSharing(record.id)}/            trackColor={ false: colors.gray300, true: colors.primary + 50"}}"
             thumbColor={record.shared ? colors.primary: colors.gray400} />/          <Text style={styles.shareLabel}>共享</Text>/        </View>/      </View>/    </TouchableOpacity>/      ), []);
-  const renderPermissionCard = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => (permission: DataPermission) => (;
+  const renderPermissionCard = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => (permission: DataPermission) => (;)
     <View key={permission.id} style={styles.permissionCard}>/      <View style={styles.permissionHeader}>/        <View style={styles.permissionIcon}>/          <Icon name={getEntityIcon(permission.type)} size={24} color={colors.primary} />/        </View>/
         <View style={styles.permissionInfo}>/          <Text style={styles.permissionEntity}>{permission.entity}</Text>/          <Text style={styles.permissionType}>/            {permission.type === "hospital ? "医院" :"
             permission.type === doctor" ? "医生 :
@@ -187,23 +185,23 @@ value={record.shared}
             permission.type === "insurance ? "保险公司" : 家庭成员"}
           </Text>/          <Text style={styles.permissionExpiry}>/                到期时间: {permission.expiryDate.toLocaleDateString("zh-CN)}"
           </Text>/        </View>/
-        <Switch;
+        <Switch
 value={permission.active}
           onValueChange={() = /> togglePermission(permission.id)}/          trackColor={ false: colors.gray300, true: colors.primary + "50"}}
           thumbColor={permission.active ? colors.primary: colors.gray400} />/      </View>/
-      <View style={styles.permissionsList}>/        <Text style={styles.permissionsTitle}>授权范围:</Text>/            {permission.permissions.map(perm, index); => (
+      <View style={styles.permissionsList}>/        <Text style={styles.permissionsTitle}>授权范围:</Text>/            {permission.permissions.map(perm, index); => ()
           <Text key={index} style={styles.permissionItem}>• {perm}</Text>/            ))}
       </View>/    </View>/      ), []);
   //
     <View style={styles.securityContainer}>/      <View style={styles.securityCard}>/        <View style={styles.securityHeader}>/          <Icon name="fingerprint" size={32} color={colors.primary} />/          <Text style={styles.securityTitle}>生物识别认证</Text>/        </View>/        <Text style={styles.securityDescription}>/              使用指纹或面部识别来保护您的健康数据访问
-        </Text>/            <Switch;
+        </Text>/            <Switch
 value={true}
           trackColor={ false: colors.gray300, true: colors.primary + 50"}}"
           thumbColor={colors.primary} />/      </View>/
       <View style={styles.securityCard}>/        <View style={styles.securityHeader}>/          <Icon name="key-variant" size={32} color={colors.primary} />/          <Text style={styles.securityTitle}>私钥管理</Text>/        </View>/        <Text style={styles.securityDescription}>/              您的私钥安全存储在设备中，用于数据加密和身份验证
         </Text>/        <TouchableOpacity style={styles.securityButton} accessibilityLabel="TODO: 添加无障碍标签" />/          <Text style={styles.securityButtonText}>备份私钥</Text>/        </TouchableOpacity>/      </View>/
       <View style={styles.securityCard}>/        <View style={styles.securityHeader}>/          <Icon name="shield-lock" size={32} color={colors.primary} />/          <Text style={styles.securityTitle}>零知识证明</Text>/        </View>/        <Text style={styles.securityDescription}>/              在不泄露具体数据的情况下，证明您的健康状态符合特定条件
-        </Text>/            <Switch;
+        </Text>/            <Switch
 value={true}
           trackColor={ false: colors.gray300, true: colors.primary + "50}}"
           thumbColor={colors.primary} />/      </View>/    </View>/      ), []);
@@ -211,17 +209,17 @@ value={true}
     switch (activeTab) {
       case "records":
         performanceMonitor.recordRender();
-        return (;
+        return (;)
           <ScrollView style={styles.content} showsVerticalScrollIndicator={false} />/            <View style={styles.section}>/              <Text style={styles.sectionTitle}>健康数据记录</Text>/              <Text style={styles.sectionDescription}>/                    您的所有健康数据都经过加密存储在区块链上，确保数据的安全性和不可篡改性。;
               </Text>/                  {records.map(renderRecordCard)};
             </View>/          </ScrollView>/            ;)
       case permissions":"
-        return (;
+        return (;)
           <ScrollView style={styles.content} showsVerticalScrollIndicator={false} />/            <View style={styles.section}>/              <Text style={styles.sectionTitle}>数据访问权限</Text>/              <Text style={styles.sectionDescription}>/                    管理谁可以访问您的健康数据，您可以随时撤销或修改权限。;
               </Text>/                  {permissions.map(renderPermissionCard)};
             </View>/          </ScrollView>/            ;)
       case "security:"
-        return (;
+        return (;)
           <ScrollView style={styles.content} showsVerticalScrollIndicator={false} />/            <View style={styles.section}>/              <Text style={styles.sectionTitle}>安全设置</Text>/              <Text style={styles.sectionDescription}>/                    配置您的数据安全选项，确保只有您本人可以访问和管理健康数据。;
               </Text>/                  {renderSecuritySettings()};
             </View>/          </ScrollView>/            ;);
@@ -229,19 +227,18 @@ value={true}
         return nu;l;l;
     }
   }
-  return (;
-    <Modal;
+  return (;)
+    <Modal
 visible={visible}
       animationType="slide"
       presentationStyle="fullScreen"
       onRequestClose={onClose} />/      <View style={styles.container}>/        <View style={styles.header}>/          <TouchableOpacity onPress={onClose} style={styles.closeButton} accessibilityLabel="TODO: 添加无障碍标签" />/            <Icon name="close" size={24} color={colors.textPrimary} />/          </TouchableOpacity>/          <Text style={styles.title}>区块链健康数据</Text>/          <TouchableOpacity style={styles.helpButton} accessibilityLabel="TODO: 添加无障碍标签" />/            <Icon name="help-circle" size={24} color={colors.textPrimary} />/          </TouchableOpacity>/        </View>/
         {renderTabBar()}
         {renderContent()}
-        { isLoading  && (
-    <View style={styles.loadingOverlay}>/            <ActivityIndicator size="large" color={colors.primary} />/            <Text style={styles.loadingText}>处理中...</Text>/          </View>/            )};
+        {isLoading   && <View style={styles.loadingOverlay}>/            <ActivityIndicator size="large" color={colors.primary} />/            <Text style={styles.loadingText}>处理中...</Text>/          </View>/            )};
       </View>/    </Modal>/      ;);
 };
-const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,
+const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,)
   flex: 1,
     backgroundColor: colors.background;
   },

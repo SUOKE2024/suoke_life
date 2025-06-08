@@ -34,7 +34,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
   const [activeSection, setActiveSection] = useState('gateway');
   const [hasChanges, setHasChanges] = useState(false);
   const [saving, setSaving] = useState(false);
-  useEffect() => {
+  useEffect(() => {
     if (visible) {
       loadConfigurations();
     }
@@ -290,16 +290,16 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
       setConfigs(configSections);
     } catch (error) {
       console.error('Error loading configurations:', error);
-      Alert.alert("错误",加载配置失败');
+      Alert.alert("错误", "加载配置失败');
     }
   };
   const updateConfigValue = (sectionId: string, configKey: string, value: any) => {
-    setConfigs(prevConfigs =>
-      prevConfigs.map(section =>
+    setConfigs(prevConfigs =>)
+      prevConfigs.map(section =>)
         section.id === sectionId;
           ? {
               ...section,
-              configs: section.configs.map(config =>
+              configs: section.configs.map(config =>)
                 config.key === configKey ? { ...config, value } : config,
               ),
             }
@@ -338,17 +338,16 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
       sections: Object.keys(newConfigs),
       });
       setHasChanges(false);
-      Alert.alert("成功",配置已保存');
+      Alert.alert("成功", "配置已保存');
     } catch (error) {
       console.error('Error saving configurations:', error);
-      Alert.alert("错误",保存配置失败');
+      Alert.alert("错误", "保存配置失败');
     } finally {
       setSaving(false);
     }
   };
   const resetToDefaults = () => {
-    Alert.alert(
-      "重置配置",确定要重置所有配置到默认值吗？',
+    Alert.alert("重置配置", "确定要重置所有配置到默认值吗？',
       [
         {
       text: "取消",
@@ -369,7 +368,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
       switch (config.type) {
         case 'boolean':
           return (
-            <Switch;
+  <Switch
               value={config.value}
               onValueChange={(value) => updateConfigValue(sectionId, config.key, value)}
               trackColor={
@@ -380,13 +379,13 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
           );
         case 'number':
           return (
-            <View style={styles.numberInput}>
-              <TextInput;
+  <View style={styles.numberInput}>
+              <TextInput
                 style={styles.textInput}
                 value={String(config.value)}
                 onChangeText={(text) => {
                   const num = parseInt(text) || 0;
-                  const clampedValue = Math.max(
+                  const clampedValue = Math.max()
                     config.min || 0,
                     Math.min(config.max || Infinity, num),
                   );
@@ -395,14 +394,13 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
                 keyboardType="numeric"
                 placeholder="0"
               />
-              {config.unit && (
-                <Text style={styles.unitText}>{config.unit}</Text>
+              {config.unit  && <Text style={styles.unitText}>{config.unit}</Text>
               )}
             </View>
           );
         case 'string':
           return (
-            <TextInput;
+  <TextInput
               style={styles.textInput}
               value={config.value}
               onChangeText={(value) => updateConfigValue(sectionId, config.key, value)}
@@ -411,19 +409,19 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
           );
         case 'select':
           return (
-            <View style={styles.selectContainer}>
-              {config.options?.map((option => (
-                <TouchableOpacity;
+  <View style={styles.selectContainer}>
+              {config.options?.map((option => ()))
+                <TouchableOpacity
                   key={option.value}
-                  style={[
+                  style={{[
                     styles.selectOption, config.value === option.value && styles.selectedOption,
-                  ]}
+                  ]}}
                   onPress={() => updateConfigValue(sectionId, config.key, option.value)}
                 >
-                  <Text style={[
+                  <Text style={{[
                     styles.selectOptionText,
                     config.value === option.value && styles.selectedOptionText,
-                  ]}>
+                  ]}}>
                     {option.label}
                   </Text>
                 </TouchableOpacity>
@@ -435,32 +433,28 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
       }
     };
     return (
-      <View key={config.key} style={styles.configItem}>
+  <View key={config.key} style={styles.configItem}>
         <View style={styles.configHeader}>
           <Text style={styles.configLabel}>{config.label}</Text>
-          {config.type !== 'select' && (
-        <View style={styles.configInput}>
+          {config.type !== 'select'  && <View style={styles.configInput}>
               {renderInput()}
             </View>
           )}
         </View>
-        {config.description && (
-          <Text style={styles.configDescription}>{config.description}</Text>
+        {config.description  && <Text style={styles.configDescription}>{config.description}</Text>
         )}
-        {config.type === 'select' && (
-        <View style={styles.configSelectWrapper}>
+        {config.type === 'select'  && <View style={styles.configSelectWrapper}>
             {renderInput()}
           </View>
         )}
-        {config.type === 'number' && config.min !== undefined && config.max !== undefined && (
-          <Text style={styles.configRange}>
+        {config.type === 'number' && config.min !== undefined && config.max !== undefined  && <Text style={styles.configRange}>
             范围: {config.min} - {config.max} {config.unit || ''}
           </Text>
         )}
       </View>
     );
   };
-  const renderSection = (section: ConfigSection) => (
+  const renderSection = (section: ConfigSection) => ()
     <View key={section.id} style={styles.section}>
       <Text style={styles.sectionTitle}>
         {section.icon} {section.title}
@@ -471,12 +465,11 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
   if (!visible) return null;
   const activeConfigSection = configs.find(section => section.id === activeSection);
   return (
-    <View style={styles.container}>
+  <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>网关配置管理</Text>
         <View style={styles.headerActions}>
-          {hasChanges && (
-            <TouchableOpacity;
+          {hasChanges  && <TouchableOpacity
               style={styles.saveButton}
               onPress={saveConfigurations}
               disabled={saving}
@@ -486,14 +479,13 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               </Text>
             </TouchableOpacity>
           )}
-          <TouchableOpacity;
+          <TouchableOpacity
             style={styles.resetButton}
             onPress={resetToDefaults}
           >
             <Text style={styles.resetButtonText}>🔄 重置</Text>
           </TouchableOpacity>
-          {onClose && (
-            <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+          {onClose  && <TouchableOpacity style={styles.closeButton} onPress={onClose}>
               <Text style={styles.closeText}>✕</Text>
             </TouchableOpacity>
           )}
@@ -502,19 +494,19 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
       <View style={styles.body}>
         <View style={styles.sidebar}>
           <Text style={styles.sidebarTitle}>配置分类</Text>
-          {configs.map((section => (
-            <TouchableOpacity;
+          {configs.map((section => ()))
+            <TouchableOpacity
               key={section.id}
-              style={[
+              style={{[
                 styles.sidebarItem, activeSection === section.id && styles.activeSidebarItem,
-              ]}
+              ]}}
               onPress={() => setActiveSection(section.id)}
             >
               <Text style={styles.sidebarIcon}>{section.icon}</Text>
-              <Text style={[
+              <Text style={{[
                 styles.sidebarText,
                 activeSection === section.id && styles.activeSidebarText,
-              ]}>
+              ]}}>
                 {section.title}
               </Text>
             </TouchableOpacity>
@@ -524,8 +516,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
           {activeConfigSection && renderSection(activeConfigSection)}
         </ScrollView>
       </View>
-      {hasChanges && (
-        <View style={styles.changesBanner}>
+      {hasChanges  && <View style={styles.changesBanner}>
           <Text style={styles.changesText}>⚠️ 有未保存的更改</Text>
         </View>
       )}

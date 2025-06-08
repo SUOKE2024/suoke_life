@@ -46,7 +46,7 @@ import React from "react";
   }
 };
 //   ;
-c ;(; /
+c ;(; /)
   config?: Partial<AgentManagerConfig />/    ) => {}
   const { AgentManager   } = await import("./AgentManager.;j;s";);/      const manager = new AgentManager(confi;g;);
   await manager.initialize;
@@ -106,28 +106,28 @@ c ;(; /
     title: "健康助手 & 首页聊天频道版主",
     description: "专注于健康管理、中医四诊合参、智能问诊和无障碍服务",
     primaryChannel: "chat",
-    specialties: ["中医诊断",健康分析", "语音交互",无障碍服务"]
+    specialties: ["中医诊断", "健康分析", "语音交互", "无障碍服务"]
   },
   xiaoke: {,
   name: "小克",
     title: "SUOKE频道版主",
     description: "负责服务订阅、农产品预制、供应链管理等商业化服务",
     primaryChannel: "suoke",
-    specialties: ["名医匹配",服务推荐", "供应链管理",第三方集成"]
+    specialties: ["名医匹配", "服务推荐", "供应链管理", "第三方集成"]
   },
   laoke: {,
   name: "老克",
     title: "探索频道版主",
     description: "负责知识传播、培训和博物馆导览，兼任玉米迷宫NPC",
     primaryChannel: "explore",
-    specialties: ["知识管理",教育培训", "内容策展",游戏引导"]
+    specialties: ["知识管理", "教育培训", "内容策展", "游戏引导"]
   },
   soer: {,
   name: "索儿",
     title: "LIFE频道版主",
     description: "提供生活健康管理、陪伴服务和数据整合分析",
     primaryChannel: "life",
-    specialties: ["生活方式管理",情感支持", "数据整合",健康陪伴"]
+    specialties: ["生活方式管理", "情感支持", "数据整合", "健康陪伴"]
   }
 } as const;
 //   ;
@@ -198,7 +198,7 @@ c ;(; /
   description: "索克生活四智能体协作系统",
   architecture: "distributed_autonomous_collaboration",
   supportedLanguages: ["zh-CN",zh-TW", "en-US"],
-  supportedDialects: ["普通话",粤语", "闽南语",上海话"],
+  supportedDialects: ["普通话", "粤语", "闽南语", "上海话"],
   tcmIntegration: true,
   modernMedicineIntegration: true,
   blockchainSupport: true,
@@ -220,7 +220,7 @@ e, /    ;
   capability: string;): boolean => {}
   // 记录渲染性能
 performanceMonitor.recordRender();
-  return (AGENT_CAPABILITIES[agentType] as readonly string[]).includes(;
+  return (AGENT_CAPABILITIES[agentType] as readonly string[]).includes(;)
     capabilit;y;);
 };
 //   ;
@@ -258,7 +258,7 @@ L;S;): AgentType => {/    }
     return `状态: ${status;}`;
   }
   const uptime = status.uptime ? Math.floor(status.uptime / 100;0;);: 0;/  const hours = Math.floor(uptime / 360;0;);/  const minutes = Math.floor(uptime % 360;0;); / 60);// return `$ {status.agentType || "unknown"}: ${status.status || "unknown";
-  } (${hours}h ${minutes}m, 负载: ${(status.currentLoad || 0) * 100).toFixed(;
+  } (${hours}h ${minutes}m, 负载: ${(status.currentLoad || 0) * 100).toFixed(;)
     1)}%;)`;
 };
 //   ;
@@ -278,28 +278,28 @@ L;S;): AgentType => {/    }
   return statuses.length > 0 ? (healthyCount / statuses.length) * 100 ;: ;0;/    };
 //   ;
 >  ;{/
-  return (;
+  return (;)
     agent &&;
     typeof agent.chat === "function" &&
     typeof agent.performTCMDiagnosis === "function;"
   ;);
 };
 export const isXiaokeAgent = (agent: unknown): boolean =;
->  ;{return (;
+>  ;{return (;)
     agent &&;
     typeof agent.matchDoctors === "function" &&;
     typeof agent.recommendServices === "function;"
   ;);
 };
 export const isLaokeAgent = (agent: unknown): boolean =;
->  ;{return (;
+>  ;{return (;)
     agent &&;
     typeof agent.searchTCMKnowledge === "function" &&;
     typeof agent.generatePersonalizedLearningPath === "function;"
   ;);
 };
 export const isSoerAgent = (agent: unknown): boolean =;
->  ;{return (;
+>  ;{return (;)
     agent &&;
     typeof agent.manageLifestyle === "function" &&;
     typeof agent.provideEmotionalSupport === "function;"

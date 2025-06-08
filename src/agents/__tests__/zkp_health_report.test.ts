@@ -172,7 +172,7 @@ describe('零知识证明性能测试', () => {
     expect(averageTime).toBeLessThan(1);
   });
   it('应该高效处理大数据集', () => {
-    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);)
     const startTime = Date.now();
     // 使用大数据集测试
     mockZKPHealthReportGenerator(largeDataset);

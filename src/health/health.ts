@@ -24,7 +24,7 @@ export const healthCheck = async (req: Request, res: Response) =;
         external_apis: await checkExternalAPIs()}
     ;};
     // 如果任何服务不可用，标记为不健康
-const isUnhealthy = Object.values(status.services).some(;
+const isUnhealthy = Object.values(status.services).some(;)
       (servic;e;) => service === "disconnected" || service === "unavailable"
     )
     if (isUnhealthy) {

@@ -6,7 +6,7 @@ import React from 'react';
 import { render } from '@testing-library/react-native';
 // 简单的测试组件
 const SimpleTestComponent = () => {
-  return React.createElement('View', { testID: 'test-view' },
+  return React.createElement('View', { testID: 'test-view' },)
     React.createElement('Text', { testID: 'test-text' }, '索克生活测试')
   );
 };
@@ -105,7 +105,7 @@ describe('索克生活简单端到端测试', () => {
   describe('集成测试', () => {
     it('多个组件能够协同工作', () => {
       const MultiComponent = () => {
-        return React.createElement('View', { testID: 'multi-view' },
+        return React.createElement('View', { testID: 'multi-view' },)
           React.createElement('Text', { testID: 'title' }, '索克生活'),
           React.createElement('Text', { testID: 'subtitle' }, '健康管理平台')
         );

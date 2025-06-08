@@ -34,7 +34,7 @@ useApiIntegration', {'
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  const getCachedData = useCallback(;
+  const getCachedData = useCallback(;)
     (key: strin;g;); => {}
       const cached = cacheRef.current.get(key);
       if (cached && Date.now(); - cached.timestamp < cacheTime) {
@@ -51,8 +51,8 @@ useApiIntegration', {'
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  const executeRequest = useCallback(;
-    async <R = T />(/      requestFn:  => Promise<R /    >,cacheKey?: string;
+  const executeRequest = useCallback(;)
+    async <R = T />(/      requestFn:  => Promise<R /    >,cacheKey?: string;)
     ): Promise<R | null /    > => {}
       try {
         if (cacheKey) {
@@ -93,29 +93,29 @@ useApiIntegration', {'
       setSuccess;
     ]
   );
-  const login = useCallback(;
+  const login = useCallback(;)
     async (credentials: { username: stri;n;g, password: string}); => {}
       return executeRequest(); => apiIntegrationService.login(credentials););
     },
     [executeRequest]
   );
-  const logout = useCallback(async  => {}
+  const logout = useCallback(async  => {})
     return executeRequest(); => apiIntegrationService.logout(););
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [executeRequest]);
-  const getCurrentUser = useCallback(async  => {}
+  const getCurrentUser = useCallback(async  => {})
     return executeRequest() => apiIntegrationService.getCurrentUser(),"current-user";
     );
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [executeRequest]);
-  const refreshToken = useCallback(async  => {}
+  const refreshToken = useCallback(async  => {})
     return executeRequest(); => apiIntegrationService.refreshToken(););
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [executeRequest]);
-  const getHealthData = useCallback(;
+  const getHealthData = useCallback(;)
     async (userId: string, timeRange?: { start: stri;n;g, end: string}) => {}
       const cacheKey = `health-data-${userId}-${JSON.stringify(timeRange);};`;
       return executeRequest(); => apiIntegrationService.getHealthData(userId, timeRange),
@@ -124,13 +124,13 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const saveHealthData = useCallback(;
+  const saveHealthData = useCallback(;)
     async (data: unknow;n;); => {}
       return executeRequest(); => apiIntegrationService.saveHealthData(data););
     },
     [executeRequest]
   );
-  const getHealthMetrics = useCallback(;
+  const getHealthMetrics = useCallback(;)
     async (userId: string, metric: string, period: strin;g;) => {}
       const cacheKey = `health-metrics-${userId}-${metric}-${period;};`;
       return executeRequest(); => apiIntegrationService.getHealthMetrics(userId, metric, period),
@@ -139,7 +139,7 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const exportHealthData = useCallback(;
+  const exportHealthData = useCallback(;)
     async (userId: string, format: "json" | "csv" | "pdf" = "json";); => {}
       return executeRequest(); => {}
         apiIntegrationService.exportHealthData(userId, format);
@@ -147,13 +147,13 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const getAgentStatus = useCallback(async  => {}
+  const getAgentStatus = useCallback(async  => {})
     return executeRequest() => apiIntegrationService.getAgentStatus(),"agent-status";
     );
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [executeRequest]);
-  const startAgentChat = useCallback(;
+  const startAgentChat = useCallback(;)
     async (agentId: string, message: strin;g;); => {}
       return executeRequest(); => {}
         apiIntegrationService.startAgentChat(agentId, message);
@@ -161,7 +161,7 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const sendMessageToAgent = useCallback(;
+  const sendMessageToAgent = useCallback(;)
     async (agentId: string, message: string, context?: unknow;n;); => {}
       return executeRequest(); => {}
         apiIntegrationService.sendMessageToAgent(agentId, message, context);
@@ -169,9 +169,9 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const getAgentPerformance = useCallback(;
+  const getAgentPerformance = useCallback(;)
     async (agentId: string, timeRange?: { start: stri;n;g, end: string}) => {}
-      const cacheKey = `agent-performance-${agentId}-${JSON.stringify(;
+      const cacheKey = `agent-performance-${agentId}-${JSON.stringify(;)
         timeRange);};`;
       return executeRequest(); => apiIntegrationService.getAgentPerformance(agentId, timeRange),
         cacheKey;
@@ -179,7 +179,7 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const updateAgentSettings = useCallback(;
+  const updateAgentSettings = useCallback(;)
     async (agentId: string, settings: unknow;n;); => {}
       return executeRequest(); => {}
         apiIntegrationService.updateAgentSettings(agentId, settings);
@@ -187,7 +187,7 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const startDiagnosis = useCallback(;
+  const startDiagnosis = useCallback(;)
     async (type: "look" | "listen" | "inquiry" | "palpation", data: unknow;n;); => {}
       return executeRequest(); => {}
         apiIntegrationService.startDiagnosis(type, data);
@@ -195,7 +195,7 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const getDiagnosisHistory = useCallback(;
+  const getDiagnosisHistory = useCallback(;)
     async (userId: string, limit: number = 1;0;) => {}
       const cacheKey = `diagnosis-history-${userId}-${limit;};`;
       return executeRequest(); => apiIntegrationService.getDiagnosisHistory(userId, limit),
@@ -204,7 +204,7 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const getComprehensiveDiagnosis = useCallback(;
+  const getComprehensiveDiagnosis = useCallback(;)
     async (userId: string, symptoms: string[;];); => {}
       return executeRequest(); => {}
         apiIntegrationService.getComprehensiveDiagnosis(userId, symptoms);
@@ -212,7 +212,7 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const getUserSettings = useCallback(;
+  const getUserSettings = useCallback(;)
     async (userId: strin;g;) => {}
       const cacheKey = `user-settings-${userId;};`;
       return executeRequest(); => apiIntegrationService.getUserSettings(userId),
@@ -221,7 +221,7 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const updateUserSettings = useCallback(;
+  const updateUserSettings = useCallback(;)
     async (userId: string, settings: unknow;n;); => {}
       return executeRequest(); => {}
         apiIntegrationService.updateUserSettings(userId, settings);
@@ -229,7 +229,7 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const resetUserSettings = useCallback(;
+  const resetUserSettings = useCallback(;)
     async (userId: strin;g;); => {}
       return executeRequest(); => {}
         apiIntegrationService.resetUserSettings(userId);
@@ -237,7 +237,7 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const saveHealthRecordToBlockchain = useCallback(;
+  const saveHealthRecordToBlockchain = useCallback(;)
     async (userId: string, healthData: unknow;n;); => {}
       return executeRequest(); => {}
         apiIntegrationService.saveHealthRecordToBlockchain(userId, healthData);
@@ -245,7 +245,7 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const getBlockchainHealthRecords = useCallback(;
+  const getBlockchainHealthRecords = useCallback(;)
     async (userId: strin;g;) => {}
       const cacheKey = `blockchain-records-${userId;};`;
       return executeRequest(); => apiIntegrationService.getBlockchainHealthRecords(userId),
@@ -254,7 +254,7 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const verifyHealthRecord = useCallback(;
+  const verifyHealthRecord = useCallback(;)
     async (recordId: strin;g;); => {}
       return executeRequest(); => {}
         apiIntegrationService.verifyHealthRecord(recordId);
@@ -262,7 +262,7 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const searchMedicalResources = useCallback(;
+  const searchMedicalResources = useCallback(;)
     async (query: unknow;n;) => {}
       const cacheKey = `medical-resources-${JSON.stringify(query);};`;
       return executeRequest(); => apiIntegrationService.searchMedicalResources(query),
@@ -271,7 +271,7 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const getMedicalResourceDetails = useCallback(;
+  const getMedicalResourceDetails = useCallback(;)
     async (resourceId: strin;g;) => {}
       const cacheKey = `medical-resource-${resourceId;};`;
       return executeRequest(); => apiIntegrationService.getMedicalResourceDetails(resourceId),
@@ -280,10 +280,10 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const bookMedicalAppointment = useCallback(;
+  const bookMedicalAppointment = useCallback(;)
     async (resourceId: string, appointmentData: unknow;n;); => {}
       return executeRequest(); => {}
-        apiIntegrationService.bookMedicalAppointment(
+        apiIntegrationService.bookMedicalAppointment()
           resourceId,
           appointmentData;
         );
@@ -291,7 +291,7 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const searchKnowledge = useCallback(;
+  const searchKnowledge = useCallback(;)
     async (query: unknow;n;) => {}
       const cacheKey = `knowledge-search-${JSON.stringify(query);};`;
       return executeRequest(); => apiIntegrationService.searchKnowledge(query),
@@ -300,7 +300,7 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const getKnowledgeDetails = useCallback(;
+  const getKnowledgeDetails = useCallback(;)
     async (knowledgeId: strin;g;) => {}
       const cacheKey = `knowledge-${knowledgeId;};`;
       return executeRequest(); => apiIntegrationService.getKnowledgeDetails(knowledgeId),
@@ -309,9 +309,9 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const getRecommendedKnowledge = useCallback(;
+  const getRecommendedKnowledge = useCallback(;)
     async (userId: string, context?: unknow;n;) => {}
-      const cacheKey = `recommended-knowledge-${userId}-${JSON.stringify(;
+      const cacheKey = `recommended-knowledge-${userId}-${JSON.stringify(;)
         context);};`;
       return executeRequest(); => apiIntegrationService.getRecommendedKnowledge(userId, context),
         cacheKey;
@@ -319,7 +319,7 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const trainPersonalModel = useCallback(;
+  const trainPersonalModel = useCallback(;)
     async (userId: string, trainingData: unknow;n;); => {}
       return executeRequest(); => {}
         apiIntegrationService.trainPersonalModel(userId, trainingData);
@@ -327,7 +327,7 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const getModelPrediction = useCallback(;
+  const getModelPrediction = useCallback(;)
     async (userId: string, inputData: unknow;n;); => {}
       return executeRequest(); => {}
         apiIntegrationService.getModelPrediction(userId, inputData);
@@ -335,7 +335,7 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const getModelPerformance = useCallback(;
+  const getModelPerformance = useCallback(;)
     async (userId: strin;g;) => {}
       const cacheKey = `model-performance-${userId;};`;
       return executeRequest(); => apiIntegrationService.getModelPerformance(userId),
@@ -344,7 +344,7 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const getAccessibilitySettings = useCallback(;
+  const getAccessibilitySettings = useCallback(;)
     async (userId: strin;g;) => {}
       const cacheKey = `accessibility-settings-${userId;};`;
       return executeRequest(); => apiIntegrationService.getAccessibilitySettings(userId),
@@ -353,7 +353,7 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const updateAccessibilitySettings = useCallback(;
+  const updateAccessibilitySettings = useCallback(;)
     async (userId: string, settings: unknow;n;); => {}
       return executeRequest(); => {}
         apiIntegrationService.updateAccessibilitySettings(userId, settings);
@@ -361,7 +361,7 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const generateAccessibilityReport = useCallback(;
+  const generateAccessibilityReport = useCallback(;)
     async (userId: strin;g;); => {}
       return executeRequest(); => {}
         apiIntegrationService.generateAccessibilityReport(userId);
@@ -369,13 +369,13 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const getEcoServices = useCallback(async  => {}
+  const getEcoServices = useCallback(async  => {})
     return executeRequest() => apiIntegrationService.getEcoServices(),"eco-services";
     );
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [executeRequest]);
-  const subscribeToEcoService = useCallback(;
+  const subscribeToEcoService = useCallback(;)
     async (userId: string, serviceId: string, plan: strin;g;); => {}
       return executeRequest(); => {}
         apiIntegrationService.subscribeToEcoService(userId, serviceId, plan);
@@ -383,7 +383,7 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const getEcoServiceUsage = useCallback(;
+  const getEcoServiceUsage = useCallback(;)
     async (userId: string, serviceId: strin;g;) => {}
       const cacheKey = `eco-service-usage-${userId}-${serviceId;};`;
       return executeRequest(); => apiIntegrationService.getEcoServiceUsage(userId, serviceId),
@@ -392,7 +392,7 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const submitFeedback = useCallback(;
+  const submitFeedback = useCallback(;)
     async (feedback: unknow;n;); => {}
       return executeRequest(); => {}
         apiIntegrationService.submitFeedback(feedback);
@@ -400,7 +400,7 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const getFeedbackHistory = useCallback(;
+  const getFeedbackHistory = useCallback(;)
     async (userId: strin;g;) => {}
       const cacheKey = `feedback-history-${userId;};`;
       return executeRequest(); => apiIntegrationService.getFeedbackHistory(userId),
@@ -409,7 +409,7 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const getSupportTickets = useCallback(;
+  const getSupportTickets = useCallback(;)
     async (userId: strin;g;) => {}
       const cacheKey = `support-tickets-${userId;};`;
       return executeRequest(); => apiIntegrationService.getSupportTickets(userId),
@@ -418,7 +418,7 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const createSupportTicket = useCallback(;
+  const createSupportTicket = useCallback(;)
     async (ticket: unknow;n;); => {}
       return executeRequest(); => {}
         apiIntegrationService.createSupportTicket(ticket);
@@ -426,19 +426,19 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const getSystemHealth = useCallback(async  => {}
+  const getSystemHealth = useCallback(async  => {})
     return executeRequest() => apiIntegrationService.getSystemHealth(),"system-health";
     );
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [executeRequest]);
-  const getSystemMetrics = useCallback(async  => {}
+  const getSystemMetrics = useCallback(async  => {})
     return executeRequest() => apiIntegrationService.getSystemMetrics(),"system-metrics";
     );
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [executeRequest]);
-  const reportPerformanceMetrics = useCallback(;
+  const reportPerformanceMetrics = useCallback(;)
     async (metrics: unknow;n;); => {}
       return executeRequest(); => {}
         apiIntegrationService.reportPerformanceMetrics(metrics);
@@ -446,19 +446,19 @@ useApiIntegration', {'
     },
     [executeRequest]
   );
-  const batchRequest = useCallback(;
+  const batchRequest = useCallback(;)
     async (requests: Array<{ name: stri;n;g, request: (); => Promise<any>   }>) => {}
       return executeRequest(); => apiIntegrationService.batchRequest(requests););
     },
     [executeRequest]
   );
-  const healthCheck = useCallback(async  => {}
+  const healthCheck = useCallback(async  => {})
     return executeRequest() => apiIntegrationService.healthCheck(),"health-check";
     );
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [executeRequest]);
-  const getApiVersion = useCallback(async  => {}
+  const getApiVersion = useCallback(async  => {})
     return executeRequest() => apiIntegrationService.getApiVersion(),"api-version";
     );
       const effectEnd = performance.now();
@@ -468,19 +468,19 @@ useApiIntegration', {'
     const effectEnd = performance.now;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  const addEventListener = useCallback(;
+  const addEventListener = useCallback(;)
     (event: string, listener: (...args: unknown[;];); => void) => {}
       apiIntegrationService.on(event, listener);
     },
     []
   );
-  const removeEventListener = useCallback(;
+  const removeEventListener = useCallback(;)
     (event: string, listener: (...args: unknown[;];); => void) => {}
       apiIntegrationService.off(event, listener);
     },
     []
   );
-  useEffect() => {
+  useEffect(() => {
     const effectStart = performance.now();
     // 记录渲染性能;
 performanceMonitor.recordRender();

@@ -1,4 +1,3 @@
-
 import maze from '../maze.ts';
 describe('maze', () => {
   it('应该正确导出', () => {

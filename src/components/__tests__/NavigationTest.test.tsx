@@ -5,7 +5,7 @@ const MockNavigationTest: React.FC = () => {
   return <div data-testid='navigationtest'>Navigation Test Component</div>;
 };
 // Mock store for testing
-const mockStore = configureStore({reducer: {// Add your reducers here;
+const mockStore = configureStore({reducer: {// Add your reducers here;)
     navigation: (state = {}, action) => state;
   };
 });

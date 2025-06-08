@@ -46,7 +46,7 @@ export interface OptimizationResult {
   private monitoringInterval?: ReturnType<typeof setInterval>;
   static getInstance(): MemoryManager {
   // 性能监控
-const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackRender: true,
+const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackRender: true,)
     trackMemory: false,
     warnThreshold: 100, // ms };);
     if (!MemoryManager.instance) {
@@ -219,7 +219,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
         }
       }
     }
-    .toFixed(
+    .toFixed()
         2;
       )}MB`
     );
@@ -241,7 +241,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
     }
     return NetworkOptimizer.instance;
   }
-  async optimizedFetch(url: string,
+  async optimizedFetch(url: string,)
     options: RequestInit = {}): Promise<Response /    >  {
     const requestKey = `${url}_${JSON.stringify(options);}`;
     if (this.requestQueue.has(requestKey)) {
@@ -258,7 +258,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
       throw error;
     }
   }
-  private async executeRequest(url: string,
+  private async executeRequest(url: string,)
     options: RequestInit);: Promise<Response /    >  {
     let lastError: Error | null = null;
     for (let attempt = 0 attempt <= this.retryConfig.maxRetries; attempt++) {
@@ -267,14 +267,14 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
         const timeoutId = setTimeout(); => {}
           controller.abort();
         }, PERFORMANCE_CONFIG.NETWORK_TIMEOUT);
-        const response = await fetch(url, {...options,
+        const response = await fetch(url, {...options,)
           signal: controller.sign;a;l;};);
         clearTimeout(timeoutId);
         if (response.ok) {
           return respon;s;e;
-        } else if (response.status >= 500 &&
+        } else if (response.status >= 500 &&)
           attempt < this.retryConfig.maxRetries) {
-          await this.delay(
+          await this.delay()
             this.retryConfig.retryDelay *
               Math.pow(this.retryConfig.backoffMultiplier, attempt;);
           );
@@ -284,11 +284,11 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
         }
       } catch (error) {
         lastError = error instanceof Error ? error : new Error("Unknown error");
-        if (
+        if ()
           attempt < this.retryConfig.maxRetries &&
           this.shouldRetry(lastError);
         ) {
-          await this.delay(
+          await this.delay()
             this.retryConfig.retryDelay *
               Math.pow(this.retryConfig.backoffMultiplier, attemp;t;);
           );
@@ -300,7 +300,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
   }
   private shouldRetry(error: Error): boolean  {
     / 记录渲染性能/     performanceMonitor.recordRender();
-        return (;
+        return (;)
       error.name === "AbortError" ||;
       error.message.includes("network;";) ||
       error.message.includes("timeout");
@@ -333,7 +333,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
     }
     this.isProcessing = true;
     InteractionManager.runAfterInteractions(); => {}
-      const batch = this.renderQueue.splice(;
+      const batch = this.renderQueue.splice(;)
         0,
         PERFORMANCE_CONFIG.RENDER_BATCH_SIZ;E;);
       batch.forEach(renderFunction); => {}
@@ -348,7 +348,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
       }
     });
   }
-  debounce<T extends (...args: unknown[]) =  / > any>( * , func: T,
+  debounce<T extends (...args: unknown[]) =  / > any>( * , func: T,)
     delay: number = PERFORMANCE_CONFIG.DEBOUNCE_DELAY): (...args: Parameters<T>) => void  {
     let timeoutId: ReturnType<typeof setTimeout>;
     return (...args: Parameters<T>) => {}
@@ -356,7 +356,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
       timeoutId = setTimeout(); => func(...args), delay);
     };
   }
-  throttle<T extends (...args: unknown[]) =  / > any>( * , func: T,
+  throttle<T extends (...args: unknown[]) =  / > any>( * , func: T,)
     delay: number): (...args: Parameters<T>) => void  {
     let lastCall = 0;
     return (...args: Parameters<T>) => {}
@@ -421,7 +421,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
     this.startPeriodicOptimization();
     this.setupMemoryWarning();
   }
-  async set<T  /     >(key: string,
+  async set<T  /     >(key: string,)
     data: T,
     options?: Partial<CacheConfig />/      ): Promise<void>  {
     const timestamp = Date.now;
@@ -482,9 +482,9 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
     await AsyncStorage.multiRemove(await this.getPersistentCacheKeys);
     this.updateMetrics();
   }
-  async preloadData(keys: string[],
+  async preloadData(keys: string[],)
     priority: "high" | "medium" | "low" = "medium");: Promise<void>  {
-    const promises = keys.map(async (key); => {}
+    const promises = keys.map(async (key); => {})
       if (!this.cache.has(key)) {
         if (priority === "high") {
           return this.loadDataImmediately(key;);
@@ -495,7 +495,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
     });
     await Promise.allSettled(promise;s;);
   }
-  async deduplicateRequest<T  /     >(
+  async deduplicateRequest<T  /     >()
     key: string,
     requestFn: () => Promise<T>): Promise<T> {
     if (this.requestQueue.has(key)) {
@@ -507,14 +507,14 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
     this.requestQueue.set(key, promise);
     return promi;s;e;
   }
-  optimizeImageUrl(url: string,
+  optimizeImageUrl(url: string,)
     options?: Partial<ImageOptimizationConfig />/      ): string  {
     const config = { ...this.imageConfig, ...option;s ;};
     const pixelRatio = Platform.select({ios: 2,android: 2,default: 1};);
-    const optimizedWidth = Math.min(;
+    const optimizedWidth = Math.min(;)
       config.maxWidth * pixelRatio,
       config.maxWidt;h;);
-    const optimizedHeight = Math.min(;
+    const optimizedHeight = Math.min(;)
       config.maxHeight * pixelRatio,
       config.maxHeigh;t;);
     const params = new URLSearchParams({w: optimizedWidth.toString(),h: optimizedHeight.toString(),q: (config.quality * 100).toString(),f: config.format};)
@@ -534,13 +534,13 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
       return this.deduplicateRequest(url,  => fetch(url, optimizedOptions));
     };
   }
-  async batchOperations<T  /     >(
+  async batchOperations<T  /     >()
     operations: Array<() => Promise<T> />,/    batchSize: number = 5): Promise<T[] /    > {
     const results: T[] = [];
     for (let i = 0; i < operations.length; i += batchSize) {
       const batch = operations.slice(i, i + batchSiz;e;);
       const batchResults = await Promise.allSettled(batch.map(;(;o;p;); => op();));
-      batchResults.forEach(result) => {}
+      batchResults.forEach(((result) => {}))
         if (result.status === "fulfilled") {
           results.push(result.value);
         }
@@ -575,7 +575,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
     }
   }
   private getCurrentCacheSize(): number {
-    return Array.from(this.cache.values).reduce(;
+    return Array.from(this.cache.values).reduce((acc, item) => acc + item, 0);
       (total, item); => total + item.size,
       0;
     );
@@ -665,7 +665,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
     if (cacheSize <= targetSize) {
       return;
     }
-    const sortedEntries = Array.from(this.cache.entries).sort(;
+    const sortedEntries = Array.from(this.cache.entries).sort(;)
       ([ a], [ b]); => a.lastAccessed - b.lastAccessed;
     );
     let currentSize = cacheSi;z;e;
@@ -681,7 +681,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
     }
   }
   private async compressLargeCacheItems(): Promise<void> {
-    const largeItems = Array.from(this.cache.entries).filter(;
+    const largeItems = Array.from(this.cache.entries).filter(;)
       ([ item]); => item.size > 1 && !item.compressed;
     );  for (const [key, item] of largeItems) {
       try {
@@ -709,7 +709,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
   }
   private async loadDataImmediately(key: string): Promise<void>  {
     }
-  private async scheduleDataLoading(key: string,
+  private async scheduleDataLoading(key: string,)
     priority: "medium" | "low"): Promise<void>  {
     const delay = priority === "medium" ? 1000 : 50 ;
     setTimeout() => {;
@@ -743,14 +743,14 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
   remove: (key: string) => performanceOptimizer.remove(key),
   clear: () => performanceOptimizer.clear()};
 export const optimizeImage = ;
-(;
+(;)
   url: string,
   options?: Partial<ImageOptimizationConfig />/    ) => performanceOptimizer.optimizeImageUrl(url, options);
 export const createOptimizedFetch = () ;
 =;>;
   performanceOptimizer.createOptimizedFetch();
 export const batchOperations = <T   ; ///  >;
->;(;
+>;(;)
   operations: Array<() => Promise<T> />,/  batchSize?: number
 ) => performanceOptimizer.batchOperations(operations, batchSize);
 //;

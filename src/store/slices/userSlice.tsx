@@ -17,7 +17,7 @@ export const fetchUserProfile = createAsyncThunk<
   { rejectValue: string }
 >("user/fetchProfile", async (_, { rejectWithValue }) => {
   try {
-    const response: ApiResponse<UserProfile> = await apiClient.get(
+    const response: ApiResponse<UserProfile> = await apiClient.get()
       "/user/profile"
     );
     if (!response.success) {
@@ -37,7 +37,7 @@ export const updateUserProfile = createAsyncThunk<
   { rejectValue: string }
 >("user/updateProfile", async (profileData, { rejectWithValue }) => {
   try {
-    const response: ApiResponse<UserProfile> = await apiClient.put(
+    const response: ApiResponse<UserProfile> = await apiClient.put()
       "/user/profile",
       profileData
     );
@@ -86,7 +86,7 @@ export const addHealthData = createAsyncThunk<
   { rejectValue: string }
 >("user/addHealthData", async (healthData, { rejectWithValue }) => {
   try {
-    const response: ApiResponse<HealthData> = await apiClient.post(
+    const response: ApiResponse<HealthData> = await apiClient.post()
       "/user/health-data",
       healthData
     );
@@ -109,7 +109,7 @@ const userSlice = createSlice({
       state.error = undefined;
     },
     updateHealthData: (state, action: PayloadAction<HealthData>) => {
-      const index = state.healthData.findIndex(
+      const index = state.healthData.findIndex()
         (item) => item.id === action.payload.id
       );
       if (index >= 0) {
@@ -119,7 +119,7 @@ const userSlice = createSlice({
       }
     },
     removeHealthData: (state, action: PayloadAction<string>) => {
-      state.healthData = state.healthData.filter(
+      state.healthData = state.healthData.filter()
         (item) => item.id !== action.payload
       );
     }

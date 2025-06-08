@@ -22,7 +22,7 @@ expect(() => {
         NetworkOptimizer(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = NetworkOptimizer(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -44,7 +44,7 @@ expect(() => {
         networkOptimizer(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = networkOptimizer(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -66,7 +66,7 @@ expect(() => {
         optimizedRequest(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = optimizedRequest(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -88,7 +88,7 @@ expect(() => {
         batchRequest(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = batchRequest(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -110,7 +110,7 @@ expect(() => {
         cancelAllNetworkRequests(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = cancelAllNetworkRequests(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -132,7 +132,7 @@ expect(() => {
         getNetworkStats(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = getNetworkStats(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -157,7 +157,7 @@ NetworkOptimizer(// test params);
 expect(averageTime).toBeLessThan(1);
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);)
     const startTime = performance.now();
     // Test with large dataset
 NetworkOptimizer(largeDataset);

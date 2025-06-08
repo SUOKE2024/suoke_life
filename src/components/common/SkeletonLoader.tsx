@@ -17,9 +17,9 @@ const SkeletonItem: React.FC<{,
   style?: any;
 }> = ({ width, height, borderRadius = 4, style }) => {
   const animatedValue = React.useRef(new Animated.Value(0)).current;
-  React.useEffect() => {
-    const animation = Animated.loop(
-      Animated.sequence([
+  React.useEffect(() => {
+    const animation = Animated.loop()
+      Animated.sequence([)
         Animated.timing(animatedValue, {
           toValue: 1,
           duration: 1000,
@@ -40,14 +40,14 @@ const SkeletonItem: React.FC<{,
     outputRange: ["#E1E9EE",#F2F8FC'],
   });
   return (
-    <Animated.View;
-      style={[
+  <Animated.View;
+      style={{[
         {
           width,
           height,
           backgroundColor,
           borderRadius,
-        },
+        }},
         style,
       ]}
     />
@@ -56,8 +56,8 @@ const SkeletonItem: React.FC<{,
 // 聊天列表骨架屏
 const ChatListSkeleton: React.FC<{ count: number }> = ({ count }) => {
   return (
-    <View style={styles.container}>
-      {Array.from({ length: count }).map((_, index) => (
+  <View style={styles.container}>
+      {Array.from({ length: count }).map((_, index) => ())
         <View key={index} style={styles.chatItem}>
           {}
           <SkeletonItem width={50} height={50} borderRadius={25} />
@@ -81,8 +81,8 @@ const ChatListSkeleton: React.FC<{ count: number }> = ({ count }) => {
 // 卡片列表骨架屏
 const CardListSkeleton: React.FC<{ count: number }> = ({ count }) => {
   return (
-    <View style={styles.container}>
-      {Array.from({ length: count }).map((_, index) => (
+  <View style={styles.container}>
+      {Array.from({ length: count }).map((_, index) => ())
         <View key={index} style={styles.cardItem}>
           {}
           <SkeletonItem width={screenWidth - 32} height={120} style={ marginBottom: 12 }} />
@@ -99,7 +99,7 @@ const CardListSkeleton: React.FC<{ count: number }> = ({ count }) => {
 // 个人资料骨架屏
 const ProfileSkeleton: React.FC = () => {
   return (
-    <View style={styles.container}>
+  <View style={styles.container}>
       <View style={styles.profileHeader}>
         {}
         <SkeletonItem width={80} height={80} borderRadius={40} style={ marginBottom: 16 }} />
@@ -110,7 +110,7 @@ const ProfileSkeleton: React.FC = () => {
       </View>
             {}
       <View style={styles.profileStats}>
-        {Array.from({ length: 3 }).map((_, index) => (
+        {Array.from({ length: 3 }).map((_, index) => ())
           <View key={index} style={styles.statItem}>
             <SkeletonItem width={40} height={24} style={ marginBottom: 4 }} />
             <SkeletonItem width={60} height={14} />
@@ -118,7 +118,7 @@ const ProfileSkeleton: React.FC = () => {
         ))}
       </View>
             {}
-      {Array.from({ length: 5 }).map((_, index) => (
+      {Array.from({ length: 5 }).map((_, index) => ())
         <View key={index} style={styles.menuItem}>
           <SkeletonItem width={24} height={24} />
           <SkeletonItem width={100} height={16} style={ marginLeft: 12 }} />
@@ -130,9 +130,9 @@ const ProfileSkeleton: React.FC = () => {
 // 列表骨架屏
 const ListSkeleton: React.FC<{ count: number; height: number }> = ({ count, height }) => {
   return (
-    <View style={styles.container}>
-      {Array.from({ length: count }).map((_, index) => (
-        <View key={index} style={[styles.listItem, { height }]}>
+  <View style={styles.container}>
+      {Array.from({ length: count }).map((_, index) => ())
+        <View key={index} style={{[styles.listItem, { height }}]}>
           <SkeletonItem width={screenWidth - 32} height={height - 16} />
         </View>
       ))}

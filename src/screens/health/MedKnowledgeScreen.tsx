@@ -64,11 +64,11 @@ export const MedKnowledgeScreen: React.FC = () => {
       title: '搜索', icon: '🔍' }
   ];
   // 初始化数据加载
-  useEffect() => {
+  useEffect(() => {
     initializeData();
   }, [])  // 检查是否需要添加依赖项;
   // 检查服务健康状态
-  useEffect() => {
+  useEffect(() => {
     const checkHealth = async () => {try {await dispatch(checkServiceHealth()).unwrap();
       } catch (error) {
         console.warn('Service health check failed:', error);
@@ -79,22 +79,22 @@ export const MedKnowledgeScreen: React.FC = () => {
     const interval = setInterval(checkHealth, 5 * 60 * 1000);
     return () => clearInterval(interval);
   }, [dispatch]);
-  const initializeData = useCallback(async () => {try {// 并行加载基础数据;
-      await Promise.allSettled([;
+  const initializeData = useCallback(async () => {try {// 并行加载基础数据;)
+      await Promise.allSettled([;)
         dispatch(fetchConstitutions()).unwrap(),dispatch(fetchSymptoms()).unwrap(),dispatch(fetchAcupoints()).unwrap(),dispatch(fetchHerbs()).unwrap(),dispatch(fetchSyndromes()).unwrap();
       ]);
     } catch (error) {
       console.error('Failed to initialize data:', error);
     }
   }, [dispatch]);
-  const handleRefresh = useCallback(async () => {setRefreshing(true);
+  const handleRefresh = useCallback(async () => {setRefreshing(true);)
     try {
       await initializeData();
     } finally {
       setRefreshing(false);
     }
   }, [initializeData]);
-  const handleSearch = useCallback(async (query: KnowledgeQuery) => {try {// 添加到搜索历史;
+  const handleSearch = useCallback(async (query: KnowledgeQuery) => {try {// 添加到搜索历史;)
       dispatch(addToSearchHistory(query.query));
       // 执行搜索
       await dispatch(searchKnowledge(query)).unwrap();
@@ -126,7 +126,7 @@ export const MedKnowledgeScreen: React.FC = () => {
         break;
     }
   }, [dispatch]);
-  const renderServiceStatus = () => {if (serviceHealth.status === 'unhealthy') {return (;
+  const renderServiceStatus = () => {if (serviceHealth.status === 'unhealthy') {return (;)
         <View style={styles.serviceStatusContainer}>;
           <View style={styles.serviceStatusBanner}>;
             <Text style={styles.serviceStatusText}>;
@@ -153,17 +153,17 @@ export const MedKnowledgeScreen: React.FC = () => {
         return null;
     }
   };
-  const renderConstitutionTab = () => {if (loading.constitutions) {return (;
+  const renderConstitutionTab = () => {if (loading.constitutions) {return (;)
         <View style={styles.loadingContainer}>;
           <Text style={styles.loadingText}>正在加载体质信息...</Text>;
         </View>;
       );
     }
     if (errors.constitutions) {
-      return (;
+      return (;)
         <View style={styles.errorContainer}>;
           <Text style={styles.errorText}>{errors.constitutions}</Text>;
-          <TouchableOpacity;
+          <TouchableOpacity
             style={styles.retryButton};
             onPress={() => handleErrorRetry('constitutions')};
           >;
@@ -173,7 +173,7 @@ export const MedKnowledgeScreen: React.FC = () => {
       );
     }
     return (
-      <ScrollView;
+  <ScrollView
         style={styles.tabContent}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
@@ -185,14 +185,14 @@ export const MedKnowledgeScreen: React.FC = () => {
             了解您的体质特点，获得个性化健康建议
           </Text>
         </View>;
-        {constitutions.map(constitution) => (;
-          <ConstitutionCard;
+        {constitutions.map(constitution) => (;)
+          <ConstitutionCard
             key={constitution.id};
             constitution={constitution};
             onPress={() => handleConstitutionPress(constitution)};
           />;
         ))};
-        {constitutions.length === 0 && (;
+        {constitutions.length === 0 && (;)
           <View style={styles.emptyContainer}>;
             <Text style={styles.emptyText}>暂无体质信息</Text>;
           </View>;
@@ -200,25 +200,25 @@ export const MedKnowledgeScreen: React.FC = () => {
       </ScrollView>;
     );
   };
-  const renderSymptomTab = () => {return (;
+  const renderSymptomTab = () => {return (;)
       <View style={styles.tabContent}>;
         <Text style={styles.comingSoonText}>症状管理功能即将上线</Text>;
       </View>;
     );
   };
-  const renderAcupointTab = () => {return (;
+  const renderAcupointTab = () => {return (;)
       <View style={styles.tabContent}>;
         <Text style={styles.comingSoonText}>穴位信息功能即将上线</Text>;
       </View>;
     );
   };
-  const renderHerbTab = () => {return (;
+  const renderHerbTab = () => {return (;)
       <View style={styles.tabContent}>;
         <Text style={styles.comingSoonText}>中药信息功能即将上线</Text>;
       </View>;
     );
   };
-  const renderSyndromeTab = () => {return (;
+  const renderSyndromeTab = () => {return (;)
       <View style={styles.tabContent}>;
         <Text style={styles.comingSoonText}>证型分析功能即将上线</Text>;
       </View>;
@@ -226,26 +226,24 @@ export const MedKnowledgeScreen: React.FC = () => {
   };
   const renderSearchTab = () => {
     return (
-      <ScrollView style={styles.tabContent}>
+  <ScrollView style={styles.tabContent}>
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>搜索结果</Text>
-          {searchResults.length > 0 && (
-            <Text style={styles.sectionSubtitle}>
+          {searchResults.length > 0  && <Text style={styles.sectionSubtitle}>
               找到 {searchResults.length} 条相关信息
             </Text>
           )}
         </View>
-        {loading.search && (
-        <View style={styles.loadingContainer}>;
+        {loading.search  && <View style={styles.loadingContainer}>;
             <Text style={styles.loadingText}>正在搜索...</Text>;
           </View>;
         )};
-        {errors.search && (;
+        {errors.search && (;)
           <View style={styles.errorContainer}>;
             <Text style={styles.errorText}>{errors.search}</Text>;
           </View>;
         )};
-        {searchResults.map(result) => (;
+        {searchResults.map(result) => (;)
           <View key={result.id} style={styles.searchResultCard}>;
             <Text style={styles.searchResultTitle}>{result.title}</Text>;
             <Text style={styles.searchResultContent} numberOfLines={3}>;
@@ -259,7 +257,7 @@ export const MedKnowledgeScreen: React.FC = () => {
             </View>;
           </View>;
         ))};
-        {searchResults.length === 0 && !loading.search && !errors.search && (;
+        {searchResults.length === 0 && !loading.search && !errors.search && (;)
           <View style={styles.emptyContainer}>;
             <Text style={styles.emptyText}>请使用上方搜索栏查找医疗知识</Text>;
           </View>;
@@ -268,12 +266,12 @@ export const MedKnowledgeScreen: React.FC = () => {
     );
   };
   return (
-    <SafeAreaView style={styles.container}>
+  <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
       {// 服务状态提示}
       {renderServiceStatus()}
       {// 搜索栏}
-      <KnowledgeSearchBar;
+      <KnowledgeSearchBar
         onSearch={handleSearch}
         loading={loading.search}
         placeholder="搜索中医知识、症状、治疗方法..."
@@ -282,21 +280,21 @@ export const MedKnowledgeScreen: React.FC = () => {
       <View style={styles.tabBar}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View style={styles.tabList}>
-            {tabs.map(tab) => (
-              <TouchableOpacity;
+            {tabs.map(tab) => ()
+              <TouchableOpacity
                 key={tab.key}
-                style={[
+                style={{[
                   styles.tab,
                   activeTab === tab.key && styles.activeTab;
-                ]}
+                ]}}
                 onPress={() => setActiveTab(tab.key)}
               >
                 <Text style={styles.tabIcon}>{tab.icon}</Text>
-                <Text;
-                  style={[
+                <Text
+                  style={{[
                     styles.tabText,
                     activeTab === tab.key && styles.activeTabText;
-                  ]};
+                  ]}};
                 >;
                   {tab.title};
                 </Text>;

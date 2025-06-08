@@ -22,7 +22,7 @@ expect(() => {
         apiClient(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = apiClient(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -44,7 +44,7 @@ expect(() => {
         setApiAuthToken(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = setApiAuthToken(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -66,7 +66,7 @@ expect(() => {
         removeApiAuthToken(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = removeApiAuthToken(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -88,7 +88,7 @@ apiClient(// test params);
 expect(averageTime).toBeLessThan(1);
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);)
     const startTime = performance.now();
     // Test with large dataset
 apiClient(largeDataset);

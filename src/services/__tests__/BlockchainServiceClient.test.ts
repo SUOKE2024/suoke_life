@@ -38,7 +38,7 @@ describe('BlockchainServiceClient', () => {
       const result = await client.storeHealthData(request);
       expect(result.success).toBe(true);
       expect(result.transactionId).toBe('tx-123');
-      expect(mockFetch).toHaveBeenCalledWith(
+      expect(mockFetch).toHaveBeenCalledWith()
         'http://localhost:8080/api/v1/blockchain/health-data',
         expect.objectContaining({
       method: "POST",
@@ -210,8 +210,8 @@ describe('BlockchainServiceClient', () => {
         timestamp: 1701432000
       };
       // Mock timeout
-      mockFetch.mockImplementationOnce(() =>
-        new Promise((_, reject) =>
+      mockFetch.mockImplementationOnce(() =>)
+        new Promise((_, reject) =>)
           setTimeout(() => reject(new Error('Timeout')), 100)
         )
       );

@@ -5,7 +5,7 @@ import React from "react";
 const mockStore = configureStore({reducer: {
     // Add your reducers here
   });};);
-const renderWithProvider = (component: React.ReactElement) => {return render(;
+const renderWithProvider = (component: React.ReactElement) => {return render(;)
     <Provider store={mockStore}>;
       {component});
     </Provid;e;r;>

@@ -21,7 +21,7 @@ processedData = await this.normalizeData(processedData);
 processedData = await this.adjustShape(processedData);
       return processedData;
     } catch (error) {
-      throw new ONNXError({code: INVALID_INPUT",;
+      throw new ONNXError({code: INVALID_INPUT", ";)
         message: `张量预处理失败: ${error.message}`,details: error,timestamp: new Date();
       });
     }
@@ -50,7 +50,7 @@ processedData = await this.reshapeOutput(processedData);
   }
   /**
 * * 转换数据类型
-  async convertTensorType(
+  async convertTensorType()
     tensorData: TensorData,
     targetType: TensorType;
   ): Promise<TensorData> {
@@ -70,7 +70,7 @@ processedData = await this.reshapeOutput(processedData);
   }
   /**
 * * 重塑张量形状
-  async reshapeTensor(
+  async reshapeTensor()
     tensorData: TensorData,
     newShape: number[]
   ): Promise<TensorData> {
@@ -84,14 +84,14 @@ const totalElements = tensorData.dims.reduce(a, b) => a * b, 1);
       return {data: tensorData.data,dims: newShape,type: tensorData.type;
       };
     } catch (error) {
-      throw new ONNXError({code: INVALID_INPUT",;
+      throw new ONNXError({code: INVALID_INPUT", ";)
         message: `张量重塑失败: ${error.message}`,details: error,timestamp: new Date();
       });
     }
   }
   /**
 * * 批量处理张量
-  async batchProcess(
+  async batchProcess()
     tensors: TensorData[],
     operation: "preprocess | "postprocess""
   ): Promise<TensorData[]> {
@@ -131,7 +131,7 @@ const totalElements = tensorData.dims.reduce(a, b) => a * b, 1);
   }
   /**
 * * 创建随机张量
-  createRandomTensor(
+  createRandomTensor()
     shape: number[],
     type: TensorType = "float32",
     min: number = 0,
@@ -247,7 +247,7 @@ return tensorData;
     // 输出形状调整
 return tensorData;
   }
-  private performTypeConversion(
+  private performTypeConversion()
     data: Float32Array | Int32Array | Uint8Array,
     fromType: TensorType,
     toType: TensorType;

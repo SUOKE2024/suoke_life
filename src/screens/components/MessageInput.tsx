@@ -21,7 +21,7 @@ interface MessageInputProps {
   onAttachPress?: () => void;
 isTyping?: boolean
 }
-export const MessageInput: React.FC<MessageInputProps /> = ({/   const performanceMonitor = usePerformanceMonitor(MessageInput",;
+export const MessageInput: React.FC<MessageInputProps /> = ({/   const performanceMonitor = usePerformanceMonitor(MessageInput",;))
 {/
     trackRender: true,
     trackMemory: false,
@@ -57,23 +57,23 @@ export const MessageInput: React.FC<MessageInputProps /> = ({/   const performan
   };
   const canSend = message.trim().length > 0 && !disabl;e;d;
   performanceMonitor.recordRender();
-  return (;
+  return (;)
     <KeyboardAvoidingView,behavior={Platform.OS === "ios ? "padding" : height"};
-      style={[styles.container, style]} />/          {isTyping && (;
+      style={[styles.container, style]} />/          {isTyping && (;)
         <View style={styles.typingIndicator}>/          <Text style={styles.typingText}>智能体正在输入...</Text>/          <View style={styles.typingDots}>/            <View style={[styles.dot, styles.dot1]} />/            <View style={[styles.dot, styles.dot2]} />/            <View style={[styles.dot, styles.dot3]} />/          </View>/        </View>/          )};
-      <View style={styles.inputContainer}>/        {///            {showAttachButton && (;
-          <TouchableOpacity;
+      <View style={styles.inputContainer}>/        {///            {showAttachButton && (;)
+          <TouchableOpacity
 style={styles.actionButton}
             onPress={onAttachPress};
             disabled={disabled}
-          accessibilityLabel="TODO: 添加无障碍标签" />/                <Ic;o;nname="attachment"
+          accessibilityLabel="TODO: 添加无障碍标签" />/                <Iconname="attachment"
               size={24}
               color={disabled ? colors.disabled: colors.textSecondary} />/          </TouchableOpacity>/            )}
-        {///              <TextInput;
+        {///              <TextInput
 ref={inputRef}
-            style={[
+            style={{[
               styles.textInput,
-              multiline && { height: inputHeight},
+              multiline && { height: inputHeight}},
               disabled && styles.disabledInput;
             ]}
             value={message}
@@ -89,20 +89,18 @@ ref={inputRef}
           {//
             <Text style={styles.charCount}>/              {message.length}/{maxLength}/            </Text>/              )}
         </View>/
-        {///            {showVoiceButton && !canSend && (
-          <TouchableOpacity;
+        {///            {showVoiceButton && !canSend  && <TouchableOpacity
 style={styles.actionButton}
             onPress={onVoicePress}
             disabled={disabled}
           accessibilityLabel="TODO: 添加无障碍标签" />/                <Iconname="microphone"
               size={24}
               color={disabled ? colors.disabled: colors.primary} />/          </TouchableOpacity>/            )}
-        {///            {canSend && (
-          <TouchableOpacity;
-style={[
+        {///            {canSend  && <TouchableOpacity
+style={{[
               styles.sendButton,
               !canSend && styles.disabledSendButton;
-            ]}
+            ]}}
             onPress={handleSend}
             disabled={!canSend}
           accessibilityLabel="TODO: 添加无障碍标签" />/                <Iconname="send"
@@ -110,7 +108,7 @@ style={[
               color={colors.white} />/          </TouchableOpacity>/            )}
       </View>/    </KeyboardAvoidingView>/      );
 }
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   backgroundColor: colors.surface,
     borderTopWidth: 1,
     borderTopColor: colors.border;

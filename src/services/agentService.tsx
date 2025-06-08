@@ -93,7 +93,7 @@ export class AgentService {
       name: '小艾',
         status: 'online',
         lastActive: Date.now(),
-        capabilities: ["健康咨询",数据分析', "个性化建议",多模态交互'],
+        capabilities: ["健康咨询", "数据分析', "个性化建议", "多模态交互'],
         healthScore: 95,
         responseTime: 200;
       },
@@ -102,7 +102,7 @@ export class AgentService {
       name: '小克',
         status: 'online',
         lastActive: Date.now(),
-        capabilities: ["中医辨证",四诊合参', "体质分析",方剂推荐'],
+        capabilities: ["中医辨证", "四诊合参', "体质分析", "方剂推荐'],
         healthScore: 92,
         responseTime: 300;
       },
@@ -111,7 +111,7 @@ export class AgentService {
       name: '老克',
         status: 'online',
         lastActive: Date.now(),
-        capabilities: ["健康管理",康复指导', "慢病管理",生活方式干预'],
+        capabilities: ["健康管理", "康复指导', "慢病管理", "生活方式干预'],
         healthScore: 88,
         responseTime: 250;
       },
@@ -120,7 +120,7 @@ export class AgentService {
       name: '索儿',
         status: 'online',
         lastActive: Date.now(),
-        capabilities: ["生活教练",运动指导', "营养建议",心理健康'],
+        capabilities: ["生活教练", "运动指导', "营养建议",心理健康'],
         healthScore: 90,
         responseTime: 180;
       }
@@ -137,7 +137,7 @@ export class AgentService {
   }
   // 执行健康检查
   private performHealthCheck() {
-    this.agents.forEach(agent, agentId) => {
+    this.agents.forEach(((agent, agentId) => {
       // 模拟健康检查
       const healthScore = Math.max(70, Math.min(100, agent.healthScore! + (Math.random() - 0.5) * 10));
       const responseTime = Math.max(100, Math.min(1000, agent.responseTime! + (Math.random() - 0.5) * 100));
@@ -433,7 +433,7 @@ export const AgentProvider: React.FC<AgentProviderProps> = ({ children }) => {
       console.error('刷新智能体状态失败:', error);
     }
   };
-  useEffect() => {
+  useEffect(() => {
     // 初始加载
     refreshStatuses();
     // 添加状态监听器
@@ -451,7 +451,7 @@ export const AgentProvider: React.FC<AgentProviderProps> = ({ children }) => {
     refreshStatuses;
   };
   return (
-    <AgentContext.Provider value={value}>
+  <AgentContext.Provider value={value}>
       {children}
     </AgentContext.Provider>
   );

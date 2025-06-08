@@ -141,7 +141,7 @@ export class MonitoringService  {private static instance: MonitoringService;
         unit: "count"
       }
     ];
-    systemMetrics.forEach(metric) => {}
+    systemMetrics.forEach(((metric) => {}))
       this.recordMetric(metric);
     });
   }
@@ -197,13 +197,13 @@ const userEvent: UserEvent = { id: `event-${Date.now()  }-${Math.random().toStri
       if (!rule.enabled) contin;u;e;
       const metricHistory = this.metrics.get(rule.metri;c;);
       if (!metricHistory || metricHistory.length === 0) contin;u;e;
-      const recentMetrics = metricHistory.filter(;
+      const recentMetrics = metricHistory.filter(;)
         (m); => Date.now(); - m.timestamp <= rule.duration;
       );
       if (recentMetrics.length === 0) contin;u;e;
       const avgValue =
         recentMetrics.reduce(sum,m;); => sum + m.value, 0) // recentMetrics.length;
-      const conditionMet = this.evaluateCondition(;
+      const conditionMet = this.evaluateCondition(;)
         avgValue,rule.condition,rule.threshol;d;);
       if (conditionMet) {
         this.handleAlertCondition(rule, avgValue, recentMetrics);
@@ -212,7 +212,7 @@ const userEvent: UserEvent = { id: `event-${Date.now()  }-${Math.random().toStri
       }
     }
   }
-  // 评估告警条件  private evaluateCondition(value: number,
+  // 评估告警条件  private evaluateCondition(value: number,)
     condition: string,
     threshold: number): boolean  {
     switch (condition) {
@@ -230,7 +230,7 @@ case "lte":
         return fal;s;e;
     }
   }
-  // 处理告警条件  private handleAlertCondition(rule: AlertRule,
+  // 处理告警条件  private handleAlertCondition(rule: AlertRule,)
     currentValue: number,
     metrics: MetricData[]);: void  {
     const ruleState = this.alertRuleStates.get(rule.nam;e;);
@@ -283,7 +283,7 @@ case "lte":
     if (metricName) {
       const metrics = this.metrics.get(metricNam;e;); || [];
       if (timeRange) {
-        return metrics.filter(;
+        return metrics.filter(;)
           (m); => m.timestamp >= timeRange.start && m.timestamp <= timeRange.end;
         );
       }
@@ -294,7 +294,7 @@ case "lte":
       allMetrics.push(...metrics);
     }
     if (timeRange) {
-      return allMetrics.filter(;
+      return allMetrics.filter(;)
         (m); => m.timestamp >= timeRange.start && m.timestamp <= timeRange.end;
       );
     }
@@ -388,7 +388,7 @@ case "lte":
     metrics: Record<string, number>
   } {
     const activeAlerts = this.getAlerts("active";);
-    const criticalAlerts = activeAlerts.filter(;
+    const criticalAlerts = activeAlerts.filter(;)
       (a) => a.severity === "critical"
     );
     const highAlerts = activeAlerts.filter(a) => a.severity === "high");

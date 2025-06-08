@@ -1,12 +1,13 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-不需要React导入
+import AsyncStorage from '@react-native-async-storage/async-storage';
+不需要React导入;
 // 存储管理器 - 索克生活APP - 性能优化
 interface StorageItem {
   data: unknown;
   timestamp: number;
   ttl?: number;
 }
-export class StorageManager {private static instance: StorageManager;
+export class StorageManager {
+  private static instance: StorageManager;
   static getInstance(): StorageManager {
     if (!StorageManager.instance) {
       StorageManager.instance = new StorageManager();
@@ -27,7 +28,7 @@ export class StorageManager {private static instance: StorageManager;
       if (!itemStr) return null;
       const item: StorageItem = JSON.parse(itemStr);
       // 检查是否过期
-if (item.ttl && Date.now() - item.timestamp > item.ttl) {
+      if (item.ttl && Date.now() - item.timestamp > item.ttl) {
         await this.remove(key);
         return null;
       }
@@ -47,7 +48,7 @@ if (item.ttl && Date.now() - item.timestamp > item.ttl) {
     return [...keys];
   }
   // 清理过期数据
-async cleanup(): Promise<void> {
+  async cleanup(): Promise<void> {
     const keys = await this.getAllKeys();
     const now = Date.now();
     for (const key of keys) {
@@ -61,7 +62,7 @@ async cleanup(): Promise<void> {
         }
       } catch (error) {
         // 如果解析失败，删除该项
-await this.remove(key);
+        await this.remove(key);
       }
     }
   }

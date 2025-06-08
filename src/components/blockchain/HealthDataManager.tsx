@@ -28,7 +28,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
   const [selectedRecord, setSelectedRecord] = useState<HealthDataRecord | null>(null);
   const [filterType, setFilterType] = useState<string>('');
   // 过滤记录
-  const filteredRecords = records.filter(record => ;
+  const filteredRecords = records.filter(record => ;)
     !filterType || record.dataType.includes(filterType);
   );
   // 数据类型统计
@@ -36,7 +36,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
     return acc;
   }, {} as Record<string, number>);
   const handleStoreData = async (dataType: string, data: any, metadata?: Record<string, string>) => {try {await storeData(dataType, data, metadata);
-      Alert.alert("成功",健康数据已成功存储到区块链');
+      Alert.alert("成功", "健康数据已成功存储到区块链');
       setShowAddModal(false);
     } catch (error) {
       Alert.alert('错误', `存储失败: ${error instanceof Error ? error.message : '未知错误'}`);
@@ -44,8 +44,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
   };
   const handleVerifyData = async (record: HealthDataRecord) => {try {// 这里需要原始数据来验证，实际应用中可能需要从其他地方获取;
       const result = await verifyData(record.transactionId, {});
-      Alert.alert(
-        '验证结果',
+      Alert.alert('验证结果',
         result.valid ? '数据完整性验证通过' : '数据完整性验证失败',
         [{ text: '确定' }]
       );
@@ -59,8 +58,8 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
       .map(b => b.toString(16).padStart(2, '0'));
       .join('') + '...';
   };
-  const renderRecord = ({ item }: { item: HealthDataRecord }) => (
-    <TouchableOpacity;
+  const renderRecord = ({ item }: { item: HealthDataRecord }) => ()
+    <TouchableOpacity
       style={styles.recordCard}
       onPress={() => setSelectedRecord(item)}
     >
@@ -77,7 +76,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
         <Text style={styles.recordValue}>{formatDataHash(item.dataHash)}</Text>;
       </View>;
       <View style={styles.recordActions}>;
-        <TouchableOpacity;
+        <TouchableOpacity
           style={styles.verifyButton};
           onPress={() => handleVerifyData(item)};
         >;
@@ -87,8 +86,8 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
     </TouchableOpacity>;
   );
   const renderDataTypeFilter = () => (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterContainer}>
-      <TouchableOpacity;
+  <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterContainer}>
+      <TouchableOpacity
         style={[styles.filterChip, !filterType && styles.filterChipActive]}
         onPress={() => setFilterType('')}
       >
@@ -96,8 +95,8 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
           全部 ({records.length});
         </Text>;
       </TouchableOpacity>;
-      {Object.entries(dataTypeStats).map(([type, count]) => (;
-        <TouchableOpacity;
+      {Object.entries(dataTypeStats).map(([type, count]) => (;))
+        <TouchableOpacity
           key={type};
           style={[styles.filterChip, filterType === type && styles.filterChipActive]};
           onPress={() => setFilterType(type)};
@@ -110,7 +109,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
     </ScrollView>;
   );
   return (
-    <View style={styles.container}>
+  <View style={styles.container}>
       {// 头部统计}
       <View style={styles.statsContainer}>
         <View style={styles.statItem}>
@@ -130,18 +129,18 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
       </View>
       {// 操作按钮}
       <View style={styles.actionContainer}>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={styles.addButton}
           onPress={() => setShowAddModal(true)}
         >
           <Text style={styles.addButtonText}>+ 添加健康数据</Text>
         </TouchableOpacity>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={styles.refreshButton}
           onPress={() => loadRecords()}
           disabled={isLoading}
         >
-          {isLoading ? (
+          {isLoading ? ()
             <ActivityIndicator size="small" color="#6C757D" />
           ) : (
             <Text style={styles.refreshButtonText}>刷新</Text>
@@ -151,13 +150,12 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
       {// 数据类型过滤器}
       {renderDataTypeFilter()}
       {// 错误显示}
-      {error && (
-        <View style={styles.errorContainer}>
+      {error  && <View style={styles.errorContainer}>
           <Text style={styles.errorText}>{error.message}</Text>
         </View>
       )}
       {// 记录列表}
-      <FlatList;
+      <FlatList
         data={filteredRecords}
         renderItem={renderRecord}
         keyExtractor={(item) => item.transactionId}
@@ -172,13 +170,13 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
         }
       />;
       {// 添加数据模态框};
-      <AddDataModal;
+      <AddDataModal
         visible={showAddModal};
         onClose={() => setShowAddModal(false)};
         onSubmit={handleStoreData};
       />;
       {// 记录详情模态框};
-      <RecordDetailModal;
+      <RecordDetailModal
         record={selectedRecord};
         onClose={() => setSelectedRecord(null)};
         onVerify={handleVerifyData};
@@ -195,7 +193,7 @@ const AddDataModal: React.FC<{,
   const [dataType, setDataType] = useState('');
   const [dataContent, setDataContent] = useState('');
   const [metadata, setMetadata] = useState('');
-  const handleSubmit = () => {if (!dataType.trim() || !dataContent.trim()) {Alert.alert("错误",请填写数据类型和内容');
+  const handleSubmit = () => {if (!dataType.trim() || !dataContent.trim()) {Alert.alert("错误", "请填写数据类型和内容');
       return;
     }
     try {
@@ -207,11 +205,11 @@ const AddDataModal: React.FC<{,
       setDataContent('');
       setMetadata('');
     } catch (error) {
-      Alert.alert("错误",数据格式不正确，请输入有效的JSON');
+      Alert.alert("错误", "数据格式不正确，请输入有效的JSON');
     }
   };
   return (
-    <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
+  <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
       <View style={styles.modalContainer}>
         <View style={styles.modalHeader}>
           <Text style={styles.modalTitle}>添加健康数据</Text>
@@ -222,7 +220,7 @@ const AddDataModal: React.FC<{,
         <ScrollView style={styles.modalContent}>
           <View style={styles.inputGroup}>
             <Text style={styles.inputLabel}>数据类型</Text>
-            <TextInput;
+            <TextInput
               style={styles.textInput}
               value={dataType}
               onChangeText={setDataType}
@@ -231,7 +229,7 @@ const AddDataModal: React.FC<{,
           </View>
           <View style={styles.inputGroup}>
             <Text style={styles.inputLabel}>数据内容 (JSON格式)</Text>
-            <TextInput;
+            <TextInput
               style={[styles.textInput, styles.textArea]}
               value={dataContent}
               onChangeText={setDataContent}
@@ -242,7 +240,7 @@ const AddDataModal: React.FC<{,
           </View>
           <View style={styles.inputGroup}>
             <Text style={styles.inputLabel}>元数据 (可选, JSON格式)</Text>
-            <TextInput;
+            <TextInput
               style={[styles.textInput, styles.textArea]};
               value={metadata};
               onChangeText={setMetadata};
@@ -267,7 +265,7 @@ const RecordDetailModal: React.FC<{,
 }> = ({ record, onClose, onVerify }) => {
   if (!record) return null;
   return (
-    <Modal visible={!!record} animationType="slide" presentationStyle="pageSheet">
+  <Modal visible={!!record} animationType="slide" presentationStyle="pageSheet">
       <View style={styles.modalContainer}>
         <View style={styles.modalHeader}>
           <Text style={styles.modalTitle}>数据详情</Text>
@@ -306,7 +304,7 @@ const RecordDetailModal: React.FC<{,
               {JSON.stringify(record.metadata, null, 2)};
             </Text>;
           </View>;
-          <TouchableOpacity;
+          <TouchableOpacity
             style={styles.verifyButton};
             onPress={() => onVerify(record)};
           >;

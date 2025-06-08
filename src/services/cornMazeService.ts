@@ -73,7 +73,7 @@ export class CornMazeService {
   */
   async createMaze(request: CreateMazeRequest): Promise<Maze> {
     try {
-      const response = await apiClient.post<MazeResponse>(;
+      const response = await apiClient.post<MazeResponse>(;)
         `${this.config.baseURL}/api/v1/mazes`,request;
       );
       return response.data.maze;
@@ -96,7 +96,7 @@ export class CornMazeService {
     }
     try {
       const params = userId ? { user_id: userId } : {};
-      const response = await apiClient.get<MazeResponse>(;
+      const response = await apiClient.get<MazeResponse>(;)
         `${this.config.baseURL}/api/v1/mazes/${mazeId}`,{ params };
       );
       // 缓存结果
@@ -117,7 +117,7 @@ export class CornMazeService {
   */
   async updateMaze(mazeId: string, request: UpdateMazeRequest): Promise<Maze> {
     try {
-      const response = await apiClient.put<MazeResponse>(;
+      const response = await apiClient.put<MazeResponse>(;)
         `${this.config.baseURL}/api/v1/mazes/${mazeId}`,request;
       );
       // 清除相关缓存
@@ -146,7 +146,7 @@ export class CornMazeService {
   */
   async listMazes(request?: ListMazesRequest): Promise<ListMazesResponse> {
     try {
-      const response = await apiClient.get<ListMazesResponse>(;
+      const response = await apiClient.get<ListMazesResponse>(;)
         `${this.config.baseURL}/api/v1/mazes`,{ params: request };
       );
       return response.data;
@@ -160,7 +160,7 @@ export class CornMazeService {
   */
   async startMaze(request: StartMazeRequest): Promise<MazeProgress> {
     try {
-      const response = await apiClient.post<{ progress: MazeProgress }>(;
+      const response = await apiClient.post<{ progress: MazeProgress }>(;)
         `${this.config.baseURL}/api/v1/mazes/${request.mazeId}/start`,{ user_id: request.userId };
       );
       return response.data.progress;
@@ -174,7 +174,7 @@ export class CornMazeService {
   */
   async moveInMaze(request: MoveRequest): Promise<MoveResponse> {
     try {
-      const response = await apiClient.post<MoveResponse>(;
+      const response = await apiClient.post<MoveResponse>(;)
         `${this.config.baseURL}/api/v1/mazes/${request.mazeId}/move`,{user_id: request.userId,direction: request.direction;
         };
       );
@@ -199,7 +199,7 @@ export class CornMazeService {
       }
     }
     try {
-      const response = await apiClient.get<UserProgressResponse>(;
+      const response = await apiClient.get<UserProgressResponse>(;)
         `${this.config.baseURL}/api/v1/mazes/${mazeId}/progress/${userId}`;
       );
       // 缓存结果
@@ -218,7 +218,7 @@ export class CornMazeService {
   /**
   * 获取迷宫模板列表
   */
-  async listMazeTemplates(
+  async listMazeTemplates()
     mazeType?: MazeTheme,
     difficulty?: MazeDifficulty,
     page: number = 1,
@@ -228,7 +228,7 @@ export class CornMazeService {
       const params: any = { page, page_size: pageSize };
       if (mazeType) params.maze_type = mazeType;
       if (difficulty) params.difficulty = difficulty;
-      const response = await apiClient.get<ListTemplatesResponse>(;
+      const response = await apiClient.get<ListTemplatesResponse>(;)
         `${this.config.baseURL}/api/v1/templates`,{ params };
       );
       return response.data;
@@ -240,7 +240,7 @@ export class CornMazeService {
   /**
   * 记录迷宫完成
   */
-  async recordMazeCompletion(
+  async recordMazeCompletion()
     userId: string,
     mazeId: string,
     stepsTaken: number,
@@ -248,7 +248,7 @@ export class CornMazeService {
     score: number;
   ): Promise<{ rewards: GameReward[]; achievements: string[] }> {
     try {
-      const response = await apiClient.post(;
+      const response = await apiClient.post(;)
         `${this.config.baseURL}/api/v1/mazes/${mazeId}/complete`,{user_id: userId,steps_taken: stepsTaken,completion_time: completionTime,score: score;
         };
       );
@@ -273,7 +273,7 @@ export class CornMazeService {
       }
     }
     try {
-      const response = await apiClient.get<{ node: KnowledgeNode }>(;
+      const response = await apiClient.get<{ node: KnowledgeNode }>(;)
         `${this.config.baseURL}/api/v1/knowledge/${nodeId}`;
       );
       // 缓存结果
@@ -302,7 +302,7 @@ export class CornMazeService {
       }
     }
     try {
-      const response = await apiClient.get<{ challenge: Challenge }>(;
+      const response = await apiClient.get<{ challenge: Challenge }>(;)
         `${this.config.baseURL}/api/v1/challenges/${challengeId}`;
       );
       // 缓存结果
@@ -321,13 +321,13 @@ export class CornMazeService {
   /**
   * 提交挑战答案
   */
-  async submitChallengeAnswer(
+  async submitChallengeAnswer()
     challengeId: string,
     userId: string,
     answers: string[]
   ): Promise<{ correct: boolean; score: number; explanation?: string }> {
     try {
-      const response = await apiClient.post(;
+      const response = await apiClient.post(;)
         `${this.config.baseURL}/api/v1/challenges/${challengeId}/submit`,{user_id: userId,answers: answers;
         };
       );
@@ -342,7 +342,7 @@ export class CornMazeService {
   */
   async getUserStats(userId: string): Promise<MazeStats> {
     try {
-      const response = await apiClient.get<MazeStats>(;
+      const response = await apiClient.get<MazeStats>(;)
         `${this.config.baseURL}/api/v1/users/${userId}/stats`;
       );
       return response.data;
@@ -354,14 +354,14 @@ export class CornMazeService {
   /**
   * 获取排行榜
   */
-  async getLeaderboard(
+  async getLeaderboard()
     mazeId?: string,
     limit: number = 10;
   ): Promise<LeaderboardEntry[]> {
     try {
       const params: any = { limit };
       if (mazeId) params.maze_id = mazeId;
-      const response = await apiClient.get<{ entries: LeaderboardEntry[] }>(;
+      const response = await apiClient.get<{ entries: LeaderboardEntry[] }>(;)
         `${this.config.baseURL}/api/v1/leaderboard`,{ params };
       );
       return response.data.entries;
@@ -373,14 +373,14 @@ export class CornMazeService {
   /**
   * 智能体迷宫交互
   */
-  async mazeNpcInteraction(
+  async mazeNpcInteraction()
     playerId: string,
     action: string,
     location: Position,
     context?: any;
   ): Promise<MazeInteraction> {
     try {
-      const response = await apiClient.post<MazeInteraction>(;
+      const response = await apiClient.post<MazeInteraction>(;)
         `${this.config.baseURL}/api/v1/maze-interaction`,{player_id: playerId,action,location,context;
         };
       );
@@ -397,7 +397,7 @@ export class CornMazeService {
   */
   async getGameSettings(userId: string): Promise<GameSettings> {
     try {
-      const response = await apiClient.get<GameSettings>(;
+      const response = await apiClient.get<GameSettings>(;)
         `${this.config.baseURL}/api/v1/users/${userId}/settings`;
       );
       return response.data;
@@ -413,7 +413,7 @@ export class CornMazeService {
   */
   async updateGameSettings(userId: string, settings: Partial<GameSettings>): Promise<GameSettings> {
     try {
-      const response = await apiClient.put<GameSettings>(;
+      const response = await apiClient.put<GameSettings>(;)
         `${this.config.baseURL}/api/v1/users/${userId}/settings`,settings;
       );
       return response.data;

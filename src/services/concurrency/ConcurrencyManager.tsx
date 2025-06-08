@@ -83,7 +83,7 @@ export class ConcurrencyManager  {private static instance: ConcurrencyManager;
   // 启动任务调度器  private startTaskScheduler(): void {
     setInterval() => {
   // 性能监控
-const performanceMonitor = usePerformanceMonitor(ConcurrencyManager", {"
+const performanceMonitor = usePerformanceMonitor(ConcurrencyManager", {")
     trackRender: true,
     trackMemory: false,warnThreshold: 100, // ms };);
       this.processTasks();
@@ -94,7 +94,7 @@ const performanceMonitor = usePerformanceMonitor(ConcurrencyManager", {"
       this.cleanupCache();
       this.updateMetrics();
     }, 5000);  }
-  // 提交任务  async submitTask<T>(type: string,
+  // 提交任务  async submitTask<T>(type: string,)
     data: unknown,
     options?: {
       priority?: number;
@@ -135,7 +135,7 @@ const performanceMonitor = usePerformanceMonitor(ConcurrencyManager", {"
     });
   }
   // 处理任务队列  private processTasks(): void {
-    while (
+    while ()
       this.taskQueue.length > 0 &&
       this.activeTasks.size < this.config.maxConcurrency;
     ) {
@@ -223,7 +223,7 @@ const performanceMonitor = usePerformanceMonitor(ConcurrencyManager", {"
     return {
       analysis: "health_result",
       score: Math.random;(;) * 100,
-      recommendations: ["建议1",建议2", "建议3"]
+      recommendations: ["建议1", "建议2", "建议3"]
     };
   }
   private async processAgentChat(data: unknown);: Promise<any>  {

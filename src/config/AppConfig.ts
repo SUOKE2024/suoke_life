@@ -145,11 +145,11 @@ const developmentConfig: AppConfiguration = {,
   },
   agents: {,
   xiaoai: {
-      enabled: true,
+  enabled: true,
       endpoint: 'http://localhost:8001',
       timeout: 30000,
       maxSessions: 10,
-    },
+},
     xiaoke: {,
   enabled: true,
       endpoint: 'http://localhost:8002',
@@ -171,10 +171,10 @@ const developmentConfig: AppConfiguration = {,
   },
   diagnosis: {,
   looking: {
-      enabled: true,
+  enabled: true,
       aiModelEndpoint: 'http://localhost:8001/diagnosis/looking',
       confidenceThreshold: 0.7,
-    },
+},
     listening: {,
   enabled: true,
       aiModelEndpoint: 'http://localhost:8001/diagnosis/listening',
@@ -249,11 +249,11 @@ const productionConfig: AppConfiguration = {,
   },
   agents: {,
   xiaoai: {
-      enabled: true,
+  enabled: true,
       endpoint: 'https://xiaoai.suokelife.com',
       timeout: 30000,
       maxSessions: 100,
-    },
+},
     xiaoke: {,
   enabled: true,
       endpoint: 'https://xiaoke.suokelife.com',
@@ -275,10 +275,10 @@ const productionConfig: AppConfiguration = {,
   },
   diagnosis: {,
   looking: {
-      enabled: true,
+  enabled: true,
       aiModelEndpoint: 'https://xiaoai.suokelife.com/diagnosis/looking',
       confidenceThreshold: 0.8,
-    },
+},
     listening: {,
   enabled: true,
       aiModelEndpoint: 'https://xiaoai.suokelife.com/diagnosis/listening',
@@ -344,36 +344,36 @@ const stagingConfig: AppConfiguration = {
   ...productionConfig,
   environment: 'staging',
   api: {
-    ...productionConfig.api,
+  ...productionConfig.api,
     baseUrl: 'https://staging-api.suokelife.com',
-  },
+},
   agents: {,
   xiaoai: {
-      ...productionConfig.agents.xiaoai,
+  ...productionConfig.agents.xiaoai,
       endpoint: 'https://staging-xiaoai.suokelife.com',
-    },
+},
     xiaoke: {
-      ...productionConfig.agents.xiaoke,
+  ...productionConfig.agents.xiaoke,
       endpoint: 'https://staging-xiaoke.suokelife.com',
-    },
+},
     laoke: {
-      ...productionConfig.agents.laoke,
+  ...productionConfig.agents.laoke,
       endpoint: 'https://staging-laoke.suokelife.com',
-    },
+},
     soer: {
-      ...productionConfig.agents.soer,
+  ...productionConfig.agents.soer,
       endpoint: 'https://staging-soer.suokelife.com',
-    },
+},
   },
   logging: {
-    ...productionConfig.logging,
+  ...productionConfig.logging,
     level: 'info',
     enableConsole: true,
-  },
+},
   performance: {
-    ...productionConfig.performance,
+  ...productionConfig.performance,
     sampleRate: 0.5,
-  },
+},
 };
 // 配置映射
 const configMap: Record<Environment, AppConfiguration> = {
@@ -468,8 +468,8 @@ class ConfigManager {
       const response = await fetch(`${this.currentConfig.api.baseUrl}/config`, {
       method: "GET",
       headers: {
-          'Content-Type': 'application/json',
-        },
+  'Content-Type': 'application/json',
+},
         signal: controller.signal,
       });
       clearTimeout(timeoutId);
@@ -533,7 +533,7 @@ export const isProduction = () => configManager.isProduction();
 // React Hook for config;
 export const useConfig = () => {
   const [config, setConfig] = React.useState(configManager.getConfig());
-  React.useEffect() => {
+  React.useEffect(() => {
     const unsubscribe = configManager.addConfigListener(setConfig);
     return unsubscribe;
   }, []);

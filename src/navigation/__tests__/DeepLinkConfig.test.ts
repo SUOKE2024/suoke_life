@@ -1,4 +1,3 @@
-
 import DeepLinkConfig from '../DeepLinkConfig.ts';
 describe('DeepLinkConfig', () => {
   it('应该正确导出', () => {

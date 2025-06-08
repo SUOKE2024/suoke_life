@@ -211,9 +211,9 @@ class CodeQualityOptimizer {
 
     // 简单的依赖修复逻辑
     const hookPatterns = [
-      /useEffect\(\s*\(\)\s*=>\s*\{[^}]*\},\s*\[\s*\]\s*\)/g,
-      /useCallback\(\s*\([^)]*\)\s*=>\s*\{[^}]*\},\s*\[\s*\]\s*\)/g,
-      /useMemo\(\s*\(\)\s*=>\s*\{[^}]*\},\s*\[\s*\]\s*\)/g
+      /useEffect\(\s*\(\)\s*=>\s*\{[^}]*\},\s*[\s*]\s*\)/g,
+      /useCallback\(\s*\([^)]*\)\s*=>\s*\{[^}]*\},\s*[\s*]\s*\)/g,
+      /useMemo\(\s*\(\)\s*=>\s*\{[^}]*\},\s*[\s*]\s*\)/g
     ];
 
     // 这里可以添加更复杂的依赖分析逻辑

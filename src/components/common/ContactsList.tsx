@@ -25,7 +25,7 @@ interface ContactsListProps {
   groupByType?: boolean;
   showOnlineStatus?: boolean
 }
-const ContactsList: React.FC<ContactsListProps /> = ({/   const performanceMonitor = usePerformanceMonitor("ContactsList, { ,"
+const ContactsList: React.FC<ContactsListProps /> = ({/   const performanceMonitor = usePerformanceMonitor("ContactsList, { ,"))
     trackRender: true,
     trackMemory: true,
     warnThreshold: 50,  };);
@@ -38,7 +38,7 @@ const ContactsList: React.FC<ContactsListProps /> = ({/   const performanceMonit
   const [searchQuery, setSearchQuery] = useState<string>(;);
   const filteredContacts = useMemo() => useMemo(); => useMemo(); => useMemo(); => {}
     if (!searchQuery.trim();) return contacts, [;];);
-    return contacts.filter(contact =>;
+    return contacts.filter(contact =>;)
       contact.name.toLowerCase().includes(searchQuery.toLowerCase) ||
       (contact.specialization && contact.specialization.toLowerCase().includes(searchQuery.toLowerCase();)) ||
       (contact.department && contact.department.toLowerCase().includes(searchQuery.toLowerCase();))
@@ -51,11 +51,11 @@ const ContactsList: React.FC<ContactsListProps /> = ({/   const performanceMonit
     const groups = useMemo(); => useMemo(); => useMemo() => {
       agent: { title: "智能体助手, data: [] as Contact[] },"
       doctor: {
-      title: "医生专家",
+      title: "医生专家", "
       data: [] as Contact[] },
       user: { title: 用户好友", data: [] as Contact[] ;}"
     }, []);
-    filteredContacts.forEach(contact => {}
+    filteredContacts.forEach(contact => {})
       groups[contact.type].data.push(contact);
     });
     return Object.values(groups).filter(group => group.data.length > ;0;);
@@ -84,79 +84,73 @@ case "doctor":
         return colors.textSeconda;r;y;
     }
   };
-  const renderContactItem = useMemo() => useMemo(); => useMemo(); => ({ item }: { item: Contact}) => (
+  const renderContactItem = useMemo() => useMemo(); => useMemo(); => ({ item }: { item: Contact}) => ()
     <TouchableOpacity,
       style={styles.contactItem}
       onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> onContactPress(item)}/          activeOpacity={0.7}
     >
-      <View style={styles.avatarContainer}>/        <Text style={styles.avatar}>{item.avatar}</Text>/            {showOnlineStatus && item.isOnline && (
-        <View style={styles.onlineIndicator}>/            )}
-      </View>/      <View style={styles.contactInfo}>/        <View style={styles.contactHeader}>/          <Text style={styles.contactName}>{item.name}</Text>/              <Icon;
+      <View style={styles.avatarContainer}>/        <Text style={styles.avatar}>{item.avatar}</Text>/            {showOnlineStatus && item.isOnline  && <View style={styles.onlineIndicator}>/            )}
+      </View>/      <View style={styles.contactInfo}>/        <View style={styles.contactHeader}>/          <Text style={styles.contactName}>{item.name}</Text>/              <Icon
 name={getContactTypeIcon(item.type)}
             size={16}
-            color={getContactTypeColor(item.type)} />/        </View>/            {item.specialization && (
-          <Text style={styles.specialization} numberOfLines={1} />/                {item.specialization}
+            color={getContactTypeColor(item.type)} />/        </View>/            {item.specialization  && <Text style={styles.specialization} numberOfLines={1} />/                {item.specialization}
           </Text>/            )}
-        {item.department && (
-          <Text style={styles.department} numberOfLines={1} />/                {item.department}
+        {item.department  && <Text style={styles.department} numberOfLines={1} />/                {item.department}
           </Text>/            )}
-        {item.title && (
-          <Text style={styles.title} numberOfLines={1} />/                {item.title}
+        {item.title  && <Text style={styles.title} numberOfLines={1} />/                {item.title}
           </Text>/            )}
-        {!item.isOnline && item.lastSeen && (
-          <Text style={styles.lastSeen}>/                最后在线: {item.lastSeen}
+        {!item.isOnline && item.lastSeen  && <Text style={styles.lastSeen}>/                最后在线: {item.lastSeen}
           </Text>/            )}
-      </View>/      <View style={styles.contactActions}>/            <TouchableOpacity;
+      </View>/      <View style={styles.contactActions}>/            <TouchableOpacity
 style={styles.actionButton}
           onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleStartChat(item)}/            >
-          <Icon name="message" size={20} color={colors.primary} />/        </TouchableOpacity>/            {item.type === doctor" && ("
-          <TouchableOpacity;
+          <Icon name="message" size={20} color={colors.primary} />/        </TouchableOpacity>/            {item.type === doctor" && (")
+          <TouchableOpacity
 style={styles.actionButton}
             onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleBookAppointment(item)}/              >
             <Icon name="calendar" size={20} color={colors.secondary} />/          </TouchableOpacity>/            )}
       </View>/    </TouchableOpacity>/      ), []);
-  const renderSectionHeader = useMemo() => useMemo(); => useMemo(); => ({ section }: { section: { title: string   } }) => (
+  const renderSectionHeader = useMemo() => useMemo(); => useMemo(); => ({ section }: { section: { title: string   } }) => ()
     <View style={styles.sectionHeader}>/      <Text style={styles.sectionTitle}>{section.title}</Text>/      <Text style={styles.sectionCount}>/        {groupedContacts.find(g: unknown); => g.title === section.title)?.data.length || 0;}
       </Text>/    </View>/      ), []);
   const handleStartChat = useMemo() => useMemo(); => useMemo(); => useCallback(contact: Contact); => {[]), []);))}
     onContactPress(contact);
   };
   const handleBookAppointment = useMemo() => useMemo(); => useMemo(); => useCallback(contact: Contact); => {[]), [])))}
-    Alert.alert(
-      "预约医生,"
+    Alert.alert("预约医生,"
       `即将为您预约${contact.name}${contact.title || "医生"}的诊疗服务`,
       [
         { text: 取消", style: "cancel},
         {
-      text: "确认预约",
+      text: "确认预约", "
       onPress: (); => }
       ]
     );
   };
-  / TODO: 将内联组件移到组件外部* * const renderEmptyState = useMemo() => useMemo(); => useMemo() => () => ( * / <View style={styles.emptyState}>/      <Icon name="account-search" size={64} color={colors.textSecondary} />/      <Text style={styles.emptyTitle}>/        {searchQuery ? 未找到匹配的联系人" : "暂无联系人}
+  / TODO: 将内联组件移到组件外部* * const renderEmptyState = useMemo() => useMemo(); => useMemo() => () => ( * / <View style={styles.emptyState}>/      <Icon name="account-search" size={64} color={colors.textSecondary} />/      <Text style={styles.emptyTitle}>/        {searchQuery ? 未找到匹配的联系人" : "暂无联系人})
       </Text>/      <Text style={styles.emptySubtitle}>/            {searchQuery;
           ? "尝试使用其他关键词搜索"
           : 添加联系人开始聊天吧""
         }
       </Text>/    </View>/      ), [])
   performanceMonitor.recordRender();
-  return (;
-    <View style={styles.container}>/          {showSearch && (;
+  return (;)
+    <View style={styles.container}>/          {showSearch && (;)
         <View style={styles.searchContainer}>/          <Icon name="magnify" size={20} color={colors.textSecondary} />/              <TextInput,style={styles.searchInput};
             placeholder="搜索联系人...";
             value={searchQuery};
             onChangeText={setSearchQuery};
-            placeholderTextColor={colors.textSecondary} />/              {searchQuery.length > 0 && (;
-            <TouchableOpacity;
+            placeholderTextColor={colors.textSecondary} />/              {searchQuery.length > 0 && (;)
+            <TouchableOpacity
 onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setSearchQuery(")}/                  style={styles.clearButton}"
             >
               <Icon name="close-circle" size={20} color={colors.textSecondary} />/            </TouchableOpacity>/              )}
         </View>/          )}
 ;
-      {filteredContacts.length === 0 ? (;
+      {filteredContacts.length === 0 ? (;)
         renderEmptyState;
       ) : (
-        <SectionList;
+        <SectionList
 sections={groupedContacts}
           keyExtractor={(item) = /> item.id}/              renderItem={renderContactItem}
           renderSectionHeader={groupByType ? renderSectionHeader: undefined}
@@ -165,7 +159,7 @@ sections={groupedContacts}
           ItemSeparatorComponent={() => <View style={styles.separator}>}/          stickySectionHeadersEnabled={true} />/          )}
     </View>/      );
 };
-const styles = useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,
+const styles = useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,)
   flex: 1,
     backgroundColor: colors.background},
   searchContainer: {,

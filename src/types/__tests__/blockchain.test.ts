@@ -110,7 +110,7 @@ describe('Blockchain Types', () => {
   });
   describe('Error Types', () => {
     it('should validate BlockchainError', () => {
-      const error = new BlockchainError(;
+      const error = new BlockchainError(;)
         'Network connection failed',BlockchainErrorCode.NETWORK_ERROR,{ endpoint: 'http://localhost:8545' };
       );
       expect(error.code).toBe(BlockchainErrorCode.NETWORK_ERROR);

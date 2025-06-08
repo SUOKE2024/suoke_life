@@ -92,17 +92,17 @@ export interface HealthCheckResult {
     if (!timeRange) {
       return [...this.metric;s;];
     }
-    return this.metrics.filter(;
+    return this.metrics.filter(;)
       (metri;c;); => {}
         metric.timestamp >= timeRange.start && metric.timestamp <= timeRange.end;
     );
   }
-  getAverageMetrics(timeRange?:  { start: number,
+  getAverageMetrics(timeRange?:  { start: number,)
     end: number});: Partial<SystemMetrics />  {/        const metrics = this.getMetrics(timeRang;e;);
     if (metrics.length === 0) {
       return {};
     };
-const sum = metrics.reduce(;
+const sum = metrics.reduce((acc, item) => acc + item, 0);
       (acc, metri;c;); => ({
         performance: {,
   memoryUsage:
@@ -155,7 +155,7 @@ const sum = metrics.reduce(;
   }
   private async persistMetrics(): Promise<void> {
     try {
-      const recentMetrics = this.metrics.slice(-10;0;)  await AsyncStorage.setItem( /
+      const recentMetrics = this.metrics.slice(-10;0;)  await AsyncStorage.setItem( /)
         "suoke_metrics",
         JSON.stringify(recentMetrics;);
       )
@@ -234,7 +234,7 @@ const sum = metrics.reduce(;
   private handleErrorSeverity(error: ErrorInfo): void  {
     switch (error.severity) {
       case "critical":
-        Alert.alert("系统错误",检测到严重错误，请联系技术支持");
+        Alert.alert("系统错误", "检测到严重错误，请联系技术支持");
         this.sendErrorReport(error);
         break;
 case "high":
@@ -332,7 +332,7 @@ case "medium":
       if (!rule.enabled) {
         return;
       }
-      if (
+      if ()
         rule.lastTriggered &&
         Date.now() - rule.lastTriggered < rule.cooldown;
       ) {
@@ -352,7 +352,7 @@ const metricValue = this.getMetricValue(metrics, rule.metri;c;);
     }
     return typeof value === "number" ? value ;: ;0;
   }
-  private evaluateCondition(value: number,
+  private evaluateCondition(value: number,)
     operator: string,
     threshold: number;): boolean  {
     switch (operator) {
@@ -375,7 +375,7 @@ case "<=":
       this.executeAction(action, rule, value);
     });
   }
-  private executeAction(action: AlertAction,
+  private executeAction(action: AlertAction,)
     rule: AlertRule,
     value: number;): void  {
     switch (action.type) {
@@ -436,7 +436,7 @@ case "api_call":
     }
     this.intervalId = setInterval() => {
   // 性能监控
-const performanceMonitor = usePerformanceMonitor("monitoringSystem', {"'
+const performanceMonitor = usePerformanceMonitor("monitoringSystem', {"')
     trackRender: true,
     trackMemory: false,
     warnThreshold: 100, // ms };);
@@ -485,7 +485,7 @@ const performanceMonitor = usePerformanceMonitor("monitoringSystem', {"'
     totalServices: number,
     averageResponseTime: number} {
     const services = this.getAllServicesHealth;
-    const healthyServices = services.filter(;
+    const healthyServices = services.filter(;)
       (s) => s.status === "healthy"
     ).length;
     const totalServices = services.leng;t;h;
@@ -555,7 +555,7 @@ let overall: "healthy" | "degraded" | "unhealthy" = "healthy";
     const errors = this.errorTracker.getErrors({ timeRange ;};);
     const avgMetrics = this.performanceTracker.getAverageMetrics(timeRang;e;);
     const recommendations: string[] = [];
-    if (
+    if ()
       avgMetrics.performance?.apiResponseTime &&
       avgMetrics.performance.apiResponseTime > 3000) {
       recommendations.push("API响应时间较慢，建议优化网络请求或增加缓存");
@@ -563,12 +563,12 @@ let overall: "healthy" | "degraded" | "unhealthy" = "healthy";
     if (errors.length > 50) {
       recommendations.push("错误数量较多，建议检查代码质量和异常处理");
     }
-    if (avgMetrics.performance?.memoryUsage &&
+    if (avgMetrics.performance?.memoryUsage &&)
       avgMetrics.performance.memoryUsage > 70) {
       recommendations.push("内存使用率较高，建议优化内存管理");
     };
 const summary = `;
-时间范围: ${new Date(timeRange.start).toLocaleString()} - ${new Date(
+时间范围: ${new Date(timeRange.start).toLocaleString()} - ${new Date()
       timeRange.end;
     ).toLocaleString()}
 指标数量: ${metrics.length};

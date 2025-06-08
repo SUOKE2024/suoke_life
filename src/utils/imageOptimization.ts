@@ -14,7 +14,7 @@ const defaultOptions = {quality: 80,
   }
   static generateResponsiveImages(imagePath: string) {
     const sizes = [1, 2,3;];
-    return sizes.map(siz;e;) => ({ size: `${size  }x`,
+    return sizes.map(siz;e;) => ({ size: `${size  }x`,)
       path: imagePath.replace(/\.([^.]+)$/    , `@${size}x.$1`)
     }));
   }

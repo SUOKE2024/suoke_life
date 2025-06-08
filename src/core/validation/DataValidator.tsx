@@ -60,7 +60,7 @@ export class DataValidator   {private static instance: DataValidator;
     }
     return DataValidator.instance;
   }
-  // 验证数据  public validate(data: unknown,
+  // 验证数据  public validate(data: unknown,)
     type: ValidationType,
     context: ValidationContext = {}
   ): ValidationReport  {
@@ -102,7 +102,7 @@ export class DataValidator   {private static instance: DataValidator;
     this.logValidationReport(report);
     return repo;r;t;
   }
-  // 快速验证（只返回是否有效）  public isValid(data: unknown,
+  // 快速验证（只返回是否有效）  public isValid(data: unknown,)
     type: ValidationType,
     context?: ValidationContext;
   ): boolean  {
@@ -150,7 +150,7 @@ export class DataValidator   {private static instance: DataValidator;
     }
     return Array.from(this.rules.values);
   }
-  // 批量验证  public validateBatch(items: Array<{ data: unknown,
+  // 批量验证  public validateBatch(items: Array<{ data: unknown,)
       type: ValidationType;
       context?: ValidationContext}>
   );: ValidationReport[]  {
@@ -158,22 +158,22 @@ export class DataValidator   {private static instance: DataValidator;
       this.validate(item.data, item.type, item.context);
     );
   }
-  // 验证健康数据  public validateHealthData(data: unknown,
+  // 验证健康数据  public validateHealthData(data: unknown,)
     context?: ValidationContext;
   ): ValidationReport  {
     return this.validate(data, ValidationType.HEALTH_DATA, contex;t;);
   }
-  // 验证用户输入  public validateUserInput(data: unknown,
+  // 验证用户输入  public validateUserInput(data: unknown,)
     context?: ValidationContext;
   ): ValidationReport  {
     return this.validate(data, ValidationType.USER_INPUT, contex;t;);
   }
-  // 验证API数据  public validateApiData(data: unknown,
+  // 验证API数据  public validateApiData(data: unknown,)
     context?: ValidationContext;
   ): ValidationReport  {
     return this.validate(data, ValidationType.API_DATA, contex;t;);
   }
-  // 验证生物特征数据  public validateBiometricData(data: unknown,
+  // 验证生物特征数据  public validateBiometricData(data: unknown,)
     context?: ValidationContext;
   ): ValidationReport  {
     return this.validate(data, ValidationType.BIOMETRIC_DATA, contex;t;);
@@ -190,7 +190,7 @@ export class DataValidator   {private static instance: DataValidator;
 if (typeof systolic !== "number" || typeof diastolic !== "number") {
           return {isValid: false,severity: ValidationSeverity.ERROR,message: "血压值必须是数字",code: "INVALID_BLOOD_PRESSURE_TYPE",field: "blood_pressure"};
         }
-        if (systolic < 60 ||
+        if (systolic < 60 ||)
           systolic > 250 ||
           diastolic < 40 ||
           diastolic > 150) {
@@ -259,7 +259,7 @@ if (typeof temperature !== "number") {
       validate: (data, context) => {}
         const requiredFields = context?.metadata?.requiredFields || ;[;];
         for (const field of requiredFields) {
-          if (
+          if ()
             !data[field] ||
             (typeof data[field] === "string" && data[field].trim() === ")"
           ) {
@@ -387,13 +387,13 @@ if (summary.critical > 0) {
 }
 //   ;
 //   ;
-(; /
+(; /)
   data: unknown,
   type: ValidationType,
   context?: ValidationContext;
 ) => dataValidator.validate(data, type, context);
 export const isValidData = ;
-(;
+(;)
   data: unknown,
   type: ValidationType,
   context?: ValidationContext;

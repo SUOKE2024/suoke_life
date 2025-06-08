@@ -15,7 +15,7 @@ jest.mock('../../services/api/agentApiService', () => ({
   }
 }));
 // Mock store
-const mockStore = configureStore({reducer: {agents: (;
+const mockStore = configureStore({reducer: {agents: (;))
       state = {xiaoai: {
       status: "active",
       health: 'healthy' },xiaoke: {
@@ -65,7 +65,7 @@ describe('智能体集成端到端测试', () => {
       };
       (agentApiService.xiaoaiChat as jest.Mock).mockResolvedValue(mockChatResponse);
       const chatRequest = {
-      message: "你好",
+      message: "你好", "
       messageType: MessageType.TEXT,userId: 'user-123',sessionId: 'session-456';
       };
       const response = await agentApiService.xiaoaiChat(chatRequest);
@@ -124,19 +124,19 @@ describe('智能体集成端到端测试', () => {
       query: "中医养生",
       results: [;
             {
-      title: "中医养生基础知识",
+      title: "中医养生基础知识", "
       content: '中医养生注重整体调理...',relevance: 0.92;
             };
           ];
         },timestamp: new Date(),requestId: 'knowledge-request-1';
       };
-      (agentApiService.laokeKnowledgeRetrieval as jest.Mock).mockResolvedValue(
+      (agentApiService.laokeKnowledgeRetrieval as jest.Mock).mockResolvedValue()
         mockKnowledgeResponse
       );
       const knowledgeRequest = {
       userId: "user-123",
       serviceType: 'knowledge_retrieval',parameters: {
-      query: "中医养生",
+      query: "中医养生", "
       maxResults: 5;
         };
       };
@@ -163,7 +163,7 @@ describe('智能体集成端到端测试', () => {
           ];
         },timestamp: new Date(),requestId: 'lifestyle-request-1';
       };
-      (agentApiService.soerLifestyleManagement as jest.Mock).mockResolvedValue(
+      (agentApiService.soerLifestyleManagement as jest.Mock).mockResolvedValue()
         mockLifestyleResponse
       );
       const lifestyleRequest = {

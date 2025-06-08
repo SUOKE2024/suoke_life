@@ -9,32 +9,32 @@ importIcon from "../../components/common/Icon";/import { HealthMetric } from "..
   onPress?: () => void;
   getTrendIcon: (trend: string) => string;
 }
-const HealthMetricCard: React.FC<HealthMetricCardProps />  = ({/      metric,onPress,
+const HealthMetricCard: React.FC<HealthMetricCardProps />  = ({/      metric,onPress,)
   getTrendIcon;
 }) => {}
   const progressPercentage = (metric.value / metric.target) * 1/      const isAboveTarget = metric.value >= metric.targ;e;t;
-return (;
-    <TouchableOpacity;
+return (;)
+    <TouchableOpacity
 style={styles.container}
       onPress={onPress}
       disabled={!onPress}
-    accessibilityLabel="TODO: 添加无障碍标签" />/      <View style={styles.header}>/            <View;
-style={[
+    accessibilityLabel="TODO: 添加无障碍标签" />/      <View style={styles.header}>/            <View
+style={{[
             styles.iconContainer,
-            { backgroundColor: metric.color + "2;0;"   }
-          ]} />/          <Icon name={metric.icon} size={20} color={metric.color} />/        </View>/        <View style={styles.headerInfo}>/          <Text style={styles.name}>{metric.name}</Text>/          <View style={styles.trendContainer}>/                <Icon;
+            { backgroundColor: metric.color + "2;0;"   }}
+          ]} />/          <Icon name={metric.icon} size={20} color={metric.color} />/        </View>/        <View style={styles.headerInfo}>/          <Text style={styles.name}>{metric.name}</Text>/          <View style={styles.trendContainer}>/                <Icon
 name={getTrendIcon(metric.trend)}
               size={16}
               color={
                 metric.trend === "up"
                   ? colors.success: metric.trend === "down"? colors.error: colors.textSecondary} />/          </View>/        </View>/      </View>/
-      <View style={styles.valueContainer}>/        <Text style={[styles.value, { color: metric.color}]} />/              {metric.value}
+      <View style={styles.valueContainer}>/        <Text style={{[styles.value, { color: metric.color}}]} />/              {metric.value}
         </Text>/        <Text style={styles.unit}>{metric.unit}</Text>/      </View>/
-      <View style={styles.progressContainer}>/        <View style={styles.progressBackground}>/              <View;
-style={[
+      <View style={styles.progressContainer}>/        <View style={styles.progressBackground}>/              <View
+style={{[
               styles.progressFill,
               {
-                width: `${Math.min(progressPercentage, 100)}%`,
+                width: `${Math.min(progressPercentage, 100)}}%`,
                 backgroundColor: isAboveTarget ? colors.success : metric.color;
               }
             ]}
@@ -44,7 +44,7 @@ style={[
       <Text style={styles.suggestion} numberOfLines={2} />/            {metric.suggestion}
       </Text>/    </TouchableOpacity>/      );
 };
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   backgroundColor: colors.white,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,

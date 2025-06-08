@@ -330,10 +330,10 @@ export class ErrorHandler {
   // 获取操作按钮标签
   private getActionLabels(action: string): string[] {
     switch (action) {
-      case 'retry': return ["重试",取消'];
-      case 'refresh': return ["重新登录",取消'];
+      case 'retry': return ["重试", "取消'];
+      case 'refresh': return ["重新登录", "取消'];
       case 'navigate': return ['确定'];
-      case 'contact_support': return ["联系客服",确定'];
+      case 'contact_support': return ["联系客服", "确定'];
       case 'wait': return ["稍后重试",取消'];
       default: return ['确定'];
     }

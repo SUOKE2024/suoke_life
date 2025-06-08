@@ -21,7 +21,7 @@ export class MCPTimestampService {private static instance: MCPTimestampService;
   }
   /**
 * * 创建当前时间的MCP时间戳
-  public now(
+  public now()
     source: MCPTimestamp[";source"] = device",
     precision: MCPTimestamp["precision] = "millisecond""
   ): MCPTimestamp {
@@ -30,7 +30,7 @@ export class MCPTimestampService {private static instance: MCPTimestampService;
   }
   /**
 * * 从Date对象创建MCP时间戳
-  public fromDate(
+  public fromDate()
     date: Date,
     source: MCPTimestamp[source"] = "device,
     precision: MCPTimestamp["precision"] = millisecond""
@@ -39,7 +39,7 @@ export class MCPTimestampService {private static instance: MCPTimestampService;
   }
   /**
 * * 从Unix时间戳创建MCP时间戳
-  public fromUnix(
+  public fromUnix()
     unix: number,
     source: MCPTimestamp["source] = "device",
     precision: MCPTimestamp[precision"] = "millisecond;
@@ -49,7 +49,7 @@ export class MCPTimestampService {private static instance: MCPTimestampService;
   }
   /**
 * * 从ISO字符串创建MCP时间戳
-  public fromISO(
+  public fromISO()
     iso: string,
     source: MCPTimestamp["source"] = device",
     precision: MCPTimestamp["precision] = "millisecond""
@@ -59,7 +59,7 @@ export class MCPTimestampService {private static instance: MCPTimestampService;
   }
   /**
 * * 创建时间范围
-  public createTimeRange(
+  public createTimeRange()
     start: Date | MCPTimestamp,
     end: Date | MCPTimestamp;
   ): TimeRange {
@@ -97,7 +97,7 @@ if (!timestamp.timezone || !timestamp.source || !timestamp.precision) {
   }
   /**
 * * 格式化显示时间
-  public format(
+  public format()
     timestamp: MCPTimestamp,
     options: Intl.DateTimeFormatOptions = {}
   ): string {
@@ -110,7 +110,7 @@ if (!timestamp.timezone || !timestamp.source || !timestamp.precision) {
       second: "2-digit",
       timeZone: timestamp.timezone;
     };
-    return new Intl.DateTimeFormat(zh-CN", {";
+    return new Intl.DateTimeFormat(zh-CN", {";)
       ...defaultOptions,...options;
     }).format(date);
   }
@@ -158,7 +158,7 @@ return {...timestamp,synchronized: true;
   }
   /**
 * * 创建MCP时间戳的私有方法
-  private createTimestamp(
+  private createTimestamp()
     date: Date,
     source: MCPTimestamp[source"],"
     precision: MCPTimestamp["precision]"
@@ -188,13 +188,13 @@ break;
 export const mcpTimestamp = MCPTimestampService.getInstance();
 /**
 * * 便捷函数
-export const createMCPTimestamp = (;
+export const createMCPTimestamp = (;)
   source: MCPTimestamp[source"] = "device,precision: MCPTimestamp["precision"] = millisecond;
 ): MCPTimestamp => mcpTimestamp.now(source, precision);
-export const createTimeRange = (;
+export const createTimeRange = (;)
   start: Date | MCPTimestamp,end: Date | MCPTimestamp;
 ): TimeRange => mcpTimestamp.createTimeRange(start, end);
-export const formatMCPTimestamp = (;
+export const formatMCPTimestamp = (;)
   timestamp: MCPTimestamp,options?: Intl.DateTimeFormatOptions;
 ): string => mcpTimestamp.format(timestamp, options);
 export const validateMCPTimestamp = (timestamp: MCPTimestamp): boolean =>;

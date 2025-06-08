@@ -205,20 +205,20 @@ export interface UserProfile {
     this.initializeAnalyzers();
   }
   // 初始化分析器  private initializeAnalyzers(): void {
-    this.pulseAnalyzer = new PulseAnalyzer(
+    this.pulseAnalyzer = new PulseAnalyzer()
       this.config.models.pulseAnalysis,
       this.knowledgeBase;
     );
-    this.touchAnalyzer = new TouchAnalyzer(
+    this.touchAnalyzer = new TouchAnalyzer()
       this.config.models.pressureAnalysis,
       this.knowledgeBase;
     );
-    this.temperatureAnalyzer = new TemperatureAnalyzer(
+    this.temperatureAnalyzer = new TemperatureAnalyzer()
       this.config.models.temperatureAnalysis,
       this.knowledgeBase;
     );
   }
-  // 执行切诊分析  public async analyze(data: PalpationData,
+  // 执行切诊分析  public async analyze(data: PalpationData,)
     userProfile?: UserProfile;
   ): Promise<PalpationResult /    >  {
     if (!this.config.enabled) {
@@ -266,11 +266,11 @@ export interface UserProfile {
       processed.touchData = await this.preprocessTouchData(data.touchData;);
     }
     if (data.temperatureData) {
-      processed.temperatureData = await this.preprocessTemperatureData(
+      processed.temperatureData = await this.preprocessTemperatureData()
         data.temperatureData;);
     }
     if (data.pressureData) {
-      processed.pressureData = await this.preprocessPressureData(
+      processed.pressureData = await this.preprocessPressureData()
         data.pressureData;);
     }
     return process;e;d;
@@ -284,7 +284,7 @@ export interface UserProfile {
       signals.touchSignals = await this.processTouchSignals(data.touchData;);
     }
     if (data.temperatureData) {
-      signals.temperatureSignals = await this.processTemperatureSignals(
+      signals.temperatureSignals = await this.processTemperatureSignals()
         data.temperatureData;);
     }
     return signa;l;s;
@@ -317,41 +317,41 @@ export interface UserProfile {
       }
     };
     if (signals.pulseSignals) {
-      features.pulse = await this.pulseAnalyzer.extractFeatures(
+      features.pulse = await this.pulseAnalyzer.extractFeatures()
         signals.pulseSignals;);
     }
     if (signals.touchSignals) {
-      features.touch = await this.touchAnalyzer.extractFeatures(
+      features.touch = await this.touchAnalyzer.extractFeatures()
         signals.touchSignals;);
     }
     if (signals.temperatureSignals) {
-      features.temperature = await this.temperatureAnalyzer.extractFeatures(
+      features.temperature = await this.temperatureAnalyzer.extractFeatures()
         signals.temperatureSignals;);
     }
     return featur;e;s;
   }
-  // 执行各项分析  private async performAnalyses(features: PalpationFeatures,
+  // 执行各项分析  private async performAnalyses(features: PalpationFeatures,)
     userProfile?: UserProfile;
   ): Promise<AnalysisResults /    >  {
     const results: AnalysisResults = {};
     if (features.pulse.rate > 0) {
-      results.pulseAnalysis = await this.pulseAnalyzer.analyze(
+      results.pulseAnalysis = await this.pulseAnalyzer.analyze()
         features.pulse,
         userProfile;);
     }
     if (features.touch.skinCondition) {
-      results.touchAnalysis = await this.touchAnalyzer.analyze(
+      results.touchAnalysis = await this.touchAnalyzer.analyze()
         features.touch,
         userProfile;);
     }
     if (features.temperature.overallTemperature) {
-      results.temperatureAnalysis = await this.temperatureAnalyzer.analyze(
+      results.temperatureAnalysis = await this.temperatureAnalyzer.analyze()
         features.temperature,
         userProfile;);
     }
     return resul;t;s;
   }
-  // 整合分析结果  private async integrateResults(features: PalpationFeatures,
+  // 整合分析结果  private async integrateResults(features: PalpationFeatures,)
     analyses: AnalysisResults);: Promise<PalpationResult /    >  {
     const confidence = this.calculateOverallConfidence(analyses;);
     const analysis = await this.generateComprehensiveAnalysis(analys;e;s;);
@@ -370,29 +370,29 @@ export interface UserProfile {
     }
     // 记录渲染性能
 performanceMonitor.recordRender();
-    return (;
+    return (;)
       confidences.reduce(sum, con;f;); => sum + conf, 0) / confidences.length/        );
   }
   // 生成综合分析  private async generateComprehensiveAnalysis(analyses: AnalysisResults);: Promise<string>  {
     const analysisTexts: string[] = [];
     if (analyses.pulseAnalysis) {
-      analysisTexts.push(
+      analysisTexts.push()
         `脉象分析：${analyses.pulseAnalysis.pulseType.primary}，${analyses.pulseAnalysis.pathologicalSignificance}`
       );
     }
     if (analyses.touchAnalysis) {
-      analysisTexts.push(
+      analysisTexts.push()
         `触诊分析：${analyses.touchAnalysis.overallAssessment}`
       );
     }
     if (analyses.temperatureAnalysis) {
-      analysisTexts.push(
+      analysisTexts.push()
         `温度分析：${analyses.temperatureAnalysis.thermalPattern.overall}，${analyses.temperatureAnalysis.thermalPattern.tcmInterpretation}`
       );
     }
     const comprehensiveAnalysis =
       await this.knowledgeBase.generateCalculationAnalysis({ palpationAnalysis: anal;y;s;e;s ; });
-    return [...analysisTexts, ",综合切诊分析：", comprehensiveAnalysis].join(\n;"
+    return [...analysisTexts, ", "综合切诊分析：", comprehensiveAnalysis].join(\n;")
     ;);
   }
   private async preprocessPulseData(data: PulseData): Promise<PulseData  /     >  {
@@ -414,7 +414,7 @@ performanceMonitor.recordRender();
   public emit(event: string, data?: unknown): void  {
     }
   // 清理资源  public async cleanup(): Promise<void> {
-    await Promise.all(
+    await Promise.all()
       [
         this.pulseAnalyzer.cleanup?.(),
         this.touchAnalyzer.cleanup?.(),
@@ -444,7 +444,7 @@ interface AnalysisResults {
   async extractFeatures(signals: unknown): Promise<PulseFeatures /    >  {
     return {rate: 72, ///     rhythm: "规律",strength: "有力",depth: "中",width: "适中",length: "正常",tension: "适中",smoothness: "流利"};
   };
-  async analyze(features: PulseFeatures,userProfile?: UserProfile;
+  async analyze(features: PulseFeatures,userProfile?: UserProfile;)
   );: Promise<PulseAnalysis /    >  {
     return {pulseType: {
       primary: "平脉",
@@ -482,7 +482,7 @@ class TouchAnalyzer {
       skinCondition: "润泽",
       muscleCondition: "有力",jointCondition: "灵活",abdominalCondition: "柔软"};
   };
-  async analyze(features: TouchFeatures,userProfile?: UserProfile;
+  async analyze(features: TouchFeatures,userProfile?: UserProfile;)
   );: Promise<TouchAnalysis /    >  {
     return {skinAnalysis: {moisture: {
       value: "润泽",
@@ -545,7 +545,7 @@ class TemperatureAnalyzer {
       overallTemperature: "正常",
       temperaturePattern: "均匀",localVariations: [];};
   }
-  async analyze(features: TemperatureFeatures,
+  async analyze(features: TemperatureFeatures,)
     userProfile?: UserProfile;
   ): Promise<TemperatureAnalysis /    >  {
     return {thermalPattern: {
@@ -566,7 +566,7 @@ class TemperatureAnalyzer {
       organ: "肾",
       thermalState: "正常", significance: "肾阳充足"}
       ],
-      constitutionalImplications: ["阳气充足",阴阳平衡"],
+      constitutionalImplications: ["阳气充足", "阴阳平衡"],
       syndromeIndications: ["阴阳调和"]
     };
   }

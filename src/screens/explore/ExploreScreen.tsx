@@ -36,7 +36,7 @@ const ExploreScreen: React.FC  = () => {}
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("all);
   const [loading, setLoading] = useState(true);
-  useEffect() => {
+  useEffect(() => {
     loadKnowledgeData();
   }, [])  // 检查是否需要添加依赖项;
   const loadKnowledgeData = async() => {}
@@ -65,18 +65,18 @@ const mockCategories: Category[] = [;
           category: "tcm-theory",
           readTime: 15分钟",
           difficulty: "intermediate,",
-          tags: ["五行", 中医基础",理论],
+          tags: ["五行", " 中医基础", "理论],
           author: "老克",
           publishDate: 2024-01-15""
         },
         {
       id: "2,",
-      title: "春季养生指南",
+      title: "春季养生指南", "
           description: 春季如何调理身体，预防疾病，保持健康",
           category: "health-tips,",
           readTime: "10分钟",
           difficulty: beginner",
-          tags: ["春季, "养生", 预防"],
+          tags: ["春季, "养生", " 预防"],
           author: "老克,",
           publishDate: "2024-01-14"
         },
@@ -87,7 +87,7 @@ const mockCategories: Category[] = [;
           category: exercise",
           readTime: "20分钟,",
           difficulty: "beginner",
-          tags: [太极",运动, "入门"],
+          tags: [太极", "运动, "入门"],
           author: 老克",
           publishDate: "2024-01-13"
         },
@@ -98,14 +98,14 @@ const mockCategories: Category[] = [;
           category: "diet-therapy",
           readTime: 25分钟",
           difficulty: "advanced,",
-          tags: ["药膳", 食疗",配方],
+          tags: ["药膳", " 食疗", "配方],
           author: "老克",
           publishDate: 2024-01-12""
         }];
       setCategories(mockCategories);
       setKnowledgeItems(mockKnowledgeItems);
     } catch (error) {
-      Alert.alert("错误", 加载内容失败，请稍后重试");"
+      Alert.alert("错误", " 加载内容失败，请稍后重试");"
     } finally {
       setLoading(false);
     }
@@ -140,35 +140,35 @@ const mockCategories: Category[] = [;
   const handleKnowledgeItemPress = (item: KnowledgeItem) => {}
     Alert.alert(item.title, `即将阅读：${item.description}`);
   };
-  const renderCategoryItem = ({ item }: { item: Category }) => (;
-    <TouchableOpacity;
-style={[
+  const renderCategoryItem = ({ item }: { item: Category }) => (;)
+    <TouchableOpacity
+style={{[
         styles.categoryItem,
         selectedCategory === item.id && styles.selectedCategoryItem;
-      ]}
+      ]}}
       onPress={() => setSelectedCategory(item.id)}
     >
-      <Icon;
+      <Icon
 name={item.icon}
         size={20}
         color={selectedCategory === item.id ? colors.white : colors.primary}
       /    >
-      <Text style={[ ///  >
+      <Text style={{[ ///  >
         styles.categoryText,
         selectedCategory === item.id && styles.selectedCategoryText;
-      ]}>
+      ]}}>
         {item.name}
       </    Text>
-      <Text style={[ ///  >
+      <Text style={{[ ///  >
         styles.categoryCount,
         selectedCategory === item.id && styles.selectedCategoryCount;
-      ]}>
+      ]}}>
         {item.count}
       </    Text>
     </    TouchableOpacity>
   );
-  const renderKnowledgeItem = ({ item }: { item: KnowledgeItem }) => (;
-    <TouchableOpacity;
+  const renderKnowledgeItem = ({ item }: { item: KnowledgeItem }) => (;)
+    <TouchableOpacity
 style={styles.knowledgeCard}
       onPress={() => handleKnowledgeItemPress(item)}
       activeOpacity={0.7}
@@ -179,14 +179,14 @@ style={styles.knowledgeCard}
           <Text style={styles.cardDescription}>{item.description}</    Text>
         </    View>
         <View style={styles.cardMeta}>
-          <View style={[styles.difficultyBadge, { backgroundColor: getDifficultyColor(item.difficulty) }]}>
+          <View style={{[styles.difficultyBadge, { backgroundColor: getDifficultyColor(item.difficulty) }}]}>
             <Text style={styles.difficultyText}>{getDifficultyText(item.difficulty)}</    Text>
           </    View>
         </    View>
       </    View>
       <View style={styles.cardFooter}>
         <View style={styles.cardTags}>
-          {item.tags.slice(0, 3).map((tag, index) => (
+          {item.tags.slice(0, 3).map((tag, index) => ())
             <View key={index} style={styles.tag}>
               <Text style={styles.tagText}>{tag}</    Text>
             </    View>
@@ -200,7 +200,7 @@ style={styles.knowledgeCard}
     </    TouchableOpacity>
   );
   if (loading) {
-    return (;
+    return (;)
       <SafeAreaView style={styles.container}>;
         <View style={styles.loadingContainer}>;
           <ActivityIndicator size="large" color={colors.primary} /    >;
@@ -210,7 +210,7 @@ style={styles.knowledgeCard}
     );
   }
   return (
-    <SafeAreaView style={styles.container}>
+  <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerContent}>
           <View style={styles.agentInfo}>;
@@ -229,7 +229,7 @@ style={styles.knowledgeCard}
         </    Text>;
       </    View>;
       <View style={styles.categoriesContainer}>;
-        <FlatList;
+        <FlatList
 data={categories}
           renderItem={renderCategoryItem}
           keyExtractor={(item) => item.id}
@@ -238,7 +238,7 @@ showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.categoriesList}
         /    >
       </    View>
-      <FlatList;
+      <FlatList
 data={filteredItems}
         renderItem={renderKnowledgeItem}
         keyExtractor={(item) => item.id}
@@ -248,7 +248,7 @@ data={filteredItems}
     </    SafeAreaView>
   );
 };
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flex: 1,
     backgroundColor: colors.background},
   loadingContainer: {,

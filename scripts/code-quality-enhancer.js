@@ -42,13 +42,13 @@ class CodeQualityEnhancer {
       },
       {
         name: 添加useCallback依赖",
-        pattern: /useCallback\(\s*([^]+),\s*\[\s*\]\s*\)/g,
+        pattern: /useCallback\(\s*([^]+),\s*[\s*]\s*\)/g,
         replacement: "useCallback($1, []),
         severity: "medium"
       },
       {
         name: 添加useMemo依赖",
-        pattern: /useMemo\(\s*([^]+),\s*\[\s*\]\s*\)/g,
+        pattern: /useMemo\(\s*([^]+),\s*[\s*]\s*\)/g,
         replacement: "useMemo($1, []),
         severity: "medium"
       }
@@ -157,7 +157,7 @@ if (content.includes(export default") && content.includes("React.FC)) {
     
     // 优化useState初始化
 content = content.replace(
-      /useState\(\s*\[\s*\]\s*\)/g,
+      /useState\(\s*[\s*]\s*\)/g,
       useState<any[]>(() => [])"
     );
     

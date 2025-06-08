@@ -1,4 +1,3 @@
-
 import setupTests from '../setupTests.ts';
 describe('setupTests', () => {
   it('应该正确导出', () => {

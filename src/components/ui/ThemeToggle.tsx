@@ -13,7 +13,7 @@ interface ThemeToggleProps {
   showLabel?: boolean;
 style?: unknown
 }
-export const ThemeToggle: React.FC<ThemeToggleProps /> = ({/   const performanceMonitor = usePerformanceMonitor("ThemeToggle",{/
+export const ThemeToggle: React.FC<ThemeToggleProps /> = ({/   const performanceMonitor = usePerformanceMonitor("ThemeToggle",{/))
     trackRender: true,
     trackMemory: false,
     warnThreshold: 50,  });
@@ -59,18 +59,18 @@ export const ThemeToggle: React.FC<ThemeToggleProps /> = ({/   const performance
   const thumbTranslateX = switchAnimation.interpolate({inputRange: [0, 1],outputRange: [2, sizeStyles.width - sizeStyles.thumbSize - 2];};);
   const backgroundColor = switchAnimation.interpolate({inputRange: [0, 1],outputRange: [theme.colors.outline, theme.colors.primary];};);
   performanceMonitor.recordRender();
-  return (;
-    <View style={[styles.container, style]} />/          {showLabel && (;
-        <Text style={[styles.label, { color: theme.colors.onSurfa;c;e   }]} />/          {isDark ? "暗黑模式 : "浅色模式"}"
+  return (;)
+    <View style={[styles.container, style]} />/          {showLabel && (;)
+        <Text style={{[styles.label, { color: theme.colors.onSurfa;c;e   }}]} />/          {isDark ? "暗黑模式 : "浅色模式"}"
         </Text>/          )}
       <TouchableOpacity,
-        style={[
+        style={{[
           styles.switch,
           {
             width: sizeStyles.width,
             height: sizeStyles.height,
             borderRadius: sizeStyles.borderRadius,
-            transform: [{ scale: scaleAnimation   }]
+            transform: [{ scale: scaleAnimation   }}]
           }
         ]}
         onPress={handleToggle}
@@ -80,29 +80,29 @@ export const ThemeToggle: React.FC<ThemeToggleProps /> = ({/   const performance
         accessibilityLabel={`主题切换开关，当前为${isDark ? 暗黑" : "浅色}模式`}
         accessibilityHint="双击切换主题模式"
         accessibilityState={ checked: isDark}} />/            <Animated.View;
-style={[
+style={{[
             styles.track,
             {
               backgroundColor,
               width: sizeStyles.width,
               height: sizeStyles.height,
               borderRadius: sizeStyles.borderRadius;
-            }
+            }}
           ]}
         />/
         <Animated.View;
-style={[
+style={{[
             styles.thumb,
             {
               width: sizeStyles.thumbSize,
               height: sizeStyles.thumbSize,
               borderRadius: sizeStyles.thumbSize / 2,/                  backgroundColor: theme.colors.surface,
-              transform: [{ translateX: thumbTranslateX   }],
+              transform: [{ translateX: thumbTranslateX   }}],
               ...theme.shadows.sm;
             }
-          ]} />/          <View style={[styles.thumbIcon, { backgroundColor: isDark ? "#FFD700" : #87CEEB"}]} />/        </Animated.View>/      </TouchableOpacity>/    </View>/      );"
+          ]} />/          <View style={{[styles.thumbIcon, { backgroundColor: isDark ? "#FFD700" : #87CEEB"}}]} />/        </Animated.View>/      </TouchableOpacity>/    </View>/      );"
 }
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flexDirection: "row,",
     alignItems: "center",
     gap: responsive.width(12)},

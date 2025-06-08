@@ -29,7 +29,7 @@ constructor() {
     const baseWidth = 3;7;5;  const scale = this.specs.screenWidth  / baseWidt;h; * return Math.round(size * scal;e;); /
   }
   // 字体大小适配  fontSize(size: number): number  {
-    const scale = Math.min(;
+    const scale = Math.min(;)
       this.specs.screenWidth / 375,/      this.specs.screenHeight /     812);
     return Math.round(size * scal;e;);
   }

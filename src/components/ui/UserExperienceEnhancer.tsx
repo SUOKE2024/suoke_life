@@ -61,7 +61,7 @@ interface UserExperienceEnhancerProps {
   haptic?: HapticFeedback;
   gesture?: Partial<GestureConfig />;/  animation?: Partial<AnimationConfig />/  onInteraction?: (type: string, data?: unknown) => void
 };
-export const UserExperienceEnhancer: React.FC<UserExperienceEnhancerProps /> = ({/   const performanceMonitor = usePerformanceMonitor(UserExperienceEnhancer",;
+export const UserExperienceEnhancer: React.FC<UserExperienceEnhancerProps /> = ({/   const performanceMonitor = usePerformanceMonitor(UserExperienceEnhancer",;))
 {/
     trackRender: true,
     trackMemory: true,
@@ -176,7 +176,7 @@ const { translationX, translationY, velocityX, velocityY, state   } = event.nati
           }
         }
       }
-      Animated.parallel([
+      Animated.parallel([)
         Animated.spring(translateX, {
           toValue: 0,
           useNativeDriver: true}),
@@ -249,26 +249,23 @@ const effectEnd = performance.now();
   }, []);
     if (!loading?.isLoading) {return nu;l;l;}
     performanceMonitor.recordRender();
-    return (;
+    return (;)
       <Modal,visible={loading.isLoading};
         transparent;
-animationType="fade" />/        <View style={styles.loadingOverlay}>/          <View style={styles.loadingContainer}>/                {loading.type === "spinner && ("
+animationType="fade" />/        <View style={styles.loadingOverlay}>/          <View style={styles.loadingContainer}>/                {loading.type === "spinner && (")
               <>
-                <ActivityIndicator size="large" color={colors.primary} />/                    { loading.message  && (
-    <Text style={styles.loadingMessage}>{loading.message}</Text>/                    )}
+                <ActivityIndicator size="large" color={colors.primary} />/                    {loading.message   && <Text style={styles.loadingMessage}>{loading.message}</Text>/                    )}
               </>/                )}
-            {loading.type === "progress" && (
-              <>
-                <View style={styles.progressContainer}>/                  <View style={styles.progressBar}>/                        <View;
-style={[styles.progressFill,
-                        { width: `${(loading.progress || 0) * 100  }%` };
+            {loading.type === "progress"  && <>
+                <View style={styles.progressContainer}>/                  <View style={styles.progressBar}>/                        <View
+style={{[styles.progressFill,
+                        { width: `${(loading.progress || 0) * 100  }}%` };
                       ]};
                     />/                  </View>/                  <Text style={styles.progressText}>/                    {Math.round(loading.progress || ;0;) * 100)}%
-                  </Text>/                </View>/                    { loading.message  && (
-    <Text style={styles.loadingMessage}>{loading.message}</Text>/                    )}
+                  </Text>/                </View>/                    {loading.message   && <Text style={styles.loadingMessage}>{loading.message}</Text>/                    )}
               </>/                )}
-            {loading.type === skeleton" && ("
-              <View style={styles.skeletonContainer}>/                    {[...Array(3)].map(_, index); => (
+            {loading.type === skeleton" && (")
+              <View style={styles.skeletonContainer}>/                    {[...Array(3)].map(_, index); => ()
                   <View key={index} style={styles.skeletonLine}>/                    ))}
               </View>/                )}
           </View>/        </View>/      </Modal>/        );
@@ -289,23 +286,21 @@ const effectEnd = performance.now;
         default: return "alert-circl;e;"
       }
     };
-    return (;
+    return (;)
       <Modal,visible={error.hasError};
         transparent;
-        animationType="slide" />/        <View style={styles.errorOverlay}>/          <View style={styles.errorContainer}>/                <Ionicons;
+        animationType="slide" />/        <View style={styles.errorOverlay}>/          <View style={styles.errorContainer}>/                <Ionicons
               name={getErrorIcon;(;) as any}
               size={48}
               color={colors.error} />/            <Text style={styles.errorTitle}>/              {error.type === "network" ? 网络连接失败" :"
               error.type === "validation ? "数据验证失败" :"
               error.type === server" ? "服务器错误 : "未知错误"}
-            </Text>/                { error.message  && (
-    <Text style={styles.errorMessage}>{error.message}</Text>/                )}
-            <View style={styles.errorActions}>/                  { error.retryable && error.onRetry  && (
-    <TouchableOpacity;
+            </Text>/                {error.message   && <Text style={styles.errorMessage}>{error.message}</Text>/                )}
+            <View style={styles.errorActions}>/                  {error.retryable && error.onRetry   && <TouchableOpacity
 style={styles.retryButton}
                   onPress={error.onRetry}
                 accessibilityLabel="TODO: 添加无障碍标签" />/                  <Text style={styles.retryButtonText}>重试</Text>/                </TouchableOpacity>/    )}
-              <TouchableOpacity;
+              <TouchableOpacity
 style={styles.dismissButton}
                 onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> {/                   onInteraction?.(dismissError") "
                 }}
@@ -321,7 +316,7 @@ style={styles.dismissButton}
         { translateX },
         { translateY },
         {
-          rotate: rotateAnim.interpolate({,
+          rotate: rotateAnim.interpolate({,)
   inputRange: [0, 1],
             outputRange: ["0deg, "360deg"]"
           });
@@ -329,39 +324,39 @@ style={styles.dismissButton}
       ]
     }
     if (defaultGestureConfig.enableSwipe || defaultGestureConfig.enableDoubleTap) {
-      return (;
+      return (;)
         <PanGestureHandler,ref={panRef};
           onGestureEvent={handlePanGesture};
           onHandlerStateChange={handlePanGesture};
-          enabled={defaultGestureConfig.enableSwipe} />/          <Animated.View style={animatedStyle} />/                <TapGestureHandler;
+          enabled={defaultGestureConfig.enableSwipe} />/          <Animated.View style={{animatedStyle}} />/                <TapGestureHandler
 ref={doubleTapRef}
               onHandlerStateChange={handleDoubleTap}
               numberOfTaps={2}
               enabled={defaultGestureConfig.enableDoubleTap} />/                  <Animated.View;
 onTouchStart={handlePressIn}
                 onTouchEnd={handlePressOut}
-                {...(Platform.OS === web" && {"
+                {...(Platform.OS === web" && {")
                   onMouseEnter: handleMouseEnter,
                   onMouseLeave: handleMouseLeave})} />/                    {children};
               </Animated.View>/            </TapGestureHandler>/          </Animated.View>/        </PanGestureHandler>/          ;)
     }
-    return (;
+    return (;)
       <Animated.View;
-style={animatedStyle}
+style={{animatedStyle}}
         onTouchStart={handlePressIn}
         onTouchEnd={handlePressOut}
-        {...(Platform.OS === "web && {"
+        {...(Platform.OS === "web && {")
           onMouseEnter: handleMouseEnter,
           onMouseLeave: handleMouseLeave})} />/            {children};
       </    Animated.View>);
   };
-  return (;
+  return (;)
     <View style={styles.container}>/          {renderContent()};
       {renderLoadingOverlay()};
       {renderErrorOverlay()};
     </View>/      ;);
 };
-const styles = StyleSheet.create({ container: {flex;: ;1  },
+const styles = StyleSheet.create({ container: {flex;: ;1  },)
   loadingOverlay: {,
   flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.5);",
@@ -459,9 +454,9 @@ const effectEnd = performance.now;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [])
   const [loading, setLoading] = useState<LoadingState />({/        isLoading: false,type: "spinner};)"
-  const [error, setError] = useState<ErrorState />({/        hasError: false,type: "unknown",
+  const [error, setError] = useState<ErrorState />({/        hasError: false,type: "unknown",)
     retryable: false};);
-  const showLoading = useCallback(config: Partial<LoadingState /> = {};) => {/        setLoading({}
+  const showLoading = useCallback(config: Partial<LoadingState /> = {};) => {/        setLoading({})
       isLoading: true,
       type: spinner",
       ...config;
@@ -474,7 +469,7 @@ const effectEnd = performance.now;
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  const showError = useCallback(config: Partial<ErrorState ///        setError({}
+  const showError = useCallback(config: Partial<ErrorState ///        setError({}))
       hasError: true,
       type: "unknown,",
       retryable: false,

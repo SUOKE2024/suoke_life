@@ -21,7 +21,7 @@ expect(() => {
         validateEmail(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = validateEmail(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -43,7 +43,7 @@ expect(() => {
         validatePhone(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = validatePhone(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -65,7 +65,7 @@ expect(() => {
         validatePassword(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = validatePassword(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -87,7 +87,7 @@ expect(() => {
         getPasswordStrength(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = getPasswordStrength(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -109,7 +109,7 @@ expect(() => {
         validateUsername(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = validateUsername(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -131,7 +131,7 @@ expect(() => {
         validateVerificationCode(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = validateVerificationCode(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -153,7 +153,7 @@ expect(() => {
         validateLoginForm(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = validateLoginForm(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -175,7 +175,7 @@ expect(() => {
         validateRegisterForm(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = validateRegisterForm(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -197,7 +197,7 @@ expect(() => {
         validateForgotPasswordForm(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = validateForgotPasswordForm(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -219,7 +219,7 @@ expect(() => {
         storeAuthTokens(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = storeAuthTokens(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -241,7 +241,7 @@ expect(() => {
         getAuthToken(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = getAuthToken(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -263,7 +263,7 @@ expect(() => {
         getRefreshToken(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = getRefreshToken(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -285,7 +285,7 @@ expect(() => {
         clearAuthTokens(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = clearAuthTokens(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -307,7 +307,7 @@ expect(() => {
         isAuthenticated(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = isAuthenticated(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -329,7 +329,7 @@ expect(() => {
         formatAuthError(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = formatAuthError(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -351,7 +351,7 @@ expect(() => {
         generateDeviceId(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = generateDeviceId(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -373,7 +373,7 @@ expect(() => {
         storeDeviceId(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = storeDeviceId(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -395,7 +395,7 @@ expect(() => {
         getDeviceId(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = getDeviceId(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -432,7 +432,7 @@ validateEmail(// test params);
 expect(averageTime).toBeLessThan(1);
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);)
     const startTime = performance.now();
     // Test with large dataset
 validateEmail(largeDataset);

@@ -20,7 +20,7 @@ expect(() => {
         formatDate(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = formatDate(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -42,7 +42,7 @@ expect(() => {
         formatRelativeTime(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = formatRelativeTime(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -64,7 +64,7 @@ expect(() => {
         getRelativeTime(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = getRelativeTime(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -86,7 +86,7 @@ expect(() => {
         calculateAge(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = calculateAge(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -108,7 +108,7 @@ expect(() => {
         isSameDay(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = isSameDay(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -130,7 +130,7 @@ expect(() => {
         isToday(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = isToday(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -152,7 +152,7 @@ expect(() => {
         isThisWeek(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = isThisWeek(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -174,7 +174,7 @@ expect(() => {
         addTime(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = addTime(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -196,7 +196,7 @@ expect(() => {
         getTimeRange(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = getTimeRange(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -218,7 +218,7 @@ expect(() => {
         getDaysInMonth(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = getDaysInMonth(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -240,7 +240,7 @@ expect(() => {
         isLeapYear(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = isLeapYear(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -262,7 +262,7 @@ expect(() => {
         getQuarter(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = getQuarter(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -284,7 +284,7 @@ expect(() => {
         convertTimezone(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = convertTimezone(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -306,7 +306,7 @@ expect(() => {
         getWorkdays(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = getWorkdays(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -328,7 +328,7 @@ expect(() => {
         parseDate(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = parseDate(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -362,7 +362,7 @@ formatDate(// test params);
 expect(averageTime).toBeLessThan(1);
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);)
     const startTime = performance.now();
     // Test with large dataset
 formatDate(largeDataset);

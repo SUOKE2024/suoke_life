@@ -38,7 +38,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [cancelReason, setCancelReason] = useState('');
   // 初始化
-  useEffect() => {
+  useEffect(() => {
     // 这里应该从用户状态获取用户ID;
     const userId = 'current-user-id';
     getAppointments(userId);
@@ -56,29 +56,29 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
     setShowCancelModal(true);
   }, [selectAppointment]);
   // 确认取消预约
-  const handleConfirmCancel = useCallback(async () => {if (!selectedAppointment) return;
+  const handleConfirmCancel = useCallback(async () => {if (!selectedAppointment) return;)
     try {
       const success = await cancelAppointment(selectedAppointment.id);
       if (success) {
         setShowCancelModal(false);
         setCancelReason('');
-        Alert.alert("取消成功",预约已取消');
+        Alert.alert("取消成功", "预约已取消');
         handleRefresh();
       } else {
-        Alert.alert("取消失败",请稍后重试');
+        Alert.alert("取消失败", "请稍后重试');
       }
     } catch (error) {
-      Alert.alert("取消失败",请稍后重试');
+      Alert.alert("取消失败", "请稍后重试');
     }
   }, [selectedAppointment, cancelAppointment, handleRefresh]);
   // 重新预约
-  const handleReschedule = useCallback(appointment: Appointment) => {navigation.navigate('MedicalResourceDetail', {resourceId: appointment.resourceId,reschedule: true ;
+  const handleReschedule = useCallback(appointment: Appointment) => {navigation.navigate('MedicalResourceDetail', {resourceId: appointment.resourceId,reschedule: true ;)
     });
   }, [navigation]);
   // 渲染标签页
   const renderTabs = () => (
-    <View style={styles.tabContainer}>
-      <TouchableOpacity;
+  <View style={styles.tabContainer}>
+      <TouchableOpacity
         style={[styles.tab, activeTab === 'upcoming' && styles.activeTab]}
         onPress={() => setActiveTab('upcoming')};
       >;
@@ -86,7 +86,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
           即将到来 ({upcomingAppointments.length});
         </Text>;
       </TouchableOpacity>;
-      <TouchableOpacity;
+      <TouchableOpacity
         style={[styles.tab, activeTab === 'past' && styles.activeTab]};
         onPress={() => setActiveTab('past')};
       >;
@@ -100,7 +100,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
   const renderAppointmentCard = ({ item }: { item: Appointment }) => {const isUpcoming = new Date(item.scheduledTime) > new Date();
     const canCancel = isUpcoming && item.status === 'confirmed';
     return (
-      <TouchableOpacity;
+  <TouchableOpacity
         style={styles.appointmentCard}
         onPress={() => handleAppointmentPress(item)}
       >
@@ -121,21 +121,17 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
             {formatDateTime(item.scheduledTime)} · {item.duration}分钟
           </Text>
         </View>
-        {item.location && (
-        <View style={styles.locationContainer}>
+        {item.location  && <View style={styles.locationContainer}>
             <Icon name="location-on" size={16} color="#666" />
             <Text style={styles.locationText}>{item.location}</Text>
           </View>
         )}
-        {item.notes && (
-          <Text style={styles.notesText}>备注：{item.notes}</Text>
+        {item.notes  && <Text style={styles.notesText}>备注：{item.notes}</Text>
         )}
-        {item.price && (
-          <Text style={styles.priceText}>费用：¥{item.price}</Text>
+        {item.price  && <Text style={styles.priceText}>费用：¥{item.price}</Text>
         )}
         <View style={styles.cardActions}>
-          {item.contact && (
-            <TouchableOpacity;
+          {item.contact  && <TouchableOpacity
               style={styles.actionButton}
               onPress={() => handleCall(item.contact!)}
             >
@@ -143,8 +139,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
               <Text style={styles.actionButtonText}>联系</Text>
             </TouchableOpacity>
           )}
-          {canCancel && (
-            <TouchableOpacity;
+          {canCancel  && <TouchableOpacity
               style={[styles.actionButton, styles.cancelActionButton]}
               onPress={() => handleCancelPress(item)}
             >
@@ -152,8 +147,8 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
               <Text style={[styles.actionButtonText, styles.cancelActionText]}>取消</Text>;
             </TouchableOpacity>;
           )};
-          {isUpcoming && item.status === 'confirmed' && (;
-            <TouchableOpacity;
+          {isUpcoming && item.status === 'confirmed' && (;)
+            <TouchableOpacity
               style={styles.actionButton};
               onPress={() => handleReschedule(item)};
             >;
@@ -172,14 +167,14 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
         if (supported) {
           return Linking.openURL(url);
         } else {
-          Alert.alert("错误",无法拨打电话');
+          Alert.alert("错误", "无法拨打电话');
         }
       })
       .catch(err) => console.error('拨打电话失败:', err));
   }, []);
   // 渲染空状态
   const renderEmptyState = () => (
-    <View style={styles.emptyContainer}>
+  <View style={styles.emptyContainer}>
       <Icon name="event-busy" size={64} color="#ccc" />
       <Text style={styles.emptyText}>;
         {activeTab === 'upcoming' ? '暂无即将到来的预约' : '暂无历史预约记录'};
@@ -187,8 +182,8 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
       <Text style={styles.emptySubtext}>;
         {activeTab === 'upcoming' ? '去搜索医疗资源并预约吧' : '完成预约后会在这里显示'};
       </Text>;
-      {activeTab === 'upcoming' && (;
-        <TouchableOpacity;
+      {activeTab === 'upcoming' && (;)
+        <TouchableOpacity
           style={styles.searchButton};
           onPress={() => navigation.navigate('MedicalResource')};
         >;
@@ -199,7 +194,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
   );
   // 渲染取消预约模态框
   const renderCancelModal = () => (
-    <Modal;
+  <Modal
       visible={showCancelModal}
       transparent;
       animationType="slide"
@@ -208,8 +203,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
           <Text style={styles.modalTitle}>取消预约</Text>
-          {selectedAppointment && (
-        <View style={styles.appointmentSummary}>
+          {selectedAppointment  && <View style={styles.appointmentSummary}>
               <Text style={styles.summaryText}>
                 {selectedAppointment.resourceName}
               </Text>
@@ -220,7 +214,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
           )}
           ;
           <Text style={styles.reasonLabel}>取消原因（可选）：</Text>;
-          <TextInput;
+          <TextInput
             style={styles.reasonInput};
             placeholder="请输入取消原因...";
             value={cancelReason};
@@ -230,7 +224,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
             textAlignVertical="top";
           />;
           <View style={styles.modalButtons}>;
-            <TouchableOpacity;
+            <TouchableOpacity
               style={[styles.modalButton, styles.cancelButton]};
               onPress={() => {setShowCancelModal(false);
                 setCancelReason('');
@@ -238,7 +232,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
             >
               <Text style={styles.cancelButtonText}>返回</Text>
             </TouchableOpacity>
-            <TouchableOpacity;
+            <TouchableOpacity
               style={[styles.modalButton, styles.confirmButton]}
               onPress={handleConfirmCancel}
             >
@@ -305,11 +299,11 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
   };
   // 渲染错误状态
   if (errors.appointments) {
-    return (;
+    return (;)
       <SafeAreaView style={styles.container}>;
         <View style={styles.errorContainer}>;
           <Text style={styles.errorText}>{errors.appointments}</Text>;
-          <TouchableOpacity;
+          <TouchableOpacity
             style={styles.retryButton};
             onPress={() => {clearSpecificError('appointments');
               handleRefresh();
@@ -323,10 +317,10 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
   }
   const currentAppointments = activeTab === 'upcoming' ? upcomingAppointments : pastAppointments;
   return (
-    <SafeAreaView style={styles.container}>
+  <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>我的预约</Text>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={styles.addButton}
           onPress={() => navigation.navigate('MedicalResource')}
         >
@@ -334,7 +328,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
         </TouchableOpacity>
       </View>
       {renderTabs()};
-      <FlatList;
+      <FlatList
         data={currentAppointments};
         renderItem={renderAppointmentCard};
         keyExtractor={(item) => item.id};

@@ -10,7 +10,7 @@ import {
 } from '../constants/config';
 // 服务接口定义
 export interface AuthService {
-  login(credentials: { email: string; password: string;
+  login(credentials: { email: string; password: string;)
 }): Promise<ApiResponse<any>>;
   logout(): Promise<ApiResponse<any>>;
   register(userData: any): Promise<ApiResponse<any>>;
@@ -345,7 +345,7 @@ export const ApiServiceProvider: React.FC<ApiServiceProviderProps> = ({ children
       setIsLoading(false);
     }
   };
-  useEffect() => {
+  useEffect(() => {
     // 初始化时检查服务健康状态
     refreshHealth();
     // 如果启用了服务发现，定期检查健康状态
@@ -362,7 +362,7 @@ export const ApiServiceProvider: React.FC<ApiServiceProviderProps> = ({ children
     refreshHealth,
   };
   return (
-    <ApiServiceContext.Provider value={value}>
+  <ApiServiceContext.Provider value={value}>
       {children}
     </ApiServiceContext.Provider>
   );

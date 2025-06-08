@@ -59,7 +59,7 @@ private personality: unknown = {,
       if (age >= 40) {
         recommendations.push({
       category: "lifestyle,",
-      title: "定期体检",
+      title: "定期体检", "
           description: 建议每年进行一次全面体检，重点关注心血管和代谢指标",
           priority: "high,",
           timeframe: "每年一次"
@@ -93,7 +93,7 @@ private personality: unknown = {,
         });
       }
       if (profile.preferences.diagnosisPreferences.privacyLevel === "high) { "
-        recommendations.forEach(rec => {}
+        recommendations.forEach(rec => {})
           rec.description = "建议咨询专业医生获取个性化指导"
         });
       }
@@ -146,19 +146,19 @@ private personality: unknown = {,
   // 无障碍功能  async enableAccessibilityFeature(feature: unknown): Promise<void>  {
     try {
       if (feature.type === "voice_assistance") {
-        await accessibilityServiceClient.manageAccessibilitySettings(
+        await accessibilityServiceClient.manageAccessibilitySettings()
           feature.userId,
           { voice_assistance: true, ...feature.preferences },
           update""
         );
       } else if (feature.type === "screen_reader) {"
-        await accessibilityServiceClient.manageAccessibilitySettings(
+        await accessibilityServiceClient.manageAccessibilitySettings()
           feature.userId,
           { screen_reader: true, ...feature.preferences },
           "update"
         );
       } else if (feature.type === sign_language") {"
-        await accessibilityServiceClient.manageAccessibilitySettings(
+        await accessibilityServiceClient.manageAccessibilitySettings()
           feature.userId,
           { sign_language: true, ...feature.preferences },
           "update"
@@ -234,8 +234,8 @@ case "cognitive:"
   }
   private generateFallbackResponse(message: string, context: ChatContext);: ChatResponse  {
     return {text: "抱歉，我现在遇到了一些技术问题。不过别担心，我还是很愿意帮助你的！你可以尝试重新描述一下你的问题，或者稍后再试。,";
-      suggestions;: ;["重新描述问题",
-        查看健康建议",联系技术支持,稍后再试"
+      suggestions;: ;["重新描述问题", "
+        查看健康建议", "联系技术支持,稍后再试"
       ],
       timestamp: Date.now()};
   }

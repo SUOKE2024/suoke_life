@@ -100,12 +100,12 @@ export class PerformanceOptimizer   {private static instance: PerformanceOptimiz
       toDelete.forEach([key]); => this.cache.delete(key);)
     }
   }
-  // 请求优化  async optimizeRequest<T>(
+  // 请求优化  async optimizeRequest<T>()
     key: string,
     requestFn: () => Promise<T>,
     options?: {
   // 性能监控
-const performanceMonitor = usePerformanceMonitor(PerformanceOptimizer", {"
+const performanceMonitor = usePerformanceMonitor(PerformanceOptimizer", {")
     trackRender: true,
     trackMemory: false,warnThreshold: 100, // ms };);
       useCache?: boolean;
@@ -126,7 +126,7 @@ const performanceMonitor = usePerformanceMonitor(PerformanceOptimizer", {"
         throw new Error("请求队列已满，请稍后重试";);
       }
       const timeout = options?.timeout || this.config.concurrency.timeou;t;
-      const promise = Promise.race([;
+      const promise = Promise.race([;)
         requestFn(),new Promise<never>(_, reject) =>;
           setTimeout() => reject(new Error("请求超时");), timeout)
         )
@@ -151,7 +151,7 @@ const performanceMonitor = usePerformanceMonitor(PerformanceOptimizer", {"
       this.requestQueue.splice(index, 1);
     }
   }
-  private updateMetrics(responseTime: number,
+  private updateMetrics(responseTime: number,)
     fromCache: boolean,
     isError = false;
   );: void  {
@@ -178,8 +178,8 @@ const performanceMonitor = usePerformanceMonitor(PerformanceOptimizer", {"
       const connectionPromises = [;
         this.tryBluetoothConnection(deviceType),this.tryWiFiConnection(deviceType),this.tryUSBConnection(deviceType)]
       optimizations.push("并行尝试多种连接方式");
-      const result = await Promise.race(;
-        connectionPromises.map(async (promise, in;d;e;x;); => {}
+      const result = await Promise.race(;)
+        connectionPromises.map(async (promise, in;d;e;x;); => {})
           try {
             const connected = await pro;m;i;s;e;
 return { connected, method: ["蓝牙",WiFi", "USB"][index;] ;}
@@ -216,7 +216,7 @@ return { connected, method: ["蓝牙",WiFi", "USB"][index;] ;}
       setTimeout(resolve, Math.random(); * 1000 + 300)
     );
     return Math.random > 0.1;  }
-  // AI分析优化  async optimizeAIAnalysis(data: unknown,
+  // AI分析优化  async optimizeAIAnalysis(data: unknown,)
     analysisType: string);: Promise< { result: unknown,
     processingTime: number,
     optimizations: string[];
@@ -226,7 +226,7 @@ return { connected, method: ["蓝牙",WiFi", "USB"][index;] ;}
     try {
       const preprocessedData = await this.preprocessData(data, analysisTy;p;e;);
       optimizations.push("数据预处理优化");
-      const cacheKey = `analysis-${analysisType}-${this.hashData(;
+      const cacheKey = `analysis-${analysisType}-${this.hashData(;)
         preprocessedData;
       );};`;
       const cachedResult = this.getCache(cacheKe;y;);
@@ -274,7 +274,7 @@ return { connected, method: ["蓝牙",WiFi", "USB"][index;] ;}
   private hashData(data: unknown);: string  {
     return btoa(JSON.stringify(data;);).slice(0, 16);
   }
-  private selectOptimalModel(analysisType: string,
+  private selectOptimalModel(analysisType: string,)
     data: unknown;);:   { name: string, config: unknown} {
     const dataSize = JSON.stringify(data).lengt;h;
     if (dataSize < 1000) {
@@ -316,10 +316,10 @@ return { connected, method: ["蓝牙",WiFi", "USB"][index;] ;}
   }
   // 预加载资源  async preloadResources(): Promise<void> {
     if (!this.config.preload.enabled) retu;r;n;
-    const preloadPromises = this.config.preload.resources.map(;
+    const preloadPromises = this.config.preload.resources.map(;)
       async (resourc;e;) => {}
         try {
-          await this.optimizeRequest(
+          await this.optimizeRequest()
             `preload-${resource}`,
             => this.loadResource(resource),
             { useCache: true, cacheTtl: 3600}  )

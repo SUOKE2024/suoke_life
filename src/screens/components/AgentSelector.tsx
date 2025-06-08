@@ -15,7 +15,7 @@ interface AgentSelectorProps {
   showSpecialty?: boolean;
   size?: small" | "medium | "large"
 }
-export const AgentSelector: React.FC<AgentSelectorProps /> = ({/   const performanceMonitor = usePerformanceMonitor(AgentSelector",;
+export const AgentSelector: React.FC<AgentSelectorProps /> = ({/   const performanceMonitor = usePerformanceMonitor(AgentSelector",;))
 {/
     trackRender: true,
     trackMemory: false,
@@ -31,7 +31,7 @@ export const AgentSelector: React.FC<AgentSelectorProps /> = ({/   const perform
   const agents: AgentType[] = [xiaoai",xiaoke, "laoke", soer"];"
   const renderAgentCards = useCallback(); => {}
     //
-    return agents.map(agen;t;); => (
+    return agents.map(agen;t;); => ()
       <AgentCard,
         key={agent}
         agent={agent}
@@ -39,26 +39,26 @@ export const AgentSelector: React.FC<AgentSelectorProps /> = ({/   const perform
         onPress={onAgentSelect}
         showSpecialty={showSpecialty}
         size={size}
-        style={horizontal ? styles.horizontalCard: undefined} />/    ));
+        style={{horizontal ? styles.horizontalCard: undefined}} />/    ));
   };
   if (horizontal) {
     performanceMonitor.recordRender();
-    return (;
-      <View style={[styles.container, style]} />/            {title && (;
+    return (;)
+      <View style={[styles.container, style]} />/            {title && (;)
           <Text style={styles.title}>{title}</Text>/            )};
-        <ScrollView;
+        <ScrollView
 horizontal;
           showsHorizontalScrollIndicator={false};
           contentContainerStyle={styles.horizontalContainer} />/              {renderAgentCards()};
         </ScrollView>/      </View>/        ;);
   }
-  return (;
-    <View style={[styles.container, style]} />/          {title && (;
+  return (;)
+    <View style={[styles.container, style]} />/          {title && (;)
         <Text style={styles.title}>{title}</Text>/          )};
       <View style={styles.verticalContainer}>/            {renderAgentCards()};
       </View>/    </View>/      ;);
 };
-const styles = StyleSheet.create({ container: {marginVertical: spacing.;s;m  },
+const styles = StyleSheet.create({ container: {marginVertical: spacing.;s;m  },)
   title: {,
   fontSize: fonts.size.md,
     fontWeight: 'bold',

@@ -65,7 +65,7 @@ await this.warmupEngine();
   }
   /**
 * * 加载ONNX模型
-  async loadModel(
+  async loadModel()
     model: ONNXModel,
     options?: ModelLoadOptions;
   ): Promise<string> {
@@ -80,7 +80,7 @@ const cachedSession = await this.cache.getModel(model.id);
       if (cachedSession) {
         this.sessions.set(sessionId, cachedSession);
         this.emit(EVENT_NAMES.CACHE_HIT, {
-          type: cache_hit",
+          type: cache_hit", "
           timestamp: new Date(),
           data: { modelId: model.id, sessionId }
         } as ONNXEvent);
@@ -136,7 +136,7 @@ if (options?.warmupRuns && options.warmupRuns > 0) {
   }
   /**
 * * 执行推理
-  async runInference(
+  async runInference()
     sessionId: string,
     inputs: Map<string, TensorData>
   ): Promise<InferenceResult> {
@@ -160,7 +160,7 @@ const cacheKey = this.generateInferenceCacheKey(sessionId, inputs);
       const cachedResult = await this.cache.getInference(cacheKey);
       if (cachedResult) {
         this.emit(EVENT_NAMES.CACHE_HIT, {
-          type: cache_hit",
+          type: cache_hit", "
           timestamp: new Date(),
           data: { sessionId, cacheKey }
         } as ONNXEvent);
@@ -193,7 +193,7 @@ await this.cache.setInference(cacheKey, result);
       // 更新性能指标
 this.updatePerformanceMetrics(sessionId, {
         averageInferenceTime: latency,
-        memoryPeakUsage: Math.max(
+        memoryPeakUsage: Math.max()
           this.performanceMetrics.get(sessionId)?.memoryPeakUsage || 0,
           memoryUsage;
         )
@@ -218,7 +218,7 @@ metadata.lastUsed = new Date();
         modelId: metadata.modelId;
       };
       this.emit(EVENT_NAMES.INFERENCE_FAILED, {
-        type: inference_failed",
+        type: inference_failed", "
         timestamp: new Date(),
         data: onnxError,
         sessionId,
@@ -273,13 +273,13 @@ await this.cache.clear();
     this.isInitialized = false;
     }
   // 私有方法
-private async createSession(
+private async createSession()
     model: ONNXModel,
     options?: ModelLoadOptions;
   ): Promise<InferenceSession> {
     const sessionOptions = this.buildSessionOptions(options?.sessionOptions);
     const providers = options?.providers || this.getOptimalProviders();
-    return await InferenceSession.create(model.path, {executionProviders: providers,...sessionOptions;
+    return await InferenceSession.create(model.path, {executionProviders: providers,...sessionOptions;)
     });
   }
   private buildSessionOptions(options?: ModelOptimizationOptions): any {
@@ -337,7 +337,7 @@ let hash =
   private async warmupEngine(): Promise<void> {
     // 引擎预热逻辑
 }
-  private async warmupModel(
+  private async warmupModel()
     sessionId: string,
     runs: number,
     preloadInputs?: TensorData[]

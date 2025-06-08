@@ -1,4 +1,3 @@
-
 import GlobalErrorHandler from '../GlobalErrorHandler.ts';
 describe('GlobalErrorHandler', () => {
   it('应该正确导出', () => {

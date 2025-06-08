@@ -1,4 +1,3 @@
-
 import CreateMazeScreen from '../CreateMazeScreen.tsx';
 describe('CreateMazeScreen', () => {
   it('应该正确导出', () => {

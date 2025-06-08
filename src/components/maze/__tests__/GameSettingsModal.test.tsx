@@ -16,7 +16,7 @@ describe('GameSettingsModal', () => {
   });
   it('应该处理用户交互', () => {
     const mockOnPress = jest.fn();
-    const { getByTestId } = renderWithProvider(
+    const { getByTestId } = renderWithProvider()
       <GameSettingsModal onPress={mockOnPress} />
     );
         fireEvent.press(getByTestId('gamesettingsmodal'));
@@ -24,7 +24,7 @@ describe('GameSettingsModal', () => {
   });
   it('应该正确显示属性', () => {
     const testProps = {
-      title: "测试标题",
+      title: "测试标题", "
       description: '测试描述'
     };
         const { getByText } = renderWithProvider(<GameSettingsModal {...testProps} />);
@@ -32,13 +32,13 @@ describe('GameSettingsModal', () => {
     expect(getByText(testProps.description)).toBeTruthy();
   });
   it('应该处理错误状态', () => {
-    const { getByTestId } = renderWithProvider(
+    const { getByTestId } = renderWithProvider()
       <GameSettingsModal error="测试错误" />
     );
         expect(getByTestId('error-message')).toBeTruthy();
   });
   it('应该处理加载状态', () => {
-    const { getByTestId } = renderWithProvider(
+    const { getByTestId } = renderWithProvider()
       <GameSettingsModal loading={true} />
     );
         expect(getByTestId('loading-indicator')).toBeTruthy();

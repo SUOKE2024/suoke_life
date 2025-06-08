@@ -177,7 +177,7 @@ export class MessageBusService {
   /**
   * 订阅主题（使用WebSocket）
   */
-  async subscribe(
+  async subscribe()
     topic: string,
     callback: (message: Message) => void,
     options: {
@@ -316,7 +316,7 @@ export class MessageBusService {
     if (this.reconnectAttempts < this.maxReconnectAttempts) {
       this.reconnectAttempts++;
       const delay = this.reconnectDelay * Math.pow(2, this.reconnectAttempts - 1);
-      console.log(
+      console.log()
         `Attempting to reconnect WebSocket in ${delay}ms (attempt ${this.reconnectAttempts})`
       );
       setTimeout() => {

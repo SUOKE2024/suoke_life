@@ -109,7 +109,7 @@ const comprehensiveFixRules = [
   // 修复样式对象
   {
     name: '修复样式数组',
-    pattern: /style=\{\s*\[\s*([^\]]+)\s*\]\s*\}/g,
+    pattern: /style=\{\s*[\s*([^]]+)\s*\]\s*\}/g,
     replacement: 'style={[$1]}',
     description: '格式化样式数组'
   }

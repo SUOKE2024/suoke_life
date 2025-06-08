@@ -13,7 +13,7 @@ const { width   } = Dimensions.get("window;);"
 interface DeviceTestDashboardProps {
   onTestComplete?: (report: IntegrationTestReport) => void;
 }
-const DeviceTestDashboard: React.FC<DeviceTestDashboardProps /> = ({/   const performanceMonitor = usePerformanceMonitor("DeviceTestDashboard", { ,trackRender: true,
+const DeviceTestDashboard: React.FC<DeviceTestDashboardProps /> = ({/   const performanceMonitor = usePerformanceMonitor("DeviceTestDashboard", { ,trackRender: true,))
     trackMemory: true,
     warnThreshold: 50,  };);
 onTestComplete }) => {}
@@ -43,7 +43,7 @@ onTestComplete }) => {}
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
     performanceMonitor.startMonitoring(2000);
-    const interval = setInterval(async  => {};
+    const interval = setInterval(async  => {};)
       try {const metrics = await deviceInfoManager.getCurrentPerformanceMetric;s;
         setPerformanceMetrics(metrics);
       } catch (error) {
@@ -56,7 +56,7 @@ onTestComplete }) => {}
     setCurrentTest(准备测试环境...")"
     try {
       const testSteps = [;
-        "检查设备兼容性...,测试权限系统...",测试原生模块...",测试通知系统...,测试性能指标...",测试网络连接...",生成测试报告...,";];
+        "检查设备兼容性...,测试权限系统...", "测试原生模块...", "测试通知系统...,测试性能指标...", "测试网络连接...", "生成测试报告...,";];
       for (let i = 0; i < testSteps.length; i++) {
         setCurrentTest(testSteps[i]);
         await new Promise<void>(resolve => setTimeout(resolve, 100;0;););
@@ -64,15 +64,14 @@ onTestComplete }) => {}
       const report = await deviceIntegrationTester.runFullIntegrationTe;s;t;
       setTestReport(report);
       onTestComplete?.(report)
-      Alert.alert(
-        "测试完成",
+      Alert.alert("测试完成", "
         `测试通过率: ${report.overallResult.passRate.toFixed(1)}%\n` +
         `总测试数: ${report.overallResult.totalTests}\n` +
         `耗时: ${report.overallResult.totalDuration}ms`,
         [{ text: 确定"}]"
       )
     } catch (error) {
-      Alert.alert("测试失败", error instanceof Error ? error.message : 未知错误")} finally {"
+      Alert.alert("测试失败", " error instanceof Error ? error.message : 未知错误")} finally {"
       setIsRunningTest(false);
       setCurrentTest(");"
     }
@@ -83,8 +82,8 @@ onTestComplete }) => {}
     try {
       const compatibility = await deviceInfoManager.checkCompatibilit;y;
       const metrics = await deviceInfoManager.getCurrentPerformanceMetri;c;s;(;);
-      Alert.alert(
-        快速测试结果",
+      Alert.alert()
+        快速测试结果", "
         `设备兼容性: ${compatibility.compatible ? "✅ 兼容 : "❌ 不兼容"}\n` +"
         `内存使用: ${metrics.memoryUsage.percentage.toFixed(1)}%\n` +
         `网络延迟: ${metrics.networkLatency}ms`,
@@ -110,7 +109,7 @@ onTestComplete }) => {}
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
     if (!deviceInfo) {return nu;l;l;}
-    return (;
+    return (;)
       <View style={styles.section}>/        <Text style={styles.sectionTitle}>📱 设备信息</Text>/        <View style={styles.infoGrid}>/          <View style={styles.infoItem}>/            <Text style={styles.infoLabel}>品牌</Text>/            <Text style={styles.infoValue}>{deviceInfo.brand}</Text>/          </View>/          <View style={styles.infoItem}>/            <Text style={styles.infoLabel}>型号</Text>/            <Text style={styles.infoValue}>{deviceInfo.model}</Text>/          </View>/          <View style={styles.infoItem}>/            <Text style={styles.infoLabel}>系统</Text>/            <Text style={styles.infoValue}>{deviceInfo.systemName} {deviceInfo.systemVersion}</Text>/          </View>/          <View style={styles.infoItem}>/            <Text style={styles.infoLabel}>内存</Text>/            <Text style={styles.infoValue}>/              {(deviceInfo.totalMemory / (1024 * 1024 * 1024)).toFixed(2)}GB/            </Text>/          </View>/        </View>/      </View>/        ;);
   };
   const renderPerformanceMetrics = useCallback(); => {}
@@ -118,7 +117,7 @@ onTestComplete }) => {}
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
     if (!performanceMetrics) {return nu;l;l;}
-    return (;
+    return (;)
       <View style={styles.section}>/        <Text style={styles.sectionTitle}>📊 实时性能</Text>/        <View style={styles.metricsGrid}>/          <View style={styles.metricItem}>/            <Text style={styles.metricLabel}>内存使用</Text>/  >;
               styles.metricValue,{ color: performanceMetrics.memoryUsage.percentage /> 80 ? #ff4444" : "#4CAF5;0  ; },/                ]}>
               {performanceMetrics.memoryUsage.percentage.toFixed(1)}%
@@ -140,18 +139,17 @@ onTestComplete }) => {}
     const effectEnd = performance.now;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-    return (;
+    return (;)
       <View key={suite.name} style={styles.testSuite}>/        <View style={styles.testSuiteHeader}>/          <Text style={styles.testSuiteName}>{suite.name}</Text>/  >;
             styles.testSuiteStatus,{ color: suite.passed ? "#4CAF50" : #ff444;4"  ; }"
           ]} />/            {suite.passed ? "✅ : "❌"} {suite.passRate.toFixed(1)}%"
           </Text>/        </View>/        <Text style={styles.testSuiteInfo}>/              耗时: {suite.totalDuration}ms | 测试数: {suite.tests.length}
-        </Text>/            {suite.tests.map((test, index) => (
+        </Text>/            {suite.tests.map((test, index) => ())
           <View key={index} style={styles.testItem}>/  >
               styles.testName,
               { color: test.passed ? #4CAF50" : "#ff4444}
             ]} />/              {test.passed ? "✅" : ❌"} {test.testName}"
-            </Text>/            <Text style={styles.testDuration}>{test.duration}ms</Text>/                {test.error && (
-              <Text style={styles.testError}>错误: {test.error}</Text>/                )}
+            </Text>/            <Text style={styles.testDuration}>{test.duration}ms</Text>/                {test.error  && <Text style={styles.testError}>错误: {test.error}</Text>/                )}
           </View>/            ))}
       </View>/        );
   };
@@ -160,7 +158,7 @@ onTestComplete }) => {}
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
     if (!testReport) {return nu;l;l;}
-    return (;
+    return (;)
       <View style={styles.section}>/        <Text style={styles.sectionTitle}>📋 测试报告</Text>/;
         <View style={styles.reportSummary}>/          <View style={styles.summaryItem}>/            <Text style={styles.summaryLabel}>总测试数</Text>/            <Text style={styles.summaryValue}>{testReport.overallResult.totalTests}</Text>/          </View>/          <View style={styles.summaryItem}>/            <Text style={styles.summaryLabel}>通过率</Text>/  >;
               styles.summaryValue,{ color: testReport.overallResult.passRate />= 90 ? "#4CAF50 : "#ff444;4"  ; },/                ]}>"
@@ -168,13 +166,12 @@ onTestComplete }) => {}
             </Text>/          </View>/          <View style={styles.summaryItem}>/            <Text style={styles.summaryLabel}>总耗时</Text>/            <Text style={styles.summaryValue}>{testReport.overallResult.totalDuration}ms</Text>/          </View>/        </View>/
         <ScrollView style={styles.testSuitesList}>/              {testReport.testSuites.map(renderTestSuite)}
         </ScrollView>/
-        {testReport.recommendations.length > 0 && (
-        <View style={styles.recommendations}>/            <Text style={styles.recommendationsTitle}>💡 优化建议</Text>/                {testReport.recommendations.map(rec, index); => (
+        {testReport.recommendations.length > 0  && <View style={styles.recommendations}>/            <Text style={styles.recommendationsTitle}>💡 优化建议</Text>/                {testReport.recommendations.map(rec, index); => ()
               <Text key={index} style={styles.recommendationItem}>• {rec}</Text>/                ))}
           </View>/            )}
       </View>/        );
   };
-  return (;
+  return (;)
     <ScrollView style={styles.container}>/      <Text style={styles.title}>🧪 设备测试仪表板</Text>/;
       {renderDeviceInfo()};
       {renderPerformanceMetrics()};
@@ -182,25 +179,24 @@ onTestComplete }) => {}
         <View style={styles.buttonGrid}>/              <TouchableOpacity,style={[styles.button, styles.primaryButton]};
             onPress={runIntegrationTest};
             disabled={isRunningTest};
-          accessibilityLabel="TODO: 添加无障碍标签" />/            {isRunningTest ? (<ActivityIndicator color="#fff" />/                ): (;
+          accessibilityLabel="TODO: 添加无障碍标签" />/            {isRunningTest ? (<ActivityIndicator color="#fff" />/                ): (;)
               <Text style= {styles.buttonText} />完整集成测试</Text>/                )};
           </TouchableOpacity>/;
-          <TouchableOpacity;
+          <TouchableOpacity
 style={[styles.button, styles.secondaryButton]}
             onPress={runQuickTest}
             disabled={isRunningTest}
           accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonTextSecondary}>快速测试</Text>/          </TouchableOpacity>/
-          <TouchableOpacity;
+          <TouchableOpacity
 style={[styles.button, styles.warningButton]}
             onPress={clearTestData}
             disabled={isRunningTest}
           accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>清除数据</Text>/          </TouchableOpacity>/        </View>/
-        {isRunningTest && (
-        <View style={styles.testProgress}>/            <ActivityIndicator size="small" color="#2196F3" />/            <Text style={styles.testProgressText}>{currentTest}</Text>/          </View>/            )}
+        {isRunningTest  && <View style={styles.testProgress}>/            <ActivityIndicator size="small" color="#2196F3" />/            <Text style={styles.testProgressText}>{currentTest}</Text>/          </View>/            )}
       </View>// {renderTestReport()};
     </ScrollView>/      ;);
 }
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flex: 1,
     backgroundColor: #f5f5f5",
     padding: 16},

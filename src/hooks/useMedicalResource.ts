@@ -130,12 +130,12 @@ export const useMedicalResource = () => {const dispatch = useDispatch<AppDispatc
     return search(refreshQuery);
   }, [search, searchQuery]);
   // 预约相关便捷方法
-  const quickBookAppointment = useCallback(resourceId: string,resourceName: string,userId: string,serviceType: string,scheduledTime: string,duration: number = 30,notes?: string;
+  const quickBookAppointment = useCallback(resourceId: string,resourceName: string,userId: string,serviceType: string,scheduledTime: string,duration: number = 30,notes?: string;)
   ) => {const appointmentData: Omit<Appointment, 'id' | 'status'> = {resourceId,resourceName,userId,serviceType,scheduledTime,duration,notes;
     };
     return createAppointment(appointmentData);
   }, [createAppointment]);
-  const cancelAppointment = useCallback(async (appointmentId: string) => {try {const response = await fetch(`/api/v1/medical-resources/appointments/${appointmentId}`, {method: 'DELETE';
+  const cancelAppointment = useCallback(async (appointmentId: string) => {try {const response = await fetch(`/api/v1/medical-resources/appointments/${appointmentId}`, {method: 'DELETE';))
       });
       if (!response.ok) {
         throw new Error('取消预约失败');
@@ -163,7 +163,7 @@ export const useMedicalResource = () => {const dispatch = useDispatch<AppDispatc
   const clearFilters = useCallback() => {updateResourceFilters({});
   }, [updateResourceFilters]);
   // 自动健康检查
-  useEffect() => {
+  useEffect(() => {
     const checkInterval = setInterval() => {healthCheck();
     }, 5 * 60 * 1000); // 每5分钟检查一次
     // 初始检查
@@ -177,11 +177,11 @@ export const useMedicalResource = () => {const dispatch = useDispatch<AppDispatc
   const hasErrors = Object.values(errors).some(error => error !== null);
   const isLoading = Object.values(loading).some(isLoading => isLoading);
   const isHealthy = serviceHealth.status === 'healthy';
-  const upcomingAppointments = appointments.filter(;
+  const upcomingAppointments = appointments.filter(;)
     appointment => appointment.status === 'confirmed' && ;
     new Date(appointment.scheduledTime) > new Date();
   );
-  const pastAppointments = appointments.filter(;
+  const pastAppointments = appointments.filter(;)
     appointment => appointment.status === 'completed' || ;
     new Date(appointment.scheduledTime) < new Date();
   );

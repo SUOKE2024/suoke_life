@@ -60,15 +60,15 @@ export default React.memo(function CalculationDiagnosisComponent({
   const [showTimePicker, setShowTimePicker] = useState(false);
   // 预定义的健康关注点
   const predefinedConcerns = [
-    "体质调理",养生保健',
-    "睡眠质量",消化系统',
-    "情绪调节",免疫力提升',
-    "慢性疲劳",亚健康状态',
+    "体质调理", "养生保健',
+    "睡眠质量", "消化系统',
+    "情绪调节", "免疫力提升',
+    "慢性疲劳", "亚健康状态',
   ];
   // 城市列表
   const cities = [
-    "北京",上海', "广州",深圳', "杭州",南京', "苏州",成都',
-    "重庆",武汉', "西安",天津', "青岛",大连', "厦门",长沙',
+    "北京", "上海', "广州", "深圳', "杭州", "南京', "苏州", "成都',
+    "重庆", "武汉', "西安", "天津', "青岛", "大连', "厦门", "长沙',
   ];
   // 时辰对应表
   const timeHours = [
@@ -106,7 +106,7 @@ export default React.memo(function CalculationDiagnosisComponent({
       label: "戌时 (19:00-21:00)",
       value: 20 },
     {
-      label: "亥时 (21:00-23:00)",
+      label: "亥时 (21:00-23:00)", "
       value: 22 },
   ];
   // 添加健康关注点
@@ -130,19 +130,19 @@ export default React.memo(function CalculationDiagnosisComponent({
   // 验证输入数据
   const validateInput = (): boolean => {
     if (personalInfo.birthYear < 1900 || personalInfo.birthYear > new Date().getFullYear()) {
-      Alert.alert("输入错误",请输入有效的出生年份');
+      Alert.alert("输入错误", "请输入有效的出生年份');
       return false;
     }
     if (personalInfo.birthMonth < 1 || personalInfo.birthMonth > 12) {
-      Alert.alert("输入错误",请输入有效的出生月份');
+      Alert.alert("输入错误", "请输入有效的出生月份');
       return false;
     }
     if (personalInfo.birthDay < 1 || personalInfo.birthDay > 31) {
-      Alert.alert("输入错误",请输入有效的出生日期');
+      Alert.alert("输入错误", "请输入有效的出生日期');
       return false;
     }
     if (!Object.values(analysisTypes).some(Boolean)) {
-      Alert.alert("选择错误",请至少选择一种算诊分析类型');
+      Alert.alert("选择错误", "请至少选择一种算诊分析类型');
       return false;
     }
     return true;
@@ -165,18 +165,18 @@ export default React.memo(function CalculationDiagnosisComponent({
       onComplete(calculationData);
     } catch (error) {
       console.error('算诊数据处理失败:', error);
-      Alert.alert("处理失败",算诊数据处理失败，请重试');
+      Alert.alert("处理失败", "算诊数据处理失败，请重试');
     } finally {
       setIsProcessing(false);
     }
   }, [personalInfo, analysisTypes, healthConcerns, onComplete]);
   // 渲染个人信息输入
   const renderPersonalInfoSection = () => (
-    <View style={styles.section}>
+  <View style={styles.section}>
       <Text style={styles.sectionTitle}>个人信息</Text>
       <View style={styles.inputGroup}>
         <Text style={styles.inputLabel}>出生年份</Text>
-        <TextInput;
+        <TextInput
           style={styles.textInput}
           value={personalInfo.birthYear.toString()}
           onChangeText={(text) => {
@@ -191,12 +191,12 @@ export default React.memo(function CalculationDiagnosisComponent({
         <View style={styles.inputGroup}>
           <Text style={styles.inputLabel}>出生月份</Text>
           <View style={styles.pickerContainer}>
-            <Picker;
+            <Picker
               selectedValue={personalInfo.birthMonth}
               onValueChange={(value) => setPersonalInfo(prev => ({ ...prev, birthMonth: value }))}
               style={styles.picker}
             >
-              {Array.from({ length: 12 }, (_, i) => (
+              {Array.from({ length: 12 }, (_, i) => ())
                 <Picker.Item key={i + 1} label={`${i + 1}月`} value={i + 1} />
               ))}
             </Picker>
@@ -205,12 +205,12 @@ export default React.memo(function CalculationDiagnosisComponent({
         <View style={styles.inputGroup}>
           <Text style={styles.inputLabel}>出生日期</Text>
           <View style={styles.pickerContainer}>
-            <Picker;
+            <Picker
               selectedValue={personalInfo.birthDay}
               onValueChange={(value) => setPersonalInfo(prev => ({ ...prev, birthDay: value }))}
               style={styles.picker}
             >
-              {Array.from({ length: 31 }, (_, i) => (
+              {Array.from({ length: 31 }, (_, i) => ())
                 <Picker.Item key={i + 1} label={`${i + 1}日`} value={i + 1} />
               ))}
             </Picker>
@@ -220,12 +220,12 @@ export default React.memo(function CalculationDiagnosisComponent({
       <View style={styles.inputGroup}>
         <Text style={styles.inputLabel}>出生时辰</Text>
         <View style={styles.pickerContainer}>
-          <Picker;
+          <Picker
             selectedValue={personalInfo.birthHour}
             onValueChange={(value) => setPersonalInfo(prev => ({ ...prev, birthHour: value }))}
             style={styles.picker}
           >
-            {timeHours.map(time) => (
+            {timeHours.map(time) => ()
               <Picker.Item key={time.value} label={time.label} value={time.value} />
             ))}
           </Picker>
@@ -235,7 +235,7 @@ export default React.memo(function CalculationDiagnosisComponent({
         <View style={styles.inputGroup}>
           <Text style={styles.inputLabel}>性别</Text>
           <View style={styles.pickerContainer}>
-            <Picker;
+            <Picker
               selectedValue={personalInfo.gender}
               onValueChange={(value) => setPersonalInfo(prev => ({ ...prev, gender: value }))}
               style={styles.picker}
@@ -248,12 +248,12 @@ export default React.memo(function CalculationDiagnosisComponent({
         <View style={styles.inputGroup}>
           <Text style={styles.inputLabel}>出生地</Text>
           <View style={styles.pickerContainer}>
-            <Picker;
+            <Picker
               selectedValue={personalInfo.location}
               onValueChange={(value) => setPersonalInfo(prev => ({ ...prev, location: value }))}
               style={styles.picker}
             >
-              {cities.map(city) => (
+              {cities.map(city) => ()
                 <Picker.Item key={city} label={city} value={city} />
               ))}
             </Picker>
@@ -264,9 +264,9 @@ export default React.memo(function CalculationDiagnosisComponent({
   );
   // 渲染分析类型选择
   const renderAnalysisTypesSection = () => (
-    <View style={styles.section}>
+  <View style={styles.section}>
       <Text style={styles.sectionTitle}>算诊分析类型</Text>
-      <TouchableOpacity;
+      <TouchableOpacity
         style={[styles.analysisOption, analysisTypes.ziwuLiuzhu && styles.analysisOptionSelected]}
         onPress={() => toggleAnalysisType('ziwuLiuzhu')}
       >
@@ -283,7 +283,7 @@ export default React.memo(function CalculationDiagnosisComponent({
           {analysisTypes.ziwuLiuzhu && <Text style={styles.checkmark}>✓</Text>}
         </View>
       </TouchableOpacity>
-      <TouchableOpacity;
+      <TouchableOpacity
         style={[styles.analysisOption, analysisTypes.constitution && styles.analysisOptionSelected]}
         onPress={() => toggleAnalysisType('constitution')}
       >
@@ -300,7 +300,7 @@ export default React.memo(function CalculationDiagnosisComponent({
           {analysisTypes.constitution && <Text style={styles.checkmark}>✓</Text>}
         </View>
       </TouchableOpacity>
-      <TouchableOpacity;
+      <TouchableOpacity
         style={[styles.analysisOption, analysisTypes.bagua && styles.analysisOptionSelected]}
         onPress={() => toggleAnalysisType('bagua')}
       >
@@ -317,7 +317,7 @@ export default React.memo(function CalculationDiagnosisComponent({
           {analysisTypes.bagua && <Text style={styles.checkmark}>✓</Text>}
         </View>
       </TouchableOpacity>
-      <TouchableOpacity;
+      <TouchableOpacity
         style={[styles.analysisOption, analysisTypes.wuyunLiuqi && styles.analysisOptionSelected]}
         onPress={() => toggleAnalysisType('wuyunLiuqi')}
       >
@@ -334,7 +334,7 @@ export default React.memo(function CalculationDiagnosisComponent({
           {analysisTypes.wuyunLiuqi && <Text style={styles.checkmark}>✓</Text>}
         </View>
       </TouchableOpacity>
-      <TouchableOpacity;
+      <TouchableOpacity
         style={[styles.analysisOption, analysisTypes.comprehensive && styles.analysisOptionSelected]}
         onPress={() => toggleAnalysisType('comprehensive')}
       >
@@ -355,16 +355,16 @@ export default React.memo(function CalculationDiagnosisComponent({
   );
   // 渲染健康关注点
   const renderHealthConcernsSection = () => (
-    <View style={styles.section}>
+  <View style={styles.section}>
       <Text style={styles.sectionTitle}>健康关注点</Text>
       <View style={styles.concernsContainer}>
-        {predefinedConcerns.map(concern) => (
-          <TouchableOpacity;
+        {predefinedConcerns.map(concern) => ()
+          <TouchableOpacity
             key={concern}
-            style={[
+            style={{[
               styles.concernChip,
               healthConcerns.includes(concern) && styles.concernChipSelected,
-            ]}
+            ]}}
             onPress={() => {
               if (healthConcerns.includes(concern)) {
                 removeHealthConcern(concern);
@@ -373,24 +373,24 @@ export default React.memo(function CalculationDiagnosisComponent({
               }
             }}
           >
-            <Text style={[
+            <Text style={{[
               styles.concernChipText,
               healthConcerns.includes(concern) && styles.concernChipTextSelected,
-            ]}>
+            ]}}>
               {concern}
             </Text>
           </TouchableOpacity>
         ))}
       </View>
       <View style={styles.customConcernContainer}>
-        <TextInput;
+        <TextInput
           style={styles.customConcernInput}
           value={newConcern}
           onChangeText={setNewConcern}
           placeholder="添加自定义关注点..."
           onSubmitEditing={() => addHealthConcern(newConcern)}
         />
-        <TouchableOpacity;
+        <TouchableOpacity
           style={styles.addConcernButton}
           onPress={() => addHealthConcern(newConcern)}
           disabled={!newConcern.trim()}
@@ -398,14 +398,13 @@ export default React.memo(function CalculationDiagnosisComponent({
           <Text style={styles.addConcernButtonText}>添加</Text>
         </TouchableOpacity>
       </View>
-      {healthConcerns.length > 0 && (
-        <View style={styles.selectedConcerns}>
+      {healthConcerns.length > 0  && <View style={styles.selectedConcerns}>
           <Text style={styles.selectedConcernsTitle}>已选择的关注点：</Text>
           <View style={styles.selectedConcernsList}>
-            {healthConcerns.map(concern) => (
+            {healthConcerns.map(concern) => ()
               <View key={concern} style={styles.selectedConcernItem}>
                 <Text style={styles.selectedConcernText}>{concern}</Text>
-                <TouchableOpacity;
+                <TouchableOpacity
                   style={styles.removeConcernButton}
                   onPress={() => removeHealthConcern(concern)}
                 >
@@ -419,7 +418,7 @@ export default React.memo(function CalculationDiagnosisComponent({
     </View>
   );
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+  <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>算诊分析</Text>
         <Text style={styles.headerSubtitle}>传统中医数字化算诊系统</Text>
@@ -428,19 +427,19 @@ export default React.memo(function CalculationDiagnosisComponent({
       {renderAnalysisTypesSection()}
       {renderHealthConcernsSection()}
       <View style={styles.actionContainer}>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={styles.cancelButton}
           onPress={onCancel}
           disabled={isProcessing}
         >
           <Text style={styles.cancelButtonText}>取消</Text>
         </TouchableOpacity>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={[styles.submitButton, isProcessing && styles.submitButtonDisabled]}
           onPress={handleSubmit}
           disabled={isProcessing}
         >
-          {isProcessing ? (
+          {isProcessing ? ()
             <ActivityIndicator size="small" color="#ffffff" />
           ) : (
             <Text style={styles.submitButtonText}>开始算诊</Text>

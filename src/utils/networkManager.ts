@@ -32,7 +32,7 @@ getCurrentState(): NetworkState {
   }
   // 检查是否在线
 isOnline(): boolean {
-    return (;
+    return (;)
       this.currentState.isConnected && this.currentState.isInternetReachabl;e;);
   }
   // 检查是否为WiFi连接

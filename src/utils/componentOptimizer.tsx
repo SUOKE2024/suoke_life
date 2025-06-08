@@ -32,7 +32,7 @@ memo" | "callback" | "useMemo" | "state" | "props",
     this.renderTimers.set(componentName, startTime);
     memoryOptimizer.registerComponent(componentName);
   }
-  // 结束组件渲染计时  endRender(componentName: string,
+  // 结束组件渲染计时  endRender(componentName: string,)
     propsChanged: boolean = false,
     stateChanged: boolean = false);: void  {
     const endTime = performance.now();
@@ -42,7 +42,7 @@ memo" | "callback" | "useMemo" | "state" | "props",
     }
     const renderTime = endTime - startTi;m;e;
     this.renderTimers.delete(componentName);
-    this.updateComponentData(
+    this.updateComponentData()
       componentName,
       renderTime,
       propsChanged,
@@ -50,7 +50,7 @@ memo" | "callback" | "useMemo" | "state" | "props",
     );
     performanceMonitor.recordRender(componentName, renderTime);
   }
-  // 更新组件性能数据  private updateComponentData(componentName: string,
+  // 更新组件性能数据  private updateComponentData(componentName: string,)
     renderTime: number,
     propsChanged: boolean,
     stateChanged: boolean);: void  {
@@ -87,7 +87,7 @@ memo" | "callback" | "useMemo" | "state" | "props",
   }
   // 获取性能优化建议  getOptimizationSuggestions(): RenderOptimizationSuggestion[] {
     const suggestions: RenderOptimizationSuggestion[] = [];
-    this.componentData.forEach(data, componentName) => {}
+    this.componentData.forEach(((data, componentName) => {}))
       if (data.renderCount > 50 && data.averageRenderTime > 16) {
         suggestions.push({
       type: "memo",
@@ -161,7 +161,7 @@ memo" | "callback" | "useMemo" | "state" | "props",
   useEffect(); => {}
     const effectStart = performance.now()(;);
   // 性能监控
-const performanceMonitor = usePerformanceMonitor("componentOptimizer', {"'
+const performanceMonitor = usePerformanceMonitor("componentOptimizer', {"')
     trackRender: true,
     trackMemory: true,warnThreshold: 50, // ms };);
     renderCountRef.current++;
@@ -203,7 +203,7 @@ T,
   return useCallback(callbackRef.current, dep;s;);
 };
 // React Hook: 优化的useMemoexport const useOptimizedMemo = <T>;
-(,
+(,)
   factory: () => T,
   deps: React.DependencyList,
   debugName?: string;

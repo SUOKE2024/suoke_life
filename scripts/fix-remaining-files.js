@@ -59,14 +59,14 @@ const aggressiveFixRules = [
   
   // 修复对象属性定义
   {
-    pattern: /{\s*([^:]+):\s*["']([^"']+)["'],\s*([^:]+):\s*["']([^"']+)["'],\s*([^:]+):\s*\[([^\]]*)\]\s*}/g,
+    pattern: /{\s*([^:]+):\s*["']([^"']+)["'],\s*([^:]+):\s*["']([^"']+)["'],\s*([^:]+):\s*[([^]]*)\]\s*}/g,
     replacement: '{\n  $1: "$2",\n  $3: "$4",\n  $5: [$6]\n}',
     description: '格式化对象定义'
   },
   
   // 修复useState定义
   {
-    pattern: /const\s+\[([^\]]+)\]\s*=\s*useState<([^>]+)>\s*\/\s*>\s*\(\[/g,
+    pattern: /const\s+[([^]]+)\]\s*=\s*useState<([^>]+)>\s*\/\s*>\s*\(\[/g,
     replacement: 'const [$1] = useState<$2>([]',
     description: '修复useState数组初始化'
   },
@@ -87,7 +87,7 @@ const aggressiveFixRules = [
   
   // 修复样式对象
   {
-    pattern: /style=\{\s*\[\s*([^\]]+)\s*\]\s*\}/g,
+    pattern: /style=\{\s*[\s*([^]]+)\s*\]\s*\}/g,
     replacement: 'style={[$1]}',
     description: '修复样式数组格式'
   },

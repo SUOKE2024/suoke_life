@@ -35,7 +35,7 @@ const LoginScreen: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   // 检查是否已登录
-  useEffect() => {
+  useEffect(() => {
     checkAuthStatus();
   }, []);  // 检查是否需要添加依赖项;
   const checkAuthStatus = async () => {
@@ -86,12 +86,11 @@ const LoginScreen: React.FC = () => {
       });
       // 获取用户信息
       const userInfo = await unifiedApiService.getCurrentUser();
-      Alert.alert(
-        '登录成功',
+      Alert.alert('登录成功',
         `欢迎回来，${userInfo.data?.username || userInfo.data?.email || '用户'}！`,
         [
           {
-      text: "确定",
+      text: "确定", "
       onPress: () => navigation.navigate('Main' as never),
           },
         ],
@@ -118,7 +117,7 @@ const LoginScreen: React.FC = () => {
     Alert.alert('提示', `${provider}登录功能即将上线`);
   };
   return (
-    <KeyboardAvoidingView;
+  <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
@@ -131,7 +130,7 @@ const LoginScreen: React.FC = () => {
           {}
           <View style={styles.inputContainer}>
             <Text style={styles.label}>邮箱</Text>
-            <TextInput;
+            <TextInput
               style={[styles.input, errors.email && styles.inputError]}
               placeholder="请输入邮箱"
               value={formData.email}
@@ -143,19 +142,18 @@ const LoginScreen: React.FC = () => {
               autoCorrect={false}
               editable={!loading}
             />
-            {errors.email && (
-              <Text style={styles.errorText}>{errors.email}</Text>
+            {errors.email  && <Text style={styles.errorText}>{errors.email}</Text>
             )}
           </View>
           {}
           <View style={styles.inputContainer}>
             <Text style={styles.label}>密码</Text>
             <View style={styles.passwordContainer}>
-              <TextInput;
-                style={[
+              <TextInput
+                style={{[
                   styles.passwordInput,
                   errors.password && styles.inputError,
-                ]}
+                ]}}
                 placeholder="请输入密码"
                 value={formData.password}
                 onChangeText={(text) =>
@@ -166,7 +164,7 @@ const LoginScreen: React.FC = () => {
                 autoCorrect={false}
                 editable={!loading}
               />
-              <TouchableOpacity;
+              <TouchableOpacity
                 style={styles.eyeButton}
                 onPress={() => setShowPassword(!showPassword)}
               >
@@ -175,13 +173,12 @@ const LoginScreen: React.FC = () => {
                 </Text>
               </TouchableOpacity>
             </View>
-            {errors.password && (
-              <Text style={styles.errorText}>{errors.password}</Text>
+            {errors.password  && <Text style={styles.errorText}>{errors.password}</Text>
             )}
           </View>
           {}
           <View style={styles.rememberContainer}>
-            <TouchableOpacity;
+            <TouchableOpacity
               style={styles.checkbox}
               onPress={() =>
                 setFormData({
@@ -190,35 +187,33 @@ const LoginScreen: React.FC = () => {
                 })
               }
             >
-              <View style={[
+              <View style={{[
                 styles.checkboxInner,
                 formData.rememberMe && styles.checkboxChecked,
-              ]}>
-                {formData.rememberMe && (
-                  <Text style={styles.checkmark}>✓</Text>
+              ]}}>
+                {formData.rememberMe  && <Text style={styles.checkmark}>✓</Text>
                 )}
               </View>
             </TouchableOpacity>
             <Text style={styles.rememberText}>记住我</Text>
           </View>
           {}
-          {errors.general && (
-            <Text style={styles.errorText}>{errors.general}</Text>
+          {errors.general  && <Text style={styles.errorText}>{errors.general}</Text>
           )}
           {}
-          <TouchableOpacity;
+          <TouchableOpacity
             style={[styles.loginButton, loading && styles.loginButtonDisabled]}
             onPress={handleLogin}
             disabled={loading}
           >
-            {loading ? (
+            {loading ? ()
               <ActivityIndicator color="#FFFFFF" />
             ) : (
               <Text style={styles.loginButtonText}>登录</Text>
             )}
           </TouchableOpacity>
           {}
-          <TouchableOpacity;
+          <TouchableOpacity
             style={styles.forgotPasswordButton}
             onPress={handleForgotPassword}
           >
@@ -232,13 +227,13 @@ const LoginScreen: React.FC = () => {
           </View>
           {}
           <View style={styles.socialContainer}>
-            <TouchableOpacity;
+            <TouchableOpacity
               style={styles.socialButton}
               onPress={() => handleSocialLogin('微信')}
             >
               <Text style={styles.socialButtonText}>微信登录</Text>
             </TouchableOpacity>
-            <TouchableOpacity;
+            <TouchableOpacity
               style={styles.socialButton}
               onPress={() => handleSocialLogin('支付宝')}
             >

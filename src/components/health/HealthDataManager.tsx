@@ -24,9 +24,9 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
   const [refreshing, setRefreshing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [editingData, setEditingData] = useState<HealthData | null>(null);
-  const [formData, setFormData] = useState({dataType: HealthDataType.HEART_RATE,value: '',unit: '',source: DataSource.MANUAL,tags: '',notes: '';
+  const [formData, setFormData] = useState({dataType: HealthDataType.HEART_RATE,value: '',unit: '',source: DataSource.MANUAL,tags: '',notes: '';)
   });
-  useEffect() => {
+  useEffect(() => {
     loadHealthData();
   }, [userId]);
   const loadHealthData = async () => {try {setLoading(true);
@@ -42,7 +42,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
       }
     } catch (error) {
       console.error('加载健康数据失败:', error);
-      Alert.alert("错误",加载健康数据失败');
+      Alert.alert("错误", "加载健康数据失败');
     } finally {
       setLoading(false);
     }
@@ -73,7 +73,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
     });
     setModalVisible(true);
   };
-  const handleSaveData = async () => {try {if (!formData.value.trim()) {Alert.alert("错误",请输入数值");
+  const handleSaveData = async () => {try {if (!formData.value.trim()) {Alert.alert("错误", "请输入数值");
         return;
       }
       const dataToSave = {userId,dataType: formData.dataType,value: isNaN(Number(formData.value)) ? formData.value : Number(formData.value),unit: formData.unit,source: formData.source,timestamp: new Date().toISOString(),tags: formData.tags ? formData.tags.split(",).map(tag => tag.trim()) : [],metadata: {notes: formData.notes;
@@ -82,31 +82,31 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
       if (editingData) {
         // 更新数据
         await healthDataService.updateHealthData(editingData.id!, dataToSave);
-        Alert.alert("成功",健康数据已更新');
+        Alert.alert("成功", "健康数据已更新');
       } else {
         // 创建新数据
         await healthDataService.createHealthData(dataToSave);
-        Alert.alert("成功",健康数据已添加');
+        Alert.alert("成功", "健康数据已添加');
       }
       setModalVisible(false);
       await loadHealthData();
     } catch (error) {
       console.error('保存健康数据失败:', error);
-      Alert.alert("错误",保存健康数据失败');
+      Alert.alert("错误", "保存健康数据失败');
     }
   };
-  const handleDeleteData = (data: HealthData) => {Alert.alert(;
-      "确认删除",确定要删除这条健康数据吗？',[;
+  const handleDeleteData = (data: HealthData) => {Alert.alert(;)
+      "确认删除", "确定要删除这条健康数据吗？',[;
         {
       text: "取消",
       style: 'cancel' },{
       text: "删除",
       style: 'destructive',onPress: async () => {try {await healthDataService.deleteHealthData(data.id!);
-              Alert.alert("成功",健康数据已删除');
+              Alert.alert("成功", "健康数据已删除');
               await loadHealthData();
             } catch (error) {
               console.error('删除健康数据失败:', error);
-              Alert.alert("错误",删除健康数据失败');
+              Alert.alert("错误", "删除健康数据失败');
             }
           }
         }
@@ -129,7 +129,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
   };
   const formatDate = (timestamp: string): string => {return new Date(timestamp).toLocaleString('zh-CN');
   };
-  const renderHealthDataItem = (item: HealthData) => (
+  const renderHealthDataItem = (item: HealthData) => ()
     <View key={item.id} style={styles.dataItem}>
       <View style={styles.dataHeader}>
         <Text style={styles.dataType}>{getDataTypeLabel(item.dataType)}</Text>
@@ -139,25 +139,23 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
         <Text style={styles.dataValue}>{formatValue(item.value, item.unit)}</Text>
         <Text style={styles.dataSource}>{getSourceLabel(item.source)}</Text>
       </View>
-      {item.tags && item.tags.length > 0 && (
-        <View style={styles.tagsContainer}>
-          {item.tags.map((tag, index) => (
+      {item.tags && item.tags.length > 0  && <View style={styles.tagsContainer}>
+          {item.tags.map((tag, index) => ())
             <Text key={index} style={styles.tag}>{tag}</Text>
           ))}
         </View>
       )}
-      {item.metadata?.notes && (
-        <Text style={styles.notes}>{item.metadata.notes}</Text>
+      {item.metadata?.notes  && <Text style={styles.notes}>{item.metadata.notes}</Text>
       )}
 ;
       <View style={styles.actionButtons}>;
-        <TouchableOpacity;
+        <TouchableOpacity
           style={[styles.actionButton, styles.editButton]};
           onPress={() => handleEditData(item)};
         >;
           <Text style={styles.actionButtonText}>编辑</Text>;
         </TouchableOpacity>;
-        <TouchableOpacity;
+        <TouchableOpacity
           style={[styles.actionButton, styles.deleteButton]};
           onPress={() => handleDeleteData(item)};
         >;
@@ -167,19 +165,19 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
     </View>;
   );
   return (
-    <View style={styles.container}>
+  <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>健康数据管理</Text>
         <TouchableOpacity style={styles.addButton} onPress={handleAddData}>
           <Text style={styles.addButtonText}>+ 添加数据</Text>;
         </TouchableOpacity>;
       </View>;
-      <ScrollView;
+      <ScrollView
         style={styles.scrollView};
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />;
         };
       >;
-        {loading ? (;
+        {loading ? (;)
           <Text style={styles.loadingText}>加载中...</Text>;
         ) : healthData.length === 0 ? (;
           <Text style={styles.emptyText}>暂无健康数据</Text>;
@@ -188,7 +186,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
         )}
       </ScrollView>
       {// 添加/编辑数据模态框}
-      <Modal;
+      <Modal
         visible={modalVisible}
         animationType="slide"
         transparent={true}
@@ -207,7 +205,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
             </View>
             <View style={styles.formGroup}>
               <Text style={styles.label}>数值</Text>
-              <TextInput;
+              <TextInput
                 style={styles.input}
                 value={formData.value}
                 onChangeText={(text) => setFormData({ ...formData, value: text })}
@@ -216,7 +214,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
             </View>
             <View style={styles.formGroup}>
               <Text style={styles.label}>单位</Text>
-              <TextInput;
+              <TextInput
                 style={styles.input}
                 value={formData.unit}
                 onChangeText={(text) => setFormData({ ...formData, unit: text })}
@@ -231,7 +229,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
             </View>
             <View style={styles.formGroup}>
               <Text style={styles.label}>标签（用逗号分隔）</Text>
-              <TextInput;
+              <TextInput
                 style={styles.input}
                 value={formData.tags}
                 onChangeText={(text) => setFormData({ ...formData, tags: text })}
@@ -240,7 +238,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
             </View>
             <View style={styles.formGroup}>
               <Text style={styles.label}>备注</Text>
-              <TextInput;
+              <TextInput
                 style={[styles.input, styles.textArea]}
                 value={formData.notes}
                 onChangeText={(text) => setFormData({ ...formData, notes: text })}
@@ -250,13 +248,13 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
               />
             </View>
             <View style={styles.modalButtons}>
-              <TouchableOpacity;
+              <TouchableOpacity
                 style={[styles.modalButton, styles.cancelButton]}
                 onPress={() => setModalVisible(false)}
               >
                 <Text style={styles.modalButtonText}>取消</Text>
               </TouchableOpacity>
-              <TouchableOpacity;
+              <TouchableOpacity
                 style={[styles.modalButton, styles.saveButton]}
                 onPress={handleSaveData}
               >

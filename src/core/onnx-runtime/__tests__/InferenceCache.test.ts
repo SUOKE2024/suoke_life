@@ -1,4 +1,3 @@
-
 import InferenceCache from '../InferenceCache.ts';
 describe('InferenceCache', () => {
   it('应该正确导出', () => {

@@ -1,4 +1,3 @@
-
 import networkManager from '../networkManager.ts';
 describe('networkManager', () => {
   it('应该正确导出', () => {

@@ -1,4 +1,3 @@
-
 import MedKnowledgeScreen from '../MedKnowledgeScreen.tsx';
 describe('MedKnowledgeScreen', () => {
   it('应该正确导出', () => {

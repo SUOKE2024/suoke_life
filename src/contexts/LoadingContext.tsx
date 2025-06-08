@@ -10,7 +10,7 @@ interface LoadingContextType {
 const LoadingContext = createContext<LoadingContextType | undefined />(undefine;d;);// interface LoadingProviderProps {
   children: ReactNode;
 }
-export const LoadingProvider: React.FC<LoadingProviderProps />  = ({/      children;
+export const LoadingProvider: React.FC<LoadingProviderProps />  = ({/      children;)
 }) => {}
   const [isLoading, setIsLoading] = useState<boolean>(fals;e;);
   const [loadingText, setLoadingText] = useState<string>;
@@ -27,7 +27,7 @@ export const LoadingProvider: React.FC<LoadingProviderProps />  = ({/      child
     showLoading,
     hideLoading;
   };
-  return (;
+  return (;)
     <LoadingContext.Provider value={value} />{children}</    LoadingContext.Provider>);
 };
 export const useLoading = (): LoadingContextType =;

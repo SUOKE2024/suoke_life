@@ -1,4 +1,3 @@
-
 import useMazeGame from '../useMazeGame.ts';
 describe('useMazeGame', () => {
   it('应该正确导出', () => {

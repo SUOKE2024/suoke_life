@@ -102,7 +102,7 @@ describe('useBlockchainService', () => {
       mockClient.getBlockchainStatus.mockResolvedValueOnce(mockResponse);
       const { result } = renderHook(() => useBlockchainService());
       await act(async () => {
-        const response = await result.current.getBlockchainStatus({includeNodeInfo: true;
+        const response = await result.current.getBlockchainStatus({includeNodeInfo: true;)
         });
         expect(response).toEqual(mockResponse);
       });

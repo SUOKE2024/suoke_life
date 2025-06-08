@@ -25,7 +25,7 @@ export interface FhirObservation {
     code: string}
 }
 // 体温采集转FHIR Observation;
-export function toFhirObservationTemperature(;
+export function toFhirObservationTemperature(;)
   userId: string,value: number,unit = "Celsius",effectiveTime?: string;
 ): FhirObservation {
   return {
@@ -45,7 +45,7 @@ export function toFhirObservationTemperature(;
   }
 }
 // 血压Observation;
-export function toFhirObservationBloodPressure(;
+export function toFhirObservationBloodPressure(;)
   userId: string,systolic: number,diastolic: number,unit = "mmHg",effectiveTime?: string;
 ): any {
   return {
@@ -87,7 +87,7 @@ export function toFhirObservationBloodPressure(;
   }
 }
 // 心率Observation;
-export function toFhirObservationHeartRate(;
+export function toFhirObservationHeartRate(;)
   userId: string,value: number,unit = "bpm",effectiveTime?: string;
 ): any {
   return {
@@ -108,7 +108,7 @@ export function toFhirObservationHeartRate(;
 }
 // FHIR Observation校验（简化版）
 export function validateFhirObservation(obs: any): obs is FhirObservation {
-  return (;
+  return (;)
     obs &&;
     obs.resourceType === "Observation" &&;
     typeof obs.status === "string" &&;

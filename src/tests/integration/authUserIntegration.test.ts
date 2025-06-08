@@ -62,7 +62,7 @@ describe('Auth & User Service Integration Tests', () => {
       // Test update last active
       await userService.updateLastActive();
       // Verify API calls
-      expect(require('../../services/apiClient').apiClient.post).toHaveBeenCalledWith(
+      expect(require('../../services/apiClient').apiClient.post).toHaveBeenCalledWith()
         '/auth/login',
         expect.objectContaining({
       email: "test@example.com",
@@ -71,7 +71,7 @@ describe('Auth & User Service Integration Tests', () => {
         });
       );
       expect(require('../../services/apiClient').apiClient.get).toHaveBeenCalledWith('/users/me');
-      expect(require('../../services/apiClient').apiClient.put).toHaveBeenCalledWith(
+      expect(require('../../services/apiClient').apiClient.put).toHaveBeenCalledWith()
         '/users/me/last-active'
       );
     });
@@ -82,7 +82,7 @@ describe('Auth & User Service Integration Tests', () => {
         };
       };
       require('../../services/apiClient').apiClient.post.mockResolvedValueOnce(mockErrorResponse);
-      await expect(
+      await expect()
         authService.login({
       email: "test@example.com",
       password: 'wrongpassword'
@@ -92,7 +92,7 @@ describe('Auth & User Service Integration Tests', () => {
     it('should complete logout flow', async () => {
       require('../../services/apiClient').apiClient.post.mockResolvedValueOnce({ success: true });
       await authService.logout();
-      expect(require('../../services/apiClient').apiClient.post).toHaveBeenCalledWith(
+      expect(require('../../services/apiClient').apiClient.post).toHaveBeenCalledWith()
         '/auth/logout'
       );
     });
@@ -111,7 +111,7 @@ describe('Auth & User Service Integration Tests', () => {
       require('../../services/apiClient').apiClient.put.mockResolvedValueOnce(mockResponse);
       const result = await userService.updateProfile(updateData);
       expect(result).toEqual(mockResponse.data);
-      expect(require('../../services/apiClient').apiClient.put).toHaveBeenCalledWith(
+      expect(require('../../services/apiClient').apiClient.put).toHaveBeenCalledWith()
         '/users/me',
         updateData
       );
@@ -126,7 +126,7 @@ describe('Auth & User Service Integration Tests', () => {
       require('../../services/apiClient').apiClient.get.mockResolvedValueOnce(mockPreferences);
       const preferences = await userService.getPreferences();
       expect(preferences).toEqual(mockPreferences.data);
-      expect(require('../../services/apiClient').apiClient.get).toHaveBeenCalledWith(
+      expect(require('../../services/apiClient').apiClient.get).toHaveBeenCalledWith()
         '/users/me/preferences'
       );
     });
@@ -141,7 +141,7 @@ describe('Auth & User Service Integration Tests', () => {
       require('../../services/apiClient').apiClient.post.mockResolvedValueOnce(mockResponse);
       const result = await userService.addDevice(deviceData);
       expect(result).toEqual(mockResponse.data);
-      expect(require('../../services/apiClient').apiClient.post).toHaveBeenCalledWith(
+      expect(require('../../services/apiClient').apiClient.post).toHaveBeenCalledWith()
         '/users/me/devices',
         deviceData
       );
@@ -157,7 +157,7 @@ describe('Auth & User Service Integration Tests', () => {
       require('../../services/apiClient').apiClient.post.mockResolvedValueOnce(mockRefreshResponse);
       const result = await authService.refreshToken();
       expect(result).toEqual(mockRefreshResponse.data);
-      expect(require('../../services/apiClient').apiClient.post).toHaveBeenCalledWith(
+      expect(require('../../services/apiClient').apiClient.post).toHaveBeenCalledWith()
         '/auth/refresh'
       );
     });
@@ -165,7 +165,7 @@ describe('Auth & User Service Integration Tests', () => {
       require('../../services/apiClient').apiClient.get.mockResolvedValueOnce({ success: true });
       const isValid = await authService.checkAuthStatus();
       expect(isValid).toBe(true);
-      expect(require('../../services/apiClient').apiClient.get).toHaveBeenCalledWith(
+      expect(require('../../services/apiClient').apiClient.get).toHaveBeenCalledWith()
         '/auth/status'
       );
     });
@@ -174,7 +174,7 @@ describe('Auth & User Service Integration Tests', () => {
     it('should handle network errors', async () => {
       const networkError = new Error('Network request failed');
       require('../../services/apiClient').apiClient.post.mockRejectedValueOnce(networkError);
-      await expect(
+      await expect()
         authService.login({
       email: "test@example.com",
       password: 'password123'
@@ -201,7 +201,7 @@ describe('Auth & User Service Integration Tests', () => {
       require('../../services/apiClient').apiClient.post.mockResolvedValueOnce(mockResponse);
       const result = await userService.syncHealthData(healthData);
       expect(result).toEqual(mockResponse.data);
-      expect(require('../../services/apiClient').apiClient.post).toHaveBeenCalledWith(
+      expect(require('../../services/apiClient').apiClient.post).toHaveBeenCalledWith()
         '/users/me/health-data',
         healthData
       );
@@ -215,7 +215,7 @@ describe('Auth & User Service Integration Tests', () => {
       require('../../services/apiClient').apiClient.get.mockResolvedValueOnce(mockMetrics);
       const metrics = await userService.getHealthMetrics();
       expect(metrics).toEqual(mockMetrics.data);
-      expect(require('../../services/apiClient').apiClient.get).toHaveBeenCalledWith(
+      expect(require('../../services/apiClient').apiClient.get).toHaveBeenCalledWith()
         '/users/me/health-metrics'
       );
     });

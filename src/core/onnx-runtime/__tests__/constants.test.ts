@@ -1,4 +1,3 @@
-
 import constants from '../constants.ts';
 describe('constants', () => {
   it('应该正确导出', () => {

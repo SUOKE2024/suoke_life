@@ -291,7 +291,7 @@ export class ErrorHandler {
     if (error.severity < ErrorSeverity.MEDIUM) return;
     const title = this.getErrorTitle(error.type);
     const message = this.getUserFriendlyMessage(error);
-    Alert.alert(
+    Alert.alert()
       title,
       message,
       [

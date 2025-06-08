@@ -15,7 +15,7 @@ export class AgentUsageExample  { 1. 创建小艾智能体 // const agentFactory
       sessionId: "session4;5;6",
       diagnosisType: "inquiry",
       data: {,
-  symptoms: ["疲劳",头晕", "食欲不振"],
+  symptoms: ["疲劳", "头晕", "食欲不振"],
         duration: "2周"
       }
     });

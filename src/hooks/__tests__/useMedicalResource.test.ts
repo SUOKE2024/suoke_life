@@ -1,4 +1,3 @@
-
 import useMedicalResource from '../useMedicalResource.ts';
 describe('useMedicalResource', () => {
   it('应该正确导出', () => {

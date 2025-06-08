@@ -43,7 +43,7 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
   /**
   * 初始化挑战
   */
-  useEffect() => {
+  useEffect(() => {
     if (visible) {
       setCurrentQuestionIndex(0);
       setSelectedAnswers({});
@@ -59,7 +59,7 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
   /**
   * 计时器
   */
-  useEffect() => {
+  useEffect(() => {
     let interval: NodeJS.Timeout;
     if (isTimerActive && timeLeft > 0) {
       interval = setInterval() => {
@@ -80,16 +80,16 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
   /**
   * 时间到处理
   */
-  const handleTimeUp = () => {Alert.alert("时间到",挑战时间已结束，将自动提交答案。', [;
+  const handleTimeUp = () => {Alert.alert("时间到", "挑战时间已结束，将自动提交答案。', [;)
       {
-      text: "确定",
+      text: "确定", "
       onPress: handleSubmit };
     ]);
   };
   /**
   * 选择答案
   */
-  const handleAnswerSelect = (answerIndex: number) => {setSelectedAnswers(prev => ({...prev,[currentQuestionIndex]: answerIndex;
+  const handleAnswerSelect = (answerIndex: number) => {setSelectedAnswers(prev => ({...prev,[currentQuestionIndex]: answerIndex;))
     }));
   };
   /**
@@ -124,7 +124,7 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
   const handleSubmit = () => {setIsTimerActive(false);
     // 计算分数
     let correctAnswers = 0;
-    challenge.questions.forEach(question, index) => {
+    challenge.questions.forEach(((question, index) => {
       const selectedAnswer = selectedAnswers[index];
       if (selectedAnswer !== undefined && selectedAnswer === parseInt(String(question.correctAnswer))) {
         correctAnswers++;
@@ -157,46 +157,46 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
   * 渲染问题选项
   */
   const renderAnswerOptions = () => {if (!currentQuestion) return null;
-    return currentQuestion.options.map((option, index) => {const isSelected = selectedAnswers[currentQuestionIndex] === index;
+    return currentQuestion.options.map((option, index) => {const isSelected = selectedAnswers[currentQuestionIndex] === index;)
       const isCorrect = showResults && index === parseInt(String(currentQuestion.correctAnswer));
       const isWrong = showResults && isSelected && index !== parseInt(String(currentQuestion.correctAnswer));
       return (
-        <TouchableOpacity;
+  <TouchableOpacity
           key={index}
-          style={[
+          style={{[
             styles.answerOption,
             isSelected && styles.selectedOption,
             showResults && isCorrect && styles.correctOption,
             showResults && isWrong && styles.wrongOption;
-          ]}
+          ]}}
           onPress={() => !showResults && handleAnswerSelect(index)}
           disabled={showResults}
         >
           <View style={styles.optionContent}>
-            <View style={[
+            <View style={{[
               styles.optionIndicator,
               isSelected && styles.selectedIndicator,
               showResults && isCorrect && styles.correctIndicator,
               showResults && isWrong && styles.wrongIndicator;
-            ]}>
-              <Text style={[
+            ]}}>
+              <Text style={{[
                 styles.optionLetter,
                 isSelected && styles.selectedLetter,
                 showResults && isCorrect && styles.correctLetter,
                 showResults && isWrong && styles.wrongLetter;
-              ]}>
+              ]}}>
                 {String.fromCharCode(65 + index)}
               </Text>
             </View>
-            <Text style={[;
+            <Text style={{[;
               styles.optionText,isSelected && styles.selectedText,showResults && isCorrect && styles.correctText,showResults && isWrong && styles.wrongText;
-            ]}>;
+            ]}}>;
               {option};
             </Text>;
-            {showResults && isCorrect && (;
+            {showResults && isCorrect && (;)
               <Icon name="check-circle" size={24} color="#4CAF50" />;
             )};
-            {showResults && isWrong && (;
+            {showResults && isWrong && (;)
               <Icon name="cancel" size={24} color="#F44336" />;
             )};
           </View>;
@@ -207,17 +207,17 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
   /**
   * 渲染结果页面
   */
-  const renderResults = () => {const correctCount = Object.keys(selectedAnswers).filter(key => {const questionIndex = parseInt(key);
+  const renderResults = () => {const correctCount = Object.keys(selectedAnswers).filter(key => {const questionIndex = parseInt(key);)
       const selectedAnswer = selectedAnswers[questionIndex];
       return selectedAnswer === parseInt(String(challenge.questions[questionIndex].correctAnswer));
     }).length;
     const accuracy = Math.round(correctCount / totalQuestions) * 100);
-    return (;
+    return (;)
       <View style={styles.resultsContainer}>;
         <View style={styles.scoreDisplay}>;
           <Icon name="emoji-events" size={48} color="#FFD54F" />;
-          <Animated.Text style={[styles.scoreText, {opacity: scoreAnim.interpolate({inputRange: [0, 100],outputRange: [0, 1];
-            });
+          <Animated.Text style={{[styles.scoreText, {opacity: scoreAnim.interpolate({inputRange: [0, 100],outputRange: [0, 1];)
+            }});
           }]}>
             {score}分
           </Animated.Text>
@@ -242,14 +242,14 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
           </View>
         </View>
         <View style={styles.resultActions}>
-          <TouchableOpacity;
+          <TouchableOpacity
             style={styles.reviewButton}
             onPress={() => setShowResults(false)}
           >
             <Icon name="replay" size={20} color="#2196F3" />
             <Text style={styles.reviewButtonText}>查看答案</Text>
           </TouchableOpacity>
-          <TouchableOpacity;
+          <TouchableOpacity
             style={styles.completeButton}
             onPress={handleComplete}
           >
@@ -262,7 +262,7 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
   };
   if (!visible) return null;
   return (
-    <Modal;
+  <Modal
       visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
@@ -278,9 +278,9 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
           <View style={styles.headerRight}>
             <View style={styles.timerContainer}>
               <Icon name="access-time" size={16} color={timeLeft < 60 ? "#F44336" : "#4CAF50"} />
-              <Text style={[
+              <Text style={{[
                 styles.timerText,
-                { color: timeLeft < 60 ? "#F44336" : "#4CAF50" }
+                { color: timeLeft < 60 ? "#F44336" : "#4CAF50" }}
               ]}>
                 {formatTime(timeLeft)}
               </Text>
@@ -291,13 +291,13 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
           </View>;
         </View>;
         {// 进度条};
-        {!showResults && (;
+        {!showResults && (;)
           <View style={styles.progressContainer}>;
             <View style={styles.progressBar}>;
               <Animated.View;
-                style={[;
-                  styles.progressFill,{width: progressAnim.interpolate({inputRange: [0, 1],outputRange: ["0%",100%'];
-                    });
+                style={{[;
+                  styles.progressFill,{width: progressAnim.interpolate({inputRange: [0, 1],outputRange: ["0%",100%'];)
+                    }});
                   }
                 ]}
               />
@@ -309,7 +309,7 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
         )}
         {// 内容区域}
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-          {showResults ? renderResults() : (
+          {showResults ? renderResults() : ()
             <>
               {// 挑战信息}
               <View style={styles.challengeInfo}>
@@ -317,12 +317,10 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
                 <Text style={styles.challengeDescription}>{challenge.description}</Text>
               </View>
               {// 当前问题}
-              {currentQuestion && (
-        <View style={styles.questionContainer}>
+              {currentQuestion  && <View style={styles.questionContainer}>
                   <Text style={styles.questionText}>{currentQuestion.question}</Text>
                   {// 问题图片 - 暂时注释掉，因为类型定义中没有imageUrl属性}
-                  {/* {currentQuestion.imageUrl && (
-        <View style={styles.questionImageContainer}>
+                  {/* {currentQuestion.imageUrl  && <View style={styles.questionImageContainer}>
                       <Image source={ uri: currentQuestion.imageUrl }}
                         style={styles.questionImage}
                         resizeMode="contain"
@@ -334,8 +332,7 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
                     {renderAnswerOptions()}
                   </View>
                   {// 解释}
-                  {showResults && currentQuestion.explanation && (
-        <View style={styles.explanationContainer}>
+                  {showResults && currentQuestion.explanation  && <View style={styles.explanationContainer}>
                       <Text style={styles.explanationTitle}>解释</Text>
                       <Text style={styles.explanationText}>
                         {currentQuestion.explanation}
@@ -348,9 +345,8 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
           )}
         </ScrollView>
         {// 底部操作栏}
-        {!showResults && (
-        <View style={styles.footer}>
-            <TouchableOpacity;
+        {!showResults  && <View style={styles.footer}>
+            <TouchableOpacity
               style={[styles.navButton, currentQuestionIndex === 0 && styles.disabledButton]}
               onPress={handlePreviousQuestion}
               disabled={currentQuestionIndex === 0}
@@ -360,23 +356,23 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
                 上一题
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity;
-              style={[
+            <TouchableOpacity
+              style={{[
                 styles.navButton,
                 styles.primaryButton,
                 selectedAnswers[currentQuestionIndex] === undefined && styles.disabledButton;
-              ]}
+              ]}}
               onPress={currentQuestionIndex === totalQuestions - 1 ? handleSubmit : handleNextQuestion}
               disabled={selectedAnswers[currentQuestionIndex] === undefined}
             >
-              <Text style={[
+              <Text style={{[
                 styles.navButtonText,
                 styles.primaryButtonText,
                 selectedAnswers[currentQuestionIndex] === undefined && styles.disabledText;
-              ]}>
+              ]}}>
                 {currentQuestionIndex === totalQuestions - 1 ? '提交答案' : '下一题'}
               </Text>
-              <Icon;
+              <Icon
                 name={currentQuestionIndex === totalQuestions - 1 ? "send" : "chevron-right"}
                 size={24}
                 color={selectedAnswers[currentQuestionIndex] === undefined ? "#CCC" : "#FFFFFF"}

@@ -4,7 +4,7 @@ importAsyncStorage from "@react-native-async-storage/async-storage";/import { ST
   zh,e;n;};
 // 初始化i18n   从AsyncStorage读取保存的语言设置export const initializeI18n = async(): Promise<void> =;
 > ;{try {
-    const savedLanguage = await AsyncStorage.getItem(;
+    const savedLanguage = await AsyncStorage.getItem(;)
       STORAGE_CONFIG.KEYS.LANGU;A;G;E;);
     if (savedLanguage && ["zh",en"].includes(savedLanguage)) {
       currentLanguage = savedLanguage as "zh" | "en"
@@ -40,8 +40,8 @@ w;n ;}): string => {}
     }
   }
   if (options && typeof value === "string") {
-    Object.keys(options).forEach(optionKey) => {}
-      value = value.replace(
+    Object.keys(options).forEach(((optionKey) => {}))
+      value = value.replace()
         new RegExp(`{${optionKey}}}`, "g"),
         options[optionKey]
       )

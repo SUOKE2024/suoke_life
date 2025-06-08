@@ -7,10 +7,10 @@ export interface NetworkStatus {
 };
 export const useNetworkStatus = () =;
 > ;{
-  const [networkStatus, setNetworkStatus] = useState<NetworkStatus /    >({isConnected: true,
+  const [networkStatus, setNetworkStatus] = useState<NetworkStatus /    >({isConnected: true,)
     isInternetReachable: true,
     type: "wifi"};);
-  useEffect() => {
+  useEffect(() => {
     //
     const checkNetworkStatus = () => {}
       setNetworkStatus({

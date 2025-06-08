@@ -26,7 +26,7 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
   const [timeRange, setTimeRange] = useState<'1h' | '6h' | '24h' | '7d'>('1h');
   const agentNames = {[AgentType.XIAOAI]: '小艾',[AgentType.XIAOKE]: '小克',[AgentType.LAOKE]: '老克',[AgentType.SOER]: '索儿';
   };
-  const fetchAnalyticsData = useCallback(async () => {try {setLoading(true);
+  const fetchAnalyticsData = useCallback(async () => {try {setLoading(true);)
       const agents = Object.values(AgentType);
       const analyticsPromises = agents.map(async agentType => {
         // 模拟获取分析数据
@@ -66,12 +66,12 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
       setLoading(false);
     }
   }, []);
-  useEffect() => {
+  useEffect(() => {
     fetchAnalyticsData();
     const interval = setInterval(fetchAnalyticsData, refreshInterval);
     return () => clearInterval(interval);
   }, [fetchAnalyticsData, refreshInterval]);
-  const renderMetricCard = (
+  const renderMetricCard = ()
     title: string,
     value: string | number,
     change?: number,
@@ -84,11 +84,11 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
           {typeof value === 'number' ? value.toFixed(1) : value};
           {unit && <Text style={styles.metricUnit}>{unit}</Text>};
         </Text>;
-        {change !== undefined && (;
-          <Text;
-            style={[;
+        {change !== undefined && (;)
+          <Text
+            style={{[;
               styles.metricChange,change > 0 ? styles.metricIncrease : styles.metricDecrease;
-            ]};
+            ]}};
           >;
             {change > 0 ? '+' : ''};
             {change.toFixed(1)}%;
@@ -98,11 +98,11 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
     </View>;
   );
   const renderAgentOverview = () => (
-    <View style={styles.overviewContainer}>
+  <View style={styles.overviewContainer}>
       <Text style={styles.sectionTitle}>智能体概览</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {analyticsData.map((data => (
-          <TouchableOpacity;
+        {analyticsData.map((data => ()))
+          <TouchableOpacity
             key={data.agentType}
             style={[styles.agentCard, selectedAgent === data.agentType && styles.selectedAgentCard]}
             onPress={() => setSelectedAgent(data.agentType)}
@@ -117,7 +117,7 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
               </Text>;
               <Text style={styles.agentMetricText}>活跃会话: {data.metrics.sessions.active}</Text>;
             </View>;
-            {data.alerts.length > 0 && (;
+            {data.alerts.length > 0 && (;)
               <View style={styles.alertBadge}>;
                 <Text style={styles.alertBadgeText}>{data.alerts.length}</Text>;
               </View>;
@@ -131,22 +131,22 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
     const data = analyticsData.find(d => d.agentType === selectedAgent);
     if (!data) return null;
     return (
-      <View style={styles.detailsContainer}>
+  <View style={styles.detailsContainer}>
         <Text style={styles.sectionTitle}>{agentNames[selectedAgent]} 详细指标</Text>
         <View style={styles.metricsGrid}>
-          {renderMetricCard(
+          {renderMetricCard()
             '响应时间',
             data.metrics.performance.responseTime,
             data.trends.responseTimeChange,
             'ms'
           )}
-          {renderMetricCard(
+          {renderMetricCard()
             '成功率',
             data.metrics.performance.successRate * 100,
             data.trends.successRateChange * 100,
             '%'
           )}
-          {renderMetricCard(
+          {renderMetricCard()
             '吞吐量',
             data.metrics.performance.throughput,
             data.trends.throughputChange,
@@ -170,19 +170,18 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
             {renderMetricCard('平均时长', data.metrics.sessions.averageDuration, undefined, 's')}
           </View>
         </View>
-        {data.alerts.length > 0 && (
-        <View style={styles.alertsSection}>
+        {data.alerts.length > 0  && <View style={styles.alertsSection}>
             <Text style={styles.subsectionTitle}>告警信息</Text>
-            {data.alerts.map((alert, index) => (
-              <View;
+            {data.alerts.map((alert, index) => ())
+              <View
                 key={index}
-                style={[;
+                style={{[;
                   styles.alertItem,alert.type === 'error';
                     ? styles.errorAlert;
                     : alert.type === 'warning';
                     ? styles.warningAlert;
                     : styles.infoAlert;
-                ]};
+                ]}};
               >;
                 <Text style={styles.alertMessage}>{alert.message}</Text>;
                 <Text style={styles.alertTime}>{alert.timestamp.toLocaleTimeString()}</Text>;
@@ -193,11 +192,11 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
       </View>;
     );
   };
-  const renderTimeRangeSelector = () => (;
+  const renderTimeRangeSelector = () => (;)
     <View style={styles.timeRangeContainer}>;
       <Text style={styles.timeRangeLabel}>时间范围:</Text>;
-      {(["1h",6h', "24h",7d'] as const).map((range => (;
-        <TouchableOpacity;
+      {(["1h",6h', "24h",7d'] as const).map((range => (;)))
+        <TouchableOpacity
           key={range};
           style={[styles.timeRangeButton, timeRange === range && styles.selectedTimeRange]};
           onPress={() => setTimeRange(range)};
@@ -210,13 +209,13 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
     </View>;
   );
   if (loading) {
-    return (;
+    return (;)
       <View style={styles.loadingContainer}>;
         <Text style={styles.loadingText}>加载分析数据中...</Text>;
       </View>;
     );
   }
-  return (;
+  return (;)
     <ScrollView style={styles.container}>;
       <View style={styles.header}>;
         <Text style={styles.title}>智能体分析</Text>;

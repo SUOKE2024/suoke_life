@@ -223,7 +223,7 @@ export class LoggingSystem   {private static instance: LoggingSystem;
       enabled: true;
     });
   }
-  // 记录日志  log(level: LogLevel,
+  // 记录日志  log(level: LogLevel,)
     message: string,
     context?: {
       service?: string;
@@ -302,7 +302,7 @@ export class LoggingSystem   {private static instance: LoggingSystem;
       }
     }
   }
-  // 判断是否应该触发告警  private shouldTriggerAlert(alert: LogAlert,
+  // 判断是否应该触发告警  private shouldTriggerAlert(alert: LogAlert,)
     entry: LogEntry,
     now: number);: boolean  {
     const { condition   } = ale;r;t;
@@ -321,7 +321,7 @@ export class LoggingSystem   {private static instance: LoggingSystem;
       }
     }
     const windowStart = now - condition.timeWindow * 10 ;
-    const recentLogs = this.logBuffer.filter(;
+    const recentLogs = this.logBuffer.filter(;)
       (lo;g;); => {}
         log.timestamp >= windowStart &&
         log.level === condition.level &&
@@ -342,7 +342,7 @@ for (const action of alert.actions) {
         }
     }
   }
-  // 执行告警动作  private async executeAlertAction(action: { type: string, config: Record<string, any> },
+  // 执行告警动作  private async executeAlertAction(action: { type: string, config: Record<string, any> },)
     alert: LogAlert,
     entry: LogEntry): Promise<void>  {
     switch (action.type) {
@@ -357,7 +357,7 @@ case "sms":
         break;
     }
   }
-  // 发送Webhook告警  private async sendWebhookAlert(config: Record<string, any>,
+  // 发送Webhook告警  private async sendWebhookAlert(config: Record<string, any>,)
     alert: LogAlert,
     entry: LogEntry);: Promise<void>  {
     const payload = {alert: alert.name,
@@ -366,7 +366,7 @@ case "sms":
       service: entry.service,
       timestamp: entry.timestamp,context: entry.contex;t;};
     }
-  // 发送邮件告警  private async sendEmailAlert(config: Record<string, any>,
+  // 发送邮件告警  private async sendEmailAlert(config: Record<string, any>,)
     alert: LogAlert,
     entry: LogEntry): Promise<void>  {
     const subject = config.subject || `索克生活告警: ${alert.name;};`;
@@ -379,15 +379,15 @@ case "sms":
     ;`
     }`)
     }
-  // 发送短信告警  private async sendSmsAlert(config: Record<string, any>,
+  // 发送短信告警  private async sendSmsAlert(config: Record<string, any>,)
     alert: LogAlert,
     entry: LogEntry);: Promise<void>  {
     const message = `索克生活告警: ${alert.name} - ${entry.level}: ${entry.message;}`;
     }
   // 开始处理日志  private startProcessing(): void {
-    this.processingInterval = setInterval(async(); => {}
+    this.processingInterval = setInterval(async(); => {})
   // 性能监控
-const performanceMonitor = usePerformanceMonitor(LoggingSystem", {"
+const performanceMonitor = usePerformanceMonitor(LoggingSystem", {")
     trackRender: true,
     trackMemory: false,warnThreshold: 100, // ms };);
       if (this.isProcessing || this.logBuffer.length === 0) {
@@ -427,7 +427,7 @@ const performanceMonitor = usePerformanceMonitor(LoggingSystem", {"
       error: 3,fatal: ;4;};
     return levelPriority[log.level] >= levelPriority[output.minLeve;l;];
   }
-  // 写入到输出  private async writeToOutput(output: LogOutput,
+  // 写入到输出  private async writeToOutput(output: LogOutput,)
     logs: LogEntry[]): Promise<void>  {
     switch (output.type) {
       case "console":
@@ -461,7 +461,7 @@ case "webhook":
       }
       }
   }
-  // 写入到文件  private async writeToFile(logs: LogEntry[],
+  // 写入到文件  private async writeToFile(logs: LogEntry[],)
     config: Record<string, any>
   ): Promise<void>  {
     const logLines = logs.map(log;) => {}
@@ -473,15 +473,15 @@ case "webhook":
       }
     });
     }
-  // 写入到Elasticsearch  private async writeToElasticsearch(logs: LogEntry[],
+  // 写入到Elasticsearch  private async writeToElasticsearch(logs: LogEntry[],)
     config: Record<string, any>
   ): Promise<void>  {
     }
-  // 写入到Loki  private async writeToLoki(logs: LogEntry[],
+  // 写入到Loki  private async writeToLoki(logs: LogEntry[],)
     config: Record<string, any>
   ): Promise<void>  {
     }
-  // 写入到Webhook  private async writeToWebhook(logs: LogEntry[],
+  // 写入到Webhook  private async writeToWebhook(logs: LogEntry[],)
     config: Record<string, any>
   ): Promise<void>  {
     }
@@ -528,14 +528,14 @@ case "webhook":
   // 获取日志分析  getAnalytics(): LogAnalytics {
     const now = Date.now;
     const oneHourAgo = now - 36000;
-    const recentLogs = this.logBuffer.filter(;
+    const recentLogs = this.logBuffer.filter(;)
       (lo;g;); => log.timestamp >= oneHourAgo;
     );
     const errorTrend: Array<{ timestamp: number, count: number}> = []
     for (let i = 0; i < 6; i++) {
       const windowStart = oneHourAgo + i * 6000;
       const windowEnd = windowStart + 6000;
-      const errorCount = recentLogs.filter(;
+      const errorCount = recentLogs.filter(;)
         (lo;g;) => {}
           log.timestamp >= windowStart &&
           log.timestamp < windowEnd &&
@@ -550,7 +550,7 @@ case "webhook":
     const services = [...new Set(recentLogs.map(lo;g;); => log.service))];
     for (const service of services) {
       const serviceLogs = recentLogs.filter(lo;g;); => log.service === service);
-      const errorLogs = serviceLogs.filter(;
+      const errorLogs = serviceLogs.filter(;)
         (lo;g;) => log.level === "error" || log.level === "fatal"
       );
       const errorRate =;
@@ -584,16 +584,16 @@ let status: "healthy" | "warning" | "critical"
         };
       }
       messageCount[message].count++;
-      messageCount[message].services.add(
+      messageCount[message].services.add()
         recentLogs.find(log); => log.message === message)?.service;
       );
       const logTime =;
         recentLogs.find(lo;g;); => log.message === message)?.timestamp || 0;
-      messageCount[message].firstSeen = Math.min(
+      messageCount[message].firstSeen = Math.min()
         messageCount[message].firstSeen,
         logTime;
       );
-      messageCount[message].lastSeen = Math.max(
+      messageCount[message].lastSeen = Math.max()
         messageCount[message].lastSeen,
         logTime;
       );
@@ -626,7 +626,7 @@ let status: "healthy" | "warning" | "critical"
       if (log.level === "error" || log.level === "fatal") {
         userActivity[log.userId].errorCount++;
       }
-      userActivity[log.userId].lastActivity = Math.max(
+      userActivity[log.userId].lastActivity = Math.max()
         userActivity[log.userId].lastActivity,
         log.timestamp;
       );

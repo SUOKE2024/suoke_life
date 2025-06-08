@@ -1,4 +1,3 @@
-
 import useScreenNavigation from '../useScreenNavigation.ts';
 describe('useScreenNavigation', () => {
   it('应该正确导出', () => {

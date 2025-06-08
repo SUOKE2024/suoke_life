@@ -43,18 +43,18 @@ class DeviceIntegrationTester {
       testSuites.push(await this.runNotificationTests);
       testSuites.push(await this.runPerformanceTests);
       testSuites.push(await this.runNetworkTests);
-      const totalTests = testSuites.reduce(;
+      const totalTests = testSuites.reduce((acc, item) => acc + item, 0);
         (sum, suit;e;); => sum + suite.tests.length,
         0;
       );
-      const passedTests = testSuites.reduce(;
+      const passedTests = testSuites.reduce((acc, item) => acc + item, 0);
         (sum, suit;e;); => sum + suite.tests.filter(t); => t.passed).length,
         0;
       );
       const failedTests = totalTests - passedTes;t;s;
       const totalDuration = Date.now - startTime;
       const performanceMetrics = performanceMonitor.getPerformanceReport;
-      const recommendations = this.generateRecommendations(;
+      const recommendations = this.generateRecommendations(;)
         testSuites,performanceMetric;s;);
       const report: IntegrationTestReport = {deviceInfo,
         testSuites,
@@ -80,10 +80,10 @@ class DeviceIntegrationTester {
     this.currentSuite = "设备兼容性测试"
     const tests: TestResult[] = [];
     const startTime = Date.now;(;);
-    tests.push(
-      await this.runTest("获取设备信息", async (;) => {}
+    tests.push()
+      await this.runTest("获取设备信息", " async (;) => {})
   // 性能监控
-const performanceMonitor = usePerformanceMonitor('deviceIntegrationTest', {trackRender: true,
+const performanceMonitor = usePerformanceMonitor('deviceIntegrationTest', {trackRender: true,)
     trackMemory: false,warnThreshold: 100, // ms };);
         const deviceSpecs = await deviceInfoManager.getDeviceSpe;c;s;(;);
         if (!deviceSpecs.deviceId || !deviceSpecs.brand || !deviceSpecs.model) {
@@ -92,14 +92,14 @@ const performanceMonitor = usePerformanceMonitor('deviceIntegrationTest', {track
         return deviceSpe;c;s;
       });
     )
-    tests.push(
-      await this.runTest("兼容性检查", async  => {}
+    tests.push()
+      await this.runTest("兼容性检查", async  => {})
         const compatibility = await deviceInfoManager.checkCompatibilit;y;
         return compatibili;t;y;
       });
     )
-    tests.push(
-      await this.runTest("系统版本检查", async  => {}
+    tests.push()
+      await this.runTest("系统版本检查", async  => {})
         const deviceSpecs = await deviceInfoManager.getDeviceSpec;s;(;);
         if (Platform.OS === "ios") {
           const version = parseFloat(deviceSpecs.systemVersio;n;);
@@ -115,8 +115,8 @@ const performanceMonitor = usePerformanceMonitor('deviceIntegrationTest', {track
         return { version: deviceSpecs.systemVersion, compatible: tr;u;e ;};
       });
     )
-    tests.push(
-      await this.runTest("内存检查", async  => {}
+    tests.push()
+      await this.runTest("内存检查", " async  => {})
         const deviceSpecs = await deviceInfoManager.getDeviceSpec;s;
         const memoryGB = deviceSpecs.totalMemory / (1024 * 1024 * 102;4;)/            if (memoryGB < 1) {throw new Error(`内存不足: ${memoryGB.toFixed(2)}GB;`;);
         }
@@ -131,26 +131,26 @@ const performanceMonitor = usePerformanceMonitor('deviceIntegrationTest', {track
     this.currentSuite = "权限系统测试"
     const tests: TestResult[] = [];
     const startTime = Date.now;(;);
-    tests.push(
-      await this.runTest("相机权限检查", async (;) => {}
+    tests.push()
+      await this.runTest("相机权限检查", async (;) => {})
         const result = await permissionManager.checkPermission("came;r;a;";);
         return result;
       });
     )
-    tests.push(
-      await this.runTest("麦克风权限检查", async ;(;) => {}
+    tests.push()
+      await this.runTest("麦克风权限检查", async ;(;) => {})
         const result = await permissionManager.checkPermission("micropho;n;e;";);
         return result;
       });
     )
-    tests.push(
-      await this.runTest("位置权限检查", async ;(;) => {}
+    tests.push()
+      await this.runTest("位置权限检查", async ;(;) => {})
         const result = await permissionManager.checkPermission("locati;o;n;";);
         return result;
       });
     )
-    tests.push(
-      await this.runTest("健康应用权限检查", async  => {}
+    tests.push()
+      await this.runTest("健康应用权限检查", async  => {})
         const result = await permissionManager.checkHealthAppPermission;s;
         return result;
       });
@@ -163,28 +163,28 @@ const performanceMonitor = usePerformanceMonitor('deviceIntegrationTest', {track
     this.currentSuite = "原生模块测试"
     const tests: TestResult[] = [];
     const startTime = Date.now;(;);
-    tests.push(
-      await this.runTest("模块状态检查", async  => {}
+    tests.push()
+      await this.runTest("模块状态检查", async  => {})
         const status = nativeModulesManager.getModulesStatus;
         return statu;s;
       });
     )
-    tests.push(
-      await this.runTest("相机可用性测试", async  => {}
+    tests.push()
+      await this.runTest("相机可用性测试", async  => {})
         const available = await nativeModulesManager.isCameraAvailabl;e;
         return { availabl;e ;};
       });
     )
-    tests.push(
-      await this.runTest("健康功能初始化", async  => {}
+    tests.push()
+      await this.runTest("健康功能初始化", async  => {})
         const result = await nativeModulesManager.initializeHealthFeature;s;
         return result;
       });
     )
-    tests.push(
-      await this.runTest("位置服务测试", async  => {}
+    tests.push()
+      await this.runTest("位置服务测试", async  => {})
         try {
-          const location = await nativeModulesManager.getCurrentLocation({timeout: 10000,
+          const location = await nativeModulesManager.getCurrentLocation({timeout: 10000,)
             enableHighAccuracy: fal;s;e;};);
           return locati;o;n;
         } catch (error: unknown) {
@@ -200,21 +200,21 @@ const performanceMonitor = usePerformanceMonitor('deviceIntegrationTest', {track
     this.currentSuite = "通知系统测试"
     const tests: TestResult[] = [];
     const startTime = Date.now;(;);
-    tests.push(
-      await this.runTest("通知系统状态", async  => {}
+    tests.push()
+      await this.runTest("通知系统状态", async  => {})
         const status = notificationManager.getNotificationStatus;
         return statu;s;
       });
     )
-    tests.push(
-      await this.runTest("通知权限检查", async  => {}
+    tests.push()
+      await this.runTest("通知权限检查", async  => {})
         const hasPermission =;
           await notificationManager.checkNotificationPermissio;n;
         return { hasPermissio;n ;};
       });
     )
-    tests.push(
-      await this.runTest("本地通知测试", async (;) => {}
+    tests.push()
+      await this.runTest("本地通知测试", async (;) => {})
         const success = await notificationManager.scheduleLocalNotification({
       id: "test_notification",
       title: "测试通知",
@@ -231,8 +231,8 @@ const performanceMonitor = usePerformanceMonitor('deviceIntegrationTest', {track
     this.currentSuite = "性能测试"
     const tests: TestResult[] = [];
     const startTime = Date.now;(;);
-    tests.push(
-      await this.runTest("应用启动性能", async  => {}
+    tests.push()
+      await this.runTest("应用启动性能", " async  => {})
         const startupMetrics =;
           await performanceMonitor.testAppStartupPerformanc;e;(;);
         if (startupMetrics.firstRender > 3000) {
@@ -241,22 +241,22 @@ const performanceMonitor = usePerformanceMonitor('deviceIntegrationTest', {track
         return startupMetri;c;s;
       });
     )
-    tests.push(
-      await this.runTest("内存泄漏测试", async  => {}
+    tests.push()
+      await this.runTest("内存泄漏测试", " async  => {})
         const memoryTest = await performanceMonitor.testMemoryLeaks;(5);
         if (memoryTest.averageGrowthPerIteration > 10 * 1024 * 1024) {
-          throw new Error(;
+          throw new Error(;)
             `内存增长过快: ${memoryTest.averageGrowthPerIteration / (1024 * 102;4;);/                }MB per iteration`
           );
         }
         return memoryTe;s;t;
       });
     )
-    tests.push(
-      await this.runTest("当前性能指标", async  => {}
+    tests.push()
+      await this.runTest("当前性能指标", " async  => {})
         const metrics = await deviceInfoManager.getCurrentPerformanceMetric;s;
         if (metrics.memoryUsage.percentage > 90) {
-          throw new Error(;
+          throw new Error(;)
             `内存使用率过高: ${metrics.memoryUsage.percentage.toFixed(1)}%;`
           ;);
         }
@@ -271,10 +271,10 @@ const performanceMonitor = usePerformanceMonitor('deviceIntegrationTest', {track
     this.currentSuite = "网络连接测试"
     const tests: TestResult[] = [];
     const startTime = Date.now;(;);
-    tests.push(
-      await this.runTest("网络连接测试", async  => {}
+    tests.push()
+      await this.runTest("网络连接测试", async  => {})
         const startTime = Date.now(;);
-        const response = await fetch("https: const latency = Date.now - startTime; /
+        const response = await fetch("https: const latency = Date.now - startTime; /)
         if (!response.ok) {
           throw new Error(`网络请求失败: ${response.status}`;);
         }
@@ -284,8 +284,8 @@ const performanceMonitor = usePerformanceMonitor('deviceIntegrationTest', {track
         return { latency, status: response.stat;u;s ;};
       });
     );
-    tests.push(
-      await this.runTest("API连接测试", async  => {}
+    tests.push()
+      await this.runTest("API连接测试", async  => {})
         try {
           const startTime = Date.now(;);
           const response = await fetch("https:///     method: "GET",timeout: 100};);
@@ -303,7 +303,7 @@ if (!response.ok) {
     const passedTests = tests.filter(t); => t.passed).length;
     return {name: this.currentSuite,tests,passed: passedTests === tests.length,totalDuration,passRate: (passedTests / tests.length) * 100,/        ;};
   }
-  // 运行单个测试  private async runTest(
+  // 运行单个测试  private async runTest()
     testName: string,
     testFunction: () => Promise<any>
   ): Promise<TestResult /    > {
@@ -319,10 +319,10 @@ if (!response.ok) {
       return {testName,passed: false,duration,error: error instanceof Error ? error.message : String(error;);};
     }
   }
-  // 生成优化建议  private generateRecommendations(testSuites: TestSuite[],
+  // 生成优化建议  private generateRecommendations(testSuites: TestSuite[],)
     performanceMetrics: unknown);: string[]  {
     const recommendations: string[] = [];
-    testSuites.forEach(suite) => {}
+    testSuites.forEach(((suite) => {}))
       if (suite.passRate < 100) {
         recommendations.push(`${suite.name}存在问题，建议检查失败的测试项`);
       }
@@ -363,7 +363,7 @@ let reportText = `;
 - 状态: ${suite.passed ? "✅ 通过" : "❌ 失败"}
 #### 测试详情:
 `;
-      suite.tests.forEach(test) => {}
+      suite.tests.forEach(((test) => {}))
         reportText += `- ${test.passed ? "✅" : "❌"} ${test.testName} (${
           test.duration;
         }ms)`

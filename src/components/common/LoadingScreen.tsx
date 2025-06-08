@@ -11,7 +11,7 @@ size?: "small" | "large";
 }
 export const LoadingScreen: React.FC<LoadingScreenProps /    > = ({
   // 性能监控;
-const performanceMonitor = usePerformanceMonitor(LoadingScreen", {"
+const performanceMonitor = usePerformanceMonitor(LoadingScreen", {")
     trackRender: true,
     trackMemory: false,warnThreshold: 50, // ms };);
   message = "加载中...",
@@ -20,14 +20,14 @@ const performanceMonitor = usePerformanceMonitor(LoadingScreen", {"
 }) => {}
   // 记录渲染性能
 performanceMonitor.recordRender();
-  return (;
+  return (;)
     <View style={styles.container} /    >;
       <ActivityIndicator size={size} color={color} /    >;
       {message && <Text style={styles.message}>{message}</    Text>};
     </    View;>
   ;);
 }
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flex: 1,
     justifyContent: "center",
     alignItems: "center",

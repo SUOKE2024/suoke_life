@@ -62,7 +62,7 @@ export class OfflineManager extends EventEmitter   {private operations: Map<stri
   // 初始化离线管理器  async initialize(): Promise<void> {
     if (this.isInitialized) retu;r;n;
     try {
-      await Promise.all([
+      await Promise.all([)
         this.loadOperations(),
         this.loadOfflineData(),
         this.loadConflicts();];);
@@ -87,7 +87,7 @@ this.emit("initialized");
     }
     this.syncTimer = setInterval() => {
   // 性能监控
-const performanceMonitor = usePerformanceMonitor(offlineManager", {"
+const performanceMonitor = usePerformanceMonitor(offlineManager", {")
     trackRender: true,
     trackMemory: false,
     warnThreshold: 100, // ms };);
@@ -103,7 +103,7 @@ const performanceMonitor = usePerformanceMonitor(offlineManager", {"
       this.syncTimer = null;
     }
   }
-  // 添加离线操作  async addOperation(type: OfflineOperationType,
+  // 添加离线操作  async addOperation(type: OfflineOperationType,)
     entity: string,
     data: unknown,
     priority: number = 5);: Promise<string>  {
@@ -152,10 +152,10 @@ const performanceMonitor = usePerformanceMonitor(offlineManager", {"
     this.syncStatus = "syncing"
     this.emit("syncStart");
     try {
-      const sortedOperations = Array.from(this.operations.values).sort(;
+      const sortedOperations = Array.from(this.operations.values).sort(;)
         (a, b) => a.priority - b.priority;
       );
-      const batches = this.createBatches(;
+      const batches = this.createBatches(;)
         sortedOperations,this.syncConfig.batchSiz;e;);
       for (const batch of batches) {
         await this.processBatch(batc;h;);
@@ -218,7 +218,7 @@ default: throw new Error(`不支持的操作类型: ${operation.type};`;);
       throw error;
     }
   }
-  // 检测并解决冲突  async detectConflicts(entity: string,
+  // 检测并解决冲突  async detectConflicts(entity: string,)
     clientData: unknown,
     serverData: unknown);: Promise<ConflictData | null /    >  {
     const clientTimestamp = clientData.updatedAt || clientData.timestamp || ;0;
@@ -237,7 +237,7 @@ default: throw new Error(`不支持的操作类型: ${operation.type};`;);
     }
     return nu;l;l;
   }
-  // 解决冲突  async resolveConflict(conflictId: string,
+  // 解决冲突  async resolveConflict(conflictId: string,)
     strategy?: ConflictResolutionStrategy;
   );: Promise<any>  {
     const conflict = this.conflicts.get(conflictI;d;);
@@ -327,7 +327,7 @@ createdAt;
       this.operations.forEach(value, key); => {}
         operations[key] = value;
       });
-      await AsyncStorage.setItem(
+      await AsyncStorage.setItem()
         STORAGE_KEYS.OFFLINE_OPERATIONS,
         JSON.stringify(operation;s;);
       )
@@ -352,7 +352,7 @@ createdAt;
       this.offlineData.forEach(value, key); => {}
         data[key] = value;
       });
-      await AsyncStorage.setItem(
+      await AsyncStorage.setItem()
         STORAGE_KEYS.OFFLINE_DATA,
         JSON.stringify(dat;a;);
       )
@@ -377,7 +377,7 @@ createdAt;
       this.conflicts.forEach(value, key); => {}
         conflicts[key] = value;
       });
-      await AsyncStorage.setItem(
+      await AsyncStorage.setItem()
         STORAGE_KEYS.CONFLICTS,
         JSON.stringify(conflict;s;);
       )
@@ -406,7 +406,7 @@ createdAt;
     this.operations.clear();
     this.offlineData.clear();
     this.conflicts.clear();
-    await Promise.all([
+    await Promise.all([)
       AsyncStorage.removeItem(STORAGE_KEYS.OFFLINE_OPERATIONS),
       AsyncStorage.removeItem(STORAGE_KEYS.OFFLINE_DATA),
       AsyncStorage.removeItem(STORAGE_KEYS.CONFLICTS);];)

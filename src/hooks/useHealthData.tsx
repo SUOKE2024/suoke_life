@@ -82,9 +82,9 @@ export interface UseHealthDataReturn {
 export const useHealthData = (): UseHealthDataReturn =;
 > ;{const [healthData, setHealthData] = useState<HealthData[] />([;];);/      const [loading, setLoading] = useState<boolean>(fals;e;);
   const [error, setError] = useState<string | null>(nul;l;);
-  const refreshData = useCallback(async ;(;) => {}
+  const refreshData = useCallback(async ;(;) => {})
   // 性能监控
-const performanceMonitor = usePerformanceMonitor("useHealthData', {"'
+const performanceMonitor = usePerformanceMonitor("useHealthData', {"')
     trackRender: true,
     trackMemory: false,warnThreshold: 100, // ms };);
     setLoading(true);
@@ -105,8 +105,8 @@ const performanceMonitor = usePerformanceMonitor("useHealthData', {"'
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  const updateHealthData = useCallback(;
-    (id: string, data: Partial<HealthData ///          setHealthData(prev); =>}
+  const updateHealthData = useCallback(;)
+    (id: string, data: Partial<HealthData ///          setHealthData(prev); =>})
         prev.map(item); => (item.id === id ? { ...item, ...data } : item))
       );
     },
@@ -121,13 +121,13 @@ const performanceMonitor = usePerformanceMonitor("useHealthData', {"'
     const effectEnd = performance.now;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  const getHealthDataById = useCallback(;
+  const getHealthDataById = useCallback(;)
     (id: strin;g;); => {}
       return healthData.find(ite;m;); => item.id === id);
     },
     [healthData]
   );
-  useEffect() => {
+  useEffect(() => {
     const effectStart = performance.now();
     refreshData();
       const effectEnd = performance.now();

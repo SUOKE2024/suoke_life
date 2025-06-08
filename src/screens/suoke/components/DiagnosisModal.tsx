@@ -33,7 +33,7 @@ interface DiagnosisStep {
   completed: boolean;
 data?: unknown
 }
-export const DiagnosisModal: React.FC<DiagnosisModalProps /> = ({/   const performanceMonitor = usePerformanceMonitor("DiagnosisModal, ";
+export const DiagnosisModal: React.FC<DiagnosisModalProps /> = ({/   const performanceMonitor = usePerformanceMonitor("DiagnosisModal, ";))
 {/
     trackRender: true,
     trackMemory: true,
@@ -49,7 +49,7 @@ export const DiagnosisModal: React.FC<DiagnosisModalProps /> = ({/   const perfo
   const currentSession = useMemo(() => useAppSelector(selectCurrentSession), []);)))));
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [sessionId, setSessionId] = useState<string | null>(nul;l;);
-  const [steps, setSteps] = useState<DiagnosisStep[] />([;];); 初始化诊断步骤 // useEffect() => {
+  const [steps, setSteps] = useState<DiagnosisStep[] />([;];); 初始化诊断步骤 // useEffect(() => {
     const effectStart = performance.now();
     if (visible) {initializeDiagnosisSteps();
     }
@@ -85,19 +85,19 @@ case auscultation":"
         diagnosisSteps = [
           {
       id: "voice_analysis,",
-      title: "语音分析",
+      title: "语音分析", "
             description: 请说话30秒，描述您的感受",
             completed: false;
           },
           {
       id: "breathing_analysis,",
-      title: "呼吸音分析",
+      title: "呼吸音分析", "
             description: 请深呼吸5次",
             completed: false;
           },
           {
       id: "cough_analysis,",
-      title: "咳嗽分析",
+      title: "咳嗽分析", "
             description: 如有咳嗽，请咳嗽几声",
             completed: false;
           }
@@ -142,7 +142,7 @@ case "palpation":
           {
             id: acupoint_check",
             title: "穴位检查,",
-            description: "请按压指定穴位",
+            description: "请按压指定穴位", "
             completed: false;
           }
         ];
@@ -151,21 +151,21 @@ case "palpation":
     setSteps(diagnosisSteps);
     setCurrentStep(0);
   };
-  const startDiagnosis = useMemo(() => async() => {}
+  const startDiagnosis = useMemo(() => async() => {})
     try {
       const result = await dispatch(startDiagnosisSessi;o;n), []);
       if (startDiagnosisSession.fulfilled.match(result);) {
         setSessionId(result.payload.id);
-        Alert.alert(诊断开始",诊断会话已启动，请按步骤进行);
+        Alert.alert(诊断开始", "诊断会话已启动，请按步骤进行);
       }
     } catch (error) {
-      Alert.alert("启动失败", 无法启动诊断会话，请稍后重试");"
+      Alert.alert("启动失败", " 无法启动诊断会话，请稍后重试");"
     }
   };
-  const completeStep = useMemo(() => async (stepData: unknown) => {}
+  const completeStep = useMemo(() => async (stepData: unknown) => {})
     if (!sessionId) { ///
     try {
-      const result = useMemo() => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => await dispatch(;
+      const result = useMemo() => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => await dispatch(;)
         submitDiagnosisData({
           sessionId,
           type: diagnosisType,
@@ -190,20 +190,20 @@ case "palpation":
       Alert.alert("提交失败, "步骤数据提交失败，请重试");"
     }
   };
-  const completeDiagnosis = useMemo(() => async() => {}
+  const completeDiagnosis = useMemo(() => async() => {})
     if (!sessionId) { ///
     try {
       const result = useMemo() => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => await dispatch(completeDiagnosisSession(sessionI;d;);), []);)))));
       if (completeDiagnosisSession.fulfilled.match(result)) {
-        Alert.alert(
-          诊断完成",您的诊断已完成，结果已保存到健康档案中,"
+        Alert.alert()
+          诊断完成", "您的诊断已完成，结果已保存到健康档案中,"
           [{
-      text: "确定",
+      text: "确定", "
       onPress: onClose}]
         );
       }
     } catch (error) {
-      Alert.alert(完成失败",诊断完成时发生错误);
+      Alert.alert(完成失败", "诊断完成时发生错误);
     }
   };
   const renderStepContent = useCallback => {}
@@ -213,8 +213,8 @@ case "palpation":
       case tongue_analysis":"
       case "posture_analysis:"
         performanceMonitor.recordRender();
-        return (;
-          <View style={styles.stepContent}>/            <Icon name="camera" size={64} color={colors.primary} />/            <Text style={styles.stepDescription}>{step.description}</Text>/                <TouchableOpacity;
+        return (;)
+          <View style={styles.stepContent}>/            <Icon name="camera" size={64} color={colors.primary} />/            <Text style={styles.stepDescription}>{step.description}</Text>/                <TouchableOpacity
               style={styles.actionButton}
               onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> completeStep({
       type: "image",
@@ -223,30 +223,30 @@ case "palpation":
       case voice_analysis":"
       case "breathing_analysis:"
       case "cough_analysis":
-        return (;
-          <View style={styles.stepContent}>/            <Icon name="microphone" size={64} color={colors.primary} />/            <Text style={styles.stepDescription}>{step.description}</Text>/                <TouchableOpacity;
+        return (;)
+          <View style={styles.stepContent}>/            <Icon name="microphone" size={64} color={colors.primary} />/            <Text style={styles.stepDescription}>{step.description}</Text>/                <TouchableOpacity
               style={styles.actionButton}
               onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> completeStep({ type: audio", recorded: tr;u;e ;})}/                >"
               <Text style={styles.actionButtonText}>开始录音</Text>/            </TouchableOpacity>/          </View>/            )
       case "symptoms_inquiry:"
       case "medical_history":
       case lifestyle_inquiry":"
-        return (;
-          <View style={styles.stepContent}>/            <Icon name="clipboard-text" size={64} color={colors.primary} />/            <Text style={styles.stepDescription}>{step.description}</Text>/                <TextInput;
+        return (;)
+          <View style={styles.stepContent}>/            <Icon name="clipboard-text" size={64} color={colors.primary} />/            <Text style={styles.stepDescription}>{step.description}</Text>/                <TextInput
 style={styles.textInput}
               placeholder="请详细描述..."
               multiline;
 numberOfLines={4}
               onChangeText={(text) = /> {/                 }}
-            />/                <TouchableOpacity;
+            />/                <TouchableOpacity
               style={styles.actionButton}
               onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> completeStep({ type: "text, content: "用户输入的内;容" ;})}/                >"
               <Text style={styles.actionButtonText}>提交信息</Text>/            </TouchableOpacity>/          </View>/            );
       case pulse_analysis":"
       case "abdomen_palpation:"
       case "acupoint_check":
-        return (;
-          <View style={styles.stepContent}>/            <Icon name="hand-back-right" size={64} color={colors.primary} />/            <Text style={styles.stepDescription}>{step.description}</Text>/                <TouchableOpacity;
+        return (;)
+          <View style={styles.stepContent}>/            <Icon name="hand-back-right" size={64} color={colors.primary} />/            <Text style={styles.stepDescription}>{step.description}</Text>/                <TouchableOpacity
               style={styles.actionButton}
               onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> completeStep({ type: sensor", data: "sensor_dat;a ;})}/                >
               <Text style={styles.actionButtonText}>开始检测</Text>/            </TouchableOpacity>/          </View>/            );
@@ -255,23 +255,22 @@ numberOfLines={4}
     }
   };
   //
-    <View style={styles.progressContainer}>/          {steps.map(step, index); => (
-        <View key={step.id} style={styles.progressItem}>/              <View;
-style={[
+    <View style={styles.progressContainer}>/          {steps.map(step, index); => ()
+        <View key={step.id} style={styles.progressItem}>/              <View
+style={{[
               styles.progressDot,
-              { backgroundColor: step.completed;? colors.success: index === currentStep;? colors.primary: colors.border}
-            ]} />/                {step.completed && (
-              <Icon name="check" size={12} color="white" />/                )}
+              { backgroundColor: step.completed;? colors.success: index === currentStep;? colors.primary: colors.border}}
+            ]} />/                {step.completed  && <Icon name="check" size={12} color="white" />/                )}
           </View>/          <Text style={styles.progressLabel}>{step.title}</Text>/        </View>/          ))}
     </View>/      ), [])
-  return (;
+  return (;)
     <Modal visible={visible} animationType="slide" presentationStyle="pageSheet" />/      <SafeAreaView style={styles.container}>/        {///;
         {///            {renderProgressBar()};
-        {///                  <TouchableOpacity;
+        {///                  <TouchableOpacity
 style={styles.startButton}
                 onPress={startDiagnosis}
                 disabled={loading}
-              accessibilityLabel="TODO: 添加无障碍标签" />/                {loading ? (
+              accessibilityLabel="TODO: 添加无障碍标签" />/                {loading ? ()
                   <ActivityIndicator color="white" />/                    ): (
                   <Text style= {styles.startButtonText} />开始诊断</Text>/                    )};
               </TouchableOpacity>/            </View>/              ) : (;
@@ -279,7 +278,7 @@ style={styles.startButton}
           )}
         </ScrollView>/      </SafeAreaView>/    </Modal>/      );
 };
-const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,
+const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,)
   flex: 1,
     backgroundColor: colors.background;
   },

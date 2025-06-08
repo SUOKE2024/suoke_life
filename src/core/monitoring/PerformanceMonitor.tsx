@@ -88,7 +88,7 @@ export class PerformanceMonitor {
     }
   }
   // 记录性能指标
-  public recordMetric(
+  public recordMetric()
     name: string,
     value: number,
     category: PerformanceCategory,
@@ -121,7 +121,7 @@ export class PerformanceMonitor {
     this.notifyListeners(metric);
   }
   // 测量函数执行时间
-  public async measureAsync<T>(
+  public async measureAsync<T>()
     name: string,
     category: PerformanceCategory,
     fn: () => Promise<T>,
@@ -146,7 +146,7 @@ export class PerformanceMonitor {
     }
   }
   // 测量同步函数执行时间
-  public measure<T>(
+  public measure<T>()
     name: string,
     category: PerformanceCategory,
     fn: () => T,
@@ -181,12 +181,12 @@ export class PerformanceMonitor {
     let responseTimeCount = 0;
     // 收集指定时间范围内的指标
     for (const [key, metricHistory] of this.metrics.entries()) {
-      const recentMetrics = metricHistory.filter(;
+      const recentMetrics = metricHistory.filter(;)
         (m) => m.timestamp >= startTime;
       );
       allMetrics.push(...recentMetrics);
       // 统计警告和严重问题
-      recentMetrics.forEach(metric) => {
+      recentMetrics.forEach(((metric) => {
         if (metric.threshold) {
           if (metric.value >= metric.threshold.critical) {
             criticalCount++;
@@ -195,7 +195,7 @@ export class PerformanceMonitor {
           }
         }
         // 计算平均响应时间
-        if (
+        if ()
           metric.category === PerformanceCategory.NETWORK ||
           metric.category === PerformanceCategory.AGENT;
         ) {
@@ -231,7 +231,7 @@ export class PerformanceMonitor {
   // 私有方法实现
   private setupDefaultThresholds(): void {
     // 设置默认阈值
-    this.setThreshold(
+    this.setThreshold()
       "api_response",
       PerformanceCategory.NETWORK,
       1000,
@@ -241,7 +241,7 @@ export class PerformanceMonitor {
     this.setThreshold("memory_usage", PerformanceCategory.MEMORY, 80, 95, "%");
     this.setThreshold("cpu_usage", PerformanceCategory.CPU, 70, 90, "%");
   }
-  private setThreshold(
+  private setThreshold()
     metricName: string,
     category: PerformanceCategory,
     warning: number,
@@ -256,7 +256,7 @@ export class PerformanceMonitor {
       unit;
     });
   }
-  private getThreshold(
+  private getThreshold()
     metricName: string;
   ): { warning: number; critical: number } | undefined {
     const threshold = this.thresholds.get(metricName);
@@ -267,18 +267,18 @@ export class PerformanceMonitor {
   private checkThreshold(metric: PerformanceMetric): void {
     if (metric.threshold) {
       if (metric.value >= metric.threshold.critical) {
-        console.warn(
+        console.warn()
           `Critical performance issue: ${metric.name} = ${metric.value}${metric.unit}`
         );
       } else if (metric.value >= metric.threshold.warning) {
-        console.warn(
+        console.warn()
           `Performance warning: ${metric.name} = ${metric.value}${metric.unit}`
         );
       }
     }
   }
   private notifyListeners(metric: PerformanceMetric): void {
-    this.listeners.forEach(listener) => {
+    this.listeners.forEach(((listener) => {
       try {
         listener(metric);
       } catch (error) {
@@ -288,13 +288,13 @@ export class PerformanceMonitor {
   }
   private collectSystemMetrics(): void {
     // 收集系统指标的实现
-    this.recordMetric(
+    this.recordMetric()
       "memory_usage",
       this.getCurrentMemoryUsage(),
       PerformanceCategory.MEMORY,
       "%"
     );
-    this.recordMetric(
+    this.recordMetric()
       "cpu_usage",
       this.getCurrentCpuUsage(),
       PerformanceCategory.CPU,
@@ -326,7 +326,7 @@ export class PerformanceMonitor {
     // 生成优化建议的实现
     const recommendations: string[] = [];
     // 分析指标并生成建议
-    const highMemoryMetrics = metrics.filter(;
+    const highMemoryMetrics = metrics.filter(;)
       (m) => m.category === PerformanceCategory.MEMORY && m.value > 80;
     );
     if (highMemoryMetrics.length > 0) {
@@ -360,7 +360,7 @@ export class PerformanceMonitor {
 // React组件
 export const PerformanceMonitorComponent: React.FC = () => {
   // 性能监控
-  const performanceMonitor = usePerformanceMonitor({trackRender: true,trackMemory: false,warnThreshold: 100, // ms;
+  const performanceMonitor = usePerformanceMonitor({trackRender: true,trackMemory: false,warnThreshold: 100, // ms;)
   });
   return <div>{// 性能监控UI组件}</div>;
 };

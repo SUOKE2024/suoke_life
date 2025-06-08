@@ -24,7 +24,7 @@ this.registerAgent(";xiaoai", {
       status: "active"
     });
     // 小克 - 专业诊断智能体，负责中医辨证和现代医学诊断
-this.registerAgent(xiaoke", {"
+this.registerAgent(xiaoke", {")
       id: "xiaoke, ",
       name: "小克",
       capabilities: [tcm_diagnosis",modern_diagnosis, "syndrome_differentiation"],
@@ -32,7 +32,7 @@ this.registerAgent(xiaoke", {"
       status: active""
     });
     // 老克 - 资深健康顾问，负责治疗方案制定和健康管理
-this.registerAgent("laoke, {"
+this.registerAgent("laoke, {")
       id: "laoke",
       name: 老克",
       capabilities: ["treatment_planning, "health_management", lifestyle_guidance"],
@@ -56,7 +56,7 @@ this.registerAgent("soer", {
   }
   /**
 * * 创建协作任务
-  async createCollaborationTask(
+  async createCollaborationTask()
     healthContext: HealthContext,
     requiredCapabilities: string[],
     priority: TaskPriority = TaskPriority.MEDIUM;
@@ -97,7 +97,7 @@ await this.startCollaborationSession(task);
 for (const agentId of task.assignedAgents) {
       const agent = this.agents.get(agentId);
       if (agent) {
-        this.emit(collaboration_started", {"
+        this.emit(collaboration_started", {")
           sessionId,
           agentId,
           task,
@@ -110,7 +110,7 @@ await this.executeCollaborationFlow(session, task);
   }
   /**
 * * 执行协作决策流程
-  private async executeCollaborationFlow(
+  private async executeCollaborationFlow()
     session: CollaborationSession,
     task: CollaborationTask;
   ): Promise<void> {
@@ -145,19 +145,19 @@ task.result = {
   }
   /**
 * * 信息收集和初步分析（小艾主导）
-  private async collectAnalysis(
+  private async collectAnalysis()
     session: CollaborationSession,
     task: CollaborationTask;
   ): Promise<any> {
     const xiaoaiAgent = this.agents.get("xiaoai");
     if (!xiaoaiAgent) throw new Error(小艾智能体未找到");"
     // 小艾进行用户交互和症状收集
-const userInteraction = await this.invokeAgent("xiaoai, "collect_symptoms", {"
+const userInteraction = await this.invokeAgent("xiaoai, "collect_symptoms", {")
       healthContext: task.healthContext,
       sessionId: session.id;
     });
     // 小艾进行初步健康评估
-const healthAssessment = await this.invokeAgent(xiaoai",assess_health, {symptoms: userInteraction.symptoms,
+const healthAssessment = await this.invokeAgent(xiaoai", "assess_health, {symptoms: userInteraction.symptoms,)
       vitalSigns: task.healthContext.vitalSigns;
     });
     return {userInteraction,healthAssessment,timestamp: new Date();
@@ -165,22 +165,22 @@ const healthAssessment = await this.invokeAgent(xiaoai",assess_health, {symptoms
   }
   /**
 * * 协同诊断和辨证（小克主导，其他智能体协助）
-  private async performCollaborativeDiagnosis(
+  private async performCollaborativeDiagnosis()
     session: CollaborationSession,
     analysisResults: any;
   ): Promise<any> {
     // 小克进行中医辨证
-const tcmDiagnosis = await this.invokeAgent("xiaoke", tcm_diagnosis", {"
+const tcmDiagnosis = await this.invokeAgent("xiaoke", tcm_diagnosis", {")
       symptoms: analysisResults.userInteraction.symptoms,
       constitution: analysisResults.healthAssessment.constitution;
     });
     // 小克进行现代医学诊断
-const modernDiagnosis = await this.invokeAgent("xiaoke, "modern_diagnosis", {"
+const modernDiagnosis = await this.invokeAgent("xiaoke, "modern_diagnosis", {")
       symptoms: analysisResults.userInteraction.symptoms,
       labResults: analysisResults.healthAssessment.labResults;
     });
     // 老克提供诊断建议
-const seniorAdvice = await this.invokeAgent(laoke",review_diagnosis, {tcmDiagnosis,
+const seniorAdvice = await this.invokeAgent(laoke", "review_diagnosis, {tcmDiagnosis,)
       modernDiagnosis;
     });
     return {tcmDiagnosis,modernDiagnosis,seniorAdvice,confidence: this.calculateDiagnosisConfidence([tcmDiagnosis, modernDiagnosis, seniorAdvice]);
@@ -188,16 +188,16 @@ const seniorAdvice = await this.invokeAgent(laoke",review_diagnosis, {tcmDiagnos
   }
   /**
 * * 治疗方案制定（老克主导）
-  private async createTreatmentPlan(
+  private async createTreatmentPlan()
     session: CollaborationSession,
     diagnosisResults: any;
   ): Promise<any> {
-    const treatmentPlan = await this.invokeAgent("laoke", create_treatment_plan", {"
+    const treatmentPlan = await this.invokeAgent("laoke", create_treatment_plan", {")
       diagnosis: diagnosisResults,
       patientProfile: session.participants;
     });
     // 小克验证治疗方案的医学合理性
-const medicalValidation = await this.invokeAgent("xiaoke, "validate_treatment", {"
+const medicalValidation = await this.invokeAgent("xiaoke, "validate_treatment", {")
       treatmentPlan;
     });
     return {plan: treatmentPlan,validation: medicalValidation,adjustments: medicalValidation.suggestedAdjustments || [];
@@ -205,16 +205,16 @@ const medicalValidation = await this.invokeAgent("xiaoke, "validate_treatment", 
   }
   /**
 * * 生活方式指导（索儿主导）
-  private async generateLifestyleGuidance(
+  private async generateLifestyleGuidance()
     session: CollaborationSession,
     treatmentPlan: any;
   ): Promise<any> {
     // 索儿提供食农结合建议
-const nutritionGuidance = await this.invokeAgent(soer",nutrition_guidance, {treatmentPlan: treatmentPlan.plan,
+const nutritionGuidance = await this.invokeAgent(soer", "nutrition_guidance, {treatmentPlan: treatmentPlan.plan,)
       season: new Date().getMonth() + 1;
     });
     // 索儿提供山水养生建议
-const wellnessGuidance = await this.invokeAgent("soer", wellness_guidance", {"
+const wellnessGuidance = await this.invokeAgent("soer", wellness_guidance", {")
       constitution: treatmentPlan.plan.targetConstitution,
       location: "default // 可从用户上下文获取"
     });
@@ -226,7 +226,7 @@ const wellnessGuidance = await this.invokeAgent("soer", wellness_guidance", {"
   private findSuitableAgents(requiredCapabilities: string[]): string[] {
     const suitableAgents: string[] = [];
     for (const [agentId, agent] of this.agents) {
-      const hasRequiredCapability = requiredCapabilities.some(capability =>;
+      const hasRequiredCapability = requiredCapabilities.some(capability =>;)
         agent.capabilities.includes(capability);
       );
       if (hasRequiredCapability && agent.status === "active") {
@@ -270,7 +270,7 @@ const participantCount = session.participants.length;
 * * 生成推荐建议
   private generateRecommendations(session: CollaborationSession): string[] {
     return [;
-      建议定期进行健康监测",保持良好的作息规律,根据体质调整饮食结构",适当进行户外运动"";
+      建议定期进行健康监测", "保持良好的作息规律,根据体质调整饮食结构", "适当进行户外运动"";
     ];
   }
   /**
@@ -278,7 +278,7 @@ const participantCount = session.participants.length;
   private generateDailyRoutine(nutritionGuidance: any, wellnessGuidance: any): any {
     return {
       morning: "早起饮温水，适量运动,",
-      noon: "营养均衡午餐，短暂休息",evening: 清淡晚餐，放松身心",;
+      noon: "营养均衡午餐，短暂休息", "evening: 清淡晚餐，放松身心",;
       sleep: "规律作息，保证充足睡眠";
     };
   }

@@ -177,7 +177,7 @@ describe('End-to-End User Authentication Flow', () => {
       });
       expect(preferences).toEqual(mockPreferencesResponse.data);
       // Step 4: Sync Health Data
-      const healthData = await userService.syncHealthData({heartRate: 75,bloodPressure: { systolic: 120, diastolic: 80 },steps: 10000;
+      const healthData = await userService.syncHealthData({heartRate: 75,bloodPressure: { systolic: 120, diastolic: 80 },steps: 10000;)
       });
       expect(healthData).toEqual(mockHealthDataResponse.data);
     });
@@ -191,7 +191,7 @@ describe('End-to-End User Authentication Flow', () => {
       message: '邮箱或密码错误'
         }
       });
-      await expect(
+      await expect()
         authService.login({
       email: "wrong@example.com",
       password: 'wrongpassword'
@@ -199,7 +199,7 @@ describe('End-to-End User Authentication Flow', () => {
       ).rejects.toThrow('邮箱或密码错误');
       // Test network error
       mockRequest.mockRejectedValueOnce(new Error('Network Error'));
-      await expect(
+      await expect()
         authService.login({
       email: "test@example.com",
       password: 'password123'

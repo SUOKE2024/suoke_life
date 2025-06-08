@@ -138,8 +138,8 @@ const specialFileRules = {
     // 修复对象结束语法错误
     content = content.replace(/,\s*\}/g, '}');
     // 修复数组语法错误
-    content = content.replace(/\[,/g, '[');
-    content = content.replace(/,\s*\]/g, ']');
+    content = content.replace(/[,/g, '[');
+    content = content.replace(/,\s*]/g, ']');
     return content;
   },
   

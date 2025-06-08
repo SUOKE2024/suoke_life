@@ -1,14 +1,15 @@
-import React from 'react';
 import 'react-native-gesture-handler/jestSetup';
+import React from 'react';
+
 // Mock React Native modules;
 jest.mock('react-native-reanimated', () => {
   const Reanimated = require('react-native-reanimated/mock');
   Reanimated.default.call = () => {};
   return Reanimated;
 });
-// Mock AsyncStorage;
+// Mock AsyncStorage
 jest.mock('@react-native-async-storage/async-storage', () =>
-  require('@react-native-async-storage/async-storage/jest/async-storage-mock'),
+  require('@react-native-async-storage/async-storage/jest/async-storage-mock')
 );
 // Mock react-native-vector-icons;
 jest.mock('react-native-vector-icons/MaterialIcons', () => 'Icon');
@@ -55,7 +56,7 @@ jest.mock('react-native-device-info', () => ({
 }));
 // Mock react-native-mmkv;
 jest.mock('react-native-mmkv', () => ({
-  MMKV: jest.fn().mockImplementation() => ({,
+  MMKV: jest.fn().mockImplementation() => ({,)
   set: jest.fn(),
     getString: jest.fn(),
     getNumber: jest.fn(),
@@ -90,7 +91,7 @@ jest.mock('react-native-voice', () => ({
 }));
 // Mock react-navigation;
 jest.mock('@react-navigation/native', () => ({
-  useNavigation: () => ({,
+  useNavigation: () => ({,)
   navigate: jest.fn(),
     goBack: jest.fn(),
     dispatch: jest.fn(),

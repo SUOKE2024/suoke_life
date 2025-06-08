@@ -60,7 +60,7 @@ const HomeScreen: React.FC = () => {
   // 工具函数
   const getAgentName = (agentType: string): string => {
     const names: Record<string, string> = {
-      xiaoai: "小艾",
+      xiaoai: "小艾", "
       xiaoke: '小克',
       laoke: '老克',
       soer: '索儿',
@@ -78,7 +78,7 @@ const HomeScreen: React.FC = () => {
   };
   const getAgentTag = (agentType: string): string => {
     const tags: Record<string, string> = {
-      xiaoai: "健康助手",
+      xiaoai: "健康助手", "
       xiaoke: '中医辨证',
       laoke: '健康顾问',
       soer: '生活教练',
@@ -87,7 +87,7 @@ const HomeScreen: React.FC = () => {
   };
   const getAgentGreeting = (agentType: string): string => {
     const greetings: Record<string, string> = {
-      xiaoai: "您好！我是小艾，有什么健康问题需要咨询吗？",
+      xiaoai: "您好！我是小艾，有什么健康问题需要咨询吗？", "
       xiaoke: '您好！我是小克，需要什么服务帮助吗？',
       laoke: '您好！我是老克，想学习什么健康知识呢？',
       soer: '您好！我是索儿，今天想了解什么生活建议呢？',
@@ -148,13 +148,13 @@ const HomeScreen: React.FC = () => {
   const generateDoctorChats = (): ChatItem[] => {
     const doctors = [
       {
-      name: "张医生",
+      name: "张医生", "
       specialty: '中医内科', message: '您的检查结果已出，一切正常' },
       {
-      name: "李教授",
+      name: "李教授", "
       specialty: '针灸专家', message: '请按照方案坚持服药，下周复诊' },
       {
-      name: "王主任",
+      name: "王主任", "
       specialty: '康复科', message: '康复训练进展良好，继续保持' },
     ];
     return doctors.map((doctor, index) => ({
@@ -162,7 +162,7 @@ const HomeScreen: React.FC = () => {
       name: doctor.name,
       avatar: index % 2 === 0 ? '👩‍⚕️' : '👨‍⚕️',
       message: doctor.message,
-      time: ["周二",上周', '3天前'][index],
+      time: ["周二", "上周', '3天前'][index],
       unread: index === 0 ? 1 : 0,
       type: 'doctor' as const,
       tag: doctor.specialty,
@@ -173,13 +173,13 @@ const HomeScreen: React.FC = () => {
   const generateUserChats = (): ChatItem[] => {
     const groups = [
       {
-      name: "健康小组",
+      name: "健康小组", "
       message: '[王医生]: 分享了一篇养生文章', unread: 3 },
       {
-      name: "家人健康群",
+      name: "家人健康群", "
       message: '[妈妈]: 今天按时吃药了吗？', unread: 0 },
       {
-      name: "运动打卡群",
+      name: "运动打卡群", "
       message: '[小明]: 今天跑步5公里完成！', unread: 2 },
     ];
     return groups.map((group, index) => ({
@@ -187,7 +187,7 @@ const HomeScreen: React.FC = () => {
       name: group.name,
       avatar: '👥',
       message: group.message,
-      time: ["周三",3/15', '昨天'][index],
+      time: ["周三", "3/15', '昨天'][index],
       unread: group.unread,
       type: 'user' as const,
       priority: 2 - index,
@@ -214,7 +214,7 @@ const HomeScreen: React.FC = () => {
       });
       setChatList(allChats);
       // 启动动画
-      Animated.parallel([
+      Animated.parallel([)
         Animated.timing(fadeAnim, {
           toValue: 1,
           duration: 600,
@@ -228,7 +228,7 @@ const HomeScreen: React.FC = () => {
       ]).start();
     } catch (error) {
       console.error('加载聊天列表失败:', error);
-      Alert.alert("错误",加载聊天列表失败，请稍后重试');
+      Alert.alert("错误", "加载聊天列表失败，请稍后重试');
     } finally {
       setLoading(false);
     }
@@ -240,11 +240,11 @@ const HomeScreen: React.FC = () => {
     setRefreshing(false);
   }, [loadChatList]);
   // 初始化
-  useEffect() => {
+  useEffect(() => {
     loadChatList();
   }, [loadChatList]);
   // 搜索过滤
-  const filteredChatList = chatList.filter(item =>
+  const filteredChatList = chatList.filter(item =>)
     item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     item.message.toLowerCase().includes(searchQuery.toLowerCase()),
   );
@@ -262,49 +262,47 @@ const HomeScreen: React.FC = () => {
       primary: "#666",
       secondary: '#F5F5F5' };
     return (
-      <Animated.View;
-        style={[
+  <Animated.View;
+        style={{[
           styles.chatItemContainer,
           {
             opacity: fadeAnim,
-            transform: [{ translateY: slideAnim }],
+            transform: [{ translateY: slideAnim }}],
           },
         ]}
       >
-        <TouchableOpacity;
-          style={[
+        <TouchableOpacity
+          style={{[
             styles.chatItem,
             item.type === 'agent' && styles.agentChatItem,
-          ]}
+          ]}}
           onPress={() => handleChatPress(item)}
           activeOpacity={0.7}
         >
           {}
           <View style={styles.avatarContainer}>
-            <View style={[
+            <View style={{[
               styles.avatarWrapper,
-              { backgroundColor: colors.secondary },
+              { backgroundColor: colors.secondary }},
             ]}>
-              <Text style={[styles.avatar, { color: colors.primary }]}>
+              <Text style={{[styles.avatar, { color: colors.primary }}]}>
                 {item.avatar}
               </Text>
-              {item.isOnline && (
-        <View style={styles.onlineIndicator}>
+              {item.isOnline  && <View style={styles.onlineIndicator}>
               )}
             </View>
           </View>
           {}
           <View style={styles.contentContainer}>
             <View style={styles.headerRow}>
-              <Text style={[
+              <Text style={{[
                 styles.chatName,
-                item.type === 'agent' && { color: colors.primary },
+                item.type === 'agent' && { color: colors.primary }},
               ]}>
                 {item.name}
               </Text>
-              {item.tag && (
-        <View style={[styles.tagContainer, { backgroundColor: colors.secondary }]}>
-                  <Text style={[styles.tagText, { color: colors.primary }]}>
+              {item.tag  && <View style={{[styles.tagContainer, { backgroundColor: colors.secondary }}]}>
+                  <Text style={{[styles.tagText, { color: colors.primary }}]}>
                     {item.tag}
                   </Text>
                 </View>
@@ -317,14 +315,13 @@ const HomeScreen: React.FC = () => {
           </View>
           {}
           <View style={styles.statusContainer}>
-            {item.unread > 0 && (
-        <View style={[styles.unreadBadge, { backgroundColor: colors.primary }]}>
+            {item.unread > 0  && <View style={{[styles.unreadBadge, { backgroundColor: colors.primary }}]}>
                 <Text style={styles.unreadText}>
                   {item.unread > 99 ? '99+' : item.unread}
                 </Text>
               </View>
             )}
-            <Icon;
+            <Icon
               name="chevron-right"
               size={20}
               color="#C0C0C0"
@@ -336,7 +333,7 @@ const HomeScreen: React.FC = () => {
   };
   // 渲染头部
   const renderHeader = () => (
-    <View style={styles.header}>
+  <View style={styles.header}>
       <View style={styles.headerGradient}>
         <View style={styles.headerContent}>
           <View style={styles.greetingContainer}>
@@ -356,15 +353,14 @@ const HomeScreen: React.FC = () => {
       <View style={styles.searchContainer}>
         <View style={styles.searchInputContainer}>
           <Icon name="magnify" size={20} color="#999" style={styles.searchIcon}>
-          <TextInput;
+          <TextInput
             style={styles.searchInput}
             placeholder="搜索聊天记录..."
             placeholderTextColor="#999"
             value={searchQuery}
             onChangeText={setSearchQuery}
           />
-          {searchQuery.length > 0 && (
-            <TouchableOpacity;
+          {searchQuery.length > 0  && <TouchableOpacity
               onPress={() => setSearchQuery('')}
               style={styles.clearButton}
             >
@@ -377,7 +373,7 @@ const HomeScreen: React.FC = () => {
   );
   // 渲染空状态
   const renderEmptyState = () => (
-    <View style={styles.emptyContainer}>
+  <View style={styles.emptyContainer}>
       <Icon name="chat-outline" size={64} color="#C0C0C0" />
       <Text style={styles.emptyTitle}>暂无聊天记录</Text>
       <Text style={styles.emptySubtitle}>开始与AI智能体对话吧</Text>
@@ -386,7 +382,7 @@ const HomeScreen: React.FC = () => {
   // 渲染加载状态
   if (loading) {
     return (
-      <SafeAreaView style={styles.container}>
+  <SafeAreaView style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="#4A90E2" />
         {renderHeader()}
         <View style={styles.loadingContainer}>
@@ -397,16 +393,16 @@ const HomeScreen: React.FC = () => {
     );
   }
   return (
-    <SafeAreaView style={styles.container}>
+  <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#4A90E2" />
-      <FlatList;
+      <FlatList
         data={filteredChatList}
         keyExtractor={(item) => item.id}
         renderItem={renderChatItem}
         ListHeaderComponent={renderHeader}
         ListEmptyComponent={renderEmptyState}
         refreshControl={
-          <RefreshControl;
+          <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
             colors={['#4A90E2']}

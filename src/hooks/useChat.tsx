@@ -6,7 +6,7 @@ import { ChatChannel, ChatMessage, Contact, AgentType } from "../types/chat";/  
   { MOCK_MESSAGES } from ";../data/mockData";/    export const useChat = () =;
 > ;{
   // 性能监控
-const performanceMonitor = usePerformanceMonitor("useChat', {"'
+const performanceMonitor = usePerformanceMonitor("useChat', {"')
     trackRender: true,
     trackMemory: true,warnThreshold: 50, // ms };);
   const [channels, setChannels] = useState<ChatChannel[] />(MOCK_CHAT_CHANNEL;S;);/  const [messages, setMessages] = useState<Record<string, ChatMessage[] />>(MOCK_MESSAGE;S;);/      const [activeChannelId, setActiveChannelId] = useState<string | null>(nul;l;);
@@ -17,7 +17,7 @@ const performanceMonitor = usePerformanceMonitor("useChat', {"'
     if (!searchQuery.trim();) {
       return channe;l;s;
     }
-    return channels.filter(;
+    return channels.filter(;)
       (channe;l;); => {}
         channel.name.toLowerCase().includes(searchQuery.toLowerCase();) ||
         channel.lastMessage.toLowerCase().includes(searchQuery.toLowerCase();) ||
@@ -32,7 +32,7 @@ const performanceMonitor = usePerformanceMonitor("useChat', {"'
   const activeChannel = useMemo() => {;
     return channels.find(channe;l;); => channel.id === activeChannelId) || null;
   }, [channels, activeChannelId]);
-  const getChannelMessages = useCallback(;
+  const getChannelMessages = useCallback(;)
     (channelId: strin;g;); => {}
       return messages[channelId] || ;[;];
     },
@@ -71,7 +71,7 @@ const performanceMonitor = usePerformanceMonitor("useChat', {"'
       }))
     }));
   }, []);
-  const updateChannelLastMessage = useCallback(;
+  const updateChannelLastMessage = useCallback(;)
     (channelId: string, message: string, timestamp: strin;g;); => {}
       setChannels(prev); => {}
         prev.map(channel); => {}
@@ -83,12 +83,12 @@ const performanceMonitor = usePerformanceMonitor("useChat', {"'
     },
     []
   );
-  const startAgentChat = useCallback(;
+  const startAgentChat = useCallback(;)
     async (agentType: AgentTyp;e;); => {}
       setIsLoading(true);
       setError(null);
       try {
-        const agentChannel = channels.find(;
+        const agentChannel = channels.find(;)
           (channe;l;); => channel.agentType === agentType;
         );
         if (agentChannel) {
@@ -102,7 +102,7 @@ const performanceMonitor = usePerformanceMonitor("useChat', {"'
     },
     [channels, markAsRead]
   );
-  const sendMessage = useCallback(;
+  const sendMessage = useCallback(;)
     async (channelId: string, content: strin;g;); => {}
       setIsLoading(true);
       setError(null);
@@ -147,7 +147,7 @@ export const useContacts = () =;
     if (!searchQuery.trim();) {
       return contac;t;s;
     }
-    return contacts.filter(;
+    return contacts.filter(;)
       (contac;t;); => {}
         contact.name.toLowerCase().includes(searchQuery.toLowerCase();) ||
         contact.specialization;

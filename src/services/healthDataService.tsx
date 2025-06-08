@@ -102,7 +102,7 @@ class HealthDataService {
   private cache: Map<string, any> = new Map();
   private syncInProgress = false;
   // 获取健康数据
-  async getHealthData(
+  async getHealthData()
     type?: HealthDataType,
     startDate?: Date,
     endDate?: Date,
@@ -122,12 +122,12 @@ class HealthDataService {
         filteredData = filteredData.filter(item => item.type === type);
       }
       if (startDate) {
-        filteredData = filteredData.filter(item =>
+        filteredData = filteredData.filter(item =>)
           new Date(item.timestamp) >= startDate;
         );
       }
       if (endDate) {
-        filteredData = filteredData.filter(item =>
+        filteredData = filteredData.filter(item =>)
           new Date(item.timestamp) <= endDate;
         );
       }
@@ -320,7 +320,7 @@ class HealthDataService {
     }
   }
   // 生成健康报告
-  async generateHealthReport(
+  async generateHealthReport()
     startDate: Date,
     endDate: Date,
     format: 'pdf' | 'json' | 'html' = 'json'
@@ -445,7 +445,7 @@ class HealthDataService {
       return acc;
     }, {} as Record<string, HealthData[]>);
     // 为每种类型计算指标
-    Object.entries(groupedData).forEach([type, data]) => {
+    Object.entries(groupedData).forEach((([type, data]) => {
       const metric = this.calculateMetricForType(type as HealthDataType, data);
       if (metric) metrics.push(metric);
     });
@@ -603,7 +603,7 @@ class HealthDataService {
       acc[item.type].push(item);
       return acc;
     }, {} as Record<string, HealthData[]>);
-    Object.entries(groupedData).forEach([type, data]) => {
+    Object.entries(groupedData).forEach((([type, data]) => {
       if (data.length >= 2) {
         const recent = data.slice(0, Math.min(3, data.length));
         const older = data.slice(Math.min(3, data.length));

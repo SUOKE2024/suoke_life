@@ -140,14 +140,14 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
     this.setupEventListeners();
   }
   private setupEventListeners() {
-    this.eventEmitter.on("api: error", (error) => {}
+    this.eventEmitter.on("api: error", (error) => {})
       });
-    this.eventEmitter.on("api: success", (data); => {}
+    this.eventEmitter.on("api: success", (data); => {})
       });
   }
   async login(credentials: { username: string, password: string}) {
     try {
-      const response = await authService.login({email: credentials.username,
+      const response = await authService.login({email: credentials.username,)
         password: credentials.passwo;r;d;};);
       this.eventEmitter.emit("api: login:success", response);
       return respon;s;e;
@@ -180,7 +180,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
       throw error;
     }
   }
-  async getHealthData(userId: string,
+  async getHealthData(userId: string,)
     timeRange?:  { start: string, end: string}): Promise<HealthData[] /    >  {
     try {
       const response = await apiClient.get("/health-data", {/            userId,...timeRan;g;e;};);
@@ -206,7 +206,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
       throw err;o;r;
     }
   }
-  async exportHealthData(
+  async exportHealthData()
     userId: string,
     format: "json" | "csv" | "pdf" = "json") {
     try {
@@ -234,7 +234,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
   }
   async sendMessageToAgent(agentId: string, message: string, context?: unknown) {
     try {
-      const response = await apiClient.post(`/agents/${agentId}/message`, {/            message,context,
+      const response = await apiClient.post(`/agents/${agentId}/message`, {/            message,context,)
         timestamp: new Date().toISOString};)
       this.eventEmitter.emit("agent: message:sent", {
         agentId,
@@ -246,11 +246,11 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
       throw error;
     }
   }
-  async getAgentPerformance(
+  async getAgentPerformance()
     agentId: string,
     timeRange?:  { start: string, end: string}) {
     try {
-      const response = await apiClient.get(;
+      const response = await apiClient.get(;)
         `/agents/${agentId}/performance`,/            timeRa;n;g;e;);
       return response.da;t;a;
     } catch (error) {
@@ -259,7 +259,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
   }
   async updateAgentSettings(agentId: string, settings: unknown) {
     try {
-      const response = await apiClient.put(;
+      const response = await apiClient.put(;)
         `/agents/${agentId}/settings`,/            setti;n;g;s;);
       this.eventEmitter.emit("agent: settings:updated", { agentId, settings });
       return response.da;t;a;
@@ -267,7 +267,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
       throw err;o;r;
     }
   }
-  async startDiagnosis(type: "look" | "listen" | "inquiry" | "palpation",
+  async startDiagnosis(type: "look" | "listen" | "inquiry" | "palpation",)
     data: unknown): Promise<DiagnosisResult /    >  {
     try {
       const response = await apiClient.post(`/diagnosis/${type}`, {/            ...data,timestamp: new Date().toISOString};)
@@ -277,7 +277,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
       throw error;
     }
   }
-  async getDiagnosisHistory(userId: string,
+  async getDiagnosisHistory(userId: string,)
     limit: number = 10;): Promise<DiagnosisResult[] /    >  {
     try {
       const response = await apiClient.get("/diagnosis/history", {/            userId,lim;i;t;};);
@@ -286,12 +286,12 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
       throw error;
     }
   }
-  async getComprehensiveDiagnosis(userId: string,
+  async getComprehensiveDiagnosis(userId: string,)
     symptoms: string[];): Promise<DiagnosisResult /    >  {
     try {
-      const response = await apiClient.post("/diagnosis/comprehensive", {/            userId,symptoms,
+      const response = await apiClient.post("/diagnosis/comprehensive", {/            userId,symptoms,)
         timestamp: new Date().toISOString};)
-      this.eventEmitter.emit(
+      this.eventEmitter.emit()
         "diagnosis: comprehensive:completed",
         response.data;
       );
@@ -307,10 +307,10 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
       throw error;
     }
   }
-  async updateUserSettings(userId: string,
+  async updateUserSettings(userId: string,)
     settings: Partial<UserSettings />/);: Promise<UserSettings /    >  {
     try {
-      const response = await apiClient.put(;
+      const response = await apiClient.put(;)
         `/users/${userId}/settings`,/            setti;n;g;s;);
       this.eventEmitter.emit("user: settings:updated", {
         userId,
@@ -328,10 +328,10 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
       throw error;
     }
   }
-  async saveHealthRecordToBlockchain(userId: string,
+  async saveHealthRecordToBlockchain(userId: string,)
     healthData: unknown): Promise<BlockchainHealthRecord /    >  {
     try {
-      const response = await apiClient.post("/blockchain/health-records", {/            userId,data: healthData,
+      const response = await apiClient.post("/blockchain/health-records", {/            userId,data: healthData,)
         timestamp: new Date().toISOString};)
       this.eventEmitter.emit("blockchain: record:saved", response.data);
       return response.da;t;a;
@@ -341,7 +341,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
   }
   async getBlockchainHealthRecords(userId: string;);: Promise<BlockchainHealthRecord[] /    >  {
     try {
-      const response = await apiClient.get(;
+      const response = await apiClient.get(;)
         `/blockchain/health-records/    ${userId;};`);
       return response.da;t;a;
     } catch (error) {
@@ -373,7 +373,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
       throw error;
     }
   }
-  async bookMedicalAppointment(
+  async bookMedicalAppointment()
     resourceId: string,
     appointmentData: { userId: string,
       serviceType: string,
@@ -381,7 +381,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
       notes?: string}
   ) {
     try {
-      const response = await apiClient.post(;
+      const response = await apiClient.post(;)
         `/medical-resources/${resourceId}/appointments`,/            {...appointmentData,
           timestamp: new Date().toISOString}
       ;)
@@ -405,11 +405,11 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
       throw error;
     }
   }
-  async getRecommendedKnowledge(userId: string,
+  async getRecommendedKnowledge(userId: string,)
     context?: unknown;
   );: Promise<KnowledgeResult[] /    >  {
     try {
-      const response = await apiClient.get(;
+      const response = await apiClient.get(;)
         `/knowledge/recommendations/${userId}`,/            { conte;x;t ;}
       ;);
       return response.da;t;a;
@@ -450,7 +450,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
   }
   async updateAccessibilitySettings(userId: string, settings: unknown) {
     try {
-      const response = await apiClient.put(;
+      const response = await apiClient.put(;)
         `/accessibility/settings/${userId}`,/            setti;n;g;s;);
       this.eventEmitter.emit("accessibility: settings:updated", {
         userId,
@@ -477,7 +477,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
   }
   async subscribeToEcoService(userId: string, serviceId: string, plan: string) {
     try {
-      const response = await apiClient.post(;
+      const response = await apiClient.post(;)
         `/eco-services/${serviceId}/subscribe`,/            {
           userId,
           plan,
@@ -495,7 +495,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
   }
   async getEcoServiceUsage(userId: string, serviceId: string) {
     try {
-      const response = await apiClient.get(;
+      const response = await apiClient.get(;)
         `/eco-services/${serviceId}/usage/    ${userId;};`);
       return response.da;t;a;
     } catch (error) {
@@ -525,7 +525,7 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
       throw err;o;r;
     }
   }
-  async createSupportTicket(ticket: { userId: string,
+  async createSupportTicket(ticket: { userId: string,)
     subject: string,
     description: string,
     priority: "low" | "medium" | "high" | "urgent",
@@ -560,17 +560,17 @@ constructor(config: Partial<ApiServiceConfig /> = {}) {/        this.config = {
       throw error;
     }
   }
-  // 批量API请求  async batchRequest(
+  // 批量API请求  async batchRequest()
     requests: Array<{ name: string, request: () => Promise<any>   }>
   ) {
   // 性能监控
-const performanceMonitor = usePerformanceMonitor(ApiIntegrationService", {"
+const performanceMonitor = usePerformanceMonitor(ApiIntegrationService", {")
     trackRender: true,
     trackMemory: false,
     warnThreshold: 100, // ms };);
     try {
-      const results = await Promise.allSettled(;
-        requests.map(async ({ name, reque;s;t ;};); => {}
+      const results = await Promise.allSettled(;)
+        requests.map(async ({ name, reque;s;t ;};); => {})
           try {
             const result = await reque;s;t;
             return { name, success: true, data: resu;l;t ;};
@@ -579,7 +579,7 @@ const performanceMonitor = usePerformanceMonitor(ApiIntegrationService", {"
           }
         });
       );
-      return results.map((result, inde;x;) => {}
+      return results.map((result, inde;x;) => {})
         if (result.status === "fulfilled") {
           return result.val;u;e;
         } else {

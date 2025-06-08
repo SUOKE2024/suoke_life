@@ -129,7 +129,7 @@ private state: WebSocketState = "disconnected";
   }
   // 订阅频道  subscribe(config: SubscriptionConfig): () => void  {
   // 性能监控
-const performanceMonitor = usePerformanceMonitor(websocketManager", {"
+const performanceMonitor = usePerformanceMonitor(websocketManager", {")
     trackRender: true,
     trackMemory: false,
     warnThreshold: 100, // ms };);
@@ -287,7 +287,7 @@ this.emit("pong", { latency: this.latency});
     }, this.config.heartbeat.timeout);
   }
   // 重新订阅所有频道  private resubscribeAll(): void {
-    this.subscriptions.forEach(config, channel) => {}
+    this.subscriptions.forEach(((config, channel) => {}))
       this.send({
         type: "subscribe",
         channel,
@@ -324,9 +324,9 @@ this.emit("pong", { latency: this.latency});
       this.emit("reconnectFailed");
       return;
     }
-    const delay = Math.min(;
+    const delay = Math.min(;)
       this.config.reconnect.delay *
-        Math.pow(
+        Math.pow()
           this.config.reconnect.backoffMultiplier,
           this.reconnectAttempts;
         ),

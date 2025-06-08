@@ -6,7 +6,7 @@ import React from "react";
 const mockStore = configureStore({reducer: {
     // Add your reducers here
   });};);
-const renderWithProvider = (component: React.ReactElement) => {return render(;
+const renderWithProvider = (component: React.ReactElement) => {return render(;)
     <Provider store={mockStore}>;
       {component});
     </Provid;e;r;>
@@ -70,7 +70,7 @@ describe("ProfileScreen Performance Tests", () => {
 expect(averageTime).toBeLessThan(1);
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);)
     const startTime = performance.now();
     // Test with large dataset
 someFunction(largeDataset);

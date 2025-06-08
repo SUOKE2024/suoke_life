@@ -60,7 +60,7 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
   const [arMode, setArMode] = useState<boolean>(false);
   const rotationAnim = useMemo(() => useRef(new Animated.ValueXY()).current, []);
   const scaleAnim = useMemo(() => useRef(new Animated.Value(1)).current, []);
-  const [constitutionData] = useState<ConstitutionVisualization[]>([
+  const [constitutionData] = useState<ConstitutionVisualization[]>([)
     {
       type: "balanced",
       name: "平和质",
@@ -78,7 +78,7 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
       regions: ["脾胃", "肺部", "心脏"]
     }
   ]);
-  const [meridiansData] = useState<MeridianData[]>([
+  const [meridiansData] = useState<MeridianData[]>([)
     {
       id: "lung",
       name: "Lung Meridian",
@@ -101,21 +101,20 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
     }
   ]);
   const startARMode = useCallback(() => {
-    Alert.alert(
-      "AR模式",
+    Alert.alert("AR模式",
       "即将启动AR相机模式，请确保设备支持ARKit/ARCore",
       [
         { text: "取消", style: "cancel" },
-        { text: "启动", onPress: () => setArMode(true) }
+        { text: "启动", " onPress: () => setArMode(true) }
       ]
     );
   }, []);
-  const renderConstitutionView = useMemo(() => (
+  const renderConstitutionView = useMemo(() => ())
     <View style={styles.viewContent}>
       <Text style={styles.viewTitle}>体质可视化分析</Text>
       <View style={styles.humanModel}>
         <Animated.View
-          style={[
+          style={{[
             styles.modelContainer,
             {
               transform: [
@@ -123,7 +122,7 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
                   rotateY: rotationAnim.x.interpolate({
                     inputRange: [-100, 100],
                     outputRange: ["-30deg", "30deg"]
-                  })
+                  }})
                 },
                 { scale: scaleAnim }
               ]
@@ -132,15 +131,15 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
         >
           <View style={styles.humanSilhouette}>
             <Text style={styles.modelLabel}>3D人体模型</Text>
-            {constitutionData.map((constitution, index) => (
+            {constitutionData.map((constitution, index) => ())
               <View
                 key={constitution.type}
-                style={[
+                style={{[
                   styles.constitutionRegion,
                   {
                     backgroundColor: constitution.color + "40",
                     opacity: constitution.intensity
-                  }
+                  }}
                 ]}
               >
                 <Text style={styles.regionLabel}>{constitution.name}</Text>
@@ -150,9 +149,9 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
         </Animated.View>
       </View>
       <View style={styles.constitutionLegend}>
-        {constitutionData.map((constitution) => (
+        {constitutionData.map((constitution) => ())
           <View key={constitution.type} style={styles.constitutionItem}>
-            <View style={[styles.constitutionDot, { backgroundColor: constitution.color }]} />
+            <View style={{[styles.constitutionDot, { backgroundColor: constitution.color }}]} />
             <View style={styles.constitutionInfo}>
               <Text style={styles.constitutionName}>{constitution.name}</Text>
               <Text style={styles.constitutionDesc}>
@@ -165,20 +164,20 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
       </View>
     </View>
   ), [constitutionData, rotationAnim, scaleAnim]);
-  const renderMeridiansView = useMemo(() => (
+  const renderMeridiansView = useMemo(() => ())
     <View style={styles.viewContent}>
       <Text style={styles.viewTitle}>经络系统</Text>
       <View style={styles.meridiansContainer}>
-        {meridiansData.map((meridian) => (
+        {meridiansData.map((meridian) => ())
           <TouchableOpacity
             key={meridian.id}
-            style={[
+            style={{[
               styles.meridianCard,
-              { borderLeftColor: meridian.color },
+              { borderLeftColor: meridian.color }},
               selectedMeridian === meridian.id && styles.selectedMeridianCard
             ]}
             onPress={() =>
-              setSelectedMeridian(
+              setSelectedMeridian()
                 selectedMeridian === meridian.id ? null : meridian.id
               )
             }
@@ -190,10 +189,9 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
             </View>
             <Text style={styles.meridianEnglish}>{meridian.name}</Text>
             <Text style={styles.pointCount}>{meridian.points.length} 个穴位</Text>
-            {selectedMeridian === meridian.id && (
-              <View style={styles.meridianDetails}>
+            {selectedMeridian === meridian.id  && <View style={styles.meridianDetails}>
                 <Text style={styles.detailTitle}>主要穴位:</Text>
-                {meridian.points.map((point) => (
+                {meridian.points.map((point) => ())
                   <TouchableOpacity
                     key={point.id}
                     style={styles.pointItem}
@@ -213,10 +211,10 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
       </View>
     </View>
   ), [meridiansData, selectedMeridian]);
-  const renderAcupointsView = useMemo(() => (
+  const renderAcupointsView = useMemo(() => ())
     <View style={styles.viewContent}>
       <Text style={styles.viewTitle}>穴位详解</Text>
-      {selectedAcupoint ? (
+      {selectedAcupoint ? ()
         <View style={styles.acupointDetail}>
           <View style={styles.acupointHeader}>
             <TouchableOpacity
@@ -237,13 +235,13 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
             </View>
             <View style={styles.infoSection}>
               <Text style={styles.infoLabel}>主要功能:</Text>
-              {selectedAcupoint.functions.map((func, index) => (
+              {selectedAcupoint.functions.map((func, index) => ())
                 <Text key={index} style={styles.functionItem}>• {func}</Text>
               ))}
             </View>
             <View style={styles.infoSection}>
               <Text style={styles.infoLabel}>主治病症:</Text>
-              {selectedAcupoint.indications.map((indication, index) => (
+              {selectedAcupoint.indications.map((indication, index) => ())
                 <Text key={index} style={styles.indicationItem}>• {indication}</Text>
               ))}
             </View>
@@ -260,14 +258,14 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
       ) : (
         <View style={styles.acupointsList}>
           <Text style={styles.instructionText}>选择经络查看穴位详情</Text>
-          {meridiansData.map((meridian) => (
+          {meridiansData.map((meridian) => ())
             <View key={meridian.id} style={styles.meridianGroup}>
               <Text style={styles.groupTitle}>{meridian.chineseName}</Text>
               <View style={styles.pointsGrid}>
-                {meridian.points.map((point) => (
+                {meridian.points.map((point) => ())
                   <TouchableOpacity
                     key={point.id}
-                    style={[styles.pointButton, { borderColor: point.color }]}
+                    style={{[styles.pointButton, { borderColor: point.color }}]}
                     onPress={() => setSelectedAcupoint(point)}
                     accessibilityLabel={`查看${point.chineseName}穴位`}
                   >
@@ -281,7 +279,7 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
       )}
     </View>
   ), [selectedAcupoint, meridiansData]);
-  const renderARView = useMemo(() => (
+  const renderARView = useMemo(() => ())
     <View style={styles.viewContent}>
       <Text style={styles.viewTitle}>AR体质可视化</Text>
       <View style={styles.arContainer}>
@@ -296,27 +294,27 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
     </View>
   ), [startARMode]);
   const renderTabBar = () => (
-    <View style={styles.tabBar}>
+  <View style={styles.tabBar}>
       {[
         { key: "constitution", label: "体质分析" },
         { key: "meridians", label: "经络系统" },
         { key: "acupoints", label: "穴位详解" },
         { key: "ar", label: "AR可视化" }
-      ].map((tab) => (
+      ].map((tab) => ())
         <TouchableOpacity
           key={tab.key}
-          style={[
+          style={{[
             styles.tabItem,
             activeView === tab.key && styles.activeTabItem
-          ]}
+          ]}}
           onPress={() => setActiveView(tab.key as any)}
           accessibilityLabel={`切换到${tab.label}`}
         >
           <Text
-            style={[
+            style={{[
               styles.tabText,
               activeView === tab.key && styles.activeTabText
-            ]}
+            ]}}
           >
             {tab.label}
           </Text>
@@ -339,7 +337,7 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
     }
   };
   return (
-    <Modal
+  <Modal
       visible={visible}
       animationType="slide"
       presentationStyle="fullScreen"

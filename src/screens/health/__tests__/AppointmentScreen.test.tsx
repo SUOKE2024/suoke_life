@@ -1,4 +1,3 @@
-
 import AppointmentScreen from '../AppointmentScreen.tsx';
 describe('AppointmentScreen', () => {
   it('应该正确导出', () => {

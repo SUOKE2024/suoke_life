@@ -1,4 +1,3 @@
-
 import ConfigurationManager from '../ConfigurationManager.tsx';
 describe('ConfigurationManager', () => {
   it('应该正确导出', () => {

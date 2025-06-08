@@ -1,4 +1,3 @@
-
 import App from '../App.tsx';
 describe('App', () => {
   it('应该正确导出', () => {

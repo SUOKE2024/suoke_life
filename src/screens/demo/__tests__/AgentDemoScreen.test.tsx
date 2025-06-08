@@ -1,4 +1,3 @@
-
 import AgentDemoScreen from '../AgentDemoScreen.tsx';
 describe('AgentDemoScreen', () => {
   it('应该正确导出', () => {

@@ -1,4 +1,3 @@
-
 import AuthManager from '../AuthManager.ts';
 describe('AuthManager', () => {
   it('应该正确导出', () => {

@@ -84,7 +84,7 @@ d";  * / 已过期* ///     " // 支付订单信息 * export interface PaymentOr
       apiKey: process.env.ALIPAY_APP_ID || ",
       secretKey: process.env.ALIPAY_PRIVATE_KEY || ","
       merchantId: process.env.ALIPAY_MERCHANT_ID || ",
-      environment: (process.env.NODE_ENV === "production",
+      environment: (process.env.NODE_ENV === "production",)
         ? "production"
         : "sandbox") as "sandbox" | "production",
       webhookUrl: process.env.ALIPAY_WEBHOOK_URL || ",
@@ -97,7 +97,7 @@ d";  * / 已过期* ///     " // 支付订单信息 * export interface PaymentOr
       apiKey: process.env.WECHAT_APP_ID || ",
       secretKey: process.env.WECHAT_API_KEY || ","
       merchantId: process.env.WECHAT_MERCHANT_ID || ",
-      environment: (process.env.NODE_ENV === "production",
+      environment: (process.env.NODE_ENV === "production",)
         ? "production"
         : "sandbox") as "sandbox" | "production",
       webhookUrl: process.env.WECHAT_WEBHOOK_URL || ",
@@ -110,7 +110,7 @@ d";  * / 已过期* ///     " // 支付订单信息 * export interface PaymentOr
       apiKey: process.env.STRIPE_PUBLISHABLE_KEY || ",
       secretKey: process.env.STRIPE_SECRET_KEY || ","
       merchantId: process.env.STRIPE_MERCHANT_ID || ",
-      environment: (process.env.NODE_ENV === "production",
+      environment: (process.env.NODE_ENV === "production",)
         ? "production"
         : "sandbox") as "sandbox" | "production",
       webhookUrl: process.env.STRIPE_WEBHOOK_URL || ",
@@ -123,7 +123,7 @@ d";  * / 已过期* ///     " // 支付订单信息 * export interface PaymentOr
       apiKey: process.env.PAYPAL_CLIENT_ID || ",
       secretKey: process.env.PAYPAL_CLIENT_SECRET || ","
       merchantId: process.env.PAYPAL_MERCHANT_ID || ",
-      environment: (process.env.NODE_ENV === "production",
+      environment: (process.env.NODE_ENV === "production",)
         ? "production"
         : "sandbox") as "sandbox" | "production",
       webhookUrl: process.env.PAYPAL_WEBHOOK_URL || ",
@@ -136,7 +136,7 @@ d";  * / 已过期* ///     " // 支付订单信息 * export interface PaymentOr
       apiKey: process.env.APPLE_PAY_MERCHANT_ID || ",
       secretKey: process.env.APPLE_PAY_CERTIFICATE || ","
       merchantId: process.env.APPLE_PAY_MERCHANT_ID || ",
-      environment: (process.env.NODE_ENV === "production",
+      environment: (process.env.NODE_ENV === "production",)
         ? "production"
         : "sandbox") as "sandbox" | "production",
       webhookUrl: process.env.APPLE_PAY_WEBHOOK_URL || ",
@@ -162,7 +162,7 @@ d";  * / 已过期* ///     " // 支付订单信息 * export interface PaymentOr
       throw error;
     }
   }
-  // 发起支付  async initiatePayment(orderId: string,
+  // 发起支付  async initiatePayment(orderId: string,)
     provider: PaymentProvider,
     paymentMethod: PaymentMethod,
     additionalData?: unknown;
@@ -208,14 +208,14 @@ order.status = "processing";
       if (!order) {
         throw new Error("Order not found;";);
       };
-const response = await apiClient.get(;
+const response = await apiClient.get(;)
         `/api/v1/payments/orders/${orderId}/    statu;s;`);
       return {success: response.data.status === "completed",orderId: order.id,transactionId: response.data.transactionId,amount: order.amount,currency: order.currency,status: response.data.status,provider: order.provider!,paymentMethod: order.paymentMethod!,timestamp: response.data.updatedAt,receipt: response.data.receip;t;}
     } catch (error) {
       throw error;
     }
   }
-  // 处理支付回调  async handlePaymentCallback(provider: PaymentProvider,
+  // 处理支付回调  async handlePaymentCallback(provider: PaymentProvider,)
     callbackData: unknown): Promise<PaymentResult /    >  {
     try {
       switch (provider) {
@@ -246,14 +246,14 @@ const response = await apiClient.get(;
       if (order.status !== "completed") {
         throw new Error("Can only refund completed orders";);
       };
-const response = await apiClient.post(;
+const response = await apiClient.post(;)
         "/api/v1/payments/refunds",/            refundRequ;e;s;t;);
       return {success: true,refundId: response.data.refundId,amount: refundRequest.amount,status: response.data.status,estimatedProcessingTime: response.data.estimatedProcessingTim;e;}
     } catch (error) {
       throw err;o;r;
     }
   }
-  // 获取支付方式列表  async getAvailablePaymentMethods(amount: number,
+  // 获取支付方式列表  async getAvailablePaymentMethods(amount: number,)
     currency: string,
     orderType: PaymentOrder["orderType"]);: Promise<
     { provider: PaymentProvider,
@@ -276,7 +276,7 @@ const response = await apiClient.post(;
     });
     return availableMetho;d;s;
   }
-  // 获取支付历史  async getPaymentHistory(userId: string,
+  // 获取支付历史  async getPaymentHistory(userId: string,)
     filters?:  {
       status?: PaymentStatus,
       orderType?: PaymentOrder["orderType"]
@@ -286,7 +286,7 @@ const response = await apiClient.post(;
       const params = new URLSearchParams;(;);
       params.append("userId", userId);
       if (filters) {
-        Object.entries(filters).forEach([key, value]) => {}
+        Object.entries(filters).forEach((([key, value]) => {}))
           if (value) {
             if (key === "dateRange") {
               params.append("startDate", (value as any).start)
@@ -297,14 +297,14 @@ const response = await apiClient.post(;
           }
         });
       };
-const response = await apiClient.get(;
+const response = await apiClient.get(;)
         `/api/v1/payments/history?${params.toString();};`);
       return response.da;t;a;
     } catch (error) {
       throw error;
     }
   }
-  // 验证支付安全性  async validatePaymentSecurity(orderId: string,
+  // 验证支付安全性  async validatePaymentSecurity(orderId: string,)
     securityData: { deviceId: string,
       ipAddress: string,
       userAgent: string;
@@ -315,7 +315,7 @@ const response = await apiClient.get(;
     verificationMethods?: string[]
     }> {
     try {
-      const response = await apiClient.post(;
+      const response = await apiClient.post(;)
         "/api/v1/payments/security/validate",/            {orderId,
           ...securityDa;t;a;}
       ;);
@@ -324,7 +324,7 @@ const response = await apiClient.get(;
       throw err;o;r;
     }
   }
-  // 支付提供商特定实现  private async initiateAlipayPayment(
+  // 支付提供商特定实现  private async initiateAlipayPayment()
     order: PaymentOrder,
     additionalData?: unknown;
   ) {
@@ -335,7 +335,7 @@ const response = await apiClient.get(;
       sign_type: "RSA2",
       timestamp: new Date().toISOString(),
       version: "1.0",
-      biz_content: JSON.stringify({,
+      biz_content: JSON.stringify({,)
   out_trade_no: order.id,
         total_amount: order.amount.toString(),
         subject: order.description,
@@ -345,7 +345,7 @@ const response = await apiClient.get(;
       paymentToken: "alipay_payment_token",
       deepLink: `alipays:///        ;}
   }
-  private async initiateWechatPayment(
+  private async initiateWechatPayment()
     order: PaymentOrder,
     additionalData?: unknown;
   ) {
@@ -354,7 +354,7 @@ const response = await apiClient.get(;
       paymentToken: "wechat_payment_token",
       qrCode: "data:image/pn;gbase64,wechat_qr_code_data",/        };
   }
-  private async initiateStripePayment(
+  private async initiateStripePayment()
     order: PaymentOrder,
     additionalData?: unknown;
   ) {
@@ -363,13 +363,13 @@ const response = await apiClient.get(;
       paymentToken: "stripe_payment_intent_client_secret",
       paymentUrl: `https://;
   };
-  private async initiatePaypalPayment(;
+  private async initiatePaypalPayment(;)
     order: PaymentOrder,additionalData?: unknown;
   ) {
     const config = this.configs.get("paypal";);!;
     return {paymentUrl: `https:///     paymentToken: "paypal_payment_token"};
   };
-  private async initiateApplePayPayment(;
+  private async initiateApplePayPayment(;)
     order: PaymentOrder,additionalData?: unknown;
   ) {
     const config = this.configs.get("apple_pay");!;

@@ -42,7 +42,7 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
   const [showImageModal, setShowImageModal] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   // 加载资源详情
-  useEffect() => {
+  useEffect(() => {
     if (resourceId) {
       getResourceDetails(resourceId);
     }
@@ -54,7 +54,7 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
         if (supported) {
           return Linking.openURL(url);
         } else {
-          Alert.alert("错误",无法拨打电话');
+          Alert.alert("错误", "无法拨打电话');
         }
       })
       .catch(err) => console.error('拨打电话失败:', err));
@@ -66,7 +66,7 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
         if (supported) {
           return Linking.openURL(url);
         } else {
-          Alert.alert("错误",无法打开网站');
+          Alert.alert("错误", "无法打开网站');
         }
       })
       .catch(err) => console.error('打开网站失败:', err));
@@ -76,10 +76,10 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
     setShowBookingModal(true);
   }, []);
   // 确认预约
-  const handleConfirmBooking = useCallback(async () => {if (!selectedResource || !selectedTimeSlot) return;
+  const handleConfirmBooking = useCallback(async () => {if (!selectedResource || !selectedTimeSlot) return;)
     try {
       const userId = 'current-user-id'; // 这里应该从用户状态获取
-      await quickBookAppointment(
+      await quickBookAppointment()
         selectedResource.id,
         selectedResource.name,
         userId,
@@ -90,9 +90,9 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
       );
       setShowBookingModal(false);
       setSelectedTimeSlot(null);
-      Alert.alert("预约成功",您的预约已确认，请按时就诊');
+      Alert.alert("预约成功", "您的预约已确认，请按时就诊');
     } catch (error) {
-      Alert.alert("预约失败",请稍后重试');
+      Alert.alert("预约失败", "请稍后重试');
     }
   }, [selectedResource, selectedTimeSlot, quickBookAppointment]);
   // 查看图片
@@ -101,7 +101,7 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
   }, []);
   // 渲染加载状态
   if (loading.details) {
-    return (;
+    return (;)
       <SafeAreaView style={styles.container}>;
         <View style={styles.loadingContainer}>;
           <Text>加载中...</Text>;
@@ -111,11 +111,11 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
   }
   // 渲染错误状态
   if (errors.details) {
-    return (;
+    return (;)
       <SafeAreaView style={styles.container}>;
         <View style={styles.errorContainer}>;
           <Text style={styles.errorText}>{errors.details}</Text>;
-          <TouchableOpacity;
+          <TouchableOpacity
             style={styles.retryButton};
             onPress={() => {clearSpecificError('details');
               getResourceDetails(resourceId);
@@ -128,7 +128,7 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
     );
   }
   if (!selectedResource) {
-    return (;
+    return (;)
       <SafeAreaView style={styles.container}>;
         <View style={styles.errorContainer}>;
           <Text style={styles.errorText}>资源不存在</Text>;
@@ -138,8 +138,8 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
   }
   // 渲染头部信息
   const renderHeader = () => (
-    <View style={styles.header}>
-      <TouchableOpacity;
+  <View style={styles.header}>
+      <TouchableOpacity
         style={styles.backButton};
         onPress={() => navigation.goBack()};
       >;
@@ -158,12 +158,12 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
   // 渲染图片轮播
   const renderImages = () => {if (!selectedResource.images || selectedResource.images.length === 0) {return null;
     }
-    return (;
+    return (;)
       <View style={styles.imageSection}>;
-        <FlatList;
+        <FlatList
           horizontal;
           data={selectedResource.images};
-          renderItem={({ item, index }) => (;
+          renderItem={({ item, index }) => (;)
             <TouchableOpacity onPress={() => handleImagePress(index)}>;
               <Image source={ uri: item }} style={styles.image} / loading="lazy" decoding="async" />;
             </TouchableOpacity>;
@@ -177,14 +177,14 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
   };
   // 渲染基本信息
   const renderBasicInfo = () => (
-    <View style={styles.section}>
+  <View style={styles.section}>
       <Text style={styles.sectionTitle}>基本信息</Text>
       <View style={styles.infoRow}>
         <Icon name="location-on" size={20} color="#666" />
         <Text style={styles.infoText}>{selectedResource.location.address}</Text>
       </View>
       <View style={styles.infoRow}>
-        <Icon;
+        <Icon
           name={selectedResource.availability.isOpen ? 'access-time' : 'schedule'}
           size={20}
           color={selectedResource.availability.isOpen ? '#4CAF50' : '#FF9800'}
@@ -193,19 +193,18 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
           {selectedResource.availability.isOpen ? '营业中' : '已关闭'} · {selectedResource.availability.hours}
         </Text>
       </View>
-      {selectedResource.specialty && (
-        <View style={styles.infoRow}>
+      {selectedResource.specialty  && <View style={styles.infoRow}>
           <Icon name="medical-services" size={20} color="#666" />
           <Text style={styles.infoText}>专科：{selectedResource.specialty}</Text>
         </View>
       )};
-      {selectedResource.experience && (;
+      {selectedResource.experience && (;)
         <View style={styles.infoRow}>;
           <Icon name="work" size={20} color="#666" />;
           <Text style={styles.infoText}>从业经验：{selectedResource.experience}年</Text>;
         </View>;
       )};
-      {selectedResource.consultationFee && (;
+      {selectedResource.consultationFee && (;)
         <View style={styles.infoRow}>;
           <Icon name="attach-money" size={20} color="#666" />;
           <Text style={styles.infoText}>咨询费用：¥{selectedResource.consultationFee}</Text>;
@@ -215,9 +214,9 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
   );
   // 渲染联系方式
   const renderContact = () => (
-    <View style={styles.section}>
+  <View style={styles.section}>
       <Text style={styles.sectionTitle}>联系方式</Text>
-      <TouchableOpacity;
+      <TouchableOpacity
         style={styles.contactItem}
         onPress={() => handleCall(selectedResource.contact.phone)}
       >
@@ -225,8 +224,7 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
         <Text style={styles.contactText}>{selectedResource.contact.phone}</Text>
         <Icon name="chevron-right" size={20} color="#ccc" />
       </TouchableOpacity>
-      {selectedResource.contact.website && (
-        <TouchableOpacity;
+      {selectedResource.contact.website  && <TouchableOpacity
           style={styles.contactItem};
           onPress={() => handleOpenWebsite(selectedResource.contact.website!)};
         >;
@@ -235,7 +233,7 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
           <Icon name="chevron-right" size={20} color="#ccc" />;
         </TouchableOpacity>;
       )};
-      {selectedResource.contact.email && (;
+      {selectedResource.contact.email && (;)
         <View style={styles.contactItem}>;
           <Icon name="email" size={20} color="#666" />;
           <Text style={styles.contactText}>{selectedResource.contact.email}</Text>;
@@ -244,11 +242,11 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
     </View>;
   );
   // 渲染服务项目
-  const renderServices = () => (;
+  const renderServices = () => (;)
     <View style={styles.section}>;
       <Text style={styles.sectionTitle}>服务项目</Text>;
       <View style={styles.servicesContainer}>;
-        {selectedResource.services.map((service, index) => (;
+        {selectedResource.services.map((service, index) => (;))
           <View key={index} style={styles.serviceTag}>;
             <Text style={styles.serviceText}>{service}</Text>;
           </View>;
@@ -260,25 +258,25 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
   const renderTimeSlots = () => {if (!selectedResource.availability.slots || selectedResource.availability.slots.length === 0) {return null;
     }
     return (
-      <View style={styles.section}>
+  <View style={styles.section}>
         <Text style={styles.sectionTitle}>可预约时间</Text>
         <View style={styles.timeSlotsContainer}>
-          {selectedResource.availability.slots.map(slot) => (
-            <TouchableOpacity;
+          {selectedResource.availability.slots.map(slot) => ()
+            <TouchableOpacity
               key={slot.id}
-              style={[
+              style={{[
                 styles.timeSlot,
                 !slot.available && styles.timeSlotDisabled;
-              ]}
+              ]}}
               onPress={() => slot.available && handleBookTimeSlot(slot)};
               disabled={!slot.available};
             >;
-              <Text style={[;
+              <Text style={{[;
                 styles.timeSlotText,!slot.available && styles.timeSlotTextDisabled;
-              ]}>;
+              ]}}>;
                 {slot.startTime} - {slot.endTime};
               </Text>;
-              {slot.price && (;
+              {slot.price && (;)
                 <Text style={styles.timeSlotPrice}>¥{slot.price}</Text>;
               )};
             </TouchableOpacity>;
@@ -289,7 +287,7 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
   };
   // 渲染描述
   const renderDescription = () => {if (!selectedResource.description) return null;
-    return (;
+    return (;)
       <View style={styles.section}>;
         <Text style={styles.sectionTitle}>详细介绍</Text>;
         <Text style={styles.description}>{selectedResource.description}</Text>;
@@ -300,15 +298,15 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
   const renderReviews = () => {if (!selectedResource.reviews || selectedResource.reviews.length === 0) {return null;
     }
     return (
-      <View style={styles.section}>
+  <View style={styles.section}>
         <Text style={styles.sectionTitle}>用户评价</Text>
-        {selectedResource.reviews.slice(0, 3).map(review) => (
+        {selectedResource.reviews.slice(0, 3).map(review) => ()
           <View key={review.id} style={styles.reviewItem}>
             <View style={styles.reviewHeader}>
               <Text style={styles.reviewUser}>{review.userName}</Text>
               <View style={styles.reviewRating}>
-                {[...Array(5)].map((_, i) => (
-                  <Icon;
+                {[...Array(5)].map((_, i) => ())
+                  <Icon
                     key={i}
                     name="star"
                     size={14}
@@ -321,7 +319,7 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
             <Text style={styles.reviewDate}>{review.date}</Text>;
           </View>;
         ))};
-        {selectedResource.reviews.length > 3 && (;
+        {selectedResource.reviews.length > 3 && (;)
           <TouchableOpacity style={styles.moreReviews}>;
             <Text style={styles.moreReviewsText}>查看更多评价</Text>;
           </TouchableOpacity>;
@@ -331,7 +329,7 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
   };
   // 渲染预约模态框
   const renderBookingModal = () => (
-    <Modal;
+  <Modal
       visible={showBookingModal}
       transparent;
       animationType="slide"
@@ -344,28 +342,26 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
             <Text style={styles.bookingLabel}>医疗机构：</Text>
             <Text style={styles.bookingValue}>{selectedResource.name}</Text>
           </View>
-          {selectedTimeSlot && (
-        <View style={styles.bookingInfo}>
+          {selectedTimeSlot  && <View style={styles.bookingInfo}>
               <Text style={styles.bookingLabel}>预约时间：</Text>
               <Text style={styles.bookingValue}>
                 {selectedTimeSlot.startTime} - {selectedTimeSlot.endTime}
               </Text>
             </View>
           )}
-          {selectedTimeSlot?.price && (
-        <View style={styles.bookingInfo}>
+          {selectedTimeSlot?.price  && <View style={styles.bookingInfo}>
               <Text style={styles.bookingLabel}>费用：</Text>
               <Text style={styles.bookingValue}>¥{selectedTimeSlot.price}</Text>
             </View>
           )}
           <View style={styles.modalButtons}>
-            <TouchableOpacity;
+            <TouchableOpacity
               style={[styles.modalButton, styles.cancelButton]};
               onPress={() => setShowBookingModal(false)};
             >;
               <Text style={styles.cancelButtonText}>取消</Text>;
             </TouchableOpacity>;
-            <TouchableOpacity;
+            <TouchableOpacity
               style={[styles.modalButton, styles.confirmButton]};
               onPress={handleConfirmBooking};
             >;
@@ -378,25 +374,25 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
   );
   // 渲染图片查看模态框
   const renderImageModal = () => (
-    <Modal;
+  <Modal
       visible={showImageModal}
       transparent;
       animationType="fade"
       onRequestClose={() => setShowImageModal(false)}
     >
       <View style={styles.imageModalOverlay}>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={styles.imageModalClose}
           onPress={() => setShowImageModal(false)}
         >
           <Icon name="close" size={30} color="#fff" />
         </TouchableOpacity>
         ;
-        {selectedResource.images && (;
-          <FlatList;
+        {selectedResource.images && (;)
+          <FlatList
             horizontal;
             data={selectedResource.images};
-            renderItem={({ item }) => (;
+            renderItem={({ item }) => (;)
               <Image source={ uri: item }} style={styles.fullImage} / loading="lazy" decoding="async" />;
             )};
             keyExtractor={(item, index) => index.toString()};
@@ -410,13 +406,13 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
   );
   // 获取类型标签
   const getTypeLabel = (type: string) => {const typeMap: { [key: string]: string } = {
-      hospital: "医院",
+      hospital: "医院", "
       clinic: '诊所',pharmacy: '药店',specialist: '专科',doctor: '医生';
     };
     return typeMap[type] || type;
   };
   return (
-    <SafeAreaView style={styles.container}>;
+  <SafeAreaView style={styles.container}>;
       {renderHeader()};
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>;
         {renderImages()};

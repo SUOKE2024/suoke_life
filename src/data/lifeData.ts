@@ -13,8 +13,8 @@
     color: "#FF9500",
     completed: false,
     timeEstimate: "15分钟",
-    benefits: ["提升精力",改善心情", "增强体质"],
-    steps: ["起床后喝一杯温水",做5分钟伸展运动", "深呼吸3次"]
+    benefits: ["提升精力", "改善心情", "增强体质"],
+    steps: ["起床后喝一杯温水", "做5分钟伸展运动", "深呼吸3次"]
   },
   {
       id: "healthy_lunch",
@@ -26,8 +26,8 @@
     color: "#34C759",
     completed: false,
     timeEstimate: "30分钟",
-    benefits: ["补充营养",维持血糖稳定", "提供持续能量"],
-    steps: ["准备新鲜蔬菜",制作蒸蛋羹", "合理搭配主食"]
+    benefits: ["补充营养", "维持血糖稳定", "提供持续能量"],
+    steps: ["准备新鲜蔬菜", "制作蒸蛋羹", "合理搭配主食"]
   },
   {
       id: "afternoon_break",
@@ -39,8 +39,8 @@
     color: "#5856D6",
     completed: true,
     timeEstimate: "10分钟",
-    benefits: ["缓解疲劳",补充营养", "放松心情"],
-    steps: ["选择合适的花茶",准备少量坚果", "享受安静时光"]
+    benefits: ["缓解疲劳", "补充营养", "放松心情"],
+    steps: ["选择合适的花茶", "准备少量坚果", "享受安静时光"]
   },
   {
       id: "evening_walk",
@@ -52,8 +52,8 @@
     color: "#007AFF",
     completed: false,
     timeEstimate: "30分钟",
-    benefits: ["促进消化",改善睡眠", "减轻压力"],
-    steps: ["选择安全的路线",穿舒适的鞋子", "保持适中的步速"]
+    benefits: ["促进消化", "改善睡眠", "减轻压力"],
+    steps: ["选择安全的路线", "穿舒适的鞋子", "保持适中的步速"]
   },
   {
       id: "digital_detox",
@@ -65,8 +65,8 @@
     color: "#FF2D92",
     completed: false,
     timeEstimate: "60分钟",
-    benefits: ["改善睡眠质量",减少蓝光伤害", "放松大脑"],
-    steps: ["设置设备关闭时间",准备睡前读物", "创造安静环境"]
+    benefits: ["改善睡眠质量", "减少蓝光伤害", "放松大脑"],
+    steps: ["设置设备关闭时间", "准备睡前读物", "创造安静环境"]
   },
   {
       id: "social_connection",
@@ -78,8 +78,8 @@
     color: "#8E44AD",
     completed: false,
     timeEstimate: "20分钟",
-    benefits: ["增进感情",分享快乐", "获得支持"],
-    steps: ["选择合适的时间",准备聊天话题", "真诚表达关心"]
+    benefits: ["增进感情", "分享快乐", "获得支持"],
+    steps: ["选择合适的时间", "准备聊天话题", "真诚表达关心"]
   }
 ];
 //   ;
@@ -205,7 +205,7 @@
         completed: false;
       }
     ],
-    rewards: ["健康徽章",专属称号", "健康积分"]
+    rewards: ["健康徽章", "专属称号", "健康积分"]
   },
   {
       id: "work_life_balance",
@@ -235,7 +235,7 @@
         completed: false;
       }
     ],
-    rewards: ["时间管理大师",生活平衡者", "效率提升奖"]
+    rewards: ["时间管理大师", "生活平衡者", "效率提升奖"]
   },
   {
       id: "mindfulness_practice",
@@ -265,7 +265,7 @@
         completed: false;
       }
     ],
-    rewards: ["正念大师",内心平静奖", "专注力提升"]
+    rewards: ["正念大师", "内心平静奖", "专注力提升"]
   }
 ];
 //   ;

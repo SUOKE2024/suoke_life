@@ -9,7 +9,7 @@ import { MainNavigator } from './MainNavigator';
 import { AuthNavigator } from './AuthNavigator';
 import { linkingConfig } from './DeepLinkConfig';
 import { RootStackParamList } from './types';
-const ChatDetailScreen = React.lazy() => import('../screens/main/ChatDetailScreen'));
+const ChatDetailScreen = React.lazy(() => import('../screens/main/ChatDetailScreen'));
 // 临时AgentDemo组件
 const AgentDemoScreen: React.FC = () => {
   return null; // TODO: 实现AgentDemo页面
@@ -24,14 +24,14 @@ const RootNavigator: React.FC<{ isAuthenticated: boolean; isDemoMode: boolean }>
   isDemoMode;
 }) => {
   return (
-    <Stack.Navigator;
+  <Stack.Navigator;
       screenOptions={
         headerShown: false,
         gestureEnabled: true,
         animation: 'slide_from_right',
       }}
     >
-      {isAuthenticated || isDemoMode ? (
+      {isAuthenticated || isDemoMode ? ()
         // 已认证用户或演示模式显示主应用
         <>
           <Stack.Screen;
@@ -91,7 +91,7 @@ const AppNavigator: React.FC = () => {
   const [initialState, setInitialState] = useState<any>();
   const [isReady, setIsReady] = useState(false);
   // 检查认证状态和恢复导航状态
-  useEffect() => {
+  useEffect(() => {
     const checkAuthStatus = async () => {
       try {
         // 恢复导航状态
@@ -129,7 +129,7 @@ const AppNavigator: React.FC = () => {
     return null;
   }
   return (
-    <NavigationContainer;
+  <NavigationContainer
       linking={linkingConfig}
       initialState={initialState}
       onStateChange={onStateChange}

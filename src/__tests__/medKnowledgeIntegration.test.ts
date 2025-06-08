@@ -10,7 +10,7 @@ describe('医疗知识服务集成测试', () => {
       const mockConstitutions = [
         {
       id: "1",
-      name: '平和质',type: '平和质',characteristics: ["体形匀称",面色润泽', '精力充沛'],description: '阴阳气血调和，体质平和',recommendations: ["保持规律作息",适量运动'],symptoms: [],lifestyle: {diet: ['均衡饮食'],exercise: ['适量运动'],sleep: ['规律作息'],emotion: ['保持平和心态'];
+      name: '平和质',type: '平和质',characteristics: ["体形匀称", "面色润泽', '精力充沛'],description: '阴阳气血调和，体质平和',recommendations: ["保持规律作息", "适量运动'],symptoms: [],lifestyle: {diet: ['均衡饮食'],exercise: ['适量运动'],sleep: ['规律作息'],emotion: ['保持平和心态'];
           },created_at: '2024-01-01T00:00:00Z',updated_at: '2024-01-01T00:00:00Z';
         };
       ];
@@ -23,7 +23,7 @@ describe('医疗知识服务集成测试', () => {
       const mockSymptoms = [;
         {
       id: "1",
-      name: '头痛',category: '神经系统',description: '头部疼痛',severity: 'moderate' as const,related_constitutions: ['气虚质'],related_syndromes: ['肝阳上亢'],treatments: ["针灸",中药'],created_at: '2024-01-01T00:00:00Z',updated_at: '2024-01-01T00:00:00Z';
+      name: '头痛',category: '神经系统',description: '头部疼痛',severity: 'moderate' as const,related_constitutions: ['气虚质'],related_syndromes: ['肝阳上亢'],treatments: ["针灸", "中药'],created_at: '2024-01-01T00:00:00Z',updated_at: '2024-01-01T00:00:00Z';
         };
       ];
       (medKnowledgeService.searchSymptoms as jest.Mock).mockResolvedValue(mockSymptoms);
@@ -40,7 +40,7 @@ describe('医疗知识服务集成测试', () => {
       ];
       (medKnowledgeService.searchKnowledge as jest.Mock).mockResolvedValue(mockSearchResults);
       const query = {
-      query: "头痛治疗",
+      query: "头痛治疗", "
       type: 'treatment' as const };
       const result = await medKnowledgeService.searchKnowledge(query);
       expect(result).toEqual(mockSearchResults);
@@ -52,12 +52,12 @@ describe('医疗知识服务集成测试', () => {
       const mockConstitutions = [
         {
       id: "1",
-      name: '气虚质',type: '气虚质',characteristics: ["气短懒言",容易疲劳'],description: '元气不足，以疲乏、气短为主要特征',recommendations: ['补气养血'],symptoms: ["疲劳",气短'],lifestyle: {diet: ['补气食物'],exercise: ['轻度运动'],sleep: ['充足睡眠'],emotion: ['避免过度思虑'];
+      name: '气虚质',type: '气虚质',characteristics: ["气短懒言", "容易疲劳'],description: '元气不足，以疲乏、气短为主要特征',recommendations: ['补气养血'],symptoms: ["疲劳", "气短'],lifestyle: {diet: ['补气食物'],exercise: ['轻度运动'],sleep: ['充足睡眠'],emotion: ['避免过度思虑'];
           },created_at: '2024-01-01T00:00:00Z',updated_at: '2024-01-01T00:00:00Z';
         };
       ];
       (medKnowledgeService.getConstitutions as jest.Mock).mockResolvedValue(mockConstitutions);
-      const symptoms = ["疲劳",气短'];
+      const symptoms = ["疲劳", "气短'];
       const result = await laokeKnowledgeIntegration.analyzeConstitutionBySymptoms(symptoms);
       expect(result.constitutions).toHaveLength(1);
       expect(result.constitutions[0].type).toBe('气虚质');
@@ -75,12 +75,12 @@ describe('医疗知识服务集成测试', () => {
       id: "1",
       type: 'lifestyle',category: 'diet',title: '饮食建议',description: '多食用补气食物',priority: 'high',evidence_level: 'strong',implementation: {
       frequency: "daily",
-      duration: '长期',instructions: ["选择温补食物",避免生冷食物'];
+      duration: '长期',instructions: ["选择温补食物", "避免生冷食物'];
           },created_at: '2024-01-01T00:00:00Z';
         };
       ];
       (medKnowledgeService.getConstitutionById as jest.Mock).mockResolvedValue(mockConstitution);
-      (medKnowledgeService.getPersonalizedRecommendations as jest.Mock).mockResolvedValue(
+      (medKnowledgeService.getPersonalizedRecommendations as jest.Mock).mockResolvedValue()
         mockRecommendations
       );
       const userContext = {age: 30,gender: 'female',currentSymptoms: ['疲劳'],lifestyle: ['久坐'];
@@ -94,7 +94,7 @@ describe('医疗知识服务集成测试', () => {
       const mockSymptoms = [;
         {
       id: "1",
-      name: '头痛',category: '神经系统',description: '头部疼痛',severity: 'moderate' as const,related_constitutions: ['肝郁质'],related_syndromes: ['肝阳上亢'],treatments: ["针灸",中药'],created_at: '2024-01-01T00:00:00Z',updated_at: '2024-01-01T00:00:00Z';
+      name: '头痛',category: '神经系统',description: '头部疼痛',severity: 'moderate' as const,related_constitutions: ['肝郁质'],related_syndromes: ['肝阳上亢'],treatments: ["针灸", "中药'],created_at: '2024-01-01T00:00:00Z',updated_at: '2024-01-01T00:00:00Z';
         };
       ];
       const mockConstitutions = [
@@ -119,10 +119,10 @@ describe('医疗知识服务集成测试', () => {
       await expect(medKnowledgeService.getConstitutions()).rejects.toThrow('网络错误');
     });
     it('应该正确处理智能体集成错误', async () => {
-      (medKnowledgeService.getConstitutions as jest.Mock).mockRejectedValue(
+      (medKnowledgeService.getConstitutions as jest.Mock).mockRejectedValue()
         new Error('服务不可用');
       );
-      await expect(
+      await expect()
         laokeKnowledgeIntegration.analyzeConstitutionBySymptoms(['头痛']);
       ).rejects.toThrow('体质分析失败');
     });

@@ -44,24 +44,24 @@ export const HealthDataDashboard: React.FC<HealthDataDashboardProps> = ({ userId
     }
   };
   const renderTabBar = () => (
-    <View style={styles.tabBar}>
-      <ScrollView;
+  <View style={styles.tabBar}>
+      <ScrollView
         horizontal;
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.tabScrollContent}
       >
-        {tabs.map(tab) => (
-          <TouchableOpacity;
+        {tabs.map(tab) => ()
+          <TouchableOpacity
             key={tab.key}
-            style={[
+            style={{[
               styles.tab,activeTab === tab.key && styles.activeTab;
-            ]};
+            ]}};
             onPress={() => setActiveTab(tab.key as TabType)};
           >;
             <Text style={styles.tabIcon}>{tab.icon}</Text>;
-            <Text style={[;
+            <Text style={{[;
               styles.tabLabel,activeTab === tab.key && styles.activeTabLabel;
-            ]}>;
+            ]}}>;
               {tab.label};
             </Text>;
           </TouchableOpacity>;
@@ -69,7 +69,7 @@ export const HealthDataDashboard: React.FC<HealthDataDashboardProps> = ({ userId
       </ScrollView>;
     </View>;
   );
-  return (;
+  return (;)
     <SafeAreaView style={styles.container}>;
       <View style={styles.header}>;
         <Text style={styles.title}>健康数据中心</Text>;

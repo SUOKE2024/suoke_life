@@ -22,7 +22,7 @@ export class ModelOptimizer extends EventEmitter {private isOptimizing: boolean 
   }
   /**
 * * 优化ONNX模型
-  async optimizeModel(
+  async optimizeModel()
     model: ONNXModel,
     options: ModelOptimizationOptions;
   ): Promise<ONNXModel> {
@@ -78,7 +78,7 @@ this.recordOptimizationHistory(model.id, result);
   }
   /**
 * * 批量优化模型
-  async optimizeModels(
+  async optimizeModels()
     models: ONNXModel[],
     options: ModelOptimizationOptions[]
   ): Promise<ONNXModel[]> {
@@ -98,7 +98,7 @@ this.recordOptimizationHistory(model.id, result);
   }
   /**
 * * 获取优化建议
-  getOptimizationRecommendation(
+  getOptimizationRecommendation()
     model: ONNXModel,
     targetPerformance: "speed | "memory" | balanced"
   ): ModelOptimizationOptions {
@@ -128,7 +128,7 @@ enableProfiling: false;
   }
   /**
 * * 分析模型性能瓶颈
-  analyzePerformanceBottlenecks(
+  analyzePerformanceBottlenecks()
     model: ONNXModel,
     metrics: PerformanceMetrics;
   ): BottleneckAnalysis {
@@ -203,7 +203,7 @@ const finalOptimizedModel = await this.applyExecutionOptimization(memoryOptimize
       throw error;
     }
   }
-  private async applyGraphOptimization(
+  private async applyGraphOptimization()
     model: ONNXModel,
     options: ModelOptimizationOptions;
   ): Promise<ONNXModel> {
@@ -223,7 +223,7 @@ await this.simulateOptimizationProcess(1000);
     };
     return optimizedModel;
   }
-  private async applyMemoryOptimization(
+  private async applyMemoryOptimization()
     model: ONNXModel,
     options: ModelOptimizationOptions;
   ): Promise<ONNXModel> {
@@ -243,7 +243,7 @@ await this.simulateOptimizationProcess(800);
     };
     return optimizedModel;
   }
-  private async applyExecutionOptimization(
+  private async applyExecutionOptimization()
     model: ONNXModel,
     options: ModelOptimizationOptions;
   ): Promise<ONNXModel> {
@@ -260,7 +260,7 @@ await this.simulateOptimizationProcess(600);
     };
     return optimizedModel;
   }
-  private async validateOptimizationResult(
+  private async validateOptimizationResult()
     originalModel: ONNXModel,
     optimizedModel: ONNXModel,
     options: ModelOptimizationOptions;
@@ -317,7 +317,7 @@ if (metrics.cpuUsage > PERFORMANCE_BENCHMARKS.CPU_USAGE.HIGH) {
   }
   private async simulateOptimizationProcess(duration: number): Promise<void> {
     // 模拟优化过程的时间消耗
-return new Promise(resolve => {};
+return new Promise(resolve => {};)
       setTimeout(resolve, duration);
     });
   }

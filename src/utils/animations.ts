@@ -62,7 +62,7 @@ n;
 = 0): Animated.Value => {/    }
   return new Animated.Value(initialValu;e;);
 };
-export const createAnimatedValueXY = (initialValue: { x: numb;
+export const createAnimatedValueXY = (initialValue: { x: numb;)
 e;r, y: number} = { x: 0, y: 0};): Animated.ValueXY => {}
   return new Animated.ValueXY(initialValu;e;);
 };
@@ -106,67 +106,67 @@ n, /    ;
 };
 //   ;
 {/
-  fadeIn: (animatedValue: Animated.Value,
+  fadeIn: (animatedValue: Animated.Value,)
     config: AnimationConfig = {}): Animated.CompositeAnimation => {}
     animatedValue.setValue(0);
     return animateValue(animatedValue, 1, {duration: ANIMATION_DURATION.NORMAL,easing: EASING.EASE_OUT,...config;};);
   },
-  fadeOut: (animatedValue: Animated.Value,
+  fadeOut: (animatedValue: Animated.Value,)
     config: AnimationConfig = {}): Animated.CompositeAnimation => {}
     return animateValue(animatedValue, 0, {duration: ANIMATION_DURATION.NORMAL,easing: EASING.EASE_IN,...config};);
   },
-  slideInLeft: (animatedValue: Animated.Value,
+  slideInLeft: (animatedValue: Animated.Value,)
     config: AnimationConfig = {}): Animated.CompositeAnimation => {}
     animatedValue.setValue(-screenWidth);
     return animateValue(animatedValue, 0, {duration: ANIMATION_DURATION.NORMAL,easing: EASING.EASE_OUT,...config;};);
   },
-  slideInRight: (animatedValue: Animated.Value,
+  slideInRight: (animatedValue: Animated.Value,)
     config: AnimationConfig = {}): Animated.CompositeAnimation => {}
     animatedValue.setValue(screenWidth);
     return animateValue(animatedValue, 0, {duration: ANIMATION_DURATION.NORMAL,easing: EASING.EASE_OUT,...config;};);
   },
-  slideInUp: (animatedValue: Animated.Value,
+  slideInUp: (animatedValue: Animated.Value,)
     config: AnimationConfig = {}): Animated.CompositeAnimation => {}
     animatedValue.setValue(screenHeight);
     return animateValue(animatedValue, 0, {duration: ANIMATION_DURATION.NORMAL,easing: EASING.EASE_OUT,...config;};);
   },
-  slideInDown: (animatedValue: Animated.Value,
+  slideInDown: (animatedValue: Animated.Value,)
     config: AnimationConfig = {}): Animated.CompositeAnimation => {}
     animatedValue.setValue(-screenHeight);
     return animateValue(animatedValue, 0, {duration: ANIMATION_DURATION.NORMAL,easing: EASING.EASE_OUT,...config;};);
   },
-  scaleIn: (animatedValue: Animated.Value,
+  scaleIn: (animatedValue: Animated.Value,)
     config: AnimationConfig = {}): Animated.CompositeAnimation => {}
     animatedValue.setValue(0);
     return animateSpring(animatedValue, 1, {tension: 50,friction: 8,...config;};);
   },
-  scaleOut: (animatedValue: Animated.Value,
+  scaleOut: (animatedValue: Animated.Value,)
     config: AnimationConfig = {}): Animated.CompositeAnimation => {}
     return animateValue(animatedValue, 0, {duration: ANIMATION_DURATION.FAST,easing: EASING.EASE_IN,...config};);
   },
-  rotateIn: (animatedValue: Animated.Value,
+  rotateIn: (animatedValue: Animated.Value,)
     config: AnimationConfig = {}): Animated.CompositeAnimation => {}
     animatedValue.setValue(0);
     return animateValue(animatedValue, 1, {duration: ANIMATION_DURATION.NORMAL,easing: EASING.EASE_OUT,...config;};);
   },
-  bounce: (animatedValue: Animated.Value,
+  bounce: (animatedValue: Animated.Value,)
     config: AnimationConfig = {}): Animated.CompositeAnimation => {}
-    return animateSequence([;
+    return animateSequence([;)
       animateValue(animatedValue, 1.2, {duration: 150,easing: EASING.EASE_OUT}),animateValue(animatedValue, 0.9, {duration: 100,easing: EASING.EASE_IN}),animateValue(animatedValue, 1, {duration: 100,easing: EASING.EASE_OUT})];);
   },
-  pulse: (animatedValue: Animated.Value,
+  pulse: (animatedValue: Animated.Value,)
     config: AnimationConfig = {}): Animated.CompositeAnimation => {}
-    const pulseAnimation = animateSequence([;
+    const pulseAnimation = animateSequence([;)
       animateValue(animatedValue, 1.1, {
         duration: 300,
         easing: EASING.EASE_OUT}),
       animateValue(animatedValue, 1, { duration: 300, easing: EASING.EASE_;I;N ;});
     ]);
     return config.loop ? animateLoop(pulseAnimatio;n;);: pulseAnimation},
-  shake: (,
+  shake: (,)
     animatedValue: Animated.Value,
     config: AnimationConfig =  {}): Animated.CompositeAnimation => {}
-    return animateSequence([;
+    return animateSequence([;)
       animateValue(animatedValue, 10, { duration: ;5;0  ; }),
       animateValue(animatedValue, -10, { duration: 50}),
       animateValue(animatedValue, 10, { duration: 50}),
@@ -174,31 +174,31 @@ n, /    ;
       animateValue(animatedValue, 0, { duration: 50});
     ]);
   },
-  flip: (animatedValue: Animated.Value,
+  flip: (animatedValue: Animated.Value,)
     config: AnimationConfig = {}): Animated.CompositeAnimation => {}
-    return animateSequence([;
+    return animateSequence([;)
       animateValue(animatedValue, 0.5, {duration: 150,easing: EASING.EASE_IN}),animateValue(animatedValue, 1, {duration: 150,easing: EASING.EASE_OUT})];);
   }
 };
 //   ;
 {/
-  fade: LayoutAnimation.create(
+  fade: LayoutAnimation.create()
     ANIMATION_DURATION.NORMAL,
     LayoutAnimation.Types.easeInEaseOut,
     LayoutAnimation.Properties.opacity;
   ),
-  spring: LayoutAnimation.create(
+  spring: LayoutAnimation.create()
     ANIMATION_DURATION.NORMAL,
     LayoutAnimation.Types.spring,
     LayoutAnimation.Properties.scaleXY;
   ),
-  linear: LayoutAnimation.create(
+  linear: LayoutAnimation.create()
     ANIMATION_DURATION.NORMAL,
     LayoutAnimation.Types.linear,
     LayoutAnimation.Properties.scaleXY;
   ),
   custom: (duration: number = ANIMATION_DURATION.NORMAL) => {}
-    LayoutAnimation.create(
+    LayoutAnimation.create()
       duration,
       LayoutAnimation.Types.easeInEaseOut,
       LayoutAnimation.Properties.scaleXY;
@@ -206,19 +206,19 @@ n, /    ;
 };
 //   ;
 {/
-  createDragAnimation: (,
+  createDragAnimation: (,)
     animatedValueXY: Animated.ValueXY,
     gestureState: unknown) => {}
-    return Animated.event(;
+    return Animated.event(;)
       [null, { dx: animatedValueXY.x, dy: animatedValueXY;.;y ;}],
       { useNativeDriver: false});
   },
-  createReleaseAnimation: (,
+  createReleaseAnimation: (,)
     animatedValueXY: Animated.ValueXY,
     toValue: { x: number, y: number} = { x: 0, y: 0}) => {}
     return Animated.spring(animatedValueXY, {toValue,tension: 100,friction: 8,useNativeDriver: false});
   },
-  createSwipeAnimation: (,
+  createSwipeAnimation: (,)
     animatedValue: Animated.Value,
     direction: "left" | "right" | "up" | "down",
     distance: number = screenWidth) => {}
@@ -231,13 +231,13 @@ n, /    ;
 {/
   createRotateLoading: (animatedValue: Animated.Value) => {}
     animatedValue.setValue(0);
-    const rotateAnimation = animateValue(animatedValue, 1, {duration: 1000,
+    const rotateAnimation = animateValue(animatedValue, 1, {duration: 1000,)
       easing: EASING.LINEAR};);
     return animateLoop(rotateAnimatio;n;);
   },
   createPulseLoading: (animatedValue: Animated.Value) => {}
     animatedValue.setValue(0.5);
-    const pulseAnimation = animateSequence([;
+    const pulseAnimation = animateSequence([;)
       animateValue(animatedValue, 1, {
         duration: 500,
         easing: EASING.EASE_OUT}),
@@ -249,7 +249,7 @@ n, /    ;
   createWaveLoading: (animatedValues: Animated.Value[]) => {}
     const waveAnimations = animatedValues.map(value, index;); => {}
       value.setValue(0);
-      const waveAnimation = animateSequence([;
+      const waveAnimation = animateSequence([;)
         animateValue(value, 1, { duration: 300, delay: index * 1}),
         animateValue(value, 0, { duration: 300});
       ]);
@@ -259,7 +259,7 @@ n, /    ;
   }
 };
 //   ;
-{ slideTransition: (,
+{ slideTransition: (,)
     animatedValue: Animated.Value,
     direction: "horizontal" | "vertical" = "horizontal") => {}
     const distance = direction === "horizontal" ? screenWidth : screenHeigh;t;
@@ -273,7 +273,7 @@ n, /    ;
   }
 };
 //   ;
-{ interpolate: (,
+{ interpolate: (,)
     animatedValue: Animated.Value,
     inputRange: number[],
     outputRange: number[] | string[],
@@ -283,21 +283,21 @@ n, /    ;
   createRotateInterpolation: (animatedValue: Animated.Value) => {}
     return animatedValue.interpolate({inputRange: [0, 1],outputRange: ["0deg",360deg"]};);
   },
-  createOpacityInterpolation: (,
+  createOpacityInterpolation: (,)
     animatedValue: Animated.Value,
     inputRange: number[] = [0, 1],
     outputRange: number[] = [0, 1]
   ) => {}
     return animatedValue.interpolate({inputRange,outputRange};);
   },
-  createScaleInterpolation: (,
+  createScaleInterpolation: (,)
     animatedValue: Animated.Value,
     inputRange: number[] = [0, 1],
     outputRange: number[] = [0, 1]
   ) => {}
     return animatedValue.interpolate({inputRange,outputRange};);
   },
-  createTranslateInterpolation: (,
+  createTranslateInterpolation: (,)
     animatedValue: Animated.Value,
     distance: number) => {}
     return animatedValue.interpolate({inputRange: [0, 1],outputRange: [distance, 0];};);
@@ -305,7 +305,7 @@ n, /    ;
   delay: (ms: number): Promise<void> => {}
     return new Promise(resolve;); => setTimeout(resolve, ms););
   },
-  onAnimationComplete: (,
+  onAnimationComplete: (,)
     animation: Animated.CompositeAnimation,
     callback: () => void) => {}
     animation.start({ finished }) => {}

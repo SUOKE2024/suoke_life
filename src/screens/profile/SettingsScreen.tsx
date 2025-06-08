@@ -10,7 +10,7 @@ type SettingsScreenNavigationProp = NativeStackNavigationProp<;
   MainStackParamList,"Setting;s;"
 ;>;
 export const SettingsScreen: React.FC  = () => {}
-  const performanceMonitor = usePerformanceMonitor("SettingsScreen', { "';
+  const performanceMonitor = usePerformanceMonitor("SettingsScreen', { "';)
     trackRender: true,trackMemory: true,warnThreshold: 50,  };);
   const navigation = useNavigation<SettingsScreenNavigationProp />/      const dispatch = useDispatch;
   const handleLogout = async() => {}
@@ -35,23 +35,23 @@ export const SettingsScreen: React.FC  = () => {}
     navigation.navigate("DeveloperPanel");
   };
   performanceMonitor.recordRender();
-  return (;
+  return (;)
     <View style={styles.container}>/      <View style={styles.header}>/        <TouchableOpacity onPress={handleBack} style={styles.backButton} accessibilityLabel="TODO: 添加无障碍标签" />/          <Text style={styles.backButtonText}>返回</Text>/        </TouchableOpacity>/        <Text style={styles.headerTitle}>设置</Text>/        <View style={styles.placeholder}>/      </View>/;
       <ScrollView style={styles.content}>/        <View style={styles.section}>/          <Text style={styles.sectionTitle}>账户设置</Text>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>个人资料</Text>/          </TouchableOpacity>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>修改密码</Text>/          </TouchableOpacity>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>隐私设置</Text>/          </TouchableOpacity>/        </View>/;
         <View style={styles.section}>/          <Text style={styles.sectionTitle}>应用设置</Text>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>通知</Text>/          </TouchableOpacity>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>语言</Text>/          </TouchableOpacity>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>显示主题</Text>/          </TouchableOpacity>/        </View>/;
         <View style={styles.section}>/          <Text style={styles.sectionTitle}>系统与开发</Text>/              <TouchableOpacity,style={styles.settingItem};
             onPress={navigateToServiceStatus};
-          accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>服务状态</Text>/          </TouchableOpacity>/              <TouchableOpacity;
+          accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>服务状态</Text>/          </TouchableOpacity>/              <TouchableOpacity
 style={styles.settingItem}
             onPress={navigateToServiceManagement}
-          accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>服务管理</Text>/          </TouchableOpacity>/              <TouchableOpacity;
+          accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>服务管理</Text>/          </TouchableOpacity>/              <TouchableOpacity
 style={styles.settingItem}
             onPress={navigateToDeveloperPanel}
           accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>开发者面板</Text>/          </TouchableOpacity>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>清除缓存</Text>/          </TouchableOpacity>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>检查更新</Text>/          </TouchableOpacity>/        </View>/
         <View style={styles.section}>/          <Text style={styles.sectionTitle}>其他</Text>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>关于我们</Text>/          </TouchableOpacity>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>帮助与反馈</Text>/          </TouchableOpacity>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>服务条款</Text>/          </TouchableOpacity>/        </View>/
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout} accessibilityLabel="TODO: 添加无障碍标签" />/          <Text style={styles.logoutButtonText}>退出登录</Text>/        </TouchableOpacity>/      </ScrollView>/    </View>/      ;);
 }
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flex: 1,
     backgroundColor: colors.background;
   },

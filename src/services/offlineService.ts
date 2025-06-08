@@ -109,7 +109,7 @@ export class OfflineService {
     }
   }
   // 缓存数据
-  async cacheData(
+  async cacheData()
     service: string,
     endpoint: string,
     data: any,
@@ -154,7 +154,7 @@ export class OfflineService {
   async clearExpiredCache(): Promise<void> {
     const now = Date.now();
     const expiredKeys: string[] = [];
-    this.cache.forEach(item, key) => {
+    this.cache.forEach(((item, key) => {
       const cacheTime = new Date(item.timestamp).getTime();
       if (now - cacheTime > item.ttl) {
         expiredKeys.push(key);
@@ -178,13 +178,13 @@ export class OfflineService {
         const priorityOrder = { high: 3, medium: 2, low: 1 };
         return priorityOrder[b.priority] - priorityOrder[a.priority];
       });
-      const results = await Promise.allSettled(
+      const results = await Promise.allSettled()
         sortedOperations.map(operation => this.executeOperation(operation))
       );
       // 处理结果
       const successfulOperations: string[] = [];
       const failedOperations: OfflineOperation[] = [];
-      results.forEach(result, index) => {
+      results.forEach(((result, index) => {
         const operation = sortedOperations[index];
                 if (result.status === 'fulfilled') {
           successfulOperations.push(operation.id);
@@ -198,7 +198,7 @@ export class OfflineService {
         }
       });
       // 更新操作队列
-      this.operationQueue = this.operationQueue.filter(
+      this.operationQueue = this.operationQueue.filter()
         op => !successfulOperations.includes(op.id)
       );
             // 重新添加失败但还可以重试的操作
@@ -284,7 +284,7 @@ export class OfflineService {
   async clearOfflineData(): Promise<void> {
     this.operationQueue = [];
     this.cache.clear();
-        await Promise.all([
+        await Promise.all([)
       AsyncStorage.removeItem(this.STORAGE_KEYS.OPERATION_QUEUE),
       AsyncStorage.removeItem(this.STORAGE_KEYS.CACHE_DATA),
       AsyncStorage.removeItem(this.STORAGE_KEYS.SYNC_STATUS),
@@ -330,7 +330,7 @@ export class OfflineService {
   // 保存操作队列到存储
   private async saveOperationQueue(): Promise<void> {
     try {
-      await AsyncStorage.setItem(
+      await AsyncStorage.setItem()
         this.STORAGE_KEYS.OPERATION_QUEUE,
         JSON.stringify(this.operationQueue)
       );
@@ -354,7 +354,7 @@ export class OfflineService {
   private async saveCacheData(): Promise<void> {
     try {
       const cacheArray = Array.from(this.cache.entries());
-      await AsyncStorage.setItem(
+      await AsyncStorage.setItem()
         this.STORAGE_KEYS.CACHE_DATA,
         JSON.stringify(cacheArray)
       );
@@ -397,7 +397,7 @@ export class OfflineService {
       service: "AGENTS",
       endpoint: '/agents/status' },
       ];
-      await Promise.allSettled(
+      await Promise.allSettled()
         criticalEndpoints.map((async ({ service, endpoint }) => {
           try {
             const response = await apiClient.get(service, endpoint);

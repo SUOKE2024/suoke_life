@@ -14,19 +14,19 @@ interface UseBenchmarkStreamingOptions {
 }
 export const useBenchmarkStreaming = (options: UseBenchmarkStreamingOptions = {}) => {const {autoConnect = true,maxEvents = 100,eventTypes = ["benchmark_progress",benchmark_complete', "benchmark_error",system_status'];
   } = options;
-  const [state, setState] = useState<BenchmarkStreamingState>({isConnected: false,connectionState: 'CLOSED',events: [],error: null;
+  const [state, setState] = useState<BenchmarkStreamingState>({isConnected: false,connectionState: 'CLOSED',events: [],error: null;)
   });
   const eventListenerRef = useRef<(event: StreamEvent) => void) | null>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   // 事件处理器
-  const handleStreamEvent = useCallback(;
-    (event: StreamEvent) => {setState(prevState => ({...prevState,events: [event, ...prevState.events].slice(0, maxEvents),error: null;
+  const handleStreamEvent = useCallback(;)
+    (event: StreamEvent) => {setState(prevState => ({...prevState,events: [event, ...prevState.events].slice(0, maxEvents),error: null;))
       }));
     },
     [maxEvents]
   );
   // 连接WebSocket;
-  const connect = useCallback(async () => {try {setState(prevState => ({ ...prevState, error: null }));
+  const connect = useCallback(async () => {try {setState(prevState => ({ ...prevState, error: null }));)
       await benchmarkStreamingService.connect();
       // 订阅事件
       benchmarkStreamingService.subscribeToEvents(eventTypes);
@@ -70,7 +70,7 @@ export const useBenchmarkStreaming = (options: UseBenchmarkStreamingOptions = {}
     }));
   }, []);
   // 启动流式基准测试
-  const startStreamingBenchmark = useCallback(;
+  const startStreamingBenchmark = useCallback(;)
     (config: StreamConfig) => {if (state.isConnected) {benchmarkStreamingService.startStreamingBenchmark(config);
       } else {
         throw new Error('WebSocket未连接');
@@ -79,24 +79,24 @@ export const useBenchmarkStreaming = (options: UseBenchmarkStreamingOptions = {}
     [state.isConnected]
   );
   // 停止流式基准测试
-  const stopStreamingBenchmark = useCallback(;
+  const stopStreamingBenchmark = useCallback(;)
     (benchmarkId: string) => {if (state.isConnected) {benchmarkStreamingService.stopStreamingBenchmark(benchmarkId);
       }
     },
     [state.isConnected]
   );
   // 清除事件历史
-  const clearEvents = useCallback() => {setState(prevState => ({...prevState,events: [];
+  const clearEvents = useCallback() => {setState(prevState => ({...prevState,events: [];))
     }));
   }, []);
   // 获取特定类型的事件
-  const getEventsByType = useCallback(;
+  const getEventsByType = useCallback(;)
     (eventType: string) => {return state.events.filter(event => event.type === eventType);
     },
     [state.events]
   );
   // 获取最新事件
-  const getLatestEvent = useCallback(;
+  const getLatestEvent = useCallback(;)
     (eventType?: string) => {if (eventType) {return state.events.find(event => event.type === eventType) || null;
       }
       return state.events[0] || null;
@@ -104,7 +104,7 @@ export const useBenchmarkStreaming = (options: UseBenchmarkStreamingOptions = {}
     [state.events]
   );
   // 监控连接状态
-  useEffect() => {
+  useEffect(() => {
     const checkConnectionState = () => {const currentState = benchmarkStreamingService.getConnectionState();
       setState(prevState => ({
         ...prevState,
@@ -116,7 +116,7 @@ export const useBenchmarkStreaming = (options: UseBenchmarkStreamingOptions = {}
     return () => clearInterval(interval);
   }, []);
   // 自动连接
-  useEffect() => {
+  useEffect(() => {
     if (autoConnect) {
       connect();
     }
@@ -124,7 +124,7 @@ export const useBenchmarkStreaming = (options: UseBenchmarkStreamingOptions = {}
     };
   }, [autoConnect, connect, disconnect]);
   // 重连逻辑
-  useEffect() => {
+  useEffect(() => {
     if (!state.isConnected && state.connectionState === 'CLOSED' && autoConnect) {
       reconnectTimeoutRef.current = setTimeout() => {
         console.log('尝试重新连接WebSocket...');

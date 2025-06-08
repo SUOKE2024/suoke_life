@@ -1,4 +1,5 @@
 import { jest } from '@jest/globals';
+
 import localAIService from '../localAIService.ts';
 // Mock dependencies
 jest.mock('../api/apiClient');

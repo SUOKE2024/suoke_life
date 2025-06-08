@@ -49,13 +49,13 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [currentAgent, setCurrentAgent] = useState<AgentType>(;
+  const [currentAgent, setCurrentAgent] = useState<AgentType>(;)
     agentType || AgentSystemUtils.getAgentByChannel(currentChannel);
   );
   const [sessionId] = useState(`session_${Date.now()}`);
   const scrollViewRef = useRef<ScrollView>(null);
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  useEffect() => {
+  useEffect(() => {
     // 组件挂载时的淡入动画
     Animated.timing(fadeAnim, {
       toValue: 1,
@@ -65,7 +65,7 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
     // 添加欢迎消息
     addWelcomeMessage();
   }, []);
-  useEffect() => {
+  useEffect(() => {
     // 当频道改变时更新智能体
     if (!agentType) {
       const newAgent = AgentSystemUtils.getAgentByChannel(currentChannel);
@@ -88,7 +88,7 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
   /**
   * 发送消息
   */
-  const sendMessage = useCallback(async () => {if (!inputText.trim() || isLoading) {return;}
+  const sendMessage = useCallback(async () => {if (!inputText.trim() || isLoading) {return;})
     const userMessage: Message = {,
   id: `user_${Date.now()}`,
       type: "user",
@@ -123,7 +123,7 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
       const errorMessage: Message = {,
   id: `error_${Date.now()}`,
         type: "agent",
-        content: "抱歉，处理您的请求时出现了问题。请稍后再试。",
+        content: "抱歉，处理您的请求时出现了问题。请稍后再试。", "
         timestamp: new Date(),
         agentType: currentAgent;
       };
@@ -162,11 +162,11 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
   /**
   * 清空对话
   */
-  const clearMessages = useCallback() => {Alert.alert("清空对话",确定要清空当前对话吗？", [;
+  const clearMessages = useCallback() => {Alert.alert("清空对话", "确定要清空当前对话吗？", [;)
       {
       text: "取消",
       style: "cancel" },{
-      text: "确定",
+      text: "确定", "
       onPress: () => {setMessages([]);
           addWelcomeMessage();
         }
@@ -181,20 +181,20 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
       ? AgentSystemUtils.getAgentRole(message.agentType);
       : null;
     return (
-      <View;
+  <View
         key={message.id}
-        style={[
+        style={{[
           styles.messageContainer,
           isUser ? styles.userMessage : styles.agentMessage;
-        ]}
+        ]}}
       >;
-        {!isUser && agentRole && (;
+        {!isUser && agentRole && (;)
           <Text style={styles.agentName}>{agentRole.name}</Text>;
         )};
-        <Text;
-          style={[;
+        <Text
+          style={{[;
             styles.messageText,isUser ? styles.userMessageText : styles.agentMessageText;
-          ]};
+          ]}};
         >;
           {message.content};
         </Text>;
@@ -210,8 +210,8 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
   const renderAgentSelector = useCallback() => {const agents = [;
       AgentType.XIAOAI,AgentType.XIAOKE,AgentType.LAOKE,AgentType.SOER;
     ];
-    return (;
-      <ScrollView;
+    return (;)
+      <ScrollView
         horizontal;
         showsHorizontalScrollIndicator={false};
         style={styles.agentSelector};
@@ -219,17 +219,17 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
         {agents.map(agent) => {const role = AgentSystemUtils.getAgentRole(agent);
           const isSelected = agent === currentAgent;
           return (
-            <TouchableOpacity;
+  <TouchableOpacity
               key={agent};
-              style={[;
+              style={{[;
                 styles.agentButton,isSelected && styles.selectedAgentButton;
-              ]};
+              ]}};
               onPress={() => switchAgent(agent)};
             >;
-              <Text;
-                style={[;
+              <Text
+                style={{[;
                   styles.agentButtonText,isSelected && styles.selectedAgentButtonText;
-                ]};
+                ]}};
               >;
                 {role.name};
               </Text>;
@@ -239,12 +239,12 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
       </ScrollView>
     );
   }, [currentAgent, switchAgent]);
-  return (;
-    <Animated.View style={[styles.container, { opacity: fadeAnim }, style]}>;
+  return (;)
+    <Animated.View style={{[styles.container, { opacity: fadeAnim }}, style]}>;
       {// 智能体选择器};
       {renderAgentSelector()};
       {// 消息列表};
-      <ScrollView;
+      <ScrollView
         ref={scrollViewRef};
         style={styles.messagesContainer};
         onContentSizeChange={() =>;
@@ -252,8 +252,7 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
         }
       >
         {messages.map(renderMessage)}
-        {isLoading && (
-        <View style={styles.loadingContainer}>
+        {isLoading  && <View style={styles.loadingContainer}>
             <ActivityIndicator size="small" color="#007AFF" />
             <Text style={styles.loadingText}>正在思考...</Text>
           </View>
@@ -261,7 +260,7 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
       </ScrollView>
       {// 输入区域}
       <View style={styles.inputContainer}>
-        <TextInput;
+        <TextInput
           style={styles.textInput}
           value={inputText}
           onChangeText={setInputText}
@@ -270,11 +269,11 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
           maxLength={500}
           editable={!isLoading}
         />
-        <TouchableOpacity;
-          style={[
+        <TouchableOpacity
+          style={{[
             styles.sendButton,
             (!inputText.trim() || isLoading) && styles.disabledButton;
-          ]}
+          ]}}
           onPress={sendMessage}
           disabled={!inputText.trim() || isLoading}
         >

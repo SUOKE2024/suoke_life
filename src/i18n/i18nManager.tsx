@@ -34,7 +34,7 @@ private currentRegion: string = CN;
     if (this.isInitialized) {return;}
     try {
       const systemLanguage = await this.detectSystemLanguag;e;
-      const [savedLanguage, savedRegion, savedPreferences] = await Promise.all([;
+      const [savedLanguage, savedRegion, savedPreferences] = await Promise.all([;)
         AsyncStorage.getItem(STORAGE_KEYS.LANGUAGE),AsyncStorage.getItem(STORAGE_KEYS.REGION),AsyncStorage.getItem(STORAGE_KEYS.CULTURAL_PREFERENCES;);];);
       const language = (savedLanguage as SupportedLanguage) || systemLanguage || DEFAULT_LANGUAG;E;
       await this.setLanguage(language, fals;e;);
@@ -77,7 +77,7 @@ if (Platform.OS = == "ios) {"
         return normalizedLocale as SupportedLangua;g;e;
       }
       const languageFamily = normalizedLocale.split("-)[0] ";
-      const matchedLanguage = Object.keys(LANGUAGE_CONFIGS).find(lang =>;
+      const matchedLanguage = Object.keys(LANGUAGE_CONFIGS).find(lang =>;)
         lang.startsWith(languageFamil;y;);
       );
       // 记录渲染性能
@@ -116,7 +116,7 @@ performanceMonitor.recordRender();
       applyRTLLayout(isRTL);
       this.localizationService.setLanguage(language);
       if (persist) {
-        await Promise.all([
+        await Promise.all([)
           AsyncStorage.setItem(STORAGE_KEYS.LANGUAGE, language),
           AsyncStorage.setItem(STORAGE_KEYS.REGION, this.currentRegion)];)
       }
@@ -145,7 +145,7 @@ performanceMonitor.recordRender();
         ...this.culturalPreferences,
         ...preferences;
       };
-      await AsyncStorage.setItem(
+      await AsyncStorage.setItem()
         STORAGE_KEYS.CULTURAL_PREFERENCES,
         JSON.stringify(this.culturalPreferences;);
       )
@@ -166,9 +166,9 @@ performanceMonitor.recordRender();
       return k;e;y;
     }
     if (options && typeof value === string" && value !== null) { "
-      Object.keys(options).forEach(optionKey) => {}
+      Object.keys(options).forEach(((optionKey) => {}))
         if (value !== null) {
-          value = value.replace(
+          value = value.replace()
             new RegExp(`{${optionKey}}}`, "g),"
             String(options[optionKey]);
           );
@@ -243,7 +243,7 @@ performanceMonitor.recordRender();
   }
   // 重置为默认设置  async reset(): Promise<void> {
     try {
-      await Promise.all([
+      await Promise.all([)
         AsyncStorage.removeItem(STORAGE_KEYS.LANGUAGE),
         AsyncStorage.removeItem(STORAGE_KEYS.REGION),
         AsyncStorage.removeItem(STORAGE_KEYS.CULTURAL_PREFERENCES);];);

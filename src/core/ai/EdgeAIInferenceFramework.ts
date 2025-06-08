@@ -347,7 +347,7 @@ export class EdgeAIInferenceFramework extends EventEmitter {
   }
 }
 // 导出便捷函数
-export function createModelConfig(
+export function createModelConfig()
   modelId: string,
   modelPath: string,
   modelType: ModelConfig['modelType'] = 'onnx',
@@ -365,7 +365,7 @@ export function createModelConfig(
     warmupIterations: 3,
   };
 }
-export function createInferenceRequest(
+export function createInferenceRequest()
   requestId: string,
   modelId: string,
   inputData: any,

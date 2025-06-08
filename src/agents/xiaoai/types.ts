@@ -78,7 +78,7 @@ export interface DiagnosisServiceClient {
   palpation: PalpationServiceClient;
   healthCheck(): Promise<{ [key: string]: boolean;
 }>;
-  comprehensiveDiagnosis(data: {,
+  comprehensiveDiagnosis(data: {,)
   userId: string;
     imageData?: ImageData;
     audioData?: AudioData;

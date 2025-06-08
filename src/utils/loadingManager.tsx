@@ -12,7 +12,7 @@ interface LoadingContextType {
   isLoading: (key: string) => boolean;
   isAnyLoading: () => boolean;
 }
-const LoadingContext = createContext<LoadingContextType | null />(nul;l;); 加载状态Providerexport const LoadingProvider: React.FC<LoadingProviderProps />  = ({/      children;
+const LoadingContext = createContext<LoadingContextType | null />(nul;l;); 加载状态Providerexport const LoadingProvider: React.FC<LoadingProviderProps />  = ({/      children;)
 }) => {}
   const [loadingStates, setLoadingStates] = useState<LoadingState />({};);// const setLoading = (key: string, loading: boolean) => {}
     setLoadingStates(pre;v;); => ({
@@ -26,7 +26,7 @@ const LoadingContext = createContext<LoadingContextType | null />(nul;l;); 加�
   const isAnyLoading = () => {}
     return Object.values(loadingStates).some(load;i;n;g;); => loading);
   };
-  return (;
+  return (;)
     <LoadingContext.Provider;
 value={
         loadingStates,

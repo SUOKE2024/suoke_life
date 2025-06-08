@@ -1,4 +1,3 @@
-
 import performanceReporter from '../performanceReporter.tsx';
 describe('performanceReporter', () => {
   it('应该正确导出', () => {

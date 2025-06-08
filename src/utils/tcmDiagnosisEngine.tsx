@@ -130,7 +130,7 @@ class ConstitutionIdentificationEngine {
     }
     return ConstitutionIdentificationEngine.instance;
   }
-  identifyConstitution(
+  identifyConstitution()
     inspectionData: InspectionData,
     inquiryData: InquiryData,
     palpationData: PalpationData,
@@ -157,15 +157,15 @@ class ConstitutionIdentificationEngine {
   }
   private getConstitutionCharacteristics(constitution: ConstitutionType): string[] {
     const characteristics: Record<ConstitutionType, string[]> = {
-      '平和质': ["体形匀称",面色润泽', "精力充沛",睡眠良好'],
-      '气虚质': ["气短懒言",容易疲劳', "自汗",舌淡苔白'],
-      '阳虚质': ["畏寒怕冷",四肢不温', "精神不振",舌淡胖'],
-      '阴虚质': ["五心烦热",口燥咽干', "舌红少苔",脉细数'],
-      '痰湿质': ["形体肥胖",腹部肥满', "口黏腻",舌胖苔腻'],
-      '湿热质': ["面垢油腻",口苦口干', "身重困倦",舌红苔黄腻'],
-      '血瘀质': ["肤色晦暗",色素沉着', "易出血",舌暗有瘀点'],
-      '气郁质': ["神情抑郁",情绪不稳', "胸胁胀满",舌淡红'],
-      '特禀质': ["过敏体质",遗传缺陷', "胎传异常",禀赋不足'],
+      '平和质': ["体形匀称", "面色润泽", "精力充沛", "睡眠良好'],
+      '气虚质': ["气短懒言", "容易疲劳", "自汗", "舌淡苔白'],
+      '阳虚质': ["畏寒怕冷", "四肢不温", "精神不振", "舌淡胖'],
+      '阴虚质': ["五心烦热", "口燥咽干", "舌红少苔", "脉细数'],
+      '痰湿质': ["形体肥胖", "腹部肥满", "口黏腻", "舌胖苔腻'],
+      '湿热质': ["面垢油腻", "口苦口干", "身重困倦", "舌红苔黄腻'],
+      '血瘀质': ["肤色晦暗", "色素沉着", "易出血", "舌暗有瘀点'],
+      '气郁质': ["神情抑郁", "情绪不稳", "胸胁胀满", "舌淡红'],
+      '特禀质': ["过敏体质", "遗传缺陷", "胎传异常", "禀赋不足'],
     };
     return characteristics[constitution] || [];
   }
@@ -179,11 +179,11 @@ class SyndromePatternEngine {
     }
     return SyndromePatternEngine.instance;
   }
-  identifyPatterns(
+  identifyPatterns()
     inspectionData: InspectionData,
     auscultationData: AuscultationData,
     inquiryData: InquiryData,
-    palpationData: PalpationData,
+    palpationData: PalpationData
   ): SyndromePattern[] {
     const patterns: SyndromePattern[] = [];
     // 检查气虚证
@@ -194,18 +194,18 @@ class SyndromePatternEngine {
         category: '气血辨证',
         description: '脏腑功能衰退所表现的证候',
         pathogenesis: '元气不足，脏腑功能减退',
-        main_symptoms: ["气短",乏力', "自汗",脉弱'],
-        secondary_symptoms: ["声低",懒言', "头晕",食少'],
+        main_symptoms: ["气短", "乏力", "自汗", "脉弱'],
+        secondary_symptoms: ["声低", "懒言", "头晕", "食少'],
         tongue_pulse: '舌淡苔白，脉虚弱',
         confidence: 0.8,
         severity: 'moderate',
       });
     }
-    return patterns.sort(a, b) => b.confidence - a.confidence);
+    return patterns.sort((a, b) => b.confidence - a.confidence);
   }
   private checkQiDeficiency(inquiryData: InquiryData, palpationData: PalpationData): boolean {
     let score = 0;
-    const qiDeficiencySymptoms = ["气短",乏力', "自汗",懒言'];
+    const qiDeficiencySymptoms = ["气短", "乏力", "自汗", "懒言'];
     for (const symptom of inquiryData.symptoms) {
       if (qiDeficiencySymptoms.includes(symptom.name)) {
         score += symptom.severity;
@@ -243,20 +243,20 @@ class PrescriptionEngine {
       composition: [
         {
       herb: "人参",
-      dosage: '9', unit: 'g', processing: '生用', function: '大补元气' },
+        dosage: "9", unit: "g", processing: "生用", function: "大补元气" },
         {
       herb: "白术",
-      dosage: '9', unit: 'g', processing: '炒用', function: '健脾燥湿' },
+        dosage: "9", unit: "g", processing: "炒用", function: "健脾燥湿" },
         {
       herb: "茯苓",
-      dosage: '9', unit: 'g', processing: '生用', function: '健脾利湿' },
+        dosage: "9", unit: "g", processing: "生用", function: "健脾利湿" },
         {
       herb: "甘草",
-      dosage: '6', unit: 'g', processing: '炙用', function: '调和诸药' },
+        dosage: "6", unit: "g", processing: "炙用", function: "调和诸药" },
       ],
-      functions: ["益气健脾",补中益气'],
-      indications: ["脾胃气虚",食少便溏', '气短乏力'],
-      contraindications: ["阴虚火旺",实热证'],
+      functions: ["益气健脾", "补中益气'],
+      indications: ["脾胃气虚", "食少便溏", "气短乏力"],
+      contraindications: ["阴虚火旺", "实热证"],
       dosage: '每日1剂',
       preparation: '水煎服',
       administration: '温服，每日2次',
@@ -280,23 +280,23 @@ export class TCMDiagnosisEngine {
     }
     return TCMDiagnosisEngine.instance;
   }
-  async performDiagnosis(
+  async performDiagnosis()
     patientId: string,
     inspectionData: InspectionData,
     auscultationData: AuscultationData,
     inquiryData: InquiryData,
     palpationData: PalpationData,
-    calculationData: CalculationData,
+    calculationData: CalculationData
   ): Promise<TCMDiagnosisResult> {
     try {
       // 体质识别
-      const constitutionResult = this.constitutionEngine.identifyConstitution(
+      const constitutionResult = this.constitutionEngine.identifyConstitution()
         inspectionData,
         inquiryData,
         palpationData,
       );
       // 证候识别
-      const patterns = this.syndromeEngine.identifyPatterns(
+      const patterns = this.syndromeEngine.identifyPatterns()
         inspectionData,
         auscultationData,
         inquiryData,
@@ -305,7 +305,7 @@ export class TCMDiagnosisEngine {
       // 方剂推荐
       const prescriptions = this.prescriptionEngine.generatePrescriptions(patterns);
       // 计算总体置信度
-      const confidence = this.calculateOverallConfidence(
+      const confidence = this.calculateOverallConfidence()
         constitutionResult.confidence,
         patterns,
       );
@@ -325,21 +325,21 @@ export class TCMDiagnosisEngine {
       throw new Error('诊断失败');
     }
   }
-  private calculateOverallConfidence(
+  private calculateOverallConfidence()
     constitutionConfidence: number,
-    patterns: SyndromePattern[],
+    patterns: SyndromePattern[]
   ): number {
     if (patterns.length === 0) return constitutionConfidence;
-    const avgPatternConfidence = patterns.reduce(sum, p) => sum + p.confidence, 0) / patterns.length;
+    const avgPatternConfidence = patterns.reduce((sum, p) => sum + p.confidence, 0) / patterns.length;
     return (constitutionConfidence + avgPatternConfidence) / 2;
   }
-  private generateReasoning(
-    constitutionResult: {,
-  constitution: ConstitutionType;
+  private generateReasoning()
+    constitutionResult: {
+      constitution: ConstitutionType;
       confidence: number,
   characteristics: string[];
     },
-    patterns: SyndromePattern[],
+    patterns: SyndromePattern[]
   ): string {
     let reasoning = `根据四诊合参，患者体质为${constitutionResult.constitution}`;
     if (patterns.length > 0) {

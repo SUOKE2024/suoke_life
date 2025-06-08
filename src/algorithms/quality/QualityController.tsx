@@ -56,25 +56,25 @@ export class QualityController {
   private initializeValidationRules(): void {
     // 数据完整性规则
     this.validationRules.set('data_completeness', {
-      name: "数据完整性检查",
+      name: "数据完整性检查", "
       check: (data: any) => this.checkDataCompleteness(data),
       severity: 'medium'
     });
     // 置信度阈值规则
     this.validationRules.set('confidence_threshold', {
-      name: "置信度阈值检查",
+      name: "置信度阈值检查", "
       check: (data: any) => this.checkConfidenceThreshold(data),
       severity: 'high'
     });
     // 结果一致性规则
     this.validationRules.set('result_consistency', {
-      name: "结果一致性检查",
+      name: "结果一致性检查", "
       check: (data: any) => this.checkResultConsistency(data),
       severity: 'medium'
     });
     // 安全性检查规则
     this.validationRules.set('safety_check', {
-      name: "安全性检查",
+      name: "安全性检查", "
       check: (data: any) => this.checkSafety(data),
       severity: 'critical'
     })
@@ -111,7 +111,7 @@ export class QualityController {
 }
       }
       // 生成警告和建议
-      this.generateWarningsAndAdvice(
+      this.generateWarningsAndAdvice()
         input,
         issues,
         warnings,
@@ -255,7 +255,7 @@ export class QualityController {
   /**
   * 生成警告和建议
   */
-  private generateWarningsAndAdvice(
+  private generateWarningsAndAdvice()
     input: ValidationInput,
     issues: QualityIssue[],
     warnings: string[],

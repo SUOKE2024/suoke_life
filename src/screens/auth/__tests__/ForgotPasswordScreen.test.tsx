@@ -1,4 +1,3 @@
-
 import ForgotPasswordScreen from '../ForgotPasswordScreen.tsx';
 describe('ForgotPasswordScreen', () => {
   it('应该正确导出', () => {

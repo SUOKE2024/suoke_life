@@ -44,7 +44,7 @@ const objectPropertyFixRules = [
   // 修复对象属性数组值后缺少逗号
   {
     name: "对象属性数组值后缺少逗号",
-    pattern: /(\w+:\s*\[[^\]]*\])(\n\s*)(\w+:)/g,
+    pattern: /(\w+:\s*[[^]]*\])(\n\s*)(\w+:)/g,
     replacement: $1,$2$3"
   },
   // 修复导入语句缺少分号

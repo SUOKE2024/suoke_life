@@ -26,12 +26,12 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
   onClose,
   onSave;
 }) => {
-  const [localSettings, setLocalSettings] = useState<GameSettings>({soundEnabled: true,musicEnabled: true,vibrationEnabled: true,autoSave: true,difficulty: MazeDifficulty.NORMAL,showHints: true,animationSpeed: 'normal',colorScheme: 'auto';
+  const [localSettings, setLocalSettings] = useState<GameSettings>({soundEnabled: true,musicEnabled: true,vibrationEnabled: true,autoSave: true,difficulty: MazeDifficulty.NORMAL,showHints: true,animationSpeed: 'normal',colorScheme: 'auto';)
   });
   /**
   * 初始化设置
   */
-  useEffect() => {
+  useEffect(() => {
     if (settings) {
       setLocalSettings(settings);
     }
@@ -39,9 +39,9 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
   /**
   * 更新设置项
   */
-  const updateSetting = <K extends keyof GameSettings>(;
+  const updateSetting = <K extends keyof GameSettings>(;)
     key: K,value: GameSettings[K];
-  ) => {setLocalSettings(prev => ({...prev,[key]: value;
+  ) => {setLocalSettings(prev => ({...prev,[key]: value;)
     }));
   };
   /**
@@ -54,13 +54,12 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
   * 重置为默认设置
   */
   const handleReset = () => {
-    Alert.alert(
-      "重置设置",确定要重置为默认设置吗？',[;
+    Alert.alert("重置设置", "确定要重置为默认设置吗？',[;
         {
       text: "取消",
       style: 'cancel' },{
-      text: "确定",
-      onPress: () => {setLocalSettings({soundEnabled: true,musicEnabled: true,vibrationEnabled: true,autoSave: true,difficulty: MazeDifficulty.NORMAL,showHints: true,animationSpeed: 'normal',colorScheme: 'auto';
+      text: "确定", "
+      onPress: () => {setLocalSettings({soundEnabled: true,musicEnabled: true,vibrationEnabled: true,autoSave: true,difficulty: MazeDifficulty.NORMAL,showHints: true,animationSpeed: 'normal',colorScheme: 'auto';)
             });
           }
         }
@@ -70,7 +69,7 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
   /**
   * 渲染开关设置项
   */
-  const renderSwitchSetting = (
+  const renderSwitchSetting = ()
     title: string,
     description: string,
     value: boolean,
@@ -86,7 +85,7 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
           <Text style={styles.settingDescription}>{description}</Text>;
         </View>;
       </View>;
-      <Switch;
+      <Switch
         value={value};
         onValueChange={onValueChange};
         trackColor={
@@ -99,7 +98,7 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
   /**
   * 渲染选择设置项
   */
-  const renderSelectSetting = (;
+  const renderSelectSetting = (;)
     title: string,description: string,value: string,options: { label: string; value: string }[],
     onValueChange: (value: string) => void,
     iconName: string,
@@ -114,19 +113,19 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
         </View>
       </View>
       <View style={styles.selectContainer}>
-        {options.map(option) => (
-          <TouchableOpacity;
+        {options.map(option) => ()
+          <TouchableOpacity
             key={option.value}
-            style={[
+            style={{[
               styles.selectOption,
               value === option.value && styles.selectedOption;
-            ]}
+            ]}}
             onPress={() => onValueChange(option.value)}
           >
-            <Text style={[
+            <Text style={{[
               styles.selectOptionText,
               value === option.value && styles.selectedOptionText;
-            ]}>
+            ]}}>
               {option.label}
             </Text>
           </TouchableOpacity>
@@ -135,7 +134,7 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
     </View>
   );
   return (
-    <Modal;
+  <Modal
       visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
@@ -157,20 +156,20 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
           {// 音频设置}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>音频设置</Text>
-            {renderSwitchSetting(
-              "音效",开启游戏音效',
+            {renderSwitchSetting()
+              "音效", "开启游戏音效',
               localSettings.soundEnabled,
               (value) => updateSetting('soundEnabled', value),
               "volume-up",#FF9800'
             )}
-            {renderSwitchSetting(
-              "背景音乐",开启背景音乐',
+            {renderSwitchSetting()
+              "背景音乐", "开启背景音乐',
               localSettings.musicEnabled,
               (value) => updateSetting('musicEnabled', value),
               "music-note",#9C27B0'
             )}
-            {renderSwitchSetting(
-              "震动反馈",开启触觉反馈',
+            {renderSwitchSetting()
+              "震动反馈", "开启触觉反馈',
               localSettings.vibrationEnabled,
               (value) => updateSetting('vibrationEnabled', value),
               "vibration",#607D8B'
@@ -179,8 +178,8 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
           {// 游戏设置}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>游戏设置</Text>
-            {renderSelectSetting(
-              "难度等级",选择游戏难度',
+            {renderSelectSetting()
+              "难度等级", "选择游戏难度',
               localSettings.difficulty,
               [
                 {
@@ -199,14 +198,14 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
               (value) => updateSetting('difficulty', value as MazeDifficulty),
               "trending-up",#F44336'
             )}
-            {renderSwitchSetting(
-              "显示提示",显示游戏提示信息',
+            {renderSwitchSetting()
+              "显示提示", "显示游戏提示信息',
               localSettings.showHints,
               (value) => updateSetting('showHints', value),
               "lightbulb-outline",#FFC107'
             )}
-            {renderSwitchSetting(
-              "自动保存",自动保存游戏进度',
+            {renderSwitchSetting()
+              "自动保存", "自动保存游戏进度',
               localSettings.autoSave,
               (value) => updateSetting('autoSave', value),
               "save",#2196F3'
@@ -215,8 +214,8 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
           {// 界面设置}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>界面设置</Text>
-            {renderSelectSetting(
-              "动画速度",调整动画播放速度',
+            {renderSelectSetting()
+              "动画速度", "调整动画播放速度',
               localSettings.animationSpeed,
               [
                 {
@@ -232,8 +231,8 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
               (value) => updateSetting('animationSpeed', value as 'slow' | 'normal' | 'fast'),
               "speed",#795548'
             )}
-            {renderSelectSetting(
-              "主题模式",选择界面主题',
+            {renderSelectSetting()
+              "主题模式", "选择界面主题',
               localSettings.colorScheme,
               [
                 {
@@ -255,7 +254,7 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
         </ScrollView>
         {// 底部操作栏}
         <View style={styles.footer}>
-          <TouchableOpacity;
+          <TouchableOpacity
             style={styles.resetButton}
             onPress={handleReset}
           >
@@ -263,13 +262,13 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
             <Text style={styles.resetButtonText}>重置</Text>
           </TouchableOpacity>
           <View style={styles.actionButtons}>
-            <TouchableOpacity;
+            <TouchableOpacity
               style={styles.cancelButton}
               onPress={onClose};
             >;
               <Text style={styles.cancelButtonText}>取消</Text>;
             </TouchableOpacity>;
-            <TouchableOpacity;
+            <TouchableOpacity
               style={styles.saveButton};
               onPress={handleSave};
             >;

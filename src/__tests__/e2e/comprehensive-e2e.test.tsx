@@ -40,11 +40,11 @@ const testUser = {
   }
 };
 const testPatient = {
-      name: "李四",
+      name: "李四", "
       age: 42,
   gender: 'female' as const,
   chiefComplaint: '头痛失眠，食欲不振',
-  symptoms: ["头痛",失眠', "食欲不振",疲劳'],
+  symptoms: ["头痛", "失眠', "食欲不振", "疲劳'],
   medicalHistory: ['高血压'],
   currentMedications: ['降压药']
 };
@@ -65,7 +65,7 @@ describe('索克生活 - 全面端到端测试', () => {
   });
   describe('🚀 用户完整旅程测试', () => {
     it('应该完成从注册到健康管理的完整用户旅程', async () => {
-      const { getByTestId, getByText, queryByText } = render(
+      const { getByTestId, getByText, queryByText } = render()
         <Provider store={store}>
           <NavigationContainer>
             <App />
@@ -149,7 +149,7 @@ describe('索克生活 - 全面端到端测试', () => {
     });
     it('应该处理用户登录失败的情况', async () => {
       mockServices.authService.login.mockRejectedValue(new Error('用户名或密码错误'));
-      const { getByTestId, getByText } = render(
+      const { getByTestId, getByText } = render()
         <Provider store={store}>
           <NavigationContainer>
             <App />
@@ -168,7 +168,7 @@ describe('索克生活 - 全面端到端测试', () => {
   });
   describe('🤖 智能体协作端到端测试', () => {
     it('应该完成四大智能体的协同工作流程', async () => {
-      const { getByTestId, getByText } = render(
+      const { getByTestId, getByText } = render()
         <Provider store={store}>
           <NavigationContainer>
             <App />
@@ -233,10 +233,10 @@ describe('索克生活 - 全面端到端测试', () => {
       console.log('✅ 智能体协作测试通过');
     });
     it('应该处理智能体服务异常情况', async () => {
-      mockServices.agentCoordinationService.startSession.mockRejectedValue(
+      mockServices.agentCoordinationService.startSession.mockRejectedValue()
         new Error('智能体服务暂时不可用')
       );
-      const { getByTestId, getByText } = render(
+      const { getByTestId, getByText } = render()
         <Provider store={store}>
           <NavigationContainer>
             <App />
@@ -255,7 +255,7 @@ describe('索克生活 - 全面端到端测试', () => {
   });
   describe('🏥 中医四诊端到端测试', () => {
     it('应该完成完整的五诊流程', async () => {
-      const { getByTestId, getByText } = render(
+      const { getByTestId, getByText } = render()
         <Provider store={store}>
           <NavigationContainer>
             <App />
@@ -332,10 +332,10 @@ describe('索克生活 - 全面端到端测试', () => {
       console.log('✅ 中医四诊测试通过');
     });
     it('应该处理诊断数据采集失败的情况', async () => {
-      mockServices.fiveDiagnosisService.performLookingDiagnosis.mockRejectedValue(
+      mockServices.fiveDiagnosisService.performLookingDiagnosis.mockRejectedValue()
         new Error('图像采集失败')
       );
-      const { getByTestId, getByText } = render(
+      const { getByTestId, getByText } = render()
         <Provider store={store}>
           <NavigationContainer>
             <App />
@@ -356,7 +356,7 @@ describe('索克生活 - 全面端到端测试', () => {
   });
   describe('🔐 数据安全端到端测试', () => {
     it('应该完成健康数据的区块链存储和验证', async () => {
-      const { getByTestId, getByText } = render(
+      const { getByTestId, getByText } = render()
         <Provider store={store}>
           <NavigationContainer>
             <App />
@@ -393,7 +393,7 @@ describe('索克生活 - 全面端到端测试', () => {
       console.log('✅ 数据安全测试通过');
     });
     it('应该保护用户隐私数据', async () => {
-      const { getByTestId, getByText } = render(
+      const { getByTestId, getByText } = render()
         <Provider store={store}>
           <NavigationContainer>
             <App />
@@ -438,7 +438,7 @@ describe('索克生活 - 全面端到端测试', () => {
     it('应该处理网络异常情况', async () => {
       // 模拟网络断开
       mockServices.networkService.isConnected.mockReturnValue(false);
-      const { getByTestId, getByText } = render(
+      const { getByTestId, getByText } = render()
         <Provider store={store}>
           <NavigationContainer>
             <App />
@@ -459,7 +459,7 @@ describe('索克生活 - 全面端到端测试', () => {
       });
     });
     it('应该监控应用性能指标', async () => {
-      const { getByTestId } = render(
+      const { getByTestId } = render()
         <Provider store={store}>
           <NavigationContainer>
             <App />

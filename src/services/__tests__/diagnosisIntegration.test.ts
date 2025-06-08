@@ -18,10 +18,10 @@ describe('诊断服务集成测试', () => {
       faceImage: 'data:image/jpeg;base64,test',
         },
         inquiryData: {
-          symptoms: ["头痛",失眠'],
+          symptoms: ["头痛", "失眠'],
           medicalHistory: ['无'],
           lifestyle: {
-      sleep: "7小时",
+      sleep: "7小时", "
       exercise: '偶尔',
           },
         },

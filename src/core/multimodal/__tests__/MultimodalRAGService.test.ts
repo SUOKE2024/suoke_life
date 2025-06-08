@@ -1,4 +1,3 @@
-
 import MultimodalRAGService from '../MultimodalRAGService.ts';
 describe('MultimodalRAGService', () => {
   it('应该正确导出', () => {

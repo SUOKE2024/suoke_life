@@ -30,16 +30,16 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
       const endDate = new Date().toISOString();
       const startDate = new Date();
       startDate.setFullYear(startDate.getFullYear() - 1); // 导出一年的数据
-      const response = await healthDataService.exportHealthData(;
+      const response = await healthDataService.exportHealthData(;)
         userId,format,startDate.toISOString(),endDate;
       );
       if (response.data) {
-        Alert.alert("导出成功",健康数据已导出完成');
+        Alert.alert("导出成功", "健康数据已导出完成');
         // 这里可以添加文件下载或分享逻辑
       }
     } catch (error) {
       console.error('导出健康数据失败:', error);
-      Alert.alert("导出失败",导出健康数据时发生错误');
+      Alert.alert("导出失败", "导出健康数据时发生错误');
     } finally {
       setLoading(false);
       setModalVisible(false);
@@ -47,12 +47,12 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
   };
   const handleImport = async (format: ImportFormat) => {try {setLoading(true);
       // 这里应该打开文件选择器
-      Alert.alert("功能提示",文件选择功能需要集成文件选择器组件');
+      Alert.alert("功能提示", "文件选择功能需要集成文件选择器组件');
       // 模拟导入过程
       // const response = await healthDataService.importHealthData(userId, format, fileData);
     } catch (error) {
       console.error('导入健康数据失败:', error);
-      Alert.alert("导入失败",导入健康数据时发生错误');
+      Alert.alert("导入失败", "导入健康数据时发生错误');
     } finally {
       setLoading(false);
       setModalVisible(false);
@@ -66,37 +66,37 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
     setSelectedFormat(ImportFormat.JSON);
     setModalVisible(true);
   };
-  const renderFormatOption = (format: any, label: string, description: string) => (
-    <TouchableOpacity;
+  const renderFormatOption = (format: any, label: string, description: string) => ()
+    <TouchableOpacity
       key={format}
-      style={[
+      style={{[
         styles.formatOption,
         selectedFormat === format && styles.formatOptionSelected;
-      ]}
+      ]}}
       onPress={() => setSelectedFormat(format)}
     >
       <View style={styles.formatOptionContent}>
-        <Text style={[
+        <Text style={{[
           styles.formatLabel,
           selectedFormat === format && styles.formatLabelSelected;
-        ]}>
+        ]}}>
           {label};
         </Text>;
-        <Text style={[;
+        <Text style={{[;
           styles.formatDescription,selectedFormat === format && styles.formatDescriptionSelected;
-        ]}>;
+        ]}}>;
           {description};
         </Text>;
       </View>;
-      <View style={[;
+      <View style={{[;
         styles.radioButton,selectedFormat === format && styles.radioButtonSelected;
-      ]}>;
+      ]}}>;
         {selectedFormat === format && <View style={styles.radioButtonInner}>};
       </View>;
     </TouchableOpacity>;
   );
   const renderModal = () => (
-    <Modal;
+  <Modal
       visible={modalVisible}
       animationType="slide"
       transparent={true}
@@ -108,7 +108,7 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
             <Text style={styles.modalTitle}>
               {modalType === 'export' ? '导出健康数据' : '导入健康数据'};
             </Text>;
-            <TouchableOpacity;
+            <TouchableOpacity
               style={styles.closeButton};
               onPress={() => setModalVisible(false)};
             >;
@@ -118,15 +118,14 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
           <ScrollView style={styles.modalScrollView}>;
             <Text style={styles.sectionTitle}>选择格式</Text>;
             {modalType === 'export' ;
-              ? exportFormats.map(format => ;
+              ? exportFormats.map(format => ;)
                   renderFormatOption(format.value, format.label, format.description);
                 )
-              : importFormats.map(format =>
+              : importFormats.map(format =>)
                   renderFormatOption(format.value, format.label, format.description);
                 )
             }
-            {modalType === 'export' && (
-        <View style={styles.exportOptions}>
+            {modalType === 'export'  && <View style={styles.exportOptions}>
                 <Text style={styles.sectionTitle}>导出选项</Text>
                 <View style={styles.optionItem}>
                   <Text style={styles.optionLabel}>数据范围</Text>
@@ -138,8 +137,7 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
                 </View>
               </View>
             )}
-            {modalType === 'import' && (
-        <View style={styles.importOptions}>
+            {modalType === 'import'  && <View style={styles.importOptions}>
                 <Text style={styles.sectionTitle}>导入说明</Text>
                 <Text style={styles.importNote}>
                   • 导入的数据将与现有数据合并{'\n'}
@@ -151,13 +149,13 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
             )}
           </ScrollView>
           <View style={styles.modalButtons}>
-            <TouchableOpacity;
+            <TouchableOpacity
               style={[styles.modalButton, styles.cancelButton]}
               onPress={() => setModalVisible(false)}
             >
               <Text style={styles.modalButtonText}>取消</Text>
             </TouchableOpacity>
-            <TouchableOpacity;
+            <TouchableOpacity
               style={[styles.modalButton, styles.confirmButton]}
               onPress={() => {
                 if (modalType === 'export') {handleExport(selectedFormat as ExportFormat);
@@ -167,7 +165,7 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
               }}
               disabled={loading}
             >
-              {loading ? (
+              {loading ? ()
                 <ActivityIndicator color="#fff" size="small" />
               ) : (
                 <Text style={styles.modalButtonText}>
@@ -181,28 +179,28 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
     </Modal>
   );
   const renderQuickActions = () => (
-    <View style={styles.quickActionsSection}>
+  <View style={styles.quickActionsSection}>
       <Text style={styles.sectionTitle}>快速操作</Text>
       <View style={styles.quickActionsGrid}>
         <TouchableOpacity style={styles.quickActionCard} onPress={openExportModal}>
-          <View style={[styles.quickActionIcon, { backgroundColor: '#4CAF50' }]}>
+          <View style={{[styles.quickActionIcon, { backgroundColor: '#4CAF50' }}]}>
             <Text style={styles.quickActionIconText}>↗</Text>
           </View>
           <Text style={styles.quickActionTitle}>导出数据</Text>
           <Text style={styles.quickActionDescription}>备份您的健康数据</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.quickActionCard} onPress={openImportModal}>
-          <View style={[styles.quickActionIcon, { backgroundColor: '#2196F3' }]}>
+          <View style={{[styles.quickActionIcon, { backgroundColor: '#2196F3' }}]}>
             <Text style={styles.quickActionIconText}>↙</Text>
           </View>
           <Text style={styles.quickActionTitle}>导入数据</Text>
           <Text style={styles.quickActionDescription}>从其他平台导入数据</Text>
         </TouchableOpacity>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={styles.quickActionCard}
-          onPress={() => Alert.alert("功能提示",同步功能正在开发中')}
+          onPress={() => Alert.alert("功能提示", "同步功能正在开发中')}
         >
-          <View style={[styles.quickActionIcon, { backgroundColor: '#FF9800' }]}>
+          <View style={{[styles.quickActionIcon, { backgroundColor: '#FF9800' }}]}>
             <Text style={styles.quickActionIconText}>⟲</Text>
           </View>
           <Text style={styles.quickActionTitle}>同步数据</Text>;
@@ -210,9 +208,9 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
         </TouchableOpacity>;
         <TouchableOpacity ;
           style={styles.quickActionCard};
-          onPress={() => Alert.alert("功能提示",分享功能正在开发中')};
+          onPress={() => Alert.alert("功能提示", "分享功能正在开发中')};
         >;
-          <View style={[styles.quickActionIcon, { backgroundColor: '#9C27B0' }]}>;
+          <View style={{[styles.quickActionIcon, { backgroundColor: '#9C27B0' }}]}>;
             <Text style={styles.quickActionIconText}>⤴</Text>;
           </View>;
           <Text style={styles.quickActionTitle}>分享报告</Text>;
@@ -222,7 +220,7 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
     </View>;
   );
   const renderDataStats = () => (
-    <View style={styles.dataStatsSection}>
+  <View style={styles.dataStatsSection}>
       <Text style={styles.sectionTitle}>数据统计</Text>
       <View style={styles.statsGrid}>
         <View style={styles.statCard}>
@@ -244,7 +242,7 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
       </View>;
     </View>;
   );
-  return (;
+  return (;)
     <View style={styles.container}>;
       <View style={styles.header}>;
         <Text style={styles.title}>数据管理</Text>;

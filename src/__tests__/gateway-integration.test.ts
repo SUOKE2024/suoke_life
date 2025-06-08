@@ -50,7 +50,7 @@ describe('网关集成测试', () => {
       };
       (fetch as jest.Mock).mockResolvedValue(mockResponse);
       const result = await apiClient.get("AUTH",/profile');
-      expect(fetch).toHaveBeenCalledWith(
+      expect(fetch).toHaveBeenCalledWith()
         expect.stringContaining('/api/v1/gateway/auth-service/profile'),
         expect.objectContaining({
       method: "GET",
@@ -77,7 +77,7 @@ describe('网关集成测试', () => {
       name: "test",
       value: 'data' };
       const result = await apiClient.post("USER",/profile', testData);
-      expect(fetch).toHaveBeenCalledWith(
+      expect(fetch).toHaveBeenCalledWith()
         expect.stringContaining('/api/v1/gateway/user-service/profile'),
         expect.objectContaining({
       method: "POST",
@@ -214,7 +214,7 @@ describe('网关集成测试', () => {
         }),
       };
       (fetch as jest.Mock).mockResolvedValue(mockResponse);
-      const result = await integratedApiService.agents.chat("你好",xiaoai');
+      const result = await integratedApiService.agents.chat("你好", "xiaoai');
       expect(result.success).toBe(true);
       expect(result.data).toHaveProperty('response');
       expect(result.data).toHaveProperty('agent');
@@ -228,7 +228,7 @@ describe('网关集成测试', () => {
           data: {
       diagnosis: "面色红润，精神饱满",
       confidence: 0.85,
-            recommendations: ["保持良好作息",适量运动'],
+            recommendations: ["保持良好作息", "适量运动'],
           },
         }),
       };
@@ -247,7 +247,7 @@ describe('网关集成测试', () => {
         json: jest.fn().mockResolvedValue({
           data: {
       answer: "根据中医理论，您的症状可能与肝气郁结有关...",
-      sources: ["中医基础理论",方剂学'],
+      sources: ["中医基础理论", "方剂学'],
             confidence: 0.92,
           },
         }),
@@ -368,8 +368,8 @@ describe('网关集成测试', () => {
         .rejects.toThrow('Network error');
     });
     test('应该正确处理超时错误', async () => {
-      (fetch as jest.Mock).mockImplementation(() =>
-        new Promise((_, reject) =>
+      (fetch as jest.Mock).mockImplementation(() =>)
+        new Promise((_, reject) =>)
           setTimeout(() => reject(new Error('Timeout')), 100),
         ),
       );

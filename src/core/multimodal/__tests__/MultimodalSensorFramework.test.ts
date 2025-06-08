@@ -1,4 +1,3 @@
-
 import MultimodalSensorFramework from '../MultimodalSensorFramework.ts';
 describe('MultimodalSensorFramework', () => {
   it('应该正确导出', () => {

@@ -1,4 +1,5 @@
 import { jest } from '@jest/globals';
+
 import cornMazeService from '../cornMazeService.ts';
 // Mock dependencies
 jest.mock('../api/apiClient');

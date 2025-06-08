@@ -401,7 +401,7 @@ export class MultimodalEncoder extends EventEmitter {
     this.createEncoders();
   }
   private initializeDefaultConfigs(): void {
-    this.encoderConfigs = new Map([
+    this.encoderConfigs = new Map([)
       [
         ModalityType.TEXT,
         {
@@ -442,7 +442,7 @@ export class MultimodalEncoder extends EventEmitter {
   */
   async initialize(): Promise<void> {
     try {
-      await Promise.all([
+      await Promise.all([)
         this.textEncoder.initialize(),
         this.tongueEncoder.initialize(),
         this.pulseEncoder.initialize();
@@ -456,7 +456,7 @@ export class MultimodalEncoder extends EventEmitter {
   /**
   * 编码单个模态数据
   */
-  async encodeModality(
+  async encodeModality()
     data: any,
     modality: ModalityType,
     metadata: Record<string, any> = {}
@@ -496,7 +496,7 @@ export class MultimodalEncoder extends EventEmitter {
   /**
   * 批量编码多模态数据
   */
-  async encodeMultimodal(
+  async encodeMultimodal()
     inputs: Array<{,
   data: any;
       modality: ModalityType;
@@ -504,7 +504,7 @@ export class MultimodalEncoder extends EventEmitter {
     }>
   ): Promise<Embedding[]> {
     try {
-      const encodingPromises = inputs.map(input =>;
+      const encodingPromises = inputs.map(input =>;)
         this.encodeModality(input.data, input.modality, input.metadata);
       );
       const embeddings = await Promise.all(encodingPromises);
@@ -537,7 +537,7 @@ export class MultimodalEncoder extends EventEmitter {
   */
   async cleanup(): Promise<void> {
     try {
-      await Promise.all([
+      await Promise.all([)
         this.textEncoder.cleanup(),
         this.tongueEncoder.cleanup(),
         this.pulseEncoder.cleanup();

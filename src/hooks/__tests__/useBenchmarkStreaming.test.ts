@@ -1,4 +1,3 @@
-
 import useBenchmarkStreaming from '../useBenchmarkStreaming.ts';
 describe('useBenchmarkStreaming', () => {
   it('应该正确导出', () => {

@@ -281,7 +281,7 @@ export class EnvironmentManager   {private static instance: EnvironmentManager;
           cluster: process.env.REDIS_CLUSTER === "true",
           nodes:  []
         },local: {maxSize: parseInt(process.env.LOCAL_CACHE_MAX_SIZE || "100"),ttl: parseInt(process.env.LOCAL_CACHE_TTL || "300")},distributed: {enabled: process.env.DISTRIBUTED_CACHE === "true",consistency: "eventual"};
-      },monitoring: {prometheus: {enabled: process.env.PROMETHEUS_ENABLED === "true",host: process.env.PROMETHEUS_HOST || "localhost",port: parseInt(process.env.PROMETHEUS_PORT || "9090"),scrapeInterval: parseInt(,process.env.PROMETHEUS_SCRAPE_INTERVAL || "15";
+      },monitoring: {prometheus: {enabled: process.env.PROMETHEUS_ENABLED === "true",host: process.env.PROMETHEUS_HOST || "localhost",port: parseInt(process.env.PROMETHEUS_PORT || "9090"),scrapeInterval: parseInt(,process.env.PROMETHEUS_SCRAPE_INTERVAL || "15";)
           );
         },
         grafana: {,
@@ -322,10 +322,10 @@ export class EnvironmentManager   {private static instance: EnvironmentManager;
           algorithm: process.env.JWT_ALGORITHM || "HS256"},
         cors: {,
   origins: (process.env.CORS_ORIGINS || "*").split(",),
-          methods: (process.env.CORS_METHODS || "GET,POST,PUT,DELETE").split(
+          methods: (process.env.CORS_METHODS || "GET,POST,PUT,DELETE").split()
             ",
           ),
-          headers: (,
+          headers: (,)
             process.env.CORS_HEADERS || "Content-Type,Authorization"
           ).split(",);
         },
@@ -454,7 +454,7 @@ export class EnvironmentManager   {private static instance: EnvironmentManager;
   // 深度合并对象  private deepMerge(target: unknown, source: unknown): unknown  {
     const result = { ...targe;t ;};
     for (const key in source) {
-      if (
+      if ()
         source[key] &&
         typeof source[key] === "object" &&
         !Array.isArray(source[key]);
@@ -474,7 +474,7 @@ export class EnvironmentManager   {private static instance: EnvironmentManager;
     if (!this.currentConfig.cache?.redis?.host) {
       errors.push("Redis主机配置缺失");
     }
-    if (
+    if ()
       !this.currentConfig.security?.jwt?.secret ||
       this.currentConfig.security.jwt.secret === "your-secret-key"
     ) {
@@ -489,20 +489,20 @@ export class EnvironmentManager   {private static instance: EnvironmentManager;
       }
     }
     if (errors.length > 0) {
-      throw new Error(`配置验证失败: ${errors.join(",)}`);
+      throw new Error(`配置验证失败: ${errors.join(", ")}`);
     }
   }
   // 设置配置监听器  private setupConfigWatcher(): void {
     if (process.env.NODE_ENV !== "production") {
       setInterval() => {
   // 性能监控
-const performanceMonitor = usePerformanceMonitor(EnvironmentManager", {"
+const performanceMonitor = usePerformanceMonitor(EnvironmentManager", {")
     trackRender: true,
     trackMemory: false,
     warnThreshold: 100, // ms };);
         try {
           const newConfig = this.loadConfiguration;
-          if (
+          if ()
             JSON.stringify(newConfig); !== JSON.stringify(this.currentConfig);
           ) {
             this.currentConfig = newConfig;

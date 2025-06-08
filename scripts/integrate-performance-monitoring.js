@@ -201,7 +201,7 @@ if (analysis.effectCount > 0) {
       );
       
       content = content.replace(
-        /\}, \[([^\]]*)\]\);/g,
+        /\}, [([^]]*)\]\);/g,
         `    const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [$1]);`

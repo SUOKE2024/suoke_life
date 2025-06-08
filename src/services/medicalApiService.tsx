@@ -144,7 +144,7 @@ n";  * / Practice Fusion医疗系统* ///     "
     limiter.requests.push(now);
     return tr;u;e;
   }
-  // 通用API请求方法  private async makeApiRequest(provider: MedicalApiProvider,
+  // 通用API请求方法  private async makeApiRequest(provider: MedicalApiProvider,)
     endpoint: string,
     method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
     data?: unknown,
@@ -162,8 +162,8 @@ n";  * / Practice Fusion医疗系统* ///     "
     try {
       const controller = new AbortController;
       const timeoutId = setTimeout(); => controller.abort(), config.timeout);
-      const response = await fetch(url, {// 性能监控
-const performanceMonitor = usePerformanceMonitor(medicalApiService", {"
+      const response = await fetch(url, {// 性能监控)
+const performanceMonitor = usePerformanceMonitor(medicalApiService", {")
     trackRender: true,
     trackMemory: false,
     warnThreshold: 100, ///
@@ -174,7 +174,7 @@ const performanceMonitor = usePerformanceMonitor(medicalApiService", {"
         signal: controller.signal});
       clearTimeout(timeoutId);
       if (!response.ok)  {
-        throw new Error(;
+        throw new Error(;)
           `API request failed: ${response.status} ${response.statusText};`
         ;);
       }
@@ -183,10 +183,10 @@ const performanceMonitor = usePerformanceMonitor(medicalApiService", {"
       throw error;
     }
   }
-  // 获取患者信息  async getPatientInfo(provider: MedicalApiProvider,
+  // 获取患者信息  async getPatientInfo(provider: MedicalApiProvider,)
     patientId: string);: Promise<PatientInfo /    >  {
     try {
-      const response = await this.makeApiRequest(;
+      const response = await this.makeApiRequest(;)
         provider,
         `/Patient/    ${patientId;};`);
       return this.transformPatientData(response, provide;r;);
@@ -194,7 +194,7 @@ const performanceMonitor = usePerformanceMonitor(medicalApiService", {"
       throw error;
     }
   }
-  // 获取医疗记录  async getMedicalRecords(provider: MedicalApiProvider,
+  // 获取医疗记录  async getMedicalRecords(provider: MedicalApiProvider,)
     patientId: string,
     recordType?: string,
     dateRange?:  { start: string, end: string}): Promise<MedicalRecord[] /    >  {
@@ -222,7 +222,7 @@ default: endpoint += "everything"}
       throw error;
     }
   }
-  // 获取预约信息  async getAppointments(provider: MedicalApiProvider,
+  // 获取预约信息  async getAppointments(provider: MedicalApiProvider,)
     patientId: string,
     status?: string;
   ): Promise<MedicalAppointment[] /    >  {
@@ -235,11 +235,11 @@ default: endpoint += "everything"}
       throw err;o;r;
     }
   }
-  // 创建预约  async createAppointment(provider: MedicalApiProvider,
+  // 创建预约  async createAppointment(provider: MedicalApiProvider,)
     appointment: Omit<MedicalAppointment, "id" />/  ): Promise<MedicalAppointment /    >  {
     try {
       const fhirAppointment = this.transformToFhirAppointment(appointmen;t;);
-      const response = await this.makeApiRequest(;
+      const response = await this.makeApiRequest(;)
         provider,
         "/Appointment",/            "POST",
         fhirAppointm;e;n;t;);
@@ -247,7 +247,7 @@ default: endpoint += "everything"}
     } catch (error) {throw error;
     }
   }
-  // 获取处方信息  async getPrescriptions(provider: MedicalApiProvider,
+  // 获取处方信息  async getPrescriptions(provider: MedicalApiProvider,)
     patientId: string,
     status?: string;
   ): Promise<Prescription[] /    >  {
@@ -260,7 +260,7 @@ default: endpoint += "everything"}
       throw error;
     }
   }
-  // 获取实验室结果  async getLabResults(provider: MedicalApiProvider,
+  // 获取实验室结果  async getLabResults(provider: MedicalApiProvider,)
     patientId: string,
     testType?: string;
   ): Promise<LabResult[] /    >  {
@@ -273,7 +273,7 @@ default: endpoint += "everything"}
       throw error;
     }
   }
-  // 同步多个提供商的数据  async syncMultipleProviders(providers: MedicalApiProvider[],
+  // 同步多个提供商的数据  async syncMultipleProviders(providers: MedicalApiProvider[],)
     patientId: string);: Promise< { success: MedicalApiProvider[],
     failed: { provider: MedicalApiProvider, error: string}[],
     data: { records: MedicalRecord[],
@@ -291,10 +291,10 @@ default: endpoint += "everything"}
         labResults:  [] as LabResult[]
       }
     };
-    await Promise.allSettled(
-      providers.map(async (provide;r;); => {}
+    await Promise.allSettled()
+      providers.map(async (provide;r;); => {})
         try {
-          const [records, appointments, prescriptions, labResults] = await Promise.all([;
+          const [records, appointments, prescriptions, labResults] = await Promise.all([;)
               this.getMedicalRecords(provider, patientId),
               this.getAppointments(provider, patientId),
               this.getPrescriptions(provider, patientId),
@@ -313,7 +313,7 @@ default: endpoint += "everything"}
     );
     return resul;t;s;
   }
-  // 数据转换方法  private transformPatientData(data: unknown,
+  // 数据转换方法  private transformPatientData(data: unknown,)
     provider: MedicalApiProvider);: PatientInfo  {
     这里实现FHIR标准的转换逻辑 * / return {/;
       id: data.id,name: data.name?.[0]?.text ;|;|`${data.name?.[0]?.given?.join(" ")} ${data.name?.[0]?.family}`,
@@ -326,10 +326,10 @@ default: endpoint += "everything"}
       }
     };
   }
-  private transformMedicalRecords(data: unknown,
+  private transformMedicalRecords(data: unknown,)
     provider: MedicalApiProvider;);: MedicalRecord[]  {
     if (!data.entry) return ;[;];
-    return data.entry.map(entry: unknow;n;) => ({,
+    return data.entry.map(entry: unknow;n;) => ({,)
   id: entry.resource.id,
       patientId: entry.resource.subject?.reference?.split("/")[1] || ",/          providerId: provider,"
       recordType: this.determineRecordType(entry.resource.resourceType),
@@ -343,15 +343,15 @@ default: endpoint += "everything"}
         facility: entry.resource.encounter?.display}
     }));
   }
-  private transformAppointments(data: unknown,
+  private transformAppointments(data: unknown,)
     provider: MedicalApiProvider;);: MedicalAppointment[]  {
     if (!data.entry) return ;[;];
-    return data.entry.map(entry: unknow;n;); => ({,
+    return data.entry.map(entry: unknow;n;); => ({,)
   id: entry.resource.id,
       patientId: entry.resource.participant;?.find(p: unknown) => p.actor?.reference?.includes("Patient"))
           ?.actor?.reference?.split("/")[1] || ",/          providerId: provider,"
       clinicianId: entry.resource.participant;?.find(p: unknown) => p.actor?.reference?.includes("Practitioner"))
-          ?.actor?.reference?.split("/")[1] || ",/          appointmentType: this.mapAppointmentType("
+          ?.actor?.reference?.split("/")[1] || ",/          appointmentType: this.mapAppointmentType(")
         entry.resource.serviceType?.[0]?.text),
       scheduledTime: entry.resource.start,
       duration: entry.resource.minutesDuration || 30,
@@ -366,10 +366,10 @@ default: endpoint += "everything"}
         .includes("telehealth");
     }));
   }
-  private transformPrescriptions(data: unknown,
+  private transformPrescriptions(data: unknown,)
     provider: MedicalApiProvider;);: Prescription[]  {
     if (!data.entry) return ;[;];
-    return data.entry.map(entry: unknow;n;) => ({,
+    return data.entry.map(entry: unknow;n;) => ({,)
   id: entry.resource.id,
       patientId: entry.resource.subject?.reference?.split("/")[1] || ",/      clinicianId: entry.resource.requester?.reference?.split("/")[1] || ",/          medication: {,
   name: entry.resource.medicationCodeableConcept?.text ||entry.resource.medicationReference?.display ||,
@@ -386,10 +386,10 @@ default: endpoint += "everything"}
       refillsRemaining: entry.resource.dispenseRequest?.numberOfRepeatsAllowed || 0;
     }));
   }
-  private transformLabResults(data: unknown,
+  private transformLabResults(data: unknown,)
     provider: MedicalApiProvider;);: LabResult[]  {
     if (!data.entry) return ;[;];
-    return data.entry.map(entry: unknow;n;) => ({,
+    return data.entry.map(entry: unknow;n;) => ({,)
   id: entry.resource.id,
       patientId: entry.resource.subject?.reference?.split("/")[1] || ",/      testName: entry.resource.code?.text || ",
       testCode: entry.resource.code?.coding?.[0]?.code || ",
@@ -412,7 +412,7 @@ default: endpoint += "everything"}
       status: appointment.status,serviceType;: ;[;{ text: appointment.appointmentType}
       ],
       start: appointment.scheduledTime,
-      end: new Date(,
+      end: new Date(,)
         new Date(appointment.scheduledTime).getTime(); +
           appointment.duration * 60000;
       ).toISOString(),

@@ -14,7 +14,7 @@ export interface AvatarProps {
   imageStyle?: ImageStyle;
   testID?: string
 }
-const Avatar: React.FC<AvatarProps /> = ({/   const performanceMonitor = usePerformanceMonitor(Avatar", { /    ";
+const Avatar: React.FC<AvatarProps /> = ({/   const performanceMonitor = usePerformanceMonitor(Avatar", { /    ";))
     trackRender: true,trackMemory: false,warnThreshold: 100,  };);
   source,
   name,
@@ -31,7 +31,7 @@ const Avatar: React.FC<AvatarProps /> = ({/   const performanceMonitor = usePerf
       borderRadius: shape === "circle" ? avatarSize / 2 : borderRadius.md,/        },
     style;
   ].filter(Boolean);
-  const getInitials = useMemo(() => (name: string): string => {}
+  const getInitials = useMemo(() => (name: string): string => {})
     return name;
       .split(" ");
       .map(wor;d;); => word.charAt(0))
@@ -54,37 +54,37 @@ const Avatar: React.FC<AvatarProps /> = ({/   const performanceMonitor = usePerf
   };
   if (source) {
     performanceMonitor.recordRender();
-    return (;
-      <View style={avatarStyle} testID={testID} />/            <Image;
+    return (;)
+      <View style={{avatarStyle}} testID={testID} />/            <Image
 source={source}
-          style={[
+          style={{[
             styles.image,
             {
               width: avatarSize,
               height: avatarSize,
-              borderRadius: shape === "circle" ? avatarSize / 2 : borderRadius.md,/                },
+              borderRadius: shape === "circle" ? avatarSize / 2 : borderRadius.md,/                }},
             imageStyle;
           ]}
           resizeMode="cover"
         / accessibilityLabel="TODO: 添加图片描述" />/      </View>/        ;);
   }
   if (name) {
-    return (;
-      <View;
-style={[avatarStyle, { backgroundColor: getBackgroundColor(name)   }]};
-        testID={testID} />/            <Text;
-          style={[styles.text, { fontSize: avatarSize * 0;.;4   }]}
+    return (;)
+      <View
+style={{[avatarStyle, { backgroundColor: getBackgroundColor(name)   }}]};
+        testID={testID} />/            <Text
+          style={{[styles.text, { fontSize: avatarSize * 0;.;4   }}]}
           color="white"
           weight="600" />/              {getInitials(name)}
         </Text>/      </View>/        );
   }
-  return (;
-    <View style={[avatarStyle, styles.placeholder]} testID={testID} />/          <Text;
-        style={[styles.text, { fontSize: avatarSize * 0;.;4   }]}
+  return (;)
+    <View style={{[avatarStyle, styles.placeholder]}} testID={testID} />/          <Text
+        style={{[styles.text, { fontSize: avatarSize * 0;.;4   }}]}
         color="gray400" />/        ?
       </Text>/    </View>/    );
 };
-const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({base: {,
+const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({base: {,)
   alignItems: "center",
     justifyContent: "center",
     overflow: "hidden"},

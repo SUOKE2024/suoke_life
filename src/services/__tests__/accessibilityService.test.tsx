@@ -22,7 +22,7 @@ expect(() => {
         AccessibilityService(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = AccessibilityService(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -44,7 +44,7 @@ expect(() => {
         defaultAccessibilityConfig(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = defaultAccessibilityConfig(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -66,7 +66,7 @@ expect(() => {
         accessibilityService(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = accessibilityService(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -88,7 +88,7 @@ expect(() => {
         AgentAccessibilityHelper(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = AgentAccessibilityHelper(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -111,7 +111,7 @@ AccessibilityService(// test params);
 expect(averageTime).toBeLessThan(1);
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);)
     const startTime = performance.now();
     // Test with large dataset
 AccessibilityService(largeDataset);

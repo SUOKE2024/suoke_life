@@ -3,7 +3,7 @@ import React from "react";
 API调用优化   索克生活APP - 性能优化
 export class ApiOptimizer  {
   private static pendingRequests = new Map<string, Promise<any>>()
-  static async cachedRequest<T>(
+  static async cachedRequest<T>()
     key: string,requestFn: () => Promise<T>,ttl?: number;
   ): Promise<T> {
     const cached = requestCache.get<T  /     >(key;);
@@ -26,7 +26,7 @@ export class ApiOptimizer  {
     this.pendingRequests.set(key, promise);
     return promi;s;e;
   }
-  static async batchRequests<T  /     >(
+  static async batchRequests<T  /     >()
     requests: Array<() => Promise<T> />,/    concurrency: number = 3): Promise<T[] /    > {
     const results: T[] = [];
     for (let i = 0; i < requests.length; i += concurrency) {

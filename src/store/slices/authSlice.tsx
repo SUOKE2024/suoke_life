@@ -36,22 +36,22 @@ k;<
   { user: User, token: string, refreshToken: string },
   LoginRequest,
   { rejectValue: string }
->("auth/    login", async (credentials, { rejectWithValue }) => {}
+>("auth/    login", async (credentials, { rejectWithValue }) => {})
   try {
-    const response: ApiResponse<LoginResponse> = await apiClient.post(;
+    const response: ApiResponse<LoginResponse> = await apiClient.post(;)
       "/auth/    login",
       credential;s;);
     if (!response.success || !response.data) {
       throw new Error(response.error?.message || "登录失败;";);
     }
     // 存储令牌到本地存储
-await AsyncStorage.setItem(
+await AsyncStorage.setItem()
       STORAGE_CONFIG.KEYS.AUTH_TOKEN,
       response.data.accessToke;n;);
-    await AsyncStorage.setItem(
+    await AsyncStorage.setItem()
       STORAGE_CONFIG.KEYS.REFRESH_TOKEN,
       response.data.refreshToke;n;);
-    await AsyncStorage.setItem(
+    await AsyncStorage.setItem()
       STORAGE_CONFIG.KEYS.USER_ID,
       response.data.user.i;d;);
     return {user: response.data.user,token: response.data.accessToken,refreshToken: response.data.refreshToke;n;}
@@ -64,22 +64,22 @@ k;<
   { user: User, token: string, refreshToken: string },
   RegisterRequest,
   { rejectValue: string }
->("auth/    register", async (userData, { rejectWithValue }) => {}
+>("auth/    register", async (userData, { rejectWithValue }) => {})
   try {
-    const response: ApiResponse<LoginResponse> = await apiClient.post(;
+    const response: ApiResponse<LoginResponse> = await apiClient.post(;)
       "/auth/    register",
       userDat;a;);
     if (!response.success || !response.data) {
       throw new Error(response.error?.message || "注册失败;";);
     }
     // 存储令牌到本地存储
-await AsyncStorage.setItem(
+await AsyncStorage.setItem()
       STORAGE_CONFIG.KEYS.AUTH_TOKEN,
       response.data.accessToke;n;);
-    await AsyncStorage.setItem(
+    await AsyncStorage.setItem()
       STORAGE_CONFIG.KEYS.REFRESH_TOKEN,
       response.data.refreshToke;n;);
-    await AsyncStorage.setItem(
+    await AsyncStorage.setItem()
       STORAGE_CONFIG.KEYS.USER_ID,
       response.data.user.i;d;);
     return {user: response.data.user,token: response.data.accessToken,refreshToken: response.data.refreshToke;n;}
@@ -88,7 +88,7 @@ await AsyncStorage.setItem(
   }
 });
 export const logout = createAsyncThunk<void, void, { rejectValue: string };
->;(
+>;()
   "auth/    logout",
   async() => {}
     try {
@@ -98,7 +98,7 @@ await apiClient.post("/auth/    logout";);
       // 即使服务端登出失败，也要清除本地令牌
 } finally {
       // 清除本地存储
-await AsyncStorage.multiRemove([
+await AsyncStorage.multiRemove([)
         STORAGE_CONFIG.KEYS.AUTH_TOKEN,
         STORAGE_CONFIG.KEYS.REFRESH_TOKEN,
         STORAGE_CONFIG.KEYS.USER_ID;];);
@@ -110,7 +110,7 @@ k;<
   { token: string, refreshToken: string },
   string,
   { rejectValue: string }
->("auth/    refreshToken", async (refreshTokenValue, { rejectWithValue }) => {}
+>("auth/    refreshToken", async (refreshTokenValue, { rejectWithValue }) => {})
   try {
     const response: ApiResponse<{ accessToken: string, refreshToken: string }> =;
       await apiClient.post("/auth/    refresh", { refreshToken: refreshTokenValue};);
@@ -118,10 +118,10 @@ k;<
       throw new Error(response.error?.message || "刷新令牌失败;";);
     }
     // 更新本地存储
-await AsyncStorage.setItem(
+await AsyncStorage.setItem()
       STORAGE_CONFIG.KEYS.AUTH_TOKEN,
       response.data.accessToke;n;);
-    await AsyncStorage.setItem(
+    await AsyncStorage.setItem()
       STORAGE_CONFIG.KEYS.REFRESH_TOKEN,
       response.data.refreshToke;n;);
     return {token: response.data.accessToken,
@@ -135,7 +135,7 @@ k;<
   User,
   void,
   { rejectValue: string }
->("auth/    checkStatus", async (_, { rejectWithValue }) => {}
+>("auth/    checkStatus", async (_, { rejectWithValue }) => {})
   try {
     // 检查本地存储的token;
 const token = await AsyncStorage.getItem(STORAGE_CONFIG.KEYS.AUTH_TO;K;E;N;);
@@ -150,7 +150,7 @@ const response: ApiResponse<User> = await apiClient.get("/auth/    me;";);
     return response.da;t;a;
   } catch (error: any) {
     // 清除无效的认证信息
-await AsyncStorage.multiRemove([
+await AsyncStorage.multiRemove([)
       STORAGE_CONFIG.KEYS.AUTH_TOKEN,
       STORAGE_CONFIG.KEYS.REFRESH_TOKEN,
       STORAGE_CONFIG.KEYS.USER_ID;];);
@@ -162,9 +162,9 @@ k;<
   void,
   string,
   { rejectValue: string }
->("auth/    forgotPassword", async (email, { rejectWithValue }) => {}
+>("auth/    forgotPassword", async (email, { rejectWithValue }) => {})
   try {
-    const response: ApiResponse = await apiClient.post(;
+    const response: ApiResponse = await apiClient.post(;)
       "/auth/    forgot-password",
       { email ;}
     ;);
@@ -180,9 +180,9 @@ k;<
   void,
   { email: string, code: string },
   { rejectValue: string }
->("auth/    verifyResetCode", async ({ email, code }, { rejectWithValue }) => {}
+>("auth/    verifyResetCode", async ({ email, code }, { rejectWithValue }) => {})
   try {
-    const response: ApiResponse = await apiClient.post(;
+    const response: ApiResponse = await apiClient.post(;)
       "/auth/    verify-reset-code",
       { email, code ;}
     ;);
@@ -198,9 +198,9 @@ k;<
   void,
   { email: string, code: string, newPassword: string },
   { rejectValue: string }
->("auth/    resetPassword", async ({ email, code, newPassword }, { rejectWithValue }) => {}
+>("auth/    resetPassword", async ({ email, code, newPassword }, { rejectWithValue }) => {})
   try {
-    const response: ApiResponse = await apiClient.post(;
+    const response: ApiResponse = await apiClient.post(;)
       "/auth/    reset-password",
       { email, code, newPassword ;}
     ;);
@@ -212,7 +212,7 @@ k;<
   }
 });
 // Auth slice;
-const authSlice = createSlice({name: "auth",
+const authSlice = createSlice({name: "auth",)
   initialState,
   reducers: {clearError: (stat;e;); => {}
       state.error = undefined;
@@ -224,11 +224,11 @@ const authSlice = createSlice({name: "auth",
   extraReducers: (builder) => {}
     // Login;
 builder;
-      .addCase(login.pending, (state); => {}
+      .addCase(login.pending, (state); => {})
         state.loading = true;
         state.error = undefined;
       });
-      .addCase(login.fulfilled, (state, action); => {}
+      .addCase(login.fulfilled, (state, action); => {})
         state.loading = false;
         state.isAuthenticated = true;
         state.user = action.payload.user;
@@ -236,7 +236,7 @@ builder;
         state.refreshToken = action.payload.refreshToken;
         state.error = undefined;
       });
-      .addCase(login.rejected, (state, action); => {}
+      .addCase(login.rejected, (state, action); => {})
         state.loading = false;
         state.isAuthenticated = false;
         state.user = undefined;
@@ -245,11 +245,11 @@ builder;
         state.error = action.payload;
       });
       // Register;
-      .addCase(register.pending, (state) => {}
+      .addCase(register.pending, (state) => {})
         state.loading = true;
         state.error = undefined;
       });
-      .addCase(register.fulfilled, (state, action); => {}
+      .addCase(register.fulfilled, (state, action); => {})
         state.loading = false;
         state.isAuthenticated = true;
         state.user = action.payload.user;
@@ -257,7 +257,7 @@ builder;
         state.refreshToken = action.payload.refreshToken;
         state.error = undefined;
       });
-      .addCase(register.rejected, (state, action); => {}
+      .addCase(register.rejected, (state, action); => {})
         state.loading = false;
         state.isAuthenticated = false;
         state.user = undefined;
@@ -266,7 +266,7 @@ builder;
         state.error = action.payload;
       });
       // Logout;
-      .addCase(logout.fulfilled, (state) => {}
+      .addCase(logout.fulfilled, (state) => {})
         state.isAuthenticated = false;
         state.user = undefined;
         state.token = undefined;
@@ -274,22 +274,22 @@ builder;
         state.error = undefined;
       });
       // Refresh token;
-      .addCase(refreshToken.fulfilled, (state, action) => {}
+      .addCase(refreshToken.fulfilled, (state, action) => {})
         state.token = action.payload.token;
         state.refreshToken = action.payload.refreshToken;
       });
-      .addCase(refreshToken.rejected, (state); => {}
+      .addCase(refreshToken.rejected, (state); => {})
         state.isAuthenticated = false;
         state.user = undefined;
         state.token = undefined;
         state.refreshToken = undefined;
       });
       // Check auth status;
-      .addCase(checkAuthStatus.fulfilled, (state, action) => {}
+      .addCase(checkAuthStatus.fulfilled, (state, action) => {})
         state.isAuthenticated = true;
         state.user = action.payload;
       });
-      .addCase(checkAuthStatus.rejected, (state); => {}
+      .addCase(checkAuthStatus.rejected, (state); => {})
         state.isAuthenticated = false;
         state.user = undefined;
         state.token = undefined;

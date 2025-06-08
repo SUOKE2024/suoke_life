@@ -135,8 +135,8 @@ export class TCMKnowledgeBase {
       category: 'substance',
       description: '人体生命活动的基本物质',
       properties: {,
-  types: ["元气",宗气', "营气",卫气'],
-        functions: ["推动",温煦', "防御",固摄', '气化']
+  types: ["元气", "宗气', "营气", "卫气'],
+        functions: ["推动", "温煦', "防御", "固摄', '气化']
       },
       relationships: [
         {
@@ -156,11 +156,11 @@ export class TCMKnowledgeBase {
       category: 'theory',
       description: '对立统一的哲学概念',
       properties: {,
-  yin: ["静",寒', "下",内', '暗'],
-        yang: ["动",热', "上",外', '明']
+  yin: ["静", "寒', "下", "内', '暗'],
+        yang: ["动", "热', "上", "外', '明']
       },
       relationships: [],
-      sources: ["易经",黄帝内经'],
+      sources: ["易经", "黄帝内经'],
       confidence: 1.0;
     })
 }
@@ -171,9 +171,9 @@ export class TCMKnowledgeBase {
       id: "red_tongue_yellow_coating",
       name: '舌红苔黄',
       category: 'tongue',
-      symptoms: ["口干",口苦', '烦躁'],
-      signs: ["舌质红",苔黄厚'],
-      syndromes: ["热证",实证'],
+      symptoms: ["口干", "口苦', '烦躁'],
+      signs: ["舌质红", "苔黄厚'],
+      syndromes: ["热证", "实证'],
       treatments: ['清热泻火'],
       confidence: 0.9;
     });
@@ -182,9 +182,9 @@ export class TCMKnowledgeBase {
       id: "pale_complexion",
       name: '面色苍白',
       category: 'face',
-      symptoms: ["乏力",气短', '心悸'],
-      signs: ["面色无华",唇色淡'],
-      syndromes: ["气血不足",阳虚'],
+      symptoms: ["乏力", "气短', '心悸'],
+      signs: ["面色无华", "唇色淡'],
+      syndromes: ["气血不足", "阳虚'],
       treatments: ['补气养血'],
       confidence: 0.8;
     })
@@ -196,9 +196,9 @@ export class TCMKnowledgeBase {
       name: '气虚证',
       category: 'deficiency',
       description: '脏腑功能衰退所表现的证候',
-      mainSymptoms: ["乏力",气短', "懒言",自汗'],
-      secondarySymptoms: ["面色萎黄",食欲不振', '大便溏薄'],
-      tongueFeatures: ["舌淡",苔白'],
+      mainSymptoms: ["乏力", "气短', "懒言", "自汗'],
+      secondarySymptoms: ["面色萎黄", "食欲不振', '大便溏薄'],
+      tongueFeatures: ["舌淡", "苔白'],
       pulseFeatures: ['脉弱'],
       treatments: [
         {
@@ -221,14 +221,14 @@ export class TCMKnowledgeBase {
       name: '平和质',
       description: '阴阳气血调和的体质状态',
       characteristics: {,
-  physical: ["体形匀称",面色红润', '精力充沛'],
-        psychological: ["性格开朗",情绪稳定', '适应力强'],
-        pathological: ["不易生病",病后恢复快']
+  physical: ["体形匀称", "面色红润', '精力充沛'],
+        psychological: ["性格开朗", "情绪稳定', '适应力强'],
+        pathological: ["不易生病", "病后恢复快']
       },
       recommendations: {,
-  diet: ["饮食有节",营养均衡', '不偏食'],
-        exercise: ["适度运动",动静结合'],
-        lifestyle: ["作息规律",劳逸结合'],
+  diet: ["饮食有节", "营养均衡', '不偏食'],
+        exercise: ["适度运动", "动静结合'],
+        lifestyle: ["作息规律", "劳逸结合'],
         prevention: ["顺应自然",调畅情志']
       }
     })
@@ -277,7 +277,7 @@ export class TCMKnowledgeBase {
       if (category && pattern.category !== category) {
         continue;
 }
-      const matchCount = symptoms.filter(
+      const matchCount = symptoms.filter()
         symptom => pattern.symptoms.includes(symptom) || pattern.signs.includes(symptom)
       ).length;
       if (matchCount > 0) {
@@ -294,7 +294,7 @@ export class TCMKnowledgeBase {
   public searchSyndromes(symptoms: string[]): SyndromeInfo[] {
     const results: SyndromeInfo[] = [];
     for (const syndrome of this.syndromes.values()) {
-      const matchCount = symptoms.filter(
+      const matchCount = symptoms.filter()
         symptom =>
           syndrome.mainSymptoms.includes(symptom) || syndrome.secondarySymptoms.includes(symptom);
       ).length;

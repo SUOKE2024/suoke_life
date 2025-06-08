@@ -22,7 +22,7 @@ expect(() => {
         PerformanceOptimizer(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = PerformanceOptimizer(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -44,7 +44,7 @@ expect(() => {
         performanceOptimizer(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = performanceOptimizer(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -66,7 +66,7 @@ expect(() => {
         cache(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = cache(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -88,7 +88,7 @@ expect(() => {
         optimizeImage(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = optimizeImage(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -110,7 +110,7 @@ expect(() => {
         createOptimizedFetch(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = createOptimizedFetch(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -132,7 +132,7 @@ expect(() => {
         batchOperations(// invalid params);
       }).not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;
+    it("should return output format,  => {", () => {// Add test cases;)
 const result = batchOperations(// test params);
       expect(typeof result).toBe("object"); // or appropriate type
     });
@@ -157,7 +157,7 @@ PerformanceOptimizer(// test params);
 expect(averageTime).toBeLessThan(1);
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);)
     const startTime = performance.now();
     // Test with large dataset
 PerformanceOptimizer(largeDataset);

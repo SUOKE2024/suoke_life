@@ -130,7 +130,7 @@ class CircuitBreaker {
   private failures = 0;
   private lastFailureTime = 0;
   private state: 'CLOSED' | 'OPEN' | 'HALF_OPEN' = 'CLOSED';
-  constructor(
+  constructor()
     private failureThreshold: number = 5,
     private recoveryTimeout: number = 60000;
   ) {}
@@ -167,7 +167,7 @@ class CircuitBreaker {
 export class GatewayApiClient {
   private tokenManager = new TokenManager();
   private cacheManager = new CacheManager();
-  private circuitBreaker = new CircuitBreaker(
+  private circuitBreaker = new CircuitBreaker()
     GATEWAY_PERFORMANCE_CONFIG.CIRCUIT_BREAKER.FAILURE_THRESHOLD,
     GATEWAY_PERFORMANCE_CONFIG.CIRCUIT_BREAKER.RECOVERY_TIMEOUT;
   );
@@ -267,7 +267,7 @@ export class GatewayApiClient {
     }
   }
   // 重试机制
-  private async withRetry<T>(
+  private async withRetry<T>()
     operation: () => Promise<T>,
     retries: number = GATEWAY_PERFORMANCE_CONFIG.RETRY_ATTEMPTS;
   ): Promise<T> {
@@ -319,7 +319,7 @@ export class GatewayApiClient {
       throw new Error('Token refresh failed');
     }
     const data = await response.json();
-    this.tokenManager.setTokens(
+    this.tokenManager.setTokens()
       data.access_token,
       data.refresh_token || refreshToken,
       data.expires_in || 3600;
@@ -370,7 +370,7 @@ export class GatewayApiClient {
           };
         }
       }
-            const error = errorHandler.handleError(
+            const error = errorHandler.handleError()
         new Error('Circuit breaker is open'),
         service;
       );
@@ -444,7 +444,7 @@ export class GatewayApiClient {
           requestId: this.generateRequestId(),
         };
       }
-            const error = errorHandler.handleError(
+            const error = errorHandler.handleError()
         new Error('Circuit breaker is open'),
         service;
       );
@@ -525,7 +525,7 @@ export class GatewayApiClient {
   async login(credentials: { email: string; password: string }): Promise<ApiResponse<any>> {
     const result = await this.post("AUTH",/auth/login', credentials, { skipAuth: true });
         if (result.success && result.data.access_token) {
-      this.tokenManager.setTokens(
+      this.tokenManager.setTokens()
         result.data.access_token,
         result.data.refresh_token,
         result.data.expires_in || 3600;

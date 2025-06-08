@@ -79,12 +79,12 @@ const MazeCompletionScreen: React.FC<MazeCompletionScreenProps> = ({
       multiplier: 1.5 },[MazeDifficulty.HARD]: {
       name: "困难",
       multiplier: 2 },[MazeDifficulty.EXPERT]: {
-      name: "专家",
+      name: "专家", "
       multiplier: 3 };
   };
-  useEffect() => {
+  useEffect(() => {
     // 启动动画
-    Animated.sequence([
+    Animated.sequence([)
       Animated.timing(animatedValue, {
         toValue: 1,
         duration: 800,
@@ -117,21 +117,21 @@ const MazeCompletionScreen: React.FC<MazeCompletionScreenProps> = ({
   };
   // 渲染星级
   const renderStars = () => {const stars = getStarRating();
-    return (;
+    return (;)
       <View style={styles.starsContainer}>;
-        {[1, 2, 3].map(star) => (;
+        {[1, 2, 3].map(star) => (;)
           <Animated.View;
             key={star};
-            style={[;
+            style={{[;
               styles.star,{opacity: animatedValue,transform: [;
-                  {scale: animatedValue.interpolate({inputRange: [0, 1],outputRange: [0, star <= stars ? 1.2 : 0.3];
-                    });
+                  {scale: animatedValue.interpolate({inputRange: [0, 1],outputRange: [0, star <= stars ? 1.2 : 0.3];)
+                    }});
                   }
                 ]
               }
             ]}
           >
-            <Icon;
+            <Icon
               name="star"
               size={32}
               color={star <= stars ? colors.warning : colors.textSecondary}
@@ -144,16 +144,16 @@ const MazeCompletionScreen: React.FC<MazeCompletionScreenProps> = ({
   // 渲染奖励
   const renderRewards = () => {if (!rewards || rewards.length === 0) return null;
     return (
-      <View style={styles.rewardsSection}>;
+  <View style={styles.rewardsSection}>;
         <Text style={styles.sectionTitle}>获得奖励</Text>;
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>;
-          {rewards.map((reward, index) => (;
+          {rewards.map((reward, index) => (;))
             <Animated.View;
               key={index};
-              style={[;
+              style={{[;
                 styles.rewardCard,{opacity: animatedValue,transform: [;
-                    {translateY: animatedValue.interpolate({inputRange: [0, 1],outputRange: [50, 0];
-                      });
+                    {translateY: animatedValue.interpolate({inputRange: [0, 1],outputRange: [50, 0];)
+                      }});
                     }
                   ]
                 }
@@ -172,12 +172,12 @@ const MazeCompletionScreen: React.FC<MazeCompletionScreenProps> = ({
   };
   // 渲染统计详情
   const renderStats = () => {if (!showDetails) return null;
-    return (;
+    return (;)
       <Animated.View;
-        style={[;
+        style={{[;
           styles.statsSection,{opacity: animatedValue,transform: [;
-              {translateY: animatedValue.interpolate({inputRange: [0, 1],outputRange: [30, 0];
-                });
+              {translateY: animatedValue.interpolate({inputRange: [0, 1],outputRange: [30, 0];)
+                }});
               }
             ]
           }
@@ -204,16 +204,16 @@ const MazeCompletionScreen: React.FC<MazeCompletionScreenProps> = ({
       </Animated.View>;
     );
   };
-  return (;
+  return (;)
     <SafeAreaView style={styles.container}>;
       <ScrollView contentContainerStyle={styles.content}>;
         {// 背景装饰};
         <View style={styles.backgroundDecoration}>;
           <Animated.View;
-            style={[;
+            style={{[;
               styles.celebrationCircle,{transform: [;
-                  {scale: animatedValue.interpolate({inputRange: [0, 1],outputRange: [0, 1];
-                    });
+                  {scale: animatedValue.interpolate({inputRange: [0, 1],outputRange: [0, 1];)
+                    }});
                   }
                 ],
                 backgroundColor: themeConfig[theme].color + '20'
@@ -223,30 +223,29 @@ const MazeCompletionScreen: React.FC<MazeCompletionScreenProps> = ({
         </View>
         {// 完成标题}
         <Animated.View;
-          style={[
+          style={{[
             styles.titleSection,
             {
               opacity: animatedValue,
               transform: [
                 {
-                  translateY: animatedValue.interpolate({,
+                  translateY: animatedValue.interpolate({,)
   inputRange: [0, 1],
                     outputRange: [-50, 0]
-                  });
+                  }});
                 }
               ]
             }
           ]}
         >
-          <Icon;
+          <Icon
             name="check-circle"
             size={64}
             color={themeConfig[theme].color}
           />
           <Text style={styles.congratsText}>恭喜完成！</Text>
           <Text style={styles.mazeNameText}>{mazeName}</Text>
-          {isNewRecord && (
-        <View style={styles.newRecordBadge}>
+          {isNewRecord  && <View style={styles.newRecordBadge}>
               <Icon name="trophy" size={16} color={colors.warning} />
               <Text style={styles.newRecordText}>新纪录！</Text>
             </View>
@@ -266,7 +265,7 @@ const MazeCompletionScreen: React.FC<MazeCompletionScreenProps> = ({
         {renderRewards()}
         {// 操作按钮}
         <View style={styles.actionsSection}>
-          <TouchableOpacity;
+          <TouchableOpacity
             style={[styles.actionButton, styles.secondaryButton]}
             onPress={() => {onPlayAgain?.();
               navigation.goBack();
@@ -275,7 +274,7 @@ const MazeCompletionScreen: React.FC<MazeCompletionScreenProps> = ({
             <Icon name="refresh" size={20} color={colors.primary} />
             <Text style={styles.secondaryButtonText}>再玩一次</Text>
           </TouchableOpacity>
-          <TouchableOpacity;
+          <TouchableOpacity
             style={[styles.actionButton, styles.primaryButton]}
             onPress={() => {
               onBackToMenu?.();
@@ -287,7 +286,7 @@ const MazeCompletionScreen: React.FC<MazeCompletionScreenProps> = ({
           </TouchableOpacity>
         </View>
         {// 分享按钮}
-        <TouchableOpacity;
+        <TouchableOpacity
           style={styles.shareButton}
           onPress={() => {
             // 实现分享功能

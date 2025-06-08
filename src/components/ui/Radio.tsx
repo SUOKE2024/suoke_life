@@ -60,8 +60,8 @@ export const Radio: React.FC<RadioProps>  = ({
   const renderDot = useCallback() => {
     if (!selected) return null;
     const dotSize = getDotSize();
-    return (;
-      <View;
+    return (;)
+      <View
 style={
           width: dotSize,
           height: dotSize,
@@ -72,23 +72,22 @@ style={
   }, [selected, getDotSize, colors.white]);
   const renderLabel = useCallback() => {
     if (!label && !description) return null;
-    return (;
+    return (;)
       <View style={styles.labelContainer}>;
-        {label && (;
-          <Text;
-style={[
+        {label && (;)
+          <Text
+style={{[
               styles.label,
-              { color: disabled ? colors.textDisabled : colors.text },
+              { color: disabled ? colors.textDisabled : colors.text }},
               labelStyle]}
           >
             {label}
           </    Text>
         )}
-        {description && (
-          <Text;
-style={[
+        {description  && <Text
+style={{[
               styles.description,
-              { color: colors.textTertiary },
+              { color: colors.textTertiary }},
               descriptionStyle]}
           >
             {description}
@@ -102,9 +101,9 @@ style={[
     {
       opacity: disabled ? 0.6 : 1,
       flexDirection: labelPosition === "left ? "row-reverse" : row"},style].filter(Boolean) as ViewStyle[], [disabled, labelPosition, style]);
-  return (;
-    <TouchableOpacity;
-style={containerStyle}
+  return (;)
+    <TouchableOpacity
+style={{containerStyle}}
       onPress={handlePress}
       disabled={disabled}
       accessibilityRole="radio"
@@ -112,12 +111,12 @@ style={containerStyle}
       accessibilityLabel="TODO: 添加无障碍标签"
     >
       {labelPosition === "left && renderLabel()}"
-      <View style={getRadioStyle()}>{renderDot()}</    View>
+      <View style={{getRadioStyle()}}>{renderDot()}</    View>
       {labelPosition === "right" && renderLabel()}
     </    TouchableOpacity>
   );
 };
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flexDirection: row",
     alignItems: "center,",
     paddingVertical: 8},

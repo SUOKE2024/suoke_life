@@ -35,7 +35,7 @@ export default {
   getUsedMemory: jest.fn(() => Promise.resolve(2000000000)),
   getTotalDiskCapacity: jest.fn(() => Promise.resolve(64000000000)),
   getFreeDiskStorage: jest.fn(() => Promise.resolve(32000000000)),
-  getPowerState: jest.fn(() =>
+  getPowerState: jest.fn(() =>)
     Promise.resolve({
       batteryLevel: 0.8,
       batteryState: 'unplugged',

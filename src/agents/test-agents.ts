@@ -64,7 +64,7 @@ export class AgentSystemTester {
   private async testBasicFunctionality(): Promise<void> {
     console.log("📋 基础功能测试");
     // 测试类型定义
-    await this.runTest("类型定义测试", async () => {
+    await this.runTest("类型定义测试", " async () => {
       const agentTypes = Object.values(AgentType);
       if (agentTypes.length !== 4) {
         throw new Error(`期望4个智能体类型，实际${agentTypes.length}个`);
@@ -73,7 +73,7 @@ export class AgentSystemTester {
     });
     // 测试工具函数
     await this.runTest("工具函数测试", async () => {
-      const xiaoaiCapabilities = AgentSystemUtils.getAgentCapabilities(;
+      const xiaoaiCapabilities = AgentSystemUtils.getAgentCapabilities(;)
         AgentType.XIAOAI;
       );
       const xiaokeRole = AgentSystemUtils.getAgentRole(AgentType.XIAOKE);
@@ -91,7 +91,7 @@ export class AgentSystemTester {
     });
     // 测试上下文创建
     await this.runTest("上下文创建测试", async () => {
-      const context = AgentSystemUtils.createDefaultContext(;
+      const context = AgentSystemUtils.createDefaultContext(;)
         "test_user",suoke";
       );
       if (!AgentSystemUtils.validateContext(context)) {
@@ -122,14 +122,14 @@ export class AgentSystemTester {
       });
     }
     // 测试批量创建
-    await this.runTest("批量创建智能体", async () => {
-      const agents = await Promise.all([;
+    await this.runTest("批量创建智能体", " async () => {
+      const agents = await Promise.all([;)
         createAgent(AgentType.XIAOAI),createAgent(AgentType.XIAOKE),createAgent(AgentType.LAOKE),createAgent(AgentType.SOER);
       ]);
       for (const agent of agents) {
         await agent.initialize();
       }
-      const statuses = await Promise.all(;
+      const statuses = await Promise.all(;)
         agents.map(agent) => agent.getHealthStatus());
       );
       for (const agent of agents) {
@@ -143,7 +143,7 @@ export class AgentSystemTester {
   */
   private async testCoordinator(): Promise<void> {
     console.log("🎯 协调器测试");
-    await this.runTest("协调器初始化", async () => {
+    await this.runTest("协调器初始化", " async () => {
       await this.coordinator.initialize();
       const statuses = await this.coordinator.getAllAgentStatus();
       if (statuses.size !== 4) {
@@ -152,7 +152,7 @@ export class AgentSystemTester {
       return { agentCount: statuses.size };
     });
     await this.runTest("单智能体任务处理", async () => {
-      const context = AgentSystemUtils.createDefaultContext(;
+      const context = AgentSystemUtils.createDefaultContext(;)
         "test_user",chat";
       );
       const response = await this.coordinator.coordinateTask("你好", context);
@@ -162,10 +162,10 @@ export class AgentSystemTester {
       return { response: response.response };
     });
     await this.runTest("多智能体协作任务", async () => {
-      const context = AgentSystemUtils.createDefaultContext(;
+      const context = AgentSystemUtils.createDefaultContext(;)
         "test_user",chat";
       );
-      const response = await this.coordinator.coordinateTask(;
+      const response = await this.coordinator.coordinateTask(;)
         "我感觉头痛，请帮我分析一下可能的原因并推荐相关服务",context;
       );
       if (!response.success) {
@@ -210,7 +210,7 @@ export class AgentSystemTester {
   private async testFactory(): Promise<void> {
     console.log("🏭 工厂模式测试");
     await this.runTest("工厂创建智能体", async () => {
-      const instance = await this.factory.createAgent({agentType: AgentType.XIAOAI,enableLogging: true,maxConcurrentTasks: 3;
+      const instance = await this.factory.createAgent({agentType: AgentType.XIAOAI,enableLogging: true,maxConcurrentTasks: 3;)
       });
       if (!instance.isActive) {
         throw new Error("智能体实例未激活");
@@ -234,7 +234,7 @@ export class AgentSystemTester {
       return {createdCount: instances.length,activeCount: activeInstances.length;
       };
     });
-    await this.runTest("工厂统计信息", async () => {
+    await this.runTest("工厂统计信息", " async () => {
       const stats = this.factory.getStatistics();
       return { stats };
     });
@@ -279,7 +279,7 @@ export class AgentSystemTester {
     console.log("⚡ 性能测试");
     await this.runTest("并发处理测试", async () => {
       const context = AgentSystemUtils.createDefaultContext("test_user");
-      const tasks = Array.from({ length: 5 }, (_, i) =>;
+      const tasks = Array.from({ length: 5 }, (_, i) =>;)
         executeAgentTask(`测试消息 ${i + 1}`, context);
       );
       const startTime = Date.now();
@@ -297,7 +297,7 @@ export class AgentSystemTester {
       const measurements = [];
       for (let i = 0; i < 3; i++) {
         const startTime = Date.now();
-        await executeAgentTask("简单测试消息", context);
+        await executeAgentTask("简单测试消息", " context);
         const duration = Date.now() - startTime;
         measurements.push(duration);
       }
@@ -347,7 +347,7 @@ export class AgentSystemTester {
   /**
   * 运行单个测试
   */
-  private async runTest(
+  private async runTest()
     testName: string,
     testFn: () => Promise<any>
   ): Promise<void> {
@@ -382,7 +382,7 @@ export class AgentSystemTester {
     const totalTests = this.testResults.length;
     const passedTests = this.testResults.filter(r) => r.success).length;
     const failedTests = totalTests - passedTests;
-    const totalDuration = this.testResults.reduce(;
+    const totalDuration = this.testResults.reduce((acc, item) => acc + item, 0);
       (sum, r) => sum + r.duration,0;
     );
     console.log("\n📊 测试结果汇总:");
@@ -396,7 +396,7 @@ export class AgentSystemTester {
       console.log("\n❌ 失败的测试:");
       this.testResults;
         .filter(r) => !r.success)
-        .forEach(r) => console.log(`  - ${r.testName}: ${r.error}`));
+        .forEach(((r) => console.log(`  - ${r.testName}: ${r.error}`));)
     }
     console.log("\n🎉 智能体系统测试完成!\n");
   }
@@ -409,7 +409,7 @@ export class AgentSystemTester {
       await this.manager.shutdown();
       await this.factory.shutdown();
     } catch (error) {
-      console.error("清理资源时出错:", error);
+      console.error("清理资源时出错:", " error);
     }
   }
 }
@@ -425,10 +425,10 @@ export async function quickTest(): Promise<void> {
     console.log("✅ 基本功能测试通过");
     console.log(`响应: ${response.response.substring(0, 100)}...`);
     // 测试智能体切换
-    const suokeContext = AgentSystemUtils.createDefaultContext(;
+    const suokeContext = AgentSystemUtils.createDefaultContext(;)
       "quick_test_user",suoke";
     );
-    const suokeResponse = await executeAgentTask(;
+    const suokeResponse = await executeAgentTask(;)
       "推荐一些健康服务",suokeContext;
     );
     console.log("✅ 智能体切换测试通过");

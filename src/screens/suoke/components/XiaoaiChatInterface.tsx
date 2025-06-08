@@ -21,7 +21,7 @@ interface XiaoaiChatInterfaceProps {
   userId: string;
 }
 const { width, height   } = Dimensions.get(";window;";);
-const XiaoaiChatInterface: React.FC<XiaoaiChatInterfaceProps /> = ({/   const performanceMonitor = usePerformanceMonitor(XiaoaiChatInterface", { /    ";
+const XiaoaiChatInterface: React.FC<XiaoaiChatInterfaceProps /> = ({/   const performanceMonitor = usePerformanceMonitor(XiaoaiChatInterface", { /    ";))
     trackRender: true,trackMemory: true,warnThreshold: 50,  };);
   visible,
   onClose,
@@ -58,7 +58,7 @@ const XiaoaiChatInterface: React.FC<XiaoaiChatInterfaceProps /> = ({/   const pe
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [visible, initializeChat, slideAnim]);
-  const sendMessage = useCallback(async  => {}
+  const sendMessage = useCallback(async  => {})
     if (!inputText.trim(); || isLoading) {
       return;
     }
@@ -99,13 +99,12 @@ const XiaoaiChatInterface: React.FC<XiaoaiChatInterfaceProps /> = ({/   const pe
   }, [inputText, isLoading, userId, sessionId, messages]);
   const showActionButtons = useCallback(actions: unknown[;];) => {}
     const actionTexts = actions.map(action => action.description).join("\n;);"
-    Alert.alert(
-      "建议的操作",
+    Alert.alert("建议的操作", "
       actionTexts,
       [
         { text: 稍后再说", style: "cancel},
         {
-      text: "好的，继续",
+      text: "好的，继续", "
       onPress: (); => handleActionAccepted(actions) }
       ]
     );
@@ -113,7 +112,7 @@ const XiaoaiChatInterface: React.FC<XiaoaiChatInterfaceProps /> = ({/   const pe
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
   const handleActionAccepted = useCallback(actions: unknown[;];); => {}
-    actions.forEach(action => {}
+    actions.forEach(action => {})
       if (action.autoStart) {
         }
     });
@@ -141,25 +140,24 @@ const XiaoaiChatInterface: React.FC<XiaoaiChatInterfaceProps /> = ({/   const pe
   const renderMessage = useCallback(message: ChatMessag;e;) => {}
     const isUser = message.role === use;r;
     performanceMonitor.recordRender();
-    return (;
+    return (;)
       <View,key={message.id};
-        style={[;
+        style={{[;
           styles.messageContainer,isUser ? styles.userMessage : styles.assistantMessage;
-        ]} />/  >
+        ]}} />/  >
           styles.messageBubble,
           isUser ? styles.userBubble : styles.assistantBubble;
         ]} />/  >
             styles.messageText,
             isUser ? styles.userText : styles.assistantText;
           ]} />/                {message.content}
-          </Text> 显示诊断结果 }/          {message.metadata?.diagnosisResults && (
-        <View style={styles.diagnosisContainer}>/              <Text style={styles.diagnosisTitle}>诊断结果:</Text>/                  {message.metadata.diagnosisResults.map(result, inde;x;); => (
+          </Text> 显示诊断结果 }/          {message.metadata?.diagnosisResults  && <View style={styles.diagnosisContainer}>/              <Text style={styles.diagnosisTitle}>诊断结果:</Text>/                  {message.metadata.diagnosisResults.map(result, inde;x;); => ()
                 <Text key={index} style={styles.diagnosisText}>/                      • {result}
                 </Text>/                  ))}
             </View>/              )}
           {//
-            <View style={styles.suggestionsContainer}>/              <Text style={styles.suggestionsTitle}>建议:</Text>/                  {message.metadata.suggestions.map((suggestion, index) => (
-                <TouchableOpacity;
+            <View style={styles.suggestionsContainer}>/              <Text style={styles.suggestionsTitle}>建议:</Text>/                  {message.metadata.suggestions.map((suggestion, index) => ())
+                <TouchableOpacity
 key={index}
                   style={styles.suggestionButton}
                   onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleSuggestionPress(suggestion)}/                    >
@@ -171,39 +169,38 @@ key={index}
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [handleSuggestionPress])
-  return (;
-    <Modal;
+  return (;)
+    <Modal
 visible={visible}
       animationType="none"
       transparent;
 onRequestClose={onClose} />/      <View style={styles.overlay}>/            <Animated.View;
-style={[
+style={{[
             styles.container,
-            { transform: [{ translateY: slideAnim   }]
+            { transform: [{ translateY: slideAnim   }}]
             }
           ]} />/          {//
                 </Text>/              </View>/            </View>/            <TouchableOpacity onPress={onClose} style={styles.closeButton} accessibilityLabel="TODO: 添加无障碍标签" />/              <Icon name="x" size={24} color={colors.textSecondary} />/            </TouchableOpacity>/          </View>/
-          {///              <KeyboardAvoidingView;
+          {///              <KeyboardAvoidingView
 style={styles.chatContainer}
-            behavior={Platform.OS === ios" ? "padding : "height"} />/                <ScrollView;
+            behavior={Platform.OS === ios" ? "padding : "height"} />/                <ScrollView
 ref={scrollViewRef}
               style={styles.messagesContainer}
               showsVerticalScrollIndicator={false} />/                  {messages.map(renderMessage)}
-              {///                  {isLoading && (
-        <View style={styles.loadingContainer}>/                  <View style={styles.loadingBubble}>/                    <Text style={styles.loadingText}>小艾正在思考...</Text>/                  </View>/                </View>/                  )}
+              {///                  {isLoading  && <View style={styles.loadingContainer}>/                  <View style={styles.loadingBubble}>/                    <Text style={styles.loadingText}>小艾正在思考...</Text>/                  </View>/                </View>/                  )}
             </ScrollView>/
-            {///                    <TextInput;
+            {///                    <TextInput
 style={styles.textInput}
                   value={inputText}
                   onChangeText={setInputText}
                   placeholder="输入你的健康问题..."
                   placeholderTextColor={colors.textSecondary}
                   multiline;
-maxLength={500} />/                    <TouchableOpacity;
-style={[;
+maxLength={500} />/                    <TouchableOpacity
+style={{[;
                     styles.sendButton,
                     (!inputText.trim || isLoading) && styles.sendButtonDisabled;
-                  ]}
+                  ]}}
                   onPress={sendMessage}
                   disabled={!inputText.trim() || isLoading}
                 accessibilityLabel="TODO: 添加无障碍标签" />/                      <Iconname="send"
@@ -212,7 +209,7 @@ style={[;
                       !inputText.trim(); || isLoading;
                         ? colors.textSecondary: colors.white} />/                </TouchableOpacity>/              </View>/            </View>/          </KeyboardAvoidingView>/        </Animated.View>/      </View>/    </Modal>/    );
 };
-const styles = useMemo() => StyleSheet.create({overlay: {,
+const styles = useMemo() => StyleSheet.create({overlay: {,)
   flex: 1,
     backgroundColor: rgba(0, 0, 0, 0.5);",
     justifyContent: "flex-end},",

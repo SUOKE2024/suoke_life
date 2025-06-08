@@ -67,7 +67,7 @@ export const Button: React.FC<ButtonProps>  = ({
   textStyle,testID,children;
 }) => {}
   // 性能监控
-const performanceMonitor = usePerformanceMonitor({componentName: Button",
+const performanceMonitor = usePerformanceMonitor({componentName: Button", ")
     trackRender: true,
     trackMemory: true,
     warnThreshold: 50, // ms;
@@ -92,7 +92,7 @@ switch (animationType) {
           useNativeDriver: true}).start();
         break;
       case pulse":"
-        Animated.sequence([
+        Animated.sequence([)
           Animated.timing(opacityValue, {
             toValue: 0.7,
             duration: 100,
@@ -234,18 +234,18 @@ const variantTextStyles = {primary: {,
   // 渲染内容
 const renderContent = () => {}
     if (loading) {
-      return (;
-        <ActivityIndicator;
+      return (;)
+        <ActivityIndicator
 size="small"
           color={variant === "outline" || variant === ghost" ? "#007AFF : "#FFFFFF'}"'
         /    >
       );
     }
-    return (;
+    return (;)
       <>;
         {leftIcon && <Text style={styles.icon}>{leftIcon}</    Text>};
-        {!iconOnly && title && (;
-          <Text style={[getTextStyles(), textStyle]}>;
+        {!iconOnly && title && (;)
+          <Text style={{[getTextStyles(), textStyle]}}>;
             {title};
           </    Text>;
         )};
@@ -254,15 +254,15 @@ size="small"
       </    >;
     );
   };
-  return (;
+  return (;)
     <Animated.View;
-style={[
+style={{[
         {
-          transform: [{ scale: scaleValue }],
+          transform: [{ scale: scaleValue }}],
           opacity: opacityValue}]}
     >
-      <TouchableOpacity;
-style={[getButtonStyles(), style]}
+      <TouchableOpacity
+style={{[getButtonStyles(), style]}}
         onPress={handlePress}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}

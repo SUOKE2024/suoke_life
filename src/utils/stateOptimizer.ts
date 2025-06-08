@@ -50,7 +50,7 @@ startStateUpdate(stateName: string): void {
     this.activeUpdates.set(stateName, Date.now());
   }
   // 结束状态更新跟踪
-endStateUpdate(
+endStateUpdate()
     stateName: string,
     oldValue: unknown,
     newValue: unknown,
@@ -76,7 +76,7 @@ private isUnnecessaryUpdate(oldValue: unknown, newValue: unknown): boolean {
     }
   }
   // 记录状态变化
-private recordStateChange(
+private recordStateChange()
     stateName: string,
     oldValue: unknown,
     newValue: unknown,
@@ -98,7 +98,7 @@ if (history.length > this.maxHistorySize) {
     this.stateHistory.set(stateName, history);
   }
   // 更新性能数据
-private updatePerformanceData(
+private updatePerformanceData()
     stateName: string,
     duration: number,
     isUnnecessary: boolean,
@@ -145,14 +145,14 @@ private processBatchedUpdates(): void {
       clearTimeout(this.batchTimer);
       this.batchTimer = null;
     }
-    this.batchedUpdates.forEach(updates, stateName) => {
+    this.batchedUpdates.forEach(((updates, stateName) => {
       if (updates.length > 0) {
         const mergedUpdate = updates.reduce(acc, { update }) => {
           return { ...acc, ...(update as object) };
         }, {} as Record<string, unknown>);
         this.startStateUpdate(`${stateName}_batch`);
         this.endStateUpdate(`${stateName}_batch`, {}, mergedUpdate, 'batch');
-        updates.forEach({ resolve }) => resolve());
+        updates.forEach((({ resolve }) => resolve());)
       }
     });
     this.batchedUpdates.clear();
@@ -173,7 +173,7 @@ getStateHistory(stateName: string, limit: number = 50): StateChangeEvent[] {
   // 获取优化建议
 getOptimizationSuggestions(): StateOptimizationSuggestion[] {
     const suggestions: StateOptimizationSuggestion[] = [];
-    this.stateData.forEach(data, stateName) => {
+    this.stateData.forEach(((data, stateName) => {
       const unnecessaryRate = data.unnecessaryUpdates / data.updateCount;
       if (unnecessaryRate > 0.3) {
         suggestions.push({
@@ -252,7 +252,7 @@ exportStateData(): {
     timestamp: number;
   } {
     const history: Record<string, StateChangeEvent[]> = {};
-    this.stateHistory.forEach(events, stateName) => {
+    this.stateHistory.forEach(((events, stateName) => {
       history[stateName] = [...events];
     });
     return { performanceData: Array.from(this.stateData.values()), history, stats: this.getStateStats(), timestamp: Date.now() };

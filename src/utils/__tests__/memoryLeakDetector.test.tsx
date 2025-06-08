@@ -1,4 +1,3 @@
-
 import memoryLeakDetector from '../memoryLeakDetector.tsx';
 describe('memoryLeakDetector', () => {
   it('应该正确导出', () => {

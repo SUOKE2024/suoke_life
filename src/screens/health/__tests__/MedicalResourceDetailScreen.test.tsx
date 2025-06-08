@@ -1,4 +1,3 @@
-
 import MedicalResourceDetailScreen from '../MedicalResourceDetailScreen.tsx';
 describe('MedicalResourceDetailScreen', () => {
   it('应该正确导出', () => {

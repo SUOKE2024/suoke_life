@@ -1,4 +1,3 @@
-
 import persistMiddleware from '../persistMiddleware.ts';
 describe('persistMiddleware', () => {
   it('应该正确导出', () => {

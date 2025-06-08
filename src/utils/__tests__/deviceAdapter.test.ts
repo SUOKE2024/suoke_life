@@ -1,4 +1,3 @@
-
 import deviceAdapter from '../deviceAdapter.ts';
 describe('deviceAdapter', () => {
   it('应该正确导出', () => {

@@ -22,7 +22,7 @@ describe('RAGService', () => {
       const query = '什么是高血压？';
       const mockResponse = {success: true,data: {
       answer: "高血压是一种常见的心血管疾病...",
-      confidence: 0.95,sources: ["医学百科",临床指南'];
+      confidence: 0.95,sources: ["医学百科", "临床指南'];
         };
       };
       // Mock fetch response
@@ -49,7 +49,7 @@ describe('RAGService', () => {
       type: 'diagnosis' as const },{
       text: "治疗查询",
       type: 'treatment' as const },{
-      text: "预防查询",
+      text: "预防查询", "
       type: 'prevention' as const };
       ];
       global.fetch = jest.fn().mockResolvedValue({
@@ -65,10 +65,10 @@ describe('RAGService', () => {
   describe('流式查询功能', () => {
     it('应该支持流式查询', async () => {
       const query = '详细解释糖尿病的治疗方案';
-      const chunks = ["糖尿病",是一种', '代谢性疾病'];
+      const chunks = ["糖尿病", "是一种', '代谢性疾病'];
       let chunkIndex = 0;
       // Mock EventSource
-      const mockEventSource = {addEventListener: jest.fn((event, callback) => {if (event === 'message') {chunks.forEach((chunk, index) => {setTimeout(() => {callback({ data: JSON.stringify({ chunk, done: index === chunks.length - 1 }) });
+      const mockEventSource = {addEventListener: jest.fn((event, callback) => {if (event === 'message') {chunks.forEach((((chunk, index) => {setTimeout(() => {callback({ data: JSON.stringify({ chunk, done: index === chunks.length - 1 }) });)))))
               }, index * 100);
             });
           }
@@ -87,11 +87,11 @@ describe('RAGService', () => {
   });
   describe('中医分析功能', () => {
     it('应该执行中医证候分析', async () => {
-      const symptoms = ["头痛",失眠', '心悸'];
+      const symptoms = ["头痛", "失眠', '心悸'];
       const constitution = '气虚质';
       const mockResponse = {success: true,data: {
-      syndrome: "心脾两虚证",
-      confidence: 0.88,description: '心脾两虚，气血不足...',recommendations: ["补益心脾",养血安神'];
+      syndrome: "心脾两虚证", "
+      confidence: 0.88,description: '心脾两虚，气血不足...',recommendations: ["补益心脾", "养血安神'];
         };
       };
       global.fetch = jest.fn().mockResolvedValue({
@@ -109,9 +109,9 @@ describe('RAGService', () => {
       const mockResponse = {success: true,data: {formulas: [;
             {
       name: "逍遥散",
-      ingredients: ["柴胡",当归', '白芍'],dosage: '每日两次，每次6g',duration: '2-4周';
+      ingredients: ["柴胡", "当归', '白芍'],dosage: '每日两次，每次6g',duration: '2-4周';
             };
-          ],precautions: ["孕妇慎用",过敏体质注意'];
+          ],precautions: ["孕妇慎用", "过敏体质注意'];
         };
       };
       global.fetch = jest.fn().mockResolvedValue({
@@ -130,14 +130,14 @@ describe('RAGService', () => {
       const query = '分析这张舌诊图片';
       const mockResponse = {success: true,data: {
       analysis: "舌质淡红，苔薄白，属正常舌象",
-      confidence: 0.92,features: ["舌质淡红",苔薄白', '舌体适中'];
+      confidence: 0.92,features: ["舌质淡红", "苔薄白', '舌体适中'];
         };
       };
       global.fetch = jest.fn().mockResolvedValue({
         ok: true,
         json: () => Promise.resolve(mockResponse);
       });
-      const result = await ragService.multimodalQuery({text: query,images: [imageData],modality: 'image';
+      const result = await ragService.multimodalQuery({text: query,images: [imageData],modality: 'image';)
       });
       expect(result.success).toBe(true);
       expect(result.data.analysis).toContain('舌象');
@@ -147,14 +147,14 @@ describe('RAGService', () => {
       const query = '分析这段咳嗽声音';
       const mockResponse = {success: true,data: {
       analysis: "干咳，频率较高，可能为燥咳",
-      confidence: 0.85,characteristics: ["干咳",频率高', '无痰音'];
+      confidence: 0.85,characteristics: ["干咳", "频率高', '无痰音'];
         };
       };
       global.fetch = jest.fn().mockResolvedValue({
         ok: true,
         json: () => Promise.resolve(mockResponse);
       });
-      const result = await ragService.multimodalQuery({text: query,audio: audioData,modality: 'audio';
+      const result = await ragService.multimodalQuery({text: query,audio: audioData,modality: 'audio';)
       });
       expect(result.success).toBe(true);
       expect(result.data.analysis).toContain('咳嗽');
@@ -237,7 +237,7 @@ describe('RAGService', () => {
       });
       await ragService.query('测试查询');
       expect(onQueryStart).toHaveBeenCalledWith({
-      query: "测试查询",
+      query: "测试查询", "
       timestamp: expect.any(Number);
       });
     });
@@ -250,7 +250,7 @@ describe('RAGService', () => {
       });
       await ragService.query('测试查询');
       expect(onQueryComplete).toHaveBeenCalledWith({
-      query: "测试查询",
+      query: "测试查询", "
       success: true,
         responseTime: expect.any(Number);
       });

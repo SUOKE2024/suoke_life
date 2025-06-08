@@ -1,4 +1,3 @@
-
 import chat from '../chat.ts';
 describe('chat', () => {
   it('应该正确导出', () => {

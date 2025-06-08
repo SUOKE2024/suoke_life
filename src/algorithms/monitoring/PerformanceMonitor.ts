@@ -177,7 +177,7 @@ export class PerformanceMonitor {
     this.metrics.responseTime.p95 = this.percentile(responseTimes, 0.95);
     this.metrics.responseTime.p99 = this.percentile(responseTimes, 0.99);
     // 计算吞吐量
-    const recentEvents = this.events.filter(;
+    const recentEvents = this.events.filter(;)
       e => e.type === 'response_time' && e.timestamp > Date.now() - 60000 // 最近1分钟;
     );
     this.metrics.throughput.requestsPerMinute = recentEvents.length;

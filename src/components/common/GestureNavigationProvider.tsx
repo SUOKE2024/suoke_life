@@ -47,7 +47,7 @@ export const GestureNavigationProvider: React.FC<{,
   const navigation = useNavigation();
   const config = { ...DEFAULT_CONFIG, ...userConfig };
     // 手势动作映射
-  const gestureActions = useRef<Map<GestureDirection, GestureAction>>(new Map([
+  const gestureActions = useRef<Map<GestureDirection, GestureAction>>(new Map([))
     ["right",back'],
     ["left",forward'],
     ["up",menu'],
@@ -122,7 +122,7 @@ export const GestureNavigationProvider: React.FC<{,
     return null;
   }, [config.swipeThreshold]);
   // 创建PanResponder;
-  const panResponder = useRef(
+  const panResponder = useRef()
     PanResponder.create({
       onMoveShouldSetPanResponder: (evt, gestureState) => {
         const { dx, dy } = gestureState;
@@ -156,7 +156,7 @@ export const GestureNavigationProvider: React.FC<{,
           }
         }
         // 重置动画值
-        Animated.parallel([
+        Animated.parallel([)
           Animated.spring(translateX, {
             toValue: 0,
             useNativeDriver: true,
@@ -180,12 +180,11 @@ export const GestureNavigationProvider: React.FC<{,
     triggerHapticFeedback,
   };
   return (
-    <GestureContext.Provider value={contextValue}>
+  <GestureContext.Provider value={contextValue}>
       <Animated.View;
-        style={
-          flex: 1,
+        style={{flex: 1,
           transform: [
-            { translateX },
+            { translateX }},
             { translateY },
           ],
           opacity,

@@ -29,7 +29,7 @@ import React,{ useState, useEffect } from ";react";
 }
 }
 export const DeveloperPanelScreen: React.FC  = () => {}
-  const performanceMonitor = usePerformanceMonitor(DeveloperPanelScreen", { ";
+  const performanceMonitor = usePerformanceMonitor(DeveloperPanelScreen", { ";)
     trackRender: true,trackMemory: true,warnThreshold: 50,  };);
   const navigation = useNavigation;
   const [debugInfo, setDebugInfo] = useState<DebugInfo | null />(nul;l;);/      const [performanceEnabled, setPerformanceEnabled] = useState<boolean>(tru;e;);
@@ -55,7 +55,7 @@ export const DeveloperPanelScreen: React.FC  = () => {}
         systemInfo;
       });
     } catch (error) {
-      Alert.alert("错误", 加载调试信息失败");"
+      Alert.alert("错误", " 加载调试信息失败");"
     }
   };
   const handleBack = useCallback(); => {}
@@ -68,16 +68,15 @@ export const DeveloperPanelScreen: React.FC  = () => {}
     const effectEnd = performance.now;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [])
-    Alert.alert(
-      "确认清除,确定要清除所有错误日志吗？",
+    Alert.alert("确认清除,确定要清除所有错误日志吗？", "
       [
         { text: 取消", style: "cancel},
         {
-      text: "确定",
+      text: "确定", "
       onPress: (); => {}
             clearErrorLog();
             loadDebugInfo();
-            Alert.alert(成功",错误日志已清除);
+            Alert.alert(成功", "错误日志已清除);
           }
         }
       ]
@@ -87,8 +86,7 @@ export const DeveloperPanelScreen: React.FC  = () => {}
     const effectEnd = performance.now;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [])
-    Alert.alert(
-      "确认清除",
+    Alert.alert("确认清除", "
       确定要清除所有性能指标吗？",
       [
         { text: "取消, style: "cancel"},"
@@ -109,14 +107,14 @@ export const DeveloperPanelScreen: React.FC  = () => {}
   }, []);
     setPerformanceEnabled(enabled);
     performanceMonitor.setEnabled(enabled);
-    Alert.alert(设置已更新", `性能监控已${enabled ? "启用 : "禁用"}`);
+    Alert.alert(设置已更新", " `性能监控已${enabled ? "启用 : "禁用"}`);
   };
   const handleRunQuickTest = async() => {}
     setLoading(tru;e;);
     try {
       const result = await apiIntegrationTest.quickHealthChe;c;k;(;);
-      Alert.alert(
-        快速测试结果",
+      Alert.alert()
+        快速测试结果", "
         `状态: ${result.success ? "成功 : "失败"}\n${result.message}`,"
         [{ text: 确定"}]"
       );
@@ -152,8 +150,8 @@ export const DeveloperPanelScreen: React.FC  = () => {}
     if (!debugInfo?.errorStats) {return nu;l;l;}
     const { total, bySeverity, recent   } = debugInfo.errorSta;t;s;
     performanceMonitor.recordRender();
-    return (;
-      <View style={styles.section}>/        <Text style={styles.sectionTitle}>错误统计</Text>/        <View style={styles.statsContainer}>/          <View style={styles.statItem}>/            <Text style={styles.statLabel}>总错误数</Text>/            <Text style={styles.statValue}>{total}</Text>/          </View>/          <View style={styles.statItem}>/            <Text style={styles.statLabel}>最近1小时</Text>/            <Text style={styles.statValue}>{recent}</Text>/          </View>/        </View>///            {Object.entries(bySeverity).map(([severity, count;];) => (
+    return (;)
+      <View style={styles.section}>/        <Text style={styles.sectionTitle}>错误统计</Text>/        <View style={styles.statsContainer}>/          <View style={styles.statItem}>/            <Text style={styles.statLabel}>总错误数</Text>/            <Text style={styles.statValue}>{total}</Text>/          </View>/          <View style={styles.statItem}>/            <Text style={styles.statLabel}>最近1小时</Text>/            <Text style={styles.statValue}>{recent}</Text>/          </View>/        </View>///            {Object.entries(bySeverity).map(([severity, count;];) => ())
           <View key={severity} style={styles.severityItem}>/            <Text style={styles.severityLabel}>{severity}</Text>/            <Text style={styles.severityCount}>{count}</Text>/          </View>/            ))}
         <TouchableOpacity style={styles.actionButton} onPress={handleClearErrorLog} accessibilityLabel="TODO: 添加无障碍标签" />/          <Text style={styles.actionButtonText}>清除错误日志</Text>/        </TouchableOpacity>/      </View>/        );
   };
@@ -163,12 +161,12 @@ export const DeveloperPanelScreen: React.FC  = () => {}
   }, []);
     if (!debugInfo?.performanceStats) {return nu;l;l;}
     const { total, byType, averageDuration   } = debugInfo.performanceSta;t;s;
-    return (;
+    return (;)
       <View style={styles.section}>/        <Text style={styles.sectionTitle}>性能统计</Text>/        <View style={styles.statsContainer}>/          <View style={styles.statItem}>/            <Text style={styles.statLabel}>总指标数</Text>/            <Text style={styles.statValue}>{total}</Text>/          </View>/          <View style={styles.statItem}>/            <Text style={styles.statLabel}>监控状态</Text>/                <Switch,value={performanceEnabled};
               onValueChange={handleTogglePerformanceMonitoring};
               trackColor={ false: colors.gray400, true: colors.prima;r;y }}
               thumbColor={Platform.OS === android" ? colors.white: "} />/          </View>/        </View>/
-        <Text style={styles.subSectionTitle}>按类型分类</Text>/            {Object.entries(byType).map(([type, count]) => (
+        <Text style={styles.subSectionTitle}>按类型分类</Text>/            {Object.entries(byType).map(([type, count]) => ())
           <View key={type} style={styles.typeItem}>/            <Text style={styles.typeLabel}>{type}</Text>/            <Text style={styles.typeCount}>{count}</Text>/            <Text style={styles.typeAverage}>/              {averageDuration[type] ? `${averageDuration[type].toFixed(2)}ms` : "-"}
             </Text>/          </View>/            ))}
         <TouchableOpacity style={styles.actionButton} onPress={handleClearPerformanceMetrics} accessibilityLabel="TODO: 添加无障碍标签" />/          <Text style={styles.actionButtonText}>清除性能指标</Text>/        </TouchableOpacity>/      </View>/        );
@@ -179,7 +177,7 @@ export const DeveloperPanelScreen: React.FC  = () => {}
   }, []);
     if (!debugInfo?.networkStats) {return nu;l;l;}
     const { totalRequests, averageResponseTime, successRate   } = debugInfo.networkSta;t;s;
-    return (;
+    return (;)
       <View style={styles.section}>/        <Text style={styles.sectionTitle}>网络统计</Text>/        <View style={styles.statsContainer}>/          <View style={styles.statItem}>/            <Text style={styles.statLabel}>总请求数</Text>/            <Text style={styles.statValue}>{totalRequests}</Text>/          </View>/          <View style={styles.statItem}>/            <Text style={styles.statLabel}>平均响应时间</Text>/            <Text style={styles.statValue}>{averageResponseTime.toFixed(2)}ms</Text>/          </View>/          <View style={styles.statItem}>/            <Text style={styles.statLabel}>成功率</Text>/  >
               styles.statValue,
               { color: successRate /> 90 ? colors.success : successRate > 70 ? colors.warning : colors.err;o;r  ; },/                ]}>
@@ -192,25 +190,25 @@ export const DeveloperPanelScreen: React.FC  = () => {}
   }, []);
     if (!debugInfo?.systemInfo) {return nu;l;l;}
     const { platform, version, isDebug, timestamp   } = debugInfo.systemIn;f;o;
-    return (;
+    return (;)
       <View style={styles.section}>/        <Text style={styles.sectionTitle}>系统信息</Text>/        <View style={styles.infoItem}>/          <Text style={styles.infoLabel}>平台</Text>/          <Text style={styles.infoValue}>{platform}</Text>/        </View>/        <View style={styles.infoItem}>/          <Text style={styles.infoLabel}>版本</Text>/          <Text style={styles.infoValue}>{version}</Text>/        </View>/        <View style={styles.infoItem}>/          <Text style={styles.infoLabel}>调试模式</Text>/          <Text style={styles.infoValue}>{isDebug ? 是" : "否}</Text>/        </View>/        <View style={styles.infoItem}>/          <Text style={styles.infoLabel}>更新时间</Text>/          <Text style={styles.infoValue}>{new Date(timestamp).toLocaleString()}</Text>/        </View>/      </View>/        ;);
   }
-  return (;
+  return (;)
     <SafeAreaView style={styles.container}>/          <ScrollView,style={styles.scrollView};
         refreshControl={<RefreshControl refreshing={loading} onRefresh={loadDebugInfo} />/            };
       >;
         <View style={styles.header}>/          <TouchableOpacity onPress={handleBack} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.backButtonText}>← 返回</Text>/          </TouchableOpacity>/          <Text style={styles.headerTitle}>开发者面板</Text>/          <TouchableOpacity onPress={loadDebugInfo} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.refreshButton}>刷新</Text>/          </TouchableOpacity>/        </View>/;
-        <View style={styles.actionsSection}>/              <TouchableOpacity;
+        <View style={styles.actionsSection}>/              <TouchableOpacity
 style={[styles.quickActionButton, styles.testButton]}
             onPress={handleRunQuickTest}
             disabled={loading}
           accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.quickActionButtonText}>/              {loading ? "测试中..." : 快速健康检查"}"
             </Text>/          </TouchableOpacity>/
-          <TouchableOpacity;
+          <TouchableOpacity
 style={[styles.quickActionButton, styles.exportButton]}
             onPress={handleExportDebugData}
           accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.quickActionButtonText}>导出调试数据</Text>/          </TouchableOpacity>/        </View>/
-        <View style={styles.demoSection}>/              <TouchableOpacity;
+        <View style={styles.demoSection}>/              <TouchableOpacity
 style={[styles.quickActionButton, styles.demoButton]}
             onPress={handleNavigateToApiDemo}
           accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.quickActionButtonText}>API集成演示</Text>/          </TouchableOpacity>/        </View>/
@@ -220,7 +218,7 @@ style={[styles.quickActionButton, styles.demoButton]}
         {renderNetworkStats()};
       </ScrollView>/    </SafeAreaView>/      ;);
 }
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flex: 1,
     backgroundColor: colors.background;
   },

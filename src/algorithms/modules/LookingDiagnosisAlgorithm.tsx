@@ -94,20 +94,20 @@ export interface UserProfile {
     this.initializeAnalyzers();
   }
   // 初始化分析器  private initializeAnalyzers(): void {
-    this.tongueAnalyzer = new TongueAnalyzer(
+    this.tongueAnalyzer = new TongueAnalyzer()
       this.config.models.tongueAnalysis,
       this.knowledgeBase;
     );
-    this.faceAnalyzer = new FaceAnalyzer(
+    this.faceAnalyzer = new FaceAnalyzer()
       this.config.models.faceAnalysis,
       this.knowledgeBase;
     );
-    this.bodyAnalyzer = new BodyAnalyzer(
+    this.bodyAnalyzer = new BodyAnalyzer()
       this.config.models.bodyAnalysis,
       this.knowledgeBase;
     );
   }
-  // 执行望诊分析  public async analyze(data: LookingData,
+  // 执行望诊分析  public async analyze(data: LookingData,)
     userProfile?: UserProfile;
   ): Promise<LookingResult /    >  {
     if (!this.config.enabled) {
@@ -127,7 +127,7 @@ export interface UserProfile {
       this.emit("algorithm:progress", {
       stage: "analysis",
       progress: 0.6});
-      const analyses = await this.performAnalyses(;
+      const analyses = await this.performAnalyses(;)
         processedData,features,userProf;i;l;e;);
       this.emit("algorithm:progress", {
       stage: "integration",
@@ -145,7 +145,7 @@ export interface UserProfile {
   ///    >  {
     const processed: ProcessedLookingData = {};
     if (data.tongueImage) {
-      processed.tongueImage = await this.preprocessImage(
+      processed.tongueImage = await this.preprocessImage()
         data.tongueImage,
         "tongue"
       ;);
@@ -158,7 +158,7 @@ export interface UserProfile {
     }
     return process;e;d;
   }
-  // 图像预处理  private async preprocessImage(image: ImageData,
+  // 图像预处理  private async preprocessImage(image: ImageData,)
     type: string);: Promise<ProcessedImageData /    >  {
     const resized = await this.resizeImage(ima;g;e;);
     const enhanced = await this.enhanceImage(resiz;e;d;);
@@ -190,7 +190,7 @@ export interface UserProfile {
       constitution: ", skinCondition: "}
     };
     if (data.tongueImage) {
-      features.tongue = await this.tongueAnalyzer.extractFeatures(
+      features.tongue = await this.tongueAnalyzer.extractFeatures()
         data.tongueImage;);
     }
     if (data.faceImage) {
@@ -201,29 +201,29 @@ export interface UserProfile {
     }
     return featur;e;s;
   }
-  // 执行各项分析  private async performAnalyses(data: ProcessedLookingData,
+  // 执行各项分析  private async performAnalyses(data: ProcessedLookingData,)
     features: LookingFeatures,
     userProfile?: UserProfile;
   ): Promise<AnalysisResults /    >  {
     const results: AnalysisResults = {};
     if (data.tongueImage) {
-      results.tongueAnalysis = await this.tongueAnalyzer.analyze(
+      results.tongueAnalysis = await this.tongueAnalyzer.analyze()
         features.tongue,
         userProfile;);
     }
     if (data.faceImage) {
-      results.faceAnalysis = await this.faceAnalyzer.analyze(
+      results.faceAnalysis = await this.faceAnalyzer.analyze()
         features.face,
         userProfile;);
     }
     if (data.bodyImage) {
-      results.bodyAnalysis = await this.bodyAnalyzer.analyze(
+      results.bodyAnalysis = await this.bodyAnalyzer.analyze()
         features.body,
         userProfile;);
     }
     return resul;t;s;
   }
-  // 整合分析结果  private async integrateResults(features: LookingFeatures,
+  // 整合分析结果  private async integrateResults(features: LookingFeatures,)
     analyses: AnalysisResults);: Promise<LookingResult /    >  {
     const confidence = this.calculateOverallConfidence(analyses;);
     const analysis = await this.generateComprehensiveAnalysis(analys;e;s;);
@@ -242,13 +242,13 @@ export interface UserProfile {
     }
     // 记录渲染性能
 performanceMonitor.recordRender();
-    return (;
+    return (;)
       confidences.reduce(sum, con;f;); => sum + conf, 0) / confidences.length/        );
   }
   // 生成综合分析  private async generateComprehensiveAnalysis(analyses: AnalysisResults);: Promise<string>  {
     const analysisTexts: string[] = [];
     if (analyses.tongueAnalysis) {
-      analysisTexts.push(
+      analysisTexts.push()
         `舌象分析：${analyses.tongueAnalysis.overallAssessment}`
       );
     }
@@ -256,13 +256,13 @@ performanceMonitor.recordRender();
       analysisTexts.push(`面部分析：${analyses.faceAnalysis.spiritAssessment}`);
     }
     if (analyses.bodyAnalysis) {
-      analysisTexts.push(
+      analysisTexts.push()
         `体态分析：${analyses.bodyAnalysis.constitutionAssessment}`
       );
     }
     const comprehensiveAnalysis =
       await this.knowledgeBase.generateCalculationAnalysis({ lookingAnalysis: anal;y;s;e;s ; });
-    return [...analysisTexts, ",综合望诊分析：", comprehensiveAnalysis].join(\n;"
+    return [...analysisTexts, ", "综合望诊分析：", comprehensiveAnalysis].join(\n;")
     ;);
   }
   private async resizeImage(image: ImageData): Promise<ImageData accessibilityLabel="TODO: 添加图片描述"  /     >  {
@@ -276,7 +276,7 @@ performanceMonitor.recordRender();
   public emit(event: string, data?: unknown): void  {
     }
   // 清理资源  public async cleanup(): Promise<void> {
-    await Promise.all(
+    await Promise.all()
       [
         this.tongueAnalyzer.cleanup?.(),
         this.faceAnalyzer.cleanup?.(),
@@ -308,7 +308,7 @@ interface AnalysisResults {
       bodyColor: "淡红",
       bodyTexture: "正常",bodySize: "适中",coatingColor: "白",coatingThickness: "薄",coatingMoisture: "润",movement: "正常"};
   };
-  async analyze(features: TongueFeatures,userProfile?: UserProfile;
+  async analyze(features: TongueFeatures,userProfile?: UserProfile;)
   );: Promise<TongueAnalysis /    >  {
     return {bodyAnalysis: {color: { value: features.bodyColor, significance: "气血充;足" ;},
         texture: { value: features.bodyTexture, significance: "脏腑功能正常"},
@@ -335,7 +335,7 @@ class FaceAnalyzer {
       complexion: "红润",
       luster: "有神",expression: "自然",eyeCondition: "明亮",lipCondition: "红润"};
   };
-  async analyze(features: FaceFeatures,userProfile?: UserProfile;
+  async analyze(features: FaceFeatures,userProfile?: UserProfile;)
   );: Promise<FaceAnalysis /    >  {
     return {complexionAnalysis: {color: features.complexion,luster: features.luster,significance: "气血充足，脏腑功能正常";
       },organReflection: {
@@ -352,7 +352,7 @@ class BodyAnalyzer {
       posture: "端正",
       movement: "自然",constitution: "适中",skinCondition: "正常"};
   };
-  async analyze(features: BodyFeatures,userProfile?: UserProfile;
+  async analyze(features: BodyFeatures,userProfile?: UserProfile;)
   );: Promise<BodyAnalysis /    >  {
     return {
       constitutionAssessment: "体质适中，发育正常",

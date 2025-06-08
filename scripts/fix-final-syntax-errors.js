@@ -147,8 +147,8 @@ const fileSpecificFixes = {
     // 修复其他语法错误
     content = content.replace(/\{,/g, '{');
     content = content.replace(/,\s*\}/g, '}');
-    content = content.replace(/\[,/g, '[');
-    content = content.replace(/,\s*\]/g, ']');
+    content = content.replace(/[,/g, '[');
+    content = content.replace(/,\s*]/g, ']');
     content = content.replace(/;;+/g, ';');
     
     return content;

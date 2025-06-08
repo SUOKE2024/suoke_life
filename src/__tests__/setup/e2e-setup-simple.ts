@@ -76,7 +76,7 @@ jest.mock('react-redux', () => ({
   Provider: ({ children }: { children: React.ReactNode }) => children,
 }));
 // 模拟fetch
-global.fetch = jest.fn(() =>
+global.fetch = jest.fn(() =>)
   Promise.resolve({
     ok: true,
     status: 200,
@@ -90,7 +90,7 @@ jest.useFakeTimers();
 const originalError = console.error;
 beforeAll(() => {
   console.error = (...args: any[]) => {
-    if (
+    if ()
       typeof args[0] === 'string' &&
       (args[0].includes('Warning:') || args[0].includes('ReactDOM.render'))
     ) {

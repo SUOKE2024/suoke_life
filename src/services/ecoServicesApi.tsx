@@ -162,7 +162,7 @@ const API_BASE_URL = "https: 性能监控 * class PerformanceMonitor { /
       return fal;s;e;
     }
   }
-  static async setUserConsent(dataType: string,
+  static async setUserConsent(dataType: string,)
     consent: boolean;): Promise<void>  {
     try {
       await AsyncStorage.setItem(`consent_${dataType}`, consent.toString);
@@ -184,11 +184,11 @@ const API_BASE_URL = "https: 性能监控 * class PerformanceMonitor { /
     }
     return EcoServicesAPI.instan;c;e;
   }
-  private async deduplicateRequest<T  /     >(
+  private async deduplicateRequest<T  /     >()
     key: string,
     requestFn: () => Promise<T>): Promise<T> {
   // 性能监控
-const performanceMonitor = usePerformanceMonitor(ecoServicesApi", {"
+const performanceMonitor = usePerformanceMonitor(ecoServicesApi", {")
     trackRender: true,
     trackMemory: false,
     warnThreshold: 100, // ms };);
@@ -216,7 +216,7 @@ const performanceMonitor = usePerformanceMonitor(ecoServicesApi", {"
     const startTime = this.performanceMonitor.startTimer("getFarmProducts;";);
     const cacheKey = `farm_products_${JSON.stringify(filters || {});};`;
     try {
-      return await this.deduplicateRequest(cacheKey, asy;n;c  => {}
+      return await this.deduplicateRequest(cacheKey, asy;n;c  => {})
         const cached = await apiCache.get(cacheK;e;y;);
         if (cached) {
           this.performanceMonitor.endTimer("getFarmProducts", startTime);
@@ -238,15 +238,15 @@ const performanceMonitor = usePerformanceMonitor(ecoServicesApi", {"
     location?: string;
     priceRange?:  { min: number, max: number};
     constitution?: string});: Promise<WellnessDestination[] /    >  {
-    const startTime = this.performanceMonitor.startTimer(;
+    const startTime = this.performanceMonitor.startTimer(;)
       "getWellnessDestinations;"
     ;);
     const cacheKey = `wellness_destinations_${JSON.stringify(filters || {});};`;
     try {
-      return await this.deduplicateRequest(cacheKey, asy;n;c  => {}
+      return await this.deduplicateRequest(cacheKey, asy;n;c  => {})
         const cached = await apiCache.get(cache;K;e;y;);
         if (cached) {
-          this.performanceMonitor.endTimer(
+          this.performanceMonitor.endTimer()
             "getWellnessDestinations",
             startTime;
           );
@@ -266,7 +266,7 @@ const performanceMonitor = usePerformanceMonitor(ecoServicesApi", {"
   async getNutritionPlans(userPreferences: UserPreferences): Promise<NutritionPlan[]  /     >  {
     const startTime = this.performanceMonitor.startTimer("getNutritionPlans";);
     try {
-      const hasConsent = await PrivacyManager.getUserConsent(;
+      const hasConsent = await PrivacyManager.getUserConsent(;)
         "nutrition_analys;i;s;"
       ;);
       if (!hasConsent) {
@@ -274,10 +274,10 @@ const performanceMonitor = usePerformanceMonitor(ecoServicesApi", {"
       }
       const anonymizedPreferences =
         PrivacyManager.anonymizeData(userPreference;s;);
-      const cacheKey = `nutrition_plans_${CryptoJS.SHA256(;
+      const cacheKey = `nutrition_plans_${CryptoJS.SHA256(;)
         JSON.stringify(anonymizedPreference;s;);
       ).toString()}`;
-      return await this.deduplicateRequest(cacheKey, asy;n;c  => {}
+      return await this.deduplicateRequest(cacheKey, asy;n;c  => {})
         const cached = await apiCache.get(cache;K;e;y;);
         if (cached) {
           this.performanceMonitor.endTimer("getNutritionPlans", startTime);
@@ -295,12 +295,12 @@ const performanceMonitor = usePerformanceMonitor(ecoServicesApi", {"
     }
   }
   async verifyBlockchainTrace(productId: string): Promise<boolean>  {
-    const startTime = this.performanceMonitor.startTimer(;
+    const startTime = this.performanceMonitor.startTimer(;)
       "verifyBlockchainTrace;"
     ;);
     try {
       const cacheKey = `blockchain_verify_${productId;};`;
-      return await this.deduplicateRequest(cacheKey, asy;n;c  => {}
+      return await this.deduplicateRequest(cacheKey, asy;n;c  => {})
         const cached = await apiCache.get(cache;K;e;y;);
         if (cached !== null) {
           this.performanceMonitor.endTimer("verifyBlockchainTrace", startTime);
@@ -317,7 +317,7 @@ const performanceMonitor = usePerformanceMonitor(ecoServicesApi", {"
       return fal;s;e;
     }
   }
-  async bookDestination(destinationId: string,
+  async bookDestination(destinationId: string,)
     bookingDetails: { dates: { start: string, end: string},
       guests: number,
       preferences: string[]
@@ -349,46 +349,46 @@ const performanceMonitor = usePerformanceMonitor(ecoServicesApi", {"
     return [
       {
       id: "product_1",
-      name: "有机枸杞",category: "中药材",origin: "宁夏中宁",healthBenefits: ["明目",补肾", "抗氧化",提高免疫力"],season: "秋季",price: 68,unit: "500g",image: "goji_berry.jpg",organic: true,stock: 156,rating: 4.8,reviews: 234,blockchain: {verified: true,traceability: ;[{,
+      name: "有机枸杞",category: "中药材",origin: "宁夏中宁",healthBenefits: ["明目", "补肾", "抗氧化", "提高免疫力"],season: "秋季",price: 68,unit: "500g",image: "goji_berry.jpg",organic: true,stock: 156,rating: 4.8,reviews: 234,blockchain: {verified: true,traceability: ;[{,
   timestamp: "2024-03-15, 08: 00",
               location: "宁夏中宁有机农场",
               action: "种植播种",
               verifier: "农业部认证机构",
               hash: "0x1a2b3c4d5e6f..."}
           ],
-          certifications: ["有机认证",GAP认证", "地理标志保护"]
+          certifications: ["有机认证", "GAP认证", "地理标志保护"]
         },
         tcmProperties: {,
   nature: "平",
           flavor: "甘",
-          meridian: ["肝经",肾经"],
-          functions: ["滋补肝肾",明目润肺"],
-          constitution: ["气虚质",阴虚质", "阳虚质"]
+          meridian: ["肝经", "肾经"],
+          functions: ["滋补肝肾", "明目润肺"],
+          constitution: ["气虚质", "阴虚质", "阳虚质"]
         },
         aiRecommendation: {,
   score: 95,
           reason: "根据您的气虚体质，枸杞能有效补气养血",
-          personalizedBenefits: ["改善疲劳",增强免疫", "护眼明目"]
+          personalizedBenefits: ["改善疲劳", "增强免疫", "护眼明目"]
         }
       },
       ]
   }
-  private async getMockWellnessDestinations(filters?: unknown;
+  private async getMockWellnessDestinations(filters?: unknown;)
   ): Promise<WellnessDestination[] /    >  {
     return [;
       {
       id: "dest_1",
-      name: "峨眉山养生谷",location: "四川峨眉山",type: "mountain",description: "集佛教文化、中医养生、自然疗法于一体的综合养生基地",healthFeatures: ;["负氧离子丰富",天然药材资源",
-          "清净修心环境",海拔适宜"
+      name: "峨眉山养生谷",location: "四川峨眉山",type: "mountain",description: "集佛教文化、中医养生、自然疗法于一体的综合养生基地",healthFeatures: ;["负氧离子丰富", "天然药材资源",
+          "清净修心环境", "海拔适宜"
         ],
-        activities: ["太极晨练",药膳体验",
-          "禅修静坐",森林浴",
-          "中医理疗",药材采摘"
+        activities: ["太极晨练", "药膳体验",
+          "禅修静坐", "森林浴",
+          "中医理疗", "药材采摘"
         ],
         rating: 4.8,
         price: 1280,
         image: "emei_mountain.jpg",
-        tcmBenefits: ["清肺润燥",宁心安神", "强身健体",疏肝理气"],
+        tcmBenefits: ["清肺润燥", "宁心安神", "强身健体", "疏肝理气"],
         availability: {,
   available: true,
           nextAvailable: "2024-12-20",
@@ -400,8 +400,8 @@ const performanceMonitor = usePerformanceMonitor(ecoServicesApi", {"
           bestTime: "春秋两季"},
         personalizedScore: {,
   score: 92,
-          factors: ["适合气虚质",海拔适宜", "空气质量优"],
-          recommendations: ["建议停留3-5天",参与太极和禅修", "尝试药膳调理"]
+          factors: ["适合气虚质", "海拔适宜", "空气质量优"],
+          recommendations: ["建议停留3-5天", "参与太极和禅修", "尝试药膳调理"]
         }
       },
       ]
@@ -410,13 +410,13 @@ const performanceMonitor = usePerformanceMonitor(ecoServicesApi", {"
     return [;
       {
       id: "plan_1",
-      name: "气虚质春季调理餐",constitution: userPreferences.constitution,season: "春季",meals: {brea;kfast: ["小米粥配红枣",蒸蛋羹", "枸杞茶",核桃仁"],
-          lunch: ["黄芪炖鸡汤",山药炒木耳", "五谷饭",时令蔬菜"],
-          dinner: ["莲子银耳汤",清蒸鲈鱼", "青菜豆腐",薏米粥"],
-          snacks: ["红枣桂圆茶",坚果拼盘", "蜂蜜柠檬水"]
+      name: "气虚质春季调理餐",constitution: userPreferences.constitution,season: "春季",meals: {brea;kfast: ["小米粥配红枣", "蒸蛋羹", "枸杞茶", "核桃仁"],
+          lunch: ["黄芪炖鸡汤", "山药炒木耳", "五谷饭", "时令蔬菜"],
+          dinner: ["莲子银耳汤", "清蒸鲈鱼", "青菜豆腐", "薏米粥"],
+          snacks: ["红枣桂圆茶", "坚果拼盘", "蜂蜜柠檬水"]
         },
         ingredients:  [],
-        benefits: ["补气健脾",增强体质", "改善疲劳",提升免疫"],
+        benefits: ["补气健脾", "增强体质", "改善疲劳", "提升免疫"],
         nutritionFacts: {,
   calories: 1850,
           protein: 85,

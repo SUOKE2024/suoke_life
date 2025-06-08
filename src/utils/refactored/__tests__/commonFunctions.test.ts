@@ -1,4 +1,3 @@
-
 import commonFunctions from '../commonFunctions.ts';
 describe('commonFunctions', () => {
   it('应该正确导出', () => {

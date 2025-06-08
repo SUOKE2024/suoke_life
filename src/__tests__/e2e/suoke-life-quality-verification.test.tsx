@@ -13,16 +13,16 @@ const SuokeLifeApp = () => {
     laoke: 'idle',
     soer: 'idle'
   });
-  return React.createElement('View', { testID: 'suoke-life-app' },
+  return React.createElement('View', { testID: 'suoke-life-app' },)
     // 导航栏
-    React.createElement('View', { testID: 'navigation-bar' },
+    React.createElement('View', { testID: 'navigation-bar' },)
       React.createElement('Text', { testID: 'app-title' }, '索克生活'),
       React.createElement('Text', { testID: 'app-subtitle' }, '智能健康管理平台')
     ),
         // 主要内容区域
-    React.createElement('View', { testID: 'main-content' },
+    React.createElement('View', { testID: 'main-content' },)
       // 首页
-      currentScreen === 'home' && React.createElement('View', { testID: 'home-screen' },
+      currentScreen === 'home' && React.createElement('View', { testID: 'home-screen' },)
         React.createElement('Text', { testID: 'welcome-message' }, '欢迎使用索克生活'),
         React.createElement('TouchableOpacity', {
       testID: "start-diagnosis-btn",
@@ -34,31 +34,31 @@ const SuokeLifeApp = () => {
         }, React.createElement('Text', {}, '健康管理'))
       ),
             // 四诊页面
-      currentScreen === 'diagnosis' && React.createElement('View', { testID: 'diagnosis-screen' },
+      currentScreen === 'diagnosis' && React.createElement('View', { testID: 'diagnosis-screen' },)
         React.createElement('Text', { testID: 'diagnosis-title' }, '中医四诊'),
-        React.createElement('View', { testID: 'diagnosis-steps' },
-          React.createElement('TouchableOpacity', { testID: 'wang-diagnosis' },
+        React.createElement('View', { testID: 'diagnosis-steps' },)
+          React.createElement('TouchableOpacity', { testID: 'wang-diagnosis' },)
             React.createElement('Text', {}, '望诊')),
-          React.createElement('TouchableOpacity', { testID: 'wen-diagnosis' },
+          React.createElement('TouchableOpacity', { testID: 'wen-diagnosis' },)
             React.createElement('Text', {}, '闻诊')),
-          React.createElement('TouchableOpacity', { testID: 'wen-inquiry' },
+          React.createElement('TouchableOpacity', { testID: 'wen-inquiry' },)
             React.createElement('Text', {}, '问诊')),
-          React.createElement('TouchableOpacity', { testID: 'qie-diagnosis' },
+          React.createElement('TouchableOpacity', { testID: 'qie-diagnosis' },)
             React.createElement('Text', {}, '切诊'))
         )
       ),
             // 健康管理页面
-      currentScreen === 'health' && React.createElement('View', { testID: 'health-screen' },
+      currentScreen === 'health' && React.createElement('View', { testID: 'health-screen' },)
         React.createElement('Text', { testID: 'health-title' }, '健康管理'),
-        React.createElement('View', { testID: 'health-data' },
+        React.createElement('View', { testID: 'health-data' },)
           React.createElement('Text', { testID: 'health-score' }, '健康评分: 85'),
           React.createElement('Text', { testID: 'last-checkup' }, '上次检查: 2024-12-06')
         )
       )
     ),
         // 智能体状态指示器
-    React.createElement('View', { testID: 'agent-status-panel' },
-      Object.keys(agentStatus).map(agent =>
+    React.createElement('View', { testID: 'agent-status-panel' },)
+      Object.keys(agentStatus).map(agent =>)
         React.createElement('View', {
           key: agent,
           testID: `agent-${agent}-status`
@@ -159,7 +159,7 @@ describe('索克生活应用质量验证', () => {
     });
     it('智能体功能定位正确', () => {
       const agentRoles = {
-      xiaoai: "对话交互智能体",
+      xiaoai: "对话交互智能体", "
       xiaoke: '服务管理智能体',
         laoke: '知识检索智能体',
         soer: '生活方式智能体'

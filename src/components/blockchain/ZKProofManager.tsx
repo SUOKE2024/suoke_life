@@ -30,25 +30,24 @@ export const ZKProofManager: React.FC<ZKProofManagerProps> = ({ userId }) => {
   circuitType: string;
     timestamp: number;
   }>>([]);
-  const handleGenerateProof = async (;
+  const handleGenerateProof = async (;)
     dataType: string,privateInputs: Record<string, any>,circuitType: string;
   ) => {try {const proof = await generateZKProof(userId, dataType, privateInputs, circuitType);
       const proofRecord = {id: Date.now().toString(),proof,dataType,circuitType,timestamp: Date.now();
       };
       setGeneratedProofs(prev => [proofRecord, ...prev]);
-      Alert.alert("成功",零知识证明生成成功');
+      Alert.alert("成功", "零知识证明生成成功');
       setShowGenerateModal(false);
     } catch (error) {
       Alert.alert('错误', `生成证明失败: ${error instanceof Error ? error.message : '未知错误'}`);
     }
   };
   const handleVerifyProof = async (request: VerifyWithZKPRequest) => {try {const result = await verifyWithZKP(request);
-      Alert.alert(
-        '验证结果',
+      Alert.alert('验证结果',
         result.valid ? '零知识证明验证通过' : '零知识证明验证失败',
         [
           {
-      text: "查看详情",
+      text: "查看详情", "
       onPress: () => {
               Alert.alert('验证详情', JSON.stringify(result.verificationDetails, null, 2));
             }
@@ -66,7 +65,7 @@ export const ZKProofManager: React.FC<ZKProofManagerProps> = ({ userId }) => {
       .join('') + '...';
   };
   return (
-    <View style={styles.container}>
+  <View style={styles.container}>
       {// 头部统计}
       <View style={styles.statsContainer}>
         <View style={styles.statItem}>
@@ -91,13 +90,13 @@ export const ZKProofManager: React.FC<ZKProofManagerProps> = ({ userId }) => {
       </View>
       {// 操作按钮}
       <View style={styles.actionContainer}>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={styles.generateButton}
           onPress={() => setShowGenerateModal(true)}
         >
           <Text style={styles.generateButtonText}>+ 生成证明</Text>
         </TouchableOpacity>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={styles.verifyButton}
           onPress={() => setShowVerifyModal(true)}
         >
@@ -105,8 +104,7 @@ export const ZKProofManager: React.FC<ZKProofManagerProps> = ({ userId }) => {
         </TouchableOpacity>
       </View>
       {// 错误显示}
-      {error && (
-        <View style={styles.errorContainer}>
+      {error  && <View style={styles.errorContainer}>
           <Text style={styles.errorText}>{error.message}</Text>
           <TouchableOpacity onPress={clearError} style={styles.errorCloseButton}>
             <Text style={styles.errorCloseText}>×</Text>
@@ -115,13 +113,13 @@ export const ZKProofManager: React.FC<ZKProofManagerProps> = ({ userId }) => {
       )}
       {// 证明列表}
       <ScrollView style={styles.proofsList} showsVerticalScrollIndicator={false}>
-        {generatedProofs.length === 0 ? (
+        {generatedProofs.length === 0 ? ()
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>暂无生成的零知识证明</Text>
             <Text style={styles.emptySubtext}>点击"生成证明"开始创建您的第一个零知识证明</Text>
           </View>
         ) : (
-          generatedProofs.map(proofRecord) => (
+          generatedProofs.map(proofRecord) => ()
             <View key={proofRecord.id} style={styles.proofCard}>
               <View style={styles.proofHeader}>
                 <Text style={styles.proofDataType}>{proofRecord.dataType}</Text>
@@ -148,14 +146,14 @@ export const ZKProofManager: React.FC<ZKProofManagerProps> = ({ userId }) => {
         )}
       </ScrollView>
       {// 生成证明模态框}
-      <GenerateProofModal;
+      <GenerateProofModal
         visible={showGenerateModal};
         onClose={() => setShowGenerateModal(false)};
         onSubmit={handleGenerateProof};
         isLoading={isLoading};
       />;
       {// 验证证明模态框};
-      <VerifyProofModal;
+      <VerifyProofModal
         visible={showVerifyModal};
         onClose={() => setShowVerifyModal(false)};
         onSubmit={handleVerifyProof};
@@ -175,18 +173,18 @@ const GenerateProofModal: React.FC<{,
   const [dataType, setDataType] = useState('');
   const [circuitType, setCircuitType] = useState('age_verification');
   const [privateInputs, setPrivateInputs] = useState('');
-  const handleSubmit = () => {if (!dataType.trim() || !privateInputs.trim()) {Alert.alert("错误",请填写所有必填字段');
+  const handleSubmit = () => {if (!dataType.trim() || !privateInputs.trim()) {Alert.alert("错误", "请填写所有必填字段');
       return;
     }
     try {
       const inputs = JSON.parse(privateInputs);
       onSubmit(dataType.trim(), inputs, circuitType);
     } catch (error) {
-      Alert.alert("错误",私有输入格式不正确，请输入有效的JSON');
+      Alert.alert("错误", "私有输入格式不正确，请输入有效的JSON');
     }
   };
   return (
-    <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
+  <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
       <View style={styles.modalContainer}>
         <View style={styles.modalHeader}>
           <Text style={styles.modalTitle}>生成零知识证明</Text>
@@ -197,7 +195,7 @@ const GenerateProofModal: React.FC<{,
         <ScrollView style={styles.modalContent}>
           <View style={styles.inputGroup}>
             <Text style={styles.inputLabel}>数据类型 *</Text>
-            <TextInput;
+            <TextInput
               style={styles.textInput}
               value={dataType}
               onChangeText={setDataType}
@@ -206,7 +204,7 @@ const GenerateProofModal: React.FC<{,
           </View>
           <View style={styles.inputGroup}>
             <Text style={styles.inputLabel}>私有输入 (JSON格式) *</Text>
-            <TextInput;
+            <TextInput
               style={[styles.textInput, styles.textArea]}
               value={privateInputs}
               onChangeText={setPrivateInputs}
@@ -215,12 +213,12 @@ const GenerateProofModal: React.FC<{,
               numberOfLines={8}
             />
           </View>;
-          <TouchableOpacity;
+          <TouchableOpacity
             style={[styles.submitButton, isLoading && styles.submitButtonDisabled]};
             onPress={handleSubmit};
             disabled={isLoading};
           >;
-            {isLoading ? (;
+            {isLoading ? (;)
               <ActivityIndicator size="small" color="#FFFFFF" />;
             ) : (;
               <Text style={styles.submitButtonText}>生成证明</Text>;
@@ -243,7 +241,7 @@ const VerifyProofModal: React.FC<{,
   const [dataType, setDataType] = useState('');
   const [proofData, setProofData] = useState('');
   const [publicInputs, setPublicInputs] = useState('');
-  const handleSubmit = () => {if (!verifierId.trim() || !dataType.trim() || !proofData.trim() || !publicInputs.trim()) {Alert.alert("错误",请填写所有字段');
+  const handleSubmit = () => {if (!verifierId.trim() || !dataType.trim() || !proofData.trim() || !publicInputs.trim()) {Alert.alert("错误", "请填写所有字段');
       return;
     }
     try {
@@ -258,11 +256,11 @@ const VerifyProofModal: React.FC<{,
       };
       onSubmit(request);
     } catch (error) {
-      Alert.alert("错误",证明数据格式不正确');
+      Alert.alert("错误", "证明数据格式不正确');
     }
   };
   return (
-    <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
+  <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
       <View style={styles.modalContainer}>
         <View style={styles.modalHeader}>
           <Text style={styles.modalTitle}>验证零知识证明</Text>
@@ -273,7 +271,7 @@ const VerifyProofModal: React.FC<{,
         <ScrollView style={styles.modalContent}>
           <View style={styles.inputGroup}>
             <Text style={styles.inputLabel}>验证者ID *</Text>
-            <TextInput;
+            <TextInput
               style={styles.textInput}
               value={verifierId}
               onChangeText={setVerifierId}
@@ -282,7 +280,7 @@ const VerifyProofModal: React.FC<{,
           </View>
           <View style={styles.inputGroup}>
             <Text style={styles.inputLabel}>数据类型 *</Text>
-            <TextInput;
+            <TextInput
               style={styles.textInput}
               value={dataType}
               onChangeText={setDataType}
@@ -291,7 +289,7 @@ const VerifyProofModal: React.FC<{,
           </View>
           <View style={styles.inputGroup}>
             <Text style={styles.inputLabel}>证明数据 (数组格式) *</Text>
-            <TextInput;
+            <TextInput
               style={[styles.textInput, styles.textArea]}
               value={proofData}
               onChangeText={setProofData}
@@ -302,7 +300,7 @@ const VerifyProofModal: React.FC<{,
           </View>
           <View style={styles.inputGroup}>
             <Text style={styles.inputLabel}>公开输入 (数组格式) *</Text>
-            <TextInput;
+            <TextInput
               style={[styles.textInput, styles.textArea]}
               value={publicInputs}
               onChangeText={setPublicInputs}
@@ -311,12 +309,12 @@ const VerifyProofModal: React.FC<{,
               numberOfLines={4}
             />
           </View>;
-          <TouchableOpacity;
+          <TouchableOpacity
             style={[styles.submitButton, isLoading && styles.submitButtonDisabled]};
             onPress={handleSubmit};
             disabled={isLoading};
           >;
-            {isLoading ? (;
+            {isLoading ? (;)
               <ActivityIndicator size="small" color="#FFFFFF" />;
             ) : (;
               <Text style={styles.submitButtonText}>验证证明</Text>;

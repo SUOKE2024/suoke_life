@@ -1,4 +1,3 @@
-
 import LoginScreen from '../LoginScreen.tsx';
 describe('LoginScreen', () => {
   it('应该正确导出', () => {

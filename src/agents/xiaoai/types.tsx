@@ -345,35 +345,35 @@ s";  * / 特禀质* ///     "
 // 小艾智能体接口 * export interface XiaoaiAgent {
   /
   chat(message: string, context: ChatContext): Promise<ChatResponse  /     >;
-  processVoiceInput(
+  processVoiceInput()
     audioData: AudioData,language?: string,dialect?: string;
   ): Promise<VoiceResponse /    >;
-  synthesizeVoice(
+  synthesizeVoice()
     text: string;
     language?: string;
     voice?: VoiceProfile;
   );: Promise<AudioData /    >
-  performLookDiagnosis(
+  performLookDiagnosis()
     imageData: ImageData;
     type: "face" | "tongue" | "body"): Promise<LookResult /    >;
-  performListenDiagnosis(
+  performListenDiagnosis()
     audioData: AudioData;
     type: "voice" | "cough" | "breathing" | "other");: Promise<ListenResult /    >;
-  performInquiryDiagnosis(
+  performInquiryDiagnosis()
     userId: string;
     symptoms?: string[]
   );: Promise<InquiryResult /    >;
   performPalpationDiagnosis(data: PalpationData);: Promise<PalpationResult /    >;
-  integrateFourDiagnosis(
+  integrateFourDiagnosis()
     results: FourDiagnosisResults);: Promise<IntegratedDiagnosis /    >;
   analyzeHealthData(data: HealthDataInput): Promise<HealthAnalysis  /     >;
-  generateHealthRecommendations(
+  generateHealthRecommendations()
     profile: UserProfile);: Promise<HealthRecommendation[] /    >;
-  trackHealthTrends(
+  trackHealthTrends()
     userId: string;
     timeRange: TimeRange);: Promise<HealthTrends /    >;
   createMedicalRecord(data: MedicalRecordInput): Promise<MedicalRecord  /     >;
-  updateMedicalRecord(
+  updateMedicalRecord()
     recordId: string;
     updates: Partial<MedicalRecord />);: Promise<MedicalRecord />;/      getMedicalHistory(;
     userId: string;
@@ -381,22 +381,22 @@ s";  * / 特禀质* ///     "
   );: Promise<MedicalRecord[] /    >;
   generateHealthReport(userId: string, type: ReportType);: Promise<HealthReport /    >;
   enableAccessibilityFeature(feature: AccessibilityFeature): Promise<void>;
-  provideNavigationAssistance(
+  provideNavigationAssistance()
     context: NavigationContext);: Promise<NavigationGuidance /    >;
   recognizeSignLanguage(videoData: VideoData);: Promise<SignLanguageResult /    >;
-  adaptInterfaceForDisability(
+  adaptInterfaceForDisability()
     disability: DisabilityType);: Promise<InterfaceAdaptation /    >;
   provideElderlyFriendlyInterface(): Promise<ElderlyInterfaceConfig /    >;
-  assessConstitution(
+  assessConstitution()
     data: ConstitutionAssessmentData): Promise<ConstitutionResult /    >;
-  performCalculationDiagnosis(
+  performCalculationDiagnosis()
     symptoms: string[];
     context: DiagnosisContext);: Promise<CalculationResult /    >;
-  generateTreatmentPlan(
+  generateTreatmentPlan()
     diagnosis: IntegratedDiagnosis;
     userProfile: UserProfile);: Promise<TreatmentPlan /    >;
   coordinateWithOtherAgents(task: AgentTask): Promise<AgentCoordinationResult  /     >;
-  shareUserContext(
+  shareUserContext()
     targetAgent: AgentType;
     context: SharedContext);: Promise<void>;
   setPersonality(traits: PersonalityTraits): void;

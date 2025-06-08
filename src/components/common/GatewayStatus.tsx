@@ -36,7 +36,7 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   const [gatewayHealth, setGatewayHealth] = useState<'healthy' | 'degraded' | 'unhealthy'>('unknown');
-  useEffect() => {
+  useEffect(() => {
     loadGatewayStatus();
     // 每30秒自动刷新
     const interval = setInterval(loadGatewayStatus, 30000);
@@ -65,7 +65,7 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
     } catch (error) {
       console.error('获取服务状态失败:', error);
       // 设置默认服务列表
-      setServices([
+      setServices([)
         {
       name: "xiaoai-service",
       status: 'unknown' },
@@ -116,8 +116,7 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
     if (onServiceSelect) {
       onServiceSelect(service.name);
     } else {
-      Alert.alert(
-        '服务详情',
+      Alert.alert('服务详情',
         `服务名称: ${service.name}\n状态: ${getStatusText(service.status)}\n响应时间: ${service.responseTime || 'N/A'}ms\n实例数: ${service.instances || 'N/A'}`,
         [{ text: '确定' }],
       );
@@ -152,13 +151,13 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
   };
   if (!metrics) {
     return (
-      <View style={styles.container}>
+  <View style={styles.container}>
         <Text style={styles.loadingText}>加载网关状态中...</Text>
       </View>
     );
   }
   return (
-    <ScrollView;
+  <ScrollView
       style={styles.container}
       refreshControl={
         <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
@@ -167,10 +166,10 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
       {}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>网关状态</Text>
-        <View style={[styles.statusCard, { borderLeftColor: getStatusColor(gatewayHealth) }]}>
+        <View style={{[styles.statusCard, { borderLeftColor: getStatusColor(gatewayHealth) }}]}>
           <View style={styles.statusHeader}>
             <Text style={styles.statusTitle}>整体健康状态</Text>
-            <View style={[styles.statusBadge, { backgroundColor: getStatusColor(gatewayHealth) }]}>
+            <View style={{[styles.statusBadge, { backgroundColor: getStatusColor(gatewayHealth) }}]}>
               <Text style={styles.statusBadgeText}>{getStatusText(gatewayHealth)}</Text>
             </View>
           </View>
@@ -180,8 +179,7 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
         </View>
       </View>
       {}
-      {showDetailedMetrics && (
-        <View style={styles.section}>
+      {showDetailedMetrics  && <View style={styles.section}>
           <Text style={styles.sectionTitle}>性能指标</Text>
           <View style={styles.metricsGrid}>
             <View style={styles.metricCard}>
@@ -192,13 +190,13 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
             </View>
             <View style={styles.metricCard}>
               <Text style={styles.metricLabel}>成功率</Text>
-              <Text style={[styles.metricValue, { color: metrics.apiSuccessRate >= 95 ? '#4CAF50' : '#F44336' }]}>
+              <Text style={{[styles.metricValue, { color: metrics.apiSuccessRate >= 95 ? '#4CAF50' : '#F44336' }}]}>
                 {formatPercentage(metrics.apiSuccessRate)}
               </Text>
             </View>
             <View style={styles.metricCard}>
               <Text style={styles.metricLabel}>错误率</Text>
-              <Text style={[styles.metricValue, { color: metrics.apiErrorRate <= 5 ? '#4CAF50' : '#F44336' }]}>
+              <Text style={{[styles.metricValue, { color: metrics.apiErrorRate <= 5 ? '#4CAF50' : '#F44336' }}]}>
                 {formatPercentage(metrics.apiErrorRate)}
               </Text>
             </View>
@@ -210,11 +208,11 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
             </View>
             <View style={styles.metricCard}>
               <Text style={styles.metricLabel}>连接质量</Text>
-              <Text style={[styles.metricValue, { color: getStatusColor(
+              <Text style={{[styles.metricValue, { color: getStatusColor()
                 metrics.connectionQuality === 'excellent' ? 'healthy' :
                 metrics.connectionQuality === 'good' ? 'healthy' :
                 metrics.connectionQuality === 'fair' ? 'degraded' : 'unhealthy',
-              ) }]}>
+              ) }}]}>
                 {metrics.connectionQuality === 'excellent' ? '优秀' :
                 metrics.connectionQuality === 'good' ? '良好' :
                 metrics.connectionQuality === 'fair' ? '一般' : '较差'}
@@ -232,31 +230,28 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
       {}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>服务状态</Text>
-        {services.map((service, index) => (
-          <TouchableOpacity;
+        {services.map((service, index) => ())
+          <TouchableOpacity
             key={index}
-            style={[styles.serviceCard, { borderLeftColor: getStatusColor(service.status) }]}
+            style={{[styles.serviceCard, { borderLeftColor: getStatusColor(service.status) }}]}
             onPress={() => handleServicePress(service)}
           >
             <View style={styles.serviceHeader}>
               <Text style={styles.serviceName}>{service.name}</Text>
-              <View style={[styles.statusBadge, { backgroundColor: getStatusColor(service.status) }]}>
+              <View style={{[styles.statusBadge, { backgroundColor: getStatusColor(service.status) }}]}>
                 <Text style={styles.statusBadgeText}>{getStatusText(service.status)}</Text>
               </View>
             </View>
             <View style={styles.serviceDetails}>
-              {service.responseTime && (
-                <Text style={styles.serviceDetailText}>
+              {service.responseTime  && <Text style={styles.serviceDetailText}>
                   响应时间: {formatResponseTime(service.responseTime)}
                 </Text>
               )}
-              {service.instances && (
-                <Text style={styles.serviceDetailText}>
+              {service.instances  && <Text style={styles.serviceDetailText}>
                   实例数: {service.instances}
                 </Text>
               )}
-              {service.lastCheck && (
-                <Text style={styles.serviceDetailText}>
+              {service.lastCheck  && <Text style={styles.serviceDetailText}>
                   最后检查: {new Date(service.lastCheck).toLocaleTimeString()}
                 </Text>
               )}
@@ -265,18 +260,17 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
         ))}
       </View>
       {}
-      {showDetailedMetrics && (
-        <View style={styles.section}>
+      {showDetailedMetrics  && <View style={styles.section}>
           <Text style={styles.sectionTitle}>系统资源</Text>
           <View style={styles.resourceCard}>
             <View style={styles.resourceItem}>
               <Text style={styles.resourceLabel}>内存使用率</Text>
               <View style={styles.progressBar}>
-                <View;
-                  style={[
+                <View
+                  style={{[
                     styles.progressFill,
                     {
-                      width: `${metrics.memoryUsage}%`,
+                      width: `${metrics.memoryUsage}}%`,
                       backgroundColor: metrics.memoryUsage > 80 ? '#F44336' : '#4CAF50',
                     },
                   ]}
@@ -287,11 +281,11 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
             <View style={styles.resourceItem}>
               <Text style={styles.resourceLabel}>CPU使用率</Text>
               <View style={styles.progressBar}>
-                <View;
-                  style={[
+                <View
+                  style={{[
                     styles.progressFill,
                     {
-                      width: `${metrics.cpuUsage}%`,
+                      width: `${metrics.cpuUsage}}%`,
                       backgroundColor: metrics.cpuUsage > 70 ? '#F44336' : '#4CAF50',
                     },
                   ]}
@@ -302,11 +296,11 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
             <View style={styles.resourceItem}>
               <Text style={styles.resourceLabel}>存储使用率</Text>
               <View style={styles.progressBar}>
-                <View;
-                  style={[
+                <View
+                  style={{[
                     styles.progressFill,
                     {
-                      width: `${metrics.storageUsage}%`,
+                      width: `${metrics.storageUsage}}%`,
                       backgroundColor: metrics.storageUsage > 85 ? '#F44336' : '#4CAF50',
                     },
                   ]}
@@ -317,11 +311,11 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
             <View style={styles.resourceItem}>
               <Text style={styles.resourceLabel}>电池电量</Text>
               <View style={styles.progressBar}>
-                <View;
-                  style={[
+                <View
+                  style={{[
                     styles.progressFill,
                     {
-                      width: `${metrics.batteryLevel}%`,
+                      width: `${metrics.batteryLevel}}%`,
                       backgroundColor: metrics.batteryLevel < 20 ? '#F44336' : '#4CAF50',
                     },
                   ]}

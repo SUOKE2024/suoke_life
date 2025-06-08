@@ -59,7 +59,7 @@ const defaultAddress: DeliveryAddress = {
       province: "北京市",
       city: "北京市",
       district: "朝阳区",
-      detail: "三里屯街道1号",
+      detail: "三里屯街道1号", "
       isDefault: true;
     };
     this.addresses.set(defaultAddress.id, defaultAddress);
@@ -83,7 +83,7 @@ async getOrder(orderId: string): Promise<LogisticsOrder | null> {
     return this.orders.get(orderId) || null;
   }
   // 更新订单状态
-async updateOrderStatus(
+async updateOrderStatus()
     orderId: string,
     status: LogisticsOrder["status],"
     location?: string;
@@ -102,7 +102,7 @@ if (order.trackingNumber) {
       await this.addTrackingInfo(order.trackingNumber, {
         timestamp: new Date(),
         status,
-        location: location || "处理中心",
+        location: location || "处理中心", "
         description: this.getStatusDescription(status);
       });
     }
@@ -149,7 +149,7 @@ async addTrackingInfo(trackingNumber: string, info: TrackingInfo): Promise<void>
     this.trackingCache.set(trackingNumber, existing);
   }
   // 获取配送报价
-async getDeliveryQuotes(
+async getDeliveryQuotes()
     fromAddress: DeliveryAddress,
     toAddress: DeliveryAddress,
     weight: number;
@@ -162,7 +162,7 @@ const quotes: DeliveryQuote[] = [;
         serviceType: "标准快递",
         price: 15 + weight * 2,
         estimatedDays: 1,
-        features: ["次日达",保价服务", "签收确认"]
+        features: ["次日达", "保价服务", "签收确认"]
       },
       {
       carrierId: "yt",
@@ -170,7 +170,7 @@ const quotes: DeliveryQuote[] = [;
         serviceType: "经济快递",
         price: 8 + weight * 1.5,
         estimatedDays: 3,
-        features: ["经济实惠",网点覆盖广"]
+        features: ["经济实惠", "网点覆盖广"]
       },
       {
       carrierId: "sto",
@@ -178,7 +178,7 @@ const quotes: DeliveryQuote[] = [;
         serviceType: "标准快递",
         price: 10 + weight * 1.8,
         estimatedDays: 2,
-        features: ["性价比高",服务稳定"]
+        features: ["性价比高", "服务稳定"]
       }
     ];
     return quotes;

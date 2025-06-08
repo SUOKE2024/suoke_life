@@ -1,4 +1,3 @@
-
 import apiCache from '../apiCache.ts';
 describe('apiCache', () => {
   it('应该正确导出', () => {

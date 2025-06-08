@@ -1,6 +1,7 @@
 import React from 'react';
 import { DefaultTheme } from 'react-native-paper';
 import { Dimensions } from 'react-native';
+
 // 索克生活 - 设计系统主题配置
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 // 颜色系统

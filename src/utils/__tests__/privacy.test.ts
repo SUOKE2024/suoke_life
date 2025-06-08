@@ -1,4 +1,3 @@
-
 import privacy from '../privacy.ts';
 describe('privacy', () => {
   it('应该正确导出', () => {

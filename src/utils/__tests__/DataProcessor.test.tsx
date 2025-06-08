@@ -1,4 +1,3 @@
-
 import DataProcessor from '../DataProcessor.tsx';
 describe('DataProcessor', () => {
   it('应该正确导出', () => {

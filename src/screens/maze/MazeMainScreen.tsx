@@ -36,19 +36,19 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
   // 主题配置
   const themeConfig = {
     [MazeTheme.HEALTH_PATH]: {
-      name: "健康之路",
+      name: "健康之路", "
       color: '#4CAF50',
       icon: 'heart-pulse',
       description: '探索基础健康知识'
     },
     [MazeTheme.NUTRITION_GARDEN]: {
-      name: "营养花园",
+      name: "营养花园", "
       color: '#FF9800',icon: 'food-apple',description: '学习营养学知识';
     },[MazeTheme.TCM_JOURNEY]: {
-      name: "中医之旅",
+      name: "中医之旅", "
       color: '#9C27B0',icon: 'leaf',description: '传统中医智慧';
     },[MazeTheme.BALANCED_LIFE]: {
-      name: "平衡生活",
+      name: "平衡生活", "
       color: '#2196F3',icon: 'scale-balance',description: '生活方式平衡';
     };
   };
@@ -59,18 +59,18 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
       color: '#FF9800' },[MazeDifficulty.HARD]: {
       name: "困难",
       color: '#F44336' },[MazeDifficulty.EXPERT]: {
-      name: "专家",
+      name: "专家", "
       color: '#9C27B0' };
   };
   // 加载数据
-  const loadData = useCallback(async () => {try {setLoading(true);
-      const [mazesResponse, templatesResponse] = await Promise.all([;
+  const loadData = useCallback(async () => {try {setLoading(true);)
+      const [mazesResponse, templatesResponse] = await Promise.all([;)
         cornMazeService.listMazes(),cornMazeService.listMazeTemplates(undefined, undefined, 1, 20);
       ]);
       setMazes(mazesResponse.mazes);
       setTemplates(templatesResponse.templates);
       // 加载用户进度
-      const progressPromises = mazesResponse.mazes.map(maze =>;
+      const progressPromises = mazesResponse.mazes.map(maze =>;)
         cornMazeService.getUserProgress(maze.id, userId).catch() => null);
       );
       const progressResults = await Promise.all(progressPromises);
@@ -78,17 +78,17 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
       setUserProgress(validProgress.map(p => p.progress));
     } catch (error) {
       console.error('加载迷宫数据失败:', error);
-      Alert.alert("错误",加载数据失败，请重试');
+      Alert.alert("错误", "加载数据失败，请重试');
     } finally {
       setLoading(false);
     }
   }, [userId]);
   // 刷新数据
-  const onRefresh = useCallback(async () => {setRefreshing(true);
+  const onRefresh = useCallback(async () => {setRefreshing(true);)
     await loadData();
     setRefreshing(false);
   }, [loadData]);
-  useEffect() => {
+  useEffect(() => {
     loadData();
   }, [loadData]);
   // 开始游戏
@@ -96,40 +96,39 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
       navigation.navigate('MazeGame', { mazeId, userId });
     } catch (error) {
       console.error('开始游戏失败:', error);
-      Alert.alert("错误",开始游戏失败，请重试');
+      Alert.alert("错误", "开始游戏失败，请重试');
     }
   };
   // 继续游戏
   const continueMaze = (mazeId: string) => {navigation.navigate('MazeGame', { mazeId, userId });
   };
   // 从模板创建迷宫
-  const createFromTemplate = async (template: MazeTemplate) => {try {const maze = await cornMazeService.createMaze({name: `${template.name} - 我的迷宫`,theme: template.mazeType,difficulty: template.difficulty,useTemplate: true,templateId: template.templateId;
+  const createFromTemplate = async (template: MazeTemplate) => {try {const maze = await cornMazeService.createMaze({name: `${template.name} - 我的迷宫`,theme: template.mazeType,difficulty: template.difficulty,useTemplate: true,templateId: template.templateId;)
       });
-      Alert.alert(
-        "创建成功",迷宫已创建，是否立即开始游戏？',
+      Alert.alert("创建成功", "迷宫已创建，是否立即开始游戏？',
         [
           {
       text: "稍后",
       style: 'cancel' },
           {
-      text: "开始",
+      text: "开始", "
       onPress: () => startMaze(maze.id) }
         ]
       );
       await loadData(); // 刷新列表
     } catch (error) {
       console.error('创建迷宫失败:', error);
-      Alert.alert("错误",创建迷宫失败，请重试');
+      Alert.alert("错误", "创建迷宫失败，请重试');
     }
   };
   // 渲染迷宫卡片
   const renderMazeCard = (maze: Maze) => {const theme = themeConfig[maze.theme];
     const difficulty = difficultyConfig[maze.difficulty];
     const progress = userProgress.find(p => p.mazeId === maze.id);
-    return (;
-      <TouchableOpacity;
+    return (;)
+      <TouchableOpacity
         key={maze.id};
-        style={[styles.mazeCard, { borderLeftColor: theme.color }]};
+        style={{[styles.mazeCard, { borderLeftColor: theme.color }}]};
         onPress={() => progress?.status === ProgressStatus.IN_PROGRESS ;
           ? continueMaze(maze.id);
           : startMaze(maze.id);
@@ -143,12 +142,11 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
               <Text style={styles.mazeTheme}>{theme.name}</Text>
             </View>
           </View>
-          <View style={[styles.difficultyBadge, { backgroundColor: difficulty.color }]}>
+          <View style={{[styles.difficultyBadge, { backgroundColor: difficulty.color }}]}>
             <Text style={styles.difficultyText}>{difficulty.name}</Text>
           </View>
         </View>
-        {maze.description && (
-          <Text style={styles.mazeDescription}>{maze.description}</Text>
+        {maze.description  && <Text style={styles.mazeDescription}>{maze.description}</Text>
         )}
         <View style={styles.mazeStats}>
           <View style={styles.statItem}>
@@ -159,9 +157,8 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
             <Icon name="clock-outline" size={16} color={colors.textSecondary} />
             <Text style={styles.statText}>{maze.estimatedTime || 15}分钟</Text>
           </View>
-          {progress && (
-        <View style={styles.statItem}>
-              <Icon;
+          {progress  && <View style={styles.statItem}>
+              <Icon
                 name={progress.status === ProgressStatus.COMPLETED ? "check-circle" : "play-circle"}
                 size={16}
                 color={progress.status === ProgressStatus.COMPLETED ? colors.success : colors.primary}
@@ -179,9 +176,9 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
   const renderTemplateCard = (template: MazeTemplate) => {const theme = themeConfig[template.mazeType];
     const difficulty = difficultyConfig[template.difficulty];
     return (
-      <TouchableOpacity;
+  <TouchableOpacity
         key={template.templateId}
-        style={[styles.templateCard, { borderLeftColor: theme.color }]}
+        style={{[styles.templateCard, { borderLeftColor: theme.color }}]}
         onPress={() => createFromTemplate(template)}
       >
         <View style={styles.templateHeader}>
@@ -192,7 +189,7 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
               <Text style={styles.templateTheme}>{theme.name}</Text>
             </View>
           </View>
-          <View style={[styles.difficultyBadge, { backgroundColor: difficulty.color }]}>
+          <View style={{[styles.difficultyBadge, { backgroundColor: difficulty.color }}]}>
             <Text style={styles.difficultyText}>{difficulty.name}</Text>
           </View>
         </View>
@@ -211,7 +208,7 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
             <Text style={styles.statText}>{template.challengeCount}个挑战</Text>;
           </View>;
         </View>;
-        {template.isPopular && (;
+        {template.isPopular && (;)
           <View style={styles.popularBadge}>;
             <Icon name="fire" size={12} color="#FF5722" />;
             <Text style={styles.popularText}>热门</Text>;
@@ -226,9 +223,9 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
     const theme = themeConfig[maze.theme];
     const completionRate = (progress.visitedNodes.length / (maze.size * maze.size)) * 100;
     return (
-      <TouchableOpacity;
+  <TouchableOpacity
         key={progress.mazeId}
-        style={[styles.progressCard, { borderLeftColor: theme.color }]}
+        style={{[styles.progressCard, { borderLeftColor: theme.color }}]}
         onPress={() => continueMaze(progress.mazeId)}
       >
         <View style={styles.progressHeader}>
@@ -244,11 +241,11 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
           <Text style={styles.progressScore}>{progress.score}分</Text>
         </View>
         <View style={styles.progressBar}>
-          <View;
-            style={[
+          <View
+            style={{[
               styles.progressFill,
               {
-                width: `${completionRate}%`,
+                width: `${completionRate}}%`,
                 backgroundColor: theme.color;
               }
             ]} ;
@@ -269,10 +266,10 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
     );
   };
   return (
-    <SafeAreaView style={styles.container}>
+  <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>玉米迷宫</Text>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={styles.createButton}
           onPress={() => navigation.navigate('CreateMaze')}
         >
@@ -280,7 +277,7 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <View style={styles.tabContainer}>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={[styles.tab, selectedTab === 'my' && styles.activeTab]}
           onPress={() => setSelectedTab('my')}
         >
@@ -288,7 +285,7 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
             我的迷宫
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={[styles.tab, selectedTab === 'templates' && styles.activeTab]}
           onPress={() => setSelectedTab('templates')}
         >
@@ -296,7 +293,7 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
             模板库
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={[styles.tab, selectedTab === 'progress' && styles.activeTab]}
           onPress={() => setSelectedTab('progress')}
         >
@@ -305,14 +302,14 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
           </Text>;
         </TouchableOpacity>;
       </View>;
-      <ScrollView;
+      <ScrollView
         style={styles.content};
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />;
         };
       >;
-        {selectedTab === 'my' && (;
+        {selectedTab === 'my' && (;)
           <View style={styles.section}>;
-            {mazes.length > 0 ? (;
+            {mazes.length > 0 ? (;)
               mazes.map(renderMazeCard);
             ) : (
               <View style={styles.emptyState}>
@@ -323,14 +320,12 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
             )}
           </View>
         )}
-        {selectedTab === 'templates' && (
-        <View style={styles.section}>
+        {selectedTab === 'templates'  && <View style={styles.section}>
             {templates.map(renderTemplateCard)}
           </View>
         )}
-        {selectedTab === 'progress' && (
-        <View style={styles.section}>
-            {userProgress.length > 0 ? (
+        {selectedTab === 'progress'  && <View style={styles.section}>
+            {userProgress.length > 0 ? ()
               userProgress.map(renderProgressCard);
             ) : (
               <View style={styles.emptyState}>

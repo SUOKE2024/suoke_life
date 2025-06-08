@@ -45,7 +45,7 @@ export const SystemMonitorDashboard: React.FC<SystemMonitorDashboardProps>  = ({
   const [services, setServices] = useState<ServiceStatus[]>([]);
   const [alerts, setAlerts] = useState<SystemAlert[]>([]);
   const [loading, setLoading] = useState(true);
-  useEffect() => {
+  useEffect(() => {
     loadSystemData();
     const interval = setInterval(loadSystemData, 30000); // 每30秒刷新;
 return() => clearInterval(interval);
@@ -140,7 +140,7 @@ const mockMetrics: SystemMetric[] = [;
         {
           id: alert-002",
           type: "warning,",
-          title: "健康服务响应缓慢",
+          title: "健康服务响应缓慢", "
           message: 健康服务平均响应时间超过200ms",
           timestamp: new Date(Date.now() - 5 * 60 * 1000),
           resolved: false;
@@ -209,18 +209,18 @@ const mockMetrics: SystemMetric[] = [;
         return "📋;"
     }
   };
-  const renderMetricCard = (metric: SystemMetric) => (;
-    <TouchableOpacity;
+  const renderMetricCard = (metric: SystemMetric) => (;)
+    <TouchableOpacity
 key={metric.id}
       style={styles.metricCard}
       onPress={() => onMetricPress?.(metric)}
     >
       <View style={styles.metricHeader}>
         <Text style={styles.metricName}>{metric.name}</    Text>
-        <View style={[styles.statusDot, { backgroundColor: getMetricStatusColor(metric.status) }]} /    >
+        <View style={{[styles.statusDot, { backgroundColor: getMetricStatusColor(metric.status) }}]} /    >
       </    View>
       <View style={styles.metricValue}>
-        <Text style={[styles.valueText, { color: getMetricStatusColor(metric.status) }]}>
+        <Text style={{[styles.valueText, { color: getMetricStatusColor(metric.status) }}]}>
           {metric.value}
         </    Text>
         <Text style={styles.unitText}>{metric.unit}</    Text>
@@ -232,15 +232,15 @@ key={metric.id}
       </    View>
     </    TouchableOpacity>
   );
-  const renderServiceCard = (service: ServiceStatus) => (;
-    <TouchableOpacity;
+  const renderServiceCard = (service: ServiceStatus) => (;)
+    <TouchableOpacity
 key={service.id}
       style={styles.serviceCard}
       onPress={() => onServicePress?.(service)}
     >
       <View style={styles.serviceHeader}>
         <Text style={styles.serviceName}>{service.name}</    Text>
-        <View style={[styles.statusBadge, { backgroundColor: getServiceStatusColor(service.status) }]}>
+        <View style={{[styles.statusBadge, { backgroundColor: getServiceStatusColor(service.status) }}]}>
           <Text style={styles.statusText}>{service.status.toUpperCase()}</    Text>
         </    View>
       </    View>
@@ -260,8 +260,8 @@ key={service.id}
       </    View>
     </    TouchableOpacity>
   );
-  const renderAlertCard = (alert: SystemAlert) => (;
-    <TouchableOpacity;
+  const renderAlertCard = (alert: SystemAlert) => (;)
+    <TouchableOpacity
 key={alert.id}
       style={[styles.alertCard, alert.resolved && styles.resolvedAlert]}
       onPress={() => onAlertPress?.(alert)}
@@ -269,15 +269,14 @@ key={alert.id}
       <View style={styles.alertHeader}>
         <Text style={styles.alertIcon}>{getAlertIcon(alert.type)}</    Text>
         <View style={styles.alertInfo}>
-          <Text style={[styles.alertTitle, { color: getAlertTypeColor(alert.type) }]}>
+          <Text style={{[styles.alertTitle, { color: getAlertTypeColor(alert.type) }}]}>
             {alert.title}
           </    Text>
           <Text style={styles.alertTimestamp}>
             {alert.timestamp.toLocaleTimeString()}
           </    Text>
         </    View>
-        {alert.resolved && (
-        <View style={styles.resolvedBadge}>
+        {alert.resolved  && <View style={styles.resolvedBadge}>
             <Text style={styles.resolvedText}>已解决</    Text>
           </    View>
         )}
@@ -290,7 +289,7 @@ key={alert.id}
     const onlineServices = services.filter(s => s.status === online").length;"
     const unresolvedAlerts = alerts.filter(a => !a.resolved).length;
     return (
-      <View style={styles.overviewContainer}>
+  <View style={styles.overviewContainer}>
         <Text style={styles.sectionTitle}>系统概览</    Text>;
         <View style={styles.overviewGrid}>;
           <View style={styles.overviewCard}>;
@@ -310,13 +309,13 @@ key={alert.id}
     );
   };
   if (loading) {
-    return (;
+    return (;)
       <View style={styles.loadingContainer}>;
         <Text style={styles.loadingText}>加载系统监控数据中...</    Text>;
       </    View>;
     );
   }
-  return (;
+  return (;)
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>;
       {renderOverview()};
       <Text style={styles.sectionTitle}>系统指标</    Text>;
@@ -334,7 +333,7 @@ key={alert.id}
     </    ScrollView>;
   );
 };
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flex: 1,
     backgroundColor: "#f5f5f5,",
     padding: 16},

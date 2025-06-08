@@ -41,7 +41,7 @@ const mockRoute = {
   params: {},
 };
 // Test wrapper component
-const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => ()
   <Provider store={mockStore}>
     <NavigationContainer>
       {children}
@@ -72,7 +72,7 @@ describe('FiveDiagnosisAgentIntegrationScreen', () => {
     });
   });
   it('应该正确渲染初始界面', () => {
-    const { getByText, getByTestId } = render(
+    const { getByText, getByTestId } = render()
       <TestWrapper>
         <FiveDiagnosisAgentIntegrationScreen
           navigation={mockNavigation}
@@ -85,7 +85,7 @@ describe('FiveDiagnosisAgentIntegrationScreen', () => {
     expect(getByTestId('diagnosis-steps-container')).toBeTruthy();
   });
   it('应该显示所有五个诊断步骤', () => {
-    const { getByText } = render(
+    const { getByText } = render()
       <TestWrapper>
         <FiveDiagnosisAgentIntegrationScreen
           navigation={mockNavigation}
@@ -100,7 +100,7 @@ describe('FiveDiagnosisAgentIntegrationScreen', () => {
     expect(getByText('算诊')).toBeTruthy();
   });
   it('应该能够开始诊断流程', async () => {
-    const { getByText } = render(
+    const { getByText } = render()
       <TestWrapper>
         <FiveDiagnosisAgentIntegrationScreen
           navigation={mockNavigation}
@@ -117,7 +117,7 @@ describe('FiveDiagnosisAgentIntegrationScreen', () => {
     });
   });
   it('应该能够执行单个诊断步骤', async () => {
-    const { getByText, getByTestId } = render(
+    const { getByText, getByTestId } = render()
       <TestWrapper>
         <FiveDiagnosisAgentIntegrationScreen
           navigation={mockNavigation}
@@ -140,14 +140,14 @@ describe('FiveDiagnosisAgentIntegrationScreen', () => {
       fireEvent.press(lookingButton);
     });
     await waitFor(() => {
-      expect(fiveDiagnosisService.performSingleDiagnosis).toHaveBeenCalledWith(
+      expect(fiveDiagnosisService.performSingleDiagnosis).toHaveBeenCalledWith()
         "test-session-123",looking',
         expect.any(Object),
       );
     });
   });
   it('应该显示诊断结果', async () => {
-    const { getByText, getByTestId } = render(
+    const { getByText, getByTestId } = render()
       <TestWrapper>
         <FiveDiagnosisAgentIntegrationScreen
           navigation={mockNavigation}
@@ -170,7 +170,7 @@ describe('FiveDiagnosisAgentIntegrationScreen', () => {
     });
   });
   it('应该能够执行智能体协调', async () => {
-    const { getByText, getByTestId } = render(
+    const { getByText, getByTestId } = render()
       <TestWrapper>
         <FiveDiagnosisAgentIntegrationScreen
           navigation={mockNavigation}
@@ -198,10 +198,10 @@ describe('FiveDiagnosisAgentIntegrationScreen', () => {
   });
   it('应该处理诊断错误', async () => {
     // Mock error response
-    (fiveDiagnosisService.performSingleDiagnosis as jest.Mock).mockRejectedValue(
+    (fiveDiagnosisService.performSingleDiagnosis as jest.Mock).mockRejectedValue()
       new Error('诊断服务暂时不可用'),
     );
-    const { getByText, getByTestId } = render(
+    const { getByText, getByTestId } = render()
       <TestWrapper>
         <FiveDiagnosisAgentIntegrationScreen
           navigation={mockNavigation}
@@ -225,7 +225,7 @@ describe('FiveDiagnosisAgentIntegrationScreen', () => {
     });
   });
   it('应该显示智能体状态', () => {
-    const { getByText } = render(
+    const { getByText } = render()
       <TestWrapper>
         <FiveDiagnosisAgentIntegrationScreen
           navigation={mockNavigation}
@@ -239,7 +239,7 @@ describe('FiveDiagnosisAgentIntegrationScreen', () => {
     expect(getByText('索儿: 空闲 (60%)')).toBeTruthy();
   });
   it('应该能够重置诊断', async () => {
-    const { getByText, getByTestId } = render(
+    const { getByText, getByTestId } = render()
       <TestWrapper>
         <FiveDiagnosisAgentIntegrationScreen
           navigation={mockNavigation}
@@ -267,7 +267,7 @@ describe('FiveDiagnosisAgentIntegrationScreen', () => {
     });
   });
   it('应该显示诊断进度', async () => {
-    const { getByTestId } = render(
+    const { getByTestId } = render()
       <TestWrapper>
         <FiveDiagnosisAgentIntegrationScreen
           navigation={mockNavigation}
@@ -295,7 +295,7 @@ describe('FiveDiagnosisAgentIntegrationScreen', () => {
     });
   });
   it('应该能够查看详细结果', async () => {
-    const { getByText, getByTestId } = render(
+    const { getByText, getByTestId } = render()
       <TestWrapper>
         <FiveDiagnosisAgentIntegrationScreen
           navigation={mockNavigation}
@@ -323,7 +323,7 @@ describe('FiveDiagnosisAgentIntegrationScreen', () => {
     });
   });
   it('应该支持模拟数据模式', async () => {
-    const { getByText, getByTestId } = render(
+    const { getByText, getByTestId } = render()
       <TestWrapper>
         <FiveDiagnosisAgentIntegrationScreen
           navigation={mockNavigation}
@@ -347,7 +347,7 @@ describe('FiveDiagnosisAgentIntegrationScreen', () => {
   });
   it('应该正确处理性能监控', () => {
     const mockUsePerformanceMonitor = require('../../hooks/usePerformanceMonitor').usePerformanceMonitor;
-    render(
+    render()
       <TestWrapper>
         <FiveDiagnosisAgentIntegrationScreen
           navigation={mockNavigation}
@@ -355,7 +355,7 @@ describe('FiveDiagnosisAgentIntegrationScreen', () => {
         />
       </TestWrapper>,
     );
-    expect(mockUsePerformanceMonitor).toHaveBeenCalledWith(
+    expect(mockUsePerformanceMonitor).toHaveBeenCalledWith()
       'FiveDiagnosisAgentIntegrationScreen',
       expect.objectContaining({
         trackRender: true,

@@ -6,7 +6,7 @@ import React from "react";
 const mockStore = configureStore({reducer: {
     // Add your reducers here
   });};);
-const wrapper = ({ children }: { children: React.ReactNode }) => (;
+const wrapper = ({ children }: { children: React.ReactNode }) => (;)
   <Provider store={mockStore}>{children}</Provider;>
 ;)
 describe("useRTLTextAlign", () => {
@@ -73,7 +73,7 @@ RTLView(// test params);
 expect(averageTime).toBeLessThan(1);
   });
   it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);
+    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);)
     const startTime = performance.now();
     // Test with large dataset
 RTLView(largeDataset);

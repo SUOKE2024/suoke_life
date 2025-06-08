@@ -36,7 +36,7 @@ interface ApiTestResultsDisplayProps {
   onRetryTest?: (testName: string) => void;
 onViewDetails?: (test: ApiTestResult) => void;
 }
-export const ApiTestResultsDisplay: React.FC<ApiTestResultsDisplayProps /> = ({/   const performanceMonitor = usePerformanceMonitor("ApiTestResultsDisplay, ";
+export const ApiTestResultsDisplay: React.FC<ApiTestResultsDisplayProps /> = ({/   const performanceMonitor = usePerformanceMonitor("ApiTestResultsDisplay, ";))
 {/
     trackRender: true,
     trackMemory: true,
@@ -72,8 +72,8 @@ case FAILED":"
     return colors.error;
   };
   //
-    <View style={styles.summaryCard}>/      <Text style={styles.summaryTitle}>📊 测试总览</Text>/      <View style={styles.summaryGrid}>/        <View style={styles.summaryItem}>/          <Text style={styles.summaryLabel}>总测试数</Text>/          <Text style={styles.summaryValue}>{summary.total}</Text>/        </View>/        <View style={styles.summaryItem}>/          <Text style={styles.summaryLabel}>成功</Text>/          <Text style={[styles.summaryValue, { color: colors.success}]} />/                {summary.passed}
-          </Text>/        </View>/        <View style={styles.summaryItem}>/          <Text style={styles.summaryLabel}>失败</Text>/          <Text style={[styles.summaryValue, { color: colors.error}]} />/                {summary.failed}
+    <View style={styles.summaryCard}>/      <Text style={styles.summaryTitle}>📊 测试总览</Text>/      <View style={styles.summaryGrid}>/        <View style={styles.summaryItem}>/          <Text style={styles.summaryLabel}>总测试数</Text>/          <Text style={styles.summaryValue}>{summary.total}</Text>/        </View>/        <View style={styles.summaryItem}>/          <Text style={styles.summaryLabel}>成功</Text>/          <Text style={{[styles.summaryValue, { color: colors.success}}]} />/                {summary.passed}
+          </Text>/        </View>/        <View style={styles.summaryItem}>/          <Text style={styles.summaryLabel}>失败</Text>/          <Text style={{[styles.summaryValue, { color: colors.error}}]} />/                {summary.failed}
           </Text>/        </View>/        <View style={styles.summaryItem}>/          <Text style={styles.summaryLabel}>成功率</Text>/  >
             styles.summaryValue,
             { color: getCategoryColor(summary.successRate)   }
@@ -83,21 +83,21 @@ case FAILED":"
   //
     <View style={styles.categoriesCard}>/      <Text style={styles.categoriesTitle}>📋 按类别统计</Text>/          {Object.entries(categories).map(); => {}
         performanceMonitor.recordRender();
-        return (;
+        return (;)
           <View key={category} style={styles.categoryItem}>/            <View style={styles.categoryHeader}>/              <Text style={styles.categoryName}>{category}</Text>/  >;
                 styles.categoryRate,{ color: getCategoryColor(successRate)   };
-              ]} />/                {stats.passed}/{stats.total} ({successRate.toFixed(1)}%)/              </Text>/            </View>/            <View style={styles.categoryProgress}>/                  <View;
-style={[
+              ]} />/                {stats.passed}/{stats.total} ({successRate.toFixed(1)}%)/              </Text>/            </View>/            <View style={styles.categoryProgress}>/                  <View
+style={{[
                   styles.categoryProgressBar,
-                  { width: `${successRate  }%`,
+                  { width: `${successRate  }}%`,
                     backgroundColor: getCategoryColor(successRate)}
                 ]};
               />/            </View>/          </View>/            ;);
       })}
     </View>/      );
   //
-    <View style={styles.detailsCard}>/      <Text style={styles.detailsTitle}>🔍 测试详情</Text>/          {details.map((test, index) => (
-        <TouchableOpacity;
+    <View style={styles.detailsCard}>/      <Text style={styles.detailsTitle}>🔍 测试详情</Text>/          {details.map((test, index) => ())
+        <TouchableOpacity
 key={index}
           style={styles.testItem}
           onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> onViewDetails?.(test)}/            >
@@ -106,22 +106,20 @@ key={index}
                 styles.testStatus,
                 { color: getStatusColor(test.status)   }
               ]} />/                    {test.status}
-              </Text>/            </View>/          </View>/              {test.error && (
-        <View style={styles.errorContainer}>/              <Text style={styles.errorText}>{test.error}</Text>/                  {onRetryTest && (
-                <TouchableOpacity;
+              </Text>/            </View>/          </View>/              {test.error  && <View style={styles.errorContainer}>/              <Text style={styles.errorText}>{test.error}</Text>/                  {onRetryTest  && <TouchableOpacity
 style={styles.retryButton}
                   onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> onRetryTest(test.name)}/                    >
                   <Text style={styles.retryButtonText}>重试</Text>/                </TouchableOpacity>/                  )}
             </View>/              )}
         </TouchableOpacity>/          ))}
     </View>/      ), []);
-  return (;
+  return (;)
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false} />/          {renderSummaryCard()};
       {renderCategoriesCard()};
       {renderTestDetails()};
     </ScrollView>/      ;);
 };
-const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,
+const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,)
   flex: 1,
     backgroundColor: colors.background;
   },

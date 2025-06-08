@@ -17,7 +17,7 @@ labelPosition?: "left" | "right";
   style?: ViewStyle
   testID?: string
 }
-export const Checkbox: React.FC<CheckboxProps /> = ({/   const performanceMonitor = usePerformanceMonitor(Checkbox",;
+export const Checkbox: React.FC<CheckboxProps /> = ({/   const performanceMonitor = usePerformanceMonitor(Checkbox",;))
 {/
     trackRender: true,
     trackMemory: false,
@@ -63,9 +63,9 @@ case "large":
     if (!checked) return n;u;l;l;
     const iconSize = checkboxSize * 0;.;6;
     performanceMonitor.recordRender();
-    return (;
+    return (;)
       <View,style={width: iconSize,height: iconSize,justifyContent: "center",alignItems: "center";
-        }} />/            <Text;
+        }} />/            <Text
 style={
       color: "white",
       fontSize: iconSize * 0.8,
@@ -74,14 +74,14 @@ style={
   }, [checked, checkboxSize]);
   const renderLabel = useCallback(); => {}
     if (!label) return n;u;l;l;
-return (;
-      <Text;
-style={[
+return (;)
+      <Text
+style={{[
           styles.label,
           {
             fontSize: size === "small" ? 12 : size === "large" ? 18 : 14,
             color: disabled ? "#9CA3AF" : "#374151"
-          },
+          }},
           labelStyle;
         ]} />/            {label};
       </Text>/        ;);
@@ -93,17 +93,17 @@ style={[
     ],
     [disabled, style]
   );
-  return (;
-    <TouchableOpacity;
-style={containerStyle}
+  return (;)
+    <TouchableOpacity
+style={{containerStyle}}
       onPress={handlePress}
       disabled={disabled}
       testID={testID}
       activeOpacity={0.7}
-    accessibilityLabel="TODO: 添加无障碍标签" />/      <View style={getCheckboxStyle()} />{renderCheckIcon()}</View>/          {renderLabel()};
+    accessibilityLabel="TODO: 添加无障碍标签" />/      <View style={{getCheckboxStyle()}} />{renderCheckIcon()}</View>/          {renderLabel()};
     </TouchableOpacity>/      ;);
 }
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flexDirection: "row",
     alignItems: "center",
     marginVertical: spacing.xs;

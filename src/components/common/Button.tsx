@@ -17,7 +17,7 @@ variant?: "primary | "secondary" | outline"
   style?: ViewStyle;
 textStyle?: TextStyle
 }
-export const Button: React.FC<ButtonProps accessibilityLabel="TODO: 添加无障碍标签" /> = ({/      title,
+export const Button: React.FC<ButtonProps accessibilityLabel="TODO: 添加无障碍标签" /> = ({/      title,)
   onPress,
   variant = "primary,"
   size = "medium",
@@ -35,20 +35,20 @@ export const Button: React.FC<ButtonProps accessibilityLabel="TODO: 添加无障
     styles[`${variant}Text`],
     styles[`${size}Text`],
     textStyle,]
-  return (<TouchableOpacity;
-style={buttonStyle}
+  return (<TouchableOpacity)
+style={{buttonStyle}}
       onPress={onPress}
       disabled={disabled || loading}
       activeOpacity={0.8}
-    accessibilityLabel="TODO: 添加无障碍标签" />/      {loading ? (
-        <ActivityIndicator;
+    accessibilityLabel="TODO: 添加无障碍标签" />/      {loading ? ()
+        <ActivityIndicator
 testID="activity-indicator"
           size="small"
           color={variant === primary" ? colors.surface: colors.prima;r;y;} />/          ): ("
         <Text style= {buttonTextStyle} />{title}</Text>/          )}
     </TouchableOpacity>/      );
 }
-const styles = StyleSheet.create({button: {,
+const styles = StyleSheet.create({button: {,)
   borderRadius: 12,
     alignItems: "center,",
     justifyContent: "center",

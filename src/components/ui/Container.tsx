@@ -20,7 +20,7 @@ export interface ContainerProps {
   style?: ViewStyle
   testID?: string
 }
-const Container: React.FC<ContainerProps /> = ({/   const performanceMonitor = usePerformanceMonitor(Container", { /    ";
+const Container: React.FC<ContainerProps /> = ({/   const performanceMonitor = usePerformanceMonitor(Container", { /    ";))
     trackRender: true,trackMemory: false,warnThreshold: 100,  };);
   children,
   padding,
@@ -32,7 +32,7 @@ const Container: React.FC<ContainerProps /> = ({/   const performanceMonitor = u
   style,
   testID;
 }) => {}
-  const containerStyle = useMemo(() => [;
+  const containerStyle = useMemo(() => [;)
     styles.base,
     { flexDirection: direction},
     padding && { padding: getPadding(padding)   },
@@ -43,8 +43,8 @@ const Container: React.FC<ContainerProps /> = ({/   const performanceMonitor = u
     style;
   ].filter(Boolean); as ViewStyle[], []);
   performanceMonitor.recordRender();
-  return (;
-    <View style={containerStyle} testID={testID} />/          {children};
+  return (;)
+    <View style={{containerStyle}} testID={testID} />/          {children};
     </View>/      ;);
 };
 //
@@ -53,6 +53,6 @@ const Container: React.FC<ContainerProps /> = ({/   const performanceMonitor = u
 const getMargin = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => (margin: keyof typeof spacing | number): number => {}
   if (typeof margin === "number") { ///      return spacing[margin;];
 };
-const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({ base: {flexDirection: "column"}
+const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({ base: {flexDirection: "column"})
 }), []);
 export default React.memo(Container);

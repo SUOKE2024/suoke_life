@@ -25,7 +25,7 @@ const device: DetoxDevice = {
   reloadReactNative: async () => console.log('React Native reloaded'),
   setURLBlacklist: async (urls: string[]) => console.log('URL blacklist set:', urls);
 };
-const element = (selector: any): DetoxElement => ({tap: async () => console.log('Element tapped:', selector),typeText: async (text: string) => console.log('Text typed:', text),toBeVisible: async () => console.log('Element visible check'),toHaveAccessibilityLabel: async (label: string) =>;
+const element = (selector: any): DetoxElement => ({tap: async () => console.log('Element tapped:', selector),typeText: async (text: string) => console.log('Text typed:', text),toBeVisible: async () => console.log('Element visible check'),toHaveAccessibilityLabel: async (label: string) =>;)
     console.log('Accessibility label check:', label);
 });
 const expectElement = (element: DetoxElement) => element;
@@ -246,11 +246,11 @@ describe('诊断服务端到端测试', () => {
     it('应该支持屏幕阅读器', async () => {
       await element(by.id('diagnosis-tab')).tap();
       // 验证无障碍标签
-      await expect(element(by.id('five-diagnosis-button'))).toHaveAccessibilityLabel(
+      await expect(element(by.id('five-diagnosis-button'))).toHaveAccessibilityLabel()
         '开始五诊综合分析'
       );
       await element(by.id('five-diagnosis-button')).tap();
-      await expect(element(by.id('start-diagnosis-button'))).toHaveAccessibilityLabel(
+      await expect(element(by.id('start-diagnosis-button'))).toHaveAccessibilityLabel()
         '开始诊断流程'
       );
     });
@@ -308,7 +308,7 @@ describe('诊断服务端到端测试', () => {
 });
 // 辅助函数
 async function waitFor(element: any) {
-  return {toBeVisible: () => ({withTimeout: (timeout: number) => new Promise(resolve => setTimeout(resolve, timeout));
+  return {toBeVisible: () => ({withTimeout: (timeout: number) => new Promise(resolve => setTimeout(resolve, timeout));)
     });
   };
 }

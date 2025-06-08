@@ -67,10 +67,10 @@ const MazeGameScreen: React.FC<MazeGameScreenProps> = ({ route, navigation }) =>
   /**
   * 初始化游戏
   */
-  const initializeGame = useCallback(async () => {try {setLoading(true);
+  const initializeGame = useCallback(async () => {try {setLoading(true);)
       setError(null);
       // 并行加载数据
-      const [mazeResponse, settingsResponse] = await Promise.all([;
+      const [mazeResponse, settingsResponse] = await Promise.all([;)
         cornMazeService.getMaze(mazeId, userId),cornMazeService.getGameSettings(userId);
       ]);
       setMaze(mazeResponse.maze);
@@ -113,7 +113,7 @@ const MazeGameScreen: React.FC<MazeGameScreenProps> = ({ route, navigation }) =>
   /**
   * 处理玩家移动
   */
-  const handleMove = useCallback(async (direction: Direction) => {if (!maze || !progress || isMoving || isPaused) return;
+  const handleMove = useCallback(async (direction: Direction) => {if (!maze || !progress || isMoving || isPaused) return;)
     try {
       setIsMoving(true);
       const moveResponse: MoveResponse = await cornMazeService.moveInMaze({
@@ -143,7 +143,7 @@ const MazeGameScreen: React.FC<MazeGameScreenProps> = ({ route, navigation }) =>
       }
     } catch (err) {
       console.error('Move failed:', err);
-      Alert.alert("错误",移动失败，请重试');
+      Alert.alert("错误", "移动失败，请重试');
     } finally {
       setIsMoving(false);
     }
@@ -151,7 +151,7 @@ const MazeGameScreen: React.FC<MazeGameScreenProps> = ({ route, navigation }) =>
   /**
   * 处理游戏事件
   */
-  const handleGameEvent = useCallback(async (moveResponse: MoveResponse) => {switch (moveResponse.eventType) {case GameEventType.KNOWLEDGE:if (moveResponse.knowledgeNode) {setCurrentKnowledge(moveResponse.knowledgeNode);
+  const handleGameEvent = useCallback(async (moveResponse: MoveResponse) => {switch (moveResponse.eventType) {case GameEventType.KNOWLEDGE:if (moveResponse.knowledgeNode) {setCurrentKnowledge(moveResponse.knowledgeNode);)
           setShowKnowledgeModal(true);
           setIsPaused(true);
           stopGameTimer();
@@ -167,11 +167,10 @@ const MazeGameScreen: React.FC<MazeGameScreenProps> = ({ route, navigation }) =>
         break;
       case GameEventType.REWARD:
         if (moveResponse.reward) {
-          Alert.alert(
-            '🎉 获得奖励！',
+          Alert.alert('🎉 获得奖励！',
             `${moveResponse.reward.name}\n${moveResponse.reward.description}`,
             [{
-      text: "太棒了！",
+      text: "太棒了！", "
       style: 'default' }]
           );
         }
@@ -200,12 +199,12 @@ const MazeGameScreen: React.FC<MazeGameScreenProps> = ({ route, navigation }) =>
   /**
   * 退出游戏
   */
-  const exitGame = useCallback() => {Alert.alert(;
-      "退出游戏",确定要退出当前游戏吗？游戏进度将会保存。',[;
+  const exitGame = useCallback() => {Alert.alert(;)
+      "退出游戏", "确定要退出当前游戏吗？游戏进度将会保存。',[;
         {
       text: "取消",
       style: 'cancel' },{
-      text: "退出",
+      text: "退出", "
       style: 'destructive',onPress: () => {stopGameTimer();
             navigation.goBack();
           }
@@ -247,7 +246,7 @@ const MazeGameScreen: React.FC<MazeGameScreenProps> = ({ route, navigation }) =>
     navigation.goBack();
   }, [navigation]);
   // 处理返回键
-  useFocusEffect(
+  useFocusEffect()
     useCallback() => {
       const onBackPress = () => {exitGame();
         return true;
@@ -257,13 +256,13 @@ const MazeGameScreen: React.FC<MazeGameScreenProps> = ({ route, navigation }) =>
     }, [exitGame])
   );
   // 组件挂载时初始化游戏
-  useEffect() => {
+  useEffect(() => {
     initializeGame();
     return () => {stopGameTimer();
     };
   }, [initializeGame, stopGameTimer]);
   // 游戏开始时启动计时器
-  useEffect() => {
+  useEffect(() => {
     if (gameStarted && !isPaused) {
       startGameTimer();
     }
@@ -272,7 +271,7 @@ const MazeGameScreen: React.FC<MazeGameScreenProps> = ({ route, navigation }) =>
   }, [gameStarted, isPaused, startGameTimer, stopGameTimer]);
   // 加载状态
   if (loading) {
-    return (;
+    return (;)
       <SafeAreaView style={styles.container}>;
         <StatusBar barStyle="light-content" backgroundColor="#2E7D32" />;
         <View style={styles.loadingContainer}>;
@@ -284,7 +283,7 @@ const MazeGameScreen: React.FC<MazeGameScreenProps> = ({ route, navigation }) =>
   }
   // 错误状态
   if (error) {
-    return (;
+    return (;)
       <SafeAreaView style={styles.container}>;
         <StatusBar barStyle="light-content" backgroundColor="#2E7D32" />;
         <View style={styles.errorContainer}>;
@@ -298,11 +297,10 @@ const MazeGameScreen: React.FC<MazeGameScreenProps> = ({ route, navigation }) =>
   }
   // 主游戏界面
   return (
-    <SafeAreaView style={styles.container}>
+  <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#2E7D32" />
       {// 进度显示}
-      {progress && (
-        <ProgressDisplay;
+      {progress  && <ProgressDisplay
           progress={progress}
           gameTime={gameTime}
           isPaused={isPaused}
@@ -313,8 +311,7 @@ const MazeGameScreen: React.FC<MazeGameScreenProps> = ({ route, navigation }) =>
         />
       )}
       {// 迷宫渲染器}
-      {maze && progress && (
-        <MazeRenderer;
+      {maze && progress  && <MazeRenderer
           maze={maze}
           progress={progress}
           isMoving={isMoving}
@@ -323,22 +320,20 @@ const MazeGameScreen: React.FC<MazeGameScreenProps> = ({ route, navigation }) =>
         />
       )}
       {// 游戏控制}
-      <GameControls;
+      <GameControls
         onMove={handleMove}
         disabled={isMoving || isPaused}
         gameSettings={gameSettings}
       />
       {// 知识节点模态框}
-      {showKnowledgeModal && currentKnowledge && (
-        <KnowledgeNodeModal;
+      {showKnowledgeModal && currentKnowledge  && <KnowledgeNodeModal
           knowledgeNode={currentKnowledge}
           visible={showKnowledgeModal}
           onClose={handleKnowledgeModalClose}
         />
       )}
       {// 挑战模态框}
-      {showChallengeModal && currentChallenge && (
-        <ChallengeModal;
+      {showChallengeModal && currentChallenge  && <ChallengeModal
           challenge={currentChallenge}
           visible={showChallengeModal}
           onClose={handleChallengeModalClose}
@@ -346,8 +341,7 @@ const MazeGameScreen: React.FC<MazeGameScreenProps> = ({ route, navigation }) =>
         />
       )}
       {// 设置模态框}
-      {showSettingsModal && gameSettings && (
-        <GameSettingsModal;
+      {showSettingsModal && gameSettings  && <GameSettingsModal
           settings={gameSettings}
           visible={showSettingsModal}
           onClose={() => setShowSettingsModal(false)}
@@ -356,9 +350,9 @@ const MazeGameScreen: React.FC<MazeGameScreenProps> = ({ route, navigation }) =>
         />;
       )};
       {// 游戏完成处理};
-      {showCompletionModal && progress && maze && (;
+      {showCompletionModal && progress && maze && (;)
         () => {// 导航到完成屏幕;
-          navigation.navigate('MazeCompletion', {score: progress.score,completionTime: gameTime,stepsCount: progress.stepsCount,theme: maze.theme,difficulty: maze.difficulty,rewards: [],mazeName: maze.name,onPlayAgain: () => {setShowCompletionModal(false);
+          navigation.navigate('MazeCompletion', {score: progress.score,completionTime: gameTime,stepsCount: progress.stepsCount,theme: maze.theme,difficulty: maze.difficulty,rewards: [],mazeName: maze.name,onPlayAgain: () => {setShowCompletionModal(false);)
               initializeGame();
             },
             onBackToMenu: () => {

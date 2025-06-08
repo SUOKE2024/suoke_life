@@ -15,11 +15,11 @@ const WelcomeScreen: React.FC  = () => {}
   const navigation = useNavigation<WelcomeScreenNavigationProp>();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.8)).current;
-  useEffect() => {
+  useEffect(() => {
     // 设置状态栏
 StatusBar.setBarStyle(dark-content", true);"
     // Logo渐入动画
-Animated.parallel([
+Animated.parallel([)
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 2000,
@@ -36,20 +36,20 @@ const timer = setTimeout() => {
     }, 3000);
     return() => clearTimeout(timer);
   }, [fadeAnim, scaleAnim, navigation]);
-  return (;
+  return (;)
     <SafeAreaView style={styles.container}>;
       <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" /    >;
       <View style={styles.content}>;
         <Animated.View;
-style={[
+style={{[
             styles.logoContainer,
             {
               opacity: fadeAnim,
-              transform: [{ scale: scaleAnim }]
+              transform: [{ scale: scaleAnim }}]
             }
           ]}
         >
-          <Image;
+          <Image
 source={require("../../assets/images/    app_icon.png")}
             style={styles.logo}
             resizeMode="contain"
@@ -59,7 +59,7 @@ source={require("../../assets/images/    app_icon.png")}
     </    SafeAreaView>
   );
 };
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flex: 1,
     backgroundColor: #FFFFFF"},"
   content: {,

@@ -3,8 +3,8 @@ import {import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useMedicalResource } from '../../hooks/useMedicalResource';
 import { MedicalResource } from '../../store/slices/medicalResourceSlice';
-const LoadingSpinner = React.lazy() => import('../../components/common/LoadingSpinner'));
-const ErrorMessage = React.lazy() => import('../../components/common/ErrorMessage'));
+const LoadingSpinner = React.lazy(() => import('../../components/common/LoadingSpinner'));
+const ErrorMessage = React.lazy(() => import('../../components/common/ErrorMessage'));
   View,
   Text,
   StyleSheet,
@@ -71,7 +71,7 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
       label: '医生', icon: 'person' };
   ];
   // 初始化
-  useEffect() => {
+  useEffect(() => {
     // 检查服务健康状态
     healthCheck();
     // 获取附近资源
@@ -113,10 +113,10 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
   }, [pagination.hasMore, loading.search, loadMoreResults]);
   // 渲染搜索栏
   const renderSearchBar = () => (
-    <View style={styles.searchContainer}>
+  <View style={styles.searchContainer}>
       <View style={styles.searchInputContainer}>
         <Icon name="search" size={24} color="#666" style={styles.searchIcon}>
-        <TextInput;
+        <TextInput
           style={styles.searchInput}
           placeholder="搜索医院、诊所、医生..."
           value={searchText}
@@ -125,8 +125,7 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
           onFocus={() => setShowSearchHistory(true)}
           returnKeyType="search"
         />
-        {searchText.length > 0 && (
-          <TouchableOpacity;
+        {searchText.length > 0  && <TouchableOpacity
             onPress={() => setSearchText('')};
             style={styles.clearButton};
           >;
@@ -134,7 +133,7 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
           </TouchableOpacity>;
         )};
       </View>;
-      <TouchableOpacity;
+      <TouchableOpacity
         style={styles.filterButton};
         onPress={toggleFiltersPanel};
       >;
@@ -144,30 +143,30 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
   );
   // 渲染类型选择器
   const renderCategorySelector = () => (
-    <ScrollView;
+  <ScrollView
       horizontal;
       showsHorizontalScrollIndicator={false}
       style={styles.categoryContainer}
       contentContainerStyle={styles.categoryContent}
     >
-      {resourceTypes.map(type) => (
-        <TouchableOpacity;
+      {resourceTypes.map(type) => ()
+        <TouchableOpacity
           key={type.key}
-          style={[
+          style={{[
             styles.categoryItem,
             selectedCategory === type.key && styles.categoryItemActive;
-          ]}
+          ]}}
           onPress={() => handleCategorySelect(type.key)}
         >
-          <Icon;
+          <Icon
             name={type.icon};
             size={20};
             color={selectedCategory === type.key ? '#fff' : '#007AFF'};
           />;
-          <Text;
-            style={[;
+          <Text
+            style={{[;
               styles.categoryText,selectedCategory === type.key && styles.categoryTextActive;
-            ]};
+            ]}};
           >;
             {type.label};
           </Text>;
@@ -177,11 +176,11 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
   );
   // 渲染搜索历史
   const renderSearchHistory = () => {if (!showSearchHistory || searchHistory.length === 0) return null;
-    return (;
+    return (;)
       <View style={styles.historyContainer}>;
         <Text style={styles.historyTitle}>搜索历史</Text>;
-        {searchHistory.map((item, index) => (;
-          <TouchableOpacity;
+        {searchHistory.map((item, index) => (;))
+          <TouchableOpacity
             key={index};
             style={styles.historyItem};
             onPress={() => {setSearchText(item);
@@ -197,8 +196,8 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
     );
   };
   // 渲染资源卡片
-  const renderResourceCard = ({ item }: { item: MedicalResource }) => (
-    <TouchableOpacity;
+  const renderResourceCard = ({ item }: { item: MedicalResource }) => ()
+    <TouchableOpacity
       style={styles.resourceCard}
       onPress={() => handleResourcePress(item)}
     >
@@ -214,31 +213,30 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
       </View>
       <Text style={styles.resourceAddress}>{item.location.address}</Text>
       <View style={styles.resourceServices}>
-        {item.services.slice(0, 3).map((service, index) => (
+        {item.services.slice(0, 3).map((service, index) => ())
           <View key={index} style={styles.serviceTag}>
             <Text style={styles.serviceText}>{service}</Text>
           </View>
         ))}
-        {item.services.length > 3 && (
-          <Text style={styles.moreServices}>+{item.services.length - 3}</Text>
+        {item.services.length > 3  && <Text style={styles.moreServices}>+{item.services.length - 3}</Text>
         )}
       </View>
       <View style={styles.resourceFooter}>
         <View style={styles.availabilityContainer}>
-          <Icon;
+          <Icon
             name={item.availability.isOpen ? 'access-time' : 'schedule'}
             size={14}
             color={item.availability.isOpen ? '#4CAF50' : '#FF9800'}
           />;
-          <Text;
-            style={[;
-              styles.availabilityText,{ color: item.availability.isOpen ? '#4CAF50' : '#FF9800' };
+          <Text
+            style={{[;
+              styles.availabilityText,{ color: item.availability.isOpen ? '#4CAF50' : '#FF9800' }};
             ]};
           >;
             {item.availability.isOpen ? '营业中' : '已关闭'};
           </Text>;
         </View>;
-        {item.consultationFee && (;
+        {item.consultationFee && (;)
           <Text style={styles.priceText}>¥{item.consultationFee}</Text>;
         )};
       </View>;
@@ -247,14 +245,14 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
   // 渲染附近资源
   const renderNearbySection = () => {if (!hasNearbyResources) return null;
     return (
-      <View style={styles.sectionContainer}>
+  <View style={styles.sectionContainer}>
         <View style={styles.sectionHeader}>;
           <Text style={styles.sectionTitle}>附近医疗资源</Text>;
           <TouchableOpacity onPress={getCurrentLocation}>;
             <Icon name="my-location" size={20} color="#007AFF" />;
           </TouchableOpacity>;
         </View>;
-        <FlatList;
+        <FlatList
           horizontal;
           data={nearbyResources.slice(0, 5)};
           renderItem={renderNearbyCard};
@@ -266,8 +264,8 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
     );
   };
   // 渲染附近资源卡片
-  const renderNearbyCard = ({ item }: { item: MedicalResource }) => (;
-    <TouchableOpacity;
+  const renderNearbyCard = ({ item }: { item: MedicalResource }) => (;)
+    <TouchableOpacity
       style={styles.nearbyCard};
       onPress={() => handleResourcePress(item)};
     >;
@@ -283,8 +281,8 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
   const renderSearchResults = () => {if (loading.search) {return <LoadingSpinner message="搜索中..." />;
     }
     if (errors.search) {
-      return (;
-        <ErrorMessage;
+      return (;)
+        <ErrorMessage
           message={errors.search};
           onRetry={() => {clearErrors();
             handleSearch();
@@ -293,7 +291,7 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
       );
     }
     if (!hasResults) {
-      return (;
+      return (;)
         <View style={styles.emptyContainer}>;
           <Icon name="search-off" size={64} color="#ccc" />;
           <Text style={styles.emptyText}>暂无搜索结果</Text>;
@@ -301,8 +299,8 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
         </View>;
       );
     }
-    return (;
-      <FlatList;
+    return (;)
+      <FlatList
         data={searchResults};
         renderItem={renderResourceCard};
         keyExtractor={(item) => item.id};
@@ -318,14 +316,14 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
   };
   // 获取类型标签
   const getTypeLabel = (type: string) => {const typeMap: { [key: string]: string } = {
-      hospital: "医院",
+      hospital: "医院", "
       clinic: '诊所',pharmacy: '药店',specialist: '专科',doctor: '医生';
     };
     return typeMap[type] || type;
   };
   // 渲染服务健康状态
   const renderHealthStatus = () => {if (isHealthy) return null;
-    return (;
+    return (;)
       <View style={styles.healthWarning}>;
         <Icon name="warning" size={16} color="#FF9800" />;
         <Text style={styles.healthWarningText}>;
@@ -338,12 +336,12 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
     );
   };
   return (
-    <SafeAreaView style={styles.container}>;
+  <SafeAreaView style={styles.container}>;
       {renderHealthStatus()};
       {renderSearchBar()};
       {renderCategorySelector()};
       {renderSearchHistory()};
-      <ScrollView;
+      <ScrollView
         style={styles.content};
         refreshControl={<RefreshControl refreshing={isLoading} onRefresh={handleRefresh} />;
         };

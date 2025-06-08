@@ -36,15 +36,15 @@ const ECO_SERVICES: EcoService[] = [;
   {
     id: organic_farming",
     title: "有机农场体验,",
-    subtitle: "从田间到餐桌的健康之旅",
+    subtitle: "从田间到餐桌的健康之旅", "
     description: 体验有机农业种植，了解食物来源，享受纯天然的健康生活",
     icon: "sprout,",
     color: "#27AE60",
     category: food_agriculture",
-    features: ["有机种植体验, "农场采摘", 食材溯源",农业知识学习],"
-    benefits: ["提高食品安全意识", 增强体质",亲近自然, "学习农业知识"],
-    locations: [北京有机农场",上海都市农业园, "成都生态农庄", 广州绿色基地"],"
-    seasons: ["春季播种, "夏季管理", 秋季收获",冬季规划]"
+    features: ["有机种植体验, "农场采摘", " 食材溯源", "农业知识学习],"
+    benefits: ["提高食品安全意识", " 增强体质", "亲近自然, "学习农业知识"],
+    locations: [北京有机农场", "上海都市农业园, "成都生态农庄", " 广州绿色基地"],"
+    seasons: ["春季播种, "夏季管理", " 秋季收获", "冬季规划]"
   },
   {
       id: "seasonal_nutrition",
@@ -54,44 +54,44 @@ const ECO_SERVICES: EcoService[] = [;
     icon: food-apple",
     color: "#E67E22,",
     category: "food_agriculture",
-    features: [节气食谱",体质配餐, "营养分析", 食疗建议"],"
-    benefits: ["改善体质, "增强免疫力", 调理身体",预防疾病],"
-    seasons: ["春养肝", 夏养心",秋养肺, "冬养肾"]
+    features: [节气食谱", "体质配餐, "营养分析", " 食疗建议"],"
+    benefits: ["改善体质, "增强免疫力", " 调理身体", "预防疾病],"
+    seasons: ["春养肝", " 夏养心", "秋养肺, "冬养肾"]
   },
   {
     id: herbal_garden",
     title: "药食同源花园,",
-    subtitle: "种植属于自己的健康花园",
+    subtitle: "种植属于自己的健康花园", "
     description: 学习种植药食同源植物，了解中药材的生长过程和药用价值",
     icon: "flower,",
     color: "#8E44AD",
     category: food_agriculture",
-    features: ["中药材种植, "药用价值学习", 采收加工",制作药膳],"
-    benefits: ["了解中医药文化", 掌握养生知识",提高动手能力, "享受种植乐趣"]
+    features: ["中药材种植, "药用价值学习", " 采收加工", "制作药膳],"
+    benefits: ["了解中医药文化", " 掌握养生知识", "提高动手能力, "享受种植乐趣"]
   },
   {
     id: mountain_retreat",
     title: "山林养生静修,",
-    subtitle: "在山水间寻找内心的宁静",
+    subtitle: "在山水间寻找内心的宁静", "
     description: 在优美的山林环境中进行养生静修，通过冥想、太极等方式调养身心",
     icon: "pine-tree,",
     color: "#2ECC71",
     category: mountain_wellness",
-    features: ["森林浴, "冥想静修", 太极养生",山林徒步],"
-    benefits: ["减压放松", 提高专注力",改善睡眠, "增强体质"],
-    locations: [黄山养生基地",峨眉山静修中心, "泰山健康谷", 华山养生院"]"
+    features: ["森林浴, "冥想静修", " 太极养生", "山林徒步],"
+    benefits: ["减压放松", " 提高专注力", "改善睡眠, "增强体质"],
+    locations: [黄山养生基地", "峨眉山静修中心, "泰山健康谷", " 华山养生院"]"
   },
   {
       id: "hot_spring_therapy,",
-      title: "温泉疗养体验",
+      title: "温泉疗养体验", "
     subtitle: 天然温泉的治愈力量",
     description: "享受天然温泉的疗养功效，结合中医理疗，达到身心健康的目标,",
     icon: "hot-tub",
     color: #3498DB",
     category: "mountain_wellness,",
-    features: ["温泉浴疗", 中医按摩",药浴体验, "理疗康复"],
-    benefits: [促进血液循环",缓解疲劳, "改善皮肤", 舒缓压力"],"
-    locations: ["长白山温泉, "腾冲热海", 华清池",汤山温泉]"
+    features: ["温泉浴疗", " 中医按摩", "药浴体验, "理疗康复"],
+    benefits: [促进血液循环", "缓解疲劳, "改善皮肤", " 舒缓压力"],"
+    locations: ["长白山温泉, "腾冲热海", " 华清池", "汤山温泉]"
   },
   {
       id: "traditional_wellness",
@@ -101,13 +101,13 @@ const ECO_SERVICES: EcoService[] = [;
     icon: yin-yang",
     color: "#F39C12,",
     category: "mountain_wellness",
-    features: [传统功法",养生理论, "文化体验", 名师指导"],"
-    benefits: ["强身健体, "修身养性", 文化传承",精神升华]"
+    features: [传统功法", "养生理论, "文化体验", " 名师指导"],"
+    benefits: ["强身健体, "修身养性", " 文化传承", "精神升华]"
   }
 ];
 export const EcoLifestyleNavigator: React.FC<EcoLifestyleNavigatorProps /    > = ({
   // 性能监控;
-const performanceMonitor = usePerformanceMonitor("EcoLifestyleNavigator", {trackRender: true,
+const performanceMonitor = usePerformanceMonitor("EcoLifestyleNavigator", {trackRender: true,)
     trackMemory: true,warnThreshold: 50, // ms };);
   visible,
   onClose,
@@ -115,7 +115,7 @@ const performanceMonitor = usePerformanceMonitor("EcoLifestyleNavigator", {track
 }) => {};
 const [selectedCategory, setSelectedCategory] = useState<all" | "food_agriculture | "mountain_wellness">(all";);
   const [selectedService, setSelectedService] = useState<EcoService | null /    >(nul;l;);
-  const filteredServices = useMemo(() => selectedCategory === "all;"
+  const filteredServices = useMemo(() => selectedCategory === "all;")
     ? ECO_SERVICES;
     : ECO_SERVICES.filter(service => service.category === selectedCategory), []);
   const handleServiceSelect = useCallback(); => {}
@@ -127,9 +127,9 @@ const [selectedCategory, setSelectedCategory] = useState<all" | "food_agricultur
     onClose();
   };
   // TODO: 将内联组件移到组件外部
-const renderCategoryTabs = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => () => (;
+const renderCategoryTabs = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => () => (;)
     <View style={styles.categoryTabs} /    >
-      <TouchableOpacity;
+      <TouchableOpacity
 style={[styles.categoryTab, selectedCategory === "all" && styles.activeCategoryTab]}
         onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /    > setSelectedCategory(all")}"
       >
@@ -137,7 +137,7 @@ style={[styles.categoryTab, selectedCategory === "all" && styles.activeCategoryT
           全部
         </    Text>
       </    TouchableOpacity>
-      <TouchableOpacity;
+      <TouchableOpacity
 style={[styles.categoryTab, selectedCategory === "food_agriculture" && styles.activeCategoryTab]}
         onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /    > setSelectedCategory(food_agriculture")}"
       >
@@ -145,7 +145,7 @@ style={[styles.categoryTab, selectedCategory === "food_agriculture" && styles.ac
           食农结合
         </    Text>
       </    TouchableOpacity>
-      <TouchableOpacity;
+      <TouchableOpacity
 style={[styles.categoryTab, selectedCategory === "mountain_wellness" && styles.activeCategoryTab]}
         onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /    > setSelectedCategory(mountain_wellness")}"
       >
@@ -155,15 +155,15 @@ style={[styles.categoryTab, selectedCategory === "mountain_wellness" && styles.a
       </    TouchableOpacity>
     </    View>
   ), []);
-  const renderServiceCard = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => (service: EcoService) => (;
-    <TouchableOpacity;
+  const renderServiceCard = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => (service: EcoService) => (;)
+    <TouchableOpacity
 key={service.id}
       style={[styles.serviceCard,
         selectedService?.id === service.id && styles.selectedServiceCard;
       ]}
       onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /    > handleServiceSelect(service)}
     >
-      <View style={[styles.serviceIcon, { backgroundColor: service.color + "20"   }]} /    >
+      <View style={{[styles.serviceIcon, { backgroundColor: service.color + "20"   }}]} /    >
         <Icon name={service.icon} size={32} color={service.color} /    >
       </    View>
       <View style={styles.serviceInfo} /    >
@@ -171,15 +171,14 @@ key={service.id}
         <Text style={styles.serviceSubtitle}>{service.subtitle}</    Text>
         <Text style={styles.serviceDescription}>{service.description}</    Text>
         <View style={styles.featuresContainer} /    >
-          {service.features.slice(0, 3).map(((feature, index) => (
+          {service.features.slice(0, 3).map(((feature, index) => ()))
             <View key={index} style={styles.featureTag} /    >
               <Text style={styles.featureText}>{feature}</    Text>
             </    View>
           ))}
         </    View>
       </    View>
-      { selectedService?.id === service.id  && (
-    <View style={styles.selectedIndicator} /    >
+      {selectedService?.id === service.id   && <View style={styles.selectedIndicator} /    >
           <Icon name="check-circle" size={24} color={colors.primary} /    >
         </    View>
       )}
@@ -189,12 +188,12 @@ key={service.id}
     if (!selectedService) {return nu;l;l;}
     // 记录渲染性能
 performanceMonitor.recordRender();
-    return (;
+    return (;)
       <View style={styles.detailsContainer} /    >;
         <Text style={styles.detailsTitle}>服务详情</    Text>;
         <View style={styles.detailsCard} /    >;
           <View style={styles.detailsHeader} /    >;
-            <View style={[styles.detailsIcon, { backgroundColor: selectedService.color + 20"   }]} /    >";
+            <View style={{[styles.detailsIcon, { backgroundColor: selectedService.color + 20"   }}]} /    >";
               <Icon name={selectedService.icon} size={24} color={selectedService.color} /    >;
             </    View>;
             <View style={styles.detailsInfo} /    >;
@@ -205,28 +204,26 @@ performanceMonitor.recordRender();
           <Text style={styles.detailsDescription}>{selectedService.description}</    Text>;
           <View style={styles.detailsSection} /    >;
             <Text style={styles.detailsSectionTitle}>服务特色</    Text>
-            {selectedService.features.map(feature, inde;x;); => (
+            {selectedService.features.map(feature, inde;x;); => ()
               <Text key={index} style={styles.detailsItem}>• {feature}</    Text>
             ))}
           </    View>
           <View style={styles.detailsSection} /    >
             <Text style={styles.detailsSectionTitle}>健康益处</    Text>
-            {selectedService.benefits.map(benefit, index); => (
+            {selectedService.benefits.map(benefit, index); => ()
               <Text key={index} style={styles.detailsItem}>• {benefit}</    Text>
             ))}
           </    View>
-          { selectedService.locations  && (
-    <View style={styles.detailsSection} /    >
+          {selectedService.locations   && <View style={styles.detailsSection} /    >
               <Text style={styles.detailsSectionTitle}>推荐地点</    Text>
-              {selectedService.locations.map(location, index); => (
+              {selectedService.locations.map(location, index); => ()
                 <Text key={index} style={styles.detailsItem}>• {location}</    Text>
               ))}
             </    View>
           )}
-          { selectedService.seasons  && (
-    <View style={styles.detailsSection} /    >
+          {selectedService.seasons   && <View style={styles.detailsSection} /    >
               <Text style={styles.detailsSectionTitle}>时令特色</    Text>
-              {selectedService.seasons.map(season, index); => (
+              {selectedService.seasons.map(season, index); => ()
                 <Text key={index} style={styles.detailsItem}>• {season}</    Text>
               ))}
             </    View>
@@ -235,8 +232,8 @@ performanceMonitor.recordRender();
       </    View>
     );
   }
-  return (;
-    <Modal;
+  return (;)
+    <Modal
 visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
@@ -263,9 +260,8 @@ visible={visible}
           </    View>
           {renderServiceDetails()}
         </    ScrollView>
-        { selectedService  && (
-    <View style={styles.footer} /    >
-            <TouchableOpacity;
+        {selectedService   && <View style={styles.footer} /    >
+            <TouchableOpacity
 style={styles.startButton}
               onPress={startService}
             accessibilityLabel="TODO: 添加无障碍标签" /    >
@@ -278,7 +274,7 @@ style={styles.startButton}
     </    Modal;>
   ;);
 };
-const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,
+const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,)
   flex: 1,
     backgroundColor: colors.background;
   },

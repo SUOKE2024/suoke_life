@@ -79,7 +79,7 @@ class RealTimeSync extends SimpleEventEmitter {
       this.ws = new WebSocket(`${this.wsUrl}?token=${this.authToken}`);
       this.ws.onopen = () => {}
   // 性能监控
-const performanceMonitor = usePerformanceMonitor(realTimeSync", {"
+const performanceMonitor = usePerformanceMonitor(realTimeSync", {")
     trackRender: true,
     trackMemory: false,
     warnThreshold: 100, // ms };);
@@ -189,7 +189,7 @@ default: }
       this.sendDataUpdate(resolved);
     }
   }
-  private async resolveConflict(serverData: SyncData,
+  private async resolveConflict(serverData: SyncData,)
     clientData: SyncData;);: Promise<SyncData | null /    >  {
     const resolver = this.conflictResolution.get(serverData.typ;e;);
     if (!resolver) {
@@ -250,7 +250,7 @@ case "manual":
   }
   private sendDataUpdate(data: SyncData): void  {
     if (this.ws && this.isConnected) {
-      this.ws.send(
+      this.ws.send()
         JSON.stringify({
           type: "data_update",
           data;
@@ -260,9 +260,9 @@ case "manual":
   }
   private requestFullSync(): void {
     if (this.ws && this.isConnected) {
-      const localVersions = Array.from(this.localData.values).map(data); => ({id: data.id,
+      const localVersions = Array.from(this.localData.values).map(data); => ({id: data.id,)
         version: data.version}))
-      this.ws.send(
+      this.ws.send()
         JSON.stringify({
       type: "sync_request",
       versions: localVersions});
@@ -294,7 +294,7 @@ case "manual":
     return Array.from(this.localData.values);
   }
   getDataByType(type: string);: SyncData[]  {
-    return Array.from(this.localData.values).filter(;
+    return Array.from(this.localData.values).filter(;)
       (data); => data.type === type;
     );
   }

@@ -1,4 +1,3 @@
-
 import MazeNavigator from '../MazeNavigator.tsx';
 describe('MazeNavigator', () => {
   it('应该正确导出', () => {

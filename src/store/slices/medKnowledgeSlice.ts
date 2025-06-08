@@ -117,7 +117,7 @@ const initialState: MedKnowledgeState = {,
   }
 };
 // 异步操作
-export const fetchConstitutions = createAsyncThunk(;
+export const fetchConstitutions = createAsyncThunk(;)
   'medKnowledge/fetchConstitutions',
   async (_, { rejectWithValue }) => {
     try {
@@ -127,7 +127,7 @@ export const fetchConstitutions = createAsyncThunk(;
     }
   }
 );
-export const fetchConstitutionById = createAsyncThunk(;
+export const fetchConstitutionById = createAsyncThunk(;)
   'medKnowledge/fetchConstitutionById',
   async (id: string, { rejectWithValue }) => {
     try {
@@ -137,7 +137,7 @@ export const fetchConstitutionById = createAsyncThunk(;
     }
   }
 );
-export const fetchSymptoms = createAsyncThunk(;
+export const fetchSymptoms = createAsyncThunk(;)
   'medKnowledge/fetchSymptoms',
   async (_, { rejectWithValue }) => {
     try {
@@ -147,7 +147,7 @@ export const fetchSymptoms = createAsyncThunk(;
     }
   }
 );
-export const searchSymptoms = createAsyncThunk(;
+export const searchSymptoms = createAsyncThunk(;)
   'medKnowledge/searchSymptoms',
   async (query: string, { rejectWithValue }) => {
     try {
@@ -157,7 +157,7 @@ export const searchSymptoms = createAsyncThunk(;
     }
   }
 );
-export const fetchAcupoints = createAsyncThunk(;
+export const fetchAcupoints = createAsyncThunk(;)
   'medKnowledge/fetchAcupoints',
   async (_, { rejectWithValue }) => {
     try {
@@ -167,7 +167,7 @@ export const fetchAcupoints = createAsyncThunk(;
     }
   }
 );
-export const fetchAcupointsByConstitution = createAsyncThunk(;
+export const fetchAcupointsByConstitution = createAsyncThunk(;)
   'medKnowledge/fetchAcupointsByConstitution',
   async (constitutionId: string, { rejectWithValue }) => {
     try {
@@ -177,7 +177,7 @@ export const fetchAcupointsByConstitution = createAsyncThunk(;
     }
   }
 );
-export const fetchHerbs = createAsyncThunk(;
+export const fetchHerbs = createAsyncThunk(;)
   'medKnowledge/fetchHerbs',
   async (_, { rejectWithValue }) => {
     try {
@@ -187,7 +187,7 @@ export const fetchHerbs = createAsyncThunk(;
     }
   }
 );
-export const fetchHerbsBySymptom = createAsyncThunk(;
+export const fetchHerbsBySymptom = createAsyncThunk(;)
   'medKnowledge/fetchHerbsBySymptom',
   async (symptomId: string, { rejectWithValue }) => {
     try {
@@ -197,7 +197,7 @@ export const fetchHerbsBySymptom = createAsyncThunk(;
     }
   }
 );
-export const fetchSyndromes = createAsyncThunk(;
+export const fetchSyndromes = createAsyncThunk(;)
   'medKnowledge/fetchSyndromes',
   async (_, { rejectWithValue }) => {
     try {
@@ -207,7 +207,7 @@ export const fetchSyndromes = createAsyncThunk(;
     }
   }
 );
-export const searchKnowledge = createAsyncThunk(;
+export const searchKnowledge = createAsyncThunk(;)
   'medKnowledge/searchKnowledge',
   async (query: KnowledgeQuery, { rejectWithValue }) => {
     try {
@@ -217,7 +217,7 @@ export const searchKnowledge = createAsyncThunk(;
     }
   }
 );
-export const fetchKnowledgeGraph = createAsyncThunk(;
+export const fetchKnowledgeGraph = createAsyncThunk(;)
   'medKnowledge/fetchKnowledgeGraph',
   async (_, { rejectWithValue }) => {
     try {
@@ -227,7 +227,7 @@ export const fetchKnowledgeGraph = createAsyncThunk(;
     }
   }
 );
-export const fetchPersonalizedRecommendations = createAsyncThunk(;
+export const fetchPersonalizedRecommendations = createAsyncThunk(;)
   'medKnowledge/fetchPersonalizedRecommendations',
   async (request: RecommendationRequest, { rejectWithValue }) => {
     try {
@@ -237,7 +237,7 @@ export const fetchPersonalizedRecommendations = createAsyncThunk(;
     }
   }
 );
-export const checkServiceHealth = createAsyncThunk(;
+export const checkServiceHealth = createAsyncThunk(;)
   'medKnowledge/checkServiceHealth',
   async (_, { rejectWithValue }) => {
     try {
@@ -249,7 +249,7 @@ export const checkServiceHealth = createAsyncThunk(;
   }
 );
 // 创建切片
-const medKnowledgeSlice = createSlice({name: 'medKnowledge',initialState,reducers: {// 选择操作,
+const medKnowledgeSlice = createSlice({name: 'medKnowledge',initialState,reducers: {// 选择操作,)
   selectConstitution: (state, action: PayloadAction<Constitution | null>) => {state.selectedConstitution = action.payload;
     },
     selectSymptom: (state, action: PayloadAction<Symptom | null>) => {

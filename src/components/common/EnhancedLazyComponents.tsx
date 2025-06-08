@@ -34,7 +34,7 @@ class ErrorBoundary extends React.Component<
   }
 }
 // 默认错误回退组件
-const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({ error, retry }) => (
+const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({ error, retry }) => ()
   <View style={styles.errorContainer}>
     <Text style={styles.errorTitle}>加载失败</Text>
     <Text style={styles.errorMessage}>{error.message}</Text>
@@ -56,7 +56,7 @@ const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({
 }) => {
   if (type === 'spinner') {
     return (
-      <View style={styles.loadingContainer}>
+  <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#007AFF" />
         <Text style={styles.loadingText}>{message}</Text>
       </View>
@@ -115,7 +115,7 @@ class PreloadManager {
   }
 }
 // 创建增强的懒加载组件
-export const createEnhancedLazyComponent = <T extends ComponentType<any>>(
+export const createEnhancedLazyComponent = <T extends ComponentType<any>>()
   importFunc: () => Promise<{ default: T }>,
   config: LazyComponentConfig = {}
 ): LazyExoticComponent<T> => {
@@ -162,11 +162,11 @@ export const createEnhancedLazyComponent = <T extends ComponentType<any>>(
   };
   const LazyComponent = React.lazy(importWithRetry);
   // 返回包装后的组件
-  const WrappedComponent = (props: any) => (
+  const WrappedComponent = (props: any) => ()
     <ErrorBoundary fallback={errorFallback}>
-      <Suspense;
+      <Suspense
         fallback={
-          fallback ? (
+          fallback ? ()
             React.createElement(fallback)
           ) : (
             <LoadingIndicator type={loadingType} skeletonType={skeletonType} />
@@ -180,13 +180,13 @@ export const createEnhancedLazyComponent = <T extends ComponentType<any>>(
   return WrappedComponent as LazyExoticComponent<T>;
 };
 // 预加载Hook;
-export const usePreloadComponent = (
+export const usePreloadComponent = ()
   importFunc: () => Promise<any>,
   condition: boolean = true;
 ) => {
   const [isPreloaded, setIsPreloaded] = useState(false);
   const preloadManager = PreloadManager.getInstance();
-  useEffect() => {
+  useEffect(() => {
     if (condition && !isPreloaded) {
       const componentKey = importFunc.toString();
       preloadManager.preload(componentKey, importFunc);
@@ -196,7 +196,7 @@ export const usePreloadComponent = (
   return isPreloaded;
 };
 // 批量预加载Hook;
-export const useBatchPreload = (
+export const useBatchPreload = ()
   components: Array<{,
   key: string;
     importFunc: () => Promise<any>;
@@ -205,9 +205,9 @@ export const useBatchPreload = (
 ) => {
   const [preloadedCount, setPreloadedCount] = useState(0);
   const preloadManager = PreloadManager.getInstance();
-  useEffect() => {
+  useEffect(() => {
     let count = 0;
-        components.forEach({ key, importFunc, condition = true }) => {
+        components.forEach((({ key, importFunc, condition = true }) => {
       if (condition) {
         preloadManager.preload(key, importFunc);
         count++;
@@ -224,7 +224,7 @@ export const useBatchPreload = (
 // 路由预加载Hook;
 export const useRoutePreload = (routeName: string, isActive: boolean) => {
   const preloadManager = PreloadManager.getInstance();
-  useEffect() => {
+  useEffect(() => {
     if (isActive) {
             // 预加载相关路由组件
       const routePreloadMap: Record<string, () => Promise<any>> = {

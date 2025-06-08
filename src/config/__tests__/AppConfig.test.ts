@@ -1,4 +1,3 @@
-
 import AppConfig from '../AppConfig.ts';
 describe('AppConfig', () => {
   it('应该正确导出', () => {

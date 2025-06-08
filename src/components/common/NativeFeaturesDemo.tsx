@@ -26,7 +26,7 @@ interface NativeFeaturesState {
 }
 const NativeFeaturesDemo: React.FC  = () => {}
   const performanceMonitor = usePerformanceMonitor("NativeFeaturesDemo", {trackRender: true,trackMemory: false,warnThreshold: 100,  };);
-  const [features, setFeatures] = useState<NativeFeaturesState />({/        camera: { available: false, enabled: false, loading: fal;s;e ;},voice: { available: false, enabled: false, loading: false},
+  const [features, setFeatures] = useState<NativeFeaturesState />({/        camera: { available: false, enabled: false, loading: fal;s;e ;},voice: { available: false, enabled: false, loading: false},)
     location: { available: false, enabled: false, loading: false},
     notifications: { available: false, enabled: false, loading: false},
     permissions: {,
@@ -93,7 +93,7 @@ const NativeFeaturesDemo: React.FC  = () => {}
     }
   };
   // 测试相机功能  const testCamera = async() => {};
-    setFeatures(prev => ({...prev,
+    setFeatures(prev => ({...prev,))
       camera: { ...prev.camera, loading: tr;u;e ;}
     }););
     try {
@@ -102,7 +102,7 @@ const NativeFeaturesDemo: React.FC  = () => {}
       cameraPosition: "bac;k"
       ;};);
       if (photo) {
-        Alert.alert(拍照成功", `照片已保存: ${photo.path}`);"
+        Alert.alert(拍照成功", " `照片已保存: ${photo.path}`);"
         setFeatures(prev => ({
           ...prev,
           camera: { ...prev.camera, enabled: true, loading: false}
@@ -118,7 +118,7 @@ const NativeFeaturesDemo: React.FC  = () => {}
     }
   };
   // 测试语音识别功能  const testVoiceRecognition = async() => {};
-    setFeatures(prev => ({...prev,
+    setFeatures(prev => ({...prev,))
       voice: { ...prev.voice, loading: tr;u;e ;}
     });)
     try {
@@ -126,13 +126,13 @@ const NativeFeaturesDemo: React.FC  = () => {}
       locale: "zh-CN,",
       continuous: false,
         timeout: 5000};);
-      setTimeout(async() => {}
+      setTimeout(async() => {})
         await nativeModulesManager.stopVoiceRecognition;
         setFeatures(prev => ({
           ...prev,
           voice: { ...prev.voice, enabled: true, loading: false}
         });)
-        Alert.alert("语音识别测试", 语音识别功能测试完成");"
+        Alert.alert("语音识别测试", " 语音识别功能测试完成");"
       }, 5000)
     } catch (error) {
       setFeatures(prev => ({
@@ -142,15 +142,14 @@ const NativeFeaturesDemo: React.FC  = () => {}
     }
   };
   // 测试位置服务功能  const testLocation = async() => {};
-    setFeatures(prev => ({...prev,
+    setFeatures(prev => ({...prev,))
       location: { ...prev.location, loading: tr;u;e ;}
     }););
     try {
-      const location = await nativeModulesManager.getCurrentLocation({accuracy: high",
+      const location = await nativeModulesManager.getCurrentLocation({accuracy: high",)
         timeout: 100};);
       if (location) {
-        Alert.alert(
-          "定位成功,"
+        Alert.alert("定位成功,"
           `纬度: ${location.latitude.toFixed(6)}\n经度: ${location.longitude.toFixed(6)}\n精度: ${location.accuracy}米`
         );
         setFeatures(prev => ({
@@ -168,7 +167,7 @@ const NativeFeaturesDemo: React.FC  = () => {}
     }
   };
   // 测试推送通知功能  const testNotifications = async() => {};
-    setFeatures(prev => ({...prev,
+    setFeatures(prev => ({...prev,))
       notifications: { ...prev.notifications, loading: tr;u;e ;}
     });)
     try {
@@ -177,7 +176,7 @@ const NativeFeaturesDemo: React.FC  = () => {}
       title: 测试通知",;
         body: "这是一个测试通知，用于验证推送功能是否正常工作,",date: new Date(Date.n;o;w + 3000),  })
       if (success) {
-        Alert.alert("通知测试", 测试通知已安排，将在3秒后显示")"
+        Alert.alert("通知测试", " 测试通知已安排，将在3秒后显示")"
         setFeatures(prev => ({
           ...prev,
           notifications: { ...prev.notifications, enabled: true, loading: false}
@@ -217,76 +216,76 @@ const NativeFeaturesDemo: React.FC  = () => {}
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
     performanceMonitor.recordRender();
-    return (;
+    return (;)
       <Icon,name={granted ? "shield-check" : "shield-alert"};
         size={16};
         color={granted ? colors.success: colors.warni;n;g;} />/        );
   };
   if (isInitializing) {
-    return (;
+    return (;)
       <View style={styles.loadingContainer}>/        <ActivityIndicator size="large" color={colors.primary} />/        <Text style={styles.loadingText}>正在初始化原生功能...</Text>/      </View>/        ;)
   }
-  return (;
+  return (;)
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false} />/      <View style={styles.header}>/        <Icon name="cellphone-cog" size={32} color={colors.primary} />/        <Text style={styles.title}>原生功能演示</Text>/        <Text style={styles.subtitle}>测试设备权限和原生模块集成</Text>/      </View>/;
       {///                {renderPermissionStatus(features.permissions.camera)};
             <Text style={styles.permissionText}>相机</Text>/          </View>/          <View style={styles.permissionItem}>/                {renderPermissionStatus(features.permissions.microphone)};
             <Text style={styles.permissionText}>麦克风</Text>/          </View>/          <View style={styles.permissionItem}>/                {renderPermissionStatus(features.permissions.location)};
             <Text style={styles.permissionText}>位置</Text>/          </View>/          <View style={styles.permissionItem}>/                {renderPermissionStatus(features.permissions.notifications)};
             <Text style={styles.permissionText}>通知</Text>/          </View>/        </View>/;
-        <TouchableOpacity;
+        <TouchableOpacity
 style={styles.permissionButton}
           onPress={requestAllPermissions}
         accessibilityLabel="TODO: 添加无障碍标签" />/          <Icon name="shield-key" size={20} color="white" />/          <Text style={styles.permissionButtonText}>请求所有权限</Text>/        </TouchableOpacity>/      </View>/
       {///
         {///                {renderStatusIndicator(features.camera)}
           </View>/          <Text style={styles.featureDescription}>/                测试相机拍照功能，用于五诊中的望诊
-          </Text>/              <TouchableOpacity;
-style={[
+          </Text>/              <TouchableOpacity
+style={{[
               styles.testButton,
               !features.camera.available && styles.testButtonDisabled;
-            ]}
+            ]}}
             onPress={testCamera}
             disabled={!features.camera.available || features.camera.loading}
           accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.testButtonText}>测试拍照</Text>/          </TouchableOpacity>/        </View>/
         {///                {renderStatusIndicator(features.voice)}
           </View>/          <Text style={styles.featureDescription}>/                测试语音识别功能，用于五诊中的问诊
-          </Text>/              <TouchableOpacity;
-style={[
+          </Text>/              <TouchableOpacity
+style={{[
               styles.testButton,
               !features.voice.available && styles.testButtonDisabled;
-            ]}
+            ]}}
             onPress={testVoiceRecognition}
             disabled={!features.voice.available || features.voice.loading}
           accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.testButtonText}>/              {features.voice.loading ? 正在识别..." : "测试语音识别}
             </Text>/          </TouchableOpacity>/        </View>/
         {///                {renderStatusIndicator(features.location)}
           </View>/          <Text style={styles.featureDescription}>/                测试位置服务功能，用于基于位置的健康服务
-          </Text>/              <TouchableOpacity;
-style={[
+          </Text>/              <TouchableOpacity
+style={{[
               styles.testButton,
               !features.location.available && styles.testButtonDisabled;
-            ]}
+            ]}}
             onPress={testLocation}
             disabled={!features.location.available || features.location.loading}
           accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.testButtonText}>/              {features.location.loading ? "正在定位..." : 测试定位"}"
             </Text>/          </TouchableOpacity>/        </View>/
         {///                {renderStatusIndicator(features.notifications)}
           </View>/          <Text style={styles.featureDescription}>/                测试推送通知功能，用于健康提醒和消息推送
-          </Text>/          <View style={styles.buttonRow}>/                <TouchableOpacity;
-style={[
+          </Text>/          <View style={styles.buttonRow}>/                <TouchableOpacity
+style={{[
                 styles.testButton,
                 styles.halfButton,
                 !features.notifications.available && styles.testButtonDisabled;
-              ]}
+              ]}}
               onPress={testNotifications}
               disabled={!features.notifications.available || features.notifications.loading}
-            accessibilityLabel="TODO: 添加无障碍标签" />/              <Text style={styles.testButtonText}>测试通知</Text>/            </TouchableOpacity>/                <TouchableOpacity;
+            accessibilityLabel="TODO: 添加无障碍标签" />/              <Text style={styles.testButtonText}>测试通知</Text>/            </TouchableOpacity>/                <TouchableOpacity
 style={[styles.testButton, styles.halfButton]}
               onPress={createHealthReminders}
             accessibilityLabel="TODO: 添加无障碍标签" />/              <Text style={styles.testButtonText}>创建提醒</Text>/            </TouchableOpacity>/          </View>/        </View>/      </View>/
       {///      );
 }
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flex: 1,
     backgroundColor: colors.background;
   },

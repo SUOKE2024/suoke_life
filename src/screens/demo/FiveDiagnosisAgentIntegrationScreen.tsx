@@ -58,7 +58,7 @@ export const FiveDiagnosisAgentIntegrationScreen: React.FC = () => {
     chiefComplaint: '',
     symptoms: [],
   });
-  const [diagnosisSteps, setDiagnosisSteps] = useState<DiagnosisStep[]>([
+  const [diagnosisSteps, setDiagnosisSteps] = useState<DiagnosisStep[]>([)
     {
       id: "looking",
       name: '望诊',
@@ -107,7 +107,7 @@ export const FiveDiagnosisAgentIntegrationScreen: React.FC = () => {
     consensus: unknown;
   } | null>(null);
   // 初始化服务
-  useEffect() => {
+  useEffect(() => {
     const effectStart = performance.now();
     initializeServices();
     return () => {
@@ -117,13 +117,13 @@ export const FiveDiagnosisAgentIntegrationScreen: React.FC = () => {
   }, []);
   const initializeServices = async () => {
     try {
-      await Promise.all([
+      await Promise.all([)
         fiveDiagnosisService.initialize(),
         agentCoordinationService.initialize(),
       ]);
       setIsInitialized(true);
     } catch (error) {
-      Alert.alert("初始化失败",服务初始化失败，请重试');
+      Alert.alert("初始化失败", "服务初始化失败，请重试');
       console.error('Service initialization failed:', error);
     }
   };
@@ -256,10 +256,10 @@ export const FiveDiagnosisAgentIntegrationScreen: React.FC = () => {
         },
       };
     });
-    Alert.alert("诊断完成",五诊算法分析和智能体协作已完成！');
+    Alert.alert("诊断完成", "五诊算法分析和智能体协作已完成！');
   };
   // 执行单个诊断步骤
-  const performDiagnosisStep = async (
+  const performDiagnosisStep = async ()
     stepId: string,
     stepIndex: number,
     stepFunction: () => Promise<{ data: unknown; agentResponses: Record<string, string> }>,
@@ -276,14 +276,14 @@ export const FiveDiagnosisAgentIntegrationScreen: React.FC = () => {
     await new Promise(resolve => setTimeout(resolve, 500));
   };
   // 更新步骤状态
-  const updateStepStatus = (
+  const updateStepStatus = ()
     stepIndex: number,
     status: DiagnosisStep['status'],
     progress: number,
     data?: unknown,
     agentResponses?: Record<string, string>,
   ) => {
-    setDiagnosisSteps(prev => prev.map((step, index) =>
+    setDiagnosisSteps(prev => prev.map((step, index) =>))
       index === stepIndex ? {
         ...step,
         status,
@@ -297,7 +297,7 @@ export const FiveDiagnosisAgentIntegrationScreen: React.FC = () => {
   const simulateLookingDiagnosis = async () => {
     await new Promise(resolve => setTimeout(resolve, 2000));
     return {
-      faceColor: "面色微黄",
+      faceColor: "面色微黄", "
       tongueColor: '舌质淡红',
       tongueCoating: '苔薄白',
       spirit: '精神尚可',
@@ -307,7 +307,7 @@ export const FiveDiagnosisAgentIntegrationScreen: React.FC = () => {
   const simulateListeningDiagnosis = async () => {
     await new Promise(resolve => setTimeout(resolve, 1500));
     return {
-      voiceQuality: "声音低微",
+      voiceQuality: "声音低微", "
       breathing: '呼吸平稳',
       cough: '偶有干咳',
       bodyOdor: '无异常气味',
@@ -319,7 +319,7 @@ export const FiveDiagnosisAgentIntegrationScreen: React.FC = () => {
       symptoms: patient.symptoms,
       duration: '3个月',
       severity: '中等',
-      triggers: ["工作压力",睡眠不足'],
+      triggers: ["工作压力", "睡眠不足'],
       appetite: '食欲一般',
       sleep: '入睡困难',
       mood: '情绪低落',
@@ -340,7 +340,7 @@ export const FiveDiagnosisAgentIntegrationScreen: React.FC = () => {
     // 模拟智能体响应
     const responses = {
       [AgentType.XIAOAI]: {
-      looking: "面色微黄，舌质淡红，苔薄白，提示脾胃虚弱",
+      looking: "面色微黄，舌质淡红，苔薄白，提示脾胃虚弱", "
       listening: '声音低微，呼吸平稳，符合气虚体质特征',
         inquiry: '症状持续3个月，与工作压力相关，建议调理脾胃',
         palpation: '脉细弱偏浮，神门穴敏感，确认气虚血瘀证',
@@ -350,7 +350,7 @@ export const FiveDiagnosisAgentIntegrationScreen: React.FC = () => {
         calculation: '数据分析显示患者健康指数偏低，需要系统性调理',
       },
       [AgentType.LAOKE]: {
-      inquiry: "根据中医理论，此为脾胃虚弱，气血不足之证",
+      inquiry: "根据中医理论，此为脾胃虚弱，气血不足之证", "
       palpation: '脉象符合《脉经》所述气虚脉象特征',
         calculation: '建议采用四君子汤加减，配合针灸调理',
       },
@@ -367,10 +367,10 @@ export const FiveDiagnosisAgentIntegrationScreen: React.FC = () => {
     const isCompleted = step.status === 'completed';
     const isProcessing = step.status === 'collecting' || step.status === 'analyzing';
     return (
-      <View key={step.id} style={[styles.stepContainer, isActive && styles.activeStep]}>
+  <View key={step.id} style={[styles.stepContainer, isActive && styles.activeStep]}>
         <View style={styles.stepHeader}>
           <View style={[styles.stepIcon, isCompleted && styles.completedIcon]}>
-            {isProcessing ? (
+            {isProcessing ? ()
               <ActivityIndicator size="small" color="#fff" />
             ) : (
               <Text style={styles.stepIconText}>{step.icon}</Text>
@@ -381,9 +381,8 @@ export const FiveDiagnosisAgentIntegrationScreen: React.FC = () => {
               {step.name}
             </Text>
             <Text style={styles.stepDescription}>{step.description}</Text>
-            {isProcessing && (
-        <View style={styles.progressContainer}>
-                <View style={[styles.progressBar, { width: `${step.progress}%` }]} />
+            {isProcessing  && <View style={styles.progressContainer}>
+                <View style={{[styles.progressBar, { width: `${step.progress}}%` }]} />
               </View>
             )}
           </View>
@@ -392,9 +391,8 @@ export const FiveDiagnosisAgentIntegrationScreen: React.FC = () => {
             {step.status === 'failed' && <Icon name="error" size={24} color="#F44336" />}
           </View>
         </View>
-        {step.agentResponses && (
-        <View style={styles.agentResponses}>
-            {Object.entries(step.agentResponses).map(([agentType, response]) => (
+        {step.agentResponses  && <View style={styles.agentResponses}>
+            {Object.entries(step.agentResponses).map(([agentType, response]) => ())
               <View key={agentType} style={styles.agentResponse}>
                 <Text style={styles.agentName}>{getAgentName(agentType)}:</Text>
                 <Text style={styles.agentResponseText}>{response}</Text>
@@ -417,7 +415,7 @@ export const FiveDiagnosisAgentIntegrationScreen: React.FC = () => {
   };
   // 渲染患者信息模态框
   const renderPatientModal = () => (
-    <Modal;
+  <Modal
       visible={showPatientModal}
       animationType="slide"
       transparent={true}
@@ -426,20 +424,20 @@ export const FiveDiagnosisAgentIntegrationScreen: React.FC = () => {
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
           <Text style={styles.modalTitle}>患者信息</Text>
-          <TextInput;
+          <TextInput
             style={styles.input}
             placeholder="患者姓名"
             value={patient.name}
             onChangeText={(text) => setPatient(prev => ({ ...prev, name: text }))}
           />
-          <TextInput;
+          <TextInput
             style={styles.input}
             placeholder="年龄"
             value={patient.age.toString()}
             onChangeText={(text) => setPatient(prev => ({ ...prev, age: parseInt(text) || 0 }))}
             keyboardType="numeric"
           />
-          <TextInput;
+          <TextInput
             style={[styles.input, styles.textArea]}
             placeholder="主诉症状"
             value={patient.chiefComplaint}
@@ -448,13 +446,13 @@ export const FiveDiagnosisAgentIntegrationScreen: React.FC = () => {
             numberOfLines={3}
           />
           <View style={styles.modalButtons}>
-            <TouchableOpacity;
+            <TouchableOpacity
               style={[styles.modalButton, styles.cancelButton]}
               onPress={() => setShowPatientModal(false)}
             >
               <Text style={styles.cancelButtonText}>取消</Text>
             </TouchableOpacity>
-            <TouchableOpacity;
+            <TouchableOpacity
               style={[styles.modalButton, styles.confirmButton]}
               onPress={() => {
                 setShowPatientModal(false);
@@ -472,7 +470,7 @@ export const FiveDiagnosisAgentIntegrationScreen: React.FC = () => {
   const renderDiagnosisResult = () => {
     if (!finalDiagnosis) return null;
     return (
-      <View style={styles.resultContainer}>
+  <View style={styles.resultContainer}>
         <Text style={styles.resultTitle}>🎯 综合诊断结果</Text>
         <View style={styles.resultContent}>
           <Text style={styles.resultLabel}>中医证型:</Text>
@@ -480,7 +478,7 @@ export const FiveDiagnosisAgentIntegrationScreen: React.FC = () => {
           <Text style={styles.resultLabel}>体质类型:</Text>
           <Text style={styles.resultValue}>{finalDiagnosis.comprehensiveAnalysis.constitution}</Text>
           <Text style={styles.resultLabel}>健康风险:</Text>
-          <Text style={[styles.resultValue, { color: getRiskColor(finalDiagnosis.comprehensiveAnalysis.healthRisk) }]}>
+          <Text style={{[styles.resultValue, { color: getRiskColor(finalDiagnosis.comprehensiveAnalysis.healthRisk) }}]}>
             {finalDiagnosis.comprehensiveAnalysis.healthRisk}
           </Text>
           <Text style={styles.resultLabel}>置信度:</Text>
@@ -499,7 +497,7 @@ export const FiveDiagnosisAgentIntegrationScreen: React.FC = () => {
   };
   if (!isInitialized) {
     return (
-      <SafeAreaView style={styles.container}>
+  <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#2196F3" />
           <Text style={styles.loadingText}>正在初始化五诊系统...</Text>
@@ -508,7 +506,7 @@ export const FiveDiagnosisAgentIntegrationScreen: React.FC = () => {
     );
   }
   return (
-    <SafeAreaView style={styles.container}>
+  <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {}
         <View style={styles.header}>
@@ -517,12 +515,12 @@ export const FiveDiagnosisAgentIntegrationScreen: React.FC = () => {
         </View>
         {}
         <View style={styles.controlSection}>
-          <TouchableOpacity;
+          <TouchableOpacity
             style={[styles.startButton, isProcessing && styles.disabledButton]}
             onPress={startDiagnosisProcess}
             disabled={isProcessing}
           >
-            {isProcessing ? (
+            {isProcessing ? ()
               <ActivityIndicator size="small" color="#fff" />
             ) : (
               <Icon name="play-arrow" size={24} color="#fff" />
@@ -540,10 +538,9 @@ export const FiveDiagnosisAgentIntegrationScreen: React.FC = () => {
         {}
         {renderDiagnosisResult()}
         {}
-        {agentCollaboration && (
-        <View style={styles.collaborationContainer}>
+        {agentCollaboration  && <View style={styles.collaborationContainer}>
             <Text style={styles.sectionTitle}>🤖 智能体协作分析</Text>
-            {Object.entries(agentCollaboration.responses).map(([agentType, response]) => (
+            {Object.entries(agentCollaboration.responses).map(([agentType, response]) => ())
               <View key={agentType} style={styles.agentCollaborationItem}>
                 <Text style={styles.agentCollaborationName}>{getAgentName(agentType)}</Text>
                 <Text style={styles.agentCollaborationResponse}>{response}</Text>

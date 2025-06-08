@@ -84,7 +84,7 @@ class AnalyticsService {
     try {
       this.performanceObserver = new PerformanceObserver(list) => {
         const entries = list.getEntries();
-        entries.forEach(entry) => {
+        entries.forEach(((entry) => {
           this.trackEvent('performance', {
             name: entry.name,
             duration: entry.duration,
@@ -202,7 +202,7 @@ class AnalyticsService {
   }
   // 计算缓存命中率
   private calculateCacheHitRate(): number {
-    const cacheEvents = this.events.filter(e =>
+    const cacheEvents = this.events.filter(e =>)
       e.type === 'api_call' && e.data.fromCache !== undefined;
     );
         if (cacheEvents.length === 0) return 0;
@@ -241,8 +241,8 @@ class AnalyticsService {
         }
       });
     // 计算会话持续时间
-    userSessions.forEach(behavior, key) => {
-      const sessionEvents = this.events.filter(e =>
+    userSessions.forEach(((behavior, key) => {
+      const sessionEvents = this.events.filter(e =>)
         e.userId === behavior.userId && e.sessionId === behavior.sessionId;
       );
             if (sessionEvents.length > 1) {
@@ -250,7 +250,7 @@ class AnalyticsService {
         behavior.duration = Math.max(...timestamps) - Math.min(...timestamps);
       }
       // 计算错误数量
-      behavior.errors = this.events.filter(e =>
+      behavior.errors = this.events.filter(e =>)
         e.type === 'error' && e.userId === behavior.userId && e.sessionId === behavior.sessionId;
       ).length;
     });

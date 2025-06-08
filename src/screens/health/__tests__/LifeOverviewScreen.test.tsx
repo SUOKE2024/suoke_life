@@ -1,4 +1,3 @@
-
 import LifeOverviewScreen from '../LifeOverviewScreen.tsx';
 describe('LifeOverviewScreen', () => {
   it('应该正确导出', () => {

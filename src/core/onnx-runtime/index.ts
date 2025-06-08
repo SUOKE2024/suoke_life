@@ -128,7 +128,7 @@ await this.engine.initialize(config);
   }
   /**
 * * 一键式模型部署 - 加载、优化、量化模型
-  async deployModel(
+  async deployModel()
     modelPath: string,
     options?: {
       quantize?: boolean;
@@ -162,7 +162,7 @@ await this.engine.loadModel(model);
   }
   /**
 * * 智能推理 - 自动处理输入输出和缓存
-  async smartInference(
+  async smartInference()
     modelId: string,
     inputs: Record<string, TensorData>,
     options?: {
@@ -216,8 +216,8 @@ if (options?.useCache) {
   }
   // 私有方法
 private generateCacheKey(modelId: string, inputs: Record<string, TensorData>): string {
-    const inputHash = JSON.stringify(;
-      Object.entries(inputs).map(([key, tensor]) => [
+    const inputHash = JSON.stringify(;)
+      Object.entries(inputs).map(([key, tensor]) => [)
         key,
         tensor.dims,
         tensor.type;
@@ -241,7 +241,7 @@ export function getGlobalONNXRuntimeManager(): ONNXRuntimeManager {if (!globalMa
 }
 /**
 * * 便捷函数：快速初始化和部署模型
-export async function quickDeploy(;
+export async function quickDeploy(;)
   modelPath: string,config?: InferenceConfig;
 ): Promise<{
   manager: ONNXRuntimeManager,
@@ -249,7 +249,7 @@ export async function quickDeploy(;
 }> {
   const manager = createONNXRuntimeManager();
   await manager.initialize(config);
-  const model = await manager.deployModel(modelPath, {quantize: true,
+  const model = await manager.deployModel(modelPath, {quantize: true,)
     optimize: true,
     cache: true;
   })
@@ -257,7 +257,7 @@ export async function quickDeploy(;
 }
 /**
 * * 便捷函数：为索克生活项目优化的模型部署
-export async function deploySuokeLifeModel(;
+export async function deploySuokeLifeModel(;)
   modelPath: string,modelType: "tcm | "health" | symptom" | "lifestyle";
 ): Promise<{
   manager: ONNXRuntimeManager,

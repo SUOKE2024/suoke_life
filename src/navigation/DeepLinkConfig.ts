@@ -136,7 +136,7 @@ export class DeepLinkHandler {
     try {
       const urlObj = new URL(url);
       const params: Record<string, string> = {};
-            urlObj.searchParams.forEach(value, key) => {
+            urlObj.searchParams.forEach(((value, key) => {
         params[key] = value;
       });
             return params;

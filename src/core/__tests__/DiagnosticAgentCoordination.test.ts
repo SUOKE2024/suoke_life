@@ -21,7 +21,7 @@ await aiFramework.initialize();
     });
   });
   describe("1. 基础协同功能测试", () => {
-    test("应该能够启动协同会话, async () => {"
+    test("应该能够启动协同会话, async () => {")
       const sessionId = await coordinator.startCoordinationSession(testUserId);
       expect(sessionId).toBeDefined();
       expect(sessionId).toMatch(/^coord_\d+_[a-z0-9]+$/);
@@ -30,7 +30,7 @@ await aiFramework.initialize();
       expect(session?.userId).toBe(testUserId);
       expect(session?.status).toBe("active");
     });
-    test(应该能够接收诊断结果", async () => {"
+    test(应该能够接收诊断结果", async () => {")
       const diagnosticResult: DiagnosticResult = {
       serviceType: "calculation,",
       timestamp: Date.now(),
@@ -59,7 +59,7 @@ await aiFramework.initialize();
       syndrome: "qi_deficiency,",
       severity: "moderate"
         },
-        recommendations: [深呼吸练习",适量运动],
+        recommendations: [深呼吸练习", "适量运动],
         confidence: 0.89,
         metadata: {
           sessionId: testSessionId,
@@ -144,7 +144,7 @@ const serviceTypes = session?.diagnosticResults.map(r => r.serviceType);
       expect(serviceTypes).toContain("inquiry");
       expect(serviceTypes).toContain(palpation");"
     });
-    test("应该在收集足够诊断数据后触发智能体分析, async () => {"
+    test("应该在收集足够诊断数据后触发智能体分析, async () => {")
       const mockTriggerHandler = jest.fn();
       coordinator.on("triggerAgentAnalysis", mockTriggerHandler);
       // 添加3个诊断结果（达到触发阈值）
@@ -167,8 +167,8 @@ const serviceTypes = session?.diagnosticResults.map(r => r.serviceType);
       });
     });
   });
-  describe("3. 四智能体协同测试", () => {
-    test(应该能够处理四个智能体的响应", async () => {"
+  describe("3. 四智能体协同测试", " () => {
+    test(应该能够处理四个智能体的响应", async () => {")
       const agentResponses: AgentResponse[] = [;
         {
       agentType: "xiaoai,",
@@ -217,7 +217,7 @@ const agentTypes = session?.agentResponses.map(r => r.agentType);
       expect(agentTypes).toContain("laoke);"
       expect(agentTypes).toContain("soer");
     });
-    test(应该在收集足够智能体响应后达成共识", async () => {"
+    test(应该在收集足够智能体响应后达成共识", async () => {")
       const mockConsensusHandler = jest.fn();
       coordinator.on("consensusReached, mockConsensusHandler);"
       // 添加两个智能体响应（达到共识阈值）
@@ -251,7 +251,7 @@ const agentTypes = session?.agentResponses.map(r => r.agentType);
     });
   });
   describe("4. 数据一致性验证测试, () => {", () => {
-    test("应该能够验证诊断结果一致性", async () => {
+    test("应该能够验证诊断结果一致性", " async () => {
       const baseTime = Date.now();
       // 添加时间一致的诊断结果
 const consistentResults: DiagnosticResult[] = [;
@@ -278,7 +278,7 @@ data: { test: "data2 },"
       expect(validation.inconsistencies).toHaveLength(0);
       expect(validation.confidence).toBeGreaterThan(0.8);
     });
-    test(应该能够检测时间不一致的诊断结果", async () => {"
+    test(应该能够检测时间不一致的诊断结果", async () => {")
       const baseTime = Date.now();
       // 添加时间跨度过大的诊断结果
 const inconsistentResults: DiagnosticResult[] = [;
@@ -304,7 +304,7 @@ data: { test: "data2" },
       expect(validation.isConsistent).toBe(false);
       expect(validation.inconsistencies).toContain("诊断时间跨度过大);"
     });
-    test("应该能够检测置信度差异过大的诊断结果", async () => {
+    test("应该能够检测置信度差异过大的诊断结果", " async () => {
       const baseTime = Date.now();
       // 添加置信度差异过大的诊断结果
 const inconsistentResults: DiagnosticResult[] = [;
@@ -332,7 +332,7 @@ metadata: { sessionId: testSessionId, userId: testUserId, version: "1.0.0" });
     });
   });
   describe("5. 边缘AI推理集成测试, () => {", () => {
-    test("应该能够与边缘AI推理框架集成", async () => {
+    test("应该能够与边缘AI推理框架集成", " async () => {
       // 模拟加载诊断模型
 const modelConfig = {modelId: tcm_diagnosis_model",
         modelType: "onnx as const,",
@@ -363,7 +363,7 @@ priority: "normal as const,",
       expect(result.confidence).toBeGreaterThan(0);
       expect(result.latency).toBeGreaterThan(0);
     });
-    test(应该能够处理批量推理请求", async () => {"
+    test(应该能够处理批量推理请求", async () => {")
       const modelConfig = {
       modelId: "batch_diagnosis_model,",
       modelType: "onnx" as const,
@@ -376,7 +376,7 @@ priority: "normal as const,",
       };
       await aiFramework.loadModel(modelConfig);
       // 创建批量推理请求
-const batchRequests = Array.from({ length: 6 }, (_, i) => ({requestId: `batch_request_${i}`,
+const batchRequests = Array.from({ length: 6 }, (_, i) => ({requestId: `batch_request_${i}`,))
         modelId: batch_diagnosis_model",
         inputData: Array.from({ length: 64 }, () => Math.random()),
         priority: "normal as const,",
@@ -389,16 +389,16 @@ const batchRequests = Array.from({ length: 6 }, (_, i) => ({requestId: `batch_re
       }));
       const results = await aiFramework.batchInference(batchRequests);
       expect(results).toHaveLength(6);
-      results.forEach((result, index) => {
+      results.forEach((((result, index) => {
         expect(result.requestId).toBe(`batch_request_${index}`);
         expect(result.confidence).toBeGreaterThan(0);
       });
     });
   });
-  describe("6. 性能和可靠性测试", () => {
-    test(应该能够处理高并发协同请求", async () => {"
+  describe("6. 性能和可靠性测试", " () => {
+    test(应该能够处理高并发协同请求", async () => {")
       const concurrentSessions = 10;
-      const sessionPromises = Array.from({ length: concurrentSessions }, async (_, i) => {const sessionId = await coordinator.startCoordinationSession(`user_${i}`);
+      const sessionPromises = Array.from({ length: concurrentSessions }, async (_, i) => {const sessionId = await coordinator.startCoordinationSession(`user_${i}`);)
         // 并发添加诊断结果
 const diagnosticResult: DiagnosticResult = {
       serviceType: "calculation,",
@@ -415,7 +415,7 @@ const diagnosticResult: DiagnosticResult = {
       // 清理会话
 await Promise.all(sessionIds.map(id => coordinator.endSession(id)))
     });
-    test(应该能够获取协同统计信息", async () => {"
+    test(应该能够获取协同统计信息", async () => {")
       // 创建几个会话
 const session1 = await coordinator.startCoordinationSession("user1);"
       const session2 = await coordinator.startCoordinationSession("user2");
@@ -426,10 +426,10 @@ const session1 = await coordinator.startCoordinationSession("user1);"
 await coordinator.endSession(session1);
       await coordinator.endSession(session2);
     });
-    test(应该能够处理错误情况", async () => {"
+    test(应该能够处理错误情况", async () => {")
       // 测试不存在的会话
-await expect(
-        coordinator.receiveDiagnosticResult("non_existent_session, {"
+await expect()
+        coordinator.receiveDiagnosticResult("non_existent_session, {")
           serviceType: "calculation",
           timestamp: Date.now(),
           data: {},
@@ -438,7 +438,7 @@ await expect(
         });
       ).rejects.toThrow(会话不存在");"
       // 测试无效的模型加载
-await expect(
+await expect()
         aiFramework.loadModel({
       modelId: "invalid_model,",
       modelType: "invalid" as any,
@@ -454,7 +454,7 @@ await expect(
     });
   });
   describe("7. 端到端工作流测试", () => {
-    test("应该能够完成完整的诊断-智能体协同工作流, async () => {"
+    test("应该能够完成完整的诊断-智能体协同工作流, async () => {")
       const workflowResults: any = {};
       // 1. 收集五诊数据
 const diagnosticResults: DiagnosticResult[] = [;

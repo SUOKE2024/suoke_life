@@ -29,15 +29,15 @@ export const MessagePublisher: React.FC<MessagePublisherProps> = ({
   onError,
   style;
 }) => {
-  const [payload, setPayload] = useState(;
+  const [payload, setPayload] = useState(;)
     typeof defaultPayload === 'string' ? defaultPayload : JSON.stringify(defaultPayload, null, 2);
   );
-  const [customAttributes, setCustomAttributes] = useState(;
+  const [customAttributes, setCustomAttributes] = useState(;)
     JSON.stringify(attributes, null, 2);
   );
   const [isPublishing, setIsPublishing] = useState(false);
   const [lastMessageId, setLastMessageId] = useState<string | null>(null);
-  const handlePublish = useCallback(async () => {if (!payload.trim()) {Alert.alert("错误",请输入消息内容');
+  const handlePublish = useCallback(async () => {if (!payload.trim()) {Alert.alert("错误", "请输入消息内容');)
       return;
     }
     setIsPublishing(true);
@@ -56,7 +56,7 @@ export const MessagePublisher: React.FC<MessagePublisherProps> = ({
           parsedAttributes = JSON.parse(customAttributes);
         }
       } catch (error) {
-        Alert.alert("错误",属性格式不正确，请输入有效的JSON');
+        Alert.alert("错误", "属性格式不正确，请输入有效的JSON');
         return;
       }
       const request: PublishRequest = {
@@ -85,13 +85,13 @@ export const MessagePublisher: React.FC<MessagePublisherProps> = ({
     setLastMessageId(null);
   }, [defaultPayload, attributes]);
   return (
-    <View style={[styles.container, style]}>
+  <View style={[styles.container, style]}>
       <Text style={styles.title}>发布消息到主题: {topic}</Text>
       <ScrollView style={styles.scrollView}>
         {// 消息内容输入}
         <View style={styles.section}>
           <Text style={styles.label}>消息内容 (JSON或文本):</Text>
-          <TextInput;
+          <TextInput
             style={styles.textInput}
             value={payload}
             onChangeText={setPayload}
@@ -104,7 +104,7 @@ export const MessagePublisher: React.FC<MessagePublisherProps> = ({
         {// 属性输入}
         <View style={styles.section}>
           <Text style={styles.label}>消息属性 (JSON):</Text>
-          <TextInput;
+          <TextInput
             style={styles.attributesInput}
             value={customAttributes}
             onChangeText={setCustomAttributes}
@@ -115,8 +115,7 @@ export const MessagePublisher: React.FC<MessagePublisherProps> = ({
           />
         </View>
         {// 最后发布的消息ID}
-        {lastMessageId && (
-        <View style={styles.section}>
+        {lastMessageId  && <View style={styles.section}>
             <Text style={styles.label}>最后发布的消息ID:</Text>
             <Text style={styles.messageId}>{lastMessageId}</Text>
           </View>
@@ -124,19 +123,19 @@ export const MessagePublisher: React.FC<MessagePublisherProps> = ({
       </ScrollView>
       {// 操作按钮}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={[styles.button, styles.clearButton]}
           onPress={handleClear}
           disabled={isPublishing}
         >
           <Text style={styles.clearButtonText}>清空</Text>;
         </TouchableOpacity>;
-        <TouchableOpacity;
+        <TouchableOpacity
           style={[styles.button, styles.publishButton, isPublishing && styles.disabledButton]};
           onPress={handlePublish};
           disabled={isPublishing};
         >;
-          {isPublishing ? (;
+          {isPublishing ? (;)
             <ActivityIndicator color="#fff" size="small" />;
           ) : (;
             <Text style={styles.publishButtonText}>发布消息</Text>;

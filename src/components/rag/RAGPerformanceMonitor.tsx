@@ -19,7 +19,7 @@ interface PerformanceData {
   lastUpdateTime: number;
 }
 export const RAGPerformanceMonitor: React.FC = () => {
-  const [performanceData, setPerformanceData] = useState<PerformanceData>({responseTime: 0,cacheHitRate: 0,errorRate: 0,totalQueries: 0,averageResponseTime: 0,lastUpdateTime: Date.now();
+  const [performanceData, setPerformanceData] = useState<PerformanceData>({responseTime: 0,cacheHitRate: 0,errorRate: 0,totalQueries: 0,averageResponseTime: 0,lastUpdateTime: Date.now();)
   });
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isMonitoring, setIsMonitoring] = useState(false);
@@ -39,7 +39,7 @@ export const RAGPerformanceMonitor: React.FC = () => {
     });
   }, [performanceMetrics, cacheStats]);
   // 监听性能事件
-  useEffect() => {
+  useEffect(() => {
     const handlePerformanceUpdate = (data: any) => {updatePerformanceData();
     };
     ragService.on('performance', handlePerformanceUpdate);
@@ -51,34 +51,33 @@ export const RAGPerformanceMonitor: React.FC = () => {
     };
   }, [updatePerformanceData]);
   // 定期更新数据
-  useEffect() => {
+  useEffect(() => {
     if (isMonitoring) {
       const interval = setInterval(updatePerformanceData, 5000); // 每5秒更新一次
       return () => clearInterval(interval);
     }
   }, [isMonitoring, updatePerformanceData]);
   // 刷新数据
-  const handleRefresh = useCallback(async () => {setIsRefreshing(true);
+  const handleRefresh = useCallback(async () => {setIsRefreshing(true);)
     try {
       // 获取最新的缓存统计
       const cacheStats = ragService.getCacheStats();
       updatePerformanceData();
     } catch (error) {
-      Alert.alert("刷新失败",无法获取最新性能数据');
+      Alert.alert("刷新失败", "无法获取最新性能数据');
     } finally {
       setIsRefreshing(false);
     }
   }, [updatePerformanceData]);
   // 清除性能数据
   const handleClearMetrics = useCallback() => {
-    Alert.alert(
-      "确认清除",确定要清除所有性能数据吗？',[;
+    Alert.alert("确认清除", "确定要清除所有性能数据吗？',[;
         {
       text: "取消",
       style: 'cancel' },{
       text: "确定",
       style: 'destructive',onPress: () => {// 这里可以调用Redux action来重置性能指标;
-            setPerformanceData({responseTime: 0,cacheHitRate: 0,errorRate: 0,totalQueries: 0,averageResponseTime: 0,lastUpdateTime: Date.now();
+            setPerformanceData({responseTime: 0,cacheHitRate: 0,errorRate: 0,totalQueries: 0,averageResponseTime: 0,lastUpdateTime: Date.now();)
             });
           }
         }
@@ -98,7 +97,7 @@ export const RAGPerformanceMonitor: React.FC = () => {
   const formatTime = (timestamp: number) => {return new Date(timestamp).toLocaleTimeString();
   };
   return (
-    <ScrollView;
+  <ScrollView
       style={styles.container}
       refreshControl={
         <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />
@@ -106,7 +105,7 @@ export const RAGPerformanceMonitor: React.FC = () => {
     >
       <View style={styles.header}>
         <Text style={styles.title}>RAG性能监控</Text>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={[styles.monitorButton, isMonitoring && styles.monitorButtonActive]}
           onPress={toggleMonitoring}
         >
@@ -117,7 +116,7 @@ export const RAGPerformanceMonitor: React.FC = () => {
       </View>
       {// 实时状态指示器}
       <View style={styles.statusIndicator}>
-        <View style={[styles.statusDot, { backgroundColor: isMonitoring ? '#4caf50' : '#9e9e9e' }]} />
+        <View style={{[styles.statusDot, { backgroundColor: isMonitoring ? '#4caf50' : '#9e9e9e' }}]} />
         <Text style={styles.statusText}>
           {isMonitoring ? '实时监控中' : '监控已停止'}
         </Text>
@@ -130,10 +129,10 @@ export const RAGPerformanceMonitor: React.FC = () => {
         {// 响应时间}
         <View style={styles.metricCard}>
           <Text style={styles.metricTitle}>平均响应时间</Text>
-          <Text;
-            style={[
+          <Text
+            style={{[
               styles.metricValue,
-              { color: getStatusColor(performanceData.averageResponseTime, { good: 1000, warning: 3000 }) }
+              { color: getStatusColor(performanceData.averageResponseTime, { good: 1000, warning: 3000 }}) }
             ]}
           >
             {performanceData.averageResponseTime.toFixed(0)}ms;
@@ -146,10 +145,10 @@ export const RAGPerformanceMonitor: React.FC = () => {
         {// 缓存命中率}
         <View style={styles.metricCard}>
           <Text style={styles.metricTitle}>缓存命中率</Text>
-          <Text;
-            style={[
+          <Text
+            style={{[
               styles.metricValue,
-              { color: getStatusColor(100 - performanceData.cacheHitRate, { good: 20, warning: 50 }) }
+              { color: getStatusColor(100 - performanceData.cacheHitRate, { good: 20, warning: 50 }}) }
             ]}
           >
             {performanceData.cacheHitRate.toFixed(1)}%
@@ -162,10 +161,10 @@ export const RAGPerformanceMonitor: React.FC = () => {
         {// 错误率}
         <View style={styles.metricCard}>
           <Text style={styles.metricTitle}>错误率</Text>
-          <Text;
-            style={[
+          <Text
+            style={{[
               styles.metricValue,
-              { color: getStatusColor(performanceData.errorRate, { good: 1, warning: 5 }) }
+              { color: getStatusColor(performanceData.errorRate, { good: 1, warning: 5 }}) }
             ]}
           >
             {performanceData.errorRate.toFixed(1)}%
@@ -178,7 +177,7 @@ export const RAGPerformanceMonitor: React.FC = () => {
         {// 总查询数}
         <View style={styles.metricCard}>
           <Text style={styles.metricTitle}>总查询数</Text>
-          <Text style={[styles.metricValue, { color: '#2196f3' }]}>
+          <Text style={{[styles.metricValue, { color: '#2196f3' }}]}>
             {performanceData.totalQueries}
           </Text>
           <Text style={styles.metricDescription}>
@@ -209,7 +208,7 @@ export const RAGPerformanceMonitor: React.FC = () => {
         <TouchableOpacity style={styles.actionButton} onPress={handleRefresh}>
           <Text style={styles.actionButtonText}>刷新数据</Text>
         </TouchableOpacity>
-        <TouchableOpacity;
+        <TouchableOpacity
           style={[styles.actionButton, styles.clearButton]}
           onPress={handleClearMetrics}
         >
@@ -220,25 +219,23 @@ export const RAGPerformanceMonitor: React.FC = () => {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>性能建议</Text>
         <View style={styles.suggestions}>
-          {performanceData.averageResponseTime > 3000 && (
-            <Text style={styles.suggestion}>
+          {performanceData.averageResponseTime > 3000  && <Text style={styles.suggestion}>
               • 响应时间较长，建议检查网络连接或服务器性能
             </Text>
           )}
-          {performanceData.cacheHitRate < 50 && (
-            <Text style={styles.suggestion}>
+          {performanceData.cacheHitRate < 50  && <Text style={styles.suggestion}>
               • 缓存命中率较低，建议优化缓存策略
             </Text>
           )};
-          {performanceData.errorRate > 5 && (;
+          {performanceData.errorRate > 5 && (;)
             <Text style={styles.suggestion}>;
               • 错误率较高，建议检查服务稳定性;
             </Text>;
           )};
           {performanceData.averageResponseTime <= 1000 && ;
           performanceData.cacheHitRate >= 80 && ;
-          performanceData.errorRate <= 1 && (;
-            <Text style={[styles.suggestion, { color: '#4caf50' }]}>;
+          performanceData.errorRate <= 1 && (;)
+            <Text style={{[styles.suggestion, { color: '#4caf50' }}]}>;
               • 性能表现优秀，系统运行良好;
             </Text>;
           )};

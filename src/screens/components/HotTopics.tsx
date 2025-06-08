@@ -2,15 +2,15 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "../../plac
 import React from "react";
 export const HotTopics: React.FC  = () => {};
   const topics = [;
-    春季养生指南",中医体质调理,健康饮食搭配",
-    运动康复方案",睡眠质量改善;"
+    春季养生指南", "中医体质调理,健康饮食搭配", "
+    运动康复方案", "睡眠质量改善;"
   ];
-  return (;
+  return (;)
     <View style={styles.container}>;
       <Text style={styles.title}>热门话题</    Text>;
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>;
         <View style={styles.topics}>;
-          {topics.map((topic, index) => (;
+          {topics.map((topic, index) => (;))
             <TouchableOpacity key={index} style={styles.topic}>;
               <Text style={styles.topicText}>{topic}</    Text>;
             </    TouchableOpacity>;
@@ -20,7 +20,7 @@ export const HotTopics: React.FC  = () => {};
     </    View>;
   );
 }
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   backgroundColor: "white",
     borderRadius: 12,
     padding: 16,

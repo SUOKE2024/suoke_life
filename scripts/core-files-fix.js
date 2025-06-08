@@ -64,7 +64,7 @@ const coreFileRules = [
   // 修复数组定义错误
   {
     name: "修复数组定义错误,
-    pattern: /\[([^\]]*)?\]/g,
+    pattern: /[([^]]*)?\]/g,
     replacement: (match, content) => {
       const cleanContent = content.replace(/;+/g, ");
       return `[${cleanContent}]`;

@@ -19,7 +19,7 @@ interface AuthInputProps extends TextInputProps { label: string;
   onBlur?: () => void;
   counter?: boolean,
   maxLength?: number}
-export const AuthInput: React.FC<AuthInputProps /> = ({/   const performanceMonitor = usePerformanceMonitor("";
+export const AuthInput: React.FC<AuthInputProps /> = ({/   const performanceMonitor = usePerformanceMonitor("";))
 AuthInput",{/    "
     trackRender: true,
     trackMemory: false,
@@ -38,11 +38,11 @@ AuthInput",{/    "
   ...props;
 }) => {}
   performanceMonitor.recordRender();
-  return (;
+  return (;)
     <View style={styles.container}>/      <Text style={[styles.label, focused && styles.labelFocused]} />/            {label};
       </Text>/  >;
         styles.inputWrapper,focused && styles.inputWrapperFocused,error && styles.inputWrapperError;
-      ]} />/        {icon && <Text style={styles.inputIcon}>{icon}</Text>}/            <TextInput;
+      ]} />/        {icon && <Text style={styles.inputIcon}>{icon}</Text>}/            <TextInput
 style={styles.input}
           value={value}
           placeholderTextColor={colors.placeholder}
@@ -50,18 +50,16 @@ style={styles.input}
           onBlur={onBlur}
           maxLength={maxLength}
           {...props}
-        />/            {counter && maxLength && value && (
-          <Text style={styles.inputCounter}>{value.length}/{maxLength}</Text>/            )}
-        {rightIcon && (
-          <TouchableOpacity;
+        />/            {counter && maxLength && value  && <Text style={styles.inputCounter}>{value.length}/{maxLength}</Text>/            )}
+        {rightIcon  && <TouchableOpacity
 style={styles.rightIconButton}
             onPress={onRightIconPress}
           accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.rightIcon}>{rightIcon}</Text>/          </TouchableOpacity>/            )}
-      </View>/          {error && (;
+      </View>/          {error && (;)
         <Animated.View style={styles.errorContainer}>/          <Text style={styles.errorText}>{error}</Text>/        </Animated.View>/          )};
     </View>/      ;);
 };
-const styles = StyleSheet.create({ container: {marginBottom: spacing.;l;g  },
+const styles = StyleSheet.create({ container: {marginBottom: spacing.;l;g  },)
   label: {,
   fontSize: fonts.size.md,
     fontWeight: 600",

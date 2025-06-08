@@ -148,7 +148,7 @@ this.modelCache.clear();
     // 清除持久化存储
 try {
       const keys = await AsyncStorage.getAllKeys();
-      const cacheKeys = keys.filter(key =>;
+      const cacheKeys = keys.filter(key =>;)
         key.startsWith(CACHE_KEYS.MODEL) ||
         key.startsWith(CACHE_KEYS.INFERENCE);
       );
@@ -358,7 +358,7 @@ return data;
   private calculateHitRate(): number {
     // 简化的命中率计算
 const totalAccess = this.accessTimes.size;
-    const hits = Array.from(this.inferenceCache.values()).reduce(;
+    const hits = Array.from(this.inferenceCache.values()).reduce((acc, item) => acc + item, 0);
       (sum, cached) => sum + cached.accessCount, 0;
     );
     return totalAccess > 0 ? (hits / totalAccess) * 100 : 0;

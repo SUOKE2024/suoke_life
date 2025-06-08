@@ -1,4 +1,3 @@
-
 import SecurityManager from '../SecurityManager.tsx';
 describe('SecurityManager', () => {
   it('应该正确导出', () => {

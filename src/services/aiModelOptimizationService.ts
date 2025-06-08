@@ -81,7 +81,7 @@ export class AIModelOptimizationService {private models: Map<string, ModelInfo> 
         isOptimized: true;
       }
     ];
-    defaultModels.forEach(model => {}
+    defaultModels.forEach(model => {})
       this.models.set(model.id, model);
     });
   }
@@ -135,7 +135,7 @@ if (!this.isOptimizing) {
   }
   /**
 * * 优化模型
-  public async optimizeModel(
+  public async optimizeModel()
     modelId: string,
     config?: OptimizationConfig;
   ): Promise<ModelInfo | null> {
@@ -153,7 +153,7 @@ const optimizationConfig: OptimizationConfig = config || {targetAccuracy: 0.90,
         enableDistillation: false;
       };
       // 模拟优化过程
-const optimizedMetrics = await this.performOptimization(;
+const optimizedMetrics = await this.performOptimization(;)
         model.metrics,
         optimizationConfig;
       );
@@ -172,7 +172,7 @@ const optimizedModel: ModelInfo = {...model,
   }
   /**
 * * 执行优化算法
-  private async performOptimization(
+  private async performOptimization()
     originalMetrics: ModelMetrics,
     config: OptimizationConfig;
   ): Promise<ModelMetrics> {
@@ -237,7 +237,7 @@ optimizedMetrics.accuracy = Math.min(optimizedMetrics.accuracy, 1.0);
   }
   /**
 * * 比较优化前后的性能
-  public comparePerformance(
+  public comparePerformance()
     originalMetrics: ModelMetrics,
     optimizedMetrics: ModelMetrics;
   ): Record<string, number> {
@@ -275,7 +275,7 @@ optimizedMetrics.accuracy = Math.min(optimizedMetrics.accuracy, 1.0);
   public generatePerformanceReport(): string {
     const models = this.getAllModels();
     let report = "=== AI模型性能报告 ===\n\n";
-    models.forEach(model => {}
+    models.forEach(model => {})
       report += `模型: ${model.name} (${model.id})\n`;
       report += `版本: ${model.version}\n`;
       report += `类型: ${model.type}\n`;

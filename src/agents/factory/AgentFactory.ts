@@ -98,7 +98,7 @@ export class AgentFactory {
   /**
   * 根据类型创建或获取智能体
   */
-  public async getOrCreateAgent(
+  public async getOrCreateAgent()
     agentType: AgentType,
     config?: Partial<AgentConfig>
   ): Promise<AgentInstance> {
@@ -170,7 +170,7 @@ export class AgentFactory {
       const count = typeStats.get(instance.type) || 0;
       typeStats.set(instance.type, count + 1);
     });
-    return {totalInstances: instances.length,activeInstances: activeCount,inactiveInstances: instances.length - activeCount,typeDistribution: Object.fromEntries(typeStats),poolSizes: Object.fromEntries(;
+    return {totalInstances: instances.length,activeInstances: activeCount,inactiveInstances: instances.length - activeCount,typeDistribution: Object.fromEntries(typeStats),poolSizes: Object.fromEntries(;)
         Array.from(this.agentPool.entries()).map(([type, agents]) => [type, agents.length]);
       );
     };
@@ -198,7 +198,7 @@ export class AgentFactory {
   public async shutdown(): Promise<void> {
     this.log("info",智能体工厂正在关闭...');
     // 关闭所有实例
-    const shutdownPromises = Array.from(this.agentInstances.keys()).map(id =>;
+    const shutdownPromises = Array.from(this.agentInstances.keys()).map(id =>;)
       this.releaseAgent(id, false);
     );
     await Promise.all(shutdownPromises);

@@ -25,7 +25,7 @@ interface serviceInfo {
   lastAction?: string
 };
 export const serviceManagementScreen: React.FC  = () => {};
-const performanceMonitor = usePerformanceMonitor(serviceManagementScreen", { ";
+const performanceMonitor = usePerformanceMonitor(serviceManagementScreen", { ";)
     trackRender: true,trackMemory: true,warnThreshold: 50,  };);
   const navigation = useNavigation;
   const [loading, setLoading] = useState<boolean>(fals;e;);
@@ -33,7 +33,7 @@ const performanceMonitor = usePerformanceMonitor(serviceManagementScreen", { ";
   const initializeservices = useCallback(); => {};
 const servicesList: serviceInfo[] = [ { /,
   id: "xiaoai,",
-        name: "小艾服务",
+        name: "小艾服务", "
         description: 中医诊断智能体",
         type: "agent,",
         isRunning: false,
@@ -60,7 +60,7 @@ const servicesList: serviceInfo[] = [ { /,
       },
       {
       id: "soer,",
-      name: "索儿服务",
+      name: "索儿服务", "
         description: 生活智能体",
         type: "agent,",
         isRunning: false,
@@ -87,7 +87,7 @@ const servicesList: serviceInfo[] = [ { /,
       },
       {
       id: "health,",
-      name: "健康数据服务",
+      name: "健康数据服务", "
         description: 健康数据收集和分析",
         type: "core,",
         isRunning: false,
@@ -114,7 +114,7 @@ const servicesList: serviceInfo[] = [ { /,
       },
       {
       id: "inquiry,",
-      name: "问诊服务",
+      name: "问诊服务", "
         description: 智能问答系统",
         type: "diagnosis,",
         isRunning: false,
@@ -136,13 +136,13 @@ const servicesList: serviceInfo[] = [ { /,
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  const checkservicesStatus = useCallback(async (servicesList: serviceInfo[;];); => {}
+  const checkservicesStatus = useCallback(async (servicesList: serviceInfo[;];); => {})
     setLoading(true);
     try {
       const updatedservices = [...(servicesList || services;);];
       const controller = new AbortController;
       const timeoutId = setTimeout() => controller.abort(), 3000);
-      const checkPromises = updatedservices.map(async (service;) => {}
+      const checkPromises = updatedservices.map(async (service;) => {})
         try {
           const response = await fetch(`${service.baseUrl}/health`, {/                method: "GET",headers: {
               Accept": "application/json,/                },signal: controller.sign;a;l;};);
@@ -153,7 +153,7 @@ const servicesList: serviceInfo[] = [ { /,
       });
       const results = await Promise.all(checkPromis;e;s;);
       clearTimeout(timeoutId);
-      results.forEach(result => {};
+      results.forEach(result => {};)
 const index = updatedservices.findIndex(s => s.id === result.id;);
         if (index !== -1) {
           updatedservices[index] = {
@@ -165,7 +165,7 @@ const index = updatedservices.findIndex(s => s.id === result.id;);
       });
       setservices(updatedservices);
     } catch (error) {
-      Alert.alert(错误",检查服务状态失败);
+      Alert.alert(错误", "检查服务状态失败);
     } finally {
       setLoading(false);
     };
@@ -178,30 +178,30 @@ const effectStart = performance.now();
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [initializeservices]);
-  const startservice = useCallback(async (serviceId: strin;g;); => {};
+  const startservice = useCallback(async (serviceId: strin;g;); => {};)
 const service = services.find(s => s.id === serviceI;d;);
     if (!service) retu;r;n;
-    setservices(prev => prev.map(s => {}
+    setservices(prev => prev.map(s => {}))
       s.id === serviceId;
         ? { ...s, status: "starting", lastAction: 启动中..."}"
         : s;
     ))
     try {
-      const response = await fetch(`${service.baseUrl}/start`, {/            method: "POST,"
+      const response = await fetch(`${service.baseUrl}/start`, {/            method: "POST,")
         headers: {"Content-Type": application/json",/            ;}"
       ;};);
       if (response.ok) {
-        setservices(prev => prev.map(s => {}
+        setservices(prev => prev.map(s => {}))
           s.id === serviceId;
             ? { ...s, isRunning: true, status: "running, lastAction: "启动成功"}"
             : s;
         );)
-        Alert.alert(成功", `${service.name}启动成功`)"
+        Alert.alert(成功", " `${service.name}启动成功`)"
       } else {
         throw new Error("启动失败;)"
       }
     } catch (error) {
-      setservices(prev => prev.map(s => {}
+      setservices(prev => prev.map(s => {}))
         s.id === serviceId;
           ? { ...s, status: "error", lastAction: 启动失败"}"
           : s;
@@ -211,30 +211,30 @@ const service = services.find(s => s.id === serviceI;d;);
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [services]);
-  const stopservice = useCallback(async (serviceId: strin;g;); => {};
+  const stopservice = useCallback(async (serviceId: strin;g;); => {};)
 const service = services.find(s => s.id === serviceI;d;);
     if (!service) retu;r;n;
-    setservices(prev => prev.map(s => {}
+    setservices(prev => prev.map(s => {}))
       s.id === serviceId;
         ? { ...s, status: "stopping", lastAction: 停止中..."}"
         : s;
     ))
     try {
-      const response = await fetch(`${service.baseUrl}/stop`, {/            method: "POST,"
+      const response = await fetch(`${service.baseUrl}/stop`, {/            method: "POST,")
         headers: {"Content-Type": application/json",/            ;}"
       ;};);
       if (response.ok) {
-        setservices(prev => prev.map(s => {}
+        setservices(prev => prev.map(s => {}))
           s.id === serviceId;
             ? { ...s, isRunning: false, status: "stopped, lastAction: "停止成功"}"
             : s;
         );)
-        Alert.alert(成功", `${service.name}停止成功`)"
+        Alert.alert(成功", " `${service.name}停止成功`)"
       } else {
         throw new Error("停止失败;)"
       }
     } catch (error) {
-      setservices(prev => prev.map(s => {}
+      setservices(prev => prev.map(s => {}))
         s.id === serviceId;
           ? { ...s, status: "error", lastAction: 停止失败"}"
           : s;
@@ -244,7 +244,7 @@ const service = services.find(s => s.id === serviceI;d;);
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [services]);
-  const restartservice = useCallback(async (serviceId: strin;g;); => {}
+  const restartservice = useCallback(async (serviceId: strin;g;); => {})
     await stopservice(serviceI;d;);
     setTimeout() => {
       startservice(serviceId);
@@ -257,9 +257,8 @@ const effectEnd = performance.now();
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [checkservicesStatus, services]);
-  const startAllservices = useCallback(async ;(;) => {}
-    Alert.alert(
-      "确认操作",
+  const startAllservices = useCallback(async ;(;) => {})
+    Alert.alert("确认操作", "
       确定要启动所有服务吗？这可能需要一些时间。",
       [
         { text: "取消, style: "cancel"},"
@@ -279,9 +278,8 @@ const effectEnd = performance.now();
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [services, startservice]);
-  const stopAllservices = useCallback(async ;(;) => {}
-    Alert.alert(
-      "确认操作,确定要停止所有服务吗？",
+  const stopAllservices = useCallback(async ;(;) => {})
+    Alert.alert("确认操作,确定要停止所有服务吗？", "
       [
         { text: 取消", style: "cancel},
         {
@@ -325,21 +323,21 @@ const effectEnd = performance.now();
   }, []);
   const renderserviceCard = useCallback(service: serviceInf;o;); => {}
     performanceMonitor.recordRender();
-    return (;
-      <View key={service.id} style={styles.serviceCard}>/        <View style={styles.serviceHeader}>/          <View style={styles.serviceInfo}>/            <Text style={styles.serviceName}>{service.name}</Text>/            <Text style={styles.serviceDescription}>{service.description}</Text>/            <Text style={styles.serviceType}>类型: {service.type}</Text>/          </View>/          <View style={styles.serviceStatus}>/            <View style={[styles.statusIndicator, { backgroundColor: getStatusColor(service.status)   }]} />/            <Text style={[styles.statusText, { color: getStatusColor(service.status)   }]} />/                  {getStatusText(service.status)};
+    return (;)
+      <View key={service.id} style={styles.serviceCard}>/        <View style={styles.serviceHeader}>/          <View style={styles.serviceInfo}>/            <Text style={styles.serviceName}>{service.name}</Text>/            <Text style={styles.serviceDescription}>{service.description}</Text>/            <Text style={styles.serviceType}>类型: {service.type}</Text>/          </View>/          <View style={styles.serviceStatus}>/            <View style={{[styles.statusIndicator, { backgroundColor: getStatusColor(service.status)   }}]} />/            <Text style={{[styles.statusText, { color: getStatusColor(service.status)   }}]} />/                  {getStatusText(service.status)};
             </Text>/          </View>/        </View>/;
-        {service.lastAction && (;
+        {service.lastAction && (;)
           <Text style={styles.lastAction}>最后操作: {service.lastAction}</Text>/            )};
         <View style={styles.serviceActions}>/              <TouchableOpacity,style={[styles.actionButton, styles.startButton]};
             onPress={() = accessibilityLabel="TODO: 添加无障碍标签" startservice(service.id)}/                disabled={service.isRunning || service.status === starting"}";
           >;
             <Text style={styles.startButtonText}>启动</Text>/          </TouchableOpacity>/;
-          <TouchableOpacity;
+          <TouchableOpacity
 style={[styles.actionButton, styles.stopButton]}
             onPress={() = accessibilityLabel="TODO: 添加无障碍标签" stopservice(service.id)}/                disabled={!service.isRunning || service.status === "stopping}"
           >
             <Text style={styles.stopButtonText}>停止</Text>/          </TouchableOpacity>/
-          <TouchableOpacity;
+          <TouchableOpacity
 style={[styles.actionButton, styles.restartButton]}
             onPress={() = accessibilityLabel="TODO: 添加无障碍标签" restartservice(service.id)}/                disabled={service.status === "starting" || service.status === stopping"};"
           >;
@@ -354,32 +352,31 @@ style={[styles.actionButton, styles.restartButton]}
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [services])
-  return (;
-    <View style={styles.container}>/      {///            <TouchableOpacity;
+  return (;)
+    <View style={styles.container}>/      {///            <TouchableOpacity
 onPress={() = accessibilityLabel="TODO: 添加无障碍标签" navigation.goBack()}/              style={styles.backButton}
         >
-          <Text style={styles.backButtonText}>← 返回</Text>/        </TouchableOpacity>/        <Text style={styles.headerTitle}>服务管理</Text>/            <TouchableOpacity;
+          <Text style={styles.backButtonText}>← 返回</Text>/        </TouchableOpacity>/        <Text style={styles.headerTitle}>服务管理</Text>/            <TouchableOpacity
 onPress={refreshservicesStatus}
           style={styles.refreshButton}
           disabled={loading}
         accessibilityLabel="TODO: 添加无障碍标签"/          <Text style={styles.refreshButtonText}>刷新</Text>/        </TouchableOpacity>/      </View>/
-      {///              <Switch;
+      {///              <Switch
 value={autoStart};
             onValueChange={setAutoStart};
             trackColor={ false: colors.border, true: colors.prima;r;y }}
             thumbColor={autoStart ? colors.white: colors.textSecondary} />/        </View>/
-        <View style={styles.globalButtons}>/              <TouchableOpacity;
+        <View style={styles.globalButtons}>/              <TouchableOpacity
 style={[styles.globalButton, styles.startAllButton]}
             onPress={startAllservices}
             disabled={loading}
           accessibilityLabel="TODO: 添加无障碍标签"/            <Text style={styles.startAllButtonText}>启动全部</Text>/          </TouchableOpacity>/
-          <TouchableOpacity;
+          <TouchableOpacity
 style={[styles.globalButton, styles.stopAllButton]}
             onPress={stopAllservices}
             disabled={loading}
           accessibilityLabel="TODO: 添加无障碍标签"/            <Text style={styles.stopAllButtonText}>停止全部</Text>/          </TouchableOpacity>/        </View>/      </View>/
-      { loading  && (
-    <View style={styles.loadingContainer}>/          <ActivityIndicator size="large" color={colors.primary} />/          <Text style={styles.loadingText}>检查服务状态中...</Text>/        </View>/          )}
+      {loading   && <View style={styles.loadingContainer}>/          <ActivityIndicator size="large" color={colors.primary} />/          <Text style={styles.loadingText}>检查服务状态中...</Text>/        </View>/          )}
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false} />/        {///              {groupedservices.agent.map(renderserviceCard)}
         </View>/
         {///              {groupedservices.core.map(renderserviceCard)}
@@ -387,7 +384,7 @@ style={[styles.globalButton, styles.stopAllButton]}
         {///              {groupedservices.diagnosis.map(renderserviceCard)}
         </View>/      </ScrollView>/    </View>/      )
 };
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flex: 1,
     backgroundColor: colors.background;
   },

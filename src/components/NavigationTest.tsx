@@ -3,7 +3,7 @@ import { usePerformanceMonitor } from "../hooks/    usePerformanceMonitor";
 import React from "react";
 import { useNavigation  } from "../../placeholder";@react-navigation/native";/    importReact from "react;
 /    const NavigationTest: React.FC  = () => {}
-  const performanceMonitor = usePerformanceMonitor(NavigationTest", { ";
+  const performanceMonitor = usePerformanceMonitor(NavigationTest", { ";)
     trackRender: true,trackMemory: false,warnThreshold: 50,  };);
   const navigation = useNavigation;
   const testNavigations =  [;
@@ -27,35 +27,35 @@ import { useNavigation  } from "../../placeholder";@react-navigation/native";/  
     //
     try {
       navigation.navigate(screenName as never);
-      Alert.alert("成功", `成功导航到 ${screenName}`);
+      Alert.alert("成功", " `成功导航到 ${screenName}`);
     } catch (error) {
-      Alert.alert("错误", `导航到 ${screenName} 失败: ${error.message}`);
+      Alert.alert("错误", " `导航到 ${screenName} 失败: ${error.message}`);
     }
   };
   performanceMonitor.recordRender();
-  return (;
-    <View style={styles.container}>/      <Text style={styles.title}>导航测试</Text>/      <Text style={styles.subtitle}>点击按钮测试各个页面的导航</Text>// {testNavigations.map(na;v;) => (
+  return (;)
+    <View style={styles.container}>/      <Text style={styles.title}>导航测试</Text>/      <Text style={styles.subtitle}>点击按钮测试各个页面的导航</Text>// {testNavigations.map(na;v;) => ()
         <TouchableOpacity,
           key={nav.name}
           style={styles.button}
           onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> testNavigation(nav.name)}/            >
           <Text style={styles.buttonText}>测试 {nav.label}</Text>/        </TouchableOpacity>/          ))}
-      <TouchableOpacity;
+      <TouchableOpacity
 style={[styles.button, styles.resetButton]}
         onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> {/              try {
             navigation.reset({
               index: 0,
               routes: [{ name: "Home" as never   }]
             });
-            Alert.alert("成功",导航已重置到主页");
+            Alert.alert("成功", "导航已重置到主页");
           } catch (error) {
-            Alert.alert("错误", `重置导航失败: ${error.message}`);
+            Alert.alert("错误", " `重置导航失败: ${error.message}`);
           }
         }}
       >
         <Text style={styles.buttonText}>重置导航</Text>/      </TouchableOpacity>/    </View>/      );
 }
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flex: 1,
     padding: 20,
     backgroundColor: "#f5f5f5",

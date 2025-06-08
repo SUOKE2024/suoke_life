@@ -76,7 +76,7 @@ export class DiagnosisIntegrationTester {
   voiceRecording: 'data:audio/wav;base64,test'
         },
         inquiryData: {,
-  symptoms: ["头痛",失眠', '食欲不振'],
+  symptoms: ["头痛", "失眠', '食欲不振'],
           medicalHistory: ['无'],
           lifestyle: {,
   sleep: '7小时',
@@ -199,7 +199,7 @@ export class DiagnosisIntegrationTester {
         await this.fiveDiagnosisService.performDiagnosis(input);
         throw new Error('应该抛出数据验证错误');
       } catch (error: any) {
-        if (
+        if ()
           error.message.includes('验证') ||
           error.message.includes('无效') ||
           error.message.includes('症状');
@@ -222,7 +222,7 @@ export class DiagnosisIntegrationTester {
         await this.fiveDiagnosisService.performDiagnosis(input);
         throw new Error('应该抛出用户ID错误');
       } catch (error: any) {
-        if (
+        if ()
           error.message.includes('用户') ||
           error.message.includes('ID') ||
           error.message.includes('空');
@@ -242,7 +242,7 @@ export class DiagnosisIntegrationTester {
         await this.fiveDiagnosisService.performDiagnosis(input);
         throw new Error('应该抛出无数据错误');
       } catch (error: any) {
-        if (
+        if ()
           error.message.includes('数据') ||
           error.message.includes('诊断') ||
           error.message.includes('提供');
@@ -318,7 +318,7 @@ export class DiagnosisIntegrationTester {
           await this.fiveDiagnosisService.performDiagnosis(input as any);
           throw new Error(`无效输入应该被拒绝: ${JSON.stringify(input)}`);
         } catch (error: any) {
-          if (
+          if ()
             !error.message.includes('验证') &&
             !error.message.includes('无效') &&
             !error.message.includes('用户') &&
@@ -441,15 +441,15 @@ export class DiagnosisIntegrationTester {
     const passedTests = this.testResults.filter(r => r.passed).length;
     const failedTests = totalTests - passedTests;
     // 计算覆盖率
-    const apiTests = this.testResults.filter(;
+    const apiTests = this.testResults.filter(;)
       r => r.testName.includes('API') || r.testName.includes('数据处理');
     ).length;
-    const errorTests = this.testResults.filter(;
+    const errorTests = this.testResults.filter(;)
       r => r.testName.includes('错误') || r.testName.includes('处理');
     ).length;
     const cacheTests = this.testResults.filter(r => r.testName.includes('缓存')).length;
     const validationTests = this.testResults.filter(r => r.testName.includes('验证')).length;
-    const performanceTests = this.testResults.filter(;
+    const performanceTests = this.testResults.filter(;)
       r =>;
         r.testName.includes('性能') ||;
         r.testName.includes('响应') ||;

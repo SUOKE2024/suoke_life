@@ -30,8 +30,8 @@ export class LaokeKnowledgeIntegration {
       // 获取所有体质信息
       const allConstitutions = await medKnowledgeService.getConstitutions();
       // 分析症状与体质的匹配度
-      const matches = allConstitutions.map(constitution => {const matchingSymptoms = symptoms.filter(symptom =>;
-          constitution.symptoms.some(;
+      const matches = allConstitutions.map(constitution => {const matchingSymptoms = symptoms.filter(symptom =>;))
+          constitution.symptoms.some(;)
             cs =>;
               cs.toLowerCase().includes(symptom.toLowerCase()) ||;
               symptom.toLowerCase().includes(cs.toLowerCase());
@@ -58,7 +58,7 @@ export class LaokeKnowledgeIntegration {
   /**
   * 基于体质获取个性化健康建议
   */
-  async getPersonalizedAdvice(
+  async getPersonalizedAdvice()
     constitutionId: string,
     userContext: {
       age?: number;
@@ -75,7 +75,7 @@ export class LaokeKnowledgeIntegration {
       // 获取体质详情
       const constitution = await medKnowledgeService.getConstitutionById(constitutionId);
       // 获取个性化推荐
-      const recommendations = await medKnowledgeService.getPersonalizedRecommendations({userId: 'current_user', // 实际应用中应该是真实用户ID;
+      const recommendations = await medKnowledgeService.getPersonalizedRecommendations({userId: 'current_user', // 实际应用中应该是真实用户ID;)
         constitution_id: constitutionId,symptoms: userContext.currentSymptoms,preferences: {
       treatment_type: "traditional",
       lifestyle_focus: userContext.lifestyle;
@@ -103,7 +103,7 @@ export class LaokeKnowledgeIntegration {
       // 搜索相关症状
       const symptoms = await medKnowledgeService.searchSymptoms(symptomDescription);
       // 基于症状分析体质
-      const constitutionAnalysis = await this.analyzeConstitutionBySymptoms(;
+      const constitutionAnalysis = await this.analyzeConstitutionBySymptoms(;)
         symptoms.map(s => s.name);
       );
       // 获取治疗建议
@@ -120,7 +120,7 @@ export class LaokeKnowledgeIntegration {
   /**
   * 知识图谱查询和推理
   */
-  async queryKnowledgeGraph(query: {,
+  async queryKnowledgeGraph(query: {,)
   entityType: string;
     entityId: string;
     relationshipType?: string;
@@ -132,11 +132,11 @@ export class LaokeKnowledgeIntegration {
   }> {
     try {
       // 获取实体关系
-      const relationships = await medKnowledgeService.getEntityRelationships(;
+      const relationships = await medKnowledgeService.getEntityRelationships(;)
         query.entityType,query.entityId;
       );
       // 获取相邻实体
-      const neighbors = await medKnowledgeService.getEntityNeighbors(;
+      const neighbors = await medKnowledgeService.getEntityNeighbors(;)
         query.entityType,query.entityId;
       );
       // 生成洞察
@@ -151,7 +151,7 @@ export class LaokeKnowledgeIntegration {
   /**
   * 综合健康评估
   */
-  async comprehensiveHealthAssessment(assessmentData: {,
+  async comprehensiveHealthAssessment(assessmentData: {,)
   symptoms: string[];
     constitution?: string;
     lifestyle: {,
@@ -173,8 +173,8 @@ export class LaokeKnowledgeIntegration {
   }> {
     try {
       // 分析症状
-      const symptomAnalysis = await this.intelligentSymptomSearch(;
-        assessmentData.symptoms.join(",);
+      const symptomAnalysis = await this.intelligentSymptomSearch(;)
+        assessmentData.symptoms.join(", ");
       );
       // 体质分析
       let constitutionAnalysis;
@@ -193,7 +193,7 @@ export class LaokeKnowledgeIntegration {
       // 识别风险因素
       const riskFactors = this.identifyRiskFactors(assessmentData, symptomAnalysis);
       // 生成预防措施
-      const preventiveActions = this.generatePreventiveActions(;
+      const preventiveActions = this.generatePreventiveActions(;)
         assessmentData,constitutionAnalysis;
       );
       // 制定随访计划
@@ -206,7 +206,7 @@ export class LaokeKnowledgeIntegration {
     }
   }
   // 私有辅助方法
-  private generateConstitutionReasoning(
+  private generateConstitutionReasoning()
     symptoms: string[],
     matches: Array<{ constitution: Constitution; confidence: number; matchingSymptoms: string[] }>
   ): string {
@@ -225,7 +225,7 @@ export class LaokeKnowledgeIntegration {
     ];
     if (userContext.currentSymptoms && userContext.currentSymptoms.length > 0) {
       advice.push("",【针对性调理】');
-      advice.push(
+      advice.push()
         `针对您当前的${userContext.currentSymptoms.join('、')}症状，建议加强相应的调理措施。`
       );
     }
@@ -241,13 +241,13 @@ export class LaokeKnowledgeIntegration {
     return Array.from(treatments).slice(0, 5);
   }
   private generateTCMAnalysis(symptoms: Symptom[], constitutions: Constitution[]): string {
-    const analysis = ["【中医分析】",', '根据中医理论，您的症状表现提示：'];
+    const analysis = ["【中医分析】", "', '根据中医理论，您的症状表现提示：'];
     if (symptoms.length > 0) {
       const categories = [...new Set(symptoms.map(s => s.category))];
       analysis.push(`主要涉及${categories.join('、')}方面的问题。`);
     }
     if (constitutions.length > 0) {
-      analysis.push(
+      analysis.push()
         `体质倾向于${constitutions[0].type}，需要注意${constitutions[0].characteristics;
           .slice(0, 2);
           .join('、')}。`
@@ -299,7 +299,7 @@ export class LaokeKnowledgeIntegration {
   }
   private generatePreventiveActions(assessmentData: any, constitutionAnalysis: any): string[] {
     const actions = [;
-      "保持规律作息，充足睡眠",均衡饮食，避免过度进食',"适量运动，增强体质",调节情绪，保持心情愉悦';
+      "保持规律作息，充足睡眠", "均衡饮食，避免过度进食',"适量运动，增强体质",调节情绪，保持心情愉悦';
     ];
     if (constitutionAnalysis.constitution) {
       actions.push(`针对${constitutionAnalysis.constitution.type}体质的特殊调养`);

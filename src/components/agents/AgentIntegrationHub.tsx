@@ -23,12 +23,12 @@ export interface AgentIntegrationHubProps {
 /**
 * * 智能体集成中心组件
 * 管理和协调多个智能体的工作
-export const AgentIntegrationHub: React.FC<AgentIntegrationHubProps>  = ({onAgentSelect,onTaskCreate;
+export const AgentIntegrationHub: React.FC<AgentIntegrationHubProps>  = ({onAgentSelect,onTaskCreate;)
 }) => {}
   const [agents, setAgents] = useState<Agent[]>([]);
   const [tasks, setTasks] = useState<AgentTask[]>([]);
   const [loading, setLoading] = useState(true);
-  useEffect() => {
+  useEffect(() => {
     loadAgentsAndTasks();
   }, [])  // 检查是否需要添加依赖项;
   const loadAgentsAndTasks = async() => {}
@@ -39,7 +39,7 @@ const mockAgents: Agent[] = [;
       name: "小艾",
           type: xiaoai",
           status: "online,",
-          capabilities: ["诊断分析", 健康咨询",症状识别],
+          capabilities: ["诊断分析", " 健康咨询", "症状识别],
           lastActive: new Date();
         },
         {
@@ -47,7 +47,7 @@ const mockAgents: Agent[] = [;
       name: 小克",
           type: "xiaoke,",
           status: "online",
-          capabilities: [数据分析",趋势预测, "报告生成"],
+          capabilities: [数据分析", "趋势预测, "报告生成"],
           lastActive: new Date();
         },
         {
@@ -55,7 +55,7 @@ const mockAgents: Agent[] = [;
           name: "老克,",
           type: "laoke",
           status: busy",
-          capabilities: ["中医诊断, "方剂推荐", 养生指导"],
+          capabilities: ["中医诊断, "方剂推荐", " 养生指导"],
           lastActive: new Date();
         },
         {
@@ -63,7 +63,7 @@ const mockAgents: Agent[] = [;
       name: "索儿",
           type: soer",
           status: "online,",
-          capabilities: ["生活管理", 社区服务",生态协调],
+          capabilities: ["生活管理", " 社区服务", "生态协调],
           lastActive: new Date();
         }
       ];
@@ -138,27 +138,26 @@ const mockAgents: Agent[] = [;
         return "#757575;"
     }
   };
-  const renderAgentCard = (agent: Agent) => (;
-    <TouchableOpacity;
+  const renderAgentCard = (agent: Agent) => (;)
+    <TouchableOpacity
 key={agent.id}
       style={styles.agentCard}
       onPress={() => onAgentSelect?.(agent)}
     >
       <View style={styles.agentHeader}>
         <Text style={styles.agentName}>{agent.name}</    Text>
-        <View style={[styles.statusDot, { backgroundColor: getStatusColor(agent.status) }]} /    >
+        <View style={{[styles.statusDot, { backgroundColor: getStatusColor(agent.status) }}]} /    >
       </    View>
       <Text style={styles.agentType}>{agent.type.toUpperCase()}</    Text>
       <Text style={styles.agentStatus}>{agent.status}</    Text>
       <View style={styles.capabilitiesContainer}>
         <Text style={styles.capabilitiesTitle}>能力:</    Text>
-        {agent.capabilities.slice(0, 2).map((capability, index) => (
+        {agent.capabilities.slice(0, 2).map((capability, index) => ())
           <Text key={index} style={styles.capability}>
             • {capability}
           </    Text>
         ))}
-        {agent.capabilities.length > 2 && (
-          <Text style={styles.moreCapabilities}>
+        {agent.capabilities.length > 2  && <Text style={styles.moreCapabilities}>
             +{agent.capabilities.length - 2} 更多
           </    Text>
         )}
@@ -171,14 +170,14 @@ key={agent.id}
   const renderTaskCard = (task: AgentTask) => {}
     const agent = agents.find(a => a.id === task.agentId);
     return (
-      <View key={task.id} style={styles.taskCard}>
+  <View key={task.id} style={styles.taskCard}>
         <View style={styles.taskHeader}>;
           <Text style={styles.taskType}>{task.type}</    Text>;
           <View style={styles.taskBadges}>;
-            <View style={[styles.priorityBadge, { backgroundColor: getPriorityColor(task.priority) }]}>;
+            <View style={{[styles.priorityBadge, { backgroundColor: getPriorityColor(task.priority) }}]}>;
               <Text style={styles.badgeText}>{task.priority}</    Text>;
             </    View>;
-            <View style={[styles.statusBadge, { backgroundColor: getTaskStatusColor(task.status) }]}>;
+            <View style={{[styles.statusBadge, { backgroundColor: getTaskStatusColor(task.status) }}]}>;
               <Text style={styles.badgeText}>{task.status}</    Text>;
             </    View>;
           </    View>;
@@ -195,7 +194,7 @@ key={agent.id}
     const runningTasks = tasks.filter(t => t.status === "running).length;"
     const completedTasks = tasks.filter(t => t.status === "completed").length;
     return (
-      <View style={styles.overviewContainer}>
+  <View style={styles.overviewContainer}>
         <Text style={styles.sectionTitle}>系统概览</    Text>;
         <View style={styles.overviewGrid}>;
           <View style={styles.overviewCard}>;
@@ -215,13 +214,13 @@ key={agent.id}
     );
   };
   if (loading) {
-    return (;
+    return (;)
       <View style={styles.loadingContainer}>;
         <Text style={styles.loadingText}>加载智能体数据中...</    Text>;
       </    View>;
     );
   }
-  return (;
+  return (;)
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>;
       {renderOverview()};
       <Text style={styles.sectionTitle}>智能体状态</    Text>;
@@ -235,7 +234,7 @@ key={agent.id}
     </    ScrollView>;
   );
 };
-const styles = StyleSheet.create({container: {,
+const styles = StyleSheet.create({container: {,)
   flex: 1,
     backgroundColor: #f5f5f5",
     padding: 16},

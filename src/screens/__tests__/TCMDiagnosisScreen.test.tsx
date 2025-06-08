@@ -1,4 +1,3 @@
-
 import TCMDiagnosisScreen from '../TCMDiagnosisScreen.tsx';
 describe('TCMDiagnosisScreen', () => {
   it('应该正确导出', () => {

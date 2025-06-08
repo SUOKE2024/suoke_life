@@ -117,11 +117,11 @@ class AgentCoordinationService {
   /**
   * 发送协作请求到多个智能体
   */
-  private async sendCollaborationRequests(
+  private async sendCollaborationRequests()
     request: CoordinationRequest,
     collaborationId: string;
   ): Promise<AgentResponse[]> {
-    const promises = request.targetAgents.map(async agentType => {try {const message: AgentMessage = {id: this.generateMessageId(),fromAgent: request.initiatorAgent,toAgent: agentType,userId: 'system',sessionId: collaborationId,messageType: MessageType.COMMAND,content: {task: request.task,data: request.data,priority: request.priority;
+    const promises = request.targetAgents.map(async agentType => {try {const message: AgentMessage = {id: this.generateMessageId(),fromAgent: request.initiatorAgent,toAgent: agentType,userId: 'system',sessionId: collaborationId,messageType: MessageType.COMMAND,content: {task: request.task,data: request.data,priority: request.priority;)
           },timestamp: new Date(),priority: request.priority;
         };
         const response = await this.sendMessageToAgent(agentType, message);
@@ -136,7 +136,7 @@ class AgentCoordinationService {
   /**
   * 向特定智能体发送消息
   */
-  private async sendMessageToAgent(
+  private async sendMessageToAgent()
     agentType: AgentType,
     message: AgentMessage;
   ): Promise<AgentResponse> {
@@ -193,7 +193,7 @@ class AgentCoordinationService {
   * 四诊协调专用方法
   */
   async coordinateFourDiagnosis(userId: string, sessionId: string): Promise<CoordinationResult> {
-    return this.initiateCollaboration({initiatorAgent: AgentType.XIAOAI,targetAgents: [AgentType.XIAOAI],task: '四诊协调统筹',priority: 'high',data: {userId,sessionId,diagnosisType: 'comprehensive';
+    return this.initiateCollaboration({initiatorAgent: AgentType.XIAOAI,targetAgents: [AgentType.XIAOAI],task: '四诊协调统筹',priority: 'high',data: {userId,sessionId,diagnosisType: 'comprehensive';)
       };
     });
   }
@@ -201,7 +201,7 @@ class AgentCoordinationService {
   * 健康管理协调
   */
   async coordinateHealthManagement(userId: string, healthData: any): Promise<CoordinationResult> {
-    return this.initiateCollaboration({initiatorAgent: AgentType.SOER,targetAgents: [AgentType.SOER, AgentType.XIAOAI],task: '健康管理协调',priority: 'normal',data: {userId,healthData,managementType: 'lifestyle';
+    return this.initiateCollaboration({initiatorAgent: AgentType.SOER,targetAgents: [AgentType.SOER, AgentType.XIAOAI],task: '健康管理协调',priority: 'normal',data: {userId,healthData,managementType: 'lifestyle';)
       };
     });
   }
@@ -209,18 +209,18 @@ class AgentCoordinationService {
   * 知识查询协调
   */
   async coordinateKnowledgeQuery(query: string, userId: string): Promise<CoordinationResult> {
-    return this.initiateCollaboration({initiatorAgent: AgentType.LAOKE,targetAgents: [AgentType.LAOKE, AgentType.XIAOAI],task: '知识查询协调',priority: 'normal',data: {query,userId,queryType: 'knowledge_retrieval';
+    return this.initiateCollaboration({initiatorAgent: AgentType.LAOKE,targetAgents: [AgentType.LAOKE, AgentType.XIAOAI],task: '知识查询协调',priority: 'normal',data: {query,userId,queryType: 'knowledge_retrieval';)
       };
     });
   }
   /**
   * 服务管理协调
   */
-  async coordinateServiceManagement(
+  async coordinateServiceManagement()
     serviceRequest: any,
     userId: string;
   ): Promise<CoordinationResult> {
-    return this.initiateCollaboration({initiatorAgent: AgentType.XIAOKE,targetAgents: [AgentType.XIAOKE],task: '服务管理协调',priority: 'normal',data: {serviceRequest,userId,managementType: 'service_subscription';
+    return this.initiateCollaboration({initiatorAgent: AgentType.XIAOKE,targetAgents: [AgentType.XIAOKE],task: '服务管理协调',priority: 'normal',data: {serviceRequest,userId,managementType: 'service_subscription';)
       };
     });
   }

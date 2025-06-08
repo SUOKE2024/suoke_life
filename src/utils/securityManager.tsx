@@ -113,15 +113,15 @@ class AccessControlManager {
   }
   private initializeDefaultRoles(): void {
     // 初始化默认角色权限
-    this.rolePermissions.set('admin', [
+    this.rolePermissions.set('admin', [)
       "user_management",system_config',
       "data_export",security_audit'
     ]);
-    this.rolePermissions.set('doctor', [
+    this.rolePermissions.set('doctor', [)
       "patient_diagnosis",medical_records',
       'prescription'
     ]);
-    this.rolePermissions.set('user', [
+    this.rolePermissions.set('user', [)
       "profile_view",health_data_view',
       'appointment_booking'
     ]);
@@ -253,7 +253,7 @@ class SecurityAuditManager {
       recommendations.push("高风险事件较多，建议加强安全监控");
     }
     const summary = `
-安全报告 (${new Date(timeRange.start).toLocaleDateString()} - ${new Date(
+安全报告 (${new Date(timeRange.start).toLocaleDateString()} - ${new Date())
       timeRange.end;
     ).toLocaleDateString()})
 总事件数: ${statistics.total}
@@ -274,7 +274,7 @@ class SecurityAuditManager {
   }
   private async persistAuditLogs(): Promise<void> {
     try {
-      const encryptedLogs = EncryptionManager.getInstance().encrypt(
+      const encryptedLogs = EncryptionManager.getInstance().encrypt()
         this.auditLogs;
       );
       await AsyncStorage.setItem("security_audit_logs", encryptedLogs);
@@ -295,10 +295,10 @@ class SecurityAuditManager {
   private checkForAlerts(event: SecurityEvent): void {
     // 检查是否需要发送安全告警
     if (event.severity === "critical") {
-      Alert.alert("安全告警",检测到严重安全事件，请立即检查系统安全");
+      Alert.alert("安全告警", "检测到严重安全事件，请立即检查系统安全");
     }
     // 检查登录失败次数
-    if (
+    if ()
       event.type === "access_denied" &&
       event.details.action === "login_failed"
     ) {
@@ -387,7 +387,7 @@ export class SecurityManager {
     const now = Date.now();
     const sessionAge = now - this.currentSession.startTime;
     const inactivityTime = now - this.currentSession.lastActivity;
-    if (sessionAge > this.securityPolicy.sessionTimeout ||
+    if (sessionAge > this.securityPolicy.sessionTimeout ||)
         inactivityTime > this.securityPolicy.sessionTimeout) {
       this.destroySession();
       return false;

@@ -89,7 +89,7 @@ export const VirtualizedList = <T extends ListItem>({
   // 优化的getItemLayout;
   const getItemLayout = useMemo() => {
     if (!config.getItemLayout) return undefined;
-        return (data: T[] | null | undefined, index: number) => ({,
+        return (data: T[] | null | undefined, index: number) => ({,)
   length: config.itemHeight,
       offset: config.itemHeight * index,
       index,
@@ -118,7 +118,7 @@ export const VirtualizedList = <T extends ListItem>({
     }
     if (isLoadingMore) {
       return (
-        <View style={styles.loadingFooter}>
+  <View style={styles.loadingFooter}>
           <ActivityIndicator size="small" color="#007AFF" />
           <Text style={styles.loadingText}>加载更多...</Text>
         </View>
@@ -137,7 +137,7 @@ export const VirtualizedList = <T extends ListItem>({
         : React.createElement(ListEmptyComponent);
     }
     return (
-      <View style={styles.emptyContainer}>
+  <View style={styles.emptyContainer}>
         <Text style={styles.emptyText}>暂无数据</Text>
       </View>
     );
@@ -146,7 +146,7 @@ export const VirtualizedList = <T extends ListItem>({
   const refreshControl = useMemo() => {
     if (!onRefresh) return undefined;
         return (
-      <RefreshControl;
+  <RefreshControl
         refreshing={refreshing}
         onRefresh={onRefresh}
         colors={['#007AFF']}
@@ -159,7 +159,7 @@ export const VirtualizedList = <T extends ListItem>({
   // 如果启用虚拟化且数据量大，使用FlatList;
   if (enableVirtualization && data.length > 50) {
     return (
-      <FlatList;
+  <FlatList
         ref={flatListRef}
         data={data}
         renderItem={optimizedRenderItem}
@@ -195,11 +195,11 @@ export const VirtualizedList = <T extends ListItem>({
   }
   // 对于小数据集，使用普通的ScrollView渲染
   return (
-    <View style={[styles.container, style]}>
-      {loading ? (
+  <View style={[styles.container, style]}>
+      {loading ? ()
         <SkeletonLoader type={skeletonType} count={8} />
       ) : (
-        <FlatList;
+        <FlatList
           data={data}
           renderItem={optimizedRenderItem}
           keyExtractor={keyExtractor}
@@ -238,7 +238,7 @@ export const ChatVirtualizedList = <T extends ListItem & { message: string; time
     keyExtractor: (item, index) => `chat-${item.id}-${item.timestamp}`,
   };
   return (
-    <VirtualizedList;
+  <VirtualizedList
       data={data}
       renderItem={renderItem}
       config={chatConfig}
@@ -264,7 +264,7 @@ export const CardVirtualizedList = <T extends ListItem>({
     getItemLayout: true,
   };
   return (
-    <VirtualizedList;
+  <VirtualizedList
       data={data}
       renderItem={renderItem}
       config={cardConfig}
@@ -274,7 +274,7 @@ export const CardVirtualizedList = <T extends ListItem>({
   );
 };
 // 无限滚动Hook;
-export const useInfiniteScroll = <T extends ListItem>(
+export const useInfiniteScroll = <T extends ListItem>()
   fetchData: (page: number) => Promise<T[]>,
   pageSize: number = 20;
 ) => {
@@ -307,7 +307,7 @@ export const useInfiniteScroll = <T extends ListItem>(
     }
   }, [fetchData, pageSize, loading]);
   // 初始加载
-  useEffect() => {
+  useEffect(() => {
     loadData(1, true);
   }, [loadData]);
   const refresh = useCallback() => {

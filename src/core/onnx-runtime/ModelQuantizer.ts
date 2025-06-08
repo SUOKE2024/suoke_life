@@ -21,7 +21,7 @@ export class ModelQuantizer extends EventEmitter {private isQuantizing: boolean 
   }
   /**
 * * 量化ONNX模型
-  async quantizeModel(
+  async quantizeModel()
     model: ONNXModel,
     config: QuantizationConfig;
   ): Promise<ONNXModel> {
@@ -74,7 +74,7 @@ await this.validateQuantizedModel(model, quantizedModel, config);
   }
   /**
 * * 批量量化模型
-  async quantizeModels(
+  async quantizeModels()
     models: ONNXModel[],
     configs: QuantizationConfig[]
   ): Promise<ONNXModel[]> {
@@ -94,7 +94,7 @@ await this.validateQuantizedModel(model, quantizedModel, config);
   }
   /**
 * * 添加校准数据
-  async addCalibrationData(
+  async addCalibrationData()
     modelId: string,
     data: Float32Array[]
   ): Promise<void> {
@@ -115,7 +115,7 @@ await this.validateQuantizedModel(model, quantizedModel, config);
   }
   /**
 * * 获取量化配置建议
-  getQuantizationRecommendation(
+  getQuantizationRecommendation()
     model: ONNXModel,
     targetDevice: TargetDevice,
     performanceRequirement: "speed | "accuracy" | size"
@@ -147,7 +147,7 @@ switch (performanceRequirement) {
   }
   /**
 * * 估算量化效果
-  estimateQuantizationImpact(
+  estimateQuantizationImpact()
     model: ONNXModel,
     level: QuantizationLevel;
   ): QuantizationImpact {
@@ -190,7 +190,7 @@ switch (config.level) {
       throw error;
     }
   }
-  private async quantizeToInt8(
+  private async quantizeToInt8()
     model: ONNXModel,
     config: QuantizationConfig;
   ): Promise<ONNXModel> {
@@ -211,12 +211,12 @@ isQuantized: true,
       metadata: {
         ...model.metadata,
         description: `${model.metadata.description} - INT8量化版本`,
-        tags: [...model.metadata.tags, quantized",int8]
+        tags: [...model.metadata.tags, quantized", "int8]
       }
     };
     return quantizedModel;
   }
-  private async quantizeToInt16(
+  private async quantizeToInt16()
     model: ONNXModel,
     config: QuantizationConfig;
   ): Promise<ONNXModel> {
@@ -236,7 +236,7 @@ isQuantized: true,
     };
     return quantizedModel;
   }
-  private async quantizeToFp16(
+  private async quantizeToFp16()
     model: ONNXModel,
     config: QuantizationConfig;
   ): Promise<ONNXModel> {
@@ -256,7 +256,7 @@ isQuantized: true,
     };
     return quantizedModel;
   }
-  private async dynamicQuantize(
+  private async dynamicQuantize()
     model: ONNXModel,
     config: QuantizationConfig;
   ): Promise<ONNXModel> {
@@ -271,12 +271,12 @@ isQuantized: true,
       metadata: {
         ...model.metadata,
         description: `${model.metadata.description} - 动态量化版本`,
-        tags: [...model.metadata.tags, quantized",dynamic]
+        tags: [...model.metadata.tags, quantized", "dynamic]
       }
     };
     return quantizedModel;
   }
-  private async validateQuantizedModel(
+  private async validateQuantizedModel()
     originalModel: ONNXModel,
     quantizedModel: ONNXModel,
     config: QuantizationConfig;
@@ -295,13 +295,13 @@ if (config.preserveAccuracy) {
     }
   private async simulateQuantizationProcess(duration: number): Promise<void> {
     // 模拟量化过程的时间消耗
-return new Promise(resolve => {};
+return new Promise(resolve => {};)
       setTimeout(resolve, duration);
     });
   }
   private async simulateAccuracyValidation(): Promise<void> {
     // 模拟精度验证过程
-return new Promise(resolve => {};
+return new Promise(resolve => {};)
       setTimeout(resolve, 500);
     });
   }

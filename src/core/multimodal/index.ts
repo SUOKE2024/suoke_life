@@ -30,7 +30,7 @@ export type {
 //
 * @param languageModel 语言模型实例
 * @returns 配置好的多模态RAG服务
-export function createMultimodalRAGService(;
+export function createMultimodalRAGService(;)
   vectorDB: VectorDatabase,languageModel: LanguageModel;
 ): MultimodalRAGService {
   return new MultimodalRAGService(vectorDB, languageModel);
@@ -55,7 +55,7 @@ dropout: 0.1,attention_heads: 8;
 * * 创建症状分析专用的融合策略
 //
 export function createSymptomAnalysisStrategy(): FusionStrategy {
-  return {name: symptom_analysis",;
+  return {name: symptom_analysis", ";
     weights: {[ModalityType.TEXT]: 0.6,       // 文本症状描述（主要）;
       [ModalityType.TONGUE]: 0.2,     // 舌象辅助;
       [ModalityType.PULSE]: 0.2,      // 脉象辅助;
@@ -71,7 +71,7 @@ export function createSymptomAnalysisStrategy(): FusionStrategy {
 * * 创建体质辨识专用的融合策略
 //
 export function createConstitutionIdentificationStrategy(): FusionStrategy {
-  return {name: constitution_identification",;
+  return {name: constitution_identification", ";
     weights: {[ModalityType.TEXT]: 0.3,       // 问诊信息;
       [ModalityType.TONGUE]: 0.35,    // 舌象特征;
       [ModalityType.PULSE]: 0.35,     // 脉象特征;
@@ -111,7 +111,7 @@ batchSize?: number;
 * @param languageModel 语言模型实例
 * @param config 配置选项
 * @returns 配置好的多模态RAG服务
-export async function createConfiguredMultimodalRAGService(;
+export async function createConfiguredMultimodalRAGService(;)
   vectorDB: VectorDatabase,languageModel: LanguageModel,config: MultimodalRAGConfig = {}
 ): Promise<MultimodalRAGService> {
   const service = new MultimodalRAGService(vectorDB, languageModel);

@@ -37,7 +37,7 @@ const GatewayConfig: React.FC = () => {
   const [hasChanges, setHasChanges] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
   // 初始化配置
-  useEffect() => {
+  useEffect(() => {
     initializeConfigs();
   }, []);  // 检查是否需要添加依赖项;
   const initializeConfigs = () => {
@@ -169,7 +169,7 @@ const GatewayConfig: React.FC = () => {
   // 获取功能描述
   const getFeatureDescription = (key: string): string => {
     const descriptions: Record<string, string> = {
-      ENABLE_STREAMING: "启用流式响应处理",
+      ENABLE_STREAMING: "启用流式响应处理", "
       ENABLE_MULTIMODAL: '启用多模态数据处理',
       ENABLE_TCM: '启用中医相关功能',
       ENABLE_OFFLINE: '启用离线模式支持',
@@ -184,10 +184,10 @@ const GatewayConfig: React.FC = () => {
   };
   // 更新配置值
   const updateConfigValue = (key: string, value: any) => {
-    setConfigs(prevConfigs =>
+    setConfigs(prevConfigs =>)
       prevConfigs.map(section => ({
         ...section,
-        items: section.items.map(item =>
+        items: section.items.map(item =>)
           item.key === key ? { ...item, value } : item,
         ),
       })),
@@ -209,23 +209,22 @@ const GatewayConfig: React.FC = () => {
       if (typeof localStorage !== 'undefined') {
         localStorage.setItem('gateway_config', JSON.stringify(configData));
       }
-      Alert.alert("成功",配置已保存');
+      Alert.alert("成功", "配置已保存');
       setHasChanges(false);
       setIsEditing(false);
     } catch (error) {
-      Alert.alert("错误",保存配置失败');
+      Alert.alert("错误", "保存配置失败');
     }
   };
   // 重置配置
   const resetConfigs = () => {
-    Alert.alert(
-      "确认重置",这将重置所有配置到默认值，确定继续吗？',
+    Alert.alert("确认重置", "这将重置所有配置到默认值，确定继续吗？',
       [
         {
       text: "取消",
       style: 'cancel' },
         {
-      text: "确定",
+      text: "确定", "
       style: 'destructive',
           onPress: () => {
             initializeConfigs();
@@ -238,8 +237,7 @@ const GatewayConfig: React.FC = () => {
   };
   // 清除缓存
   const clearCache = () => {
-    Alert.alert(
-      "清除缓存",确定要清除所有缓存数据吗？',
+    Alert.alert("清除缓存", "确定要清除所有缓存数据吗？',
       [
         {
       text: "取消",
@@ -248,7 +246,7 @@ const GatewayConfig: React.FC = () => {
       text: "确定",
       onPress: () => {
             apiService.clearCache();
-            Alert.alert("成功",缓存已清除');
+            Alert.alert("成功", "缓存已清除');
           },
         },
       ],
@@ -258,23 +256,20 @@ const GatewayConfig: React.FC = () => {
   const renderConfigItem = (item: ConfigItem) => {
     const { key, label, type, value, description, min, max } = item;
     return (
-      <View key={key} style={styles.configItem}>
+  <View key={key} style={styles.configItem}>
         <View style={styles.configHeader}>
           <Text style={styles.configLabel}>{label}</Text>
-          {type === 'boolean' && (
-            <Switch;
+          {type === 'boolean'  && <Switch
               value={value}
               onValueChange={(newValue) => updateConfigValue(key, newValue)}
               disabled={!isEditing}
             />
           )}
         </View>
-        {description && (
-          <Text style={styles.configDescription}>{description}</Text>
+        {description  && <Text style={styles.configDescription}>{description}</Text>
         )}
-        {type === 'number' && (
-        <View style={styles.numberInputContainer}>
-            <TextInput;
+        {type === 'number'  && <View style={styles.numberInputContainer}>
+            <TextInput
               style={[styles.numberInput, !isEditing && styles.disabledInput]}
               value={value.toString()}
               onChangeText={(text) => {
@@ -285,15 +280,13 @@ const GatewayConfig: React.FC = () => {
               keyboardType="numeric"
               editable={isEditing}
             />
-            {min !== undefined && max !== undefined && (
-              <Text style={styles.rangeText}>
+            {min !== undefined && max !== undefined  && <Text style={styles.rangeText}>
                 范围: {min} - {max}
               </Text>
             )}
           </View>
         )}
-        {type === 'string' && (
-          <TextInput;
+        {type === 'string'  && <TextInput
             style={[styles.textInput, !isEditing && styles.disabledInput]}
             value={value}
             onChangeText={(text) => updateConfigValue(key, text)}
@@ -306,25 +299,25 @@ const GatewayConfig: React.FC = () => {
   // 渲染配置节
   const renderConfigSection = (section: ConfigSection) => {
     return (
-      <View key={section.title} style={styles.section}>
+  <View key={section.title} style={styles.section}>
         <Text style={styles.sectionTitle}>{section.title}</Text>
         {section.items.map(renderConfigItem)}
       </View>
     );
   };
   return (
-    <View style={styles.container}>
+  <View style={styles.container}>
       {}
       <View style={styles.header}>
         <Text style={styles.title}>网关配置</Text>
         <View style={styles.headerActions}>
-          <TouchableOpacity;
+          <TouchableOpacity
             style={[styles.actionButton, styles.clearButton]}
             onPress={clearCache}
           >
             <Text style={styles.actionButtonText}>清除缓存</Text>
           </TouchableOpacity>
-          <TouchableOpacity;
+          <TouchableOpacity
             style={[styles.actionButton, styles.advancedButton]}
             onPress={() => setShowAdvanced(!showAdvanced)}
           >
@@ -344,8 +337,8 @@ const GatewayConfig: React.FC = () => {
       </ScrollView>
       {}
       <View style={styles.footer}>
-        {!isEditing ? (
-          <TouchableOpacity;
+        {!isEditing ? ()
+          <TouchableOpacity
             style={[styles.footerButton, styles.editButton]}
             onPress={() => setIsEditing(true)}
           >
@@ -353,12 +346,11 @@ const GatewayConfig: React.FC = () => {
           </TouchableOpacity>
         ) : (
           <View style={styles.editActions}>
-            <TouchableOpacity;
+            <TouchableOpacity
               style={[styles.footerButton, styles.cancelButton]}
               onPress={() => {
                 if (hasChanges) {
-                  Alert.alert(
-                    "放弃更改",有未保存的更改，确定要放弃吗？',
+                  Alert.alert("放弃更改", "有未保存的更改，确定要放弃吗？',
                     [
                       {
       text: "取消",
@@ -381,18 +373,18 @@ const GatewayConfig: React.FC = () => {
             >
               <Text style={styles.footerButtonText}>取消</Text>
             </TouchableOpacity>
-            <TouchableOpacity;
+            <TouchableOpacity
               style={[styles.footerButton, styles.resetButton]}
               onPress={resetConfigs}
             >
               <Text style={styles.footerButtonText}>重置</Text>
             </TouchableOpacity>
-            <TouchableOpacity;
-              style={[
+            <TouchableOpacity
+              style={{[
                 styles.footerButton,
                 styles.saveButton,
                 !hasChanges && styles.disabledButton,
-              ]}
+              ]}}
               onPress={saveConfigs}
               disabled={!hasChanges}
             >

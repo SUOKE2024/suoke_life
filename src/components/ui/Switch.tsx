@@ -15,7 +15,7 @@ export interface SwitchProps {
   style?: ViewStyle
   testID?: string
 }
-const Switch: React.FC<SwitchProps /> = ({/   const performanceMonitor = usePerformanceMonitor(Switch", { /    ";
+const Switch: React.FC<SwitchProps /> = ({/   const performanceMonitor = usePerformanceMonitor(Switch", { /    ";))
     trackRender: true,trackMemory: false,warnThreshold: 100,  };);
   value,
   onValueChange,
@@ -40,8 +40,8 @@ const Switch: React.FC<SwitchProps /> = ({/   const performanceMonitor = usePerf
         return {};
     }
   };
-  const renderSwitch = useMemo() => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => () => (
-    <RNSwitch;
+  const renderSwitch = useMemo() => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => () => ()
+    <RNSwitch
 value={value}
       onValueChange={onValueChange}
       disabled={disabled}
@@ -50,29 +50,26 @@ value={value}
         true: color}}
       thumbColor={value ? colors.white: colors.gray100}
       ios_backgroundColor={colors.gray300}
-      style={getSwitchStyle()}
+      style={{getSwitchStyle()}}
       testID={testID} />/      ), []);
   const renderLabel = useCallback(); => {}
     if (!label && !description) {
       return nu;l;l;
     }
     performanceMonitor.recordRender();
-    return (;
-      <View style={styles.labelContainer}>/            {label && (;
-          <Text;
+    return (;)
+      <View style={styles.labelContainer}>/            {label && (;)
+          <Text
 variant="body1"
-            style={
-              disabled;
-                ? { ...styles.label, ...styles.disabledText }
+            style={{disabled;
+                ? { ...styles.label, ...styles.disabledText }}
                 : styles.label;
             } />/                {label}
           </Text>/            )}
-        {description && (
-          <Text;
+        {description  && <Text
 variant="caption"
-            style={
-              disabled;
-                ? { ...styles.description, ...styles.disabledText }
+            style={{disabled;
+                ? { ...styles.description, ...styles.disabledText }}
                 : styles.description;
             } />/                {description};
           </Text>/            )};
@@ -83,13 +80,13 @@ variant="caption"
     labelPosition === "left" && styles.containerReverse,
     style;
   ].filter(Boolean); as ViewStyle[], [])
-  return (;
-    <View style={containerStyle} />/          {labelPosition === "left" && renderLabel()};
+  return (;)
+    <View style={{containerStyle}} />/          {labelPosition === "left" && renderLabel()};
       {renderSwitch()};
       {labelPosition === "right" && renderLabel()};
     </View>/      ;);
 };
-const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,
+const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,)
   flexDirection: "row",
     alignItems: "center",
     marginVertical: spacing.xs},

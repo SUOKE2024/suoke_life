@@ -16,27 +16,26 @@ export const ConstitutionCard: React.FC<ConstitutionCardProps> = ({
     return colors[type] || '#757575';
   };
   return (
-    <TouchableOpacity;
-      style={[styles.card, { borderLeftColor: getConstitutionColor(constitution.type) }]}
+  <TouchableOpacity
+      style={{[styles.card, { borderLeftColor: getConstitutionColor(constitution.type) }}]}
       onPress={onPress}
       activeOpacity={0.7}
     >
       <View style={styles.header}>
         <Text style={styles.name}>{constitution.name}</Text>
-        <View style={[styles.typeBadge, { backgroundColor: getConstitutionColor(constitution.type) }]}>
+        <View style={{[styles.typeBadge, { backgroundColor: getConstitutionColor(constitution.type) }}]}>
           <Text style={styles.typeText}>{constitution.type}</Text>
         </View>
       </View>
       <Text style={styles.description} numberOfLines={showDetails ? undefined : 2}>
         {constitution.description}
       </Text>
-      {showDetails && (
-        <View style={styles.detailsContainer}>
+      {showDetails  && <View style={styles.detailsContainer}>
           {// 特征}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>主要特征</Text>
             <View style={styles.tagContainer}>
-              {constitution.characteristics.slice(0, 3).map((characteristic, index) => (
+              {constitution.characteristics.slice(0, 3).map((characteristic, index) => ())
                 <View key={index} style={styles.tag}>
                   <Text style={styles.tagText}>{characteristic}</Text>
                 </View>
@@ -44,11 +43,10 @@ export const ConstitutionCard: React.FC<ConstitutionCardProps> = ({
             </View>
           </View>
           {// 症状}
-          {constitution.symptoms.length > 0 && (
-        <View style={styles.section}>
+          {constitution.symptoms.length > 0  && <View style={styles.section}>
               <Text style={styles.sectionTitle}>常见症状</Text>
               <View style={styles.tagContainer}>
-                {constitution.symptoms.slice(0, 4).map((symptom, index) => (
+                {constitution.symptoms.slice(0, 4).map((symptom, index) => ())
                   <View key={index} style={[styles.tag, styles.symptomTag]}>
                     <Text style={styles.tagText}>{symptom}</Text>
                   </View>
@@ -61,16 +59,14 @@ export const ConstitutionCard: React.FC<ConstitutionCardProps> = ({
             <Text style={styles.sectionTitle}>生活建议</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               <View style={styles.lifestyleContainer}>
-                {constitution.lifestyle.diet.length > 0 && (
-        <View style={styles.lifestyleItem}>
+                {constitution.lifestyle.diet.length > 0  && <View style={styles.lifestyleItem}>
                     <Text style={styles.lifestyleLabel}>饮食</Text>
                     <Text style={styles.lifestyleText}>
                       {constitution.lifestyle.diet.slice(0, 2).join('、')}
                     </Text>
                   </View>
                 )}
-                {constitution.lifestyle.exercise.length > 0 && (
-        <View style={styles.lifestyleItem}>
+                {constitution.lifestyle.exercise.length > 0  && <View style={styles.lifestyleItem}>
                     <Text style={styles.lifestyleLabel}>运动</Text>
                     <Text style={styles.lifestyleText}>
                       {constitution.lifestyle.exercise.slice(0, 2).join('、')}
@@ -86,7 +82,7 @@ export const ConstitutionCard: React.FC<ConstitutionCardProps> = ({
         <Text style={styles.timestamp}>;
           更新时间: {new Date(constitution.updated_at).toLocaleDateString()};
         </Text>;
-        {!showDetails && (;
+        {!showDetails && (;)
           <Text style={styles.viewMore}>点击查看详情</Text>;
         )};
       </View>;

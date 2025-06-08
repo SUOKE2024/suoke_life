@@ -230,7 +230,7 @@ export class CalculationDiagnosisAlgorithm {
   /**
   * 执行算诊分析
   */
-  public async analyze(
+  public async analyze()
     data: CalculationData,
     userProfile?: UserProfile;
   ): Promise<CalculationResult> {
@@ -253,16 +253,16 @@ export class CalculationDiagnosisAlgorithm {
       // 时辰影响分析
       const timeInfluence = await this.analyzeTimeInfluence(lunarData);
       // 综合分析
-      const analysis = await this.generateAnalysis({fiveElements,yinYang,qiFlow,constitution,seasonalInfluence,timeInfluence;
+      const analysis = await this.generateAnalysis({fiveElements,yinYang,qiFlow,constitution,seasonalInfluence,timeInfluence;)
       });
       // 生成建议
-      const recommendations = await this.generateRecommendations({fiveElements,yinYang,qiFlow,constitution,seasonalInfluence,timeInfluence;
+      const recommendations = await this.generateRecommendations({fiveElements,yinYang,qiFlow,constitution,seasonalInfluence,timeInfluence;)
       });
       // 生成警告
-      const warnings = await this.generateWarnings({fiveElements,yinYang,qiFlow,constitution;
+      const warnings = await this.generateWarnings({fiveElements,yinYang,qiFlow,constitution;)
       });
       // 计算置信度
-      const confidence = this.calculateConfidence({fiveElements,yinYang,qiFlow,constitution;
+      const confidence = this.calculateConfidence({fiveElements,yinYang,qiFlow,constitution;)
       });
       const processingTime = Date.now() - startTime;
       return {confidence,fiveElements,yinYang,qiFlow,constitution,seasonalInfluence,timeInfluence,analysis,recommendations,warnings,processingTime;
@@ -283,7 +283,7 @@ export class CalculationDiagnosisAlgorithm {
       month: '1',day: '1',hour: '子',yearStem: '甲',yearBranch: '辰',monthStem: '丙',monthBranch: '寅',dayStem: '戊',dayBranch: '午',hourStem: '壬',hourBranch: '子',zodiac: '龙',solarTerm: '立春';
     };
   }
-  private async analyzeFiveElements(
+  private async analyzeFiveElements()
     lunarData: LunarData,
     userProfile?: UserProfile;
   ): Promise<FiveElementsAnalysis> {
@@ -312,7 +312,7 @@ export class CalculationDiagnosisAlgorithm {
       };
     };
   }
-  private async analyzeYinYang(
+  private async analyzeYinYang()
     lunarData: LunarData,
     userProfile?: UserProfile;
   ): Promise<YinYangAnalysis> {
@@ -330,31 +330,31 @@ export class CalculationDiagnosisAlgorithm {
       trend: "stable",
       stability: 0.8,harmony: 0.85;
       },organYinYang: {liver: { yin: 0.5, yang: 0.5 },heart: { yin: 0.4, yang: 0.6 },spleen: { yin: 0.6, yang: 0.4 },lung: { yin: 0.5, yang: 0.5 },kidney: { yin: 0.7, yang: 0.3 };
-      },recommendations: ["保持阴阳平衡",适度运动'];
+      },recommendations: ["保持阴阳平衡", "适度运动'];
     };
   }
-  private async analyzeQiFlow(
+  private async analyzeQiFlow()
     lunarData: LunarData,
     userProfile?: UserProfile;
   ): Promise<QiFlowAnalysis> {
     // 气血流动分析逻辑
     return {meridianFlow: {},dailyRhythm: {},seasonalFlow: {
-      currentSeason: "春",
+      currentSeason: "春", "
       qiDirection: '升发',strength: 0.8,adaptability: 0.7;
       },overallFlow: {circulation: 0.8,vitality: 0.7,balance: 0.75,blockages: [];
       };
     };
   }
-  private async calculateConstitution(
+  private async calculateConstitution()
     lunarData: LunarData,
     userProfile?: UserProfile;
   ): Promise<ConstitutionCalculation> {
     // 体质计算逻辑
     return {
-      primaryConstitution: "平和质",
+      primaryConstitution: "平和质", "
       constitutionStrength: 0.8,adaptability: 0.7,vulnerabilities: [],strengths: ['气血充足'],seasonalVariations: {spring: 0.8,summer: 0.7,autumn: 0.75,winter: 0.6;
       },lifeStageInfluence: {
-      current: "青年",
+      current: "青年", "
       characteristics: ['精力充沛'],recommendations: ['保持运动'];
       };
     };
@@ -362,7 +362,7 @@ export class CalculationDiagnosisAlgorithm {
   private async analyzeSeasonalInfluence(lunarData: LunarData): Promise<SeasonalInfluence> {
     // 季节影响分析逻辑
     return {
-      currentSeason: "春",
+      currentSeason: "春", "
       seasonalQi: {,
   dominant: '木',
         strength: 0.8,
@@ -379,9 +379,9 @@ export class CalculationDiagnosisAlgorithm {
   private async analyzeTimeInfluence(lunarData: LunarData): Promise<TimeInfluence> {
     // 时辰影响分析逻辑
     return {
-      currentHour: "子时",
+      currentHour: "子时", "
       dominantMeridian: '胆经',qiActivity: {level: 0.8,direction: '内收',quality: '静';
-      },optimalActivities: ["休息",冥想'],avoidActivities: ['剧烈运动'],healthFocus: ['养肝胆'],energyLevel: 0.3;
+      },optimalActivities: ["休息", "冥想'],avoidActivities: ['剧烈运动'],healthFocus: ['养肝胆'],energyLevel: 0.3;
     };
   }
   private async generateAnalysis(data: any): Promise<string> {

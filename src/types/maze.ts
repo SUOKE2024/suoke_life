@@ -1,7 +1,7 @@
 /**
-* 玉米迷宫服务类型定义
-* Corn Maze Service Type Definitions;
-*/
+ * 玉米迷宫服务类型定义
+ * Corn Maze Service Type Definitions;
+ */
 // 基础枚举类型
 export enum MazeTheme {
   HEALTH_PATH = 'health_path', // 健康之路
@@ -73,7 +73,7 @@ export interface KnowledgeNode {
     images?: string[];
     videos?: string[];
     audio?: string[];
-};
+  };
   interactiveElements?: any[];
   estimatedReadTime?: number; // 预计阅读时间（分钟）
 }

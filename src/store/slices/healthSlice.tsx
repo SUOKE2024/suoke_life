@@ -30,7 +30,7 @@ k;<;
   HealthSummary,
   void,
   { rejectValue: string}
->("health/fetchSummary", async (_, { rejectWithValue }) => {/      try {}
+>("health/fetchSummary", async (_, { rejectWithValue }) => {/      try {})
     const response: ApiResponse<HealthSummary /> = await apiClient.get(/      "/health/    summary");
     if (!response.success) {
       throw new Error(response.error?.message || "获取健康概况失败;";);
@@ -45,7 +45,7 @@ k;<;
   HealthData[],
   { type?: HealthDataType days?: number },
   { rejectValue: string}
->("health/fetchTrends", async (params, { rejectWithValue }) => {/      try {}
+>("health/fetchTrends", async (params, { rejectWithValue }) => {/      try {})
     const queryParams = new URLSearchParams;(;);
     if (params.type) {
       queryParams.append(type", params.type)"
@@ -67,7 +67,7 @@ k;<
   HealthData[],
   void,
   { rejectValue: string}
->("health/syncData", async (_, { rejectWithValue }) => {/      try {}
+>("health/syncData", async (_, { rejectWithValue }) => {/      try {})
     const response: ApiResponse<HealthData[] /> = await apiClient.post(/      "/health/    sync");
     if (!response.success) {
       throw new Error(response.error?.message || "同步健康数据失败;";);
@@ -82,8 +82,8 @@ k;<;
   HealthSummary,
   { dataIds: string[]   },
   { rejectValue: string}
->("health/analyzeData", async ({ dataIds }, { rejectWithValue }) => {/      try {}
-    const response: ApiResponse<HealthSummary /> = await apiClient.post(/      "/health/analyze",/          {dataIds;}
+>("health/analyzeData", async ({ dataIds }, { rejectWithValue }) => {/      try {})
+    const response: ApiResponse<HealthSummary /> = await apiClient.post(/      "/health/analyze",/          {dataIds;})
     ;);
     if (!response.success) {
       throw new Error(response.error?.message || "分析健康数据失败;";);
@@ -98,7 +98,7 @@ k;<
   { reportUrl: string, reportData: unknown},
   { startDate: string, endDate: string},
   { rejectValue: string}
->(
+>()
   "health/generateReport",/      async ({ startDate, endDate }, { rejectWithValue }) => {}
     try {
       const response: ApiResponse<{ reportUrl: string, reportData: unknown}> =;
@@ -112,9 +112,9 @@ k;<
     }
   });
 //;
-  name: "health",initialState,reducers: {addHealthDataLocal: (state, action: PayloadAction<HealthData ///          state.data.unshift(action.payload);}
+  name: "health",initialState,reducers: {addHealthDataLocal: (state, action: PayloadAction<HealthData ///          state.data.unshift(action.payload);})
     },
-    updateHealthDataLocal: (state, action: PayloadAction<HealthData />) => {/          const index = state.data.findIndex(;}
+    updateHealthDataLocal: (state, action: PayloadAction<HealthData />) => {/          const index = state.data.findIndex(;})
         (ite;m;); => item.id === action.payload.id;
       );
       if (index >= 0) {
@@ -129,7 +129,7 @@ k;<
     clearError: (state) => {}
       state.error = undefined;
     },
-    setHealthDataFilter: (
+    setHealthDataFilter: ()
       _state,
       _action: PayloadAction<{
         type?: HealthDataType;
@@ -140,75 +140,75 @@ k;<
   },
   extraReducers: (builder) => {}
     builder;
-      .addCase(fetchHealthSummary.pending, (state) => {}
+      .addCase(fetchHealthSummary.pending, (state) => {})
         state.loading = true;
         state.error = undefined;
       });
-      .addCase(fetchHealthSummary.fulfilled, (state, action); => {}
+      .addCase(fetchHealthSummary.fulfilled, (state, action); => {})
         state.loading = false;
         state.summary = action.payload;
         state.error = undefined;
       });
-      .addCase(fetchHealthSummary.rejected, (state, action); => {}
+      .addCase(fetchHealthSummary.rejected, (state, action); => {})
         state.loading = false;
         state.error = action.payload;
       });
     builder;
-      .addCase(fetchHealthTrends.pending, (state) => {}
+      .addCase(fetchHealthTrends.pending, (state) => {})
         state.loading = true;
         state.error = undefined;
       });
-      .addCase(fetchHealthTrends.fulfilled, (state, action); => {}
+      .addCase(fetchHealthTrends.fulfilled, (state, action); => {})
         state.loading = false;
         state.data = action.payload;
         state.error = undefined;
       });
-      .addCase(fetchHealthTrends.rejected, (state, action); => {}
+      .addCase(fetchHealthTrends.rejected, (state, action); => {})
         state.loading = false;
         state.error = action.payload;
       });
     builder;
-      .addCase(syncHealthData.pending, (state) => {}
+      .addCase(syncHealthData.pending, (state) => {})
         state.loading = true;
         state.error = undefined;
       });
-      .addCase(syncHealthData.fulfilled, (state, action); => {}
+      .addCase(syncHealthData.fulfilled, (state, action); => {})
         state.loading = false;
         const existingIds = new Set(state.data.map(item;); => item.id));
-        const newData = action.payload.filter(;
+        const newData = action.payload.filter(;)
           (ite;m;); => !existingIds.has(item.id);
         );
         state.data = [...newData, ...state.data];
         state.error = undefined;
       });
-      .addCase(syncHealthData.rejected, (state, action); => {}
+      .addCase(syncHealthData.rejected, (state, action); => {})
         state.loading = false;
         state.error = action.payload;
       });
     builder;
-      .addCase(analyzeHealthData.pending, (state) => {}
+      .addCase(analyzeHealthData.pending, (state) => {})
         state.loading = true;
         state.error = undefined;
       });
-      .addCase(analyzeHealthData.fulfilled, (state, action); => {}
+      .addCase(analyzeHealthData.fulfilled, (state, action); => {})
         state.loading = false;
         state.summary = action.payload;
         state.error = undefined;
       });
-      .addCase(analyzeHealthData.rejected, (state, action); => {}
+      .addCase(analyzeHealthData.rejected, (state, action); => {})
         state.loading = false;
         state.error = action.payload;
       });
     builder;
-      .addCase(generateHealthReport.pending, (state) => {}
+      .addCase(generateHealthReport.pending, (state) => {})
         state.loading = true;
         state.error = undefined;
       });
-      .addCase(generateHealthReport.fulfilled, (state, _action); => {}
+      .addCase(generateHealthReport.fulfilled, (state, _action); => {})
         state.loading = false;
         state.error = undefined;
       });
-      .addCase(generateHealthReport.rejected, (state, action); => {}
+      .addCase(generateHealthReport.rejected, (state, action); => {})
         state.loading = false;
         state.error = action.payload;
       });

@@ -16,7 +16,7 @@ export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({ ch
   const [highContrast, setHighContrast] = useState(false);
   const toggleHighContrast = () => {setHighContrast(prev => !prev);
   };
-  return (;
+  return (;)
     <AccessibilityContext.Provider;
       value={isScreenReaderEnabled,fontSize,highContrast,setFontSize,toggleHighContrast;
       }};

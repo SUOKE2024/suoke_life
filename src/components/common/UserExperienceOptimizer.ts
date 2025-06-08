@@ -94,7 +94,7 @@ if (this.metrics.loadTime > 2000) {
       type: "performance",
       priority: "high",
         description: "页面加载时间超过2秒",
-        action: "优化图片压缩、启用懒加载、减少bundle大小",
+        action: "优化图片压缩、启用懒加载、减少bundle大小", "
         impact: 0.8;
       });
     }
@@ -104,7 +104,7 @@ if (this.metrics.interactionDelay > 50) {
       type: "performance",
       priority: "medium",
         description: "交互响应延迟过高",
-        action: "优化事件处理器、减少重渲染",
+        action: "优化事件处理器、减少重渲染", "
         impact: 0.6;
       });
     }
@@ -114,7 +114,7 @@ if (this.metrics.accessibilityScore < 0.9) {
       type: "accessibility",
       priority: "high",
         description: "无障碍性评分偏低",
-        action: "添加ARIA标签、改善键盘导航、提高对比度",
+        action: "添加ARIA标签、改善键盘导航、提高对比度", "
         impact: 0.7;
       });
     }
@@ -165,7 +165,7 @@ async applyOptimization(recommendationId: string): Promise<boolean> {
 return true;
   }
   // 记录用户反馈
-recordUserFeedback(feedback: {,
+recordUserFeedback(feedback: {,)
   rating: number;
     comment?: string;
     category: string;

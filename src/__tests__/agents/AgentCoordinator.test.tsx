@@ -25,9 +25,12 @@ describe('AgentCoordinator', () => {
       expect(true).toBe(true); // 占位测试
     });
     it('应该处理不同的输入参数', async () => {
-      const testCases = [{
-      input: "test1",
-      expected: 'result1' }];
+      const testCases = [
+        {
+          input: 'test1',
+          expected: 'result1',
+        },
+      ];
       for (const testCase of testCases) {
         expect(testCase.input).toBe('test1'); // 占位测试
       }

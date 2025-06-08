@@ -12,22 +12,22 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSe
   const [refreshing, setRefreshing] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState('CLOSED');
   // 加载基准测试任务
-  const loadBenchmarkTasks = useCallback(async () => {try {const taskList = await benchmarkService.listBenchmarks();
+  const loadBenchmarkTasks = useCallback(async () => {try {const taskList = await benchmarkService.listBenchmarks();)
       setTasks(taskList);
     } catch (error) {
       console.error('Failed to load benchmark tasks:', error);
-      Alert.alert("错误",加载基准测试任务失败');
+      Alert.alert("错误", "加载基准测试任务失败');
     }
   }, []);
   // 加载服务健康状态
-  const loadHealthStatus = useCallback(async () => {try {const status = await benchmarkService.getHealthStatus();
+  const loadHealthStatus = useCallback(async () => {try {const status = await benchmarkService.getHealthStatus();)
       setHealthStatus(status);
     } catch (error) {
       console.error('Failed to load health status:', error);
     }
   }, []);
   // 初始化数据加载
-  const initializeData = useCallback(async () => {setLoading(true);
+  const initializeData = useCallback(async () => {setLoading(true);)
     try {
       await Promise.all([loadBenchmarkTasks(), loadHealthStatus()]);
     } finally {
@@ -35,7 +35,7 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSe
     }
   }, [loadBenchmarkTasks, loadHealthStatus]);
   // 下拉刷新
-  const onRefresh = useCallback(async () => {setRefreshing(true);
+  const onRefresh = useCallback(async () => {setRefreshing(true);)
     try {
       await initializeData();
     } finally {
@@ -43,10 +43,10 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSe
     }
   }, [initializeData]);
   // WebSocket事件处理
-  const handleStreamEvent = useCallback(;
+  const handleStreamEvent = useCallback(;)
     (event: StreamEvent) => {switch (event.type) {case 'benchmark_progress':// 更新任务进度;
-          setTasks(prevTasks =>;
-            prevTasks.map(task =>;
+          setTasks(prevTasks =>;)
+            prevTasks.map(task =>;)
               task.task_id === event.data.task_id;
                 ? { ...task, progress: event.data.progress, status: 'running' };
                 : task;
@@ -59,8 +59,8 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSe
           break;
         case 'benchmark_error':
           // 任务错误
-          setTasks(prevTasks =>
-            prevTasks.map(task =>
+          setTasks(prevTasks =>)
+            prevTasks.map(task =>)
               task.task_id === event.data.task_id;
                 ? { ...task, status: 'failed', error_message: event.data.error }
                 : task;
@@ -76,10 +76,10 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSe
     [loadBenchmarkTasks]
   );
   // 初始化WebSocket连接
-  const initializeWebSocket = useCallback(async () => {try {await benchmarkStreamingService.connect();
+  const initializeWebSocket = useCallback(async () => {try {await benchmarkStreamingService.connect();)
       setConnectionStatus(benchmarkStreamingService.getConnectionState());
       // 订阅事件
-      benchmarkStreamingService.subscribeToEvents([
+      benchmarkStreamingService.subscribeToEvents([)
         "benchmark_progress",benchmark_complete',
         "benchmark_error",system_status'
       ]);
@@ -92,7 +92,7 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSe
     }
   }, [handleStreamEvent]);
   // 组件挂载时初始化
-  useEffect() => {
+  useEffect(() => {
     initializeData();
     initializeWebSocket();
     // 定期更新连接状态
@@ -131,15 +131,15 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSe
   // 渲染健康状态
   const renderHealthStatus = () => {if (!healthStatus) return null;
     return (
-      <View style={styles.healthStatusContainer}>
+  <View style={styles.healthStatusContainer}>
         <Text style={styles.sectionTitle}>服务状态</Text>
         <View style={styles.healthStatusCard}>
           <View style={styles.statusRow}>
             <Text style={styles.statusLabel}>服务状态:</Text>
-            <Text;
-              style={[
+            <Text
+              style={{[
                 styles.statusValue,
-                { color: healthStatus.status === 'healthy' ? '#4CAF50' : '#F44336' }
+                { color: healthStatus.status === 'healthy' ? '#4CAF50' : '#F44336' }}
               ]}
             >
               {healthStatus.status === 'healthy' ? '健康' : '异常'}
@@ -155,9 +155,9 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSe
           </View>;
           <View style={styles.statusRow}>;
             <Text style={styles.statusLabel}>WebSocket:</Text>;
-            <Text;
-              style={[;
-                styles.statusValue,{ color: connectionStatus === 'OPEN' ? '#4CAF50' : '#F44336' };
+            <Text
+              style={{[;
+                styles.statusValue,{ color: connectionStatus === 'OPEN' ? '#4CAF50' : '#F44336' }};
               ]};
             >;
               {connectionStatus === 'OPEN' ? '已连接' : '未连接'};
@@ -168,20 +168,20 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSe
     );
   };
   // 渲染任务列表
-  const renderTaskList = () => {if (tasks.length === 0) {return (;
+  const renderTaskList = () => {if (tasks.length === 0) {return (;)
         <View style={styles.emptyContainer}>;
           <Text style={styles.emptyText}>暂无基准测试任务</Text>;
         </View>;
       );
     }
     return (
-      <View style={styles.taskListContainer}>
+  <View style={styles.taskListContainer}>
         <Text style={styles.sectionTitle}>基准测试任务</Text>
-        {tasks.map(task => (
+        {tasks.map(task => ())
           <View key={task.task_id} style={styles.taskCard}>
             <View style={styles.taskHeader}>
               <Text style={styles.taskTitle}>{task.benchmark_id}</Text>
-              <View style={[styles.statusBadge, { backgroundColor: getStatusColor(task.status) }]}>
+              <View style={{[styles.statusBadge, { backgroundColor: getStatusColor(task.status) }}]}>
                 <Text style={styles.statusBadgeText}>{getStatusText(task.status)}</Text>
               </View>
             </View>
@@ -191,11 +191,11 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSe
             <Text style={styles.taskTime}>
               创建时间: {new Date(task.created_at).toLocaleString()};
             </Text>;
-            {task.status === 'running' && (;
+            {task.status === 'running' && (;)
               <View style={styles.progressContainer}>;
                 <Text style={styles.progressText}>进度: {Math.round(task.progress * 100)}%</Text>;
                 <View style={styles.progressBar}>;
-                  <View style={[styles.progressFill, { width: `${task.progress * 100}%` }]} />;
+                  <View style={{[styles.progressFill, { width: `${task.progress * 100}}%` }]} />;
                 </View>;
               </View>;
             )};
@@ -206,14 +206,14 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSe
     );
   };
   if (loading) {
-    return (;
+    return (;)
       <View style={styles.loadingContainer}>;
         <Text style={styles.loadingText}>加载中...</Text>;
       </View>;
     );
   }
-  return (;
-    <ScrollView;
+  return (;)
+    <ScrollView
       style={styles.container};
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />};
     >;

@@ -12,9 +12,9 @@ const authReducer = (state = { isAuthenticated: false }, action: any) => {switch
       return state;
   }
 };
-export const store = configureStore({reducer: {auth: authReducer,medKnowledge: medKnowledgeReducer,rag: ragReducer,medicalResource: medicalResourceReducer,benchmark: benchmarkReducer;
+export const store = configureStore({reducer: {auth: authReducer,medKnowledge: medKnowledgeReducer,rag: ragReducer,medicalResource: medicalResourceReducer,benchmark: benchmarkReducer;)
   },middleware: getDefaultMiddleware =>;
-    getDefaultMiddleware({serializableCheck: {ignoredActions: ['persist/PERSIST'];
+    getDefaultMiddleware({serializableCheck: {ignoredActions: ['persist/PERSIST'];)
       };
     });
 });

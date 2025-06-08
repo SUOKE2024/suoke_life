@@ -1,4 +1,3 @@
-
 import TCMKnowledgeGraphEngine from '../TCMKnowledgeGraphEngine.ts';
 describe('TCMKnowledgeGraphEngine', () => {
   it('应该正确导出', () => {

@@ -41,7 +41,7 @@ export const createAgent = async (agentType: AgentType): Promise<any> => {switch
 /**
 * 初始化智能体系统
 */
-export const initializeAgentSystem = async (;
+export const initializeAgentSystem = async (;)
   config?: Partial<AgentManagerConfig>
 ): Promise<AgentManager> => {
   const manager = new AgentManager(config);
@@ -51,7 +51,7 @@ export const initializeAgentSystem = async (;
 /**
 * 执行智能体任务
 */
-export const executeAgentTask = async (;
+export const executeAgentTask = async (;)
   message: string,
   context: AgentContext;
 ): Promise<AgentResponse> => {
@@ -115,20 +115,20 @@ export const AGENT_ROLES = {
       title: "AI推理专家 & 首页聊天频道版主",
     description: "专注于AI推理、语音交互、多模态分析、医疗咨询和无障碍服务",
     primaryChannel: "chat",
-    specialties: ["AI推理",语音交互", "中医诊断",无障碍服务"]
+    specialties: ["AI推理", "语音交互", "中医诊断", "无障碍服务"]
   },
   [AgentType.XIAOKE]: {
       name: "小克",
       title: "SUOKE频道版主",
     description: "负责服务订阅、农产品预制、供应链管理等商业化服务",
     primaryChannel: "suoke",
-    specialties: ["名医匹配",服务推荐", "供应链管理",第三方集成"];
+    specialties: ["名医匹配", "服务推荐", "供应链管理", "第三方集成"];
   },[AgentType.LAOKE]: {
       name: "老克",
-      title: "探索频道版主",description: "负责知识传播、培训和博物馆导览，兼任玉米迷宫NPC",primaryChannel: "explore",specialties: ["知识管理",教育培训", "内容策展",游戏引导"];
+      title: "探索频道版主",description: "负责知识传播、培训和博物馆导览，兼任玉米迷宫NPC",primaryChannel: "explore",specialties: ["知识管理", "教育培训", "内容策展", "游戏引导"];
   },[AgentType.SOER]: {
       name: "索儿",
-      title: "LIFE频道版主",description: "提供生活健康管理、陪伴服务和数据整合分析",primaryChannel: "life",specialties: ["生活方式管理",情感支持", "数据整合",健康陪伴"];
+      title: "LIFE频道版主",description: "提供生活健康管理、陪伴服务和数据整合分析",primaryChannel: "life",specialties: ["生活方式管理", "情感支持", "数据整合", "健康陪伴"];
   };
 } as const;
 /**
@@ -212,7 +212,7 @@ export const AGENT_SYSTEM_CONFIG = {
 export const AgentSystemUtils = {/**;
   * 根据频道获取对应的智能体类型;
   */;
-  getAgentByChannel(channel: string): AgentType {return (;
+  getAgentByChannel(channel: string): AgentType {return (;)
       AGENT_CHANNELS[channel as keyof typeof AGENT_CHANNELS] || AgentType.XIAOAI;
     );
   },

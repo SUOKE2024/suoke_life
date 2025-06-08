@@ -54,9 +54,9 @@ export const validateRequired = (value: unknown): boolean => {
   return true;
 };
 // 数字范围验证
-export const validateNumberRange = (
+export const validateNumberRange = ()
   value: number,
-  min?: number,
+  min?: number,,
   max?: number,
 ): boolean => {
   if (isNaN(value)) {
@@ -139,8 +139,8 @@ export interface ValidationRule {
   custom?: (value: unknown) => boolean | string;
 }
 // 表单字段验证
-export const validateField = (
-  value: unknown,
+export const validateField = ()
+  value: unknown,,
   rules: ValidationRule,
 ): { isValid: boolean; error?: string } => {
   // 必填项验证
@@ -177,8 +177,8 @@ export const validateField = (
   return { isValid: true };
 };
 // 批量验证
-export const validateForm = (
-  data: Record<string, unknown>,
+export const validateForm = ()
+  data: Record<string, unknown>,,
   rules: Record<string, ValidationRule>,
 ): { isValid: boolean; errors: Record<string, string> } => {
   const errors: Record<string, string> = {};

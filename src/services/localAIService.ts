@@ -116,15 +116,15 @@ class LocalAIService {
         return {constitutionTypes: [;
             {
       name: "平和质",
-      keywords: ["精力充沛",睡眠良好', '食欲正常'] },{
+      keywords: ["精力充沛", "睡眠良好', '食欲正常'] },{
       name: "气虚质",
-      keywords: ["乏力",气短', '容易疲劳'] },{
+      keywords: ["乏力", "气短', '容易疲劳'] },{
       name: "阳虚质",
-      keywords: ["怕冷",手脚冰凉', '精神不振'] },{
+      keywords: ["怕冷", "手脚冰凉', '精神不振'] },{
       name: "阴虚质",
-      keywords: ["口干",盗汗', '五心烦热'] },{
+      keywords: ["口干", "盗汗', '五心烦热'] },{
       name: "痰湿质",
-      keywords: ["肥胖",胸闷', '痰多'] };
+      keywords: ["肥胖", "胸闷', '痰多'] };
           ],scoringMatrix: [;
             [1.0, 0.1, 0.1, 0.1, 0.1],[0.1, 1.0, 0.3, 0.2, 0.2],[0.1, 0.3, 1.0, 0.1, 0.2],[0.1, 0.2, 0.1, 1.0, 0.1],[0.1, 0.2, 0.2, 0.1, 1.0];
           ];
@@ -133,15 +133,15 @@ class LocalAIService {
         return {pulsePatterns: [;
             {
       name: "浮脉",
-      characteristics: ["轻取即得",重按稍减'] },{
+      characteristics: ["轻取即得", "重按稍减'] },{
       name: "沉脉",
-      characteristics: ["轻取不应",重按始得'] },{
+      characteristics: ["轻取不应", "重按始得'] },{
       name: "迟脉",
-      characteristics: ["脉率缓慢",一息三至'] },{
+      characteristics: ["脉率缓慢", "一息三至'] },{
       name: "数脉",
-      characteristics: ["脉率较快",一息五至'] },{
+      characteristics: ["脉率较快", "一息五至'] },{
       name: "滑脉",
-      characteristics: ["往来流利",如珠走盘'] };
+      characteristics: ["往来流利", "如珠走盘'] };
           ],recognitionRules: [;
             {
       feature: "pressure",
@@ -190,7 +190,7 @@ class LocalAIService {
       if (!model) {
         throw new Error('症状分类模型未加载');
       }
-      const results = symptoms.map(symptom => {for (const rule of model.rules) {if (rule.pattern.test(symptom)) {return {symptom,category: rule.category,severity: rule.severity,confidence: 0.85 + Math.random() * 0.1;
+      const results = symptoms.map(symptom => {for (const rule of model.rules) {if (rule.pattern.test(symptom)) {return {symptom,category: rule.category,severity: rule.severity,confidence: 0.85 + Math.random() * 0.1;)
             };
           }
         }
@@ -287,17 +287,17 @@ class LocalAIService {
   private generateSymptomSummary(results: any[]): string {
     const categories = [...new Set(results.map(r => r.category))];
     const severityAvg = results.reduce(sum, r) => sum + r.severity, 0) / results.length;
-    return `检测到 ${categories.length} 个症状类别，平均严重程度: ${(severityAvg * 100).toFixed(;
+    return `检测到 ${categories.length} 个症状类别，平均严重程度: ${(severityAvg * 100).toFixed(;)
       1;
     )}%`;
   }
   // 生成体质建议
   private generateConstitutionRecommendations(constitution: any): string[] {
     const recommendations: { [key: string]: string[] } = {
-      平和质: ["保持规律作息",适量运动', '均衡饮食'],
-      气虚质: ["避免过度劳累",多食补气食物', '适当休息'],
-      阳虚质: ["注意保暖",多食温热食物', '避免生冷'],
-      阴虚质: ["滋阴润燥",避免熬夜', '多食甘凉食物'],
+      平和质: ["保持规律作息", "适量运动', '均衡饮食'],
+      气虚质: ["避免过度劳累", "多食补气食物', '适当休息'],
+      阳虚质: ["注意保暖", "多食温热食物', '避免生冷'],
+      阴虚质: ["滋阴润燥", "避免熬夜', '多食甘凉食物'],
       痰湿质: ["清淡饮食",适量运动', '避免油腻食物']
     };
     return recommendations[constitution.type] || ['保持健康生活方式'];
@@ -308,7 +308,7 @@ class LocalAIService {
       return '脉象正常，未发现异常模式';
     }
     const primaryPattern = patterns[0];
-    return `主要脉象: ${primaryPattern.pattern}，置信度: ${(;
+    return `主要脉象: ${primaryPattern.pattern}，置信度: ${(;)
       primaryPattern.confidence * 100;
     ).toFixed(1)}%`;
   }

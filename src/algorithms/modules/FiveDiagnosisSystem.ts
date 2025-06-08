@@ -23,7 +23,7 @@ export class FiveDiagnosisSystem extends EventEmitter {private lookDiagnosis: Lo
   async performComprehensiveDiagnosis(healthContext: HealthContext): Promise<ComprehensiveDiagnosisResult> {
     try {
       // 并行执行五诊
-const [lookResult, listenResult, inquiryResult, pulseResult, palpationResult] = await Promise.all([;
+const [lookResult, listenResult, inquiryResult, pulseResult, palpationResult] = await Promise.all([;)
         this.lookDiagnosis.diagnose(healthContext),
         this.listenDiagnosis.diagnose(healthContext),
         this.inquiryDiagnosis.diagnose(healthContext),
@@ -31,7 +31,7 @@ const [lookResult, listenResult, inquiryResult, pulseResult, palpationResult] = 
         this.palpationDiagnosis.diagnose(healthContext);
       ]);
       // 综合分析
-const synthesisResult = await this.synthesisEngine.synthesize({look: lookResult,
+const synthesisResult = await this.synthesisEngine.synthesize({look: lookResult,)
         listen: listenResult,
         inquiry: inquiryResult,
         pulse: pulseResult,
