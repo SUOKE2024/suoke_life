@@ -3,12 +3,12 @@ export interface PerformanceConfig {
   // 全局性能监控开关;
 enabled: boolean;
   // 开发环境配置
-development: {;
+development: {;,
   trackRender: boolean;
-    trackMemory: boolean;
-    trackNetwork: boolean;
-    logToConsole: boolean;
-    warnThreshold: number; // ms;
+    trackMemory: boolean;,
+  trackNetwork: boolean;
+    logToConsole: boolean;,
+  warnThreshold: number; // ms;
     errorThreshold: number // ms;
 }
   // 生产环境配置

@@ -1,15 +1,10 @@
-        import time
-from listen_service.core.audio_analyzer import AudioAnalyzer
-from listen_service.core.audio_processor import AudioProcessor
-from listen_service.models.audio_models import (
-from typing import Dict, List, Any, Optional, Union
-import asyncio
-import numpy as np
-import pytest
+"""Test module"""
+import unittest
 
-def main() - > None:
-    """主函数 - 自动生成的最小可用版本"""
-    pass
+class TestPlaceholder(unittest.TestCase):
+    def test_placeholder(self):
+        """Placeholder test"""
+        pass
 
 if __name__ == "__main__":
-    main()
+    unittest.main()

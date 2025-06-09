@@ -14,7 +14,7 @@ import { Direction, GameSettings } from '../../types/maze';
   Dimensions;
 } from 'react-native';
 interface GameControlsProps {
-  onMove: (direction: Direction) => void;
+  onMove: (direction: Direction) => void;,
   disabled: boolean;
   gameSettings: GameSettings | null;
 }
@@ -58,12 +58,12 @@ const GameControls: React.FC<GameControlsProps> = ({
     direction: Direction,iconName: string,style: any,label: string;
   ) => {return (;
       <Animated.View;
-        style={{[;
+        style={[;
           styles.directionButton,style,{transform: [{ scale: buttonScales[direction] }}],opacity: disabled ? 0.5 : 1;
           };
         ]};
       >;
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.buttonTouchable};
           onPressIn={() => handlePressIn(direction)};
           onPressOut={() => handlePressOut(direction)};
@@ -212,11 +212,11 @@ const styles = StyleSheet.create({
   },
   hintContainer: {,
   flexDirection: 'row',justifyContent: 'center',flexWrap: 'wrap',marginTop: 8;
-  },hintItem: {
-      flexDirection: "row",
+  },hintItem: {,
+  flexDirection: "row",
       alignItems: 'center',marginHorizontal: 8,marginVertical: 4;
-  },hintText: {
-      color: "#81C784",
+  },hintText: {,
+  color: "#81C784",
       fontSize: 12,marginLeft: 4;
   };
 });

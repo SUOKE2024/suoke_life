@@ -14,25 +14,25 @@ import React,{ useState, useEffect, useRef } from "react;";
   { Dimensions } from react-native""
 const { width, height   } = Dimensions.get("window;);"
 interface WellnessExperienceProps {
-  visible: boolean;
+  visible: boolean;,
   onClose: () => void;
 }
 interface WellnessScene {
-  id: string;
+  id: string;,
   name: string;
-  type: "mountain" | water" | "forest | "temple";
+  type: "mountain" | water" | "forest | "temple";,
   description: string;
-  duration: number;
+  duration: number;,
   difficulty: easy" | "medium | "hard";
   benefits: string[];
 }
 const WellnessExperience: React.FC<WellnessExperienceProps /> = ({/   const performanceMonitor = usePerformanceMonitor(WellnessExperience", { /    ";))
-    trackRender: true,trackMemory: true,warnThreshold: 50,  };);
+    trackRender: true,trackMemory: true,warnThreshold: 50};);
   visible,
   onClose;
 }) => {}
   const [selectedScene, setSelectedScene] = useState<WellnessScene | null />(nul;l;);/      const [isExperiencing, setIsExperiencing] = useState<boolean>(fals;e;);
-  const fadeAnim = useMemo(() => useRef(new Animated.Value(0);).current, []);)))));
+  const fadeAnim = useMemo() => useRef(new Animated.Value(0);).current, []);)))));
   const wellnessScenes: WellnessScene[] = [{,
   id: "mountain_sunrise,",
       name: "山巅日出",
@@ -99,12 +99,12 @@ const WellnessExperience: React.FC<WellnessExperienceProps /> = ({/   const perf
   default: return map-marke;r;
     }
   };
-  const renderSceneCard = useMemo(() => (scene: WellnessScene) => (;))
-    <TouchableOpacity
+  const renderSceneCard = useMemo() => (scene: WellnessScene) => (;))
+    <TouchableOpacity;
 key={scene.id}
       style={styles.sceneCard}
       onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> startExperience(scene)}/        >
-      <View style={styles.sceneHeader}>/        <Text style={styles.sceneName}>{scene.name}</Text>/        <View style={styles.sceneType}>/              <Icon
+      <View style={styles.sceneHeader}>/        <Text style={styles.sceneName}>{scene.name}</Text>/        <View style={styles.sceneType}>/              <Icon;
 name={getSceneIcon(scene.type)}
             size={16}
             color={colors.primary} />/          <Text style={styles.sceneTypeText}>/            {scene.type === "mountain ? "山景" :"
@@ -112,7 +112,7 @@ name={getSceneIcon(scene.type)}
             scene.type === "forest" ? 森林" : "古寺}
           </Text>/        </View>/      </View>/
       <Text style={styles.sceneDescription}>{scene.description}</Text>/
-      <View style={styles.sceneBenefits}>/        <Text style={styles.benefitsTitle}>健康益处：</Text>/        <View style={styles.benefitsList}>/              {scene.benefits.slice(0, 3).map((benefit, index) => ())
+      <View style={styles.sceneBenefits}>/        <Text style={styles.benefitsTitle}>健康益处：</Text>/        <View style={styles.benefitsList}>/              {scene.benefits.slice(0, 3).map(benefit, index) => ())
             <View key={index} style={styles.benefitItem}>/              <Icon name="check" size={12} color={colors.success} />/              <Text style={styles.benefitText}>{benefit}</Text>/            </View>/              ))}
         </View>/      </View>/
       <View style={styles.sceneFooter}>/        <Text style={styles.sceneDuration}>{scene.duration}分钟</Text>/        <View style={styles.difficultyBadge}>/          <Text style={styles.difficultyText}>/            {scene.difficulty === "easy" ? 简单" :"
@@ -127,7 +127,7 @@ name={getSceneIcon(scene.type)}
         {///              {wellnessScenes.map(renderSceneCard)};
         </ScrollView>/      </SafeAreaView>/    </Modal>/      ;);
 };
-const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,)
+const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {),
   flex: 1,
     backgroundColor: colors.background},
   header: {,

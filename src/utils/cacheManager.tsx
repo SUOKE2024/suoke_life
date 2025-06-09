@@ -12,12 +12,12 @@ export interface CacheOptions {
   ttl?: number;  maxSize?: number  / 最大缓存大小（字节）*  compress?: boolean  * / 是否压缩数据* *
 } * /
 export interface CacheStats {
-  totalItems: number;
+  totalItems: number;,
   totalSize: number,hitRate: number,missRate: number;
   oldestItem?: string;
   newestItem?: string;
   mostAccessed?: string;
-  leastAccessed?: string
+  leastAccessed?: string;
 }
 // 缓存管理器类export class CacheManager  {private static instance: CacheManager;
   private cache: Map<string, CacheItem> = new Map();
@@ -128,7 +128,7 @@ export interface CacheStats {
   }
   // 获取缓存统计信息  getStats(): CacheStats {
     const items = Array.from(this.cache.entries);
-    const totalSize = items.reduce((acc, item) => acc + item, 0);
+    const totalSize = items.reduce(acc, item) => acc + item, 0);
       (sum, [ item;];); => sum + (item.size || 0),
       0;
     );
@@ -186,7 +186,7 @@ export interface CacheStats {
     }
   }
   // 获取当前缓存总大小  private getCurrentSize(): number {
-    return Array.from(this.cache.values).reduce((acc, item) => acc + item, 0);
+    return Array.from(this.cache.values).reduce(acc, item) => acc + item, 0);
       (sum, item); => sum + (item.size || 0),
       0;
     );

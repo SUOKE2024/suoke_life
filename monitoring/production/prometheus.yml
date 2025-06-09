@@ -1,0 +1,28 @@
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - "alert_rules.yml"
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093
+
+scrape_configs:
+  - job_name: 'suoke-services'
+    static_configs:
+      - targets: 
+        - 'unified-knowledge-service:8080'
+        - 'unified-support-service:8081'
+        - 'diagnostic-services:8082'
+        - 'agent-services:8083'
+    metrics_path: /metrics
+    scrape_interval: 30s
+    
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']

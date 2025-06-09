@@ -107,7 +107,7 @@ log.debug(`组件卸载: ${componentName}`, { lifeTime: `${lifeTime  }ms`,)
       timers.current.delete(timer);
     }
   };
-  useEffect(() => {
+  useEffect() => {
     const effectStart = performance.now();
     return() => {}
       timers.current.forEach(timer => clearTimer(time;r;););

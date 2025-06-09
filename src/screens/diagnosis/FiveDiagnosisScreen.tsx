@@ -33,9 +33,9 @@ enum DiagnosisStep {
 }
 // 诊断状态接口
 interface DiagnosisState {
-  currentStep: DiagnosisStep;
+  currentStep: DiagnosisStep;,
   completedSteps: Set<DiagnosisStep>;
-  isProcessing: boolean;
+  isProcessing: boolean;,
   progress: number;
   error?: string;
   sessionId?: string;
@@ -116,7 +116,7 @@ export default React.memo(function FiveDiagnosisScreen() {
     warnThreshold: 100;
   });
   // 初始化服务
-  useEffect(() => {
+  useEffect() => {
     initializeDiagnosisService();
   }, [])  // 检查是否需要添加依赖项;
   // 监听焦点变化
@@ -129,7 +129,7 @@ export default React.memo(function FiveDiagnosisScreen() {
     }, [])
   );
   // 监听进度变化，更新动画
-  useEffect(() => {
+  useEffect() => {
     Animated.timing(progressAnimation, {
       toValue: diagnosisState.progress,
       duration: 500,
@@ -265,31 +265,31 @@ export default React.memo(function FiveDiagnosisScreen() {
     const steps = Object.values(DiagnosisStep);
         return (
   <View style={styles.stepIndicator}>
-        {steps.map((step, index) => {
+        {steps.map(step, index) => {
           const isCompleted = diagnosisState.completedSteps.has(step);
           const isCurrent = diagnosisState.currentStep === step;
           const config = STEP_CONFIG[step];
                     return (
   <View key={step} style={styles.stepItem}>
-              <View style={{[
+              <View style={[
                 styles.stepCircle,
                 isCompleted && styles.stepCompleted,
                 isCurrent && styles.stepCurrent;
               ]}}>
-                <Text style={{[
+                <Text style={[
                   styles.stepIcon,
                   (isCompleted || isCurrent) && styles.stepIconActive;
                 ]}}>
                   {config.icon}
                 </Text>
               </View>
-              <Text style={{[
+              <Text style={[
                 styles.stepTitle,
                 (isCompleted || isCurrent) && styles.stepTitleActive;
               ]}}>
                 {config.title}
               </Text>
-              {index < steps.length - 1  && <View style={{[
+              {index < steps.length - 1  && <View style={[
                   styles.stepConnector,
                   isCompleted && styles.stepConnectorCompleted;
                 ]}} />
@@ -305,10 +305,10 @@ export default React.memo(function FiveDiagnosisScreen() {
   <View style={styles.progressContainer}>
       <View style={styles.progressBar}>
         <Animated.View;
-          style={{[
+          style={[
             styles.progressFill,
             {
-              width: progressAnimation.interpolate({,)
+              width: progressAnimation.interpolate({),
   inputRange: [0, 100],
                 outputRange: ["0%",100%'],
                 extrapolate: 'clamp'
@@ -332,7 +332,7 @@ export default React.memo(function FiveDiagnosisScreen() {
   <View style={styles.stepContent}>
             <Text style={styles.stepDescription}>{config.description}</Text>
             <Text style={styles.estimatedTime}>预计用时：{config.estimatedTime}</Text>
-            <TouchableOpacity
+            <TouchableOpacity;
               style={styles.startButton}
               onPress={startDiagnosis}
               disabled={diagnosisState.isProcessing}
@@ -346,7 +346,7 @@ export default React.memo(function FiveDiagnosisScreen() {
   <View style={styles.stepContent}>
             <Text style={styles.stepDescription}>{config.description}</Text>
             <Text style={styles.estimatedTime}>预计用时：{config.estimatedTime}</Text>
-            <TouchableOpacity
+            <TouchableOpacity;
               style={styles.actionButton}
               onPress={() => completeCurrentStep(generateMockStepData(currentStep))}
               disabled={diagnosisState.isProcessing}
@@ -360,7 +360,7 @@ export default React.memo(function FiveDiagnosisScreen() {
   <View style={styles.stepContent}>
             <Text style={styles.stepDescription}>{config.description}</Text>
             <Text style={styles.estimatedTime}>预计用时：{config.estimatedTime}</Text>
-            <TouchableOpacity
+            <TouchableOpacity;
               style={styles.actionButton}
               onPress={() => completeCurrentStep(generateMockStepData(currentStep))}
               disabled={diagnosisState.isProcessing}
@@ -374,7 +374,7 @@ export default React.memo(function FiveDiagnosisScreen() {
   <View style={styles.stepContent}>
             <Text style={styles.stepDescription}>{config.description}</Text>
             <Text style={styles.estimatedTime}>预计用时：{config.estimatedTime}</Text>
-            <TouchableOpacity
+            <TouchableOpacity;
               style={styles.actionButton}
               onPress={() => completeCurrentStep(generateMockStepData(currentStep))}
               disabled={diagnosisState.isProcessing}
@@ -388,7 +388,7 @@ export default React.memo(function FiveDiagnosisScreen() {
   <View style={styles.stepContent}>
             <Text style={styles.stepDescription}>{config.description}</Text>
             <Text style={styles.estimatedTime}>预计用时：{config.estimatedTime}</Text>
-            <TouchableOpacity
+            <TouchableOpacity;
               style={styles.actionButton}
               onPress={() => completeCurrentStep(generateMockStepData(currentStep))}
               disabled={diagnosisState.isProcessing}
@@ -417,7 +417,7 @@ export default React.memo(function FiveDiagnosisScreen() {
                 <Text style={styles.calculationOptionText}>🌊 五运六气分析</Text>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity
+            <TouchableOpacity;
               style={styles.actionButton}
               onPress={() => completeCurrentStep(generateMockStepData(currentStep))}
               disabled={diagnosisState.isProcessing}
@@ -454,7 +454,7 @@ export default React.memo(function FiveDiagnosisScreen() {
                 </Text>
               </View>
             )}
-            <TouchableOpacity
+            <TouchableOpacity;
               style={styles.actionButton}
               onPress={() => navigation.goBack()}
             >
@@ -527,14 +527,14 @@ export default React.memo(function FiveDiagnosisScreen() {
   return (
   <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
           <Text style={styles.backButtonText}>←</Text>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>五诊检测</Text>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.restartButton}
           onPress={() => {
             setDiagnosisState({
@@ -551,7 +551,7 @@ export default React.memo(function FiveDiagnosisScreen() {
         </TouchableOpacity>
       </View>
       {renderProgressBar()}
-      <ScrollView
+      <ScrollView;
         style={styles.content}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.contentContainer}

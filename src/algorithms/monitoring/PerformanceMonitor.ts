@@ -6,11 +6,11 @@
 * @version 1.0.0;
 */
 export interface MonitoringConfig {
-  enabled: boolean;
+  enabled: boolean;,
   metrics: {;
-    performance: boolean;
+    performance: boolean;,
   accuracy: boolean;
-    usage: boolean;
+    usage: boolean;,
   errors: boolean;
 };
   reporting: {,
@@ -20,9 +20,9 @@ export interface MonitoringConfig {
   };
 }
 export interface PerformanceMetrics {
-  responseTime: {;
+  responseTime: {;,
   average: number;
-    p50: number;
+    p50: number;,
   p95: number;
     p99: number;
 };
@@ -35,8 +35,8 @@ export interface PerformanceMetrics {
     diagnosisAccuracy: {,
   looking: number;
       listening: number,
-  inquiry: number;
-      palpation: number,
+  inquiry: number;,
+  palpation: number,
   calculation: number;
     };
   };
@@ -51,7 +51,7 @@ export interface PerformanceMetrics {
   };
 }
 export interface MetricEvent {
-  timestamp: number;
+  timestamp: number;,
   type: string;
   value: number;
   metadata?: Record<string, any>;

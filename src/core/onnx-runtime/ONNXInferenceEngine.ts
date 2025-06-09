@@ -209,8 +209,8 @@ metadata.lastUsed = new Date();
       } as ONNXEvent);
       return result;
     } catch (error) {
-      const onnxError: ONNXError = {
-      code: "INFERENCE_FAILED",
+      const onnxError: ONNXError = {,
+  code: "INFERENCE_FAILED",
       message: `推理执行失败: ${error.message}`,
         details: error,
         timestamp: new Date(),

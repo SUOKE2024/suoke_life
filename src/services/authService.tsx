@@ -10,21 +10,21 @@ import {
 } from "../utils/authUtils";
 // 登录请求参数
 export interface LoginRequest {
-  email: string;
+  email: string;,
   password: string;
   deviceId?: string;
   rememberMe?: boolean;
 }
 // 登录响应
 export interface LoginResponse {
-  user: User;
+  user: User;,
   accessToken: string;
-  refreshToken: string;
+  refreshToken: string;,
   expiresIn: number;
 }
 // 注册请求参数
 export interface RegisterRequest {
-  username: string;
+  username: string;,
   email: string;
   password: string;
   phone?: string;
@@ -32,9 +32,9 @@ export interface RegisterRequest {
 }
 // 注册响应
 export interface RegisterResponse {
-  user: User;
+  user: User;,
   accessToken: string;
-  refreshToken: string;
+  refreshToken: string;,
   expiresIn: number;
 }
 // 忘记密码请求参数
@@ -43,12 +43,12 @@ export interface ForgotPasswordRequest {
 }
 // 验证重置码请求参数
 export interface VerifyResetCodeRequest {
-  email: string;
+  email: string;,
   code: string;
 }
 // 重置密码请求参数
 export interface ResetPasswordRequest {
-  email: string;
+  email: string;,
   code: string;
   newPassword: string;
 }
@@ -58,7 +58,7 @@ export interface RefreshTokenRequest {
 }
 // 刷新令牌响应
 export interface RefreshTokenResponse {
-  accessToken: string;
+  accessToken: string;,
   refreshToken: string;
   expiresIn: number;
 }

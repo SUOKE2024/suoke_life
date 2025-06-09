@@ -5,7 +5,7 @@ import React, { useMemo, useCallback } from "react";
 * * 索克生活 - Radio组件;
 * 单选框组件，用于单选操作
 export interface RadioProps {
-  value: string;
+  value: string;,
   selected: boolean;
   onSelect: (value: string) => void;
   label?: string;
@@ -61,7 +61,7 @@ export const Radio: React.FC<RadioProps>  = ({
     if (!selected) return null;
     const dotSize = getDotSize();
     return (;)
-      <View
+      <View;
 style={
           width: dotSize,
           height: dotSize,
@@ -75,8 +75,8 @@ style={
     return (;)
       <View style={styles.labelContainer}>;
         {label && (;)
-          <Text
-style={{[
+          <Text;
+style={[
               styles.label,
               { color: disabled ? colors.textDisabled : colors.text }},
               labelStyle]}
@@ -84,8 +84,8 @@ style={{[
             {label}
           </    Text>
         )}
-        {description  && <Text
-style={{[
+        {description  && <Text;
+style={[
               styles.description,
               { color: colors.textTertiary }},
               descriptionStyle]}
@@ -102,8 +102,8 @@ style={{[
       opacity: disabled ? 0.6 : 1,
       flexDirection: labelPosition === "left ? "row-reverse" : row"},style].filter(Boolean) as ViewStyle[], [disabled, labelPosition, style]);
   return (;)
-    <TouchableOpacity
-style={{containerStyle}}
+    <TouchableOpacity;
+style={containerStyle}}
       onPress={handlePress}
       disabled={disabled}
       accessibilityRole="radio"
@@ -111,12 +111,12 @@ style={{containerStyle}}
       accessibilityLabel="TODO: 添加无障碍标签"
     >
       {labelPosition === "left && renderLabel()}"
-      <View style={{getRadioStyle()}}>{renderDot()}</    View>
+      <View style={getRadioStyle()}}>{renderDot()}</    View>
       {labelPosition === "right" && renderLabel()}
     </    TouchableOpacity>
   );
 };
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   flexDirection: row",
     alignItems: "center,",
     paddingVertical: 8},

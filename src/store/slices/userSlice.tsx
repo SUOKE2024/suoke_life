@@ -3,11 +3,11 @@ import { UserState, UserProfile, HealthData, ApiResponse } from "../../types";
 import { apiClient } from "../../services/apiClient";
 
 // 初始状态
-const initialState: UserState = {
+const initialState: UserState = {,
   profile: undefined,
   healthData: [],
   loading: false,
-  error: undefined
+  error: undefined;
 };
 
 // 获取用户资料
@@ -39,7 +39,7 @@ export const updateUserProfile = createAsyncThunk<
   try {
     const response: ApiResponse<UserProfile> = await apiClient.put()
       "/user/profile",
-      profileData
+      profileData;
     );
     if (!response.success) {
       throw new Error(response.error?.message || "更新用户资料失败");
@@ -88,7 +88,7 @@ export const addHealthData = createAsyncThunk<
   try {
     const response: ApiResponse<HealthData> = await apiClient.post()
       "/user/health-data",
-      healthData
+      healthData;
     );
     if (!response.success) {
       throw new Error(response.error?.message || "添加健康数据失败");
@@ -100,17 +100,17 @@ export const addHealthData = createAsyncThunk<
   }
 });
 
-// 创建slice
+// 创建slice;
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {
-    clearError: (state) => {
+  reducers: {,
+  clearError: (state) => {
       state.error = undefined;
     },
     updateHealthData: (state, action: PayloadAction<HealthData>) => {
       const index = state.healthData.findIndex()
-        (item) => item.id === action.payload.id
+        (item) => item.id === action.payload.id;
       );
       if (index >= 0) {
         state.healthData[index] = action.payload;
@@ -120,12 +120,12 @@ const userSlice = createSlice({
     },
     removeHealthData: (state, action: PayloadAction<string>) => {
       state.healthData = state.healthData.filter()
-        (item) => item.id !== action.payload
+        (item) => item.id !== action.payload;
       );
     }
   },
   extraReducers: (builder) => {
-    builder
+    builder;
       .addCase(fetchUserProfile.pending, (state) => {
         state.loading = true;
         state.error = undefined;
@@ -140,7 +140,7 @@ const userSlice = createSlice({
         state.error = action.payload;
       });
     
-    builder
+    builder;
       .addCase(updateUserProfile.pending, (state) => {
         state.loading = true;
         state.error = undefined;
@@ -155,7 +155,7 @@ const userSlice = createSlice({
         state.error = action.payload;
       });
     
-    builder
+    builder;
       .addCase(fetchHealthData.pending, (state) => {
         state.loading = true;
         state.error = undefined;
@@ -170,7 +170,7 @@ const userSlice = createSlice({
         state.error = action.payload;
       });
     
-    builder
+    builder;
       .addCase(addHealthData.pending, (state) => {
         state.loading = true;
         state.error = undefined;
@@ -187,10 +187,10 @@ const userSlice = createSlice({
   }
 });
 
-// 导出actions
+// 导出actions;
 export const { clearError, updateHealthData, removeHealthData } = userSlice.actions;
 
-// 导出reducer
+// 导出reducer;
 export default userSlice.reducer;
 
 // 选择器

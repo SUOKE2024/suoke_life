@@ -12,8 +12,8 @@ export interface PrometheusConfig {
   // 服务地址  endpoint: string;
   // 抓取间隔  scrapeInterval: string;
   // 数据保留时间  retention: string;
-  // 存储配置  storage: { path: string;
-    size: string;
+  // 存储配置  storage: { path: string;,
+  size: string;
 }
   // 抓取目标  scrapeConfigs: ScrapeConfig[]
 }
@@ -51,8 +51,8 @@ export interface JaegerConfig {
   // 收集器端点  collectorEndpoint: string;
   // 查询端点  queryEndpoint: string;
   // 采样率  samplingRate: number;
-  // 存储配置  storage: {type: "memory" | "elasticsearch" | "cassandra";
-    config: Record<string, any>
+  // 存储配置  storage: {type: "memory" | "elasticsearch" | "cassandra";,
+  config: Record<string, any>
 };
 }
 export interface AlertManagerConfig {
@@ -91,7 +91,7 @@ export interface DeploymentStatus {
   // 健康状态  health: "healthy" | "unhealthy" | "unknown";
   //
   //
-  // 端点URL  endpoint?: string
+  // 端点URL  endpoint?: string;
 }
 export class MonitoringDeployment  {private static instance: MonitoringDeployment;
   private envManager: EnvironmentManager;
@@ -130,8 +130,8 @@ export class MonitoringDeployment  {private static instance: MonitoringDeploymen
       jaeger: {,
   enabled: config.monitoring.tracing.enabled,collectorEndpoint:;
           config.monitoring.tracing.jaegerEndpoint || "http: queryEndpoint: "http: / , localhost:16686",* ///;
-        storage: {
-      type: "memory",
+        storage: {,
+  type: "memory",
       config: {};
         };
       },alertManager: {enabled: config.monitoring.alerting.enabled,endpoint: "http: routes: this.generateAlertRoutes(),receivers: this.generateAlertReceivers()},nodeExporter: {enabled: true,port: 9100,collectors: ["cpu",memory", "disk",network", "filesystem"]};};
@@ -148,7 +148,7 @@ export class MonitoringDeployment  {private static instance: MonitoringDeploymen
         }
       ]
     });
-    Object.entries(config.services.agents).forEach((([name, agent]) => {}))
+    Object.entries(config.services.agents).forEach(([name, agent]) => {}))
       scrapeConfigs.push({ jobName: `agent-${name  }`,)
         scrapeInterval: "15s",
         metricsPath: "/metrics",/            staticConfigs: [{ targets: [`${agent.host  }:${agent.port}`],
@@ -157,7 +157,7 @@ export class MonitoringDeployment  {private static instance: MonitoringDeploymen
         ]
       });
     });
-    Object.entries(config.services.diagnosis).forEach((([name, service]) => {}))
+    Object.entries(config.services.diagnosis).forEach(([name, service]) => {}))
       scrapeConfigs.push({ jobName: `diagnosis-${name  }`,)
         scrapeInterval: "15s",
         metricsPath: "/metrics",/            staticConfigs: [{ targets: [`${service.host  }:${service.port}`],
@@ -166,7 +166,7 @@ export class MonitoringDeployment  {private static instance: MonitoringDeploymen
         ]
       });
     });
-    Object.entries(config.services.data).forEach((([name, service]) => {}))
+    Object.entries(config.services.data).forEach(([name, service]) => {}))
       scrapeConfigs.push({ jobName: `data-${name  }`,)
         scrapeInterval: "15s",
         metricsPath: "/metrics",/            staticConfigs: [{ targets: [`${service.host  }:${service.port}`],
@@ -180,8 +180,8 @@ export class MonitoringDeployment  {private static instance: MonitoringDeploymen
       scrapeInterval: "15s",
       metricsPath: "/metrics",/          staticConfigs: [{,
   targets: ["localhost:9100"],
-          labels: {
-      service: "node-exporter",
+          labels: {,
+  service: "node-exporter",
       type: "infrastructure"}
         }
       ]
@@ -427,8 +427,8 @@ export class MonitoringDeployment  {private static instance: MonitoringDeploymen
     await new Promise(resolve;); => setTimeout(resolve, 1000););
     }
   // 生成仪表板配置  private generateOverviewDashboard(): unknown {
-    return {dashboard: {
-      title: "索克生活系统概览",
+    return {dashboard: {,
+  title: "索克生活系统概览",
       panels: ;[{,
   title: "系统健康状态",
             type: "stat",

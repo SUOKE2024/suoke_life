@@ -4,25 +4,25 @@ import { EventEmitter } from 'events;';
 * 实现基于知识图谱的中医辨证论治推理
 // 基础数据结构定义
 export interface TCMEntity {
-  id: string;
+  id: string;,
   name: string;
-  type: EntityType;
+  type: EntityType;,
   properties: Record<string, any>;
   aliases?: string[];
   description?: string;
   confidence?: number;
 }
 export interface TCMRelation {
-  id: string;
+  id: string;,
   source: string;
-  target: string;
+  target: string;,
   type: RelationType;
   properties: Record<string, any>;
   weight?: number;
   confidence?: number;
 }
 export interface TCMTriple {
-  subject: TCMEntity;
+  subject: TCMEntity;,
   predicate: TCMRelation;
   object: TCMEntity;
 }
@@ -70,15 +70,15 @@ FOLLOWS = "follows                // 后于"
 }
 export interface DiagnosisInput {
   symptoms: string[];
-  tongueAnalysis?: {color: string;
+  tongueAnalysis?: {color: string;,
   coating: string;
-    texture: string;
+    texture: string;,
   moisture: number;
 };
   pulseAnalysis?: {
     type: string,
-  rate: number;
-    rhythm: string,
+  rate: number;,
+  rhythm: string,
   strength: number;
   };
   patientInfo?: {
@@ -90,23 +90,23 @@ export interface DiagnosisInput {
   additionalInfo?: Record<string, any>;
 }
 export interface DiagnosisResult {
-  primarySyndrome: TCMEntity;
+  primarySyndrome: TCMEntity;,
   secondarySyndromes: TCMEntity[];
-  confidence: number;
+  confidence: number;,
   reasoning: ReasoningPath[];
-  recommendations: TreatmentRecommendation[];
+  recommendations: TreatmentRecommendation[];,
   differentialDiagnosis: DifferentialDiagnosis[];
 }
 export interface ReasoningPath {
-  step: number;
+  step: number;,
   description: string;
-  entities: TCMEntity[];
+  entities: TCMEntity[];,
   relations: TCMRelation[];
-  confidence: number;
+  confidence: number;,
   reasoning: string;
 }
 export interface TreatmentRecommendation {
-  type: "formula" | herb" | "acupuncture | "lifestyle";
+  type: "formula" | herb" | "acupuncture | "lifestyle";,
   entity: TCMEntity;
   dosage?: string;
   duration?: string;
@@ -115,17 +115,17 @@ export interface TreatmentRecommendation {
   confidence: number;
 }
 export interface DifferentialDiagnosis {
-  syndrome: TCMEntity;
+  syndrome: TCMEntity;,
   probability: number;
-  supportingEvidence: string[];
+  supportingEvidence: string[];,
   contradictingEvidence: string[];
 }
 export interface KnowledgeGraphConfig {
-  enableFuzzyMatching: boolean;
+  enableFuzzyMatching: boolean;,
   confidenceThreshold: number;
-  maxReasoningDepth: number;
+  maxReasoningDepth: number;,
   enableTemporalReasoning: boolean;
-  enableUncertaintyHandling: boolean;
+  enableUncertaintyHandling: boolean;,
   weightingStrategy: uniform" | "frequency | "expert" | ml;
 }
 /**
@@ -328,8 +328,8 @@ const patterns = [;
       requiredSymptoms: ["sym_fatigue", sym_shortness_breath"],"
         optionalSymptoms: ["sym_poor_appetite, "sym_dizziness"],"
         tonguePattern: { color: 淡白", coating: "薄白 },
-        pulsePattern: {
-      type: "弱脉",
+        pulsePattern: {,
+  type: "弱脉",
       characteristics: [weak",deep] }
       },
       {
@@ -344,8 +344,8 @@ const patterns = [;
         requiredSymptoms: ["sym_palpitation],"
         optionalSymptoms: ["sym_headache"],
         tonguePattern: { color: 紫暗", coating: "薄白 },
-        pulsePattern: {
-      type: "涩脉",
+        pulsePattern: {,
+  type: "涩脉",
       characteristics: [rough",irregular] }
       };
     ];
@@ -394,7 +394,7 @@ const protocols = [;
 for (const entityType of Object.values(EntityType)) {
       this.entityIndex.set(entityType, new Set());
     }
-    this.entities.forEach(((entity, id) => {}))
+    this.entities.forEach((entity, id) => {}))
       const typeSet = this.entityIndex.get(entity.type);
       if (typeSet) {
         typeSet.add(id);
@@ -404,7 +404,7 @@ for (const entityType of Object.values(EntityType)) {
 for (const relationType of Object.values(RelationType)) {
       this.relationIndex.set(relationType, new Set());
     }
-    this.relations.forEach(((relation, id) => {}))
+    this.relations.forEach((relation, id) => {}))
       const typeSet = this.relationIndex.get(relation.type);
       if (typeSet) {
         typeSet.add(id);
@@ -747,7 +747,7 @@ if (evidence.pulseEvidence?.syndromeIndicators) {
 * * 构建推理路径
   private buildReasoningPaths(evidence: any, syndromes: TCMEntity[]): ReasoningPath[] {
     const paths: ReasoningPath[] = [];
-    syndromes.forEach(((syndrome, index) => {}))
+    syndromes.forEach((syndrome, index) => {}))
       const path: ReasoningPath = {step: index + 1,
         description: `推理${syndrome.name}`,
         entities: [syndrome],
@@ -809,7 +809,7 @@ if (evidence.pulseEvidence?.syndromeIndicators) {
   /**
 * * 计算证候置信度
   private calculateSyndromeConfidence(syndromes: TCMEntity[], paths: ReasoningPath[]): TCMEntity[] {
-    return syndromes.map((syndrome, index) => {};)
+    return syndromes.map(syndrome, index) => {};)
       const path = paths[index];
       let confidence = syndrome.confidence || 0;
       // 基于证据数量调整置信度
@@ -917,10 +917,10 @@ if (evidence.pulseEvidence?.syndromeIndicators) {
 * * 获取统计信息
   public getStatistics(): any {
     return {entities: {total: this.entities.size,byType: Object.fromEntries(;)
-          Array.from(this.entityIndex.entries()).map(([type, ids]) => [type, ids.size]);
+          Array.from(this.entityIndex.entries()).map([type, ids]) => [type, ids.size]);
         );
       },relations: {total: this.relations.size,byType: Object.fromEntries(;)
-          Array.from(this.relationIndex.entries()).map(([type, ids]) => [type, ids.size]);
+          Array.from(this.relationIndex.entries()).map([type, ids]) => [type, ids.size]);
         );
       },cache: {size: this.reasoningCache.size;
       }

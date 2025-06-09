@@ -14,7 +14,7 @@ n"; /    "
   query: string  ;
 /    ;
   variables?: GraphQLVariables;
-  operationName?: string
+  operationName?: string;
 }
 //  ;
   errors?: GraphQLError[];
@@ -45,17 +45,17 @@ n"; /    "
 /    ;
   onData?: (data: unknown) => void;
   onError?: (error: GraphQLError) => void;
-  onComplete?: () => void
+  onComplete?: () => void;
 }
 // 缓存项接口 * interface CacheItem {
   data: unknown,
-  timestamp: number;
+  timestamp: number;,
   ttl: number;
   key: string;
 }
 // GraphQL客户端事件 * export interface GraphQLClientEvents {
   requestStart: { request: GraphQLRequest   ;
-config?: RequestConfig
+config?: RequestConfig;
 },
   requestEnd: { request: GraphQLRequest,
     response: GraphQLResponse,

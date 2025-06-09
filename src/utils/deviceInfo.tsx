@@ -6,39 +6,39 @@ interface ApiResponse<T = any /> { data: T;/     , success: boolean;
   message?: string;
 code?: number}
 export interface DeviceCapabilities {
-  camera: boolean;
+  camera: boolean;,
   microphone: boolean;
-  location: boolean;
+  location: boolean;,
   biometrics: boolean;
-  nfc: boolean;
+  nfc: boolean;,
   bluetooth: boolean;
 }
 export interface DeviceSpecs {
-  deviceId: string;
+  deviceId: string;,
   brand: string;
-  model: string;
+  model: string;,
   systemName: string;
-  systemVersion: string,buildNumber: string,bundleId: string;
+  systemVersion: string,buildNumber: string,bundleId: string;,
   totalMemory: number;
-  usedMemory: number;
+  usedMemory: number;,
   totalDiskCapacity: number;
-  freeDiskStorage: number;
+  freeDiskStorage: number;,
   batteryLevel: number;
-  screenWidth: number;
+  screenWidth: number;,
   screenHeight: number;
-  pixelRatio: number;
+  pixelRatio: number;,
   fontScale: number;
-  carrier: string;
+  carrier: string;,
   ipAddress: string;
-  macAddress: string;
+  macAddress: string;,
   capabilities: DeviceCapabilities;
-  isEmulator: boolean;
+  isEmulator: boolean;,
   isTablet: boolean;
-  hasNotch: boolean;
+  hasNotch: boolean;,
   supportedAbis: string[];
 }
 export interface PerformanceMetrics {
-  appStartTime: number;
+  appStartTime: number;,
   memoryUsage: {used: number,total: number,percentage: number;
 };
   cpuUsage: number,

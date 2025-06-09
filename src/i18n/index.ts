@@ -40,7 +40,7 @@ w;n ;}): string => {}
     }
   }
   if (options && typeof value === "string") {
-    Object.keys(options).forEach(((optionKey) => {}))
+    Object.keys(options).forEach((optionKey) => {}))
       value = value.replace()
         new RegExp(`{${optionKey}}}`, "g"),
         options[optionKey]

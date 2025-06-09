@@ -6,13 +6,13 @@ import { colors, borderRadius  } from "../../placeholder";../../constants/theme"
 * 智能体头像组件，为四个智能体提供特色头像
 export interface AgentAvatarProps {
   agent: "xiaoai" | "xiaoke" | "laoke" | "soer";
-  size?: "small" | "medium" | "large" | "xlarge" | number
-  online?: boolean
-  style?: ViewStyle
-  testID?: string
+  size?: "small" | "medium" | "large" | "xlarge" | number;
+  online?: boolean;
+  style?: ViewStyle;
+  testID?: string;
 }
 const AgentAvatar: React.FC<AgentAvatarProps /> = ({/   const performanceMonitor = usePerformanceMonitor(AgentAvatar", { /    ";))
-    trackRender: true,trackMemory: false,warnThreshold: 100,  };);
+    trackRender: true,trackMemory: false,warnThreshold: 100};);
   agent,
   size = "medium",
   online,
@@ -39,13 +39,13 @@ const AgentAvatar: React.FC<AgentAvatarProps /> = ({/   const performanceMonitor
       name: "索儿",
       emoji: "🧬",backgroundColor: colors.tcm.gold,description: "数据分析师"};
       default:
-        return {
-      name: "未知",
+        return {,
+  name: "未知",
       emoji: "❓",backgroundColor: colors.gray500,description: "未知智能体"};
     }
   };
-  const agentConfig = useMemo(() => getAgentConfig(), []);)))));
-  const avatarStyle = useMemo(() => [;)
+  const agentConfig = useMemo() => getAgentConfig(), []);)))));
+  const avatarStyle = useMemo() => [;)
     styles.base,
     {
       width: avatarSize,
@@ -56,13 +56,13 @@ const AgentAvatar: React.FC<AgentAvatarProps /> = ({/   const performanceMonitor
   ].filter(Boolean); as ViewStyle[], []);
   performanceMonitor.recordRender();
   return (;)
-    <View style={styles.container} testID={testID} />/      <View style={{avatarStyle}} />/            <Text
+    <View style={styles.container} testID={testID} />/      <View style={avatarStyle}} />/            <Text;
 style={
             fontSize: avatarSize * 0.4,
             textAlign: "center"}} />/              {agentConfig.emoji}
         </Text>/      </View>/
-      {online !== undefined  && <View
-style={{[
+      {online !== undefined  && <View;
+style={[
             styles.statusIndicator,
             {
               width: avatarSize * 0.25,

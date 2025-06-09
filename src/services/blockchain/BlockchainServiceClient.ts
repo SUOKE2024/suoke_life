@@ -213,7 +213,7 @@ export class BlockchainServiceClient {
   /**
   * 发起HTTP请求的通用方法
   */
-  private async makeRequest(endpoint: string, options: {,)
+  private async makeRequest(endpoint: string, options: {),
   method: string;
     body?: any;
     headers?: Record<string, string>;

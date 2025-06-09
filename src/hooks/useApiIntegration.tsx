@@ -480,7 +480,7 @@ useApiIntegration', {'
     },
     []
   );
-  useEffect(() => {
+  useEffect() => {
     const effectStart = performance.now();
     // 记录渲染性能;
 performanceMonitor.recordRender();

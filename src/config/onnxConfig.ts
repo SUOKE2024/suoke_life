@@ -21,15 +21,15 @@ export type PerformanceMode = power_save" | "balanced | "performance;";
 /**
 * * ONNX Runtime 配置接口
 export interface ONNXRuntimeConfig {
-  environment: Environment;
+  environment: Environment;,
   deviceType: DeviceType;
-  performanceMode: PerformanceMode;
+  performanceMode: PerformanceMode;,
   inference: InferenceConfig;
-  quantization: QuantizationConfig;
+  quantization: QuantizationConfig;,
   optimization: ModelOptimizationOptions;
-  edgeCompute: EdgeComputeConfig;
+  edgeCompute: EdgeComputeConfig;,
   cache: {;
-    enabled: boolean;
+    enabled: boolean;,
   maxSize: number;
     ttl: number;
 };
@@ -41,14 +41,14 @@ export interface ONNXRuntimeConfig {
   models: {,
   baseUrl: string;
     downloadTimeout: number,
-  retryAttempts: number;
-    preloadModels: string[];
+  retryAttempts: number;,
+  preloadModels: string[];
   };
 }
 /**
 * * 默认配置
-const DEFAULT_CONFIG: ONNXRuntimeConfig = {
-      environment: "development,",
+const DEFAULT_CONFIG: ONNXRuntimeConfig = {,
+  environment: "development,",
       deviceType: "phone",
   performanceMode: balanced",
   inference: {,

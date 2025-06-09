@@ -1,43 +1,46 @@
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import { createNativeStackNavigator } from "@react-navigation/    native-stack";
-import {WelcomeScreen,
+import {
+  AuthStackParamList,
+  ForgotPasswordScreen,
   LoginScreen,
   RegisterScreen,
-  ForgotPasswordScreen,
-  AuthStackParamList;
-} from "../screens/    auth";
+  WelcomeScreen,
+} from '../screens/auth';
+
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
-export const AuthNavigator: React.FC  = () => {};
-  return (;)
+
+export const AuthNavigator: React.FC = () => {
+  return (
     <AuthStack.Navigator;
-initialRouteName="Welcome"
+      initialRouteName="Welcome"
       screenOptions={
         headerShown: false,
-        animation: "slide_from_right",
+        animation: 'slide_from_right',
         gestureEnabled: true,
-        gestureDirection: "horizontal"
+        gestureDirection: 'horizontal',
       }}
     >
       <AuthStack.Screen;
-name="Welcome"
+        name="Welcome"
         component={WelcomeScreen}
-        options={ animation: "fade" }}
-      /    >
+        options={ animation: 'fade' }}
+      />
       <AuthStack.Screen;
-name="Login"
+        name="Login"
         component={LoginScreen}
-        options={ animation: "slide_from_bottom" }}
-      /    >
+        options={ animation: 'slide_from_bottom' }}
+      />
       <AuthStack.Screen;
-name="Register"
+        name="Register"
         component={RegisterScreen}
-        options={ animation: "slide_from_right" }}
-      /    >
+        options={ animation: 'slide_from_right' }}
+      />
       <AuthStack.Screen;
-name="ForgotPassword"
+        name="ForgotPassword"
         component={ForgotPasswordScreen}
-        options={ animation: "slide_from_right" }}
-      /    >
-    </    AuthStack.Navigator>
+        options={ animation: 'slide_from_right' }}
+      />
+    </AuthStack.Navigator>
   );
 };

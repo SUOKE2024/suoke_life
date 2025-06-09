@@ -8,9 +8,9 @@ o";  * / 加密货币* ///     "
 | "processing"  *  | "completed"  *  | "failed"  *  | "cancelled"  *  | "refunded"  *  | "partial_refund"  *  | "expire;";
 d";  * / 已过期* ///     " // 支付订单信息 * export interface PaymentOrder {
   id: string,
-  userId: string;
+  userId: string;,
   amount: number;
-  currency: string;
+  currency: string;,
   description: string;
   orderType: | "medical_service"| "health_product"| "subscription";
     | "consultation";
@@ -19,7 +19,7 @@ d";  * / 已过期* ///     " // 支付订单信息 * export interface PaymentOr
   relatedId: string; ///    , status: PaymentStatus;
   paymentMethod?: PaymentMethod;
   provider?: PaymentProvider;
-  createdAt: string;
+  createdAt: string;,
   updatedAt: string;
   expiresAt?: string;
   metadata?:  {
@@ -27,23 +27,23 @@ d";  * / 已过期* ///     " // 支付订单信息 * export interface PaymentOr
     taxAmount?: number;
     shippingAmount?: number;
     insuranceCovered?: boolean;
-    prescriptionRequired?: boolean
+    prescriptionRequired?: boolean;
 };
 }
 // 支付结果 * export interface PaymentResult {
   success: boolean,   ;
   orderId: string;
   transactionId?: string;
-  amount: number;
+  amount: number;,
   currency: string;
-  status: PaymentStatus;
+  status: PaymentStatus;,
   provider: PaymentProvider;
-  paymentMethod: PaymentMethod;
+  paymentMethod: PaymentMethod;,
   timestamp: string;
   receipt?:  {
     receiptId: string;
     downloadUrl?: string;
-    emailSent?: boolean
+    emailSent?: boolean;
 };
   error?:  { code: string,
     message: string;
@@ -51,25 +51,25 @@ d";  * / 已过期* ///     " // 支付订单信息 * export interface PaymentOr
 }
 // 退款信息 * export interface RefundRequest {
   orderId: string,
-  amount: number;
+  amount: number;,
   reason: string,refundType: "full" | "partial",requestedBy: string;
   metadata?:  {
     returnedItems?: string[];
     qualityIssue?: boolean;
-    customerSatisfaction?: number
+    customerSatisfaction?: number;
 }
 }
 // 支付配置 * interface PaymentConfig {
   provider: PaymentProvider,
-  apiKey: string;
+  apiKey: string;,
   secretKey: string;
-  merchantId: string;
+  merchantId: string;,
   environment: "sandbox" | "production";
-  webhookUrl: string;
+  webhookUrl: string;,
   supportedCurrencies: string[];
-  supportedMethods: PaymentMethod[];
-  fees: {percentage: number;
-    fixed: number;
+  supportedMethods: PaymentMethod[];,
+  fees: {percentage: number;,
+  fixed: number;
     currency: string;
 }
 }
@@ -154,7 +154,7 @@ d";  * / 已过期* ///     " // 支付订单信息 * export interface PaymentOr
         status: "pending",
         createdAt: now,
         updatedAt: now,
-        expiresAt: orderData.expiresAt ||;new Date(Date.now(); + 30 * 60 * 1000).toISOString(),  }
+        expiresAt: orderData.expiresAt ||;new Date(Date.now(); + 30 * 60 * 1000).toISOString()}
       this.activeOrders.set(orderId, order);
       await apiClient.post(" / api * v1 /payments/orders", order;);/
       return ord;e;r;
@@ -286,7 +286,7 @@ const response = await apiClient.post(;)
       const params = new URLSearchParams;(;);
       params.append("userId", userId);
       if (filters) {
-        Object.entries(filters).forEach((([key, value]) => {}))
+        Object.entries(filters).forEach(([key, value]) => {}))
           if (value) {
             if (key === "dateRange") {
               params.append("startDate", (value as any).start)
@@ -335,7 +335,7 @@ const response = await apiClient.get(;)
       sign_type: "RSA2",
       timestamp: new Date().toISOString(),
       version: "1.0",
-      biz_content: JSON.stringify({,)
+      biz_content: JSON.stringify({),
   out_trade_no: order.id,
         total_amount: order.amount.toString(),
         subject: order.description,
@@ -373,8 +373,8 @@ const response = await apiClient.get(;)
     order: PaymentOrder,additionalData?: unknown;
   ) {
     const config = this.configs.get("apple_pay");!;
-    return {nativePaymentData: {merchantIdentifier: config.merchantId,paymentRequest: {
-      countryCode: "US",
+    return {nativePaymentData: {merchantIdentifier: config.merchantId,paymentRequest: {,
+  countryCode: "US",
       currencyCode: order.currency,total: {label: order.description,amount: order.amount.toString()};
         }};};
   }

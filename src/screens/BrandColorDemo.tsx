@@ -7,12 +7,12 @@ importReact from react;
   { StyleSheet } from ";react-native";
 //;
   const performanceMonitor = usePerformanceMonitor(BrandColorDemo", { ";)
-    trackRender: true,trackMemory: true,warnThreshold: 50,  };);
+    trackRender: true,trackMemory: true,warnThreshold: 50};);
     //
   const { theme   } = useTheme;
   performanceMonitor.recordRender();
   return (;)
-    <View style={styles.colorSwatch}>/      <View style={{[styles.colorBox, { backgroundColor: col;o;r   }}]} />/      <View style={styles.colorInfo}>/        <Text variant="body1" style={ fontWeight: "bold}} />/              {name}"
+    <View style={styles.colorSwatch}>/      <View style={[styles.colorBox, { backgroundColor: col;o;r   }}]} />/      <View style={styles.colorInfo}>/        <Text variant="body1" style={ fontWeight: "bold}} />/              {name}"
         </Text>/        <Text variant="caption" style={ color: theme.colors.onSurfaceVariant}} />/              {color}
         </Text>/        <Text variant="caption" style={ marginTop: 4}} />/              {description}
         </Text>/      </View>/    </View>/    );
@@ -37,7 +37,7 @@ importReact from react;
   return (;)
     <View style={styles.buttonShowcase}>/  >;
         marginBottom: 12,color: theme.colors.onSurface,fontWeight: bold"}} />/            {title};"
-      </Text>/      <View style={styles.buttonRow}>/            {buttons.map((btn, inde;x;) => ())
+      </Text>/      <View style={styles.buttonRow}>/            {buttons.map(btn, inde;x;) => ())
           <Button,
             key={index}
             variant={btn.variant}
@@ -53,7 +53,7 @@ importReact from react;
   return (;)
     <View style={styles.statusColors}>/  >;
         marginBottom: 12,color: theme.colors.onSurface,fontWeight: "bold}} />/            状态色彩系统;"
-      </Text>/      <View style={styles.statusRow}>/            {colors.map((status, inde;x;) => ())
+      </Text>/      <View style={styles.statusRow}>/            {colors.map(status, inde;x;) => ())
           <View key={index} style={styles.statusItem}>/  >
               styles.statusIndicator,
               { backgroundColor: status.color}
@@ -106,8 +106,8 @@ const BrandColorDemo: React.FC  = () => {}
     { color: theme.colors.info, name: "信息, icon: "ℹ️"}"
   ];
   return (;)
-    <ScrollView
-      style={{[styles.container, { backgroundColor: theme.colors.backgrou;n;d   }}]}
+    <ScrollView;
+      style={[styles.container, { backgroundColor: theme.colors.backgrou;n;d   }}]}
       showsVerticalScrollIndicator={false} />/      {/          <Text variant="h2" style={ ///  >
           color: theme.colors.primary,
           textAlign: center",
@@ -125,7 +125,7 @@ const BrandColorDemo: React.FC  = () => {}
           color: theme.colors.onSurfaceVariant,
           lineHeight: 24}} />/              索克绿代表生命力与健康，作为主色调传递专业可信赖的品牌形象；
           索克橙代表活力与温暖，作为次要色调，代表活力与温暖。
-        </Text>/        <Text variant="body2" style={{Object.assign({}}, styles.introText, { marginTop: 8})} />/              这套色彩系统完美融合了传统中医文化与现代设计美学，
+        </Text>/        <Text variant="body2" style={Object.assign({}}, styles.introText, { marginTop: 8})} />/              这套色彩系统完美融合了传统中医文化与现代设计美学，
           为用户提供既专业又温暖的健康管理体验。
         </Text>/      </View>/
       {///
@@ -141,7 +141,7 @@ const BrandColorDemo: React.FC  = () => {}
         </Text>/        <Text variant="body1" style={styles.footerText}>/              索克生活的品牌色彩设计深度融合了中医文化内涵与现代设计美学。
           索克绿象征着生命的蓬勃与健康的活力，体现了我们对用户健康的专业承诺；
           索克橙则代表着温暖的关怀与积极的生活态度，传递着我们对用户体验的用心呵护。
-        </Text>/        <Text variant="body2" style={{Object.assign({}}, styles.footerText, { marginTop: 12})} />/              这套色彩系统不仅在视觉上具有强烈的识别度，更在情感上与用户建立深度连接，
+        </Text>/        <Text variant="body2" style={Object.assign({}}, styles.footerText, { marginTop: 12})} />/              这套色彩系统不仅在视觉上具有强烈的识别度，更在情感上与用户建立深度连接，
           让每一次交互都充满温度，让健康管理变得更加人性化和有温度。
         </Text>/
         <View style={styles.modeIndicator}>/          <Text variant="caption" style={ color: theme.colors.onSurfaceVariant}} />/            当前模式：{isDark ? 🌙 暗黑模式" : "☀️ 浅色模式}

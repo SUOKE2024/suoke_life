@@ -9,7 +9,6 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true,
     "strict": true,
     "noImplicitAny": false,
     "strictNullChecks": false,

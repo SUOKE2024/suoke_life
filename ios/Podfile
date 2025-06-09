@@ -5,22 +5,24 @@ source 'https://cdn.cocoapods.org/'
 
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 
-platform :ios, '15.0'
+platform :ios, '15.1'
 prepare_react_native_project!
 
 target 'SuokeLife' do
   config = use_native_modules!
   
-  # 手动指定SocketRocket使用GitHub main分支
-  pod 'SocketRocket', :git => 'https://github.com/facebook/SocketRocket.git', :branch => 'main'
+  # 移除SocketRocket版本冲突，让React Native自动管理
+  # pod 'SocketRocket', '0.7.1'
   
   use_react_native!(
     :path => config[:reactNativePath],
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/..",
-    # 使用旧架构避免复杂依赖
-    :hermes_enabled => false,
-    :fabric_enabled => false
+    # 启用Hermes
+    :hermes_enabled => true,
+    # 使用旧架构
+    :fabric_enabled => false,
+    :new_arch_enabled => false
   )
 
   post_install do |installer|
@@ -33,8 +35,9 @@ target 'SuokeLife' do
     # 修复编译问题
     installer.pods_project.targets.each do |target|
       target.build_configurations.each do |config|
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
-        config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.1'
+        # 移除模拟器arm64排除，因为Apple Silicon Mac需要它
+        config.build_settings.delete('EXCLUDED_ARCHS[sdk=iphonesimulator*]')
       end
     end
   end

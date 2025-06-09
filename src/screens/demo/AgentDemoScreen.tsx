@@ -57,7 +57,7 @@ const AgentDemoScreen: React.FC  = () => {}
 const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(50)).current;
   const scaleAnim = useRef(new Animated.Value(0.9)).current;
-  useEffect(() => {
+  useEffect() => {
     // 页面进入动画
 Animated.parallel([)
       Animated.timing(fadeAnim, {
@@ -112,7 +112,7 @@ setTimeout() => {
       <StatusBar barStyle="light-content" backgroundColor="#2E7D32" /    >;
       {/* 头部 };
       <View style={styles.header}>;
-        <TouchableOpacity
+        <TouchableOpacity;
 style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
@@ -124,7 +124,7 @@ style={styles.backButton}
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {/* 智能体选择器 }
         <Animated.View;
-style={{[
+style={[
             styles.agentSelector,
             {
               opacity: fadeAnim,
@@ -133,15 +133,15 @@ style={{[
           ]}
         >
           <Text style={styles.sectionTitle}>选择智能体</    Text>
-          <ScrollView
+          <ScrollView;
 horizontal;
             showsHorizontalScrollIndicator={false}
             style={styles.agentList}
           >
             {agents.map(agent) => ()
-              <TouchableOpacity
+              <TouchableOpacity;
 key={agent.id}
-                style={{[
+                style={[
                   styles.agentCard,
                   { borderColor: agent.color }},
                   selectedAgent.id === agent.id && { backgroundColor: agent.color + "20 }"
@@ -150,14 +150,14 @@ key={agent.id}
               >
                 <Text style={styles.agentAvatar}>{agent.avatar}</    Text>
                 <Text style={styles.agentName}>{agent.name}</    Text>
-                <View style={{[styles.statusDot, { backgroundColor: getStatusColor(agent.status) }}]} /    >
+                <View style={[styles.statusDot, { backgroundColor: getStatusColor(agent.status) }}]} /    >
               </    TouchableOpacity>
             ))}
           </    ScrollView>
         </    Animated.View>
         {/* 选中智能体详情 }
         <Animated.View;
-style={{[
+style={[
             styles.agentDetails,
             {
               opacity: fadeAnim,
@@ -165,13 +165,13 @@ style={{[
             }
           ]}
         >
-          <View style={{[styles.agentHeader, { backgroundColor: selectedAgent.color }}]}>
+          <View style={[styles.agentHeader, { backgroundColor: selectedAgent.color }}]}>
             <Text style={styles.agentAvatarLarge}>{selectedAgent.avatar}</    Text>
             <View style={styles.agentInfo}>
               <Text style={styles.agentNameLarge}>{selectedAgent.name}</    Text>
               <Text style={styles.agentTitle}>{selectedAgent.title}</    Text>
               <View style={styles.statusContainer}>
-                <View style={{[styles.statusDotLarge, { backgroundColor: getStatusColor(selectedAgent.status) }}]} /    >
+                <View style={[styles.statusDotLarge, { backgroundColor: getStatusColor(selectedAgent.status) }}]} /    >
                 <Text style={styles.statusText}>{getStatusText(selectedAgent.status)}</    Text>
               </    View>
             </    View>
@@ -180,15 +180,15 @@ style={{[
             <Text style={styles.agentDescription}>{selectedAgent.description}</    Text>
             <Text style={styles.featuresTitle}>核心功能</    Text>
             <View style={styles.featuresList}>
-              {selectedAgent.features.map((feature, index) => ())
+              {selectedAgent.features.map(feature, index) => ())
                 <View key={index} style={styles.featureItem}>
-                  <View style={{[styles.featureDot, { backgroundColor: selectedAgent.color }}]} /    >
+                  <View style={[styles.featureDot, { backgroundColor: selectedAgent.color }}]} /    >
                   <Text style={styles.featureText}>{feature}</    Text>
                 </    View>
               ))}
             </    View>
-            <TouchableOpacity
-style={{[styles.interactButton, { backgroundColor: selectedAgent.color }}]}
+            <TouchableOpacity;
+style={[styles.interactButton, { backgroundColor: selectedAgent.color }}]}
               onPress={handleInteract}
               disabled={isInteracting}
             >
@@ -200,7 +200,7 @@ style={{[styles.interactButton, { backgroundColor: selectedAgent.color }}]}
         </    Animated.View>
         {/* 使用说明 }
         <Animated.View;
-style={{[
+style={[
             styles.instructionSection,
             {
               opacity: fadeAnim,
@@ -220,7 +220,7 @@ style={{[
     </    SafeAreaView>
   );
 };
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   flex: 1,
     backgroundColor: #F5F5F5"},"
   header: {,

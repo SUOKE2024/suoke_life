@@ -2,7 +2,7 @@
 gateway - 索克生活项目模块
 """
 
-from datetime import datetime
+import datetime
 from pydantic import BaseModel, Field
 from typing import Any, Dict, List, Optional, Union
 

@@ -11,21 +11,17 @@ jest.setTimeout(300000); // 5分钟
 jest.mock('react-native', () => ({
   Platform: {
       OS: "ios",
-      select: jest.fn((obj) => obj.ios || obj.default),
-  },
+      select: jest.fn((obj) => obj.ios || obj.default)},
   Dimensions: {
     get: jest.fn(() => ({
       width: 375,
       height: 812,
       scale: 3,
-      fontScale: 1,
-    })),
+      fontScale: 1})),
     addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-  },
+    removeEventListener: jest.fn()},
   Alert: {
-    alert: jest.fn(),
-  },
+    alert: jest.fn()},
   View: 'View',
   Text: 'Text',
   TouchableOpacity: 'TouchableOpacity',
@@ -40,47 +36,37 @@ jest.mock('react-native', () => ({
   Pressable: 'Pressable',
   StyleSheet: {
     create: jest.fn((styles) => styles),
-    flatten: jest.fn((style) => style),
-  },
-}));
+    flatten: jest.fn((style) => style)}}));
 // 模拟导航
 jest.mock('@react-navigation/native', () => ({
   useNavigation: () => ({
     navigate: jest.fn(),
     goBack: jest.fn(),
     reset: jest.fn(),
-    setParams: jest.fn(),
-  }),
+    setParams: jest.fn()}),
   useRoute: () => ({
-    params: {},
-  }),
+    params: {}}),
   useFocusEffect: jest.fn(),
-  NavigationContainer: ({ children }: { children: React.ReactNode }) => children,
-}));
+  NavigationContainer: ({ children }: { children: React.ReactNode }) => children}));
 // 模拟Redux
 jest.mock('react-redux', () => ({
   useSelector: jest.fn((selector) => selector({
     auth: {
       isAuthenticated: false,
       user: null,
-      token: null,
-    },
+      token: null},
     agents: {
       xiaoai: { status: 'idle' },
       xiaoke: { status: 'idle' },
       laoke: { status: 'idle' },
-      soer: { status: 'idle' },
-    },
+      soer: { status: 'idle' }},
     health: {
       data: [],
-      diagnosis: null,
-    },
-  })),
+      diagnosis: null}})),
   useDispatch: () => jest.fn(),
-  Provider: ({ children }: { children: React.ReactNode }) => children,
-}));
+  Provider: ({ children }: { children: React.ReactNode }) => children}));
 // 模拟fetch
-global.fetch = jest.fn(() =>)
+global.fetch = jest.fn(() =>
   Promise.resolve({
     ok: true,
     status: 200,
@@ -90,7 +76,7 @@ global.fetch = jest.fn(() =>)
 ) as jest.Mock;
 // 确保fetch在每个测试前都被重置
 beforeEach(() => {
-  global.fetch = jest.fn(() =>)
+  global.fetch = jest.fn(() =>
     Promise.resolve({
       ok: true,
       status: 200,
@@ -108,4 +94,4 @@ afterEach(() => {
 });
 // 测试环境信息
 console.log('🚀 索克生活端到端测试环境已初始化（最小化版）');
-export {};
+export { };

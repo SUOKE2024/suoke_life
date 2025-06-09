@@ -1,46 +1,67 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  TextInput,
-  StatusBar,
-  Alert,
-  ActivityIndicator,
-  Dimensions,
-  Animated,
-  RefreshControl,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import React, { useCallback, useEffect, useState } from 'react';
+import {
+  ActivityIndicator,
+  Alert,
+  Animated,
+  Dimensions,
+  FlatList,
+  RefreshControl,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 // import LinearGradient from 'react-native-linear-gradient';
 const { width, height } = Dimensions.get('window');
-// 聊天项类型定义
-interface ChatItem {
-  id: string;
+// 联系人类型定义
+export interface Contact {
+  id: string;,
   name: string;
-  avatar: string;
+  avatar: string;,
   message: string;
-  time: string;
+  time: string;,
   unread: number;
-  type: 'agent' | 'doctor' | 'user';
+  type: 'agent' | 'doctor' | 'user' | 'service';
   isOnline?: boolean;
   tag?: string;
   priority?: number;
+  serviceEndpoint?: string;
+  status?: 'active' | 'inactive' | 'maintenance';
+}
+// 联系人组类型定义
+export interface ContactGroup {
+  id: string;,
+  name: string;
+  contacts: Contact[];,
+  type: 'agents' | 'medical' | 'community' | 'services';
+}
+// 微服务状态类型
+interface ServiceStatus {
+  name: string;,
+  endpoint: string;
+  status: 'healthy' | 'unhealthy' | 'unknown';,
+  lastCheck: Date;
+  responseTime?: number;
 }
 type MainTabParamList = {
-  Home: undefined,
+  Home: undefined;,
   Suoke: undefined;
-  Explore: undefined,
+  Explore: undefined;,
   Life: undefined;
-  Profile: undefined,
+  Profile: undefined;,
   ChatDetail: { chatId: string; chatType: string; chatName: string };
+  AgentChat: { agentId: string; agentName: string };
+  DiagnosisService: { serviceType: string };
+  HealthData: undefined;,
+  KnowledgeBase: undefined;
 };
 type HomeScreenNavigationProp = NativeStackNavigationProp<
   MainTabParamList,
@@ -49,7 +70,8 @@ type HomeScreenNavigationProp = NativeStackNavigationProp<
 const HomeScreen: React.FC = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const [searchQuery, setSearchQuery] = useState('');
-  const [chatList, setChatList] = useState<ChatItem[]>([]);
+  const [contactGroups, setContactGroups] = useState<ContactGroup[]>([]);
+  const [serviceStatuses, setServiceStatuses] = useState<ServiceStatus[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [fadeAnim] = useState(new Animated.Value(0));
@@ -57,61 +79,63 @@ const HomeScreen: React.FC = () => {
   // 从Redux获取用户信息
   const authState = useSelector(state: RootState) => state.auth);
   const user = 'user' in authState ? authState.user : null;
+  // 微服务配置
+  const microservices = {
+    agents: {,
+  xiaoai: { name: '小艾', port: 8015, description: '多模态感知智能体' },
+      xiaoke: { name: '小克', port: 8016, description: '健康服务智能体' },
+      laoke: { name: '老克', port: 8017, description: '知识传播智能体' },
+      soer: { name: '索儿', port: 8018, description: '营养生活智能体' },
+    },
+    diagnosis: {,
+  calculation: { name: '算诊服务', port: 8023, description: '计算诊断' },
+      look: { name: '望诊服务', port: 8020, description: '图像分析诊断' },
+      listen: { name: '闻诊服务', port: 8022, description: '语音分析诊断' },
+      inquiry: { name: '问诊服务', port: 8021, description: '问答交互诊断' },
+      palpation: { name: '切诊服务', port: 8024, description: '触诊模拟' },
+    },
+    core: {,
+  gateway: { name: 'API网关', port: 8000, description: '统一入口' },
+      user: { name: '用户管理', port: 8001, description: '用户服务' },
+      knowledge: { name: '知识服务', port: 8002, description: '统一知识库' },
+      health: { name: '健康数据', port: 8003, description: '健康数据管理' },
+      blockchain: { name: '区块链服务', port: 8004, description: '隐私保护' },
+      communication: { name: '通信服务', port: 8005, description: '消息通信' },
+    },
+  };
   // 工具函数
-  const getAgentName = (agentType: string): string => {
-    const names: Record<string, string> = {
-      xiaoai: "小艾", "
-      xiaoke: '小克',
-      laoke: '老克',
-      soer: '索儿',
+  const getAgentInfo = (agentType: string) => {
+    const agentConfigs = {
+      xiaoai: {,
+  name: '小艾',
+        avatar: '🤖',
+        tag: '多模态感知',
+        greeting: '您好！我是小艾，可以帮您分析图像、语音等多模态数据',
+        colors: { primary: '#4A90E2', secondary: '#E3F2FD' },
+      },
+      xiaoke: {,
+  name: '小克',
+        avatar: '🧘‍♂️',
+        tag: '健康服务',
+        greeting: '您好！我是小克，专注为您提供个性化健康服务',
+        colors: { primary: '#7B68EE', secondary: '#F3E5F5' },
+      },
+      laoke: {,
+  name: '老克',
+        avatar: '👨‍⚕️',
+        tag: '知识传播',
+        greeting: '您好！我是老克，让我为您分享健康知识和经验',
+        colors: { primary: '#FF6B6B', secondary: '#FFEBEE' },
+      },
+      soer: {,
+  name: '索儿',
+        avatar: '🏃‍♀️',
+        tag: '营养生活',
+        greeting: '您好！我是索儿，帮您制定营养计划和生活方式',
+        colors: { primary: '#4ECDC4', secondary: '#E0F2F1' },
+      },
     };
-    return names[agentType] || agentType;
-  };
-  const getAgentAvatar = (agentType: string): string => {
-    const avatars: Record<string, string> = {
-      xiaoai: "🤖",
-      xiaoke: '🧘‍♂️',
-      laoke: '👨‍⚕️',
-      soer: '🏃‍♀️',
-    };
-    return avatars[agentType] || '🤖';
-  };
-  const getAgentTag = (agentType: string): string => {
-    const tags: Record<string, string> = {
-      xiaoai: "健康助手", "
-      xiaoke: '中医辨证',
-      laoke: '健康顾问',
-      soer: '生活教练',
-    };
-    return tags[agentType] || '';
-  };
-  const getAgentGreeting = (agentType: string): string => {
-    const greetings: Record<string, string> = {
-      xiaoai: "您好！我是小艾，有什么健康问题需要咨询吗？", "
-      xiaoke: '您好！我是小克，需要什么服务帮助吗？',
-      laoke: '您好！我是老克，想学习什么健康知识呢？',
-      soer: '您好！我是索儿，今天想了解什么生活建议呢？',
-    };
-    return greetings[agentType] || '您好！';
-  };
-  const getAgentColors = (agentType: string): { primary: string; secondary: string } => {
-    const colors: Record<string, { primary: string; secondary: string }> = {
-      xiaoai: {
-      primary: "#4A90E2",
-      secondary: '#E3F2FD' },
-      xiaoke: {
-      primary: "#7B68EE",
-      secondary: '#F3E5F5' },
-      laoke: {
-      primary: "#FF6B6B",
-      secondary: '#FFEBEE' },
-      soer: {
-      primary: "#4ECDC4",
-      secondary: '#E0F2F1' },
-    };
-    return colors[agentType] || {
-      primary: "#4A90E2",
-      secondary: '#E3F2FD' };
+    return agentConfigs[agentType] || agentConfigs.xiaoai;
   };
   const formatTime = (timestamp: string | Date | number): string => {
     if (!timestamp) return '';
@@ -126,98 +150,141 @@ const HomeScreen: React.FC = () => {
     if (diffHours < 24) return `${diffHours}小时前`;
     if (diffDays < 7) return `${diffDays}天前`;
     return date.toLocaleDateString('zh-CN', {
-      month: "short",
-      day: 'numeric' });
+      month: 'short',
+      day: 'numeric',
+    });
   };
-  // 生成智能体聊天数据
-  const generateAgentChats = (): ChatItem[] => {
-    return ["xiaoai",xiaoke', "laoke",soer'].map((agentType, index) => ({
-      id: agentType,
-      name: getAgentName(agentType),
-      avatar: getAgentAvatar(agentType),
-      message: getAgentGreeting(agentType),
-      time: '刚刚',
-      unread: Math.floor(Math.random() * 3), // 随机未读数
-      type: 'agent' as const,
-      isOnline: Math.random() > 0.3, // 70%概率在线
-      tag: getAgentTag(agentType),
-      priority: 10 - index, // 优先级
-    }));
+  // 生成智能体联系人数据
+  const generateAgentContacts = (): Contact[] => {
+    return Object.entries(microservices.agents).map([agentType, config], index) => {
+        const agentInfo = getAgentInfo(agentType);
+        return {
+          id: agentType,
+          name: agentInfo.name,
+          avatar: agentInfo.avatar,
+          message: agentInfo.greeting,
+          time: '在线',
+          unread: Math.floor(Math.random() * 3),
+          type: 'agent' as const,
+          isOnline: true,
+          tag: agentInfo.tag,
+          priority: 10 - index,
+          serviceEndpoint: `http://localhost:${config.port}`,
+          status: 'active',
+        };
+      }
+    );
   };
-  // 生成医生聊天数据
-  const generateDoctorChats = (): ChatItem[] => {
+  // 生成诊断服务联系人数据
+  const generateDiagnosisContacts = (): Contact[] => {
+    return Object.entries(microservices.diagnosis).map([serviceType, config], index) => ({
+        id: `diagnosis_${serviceType}`,
+        name: config.name,
+        avatar: ['🔍', '👁️', '👂', '💬', '🤲'][index] || '🔍',
+        message: `${config.description}服务已就绪`,
+        time: '服务中',
+        unread: 0,
+        type: 'service' as const,
+        isOnline: true,
+        tag: '诊断服务',
+        priority: 8 - index,
+        serviceEndpoint: `http://localhost:${config.port}`,
+        status: 'active',
+      })
+    );
+  };
+  // 生成核心服务联系人数据
+  const generateCoreServiceContacts = (): Contact[] => {
+    return Object.entries(microservices.core).map([serviceType, config], index) => ({
+        id: `core_${serviceType}`,
+        name: config.name,
+        avatar: ['🌐', '👤', '📚', '💊', '🔐', '📡'][index] || '⚙️',
+        message: `${config.description}运行正常`,
+        time: '运行中',
+        unread: 0,
+        type: 'service' as const,
+        isOnline: true,
+        tag: '核心服务',
+        priority: 6 - index,
+        serviceEndpoint: `http://localhost:${config.port}`,
+        status: 'active',
+      })
+    );
+  };
+  // 生成医生联系人数据
+  const generateDoctorContacts = (): Contact[] => {
     const doctors = [
       {
-      name: "张医生", "
-      specialty: '中医内科', message: '您的检查结果已出，一切正常' },
+        name: '张医生',
+        specialty: '中医内科',
+        message: '您的检查结果已出，一切正常',
+      },
       {
-      name: "李教授", "
-      specialty: '针灸专家', message: '请按照方案坚持服药，下周复诊' },
+        name: '李教授',
+        specialty: '针灸专家',
+        message: '请按照方案坚持服药，下周复诊',
+      },
       {
-      name: "王主任", "
-      specialty: '康复科', message: '康复训练进展良好，继续保持' },
+        name: '王主任',
+        specialty: '康复科',
+        message: '康复训练进展良好，继续保持',
+      },
     ];
-    return doctors.map((doctor, index) => ({
+    return doctors.map(doctor, index) => ({
       id: `doctor_${index}`,
       name: doctor.name,
       avatar: index % 2 === 0 ? '👩‍⚕️' : '👨‍⚕️',
       message: doctor.message,
-      time: ["周二", "上周', '3天前'][index],
+      time: ['周二', '上周', '3天前'][index],
       unread: index === 0 ? 1 : 0,
       type: 'doctor' as const,
       tag: doctor.specialty,
       priority: 5 - index,
+      status: 'active',
     }));
   };
-  // 生成用户群组数据
-  const generateUserChats = (): ChatItem[] => {
-    const groups = [
-      {
-      name: "健康小组", "
-      message: '[王医生]: 分享了一篇养生文章', unread: 3 },
-      {
-      name: "家人健康群", "
-      message: '[妈妈]: 今天按时吃药了吗？', unread: 0 },
-      {
-      name: "运动打卡群", "
-      message: '[小明]: 今天跑步5公里完成！', unread: 2 },
-    ];
-    return groups.map((group, index) => ({
-      id: `group_${index}`,
-      name: group.name,
-      avatar: '👥',
-      message: group.message,
-      time: ["周三", "3/15', '昨天'][index],
-      unread: group.unread,
-      type: 'user' as const,
-      priority: 2 - index,
-    }));
-  };
-  // 加载聊天列表
-  const loadChatList = useCallback(async () => {
+  // 加载联系人组数据
+  const loadContactGroups = useCallback(async () => {
     try {
       setLoading(true);
+
       // 模拟API延迟
-      await new Promise(resolve => setTimeout(resolve, 800));
-      // 生成聊天数据
-      const agentChats = generateAgentChats();
-      const doctorChats = generateDoctorChats();
-      const userChats = generateUserChats();
-      const allChats = [...agentChats, ...doctorChats, ...userChats];
-      // 按优先级排序
-      allChats.sort(a, b) => {
-        if (a.type === 'agent' && b.type !== 'agent') return -1;
-        if (a.type !== 'agent' && b.type === 'agent') return 1;
-        if (a.unread > 0 && b.unread === 0) return -1;
-        if (a.unread === 0 && b.unread > 0) return 1;
-        return (b.priority || 0) - (a.priority || 0);
-      });
-      setChatList(allChats);
+      await new Promise(resolve) => setTimeout(resolve, 1000));
+
+      const groups: ContactGroup[] = [
+        {
+          id: 'agents',
+          name: '智能体服务',
+          contacts: generateAgentContacts(),
+          type: 'agents',
+        },
+        {
+          id: 'diagnosis',
+          name: '诊断服务',
+          contacts: generateDiagnosisContacts(),
+          type: 'services',
+        },
+        {
+          id: 'core',
+          name: '核心服务',
+          contacts: generateCoreServiceContacts(),
+          type: 'services',
+        },
+        {
+          id: 'medical',
+          name: '医疗专家',
+          contacts: generateDoctorContacts(),
+          type: 'medical',
+        },
+      ];
+
+      setContactGroups(groups);
+
       // 启动动画
-      Animated.parallel([)
+      Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 1,
-          duration: 600,
+          duration: 800,
           useNativeDriver: true,
         }),
         Animated.timing(slideAnim, {
@@ -227,164 +294,171 @@ const HomeScreen: React.FC = () => {
         }),
       ]).start();
     } catch (error) {
-      console.error('加载聊天列表失败:', error);
-      Alert.alert("错误", "加载聊天列表失败，请稍后重试');
+      console.error('加载联系人失败:', error);
+      Alert.alert('错误', '加载联系人失败，请重试');
     } finally {
       setLoading(false);
     }
   }, [fadeAnim, slideAnim]);
-  // 下拉刷新
+  // 刷新数据
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    await loadChatList();
+    await loadContactGroups();
     setRefreshing(false);
-  }, [loadChatList]);
-  // 初始化
-  useEffect(() => {
-    loadChatList();
-  }, [loadChatList]);
-  // 搜索过滤
-  const filteredChatList = chatList.filter(item =>)
-    item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    item.message.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
-  // 处理聊天项点击
-  const handleChatPress = (item: ChatItem) => {
-    navigation.navigate('ChatDetail', {
-      chatId: item.id,
-      chatType: item.type,
-      chatName: item.name,
-    });
+  }, [loadContactGroups]);
+  // 处理联系人点击
+  const handleContactPress = (contact: Contact) => {
+    if (contact.type === 'agent') {
+      navigation.navigate('AgentChat', {
+        agentId: contact.id,
+        agentName: contact.name,
+      });
+    } else if (contact.type === 'service') {
+      if (contact.id.startsWith('diagnosis_')) {
+        navigation.navigate('DiagnosisService', {
+          serviceType: contact.id.replace('diagnosis_', ''),
+        });
+      } else {
+        // 处理核心服务导航
+        handleCoreServiceNavigation(contact.id);
+      }
+    } else if (contact.type === 'doctor') {
+      navigation.navigate('ChatDetail', {
+        chatId: contact.id,
+        chatType: 'doctor',
+        chatName: contact.name,
+      });
+    }
   };
-  // 渲染聊天项
-  const renderChatItem = ({ item, index }: { item: ChatItem; index: number }) => {
-    const colors = item.type === 'agent' ? getAgentColors(item.id) : {
-      primary: "#666",
-      secondary: '#F5F5F5' };
+  // 处理核心服务导航
+  const handleCoreServiceNavigation = (serviceId: string) => {
+    switch (serviceId) {
+      case 'core_user':
+        navigation.navigate('Profile');
+        break;
+      case 'core_knowledge':
+        navigation.navigate('KnowledgeBase');
+        break;
+      case 'core_health':
+        navigation.navigate('HealthData');
+        break;
+      default:
+        Alert.alert('提示', `${serviceId} 服务功能开发中`);
+    }
+  };
+  // 过滤联系人
+  const filteredGroups = contactGroups;
+    .map(group) => ({
+      ...group,
+      contacts: group.contacts.filter(contact) =>
+          contact.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          contact.tag?.toLowerCase().includes(searchQuery.toLowerCase())
+      ),
+    }))
+    .filter(group) => group.contacts.length > 0);
+  useEffect() => {
+    loadContactGroups();
+  }, [loadContactGroups]);
+  // 渲染联系人项
+  const renderContactItem = ({ item: contact }: { item: Contact }) => {
+    const agentInfo =
+      contact.type === 'agent' ? getAgentInfo(contact.id) : null;
+    const colors = agentInfo?.colors || {
+      primary: '#4A90E2',
+      secondary: '#E3F2FD',
+    };
     return (
-  <Animated.View;
-        style={{[
-          styles.chatItemContainer,
+      <Animated.View;
+        style={[
+          styles.contactItemContainer,
           {
             opacity: fadeAnim,
-            transform: [{ translateY: slideAnim }}],
+            transform: [{ translateY: slideAnim }],
           },
         ]}
       >
-        <TouchableOpacity
-          style={{[
-            styles.chatItem,
-            item.type === 'agent' && styles.agentChatItem,
-          ]}}
-          onPress={() => handleChatPress(item)}
+        <TouchableOpacity;
+          style={[
+            styles.contactItem,
+            contact.type === 'agent' && {
+              borderLeftWidth: 4,
+              borderLeftColor: colors.primary,
+            },
+          ]}
+          onPress={() => handleContactPress(contact)}
           activeOpacity={0.7}
         >
-          {}
           <View style={styles.avatarContainer}>
-            <View style={{[
-              styles.avatarWrapper,
-              { backgroundColor: colors.secondary }},
-            ]}>
-              <Text style={{[styles.avatar, { color: colors.primary }}]}>
-                {item.avatar}
-              </Text>
-              {item.isOnline  && <View style={styles.onlineIndicator}>
-              )}
+            <View;
+              style={[
+                styles.avatarWrapper,
+                { backgroundColor: colors.secondary },
+              ]}
+            >
+              <Text style={styles.avatar}>{contact.avatar}</Text>
+              {contact.isOnline && <View style={styles.onlineIndicator} />}
             </View>
           </View>
-          {}
           <View style={styles.contentContainer}>
             <View style={styles.headerRow}>
-              <Text style={{[
-                styles.chatName,
-                item.type === 'agent' && { color: colors.primary }},
-              ]}>
-                {item.name}
-              </Text>
-              {item.tag  && <View style={{[styles.tagContainer, { backgroundColor: colors.secondary }}]}>
-                  <Text style={{[styles.tagText, { color: colors.primary }}]}>
-                    {item.tag}
+              <Text style={styles.contactName}>{contact.name}</Text>
+              {contact.tag && (
+                <View;
+                  style={[
+                    styles.tagContainer,
+                    { backgroundColor: colors.primary },
+                  ]}
+                >
+                  <Text style={[styles.tagText, { color: '#FFFFFF' }]}>
+                    {contact.tag}
                   </Text>
                 </View>
               )}
-              <Text style={styles.timeText}>{item.time}</Text>
+              <Text style={styles.timeText}>{contact.time}</Text>
             </View>
             <Text style={styles.messageText} numberOfLines={2}>
-              {item.message}
+              {contact.message}
             </Text>
           </View>
-          {}
           <View style={styles.statusContainer}>
-            {item.unread > 0  && <View style={{[styles.unreadBadge, { backgroundColor: colors.primary }}]}>
-                <Text style={styles.unreadText}>
-                  {item.unread > 99 ? '99+' : item.unread}
-                </Text>
+            {contact.unread > 0 && (
+              <View;
+                style={[
+                  styles.unreadBadge,
+                  { backgroundColor: colors.primary },
+                ]}
+              >
+                <Text style={styles.unreadText}>{contact.unread}</Text>
               </View>
             )}
-            <Icon
+            <Icon;
               name="chevron-right"
               size={20}
-              color="#C0C0C0"
-              style={styles.chevronIcon}>
+              color="#CCC"
+              style={styles.chevronIcon}
+            />
           </View>
         </TouchableOpacity>
       </Animated.View>
     );
   };
-  // 渲染头部
-  const renderHeader = () => (
-  <View style={styles.header}>
-      <View style={styles.headerGradient}>
-        <View style={styles.headerContent}>
-          <View style={styles.greetingContainer}>
-            <Text style={styles.greetingText}>
-              {user && typeof user === 'object' && 'name' in user ? `你好，${(user as any).name}` : '你好'}
-            </Text>
-            <Text style={styles.subGreetingText}>
-              今天想聊些什么呢？
-            </Text>
-          </View>
-          <TouchableOpacity style={styles.profileButton}>
-            <Icon name="account-circle" size={32} color="#FFFFFF" />
-          </TouchableOpacity>
-        </View>
-      </View>
-      {}
-      <View style={styles.searchContainer}>
-        <View style={styles.searchInputContainer}>
-          <Icon name="magnify" size={20} color="#999" style={styles.searchIcon}>
-          <TextInput
-            style={styles.searchInput}
-            placeholder="搜索聊天记录..."
-            placeholderTextColor="#999"
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-          {searchQuery.length > 0  && <TouchableOpacity
-              onPress={() => setSearchQuery('')}
-              style={styles.clearButton}
-            >
-              <Icon name="close-circle" size={20} color="#999" />
-            </TouchableOpacity>
-          )}
-        </View>
-      </View>
+  // 渲染联系人组
+  const renderContactGroup = ({ item: group }: { item: ContactGroup }) => (
+    <View style={styles.groupContainer}>
+      <Text style={styles.groupTitle}>{group.name}</Text>
+      <FlatList;
+        data={group.contacts}
+        renderItem={renderContactItem}
+        keyExtractor={(item) => item.id}
+        scrollEnabled={false}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
+      />
     </View>
   );
-  // 渲染空状态
-  const renderEmptyState = () => (
-  <View style={styles.emptyContainer}>
-      <Icon name="chat-outline" size={64} color="#C0C0C0" />
-      <Text style={styles.emptyTitle}>暂无聊天记录</Text>
-      <Text style={styles.emptySubtitle}>开始与AI智能体对话吧</Text>
-    </View>
-  );
-  // 渲染加载状态
   if (loading) {
     return (
-  <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="#4A90E2" />
-        {renderHeader()}
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#4A90E2" />
           <Text style={styles.loadingText}>加载中...</Text>
@@ -393,25 +467,81 @@ const HomeScreen: React.FC = () => {
     );
   }
   return (
-  <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#4A90E2" />
-      <FlatList
-        data={filteredChatList}
+
+      {/* 头部 */}
+      <View style={styles.header}>
+        <View style={styles.headerGradient}>
+          <View style={styles.headerContent}>
+            <View style={styles.greetingContainer}>
+              <Text style={styles.greetingText}>
+                {user && typeof user === 'object' && 'name' in user;
+                  ? `你好，${(user as any).name}`
+                  : '欢迎使用索克生活'}
+              </Text>
+              <Text style={styles.subGreetingText}>智能健康管理平台</Text>
+            </View>
+            <TouchableOpacity;
+              style={styles.profileButton}
+              onPress={() => navigation.navigate('Profile')}
+            >
+              <Icon name="account-circle" size={32} color="#FFFFFF" />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+
+      {/* 搜索框 */}
+      <View style={styles.searchContainer}>
+        <View style={styles.searchInputContainer}>
+          <Icon;
+            name="magnify"
+            size={20}
+            color="#999"
+            style={styles.searchIcon}
+          />
+          <TextInput;
+            style={styles.searchInput}
+            placeholder="搜索服务或联系人..."
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            placeholderTextColor="#999"
+          />
+          {searchQuery.length > 0 && (
+            <TouchableOpacity;
+              style={styles.clearButton}
+              onPress={() => setSearchQuery('')}
+            >
+              <Icon name="close-circle" size={20} color="#999" />
+            </TouchableOpacity>
+          )}
+        </View>
+      </View>
+
+      {/* 联系人列表 */}
+      <FlatList;
+        data={filteredGroups}
+        renderItem={renderContactGroup}
         keyExtractor={(item) => item.id}
-        renderItem={renderChatItem}
-        ListHeaderComponent={renderHeader}
-        ListEmptyComponent={renderEmptyState}
+        style={styles.listContainer}
         refreshControl={
-          <RefreshControl
+          <RefreshControl;
             refreshing={refreshing}
             onRefresh={onRefresh}
             colors={['#4A90E2']}
             tintColor="#4A90E2"
           />
         }
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.listContainer}
-        ItemSeparatorComponent={() => <View style={styles.separator}>}
+        ListEmptyComponent={() => (
+          <View style={styles.emptyContainer}>
+            <Icon name="account-search" size={64} color="#CCC" />
+            <Text style={styles.emptyTitle}>没有找到匹配的联系人</Text>
+            <Text style={styles.emptySubtitle}>
+              {searchQuery ? '尝试其他搜索词' : '下拉刷新重新加载'}
+            </Text>
+          </View>
+        )}
       />
     </SafeAreaView>
   );
@@ -422,8 +552,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8F9FA',
   },
   header: {,
-  backgroundColor: '#FFFFFF',
-    borderBottomLeftRadius: 20,
+  borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -487,11 +616,21 @@ const styles = StyleSheet.create({
   listContainer: {,
   paddingBottom: 20,
   },
-  chatItemContainer: {,
+  groupContainer: {,
+  marginBottom: 20,
+  },
+  groupTitle: {,
+  fontSize: 18,
+    fontWeight: '600',
+    color: '#333',
+    marginHorizontal: 20,
+    marginBottom: 10,
+  },
+  contactItemContainer: {,
   marginHorizontal: 15,
     marginVertical: 4,
   },
-  chatItem: {,
+  contactItem: {,
   flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
@@ -502,10 +641,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 2,
-  },
-  agentChatItem: {,
-  borderLeftWidth: 4,
-    borderLeftColor: '#4A90E2',
   },
   avatarContainer: {,
   marginRight: 12,
@@ -542,7 +677,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 4,
   },
-  chatName: {,
+  contactName: {,
   fontSize: 16,
     fontWeight: '600',
     color: '#333',

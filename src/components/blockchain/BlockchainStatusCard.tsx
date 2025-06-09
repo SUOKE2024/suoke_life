@@ -26,14 +26,14 @@ export const BlockchainStatusCard: React.FC<BlockchainStatusCardProps> = ({
   const formatBlockHeight = (height: number) => {return height.toLocaleString('zh-CN');
   };
   return (
-  <TouchableOpacity
-      style={{[styles.container, { borderLeftColor: getStatusColor() }}]}
+  <TouchableOpacity;
+      style={[styles.container, { borderLeftColor: getStatusColor() }}]}
       onPress={onPress}
       activeOpacity={0.7}
     >
       <View style={styles.header}>
         <View style={styles.statusIndicator}>
-          <View style={{[styles.statusDot, { backgroundColor: getStatusColor() }}]} />
+          <View style={[styles.statusDot, { backgroundColor: getStatusColor() }}]} />
           <Text style={styles.statusText}>{getStatusText()}</Text>
         </View>
         <TouchableOpacity onPress={refresh} style={styles.refreshButton}>
@@ -161,8 +161,8 @@ export const BlockchainStatusIndicator: React.FC<{
     return '#FF6B6B';
   };
   return (;)
-    <View
-      style={{[;
+    <View;
+      style={[;
         {width: getSize(),height: getSize(),borderRadius: getSize() / 2,backgroundColor: getColor();
         }}
       ]}
@@ -174,27 +174,27 @@ export const BlockchainNetworkStats: React.FC = () => {
   const { status, isConnected } = useBlockchainStatusMonitor();
   if (!isConnected || !status) {
     return (;)
-      <View style={{statsStyles.statsContainer}}>;
+      <View style={statsStyles.statsContainer}}>;
         <ActivityIndicator size='small' color='#6C757D' />;
-        <Text style={{statsStyles.statsText}}>连接中...</Text>;
+        <Text style={statsStyles.statsText}}>连接中...</Text>;
       </View>;
     );
   }
   return (
-  <View style={{statsStyles.statsContainer}}>
-      <View style={{statsStyles.statItem}}>
-        <Text style={{statsStyles.statValue}}>{status.currentBlockHeight.toLocaleString()}</Text>
-        <Text style={{statsStyles.statLabel}}>区块高度</Text>
+  <View style={statsStyles.statsContainer}}>
+      <View style={statsStyles.statItem}}>
+        <Text style={statsStyles.statValue}}>{status.currentBlockHeight.toLocaleString()}</Text>
+        <Text style={statsStyles.statLabel}}>区块高度</Text>
       </View>;
-      <View style={{statsStyles.statDivider}} />;
-      <View style={{statsStyles.statItem}}>;
-        <Text style={{statsStyles.statValue}}>{status.nodeCount}</Text>;
-        <Text style={{statsStyles.statLabel}}>网络节点</Text>;
+      <View style={statsStyles.statDivider}} />;
+      <View style={statsStyles.statItem}}>;
+        <Text style={statsStyles.statValue}}>{status.nodeCount}</Text>;
+        <Text style={statsStyles.statLabel}}>网络节点</Text>;
       </View>;
-      <View style={{statsStyles.statDivider}} />;
-      <View style={{statsStyles.statItem}}>;
-        <Text style={{statsStyles.statValue}}>{status.transactionPoolSize}</Text>;
-        <Text style={{statsStyles.statLabel}}>待处理交易</Text>;
+      <View style={statsStyles.statDivider}} />;
+      <View style={statsStyles.statItem}}>;
+        <Text style={statsStyles.statValue}}>{status.transactionPoolSize}</Text>;
+        <Text style={statsStyles.statLabel}}>待处理交易</Text>;
       </View>;
     </View>;
   );

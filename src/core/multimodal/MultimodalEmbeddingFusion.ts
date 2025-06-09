@@ -13,16 +13,16 @@ export enum ModalityType {
 * 嵌入向量接口
 */
 export interface Embedding {
-  id: string;
+  id: string;,
   vector: number[];
-  modality: ModalityType;
+  modality: ModalityType;,
   metadata: Record<string, any>;
 }
 /**
 * 融合策略接口
 */
 export interface FusionStrategy {
-  name: string;
+  name: string;,
   weights: Record<ModalityType, number>;
   method: 'concatenation' | 'attention' | 'weighted_sum' | 'cross_modal_attention';
   parameters?: Record<string, any>;
@@ -31,9 +31,9 @@ export interface FusionStrategy {
 * 融合结果接口
 */
 export interface FusionResult {
-  fusedEmbedding: number[];
+  fusedEmbedding: number[];,
   modalityWeights: Record<ModalityType, number>;
-  confidence: number;
+  confidence: number;,
   strategy: string;
   metadata: Record<string, any>;
 }
@@ -259,7 +259,7 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
     const values = embeddings.map(e => e.vector);
     const { weights, output } = this.crossModalAttention.computeAttention(query, keys, values);
     const modalityWeights: Record<ModalityType, number> = {};
-    embeddings.forEach(((embedding, index) => {
+    embeddings.forEach((embedding, index) => {
       modalityWeights[embedding.modality] = weights[index];
     });
     return { embedding: output, weights: modalityWeights };

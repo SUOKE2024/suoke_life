@@ -39,7 +39,7 @@ scholarly",       tone: wise",            / 睿智的语调*  知识专业*  教
       const response = await apiClient.post(`${this.serviceEndpoint}/search-knowledge`, {/            query,category,)
         filters,
         user_level: userLev;e;l;};);
-      return response.data.map(result: unknow;n;); => ({,)
+      return response.data.map(result: unknow;n;); => ({),
   id: result.id,
         title: result.title,
         content: result.content,
@@ -68,14 +68,14 @@ scholarly",       tone: wise",            / 睿智的语调*  知识专业*  教
       const response = await apiClient.post(`${this.serviceEndpoint}/create-learning-path`, {/            user_profile: userProfile,learning_goals: learningGoals,)
         preferences,
         time_constraints: timeConstrain;t;s;};);
-      return {id: response.data.id,title: response.data.title,description: response.data.description,difficulty: response.data.difficulty,estimatedDuration: response.data.estimated_duration,modules: response.data.modules.map(module: unknow;n;); => ({,)
+      return {id: response.data.id,title: response.data.title,description: response.data.description,difficulty: response.data.difficulty,estimatedDuration: response.data.estimated_duration,modules: response.data.modules.map(module: unknow;n;); => ({),
   id: module.id,
           title: module.title,
           description: module.description,
           order: module.order,
           estimatedTime: module.estimated_time,
           prerequisites: module.prerequisites || [],
-          content: module.content.map(content: unknown); => ({,)
+          content: module.content.map(content: unknown); => ({),
   id: content.id,
             type: content.type,
             title: content.title,
@@ -111,7 +111,7 @@ scholarly",       tone: wise",            / 睿智的语调*  知识专业*  教
   }
   ///    >  {
     try {
-      const response = await apiClient.get(`${this.serviceEndpoint}/museum/${exhibitId;};`;);// return {id: response.data.id,name: response.data.name,description: response.data.description,category: response.data.category,period: response.data.period,location: response.data.location,artifacts: response.data.artifacts.map(artifact: unknow;n;); => ({,)
+      const response = await apiClient.get(`${this.serviceEndpoint}/museum/${exhibitId;};`;);// return {id: response.data.id,name: response.data.name,description: response.data.description,category: response.data.category,period: response.data.period,location: response.data.location,artifacts: response.data.artifacts.map(artifact: unknow;n;); => ({),
   id: artifact.id,
           name: artifact.name,
           description: artifact.description,

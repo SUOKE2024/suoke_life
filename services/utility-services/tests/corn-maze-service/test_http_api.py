@@ -6,7 +6,7 @@ test_http_api - 索克生活项目模块
 
 from corn_maze_service.internal.model.maze import MazeDifficulty, MazeTheme
 from fastapi.testclient import TestClient
-from uuid import uuid4
+import uuid
 
 """
 HTTP API 测试模块

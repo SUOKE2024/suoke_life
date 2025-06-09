@@ -100,9 +100,6 @@ exclude_lines = ["pragma: no cover", "def __repr__"]
 
 import subprocess
 import sys
-import json
-from pathlib import Path
-import time
 
 class QualityChecker:
     def __init__(self):

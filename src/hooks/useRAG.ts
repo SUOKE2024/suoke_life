@@ -33,53 +33,53 @@ import {import type {queryRAG,
 // Hook返回类型定义
 export interface UseRAGReturn {
   // 状态
-  isQuerying: boolean;
+  isQuerying: boolean;,
   isStreaming: boolean;
-  isAnalyzing: boolean;
+  isAnalyzing: boolean;,
   isRecommending: boolean;
-  currentResult: RAGQueryResponse | null;
+  currentResult: RAGQueryResponse | null;,
   queryHistory: RAGQueryResponse[];
-  tcmAnalysisResult: any;
+  tcmAnalysisResult: any;,
   herbRecommendationResult: any;
   error: string | null;
   // 统计信息
-  cacheStats: any;
+  cacheStats: any;,
   performanceMetrics: any;
-  preferences: any;
+  preferences: any;,
   offlineStatus: any;
   // 基础查询方法
-  query: (request: RAGQueryRequest) => Promise<void>;
+  query: (request: RAGQueryRequest) => Promise<void>;,
   streamQuery: (request: RAGQueryRequest, onChunk?: (chunk: StreamResponse) => void) => Promise<void>;
   // 中医特色功能
-  analyzeTCMSymptoms: (request: TCMAnalysisRequest) => Promise<void>;
+  analyzeTCMSymptoms: (request: TCMAnalysisRequest) => Promise<void>;,
   getHerbRecommendations: (request: HerbRecommendationRequest) => Promise<void>;
   // 多模态查询
-  queryWithImage: (query: string, imageUri: string, userId: string) => Promise<void>;
-  queryWithAudio: (query: string, audioUri: string, userId: string) => Promise<void>;
+  queryWithImage: (query: string, imageUri: string, userId: string) => Promise<void>;,
+  queryWithAudio: (query: string, audioUri: string, userId: string) => Promise<void>;,
   queryWithSensorData: (query: string, sensorData: any, userId: string) => Promise<void>;
   // 状态管理
-  clearResult: () => void;
+  clearResult: () => void;,
   clearError: () => void;
   updateUserPreferences: (prefs: Partial<any>) => void;
   // 缓存管理
-  clearQueryCache: () => void;
+  clearQueryCache: () => void;,
   getCacheInfo: () => any;
   // 性能管理
-  resetMetrics: () => void;
+  resetMetrics: () => void;,
   getPerformanceReport: () => any;
   // 离线支持
-  setOffline: (offline: boolean) => void;
+  setOffline: (offline: boolean) => void;,
   syncPendingQueries: () => Promise<void>;
   // 历史管理
-  getQueryHistory: () => RAGQueryResponse[];
-  searchHistory: (keyword: string) => RAGQueryResponse[];
+  getQueryHistory: () => RAGQueryResponse[];,
+  searchHistory: (keyword: string) => RAGQueryResponse[];,
   exportHistory: () => string;
   importHistory: (data: string) => void;
   // 智能推荐
-  getSmartSuggestions: (context: string) => Promise<string[]>;
+  getSmartSuggestions: (context: string) => Promise<string[]>;,
   getRelatedQueries: (query: string) => Promise<string[]>;
   // 健康评估
-  performHealthAssessment: (symptoms: string[], constitution: string) => Promise<any>;
+  performHealthAssessment: (symptoms: string[], constitution: string) => Promise<any>;,
   getPreventionAdvice: (riskFactors: string[]) => Promise<any>;
 }
 // 自定义RAG Hook;
@@ -242,7 +242,7 @@ export const useRAG = (): UseRAGReturn => {const dispatch = useDispatch();
     }
   }, [dispatch, currentResult]);
   // 监听网络状态变化
-  useEffect(() => {
+  useEffect() => {
     const handleOnline = () => {setOffline(false);
       syncPendingQueries();
     };
@@ -259,7 +259,7 @@ export const useRAG = (): UseRAGReturn => {const dispatch = useDispatch();
     }
   }, [setOffline, syncPendingQueries]);
   // 自动清理过期缓存
-  useEffect(() => {
+  useEffect() => {
     const cleanupInterval = setInterval() => {if (cacheStats.size > 100) { // 如果缓存过大;
         ragService.cleanupCache?.();
       }

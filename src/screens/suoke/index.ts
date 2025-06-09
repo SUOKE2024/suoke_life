@@ -2,5 +2,5 @@
 // 聊天频道相关屏幕的入口文件
 export { default as HomeScreen } from "./    HomeScreen;"
 // 导出类型定义
-export type { Contact, ContactGroup } from
+export type { Contact, ContactGroup } from;
 ./    HomeScreen'; '

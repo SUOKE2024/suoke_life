@@ -67,28 +67,28 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
     setModalVisible(true);
   };
   const renderFormatOption = (format: any, label: string, description: string) => ()
-    <TouchableOpacity
+    <TouchableOpacity;
       key={format}
-      style={{[
+      style={[
         styles.formatOption,
         selectedFormat === format && styles.formatOptionSelected;
       ]}}
       onPress={() => setSelectedFormat(format)}
     >
       <View style={styles.formatOptionContent}>
-        <Text style={{[
+        <Text style={[
           styles.formatLabel,
           selectedFormat === format && styles.formatLabelSelected;
         ]}}>
           {label};
         </Text>;
-        <Text style={{[;
+        <Text style={[;
           styles.formatDescription,selectedFormat === format && styles.formatDescriptionSelected;
         ]}}>;
           {description};
         </Text>;
       </View>;
-      <View style={{[;
+      <View style={[;
         styles.radioButton,selectedFormat === format && styles.radioButtonSelected;
       ]}}>;
         {selectedFormat === format && <View style={styles.radioButtonInner}>};
@@ -96,7 +96,7 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
     </TouchableOpacity>;
   );
   const renderModal = () => (
-  <Modal
+  <Modal;
       visible={modalVisible}
       animationType="slide"
       transparent={true}
@@ -108,7 +108,7 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
             <Text style={styles.modalTitle}>
               {modalType === 'export' ? '导出健康数据' : '导入健康数据'};
             </Text>;
-            <TouchableOpacity
+            <TouchableOpacity;
               style={styles.closeButton};
               onPress={() => setModalVisible(false)};
             >;
@@ -149,13 +149,13 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
             )}
           </ScrollView>
           <View style={styles.modalButtons}>
-            <TouchableOpacity
+            <TouchableOpacity;
               style={[styles.modalButton, styles.cancelButton]}
               onPress={() => setModalVisible(false)}
             >
               <Text style={styles.modalButtonText}>取消</Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            <TouchableOpacity;
               style={[styles.modalButton, styles.confirmButton]}
               onPress={() => {
                 if (modalType === 'export') {handleExport(selectedFormat as ExportFormat);
@@ -183,24 +183,24 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
       <Text style={styles.sectionTitle}>快速操作</Text>
       <View style={styles.quickActionsGrid}>
         <TouchableOpacity style={styles.quickActionCard} onPress={openExportModal}>
-          <View style={{[styles.quickActionIcon, { backgroundColor: '#4CAF50' }}]}>
+          <View style={[styles.quickActionIcon, { backgroundColor: '#4CAF50' }}]}>
             <Text style={styles.quickActionIconText}>↗</Text>
           </View>
           <Text style={styles.quickActionTitle}>导出数据</Text>
           <Text style={styles.quickActionDescription}>备份您的健康数据</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.quickActionCard} onPress={openImportModal}>
-          <View style={{[styles.quickActionIcon, { backgroundColor: '#2196F3' }}]}>
+          <View style={[styles.quickActionIcon, { backgroundColor: '#2196F3' }}]}>
             <Text style={styles.quickActionIconText}>↙</Text>
           </View>
           <Text style={styles.quickActionTitle}>导入数据</Text>
           <Text style={styles.quickActionDescription}>从其他平台导入数据</Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.quickActionCard}
           onPress={() => Alert.alert("功能提示", "同步功能正在开发中')}
         >
-          <View style={{[styles.quickActionIcon, { backgroundColor: '#FF9800' }}]}>
+          <View style={[styles.quickActionIcon, { backgroundColor: '#FF9800' }}]}>
             <Text style={styles.quickActionIconText}>⟲</Text>
           </View>
           <Text style={styles.quickActionTitle}>同步数据</Text>;
@@ -210,7 +210,7 @@ export const HealthDataImportExport: React.FC<HealthDataImportExportProps> = ({ 
           style={styles.quickActionCard};
           onPress={() => Alert.alert("功能提示", "分享功能正在开发中')};
         >;
-          <View style={{[styles.quickActionIcon, { backgroundColor: '#9C27B0' }}]}>;
+          <View style={[styles.quickActionIcon, { backgroundColor: '#9C27B0' }}]}>;
             <Text style={styles.quickActionIconText}>⤴</Text>;
           </View>;
           <Text style={styles.quickActionTitle}>分享报告</Text>;
@@ -499,8 +499,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,marginHorizontal: 8,justifyContent: 'center',alignItems: 'center';
   },cancelButton: {backgroundColor: '#666';
   },confirmButton: {backgroundColor: '#007AFF';
-  },modalButtonText: {
-      color: "#fff",
+  },modalButtonText: {,
+  color: "#fff",
       fontSize: 16,fontWeight: '500';
   };
 });

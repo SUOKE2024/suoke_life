@@ -4,7 +4,7 @@ import React from "react";
 import { useNavigation  } from "../../placeholder";@react-navigation/native";/    importReact from "react;
 /    const NavigationTest: React.FC  = () => {}
   const performanceMonitor = usePerformanceMonitor(NavigationTest", { ";)
-    trackRender: true,trackMemory: false,warnThreshold: 50,  };);
+    trackRender: true,trackMemory: false,warnThreshold: 50};);
   const navigation = useNavigation;
   const testNavigations =  [;
     {
@@ -40,7 +40,7 @@ import { useNavigation  } from "../../placeholder";@react-navigation/native";/  
           style={styles.button}
           onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> testNavigation(nav.name)}/            >
           <Text style={styles.buttonText}>测试 {nav.label}</Text>/        </TouchableOpacity>/          ))}
-      <TouchableOpacity
+      <TouchableOpacity;
 style={[styles.button, styles.resetButton]}
         onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> {/              try {
             navigation.reset({
@@ -55,7 +55,7 @@ style={[styles.button, styles.resetButton]}
       >
         <Text style={styles.buttonText}>重置导航</Text>/      </TouchableOpacity>/    </View>/      );
 }
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   flex: 1,
     padding: 20,
     backgroundColor: "#f5f5f5",

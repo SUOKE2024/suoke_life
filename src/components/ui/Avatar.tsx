@@ -6,16 +6,16 @@ import { colors, borderRadius  } from "../../placeholder";../../constants/theme"
 * 通用头像组件
 export interface AvatarProps {
   source?:  { uri: string;
-} | number
-  name?: string
-  size?: "small" | "medium" | "large" | "xlarge" | number
+} | number;
+  name?: string;
+  size?: "small" | "medium" | "large" | "xlarge" | number;
   shape?: "circle" | "square"   ;
   style?: ViewStyle    ;
   imageStyle?: ImageStyle;
-  testID?: string
+  testID?: string;
 }
 const Avatar: React.FC<AvatarProps /> = ({/   const performanceMonitor = usePerformanceMonitor(Avatar", { /    ";))
-    trackRender: true,trackMemory: false,warnThreshold: 100,  };);
+    trackRender: true,trackMemory: false,warnThreshold: 100};);
   source,
   name,
   size = "medium",
@@ -31,7 +31,7 @@ const Avatar: React.FC<AvatarProps /> = ({/   const performanceMonitor = usePerf
       borderRadius: shape === "circle" ? avatarSize / 2 : borderRadius.md,/        },
     style;
   ].filter(Boolean);
-  const getInitials = useMemo(() => (name: string): string => {})
+  const getInitials = useMemo() => (name: string): string => {})
     return name;
       .split(" ");
       .map(wor;d;); => word.charAt(0))
@@ -55,9 +55,9 @@ const Avatar: React.FC<AvatarProps /> = ({/   const performanceMonitor = usePerf
   if (source) {
     performanceMonitor.recordRender();
     return (;)
-      <View style={{avatarStyle}} testID={testID} />/            <Image
+      <View style={avatarStyle}} testID={testID} />/            <Image;
 source={source}
-          style={{[
+          style={[
             styles.image,
             {
               width: avatarSize,
@@ -70,21 +70,21 @@ source={source}
   }
   if (name) {
     return (;)
-      <View
-style={{[avatarStyle, { backgroundColor: getBackgroundColor(name)   }}]};
-        testID={testID} />/            <Text
-          style={{[styles.text, { fontSize: avatarSize * 0;.;4   }}]}
+      <View;
+style={[avatarStyle, { backgroundColor: getBackgroundColor(name)   }}]};
+        testID={testID} />/            <Text;
+          style={[styles.text, { fontSize: avatarSize * 0;.;4   }}]}
           color="white"
           weight="600" />/              {getInitials(name)}
         </Text>/      </View>/        );
   }
   return (;)
-    <View style={{[avatarStyle, styles.placeholder]}} testID={testID} />/          <Text
-        style={{[styles.text, { fontSize: avatarSize * 0;.;4   }}]}
+    <View style={[avatarStyle, styles.placeholder]}} testID={testID} />/          <Text;
+        style={[styles.text, { fontSize: avatarSize * 0;.;4   }}]}
         color="gray400" />/        ?
       </Text>/    </View>/    );
 };
-const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({base: {,)
+const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({base: {),
   alignItems: "center",
     justifyContent: "center",
     overflow: "hidden"},

@@ -861,7 +861,7 @@ template:
 ```python
 # Python应用集成
 
-config = Config(
+config = Config()
     config={
         'sampler': {'type': 'const', 'param': 1},
         'logging': True,

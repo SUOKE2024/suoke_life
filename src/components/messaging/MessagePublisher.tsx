@@ -91,7 +91,7 @@ export const MessagePublisher: React.FC<MessagePublisherProps> = ({
         {// 消息内容输入}
         <View style={styles.section}>
           <Text style={styles.label}>消息内容 (JSON或文本):</Text>
-          <TextInput
+          <TextInput;
             style={styles.textInput}
             value={payload}
             onChangeText={setPayload}
@@ -104,7 +104,7 @@ export const MessagePublisher: React.FC<MessagePublisherProps> = ({
         {// 属性输入}
         <View style={styles.section}>
           <Text style={styles.label}>消息属性 (JSON):</Text>
-          <TextInput
+          <TextInput;
             style={styles.attributesInput}
             value={customAttributes}
             onChangeText={setCustomAttributes}
@@ -123,14 +123,14 @@ export const MessagePublisher: React.FC<MessagePublisherProps> = ({
       </ScrollView>
       {// 操作按钮}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.button, styles.clearButton]}
           onPress={handleClear}
           disabled={isPublishing}
         >
           <Text style={styles.clearButtonText}>清空</Text>;
         </TouchableOpacity>;
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.button, styles.publishButton, isPublishing && styles.disabledButton]};
           onPress={handlePublish};
           disabled={isPublishing};
@@ -212,12 +212,12 @@ const styles = StyleSheet.create({
   clearButton: {,
   backgroundColor: '#6c757d'
   },
-  clearButtonText: {
-      color: "#fff",
+  clearButtonText: {,
+  color: "#fff",
       fontSize: 16,fontWeight: '600';
   },publishButton: {backgroundColor: '#007bff';
-  },publishButtonText: {
-      color: "#fff",
+  },publishButtonText: {,
+  color: "#fff",
       fontSize: 16,fontWeight: '600';
   },disabledButton: {backgroundColor: '#ccc';
   };

@@ -6,76 +6,76 @@
 * @version 1.0.0;
 */
 export interface KnowledgeBaseConfig {
-  version: string;
+  version: string;,
   updateInterval: number;
-  sources: string[];
+  sources: string[];,
   caching: {;
-    enabled: boolean;
+    enabled: boolean;,
   ttl: number;
     maxSize: number;
 }
 }
 export interface TCMConcept {
-  id: string;
+  id: string;,
   name: string;
-  category: string;
+  category: string;,
   description: string;
   properties: Record<string, any>;
-  relationships: ConceptRelationship[];
+  relationships: ConceptRelationship[];,
   sources: string[];
   confidence: number;
 }
 export interface ConceptRelationship {
-  type: 'belongs_to' | 'related_to' | 'opposite_to' | 'generates' | 'restricts';
+  type: 'belongs_to' | 'related_to' | 'opposite_to' | 'generates' | 'restricts';,
   target: string;
-  strength: number;
+  strength: number;,
   description: string;
 }
 export interface DiagnosisPattern {
-  id: string;
+  id: string;,
   name: string;
-  category: string;
+  category: string;,
   symptoms: string[];
-  signs: string[];
+  signs: string[];,
   syndromes: string[];
-  treatments: string[];
+  treatments: string[];,
   confidence: number;
 }
 export interface SyndromeInfo {
-  id: string;
+  id: string;,
   name: string;
-  category: string;
+  category: string;,
   description: string;
-  mainSymptoms: string[];
+  mainSymptoms: string[];,
   secondarySymptoms: string[];
-  tongueFeatures: string[];
+  tongueFeatures: string[];,
   pulseFeatures: string[];
-  treatments: TreatmentInfo[];
+  treatments: TreatmentInfo[];,
   prognosis: string;
 }
 export interface TreatmentInfo {
-  type: 'herbal' | 'acupuncture' | 'lifestyle' | 'diet';
+  type: 'herbal' | 'acupuncture' | 'lifestyle' | 'diet';,
   name: string;
   description: string;
   dosage?: string;
   duration?: string;
-  contraindications: string[];
+  contraindications: string[];,
   sideEffects: string[];
 }
 export interface ConstitutionType {
-  id: string;
+  id: string;,
   name: string;
-  description: string;
+  description: string;,
   characteristics: {;
-    physical: string[];
+    physical: string[];,
   psychological: string[];
     pathological: string[];
 };
   recommendations: {,
   diet: string[];
     exercise: string[],
-  lifestyle: string[];
-    prevention: string[]
+  lifestyle: string[];,
+  prevention: string[]
   }
 }
 // 中医知识库类

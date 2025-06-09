@@ -6,7 +6,7 @@ import { spacing  } from "../../placeholder";../../constants/theme";/    importR
 * 统一的容器布局组件
 export interface ContainerProps {
   children: React.ReactNode;
-  padding?: keyof typeof spacing | number
+  padding?: keyof typeof spacing | number;
   margin?: keyof typeof spacing | number;
   flex?: number;
   justify?:  | "flex-start"
@@ -17,11 +17,11 @@ export interface ContainerProps {
     | "space-evenly"
   align?: "flex-start" | "flex-end" | "center" | "stretch" | "baseline"
   direction?: "row" | "column"
-  style?: ViewStyle
-  testID?: string
+  style?: ViewStyle;
+  testID?: string;
 }
 const Container: React.FC<ContainerProps /> = ({/   const performanceMonitor = usePerformanceMonitor(Container", { /    ";))
-    trackRender: true,trackMemory: false,warnThreshold: 100,  };);
+    trackRender: true,trackMemory: false,warnThreshold: 100};);
   children,
   padding,
   margin,
@@ -32,7 +32,7 @@ const Container: React.FC<ContainerProps /> = ({/   const performanceMonitor = u
   style,
   testID;
 }) => {}
-  const containerStyle = useMemo(() => [;)
+  const containerStyle = useMemo() => [;)
     styles.base,
     { flexDirection: direction},
     padding && { padding: getPadding(padding)   },
@@ -44,7 +44,7 @@ const Container: React.FC<ContainerProps /> = ({/   const performanceMonitor = u
   ].filter(Boolean); as ViewStyle[], []);
   performanceMonitor.recordRender();
   return (;)
-    <View style={{containerStyle}} testID={testID} />/          {children};
+    <View style={containerStyle}} testID={testID} />/          {children};
     </View>/      ;);
 };
 //

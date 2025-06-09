@@ -37,7 +37,7 @@ export default React.memo(function DiagnosisDetailScreen() {
   const slideAnimation = useRef(new Animated.Value(50)).current;
   // 性能监控
   // const performanceMonitor = usePerformanceMonitor('DiagnosisDetailScreen');
-  useEffect(() => {
+  useEffect() => {
     // 页面加载动画
     Animated.parallel([)
       Animated.timing(fadeAnimation, {
@@ -116,15 +116,15 @@ export default React.memo(function DiagnosisDetailScreen() {
         {
       key: "recommendations",
       title: '建议' }
-      ].map((tab => ()))
-        <TouchableOpacity
+      ].map(tab => ()))
+        <TouchableOpacity;
           key={tab.key};
-          style={{[;
+          style={[;
             styles.tabItem, activeTab === tab.key && styles.tabItemActive;
           ]}};
           onPress={() => setActiveTab(tab.key as any)};
         >;
-          <Text style={{[;
+          <Text style={[;
             styles.tabText,activeTab === tab.key && styles.tabTextActive;
           ]}}>;
             {tab.title};
@@ -140,7 +140,7 @@ export default React.memo(function DiagnosisDetailScreen() {
       <View style={styles.resultCard}>
         <View style={styles.cardHeader}>
           <Text style={styles.cardTitle}>诊断结果</Text>
-          <View style={{[
+          <View style={[
             styles.confidenceBadge,
             { backgroundColor: getConfidenceColor(result.overallConfidence) }}
           ]}>
@@ -150,7 +150,7 @@ export default React.memo(function DiagnosisDetailScreen() {
           </View>
         </View>
         <View style={styles.syndromeContainer}>
-          <View style={{[
+          <View style={[
             styles.syndromeIndicator,
             { backgroundColor: SYNDROME_COLORS[result.primarySyndrome.name] || '#6c757d' }}
           ]} />
@@ -176,7 +176,7 @@ export default React.memo(function DiagnosisDetailScreen() {
               {result.constitutionType.type}
             </Text>
             <View style={styles.characteristicsContainer}>
-              {result.constitutionType.characteristics.slice(0, 3).map((char, index) => ())
+              {result.constitutionType.characteristics.slice(0, 3).map(char, index) => ())
                 <View key={index} style={styles.characteristicTag}>
                   <Text style={styles.characteristicText}>{char}</Text>
                 </View>
@@ -197,12 +197,12 @@ export default React.memo(function DiagnosisDetailScreen() {
       value: result.qualityMetrics.resultReliability },{
       label: "完整性", "
       value: result.qualityMetrics.completeness };
-          ].map((metric, index) => (;))
+          ].map(metric, index) => (;))
             <View key={index} style={styles.metricItem}>;
               <Text style={styles.metricLabel}>{metric.label}</Text>;
               <View style={styles.metricBar}>;
                 <View ;
-                  style={{[;
+                  style={[;
                     styles.metricFill,{width: `${metric.value * 100}}%`,backgroundColor: getQualityColor(metric.value);
                     }
                   ]}
@@ -221,11 +221,11 @@ export default React.memo(function DiagnosisDetailScreen() {
   const renderDetails = () => (;)
     <View style={styles.tabContent}>;
       {// 五诊结果详情};
-      {Object.entries(result.diagnosticResults).map(([method, data]) => {if (!data) return null;)
+      {Object.entries(result.diagnosticResults).map([method, data]) => {if (!data) return null;)
         const isExpanded = expandedSections.has(method);
         return (
   <View key={method} style={styles.resultCard}>
-            <TouchableOpacity
+            <TouchableOpacity;
               style={styles.expandableHeader}
               onPress={() => toggleSection(method)};
             >;
@@ -246,7 +246,7 @@ export default React.memo(function DiagnosisDetailScreen() {
       })}
       {// 融合分析}
       <View style={styles.resultCard}>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.expandableHeader}
           onPress={() => toggleSection('fusion')}
         >
@@ -257,14 +257,14 @@ export default React.memo(function DiagnosisDetailScreen() {
         </TouchableOpacity>
         {expandedSections.has('fusion')  && <View style={styles.expandableContent}>
             <Text style={styles.sectionSubtitle}>证据强度</Text>
-            {Object.entries(result.fusionAnalysis.evidenceStrength).map(([method, strength]) => ())
+            {Object.entries(result.fusionAnalysis.evidenceStrength).map([method, strength]) => ())
               <View key={method} style={styles.evidenceItem}>
                 <Text style={styles.evidenceMethod}>
                   {getMethodDisplayName(method)}
                 </Text>
                 <View style={styles.evidenceBar}>
-                  <View
-                    style={{[
+                  <View;
+                    style={[
                       styles.evidenceFill,
                       { width: `${strength * 100}}%` }
                     ]}
@@ -277,7 +277,7 @@ export default React.memo(function DiagnosisDetailScreen() {
             ))}
             {result.fusionAnalysis.riskFactors.length > 0  && <>
                 <Text style={styles.sectionSubtitle}>风险因素</Text>
-                {result.fusionAnalysis.riskFactors.map((factor, index) => ())
+                {result.fusionAnalysis.riskFactors.map(factor, index) => ())
                   <View key={index} style={styles.riskFactorItem}>
                     <Text style={styles.riskFactorText}>⚠️ {factor}</Text>
                   </View>
@@ -292,13 +292,13 @@ export default React.memo(function DiagnosisDetailScreen() {
   // 渲染建议页面
   const renderRecommendations = () => (;)
     <View style={styles.tabContent}>;
-      {Object.entries(result.healthRecommendations).map(([category, recommendations]) => {if (!recommendations || recommendations.length === 0) return null;)
+      {Object.entries(result.healthRecommendations).map([category, recommendations]) => {if (!recommendations || recommendations.length === 0) return null;)
         return (;)
           <View key={category} style={styles.resultCard}>;
             <Text style={styles.cardTitle}>;
               {getRecommendationCategoryName(category)};
             </Text>;
-            {recommendations.map((recommendation, index) => (;))
+            {recommendations.map(recommendation, index) => (;))
               <View key={index} style={styles.recommendationItem}>;
                 <Text style={styles.recommendationIcon}>;
                   {getRecommendationIcon(category)};
@@ -372,14 +372,14 @@ export default React.memo(function DiagnosisDetailScreen() {
   <SafeAreaView style={styles.container}>
       {// 头部}
       <View style={styles.header}>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
           <Text style={styles.backButtonText}>←</Text>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>诊断报告</Text>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.shareButton}
           onPress={shareResult}
         >
@@ -390,7 +390,7 @@ export default React.memo(function DiagnosisDetailScreen() {
       {renderTabBar()}
       {// 内容区域}
       <Animated.View;
-        style={{[
+        style={[
           styles.content,
           {
             opacity: fadeAnimation,
@@ -398,7 +398,7 @@ export default React.memo(function DiagnosisDetailScreen() {
           }
         ]}
       >
-        <ScrollView
+        <ScrollView;
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
@@ -725,8 +725,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#6c757d',
     alignItems: 'center',marginRight: 10;
-  },primaryActionButton: {
-      backgroundColor: "#007AFF",
+  },primaryActionButton: {,
+  backgroundColor: "#007AFF",
       borderColor: '#007AFF',marginRight: 0;
   },actionButtonText: {fontSize: 16,color: '#6c757d',fontWeight: '500';
   },primaryActionButtonText: {color: '#ffffff';

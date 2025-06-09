@@ -11,7 +11,7 @@ import {import { benchmarkService } from '../../services';
   Share;
 } from 'react-native';
 interface BenchmarkResultDetailProps {
-  visible: boolean;
+  visible: boolean;,
   taskId: string | null;
   onClose: () => void;
 }
@@ -36,7 +36,7 @@ export const BenchmarkResultDetail: React.FC<BenchmarkResultDetailProps> = ({
     }
   }, [taskId]);
   // 当taskId变化时重新加载数据
-  useEffect(() => {
+  useEffect() => {
     if (visible && taskId) {
       loadBenchmarkResult();
     }
@@ -128,8 +128,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#333',
     marginBottom: 12;
-  },infoCard: {
-      backgroundColor: "#fff",
+  },infoCard: {,
+  backgroundColor: "#fff",
       borderRadius: 8,padding: 16,elevation: 2,shadowColor: '#000',shadowOffset: { width: 0, height: 2 },shadowOpacity: 0.1,shadowRadius: 4;
   },infoText: {fontSize: 14,color: '#333',marginBottom: 8;
   };

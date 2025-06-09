@@ -1,16 +1,10 @@
-        from internal.agent.agent_manager import AgentManager
-        from internal.agent.mock_model_factory import get_mock_model_factory
-        from internal.repository.file_session_repository import FileSessionRepository
-        from pkg.utils.config_loader import get_config
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Union
-import asyncio
-import sys
-import traceback
+"""Test module"""
+import unittest
 
-def main() - > None:
-    """主函数 - 自动生成的最小可用版本"""
-    pass
+class TestPlaceholder(unittest.TestCase):
+    def test_placeholder(self):
+        """Placeholder test"""
+        pass
 
 if __name__ == "__main__":
-    main()
+    unittest.main()

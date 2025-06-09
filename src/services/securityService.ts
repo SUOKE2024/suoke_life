@@ -3,16 +3,16 @@
 * 处理API网关的安全功能，包括认证、授权、加密等
 */
 export interface TokenInfo {
-  accessToken: string;
+  accessToken: string;,
   refreshToken: string;
-  expiresAt: Date;
+  expiresAt: Date;,
   tokenType: string;
 }
 export interface SecurityEvent {
-  id: string;
+  id: string;,
   type: 'login' | 'logout' | 'failed_login' | 'token_refresh';
   userId?: string;
-  timestamp: Date;
+  timestamp: Date;,
   details: Record<string, any>;
 }
 class SecurityService {

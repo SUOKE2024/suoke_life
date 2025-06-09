@@ -8,29 +8,29 @@ importReact from ";react";
   ScrollView,
   { TouchableOpacity } from "react-native";
 interface ApiTestResult {
-  name: string;
+  name: string;,
   category: string;
   status: ";PASSED" | FAILED",
-  duration: number;
+  duration: number;,
   endpoint: string;
   method: string;
-  error?: string
+  error?: string;
 }
 interface ApiTestSummary {
-  total: number;
+  total: number;,
   passed: number;
-  failed: number;
+  failed: number;,
   successRate: number;
   avgDuration: number;
 }
 interface ApiTestCategories {
-  [key: string]: { total: number;
-    passed: number;
+  [key: string]: { total: number;,
+  passed: number;
     failed: number;
 };
 }
 interface ApiTestResultsDisplayProps {
-  summary: ApiTestSummary;
+  summary: ApiTestSummary;,
   categories: ApiTestCategories;
   details: ApiTestResult[];
   onRetryTest?: (testName: string) => void;
@@ -40,7 +40,7 @@ export const ApiTestResultsDisplay: React.FC<ApiTestResultsDisplayProps /> = ({/
 {/
     trackRender: true,
     trackMemory: true,
-    warnThreshold: 50,  });
+    warnThreshold: 50});
   summary,
   categories,
   details,
@@ -72,8 +72,8 @@ case FAILED":"
     return colors.error;
   };
   //
-    <View style={styles.summaryCard}>/      <Text style={styles.summaryTitle}>📊 测试总览</Text>/      <View style={styles.summaryGrid}>/        <View style={styles.summaryItem}>/          <Text style={styles.summaryLabel}>总测试数</Text>/          <Text style={styles.summaryValue}>{summary.total}</Text>/        </View>/        <View style={styles.summaryItem}>/          <Text style={styles.summaryLabel}>成功</Text>/          <Text style={{[styles.summaryValue, { color: colors.success}}]} />/                {summary.passed}
-          </Text>/        </View>/        <View style={styles.summaryItem}>/          <Text style={styles.summaryLabel}>失败</Text>/          <Text style={{[styles.summaryValue, { color: colors.error}}]} />/                {summary.failed}
+    <View style={styles.summaryCard}>/      <Text style={styles.summaryTitle}>📊 测试总览</Text>/      <View style={styles.summaryGrid}>/        <View style={styles.summaryItem}>/          <Text style={styles.summaryLabel}>总测试数</Text>/          <Text style={styles.summaryValue}>{summary.total}</Text>/        </View>/        <View style={styles.summaryItem}>/          <Text style={styles.summaryLabel}>成功</Text>/          <Text style={[styles.summaryValue, { color: colors.success}}]} />/                {summary.passed}
+          </Text>/        </View>/        <View style={styles.summaryItem}>/          <Text style={styles.summaryLabel}>失败</Text>/          <Text style={[styles.summaryValue, { color: colors.error}}]} />/                {summary.failed}
           </Text>/        </View>/        <View style={styles.summaryItem}>/          <Text style={styles.summaryLabel}>成功率</Text>/  >
             styles.summaryValue,
             { color: getCategoryColor(summary.successRate)   }
@@ -86,8 +86,8 @@ case FAILED":"
         return (;)
           <View key={category} style={styles.categoryItem}>/            <View style={styles.categoryHeader}>/              <Text style={styles.categoryName}>{category}</Text>/  >;
                 styles.categoryRate,{ color: getCategoryColor(successRate)   };
-              ]} />/                {stats.passed}/{stats.total} ({successRate.toFixed(1)}%)/              </Text>/            </View>/            <View style={styles.categoryProgress}>/                  <View
-style={{[
+              ]} />/                {stats.passed}/{stats.total} ({successRate.toFixed(1)}%)/              </Text>/            </View>/            <View style={styles.categoryProgress}>/                  <View;
+style={[
                   styles.categoryProgressBar,
                   { width: `${successRate  }}%`,
                     backgroundColor: getCategoryColor(successRate)}
@@ -96,8 +96,8 @@ style={{[
       })}
     </View>/      );
   //
-    <View style={styles.detailsCard}>/      <Text style={styles.detailsTitle}>🔍 测试详情</Text>/          {details.map((test, index) => ())
-        <TouchableOpacity
+    <View style={styles.detailsCard}>/      <Text style={styles.detailsTitle}>🔍 测试详情</Text>/          {details.map(test, index) => ())
+        <TouchableOpacity;
 key={index}
           style={styles.testItem}
           onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> onViewDetails?.(test)}/            >
@@ -106,7 +106,7 @@ key={index}
                 styles.testStatus,
                 { color: getStatusColor(test.status)   }
               ]} />/                    {test.status}
-              </Text>/            </View>/          </View>/              {test.error  && <View style={styles.errorContainer}>/              <Text style={styles.errorText}>{test.error}</Text>/                  {onRetryTest  && <TouchableOpacity
+              </Text>/            </View>/          </View>/              {test.error  && <View style={styles.errorContainer}>/              <Text style={styles.errorText}>{test.error}</Text>/                  {onRetryTest  && <TouchableOpacity;
 style={styles.retryButton}
                   onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> onRetryTest(test.name)}/                    >
                   <Text style={styles.retryButtonText}>重试</Text>/                </TouchableOpacity>/                  )}
@@ -119,7 +119,7 @@ style={styles.retryButton}
       {renderTestDetails()};
     </ScrollView>/      ;);
 };
-const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,)
+const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {),
   flex: 1,
     backgroundColor: colors.background;
   },

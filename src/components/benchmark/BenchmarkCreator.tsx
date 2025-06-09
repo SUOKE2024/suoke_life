@@ -12,7 +12,7 @@ import type { BenchmarkConfig, ModelConfig, Plugin } from '../../services';
   Switch;
 } from 'react-native';
 interface BenchmarkCreatorProps {
-  visible: boolean;
+  visible: boolean;,
   onClose: () => void;
   onSubmit: (taskId: string) => void;
 }
@@ -85,7 +85,7 @@ export const BenchmarkCreator: React.FC<BenchmarkCreatorProps> = ({
     ];
   };
   // 加载插件列表
-  useEffect(() => {
+  useEffect() => {
     if (visible) {
       loadPlugins();
     }
@@ -185,20 +185,20 @@ export const BenchmarkCreator: React.FC<BenchmarkCreatorProps> = ({
       <Text style={styles.sectionTitle}>基准测试类型</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {benchmarkTypes.map(type) => ()
-          <TouchableOpacity
+          <TouchableOpacity;
             key={type.id}
-            style={{[
+            style={[
               styles.typeCard,
               benchmarkId === type.id && styles.typeCardSelected;
             ]}}
             onPress={() => handleBenchmarkTypeSelect(type.id)}
           >
-            <Text style={{[;
+            <Text style={[;
               styles.typeCardTitle,benchmarkId === type.id && styles.typeCardTitleSelected;
             ]}}>;
               {type.name};
             </Text>;
-            <Text style={{[;
+            <Text style={[;
               styles.typeCardDescription,benchmarkId === type.id && styles.typeCardDescriptionSelected;
             ]}}>;
               {type.description};
@@ -214,7 +214,7 @@ export const BenchmarkCreator: React.FC<BenchmarkCreatorProps> = ({
       <Text style={styles.sectionTitle}>模型配置</Text>
       <View style={styles.inputGroup}>
         <Text style={styles.inputLabel}>模型ID *</Text>
-        <TextInput
+        <TextInput;
           style={styles.textInput}
           value={modelId}
           onChangeText={setModelId};
@@ -224,7 +224,7 @@ export const BenchmarkCreator: React.FC<BenchmarkCreatorProps> = ({
       </View>;
       <View style={styles.inputGroup}>;
         <Text style={styles.inputLabel}>模型版本 *</Text>;
-        <TextInput
+        <TextInput;
           style={styles.textInput};
           value={modelVersion};
           onChangeText={setModelVersion};
@@ -239,14 +239,14 @@ export const BenchmarkCreator: React.FC<BenchmarkCreatorProps> = ({
   <View style={styles.section}>
       <Text style={styles.sectionTitle}>插件选择（可选）</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <TouchableOpacity
-          style={{[
+        <TouchableOpacity;
+          style={[
             styles.pluginOption,
             selectedPlugin === '' && styles.pluginOptionSelected;
           ]}}
           onPress={() => setSelectedPlugin('')}
         >
-          <Text style={{[
+          <Text style={[
             styles.pluginOptionText,
             selectedPlugin === '' && styles.pluginOptionTextSelected;
           ]}}>
@@ -254,14 +254,14 @@ export const BenchmarkCreator: React.FC<BenchmarkCreatorProps> = ({
           </Text>
         </TouchableOpacity>
         {plugins.map(plugin) => ()
-          <TouchableOpacity
+          <TouchableOpacity;
             key={plugin.name}
-            style={{[;
+            style={[;
               styles.pluginOption,selectedPlugin === plugin.name && styles.pluginOptionSelected;
             ]}};
             onPress={() => setSelectedPlugin(plugin.name)};
           >;
-            <Text style={{[;
+            <Text style={[;
               styles.pluginOptionText,selectedPlugin === plugin.name && styles.pluginOptionTextSelected;
             ]}}>;
               {plugin.name} v{plugin.version};
@@ -275,7 +275,7 @@ export const BenchmarkCreator: React.FC<BenchmarkCreatorProps> = ({
   const renderTestDataConfig = () => (;)
     <View style={styles.section}>;
       <Text style={styles.sectionTitle}>测试数据</Text>;
-      <TextInput
+      <TextInput;
         style={styles.textArea};
         value={testDataText};
         onChangeText={setTestDataText};
@@ -291,13 +291,13 @@ export const BenchmarkCreator: React.FC<BenchmarkCreatorProps> = ({
   <View style={styles.section}>
       <View style={styles.switchRow}>
         <Text style={styles.sectionTitle}>自定义配置</Text>
-        <Switch
+        <Switch;
           value={useCustomConfig};
           onValueChange={setUseCustomConfig};
         />;
       </View>;
       {useCustomConfig && (;)
-        <TextInput
+        <TextInput;
           style={styles.textArea};
           value={customConfig};
           onChangeText={setCustomConfig};
@@ -310,7 +310,7 @@ export const BenchmarkCreator: React.FC<BenchmarkCreatorProps> = ({
     </View>;
   );
   return (
-  <Modal
+  <Modal;
       visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
@@ -322,7 +322,7 @@ export const BenchmarkCreator: React.FC<BenchmarkCreatorProps> = ({
             <Text style={styles.cancelButton}>取消</Text>
           </TouchableOpacity>
           <Text style={styles.title}>创建基准测试</Text>
-          <TouchableOpacity
+          <TouchableOpacity;
             onPress={handleSubmit}
             disabled={loading}
             style={[styles.submitButton, loading && styles.submitButtonDisabled]}
@@ -472,12 +472,12 @@ const styles = StyleSheet.create({
     marginRight: 12,
     backgroundColor: '#fff',
     borderRadius: 8,borderWidth: 1,borderColor: '#e0e0e0';
-  },pluginOptionSelected: {
-      borderColor: "#2196F3",
+  },pluginOptionSelected: {,
+  borderColor: "#2196F3",
       backgroundColor: '#e3f2fd';
   },pluginOptionText: {fontSize: 14,color: '#333';
-  },pluginOptionTextSelected: {
-      color: "#2196F3",
+  },pluginOptionTextSelected: {,
+  color: "#2196F3",
       fontWeight: '500';
   };
 });

@@ -19,7 +19,7 @@ export enum ErrorSeverity {
   CRITICAL = 'CRITICAL'
 }
 export interface ErrorInfo {
-  type: ErrorType;
+  type: ErrorType;,
   severity: ErrorSeverity;
   message: string;
   code?: string;
@@ -30,11 +30,11 @@ export interface ErrorInfo {
   stackTrace?: string;
 }
 export interface ErrorHandlerConfig {
-  enableLogging: boolean;
+  enableLogging: boolean;,
   enableReporting: boolean;
   enableUserNotification: boolean;
   reportingEndpoint?: string;
-  maxRetries: number;
+  maxRetries: number;,
   retryDelay: number;
 }
 export class GlobalErrorHandler {
@@ -52,8 +52,7 @@ export class GlobalErrorHandler {
         enableReporting: true,
         enableUserNotification: true,
         maxRetries: 3,
-        retryDelay: 1000,
-      };
+        retryDelay: 1000};
       GlobalErrorHandler.instance = new GlobalErrorHandler(config || defaultConfig);
     }
     return GlobalErrorHandler.instance;
@@ -92,8 +91,7 @@ export class GlobalErrorHandler {
       message: `网络请求失败: ${error.message}`,
       details: { url, originalError: error.message },
       timestamp: Date.now(),
-      stackTrace: error.stack,
-    });
+      stackTrace: error.stack});
   }
   /**
   * 处理API错误
@@ -106,8 +104,7 @@ export class GlobalErrorHandler {
       message: `API错误 (${status}): ${message}`,
       code: status.toString(),
       details: { endpoint, status },
-      timestamp: Date.now(),
-    });
+      timestamp: Date.now()});
   }
   /**
   * 处理验证错误
@@ -118,8 +115,7 @@ export class GlobalErrorHandler {
       severity: ErrorSeverity.LOW,
       message: `验证失败: ${field} - ${message}`,
       details: { field },
-      timestamp: Date.now(),
-    });
+      timestamp: Date.now()});
   }
   /**
   * 处理认证错误
@@ -129,8 +125,7 @@ export class GlobalErrorHandler {
       type: ErrorType.AUTHENTICATION_ERROR,
       severity: ErrorSeverity.HIGH,
       message: `认证失败: ${message}`,
-      timestamp: Date.now(),
-    });
+      timestamp: Date.now()});
   }
   /**
   * 处理业务逻辑错误
@@ -141,8 +136,7 @@ export class GlobalErrorHandler {
       severity: ErrorSeverity.MEDIUM,
       message,
       details,
-      timestamp: Date.now(),
-    });
+      timestamp: Date.now()});
   }
   /**
   * 获取错误统计
@@ -163,8 +157,7 @@ export class GlobalErrorHandler {
       total: this.errorQueue.length,
       byType,
       bySeverity,
-      recent: this.errorQueue.slice(-10),
-    };
+      recent: this.errorQueue.slice(-10)};
   }
   /**
   * 清除错误队列
@@ -184,8 +177,7 @@ export class GlobalErrorHandler {
           severity: ErrorSeverity.HIGH,
           message: `未处理的Promise拒绝: ${event.reason}`,
           details: { reason: event.reason },
-          timestamp: Date.now(),
-        });
+          timestamp: Date.now()});
       });
       // 处理全局错误
       window.addEventListener('error', (event) => {
@@ -196,11 +188,9 @@ export class GlobalErrorHandler {
           details: {,
   filename: event.filename,
             lineno: event.lineno,
-            colno: event.colno,
-          },
+            colno: event.colno},
           timestamp: Date.now(),
-          stackTrace: event.error?.stack,
-        });
+          stackTrace: event.error?.stack});
       });
     }
   }
@@ -217,8 +207,7 @@ export class GlobalErrorHandler {
       message: error.message || '未知错误',
       timestamp: Date.now(),
       stackTrace: error.stack,
-      details: context,
-    };
+      details: context};
   }
   /**
   * 记录错误
@@ -230,8 +219,7 @@ export class GlobalErrorHandler {
       severity: error.severity,
       timestamp: new Date(error.timestamp).toISOString(),
       details: error.details,
-      stackTrace: error.stackTrace,
-    });
+      stackTrace: error.stackTrace});
   }
   /**
   * 上报错误
@@ -242,10 +230,8 @@ export class GlobalErrorHandler {
       await fetch(this.config.reportingEndpoint, {
       method: "POST",
       headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(error),
-      });
+          'Content-Type': 'application/json'},
+        body: JSON.stringify(error)});
     } catch (reportingError) {
       console.error('错误上报失败:', reportingError);
     }

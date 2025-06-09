@@ -9,13 +9,13 @@ import React,{ memo, useRef, useEffect } from react;
   TouchableOpacity,
   { Animated } from ";react-native";
 interface SearchBarProps {
-  value: string;
+  value: string;,
   onChangeText: (text: string) => void;
   placeholder?: string;
   autoFocus?: boolean;
   onFocus?: () => void;
   onBlur?: () => void;
-  style?: unknown
+  style?: unknown;
 }
 export const SearchBar = memo<SearchBarProps /    >(;)
 (;{
@@ -75,12 +75,12 @@ const effectEnd = performance.now();
   // 记录渲染性能
 performanceMonitor.recordRender();
   return (;)
-    <Animated.View,style={{[;
+    <Animated.View,style={[;
         styles.container,style,{ transform: [{ scale: scaleAnim   }}];
         };
       ]} /    >;
       <Icon name="search" size={20} color={colors.textSecondary} style={styles.searchIcon} /    >;
-      <TextInput
+      <TextInput;
 ref={inputRef}
         style={styles.input}
         value={value}
@@ -101,7 +101,7 @@ ref={inputRef}
   ;);
 });
 SearchBar.displayName = SearchBar""
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   flexDirection: "row,",
     alignItems: "center",'
     backgroundColor: colors.surface,

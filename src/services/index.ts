@@ -7,9 +7,16 @@ export { default as realTimeSync } from './realTimeSync';
 export { unifiedApiService } from './unifiedApiService';
 export { ragService } from './ragService';
 export { messageBusService } from './messageBusService';
-export { cornMazeService, CornMazeService, createCornMazeService } from './cornMazeService';
+export {
+  cornMazeService,
+  CornMazeService,
+  createCornMazeService,
+} from './cornMazeService';
 export { benchmarkService, BenchmarkService } from './benchmarkService';
-export { benchmarkStreamingService, BenchmarkStreamingService } from './benchmarkStreamingService';
+export {
+  benchmarkStreamingService,
+  BenchmarkStreamingService,
+} from './benchmarkStreamingService';
 //
 export {
   UIUXOptimizationService,
@@ -70,7 +77,11 @@ export type {
   HealthStatus,
 } from './benchmarkService';
 // 基准测试流式服务相关类型导出
-export type { StreamEvent, StreamConfig, EventListener } from './benchmarkStreamingService';
+export type {
+  StreamEvent,
+  StreamConfig,
+  EventListener,
+} from './benchmarkStreamingService';
 // 导出所有服务
 export { apiClient } from './apiClient';
 export { healthDataService } from './healthDataService';

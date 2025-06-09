@@ -3,11 +3,11 @@ export interface ApiError {
   code: number,message: string;
   details?: unknown;
   timestamp: string;
-  requestId?: string
+  requestId?: string;
 }
 export interface ErrorResponse {
   success: false,error: ApiError;
-  data?: null
+  data?: null;
 }
 export class ApiErrorHandler  {
   // 创建标准化错误响应

@@ -3,8 +3,7 @@ import {
   AgentCapability,
   AgentStatus,
   AgentMetrics,
-  AgentTask,
-} from '../types/agents';
+  AgentTask} from '../types/agents';
 /**
 * 基础智能体抽象类
 * 提供所有智能体的通用功能和接口
@@ -22,7 +21,7 @@ export abstract class BaseAgent implements Agent {
   protected successfulTasks: number = 0;
   protected totalResponseTime: number = 0;
   protected lastActive: Date = new Date();
-  constructor(params: {,)
+  constructor(params: {)
   id: string;
     name: string,
   description: string;

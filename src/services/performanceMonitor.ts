@@ -4,33 +4,33 @@
 */
 export interface PerformanceMetrics {
   // API性能指标
-  apiResponseTime: number;
+  apiResponseTime: number;,
   apiSuccessRate: number;
-  apiErrorRate: number;
+  apiErrorRate: number;,
   apiThroughput: number;
   // 网络性能指标
-  networkLatency: number;
+  networkLatency: number;,
   networkBandwidth: number;
   connectionQuality: 'excellent' | 'good' | 'fair' | 'poor';
   // 应用性能指标
-  memoryUsage: number;
+  memoryUsage: number;,
   cpuUsage: number;
-  batteryLevel: number;
+  batteryLevel: number;,
   storageUsage: number;
   // 用户体验指标
-  screenLoadTime: number;
+  screenLoadTime: number;,
   interactionResponseTime: number;
-  errorCount: number;
+  errorCount: number;,
   crashCount: number;
 }
 export interface PerformanceAlert {
-  id: string;
+  id: string;,
   type: 'warning' | 'error' | 'critical';
-  metric: keyof PerformanceMetrics;
+  metric: keyof PerformanceMetrics;,
   value: number;
-  threshold: number;
+  threshold: number;,
   message: string;
-  timestamp: Date;
+  timestamp: Date;,
   resolved: boolean;
 }
 class PerformanceMonitor {

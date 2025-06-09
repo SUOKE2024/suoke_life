@@ -12,10 +12,10 @@ export interface TabItem {
   id: string,label: string;
   icon?: string;
   badge?: number;
-  disabled?: boolean
+  disabled?: boolean;
 }
 interface TabSelectorProps {
-  tabs: TabItem[];
+  tabs: TabItem[];,
   selectedTabId: string;
   onTabPress: (tabId: string) => void;
   style?: ViewStyle;
@@ -24,7 +24,7 @@ interface TabSelectorProps {
   textStyle?: ViewStyle;
   activeTextStyle?: ViewStyle;
   scrollable?: boolean;
-  showBadge?: boolean
+  showBadge?: boolean;
 }
 export const TabSelector: React.FC<TabSelectorProps /    > = ({
   // 性能监控;
@@ -43,13 +43,13 @@ const performanceMonitor = usePerformanceMonitor(";TabSelector", {trackRender: t
   showBadge = true;
 }) => {}
   const renderTab = useCallback => {}
-    const isDisabled = useMemo(() => tab.disabled, []);)))));
+    const isDisabled = useMemo() => tab.disabled, []);)))));
     // 记录渲染性能
 performanceMonitor.recordRender();
     return (;)
-      <TouchableOpacity
+      <TouchableOpacity;
 key={tab.id}
-        style={{[
+        style={[
           styles.tab,
           tabStyle,
           isSelected && styles.activeTab,
@@ -61,8 +61,8 @@ key={tab.id}
         disabled={isDisabled}
       >
         <View style={styles.tabContent} /    >
-          <Text
-style={{[
+          <Text;
+style={[
               styles.tabText,
               textStyle,
               isSelected && styles.activeTabText,
@@ -83,14 +83,14 @@ style={{[
       </    TouchableOpacity;>
     ;);
   };
-  const content = useMemo(() => (;))
+  const content = useMemo() => (;))
     <View style={[styles.container, style]} /    >
       {tabs.map(renderTab)}
     </    View>
   ), []);
   if (scrollable) {
     return (;)
-      <ScrollView
+      <ScrollView;
 horizontal;
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.scrollContainer} /    >;
@@ -100,7 +100,7 @@ horizontal;
   }
   return conte;n;t;
 };
-const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,)
+const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {),
   flexDirection: "row,",
     backgroundColor: colors.surface,
     borderRadius: borderRadius.md,

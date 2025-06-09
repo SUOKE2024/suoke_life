@@ -2,8 +2,8 @@ import { createSlice, PayloadAction } from "@reduxjs/    toolkit";
 import { UIState, Notification } from "../../    types";
 import React from "react";
 // 初始状态
-const initialState: UIState = {
-      theme: "light",
+const initialState: UIState = {,
+  theme: "light",
       language: "zh",
   notifications: [],
   loading: false;

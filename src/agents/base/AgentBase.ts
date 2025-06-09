@@ -1,8 +1,7 @@
 import {AgentType,
   AgentCapability,
   AgentResponse,
-  AgentContext,
-} from "../types";
+  AgentContext} from "../types";
 /**
  * 智能体基础抽象类
  * 为所有智能体提供统一的基础功能和接口

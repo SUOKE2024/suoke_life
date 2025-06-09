@@ -47,12 +47,12 @@ export enum GameEventType {
 }
 // 位置坐标
 export interface Position {
-  x: number;
+  x: number;,
   y: number;
 }
 // 迷宫节点
 export interface MazeNode {
-  x: number;
+  x: number;,
   y: number;
   nodeType: NodeType;
   content?: string; // 节点内容
@@ -63,11 +63,11 @@ export interface MazeNode {
 }
 // 知识节点详情
 export interface KnowledgeNode {
-  nodeId: string;
+  nodeId: string;,
   title: string;
-  content: string;
+  content: string;,
   category: string; // 分类：四季养生、五行平衡等
-  difficultyLevel: string;
+  difficultyLevel: string;,
   relatedTags: string[];
   multimedia?: {
     images?: string[];
@@ -79,11 +79,11 @@ export interface KnowledgeNode {
 }
 // 挑战任务
 export interface Challenge {
-  challengeId: string;
+  challengeId: string;,
   title: string;
-  description: string;
+  description: string;,
   type: 'multiple_choice' | 'matching' | 'sorting' | 'fill_blank'; // 题型
-  difficultyLevel: string;
+  difficultyLevel: string;,
   questions: ChallengeQuestion[];
   rewardDescription: string;
   timeLimit?: number; // 时间限制（秒）
@@ -91,7 +91,7 @@ export interface Challenge {
 }
 // 挑战题目
 export interface ChallengeQuestion {
-  questionId: string;
+  questionId: string;,
   question: string;
   options?: string[]; // 选择题选项
   correctAnswer: string | string[];
@@ -100,18 +100,18 @@ export interface ChallengeQuestion {
 }
 // 迷宫基本信息
 export interface Maze {
-  id: string;
+  id: string;,
   name: string;
   description?: string;
-  size: number; // 迷宫大小 (size x size);
+  size: number; // 迷宫大小 (size x size);,
   theme: MazeTheme;
-  difficulty: MazeDifficulty;
+  difficulty: MazeDifficulty;,
   creatorId: string;
-  nodes: MazeNode[][]; // 二维节点数组;
+  nodes: MazeNode[][]; // 二维节点数组;,
   startPosition: Position;
-  endPosition: Position;
+  endPosition: Position;,
   knowledgeNodes: KnowledgeNode[];
-  challenges: Challenge[];
+  challenges: Challenge[];,
   createdAt: Date;
   updatedAt: Date;
   isPublic?: boolean; // 是否公开
@@ -120,17 +120,17 @@ export interface Maze {
 }
 // 用户迷宫进度
 export interface MazeProgress {
-  userId: string;
+  userId: string;,
   mazeId: string;
-  status: ProgressStatus;
+  status: ProgressStatus;,
   currentPosition: Position;
-  visitedNodes: Position[]; // 已访问的节点位置;
+  visitedNodes: Position[]; // 已访问的节点位置;,
   collectedItems: string[]; // 收集的物品ID;
-  completedChallenges: string[]; // 完成的挑战ID;
+  completedChallenges: string[]; // 完成的挑战ID;,
   acquiredKnowledge: string[]; // 获得的知识点ID;
-  score: number;
+  score: number;,
   stepsCount: number; // 步数统计
-  startTime: Date;
+  startTime: Date;,
   lastActiveTime: Date;
   completionTime?: Date;
   achievements?: string[]; // 获得的成就
@@ -138,15 +138,15 @@ export interface MazeProgress {
 }
 // 迷宫模板
 export interface MazeTemplate {
-  templateId: string;
+  templateId: string;,
   name: string;
-  description: string;
+  description: string;,
   mazeType: MazeTheme;
   difficulty: MazeDifficulty;
   previewImageUrl?: string;
-  sizeX: number;
+  sizeX: number;,
   sizeY: number;
-  knowledgeNodeCount: number;
+  knowledgeNodeCount: number;,
   challengeCount: number;
   isPopular?: boolean;
   rating?: number;
@@ -157,7 +157,7 @@ export interface CreateMazeRequest {
   name: string;
   description?: string;
   size?: number;
-  theme: MazeTheme;
+  theme: MazeTheme;,
   difficulty: MazeDifficulty;
   useTemplate?: boolean;
   templateId?: string;
@@ -171,11 +171,11 @@ export interface UpdateMazeRequest {
   tags?: string[];
 }
 export interface StartMazeRequest {
-  userId: string;
+  userId: string;,
   mazeId: string;
 }
 export interface MoveRequest {
-  userId: string;
+  userId: string;,
   mazeId: string;
   direction: Direction;
 }
@@ -194,7 +194,7 @@ export interface MazeResponse {
   userProgress?: MazeProgress;
 }
 export interface MoveResponse {
-  success: boolean;
+  success: boolean;,
   newPosition: Position;
   eventType: GameEventType;
   eventId?: string;
@@ -206,28 +206,28 @@ export interface MoveResponse {
   score?: number;
 }
 export interface UserProgressResponse {
-  progress: MazeProgress;
+  progress: MazeProgress;,
   maze: Maze;
   nextRecommendations?: string[];
 }
 export interface ListMazesResponse {
-  mazes: Maze[];
+  mazes: Maze[];,
   total: number;
-  page: number;
+  page: number;,
   size: number;
   hasNext: boolean;
 }
 export interface ListTemplatesResponse {
-  templates: MazeTemplate[];
+  templates: MazeTemplate[];,
   total: number;
-  page: number;
+  page: number;,
   size: number;
 }
 // 游戏奖励
 export interface GameReward {
-  rewardId: string;
+  rewardId: string;,
   type: 'points' | 'badge' | 'item' | 'knowledge';
-  name: string;
+  name: string;,
   description: string;
   value: number;
   icon?: string;
@@ -235,15 +235,15 @@ export interface GameReward {
 }
 // 智能体迷宫交互
 export interface MazeInteraction {
-  id: string;
+  id: string;,
   playerId: string;
-  npcResponse: string;
+  npcResponse: string;,
   action: string;
-  location: Position;
+  location: Position;,
   rewards: GameReward[];
-  hints: string[];
+  hints: string[];,
   challenges: Challenge[];
-  storyProgression: number; // 故事进度 0-100;
+  storyProgression: number; // 故事进度 0-100;,
   nextActions: string[];
   timestamp: Date;
   agentType?: 'xiaoai' | 'xiaoke' | 'laoke' | 'soer';
@@ -251,41 +251,41 @@ export interface MazeInteraction {
 }
 // 迷宫统计信息
 export interface MazeStats {
-  totalMazes: number;
+  totalMazes: number;,
   completedMazes: number;
-  averageScore: number;
+  averageScore: number;,
   totalPlayTime: number; // 总游戏时间（分钟）
-  favoriteTheme: MazeTheme;
+  favoriteTheme: MazeTheme;,
   achievements: string[];
   rank?: number; // 排名
   level?: number; // 等级
 }
 // 排行榜条目
 export interface LeaderboardEntry {
-  userId: string;
+  userId: string;,
   username: string;
   avatar?: string;
-  score: number;
+  score: number;,
   completionTime: number; // 完成时间（秒）
-  rank: number;
+  rank: number;,
   mazeId: string;
-  mazeName: string;
+  mazeName: string;,
   achievedAt: Date;
 }
 // 游戏设置
 export interface GameSettings {
-  soundEnabled: boolean;
+  soundEnabled: boolean;,
   musicEnabled: boolean;
-  vibrationEnabled: boolean;
+  vibrationEnabled: boolean;,
   autoSave: boolean;
-  difficulty: MazeDifficulty;
+  difficulty: MazeDifficulty;,
   showHints: boolean;
-  animationSpeed: 'slow' | 'normal' | 'fast';
+  animationSpeed: 'slow' | 'normal' | 'fast';,
   colorScheme: 'light' | 'dark' | 'auto';
 }
 // 错误类型
 export interface MazeError {
-  code: string;
+  code: string;,
   message: string;
   details?: any;
   timestamp: Date;
@@ -293,7 +293,7 @@ export interface MazeError {
 // 事件监听器类型
 export type MazeEventListener = (event: MazeGameEvent) => void;
 export interface MazeGameEvent {
-  type: GameEventType;
+  type: GameEventType;,
   data: any;
   timestamp: Date;
 }

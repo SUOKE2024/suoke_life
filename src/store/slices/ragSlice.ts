@@ -13,43 +13,43 @@ import type {RAGQueryRequest,
 // 状态接口定义
 export interface RAGState {
   // 查询状态
-  isQuerying: boolean;
+  isQuerying: boolean;,
   isStreaming: boolean;
-  currentQuery: string;
+  currentQuery: string;,
   queryHistory: RAGQueryResponse[];
   // 当前结果
-  currentResult: RAGQueryResponse | null;
+  currentResult: RAGQueryResponse | null;,
   streamingText: string;
   // 中医分析状态
-  isAnalyzing: boolean;
+  isAnalyzing: boolean;,
   tcmAnalysisResult: TCMAnalysisResponse | null;
   // 中药推荐状态
-  isRecommending: boolean;
+  isRecommending: boolean;,
   herbRecommendationResult: HerbRecommendationResponse | null;
   // 错误处理
-  error: string | null;
+  error: string | null;,
   lastError: Error | null;
   // 缓存管理
-  cacheStats: {;
+  cacheStats: {;,
   size: number;
-    keys: string[];
+    keys: string[];,
   hitRate: number;
-    totalQueries: number;
+    totalQueries: number;,
   cacheHits: number;
 };
   // 性能监控
   performance: {,
   averageResponseTime: number;
     totalQueries: number,
-  successRate: number;
-    failureCount: number;
+  successRate: number;,
+  failureCount: number;
   };
   // 用户偏好
   preferences: {,
   enableCache: boolean;
     enableStreaming: boolean,
-  defaultTaskType: 'consultation' | 'diagnosis' | 'treatment' | 'prevention';
-    maxHistorySize: number,
+  defaultTaskType: 'consultation' | 'diagnosis' | 'treatment' | 'prevention';,
+  maxHistorySize: number,
   autoSaveHistory: boolean;
   };
   // 离线支持

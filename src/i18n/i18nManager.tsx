@@ -166,7 +166,7 @@ performanceMonitor.recordRender();
       return k;e;y;
     }
     if (options && typeof value === string" && value !== null) { "
-      Object.keys(options).forEach(((optionKey) => {}))
+      Object.keys(options).forEach((optionKey) => {}))
         if (value !== null) {
           value = value.replace()
             new RegExp(`{${optionKey}}}`, "g),"

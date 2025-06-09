@@ -10,14 +10,14 @@ export interface ApiResponse<T = unknown> {
 }
 // API错误类型
 export interface ApiError {
-  code: string;
+  code: string;,
   message: string;
   details?: Record<string, unknown>;
   stack?: string;
 }
 // API请求配置
 export interface ApiRequest {
-  url: string;
+  url: string;,
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   data?: Record<string, unknown>;
   params?: Record<string, string | number | boolean>;
@@ -26,73 +26,73 @@ export interface ApiRequest {
 }
 // 离线数据类型
 export interface OfflineData {
-  id: string;
+  id: string;,
   timestamp: number;
-  operation: 'CREATE' | 'UPDATE' | 'DELETE';
+  operation: 'CREATE' | 'UPDATE' | 'DELETE';,
   entity: string;
   payload: Record<string, unknown>;
   synced: boolean;
 }
 // 数据冲突类型
 export interface DataConflict {
-  id: string;
+  id: string;,
   entity: string;
   clientData: Record<string, unknown>;
   serverData: Record<string, unknown>;
-  timestamp: number;
+  timestamp: number;,
   resolved: boolean;
 }
 // 健康数据类型
 export interface HealthMetric {
-  id: string;
+  id: string;,
   type: 'heart_rate' | 'blood_pressure' | 'weight' | 'blood_sugar' | 'sleep' | 'steps';
-  value: number | string;
+  value: number | string;,
   unit: string;
-  timestamp: string;
+  timestamp: string;,
   source: 'manual' | 'device' | 'api';
   metadata?: Record<string, unknown>;
 }
 // 智能体消息类型
 export interface AgentMessage {
-  id: string;
+  id: string;,
   agentId: string;
-  content: string;
+  content: string;,
   type: 'text' | 'image' | 'audio' | 'file';
   timestamp: string;
   metadata?: Record<string, unknown>;
 }
 // 诊断数据类型
 export interface DiagnosisData {
-  id: string;
+  id: string;,
   userId: string;
-  type: 'five_diagnosis' | 'symptom_analysis' | 'health_assessment';
+  type: 'five_diagnosis' | 'symptom_analysis' | 'health_assessment';,
   data: Record<string, unknown>;
   result?: DiagnosisResult;
-  timestamp: string;
+  timestamp: string;,
   status: 'pending' | 'processing' | 'completed' | 'failed';
 }
 export interface DiagnosisResult {
-  id: string;
+  id: string;,
   diagnosis: string;
-  confidence: number;
+  confidence: number;,
   recommendations: string[];
   followUp?: string;
   metadata?: Record<string, unknown>;
 }
 // 用户配置类型
 export interface UserPreferences {
-  theme: 'light' | 'dark' | 'auto';
+  theme: 'light' | 'dark' | 'auto';,
   language: 'zh' | 'en';
-  notifications: NotificationSettings;
+  notifications: NotificationSettings;,
   privacy: PrivacySettings;
   accessibility: AccessibilitySettings;
 }
 export interface NotificationSettings {
-  enabled: boolean;
+  enabled: boolean;,
   types: {;
-    health_reminders: boolean;
+    health_reminders: boolean;,
   agent_messages: boolean;
-    system_updates: boolean;
+    system_updates: boolean;,
   emergency_alerts: boolean;
 };
   schedule: {,
@@ -102,15 +102,15 @@ export interface NotificationSettings {
   };
 }
 export interface PrivacySettings {
-  data_sharing: boolean;
+  data_sharing: boolean;,
   analytics: boolean;
-  personalization: boolean;
+  personalization: boolean;,
   third_party_integrations: boolean;
 }
 export interface AccessibilitySettings {
-  font_size: 'small' | 'medium' | 'large' | 'extra_large';
+  font_size: 'small' | 'medium' | 'large' | 'extra_large';,
   high_contrast: boolean;
-  screen_reader: boolean;
+  screen_reader: boolean;,
   voice_commands: boolean;
   haptic_feedback: boolean;
 }

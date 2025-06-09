@@ -4,13 +4,13 @@ import { AgentCoordinator } from "./AgentCoordinator";
 * 智能体管理器配置
 */
 export interface AgentManagerConfig {
-  maxConcurrentTasks: number;
+  maxConcurrentTasks: number;,
   healthCheckInterval: number;
-  autoRestart: boolean;
+  autoRestart: boolean;,
   logLevel: "debug" | "info" | "warn" | "error";
-  performanceMonitoring: boolean;
-  resourceLimits: {;
-    memory: number;
+  performanceMonitoring: boolean;,
+  resourceLimits: {
+    memory: number;,
   cpu: number;
 };
 }
@@ -26,13 +26,13 @@ export type AgentStatus  = | "initializing"
 * 智能体性能指标
 */
 export interface AgentMetrics {
-  tasksProcessed: number;
+  tasksProcessed: number;,
   successRate: number;
-  averageResponseTime: number;
+  averageResponseTime: number;,
   errorCount: number;
-  lastActive: Date;
+  lastActive: Date;,
   memoryUsage: number;
-  cpuUsage: number;
+  cpuUsage: number;,
   uptime: number;
 }
 /**
@@ -78,7 +78,7 @@ export class AgentManager {
       this.isRunning = true;
       this.log("info", "智能体管理器初始化完成");
     } catch (error) {
-      this.log("error",智能体管理器初始化失败", " error);
+      this.log("error", "智能体管理器初始化失败", error);
       throw error;
     }
   }
@@ -101,7 +101,7 @@ export class AgentManager {
       this.updateMetrics(result, Date.now() - startTime);
       return result;
     } catch (error) {
-      this.log("error",任务处理失败", " error);
+      this.log("error", "任务处理失败", error);
       this.updateErrorMetrics();
       throw error;
     }
@@ -114,7 +114,7 @@ export class AgentManager {
   ): Promise<Map<AgentType, AgentHealthStatus> | AgentHealthStatus> {
     const allStatus = await this.coordinator.getAllAgentStatus();
     if (agentType) {
-      return (;)
+      return (
         allStatus.get(agentType) || {agentType,status: "error",load: 0,responseTime: 0,errorRate: 1,lastCheck: new Date(),capabilities: [],version: "0.0.0";
         };
       );
@@ -150,10 +150,10 @@ export class AgentManager {
   * 获取系统概览
   */
   getSystemOverview(): any {
-    const totalTasks = Array.from(this.metrics.values()).reduce((sum, metrics) => sum + metrics.errors, 0);
+    const totalTasks = Array.from(this.metrics.values()).reduce(sum, metrics) => sum + metrics.errors, 0);
       (sum, m) => sum + m.tasksProcessed,0;
     );
-    const totalErrors = Array.from(this.metrics.values()).reduce((sum, metrics) => sum + metrics.errors, 0);
+    const totalErrors = Array.from(this.metrics.values()).reduce(sum, metrics) => sum + metrics.errors, 0);
       (sum, m) => sum + m.errorCount,0;
     );
     const avgResponseTime = this.calculateAverageResponseTime();
@@ -169,7 +169,7 @@ export class AgentManager {
       config: this.config,
       lastUpdate: new Date()
     };
-        totalTasks > 0 ? (totalTasks - totalErrors) / totalTasks : 0,averageResponseTime: avgResponseTime,systemUptime,isHealthy: this.isSystemHealthy(),config: this.config,lastUpdate: new Date();
+        totalTasks > 0 ? (totalTasks - totalErrors) / totalTasks : 0,averageResponseTime: avgResponseTime, systemUptime, isHealthy: this.isSystemHealthy(), config: this.config, lastUpdate: new Date()
     };
   }
   /**
@@ -191,10 +191,10 @@ export class AgentManager {
   * 初始化性能指标
   */
   private initializeMetrics(): void {
-    const agentTypes = [;
+    const agentTypes = [
       AgentType.XIAOAI,AgentType.XIAOKE,AgentType.LAOKE,AgentType.SOER;
     ];
-    agentTypes.forEach(((agentType) => {
+    agentTypes.forEach(agentType) => {
       this.metrics.set(agentType, {
         tasksProcessed: 0,
         successRate: 1.0,
@@ -215,7 +215,7 @@ export class AgentManager {
       try {
         await this.performHealthCheck();
       } catch (error) {
-        this.log("error",健康检查失败", " error);
+        this.log("error", "健康检查失败", error);
       }
     }, this.config.healthCheckInterval);
   }
@@ -306,7 +306,7 @@ export class AgentManager {
   private calculateAverageResponseTime(): number {
     const metrics = Array.from(this.metrics.values());
     if (metrics.length === 0) {return 0;}
-    const totalTime = metrics.reduce((sum, metrics) => sum + metrics.errors, 0);
+    const totalTime = metrics.reduce(sum, metrics) => sum + metrics.errors, 0);
       (sum, m) => sum + m.averageResponseTime,0;
     );
     return totalTime / metrics.length;

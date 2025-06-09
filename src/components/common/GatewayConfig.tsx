@@ -8,26 +8,24 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
-  Modal,
-} from 'react-native';
+  Modal} from 'react-native';
 import {
   GATEWAY_FEATURES,
   GATEWAY_PERFORMANCE_CONFIG,
   GATEWAY_CACHE_CONFIG,
-  getCurrentEnvConfig,
-} from '../../constants/config';
+  getCurrentEnvConfig} from '../../constants/config';
 import { useApiService } from '../../services/IntegratedApiService';
 interface ConfigItem {
-  key: string;
+  key: string;,
   label: string;
-  type: 'boolean' | 'number' | 'string';
+  type: 'boolean' | 'number' | 'string';,
   value: any;
   description?: string;
   min?: number;
   max?: number;
 }
 interface ConfigSection {
-  title: string;
+  title: string;,
   items: ConfigItem[];
 }
 const GatewayConfig: React.FC = () => {
@@ -37,21 +35,19 @@ const GatewayConfig: React.FC = () => {
   const [hasChanges, setHasChanges] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
   // 初始化配置
-  useEffect(() => {
+  useEffect() => {
     initializeConfigs();
   }, []);  // 检查是否需要添加依赖项;
   const initializeConfigs = () => {
     const configSections: ConfigSection[] = [
       {
       title: "功能特性",
-      items: Object.entries(GATEWAY_FEATURES).map(([key, value]) => ({
+      items: Object.entries(GATEWAY_FEATURES).map([key, value]) => ({
           key: `features.${key}`,
           label: formatLabel(key),
           type: 'boolean',
           value,
-          description: getFeatureDescription(key),
-        })),
-      },
+          description: getFeatureDescription(key)}))},
       {
       title: "性能配置",
       items: [
@@ -62,8 +58,7 @@ const GatewayConfig: React.FC = () => {
             value: GATEWAY_PERFORMANCE_CONFIG.TIMEOUT,
             description: '单个请求的超时时间（毫秒）',
             min: 1000,
-            max: 120000,
-          },
+            max: 120000},
           {
       key: "performance.RETRY_ATTEMPTS",
       label: '重试次数',
@@ -71,8 +66,7 @@ const GatewayConfig: React.FC = () => {
             value: GATEWAY_PERFORMANCE_CONFIG.RETRY_ATTEMPTS,
             description: '请求失败时的重试次数',
             min: 0,
-            max: 10,
-          },
+            max: 10},
           {
       key: "performance.RETRY_DELAY",
       label: '重试延迟',
@@ -80,8 +74,7 @@ const GatewayConfig: React.FC = () => {
             value: GATEWAY_PERFORMANCE_CONFIG.RETRY_DELAY,
             description: '重试之间的延迟时间（毫秒）',
             min: 100,
-            max: 10000,
-          },
+            max: 10000},
           {
       key: "performance.STREAM_TIMEOUT",
       label: '流式超时时间',
@@ -89,10 +82,7 @@ const GatewayConfig: React.FC = () => {
             value: GATEWAY_PERFORMANCE_CONFIG.STREAM_TIMEOUT,
             description: '流式请求的超时时间（毫秒）',
             min: 10000,
-            max: 300000,
-          },
-        ],
-      },
+            max: 300000}]},
       {
       title: "熔断器配置",
       items: [
@@ -103,8 +93,7 @@ const GatewayConfig: React.FC = () => {
             value: GATEWAY_PERFORMANCE_CONFIG.CIRCUIT_BREAKER.FAILURE_THRESHOLD,
             description: '触发熔断的连续失败次数',
             min: 1,
-            max: 20,
-          },
+            max: 20},
           {
       key: "circuitBreaker.RECOVERY_TIMEOUT",
       label: '恢复超时',
@@ -112,8 +101,7 @@ const GatewayConfig: React.FC = () => {
             value: GATEWAY_PERFORMANCE_CONFIG.CIRCUIT_BREAKER.RECOVERY_TIMEOUT,
             description: '熔断器恢复尝试的超时时间（毫秒）',
             min: 10000,
-            max: 300000,
-          },
+            max: 300000},
           {
       key: "circuitBreaker.MONITORING_PERIOD",
       label: '监控周期',
@@ -121,10 +109,7 @@ const GatewayConfig: React.FC = () => {
             value: GATEWAY_PERFORMANCE_CONFIG.CIRCUIT_BREAKER.MONITORING_PERIOD,
             description: '监控失败率的时间窗口（毫秒）',
             min: 5000,
-            max: 120000,
-          },
-        ],
-      },
+            max: 120000}]},
       {
       title: "缓存配置",
       items: [
@@ -135,8 +120,7 @@ const GatewayConfig: React.FC = () => {
             value: GATEWAY_CACHE_CONFIG.TTL,
             description: '缓存项的默认生存时间（毫秒）',
             min: 1000,
-            max: 3600000,
-          },
+            max: 3600000},
           {
       key: "cache.MAX_SIZE",
       label: '最大缓存数',
@@ -144,18 +128,13 @@ const GatewayConfig: React.FC = () => {
             value: GATEWAY_CACHE_CONFIG.MAX_SIZE,
             description: '缓存中最大项目数',
             min: 10,
-            max: 1000,
-          },
+            max: 1000},
           {
       key: "cache.ENABLE_PERSISTENCE",
       label: '启用持久化',
             type: 'boolean',
             value: GATEWAY_CACHE_CONFIG.ENABLE_PERSISTENCE,
-            description: '是否将缓存持久化到本地存储',
-          },
-        ],
-      },
-    ];
+            description: '是否将缓存持久化到本地存储'}]}];
     setConfigs(configSections);
   };
   // 格式化标签
@@ -178,8 +157,7 @@ const GatewayConfig: React.FC = () => {
       ENABLE_CIRCUIT_BREAKER: '启用熔断器保护',
       ENABLE_RATE_LIMITING: '启用请求限流',
       ENABLE_AUTHENTICATION: '启用身份认证',
-      ENABLE_MONITORING: '启用监控和日志',
-    };
+      ENABLE_MONITORING: '启用监控和日志'};
     return descriptions[key] || '功能开关';
   };
   // 更新配置值
@@ -189,8 +167,7 @@ const GatewayConfig: React.FC = () => {
         ...section,
         items: section.items.map(item =>)
           item.key === key ? { ...item, value } : item,
-        ),
-      })),
+        )})),
     );
     setHasChanges(true);
   };
@@ -230,9 +207,7 @@ const GatewayConfig: React.FC = () => {
             initializeConfigs();
             setHasChanges(false);
             setIsEditing(false);
-          },
-        },
-      ],
+          }}],
     );
   };
   // 清除缓存
@@ -247,9 +222,7 @@ const GatewayConfig: React.FC = () => {
       onPress: () => {
             apiService.clearCache();
             Alert.alert("成功", "缓存已清除');
-          },
-        },
-      ],
+          }}],
     );
   };
   // 渲染配置项
@@ -259,7 +232,7 @@ const GatewayConfig: React.FC = () => {
   <View key={key} style={styles.configItem}>
         <View style={styles.configHeader}>
           <Text style={styles.configLabel}>{label}</Text>
-          {type === 'boolean'  && <Switch
+          {type === 'boolean'  && <Switch;
               value={value}
               onValueChange={(newValue) => updateConfigValue(key, newValue)}
               disabled={!isEditing}
@@ -269,7 +242,7 @@ const GatewayConfig: React.FC = () => {
         {description  && <Text style={styles.configDescription}>{description}</Text>
         )}
         {type === 'number'  && <View style={styles.numberInputContainer}>
-            <TextInput
+            <TextInput;
               style={[styles.numberInput, !isEditing && styles.disabledInput]}
               value={value.toString()}
               onChangeText={(text) => {
@@ -286,7 +259,7 @@ const GatewayConfig: React.FC = () => {
             )}
           </View>
         )}
-        {type === 'string'  && <TextInput
+        {type === 'string'  && <TextInput;
             style={[styles.textInput, !isEditing && styles.disabledInput]}
             value={value}
             onChangeText={(text) => updateConfigValue(key, text)}
@@ -311,13 +284,13 @@ const GatewayConfig: React.FC = () => {
       <View style={styles.header}>
         <Text style={styles.title}>网关配置</Text>
         <View style={styles.headerActions}>
-          <TouchableOpacity
+          <TouchableOpacity;
             style={[styles.actionButton, styles.clearButton]}
             onPress={clearCache}
           >
             <Text style={styles.actionButtonText}>清除缓存</Text>
           </TouchableOpacity>
-          <TouchableOpacity
+          <TouchableOpacity;
             style={[styles.actionButton, styles.advancedButton]}
             onPress={() => setShowAdvanced(!showAdvanced)}
           >
@@ -329,7 +302,7 @@ const GatewayConfig: React.FC = () => {
       </View>
       {}
       <ScrollView style={styles.content}>
-        {configs.map((section, index) => {
+        {configs.map(section, index) => {
           // 高级配置只在显示高级时展示
           if (!showAdvanced && (index > 1)) return null;
           return renderConfigSection(section);
@@ -338,7 +311,7 @@ const GatewayConfig: React.FC = () => {
       {}
       <View style={styles.footer}>
         {!isEditing ? ()
-          <TouchableOpacity
+          <TouchableOpacity;
             style={[styles.footerButton, styles.editButton]}
             onPress={() => setIsEditing(true)}
           >
@@ -346,7 +319,7 @@ const GatewayConfig: React.FC = () => {
           </TouchableOpacity>
         ) : (
           <View style={styles.editActions}>
-            <TouchableOpacity
+            <TouchableOpacity;
               style={[styles.footerButton, styles.cancelButton]}
               onPress={() => {
                 if (hasChanges) {
@@ -362,9 +335,7 @@ const GatewayConfig: React.FC = () => {
                           initializeConfigs();
                           setIsEditing(false);
                           setHasChanges(false);
-                        },
-                      },
-                    ],
+                        }}],
                   );
                 } else {
                   setIsEditing(false);
@@ -373,18 +344,17 @@ const GatewayConfig: React.FC = () => {
             >
               <Text style={styles.footerButtonText}>取消</Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            <TouchableOpacity;
               style={[styles.footerButton, styles.resetButton]}
               onPress={resetConfigs}
             >
               <Text style={styles.footerButtonText}>重置</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={{[
+            <TouchableOpacity;
+              style={[
                 styles.footerButton,
                 styles.saveButton,
-                !hasChanges && styles.disabledButton,
-              ]}}
+                !hasChanges && styles.disabledButton]}}
               onPress={saveConfigs}
               disabled={!hasChanges}
             >
@@ -399,45 +369,36 @@ const GatewayConfig: React.FC = () => {
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
+    backgroundColor: '#f5f5f5'},
   header: {,
   backgroundColor: '#fff',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
+    borderBottomColor: '#e0e0e0'},
   title: {,
   fontSize: 24,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 12,
-  },
+    marginBottom: 12},
   headerActions: {,
   flexDirection: 'row',
-    gap: 8,
-  },
+    gap: 8},
   actionButton: {,
   paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 6,
-    borderWidth: 1,
-  },
+    borderWidth: 1},
   clearButton: {,
   borderColor: '#f44336',
-    backgroundColor: '#fff',
-  },
+    backgroundColor: '#fff'},
   advancedButton: {,
   borderColor: '#2196f3',
-    backgroundColor: '#fff',
-  },
+    backgroundColor: '#fff'},
   actionButtonText: {,
   fontSize: 14,
-    fontWeight: '500',
-  },
+    fontWeight: '500'},
   content: {,
-  flex: 1,
-  },
+  flex: 1},
   section: {,
   margin: 16,
     backgroundColor: '#fff',
@@ -447,48 +408,40 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
-  },
+    elevation: 3},
   sectionTitle: {,
   fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 16,
-  },
+    marginBottom: 16},
   configItem: {,
   marginBottom: 16,
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
+    borderBottomColor: '#f0f0f0'},
   configHeader: {,
   flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 4,
-  },
+    marginBottom: 4},
   configLabel: {,
   fontSize: 16,
     fontWeight: '600',
     color: '#333',
-    flex: 1,
-  },
+    flex: 1},
   configDescription: {,
   fontSize: 14,
     color: '#666',
-    marginBottom: 8,
-  },
+    marginBottom: 8},
   numberInputContainer: {,
-  marginTop: 8,
-  },
+  marginTop: 8},
   numberInput: {,
   borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 6,
     padding: 12,
     fontSize: 16,
-    backgroundColor: '#fff',
-  },
+    backgroundColor: '#fff'},
   textInput: {,
   borderWidth: 1,
     borderColor: '#ddd',
@@ -496,55 +449,42 @@ const styles = StyleSheet.create({
     padding: 12,
     fontSize: 16,
     backgroundColor: '#fff',
-    marginTop: 8,
-  },
+    marginTop: 8},
   disabledInput: {,
   backgroundColor: '#f5f5f5',
-    color: '#999',
-  },
+    color: '#999'},
   rangeText: {,
   fontSize: 12,
     color: '#666',
-    marginTop: 4,
-  },
+    marginTop: 4},
   footer: {,
   backgroundColor: '#fff',
     padding: 16,
     borderTopWidth: 1,
-    borderTopColor: '#e0e0e0',
-  },
+    borderTopColor: '#e0e0e0'},
   footerButton: {,
   paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 6,
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   footerButtonText: {,
   fontSize: 16,
     fontWeight: 'bold',
-    color: '#fff',
-  },
+    color: '#fff'},
   editButton: {,
-  backgroundColor: '#2196f3',
-  },
+  backgroundColor: '#2196f3'},
   editActions: {,
   flexDirection: 'row',
-    gap: 12,
-  },
+    gap: 12},
   cancelButton: {,
   backgroundColor: '#9e9e9e',
-    flex: 1,
-  },
+    flex: 1},
   resetButton: {,
   backgroundColor: '#ff9800',
-    flex: 1,
-  },
+    flex: 1},
   saveButton: {,
   backgroundColor: '#4caf50',
-    flex: 1,
-  },
+    flex: 1},
   disabledButton: {,
-  backgroundColor: '#ccc',
-  },
-});
+  backgroundColor: '#ccc'}});
 export default GatewayConfig;

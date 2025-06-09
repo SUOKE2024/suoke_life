@@ -3,19 +3,19 @@ import React from 'react';
 // 索克生活四智能体系统配置
 // 基于README.md第1013-1063行的智能体描述
 export interface AgentConfig {
-  id: string;
+  id: string;,
   name: string;
-  type: AgentType;
+  type: AgentType;,
   description: string;
-  channel: string;
+  channel: string;,
   role: string;
-  capabilities: string[];
+  capabilities: string[];,
   technicalFeatures: Record<string, boolean>;
-  apiEndpoint: string;
+  apiEndpoint: string;,
   port: number;
-  enabled: boolean;
+  enabled: boolean;,
   maxConcurrentTasks: number;
-  responseTimeout: number;
+  responseTimeout: number;,
   retryAttempts: number;
 }
 // 小艾智能体配置 - 首页聊天频道版主 & 四诊协调智能体
@@ -182,9 +182,9 @@ export const AGENT_CONFIGS: Record<AgentType, AgentConfig> = {
 };
 // 智能体协作配置
 export interface CollaborationConfig {
-  primaryAgent: AgentType;
+  primaryAgent: AgentType;,
   supportingAgents: AgentType[];
-  scenario: string;
+  scenario: string;,
   description: string;
 }
 export const COLLABORATION_SCENARIOS: CollaborationConfig[] = [

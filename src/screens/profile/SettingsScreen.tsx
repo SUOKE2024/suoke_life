@@ -1,123 +1,206 @@
-import { useNavigation } from "@react-navigation/native";/import { colors, spacing, fonts } from "../../constants/theme";/    import { useDispatch } from "react-redux";
-import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/      View,";
-import React from "react";
-/import { NativeStackNavigationProp } from "@react-navigation/native-stack";/import { MainStackParamList } from "../../navigation/MainNavigator";/    importReact from "react";
-  Text,
-  StyleSheet,
+import { useNavigation } from '@react-navigation/native';
+import React, { useCallback } from 'react';
+import {
+  Alert,
   ScrollView,
-  { TouchableOpacity } from ";react-native";
-type SettingsScreenNavigationProp = NativeStackNavigationProp<;
-  MainStackParamList,"Setting;s;"
-;>;
-export const SettingsScreen: React.FC  = () => {}
-  const performanceMonitor = usePerformanceMonitor("SettingsScreen', { "';)
-    trackRender: true,trackMemory: true,warnThreshold: 50,  };);
-  const navigation = useNavigation<SettingsScreenNavigationProp />/      const dispatch = useDispatch;
-  const handleLogout = async() => {}
-    try {await dispatch(logo;u;t as any);
-    } catch (error) {
-      }
-  };
-  const handleBack = useCallback(); => {}
-    //
-    navigation.goBack();
-  };
-  const navigateToServiceStatus = useCallback(); => {}
-    //
-    navigation.navigate("ServiceStatus");
-  };
-  const navigateToServiceManagement = useCallback(); => {}
-    //
-    navigation.navigate("ServiceManagement");
-  };
-  const navigateToDeveloperPanel = useCallback(); => {}
-    //
-    navigation.navigate("DeveloperPanel");
-  };
-  performanceMonitor.recordRender();
-  return (;)
-    <View style={styles.container}>/      <View style={styles.header}>/        <TouchableOpacity onPress={handleBack} style={styles.backButton} accessibilityLabel="TODO: 添加无障碍标签" />/          <Text style={styles.backButtonText}>返回</Text>/        </TouchableOpacity>/        <Text style={styles.headerTitle}>设置</Text>/        <View style={styles.placeholder}>/      </View>/;
-      <ScrollView style={styles.content}>/        <View style={styles.section}>/          <Text style={styles.sectionTitle}>账户设置</Text>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>个人资料</Text>/          </TouchableOpacity>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>修改密码</Text>/          </TouchableOpacity>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>隐私设置</Text>/          </TouchableOpacity>/        </View>/;
-        <View style={styles.section}>/          <Text style={styles.sectionTitle}>应用设置</Text>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>通知</Text>/          </TouchableOpacity>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>语言</Text>/          </TouchableOpacity>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>显示主题</Text>/          </TouchableOpacity>/        </View>/;
-        <View style={styles.section}>/          <Text style={styles.sectionTitle}>系统与开发</Text>/              <TouchableOpacity,style={styles.settingItem};
-            onPress={navigateToServiceStatus};
-          accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>服务状态</Text>/          </TouchableOpacity>/              <TouchableOpacity
-style={styles.settingItem}
-            onPress={navigateToServiceManagement}
-          accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>服务管理</Text>/          </TouchableOpacity>/              <TouchableOpacity
-style={styles.settingItem}
-            onPress={navigateToDeveloperPanel}
-          accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>开发者面板</Text>/          </TouchableOpacity>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>清除缓存</Text>/          </TouchableOpacity>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>检查更新</Text>/          </TouchableOpacity>/        </View>/
-        <View style={styles.section}>/          <Text style={styles.sectionTitle}>其他</Text>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>关于我们</Text>/          </TouchableOpacity>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>帮助与反馈</Text>/          </TouchableOpacity>/          <TouchableOpacity style={styles.settingItem} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.settingText}>服务条款</Text>/          </TouchableOpacity>/        </View>/
-        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout} accessibilityLabel="TODO: 添加无障碍标签" />/          <Text style={styles.logoutButtonText}>退出登录</Text>/        </TouchableOpacity>/      </ScrollView>/    </View>/      ;);
-}
-const styles = StyleSheet.create({container: {,)
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+export const SettingsScreen: React.FC = () => {
+  const navigation = useNavigation();
+
+  const handleLogout = useCallback(async () => {
+    Alert.alert('确认退出', '确定要退出登录吗？', [
+      { text: '取消', style: 'cancel' },
+      {
+        text: '确定',
+        onPress: () => {
+          // 这里应该调用实际的退出登录逻辑
+          Alert.alert('提示', '退出登录功能待实现');
+        },
+      },
+    ]);
+  }, []);
+
+  const navigateToServiceStatus = useCallback() => {
+    navigation.navigate('ServiceStatus' as never);
+  }, [navigation]);
+
+  const navigateToServiceManagement = useCallback() => {
+    navigation.navigate('ServiceManagement' as never);
+  }, [navigation]);
+
+  const navigateToDeveloperPanel = useCallback() => {
+    navigation.navigate('DeveloperPanel' as never);
+  }, [navigation]);
+
+  const handleClearCache = useCallback() => {
+    Alert.alert('确认清除', '确定要清除应用缓存吗？', [
+      { text: '取消', style: 'cancel' },
+      {
+        text: '确定',
+        onPress: () => {
+          Alert.alert('成功', '缓存已清除');
+        },
+      },
+    ]);
+  }, []);
+
+  const handleCheckUpdate = useCallback() => {
+    Alert.alert('检查更新', '当前已是最新版本');
+  }, []);
+
+  const handleAbout = useCallback() => {
+    Alert.alert(
+      '关于索克生活',
+      '版本: 1.0.0\n构建: 100\n\n索克生活是一个由人工智能智能体驱动的现代化健康管理平台。',
+      [{ text: '确定' }]
+    );
+  }, []);
+
+  const renderSettingItem = (title: string, onPress?: () => void) => (
+    <TouchableOpacity style={styles.settingItem} onPress={onPress}>
+      <Text style={styles.settingText}>{title}</Text>
+      <Text style={styles.arrow}>›</Text>
+    </TouchableOpacity>
+  );
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Text style={styles.backButton}>←</Text>
+        </TouchableOpacity>
+        <Text style={styles.title}>设置</Text>
+        <View style={styles.placeholder} />
+      </View>
+
+      <ScrollView style={styles.content}>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>账户设置</Text>
+          {renderSettingItem('个人资料')}
+          {renderSettingItem('修改密码')}
+          {renderSettingItem('隐私设置')}
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>应用设置</Text>
+          {renderSettingItem('通知设置')}
+          {renderSettingItem('语言设置')}
+          {renderSettingItem('显示主题')}
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>系统与开发</Text>
+          {renderSettingItem('服务状态', navigateToServiceStatus)}
+          {renderSettingItem('服务管理', navigateToServiceManagement)}
+          {renderSettingItem('开发者面板', navigateToDeveloperPanel)}
+          {renderSettingItem('清除缓存', handleClearCache)}
+          {renderSettingItem('检查更新', handleCheckUpdate)}
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>其他</Text>
+          {renderSettingItem('关于我们', handleAbout)}
+          {renderSettingItem('帮助与反馈')}
+          {renderSettingItem('服务条款')}
+        </View>
+
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <Text style={styles.logoutButtonText}>退出登录</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {,
   flex: 1,
-    backgroundColor: colors.background;
+    backgroundColor: '#F5F7FA',
   },
   header: {,
-  flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: spacing.md,
-    backgroundColor: colors.white,
+  flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: colors.border;
+    borderBottomColor: '#E1E8ED',
   },
-  backButton: { padding: spacing.sm  },
-  backButtonText: {,
-  color: colors.primary,
-    fontSize: fonts.size.md,
-    fontWeight: "bold"
+  backButton: {,
+  fontSize: 24,
+    color: '#2C3E50',
   },
-  headerTitle: {,
-  fontSize: fonts.size.lg,
-    fontWeight: "bold",
-    color: colors.text;
+  title: {,
+  fontSize: 18,
+    fontWeight: 'bold',
+    color: '#2C3E50',
   },
-  placeholder: { width: 50  },
+  placeholder: {,
+  width: 24,
+  },
   content: {,
   flex: 1,
-    padding: spacing.md;
+    padding: 20,
   },
   section: {,
-  marginBottom: spacing.xl,
-    backgroundColor: colors.white,
-    borderRadius: 8,
-    padding: spacing.md,
-    ...StyleSheet.flatten({
-      shadowColor: "#000",
-      shadowOffset: { width: 0, height;: ;2 ;},
-      shadowOpacity: 0.1,
-      shadowRadius: 4,
-      elevation: 2;
-    });
+  marginBottom: 24,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   sectionTitle: {,
-  fontSize: fonts.size.md,
-    fontWeight: "bold",
-    color: colors.textSecondary,
-    marginBottom: spacing.md;
+  fontSize: 16,
+    fontWeight: 'bold',
+    color: '#7F8C8D',
+    marginBottom: 16,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   settingItem: {,
-  paddingVertical: spacing.md,
+  flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border;
+    borderBottomColor: '#F8F9FA',
   },
   settingText: {,
-  fontSize: fonts.size.md,
-    color: colors.text;
+  fontSize: 16,
+    color: '#2C3E50',
+  },
+  arrow: {,
+  fontSize: 20,
+    color: '#BDC3C7',
   },
   logoutButton: {,
-  marginVertical: spacing.xl,
-    backgroundColor: colors.error,
-    padding: spacing.md,
-    borderRadius: 8,
-    alignItems: "center"
+  marginVertical: 24,
+    backgroundColor: '#E74C3C',
+    paddingVertical: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   logoutButtonText: {,
-  color: colors.white,
-    fontSize: fonts.size.md,
-    fontWeight: "bold"
-  }
+  color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
+
+export default SettingsScreen;

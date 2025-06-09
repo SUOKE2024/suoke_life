@@ -11,22 +11,22 @@ export enum MessageType {
     HEARTBEAT = 'HEARTBEAT'
   }
   export interface WebSocketMessage {
-  type: MessageType;
+  type: MessageType;,
   payload: any;
-    timestamp: number;
+    timestamp: number;,
   messageId: string;
     userId?: string;
     sessionId?: string;
 }
   export interface ConnectionConfig {
-  url: string;
+  url: string;,
   reconnectInterval: number;
-    maxReconnectAttempts: number;
+    maxReconnectAttempts: number;,
   heartbeatInterval: number;
     timeout: number;
 }
   export interface MessageHandler {
-  type: MessageType;
+  type: MessageType;,
   handler: (message: WebSocketMessage) => void | Promise<void>;
 }
   export class WebSocketManager {
@@ -51,8 +51,7 @@ export enum MessageType {
           reconnectInterval: 3000,
           maxReconnectAttempts: 5,
           heartbeatInterval: 30000,
-          timeout: 10000,
-        };
+          timeout: 10000};
         WebSocketManager.instance = new WebSocketManager(config || defaultConfig);
       }
       return WebSocketManager.instance;
@@ -138,8 +137,7 @@ export enum MessageType {
         timestamp: Date.now(),
         messageId: this.generateMessageId(),
         userId: options?.userId,
-        sessionId: options?.sessionId,
-      };
+        sessionId: options?.sessionId};
       if (this.ws?.readyState === WebSocket.OPEN) {
         this.ws.send(JSON.stringify(message));
       } else {
@@ -175,8 +173,7 @@ export enum MessageType {
       await this.sendMessage(MessageType.CHAT, {
         message,
         agentType,
-        timestamp: Date.now(),
-      }, { sessionId });
+        timestamp: Date.now()}, { sessionId });
     }
     /**
     * 发送健康数据
@@ -184,24 +181,22 @@ export enum MessageType {
     public async sendHealthData(data: any, userId: string): Promise<void> {
       await this.sendMessage(MessageType.HEALTH_DATA, {
         data,
-        timestamp: Date.now(),
-      }, { userId });
+        timestamp: Date.now()}, { userId });
     }
     /**
     * 获取连接状态
     */
     public getConnectionStatus(): {
       connected: boolean,
-  connecting: boolean;
-      reconnectAttempts: number,
+  connecting: boolean;,
+  reconnectAttempts: number,
   queuedMessages: number;
     } {
       return {
         connected: this.ws?.readyState === WebSocket.OPEN,
         connecting: this.isConnecting,
         reconnectAttempts: this.reconnectAttempts,
-        queuedMessages: this.messageQueue.length,
-      };
+        queuedMessages: this.messageQueue.length};
     }
     /**
     * 处理接收到的消息

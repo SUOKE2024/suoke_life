@@ -3,16 +3,16 @@ import { apiClient } from "./apiClient";/import { authService } from "./authServ
 import React from "react";
 API服务配置接口 * interface ApiServiceConfig {
   baseURL: string,
-  timeout: number;
+  timeout: number;,
   retries: number;
-  enableCache: boolean;
+  enableCache: boolean;,
   enableRealTime: boolean;
 }
 // 健康数据接口 * interface HealthData {
   id: string,
-  userId: string;
-  metrics: {heartRate: number;
-    bloodPressure: { systolic: number, diastolic: number;
+  userId: string;,
+  metrics: {heartRate: number;,
+  bloodPressure: { systolic: number, diastolic: number;
 },
     sleepQuality: number,
     stressLevel: number,
@@ -24,31 +24,31 @@ constitution: { type: string,
   timestamp: string}
 // 智能体状态接口 * interface AgentStatus {
   id: string,
-  name: string;
+  name: string;,
   status: "online" | "offline" | "busy";
-  workload: number;
-  performance: {accuracy: number;
-    responseTime: number;
+  workload: number;,
+  performance: {accuracy: number;,
+  responseTime: number;
     userSatisfaction: number;
 }
   currentTask?: string,
   lastUpdate: string}
 // 诊断结果接口 * interface DiagnosisResult {
   id: string,
-  userId: string;
+  userId: string;,
   type: "look" | "listen" | "inquiry" | "palpation" | "comprehensive";
-  results: {symptoms: string[];
-    constitution: string;
-    recommendations: string[];
-    confidence: number;
+  results: {symptoms: string[];,
+  constitution: string;
+    recommendations: string[];,
+  confidence: number;
 }
   timestamp: string}
 // 用户设置接口 * interface UserSettings {
   accessibility: {screenReader: boolean,
-    highContrast: boolean;
-    largeText: boolean;
-    reduceMotion: boolean;
-    voiceOver: boolean;
+    highContrast: boolean;,
+  largeText: boolean;
+    reduceMotion: boolean;,
+  voiceOver: boolean;
     hapticFeedback: boolean;
 }
   personalization: { theme: "light" | "dark" | "auto",
@@ -66,22 +66,22 @@ constitution: { type: string,
 }
 // 区块链健康记录接口 * interface BlockchainHealthRecord {
   id: string,
-  userId: string;
+  userId: string;,
   dataHash: string;
-  timestamp: string;
+  timestamp: string;,
   signature: string;
-  verified: boolean;
-  metadata: {dataType: string;
-    source: string;
+  verified: boolean;,
+  metadata: {dataType: string;,
+  source: string;
     version: string;
 }
 }
 // 医疗资源接口 * interface MedicalResource {
   id: string,
-  type: "hospital" | "clinic" | "pharmacy" | "specialist";
+  type: "hospital" | "clinic" | "pharmacy" | "specialist";,
   name: string;
-  location: {address: string;
-    coordinates: { lat: number, lng: number;
+  location: {address: string;,
+  coordinates: { lat: number, lng: number;
 }
   };
   services: string[],
@@ -99,31 +99,31 @@ constitution: { type: string,
   context?:  {
     userId?: string;
     symptoms?: string[];
-    constitution?: string
+    constitution?: string;
 }
 };
 interface KnowledgeResult {
-  id: string;
+  id: string;,
   title: string;
-  content: string;
+  content: string;,
   relevance: number;
-  source: string;
+  source: string;,
   category: string;
-  tags: string[];
+  tags: string[];,
   lastUpdated: string;
 }
 // 反馈接口 * interface UserFeedback {
   userId: string,
-  type: "bug" | "feature" | "improvement" | "general";
+  type: "bug" | "feature" | "improvement" | "general";,
   rating: number;
   message: string;
-  metadata?: unknown
+  metadata?: unknown;
 }
 // 性能指标接口 * interface PerformanceMetrics {
   userId: string,
-  renderTime: number;
+  renderTime: number;,
   memoryUsage: number;
-  networkLatency: number;
+  networkLatency: number;,
   errorCount: number;
   userSatisfaction: number;
 };
@@ -579,7 +579,7 @@ const performanceMonitor = usePerformanceMonitor(ApiIntegrationService", {")
           }
         });
       );
-      return results.map((result, inde;x;) => {})
+      return results.map(result, inde;x;) => {})
         if (result.status === "fulfilled") {
           return result.val;u;e;
         } else {

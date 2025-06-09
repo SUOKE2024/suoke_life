@@ -4,35 +4,35 @@ import { apiClient } from './apiClient';
 import { FourDiagnosisAggregationResult } from '../types/agents';
 // 智能体信息接口
 export interface AgentInfo {
-  id: string;
+  id: string;,
   name: string;
-  status: 'online' | 'offline' | 'busy';
+  status: 'online' | 'offline' | 'busy';,
   capabilities: string[];
   description?: string;
   avatar?: string;
 }
 // 消息接口
 export interface Message {
-  id: string;
+  id: string;,
   content: string;
-  timestamp: number;
+  timestamp: number;,
   sender: string;
   type?: 'text' | 'image' | 'audio' | 'file';
   metadata?: unknown;
 }
 // 咨询会话接口
 export interface ConsultationSession {
-  sessionId: string;
+  sessionId: string;,
   agentId: string;
-  status: 'active' | 'completed' | 'cancelled';
+  status: 'active' | 'completed' | 'cancelled';,
   startTime: number;
   endTime?: number;
 }
 // 智能体建议接口
 export interface AgentSuggestion {
-  id: string;
+  id: string;,
   title: string;
-  content: string;
+  content: string;,
   category: string;
   priority: 'high' | 'medium' | 'low';
 }
@@ -49,9 +49,9 @@ export interface ApiResponse<T = any> {
 }
 // 智能体状态类型
 export interface AgentStatus {
-  id: string;
+  id: string;,
   name: string;
-  status: 'online' | 'offline' | 'busy' | 'away';
+  status: 'online' | 'offline' | 'busy' | 'away';,
   lastActive: number;
   capabilities: string[];
   currentTask?: string;
@@ -60,18 +60,18 @@ export interface AgentStatus {
 }
 // 智能体交互类型
 export interface AgentInteraction {
-  agentId: string;
+  agentId: string;,
   userId: string;
-  sessionId: string;
+  sessionId: string;,
   messages: AgentMessage[];
   context: Record<string, any>;
-  startTime: number;
+  startTime: number;,
   lastUpdate: number;
 }
 export interface AgentMessage {
-  id: string;
+  id: string;,
   content: string;
-  timestamp: number;
+  timestamp: number;,
   sender: 'user' | 'agent';
   type: 'text' | 'image' | 'audio' | 'data';
   metadata?: Record<string, any>;
@@ -137,7 +137,7 @@ export class AgentService {
   }
   // 执行健康检查
   private performHealthCheck() {
-    this.agents.forEach(((agent, agentId) => {
+    this.agents.forEach((agent, agentId) => {
       // 模拟健康检查
       const healthScore = Math.max(70, Math.min(100, agent.healthScore! + (Math.random() - 0.5) * 10));
       const responseTime = Math.max(100, Math.min(1000, agent.responseTime! + (Math.random() - 0.5) * 100));
@@ -414,7 +414,7 @@ export class AgentService {
 export const agentService = new AgentService();
 // React Context;
 interface AgentContextType {
-  agentService: AgentService;
+  agentService: AgentService;,
   agentStatuses: Record<string, AgentStatus>;
   refreshStatuses: () => Promise<void>;
 }
@@ -433,7 +433,7 @@ export const AgentProvider: React.FC<AgentProviderProps> = ({ children }) => {
       console.error('刷新智能体状态失败:', error);
     }
   };
-  useEffect(() => {
+  useEffect() => {
     // 初始加载
     refreshStatuses();
     // 添加状态监听器

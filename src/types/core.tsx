@@ -3,8 +3,7 @@ import React from "react";
 // 基础类型 * export interface BaseEntity {
   //
 }
-id: string,
-}
+id: string}
   createdAt: Date,updatedAt: Date};
 ///     > { success: boolean;
 * data?: T;
@@ -14,8 +13,7 @@ id: string,
 // 分页类型 * export interface PaginationParams {
   //
 }
-page: number,
-};
+page: number};
   limit: number;
   sortBy?: string;
   sortOrder?: "asc" | "desc"}
@@ -27,16 +25,14 @@ export interface PaginatedResponse<T> { items: T[],
 // 智能体类型 * export interface AgentConfig {
   //
 }
-id: string,
-}
+id: string}
   name: string,enabled: boolean,model: string;
   maxTokens?: number;
   temperature?: number}
 // 健康数据类型 * export interface HealthMetric {
   //
 }
-id: string,
-}
+id: string}
   type: string,
   value: number,
   unit: string,
@@ -45,8 +41,7 @@ id: string,
 // 诊断类型 * export interface DiagnosisResult {
   //
 }
-id: string,
-}
+id: string}
   type: "looking" | "listening" | "asking" | "touching" | "pulse",
   confidence: number,
   findings: string[],
@@ -81,16 +76,14 @@ fontSize: "small" | "medium" | "large"}
 // 服务类型 * export interface ServiceStatus {
   //
 }
-name: string,
-};
+name: string};
   status: "online" | "offline" | "error",lastCheck: Date;
   responseTime?: number;
   error?: string}
 // 缓存类型 * export interface CacheConfig {
   //
 }
-ttl: number,
-}
+ttl: number}
   maxSize: number,
   strategy: "lru" | "fifo" | "lfu"}
 // 性能监控类型 * export interface PerformanceMetric {

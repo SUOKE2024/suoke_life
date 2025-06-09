@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
-} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
 export interface PaginationProps {
@@ -76,25 +71,22 @@ export const Pagination: React.FC<PaginationProps> = ({
   return (
     <View style={[styles.container, style]}>
       {showTotal && totalItems && (
-        <Text style={styles.totalText}>
-          共 {totalItems} 条
-        </Text>
+        <Text style={styles.totalText}>共 {totalItems} 条</Text>
       )}
 
       <View style={styles.paginationContainer}>
         {showPrevNext && (
-          <TouchableOpacity
-            style={[
-              styles.navButton,
-              current <= 1 && styles.disabledNavButton,
-            ]}
+          <TouchableOpacity;
+            style={[styles.navButton, current <= 1 && styles.disabledNavButton]}
             onPress={handlePrevious}
             disabled={disabled || current <= 1}
           >
-            <Text style={[
-              styles.navButtonText,
-              (disabled || current <= 1) && styles.disabledNavButtonText,
-            ]}>
+            <Text;
+              style={[
+                styles.navButtonText,
+                (disabled || current <= 1) && styles.disabledNavButtonText,
+              ]}
+            >
               ‹
             </Text>
           </TouchableOpacity>
@@ -107,7 +99,7 @@ export const Pagination: React.FC<PaginationProps> = ({
         </View>
 
         {showPrevNext && (
-          <TouchableOpacity
+          <TouchableOpacity;
             style={[
               styles.navButton,
               current >= total && styles.disabledNavButton,
@@ -115,10 +107,12 @@ export const Pagination: React.FC<PaginationProps> = ({
             onPress={handleNext}
             disabled={disabled || current >= total}
           >
-            <Text style={[
-              styles.navButtonText,
-              (disabled || current >= total) && styles.disabledNavButtonText,
-            ]}>
+            <Text;
+              style={[
+                styles.navButtonText,
+                (disabled || current >= total) && styles.disabledNavButtonText,
+              ]}
+            >
               ›
             </Text>
           </TouchableOpacity>
@@ -130,18 +124,18 @@ export const Pagination: React.FC<PaginationProps> = ({
 
 const createStyles = (theme: any, size: 'sm' | 'md' | 'lg') => {
   const sizeConfig = {
-    sm: {
-      buttonSize: 32,
+    sm: {,
+  buttonSize: 32,
       fontSize: 14,
       spacing: 4,
     },
-    md: {
-      buttonSize: 40,
+    md: {,
+  buttonSize: 40,
       fontSize: 16,
       spacing: 8,
     },
-    lg: {
-      buttonSize: 48,
+    lg: {,
+  buttonSize: 48,
       fontSize: 18,
       spacing: 12,
     },
@@ -150,18 +144,18 @@ const createStyles = (theme: any, size: 'sm' | 'md' | 'lg') => {
   const config = sizeConfig[size];
 
   return StyleSheet.create({
-    container: {
-      flexDirection: 'row',
+    container: {,
+  flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
       paddingVertical: 16,
     },
-    paginationContainer: {
-      flexDirection: 'row',
+    paginationContainer: {,
+  flexDirection: 'row',
       alignItems: 'center',
     },
-    navButton: {
-      width: config.buttonSize,
+    navButton: {,
+  width: config.buttonSize,
       height: config.buttonSize,
       borderRadius: 4,
       backgroundColor: theme.colors.surface,
@@ -171,31 +165,31 @@ const createStyles = (theme: any, size: 'sm' | 'md' | 'lg') => {
       alignItems: 'center',
       marginHorizontal: config.spacing,
     },
-    disabledNavButton: {
-      opacity: 0.5,
+    disabledNavButton: {,
+  opacity: 0.5,
     },
-    navButtonText: {
-      fontSize: config.fontSize,
+    navButtonText: {,
+  fontSize: config.fontSize,
       color: theme.colors.onSurface,
       fontWeight: '500',
     },
-    disabledNavButtonText: {
-      color: '#999',
+    disabledNavButtonText: {,
+  color: '#999',
     },
-    totalText: {
-      fontSize: 14,
+    totalText: {,
+  fontSize: 14,
       color: '#666',
       marginRight: 16,
     },
-    pageInfo: {
-      paddingHorizontal: 16,
+    pageInfo: {,
+  paddingHorizontal: 16,
     },
-    pageInfoText: {
-      fontSize: config.fontSize,
+    pageInfoText: {,
+  fontSize: config.fontSize,
       color: theme.colors.onSurface,
       fontWeight: '500',
     },
   });
 };
 
-export default Pagination; 
+export default Pagination;

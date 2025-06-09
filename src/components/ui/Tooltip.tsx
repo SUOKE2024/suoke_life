@@ -1,18 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
-    Animated,
-    Dimensions,
-    StyleSheet,
-    Text,
-    TextStyle,
-    TouchableOpacity,
-    View,
-    ViewStyle,
+  Animated,
+  Dimensions,
+  StyleSheet,
+  Text,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
 export interface TooltipProps {
-  children: React.ReactNode;
+  children: React.ReactNode;,
   content: string;
   placement?: 'top' | 'bottom' | 'left' | 'right';
   visible?: boolean;
@@ -49,26 +49,32 @@ export const Tooltip: React.FC<TooltipProps> = ({
   const { currentTheme } = useTheme();
   const [internalVisible, setInternalVisible] = useState(false);
   const [tooltipLayout, setTooltipLayout] = useState({ width: 0, height: 0 });
-  const [childLayout, setChildLayout] = useState({ x: 0, y: 0, width: 0, height: 0 });
-  
+  const [childLayout, setChildLayout] = useState({
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+  });
+
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.8)).current;
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const childRef = useRef<View>(null);
 
-  const isVisible = controlledVisible !== undefined ? controlledVisible : internalVisible;
+  const isVisible =
+    controlledVisible !== undefined ? controlledVisible : internalVisible;
 
   const showTooltip = () => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
-    
-    timeoutRef.current = setTimeout(() => {
+
+    timeoutRef.current = setTimeout() => {
       if (controlledVisible === undefined) {
         setInternalVisible(true);
       }
       onVisibilityChange?.(true);
-      
+
       Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 1,
@@ -89,7 +95,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
-    
+
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 0,
@@ -101,7 +107,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
         duration: 150,
         useNativeDriver: true,
       }),
-    ]).start(() => {
+    ]).start() => {
       if (controlledVisible === undefined) {
         setInternalVisible(false);
       }
@@ -111,7 +117,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
 
   const measureChild = () => {
     if (childRef.current) {
-      childRef.current.measure((x, y, width, height, pageX, pageY) => {
+      childRef.current.measure(x, y, width, height, pageX, pageY) => {
         setChildLayout({ x: pageX, y: pageY, width, height });
       });
     }
@@ -159,8 +165,8 @@ export const Tooltip: React.FC<TooltipProps> = ({
 
   const getArrowStyle = () => {
     const arrowSize = 6;
-    const arrowStyle: ViewStyle = {
-      position: 'absolute',
+    const arrowStyle: ViewStyle = {,
+  position: 'absolute',
       width: 0,
       height: 0,
       backgroundColor: 'transparent',
@@ -219,7 +225,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
     }
   };
 
-  useEffect(() => {
+  useEffect() => {
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
@@ -230,19 +236,19 @@ export const Tooltip: React.FC<TooltipProps> = ({
   const tooltipPosition = getTooltipPosition();
 
   const styles = StyleSheet.create({
-    container: {
-      position: 'relative',
+    container: {,
+  position: 'relative',
     },
-    tooltip: {
-      position: 'absolute',
+    tooltip: {,
+  position: 'absolute',
       backgroundColor: backgroundColor || currentTheme.colors.surface,
       borderRadius,
       paddingHorizontal: 12,
       paddingVertical: 8,
       maxWidth,
       shadowColor: currentTheme.colors.shadow,
-      shadowOffset: {
-        width: 0,
+      shadowOffset: {,
+  width: 0,
         height: 2,
       },
       shadowOpacity: 0.25,
@@ -252,8 +258,8 @@ export const Tooltip: React.FC<TooltipProps> = ({
       left: tooltipPosition.x,
       top: tooltipPosition.y,
     },
-    tooltipText: {
-      color: textColor || currentTheme.colors.onSurface,
+    tooltipText: {,
+  color: textColor || currentTheme.colors.onSurface,
       fontSize: 14,
       lineHeight: 20,
       textAlign: 'center',
@@ -263,7 +269,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
 
   return (
     <View style={[styles.container, style]}>
-      <TouchableOpacity
+      <TouchableOpacity;
         ref={childRef}
         onPressIn={() => {
           measureChild();
@@ -282,7 +288,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
       </TouchableOpacity>
 
       {isVisible && (
-        <Animated.View
+        <Animated.View;
           style={[
             styles.tooltip,
             {
@@ -304,4 +310,4 @@ export const Tooltip: React.FC<TooltipProps> = ({
   );
 };
 
-export default Tooltip; 
+export default Tooltip;

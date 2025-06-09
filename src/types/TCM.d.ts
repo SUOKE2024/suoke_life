@@ -116,8 +116,8 @@ export interface BiomarkerData {
   /** 测量设备信息
   device?: {
     id: string,
-  name: string;
-    model: string;
+  name: string;,
+  model: string;
     calibrationDate?: MCPTimestamp;
   };
   /** 中医辨证关联
@@ -143,8 +143,8 @@ export interface BiomarkerData {
   /** 趋势信息
   trend?: {
     direction: "increasing" | decreasing" | "stable,
-  rate: number; // 变化率
-significance: "significant" | moderate" | "minimal;
+  rate: number; // 变化率,
+  significance: "significant" | moderate" | "minimal;
   };
 } */
   ==================== 四诊数据类型 ==================== *///
@@ -164,8 +164,8 @@ export interface InspectionData {
   tongue: {,
   body: {
       color: pale" | "red | "dark-red" | purple,
-  texture: "tender | "normal" | old";
-      shape: "thin | "normal" | fat" | "cracked;"
+  texture: "tender | "normal" | old";,
+  shape: "thin | "normal" | fat" | "cracked;"
     };
     coating: {,
   color: "white" | yellow" | "gray | "black";
@@ -188,8 +188,8 @@ export interface AuscultationData {
 }
   /** 声音   ;
   voice: {volume: "loud | "normal" | low",
-  tone: "high | "normal" | low";
-    clarity: "clear | "hoarse" | weak";
+  tone: "high | "normal" | low";,
+  clarity: "clear | "hoarse" | weak";
   };
   /** 呼吸
   breathing: {,
@@ -222,16 +222,16 @@ export interface InquiryData {
   personalHistory: {,
   lifestyle: string;
     diet: string,
-  sleep: string;
-    exercise: string,
+  sleep: string;,
+  exercise: string,
   stress: string;
   };
   /** 症状评分
   symptoms: Array<{,
   name: string;
     severity: number; // 1-10,
-  duration: string;
-    frequency: string;
+  duration: string;,
+  frequency: string;
   }>;
   /** 问诊时间
   timestamp: MCPTimestamp; */
@@ -262,8 +262,8 @@ export interface PalpationData {
     abdomen: {,
   tenderness: boolean;
       distension: boolean,
-  masses: boolean;
-      temperature: "cold | "normal" | hot";
+  masses: boolean;,
+  temperature: "cold | "normal" | hot";
     };
     /** 穴位按压
     acupoints: Array<{,
@@ -294,8 +294,8 @@ export interface CalculationData {
     /** 出生地经纬度（用于真太阳时计算）
     birthLocation?: {
       latitude: number,
-  longitude: number;
-      timezone: string;
+  longitude: number;,
+  timezone: string;
     };
   };
   /** 子午流注分析
@@ -310,8 +310,8 @@ meridian: string; // 对应经络,
     openingPoints: Array<{,
   time: string;
       point: string,
-  meridian: string;
-      function: string;
+  meridian: string;,
+  function: string;
     }>;
     /** 治疗建议时间
     optimalTreatmentTime: {,
@@ -335,8 +335,8 @@ meridian: string; // 对应经络,
     fiveElements: {,
   wood: number;
       fire: number,
-  earth: number;
-      metal: number,
+  earth: number;,
+  metal: number,
   water: number;
     };
     /** 体质类型
@@ -360,8 +360,8 @@ reduce: string[]; // 需要减少的方面,
     natalHexagram: {,
   name: string;
       symbol: string,
-  element: string;
-      direction: string;
+  element: string;,
+  direction: string;
     };
     /** 健康分析
     healthAnalysis: {,
@@ -382,26 +382,26 @@ unfavorable: string[]; // 不利方位,
     annualQi: {,
   year: number;
       mainQi: string; // 主气,
-  guestQi: string; // 客气
-hostHeaven: string; // 司天,
+  guestQi: string; // 客气,
+  hostHeaven: string; // 司天,
   hostEarth: string; // 在泉
     }
     /** 疾病预测
     diseasePrediction: {,
   susceptibleDiseases: string[]; // 易患疾病
 preventionMethods: string[]; // 预防方法,
-  criticalPeriods: Array<{ // 关键时期
-period: string,
-  risk: low" | "medium | "high";
-        description: string;
+  criticalPeriods: Array<{ // 关键时期,
+  period: string,
+  risk: low" | "medium | "high";,
+  description: string;
       }>;
     };
     /** 调养指导
     seasonalGuidance: {,
   spring: string[];
       summer: string[],
-  autumn: string[];
-      winter: string[];
+  autumn: string[];,
+  winter: string[];
     };
   };
   /** 综合算诊结果
@@ -412,8 +412,8 @@ period: string,
     primaryRisks: Array<{,
   risk: string;
       severity: low" | "medium | "high",
-  probability: number; // 0-1;
-prevention: string[];
+  probability: number; // 0-1;,
+  prevention: string[];
     }>;
     /** 个性化调养方案
     personalizedPlan: {,
@@ -432,8 +432,8 @@ shortTerm: string[]; // 短期调养（1-3个月）,
   confidence: {,
   overall: number; // 0-1;
 ziwuLiuzhu: number,
-  constitution: number;
-    bagua: number,
+  constitution: number;,
+  bagua: number,
   wuyunLiuqi: number;
   };
   /** 算诊时间
@@ -441,8 +441,8 @@ ziwuLiuzhu: number,
   /** 算诊师信息
   practitioner?: {
     id: string,
-  name: string;
-    qualification: string;
+  name: string;,
+  qualification: string;
   }; */
 } *///
 *///
@@ -469,7 +469,7 @@ export interface FiveDiagnosesData {
 export interface AgentDiagnosisResult {
 }
 }
-  /** 辨证智能体ID
+  /** 辨证智能体ID;
   agentId: xiaoai" | "xiaoke | "laoke" | soer""
   /** 辨证结果
   diagnosis: {/** 主要证候    ,
@@ -488,24 +488,24 @@ export interface AgentDiagnosisResult {
     /** 方药建议
     prescription?: {
       name: string,
-  herbs: Array<{
-        name: string,
-  dosage: string;
-        function: string;
+  herbs: Array<{,
+  name: string,
+  dosage: string;,
+  function: string;
       }>;
     };
     /** 针灸建议
     acupuncture?: {
       points: string[],
-  method: string;
-      frequency: string;
+  method: string;,
+  frequency: string;
     };
     /** 生活调理
     lifestyle: {,
   diet: string[];
       exercise: string[],
-  sleep: string[];
-      emotion: string[];
+  sleep: string[];,
+  emotion: string[];
     };
   };
   /** 辨证置信度

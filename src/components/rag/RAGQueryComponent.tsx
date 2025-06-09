@@ -32,7 +32,7 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
   const [isStreaming, setIsStreaming] = useState(false);
   const [taskType, setTaskType] = useState<'consultation' | 'diagnosis' | 'treatment' | 'prevention'>('consultation');
   // 初始化RAG服务
-  useEffect(() => {
+  useEffect() => {
     const initializeService = async () => {try {await ragService.initialize();
       } catch (error) {
         console.error('RAG服务初始化失败:', error);
@@ -146,7 +146,7 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
     setIsLoading(true);
     setResult(null);
     try {
-      const requests: RAGQueryRequest[] = queries.map(q => ({,))
+      const requests: RAGQueryRequest[] = queries.map(q => ({)),
   query: q.trim(),
         userId,
         taskType,
@@ -161,7 +161,7 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
       if (responses.length > 0) {
         const combinedResult: RAGQueryResponse = {,
   requestId: `batch_${Date.now()}`,
-          answer: responses.map((r, i) => `${i + 1}. ${r.answer}`).join('\n\n'),
+          answer: responses.map(r, i) => `${i + 1}. ${r.answer}`).join('\n\n'),
           sources: responses.flatMap(r => r.sources),
           confidence: responses.reduce(sum, r) => sum + r.confidence, 0) / responses.length,
           reasoningChain: responses.flatMap(r => r.reasoningChain),
@@ -205,7 +205,7 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
   const handleGetMetrics = useCallback() => {const metrics = ragService.getPerformanceMetrics();
     const cacheStats = ragService.getCacheStats();
     const metricsText = Array.from(metrics.entries());
-      .map(([key, value]) => `${key}: ${value}ms`);
+      .map([key, value]) => `${key}: ${value}ms`);
       .join('\n');
     Alert.alert('性能指标',
       `${metricsText}\n\n缓存大小: ${cacheStats.size}\n缓存键数: ${cacheStats.keys.length}`
@@ -219,16 +219,16 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
         <Text style={styles.label}>查询类型:</Text>
         <View style={styles.taskTypeButtons}>
           {(["consultation",diagnosis', "treatment",prevention'] as const).map(type) => ()
-            <TouchableOpacity
+            <TouchableOpacity;
               key={type}
-              style={{[
+              style={[
                 styles.taskTypeButton,
                 taskType === type && styles.taskTypeButtonActive;
               ]}}
               onPress={() => setTaskType(type)}
             >
-              <Text
-                style={{[
+              <Text;
+                style={[
                   styles.taskTypeButtonText,
                   taskType === type && styles.taskTypeButtonTextActive;
                 ]}}
@@ -245,7 +245,7 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
       {// 查询输入}
       <View style={styles.inputContainer}>
         <Text style={styles.label}>查询内容:</Text>
-        <TextInput
+        <TextInput;
           style={styles.textInput}
           value={query}
           onChangeText={setQuery}
@@ -257,7 +257,7 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
       </View>
       {// 操作按钮}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.button, styles.queryButton]}
           onPress={handleQuery}
           disabled={isLoading || isStreaming}
@@ -268,7 +268,7 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
             <Text style={styles.buttonText}>查询</Text>
           )}
         </TouchableOpacity>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.button, styles.streamButton]}
           onPress={handleStreamQuery}
           disabled={isLoading || isStreaming}
@@ -279,7 +279,7 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
             <Text style={styles.buttonText}>流式查询</Text>
           )}
         </TouchableOpacity>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.button, styles.clearButton]}
           onPress={handleClear}
           disabled={isLoading || isStreaming}
@@ -289,21 +289,21 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
       </View>
       {// 高级功能按钮}
       <View style={styles.advancedButtonContainer}>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.smallButton, styles.healthButton]}
           onPress={handleHealthCheck}
           disabled={isLoading || isStreaming}
         >
           <Text style={styles.smallButtonText}>健康检查</Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.smallButton, styles.metricsButton]}
           onPress={handleGetMetrics}
           disabled={isLoading || isStreaming}
         >
           <Text style={styles.smallButtonText}>性能指标</Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.smallButton, styles.cacheButton]}
           onPress={handleClearCache}
           disabled={isLoading || isStreaming}
@@ -337,7 +337,7 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
             {// 来源文档}
             {result.sources && result.sources.length > 0  && <View style={styles.sourcesContainer}>
                 <Text style={styles.sourcesTitle}>参考来源:</Text>
-                {result.sources.map((source, index) => ())
+                {result.sources.map(source, index) => ())
                   <View key={source.id || index} style={styles.sourceItem}>
                     <Text style={styles.sourceTitle}>{source.title}</Text>
                     <Text style={styles.sourceSnippet}>{source.snippet}</Text>
@@ -351,8 +351,8 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
             {// 后续问题}
             {result.followUpQuestions && result.followUpQuestions.length > 0  && <View style={styles.followUpContainer}>
                 <Text style={styles.followUpTitle}>相关问题:</Text>;
-                {result.followUpQuestions.map((question, index) => (;))
-                  <TouchableOpacity
+                {result.followUpQuestions.map(question, index) => (;))
+                  <TouchableOpacity;
                     key={index};
                     style={styles.followUpItem};
                     onPress={() => setQuery(question)};
@@ -573,8 +573,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1;
-  },smallButtonText: {
-      color: "#fff",
+  },smallButtonText: {,
+  color: "#fff",
       fontSize: 12,fontWeight: '500';
   },healthButton: {backgroundColor: '#FF9500';
   },metricsButton: {backgroundColor: '#5856D6';

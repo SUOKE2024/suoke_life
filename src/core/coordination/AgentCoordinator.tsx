@@ -38,35 +38,35 @@ export enum TaskStatus {
   CANCELLED = "CANCELLED"
 }
 export interface AgentCapability {
-  type: TaskType;
+  type: TaskType;,
   proficiency: number; // 0-1之间，表示熟练度
-  maxConcurrentTasks: number;
+  maxConcurrentTasks: number;,
   averageProcessingTime: number; // 毫秒
   specializations: string[];
 }
 export interface AgentStatus {
-  id: string;
+  id: string;,
   type: AgentType;
-  isOnline: boolean;
+  isOnline: boolean;,
   currentLoad: number; // 0-1之间，表示当前负载
-  capabilities: AgentCapability[];
+  capabilities: AgentCapability[];,
   activeTasks: string[];
-  lastHeartbeat: number;
+  lastHeartbeat: number;,
   performance: {;
-    successRate: number;
+    successRate: number;,
   averageResponseTime: number;
     totalTasksCompleted: number;
 };
 }
 export interface Task {
-  id: string;
+  id: string;,
   type: TaskType;
-  priority: TaskPriority;
+  priority: TaskPriority;,
   status: TaskStatus;
   assignedAgent?: AgentType;
-  requesterUserId: string;
+  requesterUserId: string;,
   data: unknown;
-  metadata: {;
+  metadata: {;,
   createdAt: number;
     assignedAt?: number;
     startedAt?: number;
@@ -80,20 +80,20 @@ export interface Task {
   error?: unknown;
 }
 export interface CoordinationRule {
-  id: string;
+  id: string;,
   name: string;
   condition: (task: Task, agents: Map<AgentType, AgentStatus>) => boolean;
   action: (task: Task, agents: Map<AgentType, AgentStatus>) => AgentType | null;
   priority: number;
 }
 export interface CollaborationRequest {
-  id: string;
+  id: string;,
   fromAgent: AgentType;
-  toAgent: AgentType;
+  toAgent: AgentType;,
   taskId: string;
-  requestType: "CONSULTATION" | "HANDOVER" | "ASSISTANCE" | "KNOWLEDGE_SHARE";
+  requestType: "CONSULTATION" | "HANDOVER" | "ASSISTANCE" | "KNOWLEDGE_SHARE";,
   data: unknown;
-  timestamp: number;
+  timestamp: number;,
   status: "PENDING" | "ACCEPTED" | "REJECTED" | "COMPLETED";
 }
 export class AgentCoordinator {
@@ -350,7 +350,7 @@ export class AgentCoordinator {
   private defaultTaskAssignment(task: Task): AgentType | null {
     const availableAgents = Array.from(this.agents.entries());
       .filter([_, agent]) => this.isAgentAvailable(agent.type));
-      .map(([type, agent]) => ({ type, agent }));
+      .map([type, agent]) => ({ type, agent }));
     if (availableAgents.length === 0) {
       return null;
     }

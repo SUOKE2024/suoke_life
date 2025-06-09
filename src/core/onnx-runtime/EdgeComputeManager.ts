@@ -325,16 +325,16 @@ if (!this.deviceCapabilities) return 0;
 }
 // 辅助接口和类型
 interface ComputeLoad {
-  cpu: number;      // CPU使用率 (0-100);
+  cpu: number;      // CPU使用率 (0-100);,
   memory: number   // 内存使用量 (bytes);
   gpu?: number     // GPU使用率 (0-100)
 }
 interface ComputeTask {
-  id: string;
+  id: string;,
   type: string;
   priority: "low" | normal" | "high;
   estimatedLoad?: ComputeLoad;
-  timeout: number;
+  timeout: number;,
   status: "queued" | running" | "completed | "failed" | cancelled" | "paused;
   createdAt: Date;
   startTime?: Date;
@@ -353,7 +353,7 @@ interface ComputeTaskRequest {
   executor: () => Promise<any>;
 }
 interface ComputeTaskStatus {
-  id: string;
+  id: string;,
   status: string;
   progress: number;
   startTime?: Date;
@@ -361,12 +361,12 @@ interface ComputeTaskStatus {
   queuePosition?: number;
 }
 interface EdgeComputeStats {
-  activeTasks: number;
+  activeTasks: number;,
   queuedTasks: number;
-  completedTasks: number;
+  completedTasks: number;,
   averageExecutionTime: number;
-  currentLoad: ComputeLoad;
+  currentLoad: ComputeLoad;,
   thermalState: ThermalState;
-  memoryUsage: number;
+  memoryUsage: number;,
   cpuUsage: number;
 }  */

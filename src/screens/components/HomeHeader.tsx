@@ -10,7 +10,7 @@ export const HomeHeader: React.FC  = () => {}
     </    View>;
   );
 }
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   flexDirection: row",
     justifyContent: "space-between,",
     alignItems: "center",

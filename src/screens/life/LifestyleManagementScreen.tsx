@@ -1,24 +1,32 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import {
-    Animated,
-    Dimensions,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Animated,
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { borderRadius, colors, shadows, spacing, typography } from '../../constants/theme';
+import {
+  borderRadius,
+  colors,
+  shadows,
+  spacing,
+  typography,
+} from '../../constants/theme';
 
 const { width } = Dimensions.get('window');
 
 const LifestyleManagementScreen: React.FC = () => {
   const navigation = useNavigation();
-  const [activeCategory, setActiveCategory] = useState<'diet' | 'exercise' | 'sleep' | 'habits'>('diet');
-  
+  const [activeCategory, setActiveCategory] = useState<
+    'diet' | 'exercise' | 'sleep' | 'habits'
+  >('diet');
+
   // 动画值
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(50)).current;
@@ -138,7 +146,7 @@ const LifestyleManagementScreen: React.FC = () => {
     },
   ];
 
-  useEffect(() => {
+  useEffect() => {
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -163,14 +171,14 @@ const LifestyleManagementScreen: React.FC = () => {
     ];
 
     return (
-      <ScrollView 
-        horizontal 
+      <ScrollView;
+        horizontal;
         showsHorizontalScrollIndicator={false}
         style={styles.categoryContainer}
         contentContainerStyle={styles.categoryContent}
       >
-        {categories.map((category) => (
-          <TouchableOpacity
+        {categories.map(category) => (
+          <TouchableOpacity;
             key={category.key}
             style={[
               styles.categoryTab,
@@ -178,12 +186,14 @@ const LifestyleManagementScreen: React.FC = () => {
             ]}
             onPress={() => setActiveCategory(category.key as any)}
           >
-            <Icon
+            <Icon;
               name={category.icon}
               size={20}
-              color={activeCategory === category.key ? colors.white : colors.primary}
+              color={
+                activeCategory === category.key ? colors.white : colors.primary;
+              }
             />
-            <Text
+            <Text;
               style={[
                 styles.categoryText,
                 activeCategory === category.key && styles.activeCategoryText,
@@ -244,7 +254,7 @@ const LifestyleManagementScreen: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      {dietRecords.map((record) => (
+      {dietRecords.map(record) => (
         <View key={record.id} style={styles.dietCard}>
           <View style={styles.dietHeader}>
             <View style={styles.mealInfo}>
@@ -255,8 +265,10 @@ const LifestyleManagementScreen: React.FC = () => {
             <Text style={styles.caloriesText}>{record.calories} kcal</Text>
           </View>
           <View style={styles.foodList}>
-            {record.foods.map((food, index) => (
-              <Text key={index} style={styles.foodItem}>• {food}</Text>
+            {record.foods.map(food, index) => (
+              <Text key={index} style={styles.foodItem}>
+                • {food}
+              </Text>
             ))}
           </View>
         </View>
@@ -268,21 +280,36 @@ const LifestyleManagementScreen: React.FC = () => {
           <View style={styles.nutritionItem}>
             <Text style={styles.nutritionLabel}>蛋白质</Text>
             <View style={styles.progressBar}>
-              <View style={[styles.progressFill, { width: '75%', backgroundColor: colors.primary }]} />
+              <View;
+                style={[
+                  styles.progressFill,
+                  { width: '75%', backgroundColor: colors.primary },
+                ]}
+              />
             </View>
             <Text style={styles.nutritionValue}>75g</Text>
           </View>
           <View style={styles.nutritionItem}>
             <Text style={styles.nutritionLabel}>碳水化合物</Text>
             <View style={styles.progressBar}>
-              <View style={[styles.progressFill, { width: '60%', backgroundColor: colors.warning }]} />
+              <View;
+                style={[
+                  styles.progressFill,
+                  { width: '60%', backgroundColor: colors.warning },
+                ]}
+              />
             </View>
             <Text style={styles.nutritionValue}>180g</Text>
           </View>
           <View style={styles.nutritionItem}>
             <Text style={styles.nutritionLabel}>脂肪</Text>
             <View style={styles.progressBar}>
-              <View style={[styles.progressFill, { width: '45%', backgroundColor: colors.error }]} />
+              <View;
+                style={[
+                  styles.progressFill,
+                  { width: '45%', backgroundColor: colors.error },
+                ]}
+              />
             </View>
             <Text style={styles.nutritionValue}>35g</Text>
           </View>
@@ -301,22 +328,30 @@ const LifestyleManagementScreen: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      {exercisePlans.map((plan) => (
+      {exercisePlans.map(plan) => (
         <View key={plan.id} style={styles.exerciseCard}>
           <View style={styles.exerciseHeader}>
             <View style={styles.exerciseInfo}>
               <Icon name={plan.icon} size={24} color={colors.primary} />
               <View style={styles.exerciseDetails}>
                 <Text style={styles.exerciseName}>{plan.name}</Text>
-                <Text style={styles.exerciseTime}>{plan.time} • {plan.duration}分钟</Text>
+                <Text style={styles.exerciseTime}>
+                  {plan.time} • {plan.duration}分钟
+                </Text>
               </View>
             </View>
             <View style={styles.exerciseStatus}>
               <Text style={styles.caloriesText}>{plan.calories} kcal</Text>
-              <Icon 
-                name={plan.status === 'completed' ? 'check-circle' : 'clock-outline'} 
-                size={20} 
-                color={plan.status === 'completed' ? colors.success : colors.textSecondary} 
+              <Icon;
+                name={
+                  plan.status === 'completed' ? 'check-circle' : 'clock-outline'
+                }
+                size={20}
+                color={
+                  plan.status === 'completed'
+                    ? colors.success;
+                    : colors.textSecondary;
+                }
               />
             </View>
           </View>
@@ -330,20 +365,27 @@ const LifestyleManagementScreen: React.FC = () => {
             <Text style={styles.statValue}>{todayData.steps.count}</Text>
             <Text style={styles.statLabel}>步数</Text>
             <View style={styles.progressBar}>
-              <View style={[
-                styles.progressFill, 
-                { 
-                  width: `${(todayData.steps.count / todayData.steps.target) * 100}%`,
-                  backgroundColor: colors.success 
-                }
-              ]} />
+              <View;
+                style={[
+                  styles.progressFill,
+                  {
+                    width: `${(todayData.steps.count / todayData.steps.target) * 100}%`,
+                    backgroundColor: colors.success,
+                  },
+                ]}
+              />
             </View>
           </View>
           <View style={styles.statCard}>
             <Text style={styles.statValue}>510</Text>
             <Text style={styles.statLabel}>消耗卡路里</Text>
             <View style={styles.progressBar}>
-              <View style={[styles.progressFill, { width: '85%', backgroundColor: colors.error }]} />
+              <View;
+                style={[
+                  styles.progressFill,
+                  { width: '85%', backgroundColor: colors.error },
+                ]}
+              />
             </View>
           </View>
         </View>
@@ -369,7 +411,9 @@ const LifestyleManagementScreen: React.FC = () => {
           </View>
           <View style={styles.sleepDuration}>
             <Text style={styles.sleepDurationText}>{sleepData.duration}h</Text>
-            <Text style={styles.sleepQuality}>睡眠质量 {sleepData.quality}%</Text>
+            <Text style={styles.sleepQuality}>
+              睡眠质量 {sleepData.quality}%
+            </Text>
           </View>
           <View style={styles.sleepTime}>
             <Text style={styles.sleepLabel}>起床时间</Text>
@@ -380,21 +424,50 @@ const LifestyleManagementScreen: React.FC = () => {
         <View style={styles.sleepPhases}>
           <Text style={styles.summaryTitle}>睡眠阶段</Text>
           <View style={styles.phaseBar}>
-            <View style={[styles.phaseSegment, { flex: sleepData.deepSleep, backgroundColor: colors.primary }]} />
-            <View style={[styles.phaseSegment, { flex: sleepData.lightSleep, backgroundColor: colors.info }]} />
-            <View style={[styles.phaseSegment, { flex: sleepData.rem, backgroundColor: colors.warning }]} />
+            <View;
+              style={[
+                styles.phaseSegment,
+                { flex: sleepData.deepSleep, backgroundColor: colors.primary },
+              ]}
+            />
+            <View;
+              style={[
+                styles.phaseSegment,
+                { flex: sleepData.lightSleep, backgroundColor: colors.info },
+              ]}
+            />
+            <View;
+              style={[
+                styles.phaseSegment,
+                { flex: sleepData.rem, backgroundColor: colors.warning },
+              ]}
+            />
           </View>
           <View style={styles.phaseLegend}>
             <View style={styles.legendItem}>
-              <View style={[styles.legendColor, { backgroundColor: colors.primary }]} />
+              <View;
+                style={[
+                  styles.legendColor,
+                  { backgroundColor: colors.primary },
+                ]}
+              />
               <Text style={styles.legendText}>深睡 {sleepData.deepSleep}h</Text>
             </View>
             <View style={styles.legendItem}>
-              <View style={[styles.legendColor, { backgroundColor: colors.info }]} />
-              <Text style={styles.legendText}>浅睡 {sleepData.lightSleep}h</Text>
+              <View;
+                style={[styles.legendColor, { backgroundColor: colors.info }]}
+              />
+              <Text style={styles.legendText}>
+                浅睡 {sleepData.lightSleep}h;
+              </Text>
             </View>
             <View style={styles.legendItem}>
-              <View style={[styles.legendColor, { backgroundColor: colors.warning }]} />
+              <View;
+                style={[
+                  styles.legendColor,
+                  { backgroundColor: colors.warning },
+                ]}
+              />
               <Text style={styles.legendText}>REM {sleepData.rem}h</Text>
             </View>
           </View>
@@ -413,7 +486,7 @@ const LifestyleManagementScreen: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      {healthHabits.map((habit) => (
+      {healthHabits.map(habit) => (
         <View key={habit.id} style={styles.habitCard}>
           <View style={styles.habitHeader}>
             <View style={styles.habitInfo}>
@@ -426,10 +499,12 @@ const LifestyleManagementScreen: React.FC = () => {
             <View style={styles.habitStatus}>
               <Text style={styles.streakText}>{habit.streak}天</Text>
               <TouchableOpacity style={styles.checkButton}>
-                <Icon 
-                  name={habit.completed ? 'check-circle' : 'circle-outline'} 
-                  size={24} 
-                  color={habit.completed ? colors.success : colors.textSecondary} 
+                <Icon;
+                  name={habit.completed ? 'check-circle' : 'circle-outline'}
+                  size={24}
+                  color={
+                    habit.completed ? colors.success : colors.textSecondary;
+                  }
                 />
               </TouchableOpacity>
             </View>
@@ -442,7 +517,12 @@ const LifestyleManagementScreen: React.FC = () => {
         <View style={styles.completionRate}>
           <Text style={styles.completionText}>今日完成 2/4</Text>
           <View style={styles.progressBar}>
-            <View style={[styles.progressFill, { width: '50%', backgroundColor: colors.success }]} />
+            <View;
+              style={[
+                styles.progressFill,
+                { width: '50%', backgroundColor: colors.success },
+              ]}
+            />
           </View>
           <Text style={styles.completionPercentage}>50%</Text>
         </View>
@@ -470,7 +550,7 @@ const LifestyleManagementScreen: React.FC = () => {
     <SafeAreaView style={styles.container}>
       {/* 头部 */}
       <View style={styles.header}>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
@@ -482,7 +562,10 @@ const LifestyleManagementScreen: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+      <ScrollView;
+        style={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}
+      >
         {/* 今日概览 */}
         {renderTodayOverview()}
 
@@ -490,7 +573,7 @@ const LifestyleManagementScreen: React.FC = () => {
         {renderCategoryTabs()}
 
         {/* 内容区域 */}
-        <Animated.View
+        <Animated.View;
           style={[
             styles.contentContainer,
             {
@@ -507,12 +590,12 @@ const LifestyleManagementScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  container: {,
+  flex: 1,
     backgroundColor: colors.background,
   },
-  header: {
-    flexDirection: 'row',
+  header: {,
+  flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: spacing.lg,
@@ -521,47 +604,47 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
   },
-  backButton: {
-    width: 40,
+  backButton: {,
+  width: 40,
     height: 40,
     borderRadius: 20,
     backgroundColor: colors.gray100,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  headerTitle: {
-    fontSize: typography.fontSize.lg,
+  headerTitle: {,
+  fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
     color: colors.text,
   },
-  settingsButton: {
-    width: 40,
+  settingsButton: {,
+  width: 40,
     height: 40,
     borderRadius: 20,
     backgroundColor: colors.gray100,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  scrollContainer: {
-    flex: 1,
+  scrollContainer: {,
+  flex: 1,
   },
-  overviewContainer: {
-    padding: spacing.lg,
+  overviewContainer: {,
+  padding: spacing.lg,
     backgroundColor: colors.surface,
   },
-  sectionTitle: {
-    fontSize: typography.fontSize.lg,
+  sectionTitle: {,
+  fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
     color: colors.text,
     marginBottom: spacing.md,
   },
-  overviewGrid: {
-    flexDirection: 'row',
+  overviewGrid: {,
+  flexDirection: 'row',
     flexWrap: 'wrap',
     gap: spacing.md,
   },
-  overviewCard: {
-    flex: 1,
+  overviewCard: {,
+  flex: 1,
     minWidth: (width - spacing.lg * 3) / 2,
     backgroundColor: colors.gray50,
     borderRadius: borderRadius.lg,
@@ -569,29 +652,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     ...shadows.sm,
   },
-  overviewValue: {
-    fontSize: typography.fontSize.lg,
+  overviewValue: {,
+  fontSize: typography.fontSize.lg,
     fontWeight: '700' as const,
     color: colors.text,
     marginTop: spacing.sm,
   },
-  overviewLabel: {
-    fontSize: typography.fontSize.sm,
+  overviewLabel: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
     marginTop: spacing.xs,
   },
-  categoryContainer: {
-    backgroundColor: colors.surface,
+  categoryContainer: {,
+  backgroundColor: colors.surface,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
   },
-  categoryContent: {
-    paddingHorizontal: spacing.lg,
+  categoryContent: {,
+  paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
     gap: spacing.md,
   },
-  categoryTab: {
-    flexDirection: 'row',
+  categoryTab: {,
+  flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
@@ -599,311 +682,311 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary + '20',
     gap: spacing.xs,
   },
-  activeCategoryTab: {
-    backgroundColor: colors.primary,
+  activeCategoryTab: {,
+  backgroundColor: colors.primary,
   },
-  categoryText: {
-    fontSize: typography.fontSize.sm,
+  categoryText: {,
+  fontSize: typography.fontSize.sm,
     color: colors.primary,
     fontWeight: '600' as const,
   },
-  activeCategoryText: {
-    color: colors.white,
+  activeCategoryText: {,
+  color: colors.white,
   },
-  contentContainer: {
-    flex: 1,
+  contentContainer: {,
+  flex: 1,
   },
-  contentSection: {
-    padding: spacing.lg,
+  contentSection: {,
+  padding: spacing.lg,
   },
-  sectionHeader: {
-    flexDirection: 'row',
+  sectionHeader: {,
+  flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: spacing.lg,
   },
-  addButton: {
-    width: 32,
+  addButton: {,
+  width: 32,
     height: 32,
     borderRadius: 16,
     backgroundColor: colors.primary + '20',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  dietCard: {
-    backgroundColor: colors.surface,
+  dietCard: {,
+  backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginBottom: spacing.md,
     ...shadows.sm,
   },
-  dietHeader: {
-    flexDirection: 'row',
+  dietHeader: {,
+  flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: spacing.md,
   },
-  mealInfo: {
-    flexDirection: 'row',
+  mealInfo: {,
+  flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
   },
-  mealName: {
-    fontSize: typography.fontSize.base,
+  mealName: {,
+  fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
     color: colors.text,
   },
-  mealTime: {
-    fontSize: typography.fontSize.sm,
+  mealTime: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
   },
-  caloriesText: {
-    fontSize: typography.fontSize.sm,
+  caloriesText: {,
+  fontSize: typography.fontSize.sm,
     fontWeight: '600' as const,
     color: colors.primary,
   },
-  foodList: {
-    gap: spacing.xs,
+  foodList: {,
+  gap: spacing.xs,
   },
-  foodItem: {
-    fontSize: typography.fontSize.sm,
+  foodItem: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
   },
-  nutritionSummary: {
-    backgroundColor: colors.surface,
+  nutritionSummary: {,
+  backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginTop: spacing.md,
     ...shadows.sm,
   },
-  summaryTitle: {
-    fontSize: typography.fontSize.base,
+  summaryTitle: {,
+  fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
     color: colors.text,
     marginBottom: spacing.md,
   },
-  nutritionBar: {
-    gap: spacing.md,
+  nutritionBar: {,
+  gap: spacing.md,
   },
-  nutritionItem: {
-    flexDirection: 'row',
+  nutritionItem: {,
+  flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.md,
   },
-  nutritionLabel: {
-    fontSize: typography.fontSize.sm,
+  nutritionLabel: {,
+  fontSize: typography.fontSize.sm,
     color: colors.text,
     width: 80,
   },
-  progressBar: {
-    flex: 1,
+  progressBar: {,
+  flex: 1,
     height: 8,
     backgroundColor: colors.gray200,
     borderRadius: 4,
     overflow: 'hidden',
   },
-  progressFill: {
-    height: '100%',
+  progressFill: {,
+  height: '100%',
     borderRadius: 4,
   },
-  nutritionValue: {
-    fontSize: typography.fontSize.sm,
+  nutritionValue: {,
+  fontSize: typography.fontSize.sm,
     fontWeight: '600' as const,
     color: colors.text,
     width: 40,
     textAlign: 'right',
   },
-  exerciseCard: {
-    backgroundColor: colors.surface,
+  exerciseCard: {,
+  backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginBottom: spacing.md,
     ...shadows.sm,
   },
-  exerciseHeader: {
-    flexDirection: 'row',
+  exerciseHeader: {,
+  flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  exerciseInfo: {
-    flexDirection: 'row',
+  exerciseInfo: {,
+  flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.md,
   },
-  exerciseDetails: {
-    flex: 1,
+  exerciseDetails: {,
+  flex: 1,
   },
-  exerciseName: {
-    fontSize: typography.fontSize.base,
+  exerciseName: {,
+  fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
     color: colors.text,
   },
-  exerciseTime: {
-    fontSize: typography.fontSize.sm,
+  exerciseTime: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
     marginTop: 2,
   },
-  exerciseStatus: {
-    alignItems: 'flex-end',
+  exerciseStatus: {,
+  alignItems: 'flex-end',
     gap: spacing.xs,
   },
-  exerciseStats: {
-    backgroundColor: colors.surface,
+  exerciseStats: {,
+  backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginTop: spacing.md,
     ...shadows.sm,
   },
-  statsGrid: {
-    flexDirection: 'row',
+  statsGrid: {,
+  flexDirection: 'row',
     gap: spacing.md,
   },
-  statCard: {
-    flex: 1,
+  statCard: {,
+  flex: 1,
     alignItems: 'center',
   },
-  statValue: {
-    fontSize: typography.fontSize.xl,
+  statValue: {,
+  fontSize: typography.fontSize.xl,
     fontWeight: '700' as const,
     color: colors.text,
   },
-  statLabel: {
-    fontSize: typography.fontSize.sm,
+  statLabel: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
     marginTop: spacing.xs,
     marginBottom: spacing.sm,
   },
-  sleepCard: {
-    backgroundColor: colors.surface,
+  sleepCard: {,
+  backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     ...shadows.sm,
   },
-  sleepHeader: {
-    flexDirection: 'row',
+  sleepHeader: {,
+  flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: spacing.lg,
   },
-  sleepTime: {
-    alignItems: 'center',
+  sleepTime: {,
+  alignItems: 'center',
   },
-  sleepLabel: {
-    fontSize: typography.fontSize.sm,
+  sleepLabel: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
   },
-  sleepValue: {
-    fontSize: typography.fontSize.lg,
+  sleepValue: {,
+  fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
     color: colors.text,
     marginTop: spacing.xs,
   },
-  sleepDuration: {
-    alignItems: 'center',
+  sleepDuration: {,
+  alignItems: 'center',
   },
-  sleepDurationText: {
-    fontSize: typography.fontSize['3xl'],
+  sleepDurationText: {,
+  fontSize: typography.fontSize['3xl'],
     fontWeight: '700' as const,
     color: colors.primary,
   },
-  sleepQuality: {
-    fontSize: typography.fontSize.sm,
+  sleepQuality: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
     marginTop: spacing.xs,
   },
-  sleepPhases: {
-    marginTop: spacing.lg,
+  sleepPhases: {,
+  marginTop: spacing.lg,
   },
-  phaseBar: {
-    flexDirection: 'row',
+  phaseBar: {,
+  flexDirection: 'row',
     height: 20,
     borderRadius: 10,
     overflow: 'hidden',
     marginBottom: spacing.md,
   },
-  phaseSegment: {
-    height: '100%',
+  phaseSegment: {,
+  height: '100%',
   },
-  phaseLegend: {
-    flexDirection: 'row',
+  phaseLegend: {,
+  flexDirection: 'row',
     justifyContent: 'space-around',
   },
-  legendItem: {
-    flexDirection: 'row',
+  legendItem: {,
+  flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.xs,
   },
-  legendColor: {
-    width: 12,
+  legendColor: {,
+  width: 12,
     height: 12,
     borderRadius: 6,
   },
-  legendText: {
-    fontSize: typography.fontSize.xs,
+  legendText: {,
+  fontSize: typography.fontSize.xs,
     color: colors.textSecondary,
   },
-  habitCard: {
-    backgroundColor: colors.surface,
+  habitCard: {,
+  backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginBottom: spacing.md,
     ...shadows.sm,
   },
-  habitHeader: {
-    flexDirection: 'row',
+  habitHeader: {,
+  flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  habitInfo: {
-    flexDirection: 'row',
+  habitInfo: {,
+  flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.md,
     flex: 1,
   },
-  habitDetails: {
-    flex: 1,
+  habitDetails: {,
+  flex: 1,
   },
-  habitName: {
-    fontSize: typography.fontSize.base,
+  habitName: {,
+  fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
     color: colors.text,
   },
-  habitDescription: {
-    fontSize: typography.fontSize.sm,
+  habitDescription: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
     marginTop: 2,
   },
-  habitStatus: {
-    alignItems: 'center',
+  habitStatus: {,
+  alignItems: 'center',
     gap: spacing.xs,
   },
-  streakText: {
-    fontSize: typography.fontSize.sm,
+  streakText: {,
+  fontSize: typography.fontSize.sm,
     fontWeight: '600' as const,
     color: colors.primary,
   },
-  checkButton: {
-    padding: spacing.xs,
+  checkButton: {,
+  padding: spacing.xs,
   },
-  habitsSummary: {
-    backgroundColor: colors.surface,
+  habitsSummary: {,
+  backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginTop: spacing.md,
     ...shadows.sm,
   },
-  completionRate: {
-    flexDirection: 'row',
+  completionRate: {,
+  flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.md,
   },
-  completionText: {
-    fontSize: typography.fontSize.sm,
+  completionText: {,
+  fontSize: typography.fontSize.sm,
     color: colors.text,
     width: 80,
   },
-  completionPercentage: {
-    fontSize: typography.fontSize.sm,
+  completionPercentage: {,
+  fontSize: typography.fontSize.sm,
     fontWeight: '600' as const,
     color: colors.text,
     width: 40,
@@ -911,4 +994,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LifestyleManagementScreen; 
+export default LifestyleManagementScreen;

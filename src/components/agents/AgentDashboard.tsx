@@ -16,11 +16,11 @@ interface AgentDashboardProps {
   initialTab?: "monitor" | "analytics" | "chat";
 }
 interface QuickAction {
-  id: string;
+  id: string;,
   title: string;
-  description: string;
+  description: string;,
   agentType: AgentType;
-  action: () => void;
+  action: () => void;,
   icon: string;
   color: string;
 }
@@ -98,25 +98,25 @@ const AgentDashboard: React.FC<AgentDashboardProps> = ({
     await checkSystemHealth();
     setRefreshing(false);
   };
-  useEffect(() => {
+  useEffect() => {
     checkSystemHealth();
     const interval = setInterval(checkSystemHealth, 60000); // 每分钟检查一次
     return () => clearInterval(interval);
   }, [])  // 检查是否需要添加依赖项;
-  const renderSystemStatus = () => {const statusConfig = {healthy: {
-      color: "#34C759",
-      text: "系统正常", icon: "✅" },warning: {
-      color: "#FF9500",
-      text: "系统警告", icon: "⚠️" },error: {
-      color: "#FF3B30",
+  const renderSystemStatus = () => {const statusConfig = {healthy: {,
+  color: "#34C759",
+      text: "系统正常", icon: "✅" },warning: {,
+  color: "#FF9500",
+      text: "系统警告", icon: "⚠️" },error: {,
+  color: "#FF3B30",
       text: "系统异常", icon: "❌" };
     };
     const config = statusConfig[systemStatus];
     return (;)
-      <View style={{[styles.statusCard, { borderLeftColor: config.color }}]}>;
+      <View style={[styles.statusCard, { borderLeftColor: config.color }}]}>;
         <View style={styles.statusHeader}>;
           <Text style={styles.statusIcon}>{config.icon}</Text>;
-          <Text style={{[styles.statusText, { color: config.color }}]}>;
+          <Text style={[styles.statusText, { color: config.color }}]}>;
             {config.text};
           </Text>;
         </View>;
@@ -131,9 +131,9 @@ const AgentDashboard: React.FC<AgentDashboardProps> = ({
       <Text style={styles.sectionTitle}>快速操作</Text>
       <View style={styles.actionsGrid}>
         {quickActions.map(action) => (;)
-          <TouchableOpacity
+          <TouchableOpacity;
             key={action.id};
-            style={{[styles.actionCard, { borderLeftColor: action.color }}]};
+            style={[styles.actionCard, { borderLeftColor: action.color }}]};
             onPress={action.action};
             activeOpacity={0.7};
           >;
@@ -149,33 +149,33 @@ const AgentDashboard: React.FC<AgentDashboardProps> = ({
   );
   const renderTabBar = () => (
   <View style={styles.tabBar}>
-      <TouchableOpacity
+      <TouchableOpacity;
         style={[styles.tab, activeTab === "monitor" && styles.activeTab]}
         onPress={() => setActiveTab("monitor")}
       >
-        <Text style={{[
+        <Text style={[
           styles.tabText,
           activeTab === "monitor" && styles.activeTabText;
         ]}}>
           监控
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity
+      <TouchableOpacity;
         style={[styles.tab, activeTab === "analytics" && styles.activeTab]}
         onPress={() => setActiveTab("analytics")}
       >
-        <Text style={{[
+        <Text style={[
           styles.tabText,
           activeTab === "analytics" && styles.activeTabText;
         ]}}>;
           分析;
         </Text>;
       </TouchableOpacity>;
-      <TouchableOpacity
+      <TouchableOpacity;
         style={[styles.tab, activeTab === "chat" && styles.activeTab]};
         onPress={() => setActiveTab("chat")};
       >;
-        <Text style={{[;
+        <Text style={[;
           styles.tabText,activeTab === "chat" && styles.activeTabText;
         ]}}>;
           对话;
@@ -202,7 +202,7 @@ const AgentDashboard: React.FC<AgentDashboardProps> = ({
   };
   return (
   <View style={styles.container}>
-      <ScrollView
+      <ScrollView;
         style={styles.scrollView};
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />;
         };

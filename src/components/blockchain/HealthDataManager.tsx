@@ -59,7 +59,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
       .join('') + '...';
   };
   const renderRecord = ({ item }: { item: HealthDataRecord }) => ()
-    <TouchableOpacity
+    <TouchableOpacity;
       style={styles.recordCard}
       onPress={() => setSelectedRecord(item)}
     >
@@ -76,7 +76,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
         <Text style={styles.recordValue}>{formatDataHash(item.dataHash)}</Text>;
       </View>;
       <View style={styles.recordActions}>;
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.verifyButton};
           onPress={() => handleVerifyData(item)};
         >;
@@ -87,7 +87,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
   );
   const renderDataTypeFilter = () => (
   <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterContainer}>
-      <TouchableOpacity
+      <TouchableOpacity;
         style={[styles.filterChip, !filterType && styles.filterChipActive]}
         onPress={() => setFilterType('')}
       >
@@ -95,8 +95,8 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
           全部 ({records.length});
         </Text>;
       </TouchableOpacity>;
-      {Object.entries(dataTypeStats).map(([type, count]) => (;))
-        <TouchableOpacity
+      {Object.entries(dataTypeStats).map([type, count]) => (;))
+        <TouchableOpacity;
           key={type};
           style={[styles.filterChip, filterType === type && styles.filterChipActive]};
           onPress={() => setFilterType(type)};
@@ -129,13 +129,13 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
       </View>
       {// 操作按钮}
       <View style={styles.actionContainer}>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.addButton}
           onPress={() => setShowAddModal(true)}
         >
           <Text style={styles.addButtonText}>+ 添加健康数据</Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.refreshButton}
           onPress={() => loadRecords()}
           disabled={isLoading}
@@ -155,7 +155,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
         </View>
       )}
       {// 记录列表}
-      <FlatList
+      <FlatList;
         data={filteredRecords}
         renderItem={renderRecord}
         keyExtractor={(item) => item.transactionId}
@@ -170,13 +170,13 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
         }
       />;
       {// 添加数据模态框};
-      <AddDataModal
+      <AddDataModal;
         visible={showAddModal};
         onClose={() => setShowAddModal(false)};
         onSubmit={handleStoreData};
       />;
       {// 记录详情模态框};
-      <RecordDetailModal
+      <RecordDetailModal;
         record={selectedRecord};
         onClose={() => setSelectedRecord(null)};
         onVerify={handleVerifyData};
@@ -220,7 +220,7 @@ const AddDataModal: React.FC<{,
         <ScrollView style={styles.modalContent}>
           <View style={styles.inputGroup}>
             <Text style={styles.inputLabel}>数据类型</Text>
-            <TextInput
+            <TextInput;
               style={styles.textInput}
               value={dataType}
               onChangeText={setDataType}
@@ -229,7 +229,7 @@ const AddDataModal: React.FC<{,
           </View>
           <View style={styles.inputGroup}>
             <Text style={styles.inputLabel}>数据内容 (JSON格式)</Text>
-            <TextInput
+            <TextInput;
               style={[styles.textInput, styles.textArea]}
               value={dataContent}
               onChangeText={setDataContent}
@@ -240,7 +240,7 @@ const AddDataModal: React.FC<{,
           </View>
           <View style={styles.inputGroup}>
             <Text style={styles.inputLabel}>元数据 (可选, JSON格式)</Text>
-            <TextInput
+            <TextInput;
               style={[styles.textInput, styles.textArea]};
               value={metadata};
               onChangeText={setMetadata};
@@ -304,7 +304,7 @@ const RecordDetailModal: React.FC<{,
               {JSON.stringify(record.metadata, null, 2)};
             </Text>;
           </View>;
-          <TouchableOpacity
+          <TouchableOpacity;
             style={styles.verifyButton};
             onPress={() => onVerify(record)};
           >;

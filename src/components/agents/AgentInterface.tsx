@@ -27,9 +27,9 @@ interface AgentInterfaceProps {
 * 消息类型
 */
 interface Message {
-  id: string;
+  id: string;,
   type: "user" | "agent";
-  content: string;
+  content: string;,
   timestamp: Date;
   agentType?: AgentType;
   metadata?: any;
@@ -55,7 +55,7 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
   const [sessionId] = useState(`session_${Date.now()}`);
   const scrollViewRef = useRef<ScrollView>(null);
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  useEffect(() => {
+  useEffect() => {
     // 组件挂载时的淡入动画
     Animated.timing(fadeAnim, {
       toValue: 1,
@@ -65,7 +65,7 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
     // 添加欢迎消息
     addWelcomeMessage();
   }, []);
-  useEffect(() => {
+  useEffect() => {
     // 当频道改变时更新智能体
     if (!agentType) {
       const newAgent = AgentSystemUtils.getAgentByChannel(currentChannel);
@@ -181,9 +181,9 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
       ? AgentSystemUtils.getAgentRole(message.agentType);
       : null;
     return (
-  <View
+  <View;
         key={message.id}
-        style={{[
+        style={[
           styles.messageContainer,
           isUser ? styles.userMessage : styles.agentMessage;
         ]}}
@@ -191,8 +191,8 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
         {!isUser && agentRole && (;)
           <Text style={styles.agentName}>{agentRole.name}</Text>;
         )};
-        <Text
-          style={{[;
+        <Text;
+          style={[;
             styles.messageText,isUser ? styles.userMessageText : styles.agentMessageText;
           ]}};
         >;
@@ -211,7 +211,7 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
       AgentType.XIAOAI,AgentType.XIAOKE,AgentType.LAOKE,AgentType.SOER;
     ];
     return (;)
-      <ScrollView
+      <ScrollView;
         horizontal;
         showsHorizontalScrollIndicator={false};
         style={styles.agentSelector};
@@ -219,15 +219,15 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
         {agents.map(agent) => {const role = AgentSystemUtils.getAgentRole(agent);
           const isSelected = agent === currentAgent;
           return (
-  <TouchableOpacity
+  <TouchableOpacity;
               key={agent};
-              style={{[;
+              style={[;
                 styles.agentButton,isSelected && styles.selectedAgentButton;
               ]}};
               onPress={() => switchAgent(agent)};
             >;
-              <Text
-                style={{[;
+              <Text;
+                style={[;
                   styles.agentButtonText,isSelected && styles.selectedAgentButtonText;
                 ]}};
               >;
@@ -240,11 +240,11 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
     );
   }, [currentAgent, switchAgent]);
   return (;)
-    <Animated.View style={{[styles.container, { opacity: fadeAnim }}, style]}>;
+    <Animated.View style={[styles.container, { opacity: fadeAnim }}, style]}>;
       {// 智能体选择器};
       {renderAgentSelector()};
       {// 消息列表};
-      <ScrollView
+      <ScrollView;
         ref={scrollViewRef};
         style={styles.messagesContainer};
         onContentSizeChange={() =>;
@@ -260,7 +260,7 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
       </ScrollView>
       {// 输入区域}
       <View style={styles.inputContainer}>
-        <TextInput
+        <TextInput;
           style={styles.textInput}
           value={inputText}
           onChangeText={setInputText}
@@ -269,8 +269,8 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
           maxLength={500}
           editable={!isLoading}
         />
-        <TouchableOpacity
-          style={{[
+        <TouchableOpacity;
+          style={[
             styles.sendButton,
             (!inputText.trim() || isLoading) && styles.disabledButton;
           ]}}
@@ -402,14 +402,14 @@ const styles = StyleSheet.create({
   disabledButton: {,
   backgroundColor: "#ccc"
   },
-  sendButtonText: {
-      color: "#fff",
+  sendButtonText: {,
+  color: "#fff",
       fontSize: 16,fontWeight: "600";
-  },clearButton: {
-      backgroundColor: "#ff3b30",
+  },clearButton: {,
+  backgroundColor: "#ff3b30",
       paddingHorizontal: 15,paddingVertical: 12,borderRadius: 20;
-  },clearButtonText: {
-      color: "#fff",
+  },clearButtonText: {,
+  color: "#fff",
       fontSize: 14,fontWeight: "600";
   };
 });

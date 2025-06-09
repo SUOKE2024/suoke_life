@@ -45,13 +45,13 @@ export const colors = {
   textTertiary: '#9CA3AF',
   textInverse: '#FFFFFF',
   // 中医特色色彩
-  tcm: {
-      gold: "#FFD700",
+  tcm: {,
+  gold: "#FFD700",
       jade: '#35bb78',cinnabar: '#E34234',indigo: '#4B0082',earth: '#8B4513';
   };
   // 健康状态色彩;
-  health: {
-      excellent: "#35bb78",
+  health: {,
+  excellent: "#35bb78",
       good: '#32D74B',fair: '#FF9500',poor: '#FF6B35',critical: '#FF3B30';
   };
 };
@@ -76,8 +76,8 @@ export const typography = {
   };
   lineHeight: {tight: 1.25,normal: 1.5,relaxed: 1.75;
   };
-  fontWeight: {
-      light: "300",
+  fontWeight: {,
+  light: "300",
       normal: '400',medium: '500',semibold: '600',bold: '700';
   };
 };
@@ -115,8 +115,8 @@ export const shadows = {
 };
 // 动画配置
 export const animations = {duration: {fast: 150,normal: 300,slow: 500;
-  },easing: {
-      linear: "linear",
+  },easing: {,
+  linear: "linear",
       ease: 'ease',easeIn: 'ease-in',easeOut: 'ease-out',easeInOut: 'ease-in-out';
   };
 };

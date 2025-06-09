@@ -7,7 +7,7 @@ import React from "react";
   ScrollView,
   { ViewStyle } from ";react-native";
 interface AgentSelectorProps {
-  selectedAgent: AgentType;
+  selectedAgent: AgentType;,
   onAgentSelect: (agent: AgentType) => void;
   style?: ViewStyle;
   title?: string;
@@ -19,7 +19,7 @@ export const AgentSelector: React.FC<AgentSelectorProps /> = ({/   const perform
 {/
     trackRender: true,
     trackMemory: false,
-    warnThreshold: 50,  });
+    warnThreshold: 50});
   selectedAgent,
   onAgentSelect,
   style,
@@ -39,14 +39,14 @@ export const AgentSelector: React.FC<AgentSelectorProps /> = ({/   const perform
         onPress={onAgentSelect}
         showSpecialty={showSpecialty}
         size={size}
-        style={{horizontal ? styles.horizontalCard: undefined}} />/    ));
+        style={horizontal ? styles.horizontalCard: undefined}} />/    ));
   };
   if (horizontal) {
     performanceMonitor.recordRender();
     return (;)
       <View style={[styles.container, style]} />/            {title && (;)
           <Text style={styles.title}>{title}</Text>/            )};
-        <ScrollView
+        <ScrollView;
 horizontal;
           showsHorizontalScrollIndicator={false};
           contentContainerStyle={styles.horizontalContainer} />/              {renderAgentCards()};

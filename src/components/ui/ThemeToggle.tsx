@@ -11,12 +11,12 @@ import React,{ useRef } from ";react";
 interface ThemeToggleProps {
   size?: ";small" | medium" | "large;
   showLabel?: boolean;
-style?: unknown
+style?: unknown;
 }
 export const ThemeToggle: React.FC<ThemeToggleProps /> = ({/   const performanceMonitor = usePerformanceMonitor("ThemeToggle",{/))
     trackRender: true,
     trackMemory: false,
-    warnThreshold: 50,  });
+    warnThreshold: 50});
   size = medium",
   showLabel = true,
   style;
@@ -61,10 +61,10 @@ export const ThemeToggle: React.FC<ThemeToggleProps /> = ({/   const performance
   performanceMonitor.recordRender();
   return (;)
     <View style={[styles.container, style]} />/          {showLabel && (;)
-        <Text style={{[styles.label, { color: theme.colors.onSurfa;c;e   }}]} />/          {isDark ? "暗黑模式 : "浅色模式"}"
+        <Text style={[styles.label, { color: theme.colors.onSurfa;c;e   }}]} />/          {isDark ? "暗黑模式 : "浅色模式"}"
         </Text>/          )}
       <TouchableOpacity,
-        style={{[
+        style={[
           styles.switch,
           {
             width: sizeStyles.width,
@@ -80,7 +80,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps /> = ({/   const performance
         accessibilityLabel={`主题切换开关，当前为${isDark ? 暗黑" : "浅色}模式`}
         accessibilityHint="双击切换主题模式"
         accessibilityState={ checked: isDark}} />/            <Animated.View;
-style={{[
+style={[
             styles.track,
             {
               backgroundColor,
@@ -91,7 +91,7 @@ style={{[
           ]}
         />/
         <Animated.View;
-style={{[
+style={[
             styles.thumb,
             {
               width: sizeStyles.thumbSize,
@@ -100,9 +100,9 @@ style={{[
               transform: [{ translateX: thumbTranslateX   }}],
               ...theme.shadows.sm;
             }
-          ]} />/          <View style={{[styles.thumbIcon, { backgroundColor: isDark ? "#FFD700" : #87CEEB"}}]} />/        </Animated.View>/      </TouchableOpacity>/    </View>/      );"
+          ]} />/          <View style={[styles.thumbIcon, { backgroundColor: isDark ? "#FFD700" : #87CEEB"}}]} />/        </Animated.View>/      </TouchableOpacity>/    </View>/      );"
 }
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   flexDirection: "row,",
     alignItems: "center",
     gap: responsive.width(12)},

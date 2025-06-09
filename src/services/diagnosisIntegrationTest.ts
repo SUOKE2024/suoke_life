@@ -5,22 +5,22 @@ import { DiagnosisCacheManager } from './diagnosisCacheManager';
 * 测试五诊服务的API集成、错误处理、缓存机制等功能
 */
 interface TestResult {
-  testName: string;
+  testName: string;,
   passed: boolean;
   duration: number;
   error?: string;
   details?: any;
 }
 interface IntegrationTestReport {
-  totalTests: number;
+  totalTests: number;,
   passedTests: number;
-  failedTests: number;
+  failedTests: number;,
   totalDuration: number;
-  results: TestResult[];
+  results: TestResult[];,
   coverage: {;
-    apiIntegration: number;
+    apiIntegration: number;,
   errorHandling: number;
-    cacheManagement: number;
+    cacheManagement: number;,
   dataValidation: number;
     performanceOptimization: number;
 };
@@ -261,10 +261,10 @@ export class DiagnosisIntegrationTester {
     await this.runTest('缓存保存和读取', async () => {
       const testSession = {
       sessionId: "test-cache-session",
-      userId: 'test-user',startTime: Date.now(),lastUpdateTime: Date.now(),currentStep: 'looking',collectedData: {
-      userId: "test-user",
-      sessionId: 'test-cache-session',lookingData: {
-      tongueImage: "test",
+      userId: 'test-user',startTime: Date.now(),lastUpdateTime: Date.now(),currentStep: 'looking',collectedData: {,
+  userId: "test-user",
+      sessionId: 'test-cache-session',lookingData: {,
+  tongueImage: "test",
       faceImage: 'test' };
         },isCompleted: false;
       };
@@ -334,14 +334,14 @@ export class DiagnosisIntegrationTester {
       const input: FiveDiagnosisInput = {,
   userId: 'test-user',
         sessionId: 'test-session',
-        lookingData: {
-      tongueImage: "test",
+        lookingData: {,
+  tongueImage: "test",
       faceImage: 'test' },
         listeningData: { voiceRecording: 'test' },
         inquiryData: { symptoms: ['头痛'], medicalHistory: ['无'], lifestyle: {} },
         palpationData: { pulseData: [72, 75, 70] },
-        calculationData: {
-      birthDate: "1990-05-15",
+        calculationData: {,
+  birthDate: "1990-05-15",
       currentTime: new Date().toISOString() }
       };
       const result = await this.fiveDiagnosisService.performDiagnosis(input);
@@ -365,8 +365,8 @@ export class DiagnosisIntegrationTester {
       const input: FiveDiagnosisInput = {,
   userId: 'perf-test-user',
         sessionId: 'perf-test-session',
-        lookingData: {
-      tongueImage: "test",
+        lookingData: {,
+  tongueImage: "test",
       faceImage: 'test' }
       };
       await this.fiveDiagnosisService.performDiagnosis(input);

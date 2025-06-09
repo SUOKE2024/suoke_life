@@ -15,17 +15,13 @@ describe('诊断服务集成测试', () => {
       sessionId: 'test-session-001',
         lookingData: {
       tongueImage: "data:image/jpeg;base64,test",
-      faceImage: 'data:image/jpeg;base64,test',
-        },
+      faceImage: 'data:image/jpeg;base64,test'},
         inquiryData: {
           symptoms: ["头痛", "失眠'],
           medicalHistory: ['无'],
           lifestyle: {
       sleep: "7小时", "
-      exercise: '偶尔',
-          },
-        },
-      };
+      exercise: '偶尔'}}};
       const result = await fiveDiagnosisService.performDiagnosis(input);
       expect(result).toBeDefined();
       expect(result.diagnosticResults).toBeDefined();
@@ -45,9 +41,7 @@ describe('诊断服务集成测试', () => {
         userId: '', // 空用户ID
         lookingData: {
       tongueImage: "test",
-      faceImage: 'test',
-        },
-      };
+      faceImage: 'test'}};
       await expect(fiveDiagnosisService.performDiagnosis(input)).rejects.toThrow();
     });
   });

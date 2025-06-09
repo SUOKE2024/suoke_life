@@ -1,18 +1,18 @@
 import React, { useRef, useState } from 'react';
 import {
-    Animated,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextStyle,
-    TouchableOpacity,
-    View,
-    ViewStyle,
+  Animated,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
 export interface TabItem {
-  key: string;
+  key: string;,
   title: string;
   content: React.ReactNode;
   disabled?: boolean;
@@ -62,13 +62,14 @@ export const Tabs: React.FC<TabsProps> = ({
   const [internalActiveKey, setInternalActiveKey] = useState(
     defaultActiveKey || items[0]?.key || ''
   );
-  
-  const activeKey = controlledActiveKey !== undefined ? controlledActiveKey : internalActiveKey;
+
+  const activeKey =
+    controlledActiveKey !== undefined ? controlledActiveKey : internalActiveKey;
   const indicatorAnim = useRef(new Animated.Value(0)).current;
   const contentAnim = useRef(new Animated.Value(0)).current;
 
   const handleTabPress = (key: string, index: number) => {
-    const item = items.find(item => item.key === key);
+    const item = items.find(item) => item.key === key);
     if (item?.disabled) return;
 
     if (controlledActiveKey === undefined) {
@@ -91,7 +92,7 @@ export const Tabs: React.FC<TabsProps> = ({
     }
   };
 
-  const activeIndex = items.findIndex(item => item.key === activeKey);
+  const activeIndex = items.findIndex(item) => item.key === activeKey);
   const activeItem = items[activeIndex];
 
   const getTabBarStyles = () => {
@@ -143,14 +144,18 @@ export const Tabs: React.FC<TabsProps> = ({
       case 'card':
         return {
           ...baseStyle,
-          backgroundColor: isActive ? currentTheme.colors.primary : 'transparent',
+          backgroundColor: isActive;
+            ? currentTheme.colors.primary;
+            : 'transparent',
           borderRadius: 6,
           marginHorizontal: 2,
         };
       case 'button':
         return {
           ...baseStyle,
-          backgroundColor: isActive ? currentTheme.colors.primary : currentTheme.colors.surfaceVariant,
+          backgroundColor: isActive;
+            ? currentTheme.colors.primary;
+            : currentTheme.colors.surfaceVariant,
           borderRadius: 8,
           marginHorizontal: 4,
         };
@@ -158,7 +163,9 @@ export const Tabs: React.FC<TabsProps> = ({
         return {
           ...baseStyle,
           borderBottomWidth: isActive ? 2 : 0,
-          borderBottomColor: isActive ? currentTheme.colors.primary : 'transparent',
+          borderBottomColor: isActive;
+            ? currentTheme.colors.primary;
+            : 'transparent',
         };
     }
   };
@@ -166,7 +173,7 @@ export const Tabs: React.FC<TabsProps> = ({
   const getTabTextStyles = (isActive: boolean, isDisabled: boolean) => {
     const baseStyle = {
       fontSize: 16,
-      fontWeight: isActive ? '600' as const : '400' as const,
+      fontWeight: isActive ? ('600' as const) : ('400' as const),
     };
 
     if (isDisabled) {
@@ -181,33 +188,37 @@ export const Tabs: React.FC<TabsProps> = ({
       case 'button':
         return {
           ...baseStyle,
-          color: isActive ? currentTheme.colors.onPrimary : currentTheme.colors.onSurface,
+          color: isActive;
+            ? currentTheme.colors.onPrimary;
+            : currentTheme.colors.onSurface,
         };
       default:
         return {
           ...baseStyle,
-          color: isActive ? currentTheme.colors.primary : currentTheme.colors.onSurface,
+          color: isActive;
+            ? currentTheme.colors.primary;
+            : currentTheme.colors.onSurface,
         };
     }
   };
 
   const renderTabBar = () => {
     const TabBarContainer = scrollable ? ScrollView : View;
-    const containerProps = scrollable 
+    const containerProps = scrollable;
       ? { horizontal: true, showsHorizontalScrollIndicator: false }
       : {};
 
     return (
-      <TabBarContainer
+      <TabBarContainer;
         style={[getTabBarStyles(), tabBarStyle]}
         {...containerProps}
       >
-        {items.map((item, index) => {
+        {items.map(item, index) => {
           const isActive = item.key === activeKey;
           const isDisabled = item.disabled || false;
 
           return (
-            <TouchableOpacity
+            <TouchableOpacity;
               key={item.key}
               style={[
                 getTabStyles(isActive, isDisabled),
@@ -219,10 +230,10 @@ export const Tabs: React.FC<TabsProps> = ({
               accessible={accessible}
               accessibilityRole="tab"
               accessibilityLabel={item.title}
-              accessibilityState={{ selected: isActive, disabled: isDisabled }}
+              accessibilityState={ selected: isActive, disabled: isDisabled }}
             >
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text
+              <View style={ flexDirection: 'row', alignItems: 'center' }}>
+                <Text;
                   style={[
                     getTabTextStyles(isActive, isDisabled),
                     tabTextStyle,
@@ -248,22 +259,20 @@ export const Tabs: React.FC<TabsProps> = ({
     if (!activeItem) return null;
 
     return (
-      <View style={[styles.content, contentStyle]}>
-        {activeItem.content}
-      </View>
+      <View style={[styles.content, contentStyle]}>{activeItem.content}</View>
     );
   };
 
   const styles = StyleSheet.create({
-    container: {
-      flex: 1,
+    container: {,
+  flex: 1,
     },
-    content: {
-      flex: 1,
+    content: {,
+  flex: 1,
       padding: 16,
     },
-    badge: {
-      backgroundColor: currentTheme.colors.error,
+    badge: {,
+  backgroundColor: currentTheme.colors.error,
       borderRadius: 10,
       paddingHorizontal: 6,
       paddingVertical: 2,
@@ -271,8 +280,8 @@ export const Tabs: React.FC<TabsProps> = ({
       minWidth: 20,
       alignItems: 'center',
     },
-    badgeText: {
-      color: '#ffffff',
+    badgeText: {,
+  color: '#ffffff',
       fontSize: 12,
       fontWeight: '600',
     },
@@ -289,7 +298,7 @@ export const Tabs: React.FC<TabsProps> = ({
 
 // TabPane 组件（用于更简洁的API）
 export interface TabPaneProps {
-  tab: string;
+  tab: string;,
   key: string;
   disabled?: boolean;
   badge?: string | number;
@@ -307,7 +316,7 @@ export interface AdvancedTabsProps extends Omit<TabsProps, 'items'> {
 
 export const AdvancedTabs: React.FC<AdvancedTabsProps> = ({
   children,
-  ...props
+  ...props;
 }) => {
   const items: TabItem[] = React.Children.map(children, (child) => {
     if (React.isValidElement(child) && child.type === TabPane) {
@@ -325,4 +334,4 @@ export const AdvancedTabs: React.FC<AdvancedTabsProps> = ({
   return <Tabs {...props} items={items} />;
 };
 
-export default Tabs; 
+export default Tabs;

@@ -5,24 +5,24 @@ export type RootStackParamList = { Auth: undefine; d; Main: undefined };
 export type AuthStackParamList = {
   Welcome: undefine;
   d;
-  Login: undefined;
+  Login: undefined;,
   Register: undefined;
   ForgotPassword: undefined;
 };
 export type MainTabParamList = {
   Home: undefine;
   d;
-  Suoke: undefined;
+  Suoke: undefined;,
   Explore: undefined;
-  Life: undefined;
+  Life: undefined;,
   Profile: undefined;
 };
 export type MainStackParamList = {
   MainTabs: undefine;
   d;
-  Settings: undefined;
+  Settings: undefined;,
   ServiceStatus: undefined;
-  ServiceManagement: undefined;
+  ServiceManagement: undefined;,
   DeveloperPanel: undefined;
 };
 // 导航 Hook 类型

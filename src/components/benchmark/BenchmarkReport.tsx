@@ -122,8 +122,8 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
         <Card.Content>
           <View style={styles.headerInfo}>
             <View style={styles.statusRow}>
-              <Chip
-                style={{[styles.statusChip, { backgroundColor: '#4CAF50' }}]}
+              <Chip;
+                style={[styles.statusChip, { backgroundColor: '#4CAF50' }}]}
                 textStyle={ color: 'white' }}
               >
                 已完成
@@ -171,13 +171,13 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
           <Card.Content>
             <View style={styles.scoreContainer}>
               <View style={styles.scoreCircle}>
-                <Text style={{[styles.scoreText, { color: '#4CAF50' }}]}>
+                <Text style={[styles.scoreText, { color: '#4CAF50' }}]}>
                   {averageScore.toFixed(1)}
                 </Text>
                 <Text style={styles.scoreLabel}>平均分</Text>
               </View>
             </View>
-            <ProgressBar
+            <ProgressBar;
               progress={Math.min(averageScore / 100, 1)}
               color="#4CAF50"
               style={styles.scoreProgress}>
@@ -186,7 +186,7 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
                 <DataTable.Title>指标名称</DataTable.Title>
                 <DataTable.Title numeric>数值</DataTable.Title>
               </DataTable.Header>
-              {Object.entries(result.metrics).map(([key, value]) => ())
+              {Object.entries(result.metrics).map([key, value]) => ())
                 <DataTable.Row key={key}>
                   <DataTable.Cell>{key}</DataTable.Cell>
                   <DataTable.Cell numeric>
@@ -212,7 +212,7 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
                 <DataTable.Title numeric>置信度</DataTable.Title>
                 <DataTable.Title numeric>处理时间(ms)</DataTable.Title>
               </DataTable.Header>
-              {result.predictions.slice(0, 5).map((prediction, index) => ())
+              {result.predictions.slice(0, 5).map(prediction, index) => ())
                 <DataTable.Row key={index}>
                   <DataTable.Cell>
                     {typeof prediction.input_data === 'string'
@@ -248,7 +248,7 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
           <Card.Title title="元数据" />;
           <Card.Content>;
             <DataTable>;
-              {Object.entries(result.metadata).map(([key, value]) => (;))
+              {Object.entries(result.metadata).map([key, value]) => (;))
                 <DataTable.Row key={key}>;
                   <DataTable.Cell>{key}</DataTable.Cell>;
                   <DataTable.Cell>;
@@ -269,7 +269,7 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
         <Card.Content>
           <View style={styles.exportContainer}>
             <View style={styles.exportRow}>
-              <Button
+              <Button;
                 mode="contained"
                 onPress={() => handleGenerateReport('html')}
                 loading={generatingReport.html}
@@ -279,11 +279,11 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
                 生成HTML报告
               </Button>
               {reportUrls.html  && <View style={styles.reportActions}>
-                  <IconButton
+                  <IconButton;
                     icon="open-in-new"
                     onPress={() => openReport(reportUrls.html!)}
                   />
-                  <IconButton
+                  <IconButton;
                     icon="share"
                     onPress={() => shareReport(reportUrls.html!, 'html')}
                   />
@@ -292,7 +292,7 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
             </View>
             <Divider style={styles.divider}>
             <View style={styles.exportRow}>
-              <Button
+              <Button;
                 mode="outlined"
                 onPress={() => handleGenerateReport('json')}
                 loading={generatingReport.json}
@@ -302,11 +302,11 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
                 生成JSON报告
               </Button>
               {reportUrls.json  && <View style={styles.reportActions}>
-                  <IconButton
+                  <IconButton;
                     icon="open-in-new"
                     onPress={() => openReport(reportUrls.json!)}
                   />
-                  <IconButton
+                  <IconButton;
                     icon="share"
                     onPress={() => shareReport(reportUrls.json!, 'json')}
                   />
@@ -403,8 +403,8 @@ const styles = StyleSheet.create({
   exportContainer: {,
   marginTop: 8;
   },
-  exportRow: {
-      flexDirection: "row",
+  exportRow: {,
+  flexDirection: "row",
       alignItems: 'center',justifyContent: 'space-between',marginVertical: 8;
   },exportButton: {flex: 1,marginRight: 8;
   },reportActions: {flexDirection: 'row';

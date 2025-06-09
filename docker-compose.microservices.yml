@@ -24,8 +24,8 @@ services:
     depends_on:
     - postgres
     - redis
-    - rag-service
-    - health-data-service
+    - communication-service
+    - unified-health-data-service
     environment:
       API_PORT: '8000'
       DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
@@ -43,8 +43,8 @@ services:
     depends_on:
     - postgres
     - redis
-    - rag-service
-    - health-data-service
+    - communication-service
+    - unified-health-data-service
     environment:
       API_PORT: '8000'
       DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
@@ -62,8 +62,8 @@ services:
     depends_on:
     - postgres
     - redis
-    - rag-service
-    - health-data-service
+    - communication-service
+    - unified-health-data-service
     environment:
       API_PORT: '8000'
       DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
@@ -81,8 +81,8 @@ services:
     depends_on:
     - postgres
     - redis
-    - rag-service
-    - health-data-service
+    - communication-service
+    - unified-health-data-service
     environment:
       API_PORT: '8000'
       DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
@@ -112,8 +112,8 @@ services:
     restart: unless-stopped
     volumes:
     - logs_data:/app/logs
-  auth-service:
-    build: ./services/auth-service
+  user-management-service:
+    build: ./services/user-management-service
     depends_on:
     - postgres
     - redis
@@ -121,7 +121,7 @@ services:
       API_PORT: '8000'
       DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
       REDIS_URL: redis://redis:6379/0
-      SERVICE_NAME: auth-service
+      SERVICE_NAME: user-management-service
     networks:
     - suoke-network
     ports:
@@ -134,7 +134,7 @@ services:
     depends_on:
     - postgres
     - redis
-    - auth-service
+    - user-management-service
     environment:
       API_PORT: '8000'
       DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
@@ -147,24 +147,7 @@ services:
     restart: unless-stopped
     volumes:
     - logs_data:/app/logs
-  corn-maze-service:
-    build: ./services/corn-maze-service
-    depends_on:
-    - postgres
-    - redis
-    - user-service
-    environment:
-      API_PORT: '8000'
-      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
-      REDIS_URL: redis://redis:6379/0
-      SERVICE_NAME: corn-maze-service
-    networks:
-    - suoke-network
-    ports:
-    - 8008:8000
-    restart: unless-stopped
-    volumes:
-    - logs_data:/app/logs
+
   diagnostic-services-calculation-service:
     build: ./services/diagnostic-services/calculation-service
     depends_on:
@@ -258,17 +241,17 @@ services:
     restart: unless-stopped
     volumes:
     - logs_data:/app/logs
-  health-data-service:
-    build: ./services/health-data-service
+  unified-health-data-service:
+    build: ./services/unified-health-data-service
     depends_on:
     - postgres
     - redis
-    - auth-service
+    - user-management-service
     environment:
       API_PORT: '8000'
       DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
       REDIS_URL: redis://redis:6379/0
-      SERVICE_NAME: health-data-service
+      SERVICE_NAME: unified-health-data-service
     networks:
     - suoke-network
     ports:
@@ -281,7 +264,7 @@ services:
     depends_on:
     - postgres
     - redis
-    - auth-service
+    - user-management-service
     environment:
       API_PORT: '8000'
       DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
@@ -294,21 +277,22 @@ services:
     restart: unless-stopped
     volumes:
     - logs_data:/app/logs
-  integration-service:
-    build: ./services/integration-service
+  utility-services:
+    build: ./services/utility-services
     depends_on:
     - postgres
     - redis
-    - message-bus
+    - user-management-service
+    - communication-service
     environment:
       API_PORT: '8000'
       DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
       REDIS_URL: redis://redis:6379/0
-      SERVICE_NAME: integration-service
+      SERVICE_NAME: utility-services
     networks:
     - suoke-network
     ports:
-    - 8012:8000
+    - 8040:8000
     restart: unless-stopped
     volumes:
     - logs_data:/app/logs
@@ -317,7 +301,7 @@ services:
     depends_on:
     - postgres
     - redis
-    - rag-service
+    - communication-service
     environment:
       API_PORT: '8000'
       DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
@@ -330,38 +314,22 @@ services:
     restart: unless-stopped
     volumes:
     - logs_data:/app/logs
-  medical-resource-service:
-    build: ./services/medical-resource-service
+
+  communication-service:
+    build: ./services/communication-service
     depends_on:
     - postgres
     - redis
-    - user-service
+    - user-management-service
     environment:
       API_PORT: '8000'
       DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
       REDIS_URL: redis://redis:6379/0
-      SERVICE_NAME: medical-resource-service
+      SERVICE_NAME: communication-service
     networks:
     - suoke-network
     ports:
-    - 8009:8000
-    restart: unless-stopped
-    volumes:
-    - logs_data:/app/logs
-  message-bus:
-    build: ./services/message-bus
-    depends_on:
-    - postgres
-    - redis
-    environment:
-      API_PORT: '8000'
-      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
-      REDIS_URL: redis://redis:6379/0
-      SERVICE_NAME: message-bus
-    networks:
-    - suoke-network
-    ports:
-    - 8004:8000
+    - 8030:8000
     restart: unless-stopped
     volumes:
     - logs_data:/app/logs
@@ -377,24 +345,7 @@ services:
     - 5432:5432
     volumes:
     - postgres_data:/var/lib/postgresql/data
-  rag-service:
-    build: ./services/rag-service
-    depends_on:
-    - postgres
-    - redis
-    - message-bus
-    environment:
-      API_PORT: '8000'
-      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
-      REDIS_URL: redis://redis:6379/0
-      SERVICE_NAME: rag-service
-    networks:
-    - suoke-network
-    ports:
-    - 8005:8000
-    restart: unless-stopped
-    volumes:
-    - logs_data:/app/logs
+
   redis:
     image: redis:7-alpine
     networks:
@@ -420,25 +371,7 @@ services:
     restart: unless-stopped
     volumes:
     - logs_data:/app/logs
-  user-service:
-    build: ./services/user-service
-    depends_on:
-    - postgres
-    - redis
-    - auth-service
-    environment:
-      API_PORT: '8000'
-      DATABASE_URL: postgresql://suoke:suoke123@postgres:5432/suoke_db
-      REDIS_URL: redis://redis:6379/0
-      SERVICE_NAME: user-service
-    networks:
-    - suoke-network
-    ports:
-    - 8006:8000
-    restart: unless-stopped
-    volumes:
-    - logs_data:/app/logs
-version: '3.8'
+
 volumes:
   logs_data: {}
   postgres_data: {}

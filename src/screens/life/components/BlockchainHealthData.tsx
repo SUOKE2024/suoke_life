@@ -6,7 +6,7 @@ import { colors, spacing } from ../../../constants/theme" // MESSAGE_67reactMESS
 {/
     trackRender: true,
     trackMemory: true,
-    warnThreshold: 50,  });
+    warnThreshold: 50});
   visible,
   onClose;
 }) => {};
@@ -25,21 +25,21 @@ const [activeTab, setActiveTab] = useState<"records | "sharing" | privacy" | "ba
       title: 用药记录",
       data: { medication: "维生素D, dosage: "CONSTANT_1000IU", frequency: 每日一次"},
       timestamp: "2024-01-14T20:00:00Z,",
-      hash: "0x3c4d5e6f7a8b...MESSAGE_28;
-      requester: "张医生 - 中医科,",dataTypes: ["五诊结果", " 生命体征"],";
+      hash: "0x3c4d5e6f7a8b...MESSAGE_28;,
+  requester: "张医生 - 中医科,",dataTypes: ["五诊结果", " 生命体征"],";
       purpose: "制定个性化治疗方案,",duration: "3个月",status: pending"";
     },{
       id: "req_2,",
-      requester: "健康研究院", "dataTypes: [运动数据", "饮食记录],purpose: "健康生活方式研究", "duration: 1年";
-      status: "pending},";
+      requester: "健康研究院", "dataTypes: [运动数据", "饮食记录],purpose: "健康生活方式研究", "duration: 1年";,
+  status: "pending},";
   ];);
-  const encryptData = useMemo(() => async() => {})
+  const encryptData = useMemo() => async() => {})
     setLoading(true), [])
     await new Promise<void>(resolve => setTimeout(); => resolve(), CONSTANT_800));
     setLoading(false);
     Alert.alert("加密完成", " 数据已使用AES-256加密算法保护");MESSAGE_94共享成功, "数据已安全共享给授权方");"
   };
-  const backupToblockchain = useMemo(() => async() => {})
+  const backupToblockchain = useMemo() => async() => {})
     setLoading(true), []);
     await new Promise<void>(resolve => setTimeout(); => resolve(), CONSTANT_2000));
     setLoading(false);
@@ -47,13 +47,13 @@ const [activeTab, setActiveTab] = useState<"records | "sharing" | privacy" | "ba
       case "exercise": return ru;n;
       case "diet: return MESSAGE_1diagnosis: return colors.prima;r;y;"
 case "vitalsMESSAGE_65: return colors.succe;s;s;"
-case MESSAGE_31
+case MESSAGE_31;
 case "dietMESSAGE_42records, label: "数据记录", icon: database"},
         { key: "sharing, label: "数据共享", icon: share-variant"},
         { key: "privacy, label: "隐私设置", icon: shield-check"},
         { key: "backup, label: "备份恢复", icon: backup-restore"}
       ].map(tab) => ()
-        <TouchableOpacity
+        <TouchableOpacity;
 key={tab.key}
           style={[styles.tabButton, activeTab === tab.key && styles.activeTabButton]}
           onPress={() = accessibilityLabel="TODO: 添加无障碍标签MESSAGE_73records: return renderDataRecords;(;)"
@@ -133,11 +133,9 @@ key={tab.key}
     marginTop: spacing.md;
   },
   backupTime: {,
-  fontSize: 14,
-  },
+  fontSize: 14},
   backupSize: {,
-  fontSize: 12,
-  },
+  fontSize: 12},
   backupButton: {,
   flexDirection: "row,",
     alignItems: "centerMESSAGE_57,

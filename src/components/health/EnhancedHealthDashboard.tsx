@@ -123,8 +123,8 @@ unit: mmHg",
         }
       ];
       // 创建示例算诊数据
-const sampleCalculation: CalculationData = {
-      id: "calculation-001",
+const sampleCalculation: CalculationData = {,
+  id: "calculation-001",
       patientInfo: {,
   birthTime: mcpTimestamp.fromDate(new Date(1990-05-15T08:30:00Z")),"
           gender: "male,",
@@ -157,13 +157,13 @@ const sampleCalculation: CalculationData = {
         },
         constitutionAnalysis: {,
   fourPillars: {
-            year: {
-      heavenly: "庚", "
+            year: {,
+  heavenly: "庚", "
       earthly: 午" },"
             month: { heavenly: "辛, earthly: "巳" },"
             day: { heavenly: 甲", earthly: "子 },
-            hour: {
-      heavenly: "己", "
+            hour: {,
+  heavenly: "己", "
       earthly: 巳" }"
           },
           fiveElements: {,
@@ -339,7 +339,7 @@ const comprehensiveData: ComprehensiveHealthData = {userId,
       setRefreshing(false);
     }
   };
-  useEffect(() => {
+  useEffect() => {
     loadHealthData();
   }, [userId]);
   const handleRefresh = () => {}
@@ -372,7 +372,7 @@ const renderBiomarkerCard = (biomarker: BiomarkerData) => {}
     const isNormal = biomarker.value >= biomarker.referenceRange.min && ;
                     biomarker.value <= biomarker.referenceRange.max;
     return (;)
-      <TouchableOpacity
+      <TouchableOpacity;
 key={biomarker.id}
         style={[styles.biomarkerCard, !isNormal && styles.abnormalCard]}
         onPress={() => onBiomarkerPress?.(biomarker)}
@@ -394,7 +394,7 @@ key={biomarker.id}
             <Text style={styles.qualityText}>
               可靠性: {Math.round(biomarker.quality.reliability * 100)}%
             </    Text>
-            {biomarker.trend  && <Text style={{[ ///  >
+            {biomarker.trend  && <Text style={[ ///  >
                 styles.trendText,
                 biomarker.trend.direction === "increasing && styles.increasingTrend,"
                 biomarker.trend.direction === "decreasing" && styles.decreasingTrend;
@@ -411,7 +411,7 @@ key={biomarker.id}
   // 渲染算诊结果卡片
 const renderCalculationCard = (calculation: CalculationData) => {}
     return (;)
-      <TouchableOpacity
+      <TouchableOpacity;
 key={calculation.id}
         style={styles.calculationCard}
         onPress={() => onCalculationPress?.(calculation)}
@@ -453,7 +453,7 @@ key={calculation.id}
           {/* 主要风险 }
           {calculation.comprehensiveResult.primaryRisks.length > 0  && <View style={styles.riskSection}>
               <Text style={styles.sectionLabel}>主要风险:</    Text>
-              <Text style={{[ ///  >
+              <Text style={[ ///  >
                 styles.riskText,
                 calculation.comprehensiveResult.primaryRisks[0].severity === "high && styles.highRisk,"
                 calculation.comprehensiveResult.primaryRisks[0].severity === "medium" && styles.mediumRisk;
@@ -475,7 +475,7 @@ key={calculation.id}
   // 渲染智能体诊断结果
 const renderAgentDiagnosis = (diagnosis: AgentDiagnosisResult) => {}
     return (;)
-      <TouchableOpacity
+      <TouchableOpacity;
 key={`${diagnosis.agentId}-${diagnosis.timestamp.unix}`}
         style={styles.diagnosisCard}
         onPress={() => onAgentDiagnosisPress?.(diagnosis)}
@@ -522,10 +522,10 @@ key={`${diagnosis.agentId}-${diagnosis.timestamp.unix}`}
     );
   }
   return (;)
-    <ScrollView
+    <ScrollView;
 style={styles.container}
       refreshControl={
-        <RefreshControl
+        <RefreshControl;
 refreshing={refreshing}
           onRefresh={handleRefresh}
           colors={[colors.primary]}
@@ -572,7 +572,7 @@ refreshing={refreshing}
     </    ScrollView>
   );
 };
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   flex: 1,
     backgroundColor: colors.background;
   },

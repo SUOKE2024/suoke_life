@@ -1,12 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import {
-    Modal,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -24,7 +24,10 @@ export interface FilterOption {
   /** 选项类型 */
   type?: 'checkbox' | 'radio' | 'range' | 'date' | 'custom';
   /** 自定义渲染 */
-  render?: (option: FilterOption, onSelect: (value: any) => void) => React.ReactNode;
+  render?: (
+    option: FilterOption,
+    onSelect: (value: any) => void;
+  ) => React.ReactNode;
 }
 
 export interface FilterGroup {
@@ -109,65 +112,71 @@ export const SearchFilter: React.FC<SearchFilterProps> = ({
 
   const [localSearchValue, setLocalSearchValue] = useState(searchValue);
   const [localFilters, setLocalFilters] = useState<Record<string, any>>({});
-  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
+  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>(
+    {}
+  );
 
   // 初始化展开状态
-  React.useEffect(() => {
+  React.useEffect() => {
     const initialExpanded: Record<string, boolean> = {};
-    filterGroups.forEach(group => {
+    filterGroups.forEach(group) => {
       initialExpanded[group.key] = group.defaultExpanded !== false;
     });
     setExpandedGroups(initialExpanded);
   }, [filterGroups]);
 
   // 处理搜索变化
-  const handleSearchChange = useCallback((value: string) => {
-    setLocalSearchValue(value);
-    if (!showApply) {
-      onSearchChange?.(value);
-    }
-  }, [onSearchChange, showApply]);
+  const handleSearchChange = useCallback(value: string) => {
+      setLocalSearchValue(value);
+      if (!showApply) {
+        onSearchChange?.(value);
+      }
+    },
+    [onSearchChange, showApply]
+  );
 
   // 处理过滤器选择
-  const handleFilterSelect = useCallback((groupKey: string, optionKey: string, value: any) => {
-    const group = filterGroups.find(g => g.key === groupKey);
-    if (!group) return;
+  const handleFilterSelect = useCallback(groupKey: string, optionKey: string, value: any) => {
+      const group = filterGroups.find(g) => g.key === groupKey);
+      if (!group) return;
 
-    const newFilters = { ...localFilters };
+      const newFilters = { ...localFilters };
 
-    if (group.type === 'single') {
-      newFilters[groupKey] = value;
-    } else {
-      if (!newFilters[groupKey]) {
-        newFilters[groupKey] = [];
-      }
-      const currentValues = newFilters[groupKey] as any[];
-      const index = currentValues.findIndex(v => v === value);
-      
-      if (index >= 0) {
-        currentValues.splice(index, 1);
+      if (group.type === 'single') {
+        newFilters[groupKey] = value;
       } else {
-        currentValues.push(value);
-      }
-    }
+        if (!newFilters[groupKey]) {
+          newFilters[groupKey] = [];
+        }
+        const currentValues = newFilters[groupKey] as any[];
+        const index = currentValues.findIndex(v) => v === value);
 
-    setLocalFilters(newFilters);
-    
-    if (!showApply) {
-      onFilterChange?.(newFilters);
-    }
-  }, [filterGroups, localFilters, onFilterChange, showApply]);
+        if (index >= 0) {
+          currentValues.splice(index, 1);
+        } else {
+          currentValues.push(value);
+        }
+      }
+
+      setLocalFilters(newFilters);
+
+      if (!showApply) {
+        onFilterChange?.(newFilters);
+      }
+    },
+    [filterGroups, localFilters, onFilterChange, showApply]
+  );
 
   // 切换分组展开状态
-  const toggleGroupExpanded = useCallback((groupKey: string) => {
-    setExpandedGroups(prev => ({
+  const toggleGroupExpanded = useCallback(groupKey: string) => {
+    setExpandedGroups(prev) => ({
       ...prev,
       [groupKey]: !prev[groupKey],
     }));
   }, []);
 
   // 清除所有过滤器
-  const handleClear = useCallback(() => {
+  const handleClear = useCallback() => {
     setLocalSearchValue('');
     setLocalFilters({});
     onClear?.();
@@ -176,24 +185,26 @@ export const SearchFilter: React.FC<SearchFilterProps> = ({
   }, [onClear, onSearchChange, onFilterChange]);
 
   // 应用过滤器
-  const handleApply = useCallback(() => {
+  const handleApply = useCallback() => {
     onApply?.(localSearchValue, localFilters);
     onModalClose?.();
   }, [localSearchValue, localFilters, onApply, onModalClose]);
 
   // 检查选项是否选中
-  const isOptionSelected = useCallback((groupKey: string, optionValue: any) => {
-    const group = filterGroups.find(g => g.key === groupKey);
-    if (!group) return false;
+  const isOptionSelected = useCallback(groupKey: string, optionValue: any) => {
+      const group = filterGroups.find(g) => g.key === groupKey);
+      if (!group) return false;
 
-    const filterValue = localFilters[groupKey];
-    
-    if (group.type === 'single') {
-      return filterValue === optionValue;
-    } else {
-      return Array.isArray(filterValue) && filterValue.includes(optionValue);
-    }
-  }, [filterGroups, localFilters]);
+      const filterValue = localFilters[groupKey];
+
+      if (group.type === 'single') {
+        return filterValue === optionValue;
+      } else {
+        return Array.isArray(filterValue) && filterValue.includes(optionValue);
+      }
+    },
+    [filterGroups, localFilters]
+  );
 
   // 渲染搜索框
   const renderSearchBox = () => {
@@ -201,7 +212,7 @@ export const SearchFilter: React.FC<SearchFilterProps> = ({
 
     return (
       <View style={[styles.searchContainer, searchStyle]}>
-        <TextInput
+        <TextInput;
           style={styles.searchInput}
           placeholder={searchPlaceholder}
           placeholderTextColor={currentTheme.colors.onSurfaceVariant}
@@ -218,28 +229,37 @@ export const SearchFilter: React.FC<SearchFilterProps> = ({
     const isSelected = isOptionSelected(group.key, option.value);
 
     if (option.render) {
-      return option.render(option, (value) => handleFilterSelect(group.key, option.key, value));
+      return option.render(option, (value) =>
+        handleFilterSelect(group.key, option.key, value)
+      );
     }
 
     return (
-      <TouchableOpacity
+      <TouchableOpacity;
         key={option.key}
         style={[styles.filterOption, isSelected && styles.selectedFilterOption]}
         onPress={() => handleFilterSelect(group.key, option.key, option.value)}
       >
         <View style={styles.optionContent}>
-          <View style={[
-            styles.checkbox,
-            group.type === 'single' && styles.radioButton,
-            isSelected && styles.checkedCheckbox,
-          ]}>
+          <View;
+            style={[
+              styles.checkbox,
+              group.type === 'single' && styles.radioButton,
+              isSelected && styles.checkedCheckbox,
+            ]}
+          >
             {isSelected && (
               <Text style={styles.checkmark}>
                 {group.type === 'single' ? '●' : '✓'}
               </Text>
             )}
           </View>
-          <Text style={[styles.optionLabel, isSelected && styles.selectedOptionLabel]}>
+          <Text;
+            style={[
+              styles.optionLabel,
+              isSelected && styles.selectedOptionLabel,
+            ]}
+          >
             {option.label}
           </Text>
         </View>
@@ -253,22 +273,20 @@ export const SearchFilter: React.FC<SearchFilterProps> = ({
 
     return (
       <View key={group.key} style={styles.filterGroup}>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.groupHeader}
           onPress={() => group.collapsible && toggleGroupExpanded(group.key)}
           disabled={!group.collapsible}
         >
           <Text style={styles.groupTitle}>{group.title}</Text>
           {group.collapsible && (
-            <Text style={styles.expandIcon}>
-              {isExpanded ? '▼' : '▶'}
-            </Text>
+            <Text style={styles.expandIcon}>{isExpanded ? '▼' : '▶'}</Text>
           )}
         </TouchableOpacity>
-        
+
         {(!group.collapsible || isExpanded) && (
           <View style={styles.groupOptions}>
-            {group.options.map(option => renderFilterOption(group, option))}
+            {group.options.map(option) => renderFilterOption(group, option))}
           </View>
         )}
       </View>
@@ -318,7 +336,7 @@ export const SearchFilter: React.FC<SearchFilterProps> = ({
   // 如果使用模态框
   if (modal) {
     return (
-      <Modal
+      <Modal;
         visible={modalVisible}
         animationType="slide"
         presentationStyle="pageSheet"
@@ -334,9 +352,7 @@ export const SearchFilter: React.FC<SearchFilterProps> = ({
               <Text style={styles.modalApplyText}>确定</Text>
             </TouchableOpacity>
           </View>
-          <ScrollView style={styles.modalContent}>
-            {renderContent()}
-          </ScrollView>
+          <ScrollView style={styles.modalContent}>{renderContent()}</ScrollView>
         </View>
       </Modal>
     );
@@ -351,20 +367,20 @@ export const SearchFilter: React.FC<SearchFilterProps> = ({
 
 const createStyles = (theme: any, size: 'sm' | 'md' | 'lg', layout: string) => {
   const sizeConfig = {
-    sm: {
-      padding: theme.spacing.sm,
+    sm: {,
+  padding: theme.spacing.sm,
       fontSize: theme.typography.fontSize.sm,
       inputHeight: 36,
       spacing: theme.spacing.xs,
     },
-    md: {
-      padding: theme.spacing.md,
+    md: {,
+  padding: theme.spacing.md,
       fontSize: theme.typography.fontSize.base,
       inputHeight: 44,
       spacing: theme.spacing.sm,
     },
-    lg: {
-      padding: theme.spacing.lg,
+    lg: {,
+  padding: theme.spacing.lg,
       fontSize: theme.typography.fontSize.lg,
       inputHeight: 52,
       spacing: theme.spacing.md,
@@ -374,14 +390,14 @@ const createStyles = (theme: any, size: 'sm' | 'md' | 'lg', layout: string) => {
   const config = sizeConfig[size];
 
   return StyleSheet.create({
-    container: {
-      backgroundColor: theme.colors.surface,
+    container: {,
+  backgroundColor: theme.colors.surface,
     },
-    searchContainer: {
-      marginBottom: config.spacing,
+    searchContainer: {,
+  marginBottom: config.spacing,
     },
-    searchInput: {
-      height: config.inputHeight,
+    searchInput: {,
+  height: config.inputHeight,
       backgroundColor: theme.colors.surfaceVariant,
       borderRadius: theme.borderRadius.md,
       paddingHorizontal: theme.spacing.md,
@@ -390,47 +406,47 @@ const createStyles = (theme: any, size: 'sm' | 'md' | 'lg', layout: string) => {
       borderWidth: 1,
       borderColor: theme.colors.outline,
     },
-    filtersContainer: {
-      marginBottom: config.spacing,
+    filtersContainer: {,
+  marginBottom: config.spacing,
     },
-    filterGroup: {
-      marginBottom: config.spacing,
+    filterGroup: {,
+  marginBottom: config.spacing,
     },
-    groupHeader: {
-      flexDirection: 'row',
+    groupHeader: {,
+  flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
       paddingVertical: config.spacing,
       borderBottomWidth: 1,
       borderBottomColor: theme.colors.outline,
     },
-    groupTitle: {
-      fontSize: config.fontSize,
+    groupTitle: {,
+  fontSize: config.fontSize,
       fontWeight: theme.typography.fontWeight.semibold,
       color: theme.colors.onSurface,
     },
-    expandIcon: {
-      fontSize: config.fontSize,
+    expandIcon: {,
+  fontSize: config.fontSize,
       color: theme.colors.onSurfaceVariant,
     },
-    groupOptions: {
-      paddingTop: config.spacing,
+    groupOptions: {,
+  paddingTop: config.spacing,
     },
-    filterOption: {
-      paddingVertical: config.spacing,
+    filterOption: {,
+  paddingVertical: config.spacing,
       paddingHorizontal: theme.spacing.sm,
       borderRadius: theme.borderRadius.sm,
       marginBottom: theme.spacing.xs,
     },
-    selectedFilterOption: {
-      backgroundColor: theme.colors.primaryContainer,
+    selectedFilterOption: {,
+  backgroundColor: theme.colors.primaryContainer,
     },
-    optionContent: {
-      flexDirection: 'row',
+    optionContent: {,
+  flexDirection: 'row',
       alignItems: 'center',
     },
-    checkbox: {
-      width: 20,
+    checkbox: {,
+  width: 20,
       height: 20,
       borderWidth: 2,
       borderColor: theme.colors.outline,
@@ -439,36 +455,36 @@ const createStyles = (theme: any, size: 'sm' | 'md' | 'lg', layout: string) => {
       justifyContent: 'center',
       marginRight: theme.spacing.sm,
     },
-    radioButton: {
-      borderRadius: 10,
+    radioButton: {,
+  borderRadius: 10,
     },
-    checkedCheckbox: {
-      backgroundColor: theme.colors.primary,
+    checkedCheckbox: {,
+  backgroundColor: theme.colors.primary,
       borderColor: theme.colors.primary,
     },
-    checkmark: {
-      color: theme.colors.onPrimary,
+    checkmark: {,
+  color: theme.colors.onPrimary,
       fontSize: 12,
       fontWeight: theme.typography.fontWeight.bold,
     },
-    optionLabel: {
-      fontSize: config.fontSize,
+    optionLabel: {,
+  fontSize: config.fontSize,
       color: theme.colors.onSurface,
       flex: 1,
     },
-    selectedOptionLabel: {
-      color: theme.colors.onPrimaryContainer,
+    selectedOptionLabel: {,
+  color: theme.colors.onPrimaryContainer,
       fontWeight: theme.typography.fontWeight.medium,
     },
-    actionsContainer: {
-      flexDirection: 'row',
+    actionsContainer: {,
+  flexDirection: 'row',
       justifyContent: 'space-between',
       paddingTop: config.spacing,
       borderTopWidth: 1,
       borderTopColor: theme.colors.outline,
     },
-    clearButton: {
-      flex: 1,
+    clearButton: {,
+  flex: 1,
       paddingVertical: theme.spacing.sm,
       paddingHorizontal: theme.spacing.md,
       backgroundColor: theme.colors.surfaceVariant,
@@ -476,13 +492,13 @@ const createStyles = (theme: any, size: 'sm' | 'md' | 'lg', layout: string) => {
       alignItems: 'center',
       marginRight: theme.spacing.sm,
     },
-    clearButtonText: {
-      fontSize: config.fontSize,
+    clearButtonText: {,
+  fontSize: config.fontSize,
       color: theme.colors.onSurfaceVariant,
       fontWeight: theme.typography.fontWeight.medium,
     },
-    applyButton: {
-      flex: 1,
+    applyButton: {,
+  flex: 1,
       paddingVertical: theme.spacing.sm,
       paddingHorizontal: theme.spacing.md,
       backgroundColor: theme.colors.primary,
@@ -490,42 +506,42 @@ const createStyles = (theme: any, size: 'sm' | 'md' | 'lg', layout: string) => {
       alignItems: 'center',
       marginLeft: theme.spacing.sm,
     },
-    applyButtonText: {
-      fontSize: config.fontSize,
+    applyButtonText: {,
+  fontSize: config.fontSize,
       color: theme.colors.onPrimary,
       fontWeight: theme.typography.fontWeight.medium,
     },
-    modalContainer: {
-      flex: 1,
+    modalContainer: {,
+  flex: 1,
       backgroundColor: theme.colors.surface,
     },
-    modalHeader: {
-      flexDirection: 'row',
+    modalHeader: {,
+  flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
       padding: theme.spacing.md,
       borderBottomWidth: 1,
       borderBottomColor: theme.colors.outline,
     },
-    modalTitle: {
-      fontSize: theme.typography.fontSize.lg,
+    modalTitle: {,
+  fontSize: theme.typography.fontSize.lg,
       fontWeight: theme.typography.fontWeight.semibold,
       color: theme.colors.onSurface,
     },
-    modalCloseText: {
-      fontSize: config.fontSize,
+    modalCloseText: {,
+  fontSize: config.fontSize,
       color: theme.colors.onSurfaceVariant,
     },
-    modalApplyText: {
-      fontSize: config.fontSize,
+    modalApplyText: {,
+  fontSize: config.fontSize,
       color: theme.colors.primary,
       fontWeight: theme.typography.fontWeight.medium,
     },
-    modalContent: {
-      flex: 1,
+    modalContent: {,
+  flex: 1,
       padding: theme.spacing.md,
     },
   });
 };
 
-export default SearchFilter; 
+export default SearchFilter;

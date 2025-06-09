@@ -13,7 +13,7 @@ import React,{ useState } from ";react";
 export const I18nDemo: React.FC  = () => {}
   const performanceMonitor = usePerformanceMonitor("";)
 I18nDemo", { ";
-    trackRender: true,trackMemory: false,warnThreshold: 100,  };);
+    trackRender: true,trackMemory: false,warnThreshold: 100};);
   const {  language,
     region,
     isRTL,
@@ -124,56 +124,56 @@ I18nDemo", { ";
       {///              {supportedLanguages.map(lang;) => ()
             <TouchableOpacity,
               key={lang.code}
-              style={{[
+              style={[
                 styles.languageButton,
                 language === lang.code && styles.activeLanguageButton;
               ]}}
               onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleLanguageChange(lang.code)}/                  disabled={loading}
             >
-              <Text style={{[ ///  >
+              <Text style={[ ///  >
                 styles.languageButtonText,
                 language === lang.code && styles.activeLanguageButtonText;
               ]}} />/                    {lang.nativeName}
               </Text>/            </TouchableOpacity>/              ))}
         </View>/      </Card>/
       {///              {supportedRegions.slice(0, 4).map(reg) => ()
-            <TouchableOpacity
+            <TouchableOpacity;
 key={reg.code}
-              style={{[
+              style={[
                 styles.regionButton,
                 region === reg.code && styles.activeRegionButton;
               ]}}
               onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleRegionChange(reg.code)}/                  disabled={loading}
             >
-              <Text style={{[ ///  >
+              <Text style={[ ///  >
                 styles.regionButtonText,
                 region === reg.code && styles.activeRegionButtonText;
               ]}} />/                    {reg.name}
               </Text>/            </TouchableOpacity>/              ))}
         </View>/      </Card>/
       {///
-        <Button
+        <Button;
 title="测试所有格式化"
           onPress={testAllFormatting}
           style={styles.testButton}
           disabled={loading}
         / accessibilityLabel="TODO: 添加无障碍标签" />/      </Card>/{///    "
-      {///              <TouchableOpacity
+      {///              <TouchableOpacity;
 style={styles.preferenceButton}
             onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleCulturalPreferencesChange({ colorScheme: culturalPreferences.colorScheme === "light" ? dark" : "light  })}/              >
             <Text style={styles.preferenceButtonText}>/              主题: {culturalPreferences.colorScheme === "light" ? 浅色" : "深色}
             </Text>/          </TouchableOpacity>/
-          <TouchableOpacity
+          <TouchableOpacity;
 style={styles.preferenceButton}
             onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleCulturalPreferencesChange({ fontSize: culturalPreferences.fontSize === "medium" ? large" : "medium  })}/              >
             <Text style={styles.preferenceButtonText}>/              字体: {culturalPreferences.fontSize === "medium" ? 中等" : "大号}
             </Text>/          </TouchableOpacity>/        </View>/      </Card>/
-      {///              {testResults.map((result, index) => ())
+      {///              {testResults.map(result, index) => ())
             <Text key={index} style={styles.resultText}>/                  {result}
             </Text>/              ))}
           {testResults.length === 0  && <Text style={styles.noResultsText}>暂无测试结果</Text>/              )}
         </ScrollView>/      </Card>/
-      {///            <Button
+      {///            <Button;
 title="重置设置"
           onPress={handleReset}
           style={[styles.actionButton, styles.resetButton]}
@@ -181,7 +181,7 @@ title="重置设置"
         / accessibilityLabel="TODO: 添加无障碍标签" />/      </View>/    {loading  && <View style={styles.loadingOverlay}>/          <ActivityIndicator size="large" color={theme.colors.primary} />/        </View>/          )}
     </ScrollView>/      );
 }
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   flex: 1,
     backgroundColor: theme.colors.background;
   },

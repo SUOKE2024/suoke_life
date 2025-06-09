@@ -4,9 +4,9 @@ import React from "react";
 r"; /    "
 // 智能体角色定义 * export interface AgentRole {
   id: AgentType,
-  name: string;
+  name: string;,
   description: string;
-  capabilities: string[];
+  capabilities: string[];,
   specialties: string[];
   personality: {communication_style: string,empathy_level: number,expertise_confidence: number;
 };
@@ -17,35 +17,35 @@ r"; /    "
     | "emergency_response";
   priority: "low" | "medium" | "high" | "critical",requiredAgents: AgentType[];
   currentAgent?: AgentType;
-  status: "pending" | "in_progress" | "completed" | "failed";
+  status: "pending" | "in_progress" | "completed" | "failed";,
   data: unknown;
   timeline: TaskTimeline[];
-  result?: CollaborationResult
+  result?: CollaborationResult;
 }
 export interface TaskTimeline {
-  timestamp: number;
+  timestamp: number;,
   agent: AgentType;
-  action: string;
+  action: string;,
   data: unknown;
 }
 export interface CollaborationResult {
-  consensus: boolean;
+  consensus: boolean;,
   recommendations: AgentRecommendation[];
-  confidence: number;
+  confidence: number;,
   reasoning: string;
 }
 export interface AgentRecommendation {
-  agent: AgentType;
+  agent: AgentType;,
   recommendation: string;
-  confidence: number;
+  confidence: number;,
   reasoning: string;
   supporting_data: unknown;
 }
 // 智能体状态 * export interface AgentStatus {
   agent: AgentType,
-  online: boolean;
+  online: boolean;,
   busy: boolean;
-  currentTasks: string[];
+  currentTasks: string[];,
   performance: {response_time: number,accuracy: number,user_satisfaction: number;
 };
   lastUpdate: number}
@@ -107,7 +107,7 @@ export interface AgentRecommendation {
     if (recommendations.length === 0) {
       return 0;
     }
-    const totalConfidence = recommendations.reduce((acc, item) => acc + item, 0);
+    const totalConfidence = recommendations.reduce(acc, item) => acc + item, 0);
       (sum, re;c;); => sum + rec.confidence,
       0;
     );
@@ -211,7 +211,7 @@ export interface AgentRecommendation {
         empathy_level: 0.85,
         expertise_confidence: 0.8}
     });
-    this.agents.forEach(((agent, agentType) => {}))
+    this.agents.forEach((agent, agentType) => {}))
       this.agentStatuses.set(agentType, {
         agent: agentType,
         online: true,
@@ -371,7 +371,7 @@ performanceMonitor.recordRender();
     const totalTasks = this.collaborationHistory.leng;t;h;
     const averageConfidence =;
       completedTasks.length > 0;
-        ? completedTasks.reduce((acc, item) => acc + item, 0);
+        ? completedTasks.reduce(acc, item) => acc + item, 0);
             (sum, tas;k;); => sum + (task.result?.confidence || 0),
             0;
           ) / completedTasks.length/            : 0;

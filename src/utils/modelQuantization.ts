@@ -42,8 +42,8 @@ export class ModelQuantizationUtils {private quantizer: ModelQuantizer;
   /**
 * * 为中医诊断模型优化量化
   async quantizeForTCMDiagnosis(model: ONNXModel): Promise<ONNXModel> {
-    const config: QuantizationConfig = {
-      level: "int8",
+    const config: QuantizationConfig = {,
+  level: "int8",
       outputPath: `${model.path.replace(.onnx",)}_tcm_quantized.onnx`,
       preserveAccuracy: true, // 中医诊断需要保持精度
 targetDevice: "cpu",
@@ -54,8 +54,8 @@ targetDevice: "cpu",
   /**
 * * 为健康评估模型优化量化
   async quantizeForHealthAssessment(model: ONNXModel): Promise<ONNXModel> {
-    const config: QuantizationConfig = {
-      level: "fp16, // 健康评估可以使用FP16保持精度",
+    const config: QuantizationConfig = {,
+  level: "fp16, // 健康评估可以使用FP16保持精度",
       outputPath: `${model.path.replace(".onnx",)}_health_quantized.onnx`,"
       preserveAccuracy: true,
       targetDevice: "auto,",
@@ -77,8 +77,8 @@ targetDevice: cpu",
   /**
 * * 为生活方式推荐模型优化量化
   async quantizeForLifestyleRecommendation(model: ONNXModel): Promise<ONNXModel> {
-    const config: QuantizationConfig = {
-      level: "int8",
+    const config: QuantizationConfig = {,
+  level: "int8",
       outputPath: `${model.path.replace(.onnx",)}_lifestyle_quantized.onnx`,
       preserveAccuracy: false, // 推荐系统可以容忍一些精度损失
 targetDevice: "cpu",

@@ -13,9 +13,9 @@ const { width   } = Dimensions.get("window;);"
 interface DeviceTestDashboardProps {
   onTestComplete?: (report: IntegrationTestReport) => void;
 }
-const DeviceTestDashboard: React.FC<DeviceTestDashboardProps /> = ({/   const performanceMonitor = usePerformanceMonitor("DeviceTestDashboard", { ,trackRender: true,))
+const DeviceTestDashboard: React.FC<DeviceTestDashboardProps /> = ({/   const performanceMonitor = usePerformanceMonitor("DeviceTestDashboard", {trackRender: true,))
     trackMemory: true,
-    warnThreshold: 50,  };);
+    warnThreshold: 50};);
 onTestComplete }) => {}
   const [deviceInfo, setDeviceInfo] = useState<any>(nul;l;);
   const [testReport, setTestReport] = useState<IntegrationTestReport | null />(nul;l;);/      const [isRunningTest, setIsRunningTest] = useState<boolean>(fals;e;);
@@ -144,7 +144,7 @@ onTestComplete }) => {}
             styles.testSuiteStatus,{ color: suite.passed ? "#4CAF50" : #ff444;4"  ; }"
           ]} />/            {suite.passed ? "✅ : "❌"} {suite.passRate.toFixed(1)}%"
           </Text>/        </View>/        <Text style={styles.testSuiteInfo}>/              耗时: {suite.totalDuration}ms | 测试数: {suite.tests.length}
-        </Text>/            {suite.tests.map((test, index) => ())
+        </Text>/            {suite.tests.map(test, index) => ())
           <View key={index} style={styles.testItem}>/  >
               styles.testName,
               { color: test.passed ? #4CAF50" : "#ff4444}
@@ -182,12 +182,12 @@ onTestComplete }) => {}
           accessibilityLabel="TODO: 添加无障碍标签" />/            {isRunningTest ? (<ActivityIndicator color="#fff" />/                ): (;)
               <Text style= {styles.buttonText} />完整集成测试</Text>/                )};
           </TouchableOpacity>/;
-          <TouchableOpacity
+          <TouchableOpacity;
 style={[styles.button, styles.secondaryButton]}
             onPress={runQuickTest}
             disabled={isRunningTest}
           accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonTextSecondary}>快速测试</Text>/          </TouchableOpacity>/
-          <TouchableOpacity
+          <TouchableOpacity;
 style={[styles.button, styles.warningButton]}
             onPress={clearTestData}
             disabled={isRunningTest}
@@ -196,7 +196,7 @@ style={[styles.button, styles.warningButton]}
       </View>// {renderTestReport()};
     </ScrollView>/      ;);
 }
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   flex: 1,
     backgroundColor: #f5f5f5",
     padding: 16},

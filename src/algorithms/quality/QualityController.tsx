@@ -1,20 +1,20 @@
 import React from 'react';
 export interface QualityIssue {
-  type: 'data' | 'result' | 'consistency' | 'safety';
+  type: 'data' | 'result' | 'consistency' | 'safety';,
   severity: 'low' | 'medium' | 'high' | 'critical';
-  message: string;
+  message: string;,
   suggestion: string;
 }
 export interface QualityReport {
-  valid: boolean;
+  valid: boolean;,
   score: number;
-  warnings: string[];
+  warnings: string[];,
   medicalAdvice: string[];
-  followUpRecommendations: string[];
+  followUpRecommendations: string[];,
   issues: QualityIssue[];
 }
 export interface QualityControlConfig {
-  thresholds: {;
+  thresholds: {;,
   minConfidence: number;
     consistencyCheck: number;
 };
@@ -23,21 +23,21 @@ export interface QualityControlConfig {
   }
 }
 export interface ValidationRule {
-  name: string;
-  check: (data: any) => ValidationResult | Promise<ValidationResult>;
+  name: string;,
+  check: (data: any) => ValidationResult | Promise<ValidationResult>;,
   severity: 'low' | 'medium' | 'high' | 'critical';
 }
 export interface ValidationResult {
-  valid: boolean;
+  valid: boolean;,
   message: string;
   suggestion: string;
 }
 export interface ValidationInput {
-  input: any;
+  input: any;,
   diagnosisResults: any;
-  fusionResult: any;
+  fusionResult: any;,
   syndromeAnalysis: any;
-  constitutionAnalysis: any;
+  constitutionAnalysis: any;,
   treatmentRecommendation: any;
 }
 /**

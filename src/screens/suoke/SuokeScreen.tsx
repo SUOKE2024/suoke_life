@@ -11,43 +11,42 @@ import {
   RefreshControl,
   ActivityIndicator,
   Alert,
-  StatusBar,
-} from 'react-native';
+  StatusBar} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const { width } = Dimensions.get('window');
 // 产品类型定义
 interface Product {
-  id: string;
+  id: string;,
   name: string;
   price: number;
   originalPrice?: number;
-  image: string;
+  image: string;,
   category: string;
-  rating: number;
+  rating: number;,
   reviews: number;
-  description: string;
+  description: string;,
   tags: string[];
   isRecommended?: boolean;
   discount?: number;
 }
 // 服务类型定义
 interface Service {
-  id: string;
+  id: string;,
   title: string;
-  subtitle: string;
+  subtitle: string;,
   icon: string;
-  color: string;
+  color: string;,
   description: string;
   price?: number;
   isPopular?: boolean;
 }
 // 分类类型定义
 interface Category {
-  id: string;
+  id: string;,
   name: string;
-  icon: string;
+  icon: string;,
   color: string;
   count: number;
 }
@@ -74,8 +73,7 @@ const SuokeScreen: React.FC = () => {
         description: '宁夏有机枸杞，富含花青素和维生素',
         tags: ["有机", "养肝明目', '抗氧化'],
         isRecommended: true,
-        discount: 30,
-      },
+        discount: 30},
       {
       id: "2",
       name: '野生灵芝片',
@@ -88,8 +86,7 @@ const SuokeScreen: React.FC = () => {
         description: '长白山野生灵芝，增强免疫力',
         tags: ["野生", "免疫调节', '安神'],
         isRecommended: true,
-        discount: 25,
-      },
+        discount: 25},
       {
       id: "3",
       name: '蜂蜜柠檬茶',
@@ -99,8 +96,7 @@ const SuokeScreen: React.FC = () => {
         rating: 4.6,
         reviews: 432,
         description: '天然蜂蜜配柠檬，清热润燥',
-        tags: ["天然", "润燥', '维C'],
-      },
+        tags: ["天然", "润燥', '维C']},
       {
       id: "4",
       name: '养生药膳包',
@@ -112,8 +108,7 @@ const SuokeScreen: React.FC = () => {
         reviews: 98,
         description: '精选药食同源食材，滋补养生',
         tags: ["药膳", "滋补', '调理'],
-        discount: 23,
-      },
+        discount: 23},
       {
       id: "5",
       name: '艾灸贴',
@@ -123,8 +118,7 @@ const SuokeScreen: React.FC = () => {
         rating: 4.5,
         reviews: 167,
         description: '便携式艾灸贴，温经散寒',
-        tags: ["艾灸", "温经', '便携'],
-      },
+        tags: ["艾灸", "温经', '便携']},
       {
       id: "6",
       name: '刮痧板套装',
@@ -136,9 +130,7 @@ const SuokeScreen: React.FC = () => {
         reviews: 234,
         description: '天然牛角刮痧板，疏通经络',
         tags: ["刮痧", "经络', '天然'],
-        discount: 24,
-      },
-    ];
+        discount: 24}];
   };
   // 生成模拟服务数据
   const generateServices = (): Service[] => {
@@ -151,8 +143,7 @@ const SuokeScreen: React.FC = () => {
         color: '#FF6B6B',
         description: '预约知名中医专家，一对一健康咨询',
         price: 299,
-        isPopular: true,
-      },
+        isPopular: true},
       {
       id: "2",
       title: '体质检测',
@@ -161,8 +152,7 @@ const SuokeScreen: React.FC = () => {
         color: '#4ECDC4',
         description: '通过AI分析，精准识别个人体质类型',
         price: 99,
-        isPopular: true,
-      },
+        isPopular: true},
       {
       id: "3",
       title: '健康档案',
@@ -170,8 +160,7 @@ const SuokeScreen: React.FC = () => {
         icon: 'file-document',
         color: '#45B7D1',
         description: '建立完整健康档案，追踪健康变化',
-        price: 0,
-      },
+        price: 0},
       {
       id: "4",
       title: '养生计划',
@@ -179,8 +168,7 @@ const SuokeScreen: React.FC = () => {
         icon: 'calendar-check',
         color: '#96CEB4',
         description: '根据体质制定专属养生计划',
-        price: 199,
-      },
+        price: 199},
       {
       id: "5",
       title: '膳食指导',
@@ -188,8 +176,7 @@ const SuokeScreen: React.FC = () => {
         icon: 'food-apple',
         color: '#FECA57',
         description: '专业营养师提供饮食调理建议',
-        price: 149,
-      },
+        price: 149},
       {
       id: "6",
       title: '运动康复',
@@ -197,9 +184,7 @@ const SuokeScreen: React.FC = () => {
         icon: 'run',
         color: '#FF9FF3',
         description: '专业康复师制定运动康复方案',
-        price: 249,
-      },
-    ];
+        price: 249}];
   };
   // 生成分类数据
   const generateCategories = (): Category[] => {
@@ -218,8 +203,7 @@ const SuokeScreen: React.FC = () => {
       name: '药膳', icon: 'food', color: '#E91E63', count: 1 },
       {
       id: "therapy",
-      name: '理疗', icon: 'medical-bag', color: '#9C27B0', count: 2 },
-    ];
+      name: '理疗', icon: 'medical-bag', color: '#9C27B0', count: 2 }];
   };
   // 加载数据
   const loadData = useCallback(async () => {
@@ -247,7 +231,7 @@ const SuokeScreen: React.FC = () => {
     setRefreshing(false);
   }, [loadData]);
   // 初始化
-  useEffect(() => {
+  useEffect() => {
     loadData();
   }, [loadData]);
   // 过滤产品
@@ -268,8 +252,7 @@ const SuokeScreen: React.FC = () => {
       onPress: () => console.log('购买:', product.name) },
         {
       text: "加入购物车", "
-      onPress: () => console.log('加入购物车:', product.name) },
-      ],
+      onPress: () => console.log('加入购物车:', product.name) }],
     );
   };
   // 处理服务点击
@@ -283,30 +266,29 @@ const SuokeScreen: React.FC = () => {
       style: 'cancel' },
         {
       text: "立即预约", "
-      onPress: () => console.log('预约:', service.title) },
-      ],
+      onPress: () => console.log('预约:', service.title) }],
     );
   };
   // 渲染轮播图
   const renderBanner = () => (
   <View style={styles.bannerContainer}>
-      <ScrollView
+      <ScrollView;
         horizontal;
         pagingEnabled;
         showsHorizontalScrollIndicator={false}
         style={styles.bannerScroll}
       >
-        <View style={{[styles.bannerItem, { backgroundColor: '#FF6B6B' }}]}>
+        <View style={[styles.bannerItem, { backgroundColor: '#FF6B6B' }}]}>
           <Text style={styles.bannerTitle}>春季养生特惠</Text>
           <Text style={styles.bannerSubtitle}>精选中药材 限时8折</Text>
           <Icon name="leaf" size={40} color="#FFFFFF" style={styles.bannerIcon}>
         </View>
-        <View style={{[styles.bannerItem, { backgroundColor: '#4ECDC4' }}]}>
+        <View style={[styles.bannerItem, { backgroundColor: '#4ECDC4' }}]}>
           <Text style={styles.bannerTitle}>名医在线问诊</Text>
           <Text style={styles.bannerSubtitle}>三甲医院专家 24小时服务</Text>
           <Icon name="doctor" size={40} color="#FFFFFF" style={styles.bannerIcon}>
         </View>
-        <View style={{[styles.bannerItem, { backgroundColor: '#45B7D1' }}]}>
+        <View style={[styles.bannerItem, { backgroundColor: '#45B7D1' }}]}>
           <Text style={styles.bannerTitle}>AI体质检测</Text>
           <Text style={styles.bannerSubtitle}>智能分析 精准调理</Text>
           <Icon name="brain" size={40} color="#FFFFFF" style={styles.bannerIcon}>
@@ -319,24 +301,22 @@ const SuokeScreen: React.FC = () => {
   <View style={styles.categoryContainer}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {categories.map(category) => ()
-          <TouchableOpacity
+          <TouchableOpacity;
             key={category.id}
-            style={{[
+            style={[
               styles.categoryItem,
               selectedCategory === category.id && styles.categoryItemActive,
-              { borderColor: category.color }},
-            ]}
+              { borderColor: category.color }}]}
             onPress={() => setSelectedCategory(category.id)}
           >
-            <Icon
+            <Icon;
               name={category.icon}
               size={20}
               color={selectedCategory === category.id ? '#FFFFFF' : category.color}
             />
-            <Text style={{[
+            <Text style={[
               styles.categoryText,
-              selectedCategory === category.id && styles.categoryTextActive,
-            ]}}>
+              selectedCategory === category.id && styles.categoryTextActive]}}>
               {category.name}
             </Text>
             {category.count > 0  && <View style={styles.categoryBadge}>
@@ -350,12 +330,12 @@ const SuokeScreen: React.FC = () => {
   );
   // 渲染服务卡片
   const renderServiceCard = ({ item }: { item: Service }) => ()
-    <TouchableOpacity
-      style={{[styles.serviceCard, { borderLeftColor: item.color }}]}
+    <TouchableOpacity;
+      style={[styles.serviceCard, { borderLeftColor: item.color }}]}
       onPress={() => handleServicePress(item)}
     >
       <View style={styles.serviceHeader}>
-        <View style={{[styles.serviceIcon, { backgroundColor: item.color + '20' }}]}>
+        <View style={[styles.serviceIcon, { backgroundColor: item.color + '20' }}]}>
           <Icon name={item.icon} size={24} color={item.color} />
         </View>
         {item.isPopular  && <View style={styles.popularBadge}>
@@ -380,7 +360,7 @@ const SuokeScreen: React.FC = () => {
   );
   // 渲染产品卡片
   const renderProductCard = ({ item }: { item: Product }) => ()
-    <TouchableOpacity
+    <TouchableOpacity;
       style={styles.productCard}
       onPress={() => handleProductPress(item)}
     >
@@ -401,7 +381,7 @@ const SuokeScreen: React.FC = () => {
           {item.description}
         </Text>
         <View style={styles.productTags}>
-          {item.tags.slice(0, 2).map((tag, index) => ())
+          {item.tags.slice(0, 2).map(tag, index) => ())
             <View key={index} style={styles.productTag}>
               <Text style={styles.productTagText}>{tag}</Text>
             </View>
@@ -435,10 +415,10 @@ const SuokeScreen: React.FC = () => {
   return (
   <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#F8F9FA" />
-      <ScrollView
+      <ScrollView;
         style={styles.scrollView}
         refreshControl={
-          <RefreshControl
+          <RefreshControl;
             refreshing={refreshing}
             onRefresh={onRefresh}
             colors={['#4A90E2']}
@@ -462,7 +442,7 @@ const SuokeScreen: React.FC = () => {
               <Text style={styles.sectionMore}>查看全部</Text>
             </TouchableOpacity>
           </View>
-          <FlatList
+          <FlatList;
             data={services}
             renderItem={renderServiceCard}
             keyExtractor={(item) => item.id}
@@ -482,7 +462,7 @@ const SuokeScreen: React.FC = () => {
           {}
           {renderCategorySelector()}
           {}
-          <FlatList
+          <FlatList;
             data={filteredProducts}
             renderItem={renderProductCard}
             keyExtractor={(item) => item.id}
@@ -498,90 +478,72 @@ const SuokeScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    backgroundColor: '#F8F9FA',
-  },
+    backgroundColor: '#F8F9FA'},
   scrollView: {,
-  flex: 1,
-  },
+  flex: 1},
   loadingContainer: {,
   flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   loadingText: {,
   marginTop: 10,
     fontSize: 16,
-    color: '#666',
-  },
+    color: '#666'},
   header: {,
   paddingHorizontal: 20,
     paddingVertical: 20,
-    backgroundColor: '#FFFFFF',
-  },
+    backgroundColor: '#FFFFFF'},
   headerTitle: {,
   fontSize: 24,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 4,
-  },
+    marginBottom: 4},
   headerSubtitle: {,
   fontSize: 14,
-    color: '#666',
-  },
+    color: '#666'},
   bannerContainer: {,
   height: 120,
-    marginVertical: 10,
-  },
+    marginVertical: 10},
   bannerScroll: {,
-  flex: 1,
-  },
+  flex: 1},
   bannerItem: {,
   width: width - 40,
     marginHorizontal: 20,
     borderRadius: 12,
     padding: 20,
     justifyContent: 'center',
-    position: 'relative',
-  },
+    position: 'relative'},
   bannerTitle: {,
   fontSize: 18,
     fontWeight: 'bold',
     color: '#FFFFFF',
-    marginBottom: 4,
-  },
+    marginBottom: 4},
   bannerSubtitle: {,
   fontSize: 14,
     color: '#FFFFFF',
-    opacity: 0.9,
-  },
+    opacity: 0.9},
   bannerIcon: {,
   position: 'absolute',
     right: 20,
     top: 20,
-    opacity: 0.3,
-  },
+    opacity: 0.3},
   section: {,
-  marginVertical: 10,
-  },
+  marginVertical: 10},
   sectionHeader: {,
   flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
-    marginBottom: 15,
-  },
+    marginBottom: 15},
   sectionTitle: {,
   fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',
-  },
+    color: '#333'},
   sectionMore: {,
   fontSize: 14,
-    color: '#4A90E2',
-  },
+    color: '#4A90E2'},
   servicesList: {,
-  paddingHorizontal: 15,
-  },
+  paddingHorizontal: 15},
   serviceCard: {,
   width: 200,
     backgroundColor: '#FFFFFF',
@@ -593,68 +555,56 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
-  },
+    elevation: 3},
   serviceHeader: {,
   flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 12,
-  },
+    marginBottom: 12},
   serviceIcon: {,
   width: 40,
     height: 40,
     borderRadius: 20,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   popularBadge: {,
   backgroundColor: '#FF6B6B',
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: 8,
-  },
+    borderRadius: 8},
   popularText: {,
   fontSize: 10,
     color: '#FFFFFF',
-    fontWeight: 'bold',
-  },
+    fontWeight: 'bold'},
   serviceTitle: {,
   fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 4,
-  },
+    marginBottom: 4},
   serviceSubtitle: {,
   fontSize: 12,
     color: '#666',
-    marginBottom: 8,
-  },
+    marginBottom: 8},
   serviceDescription: {,
   fontSize: 14,
     color: '#666',
     lineHeight: 20,
-    marginBottom: 12,
-  },
+    marginBottom: 12},
   serviceFooter: {,
   flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   servicePrice: {,
   fontSize: 16,
     fontWeight: 'bold',
-    color: '#FF6B6B',
-  },
+    color: '#FF6B6B'},
   serviceFree: {,
   fontSize: 16,
     fontWeight: 'bold',
-    color: '#4CAF50',
-  },
+    color: '#4CAF50'},
   categoryContainer: {,
   paddingHorizontal: 20,
-    marginBottom: 15,
-  },
+    marginBottom: 15},
   categoryItem: {,
   flexDirection: 'row',
     alignItems: 'center',
@@ -664,20 +614,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginRight: 10,
     backgroundColor: '#FFFFFF',
-    position: 'relative',
-  },
+    position: 'relative'},
   categoryItemActive: {,
   backgroundColor: '#4A90E2',
-    borderColor: '#4A90E2',
-  },
+    borderColor: '#4A90E2'},
   categoryText: {,
   fontSize: 14,
     color: '#666',
-    marginLeft: 6,
-  },
+    marginLeft: 6},
   categoryTextActive: {,
-  color: '#FFFFFF',
-  },
+  color: '#FFFFFF'},
   categoryBadge: {,
   position: 'absolute',
     top: -5,
@@ -687,17 +633,14 @@ const styles = StyleSheet.create({
     minWidth: 16,
     height: 16,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   categoryBadgeText: {,
   fontSize: 10,
     color: '#FFFFFF',
-    fontWeight: 'bold',
-  },
+    fontWeight: 'bold'},
   productRow: {,
   justifyContent: 'space-between',
-    paddingHorizontal: 20,
-  },
+    paddingHorizontal: 20},
   productCard: {,
   width: (width - 50) / 2,
     backgroundColor: '#FFFFFF',
@@ -709,8 +652,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
-  },
+    elevation: 3},
   recommendedBadge: {,
   position: 'absolute',
     top: 8,
@@ -719,13 +661,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 8,
-    zIndex: 1,
-  },
+    zIndex: 1},
   recommendedText: {,
   fontSize: 10,
     color: '#FFFFFF',
-    fontWeight: 'bold',
-  },
+    fontWeight: 'bold'},
   discountBadge: {,
   position: 'absolute',
     top: 8,
@@ -734,81 +674,64 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 8,
-    zIndex: 1,
-  },
+    zIndex: 1},
   discountText: {,
   fontSize: 10,
     color: '#FFFFFF',
-    fontWeight: 'bold',
-  },
+    fontWeight: 'bold'},
   productImage: {,
   height: 80,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 8,
-  },
+    marginBottom: 8},
   productEmoji: {,
-  fontSize: 40,
-  },
+  fontSize: 40},
   productInfo: {,
-  flex: 1,
-  },
+  flex: 1},
   productName: {,
   fontSize: 14,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 4,
-  },
+    marginBottom: 4},
   productDescription: {,
   fontSize: 12,
     color: '#666',
     lineHeight: 16,
-    marginBottom: 8,
-  },
+    marginBottom: 8},
   productTags: {,
   flexDirection: 'row',
-    marginBottom: 8,
-  },
+    marginBottom: 8},
   productTag: {,
   backgroundColor: '#F0F0F0',
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 8,
-    marginRight: 4,
-  },
+    marginRight: 4},
   productTagText: {,
   fontSize: 10,
-    color: '#666',
-  },
+    color: '#666'},
   productRating: {,
   flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
-  },
+    marginBottom: 8},
   ratingText: {,
   fontSize: 12,
     color: '#333',
-    marginLeft: 2,
-  },
+    marginLeft: 2},
   reviewsText: {,
   fontSize: 12,
     color: '#999',
-    marginLeft: 4,
-  },
+    marginLeft: 4},
   productPricing: {,
   flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   productPrice: {,
   fontSize: 16,
     fontWeight: 'bold',
-    color: '#FF6B6B',
-  },
+    color: '#FF6B6B'},
   originalPrice: {,
   fontSize: 12,
     color: '#999',
     textDecorationLine: 'line-through',
-    marginLeft: 6,
-  },
-});
+    marginLeft: 6}});
 export default SuokeScreen;

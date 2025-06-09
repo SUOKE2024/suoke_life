@@ -93,8 +93,8 @@
     color: "#FF9500",
     trend: "up",
     suggestion: "保持积极心态，今天心情不错！",
-    history: [{
-      date: "2024-01-01",
+    history: [{,
+  date: "2024-01-01",
       value: 75},
       {
       date: "2024-01-02",
@@ -114,8 +114,8 @@
     color: "#34C759",
     trend: "stable",
     suggestion: "适当休息，补充能量",
-    history: [{
-      date: "2024-01-01",
+    history: [{,
+  date: "2024-01-01",
       value: 70},
       {
       date: "2024-01-02",
@@ -135,8 +135,8 @@
     color: "#FF2D92",
     trend: "down",
     suggestion: "压力稍高，建议放松一下",
-    history: [{
-      date: "2024-01-01",
+    history: [{,
+  date: "2024-01-01",
       value: 40},
       {
       date: "2024-01-02",
@@ -156,8 +156,8 @@
     color: "#5856D6",
     trend: "up",
     suggestion: "工作生活平衡良好",
-    history: [{
-      date: "2024-01-01",
+    history: [{,
+  date: "2024-01-01",
       value: 70},
       {
       date: "2024-01-02",
@@ -331,8 +331,8 @@
     progress: 65,
     targetDate: "2024-06-01",
     status: "active",
-    subGoals: [{
-      id: "weight",
+    subGoals: [{,
+  id: "weight",
       title: "减重5公斤", completed: false},
       {
       id: "endurance",
@@ -354,8 +354,8 @@
     progress: 40,
     targetDate: "2024-12-31",
     status: "active",
-    subGoals: [{
-      id: "certification",
+    subGoals: [{,
+  id: "certification",
       title: "获得专业认证", completed: false},
       {
       id: "networking",

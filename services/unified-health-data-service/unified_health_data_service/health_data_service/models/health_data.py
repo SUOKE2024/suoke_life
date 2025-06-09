@@ -5,11 +5,15 @@ health_data - 索克生活项目模块
 from .base import BaseEntity
 from .base import BaseRequest
 from .base import BaseResponse
-from datetime import datetime
+import datetime
 from enum import Enum
 from pydantic import Field
 from pydantic import field_validator
 from typing import Any, Dict, List, Optional, Union
+from sqlalchemy import Column, Integer, String, Float, DateTime, JSON, Boolean, Text
+from sqlalchemy.ext.declarative import declarative_base
+
+Base = declarative_base()
 
 """健康数据模型"""
 
@@ -40,64 +44,36 @@ class DataSource(str, Enum):
     AI_ANALYSIS = "ai_analysis" # AI分析
 
 
-class HealthData(BaseEntity):
-    """健康数据模型"""
-
-    user_id: int = Field(description = "用户ID")
-    data_type: DataType = Field(description = "数据类型")
-    data_source: DataSource = Field(description = "数据来源")
-
-    # 数据内容
-    raw_data: Dict[str, Any] = Field(description = "原始数据")
-    processed_data: Optional[Dict[str, Any]] = Field(default = None, description = "处理后数据")
-
-    # 元数据
-    device_id: Optional[str] = Field(default = None, description = "设备ID")
-    location: Optional[str] = Field(default = None, description = "采集位置")
-    tags: List[str] = Field(default_factory = list, description = "标签")
-
-    # 质量评估
-    quality_score: Optional[float] = Field(default = None, ge = 0, le = 1, description = "数据质量评分")
-    confidence_score: Optional[float] = Field(default = None, ge = 0, le = 1, description = "置信度评分")
-
-    # 状态
-    is_validated: bool = Field(default = False, description = "是否已验证")
-    is_anomaly: bool = Field(default = False, description = "是否异常")
-
-    # 时间信息
-    recorded_at: datetime = Field(description = "记录时间")
-
-    @field_validator("quality_score", "confidence_score")
-    @classmethod
-    def validate_scores(cls, v: Optional[float]) - > Optional[float]:
-        """验证评分范围"""
-        if v is not None and not (0 < = v < = 1):
-            raise ValueError("评分必须在0 - 1之间")
-        return v
+class HealthData(Base):
+    """健康数据表"""
+    __tablename__ = 'health_data'
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(String(255), nullable=False, index=True)
+    data_type = Column(String(100), nullable=False, index=True)
+    data_value = Column(Text)
+    unit = Column(String(50))
+    source = Column(String(100))
+    metadata = Column(JSON)
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 
-class VitalSigns(BaseEntity):
-    """生命体征数据"""
-
-    user_id: int = Field(description = "用户ID")
-
-    # 基础生命体征
-    heart_rate: Optional[int] = Field(default = None, ge = 30, le = 220, description = "心率(bpm)")
-    blood_pressure_systolic: Optional[int] = Field(default = None, ge = 70, le = 250, description = "收缩压(mmHg)")
-    blood_pressure_diastolic: Optional[int] = Field(default = None, ge = 40, le = 150, description = "舒张压(mmHg)")
-    body_temperature: Optional[float] = Field(default = None, ge = 35.0, le = 42.0, description = "体温(°C)")
-    respiratory_rate: Optional[int] = Field(default = None, ge = 8, le = 40, description = "呼吸频率(次 / 分)")
-    oxygen_saturation: Optional[float] = Field(default = None, ge = 70.0, le = 100.0, description = "血氧饱和度(%)")
-
-    # 身体指标
-    weight: Optional[float] = Field(default = None, ge = 20.0, le = 300.0, description = "体重(kg)")
-    height: Optional[float] = Field(default = None, ge = 100.0, le = 250.0, description = "身高(cm)")
-    bmi: Optional[float] = Field(default = None, ge = 10.0, le = 50.0, description = "BMI指数")
-
-    # 记录信息
-    recorded_at: datetime = Field(description = "记录时间")
-    device_id: Optional[str] = Field(default = None, description = "设备ID")
-    notes: Optional[str] = Field(default = None, description = "备注")
+class VitalSigns(Base):
+    """生命体征表"""
+    __tablename__ = 'vital_signs'
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(String(255), nullable=False, index=True)
+    heart_rate = Column(Float)
+    blood_pressure_systolic = Column(Float)
+    blood_pressure_diastolic = Column(Float)
+    temperature = Column(Float)
+    oxygen_saturation = Column(Float)
+    respiratory_rate = Column(Float)
+    recorded_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 
 class CreateHealthDataRequest(BaseRequest):
@@ -158,3 +134,82 @@ class VitalSignsResponse(BaseResponse):
     """生命体征响应"""
 
     data: VitalSigns = Field(description = "生命体征数据")
+
+
+class DiagnosticData(Base):
+    """诊断数据表"""
+    __tablename__ = 'diagnostic_data'
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(String(255), nullable=False, index=True)
+    diagnosis_type = Column(String(100), nullable=False)
+    diagnosis_result = Column(Text, nullable=False)
+    confidence_score = Column(Float)
+    raw_data = Column(JSON)
+    processed_data = Column(JSON)
+    doctor_id = Column(String(255))
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+
+class TCMSummary(Base):
+    """中医诊断摘要表"""
+    __tablename__ = 'tcm_summary'
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(String(255), nullable=False, index=True)
+    mongo_id = Column(String(255))  # 对应MongoDB中的详细数据
+    diagnosis_method = Column(String(50))  # 望、闻、问、切
+    main_syndrome = Column(String(200))
+    constitution_type = Column(String(100))
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+
+class HealthTrendAnalysis(BaseModel):
+    """健康趋势分析"""
+    user_id: str
+    data_type: str
+    period_days: int
+    data_points: int
+    trend_direction: str
+    change_percent: float
+    mean_value: float
+    median_value: float
+    analysis: str
+
+
+class HealthReport(BaseModel):
+    """健康报告"""
+    user_id: str
+    generated_at: datetime
+    vital_signs: Optional[VitalSignsResponse]
+    recent_diagnostics: List[DiagnosticDataResponse]
+    tcm_analysis: List[Dict[str, Any]]
+    health_score: float
+    recommendations: List[str]
+    risk_assessment: str
+
+
+class DataQualityScore(BaseModel):
+    """数据质量评分"""
+    overall_score: float
+    completeness_score: float
+    accuracy_score: float
+    timeliness_score: float
+    consistency_score: float
+    details: Dict[str, Any]
+
+
+class DiagnosticDataResponse(BaseModel):
+    """诊断数据响应"""
+    id: int
+    user_id: str
+    diagnosis_type: str
+    diagnosis_result: str
+    confidence_score: Optional[float]
+    raw_data: Optional[Dict[str, Any]]
+    processed_data: Optional[Dict[str, Any]]
+    doctor_id: Optional[str]
+    created_at: datetime
+    updated_at: datetime

@@ -62,8 +62,8 @@ this.recordOptimizationHistory(model.id, result);
       } as ONNXEvent);
       return optimizedModel;
     } catch (error) {
-      const onnxError: ONNXError = {
-      code: "OPTIMIZATION_FAILED,",
+      const onnxError: ONNXError = {,
+  code: "OPTIMIZATION_FAILED,",
       message: `模型优化失败: ${error.message}`,
         details: error,
         timestamp: new Date(),
@@ -324,20 +324,20 @@ return new Promise(resolve => {};)
 }
 // 辅助接口和类型
 interface OptimizationTask {
-  id: string;
+  id: string;,
   model: ONNXModel;
-  options: ModelOptimizationOptions;
+  options: ModelOptimizationOptions;,
   status: pending" | "running | "completed" | failed;
   createdAt: Date;
   completedAt?: Date;
   error?: string;
 }
 interface OptimizationResult {
-  originalModelId: string;
+  originalModelId: string;,
   optimizedModelId: string;
-  options: ModelOptimizationOptions;
+  options: ModelOptimizationOptions;,
   improvements: {;
-    inferenceSpeedGain: number;  // 推理速度提升倍数;
+    inferenceSpeedGain: number;  // 推理速度提升倍数;,
   memoryReduction: number;     // 内存减少比例
 modelSizeChange: number;     // 模型大小变化比例
 }
@@ -346,9 +346,9 @@ modelSizeChange: number;     // 模型大小变化比例
   error?: string;
 }
 interface BottleneckAnalysis {
-  modelId: string;
+  modelId: string;,
   bottlenecks: string[];
-  recommendations: string[];
+  recommendations: string[];,
   overallScore: number;
   metrics: PerformanceMetrics;
 }  */

@@ -6,19 +6,19 @@ import { STORAGE_CONFIG } from "../../constants/    config";
 import React from "react";
 // 登录请求参数
 interface LoginRequest {
-  email: string;
+  email: string;,
   password: string;
 }
 // 注册请求参数
 interface RegisterRequest {
-  username: string;
+  username: string;,
   email: string;
   password: string;
-  phone?: string
+  phone?: string;
 }
 // 登录响应
 interface LoginResponse {
-  user: User;
+  user: User;,
   accessToken: string;
   refreshToken: string;
 }

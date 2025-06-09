@@ -8,75 +8,75 @@ export interface FusionInput {
   palpationResult?: unknown;
   calculationResult?: unknown;
   userProfile?: UserProfile;
-sessionContext?: SessionContext
+sessionContext?: SessionContext;
 }
 export interface UserProfile {
-  age: number;
+  age: number;,
   gender: "male" | "female" | "other";
-  height: number;
+  height: number;,
   weight: number;
-  occupation: string;
+  occupation: string;,
   medicalHistory: string[],allergies: string[],medications: string[];
-  constitution?: string
+  constitution?: string;
 }
 export interface SessionContext {
-  sessionId: string;
+  sessionId: string;,
   timestamp: number;
-  environment: {temperature: number;
-    humidity: number,season: string,timeOfDay: string;
+  environment: {temperature: number;,
+  humidity: number,season: string,timeOfDay: string;
 };
   previousSessions?: string[]
 }
 export interface FusionResult {
-  confidence: number;
+  confidence: number;,
   overallAssessment: string;
-  primarySyndromes: SyndromeResult[];
+  primarySyndromes: SyndromeResult[];,
   secondarySyndromes: SyndromeResult[];
-  constitutionAnalysis: ConstitutionResult;
+  constitutionAnalysis: ConstitutionResult;,
   riskFactors: RiskFactor[];
-  recommendations: Recommendation[];
+  recommendations: Recommendation[];,
   followUpAdvice: string[];
   dataQuality: DataQualityReport;
 }
 export interface SyndromeResult {
-  id: string;
+  id: string;,
   name: string;
-  confidence: number;
+  confidence: number;,
   evidence: Evidence[];
-  severity: "mild" | "moderate" | "severe";
+  severity: "mild" | "moderate" | "severe";,
   urgency: "low" | "medium" | "high";
   description: string;
 }
 export interface Evidence {
-  source: "looking" | "listening" | "inquiry" | "palpation" | "calculation";
+  source: "looking" | "listening" | "inquiry" | "palpation" | "calculation";,
   type: string;
-  value: unknown;
+  value: unknown;,
   weight: number;
-  confidence: number;
+  confidence: number;,
   description: string;
 }
 export interface ConstitutionResult {
-  primaryType: string;
+  primaryType: string;,
   secondaryTypes: string[];
-  confidence: number;
+  confidence: number;,
   characteristics: string[];
-  tendencies: string[];
+  tendencies: string[];,
   recommendations: string[];
 }
 export interface RiskFactor {
-  type: string;
+  type: string;,
   level: "low" | "medium" | "high";
-  description: string;
+  description: string;,
   prevention: string[];
 }
 export interface Recommendation {
-  category: "treatment" | "lifestyle" | "diet" | "exercise" | "prevention";
+  category: "treatment" | "lifestyle" | "diet" | "exercise" | "prevention";,
   priority: "high" | "medium" | "low",title: string,description: string;
   duration?: string;
   contraindications?: string[];
 }
 export interface DataQualityReport {
-  completeness: number;
+  completeness: number;,
   consistency: number;
   reliability: number,issues: string[],suggestions: string[];
 }
@@ -97,7 +97,7 @@ export interface DataQualityReport {
     this.weightMatrix.set("palpation", 0.2);
     this.weightMatrix.set("calculation", 0.1);
     if (this.config.weights) {
-      Object.entries(this.config.weights).forEach((([key, value]) => {}))
+      Object.entries(this.config.weights).forEach(([key, value]) => {}))
         this.weightMatrix.set(key, value);
       });
     }

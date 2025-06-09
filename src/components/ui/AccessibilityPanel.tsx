@@ -10,13 +10,13 @@ importReact from ";react";
   { TouchableOpacity } from "react-native;";
 interface AccessibilityPanelProps {
   style?: unknown;
-  onClose?: () => void
+  onClose?: () => void;
 }
 export const AccessibilityPanel: React.FC<AccessibilityPanelProps /> = ({/   const performanceMonitor = usePerformanceMonitor("";))
 AccessibilityPanel",{/    "
     trackRender: true,
     trackMemory: false,
-    warnThreshold: 100,  });
+    warnThreshold: 100});
   style,
   onClose;
 }) => {}
@@ -50,8 +50,8 @@ AccessibilityPanel",{/    "
   };
   const renderSettingItem = (;)
     key: string,value: boolean,label: string,description: string;) => (
-    <View key={key} style={{[styles.settingItem, { borderBottomColor: theme.colors.outline}}]} />/      <View style={styles.settingContent}>/        <Text style={{[styles.settingLabel, { color: theme.colors.onSurface}}]} />/              {label}
-        </Text>/        <Text style={{[styles.settingDescription, { color: theme.colors.onSurfaceVariant}}]} />/              {description}
+    <View key={key} style={[styles.settingItem, { borderBottomColor: theme.colors.outline}}]} />/      <View style={styles.settingContent}>/        <Text style={[styles.settingLabel, { color: theme.colors.onSurface}}]} />/              {label}
+        </Text>/        <Text style={[styles.settingDescription, { color: theme.colors.onSurfaceVariant}}]} />/              {description}
         </Text>/      </View>/
       <Switch,
         value={value}
@@ -66,11 +66,11 @@ AccessibilityPanel",{/    "
       />/    </View>/    );
   const renderSliderItem = (;)
     key: string,value: number,label: string,description: string,min: number,max: number,step: number = 0.1) => (;
-    <View key={key} style={{[styles.settingItem, { borderBottomColor: theme.colors.outline}}]} />/      <View style={styles.settingContent}>/        <Text style={{[styles.settingLabel, { color: theme.colors.onSurface}}]} />/              {label}: {value.toFixed(1)};
-        </Text>/        <Text style={{[styles.settingDescription, { color: theme.colors.onSurfaceVariant}}]} />/              {description};
+    <View key={key} style={[styles.settingItem, { borderBottomColor: theme.colors.outline}}]} />/      <View style={styles.settingContent}>/        <Text style={[styles.settingLabel, { color: theme.colors.onSurface}}]} />/              {label}: {value.toFixed(1)};
+        </Text>/        <Text style={[styles.settingDescription, { color: theme.colors.onSurfaceVariant}}]} />/              {description};
         </Text>/      </View>/;
-      <View style={styles.sliderContainer}>/            <TouchableOpacity
-style={{[styles.sliderButton, { backgroundColor: theme.colors.outline}}]}
+      <View style={styles.sliderContainer}>/            <TouchableOpacity;
+style={[styles.sliderButton, { backgroundColor: theme.colors.outline}}]}
           onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> {/                const newValue = Math.max(min, value - step);
             handleConfigUpdate(key, newValue);
           }}
@@ -78,11 +78,11 @@ style={{[styles.sliderButton, { backgroundColor: theme.colors.outline}}]}
           accessibilityLabel={`减少${label}`}
           accessibilityRole="button"
         >
-          <Text style={{[styles.sliderButtonText, { color: theme.colors.onSurface}}]} />-</Text>/        </TouchableOpacity>/
-        <View style={{[styles.sliderValue, { backgroundColor: theme.colors.surface}}]} />/          <Text style={{[styles.sliderValueText, { color: theme.colors.onSurface}}]} />/                {value.toFixed(1)}
+          <Text style={[styles.sliderButtonText, { color: theme.colors.onSurface}}]} />-</Text>/        </TouchableOpacity>/
+        <View style={[styles.sliderValue, { backgroundColor: theme.colors.surface}}]} />/          <Text style={[styles.sliderValueText, { color: theme.colors.onSurface}}]} />/                {value.toFixed(1)}
           </Text>/        </View>/
-        <TouchableOpacity
-style={{[styles.sliderButton, { backgroundColor: theme.colors.outline}}]}
+        <TouchableOpacity;
+style={[styles.sliderButton, { backgroundColor: theme.colors.outline}}]}
           onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> {/            const newValue = Math.min(max, value + step);
             handleConfigUpdate(key, newValue);
           }}
@@ -90,19 +90,19 @@ style={{[styles.sliderButton, { backgroundColor: theme.colors.outline}}]}
           accessibilityLabel={`增加${label}`}
           accessibilityRole="button"
         >
-          <Text style={{[styles.sliderButtonText, { color: theme.colors.onSurface}}]} />+</Text>/        </TouchableOpacity>/      </View>/    </View>/    );
+          <Text style={[styles.sliderButtonText, { color: theme.colors.onSurface}}]} />+</Text>/        </TouchableOpacity>/      </View>/    </View>/    );
   performanceMonitor.recordRender();
   return (;)
-    <View style={{[styles.container, { backgroundColor: theme.colors.surface   }}, style]} />/      <View style={{[styles.header, { borderBottomColor: theme.colors.outline}}]} />/        <Text style={{[styles.title, { color: theme.colors.onSurface}}]} />/              无障碍设置;
+    <View style={[styles.container, { backgroundColor: theme.colors.surface   }}, style]} />/      <View style={[styles.header, { borderBottomColor: theme.colors.outline}}]} />/        <Text style={[styles.title, { color: theme.colors.onSurface}}]} />/              无障碍设置;
         </Text>/            {onClose && (;)
-          <Button
+          <Button;
 title="关闭"
             variant="ghost"
             size="small"
             onPress={onClose}
           / accessibilityLabel="TODO: 添加无障碍标签" />/    )}
       </View>/
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false} />/        <View style={styles.section}>/          <Text style={{[styles.sectionTitle, { color: theme.colors.primary}}]} />/                视觉辅助
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false} />/        <View style={styles.section}>/          <Text style={[styles.sectionTitle, { color: theme.colors.primary}}]} />/                视觉辅助
           </Text>/
           {renderSettingItem()
             highContrastEnabled",
@@ -123,7 +123,7 @@ title="关闭"
             0.1;
           )}
         </View>/
-        <View style={styles.section}>/          <Text style={{[styles.sectionTitle, { color: theme.colors.primary}}]} />/                动画与交互
+        <View style={styles.section}>/          <Text style={[styles.sectionTitle, { color: theme.colors.primary}}]} />/                动画与交互
           </Text>/
           {renderSettingItem()
             reduceMotionEnabled",
@@ -136,7 +136,7 @@ title="关闭"
             "触觉反馈,在交互时提供触觉反馈"
           )}
         </View>/
-        <View style={styles.section}>/          <Text style={{[styles.sectionTitle, { color: theme.colors.primary}}]} />/                导航辅助
+        <View style={styles.section}>/          <Text style={[styles.sectionTitle, { color: theme.colors.primary}}]} />/                导航辅助
           </Text>/
           {renderSettingItem()
             voiceNavigationEnabled",
@@ -157,7 +157,7 @@ title="关闭"
             0.1;
           )}
         </View>/
-        <View style={styles.section}>/          <Text style={{[styles.sectionTitle, { color: theme.colors.primary}}]} />/                触摸设置
+        <View style={styles.section}>/          <Text style={[styles.sectionTitle, { color: theme.colors.primary}}]} />/                触摸设置
           </Text>/
           {renderSliderItem()
             minimumTouchTargetSize",
@@ -168,7 +168,7 @@ title="关闭"
             4;
           )}
         </View>/
-        <View style={styles.actions}>/              <Button
+        <View style={styles.actions}>/              <Button;
 title="重置为默认设置"
             variant="outline"
             onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> {/                  resetConfig();
@@ -176,7 +176,7 @@ title="重置为默认设置"
             }}
             style={styles.resetButton}>/        </View>/      </ScrollView>/    </View>/      );
 }
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   flex: 1,
     borderRadius: responsive.width(12),
     overflow: "hidden},",

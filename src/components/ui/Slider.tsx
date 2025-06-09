@@ -8,22 +8,22 @@ import { colors, spacing } from "../../constants/theme";/importText from "./Text
 // 索克生活 - Slider组件   滑块组件，用于数值选择
 export interface SliderProps {
   value: number,onValueChange: (value: number) => void;
-  minimumValue?: number
+  minimumValue?: number;
   maximumValue?: number;
   step?: number;
-  trackHeight?: number
+  trackHeight?: number;
   thumbSize?: number;
   minimumTrackTintColor?: string;
   maximumTrackTintColor?: string;
   thumbTintColor?: string;
-  disabled?: boolean
-  label?: string
+  disabled?: boolean;
+  label?: string;
   showValue?: boolean;
-  style?: ViewStyle
-  testID?: string
+  style?: ViewStyle;
+  testID?: string;
 }
 const Slider: React.FC<SliderProps /> = ({/   const performanceMonitor = usePerformanceMonitor("Slider', { /    "';))
-    trackRender: true,trackMemory: true,warnThreshold: 50,  };);
+    trackRender: true,trackMemory: true,warnThreshold: 50};);
   value,
   onValueChange,
   minimumValue = 0,
@@ -67,7 +67,7 @@ const Slider: React.FC<SliderProps /> = ({/   const performanceMonitor = usePerf
       thumbPosition.setValue(position);
     }
   };
-  React.useEffect(() => {
+  React.useEffect() => {
     const effectStart = performance.now();
     updatePosition(value);
       const effectEnd = performance.now();
@@ -111,11 +111,11 @@ const Slider: React.FC<SliderProps /> = ({/   const performanceMonitor = usePerf
             <Text variant="body2" style={styles.value}>/                  {value};
             </Text>/              )};
         </View>/          )};
-      <View style={styles.sliderContainer}>/            <View,style={{[;
+      <View style={styles.sliderContainer}>/            <View,style={[;
             styles.track,{height: trackHeight,backgroundColor: maximumTrackTintColor}};
           ]};
           onLayout={handleLayout} />/              <Animated.View;
-style={{[
+style={[
               styles.minimumTrack,
               {
                 height: trackHeight,
@@ -124,7 +124,7 @@ style={{[
             ]}
           />/        </View>/
         <Animated.View;
-style={{[
+style={[
             styles.thumb,
             {
               width: thumbSize,

@@ -2,9 +2,9 @@ import { performanceMonitor } from './performanceMonitor';
 import { configService } from './configService';
 // 事件类型定义
 export interface AnalyticsEvent {
-  id: string;
+  id: string;,
   type: 'api_call' | 'error' | 'performance' | 'user_action' | 'system';
-  timestamp: number;
+  timestamp: number;,
   data: Record<string, any>;
   userId?: string;
   sessionId: string;
@@ -13,37 +13,37 @@ export interface AnalyticsEvent {
 }
 // 性能指标
 export interface PerformanceMetrics {
-  responseTime: number;
+  responseTime: number;,
   throughput: number;
-  errorRate: number;
+  errorRate: number;,
   cacheHitRate: number;
-  memoryUsage: number;
+  memoryUsage: number;,
   cpuUsage: number;
 }
 // 用户行为数据
 export interface UserBehavior {
-  userId: string;
+  userId: string;,
   sessionId: string;
-  actions: string[];
+  actions: string[];,
   duration: number;
-  screens: string[];
+  screens: string[];,
   errors: number;
 }
 // 服务使用统计
 export interface ServiceUsage {
-  service: string;
+  service: string;,
   calls: number;
-  errors: number;
+  errors: number;,
   avgResponseTime: number;
   lastUsed: number;
 }
 // 分析配置
 interface AnalyticsConfig {
-  enabled: boolean;
+  enabled: boolean;,
   batchSize: number;
-  flushInterval: number;
+  flushInterval: number;,
   maxEvents: number;
-  enableUserTracking: boolean;
+  enableUserTracking: boolean;,
   enablePerformanceTracking: boolean;
   enableErrorTracking: boolean;
 }
@@ -84,7 +84,7 @@ class AnalyticsService {
     try {
       this.performanceObserver = new PerformanceObserver(list) => {
         const entries = list.getEntries();
-        entries.forEach(((entry) => {
+        entries.forEach((entry) => {
           this.trackEvent('performance', {
             name: entry.name,
             duration: entry.duration,
@@ -241,7 +241,7 @@ class AnalyticsService {
         }
       });
     // 计算会话持续时间
-    userSessions.forEach(((behavior, key) => {
+    userSessions.forEach((behavior, key) => {
       const sessionEvents = this.events.filter(e =>)
         e.userId === behavior.userId && e.sessionId === behavior.sessionId;
       );

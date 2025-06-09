@@ -2,19 +2,19 @@ import { apiClient } from './apiClient';
 import { getCurrentEnvConfig } from '../constants/config';
 // 基准测试配置接口
 export interface BenchmarkConfig {
-  benchmark_id: string;
+  benchmark_id: string;,
   model_id: string;
-  model_version: string;
+  model_version: string;,
   test_data: any[];
   config?: Record<string, any>;
 }
 // 基准测试任务接口
 export interface BenchmarkTask {
-  task_id: string;
+  task_id: string;,
   benchmark_id: string;
-  model_id: string;
+  model_id: string;,
   model_version: string;
-  status: 'pending' | 'running' | 'completed' | 'failed';
+  status: 'pending' | 'running' | 'completed' | 'failed';,
   progress: number;
   created_at: string;
   results?: BenchmarkResult;
@@ -22,26 +22,26 @@ export interface BenchmarkTask {
 }
 // 基准测试结果接口
 export interface BenchmarkResult {
-  task_id: string;
+  task_id: string;,
   benchmark_id: string;
-  model_id: string;
+  model_id: string;,
   model_version: string;
   metrics: Record<string, number>;
-  predictions: ModelPrediction[];
+  predictions: ModelPrediction[];,
   execution_time: number;
-  timestamp: string;
+  timestamp: string;,
   metadata: Record<string, any>;
 }
 // 模型预测接口
 export interface ModelPrediction {
-  input_data: any;
+  input_data: any;,
   prediction: any;
   confidence?: number;
   processing_time: number;
 }
 // 模型配置接口
 export interface ModelConfig {
-  model_id: string;
+  model_id: string;,
   model_version: string;
   model_type: string;
   description?: string;
@@ -49,16 +49,16 @@ export interface ModelConfig {
 }
 // 插件接口
 export interface Plugin {
-  name: string;
+  name: string;,
   version: string;
-  description: string;
+  description: string;,
   author: string;
-  category: string;
+  category: string;,
   enabled: boolean;
 }
 // 基准测试状态接口
 export interface BenchmarkStatus {
-  task_id: string;
+  task_id: string;,
   status: string;
   progress: number;
   current_step?: string;
@@ -67,11 +67,11 @@ export interface BenchmarkStatus {
 }
 // 服务健康状态接口
 export interface HealthStatus {
-  status: 'healthy' | 'unhealthy';
+  status: 'healthy' | 'unhealthy';,
   version: string;
-  uptime: number;
+  uptime: number;,
   system_info: {;
-    cpu_usage: number;
+    cpu_usage: number;,
   memory_usage: number;
     disk_usage: number;
 };

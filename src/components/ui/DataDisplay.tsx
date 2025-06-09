@@ -1,10 +1,10 @@
 import React from 'react';
 import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -16,7 +16,14 @@ export interface DataItem {
   /** 值 */
   value: any;
   /** 数据类型 */
-  type?: 'text' | 'number' | 'currency' | 'percentage' | 'date' | 'boolean' | 'custom';
+  type?:
+    | 'text'
+    | 'number'
+    | 'currency'
+    | 'percentage'
+    | 'date'
+    | 'boolean'
+    | 'custom';
   /** 自定义渲染函数 */
   render?: (value: any) => React.ReactNode;
   /** 是否可复制 */
@@ -113,15 +120,15 @@ export const DataDisplay: React.FC<DataDisplayProps> = ({
       case 'number':
         const num = typeof value === 'number' ? value : parseFloat(value);
         return isNaN(num) ? '-' : `${num.toFixed(precision)}${unit || ''}`;
-      
+
       case 'currency':
         const currency = typeof value === 'number' ? value : parseFloat(value);
         return isNaN(currency) ? '-' : `¥${currency.toFixed(2)}`;
-      
+
       case 'percentage':
         const percent = typeof value === 'number' ? value : parseFloat(value);
         return isNaN(percent) ? '-' : `${(percent * 100).toFixed(precision)}%`;
-      
+
       case 'date':
         if (value instanceof Date) {
           return value.toLocaleDateString();
@@ -131,10 +138,10 @@ export const DataDisplay: React.FC<DataDisplayProps> = ({
           return isNaN(date.getTime()) ? '-' : date.toLocaleDateString();
         }
         return '-';
-      
+
       case 'boolean':
         return value ? '是' : '否';
-      
+
       default:
         return `${value}${unit || ''}`;
     }
@@ -169,7 +176,7 @@ export const DataDisplay: React.FC<DataDisplayProps> = ({
     const statusColor = getStatusColor(item.status);
 
     const itemContent = (
-      <View
+      <View;
         key={item.key}
         style={[
           styles.item,
@@ -179,7 +186,7 @@ export const DataDisplay: React.FC<DataDisplayProps> = ({
           itemStyle,
         ]}
       >
-        <Text
+        <Text;
           style={[
             styles.label,
             layout === 'horizontal' && { width: labelWidth },
@@ -189,10 +196,11 @@ export const DataDisplay: React.FC<DataDisplayProps> = ({
         >
           {item.label}
         </Text>
-        
+
         <View style={styles.valueContainer}>
-          {typeof formattedValue === 'string' || typeof formattedValue === 'number' ? (
-            <Text
+          {typeof formattedValue === 'string' ||
+          typeof formattedValue === 'number' ? (
+            <Text;
               style={[
                 styles.value,
                 { color: statusColor, textAlign: valueAlign },
@@ -202,11 +210,11 @@ export const DataDisplay: React.FC<DataDisplayProps> = ({
               {formattedValue}
             </Text>
           ) : (
-            formattedValue
+            formattedValue;
           )}
-          
+
           {item.copyable && (
-            <TouchableOpacity
+            <TouchableOpacity;
               style={styles.actionButton}
               onPress={() => {
                 // 这里可以实现复制功能
@@ -216,9 +224,9 @@ export const DataDisplay: React.FC<DataDisplayProps> = ({
               <Text style={styles.actionText}>复制</Text>
             </TouchableOpacity>
           )}
-          
+
           {item.editable && (
-            <TouchableOpacity
+            <TouchableOpacity;
               style={styles.actionButton}
               onPress={() => item.onEdit?.(item.value)}
             >
@@ -239,12 +247,13 @@ export const DataDisplay: React.FC<DataDisplayProps> = ({
       const rowItems = data.slice(i, i + columns);
       rows.push(
         <View key={i} style={styles.gridRow}>
-          {rowItems.map((item, index) => renderItem(item, i + index))}
+          {rowItems.map(item, index) => renderItem(item, i + index))}
           {/* 填充空白项 */}
           {rowItems.length < columns &&
-            Array.from({ length: columns - rowItems.length }).map((_, index) => (
-              <View key={`empty-${index}`} style={styles.gridItem} />
-            ))}
+            Array.from({ length: columns - rowItems.length }).map(_, index) => (
+                <View key={`empty-${index}`} style={styles.gridItem} />
+              )
+            )}
         </View>
       );
     }
@@ -256,16 +265,14 @@ export const DataDisplay: React.FC<DataDisplayProps> = ({
     if (!title) return null;
 
     return (
-      <TouchableOpacity
+      <TouchableOpacity;
         style={styles.titleContainer}
         onPress={collapsible ? handleToggleExpand : undefined}
         disabled={!collapsible}
       >
         <Text style={[styles.title, titleStyle]}>{title}</Text>
         {collapsible && (
-          <Text style={styles.expandIcon}>
-            {expanded ? '▼' : '▶'}
-          </Text>
+          <Text style={styles.expandIcon}>{expanded ? '▼' : '▶'}</Text>
         )}
       </TouchableOpacity>
     );
@@ -278,16 +285,12 @@ export const DataDisplay: React.FC<DataDisplayProps> = ({
     }
 
     if (layout === 'grid') {
-      return (
-        <View style={styles.gridContainer}>
-          {renderGridLayout()}
-        </View>
-      );
+      return <View style={styles.gridContainer}>{renderGridLayout()}</View>;
     }
 
     return (
       <View style={styles.listContainer}>
-        {data.map((item, index) => renderItem(item, index))}
+        {data.map(item, index) => renderItem(item, index))}
       </View>
     );
   };
@@ -302,22 +305,27 @@ export const DataDisplay: React.FC<DataDisplayProps> = ({
   );
 };
 
-const createStyles = (theme: any, size: 'sm' | 'md' | 'lg', bordered: boolean, layout: string) => {
+const createStyles = (
+  theme: any,
+  size: 'sm' | 'md' | 'lg',
+  bordered: boolean,
+  layout: string;
+) => {
   const sizeConfig = {
-    sm: {
-      padding: theme.spacing.sm,
+    sm: {,
+  padding: theme.spacing.sm,
       fontSize: theme.typography.fontSize.sm,
       titleFontSize: theme.typography.fontSize.base,
       spacing: theme.spacing.xs,
     },
-    md: {
-      padding: theme.spacing.md,
+    md: {,
+  padding: theme.spacing.md,
       fontSize: theme.typography.fontSize.base,
       titleFontSize: theme.typography.fontSize.lg,
       spacing: theme.spacing.sm,
     },
-    lg: {
-      padding: theme.spacing.lg,
+    lg: {,
+  padding: theme.spacing.lg,
       fontSize: theme.typography.fontSize.lg,
       titleFontSize: theme.typography.fontSize.xl,
       spacing: theme.spacing.md,
@@ -327,85 +335,85 @@ const createStyles = (theme: any, size: 'sm' | 'md' | 'lg', bordered: boolean, l
   const config = sizeConfig[size];
 
   return StyleSheet.create({
-    container: {
-      backgroundColor: theme.colors.surface,
+    container: {,
+  backgroundColor: theme.colors.surface,
       borderRadius: theme.borderRadius.md,
       ...(bordered && {
         borderWidth: 1,
         borderColor: theme.colors.outline,
       }),
     },
-    titleContainer: {
-      flexDirection: 'row',
+    titleContainer: {,
+  flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
       padding: config.padding,
       borderBottomWidth: 1,
       borderBottomColor: theme.colors.outline,
     },
-    title: {
-      fontSize: config.titleFontSize,
+    title: {,
+  fontSize: config.titleFontSize,
       fontWeight: theme.typography.fontWeight.semibold,
       color: theme.colors.onSurface,
     },
-    expandIcon: {
-      fontSize: config.fontSize,
+    expandIcon: {,
+  fontSize: config.fontSize,
       color: theme.colors.onSurfaceVariant,
     },
-    listContainer: {
-      padding: config.padding,
+    listContainer: {,
+  padding: config.padding,
     },
-    gridContainer: {
-      padding: config.padding,
+    gridContainer: {,
+  padding: config.padding,
     },
-    gridRow: {
-      flexDirection: 'row',
+    gridRow: {,
+  flexDirection: 'row',
       marginBottom: config.spacing,
     },
-    item: {
-      marginBottom: config.spacing,
+    item: {,
+  marginBottom: config.spacing,
     },
-    horizontalItem: {
-      flexDirection: 'row',
+    horizontalItem: {,
+  flexDirection: 'row',
       alignItems: 'center',
     },
-    gridItem: {
-      flex: 1,
+    gridItem: {,
+  flex: 1,
       marginRight: config.spacing,
     },
-    itemWithDivider: {
-      borderBottomWidth: 1,
+    itemWithDivider: {,
+  borderBottomWidth: 1,
       borderBottomColor: theme.colors.outline,
       paddingBottom: config.spacing,
     },
-    label: {
-      fontSize: config.fontSize,
+    label: {,
+  fontSize: config.fontSize,
       fontWeight: theme.typography.fontWeight.medium,
       color: theme.colors.onSurfaceVariant,
       marginBottom: layout === 'vertical' ? theme.spacing.xs : 0,
     },
-    valueContainer: {
-      flexDirection: 'row',
+    valueContainer: {,
+  flexDirection: 'row',
       alignItems: 'center',
       flex: 1,
     },
-    value: {
-      fontSize: config.fontSize,
+    value: {,
+  fontSize: config.fontSize,
       color: theme.colors.onSurface,
       flex: 1,
     },
-    actionButton: {
-      marginLeft: theme.spacing.sm,
+    actionButton: {,
+  marginLeft: theme.spacing.sm,
       paddingHorizontal: theme.spacing.sm,
       paddingVertical: theme.spacing.xs,
       backgroundColor: theme.colors.primaryContainer,
       borderRadius: theme.borderRadius.sm,
     },
-    actionText: {
-      fontSize: theme.typography.fontSize.sm,
+    actionText: {,
+  fontSize: theme.typography.fontSize.sm,
       color: theme.colors.onPrimaryContainer,
     },
   });
 };
 
-export default DataDisplay; 
+export default DataDisplay;

@@ -7,9 +7,9 @@ export enum CachePriority {
 }
 // 缓存元数据接口;
 export interface CacheMetadata {
-  priority: CachePriority;
+  priority: CachePriority;,
   createdAt: number;
-  lastAccessed: number;
+  lastAccessed: number;,
   accessCount: number;
   ttl?: number;
   size: number;
@@ -18,11 +18,11 @@ export interface CacheMetadata {
 }
 // 缓存统计信息接口
 export interface CacheStats {
-  totalItems: number;
+  totalItems: number;,
   totalSize: number;
-  hitRate: number;
+  hitRate: number;,
   missRate: number;
-  memoryUsage: number;
+  memoryUsage: number;,
   averageAccessTime: number;
 }
 // 预测模型接口

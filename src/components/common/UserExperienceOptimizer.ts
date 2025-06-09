@@ -1,22 +1,22 @@
 // 用户体验优化器
 // 负责监控和优化用户体验相关指标
 export interface UXMetrics {
-  loadTime: number;
+  loadTime: number;,
   interactionDelay: number;
-  errorRate: number;
+  errorRate: number;,
   userSatisfaction: number;
   accessibilityScore: number;
 }
 export interface UXOptimizationConfig {
-  enablePerformanceMonitoring: boolean;
+  enablePerformanceMonitoring: boolean;,
   enableAccessibilityChecks: boolean;
-  enableUserFeedback: boolean;
+  enableUserFeedback: boolean;,
   optimizationThreshold: number;
 }
 export interface UXRecommendation {
-  type: 'performance' | 'accessibility' | 'usability' | 'content';
+  type: 'performance' | 'accessibility' | 'usability' | 'content';,
   priority: 'low' | 'medium' | 'high' | 'critical';
-  description: string;
+  description: string;,
   action: string;
   impact: number;
 }
@@ -165,7 +165,7 @@ async applyOptimization(recommendationId: string): Promise<boolean> {
 return true;
   }
   // 记录用户反馈
-recordUserFeedback(feedback: {,)
+recordUserFeedback(feedback: {),
   rating: number;
     comment?: string;
     category: string;

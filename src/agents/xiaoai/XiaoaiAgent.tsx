@@ -122,7 +122,7 @@ private personality: unknown = {,
   }
   async analyzeAudio(audioData: AudioData, type: voice" | "sound): Promise<ListenResult /    >  {
     try {
-      const audioType: "voice | "cough" | breathing" | "other = type === "sound" ? other" : type as "voice
+      const audioType: "voice | "cough" | breathing" | "other = type === "sound" ? other" : type as "voice;
       const processedAudioData = { ...audioData, type: audioTy;p;e ;};
       return await diagnosisServiceClient.listen.analyzeAudio(processedAudioD;a;t;a;);
     } catch (error) {

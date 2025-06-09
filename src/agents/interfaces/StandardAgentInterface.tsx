@@ -8,7 +8,7 @@ export interface AgentContext {
   //
   //
   //
-  // 协作上下文  collaboration?: CollaborationContext
+  // 协作上下文  collaboration?: CollaborationContext;
 }
 export interface CollaborationContext {
   // 协作场景  scenario: string;
@@ -32,7 +32,7 @@ export interface AgentResponse {
   // 处理时长（毫秒）  processingTime: number;
   //
     message: string;
-    details?: unknown
+    details?: unknown;
 };
 }
 export interface AgentAction {
@@ -40,7 +40,7 @@ export interface AgentAction {
   // 行动描述  description: string;
   //
   // 优先级  priority: number;
-  // 预估执行时间  estimatedTime?: number
+  // 预估执行时间  estimatedTime?: number;
 }
 export interface AgentMessage {
   // 消息ID  messageId: string;
@@ -72,8 +72,8 @@ export interface AgentStatus {
   // 智能体版本  readonly version: string;
   ///    >;
   // 处理协作请求  processCollaboration()
-    request: AgentRequest;
-    collaborationContext: CollaborationContext): Promise<AgentResponse /    >;
+    request: AgentRequest;,
+  collaborationContext: CollaborationContext): Promise<AgentResponse /    >;
   ///    >;
   // 获取智能体能力  getCapabilities(): AgentCapability[];
   // 验证输入格式  validateInput(request: AgentRequest): Promise< { valid: boolean;

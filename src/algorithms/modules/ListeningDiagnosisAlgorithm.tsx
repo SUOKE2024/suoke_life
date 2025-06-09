@@ -9,9 +9,9 @@ export interface ListeningData {
   metadata?: Record<string, any>;
 }
 export interface AudioData {
-  data: ArrayBuffer;
+  data: ArrayBuffer;,
   format: string;
-  sampleRate: number;
+  sampleRate: number;,
   channels: number;
   duration: number;
 }
@@ -19,32 +19,32 @@ export interface ListeningResult {
   confidence: number,features: ListeningFeatures,analysis: string;
   voiceAnalysis?: VoiceAnalysis;
   breathingAnalysis?: BreathingAnalysis;
-  coughAnalysis?: CoughAnalysis
+  coughAnalysis?: CoughAnalysis;
 }
 export interface ListeningFeatures {
-  voice: VoiceFeatures;
+  voice: VoiceFeatures;,
   breathing: BreathingFeatures;
   cough: CoughFeatures;
 }
 export interface VoiceFeatures {
-  pitch: number;
+  pitch: number;,
   volume: number;
-  tone: string;
+  tone: string;,
   clarity: string;
-  rhythm: string;
+  rhythm: string;,
   emotion: string;
 }
 export interface BreathingFeatures {
-  rate: number;
+  rate: number;,
   depth: string;
-  rhythm: string;
+  rhythm: string;,
   sound: string;
   effort: string;
 }
 export interface CoughFeatures {
-  frequency: number;
+  frequency: number;,
   intensity: string;
-  type: string;
+  type: string;,
   wetness: string;
   timing: string;
 }
@@ -88,11 +88,11 @@ export interface CoughAnalysis {
   syndromeIndications: string[]
 }
 export interface UserProfile {
-  age: number;
+  age: number;,
   gender: "male" | "female" | "other";
-  height: number;
+  height: number;,
   weight: number;
-  occupation: string;
+  occupation: string;,
   medicalHistory: string[],allergies: string[],medications: string[];
 }
 // 闻诊算法类export class ListeningDiagnosisAlgorithm  {private config: ListeningConfig;
@@ -298,18 +298,18 @@ performanceMonitor.recordRender();
 // 辅助类型定义 * interface ProcessedListeningData {
     voiceRecording?: ProcessedAudioData;
   breathingRecording?: ProcessedAudioData;
-  coughRecording?: ProcessedAudioData
+  coughRecording?: ProcessedAudioData;
 }
 interface ProcessedAudioData {
-  original: AudioData;
+  original: AudioData;,
   processed: AudioData;
-  type: string;
+  type: string;,
   metadata: Record<string, any>;
 }
 interface AnalysisResults {
   voiceAnalysis?: VoiceAnalysis;
   breathingAnalysis?: BreathingAnalysis;
-  coughAnalysis?: CoughAnalysis
+  coughAnalysis?: CoughAnalysis;
 }
 //
   constructor(private config: unknown, private knowledgeBase: TCMKnowledgeBase) {}

@@ -33,7 +33,7 @@ export function maskSensitiveData(data: any): any {
     return data;
 }
 export function sanitizeLogData(...args: any[]): any[] {
-  return args.map((arg => {
+  return args.map(arg => {
     try {
       return JSON.parse(JSON.stringify(arg, (key, value) => {
         return maskSensitiveData(value);

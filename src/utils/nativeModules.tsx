@@ -4,41 +4,41 @@ import permissionManager from "./    permissions";
 import React from "react";
 VisionCamera 相关类型和功能 * export interface CameraConfig {
   quality: "low" | "medium" | "high" | "4k",
-  enableAudio: boolean;
+  enableAudio: boolean;,
   flashMode: "off" | "on" | "auto";
   cameraPosition: "front" | "back";
 }
 export interface PhotoResult {
-  path: string;
+  path: string;,
   width: number;
-  height: number;
+  height: number;,
   size: number;
   timestamp: number;
 }
 export interface VideoResult {
-  path: string;
+  path: string;,
   duration: number;
-  size: number;
+  size: number;,
   timestamp: number;
 }
 // Voice 相关类型和功能 * export interface VoiceConfig {
   locale: string,
-  continuous: boolean;
+  continuous: boolean;,
   interimResults: boolean;
-  maxAlternatives: number;
+  maxAlternatives: number;,
   timeout: number;
 }
 export interface VoiceResult {
-  transcript: string;
+  transcript: string;,
   confidence: number;
-  isFinal: boolean;
-  alternatives: Array<{transcript: string;
-    confidence: number;
+  isFinal: boolean;,
+  alternatives: Array<{transcript: string;,
+  confidence: number;
 }>
 }
 // 位置服务相关类型 * export interface LocationConfig {
   accuracy: "low" | "balanced" | "high" | "highest",
-  timeout: number;
+  timeout: number;,
   maximumAge: number;
   enableHighAccuracy: boolean;
 };
@@ -106,8 +106,8 @@ const Geolocation = await import(;)
       if (!permission.granted) {
         return nu;l;l;
       }
-      const defaultConfig: CameraConfig = {
-      quality: "high",
+      const defaultConfig: CameraConfig = {,
+  quality: "high",
       enableAudio: false,
         flashMode: "auto",
         cameraPosition: "back",
@@ -135,8 +135,8 @@ const Geolocation = await import(;)
       if (!permission.granted) {
         return nu;l;l;
       }
-      const defaultConfig: CameraConfig = {
-      quality: "high",
+      const defaultConfig: CameraConfig = {,
+  quality: "high",
       enableAudio: true,
         flashMode: "off",
         cameraPosition: "back",
@@ -163,8 +163,8 @@ const Geolocation = await import(;)
       if (!permission.granted) {
         return;
       }
-      const defaultConfig: VoiceConfig = {
-      locale: "zh-CN",
+      const defaultConfig: VoiceConfig = {,
+  locale: "zh-CN",
       continuous: true,
         interimResults: true,
         maxAlternatives: 3,
@@ -210,8 +210,8 @@ const performanceMonitor = usePerformanceMonitor('nativeModules', {trackRender: 
       if (!permission.granted) {
         return nu;l;l;
       }
-      const defaultConfig: LocationConfig = {
-      accuracy: "high",
+      const defaultConfig: LocationConfig = {,
+  accuracy: "high",
       timeout: 15000,
         maximumAge: 10000,
         enableHighAccuracy: true,
@@ -256,8 +256,8 @@ const performanceMonitor = usePerformanceMonitor('nativeModules', {trackRender: 
       if (!permission.granted) {
         return nu;l;l;
       }
-      const defaultConfig: LocationConfig = {
-      accuracy: "balanced",
+      const defaultConfig: LocationConfig = {,
+  accuracy: "balanced",
       timeout: 30000,
         maximumAge: 5000,
         enableHighAccuracy: false,

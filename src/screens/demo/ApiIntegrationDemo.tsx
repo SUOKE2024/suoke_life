@@ -1,84 +1,544 @@
-import { SafeAreaView } from MESSAGE_57;
-import { useNavigation } from "../../placeholder";@react-navigation/native";/import { Card, Button } from ../../components/uiMESSAGE_44../../hooks/useApiIntegration/import { colors, spacing, typography  } from ;../../constants/themeMESSAGE_54../../placeholderMESSAGE_11;/      View,"
-import React from "reactMESSAGE_76react;MESSAGE_27MESSAGE_74window;);MESSAGE_38ApiIntegrationDemo", {trackRender: true,trackMemory: true,warnThreshold: 50,  };);
-  timestamp: new Date().toISOString(),
-  summary: {,
-  total: 51,
-    passed: 50,
-    failed: 1,
-    successRate: 98.0,
-    avgDuration: CONSTANT_162.78},
-  categories: {,
-  auth: { total: 3, passed: 3, failed: 0},
-    health: { total: 8, passed: 8, failed: 0},
-    agents: { total: 10, passed: 10, failed: 0},
-    diagnosis: { total: 8, passed: 7, failed: 1},
-    settings: { total: 3, passed: 3, failed: 0},
-    blockchain: { total: 3, passed: 3, failed: 0},
-    ml: { total: 3, passed: 3, failed: 0},
-    accessibility: { total: 3, passed: 3, failed: 0},
-    eco: { total: 3, passed: 3, failed: 0},
-    support: { total: 4, passed: 4, failed: 0},
-    system: { total: 3, passed: 3, failed: 0}
-  },
-  details: [{,
-  name: 健康检查",
-      category: "auth,",
-      status: "PASSEDMESSAGE_56,/          method: MESSAGE_9启动问诊",
-      category: diagnosis",
-      status: "FAILED as const,",
-      duration: CONSTANT_215,
-      endpoint: "/diagnosis/inquiry",/          method: POST",
-      error: MESSAGE_36
-    ],
-    const effectEnd = performance.now();
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [])
+import { useNavigation } from '@react-navigation/native';
+import React, { useCallback, useEffect, useState } from 'react';
+import {
+  ActivityIndicator,
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 interface ApiTestResult {
-  name: string;
+  name: string;,
   category: string;
-  status: "PASSED" | FAILEDMESSAGE_10overview | "results" | live">(MESSAGE_21, MESSAGE_7
-        [
-          {
-      text: "取消",
-      style: cancel"},"
-          {
-      text: "开始,MESSAGE_34测试完成", " 所有API测试已完成，请查看结果。");MESSAGE_69results)MESSAGE_39测试失败", " error.message || 测试过程中发生错误");MESSAGE_42健康检查) { MESSAGE_14获取API版本MESSAGE_62, " `${testName} 测试已重新运行`);"
-      await loadTestResults;(;)
-    } catch (error: unknown) {
-      Alert.alert("重试失败, error.message || "重试过程中发生错误");MESSAGE_55),"
-      [{ text: "确定}]);MESSAGE_73TODO: 添加无障碍标签MESSAGE_1TODO: 添加无障碍标签MESSAGE_40TODO: 添加无障碍标签" /> setCurrentTab(overview")}/          >MESSAGE_45overview && styles.activeTabText]}} />/              概览MESSAGE_17TODO: 添加无障碍标签" /> setCurrentTab(results")}/          >"
-        <Text style={[styles.tabText, currentTab === "results && styles.activeTabText]} />/              测试结果"
-        </Text>/      </TouchableOpacity>/  >
-        onPress={() = / accessibilityLabel="TODO: 添加无障碍标签" /> setCurrentTab(live")}/          >"
-        <Text style={[styles.tabText, currentTab === "live && styles.activeTabText]} />/              实时测试MESSAGE_53TODO: 添加无障碍标签MESSAGE_65TODO: 添加无障碍标签MESSAGE_8取消",
-      style: cancel"},MESSAGE_78开始测试, onPress: (); => }MESSAGE_6TODO: 添加无障碍标签MESSAGE_24健康检查", " 系统状态正常")"
-                Alert.alert("健康检查失败, error.message)MESSAGE_71TODO: 添加无障碍标签MESSAGE_68智能体状态", " 所有智能体运行正常")"
-                Alert.alert("获取状态失败, error.message)MESSAGE_58TODO: 添加无障碍标签MESSAGE_4系统监控", " 系统运行状态良好")"
-                Alert.alert("系统监控失败, error.message);MESSAGE_49overviewMESSAGE_59:MESSAGE_16live:MESSAGE_77row",
-    alignItems: center",
-    justifyContent: "space-between,MESSAGE_67boldMESSAGE_37,
-    color: colors.textPrimary},
-  refreshButton: { padding: spacing.sm  },
-  refreshButtonText: {,
-  color: colors.primary,
-    fontSize: typography.fontSize.base,
-    fontWeight: "bold},MESSAGE_70rowMESSAGE_61,
+  status: 'PASSED' | 'FAILED' | 'PENDING';
+  duration?: number;
+  endpoint: string;,
+  method: string;
+  error?: string;
+}
+
+interface TestSummary {
+  total: number;,
+  passed: number;
+  failed: number;,
+  successRate: number;
+  avgDuration: number;
+}
+
+export const ApiIntegrationDemo: React.FC = () => {
+  const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [currentTab, setCurrentTab] = useState<'overview' | 'results' | 'live'>(
+    'overview'
+  );
+  const [testResults, setTestResults] = useState<ApiTestResult[]>([]);
+  const [summary, setSummary] = useState<TestSummary>({
+    total: 0,
+    passed: 0,
+    failed: 0,
+    successRate: 0,
+    avgDuration: 0,
+  });
+
+  const mockTestResults: ApiTestResult[] = [
+    {
+      name: '健康检查',
+      category: 'auth',
+      status: 'PASSED',
+      duration: 145,
+      endpoint: '/health',
+      method: 'GET',
+    },
+    {
+      name: '用户登录',
+      category: 'auth',
+      status: 'PASSED',
+      duration: 234,
+      endpoint: '/auth/login',
+      method: 'POST',
+    },
+    {
+      name: '获取用户信息',
+      category: 'user',
+      status: 'PASSED',
+      duration: 189,
+      endpoint: '/user/profile',
+      method: 'GET',
+    },
+    {
+      name: '启动问诊',
+      category: 'diagnosis',
+      status: 'FAILED',
+      duration: 315,
+      endpoint: '/diagnosis/inquiry',
+      method: 'POST',
+      error: '连接超时',
+    },
+    {
+      name: '智能体状态',
+      category: 'agents',
+      status: 'PASSED',
+      duration: 167,
+      endpoint: '/agents/status',
+      method: 'GET',
+    },
+  ];
+
+  const loadTestResults = useCallback(async () => {
+    setLoading(true);
+    try {
+      // 模拟API调用
+      await new Promise(resolve) => setTimeout(resolve, 1000));
+
+      setTestResults(mockTestResults);
+
+      const passed = mockTestResults.filter(r) => r.status === 'PASSED'
+      ).length;
+      const failed = mockTestResults.filter(r) => r.status === 'FAILED'
+      ).length;
+      const total = mockTestResults.length;
+      const avgDuration =
+        mockTestResults.reduce(sum, r) => sum + (r.duration || 0), 0) / total;
+
+      setSummary({
+        total,
+        passed,
+        failed,
+        successRate: (passed / total) * 100,
+        avgDuration,
+      });
+    } catch (error) {
+      Alert.alert('错误', '加载测试结果失败');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const runAllTests = useCallback(async () => {
+    Alert.alert('运行测试', '确定要运行所有API测试吗？', [
+      { text: '取消', style: 'cancel' },
+      {
+        text: '开始测试',
+        onPress: async () => {
+          setLoading(true);
+          try {
+            await new Promise(resolve) => setTimeout(resolve, 2000));
+            await loadTestResults();
+            Alert.alert('测试完成', '所有API测试已完成，请查看结果。');
+          } catch (error) {
+            Alert.alert('测试失败', '测试过程中发生错误');
+          } finally {
+            setLoading(false);
+          }
+        },
+      },
+    ]);
+  }, [loadTestResults]);
+
+  const retryTest = useCallback(
+    async (testName: string) => {
+      try {
+        setLoading(true);
+        await new Promise(resolve) => setTimeout(resolve, 1000));
+        Alert.alert('重试完成', `${testName} 测试已重新运行`);
+        await loadTestResults();
+      } catch (error) {
+        Alert.alert('重试失败', '重试过程中发生错误');
+      } finally {
+        setLoading(false);
+      }
+    },
+    [loadTestResults]
+  );
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await loadTestResults();
+    setRefreshing(false);
+  }, [loadTestResults]);
+
+  useEffect() => {
+    loadTestResults();
+  }, [loadTestResults]);
+
+  const renderOverview = () => (
+    <View style={styles.overviewContainer}>
+      <View style={styles.summaryCard}>
+        <Text style={styles.summaryTitle}>测试概览</Text>
+        <View style={styles.statsGrid}>
+          <View style={styles.statItem}>
+            <Text style={styles.statValue}>{summary.total}</Text>
+            <Text style={styles.statLabel}>总计</Text>
+          </View>
+          <View style={styles.statItem}>
+            <Text style={[styles.statValue, { color: '#27AE60' }]}>
+              {summary.passed}
+            </Text>
+            <Text style={styles.statLabel}>通过</Text>
+          </View>
+          <View style={styles.statItem}>
+            <Text style={[styles.statValue, { color: '#E74C3C' }]}>
+              {summary.failed}
+            </Text>
+            <Text style={styles.statLabel}>失败</Text>
+          </View>
+          <View style={styles.statItem}>
+            <Text style={styles.statValue}>
+              {summary.successRate.toFixed(1)}%
+            </Text>
+            <Text style={styles.statLabel}>成功率</Text>
+          </View>
+        </View>
+      </View>
+
+      <TouchableOpacity;
+        style={styles.actionButton}
+        onPress={runAllTests}
+        disabled={loading}
+      >
+        <Text style={styles.actionButtonText}>
+          {loading ? '运行中...' : '运行所有测试'}
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  const renderResults = () => (
+    <ScrollView style={styles.resultsContainer}>
+      {testResults.map(result, index) => (
+        <View key={index} style={styles.resultCard}>
+          <View style={styles.resultHeader}>
+            <Text style={styles.resultName}>{result.name}</Text>
+            <View;
+              style={[
+                styles.statusBadge,
+                {
+                  backgroundColor:
+                    result.status === 'PASSED' ? '#27AE60' : '#E74C3C',
+                },
+              ]}
+            >
+              <Text style={styles.statusText}>{result.status}</Text>
+            </View>
+          </View>
+          <Text style={styles.resultCategory}>分类: {result.category}</Text>
+          <Text style={styles.resultEndpoint}>
+            {result.method} {result.endpoint}
+          </Text>
+          {result.duration && (
+            <Text style={styles.resultDuration}>耗时: {result.duration}ms</Text>
+          )}
+          {result.error && (
+            <Text style={styles.resultError}>错误: {result.error}</Text>
+          )}
+          {result.status === 'FAILED' && (
+            <TouchableOpacity;
+              style={styles.retryButton}
+              onPress={() => retryTest(result.name)}
+            >
+              <Text style={styles.retryButtonText}>重试</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      ))}
+    </ScrollView>
+  );
+
+  const renderLiveTests = () => (
+    <View style={styles.liveContainer}>
+      <Text style={styles.liveTitle}>实时测试</Text>
+      <View style={styles.liveActions}>
+        <TouchableOpacity style={styles.liveButton}>
+          <Text style={styles.liveButtonText}>健康检查</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.liveButton}>
+          <Text style={styles.liveButtonText}>智能体状态</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.liveButton}>
+          <Text style={styles.liveButtonText}>系统监控</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Text style={styles.backButton}>←</Text>
+        </TouchableOpacity>
+        <Text style={styles.title}>API集成测试</Text>
+        <TouchableOpacity onPress={onRefresh} disabled={refreshing}>
+          <Text style={styles.refreshButton}>
+            {refreshing ? '刷新中...' : '刷新'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.tabContainer}>
+        <TouchableOpacity;
+          style={[styles.tab, currentTab === 'overview' && styles.activeTab]}
+          onPress={() => setCurrentTab('overview')}
+        >
+          <Text;
+            style={[
+              styles.tabText,
+              currentTab === 'overview' && styles.activeTabText,
+            ]}
+          >
+            概览
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity;
+          style={[styles.tab, currentTab === 'results' && styles.activeTab]}
+          onPress={() => setCurrentTab('results')}
+        >
+          <Text;
+            style={[
+              styles.tabText,
+              currentTab === 'results' && styles.activeTabText,
+            ]}
+          >
+            测试结果
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity;
+          style={[styles.tab, currentTab === 'live' && styles.activeTab]}
+          onPress={() => setCurrentTab('live')}
+        >
+          <Text;
+            style={[
+              styles.tabText,
+              currentTab === 'live' && styles.activeTabText,
+            ]}
+          >
+            实时测试
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.content}>
+        {loading && (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#3498DB" />
+            <Text style={styles.loadingText}>加载中...</Text>
+          </View>
+        )}
+        {!loading && currentTab === 'overview' && renderOverview()}
+        {!loading && currentTab === 'results' && renderResults()}
+        {!loading && currentTab === 'live' && renderLiveTests()}
+      </View>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {,
+  flex: 1,
+    backgroundColor: '#F5F7FA',
+  },
+  header: {,
+  flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    backgroundColor: '#FFFFFF',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E1E8ED',
+  },
+  backButton: {,
+  fontSize: 24,
+    color: '#2C3E50',
+  },
+  title: {,
+  fontSize: 18,
+    fontWeight: 'bold',
+    color: '#2C3E50',
+  },
+  refreshButton: {,
+  fontSize: 16,
+    color: '#3498DB',
+    fontWeight: '600',
+  },
+  tabContainer: {,
+  flexDirection: 'row',
+    backgroundColor: '#FFFFFF',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E1E8ED',
+  },
+  tab: {,
+  flex: 1,
+    paddingVertical: 16,
+    alignItems: 'center',
     borderBottomWidth: 2,
-    borderBottomColor: "transparent},MESSAGE_25CONSTANT_500MESSAGE_47},MESSAGE_22#000,MESSAGE_31boldMESSAGE_12,
-    alignItems: "center,MESSAGE_43CONSTANT_600MESSAGE_30,
-    justifyContent: "center,MESSAGE_32boldMESSAGE_26,
-    shadowOffset: { width: 0, height: 2},
+    borderBottomColor: 'transparent',
+  },
+  activeTab: {,
+  borderBottomColor: '#3498DB',
+  },
+  tabText: {,
+  fontSize: 16,
+    color: '#7F8C8D',
+  },
+  activeTabText: {,
+  color: '#3498DB',
+    fontWeight: '600',
+  },
+  content: {,
+  flex: 1,
+  },
+  loadingContainer: {,
+  flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {,
+  marginTop: 16,
+    fontSize: 16,
+    color: '#7F8C8D',
+  },
+  overviewContainer: {,
+  padding: 20,
+  },
+  summaryCard: {,
+  backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 20,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3},
+    elevation: 3,
+  },
+  summaryTitle: {,
+  fontSize: 18,
+    fontWeight: 'bold',
+    color: '#2C3E50',
+    marginBottom: 16,
+  },
   statsGrid: {,
-  flexDirection: "row,",
-    justifyContent: "space-betweenMESSAGE_20  },MESSAGE_192xl],"
-    fontWeight: "boldMESSAGE_63,
-    fontStyle: "italic},MESSAGE_51#000MESSAGE_3,
-    justifyContent: "space-between,",
-    alignItems: "centerMESSAGE_28,
-    color: colors.textPrimary,
-    textTransform: "capitalize},MESSAGE_46rowMESSAGE_13},MESSAGE_52center,MESSAGE_75bold'}"'
-}), []);
+  flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  statItem: {,
+  alignItems: 'center',
+  },
+  statValue: {,
+  fontSize: 24,
+    fontWeight: 'bold',
+    color: '#2C3E50',
+  },
+  statLabel: {,
+  fontSize: 14,
+    color: '#7F8C8D',
+    marginTop: 4,
+  },
+  actionButton: {,
+  backgroundColor: '#3498DB',
+    borderRadius: 8,
+    paddingVertical: 16,
+    alignItems: 'center',
+  },
+  actionButtonText: {,
+  color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  resultsContainer: {,
+  padding: 20,
+  },
+  resultCard: {,
+  backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 12,
+  },
+  resultHeader: {,
+  flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  resultName: {,
+  fontSize: 16,
+    fontWeight: '600',
+    color: '#2C3E50',
+  },
+  statusBadge: {,
+  paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+  },
+  statusText: {,
+  color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  resultCategory: {,
+  fontSize: 14,
+    color: '#7F8C8D',
+    marginBottom: 4,
+  },
+  resultEndpoint: {,
+  fontSize: 14,
+    color: '#7F8C8D',
+    marginBottom: 4,
+  },
+  resultDuration: {,
+  fontSize: 14,
+    color: '#7F8C8D',
+    marginBottom: 4,
+  },
+  resultError: {,
+  fontSize: 14,
+    color: '#E74C3C',
+    marginBottom: 8,
+  },
+  retryButton: {,
+  backgroundColor: '#E74C3C',
+    borderRadius: 4,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    alignSelf: 'flex-start',
+  },
+  retryButtonText: {,
+  color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  liveContainer: {,
+  padding: 20,
+  },
+  liveTitle: {,
+  fontSize: 18,
+    fontWeight: 'bold',
+    color: '#2C3E50',
+    marginBottom: 20,
+  },
+  liveActions: {,
+  gap: 12,
+  },
+  liveButton: {,
+  backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E1E8ED',
+  },
+  liveButtonText: {,
+  fontSize: 16,
+    color: '#3498DB',
+    fontWeight: '600',
+  },
+});
+
+export default ApiIntegrationDemo;

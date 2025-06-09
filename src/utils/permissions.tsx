@@ -13,7 +13,7 @@ export type PermissionType =
   | "photoLibrary"
   | "notifications";
 export interface PermissionResult {
-  granted: boolean;
+  granted: boolean;,
   status: PermissionStatus;
   canAskAgain: boolean;
 }

@@ -15,7 +15,7 @@ import React,{ useState, useRef, useEffect } from "react";
 ///     const uiuxService = createUIUXOptimizationService;
 export const UIUXDemoScreen: React.FC  = () => {}
   const performanceMonitor = usePerformanceMonitor("UIUXDemoScreen, { ";)
-    trackRender: true,trackMemory: true,warnThreshold: 50,  };);
+    trackRender: true,trackMemory: true,warnThreshold: 50};);
   const [showPerformanceMonitor, setShowPerformanceMonitor] = useState<boolean>(false;);
   const [enableAnimations, setEnableAnimations] = useState<boolean>(tru;e;);
   const [enableHaptics, setEnableHaptics] = useState<boolean>(tru;e;);
@@ -32,7 +32,7 @@ export const UIUXDemoScreen: React.FC  = () => {}
   const visualEffectManager = uiuxService.getVisualEffectManager;
   const responsiveManager = uiuxService.getResponsiveManager;
   const theme = uiuxService.getTheme;
-  useEffect(() => {
+  useEffect() => {
     const effectStart = performance.now();
     if (enableAnimations) {animationManager.breathingPulse(pulseAnim, 0.95, 1.05, 2000);
     } else {
@@ -42,7 +42,7 @@ export const UIUXDemoScreen: React.FC  = () => {}
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [enableAnimations, animationManager, pulseAnim]);
-  useEffect(() => {
+  useEffect() => {
     const effectStart = performance.now();
     visualEffectManager.adjustEffectsForPerformance(performanceLevel);
       const effectEnd = performance.now();
@@ -152,31 +152,31 @@ export const UIUXDemoScreen: React.FC  = () => {}
     <SafeAreaView style={styles.container}>/      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false} />/        {///                体验流畅的动画效果和性能优化;
           </Text>/        </View>/;
         {///;
-          <View style={styles.controlRow}>/            <Text style={styles.controlLabel}>启用动画</Text>/                <Switch
+          <View style={styles.controlRow}>/            <Text style={styles.controlLabel}>启用动画</Text>/                <Switch;
 value={enableAnimations};
               onValueChange={setEnableAnimations}
               trackColor={ false: "#767577, true: theme.colors.prima;r;y }}"
               thumbColor={enableAnimations ? "#ffffff" : #f4f3f4"} />/          </View>/    "
-          <View style={styles.controlRow}>/            <Text style={styles.controlLabel}>启用触觉反馈</Text>/                <Switch
+          <View style={styles.controlRow}>/            <Text style={styles.controlLabel}>启用触觉反馈</Text>/                <Switch;
 value={enableHaptics}
               onValueChange={setEnableHaptics}
               trackColor={ false: "#767577, true: theme.colors.primary}}"
               thumbColor={enableHaptics ? "#ffffff" : #f4f3f4"} />/          </View>/    "
-          <View style={styles.controlRow}>/            <Text style={styles.controlLabel}>性能监控</Text>/                <Switch
+          <View style={styles.controlRow}>/            <Text style={styles.controlLabel}>性能监控</Text>/                <Switch;
 value={showPerformanceMonitor}
               onValueChange={setShowPerformanceMonitor}
               trackColor={ false: "#767577, true: theme.colors.primary}}"
               thumbColor={showPerformanceMonitor ? "#ffffff" : #f4f3f4"} />/          </View>/    "
           <View style={styles.performanceLevelContainer}>/            <Text style={styles.controlLabel}>性能级别</Text>/            <View style={styles.performanceLevelButtons}>/                  {(["high, "medium", low"] as const).map(level) => ()
-                <TouchableOpacity
+                <TouchableOpacity;
 key={level}
-                  style={{[
+                  style={[
                     styles.performanceLevelButton,
                     performanceLevel === level && styles.performanceLevelButtonActive;
                   ]}}
                   onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setPerformanceLevel(level)}/                    >
-                  <Text
-style={{[
+                  <Text;
+style={[
                       styles.performanceLevelButtonText,
                       performanceLevel === level && styles.performanceLevelButtonTextActive;
                     ]}} />/                    {level === "high ? "高" : level === medium" ? "中 : "低"}"
@@ -184,7 +184,7 @@ style={{[
             </View>/          </View>/        </View>/
         {///
           <View style={styles.animationContainer}>/                <Animated.View;
-style={{[
+style={[
                 styles.animationBox,
                 {
                   transform: [;{ scale: Animated.multiply(scaleAnim, pulseAnim) }},
@@ -197,55 +197,55 @@ style={{[
               ]} />/              <Ionicons name="heart" size={40} color={theme.colors.primary} />/            </Animated.View>/          </View>/
           <View style={styles.animationStats}>/            <Text style={styles.statsText}>动画执行次数: {animationCount}</Text>/          </View>/        </View>/
         {///
-          <View style={styles.buttonGrid}>/                <TouchableOpacity
+          <View style={styles.buttonGrid}>/                <TouchableOpacity;
 style={[styles.demoButton, getResponsiveStyle(styles.primaryButton)]}
               onPress={demoSpringBounce}
               disabled={!enableAnimations}
             accessibilityLabel="TODO: 添加无障碍标签" />/              <Ionicons name="radio-button-on" size={20} color="#ffffff" />/              <Text style={styles.buttonText}>弹簧反弹</Text>/            </TouchableOpacity>/
-            <TouchableOpacity
+            <TouchableOpacity;
 style={[styles.demoButton, getResponsiveStyle(styles.secondaryButton)]}
               onPress={demoElasticScale}
               disabled={!enableAnimations}
             accessibilityLabel="TODO: 添加无障碍标签" />/              <Ionicons name="resize" size={20} color="#ffffff" />/              <Text style={styles.buttonText}>弹性缩放</Text>/            </TouchableOpacity>/
-            <TouchableOpacity
+            <TouchableOpacity;
 style={[styles.demoButton, getResponsiveStyle(styles.accentButton)]}
               onPress={demoRippleEffect}
               disabled={!enableAnimations}
             accessibilityLabel="TODO: 添加无障碍标签" />/              <Ionicons name="radio-button-off" size={20} color="#ffffff" />/              <Text style={styles.buttonText}>涟漪效果</Text>/            </TouchableOpacity>/
-            <TouchableOpacity
+            <TouchableOpacity;
 style={[styles.demoButton, getResponsiveStyle(styles.warningButton)]}
               onPress={demoRotateAnimation}
               disabled={!enableAnimations}
             accessibilityLabel="TODO: 添加无障碍标签" />/              <Ionicons name="refresh" size={20} color="#ffffff" />/              <Text style={styles.buttonText}>旋转动画</Text>/            </TouchableOpacity>/
-            <TouchableOpacity
+            <TouchableOpacity;
 style={[styles.demoButton, getResponsiveStyle(styles.successButton)]}
               onPress={demoSlideAnimation}
               disabled={!enableAnimations}
             accessibilityLabel="TODO: 添加无障碍标签" />/              <Ionicons name="arrow-forward" size={20} color="#ffffff" />/              <Text style={styles.buttonText}>滑动动画</Text>/            </TouchableOpacity>/
-            <TouchableOpacity
+            <TouchableOpacity;
 style={[styles.demoButton, getResponsiveStyle(styles.infoButton)]}
               onPress={demoFadeAnimation}
               disabled={!enableAnimations}
             accessibilityLabel="TODO: 添加无障碍标签" />/              <Ionicons name="eye" size={20} color="#ffffff" />/              <Text style={styles.buttonText}>淡入淡出</Text>/            </TouchableOpacity>/          </View>/        </View>/
         {///
-          <View style={styles.performanceButtons}>/                <TouchableOpacity
+          <View style={styles.performanceButtons}>/                <TouchableOpacity;
 style={[styles.performanceButton, getResponsiveStyle(styles.primaryButton)]}
               onPress={demoPerformanceOptimization}
             accessibilityLabel="TODO: 添加无障碍标签" />/              <Ionicons name="speedometer" size={20} color="#ffffff" />/              <Text style={styles.buttonText}>性能优化</Text>/            </TouchableOpacity>/
-            <TouchableOpacity
+            <TouchableOpacity;
 style={[styles.performanceButton, getResponsiveStyle(styles.errorButton)]}
               onPress={clearAllAnimations}
             accessibilityLabel="TODO: 添加无障碍标签" />/              <Ionicons name="stop" size={20} color="#ffffff" />/              <Text style={styles.buttonText}>清理动画</Text>/            </TouchableOpacity>/          </View>/        </View>/
         {///
-          <View style={styles.responsiveDemo}>/            <Text style={{getResponsiveStyle(styles.responsiveText)}} />/                  这是响应式文本，会根据屏幕尺寸自动调整大小
+          <View style={styles.responsiveDemo}>/            <Text style={getResponsiveStyle(styles.responsiveText)}} />/                  这是响应式文本，会根据屏幕尺寸自动调整大小
             </Text>/
-            <View style={{getResponsiveStyle(styles.responsiveBox)}} />/              <Text style={{getResponsiveStyle(styles.responsiveBoxText)}} />/                    响应式容器
+            <View style={getResponsiveStyle(styles.responsiveBox)}} />/              <Text style={getResponsiveStyle(styles.responsiveBoxText)}} />/                    响应式容器
               </Text>/            </View>/          </View>/        </View>/
         {///
           <View style={styles.visualEffectsDemo}>/            <View style={[styles.effectBox, visualEffectManager.generateShadowStyle()]} />/              <Text style={styles.effectBoxText}>阴影效果</Text>/            </View>/
             <View style={[styles.effectBox, visualEffectManager.generateGlassmorphismStyle()]} />/              <Text style={styles.effectBoxText}>毛玻璃效果</Text>/            </View>/          </View>/        </View>/
         <View style={styles.footer}>/          <Text style={styles.footerText}>/            索克生活 - UI/UX优化演示/          </Text>/        </View>/      </ScrollView>/
-      {///          <PerformanceMonitor
+      {///          <PerformanceMonitor;
 visible={showPerformanceMonitor}
         onOptimizationSuggestion={(suggestion) = /> {/              }}
         autoOptimize={performanceLevel === low"}"

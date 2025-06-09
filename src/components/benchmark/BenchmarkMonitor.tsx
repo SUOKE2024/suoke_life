@@ -40,7 +40,7 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
   } = useBenchmarkStreaming({autoConnect: true,maxEvents: 50;)
   });
   // 同步流式状态到Redux;
-  useEffect(() => {
+  useEffect() => {
     dispatch(updateStreamingStatus({
       isConnected,
       connectionState,
@@ -92,7 +92,7 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
   const progressEvents = getEventsByType('benchmark_progress');
   const completeEvents = getEventsByType('benchmark_complete');
   return (
-  <ScrollView
+  <ScrollView;
       style={styles.container}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
@@ -104,15 +104,15 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
         <Card.Content>
           <View style={styles.statusRow}>
             <View style={styles.statusItem}>
-              <Badge
-                style={{[styles.statusBadge, { backgroundColor: getConnectionStatusColor() }}]}
+              <Badge;
+                style={[styles.statusBadge, { backgroundColor: getConnectionStatusColor() }}]}
               />
               <Text style={styles.statusText}>
                 {connectionState === 'OPEN' ? '已连接' :
                 connectionState === 'CONNECTING' ? '连接中' : '已断开'}
               </Text>
             </View>
-            <Button
+            <Button;
               mode={isConnected ? 'outlined' : 'contained'}
               onPress={handleConnectionToggle}
               compact;
@@ -140,19 +140,19 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
               <Text style={styles.statLabel}>总计</Text>
             </View>
             <View style={styles.statItem}>
-              <Text style={{[styles.statNumber, { color: '#FF9800' }}]}>
+              <Text style={[styles.statNumber, { color: '#FF9800' }}]}>
                 {taskStats.running}
               </Text>
               <Text style={styles.statLabel}>运行中</Text>
             </View>
             <View style={styles.statItem}>
-              <Text style={{[styles.statNumber, { color: '#4CAF50' }}]}>
+              <Text style={[styles.statNumber, { color: '#4CAF50' }}]}>
                 {taskStats.completed}
               </Text>
               <Text style={styles.statLabel}>已完成</Text>
             </View>
             <View style={styles.statItem}>
-              <Text style={{[styles.statNumber, { color: '#F44336' }}]}>
+              <Text style={[styles.statNumber, { color: '#F44336' }}]}>
                 {taskStats.failed}
               </Text>
               <Text style={styles.statLabel}>失败</Text>
@@ -165,8 +165,8 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
           <Card.Title;
             title="系统健康状态"
             right={() => ()
-              <Chip
-                style={{[styles.statusChip, { backgroundColor: getStatusColor(getSystemStatus()) }}]}
+              <Chip;
+                style={[styles.statusChip, { backgroundColor: getStatusColor(getSystemStatus()) }}]}
                 textStyle={ color: 'white' }}
               >
                 {getSystemStatus() === 'healthy' ? '健康' :
@@ -178,7 +178,7 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
             <View style={styles.metricsContainer}>
               <View style={styles.metricItem}>
                 <Text style={styles.metricLabel}>CPU使用率</Text>
-                <ProgressBar
+                <ProgressBar;
                   progress={healthStatus.system_info.cpu_usage / 100}
                   color={healthStatus.system_info.cpu_usage > 80 ? '#F44336' : '#4CAF50'}
                   style={styles.progressBar}>
@@ -188,7 +188,7 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
               </View>
               <View style={styles.metricItem}>
                 <Text style={styles.metricLabel}>内存使用率</Text>
-                <ProgressBar
+                <ProgressBar;
                   progress={healthStatus.system_info.memory_usage / 100}
                   color={healthStatus.system_info.memory_usage > 80 ? '#F44336' : '#4CAF50'}
                   style={styles.progressBar}>
@@ -198,7 +198,7 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
               </View>
               <View style={styles.metricItem}>
                 <Text style={styles.metricLabel}>磁盘使用率</Text>
-                <ProgressBar
+                <ProgressBar;
                   progress={healthStatus.system_info.disk_usage / 100}
                   color={healthStatus.system_info.disk_usage > 80 ? '#F44336' : '#4CAF50'}
                   style={styles.progressBar}>
@@ -209,8 +209,8 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
             </View>
             <View style={styles.serviceStatus}>
               <Text style={styles.serviceLabel}>服务状态:</Text>
-              <Chip
-                style={{[styles.serviceChip, {
+              <Chip;
+                style={[styles.serviceChip, {
                   backgroundColor: healthStatus.status === 'healthy' ? '#4CAF50' : '#F44336'
                 }}]}
                 textStyle={ color: 'white' }}
@@ -229,11 +229,11 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
             <Text style={styles.noEventsText}>暂无事件</Text>
           ) : (
             <View style={styles.eventsContainer}>
-              {events.slice(0, 5).map((event, index) => ())
+              {events.slice(0, 5).map(event, index) => ())
                 <View key={index} style={styles.eventItem}>
                   <View style={styles.eventHeader}>
-                    <Chip
-                      style={{[styles.eventTypeChip, {
+                    <Chip;
+                      style={[styles.eventTypeChip, {
                         backgroundColor:
                           event.type === 'benchmark_error' ? '#F44336' :
                           event.type === 'benchmark_complete' ? '#4CAF50' :
@@ -264,19 +264,19 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
         <Card.Content>
           <View style={styles.eventStatsGrid}>
             <View style={styles.eventStatItem}>
-              <Text style={{[styles.eventStatNumber, { color: '#F44336' }}]}>
+              <Text style={[styles.eventStatNumber, { color: '#F44336' }}]}>
                 {errorEvents.length}
               </Text>
               <Text style={styles.eventStatLabel}>错误</Text>
             </View>
             <View style={styles.eventStatItem}>;
-              <Text style={{[styles.eventStatNumber, { color: '#FF9800' }}]}>;
+              <Text style={[styles.eventStatNumber, { color: '#FF9800' }}]}>;
                 {progressEvents.length};
               </Text>;
               <Text style={styles.eventStatLabel}>进度</Text>;
             </View>;
             <View style={styles.eventStatItem}>;
-              <Text style={{[styles.eventStatNumber, { color: '#4CAF50' }}]}>;
+              <Text style={[styles.eventStatNumber, { color: '#4CAF50' }}]}>;
                 {completeEvents.length};
               </Text>;
               <Text style={styles.eventStatLabel}>完成</Text>;
@@ -418,8 +418,8 @@ const styles = StyleSheet.create({
     color: '#333',
     fontFamily: 'monospace'
   },
-  eventStatsGrid: {
-      flexDirection: "row",
+  eventStatsGrid: {,
+  flexDirection: "row",
       justifyContent: 'space-around';
   },eventStatItem: {alignItems: 'center';
   },eventStatNumber: {fontSize: 20,fontWeight: 'bold';

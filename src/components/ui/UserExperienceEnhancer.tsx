@@ -30,13 +30,13 @@ const { width, height   } = Dimensions.get(";window;";);
   message?: string;
   type: "network | "validation" | server" | "unknown,"
   retryable: boolean;
-  onRetry?: () => void
+  onRetry?: () => void;
 }
 // 手势配置 * interface GestureConfig {
   enableSwipe: boolean,
-  enablePinch: boolean;
+  enablePinch: boolean;,
   enableRotation: boolean;
-  enableDoubleTap: boolean;
+  enableDoubleTap: boolean;,
   swipeThreshold: number;
   onSwipeLeft?: () => void;
   onSwipeRight?: () => void;
@@ -48,9 +48,9 @@ const { width, height   } = Dimensions.get(";window;";);
 }
 // 动画配置 * interface AnimationConfig {
   enableEntrance: boolean,
-  enableExit: boolean;
+  enableExit: boolean;,
   enableHover: boolean;
-  enablePress: boolean;
+  enablePress: boolean;,
   duration: number;
   easing: "ease" | linear" | "bounce | "spring";
 };
@@ -59,13 +59,13 @@ interface UserExperienceEnhancerProps {
   loading?: LoadingState;
   error?: ErrorState;
   haptic?: HapticFeedback;
-  gesture?: Partial<GestureConfig />;/  animation?: Partial<AnimationConfig />/  onInteraction?: (type: string, data?: unknown) => void
+  gesture?: Partial<GestureConfig />;/  animation?: Partial<AnimationConfig />/  onInteraction?: (type: string, data?: unknown) => void;
 };
 export const UserExperienceEnhancer: React.FC<UserExperienceEnhancerProps /> = ({/   const performanceMonitor = usePerformanceMonitor(UserExperienceEnhancer",;))
 {/
     trackRender: true,
     trackMemory: true,
-    warnThreshold: 50,  });
+    warnThreshold: 50});
   children,
   loading,
   error,
@@ -257,8 +257,8 @@ animationType="fade" />/        <View style={styles.loadingOverlay}>/          <
                 <ActivityIndicator size="large" color={colors.primary} />/                    {loading.message   && <Text style={styles.loadingMessage}>{loading.message}</Text>/                    )}
               </>/                )}
             {loading.type === "progress"  && <>
-                <View style={styles.progressContainer}>/                  <View style={styles.progressBar}>/                        <View
-style={{[styles.progressFill,
+                <View style={styles.progressContainer}>/                  <View style={styles.progressBar}>/                        <View;
+style={[styles.progressFill,
                         { width: `${(loading.progress || 0) * 100  }}%` };
                       ]};
                     />/                  </View>/                  <Text style={styles.progressText}>/                    {Math.round(loading.progress || ;0;) * 100)}%
@@ -289,18 +289,18 @@ const effectEnd = performance.now;
     return (;)
       <Modal,visible={error.hasError};
         transparent;
-        animationType="slide" />/        <View style={styles.errorOverlay}>/          <View style={styles.errorContainer}>/                <Ionicons
+        animationType="slide" />/        <View style={styles.errorOverlay}>/          <View style={styles.errorContainer}>/                <Ionicons;
               name={getErrorIcon;(;) as any}
               size={48}
               color={colors.error} />/            <Text style={styles.errorTitle}>/              {error.type === "network" ? 网络连接失败" :"
               error.type === "validation ? "数据验证失败" :"
               error.type === server" ? "服务器错误 : "未知错误"}
             </Text>/                {error.message   && <Text style={styles.errorMessage}>{error.message}</Text>/                )}
-            <View style={styles.errorActions}>/                  {error.retryable && error.onRetry   && <TouchableOpacity
+            <View style={styles.errorActions}>/                  {error.retryable && error.onRetry   && <TouchableOpacity;
 style={styles.retryButton}
                   onPress={error.onRetry}
                 accessibilityLabel="TODO: 添加无障碍标签" />/                  <Text style={styles.retryButtonText}>重试</Text>/                </TouchableOpacity>/    )}
-              <TouchableOpacity
+              <TouchableOpacity;
 style={styles.dismissButton}
                 onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> {/                   onInteraction?.(dismissError") "
                 }}
@@ -316,7 +316,7 @@ style={styles.dismissButton}
         { translateX },
         { translateY },
         {
-          rotate: rotateAnim.interpolate({,)
+          rotate: rotateAnim.interpolate({),
   inputRange: [0, 1],
             outputRange: ["0deg, "360deg"]"
           });
@@ -328,7 +328,7 @@ style={styles.dismissButton}
         <PanGestureHandler,ref={panRef};
           onGestureEvent={handlePanGesture};
           onHandlerStateChange={handlePanGesture};
-          enabled={defaultGestureConfig.enableSwipe} />/          <Animated.View style={{animatedStyle}} />/                <TapGestureHandler
+          enabled={defaultGestureConfig.enableSwipe} />/          <Animated.View style={animatedStyle}} />/                <TapGestureHandler;
 ref={doubleTapRef}
               onHandlerStateChange={handleDoubleTap}
               numberOfTaps={2}
@@ -342,7 +342,7 @@ onTouchStart={handlePressIn}
     }
     return (;)
       <Animated.View;
-style={{animatedStyle}}
+style={animatedStyle}}
         onTouchStart={handlePressIn}
         onTouchEnd={handlePressOut}
         {...(Platform.OS === "web && {")

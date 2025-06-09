@@ -54,8 +54,8 @@ SupportedLanguage,
     const config = this.getLanguageConfig;
     const formatStr = format || config.timeForm;a;t;
 try {
-      const options: Intl.DateTimeFormatOptions = {
-      hour: "2-digit",
+      const options: Intl.DateTimeFormatOptions = {,
+  hour: "2-digit",
       minute: "2-digit",
         hour12: formatStr.includes("A")};
       const formatter = new Intl.DateTimeFormat(this.currentLanguage, option;s;);

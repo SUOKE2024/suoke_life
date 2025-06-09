@@ -21,8 +21,8 @@
   userId: "user_12345",
       sessionId: "session_67890",
       timestamp: Date.now(),
-      lookingData: { ,
-        tongueImage: this.createSampleImageData(),
+      lookingData: {,
+  tongueImage: this.createSampleImageData(),
         faceImage: this.createSampleImageData(),
         bodyImage: this.createSampleImageData(),
         metadata: {,
@@ -31,16 +31,16 @@
           humidity: 60,
           captureTime: new Date().toISOString()}
       },
-      calculationData: { ,
-        birthDate: "1990-05-15",
+      calculationData: {,
+  birthDate: "1990-05-15",
         birthTime: "08:30",
         birthPlace: "北京市",
         currentDate: "2024-12-19",
         currentTime: "14:30",
         currentLocation: "上海市"
       },
-      userProfile: { ,
-        age: 34,
+      userProfile: {,
+  age: 34,
         gender: "male",
         height: 175,
         weight: 70,
@@ -57,8 +57,8 @@
       }
   }
   // 单独的望诊分析示例  public async runLookingDiagnosisExample(): Promise<void> {
-    const lookingInput: DiagnosisInput = {
-      userId: "user_12345",
+    const lookingInput: DiagnosisInput = {,
+  userId: "user_12345",
       sessionId: "session_looking",
       timestamp: Date.now(),
       lookingData: {,
@@ -78,8 +78,8 @@
       }
   }
   // 单独的算诊分析示例  public async runCalculationDiagnosisExample(): Promise<void> {
-    const calculationInput: DiagnosisInput = {
-      userId: "user_12345",
+    const calculationInput: DiagnosisInput = {,
+  userId: "user_12345",
       sessionId: "session_calculation",
       timestamp: Date.now(),
       calculationData: {,
@@ -141,13 +141,13 @@ if (constitution.secondaryTypes &&)
       }
     if (result.fusionResult?.recommendations &&)
       result.fusionResult.recommendations.length > 0) {
-      result.fusionResult.recommendations.forEach(((recommendation: unknown, index: number) => {}))
+      result.fusionResult.recommendations.forEach((recommendation: unknown, index: number) => {}))
           }
       );
       }
     if (result.qualityReport?.warnings &&)
       result.qualityReport.warnings.length > 0) {
-      result.qualityReport.warnings.forEach(((warning: string, index: number) => {}))
+      result.qualityReport.warnings.forEach((warning: string, index: number) => {}))
           });
       }
     if (result.qualityReport) {

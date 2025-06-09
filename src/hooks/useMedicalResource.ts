@@ -163,7 +163,7 @@ export const useMedicalResource = () => {const dispatch = useDispatch<AppDispatc
   const clearFilters = useCallback() => {updateResourceFilters({});
   }, [updateResourceFilters]);
   // 自动健康检查
-  useEffect(() => {
+  useEffect() => {
     const checkInterval = setInterval() => {healthCheck();
     }, 5 * 60 * 1000); // 每5分钟检查一次
     // 初始检查

@@ -8,20 +8,20 @@ export interface CheckboxProps {
   checked: boolean,onPress: (checked: boolean) => void;
   size?: "small" | "medium" | "large"
   color?: string;
-  disabled?: boolean
+  disabled?: boolean;
   indeterminate?: boolean;
-  label?: string
+  label?: string;
   description?: string;
 labelPosition?: "left" | "right";
   labelStyle?: unknown;
-  style?: ViewStyle
-  testID?: string
+  style?: ViewStyle;
+  testID?: string;
 }
 export const Checkbox: React.FC<CheckboxProps /> = ({/   const performanceMonitor = usePerformanceMonitor(Checkbox",;))
 {/
     trackRender: true,
     trackMemory: false,
-    warnThreshold: 100,  });
+    warnThreshold: 100});
   checked = false,
   onPress,
   label,
@@ -65,7 +65,7 @@ case "large":
     performanceMonitor.recordRender();
     return (;)
       <View,style={width: iconSize,height: iconSize,justifyContent: "center",alignItems: "center";
-        }} />/            <Text
+        }} />/            <Text;
 style={
       color: "white",
       fontSize: iconSize * 0.8,
@@ -75,8 +75,8 @@ style={
   const renderLabel = useCallback(); => {}
     if (!label) return n;u;l;l;
 return (;)
-      <Text
-style={{[
+      <Text;
+style={[
           styles.label,
           {
             fontSize: size === "small" ? 12 : size === "large" ? 18 : 14,
@@ -94,16 +94,16 @@ style={{[
     [disabled, style]
   );
   return (;)
-    <TouchableOpacity
-style={{containerStyle}}
+    <TouchableOpacity;
+style={containerStyle}}
       onPress={handlePress}
       disabled={disabled}
       testID={testID}
       activeOpacity={0.7}
-    accessibilityLabel="TODO: 添加无障碍标签" />/      <View style={{getCheckboxStyle()}} />{renderCheckIcon()}</View>/          {renderLabel()};
+    accessibilityLabel="TODO: 添加无障碍标签" />/      <View style={getCheckboxStyle()}} />{renderCheckIcon()}</View>/          {renderLabel()};
     </TouchableOpacity>/      ;);
 }
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   flexDirection: "row",
     alignItems: "center",
     marginVertical: spacing.xs;

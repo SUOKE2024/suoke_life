@@ -282,12 +282,12 @@ return tensorData;
 }
 // 辅助接口
 interface TensorStats {
-  shape: number[];
+  shape: number[];,
   type: TensorType;
-  elementCount: number;
+  elementCount: number;,
   min: number;
-  max: number;
+  max: number;,
   mean: number;
-  std: number;
+  std: number;,
   sum: number;
 }  */

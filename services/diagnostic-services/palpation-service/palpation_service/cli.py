@@ -1,17 +1,7 @@
-                import json
-    import subprocess
-from .main import PalpationService
-from pathlib import Path
-from rich.console import Console
-from rich.table import Table
-from typing import Dict, List, Any, Optional, Union
-import asyncio
-import click
-import sys
-import uvicorn
+"""Module placeholder"""
 
-def main() - > None:
-    """主函数 - 自动生成的最小可用版本"""
+def main():
+    """Main function placeholder"""
     pass
 
 if __name__ == "__main__":

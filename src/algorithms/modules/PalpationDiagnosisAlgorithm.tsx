@@ -9,7 +9,7 @@ export interface PalpationData {
   metadata?: Record<string, any>;
 }
 export interface PulseData {
-  waveform: number[];
+  waveform: number[];,
   duration: number  / 采集时长（秒）*  , positions: PulsePosition[]  * / 寸关尺三部位数据* ///;
 }
 export interface PulsePosition {
@@ -21,7 +21,7 @@ export interface TouchData {
   skinTexture?: SkinTextureData;
   muscleElasticity?: MuscleElasticityData;
   jointMobility?: JointMobilityData;
-  abdominalPalpation?: AbdominalPalpationData
+  abdominalPalpation?: AbdominalPalpationData;
 }
 export interface SkinTextureData {
   moisture: number;  temperature: number  / 相对温度*  thickness: number  * / 厚薄* // , smoothness: number  * / 0-1, 光滑度* *
@@ -33,15 +33,15 @@ export interface JointMobilityData {
   range: number;  , stiffness: number  / 0-1, 僵硬度*  swelling: number  * / 0-1, 肿胀程度* *
 } * /
 export interface AbdominalPalpationData {
-  tenderness: TendernessData[];
+  tenderness: TendernessData[];,
   masses: MassData[],organSize: OrganSizeData,muscleGuarding: number; // 0-1, 肌紧张 *
 }
 export interface TendernessData {
   location: string,intensity: number  , type: "superficial" | "deep",rebound: boolean;
 }
 export interface MassData {
-  location: string;
-  size: number  , consistency: "soft" | "firm" | "hard";
+  location: string;,
+  size: number  , consistency: "soft" | "firm" | "hard";,
   mobility: "mobile" | "fixed",pulsatile: boolean;
 };
 export interface OrganSizeData {
@@ -50,61 +50,61 @@ export interface OrganSizeData {
 } * /
 export interface TemperatureData {
   bodyTemperature: number;
-  , localTemperatures: LocalTemperatureData[];
+  , localTemperatures: LocalTemperatureData[];,
   temperatureDistribution: TemperatureDistributionData;
 }
 export interface LocalTemperatureData {
-  location: string;
+  location: string;,
   temperature: number;
   comparison: "warmer" | "cooler" | "normal";
 }
 export interface TemperatureDistributionData {
-  head: number;
+  head: number;,
   chest: number;
-  abdomen: number;
+  abdomen: number;,
   limbs: number,extremities: number;
 };
 export interface PressureData {
-  systolic: number;
+  systolic: number;,
   diastolic: number  / 舒张压*  脉率* ;
 } * /
 export interface PalpationResult {
   confidence: number,features: PalpationFeatures,analysis: string;
   pulseAnalysis?: PulseAnalysis;
   touchAnalysis?: TouchAnalysis;
-  temperatureAnalysis?: TemperatureAnalysis
+  temperatureAnalysis?: TemperatureAnalysis;
 }
 export interface PalpationFeatures {
-  pulse: PulseFeatures;
+  pulse: PulseFeatures;,
   touch: TouchFeatures;
   temperature: TemperatureFeatures,pressure: PressureFeatures;
 };
 export interface PulseFeatures {
-  rate: number;
+  rate: number;,
   rhythm: string  / 脉律*  depth: string  * / 脉位（浮沉）*  length: string  * / 脉长*  , smoothness: string  * / 脉流利度* //;
 } * /
 export interface TouchFeatures {
-  skinCondition: string;
+  skinCondition: string;,
   muscleCondition: string;
-  jointCondition: string;
+  jointCondition: string;,
   abdominalCondition: string;
 }
 export interface TemperatureFeatures {
   overallTemperature: string,temperaturePattern: string,localVariations: string[];
 }
 export interface PressureFeatures {
-  bloodPressure: string;
+  bloodPressure: string;,
   pulseCharacteristics: string;
 }
 export interface PulseAnalysis {
-  pulseType: PulseType;
+  pulseType: PulseType;,
   pulseCharacteristics: PulseCharacteristics;
-  organCorrelation: OrganCorrelation;
+  organCorrelation: OrganCorrelation;,
   syndromeIndications: string[],pathologicalSignificance: string;
 };
 export interface PulseType {
   primary: string;
-  , secondary: string[]  / 兼见脉象* ///
+  , secondary: string[]  / 兼见脉象* ///,
   description: string;
 }
 export interface PulseCharacteristics {
@@ -114,23 +114,23 @@ export interface PulseCharacteristics {
   strength: { value: string, interpretation: string},depth: { value: string, interpretation: string},width: { value: string, interpretation: string};
 }
 export interface OrganCorrelation {
-  heart: string;
+  heart: string;,
   liver: string;
-  spleen: string;
+  spleen: string;,
   lung: string;
-  kidney: string;
+  kidney: string;,
   gallbladder: string;
-  stomach: string;
+  stomach: string;,
   smallIntestine: string;
-  largeIntestine: string;
+  largeIntestine: string;,
   bladder: string;
-  tripleHeater: string;
+  tripleHeater: string;,
   pericardium: string;
 }
 export interface TouchAnalysis {
-  skinAnalysis: SkinAnalysis;
+  skinAnalysis: SkinAnalysis;,
   muscleAnalysis: MuscleAnalysis;
-  jointAnalysis: JointAnalysis;
+  jointAnalysis: JointAnalysis;,
   abdominalAnalysis: AbdominalAnalysis;
   overallAssessment: string;
 }
@@ -154,44 +154,44 @@ export interface JointAnalysis {
   inflammation: { value: string, significance: string},
   tcmInterpretation: string}
 export interface AbdominalAnalysis {
-  organAssessment: OrganAssessment;
+  organAssessment: OrganAssessment;,
   pathologicalFindings: PathologicalFinding[];
   tcmInterpretation: string;
 }
 export interface OrganAssessment {
-  liver: string;
+  liver: string;,
   spleen: string;
-  kidney: string;
+  kidney: string;,
   stomach: string;
   intestines: string;
 }
 export interface PathologicalFinding {
-  type: string;
+  type: string;,
   location: string;
-  significance: string;
+  significance: string;,
   recommendation: string;
 }
 export interface TemperatureAnalysis {
-  thermalPattern: ThermalPattern;
+  thermalPattern: ThermalPattern;,
   organThermalStates: OrganThermalState[],constitutionalImplications: string[],syndromeIndications: string[];
 }
 export interface ThermalPattern {
-  overall: string;
+  overall: string;,
   distribution: string  / 分布特点*  , tcmInterpretation: string * /;
 }
 export interface OrganThermalState {
-  organ: string;
+  organ: string;,
   thermalState: string;
   significance: string;
 }
 export interface UserProfile {
-  age: number;
+  age: number;,
   gender: "male" | "female" | "other";
-  height: number;
+  height: number;,
   weight: number;
-  occupation: string;
+  occupation: string;,
   medicalHistory: string[];
-  allergies: string[];
+  allergies: string[];,
   medications: string[];
 }
 // 切诊算法类export class PalpationDiagnosisAlgorithm  {private config: PalpationConfig;
@@ -427,17 +427,17 @@ performanceMonitor.recordRender();
     pulseData?: PulseData;
   touchData?: TouchData;
   temperatureData?: TemperatureData;
-  pressureData?: PressureData
+  pressureData?: PressureData;
 }
 interface ProcessedSignalData {
   pulseSignals?: unknown;
   touchSignals?: unknown;
-  temperatureSignals?: unknown
+  temperatureSignals?: unknown;
 }
 interface AnalysisResults {
   pulseAnalysis?: PulseAnalysis;
   touchAnalysis?: TouchAnalysis;
-  temperatureAnalysis?: TemperatureAnalysis
+  temperatureAnalysis?: TemperatureAnalysis;
 }
 //
   constructor(private config: unknown, private knowledgeBase: TCMKnowledgeBase) {}
@@ -446,8 +446,8 @@ interface AnalysisResults {
   };
   async analyze(features: PulseFeatures,userProfile?: UserProfile;)
   );: Promise<PulseAnalysis /    >  {
-    return {pulseType: {
-      primary: "平脉",
+    return {pulseType: {,
+  primary: "平脉",
       secondary: [],confidence: 0.9,description: "脉象平和，节律规整";
       },pulseCharacteristics: {rate: { value: features.rate, interpretation: "脉率正常" ;},
         rhythm: { value: features.rhythm, interpretation: "节律规整"},
@@ -484,17 +484,17 @@ class TouchAnalyzer {
   };
   async analyze(features: TouchFeatures,userProfile?: UserProfile;)
   );: Promise<TouchAnalysis /    >  {
-    return {skinAnalysis: {moisture: {
-      value: "润泽",
+    return {skinAnalysis: {moisture: {,
+  value: "润泽",
       significance: "津液充;足" ;},
-        temperature: {
-      value: "温和",
+        temperature: {,
+  value: "温和",
       significance: "阳气正常"},
-        elasticity: {
-      value: "良好",
+        elasticity: {,
+  value: "良好",
       significance: "气血充足"},
-        texture: {
-      value: "光滑",
+        texture: {,
+  value: "光滑",
       significance: "营养良好"},
         tcmInterpretation: "皮肤润泽，提示津液充足，营卫调和"
       },
@@ -502,11 +502,11 @@ class TouchAnalyzer {
   tone: {
       value: "适中",
       significance: "脾胃功能正常"},
-        elasticity: {
-      value: "良好",
+        elasticity: {,
+  value: "良好",
       significance: "气血充足"},
-        strength: {
-      value: "有力",
+        strength: {,
+  value: "有力",
       significance: "肾气充足"},
         tcmInterpretation: "肌肉有力，提示脾胃健运，肾气充足"
       },
@@ -514,11 +514,11 @@ class TouchAnalyzer {
   mobility: {
       value: "灵活",
       significance: "筋骨健康"},
-        stability: {
-      value: "稳定",
+        stability: {,
+  value: "稳定",
       significance: "肝肾充足"},
-        inflammation: {
-      value: "无",
+        inflammation: {,
+  value: "无",
       significance: "无邪气侵袭"},
         tcmInterpretation: "关节灵活，提示肝主筋、肾主骨功能正常"
       },
@@ -548,10 +548,10 @@ class TemperatureAnalyzer {
   async analyze(features: TemperatureFeatures,)
     userProfile?: UserProfile;
   ): Promise<TemperatureAnalysis /    >  {
-    return {thermalPattern: {
-      overall: "温和",
-      distribution: "均匀",variations: [],tcmInterpretation: "体温正常，阳气充足而不亢盛"},organThermalStates: ;[{
-      organ: "心",
+    return {thermalPattern: {,
+  overall: "温和",
+      distribution: "均匀",variations: [],tcmInterpretation: "体温正常，阳气充足而不亢盛"},organThermalStates: ;[{,
+  organ: "心",
       thermalState: "正常", significance: "心阳充足"},
         {
       organ: "肝",

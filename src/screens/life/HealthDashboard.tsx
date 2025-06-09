@@ -17,11 +17,11 @@ const cardWidth = useMemo(); => useMemo(); => useMemo(); => useMemo(;)
 ), []);
 export const HealthDashboard: React.FC  = () => {}
   const performanceMonitor = usePerformanceMonitor("HealthDashboard', { "';)
-    trackRender: true,trackMemory: true,warnThreshold: 50,  };);
+    trackRender: true,trackMemory: true,warnThreshold: 50};);
   const { healthData, loading, refreshData   } = useHealthData;(;);
   const [selectedTab, setSelectedTab] = useState<string>("all;";);
-  const tabs: TabItem[] = [{
-      id: "all",
+  const tabs: TabItem[] = [{,
+  id: "all",
       label: "全部"},
     {
       id: "vital",
@@ -58,7 +58,7 @@ export const HealthDashboard: React.FC  = () => {}
         showBackButton={true};
         rightIcon="chart-line";
         onRightPress={() = /> {/              }};
-      />/      {///          <HealthPathwayVisualizer
+      />/      {///          <HealthPathwayVisualizer;
 currentStage={
           selectedTab === "vital"
             ? "inspection"
@@ -67,7 +67,7 @@ currentStage={
             : "health-preservation"
         }
         onStagePress={(stage: string) = /> {/           }}
-      />/      {///          <HealthTrendChart
+      />/      {///          <HealthTrendChart;
 title={
           selectedTab === "vital"
             ? "体温趋势"
@@ -76,28 +76,28 @@ title={
             : "健康趋势"};
         data={filteredData.map(d: unknow;n;) = /> ({ date: d.date, value: d.value}))}/            unit={
           selectedTab === "vital" ? "℃" : selectedTab === "activity" ? "步" : ""
-        } />/      {///          <AgentEmotionFeedback
+        } />/      {///          <AgentEmotionFeedback;
 onFeedback={(type: string) = /> {/           }}
-      />/      {///            <TabSelector
+      />/      {///            <TabSelector;
 tabs={tabs}
           selectedTabId={selectedTab}
-          onTabPress={setSelectedTab} />/      </View>/          <ScrollView
+          onTabPress={setSelectedTab} />/      </View>/          <ScrollView;
 style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         refreshControl={
-          <RefreshControl
+          <RefreshControl;
 refreshing={loading}
             onRefresh={refreshData}
             colors={[colors.primary]}
             tintColor={colors.primary} />/            }
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.cardsContainer}>/              {filteredData.map((data: unknown, index: number) => ())
-            <HealthCard
+        <View style={styles.cardsContainer}>/              {filteredData.map(data: unknown, index: number) => ())
+            <HealthCard;
 key={data.id}
               data={data}
               onPress={handleCardPress}
-              style={{[
+              style={[
                   styles.card,
                   { width: cardWidth}},
                   index % 2 === 0 ? styles.leftCard : styles.rightCard;

@@ -32,9 +32,9 @@ import {/**
 * 玉米迷宫服务配置
 */
 interface CornMazeServiceConfig {
-  baseURL: string;
+  baseURL: string;,
   timeout: number;
-  retryAttempts: number;
+  retryAttempts: number;,
   enableCache: boolean;
 }
 /**

@@ -23,7 +23,7 @@ g;
   type: MessageType;
   channel?: string;
   data?: unknown;
-  timestamp?: number
+  timestamp?: number;
 }
 // 订阅配置接口 * export interface SubscriptionConfig {
   channel: string  ;
@@ -34,17 +34,17 @@ g;
 }
 // 重连配置接口 * export interface ReconnectConfig {
   enabled: boolean,
-  maxAttempts: number;
+  maxAttempts: number;,
   delay: number;
-  backoffMultiplier: number;
+  backoffMultiplier: number;,
   maxDelay: number;
 }
 // WebSocket配置接口 * export interface WebSocketConfig {
   url: string  ;
 /    ;
   protocols?: string[];
-  heartbeat: {enabled: boolean;
-    interval: number;
+  heartbeat: {enabled: boolean;,
+  interval: number;
     timeout: number;
 };
   reconnect: ReconnectConfig;
@@ -56,7 +56,7 @@ g;
 }
 // 消息队列项接口 * interface QueuedMessage {
   message: WebSocketMessage,
-  timestamp: number;
+  timestamp: number;,
   retries: number;
 }
 export class WebSocketManager extends EventEmitter  {private ws: WebSocket | null = null;
@@ -287,7 +287,7 @@ this.emit("pong", { latency: this.latency});
     }, this.config.heartbeat.timeout);
   }
   // 重新订阅所有频道  private resubscribeAll(): void {
-    this.subscriptions.forEach(((config, channel) => {}))
+    this.subscriptions.forEach((config, channel) => {}))
       this.send({
         type: "subscribe",
         channel,

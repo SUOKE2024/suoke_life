@@ -1,12 +1,13 @@
 import React from 'react';
 import {
-    Platform,
-    RefreshControl as RNRefreshControl,
-    RefreshControlProps as RNRefreshControlProps,
+  Platform,
+  RefreshControl as RNRefreshControl,
+  RefreshControlProps as RNRefreshControlProps,
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
-export interface RefreshControlProps extends Omit<RNRefreshControlProps, 'colors' | 'tintColor'> {
+export interface RefreshControlProps;
+  extends Omit<RNRefreshControlProps, 'colors' | 'tintColor'> {
   /** 是否正在刷新 */
   refreshing: boolean;
   /** 刷新回调 */
@@ -31,7 +32,7 @@ export const RefreshControl: React.FC<RefreshControlProps> = ({
   title,
   titleColor,
   enabled = true,
-  ...props
+  ...props;
 }) => {
   const { currentTheme } = useTheme();
 
@@ -40,7 +41,7 @@ export const RefreshControl: React.FC<RefreshControlProps> = ({
   const refreshTitleColor = titleColor || currentTheme.colors.onSurface;
 
   return (
-    <RNRefreshControl
+    <RNRefreshControl;
       refreshing={refreshing}
       onRefresh={enabled ? onRefresh : undefined}
       enabled={enabled}
@@ -50,11 +51,13 @@ export const RefreshControl: React.FC<RefreshControlProps> = ({
       titleColor={Platform.OS === 'ios' ? refreshTitleColor : undefined}
       // Android 特定属性
       colors={Platform.OS === 'android' ? [refreshColor] : undefined}
-      progressBackgroundColor={Platform.OS === 'android' ? refreshBackgroundColor : undefined}
+      progressBackgroundColor={
+        Platform.OS === 'android' ? refreshBackgroundColor : undefined;
+      }
       // 通用属性
       {...props}
     />
   );
 };
 
-export default RefreshControl; 
+export default RefreshControl;

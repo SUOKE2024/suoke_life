@@ -4,7 +4,7 @@ import { agentService, AgentStatus, AgentMessage, AgentInteraction } from '../..
 export interface AgentState {
   // 智能体状态
   agents: Record<string, AgentStatus>;
-  loading: boolean;
+  loading: boolean;,
   error: string | null;
   // 当前交互
   currentInteractions: Record<string, AgentInteraction>;
@@ -13,7 +13,7 @@ export interface AgentState {
   // 智能体配置
   agentConfigs: Record<string, any>;
   // 性能指标
-  performanceMetrics: {;
+  performanceMetrics: {;,
   responseTime: Record<string, number>;
     successRate: Record<string, number>;
     healthScore: Record<string, number>;
@@ -35,13 +35,10 @@ const initialState: AgentState = {,
   performanceMetrics: {,
   responseTime: {},
     successRate: {},
-    healthScore: {},
-  },
+    healthScore: {}},
   userPreferences: {,
   preferredAgents: [],
-    interactionSettings: {},
-  },
-};
+    interactionSettings: {}}};
 // 异步操作 - 获取所有智能体状态
 export const fetchAllAgentStatuses = createAsyncThunk()
   'agents/fetchAllStatuses',
@@ -162,7 +159,7 @@ const agentSlice = createSlice({
       state.agentConfigs[agentId] = config;
     },
     // 更新性能指标
-    updatePerformanceMetrics: (state, action: PayloadAction<{,)
+    updatePerformanceMetrics: (state, action: PayloadAction<{),
   agentId: string;
       metrics: Partial<AgentState['performanceMetrics']>;
     }>) => {
@@ -182,8 +179,7 @@ const agentSlice = createSlice({
     // 批量更新智能体状态
     batchUpdateAgentStatuses: (state, action: PayloadAction<Record<string, AgentStatus>>) => {
       state.agents = { ...state.agents, ...action.payload };
-    },
-  },
+    }},
   extraReducers: (builder) => {
     // 获取所有智能体状态
     builder;
@@ -195,7 +191,7 @@ const agentSlice = createSlice({
         state.loading = false;
         state.agents = action.payload;
         // 更新性能指标
-        Object.entries(action.payload).forEach((([agentId, status]) => {
+        Object.entries(action.payload).forEach(([agentId, status]) => {
           if (status.responseTime) {
             state.performanceMetrics.responseTime[agentId] = status.responseTime;
           }
@@ -228,8 +224,7 @@ const agentSlice = createSlice({
           messages: [],
           context: {},
           startTime: Date.now(),
-          lastUpdate: Date.now(),
-        };
+          lastUpdate: Date.now()};
       })
       .addCase(startAgentInteraction.rejected, (state, action) => {
         state.error = action.payload as string;
@@ -275,8 +270,7 @@ const agentSlice = createSlice({
       .addCase(updateAgentConfiguration.rejected, (state, action) => {
         state.error = action.payload as string;
       });
-  },
-});
+  }});
 // 导出actions;
 export const {
   clearError,
@@ -286,8 +280,7 @@ export const {
   setAgentConfig,
   updatePerformanceMetrics,
   resetAgentState,
-  batchUpdateAgentStatuses,
-} = agentSlice.actions;
+  batchUpdateAgentStatuses} = agentSlice.actions;
 // 选择器
 export const selectAllAgents = (state: { agents: AgentState }) => state.agents.agents;
 export const selectAgentById = (agentId: string) => (state: { agents: AgentState }) =>

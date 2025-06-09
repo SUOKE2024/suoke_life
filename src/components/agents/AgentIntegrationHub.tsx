@@ -1,19 +1,19 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "../../placeholder";react-native;
 import React, { useState, useEffect } from "react";
 export interface Agent {
-  id: string;
+  id: string;,
   name: string;
-  type: xiaoai" | "xiaoke | "laoke" | soer;
+  type: xiaoai" | "xiaoke | "laoke" | soer;,
   status: "online | "offline" | busy";
-  capabilities: string[];
+  capabilities: string[];,
   lastActive: Date;
 }
 export interface AgentTask {
-  id: string;
+  id: string;,
   agentId: string;
-  type: string;
+  type: string;,
   status: "pending | "running" | completed" | "failed;"
-  priority: "low" | medium" | "high;
+  priority: "low" | medium" | "high;,
   createdAt: Date;
 }
 export interface AgentIntegrationHubProps {
@@ -28,7 +28,7 @@ export const AgentIntegrationHub: React.FC<AgentIntegrationHubProps>  = ({onAgen
   const [agents, setAgents] = useState<Agent[]>([]);
   const [tasks, setTasks] = useState<AgentTask[]>([]);
   const [loading, setLoading] = useState(true);
-  useEffect(() => {
+  useEffect() => {
     loadAgentsAndTasks();
   }, [])  // 检查是否需要添加依赖项;
   const loadAgentsAndTasks = async() => {}
@@ -139,20 +139,20 @@ const mockAgents: Agent[] = [;
     }
   };
   const renderAgentCard = (agent: Agent) => (;)
-    <TouchableOpacity
+    <TouchableOpacity;
 key={agent.id}
       style={styles.agentCard}
       onPress={() => onAgentSelect?.(agent)}
     >
       <View style={styles.agentHeader}>
         <Text style={styles.agentName}>{agent.name}</    Text>
-        <View style={{[styles.statusDot, { backgroundColor: getStatusColor(agent.status) }}]} /    >
+        <View style={[styles.statusDot, { backgroundColor: getStatusColor(agent.status) }}]} /    >
       </    View>
       <Text style={styles.agentType}>{agent.type.toUpperCase()}</    Text>
       <Text style={styles.agentStatus}>{agent.status}</    Text>
       <View style={styles.capabilitiesContainer}>
         <Text style={styles.capabilitiesTitle}>能力:</    Text>
-        {agent.capabilities.slice(0, 2).map((capability, index) => ())
+        {agent.capabilities.slice(0, 2).map(capability, index) => ())
           <Text key={index} style={styles.capability}>
             • {capability}
           </    Text>
@@ -174,10 +174,10 @@ key={agent.id}
         <View style={styles.taskHeader}>;
           <Text style={styles.taskType}>{task.type}</    Text>;
           <View style={styles.taskBadges}>;
-            <View style={{[styles.priorityBadge, { backgroundColor: getPriorityColor(task.priority) }}]}>;
+            <View style={[styles.priorityBadge, { backgroundColor: getPriorityColor(task.priority) }}]}>;
               <Text style={styles.badgeText}>{task.priority}</    Text>;
             </    View>;
-            <View style={{[styles.statusBadge, { backgroundColor: getTaskStatusColor(task.status) }}]}>;
+            <View style={[styles.statusBadge, { backgroundColor: getTaskStatusColor(task.status) }}]}>;
               <Text style={styles.badgeText}>{task.status}</    Text>;
             </    View>;
           </    View>;
@@ -234,7 +234,7 @@ key={agent.id}
     </    ScrollView>;
   );
 };
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   flex: 1,
     backgroundColor: #f5f5f5",
     padding: 16},

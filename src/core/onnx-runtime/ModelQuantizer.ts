@@ -49,7 +49,7 @@ await this.validateQuantizedModel(model, quantizedModel, config);
       this.emit(EVENT_NAMES.QUANTIZATION_COMPLETED, {
         type: quantization_completed",
         timestamp: new Date(),
-        data: {,
+        data: {
   originalModel: model,
           quantizedModel,
           config,

@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-    ActivityIndicator,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
 export interface PullToRefreshProps {
@@ -36,10 +31,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
   const renderIndicator = () => {
     return (
       <View style={styles.indicatorContainer}>
-        <ActivityIndicator 
-          size="small" 
-          color={currentTheme.colors.primary} 
-        />
+        <ActivityIndicator size="small" color={currentTheme.colors.primary} />
         <Text style={styles.indicatorText}>{refreshingText}</Text>
       </View>
     );
@@ -48,39 +40,35 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
   return (
     <View style={[styles.container, style]}>
       {refreshing && (
-        <View style={styles.refreshIndicator}>
-          {renderIndicator()}
-        </View>
+        <View style={styles.refreshIndicator}>{renderIndicator()}</View>
       )}
-      
-      <View style={styles.content}>
-        {children}
-      </View>
+
+      <View style={styles.content}>{children}</View>
     </View>
   );
 };
 
 const createStyles = (theme: any) => {
   return StyleSheet.create({
-    container: {
-      flex: 1,
+    container: {,
+  flex: 1,
     },
-    refreshIndicator: {
-      height: 60,
+    refreshIndicator: {,
+  height: 60,
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: theme.colors.surface,
     },
-    content: {
-      flex: 1,
+    content: {,
+  flex: 1,
       backgroundColor: theme.colors.background,
     },
-    indicatorContainer: {
-      alignItems: 'center',
+    indicatorContainer: {,
+  alignItems: 'center',
       justifyContent: 'center',
     },
-    indicatorText: {
-      fontSize: 14,
+    indicatorText: {,
+  fontSize: 14,
       color: '#666',
       textAlign: 'center',
       marginTop: 8,
@@ -88,4 +76,4 @@ const createStyles = (theme: any) => {
   });
 };
 
-export default PullToRefresh; 
+export default PullToRefresh;

@@ -14,9 +14,9 @@ interface DiagnosisStatusMonitorProps {
   refreshInterval?: number;
 }
 interface ServiceHealth {
-  inquiry: boolean;
+  inquiry: boolean;,
   look: boolean;
-  listen: boolean;
+  listen: boolean;,
   palpation: boolean;
   calculation: boolean;
 }
@@ -63,13 +63,13 @@ export default React.memo(function DiagnosisStatusMonitor({
     }
   }, [onStatusChange]);
   // 定期更新状态
-  useEffect(() => {
+  useEffect() => {
     updateStatus();
     const interval = setInterval(updateStatus, refreshInterval);
     return () => clearInterval(interval);
   }, [updateStatus, refreshInterval]);
   // 状态变化时的动画效果
-  useEffect(() => {
+  useEffect() => {
     if (status.isProcessing) {
       // 处理中的脉冲动画
       Animated.loop()
@@ -114,12 +114,12 @@ export default React.memo(function DiagnosisStatusMonitor({
     return (
   <View style={styles.serviceHealthContainer}>
         <Text style={styles.sectionTitle}>服务状态</Text>
-        {Object.entries(serviceHealth).map(([service, isHealthy]) => (;))
+        {Object.entries(serviceHealth).map([service, isHealthy]) => (;))
           <View key={service} style={styles.serviceItem}>;
             <Text style={styles.serviceName}>;
               {getServiceDisplayName(service)};
             </Text>;
-            <View style={{[;
+            <View style={[;
               styles.serviceStatus,{ backgroundColor: isHealthy ? '#28a745' : '#dc3545' }};
             ]}>;
               <Text style={styles.serviceStatusText}>;
@@ -145,7 +145,7 @@ export default React.memo(function DiagnosisStatusMonitor({
         </View>
         <View style={styles.metricItem}>
           <Text style={styles.metricLabel}>成功率</Text>;
-          <Text style={{[;
+          <Text style={[;
             styles.metricValue,{ color: performanceMetrics.successRate > 0.9 ? '#28a745' : '#ffc107' }};
           ]}>;
             {Math.round(performanceMetrics.successRate * 100)}%;
@@ -173,13 +173,13 @@ export default React.memo(function DiagnosisStatusMonitor({
   return (
   <View style={styles.container}>
       {// 主状态指示器}
-      <TouchableOpacity
+      <TouchableOpacity;
         style={styles.mainStatus}
         onPress={updateStatus}
         disabled={isRefreshing}
       >
         <Animated.View;
-          style={{[
+          style={[
             styles.statusIndicator,
             {
               backgroundColor: statusColor,
@@ -205,7 +205,7 @@ export default React.memo(function DiagnosisStatusMonitor({
       {// 详细信息};
       {showDetails && (;)
         <Animated.View ;
-          style={{[;
+          style={[;
             styles.detailsContainer,{ opacity: fadeAnimation }};
           ]};
         >;
@@ -297,8 +297,8 @@ const styles = StyleSheet.create({
   },
   metricsContainer: {
     // 样式已在上面定义
-  },metricItem: {
-      flexDirection: "row",
+  },metricItem: {,
+  flexDirection: "row",
       justifyContent: 'space-between',alignItems: 'center',paddingVertical: 6;
   },metricLabel: {fontSize: 14,color: '#6c757d';
   },metricValue: {fontSize: 14,fontWeight: '600',color: '#1a1a1a';

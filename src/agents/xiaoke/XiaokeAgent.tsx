@@ -37,7 +37,7 @@ professional",  tone: efficient",      / 高效的语调*  商业专业*  服务
     try {
       const response = await apiClient.post(`${this.serviceEndpoint}/recommend-service`, {/            user_profile: userProfile,health_data: healthData,)
         preferences: preferenc;e;s;};);
-      return response.data.map(rec: unknow;n;); => ({,)
+      return response.data.map(rec: unknow;n;); => ({),
   id: rec.id,
         name: rec.name,
         category: rec.category,
@@ -65,7 +65,7 @@ professional",  tone: efficient",      / 高效的语调*  商业专业*  服务
       const response = await apiClient.post(`${this.serviceEndpoint}/match-doctor`, {/            symptoms,specialty,)
         location,
         preferenc;e;s;};);
-      return response.data.map(match: unknow;n;); => ({,)
+      return response.data.map(match: unknow;n;); => ({),
   doctorId: match.doctor_id,
         name: match.name,
         specialty: match.specialty,
@@ -102,7 +102,7 @@ professional",  tone: efficient",      / 高效的语调*  商业专业*  服务
   ): Promise<ProductInfo[] /    >  {
     try {
       const response = await apiClient.post(`${this.serviceEndpoint}/products/search`, {/            query,filte;r;s;};);
-      return response.data.map(product: unknow;n;); => ({,)
+      return response.data.map(product: unknow;n;); => ({),
   id: product.id,
         name: product.name,
         category: product.category,
@@ -125,7 +125,7 @@ professional",  tone: efficient",      / 高效的语调*  商业专业*  服务
   ///    >  {
     try {
       const response = await apiClient.get(`${this.serviceEndpoint}/supply-chain/${productId;};`;);// return {productId: response.data.product_id,
-        stages: response.data.stages.map(stage: unknow;n;); => ({,)
+        stages: response.data.stages.map(stage: unknow;n;); => ({),
   id: stage.id,
           name: stage.name,
           description: stage.description,
@@ -162,7 +162,7 @@ professional",  tone: efficient",      / 高效的语调*  商业专业*  服务
   }
   ///    >  {
     try {
-      const response = await apiClient.get(`${this.serviceEndpoint}/appointments/user/${userId;};`;);// return response.data.map(appointment: unknow;n;); => ({,)
+      const response = await apiClient.get(`${this.serviceEndpoint}/appointments/user/${userId;};`;);// return response.data.map(appointment: unknow;n;); => ({),
   id: appointment.id,
         doctorId: appointment.doctor_id,
         patientId: appointment.patient_id,

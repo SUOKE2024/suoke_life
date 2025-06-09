@@ -68,16 +68,16 @@ export class LaokeKnowledgeIntegration {
     }
   ): Promise<{
     recommendations: HealthRecommendation[],
-  constitution: Constitution;
-    customAdvice: string;
+  constitution: Constitution;,
+  customAdvice: string;
   }> {
     try {
       // 获取体质详情
       const constitution = await medKnowledgeService.getConstitutionById(constitutionId);
       // 获取个性化推荐
       const recommendations = await medKnowledgeService.getPersonalizedRecommendations({userId: 'current_user', // 实际应用中应该是真实用户ID;)
-        constitution_id: constitutionId,symptoms: userContext.currentSymptoms,preferences: {
-      treatment_type: "traditional",
+        constitution_id: constitutionId,symptoms: userContext.currentSymptoms,preferences: {,
+  treatment_type: "traditional",
       lifestyle_focus: userContext.lifestyle;
         };
       });
@@ -96,8 +96,8 @@ export class LaokeKnowledgeIntegration {
   async intelligentSymptomSearch(symptomDescription: string): Promise<{,
   symptoms: Symptom[];
     relatedConstitutions: Constitution[],
-  suggestedTreatments: string[];
-    tcmAnalysis: string;
+  suggestedTreatments: string[];,
+  tcmAnalysis: string;
   }> {
     try {
       // 搜索相关症状
@@ -120,15 +120,15 @@ export class LaokeKnowledgeIntegration {
   /**
   * 知识图谱查询和推理
   */
-  async queryKnowledgeGraph(query: {,)
+  async queryKnowledgeGraph(query: {),
   entityType: string;
     entityId: string;
     relationshipType?: string;
     depth?: number;
   }): Promise<{
     entity: any,
-  relationships: any[];
-    insights: string[];
+  relationships: any[];,
+  insights: string[];
   }> {
     try {
       // 获取实体关系
@@ -151,14 +151,14 @@ export class LaokeKnowledgeIntegration {
   /**
   * 综合健康评估
   */
-  async comprehensiveHealthAssessment(assessmentData: {,)
+  async comprehensiveHealthAssessment(assessmentData: {),
   symptoms: string[];
     constitution?: string;
     lifestyle: {,
   diet: string[];
       exercise: string[],
-  sleep: string;
-      stress: string;
+  sleep: string;,
+  stress: string;
     };
     demographics: {,
   age: number;
@@ -166,10 +166,10 @@ export class LaokeKnowledgeIntegration {
     };
   }): Promise<{
     overallScore: number,
-  riskFactors: string[];
-    recommendations: HealthRecommendation[],
-  preventiveActions: string[];
-    followUpPlan: string;
+  riskFactors: string[];,
+  recommendations: HealthRecommendation[],
+  preventiveActions: string[];,
+  followUpPlan: string;
   }> {
     try {
       // 分析症状

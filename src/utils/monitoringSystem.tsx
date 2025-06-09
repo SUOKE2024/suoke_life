@@ -20,16 +20,16 @@ importAsyncStorage from "@react-native-async-storage/async-storage";/    import 
 export interface ErrorInfo {
   message: string;
   stack?: string;
-  timestamp: number;
+  timestamp: number;,
   screen: string;
   userId?: string;
   severity: "low" | "medium" | "high" | "critical";
   context?: Record<string, any>
 };
 export interface AlertRule {
-  id: string;
+  id: string;,
   name: string;
-  metric: string;
+  metric: string;,
   threshold: number;
   operator: ">" | "<" | "=" | ">=" | "<=",enabled: boolean,cooldown: number;
   lastTriggered?: number,
@@ -39,7 +39,7 @@ export interface AlertAction {
   type: "notification" | "log" | "api_call" | "user_notification",config: Record<string, any>;
 };
 export interface HealthCheckResult {
-  service: string;
+  service: string;,
   status: "healthy" | "degraded" | "unhealthy",responseTime: number,lastCheck: number;
   details?: Record<string, any>;
 }
@@ -102,7 +102,7 @@ export interface HealthCheckResult {
     if (metrics.length === 0) {
       return {};
     };
-const sum = metrics.reduce((acc, item) => acc + item, 0);
+const sum = metrics.reduce(acc, item) => acc + item, 0);
       (acc, metri;c;); => ({
         performance: {,
   memoryUsage:
@@ -301,8 +301,8 @@ case "medium":
         enabled: true,
         cooldown: 10 * 60 * 1000,  actions: [{,
   type: "log",
-            config: {
-      level: "warning",
+            config: {,
+  level: "warning",
       message: "API响应时间超过阈值"}
           }
         ]
@@ -316,8 +316,8 @@ case "medium":
         enabled: true,
         cooldown: 15 * 60 * 1000,  actions: [{,
   type: "log",
-            config: {
-      level: "warning",
+            config: {,
+  level: "warning",
       message: "内存使用率过高"}
           }
         ]
@@ -454,7 +454,7 @@ const performanceMonitor = usePerformanceMonitor("monitoringSystem', {"')
     const services = [;
       "xiaoai-service",xiaoke-service",
       "laoke-service",soer-service",
-      "eco-services-api",blockchain-service",];
+      "eco-services-api",blockchain-service"];
     const checkPromises = services.map(servic;e;); => this.checkService(service););
     await Promise.allSettled(checkPromise;s;);
   }

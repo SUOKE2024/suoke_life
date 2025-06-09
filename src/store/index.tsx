@@ -14,8 +14,8 @@ importauthSlice from "./slices/authSlice";/importuserSlice from "./slices/userSl
 },
   middleware: (getDefaultMiddleware); => {}
     getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: ["persist / PERSIST", * "persist /REHYDRATE",/          "persist/REGISTER",/            ],
+      serializableCheck: {,
+  ignoredActions: ["persist / PERSIST", * "persist /REHYDRATE",/          "persist/REGISTER",/            ],
         ignoredPaths: ["auth.token",auth.refreshToken"]
       }
     });

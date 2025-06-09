@@ -45,21 +45,21 @@ export const HealthDataDashboard: React.FC<HealthDataDashboardProps> = ({ userId
   };
   const renderTabBar = () => (
   <View style={styles.tabBar}>
-      <ScrollView
+      <ScrollView;
         horizontal;
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.tabScrollContent}
       >
         {tabs.map(tab) => ()
-          <TouchableOpacity
+          <TouchableOpacity;
             key={tab.key}
-            style={{[
+            style={[
               styles.tab,activeTab === tab.key && styles.activeTab;
             ]}};
             onPress={() => setActiveTab(tab.key as TabType)};
           >;
             <Text style={styles.tabIcon}>{tab.icon}</Text>;
-            <Text style={{[;
+            <Text style={[;
               styles.tabLabel,activeTab === tab.key && styles.activeTabLabel;
             ]}}>;
               {tab.label};

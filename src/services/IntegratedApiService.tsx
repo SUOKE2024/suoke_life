@@ -68,7 +68,7 @@ export interface BlockchainService {
 }
 // 服务状态接口
 export interface ServiceHealth {
-  services: ServiceStatus[];
+  services: ServiceStatus[];,
   overallHealth: 'healthy' | 'degraded' | 'unhealthy';
   lastCheck: string;
 }
@@ -93,8 +93,7 @@ export class IntegratedApiService {
     },
     updateProfile: async (data) => {
       return apiClient.put("AUTH",/auth/profile', data);
-    },
-  };
+    }};
   // 用户服务
   user: UserService = {,
   getProfile: async () => {
@@ -114,8 +113,7 @@ export class IntegratedApiService {
     },
     updateHealthProfile: async (data) => {
       return apiClient.put("USER",/users/health-profile', data);
-    },
-  };
+    }};
   // 健康数据服务
   healthData: HealthDataService = {,
   getData: async (params) => {
@@ -140,8 +138,7 @@ export class IntegratedApiService {
     },
     getAnalysis: async (dataId) => {
       return apiClient.get('HEALTH_DATA', `/health-data/${dataId}/analysis`);
-    },
-  };
+    }};
   // 智能体服务
   agents: AgentService = {,
   getStatus: async () => {
@@ -155,10 +152,8 @@ export class IntegratedApiService {
       const response = await fetch(url, {
       method: "POST",
       headers: {
-          'Content-Type': "application/json",Accept': 'text/event-stream',
-        },
-        body: JSON.stringify({ message }),
-      });
+          'Content-Type': "application/json",Accept': 'text/event-stream'},
+        body: JSON.stringify({ message })});
       if (!response.ok) {
         throw new Error(`Stream chat failed: ${response.statusText}`);
       }
@@ -172,8 +167,7 @@ export class IntegratedApiService {
     },
     updateSettings: async (settings) => {
       return apiClient.put("AGENTS",/agents/settings', settings);
-    },
-  };
+    }};
   // 四诊服务
   diagnosis: DiagnosisService = {,
   performLookDiagnosis: async (data) => {
@@ -190,8 +184,7 @@ export class IntegratedApiService {
     },
     getComprehensiveDiagnosis: async (data) => {
       return apiClient.post("DIAGNOSIS",/diagnosis/comprehensive', data);
-    },
-  };
+    }};
   // RAG服务
   rag: RAGService = {,
   query: async (question, context) => {
@@ -202,10 +195,8 @@ export class IntegratedApiService {
       const response = await fetch(url, {
       method: "POST",
       headers: {
-          'Content-Type': "application/json",Accept': 'text/event-stream',
-        },
-        body: JSON.stringify({ question, context }),
-      });
+          'Content-Type': "application/json",Accept': 'text/event-stream'},
+        body: JSON.stringify({ question, context })});
       if (!response.ok) {
         throw new Error(`Stream query failed: ${response.statusText}`);
       }
@@ -225,8 +216,7 @@ export class IntegratedApiService {
     },
     getConstitutionAnalysis: async (data) => {
       return apiClient.post("RAG",/rag/tcm/constitution', data);
-    },
-  };
+    }};
   // 区块链服务
   blockchain: BlockchainService = {,
   getRecords: async (userId) => {
@@ -244,8 +234,7 @@ export class IntegratedApiService {
     },
     transferToken: async (data) => {
       return apiClient.post("BLOCKCHAIN",/blockchain/transfer', data);
-    },
-  };
+    }};
   // 服务发现和健康检查
   async getServiceHealth(): Promise<ServiceHealth> {
     try {
@@ -264,14 +253,12 @@ export class IntegratedApiService {
       return {
         services,
         overallHealth,
-        lastCheck: new Date().toISOString(),
-      };
+        lastCheck: new Date().toISOString()};
     } catch (error) {
       return {
         services: [],
         overallHealth: 'unhealthy',
-        lastCheck: new Date().toISOString(),
-      };
+        lastCheck: new Date().toISOString()};
     }
   }
   // 检查特定服务健康状态
@@ -284,8 +271,7 @@ export class IntegratedApiService {
         name: serviceName,
         status: 'unhealthy',
         instances: 0,
-        lastCheck: new Date().toISOString(),
-      };
+        lastCheck: new Date().toISOString()};
     }
   }
   // 获取网关状态
@@ -299,14 +285,12 @@ export class IntegratedApiService {
         cache: cacheStats,
         circuitBreaker: circuitBreakerState,
         features: GATEWAY_FEATURES,
-        timestamp: new Date().toISOString(),
-      };
+        timestamp: new Date().toISOString()};
     } catch (error) {
       return {
         healthy: false,
         error: error instanceof Error ? error.message : 'Unknown error',
-        timestamp: new Date().toISOString(),
-      };
+        timestamp: new Date().toISOString()};
     }
   }
   // 清除缓存
@@ -318,9 +302,9 @@ export class IntegratedApiService {
 export const integratedApiService = new IntegratedApiService();
 // React Context;
 interface ApiServiceContextType {
-  apiService: IntegratedApiService;
+  apiService: IntegratedApiService;,
   serviceHealth: ServiceHealth | null;
-  isLoading: boolean;
+  isLoading: boolean;,
   error: string | null;
   refreshHealth: () => Promise<void>;
 }
@@ -345,7 +329,7 @@ export const ApiServiceProvider: React.FC<ApiServiceProviderProps> = ({ children
       setIsLoading(false);
     }
   };
-  useEffect(() => {
+  useEffect() => {
     // 初始化时检查服务健康状态
     refreshHealth();
     // 如果启用了服务发现，定期检查健康状态
@@ -359,8 +343,7 @@ export const ApiServiceProvider: React.FC<ApiServiceProviderProps> = ({ children
     serviceHealth,
     isLoading,
     error,
-    refreshHealth,
-  };
+    refreshHealth};
   return (
   <ApiServiceContext.Provider value={value}>
       {children}

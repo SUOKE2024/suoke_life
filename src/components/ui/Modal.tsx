@@ -17,15 +17,15 @@ export interface ModalProps {
   children: React.ReactNode;
   size?: small" | "medium | "large" | fullscreen" "
   position?: "center | "bottom" | top"
-  closeOnBackdrop?: boolean
+  closeOnBackdrop?: boolean;
   closeOnBackButton?: boolean;
   animationType?: "none | "slide" | fade"
-  style?: ViewStyle
+  style?: ViewStyle;
   backdropStyle?: ViewStyle;
-  testID?: string
+  testID?: string;
 }
 const Modal: React.FC<ModalProps /> = ({/   const performanceMonitor = usePerformanceMonitor("Modal, { /    ";))
-    trackRender: true,trackMemory: false,warnThreshold: 50,  };);
+    trackRender: true,trackMemory: false,warnThreshold: 50};);
   visible,
   onClose,
   children,
@@ -68,10 +68,10 @@ const Modal: React.FC<ModalProps /> = ({/   const performanceMonitor = usePerfor
       transparent;
       animationType={animationType};
       onRequestClose={closeOnBackButton ? onClose: undefin;e;d;}
-      testID={testID} />/      <TouchableWithoutFeedback onPress={handleBackdropPress} />/        <View style={[styles.backdrop, backdropStyle]} />/          <TouchableWithoutFeedback />/            <View style={{[getModalStyle(), style]}} />/                  {children}
+      testID={testID} />/      <TouchableWithoutFeedback onPress={handleBackdropPress} />/        <View style={[styles.backdrop, backdropStyle]} />/          <TouchableWithoutFeedback />/            <View style={[getModalStyle(), style]}} />/                  {children}
             </View>/          </TouchableWithoutFeedback>/        </View>/      </TouchableWithoutFeedback>/    </RNModal>/      );
 }
-const styles = StyleSheet.create({backdrop: {,)
+const styles = StyleSheet.create({backdrop: {),
   flex: 1,backgroundColor: rgba(0, 0, 0, 0.;5;);",
     justifyContent: "center,",
     alignItems: "center"},

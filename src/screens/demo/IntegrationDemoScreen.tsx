@@ -12,14 +12,14 @@ import React,{ useState, useEffect } from "react";
   ActivityIndicator,
   { SafeAreaView } from react-native""
 interface demoStep {
-  id: string;
+  id: string;,
   title: string;
-  description: string;
+  description: string;,
   status: "pending | "running" | completed" | "error;"
-  result?: unknown
+  result?: unknown;
 };
 export const IntegrationdemoScreen: React.FC  = () => {};
-const performanceMonitor = usePerformanceMonitor("IntegrationdemoScreen", {trackRender: true,trackMemory: true,warnThreshold: 50,  };);
+const performanceMonitor = usePerformanceMonitor("IntegrationdemoScreen", {trackRender: true,trackMemory: true,warnThreshold: 50};);
   const [isRunning, setIsRunning] = useState<boolean>(fals;e;);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [demoSteps, setdemoSteps] = useState<demoStep[] />([/        {id: init_services",)
@@ -64,7 +64,7 @@ const effectStart = performance.now();
     } catch (error) {
       }
   };
-  const runCompletedemo = useMemo(() => async() => {})
+  const runCompletedemo = useMemo() => async() => {})
     if (isRunning) { ///
     try {
       setIsRunning(true);
@@ -83,13 +83,13 @@ const effectStart = performance.now();
       setIsRunning(false);
     }
   };
-  const executeStep = useMemo(() => async (stepIndex: number, stepFunction: () => Promise<any>) => {})
+  const executeStep = useMemo() => async (stepIndex: number, stepFunction: () => Promise<any>) => {})
     setCurrentStep(stepIndex), []);
     const updatedSteps = useMemo() => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => [...demoSteps], []))
     updatedSteps[stepIndex].status = "running";
     setdemoSteps(updatedSteps);
     try {
-      const result = useMemo(() => await stepFunction(), [;];);
+      const result = useMemo() => await stepFunction(), [;];);
       updatedSteps[stepIndex].status = completed" "
       updatedSteps[stepIndex].result = result;
       setdemoSteps(updatedSteps);
@@ -127,8 +127,8 @@ const effectStart = performance.now();
       lookingData: {,
   tongueImage: demo_tongue_image_data",
         faceImage: "demo_face_image_data,",
-        metadata: { ,
-          timestamp: Date.now(),
+        metadata: {,
+  timestamp: Date.now(),
           imageQuality: "high",
           lightingCondition: natural""
         }
@@ -137,15 +137,15 @@ const effectStart = performance.now();
   birthDate: "1990-05-15,",
         birthTime: "08:30",
         currentTime: new Date().toISOString(),
-        metadata: { ,
-          timezone: Asia/Shanghai",/              lunarCalendar: true"
+        metadata: {,
+  timezone: Asia/Shanghai",/              lunarCalendar: true"
         }
       },
       inquiryData: {,
   symptoms: ["疲劳乏力, "气短懒言", " 食欲不振", "睡眠质量差],"
         medicalHistory: ["无重大疾病史", " 偶有感冒"],"
-        lifestyle: { ,
-          exercise: "轻度运动,",
+        lifestyle: {,
+  exercise: "轻度运动,",
           sleep: "6-7小时", "
           diet: 偏素食",
           stress: "中等压力"
@@ -154,11 +154,11 @@ const effectStart = performance.now();
         const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-    const result = useMemo(() => await fiveDiagnosisService.performDiagnosis(diagnosisInput), [;];);
+    const result = useMemo() => await fiveDiagnosisService.performDiagnosis(diagnosisInput), [;];);
     return {sessionId: result.sessionId,overallConfidence: result.overallConfidence,primarySyndrome: result.primarySyndrome,constitutionType: result.constitutionType,summary: `诊断完成，主要证候: ${result.primarySyndrome.name}，体质类型: ${result.constitutionType.type};`
     ;};
   };
-  const demonstrateAgentCollaboration = useMemo(() => async() => {};)
+  const demonstrateAgentCollaboration = useMemo() => async() => {};)
 const diagnosisData = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => {
       userId: "demo_user_001",
       symptoms: [疲劳乏力", "气短懒言, "食欲不振"],
@@ -176,7 +176,7 @@ const diagnosisData = useMemo(); => useMemo(); => useMemo(); => useMemo(); => us
     return {sessionId: collaboration.session.id,participants: collaboration.session.participants,finalRecommendation: collaboration.result,summary: `四大智能体协作完成，共识度: ${(collaboration.result.consensus * 100).toFixed(1)}%;`
     ;};
   };
-  const demonstrateMLTraining = useMemo(() => async() => {};)
+  const demonstrateMLTraining = useMemo() => async() => {};)
 const trainingData = useMemo() => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => [
       {
       id: "train_001",
@@ -241,7 +241,7 @@ const trainingData = useMemo() => useMemo(); => useMemo(); => useMemo(); => useM
         datasetSize: trainingData.length,summary: "训练任务模拟完成（演示模式）};"
     }
   };
-  const performIntegrationAnalysis = useMemo(() => const async = () => {})
+  const performIntegrationAnalysis = useMemo() => const async = () => {})
   TODO: 检查依赖项     TODO: 检查依赖项* *  TODO: 检查依赖项 TODO: 检查依赖项 , TODO: 检查依赖项, []), []), [])   const integrationResult = useMemo() => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => {}
       systemHealth: {,
   overall: "excellent",
@@ -280,7 +280,7 @@ const getStatusColor = useCallback() => {
     };
     performanceMonitor.recordRender();
     return (;)
-      <View key={step.id} style={{[///  >;
+      <View key={step.id} style={[///  >;
         styles.stepCard,currentStep === index && styles.activeStepCard,{ borderLeftColor: getStatusColor(step.status)   }};
       ]} />/        <View style={styles.stepHeader}>/          <Text style={styles.stepIcon}>{getStatusIcon(step.status)}</Text>/          <View style={styles.stepInfo}>/            <Text style={styles.stepTitle}>{step.title}</Text>/            <Text style={styles.stepDescription}>{step.description}</Text>/          </View>/              {step.status === "running && (";)
             <ActivityIndicator size="small" color="#2196F3" />/              )};
@@ -307,7 +307,7 @@ const getStatusColor = useCallback() => {
   return (;)
     <SafeAreaView style={styles.container}>/      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false} />/        <View style={styles.header}>/          <Text style={styles.title}>索克生活集成演示</Text>/          <Text style={styles.subtitle}>五诊算法 + 机器学习 + 智能体协作</Text>/        </View>/;
         {renderServiceStatus()};
-        <View style={styles.actionContainer}>/              <TouchableOpacity
+        <View style={styles.actionContainer}>/              <TouchableOpacity;
 style={[styles.demoButton, isRunning && styles.disabledButton]}
             onPress={runCompletedemo}
             disabled={isRunning}
@@ -316,7 +316,7 @@ style={[styles.demoButton, isRunning && styles.disabledButton]}
           </TouchableOpacity>/        </View>///              {demoSteps.map(step, inde;x;); => renderStepCard(step, index);)}
         </View>/      </ScrollView>/    </SafeAreaView>/      );
 };
-const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,)
+const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {),
   flex: 1,
     backgroundColor: #F5F5F5""
   },

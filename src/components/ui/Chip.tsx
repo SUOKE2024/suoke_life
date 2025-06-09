@@ -1,11 +1,11 @@
 import React from 'react';
 import {
-    StyleSheet,
-    Text,
-    TextStyle,
-    TouchableOpacity,
-    View,
-    ViewStyle,
+  StyleSheet,
+  Text,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -16,7 +16,14 @@ export interface ChipProps {
   disabled?: boolean;
   variant?: 'filled' | 'outlined' | 'elevated';
   size?: 'small' | 'medium' | 'large';
-  color?: 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info';
+  color?:
+    | 'default'
+    | 'primary'
+    | 'secondary'
+    | 'success'
+    | 'warning'
+    | 'error'
+    | 'info';
   avatar?: React.ReactNode;
   icon?: React.ReactNode;
   deleteIcon?: React.ReactNode;
@@ -53,38 +60,38 @@ export const Chip: React.FC<ChipProps> = ({
   // 获取颜色配置
   const getColorConfig = () => {
     const baseColors = {
-      default: {
-        background: currentTheme.colors.surfaceVariant,
+      default: {,
+  background: currentTheme.colors.surfaceVariant,
         text: currentTheme.colors.onSurfaceVariant,
         border: currentTheme.colors.outline,
       },
-      primary: {
-        background: currentTheme.colors.primary,
+      primary: {,
+  background: currentTheme.colors.primary,
         text: currentTheme.colors.onPrimary,
         border: currentTheme.colors.primary,
       },
-      secondary: {
-        background: currentTheme.colors.secondary,
+      secondary: {,
+  background: currentTheme.colors.secondary,
         text: currentTheme.colors.onSecondary,
         border: currentTheme.colors.secondary,
       },
-      success: {
-        background: '#4CAF50',
+      success: {,
+  background: '#4CAF50',
         text: '#ffffff',
         border: '#4CAF50',
       },
-      warning: {
-        background: '#FF9800',
+      warning: {,
+  background: '#FF9800',
         text: '#ffffff',
         border: '#FF9800',
       },
-      error: {
-        background: currentTheme.colors.error,
+      error: {,
+  background: currentTheme.colors.error,
         text: '#ffffff',
         border: currentTheme.colors.error,
       },
-      info: {
-        background: '#2196F3',
+      info: {,
+  background: '#2196F3',
         text: '#ffffff',
         border: '#2196F3',
       },
@@ -112,11 +119,15 @@ export const Chip: React.FC<ChipProps> = ({
           shadowOpacity: 0.1,
           shadowRadius: 4,
         };
-      default: // filled
+      default: // filled;
         return {
-          backgroundColor: selected ? colorConfig.background : currentTheme.colors.surfaceVariant,
+          backgroundColor: selected;
+            ? colorConfig.background;
+            : currentTheme.colors.surfaceVariant,
           borderColor: 'transparent',
-          textColor: selected ? colorConfig.text : currentTheme.colors.onSurfaceVariant,
+          textColor: selected;
+            ? colorConfig.text;
+            : currentTheme.colors.onSurfaceVariant,
           borderWidth: 0,
         };
     }
@@ -141,7 +152,7 @@ export const Chip: React.FC<ChipProps> = ({
           iconSize: 20,
           borderRadius: 20,
         };
-      default: // medium
+      default: // medium;
         return {
           height: 32,
           paddingHorizontal: 12,
@@ -156,8 +167,8 @@ export const Chip: React.FC<ChipProps> = ({
   const sizeConfig = getSizeConfig();
 
   const styles = StyleSheet.create({
-    container: {
-      flexDirection: 'row',
+    container: {,
+  flexDirection: 'row',
       alignItems: 'center',
       height: sizeConfig.height,
       paddingHorizontal: sizeConfig.paddingHorizontal,
@@ -174,38 +185,38 @@ export const Chip: React.FC<ChipProps> = ({
         shadowRadius: colorConfig.shadowRadius,
       }),
     },
-    avatar: {
-      marginRight: 6,
+    avatar: {,
+  marginRight: 6,
       width: sizeConfig.iconSize,
       height: sizeConfig.iconSize,
       borderRadius: sizeConfig.iconSize / 2,
       overflow: 'hidden',
     },
-    icon: {
-      marginRight: 6,
+    icon: {,
+  marginRight: 6,
       width: sizeConfig.iconSize,
       height: sizeConfig.iconSize,
     },
-    text: {
-      flex: 1,
+    text: {,
+  flex: 1,
       fontSize: sizeConfig.fontSize,
       fontWeight: '500',
       color: colorConfig.textColor,
       textAlign: 'center',
     },
-    deleteIcon: {
-      marginLeft: 6,
+    deleteIcon: {,
+  marginLeft: 6,
       width: sizeConfig.iconSize,
       height: sizeConfig.iconSize,
       justifyContent: 'center',
       alignItems: 'center',
     },
-    deleteButton: {
-      padding: 2,
+    deleteButton: {,
+  padding: 2,
       borderRadius: sizeConfig.iconSize / 2,
     },
-    deleteText: {
-      fontSize: sizeConfig.iconSize - 4,
+    deleteText: {,
+  fontSize: sizeConfig.iconSize - 4,
       color: colorConfig.textColor,
       fontWeight: 'bold',
     },
@@ -227,20 +238,20 @@ export const Chip: React.FC<ChipProps> = ({
     <>
       {avatar && <View style={styles.avatar}>{avatar}</View>}
       {icon && <View style={styles.icon}>{icon}</View>}
-      
+
       <Text style={[styles.text, textStyle]} numberOfLines={1}>
         {displayText}
       </Text>
-      
+
       {(deleteIcon || onDelete) && (
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.deleteIcon, styles.deleteButton]}
           onPress={handleDelete}
           disabled={disabled}
           accessible={accessible}
           accessibilityRole="button"
           accessibilityLabel="删除标签"
-          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          hitSlop={ top: 8, bottom: 8, left: 8, right: 8 }}
         >
           {deleteIcon || <Text style={styles.deleteText}>×</Text>}
         </TouchableOpacity>
@@ -250,14 +261,14 @@ export const Chip: React.FC<ChipProps> = ({
 
   if (onPress) {
     return (
-      <TouchableOpacity
+      <TouchableOpacity;
         style={[styles.container, style]}
         onPress={handlePress}
         disabled={disabled}
         accessible={accessible}
         accessibilityRole="button"
         accessibilityLabel={`标签: ${displayText}`}
-        accessibilityState={{ selected, disabled }}
+        accessibilityState={ selected, disabled }}
         testID={testID}
       >
         {renderContent()}
@@ -266,7 +277,7 @@ export const Chip: React.FC<ChipProps> = ({
   }
 
   return (
-    <View
+    <View;
       style={[styles.container, style]}
       accessible={accessible}
       accessibilityRole="text"
@@ -278,4 +289,4 @@ export const Chip: React.FC<ChipProps> = ({
   );
 };
 
-export default Chip; 
+export default Chip;

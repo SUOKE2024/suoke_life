@@ -1,22 +1,27 @@
 import React, { useCallback, useState } from 'react';
 import {
-    ActivityIndicator,
-    Alert,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { colors, spacing } from '../../../constants/theme';
-import { DiagnosisComponentProps, ListenDiagnosisData } from '../../../types/diagnosis';
+import {
+  DiagnosisComponentProps,
+  ListenDiagnosisData,
+} from '../../../types/diagnosis';
 
 export const ListenDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
   onComplete,
   onCancel,
 }) => {
   const [isRecording, setIsRecording] = useState(false);
-  const [recordingType, setRecordingType] = useState<'voice' | 'breathing' | 'cough' | null>(null);
+  const [recordingType, setRecordingType] = useState<
+    'voice' | 'breathing' | 'cough' | null;
+  >(null);
   const [recordings, setRecordings] = useState<{
     voice?: string;
     breathing?: string;
@@ -25,28 +30,34 @@ export const ListenDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<any>(null);
 
-  const startRecording = useCallback((type: 'voice' | 'breathing' | 'cough') => {
-    setIsRecording(true);
-    setRecordingType(type);
-    
-    // 模拟录音过程
-    setTimeout(() => {
-      setIsRecording(false);
-      setRecordings(prev => ({
-        ...prev,
-        [type]: `recording_${type}_${Date.now()}.wav`
-      }));
-      setRecordingType(null);
-      Alert.alert('录音完成', `${getRecordingTypeLabel(type)}录音已保存`);
-    }, 3000);
-  }, []);
+  const startRecording = useCallback(type: 'voice' | 'breathing' | 'cough') => {
+      setIsRecording(true);
+      setRecordingType(type);
+
+      // 模拟录音过程
+      setTimeout() => {
+        setIsRecording(false);
+        setRecordings(prev) => ({
+          ...prev,
+          [type]: `recording_${type}_${Date.now()}.wav`,
+        }));
+        setRecordingType(null);
+        Alert.alert('录音完成', `${getRecordingTypeLabel(type)}录音已保存`);
+      }, 3000);
+    },
+    []
+  );
 
   const getRecordingTypeLabel = (type: 'voice' | 'breathing' | 'cough') => {
     switch (type) {
-      case 'voice': return '语音';
-      case 'breathing': return '呼吸音';
-      case 'cough': return '咳嗽音';
-      default: return '';
+      case 'voice':
+        return '语音';
+      case 'breathing':
+        return '呼吸音';
+      case 'cough':
+        return '咳嗽音';
+      default:
+        return '';
     }
   };
 
@@ -59,30 +70,36 @@ export const ListenDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
     setIsAnalyzing(true);
     try {
       // 模拟音频分析过程
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      await new Promise(resolve) => setTimeout(resolve, 2000));
+
       const mockResult = {
-        voiceAnalysis: recordings.voice ? {
-          tone: '声音洪亮',
-          rhythm: '语速适中',
-          quality: '音质清晰',
-          features: ['声音有力', '语调平稳'],
-          confidence: 0.88,
-        } : null,
-        breathingAnalysis: recordings.breathing ? {
-          pattern: '呼吸平稳',
-          depth: '深度适中',
-          frequency: '频率正常',
-          features: ['呼吸顺畅', '无异常音'],
-          confidence: 0.85,
-        } : null,
-        coughAnalysis: recordings.cough ? {
-          type: '干咳',
-          intensity: '轻微',
-          frequency: '偶发',
-          features: ['咳嗽清浅', '无痰音'],
-          confidence: 0.82,
-        } : null,
+        voiceAnalysis: recordings.voice;
+          ? {
+              tone: '声音洪亮',
+              rhythm: '语速适中',
+              quality: '音质清晰',
+              features: ['声音有力', '语调平稳'],
+              confidence: 0.88,
+            }
+          : null,
+        breathingAnalysis: recordings.breathing;
+          ? {
+              pattern: '呼吸平稳',
+              depth: '深度适中',
+              frequency: '频率正常',
+              features: ['呼吸顺畅', '无异常音'],
+              confidence: 0.85,
+            }
+          : null,
+        coughAnalysis: recordings.cough;
+          ? {
+              type: '干咳',
+              intensity: '轻微',
+              frequency: '偶发',
+              features: ['咳嗽清浅', '无痰音'],
+              confidence: 0.82,
+            }
+          : null,
         overallAssessment: '闻诊结果显示呼吸系统功能正常',
         recommendations: [
           '保持室内空气流通',
@@ -99,9 +116,9 @@ export const ListenDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
     }
   }, [recordings]);
 
-  const handleComplete = useCallback(() => {
-    const data: ListenDiagnosisData = {
-      voiceRecording: recordings.voice,
+  const handleComplete = useCallback() => {
+    const data: ListenDiagnosisData = {,
+  voiceRecording: recordings.voice,
       breathingPattern: recordings.breathing,
       coughSound: recordings.cough,
       metadata: {
@@ -116,18 +133,18 @@ export const ListenDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
     type: 'voice' | 'breathing' | 'cough',
     title: string,
     description: string,
-    instruction: string
+    instruction: string;
   ) => (
     <View style={styles.recordingSection}>
       <Text style={styles.sectionTitle}>{title}</Text>
       <Text style={styles.sectionDescription}>{description}</Text>
       <Text style={styles.instructionText}>{instruction}</Text>
-      
+
       <View style={styles.recordingContainer}>
         {recordings[type] ? (
           <View style={styles.recordedIndicator}>
             <Text style={styles.recordedText}>✓ 已录制</Text>
-            <TouchableOpacity
+            <TouchableOpacity;
               style={styles.reRecordButton}
               onPress={() => startRecording(type)}
               disabled={isRecording}
@@ -136,10 +153,10 @@ export const ListenDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
             </TouchableOpacity>
           </View>
         ) : (
-          <TouchableOpacity
+          <TouchableOpacity;
             style={[
               styles.recordButton,
-              isRecording && recordingType === type && styles.recordingButton
+              isRecording && recordingType === type && styles.recordingButton,
             ]}
             onPress={() => startRecording(type)}
             disabled={isRecording}
@@ -164,15 +181,22 @@ export const ListenDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
     return (
       <View style={styles.resultContainer}>
         <Text style={styles.resultTitle}>分析结果</Text>
-        
+
         {analysisResult.voiceAnalysis && (
           <View style={styles.analysisSection}>
             <Text style={styles.analysisTitle}>语音分析</Text>
-            <Text style={styles.analysisText}>音调：{analysisResult.voiceAnalysis.tone}</Text>
-            <Text style={styles.analysisText}>节律：{analysisResult.voiceAnalysis.rhythm}</Text>
-            <Text style={styles.analysisText}>音质：{analysisResult.voiceAnalysis.quality}</Text>
+            <Text style={styles.analysisText}>
+              音调：{analysisResult.voiceAnalysis.tone}
+            </Text>
+            <Text style={styles.analysisText}>
+              节律：{analysisResult.voiceAnalysis.rhythm}
+            </Text>
+            <Text style={styles.analysisText}>
+              音质：{analysisResult.voiceAnalysis.quality}
+            </Text>
             <Text style={styles.confidenceText}>
-              置信度：{(analysisResult.voiceAnalysis.confidence * 100).toFixed(1)}%
+              置信度：
+              {(analysisResult.voiceAnalysis.confidence * 100).toFixed(1)}%
             </Text>
           </View>
         )}
@@ -180,11 +204,18 @@ export const ListenDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
         {analysisResult.breathingAnalysis && (
           <View style={styles.analysisSection}>
             <Text style={styles.analysisTitle}>呼吸音分析</Text>
-            <Text style={styles.analysisText}>模式：{analysisResult.breathingAnalysis.pattern}</Text>
-            <Text style={styles.analysisText}>深度：{analysisResult.breathingAnalysis.depth}</Text>
-            <Text style={styles.analysisText}>频率：{analysisResult.breathingAnalysis.frequency}</Text>
+            <Text style={styles.analysisText}>
+              模式：{analysisResult.breathingAnalysis.pattern}
+            </Text>
+            <Text style={styles.analysisText}>
+              深度：{analysisResult.breathingAnalysis.depth}
+            </Text>
+            <Text style={styles.analysisText}>
+              频率：{analysisResult.breathingAnalysis.frequency}
+            </Text>
             <Text style={styles.confidenceText}>
-              置信度：{(analysisResult.breathingAnalysis.confidence * 100).toFixed(1)}%
+              置信度：
+              {(analysisResult.breathingAnalysis.confidence * 100).toFixed(1)}%
             </Text>
           </View>
         )}
@@ -192,19 +223,28 @@ export const ListenDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
         {analysisResult.coughAnalysis && (
           <View style={styles.analysisSection}>
             <Text style={styles.analysisTitle}>咳嗽音分析</Text>
-            <Text style={styles.analysisText}>类型：{analysisResult.coughAnalysis.type}</Text>
-            <Text style={styles.analysisText}>强度：{analysisResult.coughAnalysis.intensity}</Text>
-            <Text style={styles.analysisText}>频率：{analysisResult.coughAnalysis.frequency}</Text>
+            <Text style={styles.analysisText}>
+              类型：{analysisResult.coughAnalysis.type}
+            </Text>
+            <Text style={styles.analysisText}>
+              强度：{analysisResult.coughAnalysis.intensity}
+            </Text>
+            <Text style={styles.analysisText}>
+              频率：{analysisResult.coughAnalysis.frequency}
+            </Text>
             <Text style={styles.confidenceText}>
-              置信度：{(analysisResult.coughAnalysis.confidence * 100).toFixed(1)}%
+              置信度：
+              {(analysisResult.coughAnalysis.confidence * 100).toFixed(1)}%
             </Text>
           </View>
         )}
 
         <View style={styles.recommendationSection}>
           <Text style={styles.analysisTitle}>建议</Text>
-          {analysisResult.recommendations.map((rec: string, index: number) => (
-            <Text key={index} style={styles.recommendationText}>• {rec}</Text>
+          {analysisResult.recommendations.map(rec: string, index: number) => (
+            <Text key={index} style={styles.recommendationText}>
+              • {rec}
+            </Text>
           ))}
         </View>
       </View>
@@ -240,7 +280,7 @@ export const ListenDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
       )}
 
       <View style={styles.actionContainer}>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.button, styles.analyzeButton]}
           onPress={analyzeRecordings}
           disabled={isAnalyzing || Object.keys(recordings).length === 0}
@@ -257,7 +297,7 @@ export const ListenDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
 
       {analysisResult && (
         <View style={styles.actionContainer}>
-          <TouchableOpacity
+          <TouchableOpacity;
             style={[styles.button, styles.completeButton]}
             onPress={handleComplete}
           >
@@ -270,155 +310,155 @@ export const ListenDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  container: {,
+  flex: 1,
     padding: spacing.md,
   },
-  title: {
-    fontSize: 20,
+  title: {,
+  fontSize: 20,
     fontWeight: '600',
     color: colors.textPrimary,
     marginBottom: spacing.sm,
   },
-  subtitle: {
-    fontSize: 14,
+  subtitle: {,
+  fontSize: 14,
     color: colors.textSecondary,
     marginBottom: spacing.lg,
     lineHeight: 20,
   },
-  recordingSection: {
-    marginBottom: spacing.lg,
+  recordingSection: {,
+  marginBottom: spacing.lg,
     backgroundColor: colors.surface,
     borderRadius: 8,
     padding: spacing.md,
   },
-  sectionTitle: {
-    fontSize: 16,
+  sectionTitle: {,
+  fontSize: 16,
     fontWeight: '600',
     color: colors.textPrimary,
     marginBottom: spacing.xs,
   },
-  sectionDescription: {
-    fontSize: 14,
+  sectionDescription: {,
+  fontSize: 14,
     color: colors.textSecondary,
     marginBottom: spacing.sm,
   },
-  instructionText: {
-    fontSize: 12,
+  instructionText: {,
+  fontSize: 12,
     color: colors.textTertiary,
     marginBottom: spacing.md,
     fontStyle: 'italic',
   },
-  recordingContainer: {
-    alignItems: 'center',
+  recordingContainer: {,
+  alignItems: 'center',
   },
-  recordButton: {
-    backgroundColor: colors.primary,
+  recordButton: {,
+  backgroundColor: colors.primary,
     paddingVertical: spacing.md,
     paddingHorizontal: spacing.lg,
     borderRadius: 8,
     minWidth: 120,
     alignItems: 'center',
   },
-  recordingButton: {
-    backgroundColor: colors.error,
+  recordingButton: {,
+  backgroundColor: colors.error,
   },
-  recordButtonText: {
-    fontSize: 16,
+  recordButtonText: {,
+  fontSize: 16,
     fontWeight: '600',
     color: colors.white,
   },
-  recordingIndicator: {
-    flexDirection: 'row',
+  recordingIndicator: {,
+  flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
   },
-  recordingText: {
-    fontSize: 16,
+  recordingText: {,
+  fontSize: 16,
     fontWeight: '600',
     color: colors.white,
   },
-  recordedIndicator: {
-    flexDirection: 'row',
+  recordedIndicator: {,
+  flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.md,
   },
-  recordedText: {
-    fontSize: 16,
+  recordedText: {,
+  fontSize: 16,
     color: colors.success,
     fontWeight: '600',
   },
-  reRecordButton: {
-    backgroundColor: colors.border,
+  reRecordButton: {,
+  backgroundColor: colors.border,
     paddingVertical: spacing.sm,
     paddingHorizontal: spacing.md,
     borderRadius: 6,
   },
-  reRecordText: {
-    fontSize: 14,
+  reRecordText: {,
+  fontSize: 14,
     color: colors.textSecondary,
   },
-  actionContainer: {
-    marginVertical: spacing.md,
+  actionContainer: {,
+  marginVertical: spacing.md,
   },
-  button: {
-    paddingVertical: spacing.md,
+  button: {,
+  paddingVertical: spacing.md,
     paddingHorizontal: spacing.lg,
     borderRadius: 8,
     alignItems: 'center',
   },
-  analyzeButton: {
-    backgroundColor: colors.primary,
+  analyzeButton: {,
+  backgroundColor: colors.primary,
   },
-  completeButton: {
-    backgroundColor: colors.success,
+  completeButton: {,
+  backgroundColor: colors.success,
   },
-  buttonText: {
-    fontSize: 16,
+  buttonText: {,
+  fontSize: 16,
     fontWeight: '600',
     color: colors.white,
   },
-  resultContainer: {
-    backgroundColor: colors.surface,
+  resultContainer: {,
+  backgroundColor: colors.surface,
     borderRadius: 8,
     padding: spacing.md,
     marginTop: spacing.md,
   },
-  resultTitle: {
-    fontSize: 18,
+  resultTitle: {,
+  fontSize: 18,
     fontWeight: '600',
     color: colors.textPrimary,
     marginBottom: spacing.md,
   },
-  analysisSection: {
-    marginBottom: spacing.md,
+  analysisSection: {,
+  marginBottom: spacing.md,
     paddingBottom: spacing.md,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
   },
-  analysisTitle: {
-    fontSize: 16,
+  analysisTitle: {,
+  fontSize: 16,
     fontWeight: '600',
     color: colors.textPrimary,
     marginBottom: spacing.sm,
   },
-  analysisText: {
-    fontSize: 14,
+  analysisText: {,
+  fontSize: 14,
     color: colors.textSecondary,
     marginBottom: spacing.xs,
   },
-  confidenceText: {
-    fontSize: 12,
+  confidenceText: {,
+  fontSize: 12,
     color: colors.primary,
     fontWeight: '500',
   },
-  recommendationSection: {
-    marginTop: spacing.sm,
+  recommendationSection: {,
+  marginTop: spacing.sm,
   },
-  recommendationText: {
-    fontSize: 14,
+  recommendationText: {,
+  fontSize: 14,
     color: colors.textSecondary,
     marginBottom: spacing.xs,
     lineHeight: 20,
   },
-}); 
+});

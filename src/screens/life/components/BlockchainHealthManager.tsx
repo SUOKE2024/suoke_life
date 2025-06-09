@@ -11,31 +11,31 @@ import React,{ useState, useEffect } from react""
   Switch,
   { ActivityIndicator } from ";react-native";
 interface HealthDataRecord {
-  id: string;
+  id: string;,
   type: diagnosis" | "medication | "test_result" | vital_signs" | "lifestyle;
-  title: string;
+  title: string;,
   description: string;
-  timestamp: Date;
+  timestamp: Date;,
   hash: string;
-  verified: boolean;
+  verified: boolean;,
   encrypted: boolean;
-  shared: boolean;
+  shared: boolean;,
   size: string;
 };
 interface DataPermission {
-  id: string;
+  id: string;,
   entity: string;
   type: "hospital" | doctor" | "researcher | "insurance" | family",
-  permissions: string[];
+  permissions: string[];,
   expiryDate: Date;
   active: boolean;
 };
 interface BlockchainHealthManagerProps {
-  visible: boolean;
+  visible: boolean;,
   onClose: () => void;
 };
-const SAMPLE_RECORDS: HealthDataRecord[] = [{
-      id: "1,",
+const SAMPLE_RECORDS: HealthDataRecord[] = [{,
+  id: "1,",
       type: "diagnosis",
     title: 中医四诊报告",
     description: "2024年1月健康评估报告，包含望闻问切四诊结果,",
@@ -71,8 +71,8 @@ const SAMPLE_RECORDS: HealthDataRecord[] = [{
     size: 0.5 MB""
   }
 ];
-const SAMPLE_PERMISSIONS: DataPermission[] = [{
-      id: "1,",
+const SAMPLE_PERMISSIONS: DataPermission[] = [{,
+  id: "1,",
       entity: "北京中医医院",
     type: hospital",
     permissions: ["查看诊断记录, "查看生命体征"],"
@@ -100,7 +100,7 @@ export const BlockchainHealthManager: React.FC<BlockchainHealthManagerProps /> =
 {/
     trackRender: true,
     trackMemory: true,
-    warnThreshold: 50,  });
+    warnThreshold: 50});
   visible,
   onClose;
 }) => {};
@@ -121,7 +121,7 @@ const [activeTab, setActiveTab] = useState<"records | "permissions" | security">
       setIsLoading(false);
     }
   };
-  const togglePermission = useMemo(() => async (permissionId: string) => {})
+  const togglePermission = useMemo() => async (permissionId: string) => {})
     setIsLoading(true), []);
     try {
       await new Promise<void>(resolve => setTimeout(); => resolve(), 1000));
@@ -138,42 +138,42 @@ const [activeTab, setActiveTab] = useState<"records | "permissions" | security">
     }
   };
   //
-    <View style={styles.tabBar}>/          <TouchableOpacity
+    <View style={styles.tabBar}>/          <TouchableOpacity;
 style={[styles.tab, activeTab === "records && styles.activeTab]}"
         onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setActiveTab("records")}/          >
-        <Icon
+        <Icon;
 name="database"
           size={20}
           color={activeTab === records" ? colors.primary: colors.textSecondary} />/        <Text style={[styles.tabText, activeTab === "records && styles.activeTabText]} />/              数据记录
         </Text>/      </TouchableOpacity>/
-      <TouchableOpacity
+      <TouchableOpacity;
 style={[styles.tab, activeTab === "permissions" && styles.activeTab]}
         onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setActiveTab(permissions")}/          >"
-        <Icon
+        <Icon;
 name="key"
           size={20}
           color={activeTab === "permissions ? colors.primary: colors.textSecondary} />/        <Text style={[styles.tabText, activeTab === "permissions" && styles.activeTabText]} />/              访问权限"
         </Text>/      </TouchableOpacity>/
-      <TouchableOpacity
+      <TouchableOpacity;
 style={[styles.tab, activeTab === security" && styles.activeTab]}"
         onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setActiveTab("security)}/          >"
-        <Icon
+        <Icon;
 name="shield-check"
           size={20}
           color={activeTab === "security" ? colors.primary: colors.textSecondary} />/        <Text style={[styles.tabText, activeTab === security" && styles.activeTabText]} />/              安全设置"
         </Text>/      </TouchableOpacity>/    </View>/      ), []);
   const renderRecordCard = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => (record: HealthDataRecord) => (;)
-    <TouchableOpacity
+    <TouchableOpacity;
 key={record.id}
       style={styles.recordCard}
       onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setSelectedRecord(record)}/        >
-      <View style={styles.recordHeader}>/        <View style={{[styles.recordIcon, { backgroundColor: getTypeColor(record.type) + "20   }}]} />/          <Icon name={getTypeIcon(record.type)} size={24} color={getTypeColor(record.type)} />/        </View>/    "
+      <View style={styles.recordHeader}>/        <View style={[styles.recordIcon, { backgroundColor: getTypeColor(record.type) + "20   }}]} />/          <Icon name={getTypeIcon(record.type)} size={24} color={getTypeColor(record.type)} />/        </View>/    "
         <View style={styles.recordInfo}>/          <Text style={styles.recordTitle}>{record.title}</Text>/          <Text style={styles.recordDescription}>{record.description}</Text>/          <Text style={styles.recordTimestamp}>/                {record.timestamp.toLocaleDateString("zh-CN")}
           </Text>/        </View>/
         <View style={styles.recordStatus}>/              {record.verified   && <View style={styles.statusBadge}>/              <Icon name="check-circle" size={16} color={colors.success} />/              <Text style={styles.statusText}>已验证</Text>/            </View>/              )}
           {record.encrypted   && <View style={styles.statusBadge}>/              <Icon name="lock" size={16} color={colors.primary} />/              <Text style={styles.statusText}>已加密</Text>/            </View>/              )}
         </View>/      </View>/
-      <View style={styles.recordFooter}>/        <Text style={styles.recordHash}>哈希: {record.hash}</Text>/        <View style={styles.recordActions}>/          <Text style={styles.recordSize}>{record.size}</Text>/              <Switch
+      <View style={styles.recordFooter}>/        <Text style={styles.recordHash}>哈希: {record.hash}</Text>/        <View style={styles.recordActions}>/          <Text style={styles.recordSize}>{record.size}</Text>/              <Switch;
 value={record.shared}
             onValueChange={() = /> toggleRecordSharing(record.id)}/            trackColor={ false: colors.gray300, true: colors.primary + 50"}}"
             thumbColor={record.shared ? colors.primary: colors.gray400} />/          <Text style={styles.shareLabel}>共享</Text>/        </View>/      </View>/    </TouchableOpacity>/      ), []);
@@ -185,7 +185,7 @@ value={record.shared}
             permission.type === "insurance ? "保险公司" : 家庭成员"}
           </Text>/          <Text style={styles.permissionExpiry}>/                到期时间: {permission.expiryDate.toLocaleDateString("zh-CN)}"
           </Text>/        </View>/
-        <Switch
+        <Switch;
 value={permission.active}
           onValueChange={() = /> togglePermission(permission.id)}/          trackColor={ false: colors.gray300, true: colors.primary + "50"}}
           thumbColor={permission.active ? colors.primary: colors.gray400} />/      </View>/
@@ -194,14 +194,14 @@ value={permission.active}
       </View>/    </View>/      ), []);
   //
     <View style={styles.securityContainer}>/      <View style={styles.securityCard}>/        <View style={styles.securityHeader}>/          <Icon name="fingerprint" size={32} color={colors.primary} />/          <Text style={styles.securityTitle}>生物识别认证</Text>/        </View>/        <Text style={styles.securityDescription}>/              使用指纹或面部识别来保护您的健康数据访问
-        </Text>/            <Switch
+        </Text>/            <Switch;
 value={true}
           trackColor={ false: colors.gray300, true: colors.primary + 50"}}"
           thumbColor={colors.primary} />/      </View>/
       <View style={styles.securityCard}>/        <View style={styles.securityHeader}>/          <Icon name="key-variant" size={32} color={colors.primary} />/          <Text style={styles.securityTitle}>私钥管理</Text>/        </View>/        <Text style={styles.securityDescription}>/              您的私钥安全存储在设备中，用于数据加密和身份验证
         </Text>/        <TouchableOpacity style={styles.securityButton} accessibilityLabel="TODO: 添加无障碍标签" />/          <Text style={styles.securityButtonText}>备份私钥</Text>/        </TouchableOpacity>/      </View>/
       <View style={styles.securityCard}>/        <View style={styles.securityHeader}>/          <Icon name="shield-lock" size={32} color={colors.primary} />/          <Text style={styles.securityTitle}>零知识证明</Text>/        </View>/        <Text style={styles.securityDescription}>/              在不泄露具体数据的情况下，证明您的健康状态符合特定条件
-        </Text>/            <Switch
+        </Text>/            <Switch;
 value={true}
           trackColor={ false: colors.gray300, true: colors.primary + "50}}"
           thumbColor={colors.primary} />/      </View>/    </View>/      ), []);
@@ -228,7 +228,7 @@ value={true}
     }
   }
   return (;)
-    <Modal
+    <Modal;
 visible={visible}
       animationType="slide"
       presentationStyle="fullScreen"
@@ -238,7 +238,7 @@ visible={visible}
         {isLoading   && <View style={styles.loadingOverlay}>/            <ActivityIndicator size="large" color={colors.primary} />/            <Text style={styles.loadingText}>处理中...</Text>/          </View>/            )};
       </View>/    </Modal>/      ;);
 };
-const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,)
+const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {),
   flex: 1,
     backgroundColor: colors.background;
   },

@@ -11,15 +11,15 @@ export interface RequestConfig {
   retryDelay?: number;
   cache?: boolean;
   cacheTTL?: number;
-  dedupe?: boolean
+  dedupe?: boolean;
 }
 export interface RequestResponse<T = any /> {/      data: T,status: number,headers: Record<string, string>;
   cached: boolean,
   duration: number}
 export interface BatchRequest {
-  id: string;
+  id: string;,
   config: RequestConfig;
-  resolve: (response: RequestResponse) => void;
+  resolve: (response: RequestResponse) => void;,
   reject: (error: unknown) => void;
 }
 // 网络优化器类export class NetworkOptimizer  {private static instance: NetworkOptimizer;
@@ -239,7 +239,7 @@ const fetchConfig: RequestInit = {method: config.method,
   }
   // 取消所有待处理的请求  cancelAllRequests(): void {
     this.pendingRequests.clear();
-    this.batchQueue.forEach(((request) => {}))
+    this.batchQueue.forEach((request) => {}))
       request.reject(new Error("Request cancelled"));
     });
     this.batchQueue = [];

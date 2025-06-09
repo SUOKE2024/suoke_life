@@ -5,7 +5,7 @@ import React from "react";
   DiagnosisData,
   DiagnosisResult,
   DiagnosisType,
-{ ApiResponse } from "../../types";  初始状态 * const initialState: DiagnosisState = { ,
+{ ApiResponse } from "../../types";  初始状态 * const initialState: DiagnosisState = {,
   currentSession: undefined,
   sessions:  [],
   results:  [],

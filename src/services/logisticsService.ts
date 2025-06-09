@@ -1,23 +1,23 @@
 // 物流服务 - 处理配送、追踪等物流相关功能
 export interface DeliveryAddress {
-  id: string;
+  id: string;,
   name: string;
-  phone: string;
+  phone: string;,
   province: string;
-  city: string;
+  city: string;,
   district: string;
-  detail: string;
+  detail: string;,
   isDefault: boolean;
 }
 export interface LogisticsOrder {
-  id: string;
+  id: string;,
   orderNumber: string;
   trackingNumber?: string;
-  status: "pending" | "picked_up" | "in_transit" | "delivered" | "cancelled";
+  status: "pending" | "picked_up" | "in_transit" | "delivered" | "cancelled";,
   sender: DeliveryAddress;
-  receiver: DeliveryAddress;
+  receiver: DeliveryAddress;,
   items: Array<{;
-    name: string;
+    name: string;,
   quantity: number;
     weight: number;
 }>;
@@ -27,17 +27,17 @@ export interface LogisticsOrder {
   updatedAt: Date;
 }
 export interface TrackingInfo {
-  timestamp: Date;
+  timestamp: Date;,
   status: string;
-  location: string;
+  location: string;,
   description: string;
 }
 export interface DeliveryQuote {
-  carrierId: string;
+  carrierId: string;,
   carrierName: string;
-  serviceType: string;
+  serviceType: string;,
   price: number;
-  estimatedDays: number;
+  estimatedDays: number;,
   features: string[];
 }
 /**
@@ -52,8 +52,8 @@ export class LogisticsService {private orders: Map<string, LogisticsOrder> = new
   // 初始化默认数据
 private initializeDefaultData(): void {
     // 添加一些示例地址
-const defaultAddress: DeliveryAddress = {
-      id: "addr-001",
+const defaultAddress: DeliveryAddress = {,
+  id: "addr-001",
       name: "张三",
       phone: "13800138000",
       province: "北京市",
@@ -263,10 +263,10 @@ if (serviceType === "express") {
   };
   // 获取订单统计;
 getOrderStats(): {total: number,
-  pending: number;
-    inTransit: number,
-  delivered: number;
-    cancelled: number;
+  pending: number;,
+  inTransit: number,
+  delivered: number;,
+  cancelled: number;
   } {
     const stats = {total: this.orders.size,
       pending: 0,

@@ -3,8 +3,8 @@ import {import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useMedicalResource } from '../../hooks/useMedicalResource';
 import { MedicalResource } from '../../store/slices/medicalResourceSlice';
-const LoadingSpinner = React.lazy(() => import('../../components/common/LoadingSpinner'));
-const ErrorMessage = React.lazy(() => import('../../components/common/ErrorMessage'));
+const LoadingSpinner = React.lazy() => import('../../components/common/LoadingSpinner'));
+const ErrorMessage = React.lazy() => import('../../components/common/ErrorMessage'));
   View,
   Text,
   StyleSheet,
@@ -71,7 +71,7 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
       label: '医生', icon: 'person' };
   ];
   // 初始化
-  useEffect(() => {
+  useEffect() => {
     // 检查服务健康状态
     healthCheck();
     // 获取附近资源
@@ -116,7 +116,7 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
   <View style={styles.searchContainer}>
       <View style={styles.searchInputContainer}>
         <Icon name="search" size={24} color="#666" style={styles.searchIcon}>
-        <TextInput
+        <TextInput;
           style={styles.searchInput}
           placeholder="搜索医院、诊所、医生..."
           value={searchText}
@@ -125,7 +125,7 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
           onFocus={() => setShowSearchHistory(true)}
           returnKeyType="search"
         />
-        {searchText.length > 0  && <TouchableOpacity
+        {searchText.length > 0  && <TouchableOpacity;
             onPress={() => setSearchText('')};
             style={styles.clearButton};
           >;
@@ -133,7 +133,7 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
           </TouchableOpacity>;
         )};
       </View>;
-      <TouchableOpacity
+      <TouchableOpacity;
         style={styles.filterButton};
         onPress={toggleFiltersPanel};
       >;
@@ -143,28 +143,28 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
   );
   // 渲染类型选择器
   const renderCategorySelector = () => (
-  <ScrollView
+  <ScrollView;
       horizontal;
       showsHorizontalScrollIndicator={false}
       style={styles.categoryContainer}
       contentContainerStyle={styles.categoryContent}
     >
       {resourceTypes.map(type) => ()
-        <TouchableOpacity
+        <TouchableOpacity;
           key={type.key}
-          style={{[
+          style={[
             styles.categoryItem,
             selectedCategory === type.key && styles.categoryItemActive;
           ]}}
           onPress={() => handleCategorySelect(type.key)}
         >
-          <Icon
+          <Icon;
             name={type.icon};
             size={20};
             color={selectedCategory === type.key ? '#fff' : '#007AFF'};
           />;
-          <Text
-            style={{[;
+          <Text;
+            style={[;
               styles.categoryText,selectedCategory === type.key && styles.categoryTextActive;
             ]}};
           >;
@@ -179,8 +179,8 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
     return (;)
       <View style={styles.historyContainer}>;
         <Text style={styles.historyTitle}>搜索历史</Text>;
-        {searchHistory.map((item, index) => (;))
-          <TouchableOpacity
+        {searchHistory.map(item, index) => (;))
+          <TouchableOpacity;
             key={index};
             style={styles.historyItem};
             onPress={() => {setSearchText(item);
@@ -197,7 +197,7 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
   };
   // 渲染资源卡片
   const renderResourceCard = ({ item }: { item: MedicalResource }) => ()
-    <TouchableOpacity
+    <TouchableOpacity;
       style={styles.resourceCard}
       onPress={() => handleResourcePress(item)}
     >
@@ -213,7 +213,7 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
       </View>
       <Text style={styles.resourceAddress}>{item.location.address}</Text>
       <View style={styles.resourceServices}>
-        {item.services.slice(0, 3).map((service, index) => ())
+        {item.services.slice(0, 3).map(service, index) => ())
           <View key={index} style={styles.serviceTag}>
             <Text style={styles.serviceText}>{service}</Text>
           </View>
@@ -223,13 +223,13 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
       </View>
       <View style={styles.resourceFooter}>
         <View style={styles.availabilityContainer}>
-          <Icon
+          <Icon;
             name={item.availability.isOpen ? 'access-time' : 'schedule'}
             size={14}
             color={item.availability.isOpen ? '#4CAF50' : '#FF9800'}
           />;
-          <Text
-            style={{[;
+          <Text;
+            style={[;
               styles.availabilityText,{ color: item.availability.isOpen ? '#4CAF50' : '#FF9800' }};
             ]};
           >;
@@ -252,7 +252,7 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
             <Icon name="my-location" size={20} color="#007AFF" />;
           </TouchableOpacity>;
         </View>;
-        <FlatList
+        <FlatList;
           horizontal;
           data={nearbyResources.slice(0, 5)};
           renderItem={renderNearbyCard};
@@ -265,7 +265,7 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
   };
   // 渲染附近资源卡片
   const renderNearbyCard = ({ item }: { item: MedicalResource }) => (;)
-    <TouchableOpacity
+    <TouchableOpacity;
       style={styles.nearbyCard};
       onPress={() => handleResourcePress(item)};
     >;
@@ -282,7 +282,7 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
     }
     if (errors.search) {
       return (;)
-        <ErrorMessage
+        <ErrorMessage;
           message={errors.search};
           onRetry={() => {clearErrors();
             handleSearch();
@@ -300,7 +300,7 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
       );
     }
     return (;)
-      <FlatList
+      <FlatList;
         data={searchResults};
         renderItem={renderResourceCard};
         keyExtractor={(item) => item.id};
@@ -341,7 +341,7 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
       {renderSearchBar()};
       {renderCategorySelector()};
       {renderSearchHistory()};
-      <ScrollView
+      <ScrollView;
         style={styles.content};
         refreshControl={<RefreshControl refreshing={isLoading} onRefresh={handleRefresh} />;
         };

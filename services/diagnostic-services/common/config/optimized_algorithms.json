@@ -1,0 +1,27 @@
+{
+  "tcm_algorithms": {
+    "syndrome_patterns": {
+      "气虚证": {
+        "primary_symptoms": [
+          "疲劳",
+          "气短",
+          "懒言",
+          "自汗"
+        ],
+        "weight_adjustments": {
+          "symptom_consistency": 0.4,
+          "pulse_tongue_correlation": 0.3,
+          "constitution_match": 0.3
+        }
+      }
+    }
+  },
+  "image_algorithms": {
+    "face_analysis": {
+      "complexion_detection": {
+        "color_space": "LAB",
+        "lighting_normalization": true
+      }
+    }
+  }
+}

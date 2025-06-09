@@ -20,9 +20,9 @@ export interface MultimodalQuery {
 /**
 * * 检索结果接口
 export interface RetrievalResult {
-  id: string;
+  id: string;,
   content: string;
-  modality: ModalityType;
+  modality: ModalityType;,
   score: number;
   metadata: Record<string, any>;
   embedding?: number[];
@@ -30,11 +30,11 @@ export interface RetrievalResult {
 /**
 * * RAG响应接口
 export interface RAGResponse {
-  answer: string;
+  answer: string;,
   confidence: number;
-  sources: RetrievalResult[];
+  sources: RetrievalResult[];,
   fusionResult: FusionResult;
-  reasoning: string;
+  reasoning: string;,
   metadata: Record<string, any>;
 }
 /**
@@ -260,12 +260,12 @@ const result = await this.languageModel.generateWithReasoning(prompt, context);
   ): string[] {
     const context: string[] = [];
     // 添加检索到的文档内容
-retrievalResults.forEach(((result, index) => {}))
+retrievalResults.forEach((result, index) => {}))
       context.push(`[文档${index + 1}] ${result.content}`);
     });
     // 添加模态信息
 const modalityInfo = Object.entries(fusionResult.modalityWeights);
-      .map(([modality, weight]) => `${modality}: ${(weight * 100).toFixed(1)}%`);
+      .map([modality, weight]) => `${modality}: ${(weight * 100).toFixed(1)}%`);
       .join(" );"
     context.push(`[模态权重] ${modalityInfo}`);
     // 添加融合策略信息

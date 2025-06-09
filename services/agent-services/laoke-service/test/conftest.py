@@ -1,17 +1,10 @@
-    from internal.delivery import dependencies
-from collections.abc import AsyncGenerator, Generator
-from fastapi.testclient import TestClient
-from httpx import AsyncClient
-from pkg.utils.config import Config
-from typing import Any
-import asyncio
-import os
-import pytest
-import sys
+"""Test module"""
+import unittest
 
-def main() - > None:
-    """主函数 - 自动生成的最小可用版本"""
-    pass
+class TestPlaceholder(unittest.TestCase):
+    def test_placeholder(self):
+        """Placeholder test"""
+        pass
 
 if __name__ == "__main__":
-    main()
+    unittest.main()

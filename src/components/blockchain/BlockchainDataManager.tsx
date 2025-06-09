@@ -5,11 +5,11 @@ import React from "reactMESSAGE_9;react-nativeMESSAGE_55;);MESSAGE_53health | "d
 {/
     trackRender: true,
     trackMemory: true,
-    warnThreshold: 50,  });
+    warnThreshold: 50});
   onRecordPress,
   onUploadComplete;
 }) => {};
-const dispatch = useMemo(() => useAppDispatch(), []););
+const dispatch = useMemo() => useAppDispatch(), []););
   const { profile: user} = useAppSelector(state => state.use;r;);
   const [records, setRecords] = useState<BlockchainRecord[] />([;];);/      const [loading, setLoading] = useState<boolean>(fals;e;);
   const [refreshing, setRefreshing] = useState<boolean>(fals;e;);
@@ -55,9 +55,9 @@ const effectStart = performance.now();
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  const onRefresh = useMemo(() => useCallback(const async =  => {}))
+  const onRefresh = useMemo() => useCallback(const async =  => {}))
   //
-  const handleUploadData = useMemo(() => useCallback(async (request: DataUploadRequest); => {}))
+  const handleUploadData = useMemo() => useCallback(async (request: DataUploadRequest); => {}))
     setLoading(true), []);
     try {
       await new Promise<void>(resolve => setTimeout() => resolve(), CONSTANT_2000))
@@ -70,7 +70,7 @@ const effectStart = performance.now();
           ]}
           onPress={() = accessibilityLabel="TODO: 添加无障碍标签MESSAGE_56 ? MESSAGE_12confirmedMESSAGE_86TODO: 添加无障碍标签MESSAGE_1 ? MESSAGE_10pending" ? 待确认" : MESSAGE_44zh-CNMESSAGE_39lock-closedMESSAGE_64shareMESSAGE_77TODO: 添加无障碍标签MESSAGE_43shield-checkmarkMESSAGE_17slide"
       presentationStyle="pageSheetMESSAGE_87TODO: 添加无障碍标签MESSAGE_84closeMESSAGE_13,diagnosis, "prescription", report"] as const).map(type) => (")
-                <TouchableOpacity
+                <TouchableOpacity;
 key={type}
                   style={styles.typeOption}
                 accessibilityLabel="TODO: 添加无障碍标签MESSAGE_11取消"
@@ -84,17 +84,17 @@ key={type}
             }}
             style={styles.modalButton}>/        </View>/      </SafeAreaView>/    </Modal>/      )
   return (;)
-    <SafeAreaView style={styles.container}>/          <ScrollView
+    <SafeAreaView style={styles.container}>/          <ScrollView;
 style={styles.scrollView}
         refreshControl={
-          <RefreshControl
+          <RefreshControl;
 refreshing={refreshing}
             onRefresh={onRefresh}
             tintColor={colors.primary}
             colors={[colors.primary]} />/            }
         showsVerticalScrollIndicator={false}
       >
-        {///                <TouchableOpacity
+        {///                <TouchableOpacity;
 style={styles.uploadButton}
               onPress={() = accessibilityLabel="TODO: 添加无障碍标签MESSAGE_5cloud-uploadMESSAGE_8row,",
     justifyContent: "space-between",
@@ -124,24 +124,24 @@ style={styles.uploadButton}
     borderRadius: 8},
   tabButtonActive: { backgroundColor: colors.primary  },
   tabButtonText: {,
-    fontWeight: "500},MESSAGE_68600MESSAGE_48},MESSAGE_24row,",
+  fontWeight: "500},MESSAGE_68600MESSAGE_48},MESSAGE_24row,",
     alignItems: "flex-startMESSAGE_85,
     justifyContent: "center,",
     alignItems: "centerMESSAGE_79,
     marginBottom: spacing.xs},
   recordDescription: {,
-    color: colors.textSecondary},
+  color: colors.textSecondary},
   statusBadge: {,
   paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
     borderRadius: 6},
   statusText: {,
-    color: colors.white,
+  color: colors.white,
     fontWeight: "600},MESSAGE_49rowMESSAGE_29,
     alignItems: "center,MESSAGE_25500MESSAGE_73,
     marginLeft: spacing.sm},
   recordActions: {,
-    justifyContent: "space-between",
+  justifyContent: "space-between",
     alignItems: center"},MESSAGE_18row,MESSAGE_26row",
     alignItems: center",
     backgroundColor: colors.gray100,
@@ -150,7 +150,7 @@ style={styles.uploadButton}
     borderRadius: 6,
     gap: spacing.xs},
   tagText: {,
-    fontWeight: "500},MESSAGE_45row",
+  fontWeight: "500},MESSAGE_45row",
     alignItems: center",
     backgroundColor: colors.primary + "20,MESSAGE_15600MESSAGE_54,
     justifyContent: "space-between,",
@@ -158,7 +158,7 @@ style={styles.uploadButton}
     flexWrap: wrap",
     gap: spacing.sm},
   typeOption: {,
-    alignItems: "centerMESSAGE_32},MESSAGE_21row,MESSAGE_58absoluteMESSAGE_30,
+  alignItems: "centerMESSAGE_32},MESSAGE_21row,MESSAGE_58absoluteMESSAGE_30,
     justifyContent: "center,",
     alignItems: "centerMESSAGE_41 | "diagnosis | "prescriptionMESSAGE_7pending | "confirmed" | fail;e;";
 d;

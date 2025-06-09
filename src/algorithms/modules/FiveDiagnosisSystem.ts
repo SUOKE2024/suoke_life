@@ -80,10 +80,10 @@ return {faceColor: await this.analyzeFaceColor(context),tongueAnalysis: await th
       luster: good", distribution: "even };
   }
   private async analyzeTongue(context: HealthContext): Promise<TongueAnalysis> {
-    return {tongueBody: {
-      color: "pink",
-      texture: normal", size: "normal },tongueCoating: {
-      color: "white",
+    return {tongueBody: {,
+  color: "pink",
+      texture: normal", size: "normal },tongueCoating: {,
+  color: "white",
       thickness: thin", moisture: "normal };
     };
   }
@@ -168,8 +168,8 @@ class PulseDiagnosisModule {
     };
   }
   private async analyzePulsePositions(context: HealthContext): Promise<PulsePositions> {
-    return {cun: {
-      strength: "normal",
+    return {cun: {,
+  strength: "normal",
       quality: smooth" },";
       guan: { strength: "normal, quality: "smooth" },";
       chi: { strength: normal", quality: "smooth };
@@ -241,71 +241,71 @@ class DiagnosisSynthesisEngine {
 }
 // 类型定义
 export interface ComprehensiveDiagnosisResult {
-  userId: string;
+  userId: string;,
   timestamp: Date;
-  individualResults: FiveDiagnosisResults;
+  individualResults: FiveDiagnosisResults;,
   synthesis: DiagnosisSynthesis;
-  confidence: number;
+  confidence: number;,
   recommendations: TreatmentRecommendation[];
 }
 export interface FiveDiagnosisResults {
-  look: LookDiagnosisResult;
+  look: LookDiagnosisResult;,
   listen: ListenDiagnosisResult;
-  inquiry: InquiryDiagnosisResult;
+  inquiry: InquiryDiagnosisResult;,
   pulse: PulseDiagnosisResult;
   palpation: PalpationDiagnosisResult;
 }
 export interface LookDiagnosisResult {
-  faceColor: FaceColorAnalysis;
+  faceColor: FaceColorAnalysis;,
   tongueAnalysis: TongueAnalysis;
-  bodyShape: BodyShapeAnalysis;
+  bodyShape: BodyShapeAnalysis;,
   spirit: SpiritAnalysis;
   confidence: number;
 }
 export interface ListenDiagnosisResult {
-  voiceAnalysis: VoiceAnalysis;
+  voiceAnalysis: VoiceAnalysis;,
   breathingAnalysis: BreathingAnalysis;
-  coughAnalysis: CoughAnalysis;
+  coughAnalysis: CoughAnalysis;,
   odorAnalysis: OdorAnalysis;
   confidence: number;
 }
 export interface InquiryDiagnosisResult {
-  chiefComplaint: ChiefComplaintAnalysis;
+  chiefComplaint: ChiefComplaintAnalysis;,
   presentIllness: PresentIllnessAnalysis;
-  pastHistory: PastHistoryAnalysis;
+  pastHistory: PastHistoryAnalysis;,
   familyHistory: FamilyHistoryAnalysis;
-  personalHistory: PersonalHistoryAnalysis;
+  personalHistory: PersonalHistoryAnalysis;,
   systemReview: SystemReviewAnalysis;
   confidence: number;
 }
 export interface PulseDiagnosisResult {
-  pulseCharacteristics: PulseCharacteristics;
+  pulseCharacteristics: PulseCharacteristics;,
   pulsePositions: PulsePositions;
-  pulseStrength: PulseStrength;
+  pulseStrength: PulseStrength;,
   pulseRhythm: PulseRhythm;
   confidence: number;
 }
 export interface PalpationDiagnosisResult {
-  abdominalPalpation: AbdominalPalpation;
+  abdominalPalpation: AbdominalPalpation;,
   acupointPalpation: AcupointPalpation;
-  skinTemperature: SkinTemperatureAnalysis;
+  skinTemperature: SkinTemperatureAnalysis;,
   muscleTexture: MuscleTextureAnalysis;
   confidence: number;
 }
 export interface DiagnosisSynthesis {
-  syndrome: SyndromeAnalysis;
+  syndrome: SyndromeAnalysis;,
   constitution: ConstitutionAnalysis;
-  pathology: PathologyAnalysis;
+  pathology: PathologyAnalysis;,
   treatment: TreatmentAnalysis;
 }
 // 详细分析类型
 export interface FaceColorAnalysis {
-  color: string;
+  color: string;,
   luster: string;
   distribution: string;
 }
 export interface TongueAnalysis {
-  tongueBody: {color: string;
+  tongueBody: {color: string;,
   texture: string;
     size: string;
 };
@@ -316,46 +316,46 @@ export interface TongueAnalysis {
   };
 }
 export interface BodyShapeAnalysis {
-  build: string;
+  build: string;,
   posture: string;
   movement: string;
 }
 export interface SpiritAnalysis {
-  vitality: string;
+  vitality: string;,
   consciousness: string;
   expression: string;
 }
 export interface VoiceAnalysis {
-  volume: string;
+  volume: string;,
   tone: string;
   rhythm: string;
 }
 export interface BreathingAnalysis {
-  rate: string;
+  rate: string;,
   depth: string;
   rhythm: string;
 }
 export interface CoughAnalysis {
-  present: boolean;
+  present: boolean;,
   type: string;
   frequency: string;
 }
 export interface OdorAnalysis {
-  bodyOdor: string;
+  bodyOdor: string;,
   breathOdor: string;
 }
 export interface ChiefComplaintAnalysis {
-  primarySymptom: string;
+  primarySymptom: string;,
   duration: string;
   severity: number;
 }
 export interface PresentIllnessAnalysis {
-  onset: string;
+  onset: string;,
   progression: string;
   triggers: string[];
 }
 export interface PastHistoryAnalysis {
-  chronicDiseases: string[];
+  chronicDiseases: string[];,
   surgeries: string[];
   allergies: string[];
 }
@@ -363,9 +363,9 @@ export interface FamilyHistoryAnalysis {
   hereditaryDiseases: string[];
 }
 export interface PersonalHistoryAnalysis {
-  lifestyle: {diet: string[];
+  lifestyle: {diet: string[];,
   exercise: string[];
-    sleep: number;
+    sleep: number;,
   stress: number;
 };
 }
@@ -373,75 +373,75 @@ export interface SystemReviewAnalysis {
   systems: Record<string, any>;
 }
 export interface PulseCharacteristics {
-  rate: string;
+  rate: string;,
   depth: string;
-  width: string;
+  width: string;,
   length: string;
   smoothness: string;
 }
 export interface PulsePositions {
-  cun: { strength: string;
+  cun: { strength: string;,
   quality: string;
 };
   guan: { strength: string; quality: string };
   chi: { strength: string; quality: string };
 }
 export interface PulseStrength {
-  overall: string;
+  overall: string;,
   leftHand: string;
   rightHand: string;
 }
 export interface PulseRhythm {
-  regularity: string;
+  regularity: string;,
   intervals: string;
 }
 export interface AbdominalPalpation {
-  tenderness: string;
+  tenderness: string;,
   masses: string;
-  distension: string;
+  distension: string;,
   temperature: string;
 }
 export interface AcupointPalpation {
-  sensitivePoints: string[];
+  sensitivePoints: string[];,
   abnormalTexture: string[];
 }
 export interface SkinTemperatureAnalysis {
-  overall: number;
+  overall: number;,
   distribution: string;
   abnormalAreas: string[];
 }
 export interface MuscleTextureAnalysis {
-  tension: string;
+  tension: string;,
   elasticity: string;
   thickness: string;
 }
 export interface SyndromeAnalysis {
-  primarySyndrome: string;
+  primarySyndrome: string;,
   secondarySyndromes: string[];
-  confidence: number;
+  confidence: number;,
   evidence: string[];
 }
 export interface ConstitutionAnalysis {
-  constitutionType: string;
+  constitutionType: string;,
   characteristics: string[];
   confidence: number;
 }
 export interface PathologyAnalysis {
-  pathogenesis: string;
+  pathogenesis: string;,
   location: string[];
-  nature: string;
+  nature: string;,
   confidence: number;
 }
 export interface TreatmentAnalysis {
-  principle: string;
+  principle: string;,
   methods: string[];
-  contraindications: string[];
+  contraindications: string[];,
   confidence: number;
 }
 export interface TreatmentRecommendation {
-  type: string;
+  type: string;,
   description: string;
-  priority: "high | "medium" | low";
+  priority: "high | "medium" | low";,
   duration: string;
   precautions: string[];
 }

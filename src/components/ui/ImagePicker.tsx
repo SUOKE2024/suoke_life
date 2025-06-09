@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import {
-    Alert,
-    Dimensions,
-    Image,
-    ImageStyle,
-    Modal,
-    StyleSheet,
-    Text,
-    TextStyle,
-    TouchableOpacity,
-    View,
-    ViewStyle,
+  Alert,
+  Dimensions,
+  Image,
+  ImageStyle,
+  Modal,
+  StyleSheet,
+  Text,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -19,8 +19,8 @@ export interface ImagePickerProps {
   defaultValue?: string[];
   onChange?: (images: string[]) => void;
   maxCount?: number;
-  maxSize?: number; // MB
-  quality?: number; // 0-1
+  maxSize?: number; // MB;
+  quality?: number; // 0-1;
   allowedTypes?: string[];
   multiple?: boolean;
   showPreview?: boolean;
@@ -68,15 +68,11 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
   const selectImages = () => {
     if (disabled) return;
 
-    Alert.alert(
-      '选择图片',
-      '请选择图片来源',
-      [
-        { text: '取消', style: 'cancel' },
-        { text: '相机', onPress: () => openCamera() },
-        { text: '相册', onPress: () => openGallery() },
-      ]
-    );
+    Alert.alert('选择图片', '请选择图片来源', [
+      { text: '取消', style: 'cancel' },
+      { text: '相机', onPress: () => openCamera() },
+      { text: '相册', onPress: () => openGallery() },
+    ]);
   };
 
   const openCamera = () => {
@@ -85,10 +81,11 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
   };
 
   const openGallery = () => {
-    const mockImages = Array.from({ length: multiple ? Math.min(3, maxCount - images.length) : 1 }, 
+    const mockImages = Array.from(
+      { length: multiple ? Math.min(3, maxCount - images.length) : 1 },
       (_, index) => `https://picsum.photos/400/400?random=${Date.now() + index}`
     );
-    
+
     if (multiple) {
       addImages(mockImages);
     } else {
@@ -111,9 +108,12 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
   const addImages = (imageUris: string[]) => {
     const availableSlots = maxCount - images.length;
     const imagesToAdd = imageUris.slice(0, availableSlots);
-    
+
     if (imageUris.length > availableSlots) {
-      Alert.alert('提示', `最多只能选择${maxCount}张图片，已为您选择前${availableSlots}张`);
+      Alert.alert(
+        '提示',
+        `最多只能选择${maxCount}张图片，已为您选择前${availableSlots}张`
+      );
     }
 
     const newImages = [...images, ...imagesToAdd];
@@ -122,7 +122,7 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
   };
 
   const removeImage = (index: number) => {
-    const newImages = images.filter((_, i) => i !== index);
+    const newImages = images.filter(_, i) => i !== index);
     setImages(newImages);
     onChange?.(newImages);
   };
@@ -133,16 +133,16 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
   };
 
   const styles = StyleSheet.create({
-    container: {
-      backgroundColor: currentTheme.colors.surface,
+    container: {,
+  backgroundColor: currentTheme.colors.surface,
     },
-    previewContainer: {
-      flexDirection: 'row',
+    previewContainer: {,
+  flexDirection: 'row',
       flexWrap: 'wrap',
       gap: 8,
     },
-    addButton: {
-      backgroundColor: currentTheme.colors.surfaceVariant,
+    addButton: {,
+  backgroundColor: currentTheme.colors.surfaceVariant,
       borderRadius: 8,
       borderWidth: 2,
       borderColor: currentTheme.colors.outline,
@@ -151,30 +151,30 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
       alignItems: 'center',
       opacity: disabled ? 0.5 : 1,
     },
-    addButtonText: {
-      fontSize: 24,
+    addButtonText: {,
+  fontSize: 24,
       color: currentTheme.colors.onSurfaceVariant,
       marginBottom: 4,
     },
-    addButtonLabel: {
-      fontSize: 12,
+    addButtonLabel: {,
+  fontSize: 12,
       color: currentTheme.colors.onSurfaceVariant,
       textAlign: 'center',
     },
-    imageContainer: {
-      position: 'relative',
+    imageContainer: {,
+  position: 'relative',
       borderRadius: 8,
       overflow: 'hidden',
     },
-    imageButton: {
-      width: '100%',
+    imageButton: {,
+  width: '100%',
       height: '100%',
     },
-    image: {
-      borderRadius: 8,
+    image: {,
+  borderRadius: 8,
     },
-    removeButton: {
-      position: 'absolute',
+    removeButton: {,
+  position: 'absolute',
       top: -8,
       right: -8,
       width: 24,
@@ -189,31 +189,31 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
       shadowOpacity: 0.25,
       shadowRadius: 3.84,
     },
-    removeButtonText: {
-      color: '#ffffff',
+    removeButtonText: {,
+  color: '#ffffff',
       fontSize: 16,
       fontWeight: 'bold',
       lineHeight: 16,
     },
-    modal: {
-      flex: 1,
+    modal: {,
+  flex: 1,
       backgroundColor: 'rgba(0, 0, 0, 0.9)',
       justifyContent: 'center',
       alignItems: 'center',
     },
-    modalContent: {
-      width: screenWidth * 0.9,
+    modalContent: {,
+  width: screenWidth * 0.9,
       height: screenWidth * 0.9,
       backgroundColor: currentTheme.colors.surface,
       borderRadius: 8,
       overflow: 'hidden',
     },
-    modalImage: {
-      width: '100%',
+    modalImage: {,
+  width: '100%',
       height: '100%',
     },
-    modalHeader: {
-      position: 'absolute',
+    modalHeader: {,
+  position: 'absolute',
       top: 0,
       left: 0,
       right: 0,
@@ -225,32 +225,32 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
       paddingHorizontal: 16,
       zIndex: 1,
     },
-    modalTitle: {
-      color: '#ffffff',
+    modalTitle: {,
+  color: '#ffffff',
       fontSize: 16,
       fontWeight: '600',
     },
-    modalCloseButton: {
-      width: 32,
+    modalCloseButton: {,
+  width: 32,
       height: 32,
       borderRadius: 16,
       backgroundColor: 'rgba(255, 255, 255, 0.2)',
       justifyContent: 'center',
       alignItems: 'center',
     },
-    modalCloseText: {
-      color: '#ffffff',
+    modalCloseText: {,
+  color: '#ffffff',
       fontSize: 18,
       fontWeight: 'bold',
     },
-    infoContainer: {
-      marginTop: 8,
+    infoContainer: {,
+  marginTop: 8,
       padding: 8,
       backgroundColor: currentTheme.colors.surfaceVariant,
       borderRadius: 4,
     },
-    infoText: {
-      fontSize: 12,
+    infoText: {,
+  fontSize: 12,
       color: currentTheme.colors.onSurfaceVariant,
       textAlign: 'center',
     },
@@ -260,8 +260,12 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
     if (images.length >= maxCount) return null;
 
     return (
-      <TouchableOpacity
-        style={[styles.addButton, { width: previewSize, height: previewSize }, buttonStyle]}
+      <TouchableOpacity;
+        style={[
+          styles.addButton,
+          { width: previewSize, height: previewSize },
+          buttonStyle,
+        ]}
         onPress={selectImages}
         disabled={disabled}
         accessible={accessible}
@@ -269,26 +273,38 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
         accessibilityLabel={placeholder}
       >
         <Text style={[styles.addButtonText, buttonTextStyle]}>+</Text>
-        <Text style={[styles.addButtonLabel, buttonTextStyle]}>{placeholder}</Text>
+        <Text style={[styles.addButtonLabel, buttonTextStyle]}>
+          {placeholder}
+        </Text>
       </TouchableOpacity>
     );
   };
 
   const renderImagePreview = (imageUri: string, index: number) => {
     return (
-      <View key={index} style={[styles.imageContainer, { width: previewSize, height: previewSize }]}>
-        <TouchableOpacity
+      <View;
+        key={index}
+        style={[
+          styles.imageContainer,
+          { width: previewSize, height: previewSize },
+        ]}
+      >
+        <TouchableOpacity;
           onPress={() => previewImageModal(imageUri)}
           style={styles.imageButton}
         >
-          <Image
-            source={{ uri: imageUri }}
-            style={[styles.image, { width: previewSize, height: previewSize }, imageStyle]}
+          <Image;
+            source={ uri: imageUri }}
+            style={[
+              styles.image,
+              { width: previewSize, height: previewSize },
+              imageStyle,
+            ]}
             resizeMode="cover"
           />
         </TouchableOpacity>
-        
-        <TouchableOpacity
+
+        <TouchableOpacity;
           style={styles.removeButton}
           onPress={() => removeImage(index)}
           accessible={accessible}
@@ -305,13 +321,13 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
     <View style={[styles.container, style]} testID={testID}>
       {showPreview && (
         <View style={[styles.previewContainer, previewStyle]}>
-          {images.map((imageUri, index) => renderImagePreview(imageUri, index))}
+          {images.map(imageUri, index) => renderImagePreview(imageUri, index))}
           {renderAddButton()}
         </View>
       )}
 
       {!showPreview && (
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.addButton, { height: 48 }, buttonStyle]}
           onPress={selectImages}
           disabled={disabled}
@@ -319,7 +335,9 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
           accessibilityRole="button"
           accessibilityLabel={placeholder}
         >
-          <Text style={[styles.addButtonLabel, buttonTextStyle]}>{placeholder}</Text>
+          <Text style={[styles.addButtonLabel, buttonTextStyle]}>
+            {placeholder}
+          </Text>
         </TouchableOpacity>
       )}
 
@@ -330,9 +348,9 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
         </Text>
       </View>
 
-      <Modal
+      <Modal;
         visible={modalVisible}
-        transparent
+        transparent;
         animationType="fade"
         onRequestClose={() => setModalVisible(false)}
       >
@@ -340,7 +358,7 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>图片预览</Text>
-              <TouchableOpacity
+              <TouchableOpacity;
                 style={styles.modalCloseButton}
                 onPress={() => setModalVisible(false)}
                 accessible={accessible}
@@ -350,10 +368,10 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
                 <Text style={styles.modalCloseText}>×</Text>
               </TouchableOpacity>
             </View>
-            
+
             {previewImage && (
-              <Image
-                source={{ uri: previewImage }}
+              <Image;
+                source={ uri: previewImage }}
                 style={styles.modalImage}
                 resizeMode="contain"
               />
@@ -365,4 +383,4 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
   );
 };
 
-export default ImagePicker; 
+export default ImagePicker;

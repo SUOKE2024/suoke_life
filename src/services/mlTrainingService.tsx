@@ -8,7 +8,7 @@ import React from "react";
     listeningData?: unknown;
     inquiryData?: unknown;
     palpationData?: unknown;
-    calculationData?: unknown
+    calculationData?: unknown;
 };
   expectedOutput: { syndrome: string,
     constitution: string,
@@ -39,25 +39,25 @@ import React from "react";
 }
 // 训练任务接口 * export interface TrainingTask {
   id: string,
-  name: string;
+  name: string;,
   description: string;
-  modelConfig: ModelConfig;
+  modelConfig: ModelConfig;,
   datasetId: string;
   status: "pending" | "running" | "completed" | "failed" | "cancelled",progress: number,metrics: {accuracy?: number;
     precision?: number;
     recall?: number;
     f1Score?: number;
     loss?: number;
-    validationAccuracy?: number
+    validationAccuracy?: number;
 };
   startTime?: number;
   endTime?: number;
   errorMessage?: string}
 // 模型评估结果接口 * export interface ModelEvaluation {
   modelId: string,
-  taskId: string;
-  metrics: {overall: {accuracy: number;
-      precision: number;
+  taskId: string;,
+  metrics: {overall: {accuracy: number;,
+  precision: number;
       recall: number,f1Score: number,auc: number;
 };
     byDiagnosis: {
@@ -79,13 +79,13 @@ import React from "react";
   timestamp: number}
 // 模型部署状态接口 * export interface ModelDeployment {
   modelId: string,
-  version: string;
+  version: string;,
   status: "staging" | "production" | "deprecated";
-  deploymentTime: number;
-  performance: {averageResponseTime: number;
-    throughput: number;
-    errorRate: number;
-    accuracy: number;
+  deploymentTime: number;,
+  performance: {averageResponseTime: number;,
+  throughput: number;
+    errorRate: number;,
+  accuracy: number;
 }
   rollbackInfo?: { previousVersion: string,rollbackTime: number,reason: string};
 }
@@ -302,7 +302,7 @@ importance: number,
     );
     const averageAccuracy =;
       completedTasks.length > 0;
-        ? completedTasks.reduce((acc, item) => acc + item, 0);
+        ? completedTasks.reduce(acc, item) => acc + item, 0);
             (sum, tas;k;); => sum + (task.metrics.accuracy || 0),
             0;
           ) / completedTasks.length/            : 0;

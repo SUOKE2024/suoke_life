@@ -21,15 +21,15 @@ AgentType,
 logLevel?: ";debug" | info" | "warn | "error"
 }
 export interface AgentInstance {
-  id: string;
+  id: string;,
   agent: Agent;
-  config: AgentConfig;
+  config: AgentConfig;,
   status: AgentStatus;
-  healthStatus: AgentHealthStatus;
+  healthStatus: AgentHealthStatus;,
   createdAt: Date;
-  lastActivity: Date;
-  metrics: {totalRequests: number;
-    successfulRequests: number;
+  lastActivity: Date;,
+  metrics: {totalRequests: number;,
+  successfulRequests: number;
     failedRequests: number,averageResponseTime: number,uptime: number;
 };
 }
@@ -54,8 +54,8 @@ export class AgentFactory   {private static instance: AgentFactory;
       status: AgentStatus.IDLE,
       capabilities: config.capabilities,
       description: config.description,
-      technicalFeatures: { ,
-        multimodalLLM: true,           localModel: true,              / 轻量级本地模型*  视觉识别组件*  四诊合参模块集成* *} * /
+      technicalFeatures: {,
+  multimodalLLM: true,           localModel: true,              / 轻量级本地模型*  视觉识别组件*  四诊合参模块集成* *} * /
     }
     await this.registerAgent(xiaoaiAgent, confi;g;);
     return xiaoaiAge;n;t;
@@ -68,8 +68,8 @@ export class AgentFactory   {private static instance: AgentFactory;
       status: AgentStatus.IDLE,
       capabilities: config.capabilities,
       description: config.description,
-      technicalFeatures: { ,
-        recommendationAlgorithm: true,  rcmSystem: true,               / RCM系统集成*  区块链溯源*  API网关* *} * /
+      technicalFeatures: {,
+  recommendationAlgorithm: true,  rcmSystem: true,               / RCM系统集成*  区块链溯源*  API网关* *} * /
     }
     await this.registerAgent(xiaokeAgent, confi;g;);
     return xiaokeAge;n;t;
@@ -82,8 +82,8 @@ export class AgentFactory   {private static instance: AgentFactory;
       status: AgentStatus.IDLE,
       capabilities: config.capabilities,
       description: config.description,
-      technicalFeatures: { ,
-        knowledgeGraph: true,          ragSystem: true,               / RAG系统*  学习进度追踪*  AR* * VR互动系统 *  内容审核 * // }
+      technicalFeatures: {,
+  knowledgeGraph: true,          ragSystem: true,               / RAG系统*  学习进度追踪*  AR* * VR互动系统 *  内容审核 * // }
     }
     await this.registerAgent(laokeAgent, confi;g;);
     return laokeAge;n;t;
@@ -96,8 +96,8 @@ export class AgentFactory   {private static instance: AgentFactory;
       status: AgentStatus.IDLE,
       capabilities: config.capabilities,
       description: config.description,
-      technicalFeatures: { ,
-        dataFusion: true,              edgeComputing: true,           / 边缘计算*  隐私保护*  强化学习*  情感计算* *} * /
+      technicalFeatures: {,
+  dataFusion: true,              edgeComputing: true,           / 边缘计算*  隐私保护*  强化学习*  情感计算* *} * /
     }
     await this.registerAgent(soerAgent, confi;g;);
     return soerAge;n;t;

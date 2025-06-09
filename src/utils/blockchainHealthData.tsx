@@ -4,31 +4,31 @@ import React from "react";
 区块链配置 * const BLOCKCHAIN_CONFIG = { ;
   NETWORK_ID: "suoke_health_network",BLOCK_SIZE_LIMIT: 1024 * 1024,  MINING_DIFFICULTY: 4,BLOCK_TIME: 30000,  CONSENSUS_THRESHOLD: 0.67,  / 67%共识*  7年* * ;}; * / // 健康数据类型 * export interface HealthDataRecord {
   id: string,
-  userId: string;
+  userId: string;,
   dataType: | "vital_signs"| "diagnosis"| "treatment";
     | "lifestyle"
     | "genetic"
     | "environmental"
-  data: unknown;
+  data: unknown;,
   timestamp: number;
-  source: string;
+  source: string;,
   privacy_level: "public" | "private" | "confidential" | "restricted";
-  consent: ConsentRecord;
+  consent: ConsentRecord;,
   hash: string;
 }
 export interface ConsentRecord {
-  granted: boolean;
+  granted: boolean;,
   scope: string[],expiry: number,grantor: string;
   witness?: string;
   signature: string;
 }
 // 区块结构 * export interface Block {
   index: number,
-  timestamp: number;
+  timestamp: number;,
   data: HealthDataRecord[];
-  previousHash: string;
+  previousHash: string;,
   hash: string;
-  nonce: number;
+  nonce: number;,
   merkleRoot: string;
   validator: string;
 }
@@ -39,30 +39,30 @@ export interface ConsentRecord {
     | "data_share";
   from: string;
   to?: string;
-  data: unknown;
+  data: unknown;,
   timestamp: number;
-  signature: string;
+  signature: string;,
   fee: number;
 }
 // 访问控制记录 * export interface AccessControl {
   dataId: string,
-  userId: string;
+  userId: string;,
   permissions: string[],grantedBy: string,grantedAt: number;
   expiresAt?: number;
   conditions?: string[];
 }
 // 零知识证明 * export interface ZKProof {
   statement: string,
-  proof: string;
+  proof: string;,
   publicInputs: unknown[];
-  verificationKey: string;
+  verificationKey: string;,
   timestamp: number;
 };
 // Merkle树节点 * interface MerkleNode {
   hash: string    ;
   left?: MerkleNode;
   right?: MerkleNode;
-  data?: unknown
+  data?: unknown;
 }
 //
   private root: MerkleNode | null = null;

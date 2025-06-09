@@ -9,50 +9,46 @@ import {
   Alert,
   ActivityIndicator,
   Dimensions,
-  Platform,
-} from 'react-native';
+  Platform} from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { fiveDiagnosisService, CalculationDiagnosisData } from '../../services/fiveDiagnosisService';
 interface CalculationDiagnosisProps {
-  onComplete: (data: CalculationDiagnosisData) => void;
+  onComplete: (data: CalculationDiagnosisData) => void;,
   onCancel: () => void;
 }
 interface PersonalInfo {
-  birthYear: number;
+  birthYear: number;,
   birthMonth: number;
-  birthDay: number;
+  birthDay: number;,
   birthHour: number;
-  gender: string;
+  gender: string;,
   location: string;
 }
 interface AnalysisTypes {
-  ziwuLiuzhu: boolean;
+  ziwuLiuzhu: boolean;,
   constitution: boolean;
-  bagua: boolean;
+  bagua: boolean;,
   wuyunLiuqi: boolean;
   comprehensive: boolean;
 }
 const { width: screenWidth } = Dimensions.get('window');
 export default React.memo(function CalculationDiagnosisComponent({
   onComplete,
-  onCancel,
-}: CalculationDiagnosisProps) {
+  onCancel}: CalculationDiagnosisProps) {
   const [personalInfo, setPersonalInfo] = useState<PersonalInfo>({
     birthYear: new Date().getFullYear() - 30,
     birthMonth: 1,
     birthDay: 1,
     birthHour: 12,
     gender: '男',
-    location: '北京',
-  });
+    location: '北京'});
   const [analysisTypes, setAnalysisTypes] = useState<AnalysisTypes>({
     ziwuLiuzhu: true,
     constitution: true,
     bagua: false,
     wuyunLiuqi: false,
-    comprehensive: true,
-  });
+    comprehensive: true});
   const [healthConcerns, setHealthConcerns] = useState<string[]>([]);
   const [newConcern, setNewConcern] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
@@ -63,13 +59,11 @@ export default React.memo(function CalculationDiagnosisComponent({
     "体质调理", "养生保健',
     "睡眠质量", "消化系统',
     "情绪调节", "免疫力提升',
-    "慢性疲劳", "亚健康状态',
-  ];
+    "慢性疲劳", "亚健康状态'];
   // 城市列表
   const cities = [
     "北京", "上海', "广州", "深圳', "杭州", "南京', "苏州", "成都',
-    "重庆", "武汉', "西安", "天津', "青岛", "大连', "厦门", "长沙',
-  ];
+    "重庆", "武汉', "西安", "天津', "青岛", "大连', "厦门", "长沙'];
   // 时辰对应表
   const timeHours = [
     {
@@ -107,8 +101,7 @@ export default React.memo(function CalculationDiagnosisComponent({
       value: 20 },
     {
       label: "亥时 (21:00-23:00)", "
-      value: 22 },
-  ];
+      value: 22 }];
   // 添加健康关注点
   const addHealthConcern = useCallback(concern: string) => {
     if (concern.trim() && !healthConcerns.includes(concern.trim())) {
@@ -124,8 +117,7 @@ export default React.memo(function CalculationDiagnosisComponent({
   const toggleAnalysisType = useCallback(type: keyof AnalysisTypes) => {
     setAnalysisTypes(prev => ({
       ...prev,
-      [type]: !prev[type],
-    }));
+      [type]: !prev[type]}));
   }, []);
   // 验证输入数据
   const validateInput = (): boolean => {
@@ -158,8 +150,7 @@ export default React.memo(function CalculationDiagnosisComponent({
         personalInfo,
         analysisTypes,
         currentTime: new Date().toISOString(),
-        healthConcerns,
-      };
+        healthConcerns};
       // 可以在这里调用算诊分析API进行预处理
       await new Promise(resolve => setTimeout(resolve, 1000)); // 模拟处理时间
       onComplete(calculationData);
@@ -176,7 +167,7 @@ export default React.memo(function CalculationDiagnosisComponent({
       <Text style={styles.sectionTitle}>个人信息</Text>
       <View style={styles.inputGroup}>
         <Text style={styles.inputLabel}>出生年份</Text>
-        <TextInput
+        <TextInput;
           style={styles.textInput}
           value={personalInfo.birthYear.toString()}
           onChangeText={(text) => {
@@ -191,7 +182,7 @@ export default React.memo(function CalculationDiagnosisComponent({
         <View style={styles.inputGroup}>
           <Text style={styles.inputLabel}>出生月份</Text>
           <View style={styles.pickerContainer}>
-            <Picker
+            <Picker;
               selectedValue={personalInfo.birthMonth}
               onValueChange={(value) => setPersonalInfo(prev => ({ ...prev, birthMonth: value }))}
               style={styles.picker}
@@ -205,7 +196,7 @@ export default React.memo(function CalculationDiagnosisComponent({
         <View style={styles.inputGroup}>
           <Text style={styles.inputLabel}>出生日期</Text>
           <View style={styles.pickerContainer}>
-            <Picker
+            <Picker;
               selectedValue={personalInfo.birthDay}
               onValueChange={(value) => setPersonalInfo(prev => ({ ...prev, birthDay: value }))}
               style={styles.picker}
@@ -220,7 +211,7 @@ export default React.memo(function CalculationDiagnosisComponent({
       <View style={styles.inputGroup}>
         <Text style={styles.inputLabel}>出生时辰</Text>
         <View style={styles.pickerContainer}>
-          <Picker
+          <Picker;
             selectedValue={personalInfo.birthHour}
             onValueChange={(value) => setPersonalInfo(prev => ({ ...prev, birthHour: value }))}
             style={styles.picker}
@@ -235,7 +226,7 @@ export default React.memo(function CalculationDiagnosisComponent({
         <View style={styles.inputGroup}>
           <Text style={styles.inputLabel}>性别</Text>
           <View style={styles.pickerContainer}>
-            <Picker
+            <Picker;
               selectedValue={personalInfo.gender}
               onValueChange={(value) => setPersonalInfo(prev => ({ ...prev, gender: value }))}
               style={styles.picker}
@@ -248,7 +239,7 @@ export default React.memo(function CalculationDiagnosisComponent({
         <View style={styles.inputGroup}>
           <Text style={styles.inputLabel}>出生地</Text>
           <View style={styles.pickerContainer}>
-            <Picker
+            <Picker;
               selectedValue={personalInfo.location}
               onValueChange={(value) => setPersonalInfo(prev => ({ ...prev, location: value }))}
               style={styles.picker}
@@ -266,7 +257,7 @@ export default React.memo(function CalculationDiagnosisComponent({
   const renderAnalysisTypesSection = () => (
   <View style={styles.section}>
       <Text style={styles.sectionTitle}>算诊分析类型</Text>
-      <TouchableOpacity
+      <TouchableOpacity;
         style={[styles.analysisOption, analysisTypes.ziwuLiuzhu && styles.analysisOptionSelected]}
         onPress={() => toggleAnalysisType('ziwuLiuzhu')}
       >
@@ -283,7 +274,7 @@ export default React.memo(function CalculationDiagnosisComponent({
           {analysisTypes.ziwuLiuzhu && <Text style={styles.checkmark}>✓</Text>}
         </View>
       </TouchableOpacity>
-      <TouchableOpacity
+      <TouchableOpacity;
         style={[styles.analysisOption, analysisTypes.constitution && styles.analysisOptionSelected]}
         onPress={() => toggleAnalysisType('constitution')}
       >
@@ -300,7 +291,7 @@ export default React.memo(function CalculationDiagnosisComponent({
           {analysisTypes.constitution && <Text style={styles.checkmark}>✓</Text>}
         </View>
       </TouchableOpacity>
-      <TouchableOpacity
+      <TouchableOpacity;
         style={[styles.analysisOption, analysisTypes.bagua && styles.analysisOptionSelected]}
         onPress={() => toggleAnalysisType('bagua')}
       >
@@ -317,7 +308,7 @@ export default React.memo(function CalculationDiagnosisComponent({
           {analysisTypes.bagua && <Text style={styles.checkmark}>✓</Text>}
         </View>
       </TouchableOpacity>
-      <TouchableOpacity
+      <TouchableOpacity;
         style={[styles.analysisOption, analysisTypes.wuyunLiuqi && styles.analysisOptionSelected]}
         onPress={() => toggleAnalysisType('wuyunLiuqi')}
       >
@@ -334,7 +325,7 @@ export default React.memo(function CalculationDiagnosisComponent({
           {analysisTypes.wuyunLiuqi && <Text style={styles.checkmark}>✓</Text>}
         </View>
       </TouchableOpacity>
-      <TouchableOpacity
+      <TouchableOpacity;
         style={[styles.analysisOption, analysisTypes.comprehensive && styles.analysisOptionSelected]}
         onPress={() => toggleAnalysisType('comprehensive')}
       >
@@ -359,12 +350,11 @@ export default React.memo(function CalculationDiagnosisComponent({
       <Text style={styles.sectionTitle}>健康关注点</Text>
       <View style={styles.concernsContainer}>
         {predefinedConcerns.map(concern) => ()
-          <TouchableOpacity
+          <TouchableOpacity;
             key={concern}
-            style={{[
+            style={[
               styles.concernChip,
-              healthConcerns.includes(concern) && styles.concernChipSelected,
-            ]}}
+              healthConcerns.includes(concern) && styles.concernChipSelected]}}
             onPress={() => {
               if (healthConcerns.includes(concern)) {
                 removeHealthConcern(concern);
@@ -373,24 +363,23 @@ export default React.memo(function CalculationDiagnosisComponent({
               }
             }}
           >
-            <Text style={{[
+            <Text style={[
               styles.concernChipText,
-              healthConcerns.includes(concern) && styles.concernChipTextSelected,
-            ]}}>
+              healthConcerns.includes(concern) && styles.concernChipTextSelected]}}>
               {concern}
             </Text>
           </TouchableOpacity>
         ))}
       </View>
       <View style={styles.customConcernContainer}>
-        <TextInput
+        <TextInput;
           style={styles.customConcernInput}
           value={newConcern}
           onChangeText={setNewConcern}
           placeholder="添加自定义关注点..."
           onSubmitEditing={() => addHealthConcern(newConcern)}
         />
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.addConcernButton}
           onPress={() => addHealthConcern(newConcern)}
           disabled={!newConcern.trim()}
@@ -404,7 +393,7 @@ export default React.memo(function CalculationDiagnosisComponent({
             {healthConcerns.map(concern) => ()
               <View key={concern} style={styles.selectedConcernItem}>
                 <Text style={styles.selectedConcernText}>{concern}</Text>
-                <TouchableOpacity
+                <TouchableOpacity;
                   style={styles.removeConcernButton}
                   onPress={() => removeHealthConcern(concern)}
                 >
@@ -427,14 +416,14 @@ export default React.memo(function CalculationDiagnosisComponent({
       {renderAnalysisTypesSection()}
       {renderHealthConcernsSection()}
       <View style={styles.actionContainer}>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.cancelButton}
           onPress={onCancel}
           disabled={isProcessing}
         >
           <Text style={styles.cancelButtonText}>取消</Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.submitButton, isProcessing && styles.submitButtonDisabled]}
           onPress={handleSubmit}
           disabled={isProcessing}
@@ -452,25 +441,21 @@ export default React.memo(function CalculationDiagnosisComponent({
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    backgroundColor: '#f8f9fa',
-  },
+    backgroundColor: '#f8f9fa'},
   header: {,
   backgroundColor: '#ffffff',
     padding: 20,
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: '#e9ecef',
-  },
+    borderBottomColor: '#e9ecef'},
   headerTitle: {,
   fontSize: 24,
     fontWeight: '700',
     color: '#1a1a1a',
-    marginBottom: 5,
-  },
+    marginBottom: 5},
   headerSubtitle: {,
   fontSize: 16,
-    color: '#6c757d',
-  },
+    color: '#6c757d'},
   section: {,
   backgroundColor: '#ffffff',
     margin: 15,
@@ -479,48 +464,39 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {,
   width: 0,
-      height: 2,
-    },
+      height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 3.84,
-    elevation: 5,
-  },
+    elevation: 5},
   sectionTitle: {,
   fontSize: 18,
     fontWeight: '600',
     color: '#1a1a1a',
-    marginBottom: 15,
-  },
+    marginBottom: 15},
   inputGroup: {,
-  marginBottom: 15,
-  },
+  marginBottom: 15},
   inputRow: {,
   flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between'},
   inputLabel: {,
   fontSize: 16,
     fontWeight: '500',
     color: '#1a1a1a',
-    marginBottom: 8,
-  },
+    marginBottom: 8},
   textInput: {,
   borderWidth: 1,
     borderColor: '#e9ecef',
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
-    backgroundColor: '#ffffff',
-  },
+    backgroundColor: '#ffffff'},
   pickerContainer: {,
   borderWidth: 1,
     borderColor: '#e9ecef',
     borderRadius: 8,
-    backgroundColor: '#ffffff',
-  },
+    backgroundColor: '#ffffff'},
   picker: {,
-  height: 50,
-  },
+  height: 50},
   analysisOption: {,
   flexDirection: 'row',
     alignItems: 'center',
@@ -529,33 +505,26 @@ const styles = StyleSheet.create({
     borderColor: '#e9ecef',
     borderRadius: 8,
     marginBottom: 10,
-    backgroundColor: '#f8f9fa',
-  },
+    backgroundColor: '#f8f9fa'},
   analysisOptionSelected: {,
   borderColor: '#007AFF',
-    backgroundColor: '#e3f2fd',
-  },
+    backgroundColor: '#e3f2fd'},
   analysisOptionIcon: {,
   fontSize: 24,
-    marginRight: 15,
-  },
+    marginRight: 15},
   analysisOptionContent: {,
-  flex: 1,
-  },
+  flex: 1},
   analysisOptionTitle: {,
   fontSize: 16,
     fontWeight: '600',
     color: '#1a1a1a',
-    marginBottom: 4,
-  },
+    marginBottom: 4},
   analysisOptionTitleSelected: {,
-  color: '#007AFF',
-  },
+  color: '#007AFF'},
   analysisOptionDescription: {,
   fontSize: 14,
     color: '#6c757d',
-    lineHeight: 20,
-  },
+    lineHeight: 20},
   checkbox: {,
   width: 24,
     height: 24,
@@ -563,43 +532,34 @@ const styles = StyleSheet.create({
     borderColor: '#e9ecef',
     borderRadius: 4,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   checkboxSelected: {,
   borderColor: '#007AFF',
-    backgroundColor: '#007AFF',
-  },
+    backgroundColor: '#007AFF'},
   checkmark: {,
   color: '#ffffff',
     fontSize: 16,
-    fontWeight: 'bold',
-  },
+    fontWeight: 'bold'},
   concernsContainer: {,
   flexDirection: 'row',
     flexWrap: 'wrap',
-    marginBottom: 15,
-  },
+    marginBottom: 15},
   concernChip: {,
   backgroundColor: '#e9ecef',
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 20,
-    margin: 4,
-  },
+    margin: 4},
   concernChipSelected: {,
-  backgroundColor: '#007AFF',
-  },
+  backgroundColor: '#007AFF'},
   concernChipText: {,
   fontSize: 14,
-    color: '#6c757d',
-  },
+    color: '#6c757d'},
   concernChipTextSelected: {,
-  color: '#ffffff',
-  },
+  color: '#ffffff'},
   customConcernContainer: {,
   flexDirection: 'row',
-    marginBottom: 15,
-  },
+    marginBottom: 15},
   customConcernInput: {,
   flex: 1,
     borderWidth: 1,
@@ -607,33 +567,27 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
-    marginRight: 10,
-  },
+    marginRight: 10},
   addConcernButton: {,
   backgroundColor: '#007AFF',
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 8,
-    justifyContent: 'center',
-  },
+    justifyContent: 'center'},
   addConcernButtonText: {,
   color: '#ffffff',
     fontSize: 16,
-    fontWeight: '600',
-  },
+    fontWeight: '600'},
   selectedConcerns: {,
-  marginTop: 15,
-  },
+  marginTop: 15},
   selectedConcernsTitle: {,
   fontSize: 16,
     fontWeight: '500',
     color: '#1a1a1a',
-    marginBottom: 10,
-  },
+    marginBottom: 10},
   selectedConcernsList: {,
   flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
+    flexWrap: 'wrap'},
   selectedConcernItem: {,
   flexDirection: 'row',
     alignItems: 'center',
@@ -641,59 +595,48 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
-    margin: 2,
-  },
+    margin: 2},
   selectedConcernText: {,
   color: '#ffffff',
     fontSize: 14,
-    marginRight: 8,
-  },
+    marginRight: 8},
   removeConcernButton: {,
   width: 20,
     height: 20,
     borderRadius: 10,
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   removeConcernButtonText: {,
   color: '#ffffff',
     fontSize: 16,
-    fontWeight: 'bold',
-  },
+    fontWeight: 'bold'},
   actionContainer: {,
   flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 20,
-    paddingBottom: 40,
-  },
+    paddingBottom: 40},
   cancelButton: {,
   flex: 1,
     backgroundColor: '#6c757d',
     paddingVertical: 15,
     borderRadius: 8,
     marginRight: 10,
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   cancelButtonText: {,
   color: '#ffffff',
     fontSize: 16,
-    fontWeight: '600',
-  },
+    fontWeight: '600'},
   submitButton: {,
   flex: 2,
     backgroundColor: '#007AFF',
     paddingVertical: 15,
     borderRadius: 8,
     marginLeft: 10,
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   submitButtonDisabled: {,
-  backgroundColor: '#adb5bd',
-  },
+  backgroundColor: '#adb5bd'},
   submitButtonText: {,
   color: '#ffffff',
     fontSize: 16,
-    fontWeight: '600',
-  },
-});
+    fontWeight: '600'}});

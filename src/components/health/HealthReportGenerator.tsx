@@ -23,7 +23,7 @@ export const HealthReportGenerator: React.FC<HealthReportGeneratorProps> = ({ us
   const [refreshing, setRefreshing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [generating, setGenerating] = useState(false);
-  useEffect(() => {
+  useEffect() => {
     loadReports();
   }, [userId]);
   const loadReports = async () => {try {setLoading(true);
@@ -95,7 +95,7 @@ export const HealthReportGenerator: React.FC<HealthReportGeneratorProps> = ({ us
     return `${formatDate(period.startDate)} - ${formatDate(period.endDate)}`;
   };
   const renderReportCard = (report: HealthReport) => (;)
-    <TouchableOpacity
+    <TouchableOpacity;
       key={report.id};
       style={styles.reportCard};
       onPress={() => {setSelectedReport(report);
@@ -104,7 +104,7 @@ export const HealthReportGenerator: React.FC<HealthReportGeneratorProps> = ({ us
     >
       <View style={styles.reportHeader}>
         <Text style={styles.reportTitle}>{getReportTypeLabel(report.reportType)}</Text>
-        <View style={{[styles.scoreContainer, { backgroundColor: getScoreColor(report.score) }}]}>
+        <View style={[styles.scoreContainer, { backgroundColor: getScoreColor(report.score) }}]}>
           <Text style={styles.scoreText}>{report.score}</Text>
         </View>
       </View>
@@ -161,7 +161,7 @@ export const HealthReportGenerator: React.FC<HealthReportGeneratorProps> = ({ us
       period: "year",
       label: '年报告' }
               ].map(periodItem) => ()
-                <TouchableOpacity
+                <TouchableOpacity;
                   key={periodItem.period};
                   style={styles.periodButton};
                   onPress={() => generateReport(;)
@@ -196,7 +196,7 @@ export const HealthReportGenerator: React.FC<HealthReportGeneratorProps> = ({ us
   };
   const renderReportDetail = () => {if (!selectedReport) return null;
     return (
-  <Modal
+  <Modal;
         visible={modalVisible}
         animationType="slide"
         transparent={true}
@@ -208,7 +208,7 @@ export const HealthReportGenerator: React.FC<HealthReportGeneratorProps> = ({ us
               <Text style={styles.modalTitle}>
                 {getReportTypeLabel(selectedReport.reportType)}
               </Text>
-              <TouchableOpacity
+              <TouchableOpacity;
                 style={styles.closeButton}
                 onPress={() => setModalVisible(false)}
               >
@@ -219,7 +219,7 @@ export const HealthReportGenerator: React.FC<HealthReportGeneratorProps> = ({ us
               {// 报告概览}
               <View style={styles.reportOverview}>
                 <View style={styles.overviewHeader}>
-                  <View style={{[styles.scoreDisplay, { backgroundColor: getScoreColor(selectedReport.score) }}]}>
+                  <View style={[styles.scoreDisplay, { backgroundColor: getScoreColor(selectedReport.score) }}]}>
                     <Text style={styles.scoreDisplayText}>{selectedReport.score}</Text>
                     <Text style={styles.scoreDisplayLabel}>{getScoreLabel(selectedReport.score)}</Text>
                   </View>
@@ -233,7 +233,7 @@ export const HealthReportGenerator: React.FC<HealthReportGeneratorProps> = ({ us
               {// 健康洞察}
               {selectedReport.insights.length > 0  && <View style={styles.reportSection}>
                   <Text style={styles.reportSectionTitle}>健康洞察</Text>
-                  {selectedReport.insights.map((insight, index) => ())
+                  {selectedReport.insights.map(insight, index) => ())
                     <View key={index} style={styles.insightItem}>
                       <Text style={styles.insightText}>• {insight}</Text>
                     </View>
@@ -243,7 +243,7 @@ export const HealthReportGenerator: React.FC<HealthReportGeneratorProps> = ({ us
               {// 健康建议}
               {selectedReport.recommendations.length > 0  && <View style={styles.reportSection}>
                   <Text style={styles.reportSectionTitle}>健康建议</Text>
-                  {selectedReport.recommendations.map((recommendation, index) => ())
+                  {selectedReport.recommendations.map(recommendation, index) => ())
                     <View key={index} style={styles.recommendationItem}>
                       <Text style={styles.recommendationText}>• {recommendation}</Text>
                     </View>
@@ -253,7 +253,7 @@ export const HealthReportGenerator: React.FC<HealthReportGeneratorProps> = ({ us
               {// 风险因素}
               {selectedReport.riskFactors.length > 0  && <View style={styles.reportSection}>
                   <Text style={[styles.reportSectionTitle, styles.riskTitle]}>风险因素</Text>
-                  {selectedReport.riskFactors.map((risk, index) => ())
+                  {selectedReport.riskFactors.map(risk, index) => ())
                     <View key={index} style={styles.riskItem}>
                       <Text style={styles.riskText}>⚠️ {risk}</Text>
                     </View>
@@ -263,13 +263,13 @@ export const HealthReportGenerator: React.FC<HealthReportGeneratorProps> = ({ us
               {// 趋势分析}
               {selectedReport.trends.length > 0  && <View style={styles.reportSection}>
                   <Text style={styles.reportSectionTitle}>趋势分析</Text>
-                  {selectedReport.trends.map((trend, index) => ())
+                  {selectedReport.trends.map(trend, index) => ())
                     <View key={index} style={styles.trendItem}>
                       <View style={styles.trendHeader}>
                         <Text style={styles.trendDataType}>
                           {getDataTypeLabel(trend.dataType)}
                         </Text>
-                        <Text style={{[
+                        <Text style={[
                           styles.trendDirection,
                           { color: getTrendColor(trend.trend) }}
                         ]}>;
@@ -296,7 +296,7 @@ export const HealthReportGenerator: React.FC<HealthReportGeneratorProps> = ({ us
         <Text style={styles.title}>健康报告</Text>
         <Text style={styles.subtitle}>智能分析您的健康状况</Text>
       </View>
-      <ScrollView
+      <ScrollView;
         style={styles.scrollView}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />;
         };
@@ -646,8 +646,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  generatingModal: {
-      backgroundColor: "#fff",
+  generatingModal: {,
+  backgroundColor: "#fff",
       borderRadius: 12,padding: 24,alignItems: 'center';
   },generatingText: {fontSize: 16,fontWeight: 'bold',color: '#333',marginBottom: 8;
   },generatingSubtext: {fontSize: 14,color: '#666';

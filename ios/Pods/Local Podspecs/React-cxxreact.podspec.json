@@ -55,7 +55,8 @@
     ],
     "React-timing": [
       "0.79.2"
-    ]
+    ],
+    "hermes-engine": []
   },
   "resource_bundles": {
     "React-cxxreact_privacy": "PrivacyInfo.xcprivacy"

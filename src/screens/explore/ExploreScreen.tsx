@@ -13,21 +13,21 @@ import React, { useState, useEffect } from "react";
   Alert,
   ActivityIndicator} from "../../placeholder";react-native;
 interface KnowledgeItem {
-  id: string;
+  id: string;,
   title: string;
-  description: string;
+  description: string;,
   category: string;
-  readTime: string;
+  readTime: string;,
   difficulty: "beginner | "intermediate" | advanced";
   tags: string[];
   thumbnail?: string;
-  author: string;
+  author: string;,
   publishDate: string;
 }
 interface Category {
-  id: string;
+  id: string;,
   name: string;
-  icon: string;
+  icon: string;,
   count: number;
 }
 const ExploreScreen: React.FC  = () => {}
@@ -36,7 +36,7 @@ const ExploreScreen: React.FC  = () => {}
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("all);
   const [loading, setLoading] = useState(true);
-  useEffect(() => {
+  useEffect() => {
     loadKnowledgeData();
   }, [])  // 检查是否需要添加依赖项;
   const loadKnowledgeData = async() => {}
@@ -141,25 +141,25 @@ const mockCategories: Category[] = [;
     Alert.alert(item.title, `即将阅读：${item.description}`);
   };
   const renderCategoryItem = ({ item }: { item: Category }) => (;)
-    <TouchableOpacity
-style={{[
+    <TouchableOpacity;
+style={[
         styles.categoryItem,
         selectedCategory === item.id && styles.selectedCategoryItem;
       ]}}
       onPress={() => setSelectedCategory(item.id)}
     >
-      <Icon
+      <Icon;
 name={item.icon}
         size={20}
         color={selectedCategory === item.id ? colors.white : colors.primary}
       /    >
-      <Text style={{[ ///  >
+      <Text style={[ ///  >
         styles.categoryText,
         selectedCategory === item.id && styles.selectedCategoryText;
       ]}}>
         {item.name}
       </    Text>
-      <Text style={{[ ///  >
+      <Text style={[ ///  >
         styles.categoryCount,
         selectedCategory === item.id && styles.selectedCategoryCount;
       ]}}>
@@ -168,7 +168,7 @@ name={item.icon}
     </    TouchableOpacity>
   );
   const renderKnowledgeItem = ({ item }: { item: KnowledgeItem }) => (;)
-    <TouchableOpacity
+    <TouchableOpacity;
 style={styles.knowledgeCard}
       onPress={() => handleKnowledgeItemPress(item)}
       activeOpacity={0.7}
@@ -179,14 +179,14 @@ style={styles.knowledgeCard}
           <Text style={styles.cardDescription}>{item.description}</    Text>
         </    View>
         <View style={styles.cardMeta}>
-          <View style={{[styles.difficultyBadge, { backgroundColor: getDifficultyColor(item.difficulty) }}]}>
+          <View style={[styles.difficultyBadge, { backgroundColor: getDifficultyColor(item.difficulty) }}]}>
             <Text style={styles.difficultyText}>{getDifficultyText(item.difficulty)}</    Text>
           </    View>
         </    View>
       </    View>
       <View style={styles.cardFooter}>
         <View style={styles.cardTags}>
-          {item.tags.slice(0, 3).map((tag, index) => ())
+          {item.tags.slice(0, 3).map(tag, index) => ())
             <View key={index} style={styles.tag}>
               <Text style={styles.tagText}>{tag}</    Text>
             </    View>
@@ -229,7 +229,7 @@ style={styles.knowledgeCard}
         </    Text>;
       </    View>;
       <View style={styles.categoriesContainer}>;
-        <FlatList
+        <FlatList;
 data={categories}
           renderItem={renderCategoryItem}
           keyExtractor={(item) => item.id}
@@ -238,7 +238,7 @@ showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.categoriesList}
         /    >
       </    View>
-      <FlatList
+      <FlatList;
 data={filteredItems}
         renderItem={renderKnowledgeItem}
         keyExtractor={(item) => item.id}
@@ -248,7 +248,7 @@ data={filteredItems}
     </    SafeAreaView>
   );
 };
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   flex: 1,
     backgroundColor: colors.background},
   loadingContainer: {,

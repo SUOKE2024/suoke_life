@@ -63,15 +63,15 @@ g;"; * /     | "tcm_diagnosis""
   | "crisis_support"
 // 智能体性能指标 * export interface AgentMetrics {
   tasksProcessed: number,
-  successRate: number;
+  successRate: number;,
   averageResponseTime: number;
   lastActive: Date;
 }
 // 智能体任务 * export interface AgentTask {
   taskId: string,
-  type: string;
+  type: string;,
   data: unknown;
-  priority: "low" | "medium" | "high" | "urgent";
+  priority: "low" | "medium" | "high" | "urgent";,
   timestamp: Date;
   userId?: string;
   timeout?: number;
@@ -82,15 +82,15 @@ g;"; * /     | "tcm_diagnosis""
 /    ;
   data?: unknown;
   error?: string;
-  timestamp: Date;
+  timestamp: Date;,
   agentId: string;
   taskId?: string;
 }
 // 智能体配置 * export interface AgentConfig {
   maxConcurrentTasks: number,
-  timeoutMs: number;
+  timeoutMs: number;,
   retryAttempts: number;
-  cacheEnabled: boolean;
+  cacheEnabled: boolean;,
   cacheTTL: number;
   [key: string]: unknown;
 }
@@ -119,7 +119,7 @@ export interface ContactInfo {
   emergencyContact?: EmergencyContact;
 }
 export interface EmergencyContact {
-  name: string;
+  name: string;,
   relationship: string;
   phone: string;
   email?: string;
@@ -133,13 +133,13 @@ export interface Schedule {
 }
 // 评分和反馈 * export interface Rating {
   score: number,   ;
-  maxScore: number;
+  maxScore: number;,
   reviewCount: number;
   distribution?: { [score: number]: number;
 };
 }
 export interface Feedback {
-  id: string;
+  id: string;,
   userId: string;
   rating: number;
   comment?: string;
@@ -148,11 +148,11 @@ export interface Feedback {
 }
 // 通知类型 * export interface Notification {
   id: string,
-  userId: string;
+  userId: string;,
   type: string;
-  title: string;
+  title: string;,
   message: string;
-  priority: "low" | "medium" | "high" | "urgent";
+  priority: "low" | "medium" | "high" | "urgent";,
   read: boolean;
   timestamp: Date;
   expiresAt?: Date;
@@ -162,7 +162,7 @@ export interface Feedback {
   code: string,   ;
   message: string;
   details?: unknown;
-  timestamp: Date;
+  timestamp: Date;,
   agentId: string;
   taskId?: string;
 }
@@ -178,7 +178,7 @@ d;
   | "qi_stagnation"
   | "special_constitution";
 export interface HealthGoal {
-  id: string;
+  id: string;,
   type: string;
   description: string;
   targetValue?: number;
@@ -188,15 +188,15 @@ export interface HealthGoal {
   priority: "low" | "medium" | "high";
 }
 export interface RiskFactor {
-  factor: string;
+  factor: string;,
   level: "low" | "medium" | "high";
   description?: string;
   recommendations?: string[];
 }
 export interface Medication {
-  name: string;
+  name: string;,
   dosage: string;
-  frequency: string;
+  frequency: string;,
   startDate: Date;
   endDate?: Date;
   prescribedBy?: string;
@@ -204,21 +204,21 @@ export interface Medication {
 }
 // 服务相关基础类型 * export interface ServiceProvider {
   id: string,
-  name: string;
+  name: string;,
   type: string;
-  rating: number;
+  rating: number;,
   verified: boolean;
   contact: ContactInfo;
   location?: Location;
 }
 export interface PricingInfo {
-  amount: number;
+  amount: number;,
   currency: string;
   unit?: string;
   discounts?: Discount[]
 }
 export interface Discount {
-  type: string;
+  type: string;,
   value: number;
   description: string;
   validUntil?: Date;
@@ -237,29 +237,29 @@ export interface AvailabilityInfo {
     | "wechat_pay"
     | "bank_transfer"
     | "cash";
-  provider: string;
+  provider: string;,
   details: unknown;
-  default: boolean;
+  default: boolean;,
   verified: boolean;
 }
 export interface PaymentRequest {
-  amount: number;
+  amount: number;,
   currency: string;
-  description: string;
+  description: string;,
   paymentMethod: PaymentMethod;
   userId: string;
   orderId?: string;
   metadata?: unknown;
 }
 export interface PaymentTransaction {
-  id: string;
+  id: string;,
   userId: string;
-  amount: number;
+  amount: number;,
   currency: string;
-  method: PaymentMethod;
+  method: PaymentMethod;,
   status: | "pending"| "processing"| "completed";
     | "failed"| "cancelled"| "refunded";
-  description: string;
+  description: string;,
   timestamp: Date;
   confirmationCode?: string;
   failureReason?: string;
@@ -268,9 +268,9 @@ export interface PaymentTransaction {
 }
 // 订阅相关基础类型 * export interface SubscriptionPlan {
   id: string,
-  name: string;
+  name: string;,
   description: string;
-  price: PricingInfo;
+  price: PricingInfo;,
   duration: string;
   features: string[];
   limitations?: unknown;
@@ -379,7 +379,7 @@ export interface AgentContext {
 * 智能体响应
 */
 export interface AgentResponse {
-  success: boolean;
+  success: boolean;,
   response: string;
   data?: any;
   error?: string;
@@ -398,16 +398,16 @@ export interface AgentResponse {
 * 用户档案
 */
 export interface UserProfile {
-  id: string;
+  id: string;,
   name: string;
-  age: number;
+  age: number;,
   gender: 'male' | 'female' | 'other';
   constitution?: ConstitutionType; // 中医体质
   medicalHistory?: MedicalRecord[];
   allergies?: string[];
   medications?: Medication[];
   preferences?: UserPreferences;
-  createdAt: Date;
+  createdAt: Date;,
   updatedAt: Date;
 }
 /**
@@ -427,11 +427,11 @@ export interface HealthData {
 * 用户偏好
 */
 export interface UserPreferences {
-  language: string;
+  language: string;,
   timezone: string;
-  notificationSettings: NotificationSettings;
+  notificationSettings: NotificationSettings;,
   privacySettings: PrivacySettings;
-  accessibilitySettings: AccessibilitySettings;
+  accessibilitySettings: AccessibilitySettings;,
   communicationStyle: 'formal' | 'casual' | 'friendly';
   preferredAgents?: AgentType[];
 }
@@ -439,7 +439,7 @@ export interface UserPreferences {
 * 位置信息
 */
 export interface LocationInfo {
-  latitude: number;
+  latitude: number;,
   longitude: number;
   address?: string;
   city?: string;
@@ -450,9 +450,9 @@ export interface LocationInfo {
 * 设备信息
 */
 export interface DeviceInfo {
-  deviceId: string;
+  deviceId: string;,
   platform: 'ios' | 'android' | 'web';
-  version: string;
+  version: string;,
   capabilities: string[];
   sensors?: string[];
 }
@@ -460,9 +460,9 @@ export interface DeviceInfo {
 * 对话消息
 */
 export interface ConversationMessage {
-  id: string;
+  id: string;,
   agentType: AgentType;
-  message: string;
+  message: string;,
   timestamp: Date;
   isUser: boolean;
   metadata?: any;
@@ -471,9 +471,9 @@ export interface ConversationMessage {
 * 医疗记录
 */
 export interface MedicalRecord {
-  id: string;
+  id: string;,
   date: Date;
-  type: 'diagnosis' | 'treatment' | 'prescription' | 'test_result';
+  type: 'diagnosis' | 'treatment' | 'prescription' | 'test_result';,
   description: string;
   doctor?: string;
   hospital?: string;
@@ -485,7 +485,7 @@ export interface MedicalRecord {
 export interface VitalSigns {
   heartRate?: number;
   bloodPressure?: {
-    systolic: number;
+    systolic: number;,
   diastolic: number;
 };
   temperature?: number;
@@ -499,7 +499,7 @@ export interface VitalSigns {
 * 症状
 */
 export interface Symptom {
-  name: string;
+  name: string;,
   severity: 1 | 2 | 3 | 4 | 5; // 1-轻微, 5-严重
   duration: string;
   description?: string;
@@ -511,9 +511,9 @@ export interface Symptom {
 * 健康测量
 */
 export interface HealthMeasurement {
-  type: string;
+  type: string;,
   value: number;
-  unit: string;
+  unit: string;,
   timestamp: Date;
   device?: string;
   notes?: string;
@@ -522,7 +522,7 @@ export interface HealthMeasurement {
 * 活动数据
 */
 export interface ActivityData {
-  type: 'walking' | 'running' | 'cycling' | 'swimming' | 'other';
+  type: 'walking' | 'running' | 'cycling' | 'swimming' | 'other';,
   duration: number; // 分钟
   intensity: 'low' | 'moderate' | 'high';
   calories?: number;
@@ -533,9 +533,9 @@ export interface ActivityData {
 * 睡眠数据
 */
 export interface SleepData {
-  bedtime: Date;
+  bedtime: Date;,
   wakeTime: Date;
-  duration: number; // 小时;
+  duration: number; // 小时;,
   quality: 1 | 2 | 3 | 4 | 5;
   deepSleep?: number;
   lightSleep?: number;
@@ -546,11 +546,11 @@ export interface SleepData {
 * 营养数据
 */
 export interface NutritionData {
-  meals: Meal[];
+  meals: Meal[];,
   totalCalories: number;
-  macronutrients: {;
+  macronutrients: {;,
   carbs: number;
-    protein: number;
+    protein: number;,
   fat: number;
 };
   micronutrients?: { [key: string]: number };
@@ -560,18 +560,18 @@ export interface NutritionData {
 * 餐食
 */
 export interface Meal {
-  type: 'breakfast' | 'lunch' | 'dinner' | 'snack';
+  type: 'breakfast' | 'lunch' | 'dinner' | 'snack';,
   foods: Food[];
-  timestamp: Date;
+  timestamp: Date;,
   calories: number;
 }
 /**
 * 食物
 */
 export interface Food {
-  name: string;
+  name: string;,
   quantity: number;
-  unit: string;
+  unit: string;,
   calories: number;
   nutrients?: { [key: string]: number;
 };
@@ -580,7 +580,7 @@ export interface Food {
 * 情绪数据
 */
 export interface MoodData {
-  mood: 'very_sad' | 'sad' | 'neutral' | 'happy' | 'very_happy';
+  mood: 'very_sad' | 'sad' | 'neutral' | 'happy' | 'very_happy';,
   stress: 1 | 2 | 3 | 4 | 5;
   energy: 1 | 2 | 3 | 4 | 5;
   notes?: string;
@@ -590,13 +590,13 @@ export interface MoodData {
 * 通知设置
 */
 export interface NotificationSettings {
-  enabled: boolean;
+  enabled: boolean;,
   healthReminders: boolean;
-  appointmentReminders: boolean;
+  appointmentReminders: boolean;,
   medicationReminders: boolean;
-  exerciseReminders: boolean;
+  exerciseReminders: boolean;,
   sleepReminders: boolean;
-  quietHours: {;
+  quietHours: {;,
   start: string;
     end: string;
 };
@@ -605,9 +605,9 @@ export interface NotificationSettings {
 * 隐私设置
 */
 export interface PrivacySettings {
-  dataSharing: boolean;
+  dataSharing: boolean;,
   anonymousAnalytics: boolean;
-  locationTracking: boolean;
+  locationTracking: boolean;,
   healthDataSharing: boolean;
   marketingCommunications: boolean;
 }
@@ -615,11 +615,11 @@ export interface PrivacySettings {
 * 无障碍设置
 */
 export interface AccessibilitySettings {
-  voiceGuidance: boolean;
+  voiceGuidance: boolean;,
   signLanguage: boolean;
-  highContrast: boolean;
+  highContrast: boolean;,
   largeText: boolean;
-  screenReader: boolean;
+  screenReader: boolean;,
   hapticFeedback: boolean;
   slowAnimations: boolean;
 }
@@ -627,13 +627,13 @@ export interface AccessibilitySettings {
 * 智能体健康状态
 */
 export interface AgentHealthStatus {
-  agentType: AgentType;
+  agentType: AgentType;,
   status: 'healthy' | 'warning' | 'error' | 'initializing' | 'shutdown';
-  load: number; // 0-1;
+  load: number; // 0-1;,
   responseTime: number; // 毫秒
-  errorRate: number; // 0-1;
+  errorRate: number; // 0-1;,
   lastCheck: Date;
-  capabilities: AgentCapability[];
+  capabilities: AgentCapability[];,
   version: string;
   uptime?: number;
   memoryUsage?: number;
@@ -645,11 +645,11 @@ export interface AgentHealthStatus {
 * 智能体协作消息
 */
 export interface AgentCollaborationMessage {
-  id: string;
+  id: string;,
   fromAgent: AgentType;
-  toAgent: AgentType;
+  toAgent: AgentType;,
   messageType: 'request' | 'response' | 'notification' | 'data_share';
-  content: any;
+  content: any;,
   priority: 'low' | 'normal' | 'high' | 'urgent';
   timestamp: Date;
   correlationId?: string;
@@ -659,7 +659,7 @@ export interface AgentCollaborationMessage {
 * 智能体决策结果
 */
 export interface AgentDecisionResult {
-  decision: string;
+  decision: string;,
   confidence: number;
   reasoning: string[];
   alternatives?: string[];

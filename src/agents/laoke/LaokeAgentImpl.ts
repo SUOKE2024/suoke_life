@@ -411,8 +411,8 @@ export class LaokeAgentImpl extends AgentBase {
     // 处理游戏交互
     const gameSession = await this.createGameSession(context);
     return {message:;
-        "欢迎来到知识探索的奇妙世界！我将作为您的向导，带您踏上学习冒险之旅：",data: {currentCharacter: gameSession.character,availableQuests: gameSession.quests,playerProgress: gameSession.progress,achievements: gameSession.achievements,inventory: gameSession.inventory,gameWorld: {
-      currentLocation: "知识图书馆",
+        "欢迎来到知识探索的奇妙世界！我将作为您的向导，带您踏上学习冒险之旅：",data: {currentCharacter: gameSession.character,availableQuests: gameSession.quests,playerProgress: gameSession.progress,achievements: gameSession.achievements,inventory: gameSession.inventory,gameWorld: {,
+  currentLocation: "知识图书馆",
       availableAreas: ["医学殿堂", "文化广场", "科技实验室", "艺术工坊"],interactiveElements: ["NPC对话", "知识挑战", "探索任务", "协作项目"];
         },npcPersonality: this.gameNPCEngine.characterProfiles;
       };
@@ -435,11 +435,11 @@ export class LaokeAgentImpl extends AgentBase {
   editor: "富文本编辑器",
           templates: "多种模板选择",
           mediaLibrary: "媒体资源库",collaboration: "团队协作功能";
-        },analytics: {
-      readership: "读者分析",
+        },analytics: {,
+  readership: "读者分析",
       engagement: "互动统计",performance: "内容表现",trends: "趋势分析";
-        },monetization: {
-      advertising: "广告收入",
+        },monetization: {,
+  advertising: "广告收入",
       subscriptions: "订阅服务",merchandise: "周边商品",courses: "付费课程";
         };
       };
@@ -583,8 +583,8 @@ export class LaokeAgentImpl extends AgentBase {
   }
   private async createGameSession(context: AgentContext): Promise<any> {
     // 创建游戏会话
-    return {character: {
-      name: "知识探索者", "
+    return {character: {,
+  name: "知识探索者", "
       level: 1,experience: 0,attributes: { 智慧: 10, 好奇心: 10, 毅力: 10 };
       },quests: [;
         { id: 1, name: "初探医学殿堂", difficulty: "简单", reward: "知识徽章" },{ id: 2, name: "文化寻宝之旅", difficulty: "中等", reward: "文化勋章" };

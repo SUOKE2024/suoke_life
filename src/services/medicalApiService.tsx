@@ -8,29 +8,29 @@ interface ApiResponse<T = any /> { data: T;/    , success: boolean;
 n";  * / Practice Fusion医疗系统* ///     "
 // 医疗数据类型 * export interface MedicalRecord {
   id: string,
-  patientId: string;
+  patientId: string;,
   providerId: string;
   recordType: | "diagnosis"| "prescription"| "lab_result";
     | "vital_signs";
     | "allergy";
     | "immunization";
-  data: unknown;
+  data: unknown;,
   timestamp: string;
-  source: MedicalApiProvider;
+  source: MedicalApiProvider;,
   verified: boolean;
   metadata?:  {
     clinician?: string;
     facility?: string;
     department?: string;
-    confidence?: number
+    confidence?: number;
 };
 }
 // 患者信息 * export interface PatientInfo {
   id: string,
-  name: string;
+  name: string;,
   dateOfBirth: string,gender: "male" | "female" | "other",contactInfo: {phone?: string;
     email?: string;
-    address?: string
+    address?: string;
 };
   insuranceInfo?:  { provider: string,
     policyNumber: string;
@@ -41,19 +41,19 @@ n";  * / Practice Fusion医疗系统* ///     "
 }
 // 医疗预约信息 * export interface MedicalAppointment {
   id: string,
-  patientId: string;
+  patientId: string;,
   providerId: string;
-  clinicianId: string;
+  clinicianId: string;,
   appointmentType: | "consultation"| "follow_up"| "procedure";
     | "lab_test"
     | "imaging"
-  scheduledTime: string;
+  scheduledTime: string;,
   duration: number //;
     | "completed"
     | "cancelled"
     | "no_show";
   location: {facility: string,address: string;
-    room?: string
+    room?: string;
 };
   notes?: string;
   telehealth?: boolean}
@@ -61,10 +61,10 @@ n";  * / Practice Fusion医疗系统* ///     "
   id: string,
   patientId: string,clinicianId: string,medication: {name: string;
     genericName?: string;
-    dosage: string;
-    frequency: string;
-    duration: string;
-    instructions: string;
+    dosage: string;,
+  frequency: string;
+    duration: string;,
+  instructions: string;
 }
   prescribedDate: string,
   status: "active" | "completed" | "cancelled" | "expired",
@@ -75,7 +75,7 @@ n";  * / Practice Fusion医疗系统* ///     "
 }
 // 实验室结果 * export interface LabResult {
   id: string,
-  patientId: string;
+  patientId: string;,
   testName: string,testCode: string,result: {value: string | number;
     unit?: string;
     referenceRange?: string;
@@ -88,12 +88,12 @@ n";  * / Practice Fusion医疗系统* ///     "
   notes?: string}
 // API配置 * interface ApiConfig {
   baseUrl: string,
-  apiKey: string;
+  apiKey: string;,
   version: string;
-  timeout: number;
+  timeout: number;,
   retryAttempts: number;
-  rateLimit: {requests: number;
-    window: number ;
+  rateLimit: {requests: number;,
+  window: number ;
 }
 }
 //
@@ -329,7 +329,7 @@ default: endpoint += "everything"}
   private transformMedicalRecords(data: unknown,)
     provider: MedicalApiProvider;);: MedicalRecord[]  {
     if (!data.entry) return ;[;];
-    return data.entry.map(entry: unknow;n;) => ({,)
+    return data.entry.map(entry: unknow;n;) => ({),
   id: entry.resource.id,
       patientId: entry.resource.subject?.reference?.split("/")[1] || ",/          providerId: provider,"
       recordType: this.determineRecordType(entry.resource.resourceType),
@@ -346,7 +346,7 @@ default: endpoint += "everything"}
   private transformAppointments(data: unknown,)
     provider: MedicalApiProvider;);: MedicalAppointment[]  {
     if (!data.entry) return ;[;];
-    return data.entry.map(entry: unknow;n;); => ({,)
+    return data.entry.map(entry: unknow;n;); => ({),
   id: entry.resource.id,
       patientId: entry.resource.participant;?.find(p: unknown) => p.actor?.reference?.includes("Patient"))
           ?.actor?.reference?.split("/")[1] || ",/          providerId: provider,"
@@ -369,7 +369,7 @@ default: endpoint += "everything"}
   private transformPrescriptions(data: unknown,)
     provider: MedicalApiProvider;);: Prescription[]  {
     if (!data.entry) return ;[;];
-    return data.entry.map(entry: unknow;n;) => ({,)
+    return data.entry.map(entry: unknow;n;) => ({),
   id: entry.resource.id,
       patientId: entry.resource.subject?.reference?.split("/")[1] || ",/      clinicianId: entry.resource.requester?.reference?.split("/")[1] || ",/          medication: {,
   name: entry.resource.medicationCodeableConcept?.text ||entry.resource.medicationReference?.display ||,
@@ -389,7 +389,7 @@ default: endpoint += "everything"}
   private transformLabResults(data: unknown,)
     provider: MedicalApiProvider;);: LabResult[]  {
     if (!data.entry) return ;[;];
-    return data.entry.map(entry: unknow;n;) => ({,)
+    return data.entry.map(entry: unknow;n;) => ({),
   id: entry.resource.id,
       patientId: entry.resource.subject?.reference?.split("/")[1] || ",/      testName: entry.resource.code?.text || ",
       testCode: entry.resource.code?.coding?.[0]?.code || ",

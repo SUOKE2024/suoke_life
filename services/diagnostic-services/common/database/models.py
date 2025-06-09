@@ -2,7 +2,7 @@
 models - 索克生活项目模块
 """
 
-from datetime import datetime
+import datetime
 from sqlalchemy import Column, Integer, String, DateTime, Text, Float, Boolean, JSON, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declarative_base

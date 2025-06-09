@@ -12,7 +12,7 @@ export interface AppError extends Error {
 }
 // 错误恢复建议
 export interface ErrorRecovery {
-  action: 'retry' | 'refresh' | 'navigate' | 'contact_support' | 'wait';
+  action: 'retry' | 'refresh' | 'navigate' | 'contact_support' | 'wait';,
   message: string;
   autoRetry?: boolean;
   retryDelay?: number;
@@ -45,8 +45,7 @@ export class ErrorHandler {
       return {
         ...error,
         timestamp,
-        requestId,
-      };
+        requestId};
     }
     // 网络错误
     if (error.name === 'TypeError' && error.message.includes('fetch')) {
@@ -59,8 +58,7 @@ export class ErrorHandler {
         recoverable: true,
         timestamp,
         requestId,
-        service: context,
-      };
+        service: context};
     }
     // HTTP错误
     if (error.status) {
@@ -74,8 +72,7 @@ export class ErrorHandler {
         recoverable: this.isHttpErrorRecoverable(error.status),
         timestamp,
         requestId,
-        service: context,
-      };
+        service: context};
     }
     // 超时错误
     if (error.name === 'AbortError' || error.message.includes('timeout')) {
@@ -88,8 +85,7 @@ export class ErrorHandler {
         recoverable: true,
         timestamp,
         requestId,
-        service: context,
-      };
+        service: context};
     }
     // 通用错误
     return {
@@ -101,8 +97,7 @@ export class ErrorHandler {
       recoverable: true,
       timestamp,
       requestId,
-      service: context,
-    };
+      service: context};
   }
   // 映射HTTP状态码到错误代码
   private mapHttpStatusToErrorCode(status: number): string {
@@ -153,48 +148,41 @@ export class ErrorHandler {
           message: '请检查网络连接后重试',
           autoRetry: true,
           retryDelay: 3000,
-          maxRetries: 3,
-        };
+          maxRetries: 3};
       case ERROR_CODES.UNAUTHORIZED:
         return {,
   action: 'refresh',
           message: '请重新登录',
-          autoRetry: false,
-        };
+          autoRetry: false};
       case ERROR_CODES.TIMEOUT:
         return {,
   action: 'retry',
           message: '请求超时，正在重试...',
           autoRetry: true,
           retryDelay: 2000,
-          maxRetries: 2,
-        };
+          maxRetries: 2};
       case ERROR_CODES.SERVICE_UNAVAILABLE:
         return {,
   action: 'wait',
           message: '服务暂时不可用，请稍后重试',
           autoRetry: true,
           retryDelay: 10000,
-          maxRetries: 3,
-        };
+          maxRetries: 3};
       case ERROR_CODES.VALIDATION_ERROR:
         return {,
   action: 'navigate',
           message: '请检查输入信息',
-          autoRetry: false,
-        };
+          autoRetry: false};
       case ERROR_CODES.FORBIDDEN:
         return {,
   action: 'contact_support',
           message: '权限不足，请联系管理员',
-          autoRetry: false,
-        };
+          autoRetry: false};
       default:
         return {,
   action: 'retry',
           message: '操作失败，请重试',
-          autoRetry: false,
-        };
+          autoRetry: false};
     }
   }
   // 记录错误日志
@@ -209,8 +197,7 @@ export class ErrorHandler {
       message: error.technicalMessage,
       userMessage: error.userMessage,
       recoverable: error.recoverable,
-      stack: error.stack,
-    };
+      stack: error.stack};
     if (logLevel === 'error') {
       console.error('App Error:', logMessage);
     } else if (logLevel === 'warn') {
@@ -268,8 +255,7 @@ export class ErrorHandler {
       byCode: {} as Record<string, number>,
       byService: {} as Record<string, number>,
       recoverable: 0,
-      recent: 0,
-    };
+      recent: 0};
     this.errorHistory.forEach(error => {
       // 按错误代码统计
       stats.byCode[error.code] = (stats.byCode[error.code] || 0) + 1;
@@ -297,8 +283,7 @@ export class ErrorHandler {
     const criticalCodes = [
       ERROR_CODES.UNAUTHORIZED,
       ERROR_CODES.FORBIDDEN,
-      ERROR_CODES.SERVER_ERROR,
-    ];
+      ERROR_CODES.SERVER_ERROR];
     return criticalCodes.includes(error.code) || !error.recoverable;
   }
   // 格式化错误信息用于显示
@@ -311,8 +296,7 @@ export class ErrorHandler {
         return {
       title: this.getErrorTitle(error.code),
       message: error.userMessage || error.message,
-      actions: this.getActionLabels(recovery.action),
-    };
+      actions: this.getActionLabels(recovery.action)};
   }
   // 获取错误标题
   private getErrorTitle(code: string): string {

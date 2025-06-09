@@ -10,7 +10,7 @@ import os
 import sys
 import logging
 from pathlib import Path
-from datetime import datetime
+import datetime
 import json
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')

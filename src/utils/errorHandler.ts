@@ -21,9 +21,9 @@ export enum ErrorSeverity {
 }
 // 错误接口
 export interface AppError {
-  id: string;
+  id: string;,
   type: ErrorType;
-  severity: ErrorSeverity;
+  severity: ErrorSeverity;,
   message: string;
   details?: any;
   timestamp: number;
@@ -35,9 +35,9 @@ export interface AppError {
 }
 // 错误处理配置
 interface ErrorHandlerConfig {
-  enableCrashlytics: boolean;
+  enableCrashlytics: boolean;,
   enableLocalLogging: boolean;
-  enableUserNotification: boolean;
+  enableUserNotification: boolean;,
   maxErrorsInMemory: number;
   autoReportThreshold: ErrorSeverity;
 }
@@ -47,8 +47,7 @@ const defaultConfig: ErrorHandlerConfig = {,
   enableLocalLogging: true,
   enableUserNotification: true,
   maxErrorsInMemory: 100,
-  autoReportThreshold: ErrorSeverity.HIGH,
-};
+  autoReportThreshold: ErrorSeverity.HIGH};
 // 错误处理器类
 export class ErrorHandler {
   private static instance: ErrorHandler;
@@ -76,8 +75,7 @@ export class ErrorHandler {
         severity: ErrorSeverity.HIGH,
         message: 'Unhandled Promise Rejection',
         details: event.reason,
-        stackTrace: event.reason?.stack,
-      });
+        stackTrace: event.reason?.stack});
       if (originalHandler) {
         originalHandler(event);
       }
@@ -90,8 +88,7 @@ export class ErrorHandler {
         severity: isFatal ? ErrorSeverity.CRITICAL : ErrorSeverity.HIGH,
         message: error.message || 'JavaScript Error',
         details: error,
-        stackTrace: error.stack,
-      });
+        stackTrace: error.stack});
       if (originalErrorHandler) {
         originalErrorHandler(error, isFatal);
       }
@@ -104,8 +101,7 @@ export class ErrorHandler {
       severity: ErrorSeverity.MEDIUM,
       timestamp: Date.now(),
       resolved: false,
-      ...errorInput,
-    };
+      ...errorInput};
     // 添加到错误队列
     this.addToErrorQueue(error);
     // 记录错误
@@ -146,10 +142,8 @@ export class ErrorHandler {
   status: error.status,
         statusText: error.statusText,
         url: error.config?.url,
-        method: error.config?.method,
-      },
-      context,
-    });
+        method: error.config?.method},
+      context});
   }
   // 处理智能体服务错误
   public handleAgentServiceError(error: any, agentId?: string, context?: Record<string, any>): AppError {
@@ -173,8 +167,7 @@ export class ErrorHandler {
       severity,
       message,
       details: { agentId, originalError: error },
-      context,
-    });
+      context});
   }
   // 处理验证错误
   public handleValidationError(field: string, value: any, rule: string): AppError {
@@ -182,8 +175,7 @@ export class ErrorHandler {
       type: ErrorType.VALIDATION,
       severity: ErrorSeverity.LOW,
       message: `字段 ${field} 验证失败`,
-      details: { field, value, rule },
-    });
+      details: { field, value, rule }});
   }
   // 处理权限错误
   public handlePermissionError(permission: string, context?: Record<string, any>): AppError {
@@ -192,8 +184,7 @@ export class ErrorHandler {
       severity: ErrorSeverity.MEDIUM,
       message: `缺少权限: ${permission}`,
       details: { permission },
-      context,
-    });
+      context});
   }
   // 添加错误监听器
   public addErrorListener(listener: (error: AppError) => void): () => void {
@@ -247,8 +238,7 @@ export class ErrorHandler {
       severity: error.severity,
       timestamp: new Date(error.timestamp).toISOString(),
       details: error.details,
-      context: error.context,
-    });
+      context: error.context});
   }
   // 上报错误
   private reportError(error: AppError): void {
@@ -262,15 +252,13 @@ export class ErrorHandler {
         severity: error.severity,
         timestamp: error.timestamp,
         details: JSON.stringify(error.details),
-        context: JSON.stringify(error.context),
-      });
+        context: JSON.stringify(error.context)});
       // 设置自定义属性
       crashlytics().setAttributes({
         errorType: error.type,
         severity: error.severity,
         userId: error.userId || 'unknown',
-        sessionId: error.sessionId || 'unknown',
-      });
+        sessionId: error.sessionId || 'unknown'});
     } catch (reportError) {
       console.warn('Failed to report error to Crashlytics:', reportError);
     }
@@ -297,14 +285,11 @@ export class ErrorHandler {
       [
         {
       text: "确定",
-      style: 'default',
-        },
+      style: 'default'},
         ...(error.severity >= ErrorSeverity.HIGH ? [{
       text: "反馈问题",
       style: 'default',
-          onPress: () => this.openFeedback(error),
-        }] : []),
-      ],
+          onPress: () => this.openFeedback(error)}] : [])],
     );
   }
   // 获取日志级别
@@ -393,8 +378,7 @@ export class ErrorHandler {
       byType: {} as Record<ErrorType, number>,
       bySeverity: {} as Record<ErrorSeverity, number>,
       resolved: 0,
-      unresolved: 0,
-    };
+      unresolved: 0};
     // 初始化计数器
     Object.values(ErrorType).forEach(type => {
       stats.byType[type] = 0;
@@ -440,7 +424,6 @@ export const useErrorHandler = () => {
     getErrorStats: () => errorHandler.getErrorStats(),
     addErrorListener: (listener: (error: AppError) => void) => errorHandler.addErrorListener(listener),
     resolveError: (errorId: string) => errorHandler.resolveError(errorId),
-    clearErrorHistory: () => errorHandler.clearErrorHistory(),
-  };
+    clearErrorHistory: () => errorHandler.clearErrorHistory()};
 };
 export default errorHandler;

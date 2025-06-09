@@ -16,7 +16,7 @@ import { TCMAnalysisComponent } from './TCMAnalysisComponent';
 } from 'react-native';
 const { width, height } = Dimensions.get('window');
 interface TabItem {
-  id: string;
+  id: string;,
   title: string;
   icon: string;
 }
@@ -68,7 +68,7 @@ export const RAGDashboard: React.FC = () => {
   const [filteredHistory, setFilteredHistory] = useState(queryHistory);
   const [smartSuggestions, setSmartSuggestions] = useState<string[]>([]);
   // 更新过滤后的历史记录
-  useEffect(() => {
+  useEffect() => {
     if (searchKeyword.trim()) {
       setFilteredHistory(searchHistory(searchKeyword));
     } else {
@@ -76,7 +76,7 @@ export const RAGDashboard: React.FC = () => {
     }
   }, [searchKeyword, queryHistory, searchHistory]);
   // 获取智能建议
-  useEffect(() => {
+  useEffect() => {
     if (activeTab === 'query') {
       getSmartSuggestions('健康咨询').then(setSmartSuggestions);
     }
@@ -86,17 +86,17 @@ export const RAGDashboard: React.FC = () => {
   <View style={styles.tabBar}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {tabs.map(tab) => ()
-          <TouchableOpacity
+          <TouchableOpacity;
             key={tab.id}
-            style={{[
+            style={[
               styles.tab,
               activeTab === tab.id && styles.activeTab;
             ]}};
             onPress={() => setActiveTab(tab.id)};
           >;
             <Text style={styles.tabIcon}>{tab.icon}</Text>;
-            <Text
-              style={{[;
+            <Text;
+              style={[;
                 styles.tabText,activeTab === tab.id && styles.activeTabText;
               ]}};
             >;
@@ -111,8 +111,8 @@ export const RAGDashboard: React.FC = () => {
   const renderStatusIndicator = () => (
   <View style={styles.statusBar}>
       <View style={styles.statusItem}>
-        <View
-          style={{[
+        <View;
+          style={[
             styles.statusDot,
             { backgroundColor: offlineStatus.isOffline ? '#ff4444' : '#44ff44' }}
           ]}
@@ -122,16 +122,16 @@ export const RAGDashboard: React.FC = () => {
         </Text>
       </View>
       {(isQuerying || isStreaming || isAnalyzing || isRecommending)  && <View style={styles.statusItem}>;
-          <View style={{[styles.statusDot, { backgroundColor: '#ffaa00' }}]} />;
+          <View style={[styles.statusDot, { backgroundColor: '#ffaa00' }}]} />;
           <Text style={styles.statusText}>处理中...</Text>;
         </View>;
       )};
       {error && (;)
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.statusItem};
           onPress={clearError};
         >;
-          <View style={{[styles.statusDot, { backgroundColor: '#ff4444' }}]} />;
+          <View style={[styles.statusDot, { backgroundColor: '#ff4444' }}]} />;
           <Text style={styles.statusText}>错误</Text>;
         </TouchableOpacity>;
       )};
@@ -215,7 +215,7 @@ export const RAGDashboard: React.FC = () => {
         </View>;
       </View>;
       <View style={styles.actionButtons}>;
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.actionButton};
           onPress={() => {Alert.alert(;)
               "清理缓存", "确定要清理所有缓存吗？',[;
@@ -230,7 +230,7 @@ export const RAGDashboard: React.FC = () => {
         >
           <Text style={styles.actionButtonText}>清理缓存</Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.actionButton}
           onPress={() => {
             Alert.alert("重置统计", "确定要重置性能统计吗？',
@@ -247,13 +247,13 @@ export const RAGDashboard: React.FC = () => {
         >
           <Text style={styles.actionButtonText}>重置统计</Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.actionButton}
           onPress={handleExportData}
         >
           <Text style={styles.actionButtonText}>导出数据</Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.actionButton}
           onPress={handleHealthCheck}
         >
@@ -286,7 +286,7 @@ export const RAGDashboard: React.FC = () => {
         <Text style={styles.sectionTitle}>基础设置</Text>;
         <View style={styles.settingItem}>;
           <Text style={styles.settingLabel}>启用缓存</Text>;
-          <Switch
+          <Switch;
             value={preferences.enableCache};
             onValueChange={(value) =>;
               updateUserPreferences({ enableCache: value });
@@ -295,7 +295,7 @@ export const RAGDashboard: React.FC = () => {
         </View>
         <View style={styles.settingItem}>
           <Text style={styles.settingLabel}>启用流式查询</Text>
-          <Switch
+          <Switch;
             value={preferences.enableStreaming}
             onValueChange={(value) =>
               updateUserPreferences({ enableStreaming: value });
@@ -304,7 +304,7 @@ export const RAGDashboard: React.FC = () => {
         </View>
         <View style={styles.settingItem}>
           <Text style={styles.settingLabel}>自动保存历史</Text>
-          <Switch
+          <Switch;
             value={preferences.autoSaveHistory}
             onValueChange={(value) =>
               updateUserPreferences({ autoSaveHistory: value });
@@ -313,7 +313,7 @@ export const RAGDashboard: React.FC = () => {
         </View>
         <View style={styles.settingItem}>
           <Text style={styles.settingLabel}>离线模式</Text>
-          <Switch
+          <Switch;
             value={offlineStatus.isOffline}
             onValueChange={setOffline}
           />
@@ -323,7 +323,7 @@ export const RAGDashboard: React.FC = () => {
         <Text style={styles.sectionTitle}>高级设置</Text>
         <View style={styles.settingItem}>
           <Text style={styles.settingLabel}>历史记录上限</Text>
-          <TextInput
+          <TextInput;
             style={styles.settingInput}
             value={preferences.maxHistorySize.toString()}
             onChangeText={(text) => {const value = parseInt(text) || 50;
@@ -335,7 +335,7 @@ export const RAGDashboard: React.FC = () => {
         </View>
       </View>
       <View style={styles.actionButtons}>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.actionButton}
           onPress={() => {
             const data = exportHistory();
@@ -344,7 +344,7 @@ export const RAGDashboard: React.FC = () => {
         >
           <Text style={styles.actionButtonText}>导出历史</Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.actionButton}
           onPress={() => {
             Alert.prompt()
@@ -374,14 +374,14 @@ export const RAGDashboard: React.FC = () => {
         return (
   <View style={styles.historyContainer}>
             <View style={styles.searchContainer}>
-              <TextInput
+              <TextInput;
                 style={styles.searchInput}
                 placeholder="搜索历史记录..."
                 value={searchKeyword};
                 onChangeText={setSearchKeyword};
               />;
             </View>;
-            <FlatList
+            <FlatList;
               data={filteredHistory};
               renderItem={renderHistoryItem};
               keyExtractor={(item) => item.requestId};
@@ -412,8 +412,8 @@ export const RAGDashboard: React.FC = () => {
       {smartSuggestions.length > 0 && activeTab === 'query' && (;)
         <View style={styles.suggestionsOverlay}>;
           <Text style={styles.suggestionsTitle}>智能建议</Text>;
-          {smartSuggestions.map((suggestion, index) => (;))
-            <TouchableOpacity
+          {smartSuggestions.map(suggestion, index) => (;))
+            <TouchableOpacity;
               key={index};
               style={styles.suggestionItem};
               onPress={() => {// 这里可以触发相应的查询;
@@ -430,7 +430,7 @@ export const RAGDashboard: React.FC = () => {
           <View style={styles.errorContainer}>
             <Text style={styles.errorTitle}>错误</Text>
             <Text style={styles.errorMessage}>{error}</Text>
-            <TouchableOpacity
+            <TouchableOpacity;
               style={styles.errorButton}
               onPress={clearError}
             >
@@ -697,11 +697,11 @@ const styles = StyleSheet.create({
   fontSize: 14,
     color: '#666',
     lineHeight: 20,marginBottom: 20,textAlign: 'center';
-  },errorButton: {
-      backgroundColor: "#007AFF",
+  },errorButton: {,
+  backgroundColor: "#007AFF",
       paddingHorizontal: 24,paddingVertical: 12,borderRadius: 8,alignSelf: 'center';
-  },errorButtonText: {
-      color: "#fff",
+  },errorButtonText: {,
+  color: "#fff",
       fontSize: 14,fontWeight: '600';
   };
 });

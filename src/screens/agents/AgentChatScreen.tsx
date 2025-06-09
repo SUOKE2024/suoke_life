@@ -1,224 +1,344 @@
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
-    Alert,
-    Animated,
-    Dimensions,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Alert,
+  Animated,
+  Dimensions,
+  FlatList,
+  KeyboardAvoidingView,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { borderRadius, colors, shadows, spacing, typography } from '../../constants/theme';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
+// 消息类型定义
 interface Message {
-  id: string;
+  id: string;,
   text: string;
-  sender: 'user' | 'agent';
+  sender: 'user' | 'agent';,
   timestamp: Date;
-  type?: 'text' | 'image' | 'file' | 'suggestion';
-  metadata?: any;
+  type: 'text' | 'image' | 'voice' | 'file' | 'diagnosis';,
+  status: 'sending' | 'sent' | 'delivered' | 'read' | 'failed';
+  metadata?: {
+    imageUrl?: string;
+    voiceUrl?: string;
+    fileUrl?: string;
+    fileName?: string;
+    diagnosisData?: any;
+  };
 }
 
-interface Agent {
-  id: string;
+// 智能体信息类型
+interface AgentInfo {
+  id: string;,
   name: string;
-  avatar: string;
-  specialty: string;
-  status: 'online' | 'offline' | 'busy';
+  avatar: string;,
   description: string;
+  capabilities: string[];,
+  serviceEndpoint: string;
+  status: 'online' | 'offline' | 'busy';,
+  colors: {
+    primary: string;,
+  secondary: string;
+    accent: string;
+  };
 }
+
+// 路由参数类型
+type RootStackParamList = {
+  AgentChat: { agentId: string; agentName: string };
+};
+
+type AgentChatScreenRouteProp = RouteProp<RootStackParamList, 'AgentChat'>;
+type AgentChatScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'AgentChat'
+>;
 
 const AgentChatScreen: React.FC = () => {
-  const navigation = useNavigation();
-  const route = useRoute();
-  const scrollViewRef = useRef<ScrollView>(null);
-  const inputRef = useRef<TextInput>(null);
-  
+  const navigation = useNavigation<AgentChatScreenNavigationProp>();
+  const route = useRoute<AgentChatScreenRouteProp>();
+  const { agentId, agentName } = route.params;
+
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [agent, setAgent] = useState<Agent | null>(null);
-  const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [isRecording, setIsRecording] = useState(false);
-  
-  // 动画值
-  const typingAnimation = useRef(new Animated.Value(0)).current;
-  const sendButtonScale = useRef(new Animated.Value(1)).current;
+  const [agentInfo, setAgentInfo] = useState<AgentInfo | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [connecting, setConnecting] = useState(false);
 
-  // 模拟智能体数据
-  useEffect(() => {
-    const agentData: Agent = {
-      id: 'xiaoai',
+  const flatListRef = useRef<FlatList>(null);
+  const typingAnimation = useRef(new Animated.Value(0)).current;
+
+  // 从Redux获取用户信息
+  const authState = useSelector(state: RootState) => state.auth);
+  const user = 'user' in authState ? authState.user : null;
+
+  // 智能体配置
+  const agentConfigs: Record<string, AgentInfo> = {
+    xiaoai: {,
+  id: 'xiaoai',
       name: '小艾',
       avatar: '🤖',
-      specialty: '健康咨询',
+      description: '多模态感知智能体，擅长图像、语音、文本分析',
+      capabilities: ['图像分析', '语音识别', '多模态融合', '健康检测'],
+      serviceEndpoint: 'http://localhost:8015',
       status: 'online',
-      description: '您的专属健康管理助手',
-    };
-    setAgent(agentData);
+      colors: {,
+  primary: '#4A90E2',
+        secondary: '#E3F2FD',
+        accent: '#2196F3',
+      },
+    },
+    xiaoke: {,
+  id: 'xiaoke',
+      name: '小克',
+      avatar: '🧘‍♂️',
+      description: '健康服务智能体，提供个性化健康管理服务',
+      capabilities: ['健康评估', '服务推荐', '预约管理', '健康计划'],
+      serviceEndpoint: 'http://localhost:8016',
+      status: 'online',
+      colors: {,
+  primary: '#7B68EE',
+        secondary: '#F3E5F5',
+        accent: '#9C27B0',
+      },
+    },
+    laoke: {,
+  id: 'laoke',
+      name: '老克',
+      avatar: '👨‍⚕️',
+      description: '知识传播智能体，分享健康知识和经验',
+      capabilities: ['知识问答', '健康教育', '经验分享', '学习指导'],
+      serviceEndpoint: 'http://localhost:8017',
+      status: 'online',
+      colors: {,
+  primary: '#FF6B6B',
+        secondary: '#FFEBEE',
+        accent: '#F44336',
+      },
+    },
+    soer: {,
+  id: 'soer',
+      name: '索儿',
+      avatar: '🏃‍♀️',
+      description: '营养生活智能体，制定营养计划和生活方式',
+      capabilities: ['营养分析', '运动指导', '生活规划', '习惯养成'],
+      serviceEndpoint: 'http://localhost:8018',
+      status: 'online',
+      colors: {,
+  primary: '#4ECDC4',
+        secondary: '#E0F2F1',
+        accent: '#009688',
+      },
+    },
+  };
 
-    // 初始欢迎消息
-    const welcomeMessage: Message = {
-      id: '1',
-      text: '您好！我是小艾，您的专属健康管理助手。我可以帮您分析健康数据、制定健康计划、回答健康问题。有什么可以帮助您的吗？',
-      sender: 'agent',
-      timestamp: new Date(),
-      type: 'text',
-    };
-    setMessages([welcomeMessage]);
-
-    // 设置建议
-    setSuggestions([
-      '分析我的健康数据',
-      '制定运动计划',
-      '饮食建议',
-      '睡眠优化',
-    ]);
-  }, []);
-
-  // 打字动画
-  useEffect(() => {
-    if (isTyping) {
-      Animated.loop(
-        Animated.sequence([
-          Animated.timing(typingAnimation, {
-            toValue: 1,
-            duration: 600,
-            useNativeDriver: true,
-          }),
-          Animated.timing(typingAnimation, {
-            toValue: 0,
-            duration: 600,
-            useNativeDriver: true,
-          }),
-        ])
-      ).start();
-    } else {
-      typingAnimation.setValue(0);
-    }
-  }, [isTyping, typingAnimation]);
-
-  // 滚动到底部
-  const scrollToBottom = useCallback(() => {
-    setTimeout(() => {
-      scrollViewRef.current?.scrollToEnd({ animated: true });
-    }, 100);
-  }, []);
-
-  // 发送消息
-  const sendMessage = useCallback(async (text: string) => {
-    if (!text.trim()) return;
-
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      text: text.trim(),
-      sender: 'user',
-      timestamp: new Date(),
-      type: 'text',
-    };
-
-    setMessages(prev => [...prev, userMessage]);
-    setInputText('');
-    setIsTyping(true);
-    scrollToBottom();
-
-    // 按钮动画
-    Animated.sequence([
-      Animated.timing(sendButtonScale, {
-        toValue: 0.8,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(sendButtonScale, {
-        toValue: 1,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-    ]).start();
-
-    // 模拟智能体回复
-    setTimeout(() => {
-      const agentResponse = generateAgentResponse(text);
-      const agentMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: agentResponse,
+  // 初始化智能体信息
+  useEffect() => {
+    const agent = agentConfigs[agentId];
+    if (agent) {
+      setAgentInfo(agent);
+      // 添加欢迎消息
+      const welcomeMessage: Message = {,
+  id: 'welcome',
+        text: `您好！我是${agent.name}，${agent.description}。有什么可以帮助您的吗？`,
         sender: 'agent',
         timestamp: new Date(),
         type: 'text',
+        status: 'read',
       };
+      setMessages([welcomeMessage]);
+    }
+    setLoading(false);
+  }, [agentId]);
 
-      setMessages(prev => [...prev, agentMessage]);
-      setIsTyping(false);
-      scrollToBottom();
-    }, 1500 + Math.random() * 1000);
-  }, [scrollToBottom, sendButtonScale]);
+  // 启动打字动画
+  const startTypingAnimation = () => {
+    setIsTyping(true);
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(typingAnimation, {
+          toValue: 1,
+          duration: 600,
+          useNativeDriver: true,
+        }),
+        Animated.timing(typingAnimation, {
+          toValue: 0,
+          duration: 600,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  };
 
-  // 生成智能体回复
-  const generateAgentResponse = (userText: string): string => {
-    const responses = {
-      '健康数据': '根据您最近的健康数据分析，您的整体健康状况良好。心率平均72bpm，血压120/80mmHg，体重稳定。建议继续保持规律运动和健康饮食。',
-      '运动计划': '为您推荐以下运动计划：\n\n🏃‍♂️ 有氧运动：每周3-4次，每次30-45分钟\n💪 力量训练：每周2次，每次20-30分钟\n🧘‍♀️ 瑜伽拉伸：每天10-15分钟\n\n记得循序渐进，量力而行！',
-      '饮食': '健康饮食建议：\n\n🥗 多吃蔬菜水果，每天5-7份\n🐟 适量优质蛋白质\n🌾 选择全谷物食品\n💧 每天饮水1.5-2升\n🚫 少油少盐少糖\n\n均衡营养是健康的基础！',
-      '睡眠': '优质睡眠建议：\n\n⏰ 规律作息，每天同一时间睡觉起床\n🌙 睡前1小时避免电子设备\n🛏️ 保持卧室安静、黑暗、凉爽\n☕ 下午3点后避免咖啡因\n🧘‍♀️ 睡前可以做些放松练习\n\n良好的睡眠是健康的重要支柱！',
+  // 停止打字动画
+  const stopTypingAnimation = () => {
+    setIsTyping(false);
+    typingAnimation.stopAnimation();
+    typingAnimation.setValue(0);
+  };
+
+  // 发送消息
+  const sendMessage = useCallback(async () => {
+    if (!inputText.trim() || !agentInfo) return;
+
+    const userMessage: Message = {,
+  id: Date.now().toString(),
+      text: inputText.trim(),
+      sender: 'user',
+      timestamp: new Date(),
+      type: 'text',
+      status: 'sending',
     };
 
-    // 简单的关键词匹配
-    for (const [keyword, response] of Object.entries(responses)) {
-      if (userText.includes(keyword)) {
-        return response;
-      }
+    setMessages(prev) => [...prev, userMessage]);
+    setInputText('');
+
+    // 滚动到底部
+    setTimeout() => {
+      flatListRef.current?.scrollToEnd({ animated: true });
+    }, 100);
+
+    try {
+      // 更新消息状态为已发送
+      setMessages(prev) =>
+        prev.map(msg) =>
+          msg.id === userMessage.id ? { ...msg, status: 'sent' as const } : msg;
+        )
+      );
+
+      // 开始打字动画
+      startTypingAnimation();
+
+      // 模拟API调用
+      const response = await simulateAgentResponse(inputText.trim(), agentInfo);
+
+      // 停止打字动画
+      stopTypingAnimation();
+
+      // 添加智能体回复
+      const agentMessage: Message = {,
+  id: (Date.now() + 1).toString(),
+        text: response.text,
+        sender: 'agent',
+        timestamp: new Date(),
+        type: response.type || 'text',
+        status: 'read',
+        metadata: response.metadata,
+      };
+
+      setMessages(prev) => [...prev, agentMessage]);
+
+      // 更新用户消息状态为已读
+      setMessages(prev) =>
+        prev.map(msg) =>
+          msg.id === userMessage.id ? { ...msg, status: 'read' as const } : msg;
+        )
+      );
+    } catch (error) {
+      console.error('发送消息失败:', error);
+      stopTypingAnimation();
+
+      // 更新消息状态为失败
+      setMessages(prev) =>
+        prev.map(msg) =>
+          msg.id === userMessage.id;
+            ? { ...msg, status: 'failed' as const }
+            : msg;
+        )
+      );
+
+      Alert.alert('错误', '发送消息失败，请重试');
     }
+  }, [inputText, agentInfo]);
 
-    return '感谢您的问题！我会根据您的具体情况为您提供个性化的健康建议。如果您有具体的健康问题或需求，请详细描述，我会为您提供更精准的帮助。';
+  // 模拟智能体响应
+  const simulateAgentResponse = async (userInput: string, agent: AgentInfo) => {
+    // 模拟网络延迟
+    await new Promise(resolve) =>
+      setTimeout(resolve, 1000 + Math.random() * 2000)
+    );
+
+    const responses = {
+      xiaoai: [
+        '我可以帮您分析图像、语音或其他多模态数据。请上传您需要分析的内容。',
+        '基于您的描述，我建议进行多模态健康检测。这将包括面部分析、语音分析等。',
+        '我的多模态感知能力可以同时处理图像、语音和文本信息，为您提供综合分析。',
+      ],
+      xiaoke: [
+        '根据您的需求，我为您推荐以下健康服务：定期体检、营养咨询、运动指导。',
+        '我可以帮您预约专业的健康服务，包括中医诊疗、营养咨询等。',
+        '基于您的健康档案，我建议制定个性化的健康管理计划。',
+      ],
+      laoke: [
+        '关于这个健康问题，中医理论认为需要从整体调理的角度来看待。',
+        '我来为您分享一些相关的健康知识和养生经验。',
+        '根据传统中医理论，这种情况通常与体质和生活习惯有关。',
+      ],
+      soer: [
+        '根据您的情况，我建议调整饮食结构，增加优质蛋白质和维生素的摄入。',
+        '我为您制定了一个营养均衡的饮食计划，包括三餐搭配和运动建议。',
+        '健康的生活方式包括规律作息、均衡饮食和适量运动。',
+      ],
+    };
+
+    const agentResponses =
+      responses[agent.id as keyof typeof responses] || responses.xiaoai;
+    const randomResponse =
+      agentResponses[Math.floor(Math.random() * agentResponses.length)];
+
+    return {
+      text: randomResponse,
+      type: 'text' as const,
+      metadata: {},
+    };
   };
 
-  // 处理建议点击
-  const handleSuggestionPress = (suggestion: string) => {
-    sendMessage(suggestion);
-  };
-
-  // 处理语音录制
-  const handleVoiceRecord = () => {
-    setIsRecording(!isRecording);
-    // TODO: 实现语音录制功能
-    Alert.alert('语音功能', '语音录制功能即将上线！');
-  };
-
-  // 渲染消息
-  const renderMessage = (message: Message, index: number) => {
+  // 渲染消息项
+  const renderMessage = ({ item: message }: { item: Message }) => {
     const isUser = message.sender === 'user';
-    const isLastMessage = index === messages.length - 1;
+    const colors = agentInfo?.colors || agentConfigs.xiaoai.colors;
 
     return (
-      <View
-        key={message.id}
+      <View;
         style={[
           styles.messageContainer,
           isUser ? styles.userMessageContainer : styles.agentMessageContainer,
         ]}
       >
         {!isUser && (
-          <View style={styles.agentAvatar}>
-            <Text style={styles.agentAvatarText}>{agent?.avatar}</Text>
+          <View;
+            style={[
+              styles.avatarContainer,
+              { backgroundColor: colors.secondary },
+            ]}
+          >
+            <Text style={styles.avatarText}>{agentInfo?.avatar}</Text>
           </View>
         )}
-        
-        <View
+
+        <View;
           style={[
             styles.messageBubble,
-            isUser ? styles.userMessageBubble : styles.agentMessageBubble,
+            isUser;
+              ? [styles.userBubble, { backgroundColor: colors.primary }]
+              : styles.agentBubble,
           ]}
         >
-          <Text
+          <Text;
             style={[
               styles.messageText,
               isUser ? styles.userMessageText : styles.agentMessageText,
@@ -226,202 +346,221 @@ const AgentChatScreen: React.FC = () => {
           >
             {message.text}
           </Text>
-          <Text
-            style={[
-              styles.messageTime,
-              isUser ? styles.userMessageTime : styles.agentMessageTime,
-            ]}
-          >
-            {message.timestamp.toLocaleTimeString('zh-CN', {
-              hour: '2-digit',
-              minute: '2-digit',
-            })}
-          </Text>
-        </View>
 
-        {isUser && (
-          <View style={styles.userAvatar}>
-            <Icon name="account" size={20} color={colors.white} />
+          <View style={styles.messageFooter}>
+            <Text;
+              style={[
+                styles.timestampText,
+                isUser ? styles.userTimestampText : styles.agentTimestampText,
+              ]}
+            >
+              {message.timestamp.toLocaleTimeString('zh-CN', {
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
+            </Text>
+
+            {isUser && (
+              <Icon;
+                name={getStatusIcon(message.status)}
+                size={12}
+                color={getStatusColor(message.status)}
+                style={styles.statusIcon}
+              />
+            )}
           </View>
-        )}
+        </View>
       </View>
     );
+  };
+
+  // 获取状态图标
+  const getStatusIcon = (status: Message['status']) => {
+    switch (status) {
+      case 'sending':
+        return 'clock-outline';
+      case 'sent':
+        return 'check';
+      case 'delivered':
+        return 'check-all';
+      case 'read':
+        return 'check-all';
+      case 'failed':
+        return 'alert-circle-outline';
+      default:
+        return 'check';
+    }
+  };
+
+  // 获取状态颜色
+  const getStatusColor = (status: Message['status']) => {
+    switch (status) {
+      case 'sending':
+        return '#999';
+      case 'sent':
+        return '#999';
+      case 'delivered':
+        return '#4CAF50';
+      case 'read':
+        return '#4CAF50';
+      case 'failed':
+        return '#F44336';
+      default:
+        return '#999';
+    }
   };
 
   // 渲染打字指示器
   const renderTypingIndicator = () => {
-    if (!isTyping) return null;
+    if (!isTyping || !agentInfo) return null;
+
+    const colors = agentInfo.colors;
 
     return (
-      <View style={styles.typingContainer}>
-        <View style={styles.agentAvatar}>
-          <Text style={styles.agentAvatarText}>{agent?.avatar}</Text>
+      <View style={[styles.messageContainer, styles.agentMessageContainer]}>
+        <View;
+          style={[
+            styles.avatarContainer,
+            { backgroundColor: colors.secondary },
+          ]}
+        >
+          <Text style={styles.avatarText}>{agentInfo.avatar}</Text>
         </View>
+
         <View style={styles.typingBubble}>
-          <Animated.View
+          <Animated.View;
+            style={[styles.typingDot, { opacity: typingAnimation }]}
+          />
+          <Animated.View;
             style={[
               styles.typingDot,
               {
-                opacity: typingAnimation.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [0.3, 1],
-                }),
+                opacity: typingAnimation,
+                transform: [{ scale: typingAnimation }],
               },
             ]}
           />
-          <Animated.View
-            style={[
-              styles.typingDot,
-              {
-                opacity: typingAnimation.interpolate({
-                  inputRange: [0, 0.5, 1],
-                  outputRange: [0.3, 1, 0.3],
-                }),
-              },
-            ]}
-          />
-          <Animated.View
-            style={[
-              styles.typingDot,
-              {
-                opacity: typingAnimation.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [1, 0.3],
-                }),
-              },
-            ]}
+          <Animated.View;
+            style={[styles.typingDot, { opacity: typingAnimation }]}
           />
         </View>
       </View>
     );
   };
 
-  // 渲染建议
-  const renderSuggestions = () => {
-    if (messages.length > 1) return null;
-
+  if (loading) {
     return (
-      <View style={styles.suggestionsContainer}>
-        <Text style={styles.suggestionsTitle}>您可以问我：</Text>
-        <View style={styles.suggestionsGrid}>
-          {suggestions.map((suggestion, index) => (
-            <TouchableOpacity
-              key={index}
-              style={styles.suggestionButton}
-              onPress={() => handleSuggestionPress(suggestion)}
-            >
-              <Text style={styles.suggestionText}>{suggestion}</Text>
-            </TouchableOpacity>
-          ))}
+      <SafeAreaView style={styles.container}>
+        <StatusBar;
+          barStyle="light-content"
+          backgroundColor={agentConfigs.xiaoai.colors.primary}
+        />
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator;
+            size="large"
+            color={agentConfigs.xiaoai.colors.primary}
+          />
+          <Text style={styles.loadingText}>连接中...</Text>
         </View>
-      </View>
+      </SafeAreaView>
     );
-  };
+  }
+
+  if (!agentInfo) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="light-content" backgroundColor="#F44336" />
+        <View style={styles.errorContainer}>
+          <Icon name="robot-confused" size={64} color="#F44336" />
+          <Text style={styles.errorTitle}>智能体不存在</Text>
+          <Text style={styles.errorSubtitle}>请检查智能体ID是否正确</Text>
+          <TouchableOpacity;
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Text style={styles.backButtonText}>返回</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  const colors = agentInfo.colors;
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
+
       {/* 头部 */}
-      <View style={styles.header}>
-        <TouchableOpacity
+      <View style={[styles.header, { backgroundColor: colors.primary }]}>
+        <TouchableOpacity;
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
-          <Icon name="arrow-left" size={24} color={colors.text} />
+          <Icon name="arrow-left" size={24} color="#FFFFFF" />
         </TouchableOpacity>
-        
-        <View style={styles.agentInfo}>
-          <View style={styles.agentHeaderAvatar}>
-            <Text style={styles.agentHeaderAvatarText}>{agent?.avatar}</Text>
+
+        <View style={styles.headerInfo}>
+          <View;
+            style={[styles.headerAvatar, { backgroundColor: colors.secondary }]}
+          >
+            <Text style={styles.headerAvatarText}>{agentInfo.avatar}</Text>
           </View>
-          <View style={styles.agentDetails}>
-            <Text style={styles.agentName}>{agent?.name}</Text>
-            <View style={styles.agentStatusContainer}>
-              <View
-                style={[
-                  styles.statusDot,
-                  { backgroundColor: agent?.status === 'online' ? colors.success : colors.gray400 },
-                ]}
-              />
-              <Text style={styles.agentStatus}>
-                {agent?.status === 'online' ? '在线' : '离线'}
-              </Text>
-            </View>
+          <View style={styles.headerTextContainer}>
+            <Text style={styles.headerTitle}>{agentInfo.name}</Text>
+            <Text style={styles.headerSubtitle}>
+              {agentInfo.status === 'online' ? '在线' : '离线'}
+            </Text>
           </View>
         </View>
 
         <TouchableOpacity style={styles.moreButton}>
-          <Icon name="dots-vertical" size={24} color={colors.text} />
+          <Icon name="dots-vertical" size={24} color="#FFFFFF" />
         </TouchableOpacity>
       </View>
 
       {/* 消息列表 */}
-      <KeyboardAvoidingView
+      <KeyboardAvoidingView;
         style={styles.chatContainer}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
       >
-        <ScrollView
-          ref={scrollViewRef}
-          style={styles.messagesContainer}
-          contentContainerStyle={styles.messagesContent}
+        <FlatList;
+          ref={flatListRef}
+          data={messages}
+          renderItem={renderMessage}
+          keyExtractor={(item) => item.id}
+          style={styles.messagesList}
+          contentContainerStyle={styles.messagesContainer}
           showsVerticalScrollIndicator={false}
-          onContentSizeChange={scrollToBottom}
-        >
-          {messages.map(renderMessage)}
-          {renderTypingIndicator()}
-          {renderSuggestions()}
-        </ScrollView>
+          onContentSizeChange={() =>
+            flatListRef.current?.scrollToEnd({ animated: true })
+          }
+          ListFooterComponent={renderTypingIndicator}
+        />
 
-        {/* 输入区域 */}
+        {/* 输入框 */}
         <View style={styles.inputContainer}>
           <View style={styles.inputWrapper}>
-            <TouchableOpacity
-              style={styles.attachButton}
-              onPress={() => Alert.alert('附件', '附件功能即将上线！')}
-            >
-              <Icon name="paperclip" size={20} color={colors.textSecondary} />
-            </TouchableOpacity>
-
-            <TextInput
-              ref={inputRef}
+            <TextInput;
               style={styles.textInput}
-              placeholder="输入消息..."
-              placeholderTextColor={colors.textSecondary}
+              placeholder={`与${agentInfo.name}对话...`}
+              placeholderTextColor="#999"
               value={inputText}
               onChangeText={setInputText}
-              multiline
-              maxLength={500}
-              onSubmitEditing={() => sendMessage(inputText)}
-              blurOnSubmit={false}
+              multiline;
+              maxLength={1000}
             />
 
-            <TouchableOpacity
-              style={[styles.voiceButton, isRecording && styles.voiceButtonActive]}
-              onPress={handleVoiceRecord}
+            <TouchableOpacity;
+              style={[
+                styles.sendButton,
+                { backgroundColor: inputText.trim() ? colors.primary : '#CCC' },
+              ]}
+              onPress={sendMessage}
+              disabled={!inputText.trim()}
             >
-              <Icon
-                name={isRecording ? 'microphone' : 'microphone-outline'}
-                size={20}
-                color={isRecording ? colors.error : colors.textSecondary}
-              />
+              <Icon name="send" size={20} color="#FFFFFF" />
             </TouchableOpacity>
-
-            <Animated.View style={{ transform: [{ scale: sendButtonScale }] }}>
-              <TouchableOpacity
-                style={[
-                  styles.sendButton,
-                  inputText.trim() ? styles.sendButtonActive : styles.sendButtonInactive,
-                ]}
-                onPress={() => sendMessage(inputText)}
-                disabled={!inputText.trim()}
-              >
-                <Icon
-                  name="send"
-                  size={20}
-                  color={inputText.trim() ? colors.white : colors.textSecondary}
-                />
-              </TouchableOpacity>
-            </Animated.View>
           </View>
         </View>
       </KeyboardAvoidingView>
@@ -430,257 +569,220 @@ const AgentChatScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
+  container: {,
+  flex: 1,
+    backgroundColor: '#F8F9FA',
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-    backgroundColor: colors.surface,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-    ...shadows.sm,
-  },
-  backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.gray100,
+  loadingContainer: {,
+  flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  agentInfo: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginLeft: spacing.md,
+  loadingText: {,
+  marginTop: 10,
+    fontSize: 16,
+    color: '#666',
   },
-  agentHeaderAvatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.primary,
+  errorContainer: {,
+  flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 40,
   },
-  agentHeaderAvatarText: {
-    fontSize: 20,
+  errorTitle: {,
+  fontSize: 20,
+    fontWeight: 'bold',
+    color: '#333',
+    marginTop: 16,
+    marginBottom: 8,
   },
-  agentDetails: {
-    marginLeft: spacing.sm,
+  errorSubtitle: {,
+  fontSize: 14,
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 24,
   },
-  agentName: {
-    fontSize: typography.fontSize.base,
-    fontWeight: '600' as const,
-    color: colors.text,
+  header: {,
+  flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
-  agentStatusContainer: {
+  backButton: {,
+  padding: 8,
+    marginRight: 8,
+  },
+  headerInfo: {,
+  flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  headerAvatar: {,
+  width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  headerAvatarText: {,
+  fontSize: 20,
+  },
+  headerTextContainer: {,
+  flex: 1,
+  },
+  headerTitle: {,
+  fontSize: 18,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+  },
+  headerSubtitle: {,
+  fontSize: 12,
+    color: '#E3F2FD',
     marginTop: 2,
   },
-  statusDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginRight: spacing.xs,
+  moreButton: {,
+  padding: 8,
   },
-  agentStatus: {
-    fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
+  chatContainer: {,
+  flex: 1,
   },
-  moreButton: {
-    width: 40,
-    height: 40,
+  messagesList: {,
+  flex: 1,
+  },
+  messagesContainer: {,
+  paddingVertical: 16,
+  },
+  messageContainer: {,
+  flexDirection: 'row',
+    marginVertical: 4,
+    paddingHorizontal: 16,
+  },
+  userMessageContainer: {,
+  justifyContent: 'flex-end',
+  },
+  agentMessageContainer: {,
+  justifyContent: 'flex-start',
+  },
+  avatarContainer: {,
+  width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 8,
+    alignSelf: 'flex-end',
+  },
+  avatarText: {,
+  fontSize: 16,
+  },
+  messageBubble: {,
+  maxWidth: width * 0.75,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     borderRadius: 20,
-    backgroundColor: colors.gray100,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
-  chatContainer: {
-    flex: 1,
+  userBubble: {,
+  borderBottomRightRadius: 4,
   },
-  messagesContainer: {
-    flex: 1,
-  },
-  messagesContent: {
-    paddingVertical: spacing.md,
-    paddingHorizontal: spacing.lg,
-  },
-  messageContainer: {
-    flexDirection: 'row',
-    marginBottom: spacing.md,
-    alignItems: 'flex-end',
-  },
-  userMessageContainer: {
-    justifyContent: 'flex-end',
-  },
-  agentMessageContainer: {
-    justifyContent: 'flex-start',
-  },
-  agentAvatar: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: spacing.sm,
-  },
-  agentAvatarText: {
-    fontSize: 16,
-  },
-  userAvatar: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: colors.secondary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: spacing.sm,
-  },
-  messageBubble: {
-    maxWidth: screenWidth * 0.7,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderRadius: borderRadius.lg,
-  },
-  userMessageBubble: {
-    backgroundColor: colors.primary,
-    borderBottomRightRadius: 4,
-  },
-  agentMessageBubble: {
-    backgroundColor: colors.surface,
+  agentBubble: {,
+  backgroundColor: '#FFFFFF',
     borderBottomLeftRadius: 4,
-    ...shadows.sm,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
   },
-  messageText: {
-    fontSize: typography.fontSize.base,
+  messageText: {,
+  fontSize: 16,
     lineHeight: 22,
   },
-  userMessageText: {
-    color: colors.white,
+  userMessageText: {,
+  color: '#FFFFFF',
   },
-  agentMessageText: {
-    color: colors.text,
+  agentMessageText: {,
+  color: '#333',
   },
-  messageTime: {
-    fontSize: typography.fontSize.xs,
-    marginTop: spacing.xs,
+  messageFooter: {,
+  flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    marginTop: 4,
   },
-  userMessageTime: {
-    color: colors.white,
-    opacity: 0.8,
-    textAlign: 'right',
+  timestampText: {,
+  fontSize: 11,
+    marginRight: 4,
   },
-  agentMessageTime: {
-    color: colors.textSecondary,
+  userTimestampText: {,
+  color: 'rgba(255, 255, 255, 0.7)',
   },
-  typingContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    marginBottom: spacing.md,
+  agentTimestampText: {,
+  color: '#999',
   },
-  typingBubble: {
-    flexDirection: 'row',
-    backgroundColor: colors.surface,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderRadius: borderRadius.lg,
+  statusIcon: {,
+  marginLeft: 2,
+  },
+  typingBubble: {,
+  flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 20,
     borderBottomLeftRadius: 4,
-    ...shadows.sm,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
   },
-  typingDot: {
-    width: 8,
+  typingDot: {,
+  width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: colors.textSecondary,
+    backgroundColor: '#999',
     marginHorizontal: 2,
   },
-  suggestionsContainer: {
-    marginTop: spacing.lg,
-  },
-  suggestionsTitle: {
-    fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
-    marginBottom: spacing.sm,
-  },
-  suggestionsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.sm,
-  },
-  suggestionButton: {
-    backgroundColor: colors.surface,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderRadius: borderRadius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
-    ...shadows.sm,
-  },
-  suggestionText: {
-    fontSize: typography.fontSize.sm,
-    color: colors.primary,
-  },
-  inputContainer: {
-    backgroundColor: colors.surface,
+  inputContainer: {,
+  paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: '#FFFFFF',
     borderTopWidth: 1,
-    borderTopColor: colors.border,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
+    borderTopColor: '#E0E0E0',
   },
-  inputWrapper: {
-    flexDirection: 'row',
+  inputWrapper: {,
+  flexDirection: 'row',
     alignItems: 'flex-end',
-    backgroundColor: colors.background,
-    borderRadius: borderRadius.xl,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-    borderWidth: 1,
-    borderColor: colors.border,
+    backgroundColor: '#F5F5F5',
+    borderRadius: 25,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
   },
-  attachButton: {
-    width: 36,
-    height: 36,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  textInput: {
-    flex: 1,
-    fontSize: typography.fontSize.base,
-    color: colors.text,
+  textInput: {,
+  flex: 1,
+    fontSize: 16,
+    color: '#333',
     maxHeight: 100,
-    paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.xs,
+    marginRight: 8,
   },
-  voiceButton: {
-    width: 36,
-    height: 36,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 18,
-  },
-  voiceButtonActive: {
-    backgroundColor: colors.error + '20',
-  },
-  sendButton: {
-    width: 36,
+  sendButton: {,
+  width: 36,
     height: 36,
     borderRadius: 18,
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: spacing.xs,
   },
-  sendButtonActive: {
-    backgroundColor: colors.primary,
-  },
-  sendButtonInactive: {
-    backgroundColor: colors.gray200,
+  backButtonText: {,
+  color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
 
-export default AgentChatScreen; 
+export default AgentChatScreen;

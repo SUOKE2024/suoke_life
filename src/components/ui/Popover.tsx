@@ -1,17 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
-    Animated,
-    Dimensions,
-    Modal,
-    StyleSheet,
-    TouchableOpacity,
-    View,
-    ViewStyle,
+  Animated,
+  Dimensions,
+  Modal,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  ViewStyle,
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
 export interface PopoverProps {
-  children: React.ReactNode;
+  children: React.ReactNode;,
   content: React.ReactNode;
   placement?: 'top' | 'bottom' | 'left' | 'right' | 'auto';
   trigger?: 'press' | 'longPress' | 'hover';
@@ -47,22 +47,30 @@ export const Popover: React.FC<PopoverProps> = ({
 }) => {
   const { currentTheme } = useTheme();
   const [internalVisible, setInternalVisible] = useState(false);
-  const [triggerLayout, setTriggerLayout] = useState({ x: 0, y: 0, width: 0, height: 0 });
+  const [triggerLayout, setTriggerLayout] = useState({
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+  });
   const [contentLayout, setContentLayout] = useState({ width: 0, height: 0 });
-  const [actualPlacement, setActualPlacement] = useState<'top' | 'bottom' | 'left' | 'right'>('bottom');
-  
+  const [actualPlacement, setActualPlacement] = useState<
+    'top' | 'bottom' | 'left' | 'right'
+  >('bottom');
+
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.8)).current;
   const triggerRef = useRef<View>(null);
 
-  const isVisible = controlledVisible !== undefined ? controlledVisible : internalVisible;
+  const isVisible =
+    controlledVisible !== undefined ? controlledVisible : internalVisible;
 
   const showPopover = () => {
     if (controlledVisible === undefined) {
       setInternalVisible(true);
     }
     onVisibilityChange?.(true);
-    
+
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -90,7 +98,7 @@ export const Popover: React.FC<PopoverProps> = ({
         duration: 150,
         useNativeDriver: true,
       }),
-    ]).start(() => {
+    ]).start() => {
       if (controlledVisible === undefined) {
         setInternalVisible(false);
       }
@@ -100,7 +108,7 @@ export const Popover: React.FC<PopoverProps> = ({
 
   const measureTrigger = () => {
     if (triggerRef.current) {
-      triggerRef.current.measure((x, y, width, height, pageX, pageY) => {
+      triggerRef.current.measure(x, y, width, height, pageX, pageY) => {
         setTriggerLayout({ x: pageX, y: pageY, width, height });
       });
     }
@@ -127,7 +135,7 @@ export const Popover: React.FC<PopoverProps> = ({
       { direction: 'left' as const, space: spaceLeft },
     ];
 
-    return spaces.sort((a, b) => b.space - a.space)[0].direction;
+    return spaces.sort(a, b) => b.space - a.space)[0].direction;
   };
 
   const getPopoverPosition = () => {
@@ -174,8 +182,8 @@ export const Popover: React.FC<PopoverProps> = ({
     if (!showArrow) return null;
 
     const arrowSize = 8;
-    const arrowStyle: ViewStyle = {
-      position: 'absolute',
+    const arrowStyle: ViewStyle = {,
+  position: 'absolute',
       width: 0,
       height: 0,
       backgroundColor: 'transparent',
@@ -234,7 +242,7 @@ export const Popover: React.FC<PopoverProps> = ({
     }
   };
 
-  useEffect(() => {
+  useEffect() => {
     if (isVisible && triggerLayout.width > 0) {
       setActualPlacement(calculatePlacement());
     }
@@ -246,18 +254,18 @@ export const Popover: React.FC<PopoverProps> = ({
     trigger: {
       // 触发器样式
     },
-    overlay: {
-      flex: 1,
+    overlay: {,
+  flex: 1,
       backgroundColor: 'transparent',
     },
-    popover: {
-      position: 'absolute',
+    popover: {,
+  position: 'absolute',
       backgroundColor: backgroundColor || currentTheme.colors.surface,
       borderRadius,
       padding: 12,
       shadowColor: currentTheme.colors.shadow,
-      shadowOffset: {
-        width: 0,
+      shadowOffset: {,
+  width: 0,
         height: 4,
       },
       shadowOpacity: 0.3,
@@ -291,7 +299,7 @@ export const Popover: React.FC<PopoverProps> = ({
 
   return (
     <>
-      <TouchableOpacity
+      <TouchableOpacity;
         ref={triggerRef}
         style={[styles.trigger, style]}
         onPress={handleTriggerPress}
@@ -307,18 +315,18 @@ export const Popover: React.FC<PopoverProps> = ({
         {children}
       </TouchableOpacity>
 
-      <Modal
+      <Modal;
         visible={isVisible}
-        transparent
+        transparent;
         animationType="none"
         onRequestClose={hidePopover}
       >
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.overlay}
           activeOpacity={1}
           onPress={hidePopover}
         >
-          <Animated.View
+          <Animated.View;
             style={[
               styles.popover,
               {
@@ -342,4 +350,4 @@ export const Popover: React.FC<PopoverProps> = ({
   );
 };
 
-export default Popover; 
+export default Popover;

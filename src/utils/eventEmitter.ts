@@ -35,7 +35,7 @@ export class EventEmitter {
   emit(event: string, ...args: any[]): void {
     const listeners = this.events.get(event);
     if (listeners) {
-      listeners.forEach(listener => {
+      listeners.forEach(listener) => {
         try {
           listener(...args);
         } catch (error) {

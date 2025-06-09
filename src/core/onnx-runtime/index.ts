@@ -217,7 +217,7 @@ if (options?.useCache) {
   // 私有方法
 private generateCacheKey(modelId: string, inputs: Record<string, TensorData>): string {
     const inputHash = JSON.stringify(;)
-      Object.entries(inputs).map(([key, tensor]) => [)
+      Object.entries(inputs).map([key, tensor]) => [)
         key,
         tensor.dims,
         tensor.type;

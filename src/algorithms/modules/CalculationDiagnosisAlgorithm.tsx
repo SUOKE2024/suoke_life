@@ -10,90 +10,90 @@ import { TCMKnowledgeBase } from '../knowledge/TCMKnowledgeBase';
 */
 // 类型定义
 export interface CalculationData {
-  birthDate: string;
+  birthDate: string;,
   birthTime: string;
-  birthPlace: string;
+  birthPlace: string;,
   currentDate: string;
-  currentTime: string;
+  currentTime: string;,
   currentLocation: string;
   lunarData?: LunarData;
   metadata?: Record<string, any>;
 }
 export interface LunarData {
-  year: string;
+  year: string;,
   month: string;
-  day: string;
+  day: string;,
   hour: string;
-  yearStem: string;
+  yearStem: string;,
   yearBranch: string;
-  monthStem: string;
+  monthStem: string;,
   monthBranch: string;
-  dayStem: string;
+  dayStem: string;,
   dayBranch: string;
-  hourStem: string;
+  hourStem: string;,
   hourBranch: string;
-  zodiac: string;
+  zodiac: string;,
   solarTerm: string;
 }
 export interface CalculationResult {
-  confidence: number;
+  confidence: number;,
   fiveElements: FiveElementsAnalysis;
-  yinYang: YinYangAnalysis;
+  yinYang: YinYangAnalysis;,
   qiFlow: QiFlowAnalysis;
-  constitution: ConstitutionCalculation;
+  constitution: ConstitutionCalculation;,
   seasonalInfluence: SeasonalInfluence;
-  timeInfluence: TimeInfluence;
+  timeInfluence: TimeInfluence;,
   analysis: string;
-  recommendations: string[];
+  recommendations: string[];,
   warnings: string[];
   processingTime?: number;
 }
 export interface FiveElementsAnalysis {
-  birthElements: {;
+  birthElements: {;,
   wood: number;
-    fire: number;
+    fire: number;,
   earth: number;
-    metal: number;
+    metal: number;,
   water: number;
 };
   currentElements: {,
   wood: number;
     fire: number,
-  earth: number;
-    metal: number,
+  earth: number;,
+  metal: number,
   water: number;
   };
   balance: {,
   overall: number;
     deficiency: string[],
-  excess: string[];
-    harmony: number;
+  excess: string[];,
+  harmony: number;
   };
   interactions: {,
   generation: ElementInteraction[];
     restriction: ElementInteraction[],
-  overacting: ElementInteraction[];
-    insulting: ElementInteraction[];
+  overacting: ElementInteraction[];,
+  insulting: ElementInteraction[];
   };
   organCorrelation: {,
   liver: number;
     heart: number,
-  spleen: number;
-    lung: number,
+  spleen: number;,
+  lung: number,
   kidney: number;
   };
 }
 export interface ElementInteraction {
-  from: string;
+  from: string;,
   to: string;
-  strength: number;
+  strength: number;,
   type: 'generation' | 'restriction' | 'overacting' | 'insulting';
   description: string;
 }
 export interface YinYangAnalysis {
-  birthYinYang: {;
+  birthYinYang: {;,
   yin: number;
-    yang: number;
+    yang: number;,
   balance: number;
 };
   currentYinYang: {,
@@ -117,9 +117,9 @@ export interface YinYangAnalysis {
 }
 export interface QiFlowAnalysis {
   meridianFlow: {;
-    [meridian: string]: {;
+    [meridian: string]: {;,
   strength: number;
-      direction: 'forward' | 'reverse' | 'stagnant';
+      direction: 'forward' | 'reverse' | 'stagnant';,
   blockages: string[];
       openness: number;
 };
@@ -134,26 +134,26 @@ export interface QiFlowAnalysis {
   seasonalFlow: {,
   currentSeason: string;
     qiDirection: string,
-  strength: number;
-    adaptability: number;
+  strength: number;,
+  adaptability: number;
   };
   overallFlow: {,
   circulation: number;
     vitality: number,
-  balance: number;
-    blockages: string[];
+  balance: number;,
+  blockages: string[];
   };
 }
 export interface ConstitutionCalculation {
   primaryConstitution: string;
   secondaryConstitution?: string;
-  constitutionStrength: number;
+  constitutionStrength: number;,
   adaptability: number;
-  vulnerabilities: string[];
+  vulnerabilities: string[];,
   strengths: string[];
-  seasonalVariations: {;
+  seasonalVariations: {;,
   spring: number;
-    summer: number;
+    summer: number;,
   autumn: number;
     winter: number;
 };
@@ -164,9 +164,9 @@ export interface ConstitutionCalculation {
   };
 }
 export interface SeasonalInfluence {
-  currentSeason: string;
+  currentSeason: string;,
   seasonalQi: {;
-    dominant: string;
+    dominant: string;,
   strength: number;
     direction: string;
 };
@@ -178,10 +178,10 @@ export interface SeasonalInfluence {
   climaticFactors: {,
   wind: number;
     cold: number,
-  heat: number;
-    dampness: number,
-  dryness: number;
-    fire: number;
+  heat: number;,
+  dampness: number,
+  dryness: number;,
+  fire: number;
   };
   adaptation: {,
   required: string[];
@@ -190,30 +190,30 @@ export interface SeasonalInfluence {
   };
 }
 export interface TimeInfluence {
-  currentHour: string;
+  currentHour: string;,
   dominantMeridian: string;
-  qiActivity: {;
+  qiActivity: {;,
   level: number;
-    direction: string;
+    direction: string;,
   quality: string;
 };
   optimalActivities: string[],
-  avoidActivities: string[];
+  avoidActivities: string[];,
   healthFocus: string[],
   energyLevel: number;
 }
 export interface UserProfile {
-  age: number;
+  age: number;,
   gender: 'male' | 'female' | 'other';
-  height: number;
+  height: number;,
   weight: number;
-  occupation: string;
+  occupation: string;,
   medicalHistory: string[];
-  allergies: string[];
+  allergies: string[];,
   medications: string[];
 }
 interface LocationData {
-  latitude: number;
+  latitude: number;,
   longitude: number;
   timezone: string;
 }
@@ -326,8 +326,8 @@ export class CalculationDiagnosisAlgorithm {
       currentYinYang: {,
   yin: 0.45,
         yang: 0.55,balance: 0.85;
-      },dynamicBalance: {
-      trend: "stable",
+      },dynamicBalance: {,
+  trend: "stable",
       stability: 0.8,harmony: 0.85;
       },organYinYang: {liver: { yin: 0.5, yang: 0.5 },heart: { yin: 0.4, yang: 0.6 },spleen: { yin: 0.6, yang: 0.4 },lung: { yin: 0.5, yang: 0.5 },kidney: { yin: 0.7, yang: 0.3 };
       },recommendations: ["保持阴阳平衡", "适度运动'];
@@ -338,8 +338,8 @@ export class CalculationDiagnosisAlgorithm {
     userProfile?: UserProfile;
   ): Promise<QiFlowAnalysis> {
     // 气血流动分析逻辑
-    return {meridianFlow: {},dailyRhythm: {},seasonalFlow: {
-      currentSeason: "春", "
+    return {meridianFlow: {},dailyRhythm: {},seasonalFlow: {,
+  currentSeason: "春", "
       qiDirection: '升发',strength: 0.8,adaptability: 0.7;
       },overallFlow: {circulation: 0.8,vitality: 0.7,balance: 0.75,blockages: [];
       };
@@ -353,8 +353,8 @@ export class CalculationDiagnosisAlgorithm {
     return {
       primaryConstitution: "平和质", "
       constitutionStrength: 0.8,adaptability: 0.7,vulnerabilities: [],strengths: ['气血充足'],seasonalVariations: {spring: 0.8,summer: 0.7,autumn: 0.75,winter: 0.6;
-      },lifeStageInfluence: {
-      current: "青年", "
+      },lifeStageInfluence: {,
+  current: "青年", "
       characteristics: ['精力充沛'],recommendations: ['保持运动'];
       };
     };

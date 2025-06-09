@@ -17,32 +17,32 @@ import React,{ useState, useEffect, useRef, useCallback } from ";react";
 const { width: SCREEN_WIDTH} = Dimensions.get(";window;";);
 // 性能指标接口 * interface PerformanceMetrics {
   fps: number,
-  memoryUsage: number;
+  memoryUsage: number;,
   renderTime: number;
-  jsHeapSize: number;
+  jsHeapSize: number;,
   networkLatency: number;
   batteryLevel?: number;
   cpuUsage: number;
 }
 // 性能警告类型 * interface PerformanceWarning {
   type: memory" | "fps | "render" | network" | "battery,
-  severity: "low" | medium" | "high | "critical";
+  severity: "low" | medium" | "high | "critical";,
   message: string;
-  suggestion: string;
+  suggestion: string;,
   timestamp: number;
 }
 // 组件属性 * interface PerformanceMonitorProps {
     visible?: boolean;
   onOptimizationSuggestion?: (suggestion: string) => void;
   autoOptimize?: boolean;
-  showDetailedMetrics?: boolean
+  showDetailedMetrics?: boolean;
 }
 ///     const uiuxService = createUIUXOptimizationService(;);
 export const PerformanceMonitor: React.FC<PerformanceMonitorProps /> = ({/   const performanceMonitor = usePerformanceMonitor(PerformanceMonitor",;))
 {/
     trackRender: true,
     trackMemory: true,
-    warnThreshold: 50,  });
+    warnThreshold: 50});
   visible = false,
   onOptimizationSuggestion,
   autoOptimize = false,
@@ -60,7 +60,7 @@ const [metrics, setMetrics] = useState<PerformanceMetrics  / >({ * fps: 60, ;)
   const performanceOptimizer = uiuxService.getPerformanceOptimizer;
   const animationManager = uiuxService.getAnimationManager;
   const visualEffectManager = uiuxService.getVisualEffectManager;
-  ///     useEffect(() => {
+  ///     useEffect() => {
     const effectStart = performance.now();
     if (visible) {
       Animated.spring(slideAnim, {
@@ -76,7 +76,7 @@ const [metrics, setMetrics] = useState<PerformanceMetrics  / >({ * fps: 60, ;)
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [visible, slideAnim]);
-  useEffect(() => {
+  useEffect() => {
     const effectStart = performance.now();
     if (warnings.length > 0) {const pulse = () => {}
         Animated.sequence([)
@@ -242,7 +242,7 @@ const effectEnd = performance.now();
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [performAutoOptimization, animationManager, progressAnim]);
-  useEffect(() => {
+  useEffect() => {
     const effectStart = performance.now();
     if (visible) {startMonitoring();
     } else {
@@ -266,18 +266,18 @@ const effectEnd = performance.now();
           styles.metricIndicator,{ backgroundColor: getPerformanceColor(value, thresholds) };
         ]} />/      </View>/    </View>/      ;);
   const renderWarningItem = (warning: PerformanceWarning, index: number) => (;)
-    <View key={index} style={{[styles.warningItem, styles[`warning${warning.severity}}`]]} />/      <Text style={styles.warningMessage}>{warning.message}</Text>/      <Text style={styles.warningSuggestion}>{warning.suggestion}</Text>/    </View>/      ;);
+    <View key={index} style={[styles.warningItem, styles[`warning${warning.severity}}`]]} />/      <Text style={styles.warningMessage}>{warning.message}</Text>/      <Text style={styles.warningSuggestion}>{warning.suggestion}</Text>/    </View>/      ;);
   if (!visible) return n;u;l;l;
   return (;)
-    <Animated.View,style={{[;
+    <Animated.View,style={[;
         styles.container,
         { transform;: ;[{ translateX: slideAnim}},
             { scale: pulseAnim}
           ]}
-      ]} />/      <View style={styles.header}>/        <Text style={styles.title}>性能监控</Text>/        <View style={styles.headerButtons}>/              <TouchableOpacity
+      ]} />/      <View style={styles.header}>/        <Text style={styles.title}>性能监控</Text>/        <View style={styles.headerButtons}>/              <TouchableOpacity;
 style={[styles.button, styles.optimizeButton]}
             onPress={manualOptimize}
-          accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>优化</Text>/          </TouchableOpacity>/              <TouchableOpacity
+          accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>优化</Text>/          </TouchableOpacity>/              <TouchableOpacity;
 style={[styles.button, styles.clearButton]}
             onPress={clearWarnings}
           accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>清除</Text>/          </TouchableOpacity>/        </View>/      </View>/
@@ -289,10 +289,10 @@ style={[styles.button, styles.clearButton]}
         {///            {showDetailedMetrics   && <View style={styles.metricsSection}>/            <Text style={styles.sectionTitle}>详细指标</Text>/            {renderMetricItem("JS堆大小, metrics.jsHeapSize / 1024 / 1024, "MB", [100, 50, 25])}/                {renderMetricItem(CPU使用率", metrics.cpuUsage, "%, [80, 60, 40])}"
           </View>/            )}
         {///                <Animated.View;
-style={{[
+style={[
                 styles.progressFill,
                 {
-                  width: progressAnim.interpolate({,)
+                  width: progressAnim.interpolate({),
   inputRange: [0, 1],
                     outputRange: ["0%", 100%"]"
                   }});
@@ -309,8 +309,8 @@ style={{[
           </Text>/        </View>/      </ScrollView>/    </Animated.View>/      )
 }
 //;
-  container: {
-      position: "absolute",
+  container: {,
+  position: "absolute",
       top: 50,left: 10,width: SCREEN_WIDTH - 20,maxHeight: 80%",;
     backgroundColor: "rgba(255, 255, 255, 0.9;5;),",
     borderRadius: 12,

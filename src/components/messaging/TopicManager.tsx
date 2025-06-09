@@ -21,9 +21,9 @@ interface TopicManagerProps {
   style?: ViewStyle;
 }
 interface TopicItemProps {
-  topic: Topic;
-  onSelect: (topic: Topic) => void;
-  onDelete: (topicName: string) => void;
+  topic: Topic;,
+  onSelect: (topic: Topic) => void;,
+  onDelete: (topicName: string) => void;,
   onViewDetails: (topic: Topic) => void;
 }
 const TopicItem: React.FC<TopicItemProps> = ({
@@ -55,20 +55,20 @@ const TopicItem: React.FC<TopicItemProps> = ({
         </Text>
       </View>
       <View style={styles.topicActions}>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.actionButton, styles.selectButton]}
           onPress={() => onSelect(topic)}
         >
           <Text style={styles.selectButtonText}>选择</Text>
         </TouchableOpacity>
         ;
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.actionButton, styles.detailButton]};
           onPress={() => onViewDetails(topic)};
         >;
           <Text style={styles.detailButtonText}>详情</Text>;
         </TouchableOpacity>;
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.actionButton, styles.deleteButton]};
           onPress={handleDelete};
         >;
@@ -144,11 +144,11 @@ const TopicManager: React.FC<TopicManagerProps> = ({
       Alert.alert("错误", "获取主题详情失败');
     }
   }, []);
-  useEffect(() => {
+  useEffect() => {
     loadTopics();
   }, [loadTopics]);
   const renderTopicItem = ({ item }: { item: Topic }) => (;)
-    <TopicItem
+    <TopicItem;
       topic={item};
       onSelect={handleTopicSelect};
       onDelete={handleDeleteTopic};
@@ -160,7 +160,7 @@ const TopicManager: React.FC<TopicManagerProps> = ({
       {// 头部操作栏}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>主题列表</Text>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.createButton}
           onPress={() => setShowCreateModal(true)}
         >
@@ -174,14 +174,14 @@ const TopicManager: React.FC<TopicManagerProps> = ({
           <Text style={styles.loadingText}>加载中...</Text>
         </View>
       ) : (
-        <FlatList
+        <FlatList;
           data={topics}
           renderItem={renderTopicItem}
           keyExtractor={(item) => item.name}
           style={styles.list}
           contentContainerStyle={styles.listContent}
           refreshControl={
-            <RefreshControl
+            <RefreshControl;
               refreshing={refreshing}
               onRefresh={handleRefresh}
               colors={['#007bff']}
@@ -190,7 +190,7 @@ const TopicManager: React.FC<TopicManagerProps> = ({
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
               <Text style={styles.emptyText}>暂无主题</Text>
-              <TouchableOpacity
+              <TouchableOpacity;
                 style={styles.createFirstButton}
                 onPress={() => setShowCreateModal(true)}
               >
@@ -201,7 +201,7 @@ const TopicManager: React.FC<TopicManagerProps> = ({
         />
       )}
       {// 创建主题模态框}
-      <Modal
+      <Modal;
         visible={showCreateModal}
         animationType="slide"
         transparent={true}
@@ -210,14 +210,14 @@ const TopicManager: React.FC<TopicManagerProps> = ({
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>创建新主题</Text>
-            <TextInput
+            <TextInput;
               style={styles.input}
               placeholder="主题名称 (必填)"
               value={newTopicName}
               onChangeText={setNewTopicName}
               autoFocus;
             />
-            <TextInput
+            <TextInput;
               style={[styles.input, styles.textArea]}
               placeholder="主题描述 (可选)"
               value={newTopicDescription}
@@ -226,14 +226,14 @@ const TopicManager: React.FC<TopicManagerProps> = ({
               numberOfLines={3}
             />
             <View style={styles.modalActions}>
-              <TouchableOpacity
+              <TouchableOpacity;
                 style={[styles.modalButton, styles.cancelButton]}
                 onPress={() => setShowCreateModal(false)}
                 disabled={creating}
               >
                 <Text style={styles.cancelButtonText}>取消</Text>
               </TouchableOpacity>
-              <TouchableOpacity
+              <TouchableOpacity;
                 style={[styles.modalButton, styles.confirmButton]}
                 onPress={handleCreateTopic}
                 disabled={creating}
@@ -249,7 +249,7 @@ const TopicManager: React.FC<TopicManagerProps> = ({
         </View>
       </Modal>
       {// 主题详情模态框}
-      <Modal
+      <Modal;
         visible={showDetailModal}
         animationType="slide"
         transparent={true}
@@ -290,7 +290,7 @@ const TopicManager: React.FC<TopicManagerProps> = ({
               </View>;
             )};
             <View style={styles.modalActions}>;
-              <TouchableOpacity
+              <TouchableOpacity;
                 style={[styles.modalButton, styles.confirmButton]};
                 onPress={() => setShowDetailModal(false)};
               >;
@@ -497,8 +497,8 @@ const styles = StyleSheet.create({
   },
   detailContent: {,
   marginBottom: 20;
-  },detailRow: {
-      flexDirection: "row",
+  },detailRow: {,
+  flexDirection: "row",
       marginBottom: 12;
   },detailLabel: {fontSize: 14,fontWeight: '600',color: '#495057',width: 80;
   },detailValue: {fontSize: 14,color: '#6c757d',flex: 1;

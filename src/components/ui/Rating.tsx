@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import {
-    GestureResponderEvent,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-    ViewStyle,
+  GestureResponderEvent,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ViewStyle,
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -86,7 +86,7 @@ export const Rating: React.FC<RatingProps> = ({
 
   const getRatingValue = (index: number) => {
     const currentValue = hoverValue !== null ? hoverValue : value;
-    
+
     if (allowHalf) {
       if (currentValue >= index + 1) return 1; // 完全填充
       if (currentValue >= index + 0.5) return 0.5; // 半填充
@@ -102,23 +102,23 @@ export const Rating: React.FC<RatingProps> = ({
     const iconSymbol = getIconSymbol();
 
     const styles = StyleSheet.create({
-      starContainer: {
-        position: 'relative',
+      starContainer: {,
+  position: 'relative',
         marginRight: index < max - 1 ? 2 : 0,
       },
-      star: {
-        width: sizeStyles.width,
+      star: {,
+  width: sizeStyles.width,
         height: sizeStyles.height,
         justifyContent: 'center',
         alignItems: 'center',
       },
-      starText: {
-        fontSize: sizeStyles.fontSize,
+      starText: {,
+  fontSize: sizeStyles.fontSize,
         color: inactiveColor,
         textAlign: 'center',
       },
-      starFilled: {
-        position: 'absolute',
+      starFilled: {,
+  position: 'absolute',
         top: 0,
         left: 0,
         width: sizeStyles.width,
@@ -127,15 +127,15 @@ export const Rating: React.FC<RatingProps> = ({
         alignItems: 'center',
         overflow: 'hidden',
       },
-      starFilledText: {
-        fontSize: sizeStyles.fontSize,
+      starFilledText: {,
+  fontSize: sizeStyles.fontSize,
         color: activeColor,
         textAlign: 'center',
       },
     });
 
     return (
-      <TouchableOpacity
+      <TouchableOpacity;
         key={index}
         style={styles.starContainer}
         onPress={(event) => handlePress(index, event)}
@@ -143,17 +143,18 @@ export const Rating: React.FC<RatingProps> = ({
         accessible={accessible}
         accessibilityRole="button"
         accessibilityLabel={`${index + 1} 星`}
-        accessibilityState={{ selected: ratingValue > 0 }}
+        accessibilityState={ selected: ratingValue > 0 }}
       >
         <View style={styles.star}>
           <Text style={styles.starText}>{iconSymbol}</Text>
         </View>
         {ratingValue > 0 && (
-          <View
+          <View;
             style={[
               styles.starFilled,
               {
-                width: ratingValue === 0.5 ? sizeStyles.width / 2 : sizeStyles.width,
+                width:
+                  ratingValue === 0.5 ? sizeStyles.width / 2 : sizeStyles.width,
               },
             ]}
           >
@@ -165,20 +166,22 @@ export const Rating: React.FC<RatingProps> = ({
   };
 
   const containerStyles = StyleSheet.create({
-    container: {
-      flexDirection: 'row',
+    container: {,
+  flexDirection: 'row',
       alignItems: 'center',
     },
   });
 
   return (
-    <View
+    <View;
       style={[containerStyles.container, style]}
       testID={testID}
       accessible={accessible}
       accessibilityRole="adjustable"
-      accessibilityLabel={accessibilityLabel || `评分 ${value} 分，满分 ${max} 分`}
-      accessibilityValue={{
+      accessibilityLabel={
+        accessibilityLabel || `评分 ${value} 分，满分 ${max} 分`
+      }
+      accessibilityValue={
         min: 0,
         max,
         now: value,
@@ -189,4 +192,4 @@ export const Rating: React.FC<RatingProps> = ({
   );
 };
 
-export default Rating; 
+export default Rating;

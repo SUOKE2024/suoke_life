@@ -10,13 +10,13 @@ interface PerformanceConfig {
 interface PerformanceMetrics {
   renderTime: number;
   memoryUsage?: number;
-  componentName: string;
+  componentName: string;,
   timestamp: number;
 }
 interface UsePerformanceMonitorReturn {
-  recordRender: () => void;
+  recordRender: () => void;,
   getMetrics: () => PerformanceMetrics[];
-  clearMetrics: () => void;
+  clearMetrics: () => void;,
   averageRenderTime: number;
 }
 export const usePerformanceMonitor = ()
@@ -27,26 +27,24 @@ export const usePerformanceMonitor = ()
     trackRender = true,
     trackMemory = false,
     warnThreshold = 16, // 60fps = 16.67ms per frame;
-    sampleRate = 1.0,
-  } = config;
+    sampleRate = 1.0} = config;
   const renderStartTime = useRef<number>(0);
   const [metrics, setMetrics] = useState<PerformanceMetrics[]>([]);
   const metricsRef = useRef<PerformanceMetrics[]>([]);
   // 记录渲染开始时间
-  useEffect(() => {
+  useEffect() => {
     if (trackRender && Math.random() < sampleRate) {
       renderStartTime.current = performance.now();
     }
   });
   // 记录渲染结束时间
-  useEffect(() => {
+  useEffect() => {
     if (trackRender && renderStartTime.current > 0) {
       const renderTime = performance.now() - renderStartTime.current;
       const metric: PerformanceMetrics = {
         renderTime,
         componentName,
-        timestamp: Date.now(),
-      };
+        timestamp: Date.now()};
       // 添加内存使用信息（如果支持）
       if (trackMemory && 'memory' in performance) {
         const memoryInfo = (performance as any).memory;
@@ -72,8 +70,7 @@ export const usePerformanceMonitor = ()
       const metric: PerformanceMetrics = {,
   renderTime: Math.max(0, renderTime),
         componentName,
-        timestamp: Date.now(),
-      };
+        timestamp: Date.now()};
       if (trackMemory && 'memory' in performance) {
         const memoryInfo = (performance as any).memory;
         metric.memoryUsage = memoryInfo.usedJSHeapSize;
@@ -96,7 +93,7 @@ export const usePerformanceMonitor = ()
     ? metrics.reduce(sum, metric) => sum + metric.renderTime, 0) / metrics.length;
     : 0;
   // 开发环境下的性能报告
-  useEffect(() => {
+  useEffect() => {
     if (__DEV__ && metrics.length > 0 && metrics.length % 10 === 0) {
       const recentMetrics = metrics.slice(-10);
       const avgRenderTime = recentMetrics.reduce(sum, m) => sum + m.renderTime, 0) / 10;
@@ -107,16 +104,14 @@ export const usePerformanceMonitor = ()
         totalSamples: metrics.length,
         memoryUsage: trackMemory && 'memory' in performance;
           ? `${(performance as any).memory.usedJSHeapSize / 1024 / 1024).toFixed(2)}MB`
-          : 'N/A',
-      });
+          : 'N/A'});
     }
   }, [metrics, componentName, trackMemory]);
   return {
     recordRender,
     getMetrics,
     clearMetrics,
-    averageRenderTime,
-  };
+    averageRenderTime};
 };
 // 高阶组件版本
 export const withPerformanceMonitor = <P extends object>()

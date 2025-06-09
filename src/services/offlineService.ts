@@ -4,31 +4,31 @@ import { GATEWAY_FEATURES, GATEWAY_CACHE_CONFIG } from '../constants/config';
 import { errorHandler, AppError } from './errorHandler';
 // 离线操作类型
 export interface OfflineOperation {
-  id: string;
+  id: string;,
   type: 'CREATE' | 'UPDATE' | 'DELETE';
-  service: string;
+  service: string;,
   endpoint: string;
   data?: any;
-  timestamp: string;
+  timestamp: string;,
   retryCount: number;
-  maxRetries: number;
+  maxRetries: number;,
   priority: 'low' | 'medium' | 'high';
 }
 // 缓存项接口
 export interface CacheItem {
-  key: string;
+  key: string;,
   data: any;
-  timestamp: string;
+  timestamp: string;,
   ttl: number;
-  service: string;
+  service: string;,
   endpoint: string;
   etag?: string;
 }
 // 同步状态
 export interface SyncStatus {
-  isOnline: boolean;
+  isOnline: boolean;,
   lastSyncTime: string | null;
-  pendingOperations: number;
+  pendingOperations: number;,
   failedOperations: number;
   syncInProgress: boolean;
 }
@@ -44,8 +44,7 @@ export class OfflineService {
   private readonly STORAGE_KEYS = {
       OPERATION_QUEUE: "@suoke_life:offline_queue",
       CACHE_DATA: '@suoke_life:cache_data',
-    SYNC_STATUS: '@suoke_life:sync_status',
-  };
+    SYNC_STATUS: '@suoke_life:sync_status'};
   static getInstance(): OfflineService {
     if (!OfflineService.instance) {
       OfflineService.instance = new OfflineService();
@@ -99,8 +98,7 @@ export class OfflineService {
       ...operation,
       id: this.generateOperationId(),
       timestamp: new Date().toISOString(),
-      retryCount: 0,
-    };
+      retryCount: 0};
     this.operationQueue.push(offlineOp);
     await this.saveOperationQueue();
         // 如果在线，立即尝试执行
@@ -124,8 +122,7 @@ export class OfflineService {
       ttl,
       service,
       endpoint,
-      etag,
-    };
+      etag};
     this.cache.set(key, cacheItem);
     await this.saveCacheData();
   }
@@ -154,7 +151,7 @@ export class OfflineService {
   async clearExpiredCache(): Promise<void> {
     const now = Date.now();
     const expiredKeys: string[] = [];
-    this.cache.forEach(((item, key) => {
+    this.cache.forEach((item, key) => {
       const cacheTime = new Date(item.timestamp).getTime();
       if (now - cacheTime > item.ttl) {
         expiredKeys.push(key);
@@ -184,7 +181,7 @@ export class OfflineService {
       // 处理结果
       const successfulOperations: string[] = [];
       const failedOperations: OfflineOperation[] = [];
-      results.forEach(((result, index) => {
+      results.forEach((result, index) => {
         const operation = sortedOperations[index];
                 if (result.status === 'fulfilled') {
           successfulOperations.push(operation.id);
@@ -239,8 +236,7 @@ export class OfflineService {
       lastSyncTime: this.getLastSyncTime(),
       pendingOperations: this.operationQueue.length,
       failedOperations: this.operationQueue.filter(op => op.retryCount >= op.maxRetries).length,
-      syncInProgress: this.syncInProgress,
-    };
+      syncInProgress: this.syncInProgress};
   }
   // 添加同步状态监听器
   addSyncListener(listener: (status: SyncStatus) => void): () => void {
@@ -287,14 +283,13 @@ export class OfflineService {
         await Promise.all([)
       AsyncStorage.removeItem(this.STORAGE_KEYS.OPERATION_QUEUE),
       AsyncStorage.removeItem(this.STORAGE_KEYS.CACHE_DATA),
-      AsyncStorage.removeItem(this.STORAGE_KEYS.SYNC_STATUS),
-    ]);
+      AsyncStorage.removeItem(this.STORAGE_KEYS.SYNC_STATUS)]);
   }
   // 获取缓存统计
   getCacheStats(): {
     totalItems: number,
-  totalSize: number;
-    hitRate: number,
+  totalSize: number;,
+  hitRate: number,
   expiredItems: number;
   } {
     const now = Date.now();
@@ -311,8 +306,7 @@ export class OfflineService {
       totalItems: this.cache.size,
       totalSize,
       hitRate: 0, // 需要实际的命中率统计
-      expiredItems,
-    };
+      expiredItems};
   }
   // 生成操作ID;
   private generateOperationId(): string {
@@ -395,10 +389,9 @@ export class OfflineService {
       endpoint: '/health-data/recent' },
         {
       service: "AGENTS",
-      endpoint: '/agents/status' },
-      ];
+      endpoint: '/agents/status' }];
       await Promise.allSettled()
-        criticalEndpoints.map((async ({ service, endpoint }) => {
+        criticalEndpoints.map(async ({ service, endpoint }) => {
           try {
             const response = await apiClient.get(service, endpoint);
             if (response.success) {

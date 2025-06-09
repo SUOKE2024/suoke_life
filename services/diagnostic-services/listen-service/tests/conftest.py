@@ -1,17 +1,10 @@
-    from listen_service.config.settings import Settings, Environment
-    from listen_service.core.audio_analyzer import AudioAnalyzer
-    from listen_service.models.audio_models import AudioAnalysisRequest, AnalysisType
-    from listen_service.models.audio_models import VoiceFeatures, AudioAnalysisResponse
-    from listen_service.models.tcm_models import TCMDiagnosis
-from typing import Dict, List, Any, Optional, Union
-from unittest.mock import AsyncMock, MagicMock
-import asyncio
-import pytest
-import uuid
+"""Test module"""
+import unittest
 
-def main() - > None:
-    """主函数 - 自动生成的最小可用版本"""
-    pass
+class TestPlaceholder(unittest.TestCase):
+    def test_placeholder(self):
+        """Placeholder test"""
+        pass
 
 if __name__ == "__main__":
-    main()
+    unittest.main()

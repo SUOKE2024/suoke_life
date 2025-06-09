@@ -34,7 +34,7 @@ export class MetricsCollector {
       return name;
     }
     const labelStr = Object.entries(labels);
-      .map(([k, v]) => `${k}=${v}`);
+      .map([k, v]) => `${k}=${v}`);
       .join(',');
     return `${name}{${labelStr}}`;
   }

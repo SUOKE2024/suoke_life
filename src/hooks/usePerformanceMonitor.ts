@@ -3,7 +3,7 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 declare global {
   interface Performance {
   memory?: {
-      usedJSHeapSize: number;
+      usedJSHeapSize: number;,
   totalJSHeapSize: number;
       jsHeapSizeLimit: number;
 };
@@ -21,16 +21,16 @@ interface PerformanceMonitorConfig {
 }
 // 性能指标接口
 interface PerformanceMetrics {
-  renderTime: number;
+  renderTime: number;,
   memoryUsage: number;
-  networkLatency: number;
+  networkLatency: number;,
   componentMountTime: number;
-  updateCount: number;
+  updateCount: number;,
   errorCount: number;
 }
 // 性能事件接口
 interface PerformanceEvent {
-  type: 'render' | 'memory' | 'network' | 'error' | 'warning';
+  type: 'render' | 'memory' | 'network' | 'error' | 'warning';,
   timestamp: number;
   duration?: number;
   value?: number;
@@ -44,8 +44,7 @@ const DEFAULT_CONFIG: PerformanceMonitorConfig = {,
   warnThreshold: 16, // 60fps = 16.67ms per frame;
   errorThreshold: 100,
   sampleRate: 1.0,
-  enableLogging: __DEV__,
-};
+  enableLogging: __DEV__};
 /**
 * 性能监控Hook;
 * 提供组件级别的性能监控和分析功能
@@ -64,8 +63,7 @@ export const usePerformanceMonitor = ()
     networkLatency: 0,
     componentMountTime: 0,
     updateCount: 0,
-    errorCount: 0,
-  });
+    errorCount: 0});
   const eventsRef = useRef<PerformanceEvent[]>([]);
   const [isMonitoring, setIsMonitoring] = useState<boolean>(false);
   // 记录性能事件
@@ -93,9 +91,7 @@ export const usePerformanceMonitor = ()
             metadata: {,
   originalEvent: event,
               threshold: finalConfig.errorThreshold,
-              message: `Performance threshold exceeded: ${event.duration}ms > ${finalConfig.errorThreshold}ms`,
-            },
-          });
+              message: `Performance threshold exceeded: ${event.duration}ms > ${finalConfig.errorThreshold}ms`}});
         }
       } else if (event.duration > finalConfig.warnThreshold! && event.type !== 'warning') {
         eventsRef.current.push({
@@ -104,9 +100,7 @@ export const usePerformanceMonitor = ()
           metadata: {,
   originalEvent: event,
             threshold: finalConfig.warnThreshold,
-            message: `Performance warning: ${event.duration}ms > ${finalConfig.warnThreshold}ms`,
-          },
-        });
+            message: `Performance warning: ${event.duration}ms > ${finalConfig.warnThreshold}ms`}});
       }
     }
   }, [componentName, finalConfig]);
@@ -125,9 +119,7 @@ export const usePerformanceMonitor = ()
       duration: renderTime,
       metadata: {,
   renderCount: renderCountRef.current,
-        componentName,
-      },
-    });
+        componentName}});
   }, [componentName, finalConfig.trackRender, recordEvent]);
   // 记录内存使用
   const recordMemory = useCallback() => {
@@ -145,9 +137,7 @@ export const usePerformanceMonitor = ()
           metadata: {,
   totalJSHeapSize: memoryInfo.totalJSHeapSize / 1024 / 1024,
             jsHeapSizeLimit: memoryInfo.jsHeapSizeLimit / 1024 / 1024,
-            componentName,
-          },
-        });
+            componentName}});
       } else {
         // 使用React Native的JSC内存监控（如果可用）
         const memoryUsage = (global as any).nativePerformanceNow?.() || 0;
@@ -159,9 +149,7 @@ export const usePerformanceMonitor = ()
             value: memoryUsage,
             metadata: {,
   source: 'nativePerformanceNow',
-              componentName,
-            },
-          });
+              componentName}});
         }
       }
     } catch (error) {
@@ -179,9 +167,7 @@ export const usePerformanceMonitor = ()
       metadata: {
         url,
         success,
-        componentName,
-      },
-    });
+        componentName}});
   }, [componentName, finalConfig.trackNetwork, recordEvent]);
   // 记录自定义指标
   const recordMetric = useCallback(name: string, value: number, metadata?: Record<string, any>) => {
@@ -192,9 +178,7 @@ export const usePerformanceMonitor = ()
       metadata: {,
   metricName: name,
         componentName,
-        ...metadata,
-      },
-    });
+        ...metadata}});
   }, [componentName, recordEvent]);
   // 记录错误
   const recordError = useCallback(error: Error, metadata?: Record<string, any>) => {
@@ -206,12 +190,9 @@ export const usePerformanceMonitor = ()
   error: {
           name: error.name,
           message: error.message,
-          stack: error.stack,
-        },
+          stack: error.stack},
         componentName,
-        ...metadata,
-      },
-    });
+        ...metadata}});
   }, [componentName, recordEvent]);
   // 获取性能摘要
   const getPerformanceSummary = useCallback() => {
@@ -239,8 +220,7 @@ export const usePerformanceMonitor = ()
       errorCount: errorEvents.length,
       totalEvents: events.length,
       metrics: { ...metricsRef.current },
-      recentEvents: events.slice(-10),
-    };
+      recentEvents: events.slice(-10)};
   }, [componentName]);
   // 清除性能数据
   const clearPerformanceData = useCallback() => {
@@ -252,8 +232,7 @@ export const usePerformanceMonitor = ()
       networkLatency: 0,
       componentMountTime: 0,
       updateCount: 0,
-      errorCount: 0,
-    };
+      errorCount: 0};
   }, []);
   // 启动监控
   const startMonitoring = useCallback() => {
@@ -273,14 +252,14 @@ export const usePerformanceMonitor = ()
     setIsMonitoring(false);
   }, [isMonitoring]);
   // 组件挂载时启动监控
-  useEffect(() => {
+  useEffect() => {
     startMonitoring();
     return () => {
       stopMonitoring();
     };
   }, [startMonitoring, stopMonitoring]);
   // 每次渲染时记录性能
-  useEffect(() => {
+  useEffect() => {
     recordRender();
   });
   // 返回监控接口
@@ -304,8 +283,7 @@ export const usePerformanceMonitor = ()
     getCurrentMetrics: () => ({ ...metricsRef.current }),
     getRecentEvents: () => [...eventsRef.current.slice(-20)],
     // 配置
-    config: finalConfig,
-  };
+    config: finalConfig};
 };
 // 性能监控上下文Hook;
 export const usePerformanceContext = () => {
@@ -313,8 +291,7 @@ export const usePerformanceContext = () => {
   const registerComponent = useCallback(componentName: string, metrics: any) => {
     setGlobalMetrics(prev => ({
       ...prev,
-      [componentName]: metrics,
-    }));
+      [componentName]: metrics}));
   }, []);
   const unregisterComponent = useCallback(componentName: string) => {
     setGlobalMetrics(prev => {
@@ -333,14 +310,12 @@ export const usePerformanceContext = () => {
       totalComponents,
       totalRenders,
       averageRenderTime: avgRenderTime || 0,
-      components: globalMetrics,
-    };
+      components: globalMetrics};
   }, [globalMetrics]);
   return {
     globalMetrics,
     registerComponent,
     unregisterComponent,
-    getGlobalSummary,
-  };
+    getGlobalSummary};
 };
 export default usePerformanceMonitor;

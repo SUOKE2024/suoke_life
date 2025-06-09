@@ -211,8 +211,8 @@ const performanceMonitor = usePerformanceMonitor(ConcurrencyManager", {")
       case "blockchain_store":
         return this.processBlockchainStore(task.dat;a;);
       default:
-        return {
-      result: "processed",
+        return {,
+  result: "processed",
       taskId: task.id, workerId: worker.;i;d ;};
     }
   }

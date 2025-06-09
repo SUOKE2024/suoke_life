@@ -88,7 +88,7 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
     await loadData();
     setRefreshing(false);
   }, [loadData]);
-  useEffect(() => {
+  useEffect() => {
     loadData();
   }, [loadData]);
   // 开始游戏
@@ -126,9 +126,9 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
     const difficulty = difficultyConfig[maze.difficulty];
     const progress = userProgress.find(p => p.mazeId === maze.id);
     return (;)
-      <TouchableOpacity
+      <TouchableOpacity;
         key={maze.id};
-        style={{[styles.mazeCard, { borderLeftColor: theme.color }}]};
+        style={[styles.mazeCard, { borderLeftColor: theme.color }}]};
         onPress={() => progress?.status === ProgressStatus.IN_PROGRESS ;
           ? continueMaze(maze.id);
           : startMaze(maze.id);
@@ -142,7 +142,7 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
               <Text style={styles.mazeTheme}>{theme.name}</Text>
             </View>
           </View>
-          <View style={{[styles.difficultyBadge, { backgroundColor: difficulty.color }}]}>
+          <View style={[styles.difficultyBadge, { backgroundColor: difficulty.color }}]}>
             <Text style={styles.difficultyText}>{difficulty.name}</Text>
           </View>
         </View>
@@ -158,7 +158,7 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
             <Text style={styles.statText}>{maze.estimatedTime || 15}分钟</Text>
           </View>
           {progress  && <View style={styles.statItem}>
-              <Icon
+              <Icon;
                 name={progress.status === ProgressStatus.COMPLETED ? "check-circle" : "play-circle"}
                 size={16}
                 color={progress.status === ProgressStatus.COMPLETED ? colors.success : colors.primary}
@@ -176,9 +176,9 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
   const renderTemplateCard = (template: MazeTemplate) => {const theme = themeConfig[template.mazeType];
     const difficulty = difficultyConfig[template.difficulty];
     return (
-  <TouchableOpacity
+  <TouchableOpacity;
         key={template.templateId}
-        style={{[styles.templateCard, { borderLeftColor: theme.color }}]}
+        style={[styles.templateCard, { borderLeftColor: theme.color }}]}
         onPress={() => createFromTemplate(template)}
       >
         <View style={styles.templateHeader}>
@@ -189,7 +189,7 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
               <Text style={styles.templateTheme}>{theme.name}</Text>
             </View>
           </View>
-          <View style={{[styles.difficultyBadge, { backgroundColor: difficulty.color }}]}>
+          <View style={[styles.difficultyBadge, { backgroundColor: difficulty.color }}]}>
             <Text style={styles.difficultyText}>{difficulty.name}</Text>
           </View>
         </View>
@@ -223,9 +223,9 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
     const theme = themeConfig[maze.theme];
     const completionRate = (progress.visitedNodes.length / (maze.size * maze.size)) * 100;
     return (
-  <TouchableOpacity
+  <TouchableOpacity;
         key={progress.mazeId}
-        style={{[styles.progressCard, { borderLeftColor: theme.color }}]}
+        style={[styles.progressCard, { borderLeftColor: theme.color }}]}
         onPress={() => continueMaze(progress.mazeId)}
       >
         <View style={styles.progressHeader}>
@@ -241,8 +241,8 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
           <Text style={styles.progressScore}>{progress.score}分</Text>
         </View>
         <View style={styles.progressBar}>
-          <View
-            style={{[
+          <View;
+            style={[
               styles.progressFill,
               {
                 width: `${completionRate}}%`,
@@ -269,7 +269,7 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
   <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>玉米迷宫</Text>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.createButton}
           onPress={() => navigation.navigate('CreateMaze')}
         >
@@ -277,7 +277,7 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <View style={styles.tabContainer}>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.tab, selectedTab === 'my' && styles.activeTab]}
           onPress={() => setSelectedTab('my')}
         >
@@ -285,7 +285,7 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
             我的迷宫
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.tab, selectedTab === 'templates' && styles.activeTab]}
           onPress={() => setSelectedTab('templates')}
         >
@@ -293,7 +293,7 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
             模板库
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.tab, selectedTab === 'progress' && styles.activeTab]}
           onPress={() => setSelectedTab('progress')}
         >
@@ -302,7 +302,7 @@ const MazeMainScreen: React.FC<MazeMainScreenProps> = ({ navigation }) => {
           </Text>;
         </TouchableOpacity>;
       </View>;
-      <ScrollView
+      <ScrollView;
         style={styles.content};
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />;
         };
@@ -589,8 +589,8 @@ const styles = StyleSheet.create({
   fontSize: 12,
     color: colors.textSecondary;
   },
-  emptyState: {
-      alignItems: "center",
+  emptyState: {,
+  alignItems: "center",
       paddingVertical: 60;
   },emptyText: {fontSize: 18,fontWeight: '600',color: colors.textSecondary,marginTop: 16;
   },emptySubtext: {fontSize: 14,color: colors.textSecondary,marginTop: 8,textAlign: 'center';

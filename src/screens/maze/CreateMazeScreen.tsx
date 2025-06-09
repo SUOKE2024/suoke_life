@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {import { SafeAreaView } from 'react-native-safe-area-context';
-const Icon = React.lazy(() => import('../../components/common/Icon'));
+const Icon = React.lazy() => import('../../components/common/Icon'));
 import { colors } from '../../constants/theme';
 import { cornMazeService } from '../../services/cornMazeService';
 import {View,
@@ -60,7 +60,7 @@ const CreateMazeScreen: React.FC<CreateMazeScreenProps> = ({ navigation }) => {
       color: '#9C27B0', description: '极具挑战性' };
   };
   // 加载模板
-  useEffect(() => {
+  useEffect() => {
     const loadTemplates = async () => {try {const response = await cornMazeService.listMazeTemplates(undefined, undefined, 1, 50);
         setTemplates(response.templates);
       } catch (error) {
@@ -117,10 +117,10 @@ const CreateMazeScreen: React.FC<CreateMazeScreenProps> = ({ navigation }) => {
   <View style={styles.section}>
       <Text style={styles.sectionTitle}>选择主题</Text>
       <View style={styles.optionGrid}>
-        {Object.entries(themeConfig).map(([key, config]) => (;))
-          <TouchableOpacity
+        {Object.entries(themeConfig).map([key, config]) => (;))
+          <TouchableOpacity;
             key={key};
-            style={{[;
+            style={[;
               styles.optionCard,theme === key && { borderColor: config.color, borderWidth: 2 }};
             ]};
             onPress={() => setTheme(key as MazeTheme)};
@@ -138,15 +138,15 @@ const CreateMazeScreen: React.FC<CreateMazeScreenProps> = ({ navigation }) => {
   <View style={styles.section}>
       <Text style={styles.sectionTitle}>选择难度</Text>
       <View style={styles.optionGrid}>
-        {Object.entries(difficultyConfig).map(([key, config]) => (;))
-          <TouchableOpacity
+        {Object.entries(difficultyConfig).map([key, config]) => (;))
+          <TouchableOpacity;
             key={key};
-            style={{[;
+            style={[;
               styles.difficultyCard,difficulty === key && { borderColor: config.color, borderWidth: 2 }};
             ]};
             onPress={() => setDifficulty(key as MazeDifficulty)};
           >;
-            <View style={{[styles.difficultyIndicator, { backgroundColor: config.color }}]} />;
+            <View style={[styles.difficultyIndicator, { backgroundColor: config.color }}]} />;
             <Text style={styles.difficultyName}>{config.name}</Text>;
             <Text style={styles.difficultyDescription}>{config.description}</Text>;
           </TouchableOpacity>;
@@ -163,9 +163,9 @@ const CreateMazeScreen: React.FC<CreateMazeScreenProps> = ({ navigation }) => {
         {filteredTemplates.length > 0 ? ()
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             {filteredTemplates.map(template) => ()
-              <TouchableOpacity
+              <TouchableOpacity;
                 key={template.templateId}
-                style={{[
+                style={[
                   styles.templateCard,
                   selectedTemplate?.templateId === template.templateId && styles.selectedTemplate;
                 ]}}
@@ -206,7 +206,7 @@ const CreateMazeScreen: React.FC<CreateMazeScreenProps> = ({ navigation }) => {
           <Text style={styles.sectionTitle}>基本信息</Text>
           <View style={styles.inputGroup}>
             <Text style={styles.inputLabel}>迷宫名称 *</Text>
-            <TextInput
+            <TextInput;
               style={styles.textInput}
               value={name}
               onChangeText={setName}
@@ -216,7 +216,7 @@ const CreateMazeScreen: React.FC<CreateMazeScreenProps> = ({ navigation }) => {
           </View>
           <View style={styles.inputGroup}>
             <Text style={styles.inputLabel}>描述</Text>
-            <TextInput
+            <TextInput;
               style={[styles.textInput, styles.textArea]}
               value={description}
               onChangeText={setDescription}
@@ -236,7 +236,7 @@ const CreateMazeScreen: React.FC<CreateMazeScreenProps> = ({ navigation }) => {
                 基于预设模板快速创建迷宫
               </Text>
             </View>
-            <Switch
+            <Switch;
               value={useTemplate}
               onValueChange={setUseTemplate}
               trackColor={ false: colors.border, true: colors.primary }}
@@ -255,15 +255,15 @@ const CreateMazeScreen: React.FC<CreateMazeScreenProps> = ({ navigation }) => {
             <Text style={styles.sectionTitle}>迷宫大小</Text>
             <View style={styles.sizeSelector}>
               {[8, 10, 12, 15, 20].map(sizeOption) => ()
-                <TouchableOpacity
+                <TouchableOpacity;
                   key={sizeOption}
-                  style={{[
+                  style={[
                     styles.sizeOption,
                     size === sizeOption && styles.selectedSize;
                   ]}}
                   onPress={() => setSize(sizeOption)}
                 >
-                  <Text style={{[
+                  <Text style={[
                     styles.sizeText,
                     size === sizeOption && styles.selectedSizeText;
                   ]}}>
@@ -277,7 +277,7 @@ const CreateMazeScreen: React.FC<CreateMazeScreenProps> = ({ navigation }) => {
       </ScrollView>;
       {// 创建按钮};
       <View style={styles.footer}>;
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.createButton, loading && styles.disabledButton]};
           onPress={createMaze};
           disabled={loading};

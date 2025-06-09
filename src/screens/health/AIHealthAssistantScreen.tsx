@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
-    Alert,
-    Animated,
-    Dimensions,
-    FlatList,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  Animated,
+  Dimensions,
+  FlatList,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -18,33 +18,35 @@ import { useTheme } from '../../contexts/ThemeContext';
 const { width, height } = Dimensions.get('window');
 
 interface Message {
-  id: string;
+  id: string;,
   text: string;
-  isUser: boolean;
+  isUser: boolean;,
   timestamp: Date;
   type?: 'text' | 'analysis' | 'suggestion';
 }
 
 interface QuickAction {
-  id: string;
+  id: string;,
   title: string;
-  icon: string;
+  icon: string;,
   description: string;
   action: () => void;
 }
 
 interface HealthSuggestion {
-  id: string;
+  id: string;,
   category: string;
-  title: string;
+  title: string;,
   description: string;
-  priority: 'high' | 'medium' | 'low';
+  priority: 'high' | 'medium' | 'low';,
   icon: string;
 }
 
 const AIHealthAssistantScreen: React.FC = () => {
   const { theme } = useTheme();
-  const [activeTab, setActiveTab] = useState<'chat' | 'suggestions' | 'analysis'>('chat');
+  const [activeTab, setActiveTab] = useState<
+    'chat' | 'suggestions' | 'analysis'
+  >('chat');
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -125,7 +127,7 @@ const AIHealthAssistantScreen: React.FC = () => {
     },
   ];
 
-  useEffect(() => {
+  useEffect() => {
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 500,
@@ -142,22 +144,22 @@ const AIHealthAssistantScreen: React.FC = () => {
     const messageText = text || inputText.trim();
     if (!messageText) return;
 
-    const userMessage: Message = {
-      id: Date.now().toString(),
+    const userMessage: Message = {,
+  id: Date.now().toString(),
       text: messageText,
       isUser: true,
       timestamp: new Date(),
       type: 'text',
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    setMessages(prev) => [...prev, userMessage]);
     setInputText('');
     setIsTyping(true);
 
     // 模拟AI回复
-    setTimeout(() => {
+    setTimeout() => {
       const aiResponse = generateAIResponse(messageText);
-      setMessages(prev => [...prev, aiResponse]);
+      setMessages(prev) => [...prev, aiResponse]);
       setIsTyping(false);
     }, 1500);
   };
@@ -182,7 +184,7 @@ const AIHealthAssistantScreen: React.FC = () => {
       },
     };
 
-    let responseKey = Object.keys(responses).find(key => 
+    let responseKey = Object.keys(responses).find(key) =>
       userMessage.includes(key)
     );
 
@@ -190,7 +192,8 @@ const AIHealthAssistantScreen: React.FC = () => {
       responseKey = '症状'; // 默认回复
     }
 
-    const response = responses[responseKey as keyof typeof responses] || responses.症状;
+    const response =
+      responses[responseKey as keyof typeof responses] || responses.症状;
 
     return {
       id: Date.now().toString(),
@@ -202,74 +205,130 @@ const AIHealthAssistantScreen: React.FC = () => {
   };
 
   const renderMessage = ({ item }: { item: Message }) => (
-    <View style={[
-      styles.messageContainer,
-      item.isUser ? styles.userMessage : styles.aiMessage,
-    ]}>
+    <View;
+      style={[
+        styles.messageContainer,
+        item.isUser ? styles.userMessage : styles.aiMessage,
+      ]}
+    >
       {!item.isUser && (
         <View style={[styles.aiAvatar, { backgroundColor: theme.primary }]}>
           <Icon name="smart-toy" size={20} color={theme.surface} />
         </View>
       )}
-      <View style={[
-        styles.messageBubble,
-        item.isUser 
-          ? { backgroundColor: theme.primary }
-          : { backgroundColor: theme.surface, borderColor: theme.border, borderWidth: 1 },
-      ]}>
-        <Text style={[
-          styles.messageText,
-          { color: item.isUser ? theme.surface : theme.text },
-        ]}>
+      <View;
+        style={[
+          styles.messageBubble,
+          item.isUser;
+            ? { backgroundColor: theme.primary }
+            : {
+                backgroundColor: theme.surface,
+                borderColor: theme.border,
+                borderWidth: 1,
+              },
+        ]}
+      >
+        <Text;
+          style={[
+            styles.messageText,
+            { color: item.isUser ? theme.surface : theme.text },
+          ]}
+        >
           {item.text}
         </Text>
-        <Text style={[
-          styles.messageTime,
-          { color: item.isUser ? theme.surface + '80' : theme.textSecondary },
-        ]}>
-          {item.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+        <Text;
+          style={[
+            styles.messageTime,
+            { color: item.isUser ? theme.surface + '80' : theme.textSecondary },
+          ]}
+        >
+          {item.timestamp.toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+          })}
         </Text>
       </View>
     </View>
   );
 
   const renderQuickAction = ({ item }: { item: QuickAction }) => (
-    <TouchableOpacity
-      style={[styles.quickActionCard, { backgroundColor: theme.surface, borderColor: theme.border }]}
+    <TouchableOpacity;
+      style={[
+        styles.quickActionCard,
+        { backgroundColor: theme.surface, borderColor: theme.border },
+      ]}
       onPress={item.action}
     >
-      <View style={[styles.quickActionIcon, { backgroundColor: theme.primary + '20' }]}>
+      <View;
+        style={[
+          styles.quickActionIcon,
+          { backgroundColor: theme.primary + '20' },
+        ]}
+      >
         <Icon name={item.icon} size={24} color={theme.primary} />
       </View>
-      <Text style={[styles.quickActionTitle, { color: theme.text }]}>{item.title}</Text>
-      <Text style={[styles.quickActionDescription, { color: theme.textSecondary }]}>
+      <Text style={[styles.quickActionTitle, { color: theme.text }]}>
+        {item.title}
+      </Text>
+      <Text;
+        style={[styles.quickActionDescription, { color: theme.textSecondary }]}
+      >
         {item.description}
       </Text>
     </TouchableOpacity>
   );
 
   const renderSuggestion = ({ item }: { item: HealthSuggestion }) => (
-    <View style={[styles.suggestionCard, { backgroundColor: theme.surface, borderColor: theme.border }]}>
+    <View;
+      style={[
+        styles.suggestionCard,
+        { backgroundColor: theme.surface, borderColor: theme.border },
+      ]}
+    >
       <View style={styles.suggestionHeader}>
-        <View style={[styles.suggestionIcon, { backgroundColor: theme.primary + '20' }]}>
+        <View;
+          style={[
+            styles.suggestionIcon,
+            { backgroundColor: theme.primary + '20' },
+          ]}
+        >
           <Icon name={item.icon} size={20} color={theme.primary} />
         </View>
         <View style={styles.suggestionInfo}>
-          <Text style={[styles.suggestionCategory, { color: theme.textSecondary }]}>
+          <Text;
+            style={[styles.suggestionCategory, { color: theme.textSecondary }]}
+          >
             {item.category}
           </Text>
-          <Text style={[styles.suggestionTitle, { color: theme.text }]}>{item.title}</Text>
+          <Text style={[styles.suggestionTitle, { color: theme.text }]}>
+            {item.title}
+          </Text>
         </View>
-        <View style={[
-          styles.priorityBadge,
-          { backgroundColor: item.priority === 'high' ? '#FF6B6B' : item.priority === 'medium' ? '#4ECDC4' : '#95E1D3' },
-        ]}>
+        <View;
+          style={[
+            styles.priorityBadge,
+            {
+              backgroundColor:
+                item.priority === 'high'
+                  ? '#FF6B6B'
+                  : item.priority === 'medium'
+                    ? '#4ECDC4'
+                    : '#95E1D3',
+            },
+          ]}
+        >
           <Text style={[styles.priorityText, { color: theme.surface }]}>
-            {item.priority === 'high' ? '高' : item.priority === 'medium' ? '中' : '低'}
+            {item.priority === 'high'
+              ? '高'
+              : item.priority === 'medium'
+                ? '中'
+                : '低'}
           </Text>
         </View>
       </View>
-      <Text style={[styles.suggestionDescription, { color: theme.textSecondary }]}>
+      <Text;
+        style={[styles.suggestionDescription, { color: theme.textSecondary }]}
+      >
         {item.description}
       </Text>
     </View>
@@ -277,34 +336,43 @@ const AIHealthAssistantScreen: React.FC = () => {
 
   const renderChatTab = () => (
     <View style={styles.chatContainer}>
-      <FlatList
+      <FlatList;
         ref={scrollViewRef}
         data={messages}
         renderItem={renderMessage}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id}
         style={styles.messagesList}
-        onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })}
+        onContentSizeChange={() =>
+          scrollViewRef.current?.scrollToEnd({ animated: true })
+        }
       />
-      
+
       {isTyping && (
-        <View style={[styles.typingIndicator, { backgroundColor: theme.surface }]}>
+        <View;
+          style={[styles.typingIndicator, { backgroundColor: theme.surface }]}
+        >
           <Text style={[styles.typingText, { color: theme.textSecondary }]}>
             AI助手正在输入...
           </Text>
         </View>
       )}
 
-      <View style={[styles.inputContainer, { backgroundColor: theme.surface, borderColor: theme.border }]}>
-        <TextInput
+      <View;
+        style={[
+          styles.inputContainer,
+          { backgroundColor: theme.surface, borderColor: theme.border },
+        ]}
+      >
+        <TextInput;
           style={[styles.textInput, { color: theme.text }]}
           value={inputText}
           onChangeText={setInputText}
           placeholder="输入您的健康问题..."
           placeholderTextColor={theme.textSecondary}
-          multiline
+          multiline;
           maxLength={500}
         />
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.sendButton, { backgroundColor: theme.primary }]}
           onPress={() => handleSendMessage()}
           disabled={!inputText.trim()}
@@ -314,12 +382,14 @@ const AIHealthAssistantScreen: React.FC = () => {
       </View>
 
       <View style={styles.quickActionsContainer}>
-        <Text style={[styles.quickActionsTitle, { color: theme.text }]}>快捷操作</Text>
-        <FlatList
+        <Text style={[styles.quickActionsTitle, { color: theme.text }]}>
+          快捷操作
+        </Text>
+        <FlatList;
           data={quickActions}
           renderItem={renderQuickAction}
-          keyExtractor={item => item.id}
-          horizontal
+          keyExtractor={(item) => item.id}
+          horizontal;
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.quickActionsList}
         />
@@ -329,15 +399,17 @@ const AIHealthAssistantScreen: React.FC = () => {
 
   const renderSuggestionsTab = () => (
     <ScrollView style={styles.suggestionsContainer}>
-      <Text style={[styles.sectionTitle, { color: theme.text }]}>个性化健康建议</Text>
+      <Text style={[styles.sectionTitle, { color: theme.text }]}>
+        个性化健康建议
+      </Text>
       <Text style={[styles.sectionSubtitle, { color: theme.textSecondary }]}>
         基于您的健康数据和生活习惯，为您推荐以下建议
       </Text>
-      
-      <FlatList
+
+      <FlatList;
         data={healthSuggestions}
         renderItem={renderSuggestion}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id}
         scrollEnabled={false}
         contentContainerStyle={styles.suggestionsList}
       />
@@ -346,47 +418,84 @@ const AIHealthAssistantScreen: React.FC = () => {
 
   const renderAnalysisTab = () => (
     <ScrollView style={styles.analysisContainer}>
-      <Text style={[styles.sectionTitle, { color: theme.text }]}>健康分析报告</Text>
-      
-      <View style={[styles.analysisCard, { backgroundColor: theme.surface, borderColor: theme.border }]}>
+      <Text style={[styles.sectionTitle, { color: theme.text }]}>
+        健康分析报告
+      </Text>
+
+      <View;
+        style={[
+          styles.analysisCard,
+          { backgroundColor: theme.surface, borderColor: theme.border },
+        ]}
+      >
         <View style={styles.analysisHeader}>
           <Icon name="analytics" size={24} color={theme.primary} />
-          <Text style={[styles.analysisTitle, { color: theme.text }]}>综合健康评分</Text>
+          <Text style={[styles.analysisTitle, { color: theme.text }]}>
+            综合健康评分
+          </Text>
         </View>
         <View style={styles.scoreContainer}>
           <Text style={[styles.scoreValue, { color: theme.primary }]}>85</Text>
-          <Text style={[styles.scoreLabel, { color: theme.textSecondary }]}>分</Text>
+          <Text style={[styles.scoreLabel, { color: theme.textSecondary }]}>
+            分
+          </Text>
         </View>
         <Text style={[styles.scoreDescription, { color: theme.textSecondary }]}>
           您的整体健康状况良好，建议继续保持现有的健康习惯
         </Text>
       </View>
 
-      <View style={[styles.analysisCard, { backgroundColor: theme.surface, borderColor: theme.border }]}>
+      <View;
+        style={[
+          styles.analysisCard,
+          { backgroundColor: theme.surface, borderColor: theme.border },
+        ]}
+      >
         <View style={styles.analysisHeader}>
           <Icon name="trending-up" size={24} color={theme.primary} />
-          <Text style={[styles.analysisTitle, { color: theme.text }]}>健康趋势</Text>
+          <Text style={[styles.analysisTitle, { color: theme.text }]}>
+            健康趋势
+          </Text>
         </View>
         <View style={styles.trendContainer}>
           <View style={styles.trendItem}>
-            <Text style={[styles.trendLabel, { color: theme.textSecondary }]}>体重</Text>
-            <Text style={[styles.trendValue, { color: '#4ECDC4' }]}>↗ 稳定</Text>
+            <Text style={[styles.trendLabel, { color: theme.textSecondary }]}>
+              体重
+            </Text>
+            <Text style={[styles.trendValue, { color: '#4ECDC4' }]}>
+              ↗ 稳定
+            </Text>
           </View>
           <View style={styles.trendItem}>
-            <Text style={[styles.trendLabel, { color: theme.textSecondary }]}>血压</Text>
-            <Text style={[styles.trendValue, { color: '#4ECDC4' }]}>↗ 改善</Text>
+            <Text style={[styles.trendLabel, { color: theme.textSecondary }]}>
+              血压
+            </Text>
+            <Text style={[styles.trendValue, { color: '#4ECDC4' }]}>
+              ↗ 改善
+            </Text>
           </View>
           <View style={styles.trendItem}>
-            <Text style={[styles.trendLabel, { color: theme.textSecondary }]}>睡眠</Text>
-            <Text style={[styles.trendValue, { color: '#FFD93D' }]}>→ 一般</Text>
+            <Text style={[styles.trendLabel, { color: theme.textSecondary }]}>
+              睡眠
+            </Text>
+            <Text style={[styles.trendValue, { color: '#FFD93D' }]}>
+              → 一般
+            </Text>
           </View>
         </View>
       </View>
 
-      <View style={[styles.analysisCard, { backgroundColor: theme.surface, borderColor: theme.border }]}>
+      <View;
+        style={[
+          styles.analysisCard,
+          { backgroundColor: theme.surface, borderColor: theme.border },
+        ]}
+      >
         <View style={styles.analysisHeader}>
           <Icon name="lightbulb" size={24} color={theme.primary} />
-          <Text style={[styles.analysisTitle, { color: theme.text }]}>AI洞察</Text>
+          <Text style={[styles.analysisTitle, { color: theme.text }]}>
+            AI洞察
+          </Text>
         </View>
         <Text style={[styles.insightText, { color: theme.textSecondary }]}>
           根据您最近的健康数据分析，您的运动量有所增加，这对心血管健康很有益处。
@@ -397,13 +506,25 @@ const AIHealthAssistantScreen: React.FC = () => {
   );
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
+    <SafeAreaView;
+      style={[styles.container, { backgroundColor: theme.background }]}
+    >
       <Animated.View style={[styles.content, { opacity: fadeAnim }]}>
         {/* Header */}
-        <View style={[styles.header, { backgroundColor: theme.surface, borderBottomColor: theme.border }]}>
-          <Text style={[styles.headerTitle, { color: theme.text }]}>AI健康助手</Text>
-          <TouchableOpacity
-            style={[styles.headerButton, { backgroundColor: theme.primary + '20' }]}
+        <View;
+          style={[
+            styles.header,
+            { backgroundColor: theme.surface, borderBottomColor: theme.border },
+          ]}
+        >
+          <Text style={[styles.headerTitle, { color: theme.text }]}>
+            AI健康助手
+          </Text>
+          <TouchableOpacity;
+            style={[
+              styles.headerButton,
+              { backgroundColor: theme.primary + '20' },
+            ]}
             onPress={() => Alert.alert('设置', '功能开发中...')}
           >
             <Icon name="settings" size={20} color={theme.primary} />
@@ -411,29 +532,46 @@ const AIHealthAssistantScreen: React.FC = () => {
         </View>
 
         {/* Tab Navigation */}
-        <View style={[styles.tabContainer, { backgroundColor: theme.surface, borderBottomColor: theme.border }]}>
+        <View;
+          style={[
+            styles.tabContainer,
+            { backgroundColor: theme.surface, borderBottomColor: theme.border },
+          ]}
+        >
           {[
             { key: 'chat', label: '智能问答', icon: 'chat' },
             { key: 'suggestions', label: '健康建议', icon: 'lightbulb' },
             { key: 'analysis', label: '健康分析', icon: 'analytics' },
-          ].map(tab => (
-            <TouchableOpacity
+          ].map(tab) => (
+            <TouchableOpacity;
               key={tab.key}
               style={[
                 styles.tab,
-                activeTab === tab.key && { borderBottomColor: theme.primary, borderBottomWidth: 2 },
+                activeTab === tab.key && {
+                  borderBottomColor: theme.primary,
+                  borderBottomWidth: 2,
+                },
               ]}
               onPress={() => setActiveTab(tab.key as any)}
             >
-              <Icon 
-                name={tab.icon} 
-                size={20} 
-                color={activeTab === tab.key ? theme.primary : theme.textSecondary} 
+              <Icon;
+                name={tab.icon}
+                size={20}
+                color={
+                  activeTab === tab.key ? theme.primary : theme.textSecondary;
+                }
               />
-              <Text style={[
-                styles.tabLabel,
-                { color: activeTab === tab.key ? theme.primary : theme.textSecondary },
-              ]}>
+              <Text;
+                style={[
+                  styles.tabLabel,
+                  {
+                    color:
+                      activeTab === tab.key;
+                        ? theme.primary;
+                        : theme.textSecondary,
+                  },
+                ]}
+              >
                 {tab.label}
               </Text>
             </TouchableOpacity>
@@ -452,279 +590,279 @@ const AIHealthAssistantScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  container: {,
+  flex: 1,
   },
-  content: {
-    flex: 1,
+  content: {,
+  flex: 1,
   },
-  header: {
-    flexDirection: 'row',
+  header: {,
+  flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 15,
     borderBottomWidth: 1,
   },
-  headerTitle: {
-    fontSize: 20,
+  headerTitle: {,
+  fontSize: 20,
     fontWeight: '600',
   },
-  headerButton: {
-    width: 36,
+  headerButton: {,
+  width: 36,
     height: 36,
     borderRadius: 18,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  tabContainer: {
-    flexDirection: 'row',
+  tabContainer: {,
+  flexDirection: 'row',
     borderBottomWidth: 1,
   },
-  tab: {
-    flex: 1,
+  tab: {,
+  flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 12,
     gap: 6,
   },
-  tabLabel: {
-    fontSize: 14,
+  tabLabel: {,
+  fontSize: 14,
     fontWeight: '500',
   },
-  tabContent: {
-    flex: 1,
+  tabContent: {,
+  flex: 1,
   },
-  chatContainer: {
-    flex: 1,
+  chatContainer: {,
+  flex: 1,
   },
-  messagesList: {
-    flex: 1,
+  messagesList: {,
+  flex: 1,
     paddingHorizontal: 16,
     paddingTop: 16,
   },
-  messageContainer: {
-    flexDirection: 'row',
+  messageContainer: {,
+  flexDirection: 'row',
     marginBottom: 16,
     alignItems: 'flex-end',
   },
-  userMessage: {
-    justifyContent: 'flex-end',
+  userMessage: {,
+  justifyContent: 'flex-end',
   },
-  aiMessage: {
-    justifyContent: 'flex-start',
+  aiMessage: {,
+  justifyContent: 'flex-start',
   },
-  aiAvatar: {
-    width: 32,
+  aiAvatar: {,
+  width: 32,
     height: 32,
     borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 8,
   },
-  messageBubble: {
-    maxWidth: width * 0.75,
+  messageBubble: {,
+  maxWidth: width * 0.75,
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 20,
   },
-  messageText: {
-    fontSize: 16,
+  messageText: {,
+  fontSize: 16,
     lineHeight: 22,
   },
-  messageTime: {
-    fontSize: 12,
+  messageTime: {,
+  fontSize: 12,
     marginTop: 4,
   },
-  typingIndicator: {
-    paddingHorizontal: 16,
+  typingIndicator: {,
+  paddingHorizontal: 16,
     paddingVertical: 8,
     marginHorizontal: 16,
     borderRadius: 12,
     marginBottom: 8,
   },
-  typingText: {
-    fontSize: 14,
+  typingText: {,
+  fontSize: 14,
     fontStyle: 'italic',
   },
-  inputContainer: {
-    flexDirection: 'row',
+  inputContainer: {,
+  flexDirection: 'row',
     alignItems: 'flex-end',
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderTopWidth: 1,
     gap: 12,
   },
-  textInput: {
-    flex: 1,
+  textInput: {,
+  flex: 1,
     maxHeight: 100,
     fontSize: 16,
     paddingVertical: 8,
   },
-  sendButton: {
-    width: 40,
+  sendButton: {,
+  width: 40,
     height: 40,
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  quickActionsContainer: {
-    paddingHorizontal: 16,
+  quickActionsContainer: {,
+  paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  quickActionsTitle: {
-    fontSize: 16,
+  quickActionsTitle: {,
+  fontSize: 16,
     fontWeight: '600',
     marginBottom: 12,
   },
-  quickActionsList: {
-    gap: 12,
+  quickActionsList: {,
+  gap: 12,
   },
-  quickActionCard: {
-    width: 140,
+  quickActionCard: {,
+  width: 140,
     padding: 16,
     borderRadius: 12,
     borderWidth: 1,
     alignItems: 'center',
   },
-  quickActionIcon: {
-    width: 48,
+  quickActionIcon: {,
+  width: 48,
     height: 48,
     borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
   },
-  quickActionTitle: {
-    fontSize: 14,
+  quickActionTitle: {,
+  fontSize: 14,
     fontWeight: '600',
     textAlign: 'center',
     marginBottom: 4,
   },
-  quickActionDescription: {
-    fontSize: 12,
+  quickActionDescription: {,
+  fontSize: 12,
     textAlign: 'center',
     lineHeight: 16,
   },
-  suggestionsContainer: {
-    flex: 1,
+  suggestionsContainer: {,
+  flex: 1,
     padding: 16,
   },
-  sectionTitle: {
-    fontSize: 20,
+  sectionTitle: {,
+  fontSize: 20,
     fontWeight: '600',
     marginBottom: 8,
   },
-  sectionSubtitle: {
-    fontSize: 14,
+  sectionSubtitle: {,
+  fontSize: 14,
     lineHeight: 20,
     marginBottom: 20,
   },
-  suggestionsList: {
-    gap: 12,
+  suggestionsList: {,
+  gap: 12,
   },
-  suggestionCard: {
-    padding: 16,
+  suggestionCard: {,
+  padding: 16,
     borderRadius: 12,
     borderWidth: 1,
   },
-  suggestionHeader: {
-    flexDirection: 'row',
+  suggestionHeader: {,
+  flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 8,
   },
-  suggestionIcon: {
-    width: 36,
+  suggestionIcon: {,
+  width: 36,
     height: 36,
     borderRadius: 18,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
   },
-  suggestionInfo: {
-    flex: 1,
+  suggestionInfo: {,
+  flex: 1,
   },
-  suggestionCategory: {
-    fontSize: 12,
+  suggestionCategory: {,
+  fontSize: 12,
     fontWeight: '500',
     marginBottom: 2,
   },
-  suggestionTitle: {
-    fontSize: 16,
+  suggestionTitle: {,
+  fontSize: 16,
     fontWeight: '600',
   },
-  priorityBadge: {
-    paddingHorizontal: 8,
+  priorityBadge: {,
+  paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
   },
-  priorityText: {
-    fontSize: 12,
+  priorityText: {,
+  fontSize: 12,
     fontWeight: '600',
   },
-  suggestionDescription: {
-    fontSize: 14,
+  suggestionDescription: {,
+  fontSize: 14,
     lineHeight: 20,
   },
-  analysisContainer: {
-    flex: 1,
+  analysisContainer: {,
+  flex: 1,
     padding: 16,
   },
-  analysisCard: {
-    padding: 20,
+  analysisCard: {,
+  padding: 20,
     borderRadius: 12,
     borderWidth: 1,
     marginBottom: 16,
   },
-  analysisHeader: {
-    flexDirection: 'row',
+  analysisHeader: {,
+  flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 16,
     gap: 8,
   },
-  analysisTitle: {
-    fontSize: 18,
+  analysisTitle: {,
+  fontSize: 18,
     fontWeight: '600',
   },
-  scoreContainer: {
-    flexDirection: 'row',
+  scoreContainer: {,
+  flexDirection: 'row',
     alignItems: 'baseline',
     justifyContent: 'center',
     marginBottom: 12,
   },
-  scoreValue: {
-    fontSize: 48,
+  scoreValue: {,
+  fontSize: 48,
     fontWeight: '700',
   },
-  scoreLabel: {
-    fontSize: 18,
+  scoreLabel: {,
+  fontSize: 18,
     marginLeft: 4,
   },
-  scoreDescription: {
-    fontSize: 14,
+  scoreDescription: {,
+  fontSize: 14,
     textAlign: 'center',
     lineHeight: 20,
   },
-  trendContainer: {
-    gap: 12,
+  trendContainer: {,
+  gap: 12,
   },
-  trendItem: {
-    flexDirection: 'row',
+  trendItem: {,
+  flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  trendLabel: {
-    fontSize: 16,
+  trendLabel: {,
+  fontSize: 16,
   },
-  trendValue: {
-    fontSize: 16,
+  trendValue: {,
+  fontSize: 16,
     fontWeight: '600',
   },
-  insightText: {
-    fontSize: 14,
+  insightText: {,
+  fontSize: 14,
     lineHeight: 22,
   },
 });
 
-export default AIHealthAssistantScreen; 
+export default AIHealthAssistantScreen;

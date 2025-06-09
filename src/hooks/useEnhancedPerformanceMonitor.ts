@@ -2,40 +2,40 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { InteractionManager, Dimensions } from 'react-native';
 // 性能指标接口
 interface PerformanceMetrics {
-  renderTime: number;
+  renderTime: number;,
   memoryUsage: number;
-  networkLatency: number;
+  networkLatency: number;,
   frameDrops: number;
-  interactionDelay: number;
+  interactionDelay: number;,
   bundleSize: number;
-  cacheHitRate: number;
+  cacheHitRate: number;,
   errorCount: number;
-  warningCount: number;
+  warningCount: number;,
   timestamp: number;
 }
 // 性能阈值配置
 interface PerformanceThresholds {
-  renderTime: number;
+  renderTime: number;,
   memoryUsage: number;
-  networkLatency: number;
+  networkLatency: number;,
   frameDrops: number;
   interactionDelay: number;
 }
 // 性能优化建议
 interface OptimizationSuggestion {
-  type: 'render' | 'memory' | 'network' | 'interaction' | 'bundle';
+  type: 'render' | 'memory' | 'network' | 'interaction' | 'bundle';,
   severity: 'low' | 'medium' | 'high' | 'critical';
-  message: string;
+  message: string;,
   action: string;
   impact: string;
 }
 // 性能监控配置
 interface PerformanceMonitorConfig {
-  enabled: boolean;
+  enabled: boolean;,
   sampleRate: number;
-  thresholds: PerformanceThresholds;
+  thresholds: PerformanceThresholds;,
   reportInterval: number;
-  maxSamples: number;
+  maxSamples: number;,
   enableDetailedLogging: boolean;
 }
 // 默认配置
@@ -51,8 +51,7 @@ const DEFAULT_CONFIG: PerformanceMonitorConfig = {,
   },
   reportInterval: 30000, // 30秒
   maxSamples: 100,
-  enableDetailedLogging: false,
-};
+  enableDetailedLogging: false};
 // 性能数据收集器
 class PerformanceCollector {
   private static instance: PerformanceCollector;
@@ -99,8 +98,7 @@ class PerformanceCollector {
       cacheHitRate: 0,
       errorCount: this.errorCount,
       warningCount: this.warningCount,
-      timestamp: Date.now(),
-    };
+      timestamp: Date.now()};
     this.addMetric(metric);
     if (this.config.enableDetailedLogging) {
       console.log(`[Performance] ${componentName} render time: ${renderTime}ms`);
@@ -152,16 +150,15 @@ class PerformanceCollector {
   // 获取性能报告
   getPerformanceReport(): {
     metrics: PerformanceMetrics[],
-  averages: Partial<PerformanceMetrics>;
-    suggestions: OptimizationSuggestion[];
+  averages: Partial<PerformanceMetrics>;,
+  suggestions: OptimizationSuggestion[];
   } {
     const averages = this.calculateAverages();
     const suggestions = this.generateOptimizationSuggestions(averages);
     return {
       metrics: this.metrics,
       averages,
-      suggestions,
-    };
+      suggestions};
   }
   // 计算平均值
   private calculateAverages(): Partial<PerformanceMetrics> {
@@ -173,8 +170,7 @@ class PerformanceCollector {
         frameDrops: acc.frameDrops + metric.frameDrops,
         interactionDelay: acc.interactionDelay + metric.interactionDelay,
         errorCount: acc.errorCount + metric.errorCount,
-        warningCount: acc.warningCount + metric.warningCount,
-      }),
+        warningCount: acc.warningCount + metric.warningCount}),
       {
         renderTime: 0,
         memoryUsage: 0,
@@ -182,8 +178,7 @@ class PerformanceCollector {
         frameDrops: 0,
         interactionDelay: 0,
         errorCount: 0,
-        warningCount: 0,
-      }
+        warningCount: 0}
     );
     const count = this.metrics.length;
     return {
@@ -193,8 +188,7 @@ class PerformanceCollector {
       frameDrops: sums.frameDrops / count,
       interactionDelay: sums.interactionDelay / count,
       errorCount: sums.errorCount / count,
-      warningCount: sums.warningCount / count,
-    };
+      warningCount: sums.warningCount / count};
   }
   // 生成优化建议
   private generateOptimizationSuggestions(averages: Partial<PerformanceMetrics>): OptimizationSuggestion[] {
@@ -206,8 +200,7 @@ class PerformanceCollector {
       severity: averages.renderTime > this.config.thresholds.renderTime * 2 ? 'high' : 'medium',
         message: `平均渲染时间 ${averages.renderTime.toFixed(2)}ms 超过阈值 ${this.config.thresholds.renderTime}ms`,
         action: '考虑使用 React.memo、useMemo 或 useCallback 优化组件渲染',
-        impact: '提升用户界面响应速度和流畅度',
-      });
+        impact: '提升用户界面响应速度和流畅度'});
     }
     // 内存使用建议
     if (averages.memoryUsage && averages.memoryUsage > this.config.thresholds.memoryUsage) {
@@ -216,8 +209,7 @@ class PerformanceCollector {
       severity: averages.memoryUsage > this.config.thresholds.memoryUsage * 2 ? 'critical' : 'high',
         message: `平均内存使用 ${(averages.memoryUsage / 1024 / 1024).toFixed(2)}MB 超过阈值`,
         action: '检查内存泄漏，优化图片加载，清理未使用的引用',
-        impact: '减少应用崩溃风险，提升稳定性',
-      });
+        impact: '减少应用崩溃风险，提升稳定性'});
     }
     // 网络延迟建议
     if (averages.networkLatency && averages.networkLatency > this.config.thresholds.networkLatency) {
@@ -226,8 +218,7 @@ class PerformanceCollector {
       severity: 'medium',
         message: `平均网络延迟 ${averages.networkLatency.toFixed(2)}ms 较高`,
         action: '实施请求缓存、数据预加载或使用 CDN',
-        impact: '提升数据加载速度和用户体验',
-      });
+        impact: '提升数据加载速度和用户体验'});
     }
     // 交互延迟建议
     if (averages.interactionDelay && averages.interactionDelay > this.config.thresholds.interactionDelay) {
@@ -236,8 +227,7 @@ class PerformanceCollector {
       severity: 'medium',
         message: `平均交互延迟 ${averages.interactionDelay.toFixed(2)}ms 较高`,
         action: '优化事件处理器，使用防抖或节流技术',
-        impact: '提升用户交互响应速度',
-      });
+        impact: '提升用户交互响应速度'});
     }
     return suggestions;
   }
@@ -257,14 +247,14 @@ export const useEnhancedPerformanceMonitor = ()
 ) => {
   const [performanceData, setPerformanceData] = useState<{
     metrics: PerformanceMetrics[],
-  averages: Partial<PerformanceMetrics>;
-    suggestions: OptimizationSuggestion[];
+  averages: Partial<PerformanceMetrics>;,
+  suggestions: OptimizationSuggestion[];
   }>({ metrics: [], averages: {}, suggestions: [] });
   const renderStartTime = useRef<number>(0);
   const collector = useRef<PerformanceCollector>();
   const reportTimer = useRef<NodeJS.Timeout>();
   // 初始化收集器
-  useEffect(() => {
+  useEffect() => {
     const mergedConfig = { ...DEFAULT_CONFIG, ...config };
     collector.current = PerformanceCollector.getInstance(mergedConfig);
   }, [config]);
@@ -294,7 +284,7 @@ export const useEnhancedPerformanceMonitor = ()
     return collector.current?.getPerformanceReport() || { metrics: [], averages: {}, suggestions: [] };
   }, []);
   // 定期更新性能数据
-  useEffect(() => {
+  useEffect() => {
     const mergedConfig = { ...DEFAULT_CONFIG, ...config };
         if (mergedConfig.enabled) {
       reportTimer.current = setInterval() => {
@@ -309,7 +299,7 @@ export const useEnhancedPerformanceMonitor = ()
     };
   }, [config, getPerformanceReport]);
   // 组件挂载时开始测量
-  useEffect(() => {
+  useEffect() => {
     startRenderMeasurement();
         // 使用 InteractionManager 确保在交互完成后测量
     const handle = InteractionManager.runAfterInteractions() => {
@@ -326,8 +316,7 @@ export const useEnhancedPerformanceMonitor = ()
     recordNetworkRequest,
     recordInteraction,
     getPerformanceReport,
-    clearData: () => collector.current?.clear(),
-  };
+    clearData: () => collector.current?.clear()};
 };
 // 性能监控装饰器
 export const withPerformanceMonitoring = <P extends object>()
@@ -337,7 +326,7 @@ export const withPerformanceMonitoring = <P extends object>()
   const MonitoredComponent = (props: P) => {
     const name = componentName || WrappedComponent.displayName || WrappedComponent.name || 'Unknown';
     const { startRenderMeasurement, endRenderMeasurement } = useEnhancedPerformanceMonitor(name);
-    useEffect(() => {
+    useEffect() => {
       startRenderMeasurement();
       return () => {
         endRenderMeasurement();

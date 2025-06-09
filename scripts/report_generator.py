@@ -5,7 +5,7 @@
 
 import json
 import time
-from datetime import datetime
+import datetime
 from pathlib import Path
 
 def generate_daily_report():

@@ -126,8 +126,7 @@ export const createEnhancedLazyComponent = <T extends ComponentType<any>>()
     skeletonType = 'list',
     preload = false,
     retryCount = 3,
-    timeout = 10000,
-  } = config;
+    timeout = 10000} = config;
   // 生成组件键
   const componentKey = importFunc.toString();
   const preloadManager = PreloadManager.getInstance();
@@ -164,7 +163,7 @@ export const createEnhancedLazyComponent = <T extends ComponentType<any>>()
   // 返回包装后的组件
   const WrappedComponent = (props: any) => ()
     <ErrorBoundary fallback={errorFallback}>
-      <Suspense
+      <Suspense;
         fallback={
           fallback ? ()
             React.createElement(fallback)
@@ -186,7 +185,7 @@ export const usePreloadComponent = ()
 ) => {
   const [isPreloaded, setIsPreloaded] = useState(false);
   const preloadManager = PreloadManager.getInstance();
-  useEffect(() => {
+  useEffect() => {
     if (condition && !isPreloaded) {
       const componentKey = importFunc.toString();
       preloadManager.preload(componentKey, importFunc);
@@ -205,9 +204,9 @@ export const useBatchPreload = ()
 ) => {
   const [preloadedCount, setPreloadedCount] = useState(0);
   const preloadManager = PreloadManager.getInstance();
-  useEffect(() => {
+  useEffect() => {
     let count = 0;
-        components.forEach((({ key, importFunc, condition = true }) => {
+        components.forEach(({ key, importFunc, condition = true }) => {
       if (condition) {
         preloadManager.preload(key, importFunc);
         count++;
@@ -218,13 +217,12 @@ export const useBatchPreload = ()
   return {
     preloadedCount,
     totalCount: components.length,
-    isComplete: preloadedCount === components.filter(c => c.condition !== false).length,
-  };
+    isComplete: preloadedCount === components.filter(c => c.condition !== false).length};
 };
 // 路由预加载Hook;
 export const useRoutePreload = (routeName: string, isActive: boolean) => {
   const preloadManager = PreloadManager.getInstance();
-  useEffect(() => {
+  useEffect() => {
     if (isActive) {
             // 预加载相关路由组件
       const routePreloadMap: Record<string, () => Promise<any>> = {
@@ -243,41 +241,33 @@ const styles = StyleSheet.create({
   flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
-  },
+    padding: 20},
   errorTitle: {,
   fontSize: 18,
     fontWeight: 'bold',
     color: '#FF3B30',
-    marginBottom: 8,
-  },
+    marginBottom: 8},
   errorMessage: {,
   fontSize: 14,
     color: '#666',
     textAlign: 'center',
-    marginBottom: 20,
-  },
+    marginBottom: 20},
   retryButton: {,
   backgroundColor: '#007AFF',
     paddingHorizontal: 20,
     paddingVertical: 10,
-    borderRadius: 8,
-  },
+    borderRadius: 8},
   retryButtonText: {,
   color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: '600',
-  },
+    fontWeight: '600'},
   loadingContainer: {,
   flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
-  },
+    padding: 20},
   loadingText: {,
   marginTop: 12,
     fontSize: 16,
-    color: '#666',
-  },
-});
+    color: '#666'}});
 export { PreloadManager, LoadingIndicator, ErrorBoundary };

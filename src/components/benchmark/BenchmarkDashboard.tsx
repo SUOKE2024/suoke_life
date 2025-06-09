@@ -92,7 +92,7 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSe
     }
   }, [handleStreamEvent]);
   // 组件挂载时初始化
-  useEffect(() => {
+  useEffect() => {
     initializeData();
     initializeWebSocket();
     // 定期更新连接状态
@@ -136,8 +136,8 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSe
         <View style={styles.healthStatusCard}>
           <View style={styles.statusRow}>
             <Text style={styles.statusLabel}>服务状态:</Text>
-            <Text
-              style={{[
+            <Text;
+              style={[
                 styles.statusValue,
                 { color: healthStatus.status === 'healthy' ? '#4CAF50' : '#F44336' }}
               ]}
@@ -155,8 +155,8 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSe
           </View>;
           <View style={styles.statusRow}>;
             <Text style={styles.statusLabel}>WebSocket:</Text>;
-            <Text
-              style={{[;
+            <Text;
+              style={[;
                 styles.statusValue,{ color: connectionStatus === 'OPEN' ? '#4CAF50' : '#F44336' }};
               ]};
             >;
@@ -181,7 +181,7 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSe
           <View key={task.task_id} style={styles.taskCard}>
             <View style={styles.taskHeader}>
               <Text style={styles.taskTitle}>{task.benchmark_id}</Text>
-              <View style={{[styles.statusBadge, { backgroundColor: getStatusColor(task.status) }}]}>
+              <View style={[styles.statusBadge, { backgroundColor: getStatusColor(task.status) }}]}>
                 <Text style={styles.statusBadgeText}>{getStatusText(task.status)}</Text>
               </View>
             </View>
@@ -195,7 +195,7 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSe
               <View style={styles.progressContainer}>;
                 <Text style={styles.progressText}>进度: {Math.round(task.progress * 100)}%</Text>;
                 <View style={styles.progressBar}>;
-                  <View style={{[styles.progressFill, { width: `${task.progress * 100}}%` }]} />;
+                  <View style={[styles.progressFill, { width: `${task.progress * 100}}%` }]} />;
                 </View>;
               </View>;
             )};
@@ -213,7 +213,7 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSe
     );
   }
   return (;)
-    <ScrollView
+    <ScrollView;
       style={styles.container};
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />};
     >;
@@ -333,8 +333,8 @@ const styles = StyleSheet.create({
   progressFill: {,
   height: '100%',backgroundColor: '#2196F3';
   },errorText: {fontSize: 12,color: '#F44336',marginTop: 8;
-  },emptyContainer: {
-      alignItems: "center",
+  },emptyContainer: {,
+  alignItems: "center",
       padding: 32;
   },emptyText: {fontSize: 16,color: '#999';
   };

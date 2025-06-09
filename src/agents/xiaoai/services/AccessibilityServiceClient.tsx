@@ -11,16 +11,16 @@ code?: number}
   success: boolean  ;
 /    ;
   data?: unknown;
-  error?: string
+  error?: string;
 }
 export interface VoiceAssistanceResponse {
   recognized_text: string,response_text: string,response_audio: string;
-  , confidence: number;
+  , confidence: number;,
   success: boolean;
-  error?: string
+  error?: string;
 }
 export interface ImageAssistanceResponse {
-  scene_description: string;
+  scene_description: string;,
   medical_features: Array<{type: string,description: string,confidence: number;
 }>;
   navigation_guidance: string,
@@ -28,10 +28,10 @@ export interface ImageAssistanceResponse {
   audio_guidance: string;  , success: boolean;
   error?: string}
 export interface SignLanguageResponse {
-  recognized_text: string;
+  recognized_text: string;,
   confidence: number;
-  segments: Array<{text: string;
-    start_time_ms: number,end_time_ms: number,confidence: number;
+  segments: Array<{text: string;,
+  start_time_ms: number,end_time_ms: number,confidence: number;
 }>;
   success: boolean;
   error?: string}
@@ -40,23 +40,23 @@ export interface AccessibleContentResponse {
   , tactile_content: string  / 盲文内容* // , success: boolean * / error?: string;
 }
 export interface ScreenReadingResponse {
-  screen_description: string;
-  ui_elements: Array<{element_type: string;
-    content: string;
-    action: string;
-    location: {x: number;
-      y: number;
-      width: number;
-      height: number;
+  screen_description: string;,
+  ui_elements: Array<{element_type: string;,
+  content: string;
+    action: string;,
+  location: {x: number;,
+  y: number;
+      width: number;,
+  height: number;
 };
   }>;
   audio_description: string;  , success: boolean;
   error?: string}
 export interface AccessibilitySettingsResponse {
-  current_preferences: {language: string;
-    voice_type: string;
-    speech_rate: number;
-    high_contrast: boolean,screen_reader: boolean,font_size: string;
+  current_preferences: {language: string;,
+  voice_type: string;
+    speech_rate: number;,
+  high_contrast: boolean,screen_reader: boolean,font_size: string;
     [key: string]: unknown;
 };
   success: boolean,
@@ -211,7 +211,7 @@ export interface AccessibilitySettingsResponse {
       method: "POST",
       headers: {
             "Content-Type": "application/json",/            Accept: "application/json",/              },
-          body: JSON.stringify({,)
+          body: JSON.stringify({),
   screen_data: screenData,
             user_id: userId,
             context,
@@ -239,7 +239,7 @@ export interface AccessibilitySettingsResponse {
       method: "POST",
       headers: {
             "Content-Type": "application/json",/            Accept: "application/json",/              },
-          body: JSON.stringify({,)
+          body: JSON.stringify({),
   user_id: userId,
             preferences,action;};);}
       ;)
@@ -250,8 +250,8 @@ export interface AccessibilitySettingsResponse {
       return { current_preferences: result.current_preferences || {  },success: result.success || false,message: result.message ||
       ;}
     } catch (error) {
-      return {current_preferences: {
-      language: "zh-CN",
+      return {current_preferences: {,
+  language: "zh-CN",
       voice_type: "female",speech_rate: 1.0,high_contrast: false,screen_reader: false,font_size: "medium";
         },success: false,message: `设置管理失败: ${(error as Error).message}`,error: (error as Error).messag;e;};
     }

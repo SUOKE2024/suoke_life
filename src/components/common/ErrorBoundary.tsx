@@ -9,7 +9,7 @@ interface Props {
   onError?: (error: AppError) => void;
 }
 interface State {
-  hasError: boolean;
+  hasError: boolean;,
   error: AppError | null;
   retryCount: number;
 }
@@ -20,8 +20,7 @@ export class ErrorBoundary extends Component<Props, State> {
     this.state = {
       hasError: false,
       error: null,
-      retryCount: 0,
-    };
+      retryCount: 0};
   }
   static getDerivedStateFromError(error: Error): State {
     // 将错误转换为AppError;
@@ -29,8 +28,7 @@ export class ErrorBoundary extends Component<Props, State> {
         return {
       hasError: true,
       error: appError,
-      retryCount: 0,
-    };
+      retryCount: 0};
   }
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     const appError = errorHandler.handleError(error, 'error-boundary');
@@ -42,8 +40,7 @@ export class ErrorBoundary extends Component<Props, State> {
     console.error('ErrorBoundary caught an error:', {
       error: appError,
       errorInfo,
-      componentStack: errorInfo.componentStack,
-    });
+      componentStack: errorInfo.componentStack});
   }
   handleRetry = () => {
     if (this.state.retryCount >= this.maxRetries) {
@@ -54,16 +51,14 @@ export class ErrorBoundary extends Component<Props, State> {
       onPress: this.handleRefresh },
           {
       text: "联系客服", "
-      onPress: this.handleContactSupport },
-        ]
+      onPress: this.handleContactSupport }]
       );
       return;
     }
     this.setState(prevState => ({
       hasError: false,
       error: null,
-      retryCount: prevState.retryCount + 1,
-    }));
+      retryCount: prevState.retryCount + 1}));
   };
   handleRefresh = () => {
     // 在React Native中，可以使用RNRestart.Restart()
@@ -71,8 +66,7 @@ export class ErrorBoundary extends Component<Props, State> {
     this.setState({
       hasError: false,
       error: null,
-      retryCount: 0,
-    });
+      retryCount: 0});
   };
   handleContactSupport = () => {
     // 这里可以集成客服系统或发送错误报告
@@ -86,8 +80,7 @@ export class ErrorBoundary extends Component<Props, State> {
       error: this.state.error,
       timestamp: new Date().toISOString(),
       userAgent: navigator.userAgent,
-      url: window.location?.href,
-    };
+      url: window.location?.href};
     // 发送错误报告
     console.log('Error report:', errorReport);
         Alert.alert("错误报告已发送", "感谢您的反馈，我们会尽快处理此问题',
@@ -101,7 +94,7 @@ export class ErrorBoundary extends Component<Props, State> {
     return (
   <View style={styles.errorContainer}>
         <View style={styles.errorHeader}>
-          <Icon
+          <Icon;
             name={isCritical ? 'error' : 'warning'}
             size={48}
             color={isCritical ? '#f44336' : '#ff9800'}
@@ -172,15 +165,14 @@ export const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
   error,
   onRetry,
   onDismiss,
-  style,
-}) => {
+  style}) => {
   const errorDisplay = formatErrorForDisplay(error);
   const recovery = getRecoveryAdvice(error);
   const isCritical = errorHandler.isCriticalError(error);
   return (
   <View style={[styles.errorDisplay, style]}>
       <View style={styles.errorDisplayHeader}>
-        <Icon
+        <Icon;
           name={isCritical ? 'error' : 'warning'}
           size={24}
           color={isCritical ? '#f44336' : '#ff9800'}
@@ -193,7 +185,7 @@ export const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
       </View>
       <Text style={styles.errorDisplayMessage}>{errorDisplay.message}</Text>
       {(onRetry || recovery.autoRetry)  && <View style={styles.errorDisplayActions}>
-          <TouchableOpacity
+          <TouchableOpacity;
             style={styles.retryButton}
             onPress={onRetry}
           >
@@ -211,47 +203,39 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#f5f5f5',
-  },
+    backgroundColor: '#f5f5f5'},
   errorHeader: {,
   alignItems: 'center',
-    marginBottom: 20,
-  },
+    marginBottom: 20},
   errorTitle: {,
   fontSize: 20,
     fontWeight: 'bold',
     color: '#333',
     marginTop: 10,
-    textAlign: 'center',
-  },
+    textAlign: 'center'},
   errorBody: {,
   alignItems: 'center',
-    marginBottom: 30,
-  },
+    marginBottom: 30},
   errorMessage: {,
   fontSize: 16,
     color: '#666',
     textAlign: 'center',
     marginBottom: 10,
-    lineHeight: 24,
-  },
+    lineHeight: 24},
   errorId: {,
   fontSize: 12,
     color: '#999',
-    marginBottom: 10,
-  },
+    marginBottom: 10},
   recoveryMessage: {,
   fontSize: 14,
     color: '#2196F3',
     textAlign: 'center',
-    fontStyle: 'italic',
-  },
+    fontStyle: 'italic'},
   errorActions: {,
   flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    gap: 10,
-  },
+    gap: 10},
   primaryButton: {,
   flexDirection: 'row',
     alignItems: 'center',
@@ -259,13 +243,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 8,
-    gap: 8,
-  },
+    gap: 8},
   primaryButtonText: {,
   color: '#fff',
     fontSize: 16,
-    fontWeight: '600',
-  },
+    fontWeight: '600'},
   secondaryButton: {,
   flexDirection: 'row',
     alignItems: 'center',
@@ -275,13 +257,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 8,
-    gap: 8,
-  },
+    gap: 8},
   secondaryButtonText: {,
   color: '#2196F3',
     fontSize: 16,
-    fontWeight: '600',
-  },
+    fontWeight: '600'},
   debugInfo: {,
   marginTop: 30,
     padding: 15,
@@ -289,20 +269,17 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#ddd',
-    width: '100%',
-  },
+    width: '100%'},
   debugTitle: {,
   fontSize: 14,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 10,
-  },
+    marginBottom: 10},
   debugText: {,
   fontSize: 12,
     color: '#666',
     marginBottom: 5,
-    fontFamily: 'monospace',
-  },
+    fontFamily: 'monospace'},
   errorDisplay: {,
   backgroundColor: '#fff',
     borderLeftWidth: 4,
@@ -314,42 +291,34 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
-  },
+    elevation: 3},
   errorDisplayHeader: {,
   flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
-  },
+    marginBottom: 10},
   errorDisplayTitle: {,
   fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
     marginLeft: 10,
-    flex: 1,
-  },
+    flex: 1},
   errorDisplayMessage: {,
   fontSize: 14,
     color: '#666',
     lineHeight: 20,
-    marginBottom: 10,
-  },
+    marginBottom: 10},
   errorDisplayActions: {,
   flexDirection: 'row',
-    justifyContent: 'flex-end',
-  },
+    justifyContent: 'flex-end'},
   retryButton: {,
   backgroundColor: '#2196F3',
     paddingHorizontal: 15,
     paddingVertical: 8,
-    borderRadius: 6,
-  },
+    borderRadius: 6},
   retryButtonText: {,
   color: '#fff',
     fontSize: 14,
-    fontWeight: '600',
-  },
-});
+    fontWeight: '600'}});
 // RAG专用错误边界
 export const RAGErrorBoundary: React.FC<{ children: ReactNode }> = ({ children }) => {
   const handleRAGError = (error: Error, errorInfo: string) => {// RAG特定的错误处理逻辑;

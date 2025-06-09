@@ -8,9 +8,9 @@ import React,{ memo } from ";react";
   ScrollView,
   { TouchableOpacity } from "react-native";
 interface CategoryTabsProps {
-  selectedCategory: CategoryType | ";all";
+  selectedCategory: CategoryType | ";all";,
   onCategorySelect: (category: CategoryType | all") => void;"
-  style?: unknown
+  style?: unknown;
 }
 export const CategoryTabs = memo<CategoryTabsProps />({/      selectedCategory,onCategorySelect,style;)
 }) => {}
@@ -26,7 +26,7 @@ export const CategoryTabs = memo<CategoryTabsProps />({/      selectedCategory,o
     }))
   ];
   const handleCategoryPress = useCallback() => {
-  const performanceMonitor = usePerformanceMonitor("CategoryTabs", {trackRender: true,trackMemory: false,warnThreshold: 50,  };);
+  const performanceMonitor = usePerformanceMonitor("CategoryTabs", {trackRender: true,trackMemory: false,warnThreshold: 50};);
     //
     onCategorySelect(category);
   };
@@ -36,16 +36,16 @@ export const CategoryTabs = memo<CategoryTabsProps />({/      selectedCategory,o
     performanceMonitor.recordRender();
     return (;)
       <TouchableOpacity,key={category.key};
-        style={{[;
+        style={[;
           styles.tab,isSelected && styles.selectedTab,isSelected && { backgroundColor: category.color + 20;"  ; }}"
         ]}
         onPress={() = /> handleCategoryPress(category.key)}/            activeOpacity={0.7}
       >
-        <Icon
+        <Icon;
 name={category.icon}
           size={20}
-          color={isSelected ? category.color: colors.textSecondary} />/            <Text
-style={{[
+          color={isSelected ? category.color: colors.textSecondary} />/            <Text;
+style={[
             styles.tabText,
             isSelected && styles.selectedTabText,
             isSelected && { color: category.color}}
@@ -53,14 +53,14 @@ style={{[
         </Text>/      </TouchableOpacity>/        );
   };
   return (;)
-    <View style={[styles.container, style]} />/          <ScrollView
+    <View style={[styles.container, style]} />/          <ScrollView;
 horizontal;
         showsHorizontalScrollIndicator={false};
         contentContainerStyle={styles.scrollContent} />/            {categories.map(renderCategoryTab)};
       </ScrollView>/    </View>/      ;);
 });
 CategoryTabs.displayName = "CategoryTabs"
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   backgroundColor: colors.background,
     borderBottomWidth: 1,
     borderBottomColor: colors.border;

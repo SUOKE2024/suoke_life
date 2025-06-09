@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import {
-    Animated,
-    Dimensions,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Animated,
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -34,8 +34,8 @@ export interface NotificationProps {
   icon?: React.ReactNode;
   /** 自定义操作按钮 */
   actions?: Array<{
-    label: string;
-    onPress: () => void;
+    label: string;,
+  onPress: () => void;
     style?: 'primary' | 'secondary';
   }>;
   /** 自定义样式 */
@@ -167,7 +167,7 @@ export const Notification: React.FC<NotificationProps> = ({
       );
     }
 
-    Animated.parallel(animations).start(() => {
+    Animated.parallel(animations).start() => {
       onClose?.();
     });
   };
@@ -191,20 +191,16 @@ export const Notification: React.FC<NotificationProps> = ({
       error: '❌',
     };
 
-    return (
-      <Text style={styles.defaultIcon}>
-        {iconMap[type]}
-      </Text>
-    );
+    return <Text style={styles.defaultIcon}>{iconMap[type]}</Text>;
   };
 
   // 生命周期管理
-  useEffect(() => {
+  useEffect() => {
     if (visible) {
       showNotification();
-      
+
       if (duration > 0) {
-        timeoutRef.current = setTimeout(() => {
+        timeoutRef.current = setTimeout() => {
           handleClose();
         }, duration);
       }
@@ -227,8 +223,8 @@ export const Notification: React.FC<NotificationProps> = ({
 
     return (
       <View style={styles.actionsContainer}>
-        {actions.map((action, index) => (
-          <TouchableOpacity
+        {actions.map(action, index) => (
+          <TouchableOpacity;
             key={index}
             style={[
               styles.actionButton,
@@ -236,7 +232,7 @@ export const Notification: React.FC<NotificationProps> = ({
             ]}
             onPress={action.onPress}
           >
-            <Text
+            <Text;
               style={[
                 styles.actionButtonText,
                 action.style === 'primary' && styles.primaryActionButtonText,
@@ -254,10 +250,8 @@ export const Notification: React.FC<NotificationProps> = ({
   const renderContent = () => (
     <View style={[styles.container, { maxWidth }, style]}>
       <View style={styles.content}>
-        <View style={styles.iconContainer}>
-          {getTypeIcon()}
-        </View>
-        
+        <View style={styles.iconContainer}>{getTypeIcon()}</View>
+
         <View style={styles.textContainer}>
           {title && (
             <Text style={[styles.title, titleStyle]} numberOfLines={2}>
@@ -269,7 +263,7 @@ export const Notification: React.FC<NotificationProps> = ({
           </Text>
           {renderActions()}
         </View>
-        
+
         {closable && (
           <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
             <Text style={styles.closeButtonText}>×</Text>
@@ -290,13 +284,14 @@ export const Notification: React.FC<NotificationProps> = ({
     }
 
     const animatedStyle = {
-      opacity: animationType === 'fade' || animationType === 'scale' ? opacity : 1,
+      opacity:
+        animationType === 'fade' || animationType === 'scale' ? opacity : 1,
       transform: transforms,
     };
 
     return (
       <Animated.View style={[styles.wrapper, animatedStyle]}>
-        <TouchableOpacity
+        <TouchableOpacity;
           activeOpacity={onPress ? 0.8 : 1}
           onPress={onPress}
           disabled={!onPress}
@@ -320,15 +315,19 @@ const createStyles = (theme: any, type: string, position: string) => {
     switch (type) {
       case 'success':
         return {
-          background: theme.colors.successContainer || theme.colors.primaryContainer,
+          background:
+            theme.colors.successContainer || theme.colors.primaryContainer,
           border: theme.colors.success,
-          text: theme.colors.onSuccessContainer || theme.colors.onPrimaryContainer,
+          text:
+            theme.colors.onSuccessContainer || theme.colors.onPrimaryContainer,
         };
       case 'warning':
         return {
-          background: theme.colors.warningContainer || theme.colors.primaryContainer,
+          background:
+            theme.colors.warningContainer || theme.colors.primaryContainer,
           border: theme.colors.warning,
-          text: theme.colors.onWarningContainer || theme.colors.onPrimaryContainer,
+          text:
+            theme.colors.onWarningContainer || theme.colors.onPrimaryContainer,
         };
       case 'error':
         return {
@@ -337,8 +336,8 @@ const createStyles = (theme: any, type: string, position: string) => {
           text: theme.colors.onErrorContainer,
         };
       default:
-        return {
-          background: theme.colors.surfaceVariant,
+        return {,
+  background: theme.colors.surfaceVariant,
           border: theme.colors.primary,
           text: theme.colors.onSurfaceVariant,
         };
@@ -348,13 +347,18 @@ const createStyles = (theme: any, type: string, position: string) => {
   const colors = getTypeColors();
 
   return StyleSheet.create({
-    overlay: {
-      position: 'absolute',
+    overlay: {,
+  position: 'absolute',
       top: 0,
       left: 0,
       right: 0,
       bottom: 0,
-      justifyContent: position === 'top' ? 'flex-start' : position === 'bottom' ? 'flex-end' : 'center',
+      justifyContent:
+        position === 'top'
+          ? 'flex-start'
+          : position === 'bottom'
+            ? 'flex-end'
+            : 'center',
       alignItems: 'center',
       paddingTop: position === 'top' ? 50 : 0,
       paddingBottom: position === 'bottom' ? 50 : 0,
@@ -362,89 +366,89 @@ const createStyles = (theme: any, type: string, position: string) => {
       pointerEvents: 'box-none',
       zIndex: 1000,
     },
-    backdropOverlay: {
-      backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    backdropOverlay: {,
+  backgroundColor: 'rgba(0, 0, 0, 0.3)',
       pointerEvents: 'auto',
     },
-    wrapper: {
-      width: '100%',
+    wrapper: {,
+  width: '100%',
       alignItems: 'center',
     },
-    container: {
-      backgroundColor: colors.background,
+    container: {,
+  backgroundColor: colors.background,
       borderRadius: theme.borderRadius.lg,
       borderLeftWidth: 4,
       borderLeftColor: colors.border,
       shadowColor: theme.colors.shadow,
-      shadowOffset: {
-        width: 0,
+      shadowOffset: {,
+  width: 0,
         height: 4,
       },
       shadowOpacity: 0.15,
       shadowRadius: 8,
       elevation: 8,
     },
-    content: {
-      flexDirection: 'row',
+    content: {,
+  flexDirection: 'row',
       alignItems: 'flex-start',
       padding: theme.spacing.md,
     },
-    iconContainer: {
-      marginRight: theme.spacing.sm,
+    iconContainer: {,
+  marginRight: theme.spacing.sm,
       paddingTop: theme.spacing.xs,
     },
-    defaultIcon: {
-      fontSize: 20,
+    defaultIcon: {,
+  fontSize: 20,
     },
-    textContainer: {
-      flex: 1,
+    textContainer: {,
+  flex: 1,
     },
-    title: {
-      fontSize: theme.typography.fontSize.base,
+    title: {,
+  fontSize: theme.typography.fontSize.base,
       fontWeight: theme.typography.fontWeight.semibold,
       color: colors.text,
       marginBottom: theme.spacing.xs,
     },
-    message: {
-      fontSize: theme.typography.fontSize.sm,
+    message: {,
+  fontSize: theme.typography.fontSize.sm,
       color: colors.text,
       lineHeight: theme.typography.fontSize.sm * 1.4,
     },
-    closeButton: {
-      padding: theme.spacing.xs,
+    closeButton: {,
+  padding: theme.spacing.xs,
       marginLeft: theme.spacing.sm,
     },
-    closeButtonText: {
-      fontSize: 20,
+    closeButtonText: {,
+  fontSize: 20,
       color: colors.text,
       fontWeight: theme.typography.fontWeight.bold,
     },
-    actionsContainer: {
-      flexDirection: 'row',
+    actionsContainer: {,
+  flexDirection: 'row',
       marginTop: theme.spacing.sm,
       gap: theme.spacing.sm,
     },
-    actionButton: {
-      paddingHorizontal: theme.spacing.md,
+    actionButton: {,
+  paddingHorizontal: theme.spacing.md,
       paddingVertical: theme.spacing.xs,
       borderRadius: theme.borderRadius.md,
       backgroundColor: theme.colors.surface,
       borderWidth: 1,
       borderColor: colors.border,
     },
-    primaryActionButton: {
-      backgroundColor: colors.border,
+    primaryActionButton: {,
+  backgroundColor: colors.border,
       borderColor: colors.border,
     },
-    actionButtonText: {
-      fontSize: theme.typography.fontSize.sm,
+    actionButtonText: {,
+  fontSize: theme.typography.fontSize.sm,
       color: colors.text,
       fontWeight: theme.typography.fontWeight.medium,
     },
-    primaryActionButtonText: {
-      color: theme.colors.onPrimary,
+    primaryActionButtonText: {,
+  color: theme.colors.onPrimary,
     },
   });
 };
 
-export default Notification; 
+export default Notification;

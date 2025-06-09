@@ -15,7 +15,7 @@ import { configService } from './configService';
 // API响应接口
 export interface ApiResponse<T = any> {
   data: T,
-  status: number;
+  status: number;,
   statusText: string,
   success: boolean;
   message?: string;
@@ -41,7 +41,7 @@ export interface GatewayError extends Error {
 }
 // 服务状态接口
 export interface ServiceStatus {
-  name: string;
+  name: string;,
   status: 'healthy' | 'unhealthy' | 'unknown';
   instances: number;
   responseTime?: number;
@@ -200,8 +200,7 @@ export class GatewayApiClient {
   private async prepareHeaders(config: RequestConfig = {}): Promise<Record<string, string>> {
     const headers: Record<string, string> = {
       'Content-Type': "application/json",X-Client-Version': "1.0.0",X-Request-ID': this.generateRequestId(),
-      ...config.headers,
-    };
+      ...config.headers};
     // 添加认证头
     if (!config.skipAuth && GATEWAY_FEATURES.ENABLE_AUTHENTICATION) {
       const token = this.tokenManager.getAccessToken();
@@ -235,8 +234,7 @@ export class GatewayApiClient {
         status: response.status,
         requestId,
         timestamp,
-        service,
-      };
+        service};
             // 使用错误处理器处理错误
       const appError = errorHandler.handleError(error, service || 'api-client');
       throw appError;
@@ -249,8 +247,7 @@ export class GatewayApiClient {
       success: true,
       message: data.message,
       timestamp,
-      requestId,
-    };
+      requestId};
   }
   // 映射HTTP状态码到错误代码
   private mapStatusToErrorCode(status: number): string {
@@ -310,10 +307,8 @@ export class GatewayApiClient {
     const response = await fetch(`${this.baseURL}/api/v1/gateway/auth-service/auth/refresh`, {
       method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ refresh_token: refreshToken }),
-    });
+        'Content-Type': 'application/json'},
+      body: JSON.stringify({ refresh_token: refreshToken })});
     if (!response.ok) {
       this.tokenManager.clearTokens();
       throw new Error('Token refresh failed');
@@ -342,8 +337,7 @@ export class GatewayApiClient {
           success: true,
           message: 'Data from offline cache',
           timestamp: new Date().toISOString(),
-          requestId: this.generateRequestId(),
-        };
+          requestId: this.generateRequestId()};
       }
     }
         // 检查内存缓存
@@ -366,8 +360,7 @@ export class GatewayApiClient {
             success: true,
             message: 'Data from cache due to circuit breaker',
             timestamp: new Date().toISOString(),
-            requestId: this.generateRequestId(),
-          };
+            requestId: this.generateRequestId()};
         }
       }
             const error = errorHandler.handleError()
@@ -383,8 +376,7 @@ export class GatewayApiClient {
                 const response = await fetch(url, {
           method: 'GET',
           headers,
-          signal: config.signal || AbortSignal.timeout(config.timeout || this.defaultTimeout),
-        });
+          signal: config.signal || AbortSignal.timeout(config.timeout || this.defaultTimeout)});
         const result = await this.handleResponse<T>(response, requestId);
                 // 缓存成功响应到内存
         if (config.cache !== false && GATEWAY_FEATURES.ENABLE_CACHING) {
@@ -411,8 +403,7 @@ export class GatewayApiClient {
             success: true,
             message: 'Data from cache due to request failure',
             timestamp: new Date().toISOString(),
-            requestId: this.generateRequestId(),
-          };
+            requestId: this.generateRequestId()};
         }
       }
             performanceMonitor.recordApiCall(Date.now() - startTime, false);
@@ -432,8 +423,7 @@ export class GatewayApiClient {
           endpoint,
           data,
           maxRetries: 3,
-          priority: 'medium',
-        });
+          priority: 'medium'});
                 return {
           data: { queued: true, message: 'Operation queued for later execution' } as T,
           status: 202,
@@ -441,8 +431,7 @@ export class GatewayApiClient {
           success: true,
           message: 'Operation added to offline queue',
           timestamp: new Date().toISOString(),
-          requestId: this.generateRequestId(),
-        };
+          requestId: this.generateRequestId()};
       }
             const error = errorHandler.handleError()
         new Error('Circuit breaker is open'),
@@ -458,8 +447,7 @@ export class GatewayApiClient {
           method: 'POST',
           headers,
           body: data ? JSON.stringify(data) : undefined,
-          signal: config.signal || AbortSignal.timeout(config.timeout || this.defaultTimeout),
-        });
+          signal: config.signal || AbortSignal.timeout(config.timeout || this.defaultTimeout)});
         const result = await this.handleResponse<T>(response, requestId);
         this.circuitBreaker.recordSuccess();
         return result;
@@ -473,8 +461,7 @@ export class GatewayApiClient {
           endpoint,
           data,
           maxRetries: 3,
-          priority: 'medium',
-        });
+          priority: 'medium'});
                 return {
           data: { queued: true, message: 'Operation queued due to network failure' } as T,
           status: 202,
@@ -482,8 +469,7 @@ export class GatewayApiClient {
           success: true,
           message: 'Operation added to offline queue due to failure',
           timestamp: new Date().toISOString(),
-          requestId: this.generateRequestId(),
-        };
+          requestId: this.generateRequestId()};
       }
             throw error;
     }
@@ -498,8 +484,7 @@ export class GatewayApiClient {
         method: 'PUT',
         headers,
         body: data ? JSON.stringify(data) : undefined,
-        signal: config.signal || AbortSignal.timeout(config.timeout || this.defaultTimeout),
-      });
+        signal: config.signal || AbortSignal.timeout(config.timeout || this.defaultTimeout)});
       const result = await this.handleResponse<T>(response, requestId);
       this.circuitBreaker.recordSuccess();
       return result;
@@ -514,8 +499,7 @@ export class GatewayApiClient {
             const response = await fetch(url, {
         method: 'DELETE',
         headers,
-        signal: config.signal || AbortSignal.timeout(config.timeout || this.defaultTimeout),
-      });
+        signal: config.signal || AbortSignal.timeout(config.timeout || this.defaultTimeout)});
       const result = await this.handleResponse<T>(response, requestId);
       this.circuitBreaker.recordSuccess();
       return result;
@@ -565,8 +549,7 @@ export class GatewayApiClient {
     try {
       const response = await fetch(`${this.baseURL}/health`, {
       method: "GET",
-      signal: AbortSignal.timeout(5000),
-      });
+      signal: AbortSignal.timeout(5000)});
       return response.ok;
     } catch {
       return false;

@@ -8,24 +8,24 @@ importIcon from "react-native-vector-icons/MaterialCommunityIcons/import { color
   Switch,
   { ActivityIndicator } from "react-native;";
 interface FeatureStatus {
-  available: boolean;
+  available: boolean;,
   enabled: boolean;
   loading: boolean;
-  error?: string
+  error?: string;
 }
 interface NativeFeaturesState {
-  camera: FeatureStatus;
+  camera: FeatureStatus;,
   voice: FeatureStatus;
-  location: FeatureStatus;
+  location: FeatureStatus;,
   notifications: FeatureStatus;
-  permissions: {camera: boolean;
-    microphone: boolean;
-    location: boolean;
-    notifications: boolean;
+  permissions: {camera: boolean;,
+  microphone: boolean;
+    location: boolean;,
+  notifications: boolean;
 }
 }
 const NativeFeaturesDemo: React.FC  = () => {}
-  const performanceMonitor = usePerformanceMonitor("NativeFeaturesDemo", {trackRender: true,trackMemory: false,warnThreshold: 100,  };);
+  const performanceMonitor = usePerformanceMonitor("NativeFeaturesDemo", {trackRender: true,trackMemory: false,warnThreshold: 100};);
   const [features, setFeatures] = useState<NativeFeaturesState />({/        camera: { available: false, enabled: false, loading: fal;s;e ;},voice: { available: false, enabled: false, loading: false},)
     location: { available: false, enabled: false, loading: false},
     notifications: { available: false, enabled: false, loading: false},
@@ -72,7 +72,7 @@ const NativeFeaturesDemo: React.FC  = () => {}
   camera: healthFeatures.permissions.camera.granted,
           microphone: healthFeatures.permissions.microphone.granted,
           location: healthFeatures.permissions.location.granted,
-          notifications: false,  }
+          notifications: false}
       }))
       } catch (error) {
       Alert.alert("初始化失败, "部分原生功能可能无法正常使用");"
@@ -174,7 +174,7 @@ const NativeFeaturesDemo: React.FC  = () => {}
       const success = await notificationManager.scheduleLocalNotification({
       id: "test_notification",
       title: 测试通知",;
-        body: "这是一个测试通知，用于验证推送功能是否正常工作,",date: new Date(Date.n;o;w + 3000),  })
+        body: "这是一个测试通知，用于验证推送功能是否正常工作,",date: new Date(Date.n;o;w + 3000)})
       if (success) {
         Alert.alert("通知测试", " 测试通知已安排，将在3秒后显示")"
         setFeatures(prev => ({
@@ -232,15 +232,15 @@ const NativeFeaturesDemo: React.FC  = () => {}
             <Text style={styles.permissionText}>麦克风</Text>/          </View>/          <View style={styles.permissionItem}>/                {renderPermissionStatus(features.permissions.location)};
             <Text style={styles.permissionText}>位置</Text>/          </View>/          <View style={styles.permissionItem}>/                {renderPermissionStatus(features.permissions.notifications)};
             <Text style={styles.permissionText}>通知</Text>/          </View>/        </View>/;
-        <TouchableOpacity
+        <TouchableOpacity;
 style={styles.permissionButton}
           onPress={requestAllPermissions}
         accessibilityLabel="TODO: 添加无障碍标签" />/          <Icon name="shield-key" size={20} color="white" />/          <Text style={styles.permissionButtonText}>请求所有权限</Text>/        </TouchableOpacity>/      </View>/
       {///
         {///                {renderStatusIndicator(features.camera)}
           </View>/          <Text style={styles.featureDescription}>/                测试相机拍照功能，用于五诊中的望诊
-          </Text>/              <TouchableOpacity
-style={{[
+          </Text>/              <TouchableOpacity;
+style={[
               styles.testButton,
               !features.camera.available && styles.testButtonDisabled;
             ]}}
@@ -249,8 +249,8 @@ style={{[
           accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.testButtonText}>测试拍照</Text>/          </TouchableOpacity>/        </View>/
         {///                {renderStatusIndicator(features.voice)}
           </View>/          <Text style={styles.featureDescription}>/                测试语音识别功能，用于五诊中的问诊
-          </Text>/              <TouchableOpacity
-style={{[
+          </Text>/              <TouchableOpacity;
+style={[
               styles.testButton,
               !features.voice.available && styles.testButtonDisabled;
             ]}}
@@ -260,8 +260,8 @@ style={{[
             </Text>/          </TouchableOpacity>/        </View>/
         {///                {renderStatusIndicator(features.location)}
           </View>/          <Text style={styles.featureDescription}>/                测试位置服务功能，用于基于位置的健康服务
-          </Text>/              <TouchableOpacity
-style={{[
+          </Text>/              <TouchableOpacity;
+style={[
               styles.testButton,
               !features.location.available && styles.testButtonDisabled;
             ]}}
@@ -271,21 +271,21 @@ style={{[
             </Text>/          </TouchableOpacity>/        </View>/
         {///                {renderStatusIndicator(features.notifications)}
           </View>/          <Text style={styles.featureDescription}>/                测试推送通知功能，用于健康提醒和消息推送
-          </Text>/          <View style={styles.buttonRow}>/                <TouchableOpacity
-style={{[
+          </Text>/          <View style={styles.buttonRow}>/                <TouchableOpacity;
+style={[
                 styles.testButton,
                 styles.halfButton,
                 !features.notifications.available && styles.testButtonDisabled;
               ]}}
               onPress={testNotifications}
               disabled={!features.notifications.available || features.notifications.loading}
-            accessibilityLabel="TODO: 添加无障碍标签" />/              <Text style={styles.testButtonText}>测试通知</Text>/            </TouchableOpacity>/                <TouchableOpacity
+            accessibilityLabel="TODO: 添加无障碍标签" />/              <Text style={styles.testButtonText}>测试通知</Text>/            </TouchableOpacity>/                <TouchableOpacity;
 style={[styles.testButton, styles.halfButton]}
               onPress={createHealthReminders}
             accessibilityLabel="TODO: 添加无障碍标签" />/              <Text style={styles.testButtonText}>创建提醒</Text>/            </TouchableOpacity>/          </View>/        </View>/      </View>/
       {///      );
 }
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   flex: 1,
     backgroundColor: colors.background;
   },

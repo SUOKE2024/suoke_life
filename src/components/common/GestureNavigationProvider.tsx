@@ -4,11 +4,11 @@ import { useNavigation } from '@react-navigation/native';
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 // 手势配置接口
 interface GestureConfig {
-  swipeThreshold: number;
+  swipeThreshold: number;,
   velocityThreshold: number;
-  enableBackGesture: boolean;
+  enableBackGesture: boolean;,
   enableQuickActions: boolean;
-  enableHapticFeedback: boolean;
+  enableHapticFeedback: boolean;,
   edgeSwipeWidth: number;
 }
 // 手势动作类型
@@ -23,9 +23,9 @@ type GestureAction =
 type GestureDirection = 'left' | 'right' | 'up' | 'down';
 // 手势上下文
 interface GestureContextType {
-  config: GestureConfig;
-  registerGestureAction: (direction: GestureDirection, action: GestureAction) => void;
-  unregisterGestureAction: (direction: GestureDirection) => void;
+  config: GestureConfig;,
+  registerGestureAction: (direction: GestureDirection, action: GestureAction) => void;,
+  unregisterGestureAction: (direction: GestureDirection) => void;,
   triggerHapticFeedback: (type?: 'light' | 'medium' | 'heavy') => void;
 }
 // 默认配置
@@ -35,8 +35,7 @@ const DEFAULT_CONFIG: GestureConfig = {,
   enableBackGesture: true,
   enableQuickActions: true,
   enableHapticFeedback: true,
-  edgeSwipeWidth: 20,
-};
+  edgeSwipeWidth: 20};
 // 创建上下文
 const GestureContext = createContext<GestureContextType | null>(null);
 // 手势导航提供者
@@ -51,8 +50,7 @@ export const GestureNavigationProvider: React.FC<{,
     ["right",back'],
     ["left",forward'],
     ["up",menu'],
-    ["down",refresh'],
-  ]));
+    ["down",refresh']]));
   // 动画值
   const translateX = useRef(new Animated.Value(0)).current;
   const translateY = useRef(new Animated.Value(0)).current;
@@ -159,36 +157,28 @@ export const GestureNavigationProvider: React.FC<{,
         Animated.parallel([)
           Animated.spring(translateX, {
             toValue: 0,
-            useNativeDriver: true,
-          }),
+            useNativeDriver: true}),
           Animated.spring(translateY, {
             toValue: 0,
-            useNativeDriver: true,
-          }),
+            useNativeDriver: true}),
           Animated.spring(opacity, {
             toValue: 1,
-            useNativeDriver: true,
-          }),
-        ]).start();
-      },
-    })
+            useNativeDriver: true})]).start();
+      }})
   ).current;
   const contextValue: GestureContextType = {
     config,
     registerGestureAction,
     unregisterGestureAction,
-    triggerHapticFeedback,
-  };
+    triggerHapticFeedback};
   return (
   <GestureContext.Provider value={contextValue}>
       <Animated.View;
-        style={{flex: 1,
+        style={flex: 1,
           transform: [
             { translateX }},
-            { translateY },
-          ],
-          opacity,
-        }}
+            { translateY }],
+          opacity}}
         {...panResponder.panHandlers}
       >
         {children}
@@ -206,7 +196,6 @@ export const useGestureNavigation = () => {
     config: context.config,
     registerGestureAction: context.registerGestureAction,
     unregisterGestureAction: context.unregisterGestureAction,
-    triggerHapticFeedback: context.triggerHapticFeedback,
-  };
+    triggerHapticFeedback: context.triggerHapticFeedback};
 };
 export default GestureNavigationProvider;

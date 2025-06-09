@@ -1,13 +1,10 @@
-from datetime import datetime, timedelta
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from suoke_blockchain_service.models import (
-import pytest
+"""Test module"""
+import unittest
 
-
-def main():
-    """主函数 - 自动生成的最小可用版本"""
-    pass
+class TestPlaceholder(unittest.TestCase):
+    def test_placeholder(self):
+        """Placeholder test"""
+        pass
 
 if __name__ == "__main__":
-    main()
+    unittest.main()

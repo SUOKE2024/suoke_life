@@ -97,7 +97,7 @@ export const MessageSubscriber: React.FC<MessageSubscriberProps> = ({
   const handleClearMessages = useCallback() => {setMessages([]);
   }, []);
   // 组件卸载时自动取消订阅
-  useEffect(() => {
+  useEffect() => {
     return () => {if (subscriptionId) {messageBusService.unsubscribe(subscriptionId);
       }
     };
@@ -143,7 +143,7 @@ export const MessageSubscriber: React.FC<MessageSubscriberProps> = ({
       {// 过滤器配置}
       <View style={styles.filterSection}>
         <Text style={styles.label}>消息过滤器 (JSON):</Text>
-        <TextInput
+        <TextInput;
           style={styles.filterInput}
           value={customFilter}
           onChangeText={setCustomFilter}
@@ -156,8 +156,8 @@ export const MessageSubscriber: React.FC<MessageSubscriberProps> = ({
       </View>
       {// 控制按钮}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={{[
+        <TouchableOpacity;
+          style={[
             styles.button,
             isSubscribed ? styles.unsubscribeButton : styles.subscribeButton,
             isConnecting && styles.disabledButton;
@@ -173,7 +173,7 @@ export const MessageSubscriber: React.FC<MessageSubscriberProps> = ({
             </Text>
           )}
         </TouchableOpacity>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.button, styles.clearButton]}
           onPress={handleClearMessages}
           disabled={messages.length === 0}
@@ -189,7 +189,7 @@ export const MessageSubscriber: React.FC<MessageSubscriberProps> = ({
         </Text>
       </View>
       {// 消息列表}
-      <FlatList
+      <FlatList;
         ref={flatListRef};
         data={messages};
         renderItem={renderMessageItem};

@@ -393,7 +393,7 @@ type: "LPDDR4",'
 }
 // 辅助接口
 interface ModelRequirements {
-  minMemory: number;
+  minMemory: number;,
   minCpuCores: number;
   requiredProviders?: ExecutionProvider[];
   preferredProviders?: ExecutionProvider[];
@@ -405,6 +405,6 @@ interface CompatibilityResult {
   estimatedPerformance?: PerformanceEstimate;
 }
 interface PerformanceEstimate {
-  score: number; // 0-100;
+  score: number; // 0-100;,
   bottlenecks: string[];
 }  */

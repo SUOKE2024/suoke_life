@@ -6,27 +6,27 @@ interface ApiResponse<T = any /> { data: T;/    , success: boolean;
   code?: number}
 * / 支持智能重试、缓存、熔断器、离线队列等高级功能* * interface RetryConfig {
   maxAttempts: number, * /
-  baseDelay: number;
+  baseDelay: number;,
   maxDelay: number;
   backoffFactor: number;
 }
 interface CacheConfig {
-  ttl: number;
+  ttl: number;,
   maxSize: number;
   strategy: "memory" | "storage" | "both";
 }
 interface RequestQueue {
-  id: string;
+  id: string;,
   method: string;
   endpoint: string;
   data?: unknown;
   config?: unknown;
-  timestamp: number;
+  timestamp: number;,
   retryCount: number;
   priority: number;
 }
 interface CircuitBreakerConfig {
-  failureThreshold: number;
+  failureThreshold: number;,
   recoveryTimeout: number;
   monitoringPeriod: number;
 }
@@ -295,7 +295,7 @@ const performanceMonitor = usePerformanceMonitor(enhancedApiClient", {")
       config,
       timestamp: Date.now(),
       retryCount: 0,
-      priority: method === "POST" ? 1 : 0,  }
+      priority: method === "POST" ? 1 : 0}
     this.requestQueue.push(queueItem);
     this.requestQueue.sort(a, b) => {}
       if (a.priority !== b.priority) {

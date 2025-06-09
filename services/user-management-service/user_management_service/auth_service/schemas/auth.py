@@ -2,7 +2,7 @@
 auth - 索克生活项目模块
 """
 
-from datetime import datetime
+import datetime
 from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
 

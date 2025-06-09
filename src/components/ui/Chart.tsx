@@ -1,11 +1,5 @@
 import React, { useMemo } from 'react';
-import {
-    Dimensions,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native';
+import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -102,31 +96,29 @@ export const Chart: React.FC<ChartProps> = ({
   const colors = colorScheme || defaultColors;
 
   // 计算数据范围
-  const { max, min, range } = useMemo(() => {
-    const values = data.map(d => d.value);
+  const { max, min, range } = useMemo() => {
+    const values = data.map(d) => d.value);
     const dataMax = Math.max(...values);
     const dataMin = Math.min(...values);
-    
+
     const max = maxValue !== undefined ? maxValue : dataMax;
     const min = minValue !== undefined ? minValue : Math.min(dataMin, 0);
     const range = max - min;
-    
+
     return { max, min, range };
   }, [data, maxValue, minValue]);
 
   // 归一化值
   const normalizeValue = (value: number) => {
     if (range === 0) return 0;
-    return ((value - min) / range);
+    return (value - min) / range;
   };
 
   // 渲染标题
   const renderTitle = () => {
     if (!title) return null;
-    
-    return (
-      <Text style={[styles.title, titleStyle]}>{title}</Text>
-    );
+
+    return <Text style={[styles.title, titleStyle]}>{title}</Text>;
   };
 
   // 渲染网格
@@ -135,11 +127,11 @@ export const Chart: React.FC<ChartProps> = ({
 
     const gridLines = [];
     const gridCount = 5;
-    
+
     for (let i = 0; i <= gridCount; i++) {
       const y = (height - 40) * (i / gridCount) + 20;
       gridLines.push(
-        <View
+        <View;
           key={i}
           style={[
             styles.gridLine,
@@ -162,13 +154,13 @@ export const Chart: React.FC<ChartProps> = ({
 
     const labels = [];
     const labelCount = 5;
-    
+
     for (let i = 0; i <= labelCount; i++) {
-      const value = max - (range * i / labelCount);
+      const value = max - (range * i) / labelCount;
       const y = (height - 40) * (i / labelCount) + 15;
-      
+
       labels.push(
-        <Text
+        <Text;
           key={i}
           style={[
             styles.yLabel,
@@ -190,9 +182,9 @@ export const Chart: React.FC<ChartProps> = ({
     if (!showLabels || data.length === 0) return null;
 
     const barWidth = (width - 80) / data.length;
-    
-    return data.map((item, index) => (
-      <Text
+
+    return data.map(item, index) => (
+      <Text;
         key={index}
         style={[
           styles.xLabel,
@@ -211,16 +203,16 @@ export const Chart: React.FC<ChartProps> = ({
   const renderBarChart = () => {
     if (data.length === 0) return null;
 
-    const barWidth = (width - 80) / data.length * 0.8;
-    const barSpacing = (width - 80) / data.length * 0.2;
-    
-    return data.map((item, index) => {
+    const barWidth = (width - 80) / data.length) * 0.8;
+    const barSpacing = (width - 80) / data.length) * 0.2;
+
+    return data.map(item, index) => {
       const barHeight = normalizeValue(item.value) * (height - 60);
       const color = item.color || colors[index % colors.length];
-      
+
       return (
         <View key={index}>
-          <View
+          <View;
             style={[
               styles.bar,
               {
@@ -233,7 +225,7 @@ export const Chart: React.FC<ChartProps> = ({
             ]}
           />
           {showValues && (
-            <Text
+            <Text;
               style={[
                 styles.valueLabel,
                 {
@@ -255,7 +247,7 @@ export const Chart: React.FC<ChartProps> = ({
     if (data.length === 0) return null;
 
     const pointWidth = (width - 80) / (data.length - 1 || 1);
-    const points = data.map((item, index) => {
+    const points = data.map(item, index) => {
       const x = 50 + index * pointWidth;
       const y = height - 20 - normalizeValue(item.value) * (height - 60);
       return { x, y, value: item.value };
@@ -263,7 +255,7 @@ export const Chart: React.FC<ChartProps> = ({
 
     // 生成路径
     let pathData = '';
-    points.forEach((point, index) => {
+    points.forEach(point, index) => {
       if (index === 0) {
         pathData += `M ${point.x} ${point.y}`;
       } else {
@@ -285,9 +277,9 @@ export const Chart: React.FC<ChartProps> = ({
       <>
         {/* 这里应该使用SVG来绘制路径，但React Native需要额外的库 */}
         {/* 简化版本：只显示点 */}
-        {points.map((point, index) => (
+        {points.map(point, index) => (
           <View key={index}>
-            <View
+            <View;
               style={[
                 styles.linePoint,
                 {
@@ -298,7 +290,7 @@ export const Chart: React.FC<ChartProps> = ({
               ]}
             />
             {showValues && (
-              <Text
+              <Text;
                 style={[
                   styles.valueLabel,
                   {
@@ -313,15 +305,19 @@ export const Chart: React.FC<ChartProps> = ({
           </View>
         ))}
         {/* 连接线（简化版） */}
-        {points.slice(1).map((point, index) => {
+        {points.slice(1).map(point, index) => {
           const prevPoint = points[index];
           const lineWidth = Math.sqrt(
-            Math.pow(point.x - prevPoint.x, 2) + Math.pow(point.y - prevPoint.y, 2)
+            Math.pow(point.x - prevPoint.x, 2) +
+              Math.pow(point.y - prevPoint.y, 2)
           );
-          const angle = Math.atan2(point.y - prevPoint.y, point.x - prevPoint.x);
-          
+          const angle = Math.atan2(
+            point.y - prevPoint.y,
+            point.x - prevPoint.x;
+          );
+
           return (
-            <View
+            <View;
               key={index}
               style={[
                 styles.line,
@@ -344,14 +340,14 @@ export const Chart: React.FC<ChartProps> = ({
   const renderPieChart = () => {
     if (data.length === 0) return null;
 
-    const total = data.reduce((sum, item) => sum + item.value, 0);
+    const total = data.reduce(sum, item) => sum + item.value, 0);
     const centerX = width / 2;
     const centerY = height / 2;
     const radius = Math.min(width, height) / 3;
 
     let currentAngle = 0;
 
-    return data.map((item, index) => {
+    return data.map(item, index) => {
       const percentage = item.value / total;
       const angle = percentage * 2 * Math.PI;
       const color = item.color || colors[index % colors.length];
@@ -366,7 +362,7 @@ export const Chart: React.FC<ChartProps> = ({
       return (
         <View key={index}>
           {/* 这里应该使用SVG绘制扇形，简化版本使用圆形 */}
-          <View
+          <View;
             style={[
               styles.pieSlice,
               {
@@ -380,7 +376,7 @@ export const Chart: React.FC<ChartProps> = ({
             ]}
           />
           {showValues && (
-            <Text
+            <Text;
               style={[
                 styles.pieLabel,
                 {
@@ -404,14 +400,14 @@ export const Chart: React.FC<ChartProps> = ({
     const barHeight = 20;
     const spacing = 10;
 
-    return data.map((item, index) => {
+    return data.map(item, index) => {
       const progress = normalizeValue(item.value);
       const color = item.color || colors[index % colors.length];
       const y = index * (barHeight + spacing);
 
       return (
-        <View key={index} style={{ top: y }}>
-          <View
+        <View key={index} style={ top: y }}>
+          <View;
             style={[
               styles.progressBackground,
               {
@@ -421,7 +417,7 @@ export const Chart: React.FC<ChartProps> = ({
               },
             ]}
           />
-          <View
+          <View;
             style={[
               styles.progressBar,
               {
@@ -432,7 +428,7 @@ export const Chart: React.FC<ChartProps> = ({
               },
             ]}
           />
-          <Text
+          <Text;
             style={[
               styles.progressLabel,
               {
@@ -444,7 +440,7 @@ export const Chart: React.FC<ChartProps> = ({
             {formatXLabel(item.label)}
           </Text>
           {showValues && (
-            <Text
+            <Text;
               style={[
                 styles.progressValue,
                 {
@@ -467,20 +463,13 @@ export const Chart: React.FC<ChartProps> = ({
 
     return (
       <View style={styles.legend}>
-        {data.map((item, index) => {
+        {data.map(item, index) => {
           const color = item.color || colors[index % colors.length];
-          
+
           return (
             <View key={index} style={styles.legendItem}>
-              <View
-                style={[
-                  styles.legendColor,
-                  { backgroundColor: color },
-                ]}
-              />
-              <Text style={styles.legendLabel}>
-                {formatXLabel(item.label)}
-              </Text>
+              <View style={[styles.legendColor, { backgroundColor: color }]} />
+              <Text style={styles.legendLabel}>{formatXLabel(item.label)}</Text>
             </View>
           );
         })}
@@ -523,119 +512,119 @@ export const Chart: React.FC<ChartProps> = ({
 
 const createStyles = (theme: any) => {
   return StyleSheet.create({
-    container: {
-      backgroundColor: theme.colors.surface,
+    container: {,
+  backgroundColor: theme.colors.surface,
       borderRadius: theme.borderRadius.md,
       padding: theme.spacing.md,
     },
-    title: {
-      fontSize: theme.typography.fontSize.lg,
+    title: {,
+  fontSize: theme.typography.fontSize.lg,
       fontWeight: theme.typography.fontWeight.semibold,
       color: theme.colors.onSurface,
       textAlign: 'center',
       marginBottom: theme.spacing.md,
     },
-    chartContainer: {
-      position: 'relative',
+    chartContainer: {,
+  position: 'relative',
       backgroundColor: theme.colors.surface,
     },
-    gridLine: {
-      position: 'absolute',
+    gridLine: {,
+  position: 'absolute',
       height: 1,
       backgroundColor: theme.colors.outline,
       opacity: 0.3,
     },
-    yLabel: {
-      position: 'absolute',
+    yLabel: {,
+  position: 'absolute',
       left: 5,
       fontSize: theme.typography.fontSize.xs,
       color: theme.colors.onSurfaceVariant,
       textAlign: 'right',
       width: 30,
     },
-    xLabel: {
-      position: 'absolute',
+    xLabel: {,
+  position: 'absolute',
       fontSize: theme.typography.fontSize.xs,
       color: theme.colors.onSurfaceVariant,
       textAlign: 'center',
       transform: [{ translateX: -20 }],
       width: 40,
     },
-    bar: {
-      position: 'absolute',
+    bar: {,
+  position: 'absolute',
       borderRadius: theme.borderRadius.sm,
     },
-    valueLabel: {
-      position: 'absolute',
+    valueLabel: {,
+  position: 'absolute',
       fontSize: theme.typography.fontSize.xs,
       color: theme.colors.onSurface,
       textAlign: 'center',
       transform: [{ translateX: -15 }],
       width: 30,
     },
-    linePoint: {
-      position: 'absolute',
+    linePoint: {,
+  position: 'absolute',
       width: 8,
       height: 8,
       borderRadius: 4,
       borderWidth: 2,
       borderColor: theme.colors.surface,
     },
-    line: {
-      position: 'absolute',
+    line: {,
+  position: 'absolute',
       height: 2,
       transformOrigin: 'left center',
     },
-    pieSlice: {
-      position: 'absolute',
+    pieSlice: {,
+  position: 'absolute',
     },
-    pieLabel: {
-      position: 'absolute',
+    pieLabel: {,
+  position: 'absolute',
       fontSize: theme.typography.fontSize.xs,
       color: theme.colors.onSurface,
       textAlign: 'center',
       transform: [{ translateX: -15 }, { translateY: -8 }],
       width: 30,
     },
-    progressBackground: {
-      position: 'absolute',
+    progressBackground: {,
+  position: 'absolute',
       backgroundColor: theme.colors.surfaceVariant,
       borderRadius: theme.borderRadius.sm,
     },
-    progressBar: {
-      position: 'absolute',
+    progressBar: {,
+  position: 'absolute',
       borderRadius: theme.borderRadius.sm,
     },
-    progressLabel: {
-      position: 'absolute',
+    progressLabel: {,
+  position: 'absolute',
       fontSize: theme.typography.fontSize.sm,
       color: theme.colors.onSurface,
     },
-    progressValue: {
-      position: 'absolute',
+    progressValue: {,
+  position: 'absolute',
       fontSize: theme.typography.fontSize.sm,
       color: theme.colors.onSurface,
     },
-    legend: {
-      flexDirection: 'row',
+    legend: {,
+  flexDirection: 'row',
       flexWrap: 'wrap',
       justifyContent: 'center',
       marginTop: theme.spacing.md,
     },
-    legendItem: {
-      flexDirection: 'row',
+    legendItem: {,
+  flexDirection: 'row',
       alignItems: 'center',
       marginRight: theme.spacing.md,
       marginBottom: theme.spacing.xs,
     },
-    legendColor: {
-      width: 12,
+    legendColor: {,
+  width: 12,
       height: 12,
       borderRadius: 6,
       marginRight: theme.spacing.xs,
     },
-    legendLabel: {
-      fontSize: theme.typography.fontSize.sm,
+    legendLabel: {,
+  fontSize: theme.typography.fontSize.sm,
       color: theme.colors.onSurface,
     },
   });

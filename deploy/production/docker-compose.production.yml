@@ -1,0 +1,110 @@
+{
+  "version": "3.8",
+  "services": {
+    "unified-knowledge-service": {
+      "image": "suoke/unified-knowledge-service:latest",
+      "ports": [
+        "8080:8080"
+      ],
+      "environment": {
+        "ENVIRONMENT": "production",
+        "LOG_LEVEL": "INFO",
+        "DATABASE_URL": "${DATABASE_URL}",
+        "REDIS_URL": "${REDIS_URL}"
+      },
+      "restart": "unless-stopped",
+      "healthcheck": {
+        "test": [
+          "CMD",
+          "curl",
+          "-f",
+          "http://localhost:8080/health"
+        ],
+        "interval": "30s",
+        "timeout": "10s",
+        "retries": 3
+      },
+      "deploy": {
+        "resources": {
+          "limits": {
+            "cpus": "0.5",
+            "memory": "1G"
+          },
+          "reservations": {
+            "cpus": "0.25",
+            "memory": "512M"
+          }
+        }
+      }
+    },
+    "unified-support-service": {
+      "image": "suoke/unified-support-service:latest",
+      "ports": [
+        "8081:8081"
+      ],
+      "environment": {
+        "ENVIRONMENT": "production",
+        "LOG_LEVEL": "INFO"
+      },
+      "restart": "unless-stopped",
+      "healthcheck": {
+        "test": [
+          "CMD",
+          "curl",
+          "-f",
+          "http://localhost:8081/health"
+        ],
+        "interval": "30s",
+        "timeout": "10s",
+        "retries": 3
+      }
+    },
+    "nginx": {
+      "image": "nginx:alpine",
+      "ports": [
+        "80:80",
+        "443:443"
+      ],
+      "volumes": [
+        "./nginx.conf:/etc/nginx/nginx.conf",
+        "./ssl:/etc/nginx/ssl"
+      ],
+      "depends_on": [
+        "unified-knowledge-service",
+        "unified-support-service"
+      ],
+      "restart": "unless-stopped"
+    },
+    "prometheus": {
+      "image": "prom/prometheus:latest",
+      "ports": [
+        "9090:9090"
+      ],
+      "volumes": [
+        "../monitoring/production/prometheus.yml:/etc/prometheus/prometheus.yml"
+      ],
+      "restart": "unless-stopped"
+    },
+    "grafana": {
+      "image": "grafana/grafana:latest",
+      "ports": [
+        "3000:3000"
+      ],
+      "environment": {
+        "GF_SECURITY_ADMIN_PASSWORD": "${GRAFANA_PASSWORD}"
+      },
+      "volumes": [
+        "grafana-storage:/var/lib/grafana"
+      ],
+      "restart": "unless-stopped"
+    }
+  },
+  "volumes": {
+    "grafana-storage": {}
+  },
+  "networks": {
+    "suoke-network": {
+      "driver": "bridge"
+    }
+  }
+}

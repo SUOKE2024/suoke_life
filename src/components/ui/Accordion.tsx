@@ -1,25 +1,28 @@
 import React, { useRef, useState } from 'react';
 import {
-    Animated,
-    LayoutAnimation,
-    Platform,
-    StyleSheet,
-    Text,
-    TextStyle,
-    TouchableOpacity,
-    UIManager,
-    View,
-    ViewStyle,
+  Animated,
+  LayoutAnimation,
+  Platform,
+  StyleSheet,
+  Text,
+  TextStyle,
+  TouchableOpacity,
+  UIManager,
+  View,
+  ViewStyle,
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
-// 启用Android的LayoutAnimation
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+// 启用Android的LayoutAnimation;
+if (
+  Platform.OS === 'android' &&
+  UIManager.setLayoutAnimationEnabledExperimental;
+) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
 export interface AccordionItem {
-  key: string;
+  key: string;,
   title: string;
   content: React.ReactNode;
   disabled?: boolean;
@@ -62,22 +65,26 @@ export const Accordion: React.FC<AccordionProps> = ({
   testID,
 }) => {
   const { currentTheme } = useTheme();
-  const [internalActiveKeys, setInternalActiveKeys] = useState<string[]>(defaultActiveKeys);
-  
-  const activeKeys = controlledActiveKeys !== undefined ? controlledActiveKeys : internalActiveKeys;
+  const [internalActiveKeys, setInternalActiveKeys] =
+    useState<string[]>(defaultActiveKeys);
+
+  const activeKeys =
+    controlledActiveKeys !== undefined;
+      ? controlledActiveKeys;
+      : internalActiveKeys;
   const rotationAnims = useRef<{ [key: string]: Animated.Value }>({}).current;
 
   // 初始化动画值
-  items.forEach(item => {
+  items.forEach(item) => {
     if (!rotationAnims[item.key]) {
       rotationAnims[item.key] = new Animated.Value(
-        activeKeys.includes(item.key) ? 1 : 0
+        activeKeys.includes(item.key) ? 1 : 0;
       );
     }
   });
 
   const handlePress = (key: string) => {
-    const item = items.find(item => item.key === key);
+    const item = items.find(item) => item.key === key);
     if (item?.disabled) return;
 
     let newActiveKeys: string[];
@@ -88,7 +95,7 @@ export const Accordion: React.FC<AccordionProps> = ({
     } else {
       // 普通模式：可以展开多个
       newActiveKeys = activeKeys.includes(key)
-        ? activeKeys.filter(k => k !== key)
+        ? activeKeys.filter(k) => k !== key)
         : [...activeKeys, key];
     }
 
@@ -100,7 +107,7 @@ export const Accordion: React.FC<AccordionProps> = ({
     // 动画处理
     if (animated) {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-      
+
       // 旋转动画
       const targetValue = newActiveKeys.includes(key) ? 1 : 0;
       Animated.timing(rotationAnims[key], {
@@ -122,8 +129,10 @@ export const Accordion: React.FC<AccordionProps> = ({
     });
 
     return (
-      <Animated.View style={{ transform: [{ rotate: rotation }] }}>
-        <Text style={[styles.defaultIcon, { color: currentTheme.colors.onSurface }]}>
+      <Animated.View style={ transform: [{ rotate: rotation }] }}>
+        <Text;
+          style={[styles.defaultIcon, { color: currentTheme.colors.onSurface }]}
+        >
           ▼
         </Text>
       </Animated.View>
@@ -131,65 +140,65 @@ export const Accordion: React.FC<AccordionProps> = ({
   };
 
   const styles = StyleSheet.create({
-    container: {
-      backgroundColor: currentTheme.colors.surface,
+    container: {,
+  backgroundColor: currentTheme.colors.surface,
       borderRadius: 8,
       overflow: 'hidden',
     },
-    bordered: {
-      borderWidth: 1,
+    bordered: {,
+  borderWidth: 1,
       borderColor: currentTheme.colors.outline,
     },
-    item: {
-      backgroundColor: currentTheme.colors.surface,
+    item: {,
+  backgroundColor: currentTheme.colors.surface,
     },
-    itemBordered: {
-      borderBottomWidth: 1,
+    itemBordered: {,
+  borderBottomWidth: 1,
       borderBottomColor: currentTheme.colors.outline,
     },
-    header: {
-      flexDirection: 'row',
+    header: {,
+  flexDirection: 'row',
       alignItems: 'center',
       paddingHorizontal: 16,
       paddingVertical: 12,
       backgroundColor: currentTheme.colors.surface,
     },
-    headerActive: {
-      backgroundColor: currentTheme.colors.surfaceVariant,
+    headerActive: {,
+  backgroundColor: currentTheme.colors.surfaceVariant,
     },
-    headerDisabled: {
-      opacity: 0.5,
+    headerDisabled: {,
+  opacity: 0.5,
     },
-    icon: {
-      marginRight: 12,
+    icon: {,
+  marginRight: 12,
       width: 24,
       height: 24,
       justifyContent: 'center',
       alignItems: 'center',
     },
-    title: {
-      flex: 1,
+    title: {,
+  flex: 1,
       fontSize: 16,
       fontWeight: '500',
       color: currentTheme.colors.onSurface,
     },
-    titleActive: {
-      color: currentTheme.colors.primary,
+    titleActive: {,
+  color: currentTheme.colors.primary,
       fontWeight: '600',
     },
-    expandIcon: {
-      marginLeft: 12,
+    expandIcon: {,
+  marginLeft: 12,
       width: 24,
       height: 24,
       justifyContent: 'center',
       alignItems: 'center',
     },
-    defaultIcon: {
-      fontSize: 12,
+    defaultIcon: {,
+  fontSize: 12,
       fontWeight: 'bold',
     },
-    content: {
-      paddingHorizontal: 16,
+    content: {,
+  paddingHorizontal: 16,
       paddingVertical: 12,
       backgroundColor: currentTheme.colors.background,
       borderTopWidth: 1,
@@ -198,21 +207,17 @@ export const Accordion: React.FC<AccordionProps> = ({
   });
 
   return (
-    <View 
-      style={[
-        styles.container,
-        bordered && styles.bordered,
-        style
-      ]} 
+    <View;
+      style={[styles.container, bordered && styles.bordered, style]}
       testID={testID}
     >
-      {items.map((item, index) => {
+      {items.map(item, index) => {
         const isExpanded = activeKeys.includes(item.key);
         const isDisabled = item.disabled || false;
         const isLastItem = index === items.length - 1;
 
         return (
-          <View
+          <View;
             key={item.key}
             style={[
               styles.item,
@@ -220,7 +225,7 @@ export const Accordion: React.FC<AccordionProps> = ({
               itemStyle,
             ]}
           >
-            <TouchableOpacity
+            <TouchableOpacity;
               style={[
                 styles.header,
                 isExpanded && styles.headerActive,
@@ -232,18 +237,14 @@ export const Accordion: React.FC<AccordionProps> = ({
               accessible={accessible}
               accessibilityRole="button"
               accessibilityLabel={`${item.title} ${isExpanded ? '已展开' : '已折叠'}`}
-              accessibilityState={{ 
-                expanded: isExpanded, 
-                disabled: isDisabled 
+              accessibilityState={
+                expanded: isExpanded,
+                disabled: isDisabled,
               }}
             >
-              {item.icon && (
-                <View style={styles.icon}>
-                  {item.icon}
-                </View>
-              )}
-              
-              <Text
+              {item.icon && <View style={styles.icon}>{item.icon}</View>}
+
+              <Text;
                 style={[
                   styles.title,
                   isExpanded && styles.titleActive,
@@ -252,16 +253,14 @@ export const Accordion: React.FC<AccordionProps> = ({
               >
                 {item.title}
               </Text>
-              
+
               <View style={styles.expandIcon}>
                 {renderExpandIcon(isExpanded, item.key)}
               </View>
             </TouchableOpacity>
-            
+
             {isExpanded && (
-              <View style={[styles.content, contentStyle]}>
-                {item.content}
-              </View>
+              <View style={[styles.content, contentStyle]}>{item.content}</View>
             )}
           </View>
         );
@@ -272,7 +271,7 @@ export const Accordion: React.FC<AccordionProps> = ({
 
 // 单个折叠面板项组件
 export interface AccordionPanelProps {
-  title: string;
+  title: string;,
   key: string;
   disabled?: boolean;
   icon?: React.ReactNode;
@@ -290,7 +289,7 @@ export interface AdvancedAccordionProps extends Omit<AccordionProps, 'items'> {
 
 export const AdvancedAccordion: React.FC<AdvancedAccordionProps> = ({
   children,
-  ...props
+  ...props;
 }) => {
   const items: AccordionItem[] = React.Children.map(children, (child) => {
     if (React.isValidElement(child) && child.type === AccordionPanel) {
@@ -308,4 +307,4 @@ export const AdvancedAccordion: React.FC<AdvancedAccordionProps> = ({
   return <Accordion {...props} items={items} />;
 };
 
-export default Accordion; 
+export default Accordion;

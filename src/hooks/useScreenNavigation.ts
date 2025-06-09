@@ -2,15 +2,15 @@ import { useNavigation } from "@react-navigation/native";/    import {   Alert  
 // useScreenNavigation.ts   索克生活APP - 自动生成的类型安全文件     @description TODO: 添加文件描述 @author 索克生活开发团队   @version 1.0.0;
 import { useCallback } from "react";
 export interface UseScreenNavigationReturn {
-  goBack: () => void;
+  goBack: () => void;,
   goToHome: () => void;
-  goToProfile: () => void;
+  goToProfile: () => void;,
   goToSettings: () => void;
-  goToLogin: () => void;
+  goToLogin: () => void;,
   goToRegister: () => void;
   showAlert: (title: string, message: string, onConfirm?: () => void) => void;
-  showConfirm: (title: string;)
-    message: string,onConfirm: () => void,onCancel?: () => void;
+  showConfirm: (title: string;),
+  message: string,onConfirm: () => void,onCancel?: () => void;
   ) => void;
 }
 export const useScreenNavigation = (): UseScreenNavigationReturn =;

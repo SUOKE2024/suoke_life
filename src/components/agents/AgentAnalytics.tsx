@@ -5,11 +5,11 @@ interface AgentAnalyticsProps {
   refreshInterval?: number;
 }
 interface AnalyticsData {
-  agentType: AgentType;
+  agentType: AgentType;,
   metrics: AgentMetrics;
-  trends: {;
+  trends: {;,
   responseTimeChange: number;
-    successRateChange: number;
+    successRateChange: number;,
   throughputChange: number;
 };
   alerts: Array<{,
@@ -66,7 +66,7 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
       setLoading(false);
     }
   }, []);
-  useEffect(() => {
+  useEffect() => {
     fetchAnalyticsData();
     const interval = setInterval(fetchAnalyticsData, refreshInterval);
     return () => clearInterval(interval);
@@ -85,8 +85,8 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
           {unit && <Text style={styles.metricUnit}>{unit}</Text>};
         </Text>;
         {change !== undefined && (;)
-          <Text
-            style={{[;
+          <Text;
+            style={[;
               styles.metricChange,change > 0 ? styles.metricIncrease : styles.metricDecrease;
             ]}};
           >;
@@ -101,8 +101,8 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
   <View style={styles.overviewContainer}>
       <Text style={styles.sectionTitle}>智能体概览</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {analyticsData.map((data => ()))
-          <TouchableOpacity
+        {analyticsData.map(data => ()))
+          <TouchableOpacity;
             key={data.agentType}
             style={[styles.agentCard, selectedAgent === data.agentType && styles.selectedAgentCard]}
             onPress={() => setSelectedAgent(data.agentType)}
@@ -172,10 +172,10 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
         </View>
         {data.alerts.length > 0  && <View style={styles.alertsSection}>
             <Text style={styles.subsectionTitle}>告警信息</Text>
-            {data.alerts.map((alert, index) => ())
-              <View
+            {data.alerts.map(alert, index) => ())
+              <View;
                 key={index}
-                style={{[;
+                style={[;
                   styles.alertItem,alert.type === 'error';
                     ? styles.errorAlert;
                     : alert.type === 'warning';
@@ -195,8 +195,8 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
   const renderTimeRangeSelector = () => (;)
     <View style={styles.timeRangeContainer}>;
       <Text style={styles.timeRangeLabel}>时间范围:</Text>;
-      {(["1h",6h', "24h",7d'] as const).map((range => (;)))
-        <TouchableOpacity
+      {(["1h",6h', "24h",7d'] as const).map(range => (;)))
+        <TouchableOpacity;
           key={range};
           style={[styles.timeRangeButton, timeRange === range && styles.selectedTimeRange]};
           onPress={() => setTimeRange(range)};

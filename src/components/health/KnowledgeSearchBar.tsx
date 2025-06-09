@@ -57,7 +57,7 @@ export const KnowledgeSearchBar: React.FC<KnowledgeSearchBarProps> = ({
   <View style={styles.container}>
       {// 搜索输入框}
       <View style={styles.searchContainer}>
-        <TextInput
+        <TextInput;
           style={styles.searchInput}
           value={searchText}
           onChangeText={setSearchText}
@@ -67,7 +67,7 @@ export const KnowledgeSearchBar: React.FC<KnowledgeSearchBarProps> = ({
           onSubmitEditing={handleSearch}
           editable={!loading}
         />
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.searchButton, loading && styles.searchButtonDisabled]}
           onPress={handleSearch}
           disabled={loading || !searchText.trim()}
@@ -81,7 +81,7 @@ export const KnowledgeSearchBar: React.FC<KnowledgeSearchBarProps> = ({
       </View>
       {// 搜索类型选择器}
       {showFilters  && <View style={styles.filtersContainer}>
-          <TouchableOpacity
+          <TouchableOpacity;
             style={styles.typeSelector}
             onPress={() => setShowTypeSelector(!showTypeSelector)}
           >
@@ -96,16 +96,16 @@ export const KnowledgeSearchBar: React.FC<KnowledgeSearchBarProps> = ({
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <View style={styles.typeList}>
                   {searchTypes.map(type) => ()
-                    <TouchableOpacity
+                    <TouchableOpacity;
                       key={type.key}
-                      style={{[
+                      style={[
                         styles.typeOption,
                         selectedType === type.key && styles.typeOptionSelected;
                       ]}}
                       onPress={() => handleTypeSelect(type.key)}
                     >
-                      <Text
-                        style={{[
+                      <Text;
+                        style={[
                           styles.typeOptionText,
                           selectedType === type.key && styles.typeOptionTextSelected;
                         ]}}
@@ -127,8 +127,8 @@ export const KnowledgeSearchBar: React.FC<KnowledgeSearchBarProps> = ({
         style={styles.suggestionsContainer};
       >;
         <View style={styles.suggestions}>;
-          {["头痛", "失眠', "消化不良", "疲劳', "焦虑", "感冒'].map((suggestion, index) => (;))
-            <TouchableOpacity
+          {["头痛", "失眠', "消化不良", "疲劳', "焦虑", "感冒'].map(suggestion, index) => (;))
+            <TouchableOpacity;
               key={index};
               style={styles.suggestionChip};
               onPress={() => {setSearchText(suggestion);
@@ -241,11 +241,11 @@ const styles = StyleSheet.create({
   suggestionsContainer: {,
   maxHeight: 40;
   },
-  suggestions: {
-      flexDirection: "row",
+  suggestions: {,
+  flexDirection: "row",
       gap: 8;
-  },suggestionChip: {
-      backgroundColor: "#E3F2FD",
+  },suggestionChip: {,
+  backgroundColor: "#E3F2FD",
       paddingHorizontal: 12,paddingVertical: 6,borderRadius: 16,marginRight: 8;
   },suggestionText: {fontSize: 12,color: '#1976D2',fontWeight: '500';
   };

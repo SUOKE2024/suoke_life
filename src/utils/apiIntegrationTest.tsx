@@ -5,18 +5,18 @@ interface ApiResponse<T = any /> { data: T;/     , success: boolean;
 code?: number}
 API集成测试工具   用于测试前端与后端API的集成
 interface TestResult {
-  service: string;
+  service: string;,
   endpoint: string;
   success: boolean;
   status?: number;
   responseTime: number;
   error?: string;
-  data?: unknown
+  data?: unknown;
 }
 interface TestReport {
-  timestamp: string;
+  timestamp: string;,
   totalTests: number;
-  passedTests: number;
+  passedTests: number;,
   failedTests: number;
   results: TestResult[];
 }

@@ -1,12 +1,12 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextStyle,
-    TouchableOpacity,
-    View,
-    ViewStyle,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
 } from 'react-native';
 
 interface ErrorBoundaryProps {
@@ -22,12 +22,15 @@ interface ErrorBoundaryProps {
 }
 
 interface ErrorBoundaryState {
-  hasError: boolean;
+  hasError: boolean;,
   error: Error | null;
   errorInfo: ErrorInfo | null;
 }
 
-export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+export class ErrorBoundary extends Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState;
+> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = {
@@ -75,14 +78,14 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
         return this.props.fallback;
       }
 
-      // 默认错误UI
+      // 默认错误UI;
       return (
         <View style={[styles.container, this.props.style]}>
           <View style={styles.content}>
             <Text style={[styles.title, this.props.titleStyle]}>
               😵 出现了一些问题
             </Text>
-            
+
             <Text style={[styles.message, this.props.messageStyle]}>
               应用遇到了意外错误，请尝试重新加载页面。
             </Text>
@@ -93,7 +96,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                 <Text style={styles.errorText}>
                   {this.state.error.toString()}
                 </Text>
-                
+
                 {this.state.errorInfo && (
                   <>
                     <Text style={styles.detailsTitle}>组件堆栈：</Text>
@@ -105,14 +108,16 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
               </ScrollView>
             )}
 
-            <TouchableOpacity
+            <TouchableOpacity;
               style={[styles.retryButton, this.props.buttonStyle]}
               onPress={this.handleRetry}
-              accessible
+              accessible;
               accessibilityRole="button"
               accessibilityLabel="重试"
             >
-              <Text style={[styles.retryButtonText, this.props.buttonTextStyle]}>
+              <Text;
+                style={[styles.retryButtonText, this.props.buttonTextStyle]}
+              >
                 🔄 重试
               </Text>
             </TouchableOpacity>
@@ -126,77 +131,77 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  container: {,
+  flex: 1,
     backgroundColor: '#f8f9fa',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
   },
-  content: {
-    backgroundColor: '#ffffff',
+  content: {,
+  backgroundColor: '#ffffff',
     borderRadius: 12,
     padding: 24,
     maxWidth: 400,
     width: '100%',
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
+    shadowOffset: {,
+  width: 0,
       height: 2,
     },
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 4,
   },
-  title: {
-    fontSize: 24,
+  title: {,
+  fontSize: 24,
     fontWeight: '600',
     color: '#1a1a1a',
     textAlign: 'center',
     marginBottom: 12,
   },
-  message: {
-    fontSize: 16,
+  message: {,
+  fontSize: 16,
     color: '#666666',
     textAlign: 'center',
     lineHeight: 24,
     marginBottom: 24,
   },
-  detailsContainer: {
-    backgroundColor: '#f5f5f5',
+  detailsContainer: {,
+  backgroundColor: '#f5f5f5',
     borderRadius: 8,
     padding: 12,
     marginBottom: 24,
     maxHeight: 200,
   },
-  detailsTitle: {
-    fontSize: 14,
+  detailsTitle: {,
+  fontSize: 14,
     fontWeight: '600',
     color: '#333333',
     marginBottom: 8,
     marginTop: 12,
   },
-  errorText: {
-    fontSize: 12,
+  errorText: {,
+  fontSize: 12,
     color: '#d32f2f',
     fontFamily: 'monospace',
     lineHeight: 16,
   },
-  stackText: {
-    fontSize: 11,
+  stackText: {,
+  fontSize: 11,
     color: '#666666',
     fontFamily: 'monospace',
     lineHeight: 14,
   },
-  retryButton: {
-    backgroundColor: '#2196f3',
+  retryButton: {,
+  backgroundColor: '#2196f3',
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 24,
     alignItems: 'center',
   },
-  retryButtonText: {
-    color: '#ffffff',
+  retryButtonText: {,
+  color: '#ffffff',
     fontSize: 16,
     fontWeight: '600',
   },
@@ -214,7 +219,7 @@ export function withErrorBoundary<P extends object>(
   );
 
   WrappedComponent.displayName = `withErrorBoundary(${Component.displayName || Component.name})`;
-  
+
   return WrappedComponent;
 }
 
@@ -222,15 +227,15 @@ export function withErrorBoundary<P extends object>(
 export function useErrorHandler() {
   const [error, setError] = React.useState<Error | null>(null);
 
-  const resetError = React.useCallback(() => {
+  const resetError = React.useCallback() => {
     setError(null);
   }, []);
 
-  const captureError = React.useCallback((error: Error) => {
+  const captureError = React.useCallback(error: Error) => {
     setError(error);
   }, []);
 
-  React.useEffect(() => {
+  React.useEffect() => {
     if (error) {
       throw error;
     }

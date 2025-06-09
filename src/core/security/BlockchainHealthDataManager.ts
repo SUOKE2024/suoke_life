@@ -313,7 +313,7 @@ const storageValid = await this.verifyStorageConsistency(dataHash);
     );
     const results = await Promise.allSettled(storagePromises);
     const successfulNodes = results;
-      .map((result, index) => ({ result, node: nodes[index] }))
+      .map(result, index) => ({ result, node: nodes[index] }))
       .filter({ result }) => result.status === "fulfilled);"
       .map({ node }) => node.getId());
     if (successfulNodes.length < 2) {
@@ -504,9 +504,9 @@ return [];
 }
 // 相关接口和类型定义
 export interface DataPermissions {
-  read: boolean;
+  read: boolean;,
   write: boolean;
-  share: boolean;
+  share: boolean;,
   delete: boolean;
   audit: boolean;
   timeLimit?: number;
@@ -518,25 +518,25 @@ export interface SharingPermissions extends DataPermissions {allowSubsharing: bo
   requiredConsent: boolean;
 }
 export interface RequesterCredentials {
-  requesterId: string;
+  requesterId: string;,
   publicKey: string;
-  signature: string;
+  signature: string;,
   decryptionKey: string;
-  purpose: string;
+  purpose: string;,
   timestamp: Date;
 }
 export interface DataStorageResult {
-  success: boolean;
+  success: boolean;,
   dataHash: string;
-  blockHeight: number;
+  blockHeight: number;,
   storageNodes: string[];
-  zkProofHash: string;
+  zkProofHash: string;,
   timestamp: Date;
 }
 export interface DataSharingResult {
-  success: boolean;
+  success: boolean;,
   sharingId: string;
-  contractAddress: string;
+  contractAddress: string;,
   sharingKey: string;
   expiresAt?: Date;
   timestamp: Date;
@@ -549,90 +549,90 @@ export interface IntegrityVerificationResult {
   confirmations?: number;
 }
 export interface DataAccessRecord {
-  id: string;
+  id: string;,
   userId: string;
-  dataHash: string;
+  dataHash: string;,
   accessorId: string;
-  operation: string;
+  operation: string;,
   timestamp: Date;
-  ipAddress: string;
+  ipAddress: string;,
   userAgent: string;
   dataType?: string;
   success: boolean;
   reason?: string;
 }
 export interface TimeRange {
-  startTime: Date;
+  startTime: Date;,
   endTime: Date;
 }
 export interface DataUsageReport {
-  userId: string;
+  userId: string;,
   timeRange: TimeRange;
-  totalAccesses: number;
+  totalAccesses: number;,
   uniqueAccessors: number;
   dataTypesAccessed: Record<string, number>;
-  accessPatterns: AccessPattern[];
+  accessPatterns: AccessPattern[];,
   securityEvents: SecurityEvent[];
   generatedAt: Date;
 }
 export interface AccessPattern {
-  pattern: string;
+  pattern: string;,
   frequency: number;
   timeDistribution: Record<string, number>;
   riskLevel: low" | "medium | "high";
 }
 export interface SecurityEvent {
-  id: string;
+  id: string;,
   type: string;
-  severity: low" | "medium | "high" | critical;
+  severity: low" | "medium | "high" | critical;,
   description: string;
-  timestamp: Date;
+  timestamp: Date;,
   userId: string;
   dataHash?: string;
   resolved: boolean;
 }
 export interface BlockchainStatus {
-  isInitialized: boolean;
+  isInitialized: boolean;,
   blockHeight: number;
-  nodeCount: number;
+  nodeCount: number;,
   contractCount: number;
-  consensusStatus: string;
+  consensusStatus: string;,
   lastBlockTime: Date;
 }
 export interface SystemStats {
-  totalDataBlocks: number;
+  totalDataBlocks: number;,
   totalUsers: number;
-  totalSharedData: number;
+  totalSharedData: number;,
   averageBlockTime: number;
-  networkHashRate: number;
+  networkHashRate: number;,
   storageUtilization: number;
 }
 export interface DataBlock {
-  hash: string;
+  hash: string;,
   userId: string;
-  data: EncryptedData;
+  data: EncryptedData;,
   zkProof: ZKProof;
-  timestamp: Date;
+  timestamp: Date;,
   blockHeight: number;
-  previousHash: string;
+  previousHash: string;,
   nonce: number;
 }
 export interface EncryptedData {
-  ciphertext: string;
+  ciphertext: string;,
   iv: string;
-  authTag: string;
+  authTag: string;,
   algorithm: string;
   keyId: string;
 }
 export interface ZKProof {
-  hash: string;
+  hash: string;,
   proof: string;
-  publicInputs: string[];
+  publicInputs: string[];,
   verificationKey: string;
   circuit: string;
 }
 export interface DistributionResult {
-  success: boolean;
+  success: boolean;,
   nodes: string[];
   replicationFactor: number;
 }
@@ -870,11 +870,11 @@ class SharingContract {
   public duration?: number;
   public createdAt: Date;
   private terminated: boolean = false;
-  constructor(params: {,)
+  constructor(params: {),
   id: string;
     ownerId: string,
-  recipientId: string;
-    dataHash: string,
+  recipientId: string;,
+  dataHash: string,
   permissions: SharingPermissions;
     duration?: number;
     createdAt: Date;

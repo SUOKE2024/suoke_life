@@ -1,38 +1,44 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import {
-    Alert,
-    Animated,
-    Dimensions,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+  Alert,
+  Animated,
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Button } from '../../components/ui/Button';
 import { ProgressBar } from '../../components/ui/ProgressBar';
-import { borderRadius, colors, shadows, spacing, typography } from '../../constants/theme';
+import {
+  borderRadius,
+  colors,
+  shadows,
+  spacing,
+  typography,
+} from '../../constants/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
 
 interface DiagnosisStep {
-  id: string;
+  id: string;,
   title: string;
-  description: string;
+  description: string;,
   icon: string;
-  color: string;
+  color: string;,
   completed: boolean;
   active: boolean;
   data?: any;
 }
 
 interface DiagnosisResult {
-  syndrome: string;
+  syndrome: string;,
   confidence: number;
-  symptoms: string[];
+  symptoms: string[];,
   recommendations: string[];
   prescription?: string;
 }
@@ -40,12 +46,13 @@ interface DiagnosisResult {
 const EnhancedDiagnosisScreen: React.FC = () => {
   const navigation = useNavigation();
   const scrollViewRef = useRef<ScrollView>(null);
-  
+
   const [currentStep, setCurrentStep] = useState(0);
   const [progress, setProgress] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [diagnosisResult, setDiagnosisResult] = useState<DiagnosisResult | null>(null);
-  
+  const [diagnosisResult, setDiagnosisResult] =
+    useState<DiagnosisResult | null>(null);
+
   // 动画值
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(50)).current;
@@ -92,7 +99,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
   ]);
 
   // 初始化动画
-  useEffect(() => {
+  useEffect() => {
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -112,8 +119,8 @@ const EnhancedDiagnosisScreen: React.FC = () => {
   }, []);
 
   // 更新进度
-  useEffect(() => {
-    const completedSteps = steps.filter(step => step.completed).length;
+  useEffect() => {
+    const completedSteps = steps.filter(step) => step.completed).length;
     const newProgress = (completedSteps / steps.length) * 100;
     setProgress(newProgress);
   }, [steps]);
@@ -122,16 +129,23 @@ const EnhancedDiagnosisScreen: React.FC = () => {
   const nextStep = () => {
     if (currentStep < steps.length - 1) {
       // 标记当前步骤为完成
-      setSteps(prev => prev.map((step, index) => ({
-        ...step,
-        completed: index === currentStep ? true : step.completed,
-        active: index === currentStep + 1 ? true : (index === currentStep ? false : step.active),
-      })));
-      
-      setCurrentStep(prev => prev + 1);
-      
+      setSteps(prev) =>
+        prev.map(step, index) => ({
+          ...step,
+          completed: index === currentStep ? true : step.completed,
+          active:
+            index === currentStep + 1;
+              ? true;
+              : index === currentStep;
+                ? false;
+                : step.active,
+        }))
+      );
+
+      setCurrentStep(prev) => prev + 1);
+
       // 滚动到下一步
-      setTimeout(() => {
+      setTimeout() => {
         scrollViewRef.current?.scrollTo({
           y: (currentStep + 1) * 200,
           animated: true,
@@ -139,12 +153,14 @@ const EnhancedDiagnosisScreen: React.FC = () => {
       }, 300);
     } else {
       // 完成所有步骤，开始分析
-      setSteps(prev => prev.map((step, index) => ({
-        ...step,
-        completed: index === currentStep ? true : step.completed,
-        active: false,
-      })));
-      
+      setSteps(prev) =>
+        prev.map(step, index) => ({
+          ...step,
+          completed: index === currentStep ? true : step.completed,
+          active: false,
+        }))
+      );
+
       startDiagnosisAnalysis();
     }
   };
@@ -152,13 +168,13 @@ const EnhancedDiagnosisScreen: React.FC = () => {
   // 开始诊断分析
   const startDiagnosisAnalysis = async () => {
     setIsProcessing(true);
-    
+
     // 模拟AI分析过程
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    
+    await new Promise(resolve) => setTimeout(resolve, 3000));
+
     // 模拟诊断结果
-    const result: DiagnosisResult = {
-      syndrome: '脾胃虚弱证',
+    const result: DiagnosisResult = {,
+  syndrome: '脾胃虚弱证',
       confidence: 85,
       symptoms: ['食欲不振', '腹胀', '乏力', '大便溏薄'],
       recommendations: [
@@ -169,7 +185,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
       ],
       prescription: '四君子汤加减',
     };
-    
+
     setDiagnosisResult(result);
     setIsProcessing(false);
   };
@@ -180,11 +196,13 @@ const EnhancedDiagnosisScreen: React.FC = () => {
     setProgress(0);
     setIsProcessing(false);
     setDiagnosisResult(null);
-    setSteps(prev => prev.map((step, index) => ({
-      ...step,
-      completed: false,
-      active: index === 0,
-    })));
+    setSteps(prev) =>
+      prev.map(step, index) => ({
+        ...step,
+        completed: false,
+        active: index === 0,
+      }))
+    );
   };
 
   // 渲染步骤卡片
@@ -194,7 +212,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
     const isCurrent = index === currentStep;
 
     return (
-      <Animated.View
+      <Animated.View;
         key={step.id}
         style={[
           styles.stepCard,
@@ -210,21 +228,23 @@ const EnhancedDiagnosisScreen: React.FC = () => {
         ]}
       >
         <View style={styles.stepHeader}>
-          <View
+          <View;
             style={[
               styles.stepIcon,
               { backgroundColor: step.color },
               isCompleted && styles.completedStepIcon,
             ]}
           >
-            <Icon
+            <Icon;
               name={isCompleted ? 'check' : step.icon}
               size={24}
               color={colors.white}
             />
           </View>
           <View style={styles.stepInfo}>
-            <Text style={[styles.stepTitle, isActive && styles.activeStepTitle]}>
+            <Text;
+              style={[styles.stepTitle, isActive && styles.activeStepTitle]}
+            >
               {step.title}
             </Text>
             <Text style={styles.stepDescription}>{step.description}</Text>
@@ -240,9 +260,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
         </View>
 
         {isCurrent && !isCompleted && (
-          <View style={styles.stepContent}>
-            {renderStepContent(step)}
-          </View>
+          <View style={styles.stepContent}>{renderStepContent(step)}</View>
         )}
       </Animated.View>
     );
@@ -265,7 +283,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
                 <Text style={styles.uploadText}>拍摄舌象照片</Text>
               </TouchableOpacity>
             </View>
-            <Button
+            <Button;
               title="完成望诊"
               onPress={nextStep}
               style={styles.nextButton}
@@ -286,7 +304,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
             <Text style={styles.instructionText}>
               请说话30秒，内容可以是朗读、日常对话等
             </Text>
-            <Button
+            <Button;
               title="完成闻诊"
               onPress={nextStep}
               style={styles.nextButton}
@@ -301,14 +319,18 @@ const EnhancedDiagnosisScreen: React.FC = () => {
             <View style={styles.questionContainer}>
               <Text style={styles.questionText}>请选择您目前的症状：</Text>
               <View style={styles.symptomsGrid}>
-                {['头痛', '失眠', '食欲不振', '腹胀', '乏力', '心悸'].map((symptom) => (
-                  <TouchableOpacity key={symptom} style={styles.symptomButton}>
-                    <Text style={styles.symptomText}>{symptom}</Text>
-                  </TouchableOpacity>
-                ))}
+                {['头痛', '失眠', '食欲不振', '腹胀', '乏力', '心悸'].map(symptom) => (
+                    <TouchableOpacity;
+                      key={symptom}
+                      style={styles.symptomButton}
+                    >
+                      <Text style={styles.symptomText}>{symptom}</Text>
+                    </TouchableOpacity>
+                  )
+                )}
               </View>
             </View>
-            <Button
+            <Button;
               title="完成问诊"
               onPress={nextStep}
               style={styles.nextButton}
@@ -329,7 +351,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
                 <Text style={styles.pulseText}>检测中...</Text>
               </View>
             </View>
-            <Button
+            <Button;
               title="完成切诊"
               onPress={nextStep}
               style={styles.nextButton}
@@ -358,13 +380,15 @@ const EnhancedDiagnosisScreen: React.FC = () => {
           <Text style={styles.syndromeName}>{diagnosisResult.syndrome}</Text>
           <View style={styles.confidenceContainer}>
             <Text style={styles.confidenceLabel}>可信度：</Text>
-            <Text style={styles.confidenceValue}>{diagnosisResult.confidence}%</Text>
+            <Text style={styles.confidenceValue}>
+              {diagnosisResult.confidence}%
+            </Text>
           </View>
         </View>
 
         <View style={styles.symptomsCard}>
           <Text style={styles.cardTitle}>主要症状</Text>
-          {diagnosisResult.symptoms.map((symptom, index) => (
+          {diagnosisResult.symptoms.map(symptom, index) => (
             <View key={index} style={styles.symptomItem}>
               <Icon name="circle-small" size={16} color={colors.primary} />
               <Text style={styles.symptomItemText}>{symptom}</Text>
@@ -374,7 +398,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
 
         <View style={styles.recommendationsCard}>
           <Text style={styles.cardTitle}>调理建议</Text>
-          {diagnosisResult.recommendations.map((recommendation, index) => (
+          {diagnosisResult.recommendations.map(recommendation, index) => (
             <View key={index} style={styles.recommendationItem}>
               <Text style={styles.recommendationNumber}>{index + 1}</Text>
               <Text style={styles.recommendationText}>{recommendation}</Text>
@@ -385,17 +409,19 @@ const EnhancedDiagnosisScreen: React.FC = () => {
         {diagnosisResult.prescription && (
           <View style={styles.prescriptionCard}>
             <Text style={styles.cardTitle}>推荐方剂</Text>
-            <Text style={styles.prescriptionText}>{diagnosisResult.prescription}</Text>
+            <Text style={styles.prescriptionText}>
+              {diagnosisResult.prescription}
+            </Text>
           </View>
         )}
 
         <View style={styles.actionButtons}>
-          <Button
+          <Button;
             title="保存报告"
             onPress={() => Alert.alert('保存成功', '诊断报告已保存到健康档案')}
             style={styles.actionButton}
           />
-          <Button
+          <Button;
             title="重新诊断"
             onPress={restart}
             variant="outline"
@@ -409,16 +435,18 @@ const EnhancedDiagnosisScreen: React.FC = () => {
   // 渲染处理中状态
   const renderProcessing = () => (
     <View style={styles.processingContainer}>
-      <Animated.View
+      <Animated.View;
         style={[
           styles.processingIcon,
           {
-            transform: [{
-              rotate: fadeAnim.interpolate({
-                inputRange: [0, 1],
-                outputRange: ['0deg', '360deg'],
-              }),
-            }],
+            transform: [
+              {
+                rotate: fadeAnim.interpolate({,
+  inputRange: [0, 1],
+                  outputRange: ['0deg', '360deg'],
+                }),
+              },
+            ],
           },
         ]}
       >
@@ -436,7 +464,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
     <SafeAreaView style={styles.container}>
       {/* 头部 */}
       <View style={styles.header}>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
@@ -451,13 +479,11 @@ const EnhancedDiagnosisScreen: React.FC = () => {
       {/* 进度条 */}
       <View style={styles.progressContainer}>
         <ProgressBar progress={progress} style={styles.progressBar} />
-        <Text style={styles.progressText}>
-          {Math.round(progress)}% 完成
-        </Text>
+        <Text style={styles.progressText}>{Math.round(progress)}% 完成</Text>
       </View>
 
       {/* 内容区域 */}
-      <ScrollView
+      <ScrollView;
         ref={scrollViewRef}
         style={styles.content}
         showsVerticalScrollIndicator={false}
@@ -467,9 +493,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
         ) : diagnosisResult ? (
           renderDiagnosisResult()
         ) : (
-          <View style={styles.stepsContainer}>
-            {steps.map(renderStepCard)}
-          </View>
+          <View style={styles.stepsContainer}>{steps.map(renderStepCard)}</View>
         )}
       </ScrollView>
     </SafeAreaView>
@@ -477,12 +501,12 @@ const EnhancedDiagnosisScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  container: {,
+  flex: 1,
     backgroundColor: colors.background,
   },
-  header: {
-    flexDirection: 'row',
+  header: {,
+  flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: spacing.lg,
@@ -491,48 +515,48 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
   },
-  backButton: {
-    width: 40,
+  backButton: {,
+  width: 40,
     height: 40,
     borderRadius: 20,
     backgroundColor: colors.gray100,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  headerTitle: {
-    fontSize: typography.fontSize.lg,
+  headerTitle: {,
+  fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
     color: colors.text,
   },
-  helpButton: {
-    width: 40,
+  helpButton: {,
+  width: 40,
     height: 40,
     borderRadius: 20,
     backgroundColor: colors.gray100,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  progressContainer: {
-    paddingHorizontal: spacing.lg,
+  progressContainer: {,
+  paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
     backgroundColor: colors.surface,
   },
-  progressBar: {
-    marginBottom: spacing.xs,
+  progressBar: {,
+  marginBottom: spacing.xs,
   },
-  progressText: {
-    fontSize: typography.fontSize.sm,
+  progressText: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
     textAlign: 'center',
   },
-  content: {
-    flex: 1,
+  content: {,
+  flex: 1,
   },
-  stepsContainer: {
-    padding: spacing.lg,
+  stepsContainer: {,
+  padding: spacing.lg,
   },
-  stepCard: {
-    backgroundColor: colors.surface,
+  stepCard: {,
+  backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginBottom: spacing.lg,
@@ -540,81 +564,81 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     ...shadows.sm,
   },
-  activeStepCard: {
-    borderColor: colors.primary,
+  activeStepCard: {,
+  borderColor: colors.primary,
     ...shadows.md,
   },
-  completedStepCard: {
-    backgroundColor: colors.success + '10',
+  completedStepCard: {,
+  backgroundColor: colors.success + '10',
     borderColor: colors.success,
   },
-  stepHeader: {
-    flexDirection: 'row',
+  stepHeader: {,
+  flexDirection: 'row',
     alignItems: 'center',
   },
-  stepIcon: {
-    width: 48,
+  stepIcon: {,
+  width: 48,
     height: 48,
     borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  completedStepIcon: {
-    backgroundColor: colors.success,
+  completedStepIcon: {,
+  backgroundColor: colors.success,
   },
-  stepInfo: {
-    flex: 1,
+  stepInfo: {,
+  flex: 1,
     marginLeft: spacing.md,
   },
-  stepTitle: {
-    fontSize: typography.fontSize.lg,
+  stepTitle: {,
+  fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
     color: colors.text,
   },
-  activeStepTitle: {
-    color: colors.primary,
+  activeStepTitle: {,
+  color: colors.primary,
   },
-  stepDescription: {
-    fontSize: typography.fontSize.sm,
+  stepDescription: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
     marginTop: 2,
   },
-  stepStatus: {
-    width: 24,
+  stepStatus: {,
+  width: 24,
     height: 24,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  activeIndicator: {
-    width: 12,
+  activeIndicator: {,
+  width: 12,
     height: 12,
     borderRadius: 6,
     backgroundColor: colors.primary,
   },
-  stepContent: {
-    marginTop: spacing.lg,
+  stepContent: {,
+  marginTop: spacing.lg,
     paddingTop: spacing.lg,
     borderTopWidth: 1,
     borderTopColor: colors.border,
   },
-  contentContainer: {
-    alignItems: 'center',
+  contentContainer: {,
+  alignItems: 'center',
   },
-  contentTitle: {
-    fontSize: typography.fontSize.base,
+  contentTitle: {,
+  fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
     color: colors.text,
     marginBottom: spacing.lg,
     textAlign: 'center',
   },
-  uploadContainer: {
-    flexDirection: 'row',
+  uploadContainer: {,
+  flexDirection: 'row',
     justifyContent: 'space-around',
     width: '100%',
     marginBottom: spacing.lg,
   },
-  uploadButton: {
-    alignItems: 'center',
+  uploadButton: {,
+  alignItems: 'center',
     padding: spacing.lg,
     borderWidth: 2,
     borderColor: colors.primary,
@@ -622,18 +646,18 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.md,
     width: '45%',
   },
-  uploadText: {
-    fontSize: typography.fontSize.sm,
+  uploadText: {,
+  fontSize: typography.fontSize.sm,
     color: colors.primary,
     marginTop: spacing.sm,
     textAlign: 'center',
   },
-  recordContainer: {
-    alignItems: 'center',
+  recordContainer: {,
+  alignItems: 'center',
     marginBottom: spacing.lg,
   },
-  recordButton: {
-    width: 120,
+  recordButton: {,
+  width: 120,
     height: 120,
     borderRadius: 60,
     backgroundColor: colors.secondary + '20',
@@ -642,168 +666,168 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: colors.secondary,
   },
-  recordText: {
-    fontSize: typography.fontSize.sm,
+  recordText: {,
+  fontSize: typography.fontSize.sm,
     color: colors.secondary,
     marginTop: spacing.sm,
   },
-  instructionText: {
-    fontSize: typography.fontSize.sm,
+  instructionText: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
     textAlign: 'center',
     marginBottom: spacing.lg,
     lineHeight: 20,
   },
-  questionContainer: {
-    width: '100%',
+  questionContainer: {,
+  width: '100%',
     marginBottom: spacing.lg,
   },
-  questionText: {
-    fontSize: typography.fontSize.base,
+  questionText: {,
+  fontSize: typography.fontSize.base,
     color: colors.text,
     marginBottom: spacing.md,
   },
-  symptomsGrid: {
-    flexDirection: 'row',
+  symptomsGrid: {,
+  flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
   },
-  symptomButton: {
-    width: '48%',
+  symptomButton: {,
+  width: '48%',
     padding: spacing.md,
     backgroundColor: colors.gray100,
     borderRadius: borderRadius.md,
     marginBottom: spacing.sm,
     alignItems: 'center',
   },
-  symptomText: {
-    fontSize: typography.fontSize.sm,
+  symptomText: {,
+  fontSize: typography.fontSize.sm,
     color: colors.text,
   },
-  pulseContainer: {
-    alignItems: 'center',
+  pulseContainer: {,
+  alignItems: 'center',
     marginBottom: spacing.lg,
   },
-  pulseIndicator: {
-    alignItems: 'center',
+  pulseIndicator: {,
+  alignItems: 'center',
     marginTop: spacing.lg,
   },
-  pulseText: {
-    fontSize: typography.fontSize.base,
+  pulseText: {,
+  fontSize: typography.fontSize.base,
     color: colors.info,
     marginTop: spacing.sm,
   },
-  nextButton: {
-    width: '100%',
+  nextButton: {,
+  width: '100%',
   },
-  processingContainer: {
-    flex: 1,
+  processingContainer: {,
+  flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: spacing.xl,
   },
-  processingIcon: {
-    marginBottom: spacing.lg,
+  processingIcon: {,
+  marginBottom: spacing.lg,
   },
-  processingTitle: {
-    fontSize: typography.fontSize.xl,
+  processingTitle: {,
+  fontSize: typography.fontSize.xl,
     fontWeight: '600' as const,
     color: colors.text,
     marginBottom: spacing.sm,
   },
-  processingText: {
-    fontSize: typography.fontSize.base,
+  processingText: {,
+  fontSize: typography.fontSize.base,
     color: colors.textSecondary,
     textAlign: 'center',
     marginBottom: spacing.xl,
     lineHeight: 22,
   },
-  processingProgress: {
-    width: '80%',
+  processingProgress: {,
+  width: '80%',
   },
-  resultContainer: {
-    padding: spacing.lg,
+  resultContainer: {,
+  padding: spacing.lg,
   },
-  resultHeader: {
-    flexDirection: 'row',
+  resultHeader: {,
+  flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: spacing.xl,
   },
-  resultTitle: {
-    fontSize: typography.fontSize.xl,
+  resultTitle: {,
+  fontSize: typography.fontSize.xl,
     fontWeight: '600' as const,
     color: colors.text,
     marginLeft: spacing.sm,
   },
-  syndromeCard: {
-    backgroundColor: colors.primary + '10',
+  syndromeCard: {,
+  backgroundColor: colors.primary + '10',
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginBottom: spacing.lg,
     borderWidth: 1,
     borderColor: colors.primary,
   },
-  syndromeTitle: {
-    fontSize: typography.fontSize.sm,
+  syndromeTitle: {,
+  fontSize: typography.fontSize.sm,
     color: colors.primary,
     marginBottom: spacing.xs,
   },
-  syndromeName: {
-    fontSize: typography.fontSize.xl,
+  syndromeName: {,
+  fontSize: typography.fontSize.xl,
     fontWeight: '700' as const,
     color: colors.primary,
     marginBottom: spacing.sm,
   },
-  confidenceContainer: {
-    flexDirection: 'row',
+  confidenceContainer: {,
+  flexDirection: 'row',
     alignItems: 'center',
   },
-  confidenceLabel: {
-    fontSize: typography.fontSize.sm,
+  confidenceLabel: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
   },
-  confidenceValue: {
-    fontSize: typography.fontSize.sm,
+  confidenceValue: {,
+  fontSize: typography.fontSize.sm,
     fontWeight: '600' as const,
     color: colors.primary,
   },
-  symptomsCard: {
-    backgroundColor: colors.surface,
+  symptomsCard: {,
+  backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginBottom: spacing.lg,
     ...shadows.sm,
   },
-  cardTitle: {
-    fontSize: typography.fontSize.base,
+  cardTitle: {,
+  fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
     color: colors.text,
     marginBottom: spacing.md,
   },
-  symptomItem: {
-    flexDirection: 'row',
+  symptomItem: {,
+  flexDirection: 'row',
     alignItems: 'center',
     marginBottom: spacing.xs,
   },
-  symptomItemText: {
-    fontSize: typography.fontSize.sm,
+  symptomItemText: {,
+  fontSize: typography.fontSize.sm,
     color: colors.text,
     marginLeft: spacing.xs,
   },
-  recommendationsCard: {
-    backgroundColor: colors.surface,
+  recommendationsCard: {,
+  backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginBottom: spacing.lg,
     ...shadows.sm,
   },
-  recommendationItem: {
-    flexDirection: 'row',
+  recommendationItem: {,
+  flexDirection: 'row',
     marginBottom: spacing.sm,
   },
-  recommendationNumber: {
-    width: 20,
+  recommendationNumber: {,
+  width: 20,
     height: 20,
     borderRadius: 10,
     backgroundColor: colors.primary,
@@ -813,33 +837,33 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     marginRight: spacing.sm,
   },
-  recommendationText: {
-    flex: 1,
+  recommendationText: {,
+  flex: 1,
     fontSize: typography.fontSize.sm,
     color: colors.text,
     lineHeight: 20,
   },
-  prescriptionCard: {
-    backgroundColor: colors.warning + '10',
+  prescriptionCard: {,
+  backgroundColor: colors.warning + '10',
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginBottom: spacing.lg,
     borderWidth: 1,
     borderColor: colors.warning,
   },
-  prescriptionText: {
-    fontSize: typography.fontSize.base,
+  prescriptionText: {,
+  fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
     color: colors.warning,
   },
-  actionButtons: {
-    flexDirection: 'row',
+  actionButtons: {,
+  flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: spacing.lg,
   },
-  actionButton: {
-    width: '48%',
+  actionButton: {,
+  width: '48%',
   },
 });
 
-export default EnhancedDiagnosisScreen; 
+export default EnhancedDiagnosisScreen;

@@ -14,15 +14,15 @@ import {/**
 * 迷宫上下文信息
 */
 export interface MazeContext {
-  currentPosition: Position;
+  currentPosition: Position;,
   visitedNodes: Position[];
-  mazeTheme: MazeTheme;
+  mazeTheme: MazeTheme;,
   difficulty: MazeDifficulty;
-  score: number;
+  score: number;,
   stepsCount: number;
-  timeSpent: number;
+  timeSpent: number;,
   completedChallenges: string[];
-  acquiredKnowledge: string[];
+  acquiredKnowledge: string[];,
   playerLevel: 'beginner' | 'intermediate' | 'advanced';
 }
 /**

@@ -13,9 +13,7 @@ describe('TCMKnowledgeBase', () => {
       caching: {
         enabled: true,
         ttl: 3600,
-        maxSize: 1000,
-      },
-    };
+        maxSize: 1000}};
     const result = new TCMKnowledgeBase(config);
     expect(result).toBeDefined();
   });
@@ -28,9 +26,7 @@ describe('TCMKnowledgeBase', () => {
       caching: {
         enabled: false,
         ttl: 0,
-        maxSize: 0,
-      },
-    };
+        maxSize: 0}};
     const result = new TCMKnowledgeBase(config);
     expect(result).toBeDefined();
   });
@@ -44,9 +40,7 @@ describe('TCMKnowledgeBase', () => {
         caching: {
           enabled: true,
           ttl: 3600,
-          maxSize: 1000,
-        },
-      };
+          maxSize: 1000}};
       new TCMKnowledgeBase(config);
     }).not.toThrow();
   });
@@ -59,9 +53,7 @@ describe('TCMKnowledgeBase', () => {
       caching: {
         enabled: true,
         ttl: 3600,
-        maxSize: 1000,
-      },
-    };
+        maxSize: 1000}};
     const result = new TCMKnowledgeBase(config);
     expect(result).toBeDefined();
   });
@@ -74,9 +66,7 @@ describe('TCMKnowledgeBase', () => {
       caching: {
         enabled: true,
         ttl: 3600,
-        maxSize: 1000,
-      },
-    };
+        maxSize: 1000}};
     const result = new TCMKnowledgeBase(config);
     const end = performance.now();
     expect(result).toBeDefined();
@@ -96,9 +86,7 @@ describe('TCMKnowledgeBase Performance Tests', () => {
         caching: {
           enabled: true,
           ttl: 3600,
-          maxSize: 1000,
-        },
-      };
+          maxSize: 1000}};
       new TCMKnowledgeBase(config);
     }
     const endTime = performance.now();
@@ -117,9 +105,7 @@ describe('TCMKnowledgeBase Performance Tests', () => {
       caching: {
         enabled: true,
         ttl: 3600,
-        maxSize: 1000,
-      },
-    };
+        maxSize: 1000}};
     new TCMKnowledgeBase(config);
     const endTime = performance.now();
     // Should handle large datasets within 1000ms
@@ -136,9 +122,7 @@ describe('TCMKnowledgeBase Performance Tests', () => {
         caching: {
           enabled: true,
           ttl: 3600,
-          maxSize: 1000,
-        },
-      };
+          maxSize: 1000}};
       new TCMKnowledgeBase(config);
     }
     // Force garbage collection if available

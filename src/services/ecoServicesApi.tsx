@@ -4,17 +4,17 @@ import React from "react";
 importAsyncStorage from "@react-native-async-storage/async-storage";/    importCryptoJS from "crypto-js";
 数据类型定义 * export interface FarmProduct {
   id: string,
-  name: string;
+  name: string;,
   category: string;
-  origin: string;
+  origin: string;,
   healthBenefits: string[];
-  season: string;
+  season: string;,
   price: number;
-  unit: string;
+  unit: string;,
   image: string;
-  organic: boolean;
+  organic: boolean;,
   stock: number;
-  rating: number;
+  rating: number;,
   reviews: number;
   blockchain: {verified: boolean,traceability: BlockchainTrace[],certifications: string[];
 };
@@ -30,26 +30,26 @@ importAsyncStorage from "@react-native-async-storage/async-storage";/    importC
     }
 }
 export interface BlockchainTrace {
-  timestamp: string;
+  timestamp: string;,
   location: string;
-  action: string;
+  action: string;,
   verifier: string;
   hash: string;
 }
 export interface WellnessDestination {
-  id: string;
+  id: string;,
   name: string;
-  location: string;
+  location: string;,
   type: "mountain" | "water" | "forest" | "hot_spring" | "temple" | "village";
-  description: string;
+  description: string;,
   healthFeatures: string[];
-  activities: string[];
+  activities: string[];,
   rating: number;
-  price: number;
+  price: number;,
   image: string;
-  tcmBenefits: string[];
-  availability: {available: boolean;
-    nextAvailable: string,capacity: number,booked: number;
+  tcmBenefits: string[];,
+  availability: {available: boolean;,
+  nextAvailable: string,capacity: number,booked: number;
 };
   weatherSuitability: { currentScore: number,
     forecast: string,
@@ -60,12 +60,12 @@ export interface WellnessDestination {
     };
 }
 export interface NutritionPlan {
-  id: string;
+  id: string;,
   name: string;
-  constitution: string,season: string,meals: {break;
+  constitution: string,season: string,meals: {break;,
   fast: string[];
-    lunch: string[];
-    dinner: string[];
+    lunch: string[];,
+  dinner: string[];
     snacks: string[];
 };
   ingredients: FarmProduct[],
@@ -77,13 +77,13 @@ export interface NutritionPlan {
     fiber: number};
   aiOptimized: boolean}
 export interface UserPreferences {
-  constitution: string;
+  constitution: string;,
   allergies: string[];
-  dietaryRestrictions: string[];
+  dietaryRestrictions: string[];,
   healthGoals: string[];
-  location: string;
-  budget: {min: number;
-    max: number;
+  location: string;,
+  budget: {min: number;,
+  max: number;
 }
 };
 //   ;
@@ -370,8 +370,7 @@ const performanceMonitor = usePerformanceMonitor(ecoServicesApi", {")
           reason: "根据您的气虚体质，枸杞能有效补气养血",
           personalizedBenefits: ["改善疲劳", "增强免疫", "护眼明目"]
         }
-      },
-      ]
+      }]
   }
   private async getMockWellnessDestinations(filters?: unknown;)
   ): Promise<WellnessDestination[] /    >  {
@@ -403,8 +402,7 @@ const performanceMonitor = usePerformanceMonitor(ecoServicesApi", {")
           factors: ["适合气虚质", "海拔适宜", "空气质量优"],
           recommendations: ["建议停留3-5天", "参与太极和禅修", "尝试药膳调理"]
         }
-      },
-      ]
+      }]
   }
   private async getMockNutritionPlans(userPreferences: UserPreferences;): Promise<NutritionPlan[] /    >  {
     return [;
@@ -423,8 +421,7 @@ const performanceMonitor = usePerformanceMonitor(ecoServicesApi", {")
           carbs: 245,
           fat: 65,
           fiber: 35},
-        aiOptimized: true},
-      ];
+        aiOptimized: true}];
   }
 }
 //   ;

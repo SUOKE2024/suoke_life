@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-    StyleSheet,
-    Text,
-    TextStyle,
-    View,
-    ViewStyle,
-} from 'react-native';
+import { StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
 export interface BadgeProps {
@@ -14,7 +8,14 @@ export interface BadgeProps {
   maxCount?: number;
   showZero?: boolean;
   dot?: boolean;
-  variant?: 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info';
+  variant?:
+    | 'default'
+    | 'primary'
+    | 'secondary'
+    | 'success'
+    | 'warning'
+    | 'error'
+    | 'info';
   size?: 'small' | 'medium' | 'large';
   position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
   offset?: [number, number]; // [x, y]
@@ -105,8 +106,8 @@ export const Badge: React.FC<BadgeProps> = ({
           color: '#ffffff',
         };
       default:
-        return {
-          backgroundColor: currentTheme.colors.outline,
+        return {,
+  backgroundColor: currentTheme.colors.outline,
           color: currentTheme.colors.onSurface,
         };
     }
@@ -131,7 +132,7 @@ export const Badge: React.FC<BadgeProps> = ({
           fontSize: 14,
           paddingHorizontal: dot ? 0 : 8,
         };
-      default: // medium
+      default: // medium;
         return {
           minWidth: dot ? 8 : 20,
           height: dot ? 8 : 20,
@@ -145,7 +146,7 @@ export const Badge: React.FC<BadgeProps> = ({
   // 获取位置样式
   const getPositionStyle = () => {
     const [offsetX, offsetY] = offset;
-    
+
     switch (position) {
       case 'top-left':
         return {
@@ -168,7 +169,7 @@ export const Badge: React.FC<BadgeProps> = ({
           left: offsetX,
           zIndex: 1,
         };
-      default: // top-right
+      default: // top-right;
         return {
           position: 'absolute' as const,
           top: offsetY,
@@ -183,8 +184,8 @@ export const Badge: React.FC<BadgeProps> = ({
   const positionStyle = getPositionStyle();
 
   const styles = StyleSheet.create({
-    container: {
-      position: 'relative',
+    container: {,
+  position: 'relative',
     },
     badge: {
       ...positionStyle,
@@ -198,15 +199,15 @@ export const Badge: React.FC<BadgeProps> = ({
       borderWidth: 2,
       borderColor: currentTheme.colors.surface,
     },
-    badgeText: {
-      color: variantColors.color,
+    badgeText: {,
+  color: variantColors.color,
       fontSize: sizeConfig.fontSize,
       fontWeight: '600',
       textAlign: 'center',
       lineHeight: sizeConfig.fontSize + 2,
     },
-    standalone: {
-      position: 'relative',
+    standalone: {,
+  position: 'relative',
       alignSelf: 'flex-start',
     },
   });
@@ -216,7 +217,7 @@ export const Badge: React.FC<BadgeProps> = ({
     return (
       <View style={[styles.standalone, style]} testID={testID}>
         {showBadge && (
-          <View
+          <View;
             style={[
               styles.badge,
               { position: 'relative', top: 0, right: 0, left: 0, bottom: 0 },
@@ -242,7 +243,7 @@ export const Badge: React.FC<BadgeProps> = ({
     <View style={[styles.container, style]} testID={testID}>
       {children}
       {showBadge && (
-        <View
+        <View;
           style={[styles.badge, badgeStyle]}
           accessible={accessible}
           accessibilityRole="text"

@@ -3,11 +3,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { apiClient } from './apiClient';
 // 健康数据类型定义
 export interface HealthData {
-  id: string;
+  id: string;,
   userId: string;
-  type: HealthDataType;
+  type: HealthDataType;,
   value: number;
-  unit: string;
+  unit: string;,
   timestamp: Date;
   source: 'manual' | 'device' | 'sync';
   metadata?: Record<string, any>;
@@ -29,65 +29,65 @@ export type HealthDataType =
   | 'blood_sugar'
   | 'blood_oxygen';
 export interface HealthMetric {
-  id: string;
+  id: string;,
   name: string;
-  value: number;
+  value: number;,
   unit: string;
-  trend: 'up' | 'down' | 'stable';
+  trend: 'up' | 'down' | 'stable';,
   status: 'excellent' | 'good' | 'fair' | 'poor';
-  icon: string;
+  icon: string;,
   color: string;
   lastUpdated: Date;
   normalRange?: {
-    min: number;
+    min: number;,
   max: number;
 };
 }
 export interface HealthGoal {
-  id: string;
+  id: string;,
   userId: string;
-  title: string;
+  title: string;,
   description: string;
-  type: HealthDataType;
+  type: HealthDataType;,
   targetValue: number;
-  currentValue: number;
+  currentValue: number;,
   unit: string;
-  deadline: Date;
+  deadline: Date;,
   progress: number;
-  category: string;
+  category: string;,
   isActive: boolean;
-  createdAt: Date;
+  createdAt: Date;,
   updatedAt: Date;
 }
 export interface HealthSummary {
-  overallScore: number;
+  overallScore: number;,
   constitution: string;
-  recommendations: string[];
+  recommendations: string[];,
   trends: Record<string, 'up' | 'down' | 'stable'>;
-  alerts: HealthAlert[];
+  alerts: HealthAlert[];,
   lastUpdated: Date;
 }
 export interface HealthAlert {
-  id: string;
+  id: string;,
   type: 'warning' | 'info' | 'critical';
-  title: string;
+  title: string;,
   message: string;
-  timestamp: Date;
+  timestamp: Date;,
   isRead: boolean;
   actionRequired: boolean;
 }
 export interface HealthReport {
-  id: string;
+  id: string;,
   userId: string;
-  title: string;
+  title: string;,
   period: {;
-    start: Date;
+    start: Date;,
   end: Date;
 };
   summary: HealthSummary,
-  data: HealthData[];
+  data: HealthData[];,
   insights: string[],
-  recommendations: string[];
+  recommendations: string[];,
   generatedAt: Date,
   format: 'pdf' | 'json' | 'html';
 }
@@ -96,8 +96,7 @@ const STORAGE_KEYS = {
       HEALTH_DATA: "health_data",
       HEALTH_GOALS: 'health_goals',
   HEALTH_SETTINGS: 'health_settings',
-  SYNC_STATUS: 'health_sync_status',
-};
+  SYNC_STATUS: 'health_sync_status'};
 class HealthDataService {
   private cache: Map<string, any> = new Map();
   private syncInProgress = false;
@@ -153,8 +152,7 @@ class HealthDataService {
       const newData: HealthData = {
         ...data,
         id: this.generateId(),
-        timestamp: new Date(),
-      };
+        timestamp: new Date()};
       // 保存到本地存储
       await this.saveHealthDataLocally(newData);
       // 清除相关缓存
@@ -173,8 +171,7 @@ class HealthDataService {
       const newDataList: HealthData[] = dataList.map(data => ({
         ...data,
         id: this.generateId(),
-        timestamp: new Date(),
-      }));
+        timestamp: new Date()}));
       // 批量保存到本地存储
       for (const data of newDataList) {
         await this.saveHealthDataLocally(data);
@@ -200,8 +197,7 @@ class HealthDataService {
       const updatedData = {
         ...localData[index],
         ...updates,
-        updatedAt: new Date(),
-      };
+        updatedAt: new Date()};
       localData[index] = updatedData;
       await this.saveAllHealthData(localData);
       // 清除相关缓存
@@ -287,8 +283,7 @@ class HealthDataService {
         id: this.generateId(),
         progress: 0,
         createdAt: new Date(),
-        updatedAt: new Date(),
-      };
+        updatedAt: new Date()};
       const goals = await this.getHealthGoals();
       goals.push(newGoal);
       await AsyncStorage.setItem(STORAGE_KEYS.HEALTH_GOALS, JSON.stringify(goals));
@@ -309,8 +304,7 @@ class HealthDataService {
       const updatedGoal = {
         ...goals[index],
         ...updates,
-        updatedAt: new Date(),
-      };
+        updatedAt: new Date()};
       goals[index] = updatedGoal;
       await AsyncStorage.setItem(STORAGE_KEYS.HEALTH_GOALS, JSON.stringify(goals));
       return updatedGoal;
@@ -340,8 +334,7 @@ class HealthDataService {
         insights,
         recommendations,
         generatedAt: new Date(),
-        format,
-      };
+        format};
       return report;
     } catch (error) {
       console.error('Failed to generate health report:', error);
@@ -367,16 +360,14 @@ class HealthDataService {
       // 更新同步状态
       await AsyncStorage.setItem(STORAGE_KEYS.SYNC_STATUS, JSON.stringify({
         lastSync: new Date(),
-        status: 'success',
-      }));
+        status: 'success'}));
     } catch (error) {
       console.error('Failed to sync to server:', error);
       // 记录同步失败状态
       await AsyncStorage.setItem(STORAGE_KEYS.SYNC_STATUS, JSON.stringify({
         lastSync: new Date(),
         status: 'failed',
-        error: error.message,
-      }));
+        error: error.message}));
     } finally {
       this.syncInProgress = false;
     }
@@ -445,7 +436,7 @@ class HealthDataService {
       return acc;
     }, {} as Record<string, HealthData[]>);
     // 为每种类型计算指标
-    Object.entries(groupedData).forEach((([type, data]) => {
+    Object.entries(groupedData).forEach(([type, data]) => {
       const metric = this.calculateMetricForType(type as HealthDataType, data);
       if (metric) metrics.push(metric);
     });
@@ -480,8 +471,7 @@ class HealthDataService {
       icon: metricInfo.icon,
       color: metricInfo.color,
       lastUpdated: latest.timestamp,
-      normalRange: metricInfo.normalRange,
-    };
+      normalRange: metricInfo.normalRange};
   }
   private getMetricInfo(type: HealthDataType, value: number, average: number) {
     // 根据健康数据类型返回相应的显示信息和状态评估
@@ -558,8 +548,7 @@ class HealthDataService {
       recommendations: this.generateBasicRecommendations(metrics),
       trends: this.calculateTrends(healthData),
       alerts: [], // 这里应该基于数据生成警告
-      lastUpdated: new Date(),
-    };
+      lastUpdated: new Date()};
   }
   private calculateOverallScore(metrics: HealthMetric[]): number {
     if (metrics.length === 0) return 0;
@@ -567,8 +556,7 @@ class HealthDataService {
       excellent: 100,
       good: 80,
       fair: 60,
-      poor: 40,
-    };
+      poor: 40};
     const totalScore = metrics.reduce(sum, metric) => {
       return sum + statusScores[metric.status];
     }, 0);
@@ -603,7 +591,7 @@ class HealthDataService {
       acc[item.type].push(item);
       return acc;
     }, {} as Record<string, HealthData[]>);
-    Object.entries(groupedData).forEach((([type, data]) => {
+    Object.entries(groupedData).forEach(([type, data]) => {
       if (data.length >= 2) {
         const recent = data.slice(0, Math.min(3, data.length));
         const older = data.slice(Math.min(3, data.length));

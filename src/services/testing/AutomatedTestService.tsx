@@ -34,17 +34,17 @@ export interface AssertionResult {
   // 断言结果  passed: boolean;
   // 期望值  expected: unknown;
   // 实际值  actual: unknown;
-  // 错误信息  error?: string
+  // 错误信息  error?: string;
 }
 export interface TestSuite {
   // 测试套件ID  id: string;
   // 套件名称  name: string;
   // 套件描述  description: string;
   // 测试用例  testCases: TestCase[];
-  // 套件配置  config: { parallel: boolean;
-    maxConcurrency: number;
-    timeout: number;
-    retries: number;
+  // 套件配置  config: { parallel: boolean;,
+  maxConcurrency: number;
+    timeout: number;,
+  retries: number;
 }
 }
 export interface TestRun {
@@ -59,15 +59,15 @@ export interface TestRun {
   // 跳过测试数  skippedTests: number;
   // 测试结果  results: TestResult[];
   //
-  // 性能报告  performance?: PerformanceReport
+  // 性能报告  performance?: PerformanceReport;
 }
 export interface CoverageReport {
   // 总行数  totalLines: number;
   // 覆盖行数  coveredLines: number;
   // 覆盖率百分比  percentage: number;
-  // 文件覆盖率  files: Record<string
-    { lines: number;
-      covered: number;
+  // 文件覆盖率  files: Record<string;
+    { lines: number;,
+  covered: number;
       percentage: number;
 }
   >
@@ -76,8 +76,8 @@ export interface PerformanceReport {
   // 平均响应时间  averageResponseTime: number;
   // 最大响应时间  maxResponseTime: number;
   // 最小响应时间  minResponseTime: number;
-  // 内存使用  memoryUsage: { peak: number;
-    average: number;
+  // 内存使用  memoryUsage: { peak: number;,
+  average: number;
 }
   // CPU使用率  cpuUsage: { peak: number,
     average: number}

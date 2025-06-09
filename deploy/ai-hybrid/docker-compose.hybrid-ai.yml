@@ -1,0 +1,205 @@
+version: '3.8'
+
+services:
+  # 本地AI推理服务
+  local-ai-service:
+    build:
+      context: ../../
+      dockerfile: deploy/ai-hybrid/Dockerfile.local-ai
+    container_name: suoke-local-ai
+    environment:
+      - NODE_ENV=production
+      - AI_MODE=local
+      - MODEL_PATH=/app/models
+      - CACHE_SIZE=512MB
+      - MAX_CONCURRENT_REQUESTS=10
+    volumes:
+      - ai-models:/app/models
+      - ai-cache:/app/cache
+    ports:
+      - "8090:8080"
+    networks:
+      - suoke-ai-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '2.0'
+        reservations:
+          memory: 1G
+          cpus: '1.0'
+
+  # 云端AI代理服务
+  cloud-ai-proxy:
+    build:
+      context: ../../
+      dockerfile: deploy/ai-hybrid/Dockerfile.cloud-proxy
+    container_name: suoke-cloud-ai-proxy
+    environment:
+      - NODE_ENV=production
+      - AI_MODE=cloud
+      - KUBERNETES_NAMESPACE=suoke-life
+      - CLOUD_ENDPOINT=https://api.suoke.life/ai
+      - API_TIMEOUT=30000
+    ports:
+      - "8091:8080"
+    networks:
+      - suoke-ai-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 混合推理编排器
+  hybrid-orchestrator:
+    build:
+      context: ../../
+      dockerfile: deploy/ai-hybrid/Dockerfile.orchestrator
+    container_name: suoke-hybrid-orchestrator
+    environment:
+      - NODE_ENV=production
+      - LOCAL_AI_URL=http://local-ai-service:8080
+      - CLOUD_AI_URL=http://cloud-ai-proxy:8080
+      - REDIS_URL=redis://redis:6379
+      - ENABLE_LOCAL_INFERENCE=true
+      - ENABLE_CLOUD_INFERENCE=true
+      - ENABLE_CACHING=true
+      - ENABLE_FALLBACK=true
+      - MAX_CONCURRENT_REQUESTS=20
+      - DEFAULT_TIMEOUT=30000
+    ports:
+      - "8092:8080"
+    networks:
+      - suoke-ai-network
+    depends_on:
+      - local-ai-service
+      - cloud-ai-proxy
+      - redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis缓存服务
+  redis:
+    image: redis:7-alpine
+    container_name: suoke-ai-redis
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - suoke-ai-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # AI模型下载服务
+  model-downloader:
+    build:
+      context: ../../
+      dockerfile: deploy/ai-hybrid/Dockerfile.model-downloader
+    container_name: suoke-model-downloader
+    environment:
+      - MODEL_REGISTRY=https://models.suoke.life
+      - DOWNLOAD_PATH=/app/models
+      - VERIFY_CHECKSUMS=true
+    volumes:
+      - ai-models:/app/models
+    networks:
+      - suoke-ai-network
+    restart: "no"
+    profiles:
+      - setup
+
+  # 性能监控服务
+  ai-monitor:
+    build:
+      context: ../../
+      dockerfile: deploy/ai-hybrid/Dockerfile.monitor
+    container_name: suoke-ai-monitor
+    environment:
+      - MONITOR_INTERVAL=30
+      - METRICS_ENDPOINT=http://hybrid-orchestrator:8080/metrics
+      - ALERT_WEBHOOK=https://alerts.suoke.life/webhook
+    ports:
+      - "8093:8080"
+    networks:
+      - suoke-ai-network
+    depends_on:
+      - hybrid-orchestrator
+    restart: unless-stopped
+
+  # Nginx负载均衡器
+  ai-gateway:
+    image: nginx:alpine
+    container_name: suoke-ai-gateway
+    volumes:
+      - ./nginx/ai-gateway.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8080:80"
+    networks:
+      - suoke-ai-network
+    depends_on:
+      - hybrid-orchestrator
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  ai-models:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./data/models
+  ai-cache:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./data/cache
+  redis-data:
+    driver: local
+
+networks:
+  suoke-ai-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# 健康检查和监控配置
+x-healthcheck-defaults: &healthcheck-defaults
+  interval: 30s
+  timeout: 10s
+  retries: 3
+  start_period: 40s
+
+# 资源限制配置
+x-resource-defaults: &resource-defaults
+  deploy:
+    resources:
+      limits:
+        memory: 1G
+        cpus: '1.0'
+      reservations:
+        memory: 512M
+        cpus: '0.5' 

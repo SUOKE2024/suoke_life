@@ -36,7 +36,7 @@ export const getAllKeys = async (): Promise<string[]> => {try {const keys = awai
 // 批量存储
 export const multiSet = async (keyValuePairs: [string, any][]): Promise<void> => {
   try {
-    const stringPairs: [string, string][] = keyValuePairs.map(([key, value]) => [key, JSON.stringify(value)])
+    const stringPairs: [string, string][] = keyValuePairs.map([key, value]) => [key, JSON.stringify(value)])
     );
     await AsyncStorage.multiSet(stringPairs);
   } catch (error) {
@@ -46,7 +46,7 @@ export const multiSet = async (keyValuePairs: [string, any][]): Promise<void> =>
 // 批量获取
 export const multiGet = async (keys: string[]): Promise<{ [key: string]: unknown }> => {try {const keyValuePairs = await AsyncStorage.multiGet(keys);
     const result: { [key: string]: unknown } = {};
-    keyValuePairs.forEach((([key, value]) => {
+    keyValuePairs.forEach(([key, value]) => {
       try {
         result[key] = value ? JSON.parse(value) : null;
       } catch {

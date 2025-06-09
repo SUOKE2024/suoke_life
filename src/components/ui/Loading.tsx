@@ -19,7 +19,7 @@ overlay?: boolean;
   // 自定义样式
 style?: ViewStyle;
   // 其他属性
-testID?: string
+testID?: string;
 }
 const Loading: React.FC<LoadingProps /    > = ({// 性能监控)
 const performanceMonitor = usePerformanceMonitor(Loading", {")
@@ -63,7 +63,7 @@ const performanceMonitor = usePerformanceMonitor(Loading", {")
   // 记录渲染性能
 performanceMonitor.recordRender();
   return (;)
-    <View style={{containerStyle}} testID={testID} /    >;
+    <View style={containerStyle}} testID={testID} /    >;
       <View style={styles.content} /    >;
         <ActivityIndicator size={size} color={color} style={styles.indicator} /    >;
         {text && (;)

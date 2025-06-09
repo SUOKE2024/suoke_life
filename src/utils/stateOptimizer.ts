@@ -1,32 +1,32 @@
 // 状态优化器工具 - 提供状态更新优化、状态变化追踪、状态性能监控等功能
 // 应用状态管理优化工具   提供状态更新优化、状态变化追踪、状态性能监控等功能
 export interface StateChangeEvent {
-  stateName: string;
+  stateName: string;,
   oldValue: unknown;
-  newValue: unknown;
+  newValue: unknown;,
   timestamp: number;
-  duration: number;
+  duration: number;,
   source: string;
 }
 export interface StatePerformanceData {
-  stateName: string;
+  stateName: string;,
   updateCount: number;
-  averageUpdateTime: number;
+  averageUpdateTime: number;,
   lastUpdateTime: number;
-  totalChanges: number;
+  totalChanges: number;,
   unnecessaryUpdates: number;
   timestamp: number;
 }
 export interface StateOptimizationSuggestion {
-  type: 'batching' | 'memoization' | 'normalization' | 'splitting';
+  type: 'batching' | 'memoization' | 'normalization' | 'splitting';,
   severity: 'low' | 'medium' | 'high';
-  message: string;
+  message: string;,
   stateName: string;
   impact: number;
 }
 // 批量更新项接口
 interface BatchUpdateItem {
-  update: unknown;
+  update: unknown;,
   resolve: () => void;
 }
 // 状态优化器类
@@ -145,14 +145,14 @@ private processBatchedUpdates(): void {
       clearTimeout(this.batchTimer);
       this.batchTimer = null;
     }
-    this.batchedUpdates.forEach(((updates, stateName) => {
+    this.batchedUpdates.forEach((updates, stateName) => {
       if (updates.length > 0) {
         const mergedUpdate = updates.reduce(acc, { update }) => {
           return { ...acc, ...(update as object) };
         }, {} as Record<string, unknown>);
         this.startStateUpdate(`${stateName}_batch`);
         this.endStateUpdate(`${stateName}_batch`, {}, mergedUpdate, 'batch');
-        updates.forEach((({ resolve }) => resolve());)
+        updates.forEach(({ resolve }) => resolve());)
       }
     });
     this.batchedUpdates.clear();
@@ -173,7 +173,7 @@ getStateHistory(stateName: string, limit: number = 50): StateChangeEvent[] {
   // 获取优化建议
 getOptimizationSuggestions(): StateOptimizationSuggestion[] {
     const suggestions: StateOptimizationSuggestion[] = [];
-    this.stateData.forEach(((data, stateName) => {
+    this.stateData.forEach((data, stateName) => {
       const unnecessaryRate = data.unnecessaryUpdates / data.updateCount;
       if (unnecessaryRate > 0.3) {
         suggestions.push({
@@ -181,8 +181,7 @@ getOptimizationSuggestions(): StateOptimizationSuggestion[] {
       severity: unnecessaryRate > 0.7 ? 'high' : 'medium',
           message: `状态 ${stateName} 有 ${(unnecessaryRate * 100).toFixed(1)}% 的不必要更新，建议使用记忆化优化`,
           stateName,
-          impact: unnecessaryRate,
-        });
+          impact: unnecessaryRate});
       }
       if (data.updateCount > 100 && data.averageUpdateTime > 5) {
         suggestions.push({
@@ -190,8 +189,7 @@ getOptimizationSuggestions(): StateOptimizationSuggestion[] {
       severity: 'medium',
           message: `状态 ${stateName} 更新频繁，建议使用批量更新优化`,
           stateName,
-          impact: data.updateCount / 100,
-        });
+          impact: data.updateCount / 100});
       }
       if (data.averageUpdateTime > 16) {
         suggestions.push({
@@ -199,8 +197,7 @@ getOptimizationSuggestions(): StateOptimizationSuggestion[] {
       severity: 'high',
           message: `状态 ${stateName} 更新耗时过长，建议优化数据结构或拆分状态`,
           stateName,
-          impact: data.averageUpdateTime / 16,
-        });
+          impact: data.averageUpdateTime / 16});
       }
     });
     return suggestions.sort(a, b) => b.impact - a.impact);
@@ -208,12 +205,12 @@ getOptimizationSuggestions(): StateOptimizationSuggestion[] {
   // 获取状态统计
 getStateStats(): {
     totalStates: number,
-  totalUpdates: number;
-    averageUpdateTime: number,
-  unnecessaryUpdateRate: number;
-    slowestStates: StatePerformanceData[],
-  mostUpdatedStates: StatePerformanceData[];
-    suggestions: StateOptimizationSuggestion[];
+  totalUpdates: number;,
+  averageUpdateTime: number,
+  unnecessaryUpdateRate: number;,
+  slowestStates: StatePerformanceData[],
+  mostUpdatedStates: StatePerformanceData[];,
+  suggestions: StateOptimizationSuggestion[];
   } {
     const states = Array.from(this.stateData.values());
     const totalStates = states.length;
@@ -243,16 +240,16 @@ exportStateData(): {
         stats: {,
   totalStates: number;
       totalUpdates: number,
-  averageUpdateTime: number;
-      unnecessaryUpdateRate: number,
-  slowestStates: StatePerformanceData[];
-      mostUpdatedStates: StatePerformanceData[],
+  averageUpdateTime: number;,
+  unnecessaryUpdateRate: number,
+  slowestStates: StatePerformanceData[];,
+  mostUpdatedStates: StatePerformanceData[],
   suggestions: StateOptimizationSuggestion[];
     };
     timestamp: number;
   } {
     const history: Record<string, StateChangeEvent[]> = {};
-    this.stateHistory.forEach(((events, stateName) => {
+    this.stateHistory.forEach((events, stateName) => {
       history[stateName] = [...events];
     });
     return { performanceData: Array.from(this.stateData.values()), history, stats: this.getStateStats(), timestamp: Date.now() };

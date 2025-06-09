@@ -1,8 +1,8 @@
 import React from "react";
 // 配置管理器   索克生活APP - 架构优化
 interface AppConfig {
-  api: {baseUrl: string;
-    timeout: number;
+  api: {baseUrl: string;,
+  timeout: number;
     retryAttempts: number;
 };
   agents: { xiaoai: {,
@@ -68,7 +68,7 @@ class ConfigurationManager {
         laoke: {,
   enabled: true,
           model: "gpt-4"},soer: {enabled: true,model: "gpt-4"};
-      },features: {fiveDiagnosis: true,blockchain: true,offlineMode: false},performance: {enableMemoryMonitoring: true,enablePerformanceTracking: true,maxCacheSize: 100 * 1024 * 1024,  },security: {enableEncryption: true,tokenExpiration: 24 * 60 * 60 * 1000,  };};
+      },features: {fiveDiagnosis: true,blockchain: true,offlineMode: false},performance: {enableMemoryMonitoring: true,enablePerformanceTracking: true,maxCacheSize: 100 * 1024 * 1024},security: {enableEncryption: true,tokenExpiration: 24 * 60 * 60 * 1000};};
   }
   private loadEnvironmentConfig(): void {
     if (process.env.API_BASE_URL) {

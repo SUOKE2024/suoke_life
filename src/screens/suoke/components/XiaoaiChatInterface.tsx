@@ -16,13 +16,13 @@ importIcon from "../../../components/common/Icon/import { colors  } from "../../
   ChatResponse,
   UserProfile } from "../../../agents/xiaoai/types/    ";
 interface XiaoaiChatInterfaceProps {
-  visible: boolean;
+  visible: boolean;,
   onClose: () => void;
   userId: string;
 }
 const { width, height   } = Dimensions.get(";window;";);
 const XiaoaiChatInterface: React.FC<XiaoaiChatInterfaceProps /> = ({/   const performanceMonitor = usePerformanceMonitor(XiaoaiChatInterface", { /    ";))
-    trackRender: true,trackMemory: true,warnThreshold: 50,  };);
+    trackRender: true,trackMemory: true,warnThreshold: 50};);
   visible,
   onClose,
   userId;
@@ -142,7 +142,7 @@ const XiaoaiChatInterface: React.FC<XiaoaiChatInterfaceProps /> = ({/   const pe
     performanceMonitor.recordRender();
     return (;)
       <View,key={message.id};
-        style={{[;
+        style={[;
           styles.messageContainer,isUser ? styles.userMessage : styles.assistantMessage;
         ]}} />/  >
           styles.messageBubble,
@@ -156,8 +156,8 @@ const XiaoaiChatInterface: React.FC<XiaoaiChatInterfaceProps /> = ({/   const pe
                 </Text>/                  ))}
             </View>/              )}
           {//
-            <View style={styles.suggestionsContainer}>/              <Text style={styles.suggestionsTitle}>建议:</Text>/                  {message.metadata.suggestions.map((suggestion, index) => ())
-                <TouchableOpacity
+            <View style={styles.suggestionsContainer}>/              <Text style={styles.suggestionsTitle}>建议:</Text>/                  {message.metadata.suggestions.map(suggestion, index) => ())
+                <TouchableOpacity;
 key={index}
                   style={styles.suggestionButton}
                   onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleSuggestionPress(suggestion)}/                    >
@@ -170,34 +170,34 @@ key={index}
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [handleSuggestionPress])
   return (;)
-    <Modal
+    <Modal;
 visible={visible}
       animationType="none"
       transparent;
 onRequestClose={onClose} />/      <View style={styles.overlay}>/            <Animated.View;
-style={{[
+style={[
             styles.container,
             { transform: [{ translateY: slideAnim   }}]
             }
           ]} />/          {//
                 </Text>/              </View>/            </View>/            <TouchableOpacity onPress={onClose} style={styles.closeButton} accessibilityLabel="TODO: 添加无障碍标签" />/              <Icon name="x" size={24} color={colors.textSecondary} />/            </TouchableOpacity>/          </View>/
-          {///              <KeyboardAvoidingView
+          {///              <KeyboardAvoidingView;
 style={styles.chatContainer}
-            behavior={Platform.OS === ios" ? "padding : "height"} />/                <ScrollView
+            behavior={Platform.OS === ios" ? "padding : "height"} />/                <ScrollView;
 ref={scrollViewRef}
               style={styles.messagesContainer}
               showsVerticalScrollIndicator={false} />/                  {messages.map(renderMessage)}
               {///                  {isLoading  && <View style={styles.loadingContainer}>/                  <View style={styles.loadingBubble}>/                    <Text style={styles.loadingText}>小艾正在思考...</Text>/                  </View>/                </View>/                  )}
             </ScrollView>/
-            {///                    <TextInput
+            {///                    <TextInput;
 style={styles.textInput}
                   value={inputText}
                   onChangeText={setInputText}
                   placeholder="输入你的健康问题..."
                   placeholderTextColor={colors.textSecondary}
                   multiline;
-maxLength={500} />/                    <TouchableOpacity
-style={{[;
+maxLength={500} />/                    <TouchableOpacity;
+style={[;
                     styles.sendButton,
                     (!inputText.trim || isLoading) && styles.sendButtonDisabled;
                   ]}}
@@ -209,7 +209,7 @@ style={{[;
                       !inputText.trim(); || isLoading;
                         ? colors.textSecondary: colors.white} />/                </TouchableOpacity>/              </View>/            </View>/          </KeyboardAvoidingView>/        </Animated.View>/      </View>/    </Modal>/    );
 };
-const styles = useMemo() => StyleSheet.create({overlay: {,)
+const styles = useMemo() => StyleSheet.create({overlay: {),
   flex: 1,
     backgroundColor: rgba(0, 0, 0, 0.5);",
     justifyContent: "flex-end},",

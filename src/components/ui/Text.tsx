@@ -42,20 +42,20 @@ size?: | "xs";
     | number;
 weight?: "300" | "400" | "500" | "600" | "700";
   align?: "left" | "center" | "right" | "justify";
-  disabled?: boolean
+  disabled?: boolean;
   selectable?: boolean;
-  numberOfLines?: number
+  numberOfLines?: number;
   ellipsizeMode?: "head" | "middle" | "tail" | "clip"
-  accessibilityLabel?: string
+  accessibilityLabel?: string;
   accessibilityHint?: string;
   accessibilityRole?: AccessibilityRole;
-  style?: TextStyle
-  testID?: string
+  style?: TextStyle;
+  testID?: string;
   onPress?: () => void;
-  onLongPress?: () => void
+  onLongPress?: () => void;
 }
 const Text: React.FC<TextProps /> = ({/   const performanceMonitor = usePerformanceMonitor("Text', { /    "';))
-    trackRender: true,trackMemory: false,warnThreshold: 100,  };);
+    trackRender: true,trackMemory: false,warnThreshold: 100};);
   children,
   variant = "body1",
   color,
@@ -233,8 +233,8 @@ const Text: React.FC<TextProps /> = ({/   const performanceMonitor = usePerforma
   };
   performanceMonitor.recordRender();
   return (;)
-    <RNText
-style={{[textStyle, style]}}
+    <RNText;
+style={[textStyle, style]}}
       numberOfLines={numberOfLines}
       ellipsizeMode={ellipsizeMode}
       selectable={selectable}
@@ -247,6 +247,6 @@ style={{[textStyle, style]}}
       onLongPress={onLongPress} />/          {children};
     </RNText>/      ;);
 };
-const styles = StyleSheet.create({base: {fontFamily: "System",  },)
+const styles = StyleSheet.create({base: {fontFamily: "System"},)
   disabled: { opacity: 0.5  };};);
 export default React.memo(Text);

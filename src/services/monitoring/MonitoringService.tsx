@@ -17,7 +17,7 @@ export interface UserEvent {
   //
   //
     version: string;
-    userAgent?: string
+    userAgent?: string;
 };
 }
 export interface Alert {
@@ -141,7 +141,7 @@ export class MonitoringService  {private static instance: MonitoringService;
         unit: "count"
       }
     ];
-    systemMetrics.forEach(((metric) => {}))
+    systemMetrics.forEach((metric) => {}))
       this.recordMetric(metric);
     });
   }

@@ -1,19 +1,19 @@
 // FHIR健康数据标准工具（前端TypeScript版）
 // 支持健康数据采集、存储、交换的FHIR格式转换与校验
 export interface FhirObservation {
-  resourceType: "Observation";
+  resourceType: "Observation";,
   status: string;
-  category: Array<{;
+  category: Array<{;,
   coding: Array<{;
-      system: string;
+      system: string;,
   code: string;
 }>;
   }>;
   code: {,
   coding: Array<{
       system: string,
-  code: string;
-      display: string}>;
+  code: string;,
+  display: string}>;
   };
   subject: {,
   reference: string};
@@ -21,8 +21,8 @@ export interface FhirObservation {
   valueQuantity: {,
   value: number;
     unit: string,
-  system: string;
-    code: string}
+  system: string;,
+  code: string}
 }
 // 体温采集转FHIR Observation;
 export function toFhirObservationTemperature(;)
@@ -36,8 +36,8 @@ export function toFhirObservationTemperature(;)
       system: "http:///    observation-category",
       code: "vital-signs";
       }];
-    }],code: {coding: [{
-      system: "http:// loinc.org",
+    }],code: {coding: [{,
+  system: "http:// loinc.org",
       code: "8310-5",display: "Body temperature";
       }];
     },subject: { reference: `Patient/    ${userId}` },effectiveDateTime: effectiveTime,valueQuantity: {value,unit,system: "http:// unitsofmeasure.org",code: unit;
@@ -63,8 +63,8 @@ export function toFhirObservationBloodPressure(;)
       code: "85354-9",
         display: "Blood pressure panel"
       }];
-    },subject: { reference: `Patient/    ${userId}` },effectiveDateTime: effectiveTime,component: [{code: {coding: [{
-      system: "http:// loinc.org",
+    },subject: { reference: `Patient/    ${userId}` },effectiveDateTime: effectiveTime,component: [{code: {coding: [{,
+  system: "http:// loinc.org",
       code: "8480-6",display: "Systolic blood pressure";
         }];
       },valueQuantity: {value: systolic,unit,system: "http:// unitsofmeasure.org",code: unit;
@@ -98,8 +98,8 @@ export function toFhirObservationHeartRate(;)
       system: "http:///    observation-category",
       code: "vital-signs";
       }];
-    }],code: {coding: [{
-      system: "http:// loinc.org",
+    }],code: {coding: [{,
+  system: "http:// loinc.org",
       code: "8867-4",display: "Heart rate";
       }];
     },subject: { reference: `Patient/    ${userId}` },effectiveDateTime: effectiveTime,valueQuantity: {value,unit,system: "http:// unitsofmeasure.org",code: unit;

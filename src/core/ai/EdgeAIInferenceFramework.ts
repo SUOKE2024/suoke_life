@@ -26,22 +26,22 @@ class ErrorHandler {
   }
 }
 export interface ModelConfig {
-  modelId: string;
+  modelId: string;,
   modelType: 'onnx' | 'tflite' | 'pytorch' | 'custom';
-  modelPath: string;
+  modelPath: string;,
   inputShape: number[];
-  outputShape: number[];
+  outputShape: number[];,
   precision: 'fp32' | 'fp16' | 'int8';
-  deviceType: 'cpu' | 'gpu' | 'npu';
+  deviceType: 'cpu' | 'gpu' | 'npu';,
   maxBatchSize: number;
   warmupIterations: number;
 }
 export interface InferenceRequest {
-  requestId: string;
+  requestId: string;,
   modelId: string;
-  inputData: any;
+  inputData: any;,
   priority: 'low' | 'normal' | 'high' | 'critical';
-  timeout: number;
+  timeout: number;,
   metadata: {;
     userId?: string;
     sessionId?: string;
@@ -49,24 +49,24 @@ export interface InferenceRequest {
 };
 }
 export interface InferenceResult {
-  requestId: string;
+  requestId: string;,
   modelId: string;
-  outputData: any;
+  outputData: any;,
   confidence: number;
-  latency: number;
+  latency: number;,
   deviceUsed: string;
-  metadata: {;
+  metadata: {;,
   timestamp: number;
-    processingTime: number;
+    processingTime: number;,
   memoryUsage: number;
 };
 }
 export interface DeviceInfo {
-  deviceId: string;
+  deviceId: string;,
   deviceType: 'cpu' | 'gpu' | 'npu';
-  capabilities: string[];
+  capabilities: string[];,
   memoryTotal: number;
-  memoryAvailable: number;
+  memoryAvailable: number;,
   computeUnits: number;
   isAvailable: boolean;
 }
@@ -125,8 +125,7 @@ export class EdgeAIInferenceFramework extends EventEmitter {
         memoryTotal: this.getSystemMemory(),
         memoryAvailable: this.getAvailableMemory(),
         computeUnits: this.getCPUCores(),
-        isAvailable: true,
-      };
+        isAvailable: true};
       this.deviceInfo.set('cpu-0', cpuDevice);
       // GPU设备检测（如果可用）
       if (await this.isGPUAvailable()) {
@@ -137,8 +136,7 @@ export class EdgeAIInferenceFramework extends EventEmitter {
           memoryTotal: await this.getGPUMemory(),
           memoryAvailable: await this.getAvailableGPUMemory(),
           computeUnits: await this.getGPUCores(),
-          isAvailable: true,
-        };
+          isAvailable: true};
         this.deviceInfo.set('gpu-0', gpuDevice);
       }
       // NPU设备检测（如果可用）
@@ -150,8 +148,7 @@ export class EdgeAIInferenceFramework extends EventEmitter {
           memoryTotal: await this.getNPUMemory(),
           memoryAvailable: await this.getAvailableNPUMemory(),
           computeUnits: await this.getNPUCores(),
-          isAvailable: true,
-        };
+          isAvailable: true};
         this.deviceInfo.set('npu-0', npuDevice);
       }
       this.logger.info(`检测到 ${this.deviceInfo.size} 个可用设备`);
@@ -208,18 +205,15 @@ export class EdgeAIInferenceFramework extends EventEmitter {
         model,
         config,
         deviceId: selectedDevice.deviceId,
-        loadTime: Date.now() - startTime,
-      });
+        loadTime: Date.now() - startTime});
       this.modelConfigs.set(config.modelId, config);
       this.logger.info(`模型加载完成: ${config.modelId}`, {
         device: selectedDevice.deviceId,
-        loadTime: Date.now() - startTime,
-      });
+        loadTime: Date.now() - startTime});
       this.metrics.incrementCounter('models_loaded');
       this.emit('modelLoaded', {
         modelId: config.modelId,
-        deviceId: selectedDevice.deviceId,
-      });
+        deviceId: selectedDevice.deviceId});
     } catch (error) {
       this.errorHandler.handleError(error, 'loadModel');
       throw error;
@@ -291,9 +285,7 @@ export class EdgeAIInferenceFramework extends EventEmitter {
       metadata: {,
   timestamp: Date.now(),
         processingTime: 50.0,
-        memoryUsage: 1024,
-      },
-    };
+        memoryUsage: 1024}};
   }
   /**
   * 启动请求处理器
@@ -362,8 +354,7 @@ export function createModelConfig()
     precision: 'fp32',
     deviceType,
     maxBatchSize: 1,
-    warmupIterations: 3,
-  };
+    warmupIterations: 3};
 }
 export function createInferenceRequest()
   requestId: string,
@@ -380,7 +371,5 @@ export function createInferenceRequest()
     metadata: {,
   timestamp: Date.now(),
       userId: undefined,
-      sessionId: undefined,
-    },
-  };
+      sessionId: undefined}};
 }

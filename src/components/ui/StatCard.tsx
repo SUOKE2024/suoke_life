@@ -1,10 +1,10 @@
 import React from 'react';
 import {
-    Animated,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Animated,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -89,12 +89,21 @@ export const StatCard: React.FC<StatCardProps> = ({
   animationDelay = 0,
 }) => {
   const { currentTheme } = useTheme();
-  const styles = createStyles(currentTheme, color, size, bordered, shadow, layout);
+  const styles = createStyles(
+    currentTheme,
+    color,
+    size,
+    bordered,
+    shadow,
+    layout;
+  );
 
   const fadeAnim = React.useRef(new Animated.Value(animated ? 0 : 1)).current;
-  const scaleAnim = React.useRef(new Animated.Value(animated ? 0.8 : 1)).current;
+  const scaleAnim = React.useRef(
+    new Animated.Value(animated ? 0.8 : 1)
+  ).current;
 
-  React.useEffect(() => {
+  React.useEffect() => {
     if (animated) {
       Animated.parallel([
         Animated.timing(fadeAnim, {
@@ -161,12 +170,8 @@ export const StatCard: React.FC<StatCardProps> = ({
   // 渲染图标
   const renderIcon = () => {
     if (!icon) return null;
-    
-    return (
-      <View style={styles.iconContainer}>
-        {icon}
-      </View>
-    );
+
+    return <View style={styles.iconContainer}>{icon}</View>;
   };
 
   // 渲染主要内容
@@ -175,19 +180,15 @@ export const StatCard: React.FC<StatCardProps> = ({
       <Text style={[styles.title, titleStyle]} numberOfLines={2}>
         {title}
       </Text>
-      
+
       <View style={styles.valueContainer}>
-        {prefix && (
-          <Text style={[styles.prefix, valueStyle]}>{prefix}</Text>
-        )}
+        {prefix && <Text style={[styles.prefix, valueStyle]}>{prefix}</Text>}
         <Text style={[styles.value, valueStyle]} numberOfLines={1}>
           {formatValue(value)}
         </Text>
-        {suffix && (
-          <Text style={[styles.suffix, valueStyle]}>{suffix}</Text>
-        )}
+        {suffix && <Text style={[styles.suffix, valueStyle]}>{suffix}</Text>}
       </View>
-      
+
       {subtitle && (
         <Text style={[styles.subtitle, subtitleStyle]} numberOfLines={2}>
           {subtitle}
@@ -207,7 +208,13 @@ export const StatCard: React.FC<StatCardProps> = ({
             <Text style={[styles.trendIcon, { color: getTrendColor() }]}>
               {getTrendIcon()}
             </Text>
-            <Text style={[styles.trendNumber, { color: getTrendColor() }, trendStyle]}>
+            <Text;
+              style={[
+                styles.trendNumber,
+                { color: getTrendColor() },
+                trendStyle,
+              ]}
+            >
               {Math.abs(trend)}%
             </Text>
           </View>
@@ -253,7 +260,7 @@ export const StatCard: React.FC<StatCardProps> = ({
   const CardComponent = clickable ? TouchableOpacity : View;
 
   return (
-    <Animated.View
+    <Animated.View;
       style={[
         {
           opacity: fadeAnim,
@@ -261,7 +268,7 @@ export const StatCard: React.FC<StatCardProps> = ({
         },
       ]}
     >
-      <CardComponent
+      <CardComponent;
         style={[styles.container, style]}
         onPress={clickable ? onPress : undefined}
         activeOpacity={clickable ? 0.7 : 1}
@@ -278,11 +285,11 @@ const createStyles = (
   size: 'sm' | 'md' | 'lg',
   bordered: boolean,
   shadow: boolean,
-  layout: string
+  layout: string;
 ) => {
   const sizeConfig = {
-    sm: {
-      padding: theme.spacing.sm,
+    sm: {,
+  padding: theme.spacing.sm,
       titleFontSize: theme.typography.fontSize.sm,
       valueFontSize: theme.typography.fontSize.lg,
       subtitleFontSize: theme.typography.fontSize.xs,
@@ -290,8 +297,8 @@ const createStyles = (
       iconSize: 24,
       minHeight: 80,
     },
-    md: {
-      padding: theme.spacing.md,
+    md: {,
+  padding: theme.spacing.md,
       titleFontSize: theme.typography.fontSize.base,
       valueFontSize: theme.typography.fontSize.xl,
       subtitleFontSize: theme.typography.fontSize.sm,
@@ -299,8 +306,8 @@ const createStyles = (
       iconSize: 32,
       minHeight: 100,
     },
-    lg: {
-      padding: theme.spacing.lg,
+    lg: {,
+  padding: theme.spacing.lg,
       titleFontSize: theme.typography.fontSize.lg,
       valueFontSize: theme.typography.fontSize['2xl'],
       subtitleFontSize: theme.typography.fontSize.base,
@@ -323,13 +330,15 @@ const createStyles = (
         };
       case 'success':
         return {
-          background: theme.colors.successContainer || theme.colors.primaryContainer,
+          background:
+            theme.colors.successContainer || theme.colors.primaryContainer,
           border: theme.colors.success,
           accent: theme.colors.success,
         };
       case 'warning':
         return {
-          background: theme.colors.warningContainer || theme.colors.primaryContainer,
+          background:
+            theme.colors.warningContainer || theme.colors.primaryContainer,
           border: theme.colors.warning,
           accent: theme.colors.warning,
         };
@@ -341,13 +350,14 @@ const createStyles = (
         };
       case 'info':
         return {
-          background: theme.colors.infoContainer || theme.colors.primaryContainer,
+          background:
+            theme.colors.infoContainer || theme.colors.primaryContainer,
           border: theme.colors.info || theme.colors.primary,
           accent: theme.colors.info || theme.colors.primary,
         };
       default:
-        return {
-          background: theme.colors.surface,
+        return {,
+  background: theme.colors.surface,
           border: theme.colors.outline,
           accent: theme.colors.onSurface,
         };
@@ -357,8 +367,8 @@ const createStyles = (
   const colorConfig = getColorConfig();
 
   return StyleSheet.create({
-    container: {
-      backgroundColor: colorConfig.background,
+    container: {,
+  backgroundColor: colorConfig.background,
       borderRadius: theme.borderRadius.lg,
       padding: config.padding,
       minHeight: config.minHeight,
@@ -368,8 +378,8 @@ const createStyles = (
       }),
       ...(shadow && {
         shadowColor: theme.colors.shadow,
-        shadowOffset: {
-          width: 0,
+        shadowOffset: {,
+  width: 0,
           height: 2,
         },
         shadowOpacity: 0.1,
@@ -377,105 +387,105 @@ const createStyles = (
         elevation: 3,
       }),
     },
-    verticalLayout: {
-      flex: 1,
+    verticalLayout: {,
+  flex: 1,
     },
-    horizontalLayout: {
-      flexDirection: 'row',
+    horizontalLayout: {,
+  flexDirection: 'row',
       alignItems: 'center',
       flex: 1,
     },
-    header: {
-      flexDirection: 'row',
+    header: {,
+  flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'flex-start',
       marginBottom: theme.spacing.sm,
     },
-    horizontalContent: {
-      flex: 1,
+    horizontalContent: {,
+  flex: 1,
       marginLeft: theme.spacing.md,
     },
-    iconContainer: {
-      width: config.iconSize,
+    iconContainer: {,
+  width: config.iconSize,
       height: config.iconSize,
       alignItems: 'center',
       justifyContent: 'center',
     },
-    mainContent: {
-      flex: 1,
+    mainContent: {,
+  flex: 1,
     },
-    title: {
-      fontSize: config.titleFontSize,
+    title: {,
+  fontSize: config.titleFontSize,
       fontWeight: theme.typography.fontWeight.medium,
       color: theme.colors.onSurface,
       marginBottom: theme.spacing.xs,
     },
-    valueContainer: {
-      flexDirection: 'row',
+    valueContainer: {,
+  flexDirection: 'row',
       alignItems: 'baseline',
       marginBottom: theme.spacing.xs,
     },
-    value: {
-      fontSize: config.valueFontSize,
+    value: {,
+  fontSize: config.valueFontSize,
       fontWeight: theme.typography.fontWeight.bold,
       color: colorConfig.accent,
     },
-    prefix: {
-      fontSize: config.valueFontSize * 0.7,
+    prefix: {,
+  fontSize: config.valueFontSize * 0.7,
       fontWeight: theme.typography.fontWeight.medium,
       color: colorConfig.accent,
       marginRight: theme.spacing.xs,
     },
-    suffix: {
-      fontSize: config.valueFontSize * 0.7,
+    suffix: {,
+  fontSize: config.valueFontSize * 0.7,
       fontWeight: theme.typography.fontWeight.medium,
       color: colorConfig.accent,
       marginLeft: theme.spacing.xs,
     },
-    subtitle: {
-      fontSize: config.subtitleFontSize,
+    subtitle: {,
+  fontSize: config.subtitleFontSize,
       color: theme.colors.onSurfaceVariant,
       lineHeight: config.subtitleFontSize * 1.4,
     },
-    trendContainer: {
-      flexDirection: layout === 'horizontal' ? 'column' : 'row',
+    trendContainer: {,
+  flexDirection: layout === 'horizontal' ? 'column' : 'row',
       alignItems: layout === 'horizontal' ? 'flex-end' : 'center',
     },
-    trendValue: {
-      flexDirection: 'row',
+    trendValue: {,
+  flexDirection: 'row',
       alignItems: 'center',
     },
-    trendIcon: {
-      fontSize: config.trendFontSize,
+    trendIcon: {,
+  fontSize: config.trendFontSize,
       marginRight: theme.spacing.xs,
     },
-    trendNumber: {
-      fontSize: config.trendFontSize,
+    trendNumber: {,
+  fontSize: config.trendFontSize,
       fontWeight: theme.typography.fontWeight.semibold,
     },
-    trendText: {
-      fontSize: config.trendFontSize,
+    trendText: {,
+  fontSize: config.trendFontSize,
       color: theme.colors.onSurfaceVariant,
       marginTop: layout === 'horizontal' ? theme.spacing.xs : 0,
       marginLeft: layout === 'horizontal' ? 0 : theme.spacing.sm,
     },
-    loadingContainer: {
-      flex: 1,
+    loadingContainer: {,
+  flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
     },
-    loadingPlaceholder: {
-      width: '60%',
+    loadingPlaceholder: {,
+  width: '60%',
       height: config.valueFontSize,
       backgroundColor: theme.colors.outline,
       borderRadius: theme.borderRadius.sm,
       marginBottom: theme.spacing.sm,
     },
-    loadingText: {
-      fontSize: config.subtitleFontSize,
+    loadingText: {,
+  fontSize: config.subtitleFontSize,
       color: theme.colors.onSurfaceVariant,
     },
   });
 };
 
-export default StatCard; 
+export default StatCard;

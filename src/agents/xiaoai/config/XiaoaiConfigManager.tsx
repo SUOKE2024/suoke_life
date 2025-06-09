@@ -14,63 +14,63 @@ import {import React from "react";
   PerformanceConfig;
 } from ../types" 配置键前缀 /     const CONFIG_KEY_PREFIX = "xiaoai_config_;
 const CONFIG_VERSION = "1.0.0"
-const DEFAULT_CONFIG: XiaoaiConfig = {
+const DEFAULT_CONFIG: XiaoaiConfig = {,
   version: CONFIG_VERSION,
   enabled: true,
   debugMode: false,
-  personality: { ,
-    style: caring",
+  personality: {,
+  style: caring",
     tone: "warm,",
     expertise: "health",
     patience: high",
     empathy: "high,",
     culturalSensitivity: "high"},
-  voice: { ,
-    gender: female",
+  voice: {,
+  gender: female",
     age: "adult,",
     tone: "warm",
     speed: normal",
     language: "zh,",
     dialect: undefined},
-  diagnosis: {
-    look: { ,
+  diagnosis: {,
+  look: {
       enabled: true,
       faceAnalysis: true,
       tongueAnalysis: true,
       bodyAnalysis: true,
       imageQuality: "high",
       confidenceThreshold: 0.7},
-    listen: { ,
-      enabled: true,
+    listen: {,
+  enabled: true,
       voiceAnalysis: true,
       breathingAnalysis: true,
       coughAnalysis: true,
       audioQuality: high",
       noiseReduction: true,
       confidenceThreshold: 0.7},
-    inquiry: { ,
-      enabled: true,
+    inquiry: {,
+  enabled: true,
       maxQuestions: 20,
       adaptiveQuestioning: true,
       followUpEnabled: true,
       contextAware: true,
       multiLanguageSupport: true},
-    palpation: { ,
-      enabled: true,
+    palpation: {,
+  enabled: true,
       pulseAnalysis: true,
       pressurePointAnalysis: true,
       sensorCalibration: "auto,",
       dataQuality: "high",
       confidenceThreshold: 0.7},
-    calculation: { ,
-      enabled: true,
+    calculation: {,
+  enabled: true,
       algorithmType: hybrid",
       mlModelVersion: "latest,",
       ruleEngineVersion: "v2",
       confidenceThreshold: 0.8,
       explainabilityLevel: detailed"},"
-    integration: { ,
-      enabled: true,
+    integration: {,
+  enabled: true,
       weightDistribution: {,
   look: 0.25,
         listen: 0.25,
@@ -79,19 +79,19 @@ const DEFAULT_CONFIG: XiaoaiConfig = {
       minimumDiagnosisTypes: 2,
       confidenceAggregation: "weighted_average}"
   },
-  healthAnalysis: {
-    dataCollection: { ,
+  healthAnalysis: {,
+  dataCollection: {
       enabled: true,
       frequency: "daily",
       autoSync: true,
       dataTypes: [vitals",symptoms, "lifestyle", environment"],"
       privacyMode: "standard},"
-    trendAnalysis: { ,
-      enabled: true,
+    trendAnalysis: {,
+  enabled: true,
       lookbackPeriod: 30,  predictionHorizon: 7,  / 天* ///
       patternRecognition: true},
-    riskAssessment: { ,
-      enabled: true,
+    riskAssessment: {,
+  enabled: true,
       factors: ["genetic", lifestyle",environmental, "medical_history"],
       updateFrequency: weekly",
       alertThresholds: {,
@@ -100,16 +100,16 @@ const DEFAULT_CONFIG: XiaoaiConfig = {
         high: 0.8,
         critical: 0.95}
     },
-    recommendations: { ,
-      enabled: true,
+    recommendations: {,
+  enabled: true,
       personalized: true,
       evidenceBased: true,
       culturallyAdapted: true,
       maxRecommendations: 10,
       updateFrequency: "daily}"
   },
-  accessibility: { ,
-    enabled: false,
+  accessibility: {,
+  enabled: false,
     features: {,
   visualImpairment: {
         enabled: false,
@@ -140,16 +140,16 @@ const DEFAULT_CONFIG: XiaoaiConfig = {
       voiceGuidance: true,
       reminderSupport: true}
   },
-  language: { ,
-    primary: zh",
+  language: {,
+  primary: zh",
     secondary: [],
     autoDetect: true,
     dialectSupport: true,
     supportedDialects: ["mandarin, "cantonese", shanghainese"],
     translationQuality: "high,",
     culturalAdaptation: true},
-  notification: { ,
-    enabled: true,
+  notification: {,
+  enabled: true,
     channels: {,
   health_alerts: true,
       medication_reminders: true,
@@ -165,8 +165,8 @@ const DEFAULT_CONFIG: XiaoaiConfig = {
   health_tips: "daily,",
       check_in_reminders: "weekly"}
   },
-  privacy: { ,
-    dataCollection: {,
+  privacy: {,
+  dataCollection: {
   analytics: true,
       diagnosticData: true,
       usageStatistics: true,
@@ -184,39 +184,39 @@ const DEFAULT_CONFIG: XiaoaiConfig = {
       inTransit: true,
       endToEnd: true}
   },
-  performance: { ,
-    caching: {,
+  performance: {,
+  caching: {
   enabled: true,
       ttl: CACHE_CONFIG.TTL.MEDIUM,
       maxSize: 100 * 1024 * 1024,  strategy: "lru},"
     network: {,
   timeout: APP_CONFIG.AGENTS.RESPONSE_TIMEOUT,retryAttempts: 3,retryDelay: 1000,offlineMode: true},processing: {maxConcurrentTasks: 5,priorityQueue: true,backgroundProcessing: true,lowPowerMode: "adaptive"};
-  }, experimental: { ,advancedDiagnostics: false,aiPoweredPredictions: false,augmentedRealitySupport: false,blockchainIntegration: false,quantumAlgorithms: false};
+  }, experimental: {advancedDiagnostics: false,aiPoweredPredictions: false,augmentedRealitySupport: false,blockchainIntegration: false,quantumAlgorithms: false};
 };
 // 配置接口 * export interface XiaoaiConfig {
   version: string, *
-  enabled: boolean;
+  enabled: boolean;,
   debugMode: boolean;
-  personality: PersonalityTraits;
+  personality: PersonalityTraits;,
   voice: VoiceProfile;
-  diagnosis: DiagnosisConfig;
+  diagnosis: DiagnosisConfig;,
   healthAnalysis: HealthAnalysisConfig;
-  accessibility: AccessibilityConfig;
+  accessibility: AccessibilityConfig;,
   language: LanguageConfig;
-  notification: NotificationConfig;
+  notification: NotificationConfig;,
   privacy: PrivacyConfig;
-  performance: PerformanceConfig;
+  performance: PerformanceConfig;,
   experimental: ExperimentalFeatures;
 }
 interface ExperimentalFeatures {
-  advancedDiagnostics: boolean;
+  advancedDiagnostics: boolean;,
   aiPoweredPredictions: boolean;
-  augmentedRealitySupport: boolean;
+  augmentedRealitySupport: boolean;,
   blockchainIntegration: boolean;
   quantumAlgorithms: boolean;
 }
 // 配置变更事件 * export interface ConfigChangeEvent {
-  key: string, // oldValue: unknown;
+  key: string, // oldValue: unknown;,
   newValue: unknown;
   timestamp: Date;
 }
@@ -264,7 +264,7 @@ private constructor() {
         return nu;l;l;
       });
       const results = await Promise.all(promi;s;e;s;);
-      results.forEach(((result) => {}))
+      results.forEach((result) => {}))
         if (result) {
           this.setConfigValue(result.key, result.value, false);
         }
@@ -369,7 +369,7 @@ const performanceMonitor = usePerformanceMonitor("XiaoaiConfigManager, {")
   }
   //
     if (keys) {
-      keys.forEach(((key) => {}))
+      keys.forEach((key) => {}))
         this.setConfigValue(key, (DEFAULT_CONFIG as any)[key], false);
       });
     } else {

@@ -1,14 +1,14 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useCallback, useState } from 'react';
 import {
-    Alert,
-    Dimensions,
-    RefreshControl,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Alert,
+  Dimensions,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -16,23 +16,29 @@ import { Button } from '../../components/ui/Button';
 import { Chart } from '../../components/ui/Chart';
 import { StatCard } from '../../components/ui/StatCard';
 import { Tabs } from '../../components/ui/Tabs';
-import { borderRadius, colors, shadows, spacing, typography } from '../../constants/theme';
+import {
+  borderRadius,
+  colors,
+  shadows,
+  spacing,
+  typography,
+} from '../../constants/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
 
 interface HealthMetric {
-  id: string;
+  id: string;,
   name: string;
-  value: number;
+  value: number;,
   unit: string;
-  trend: 'up' | 'down' | 'neutral';
+  trend: 'up' | 'down' | 'neutral';,
   change: number;
-  color: string;
+  color: string;,
   icon: string;
 }
 
 interface ChartData {
-  label: string;
+  label: string;,
   value: number;
   date: string;
 }
@@ -42,7 +48,7 @@ const HealthDataVisualizationScreen: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [refreshing, setRefreshing] = useState(false);
   const [timeRange, setTimeRange] = useState<'week' | 'month' | 'year'>('week');
-  
+
   // 模拟健康指标数据
   const [healthMetrics] = useState<HealthMetric[]>([
     {
@@ -101,20 +107,16 @@ const HealthDataVisualizationScreen: React.FC = () => {
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     // 模拟数据刷新
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve) => setTimeout(resolve, 1000));
     setRefreshing(false);
   }, []);
 
   const handleExportData = () => {
-    Alert.alert(
-      '导出数据',
-      '选择导出格式',
-      [
-        { text: 'PDF报告', onPress: () => console.log('导出PDF') },
-        { text: 'Excel表格', onPress: () => console.log('导出Excel') },
-        { text: '取消', style: 'cancel' },
-      ]
-    );
+    Alert.alert('导出数据', '选择导出格式', [
+      { text: 'PDF报告', onPress: () => console.log('导出PDF') },
+      { text: 'Excel表格', onPress: () => console.log('导出Excel') },
+      { text: '取消', style: 'cancel' },
+    ]);
   };
 
   const renderOverviewTab = () => (
@@ -123,16 +125,16 @@ const HealthDataVisualizationScreen: React.FC = () => {
       <View style={styles.metricsContainer}>
         <Text style={styles.sectionTitle}>健康指标概览</Text>
         <View style={styles.metricsGrid}>
-          {healthMetrics.map((metric) => (
-                         <StatCard
-               key={metric.id}
-               title={metric.name}
-               value={`${metric.value} ${metric.unit}`}
-               trend={metric.change}
-               trendType={metric.trend}
-               color={metric.color as any}
-               style={styles.metricCard}
-             />
+          {healthMetrics.map(metric) => (
+            <StatCard;
+              key={metric.id}
+              title={metric.name}
+              value={`${metric.value} ${metric.unit}`}
+              trend={metric.change}
+              trendType={metric.trend}
+              color={metric.color as any}
+              style={styles.metricCard}
+            />
           ))}
         </View>
       </View>
@@ -142,8 +144,8 @@ const HealthDataVisualizationScreen: React.FC = () => {
         <View style={styles.chartHeader}>
           <Text style={styles.sectionTitle}>步数趋势</Text>
           <View style={styles.timeRangeSelector}>
-            {(['week', 'month', 'year'] as const).map((range) => (
-              <TouchableOpacity
+            {(['week', 'month', 'year'] as const).map(range) => (
+              <TouchableOpacity;
                 key={range}
                 style={[
                   styles.timeRangeButton,
@@ -151,7 +153,7 @@ const HealthDataVisualizationScreen: React.FC = () => {
                 ]}
                 onPress={() => setTimeRange(range)}
               >
-                <Text
+                <Text;
                   style={[
                     styles.timeRangeText,
                     timeRange === range && styles.timeRangeTextActive,
@@ -163,13 +165,7 @@ const HealthDataVisualizationScreen: React.FC = () => {
             ))}
           </View>
         </View>
-                 <Chart
-           data={chartData}
-           type="line"
-           height={200}
-           showGrid
-           showLabels
-         />
+        <Chart data={chartData} type="line" height={200} showGrid showLabels />
       </View>
 
       {/* 健康建议 */}
@@ -201,47 +197,56 @@ const HealthDataVisualizationScreen: React.FC = () => {
     <ScrollView style={styles.tabContent}>
       <View style={styles.trendsContainer}>
         <Text style={styles.sectionTitle}>健康趋势分析</Text>
-        
+
         {/* 心率趋势 */}
         <View style={styles.trendCard}>
           <View style={styles.trendHeader}>
             <Icon name="heart-pulse" size={20} color={colors.error} />
             <Text style={styles.trendTitle}>心率变化</Text>
           </View>
-                     <Chart
-             data={chartData.map(item => ({ ...item, value: 70 + Math.random() * 20 }))}
-             type="area"
-             height={150}
-             showGrid={false}
-           />
-         </View>
+          <Chart;
+            data={chartData.map(item) => ({
+              ...item,
+              value: 70 + Math.random() * 20,
+            }))}
+            type="area"
+            height={150}
+            showGrid={false}
+          />
+        </View>
 
-         {/* 体重趋势 */}
-         <View style={styles.trendCard}>
-           <View style={styles.trendHeader}>
-             <Icon name="scale-bathroom" size={20} color={colors.warning} />
-             <Text style={styles.trendTitle}>体重变化</Text>
-           </View>
-           <Chart
-             data={chartData.map(item => ({ ...item, value: 68 + Math.random() * 2 }))}
-             type="line"
-             height={150}
-             showGrid={false}
-           />
-         </View>
+        {/* 体重趋势 */}
+        <View style={styles.trendCard}>
+          <View style={styles.trendHeader}>
+            <Icon name="scale-bathroom" size={20} color={colors.warning} />
+            <Text style={styles.trendTitle}>体重变化</Text>
+          </View>
+          <Chart;
+            data={chartData.map(item) => ({
+              ...item,
+              value: 68 + Math.random() * 2,
+            }))}
+            type="line"
+            height={150}
+            showGrid={false}
+          />
+        </View>
 
-         {/* 睡眠趋势 */}
-         <View style={styles.trendCard}>
-           <View style={styles.trendHeader}>
-             <Icon name="sleep" size={20} color={colors.info} />
-             <Text style={styles.trendTitle}>睡眠时长</Text>
-           </View>
-           <Chart
-             data={chartData.map(item => ({ ...item, value: 6 + Math.random() * 3 }))}
-             type="bar"
-             height={150}
-             showGrid={false}
-           />
+        {/* 睡眠趋势 */}
+        <View style={styles.trendCard}>
+          <View style={styles.trendHeader}>
+            <Icon name="sleep" size={20} color={colors.info} />
+            <Text style={styles.trendTitle}>睡眠时长</Text>
+          </View>
+          <Chart;
+            data={chartData.map(item) => ({
+              ...item,
+              value: 6 + Math.random() * 3,
+            }))}
+            type="bar"
+            height={150}
+            showGrid={false}
+          />
         </View>
       </View>
     </ScrollView>
@@ -251,10 +256,14 @@ const HealthDataVisualizationScreen: React.FC = () => {
     <ScrollView style={styles.tabContent}>
       <View style={styles.reportsContainer}>
         <Text style={styles.sectionTitle}>健康报告</Text>
-        
+
         <View style={styles.reportCard}>
           <View style={styles.reportHeader}>
-            <Icon name="file-document-outline" size={24} color={colors.primary} />
+            <Icon;
+              name="file-document-outline"
+              size={24}
+              color={colors.primary}
+            />
             <View style={styles.reportInfo}>
               <Text style={styles.reportTitle}>周度健康报告</Text>
               <Text style={styles.reportDate}>2024年1月第1周</Text>
@@ -284,10 +293,7 @@ const HealthDataVisualizationScreen: React.FC = () => {
           </Text>
         </View>
 
-                 <Button
-           title="生成自定义报告"
-           onPress={handleExportData}
-         />
+        <Button title="生成自定义报告" onPress={handleExportData} />
       </View>
     </ScrollView>
   );
@@ -296,14 +302,14 @@ const HealthDataVisualizationScreen: React.FC = () => {
     <SafeAreaView style={styles.container}>
       {/* 头部 */}
       <View style={styles.header}>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
           <Icon name="arrow-left" size={24} color={colors.text} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>健康数据</Text>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.settingsButton}
           onPress={handleExportData}
         >
@@ -312,18 +318,18 @@ const HealthDataVisualizationScreen: React.FC = () => {
       </View>
 
       {/* 标签页 */}
-             <Tabs
-         activeKey={activeTab}
-         onChange={setActiveTab}
-         items={[
-           { key: 'overview', title: '概览', content: null },
-           { key: 'trends', title: '趋势', content: null },
-           { key: 'reports', title: '报告', content: null },
-         ]}
-       />
+      <Tabs;
+        activeKey={activeTab}
+        onChange={setActiveTab}
+        items={[
+          { key: 'overview', title: '概览', content: null },
+          { key: 'trends', title: '趋势', content: null },
+          { key: 'reports', title: '报告', content: null },
+        ]}
+      />
 
       {/* 内容区域 */}
-      <ScrollView
+      <ScrollView;
         style={styles.content}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -338,12 +344,12 @@ const HealthDataVisualizationScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  container: {,
+  flex: 1,
     backgroundColor: colors.background,
   },
-  header: {
-    flexDirection: 'row',
+  header: {,
+  flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: spacing.lg,
@@ -352,175 +358,175 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
   },
-  backButton: {
-    width: 40,
+  backButton: {,
+  width: 40,
     height: 40,
     borderRadius: 20,
     backgroundColor: colors.gray100,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  headerTitle: {
-    fontSize: typography.fontSize.lg,
+  headerTitle: {,
+  fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
     color: colors.text,
   },
-  settingsButton: {
-    width: 40,
+  settingsButton: {,
+  width: 40,
     height: 40,
     borderRadius: 20,
     backgroundColor: colors.gray100,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  content: {
-    flex: 1,
+  content: {,
+  flex: 1,
   },
-  tabContent: {
-    flex: 1,
+  tabContent: {,
+  flex: 1,
     padding: spacing.lg,
   },
-  sectionTitle: {
-    fontSize: typography.fontSize.lg,
+  sectionTitle: {,
+  fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
     color: colors.text,
     marginBottom: spacing.md,
   },
-  metricsContainer: {
-    marginBottom: spacing.xl,
+  metricsContainer: {,
+  marginBottom: spacing.xl,
   },
-  metricsGrid: {
-    flexDirection: 'row',
+  metricsGrid: {,
+  flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
   },
-  metricCard: {
-    width: (screenWidth - spacing.lg * 3) / 2,
+  metricCard: {,
+  width: (screenWidth - spacing.lg * 3) / 2,
     marginBottom: spacing.md,
   },
-  chartContainer: {
-    backgroundColor: colors.surface,
+  chartContainer: {,
+  backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginBottom: spacing.xl,
     ...shadows.sm,
   },
-  chartHeader: {
-    flexDirection: 'row',
+  chartHeader: {,
+  flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: spacing.lg,
   },
-  timeRangeSelector: {
-    flexDirection: 'row',
+  timeRangeSelector: {,
+  flexDirection: 'row',
     backgroundColor: colors.gray100,
     borderRadius: borderRadius.md,
     padding: 2,
   },
-  timeRangeButton: {
-    paddingHorizontal: spacing.sm,
+  timeRangeButton: {,
+  paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
     borderRadius: borderRadius.sm,
   },
-  timeRangeButtonActive: {
-    backgroundColor: colors.primary,
+  timeRangeButtonActive: {,
+  backgroundColor: colors.primary,
   },
-  timeRangeText: {
-    fontSize: typography.fontSize.sm,
+  timeRangeText: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
   },
-  timeRangeTextActive: {
-    color: colors.white,
+  timeRangeTextActive: {,
+  color: colors.white,
   },
-  recommendationsContainer: {
-    marginBottom: spacing.xl,
+  recommendationsContainer: {,
+  marginBottom: spacing.xl,
   },
-  recommendationCard: {
-    flexDirection: 'row',
+  recommendationCard: {,
+  flexDirection: 'row',
     backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginBottom: spacing.md,
     ...shadows.sm,
   },
-  recommendationContent: {
-    flex: 1,
+  recommendationContent: {,
+  flex: 1,
     marginLeft: spacing.md,
   },
-  recommendationTitle: {
-    fontSize: typography.fontSize.base,
+  recommendationTitle: {,
+  fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
     color: colors.text,
     marginBottom: spacing.xs,
   },
-  recommendationText: {
-    fontSize: typography.fontSize.sm,
+  recommendationText: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
     lineHeight: 20,
   },
-  trendsContainer: {
-    flex: 1,
+  trendsContainer: {,
+  flex: 1,
   },
-  trendCard: {
-    backgroundColor: colors.surface,
+  trendCard: {,
+  backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginBottom: spacing.lg,
     ...shadows.sm,
   },
-  trendHeader: {
-    flexDirection: 'row',
+  trendHeader: {,
+  flexDirection: 'row',
     alignItems: 'center',
     marginBottom: spacing.md,
   },
-  trendTitle: {
-    fontSize: typography.fontSize.base,
+  trendTitle: {,
+  fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
     color: colors.text,
     marginLeft: spacing.sm,
   },
-  reportsContainer: {
-    flex: 1,
+  reportsContainer: {,
+  flex: 1,
   },
-  reportCard: {
-    backgroundColor: colors.surface,
+  reportCard: {,
+  backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginBottom: spacing.lg,
     ...shadows.sm,
   },
-  reportHeader: {
-    flexDirection: 'row',
+  reportHeader: {,
+  flexDirection: 'row',
     alignItems: 'center',
     marginBottom: spacing.sm,
   },
-  reportInfo: {
-    flex: 1,
+  reportInfo: {,
+  flex: 1,
     marginLeft: spacing.md,
   },
-  reportTitle: {
-    fontSize: typography.fontSize.base,
+  reportTitle: {,
+  fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
     color: colors.text,
   },
-  reportDate: {
-    fontSize: typography.fontSize.sm,
+  reportDate: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
     marginTop: 2,
   },
-  downloadButton: {
-    width: 36,
+  downloadButton: {,
+  width: 36,
     height: 36,
     borderRadius: 18,
     backgroundColor: colors.gray100,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  reportSummary: {
-    fontSize: typography.fontSize.sm,
+  reportSummary: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
     lineHeight: 20,
   },
 });
 
-export default HealthDataVisualizationScreen; 
+export default HealthDataVisualizationScreen;

@@ -1,63 +1,8 @@
-from typing import Dict, List, Any, Optional, Union
+"""Module placeholder"""
 
-"""
-start - 索克生活项目模块
-"""
-
-from pathlib import Path
-from soer_service.config.settings import get_settings
-from soer_service.core.logging import get_logger
-from soer_service.main import app
-import asyncio
-import sys
-import uvicorn
-
-#! / usr / bin / env python3
-"""
-索儿服务启动脚本
-
-用于启动 soer - service 微服务
-"""
-
-
-# 添加项目根目录到 Python 路径
-project_root = Path(__file__).parent.parent
-sys.path.insert(0, str(project_root))
-
-
-
-logger = get_logger(__name__)
-
-
-async def main() - > None:
-    """主函数"""
-    try:
-        settings = get_settings()
-
-        logger.info("🚀 启动索儿服务...")
-        logger.info(f"环境: {settings.environment}")
-        logger.info(f"调试模式: {settings.debug}")
-        logger.info(f"服务端口: {settings.port}")
-
-        # 启动 FastAPI 应用
-        config = uvicorn.Config(
-            app = app,
-            host = settings.host,
-            port = settings.port,
-            reload = settings.debug,
-            log_level = "info" if not settings.debug else "debug",
-            access_log = True
-        )
-
-        server = uvicorn.Server(config)
-        await server.serve()
-
-    except KeyboardInterrupt:
-        logger.info("👋 服务已停止")
-    except Exception as e:
-        logger.error(f"❌ 服务启动失败: {e}")
-        sys.exit(1)
-
+def main():
+    """Main function placeholder"""
+    pass
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()

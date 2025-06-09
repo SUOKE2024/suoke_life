@@ -15,9 +15,9 @@ export interface EncoderConfig {
 * 舌象特征提取器
 */
 export interface TongueFeatures {
-  color: {;
+  color: {;,
   red: number;
-    pink: number;
+    pink: number;,
   pale: number;
     purple: number;
 };
@@ -41,9 +41,9 @@ export interface TongueFeatures {
 * 脉象特征提取器
 */
 export interface PulseFeatures {
-  rate: number;
+  rate: number;,
   rhythm: {;
-    regularity: number;
+    regularity: number;,
   pattern: string;
 };
   strength: {,
@@ -53,10 +53,10 @@ export interface PulseFeatures {
   quality: {,
   floating: number;
     deep: number,
-  slow: number;
-    rapid: number,
-  weak: number;
-    strong: number;
+  slow: number;,
+  rapid: number,
+  weak: number;,
+  strong: number;
   };
   waveform: {,
   peaks: number[];

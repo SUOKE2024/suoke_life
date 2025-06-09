@@ -2,7 +2,7 @@
 health_plan - 索克生活项目模块
 """
 
-from datetime import datetime, time
+import datetime
 from pydantic import BaseModel, Field
 from typing import Any
 

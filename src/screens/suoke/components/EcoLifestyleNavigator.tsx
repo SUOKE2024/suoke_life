@@ -15,20 +15,20 @@ import React,{ useState } from react""
   { Image } from ";react-native";
 const { width   } = Dimensions.get(window;";);"
 interface EcoService {
-  id: string;
+  id: string;,
   title: string;
-  subtitle: string;
+  subtitle: string;,
   description: string;
-  icon: string;
+  icon: string;,
   color: string;
-  category: "food_agriculture | "mountain_wellness";
+  category: "food_agriculture | "mountain_wellness";,
   features: string[];
   benefits: string[];
   locations?: string[];
   seasons?: string[]
 };
 interface EcoLifestyleNavigatorProps {
-  visible: boolean;
+  visible: boolean;,
   onClose: () => void;
   onServiceSelect: (serviceId: string) => void;
 };
@@ -115,7 +115,7 @@ const performanceMonitor = usePerformanceMonitor("EcoLifestyleNavigator", {track
 }) => {};
 const [selectedCategory, setSelectedCategory] = useState<all" | "food_agriculture | "mountain_wellness">(all";);
   const [selectedService, setSelectedService] = useState<EcoService | null /    >(nul;l;);
-  const filteredServices = useMemo(() => selectedCategory === "all;")
+  const filteredServices = useMemo() => selectedCategory === "all;")
     ? ECO_SERVICES;
     : ECO_SERVICES.filter(service => service.category === selectedCategory), []);
   const handleServiceSelect = useCallback(); => {}
@@ -129,7 +129,7 @@ const [selectedCategory, setSelectedCategory] = useState<all" | "food_agricultur
   // TODO: 将内联组件移到组件外部
 const renderCategoryTabs = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => () => (;)
     <View style={styles.categoryTabs} /    >
-      <TouchableOpacity
+      <TouchableOpacity;
 style={[styles.categoryTab, selectedCategory === "all" && styles.activeCategoryTab]}
         onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /    > setSelectedCategory(all")}"
       >
@@ -137,7 +137,7 @@ style={[styles.categoryTab, selectedCategory === "all" && styles.activeCategoryT
           全部
         </    Text>
       </    TouchableOpacity>
-      <TouchableOpacity
+      <TouchableOpacity;
 style={[styles.categoryTab, selectedCategory === "food_agriculture" && styles.activeCategoryTab]}
         onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /    > setSelectedCategory(food_agriculture")}"
       >
@@ -145,7 +145,7 @@ style={[styles.categoryTab, selectedCategory === "food_agriculture" && styles.ac
           食农结合
         </    Text>
       </    TouchableOpacity>
-      <TouchableOpacity
+      <TouchableOpacity;
 style={[styles.categoryTab, selectedCategory === "mountain_wellness" && styles.activeCategoryTab]}
         onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /    > setSelectedCategory(mountain_wellness")}"
       >
@@ -156,14 +156,14 @@ style={[styles.categoryTab, selectedCategory === "mountain_wellness" && styles.a
     </    View>
   ), []);
   const renderServiceCard = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => (service: EcoService) => (;)
-    <TouchableOpacity
+    <TouchableOpacity;
 key={service.id}
       style={[styles.serviceCard,
         selectedService?.id === service.id && styles.selectedServiceCard;
       ]}
       onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /    > handleServiceSelect(service)}
     >
-      <View style={{[styles.serviceIcon, { backgroundColor: service.color + "20"   }}]} /    >
+      <View style={[styles.serviceIcon, { backgroundColor: service.color + "20"   }}]} /    >
         <Icon name={service.icon} size={32} color={service.color} /    >
       </    View>
       <View style={styles.serviceInfo} /    >
@@ -171,7 +171,7 @@ key={service.id}
         <Text style={styles.serviceSubtitle}>{service.subtitle}</    Text>
         <Text style={styles.serviceDescription}>{service.description}</    Text>
         <View style={styles.featuresContainer} /    >
-          {service.features.slice(0, 3).map(((feature, index) => ()))
+          {service.features.slice(0, 3).map((feature, index) => ()))
             <View key={index} style={styles.featureTag} /    >
               <Text style={styles.featureText}>{feature}</    Text>
             </    View>
@@ -193,7 +193,7 @@ performanceMonitor.recordRender();
         <Text style={styles.detailsTitle}>服务详情</    Text>;
         <View style={styles.detailsCard} /    >;
           <View style={styles.detailsHeader} /    >;
-            <View style={{[styles.detailsIcon, { backgroundColor: selectedService.color + 20"   }}]} /    >";
+            <View style={[styles.detailsIcon, { backgroundColor: selectedService.color + 20"   }}]} /    >";
               <Icon name={selectedService.icon} size={24} color={selectedService.color} /    >;
             </    View>;
             <View style={styles.detailsInfo} /    >;
@@ -233,7 +233,7 @@ performanceMonitor.recordRender();
     );
   }
   return (;)
-    <Modal
+    <Modal;
 visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
@@ -261,7 +261,7 @@ visible={visible}
           {renderServiceDetails()}
         </    ScrollView>
         {selectedService   && <View style={styles.footer} /    >
-            <TouchableOpacity
+            <TouchableOpacity;
 style={styles.startButton}
               onPress={startService}
             accessibilityLabel="TODO: 添加无障碍标签" /    >
@@ -274,7 +274,7 @@ style={styles.startButton}
     </    Modal;>
   ;);
 };
-const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,)
+const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {),
   flex: 1,
     backgroundColor: colors.background;
   },

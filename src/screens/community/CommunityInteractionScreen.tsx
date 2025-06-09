@@ -1,68 +1,76 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import {
-    Animated,
-    FlatList,
-    RefreshControl,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
+  Animated,
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Button } from '../../components/ui/Button';
-import { borderRadius, colors, shadows, spacing, typography } from '../../constants/theme';
+import {
+  borderRadius,
+  colors,
+  shadows,
+  spacing,
+  typography,
+} from '../../constants/theme';
 
 interface Post {
-  id: string;
+  id: string;,
   author: {
-    id: string;
-    name: string;
-    avatar: string;
-    level: string;
+    id: string;,
+  name: string;
+    avatar: string;,
+  level: string;
     verified: boolean;
   };
   content: string;
   images?: string[];
-  topic: string;
+  topic: string;,
   tags: string[];
-  likes: number;
+  likes: number;,
   comments: number;
-  shares: number;
+  shares: number;,
   timestamp: string;
-  liked: boolean;
+  liked: boolean;,
   bookmarked: boolean;
 }
 
 interface Topic {
-  id: string;
+  id: string;,
   name: string;
-  icon: string;
+  icon: string;,
   color: string;
-  posts: number;
+  posts: number;,
   followers: number;
   trending: boolean;
 }
 
 interface Expert {
-  id: string;
+  id: string;,
   name: string;
-  avatar: string;
+  avatar: string;,
   title: string;
-  specialty: string;
+  specialty: string;,
   rating: number;
-  consultations: number;
+  consultations: number;,
   online: boolean;
 }
 
 const CommunityInteractionScreen: React.FC = () => {
   const navigation = useNavigation();
   const [refreshing, setRefreshing] = useState(false);
-  const [activeTab, setActiveTab] = useState<'feed' | 'topics' | 'experts' | 'my'>('feed');
+  const [activeTab, setActiveTab] = useState<
+    'feed' | 'topics' | 'experts' | 'my'
+  >('feed');
   const [searchQuery, setSearchQuery] = useState('');
-  
+
   // 动画值
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(50)).current;
@@ -154,15 +162,19 @@ const CommunityInteractionScreen: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([
     {
       id: '1',
-      author: {
-        id: '1',
+      author: {,
+  id: '1',
         name: '健康小达人',
         avatar: 'https://example.com/user1.jpg',
         level: 'Lv.5',
         verified: true,
       },
-      content: '分享一下我的减肥心得！坚持3个月，成功减重15斤。主要是控制饮食+规律运动，每天记录体重和饮食，养成良好习惯最重要。',
-      images: ['https://example.com/image1.jpg', 'https://example.com/image2.jpg'],
+      content:
+        '分享一下我的减肥心得！坚持3个月，成功减重15斤。主要是控制饮食+规律运动，每天记录体重和饮食，养成良好习惯最重要。',
+      images: [
+        'https://example.com/image1.jpg',
+        'https://example.com/image2.jpg',
+      ],
       topic: '减肥心得',
       tags: ['减肥', '饮食控制', '运动'],
       likes: 128,
@@ -174,14 +186,15 @@ const CommunityInteractionScreen: React.FC = () => {
     },
     {
       id: '2',
-      author: {
-        id: '2',
+      author: {,
+  id: '2',
         name: '运动爱好者',
         avatar: 'https://example.com/user2.jpg',
         level: 'Lv.3',
         verified: false,
       },
-      content: '今天完成了5公里晨跑，感觉整个人都充满活力！坚持运动真的能改善心情，推荐大家都试试。',
+      content:
+        '今天完成了5公里晨跑，感觉整个人都充满活力！坚持运动真的能改善心情，推荐大家都试试。',
       topic: '运动健身',
       tags: ['跑步', '晨练', '心情'],
       likes: 89,
@@ -193,14 +206,15 @@ const CommunityInteractionScreen: React.FC = () => {
     },
     {
       id: '3',
-      author: {
-        id: '3',
+      author: {,
+  id: '3',
         name: '营养师小美',
         avatar: 'https://example.com/user3.jpg',
         level: 'Lv.7',
         verified: true,
       },
-      content: '秋季养生小贴士：多吃梨、银耳、百合等润燥食物，少吃辛辣刺激食品。记得多喝水，保持充足睡眠哦！',
+      content:
+        '秋季养生小贴士：多吃梨、银耳、百合等润燥食物，少吃辛辣刺激食品。记得多喝水，保持充足睡眠哦！',
       topic: '营养饮食',
       tags: ['秋季养生', '饮食建议', '健康'],
       likes: 156,
@@ -213,7 +227,7 @@ const CommunityInteractionScreen: React.FC = () => {
   ]);
 
   // 初始化动画
-  useEffect(() => {
+  useEffect() => {
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -232,31 +246,33 @@ const CommunityInteractionScreen: React.FC = () => {
   const onRefresh = async () => {
     setRefreshing(true);
     // 模拟数据加载
-    setTimeout(() => {
+    setTimeout() => {
       setRefreshing(false);
     }, 1000);
   };
 
   // 点赞操作
   const handleLike = (postId: string) => {
-    setPosts(prev => prev.map(post => 
-      post.id === postId 
-        ? { 
-            ...post, 
-            liked: !post.liked,
-            likes: post.liked ? post.likes - 1 : post.likes + 1
-          }
-        : post
-    ));
+    setPosts(prev) =>
+      prev.map(post) =>
+        post.id === postId;
+          ? {
+              ...post,
+              liked: !post.liked,
+              likes: post.liked ? post.likes - 1 : post.likes + 1,
+            }
+          : post;
+      )
+    );
   };
 
   // 收藏操作
   const handleBookmark = (postId: string) => {
-    setPosts(prev => prev.map(post => 
-      post.id === postId 
-        ? { ...post, bookmarked: !post.bookmarked }
-        : post
-    ));
+    setPosts(prev) =>
+      prev.map(post) =>
+        post.id === postId ? { ...post, bookmarked: !post.bookmarked } : post;
+      )
+    );
   };
 
   // 渲染标签栏
@@ -270,21 +286,20 @@ const CommunityInteractionScreen: React.FC = () => {
 
     return (
       <View style={styles.tabContainer}>
-        {tabs.map((tab) => (
-          <TouchableOpacity
+        {tabs.map(tab) => (
+          <TouchableOpacity;
             key={tab.key}
-            style={[
-              styles.tab,
-              activeTab === tab.key && styles.activeTab,
-            ]}
+            style={[styles.tab, activeTab === tab.key && styles.activeTab]}
             onPress={() => setActiveTab(tab.key as any)}
           >
-            <Icon
+            <Icon;
               name={tab.icon}
               size={20}
-              color={activeTab === tab.key ? colors.primary : colors.textSecondary}
+              color={
+                activeTab === tab.key ? colors.primary : colors.textSecondary;
+              }
             />
-            <Text
+            <Text;
               style={[
                 styles.tabText,
                 activeTab === tab.key && styles.activeTabText,
@@ -303,7 +318,7 @@ const CommunityInteractionScreen: React.FC = () => {
     <View style={styles.searchContainer}>
       <View style={styles.searchBar}>
         <Icon name="magnify" size={20} color={colors.textSecondary} />
-        <TextInput
+        <TextInput;
           style={styles.searchInput}
           placeholder="搜索话题、用户或内容..."
           value={searchQuery}
@@ -353,7 +368,7 @@ const CommunityInteractionScreen: React.FC = () => {
       {/* 图片 */}
       {item.images && item.images.length > 0 && (
         <View style={styles.imageContainer}>
-          {item.images.map((image, index) => (
+          {item.images.map(image, index) => (
             <View key={index} style={styles.imagePlaceholder}>
               <Icon name="image" size={32} color={colors.textSecondary} />
             </View>
@@ -363,7 +378,7 @@ const CommunityInteractionScreen: React.FC = () => {
 
       {/* 标签 */}
       <View style={styles.tagsContainer}>
-        {item.tags.map((tag, index) => (
+        {item.tags.map(tag, index) => (
           <View key={index} style={styles.tag}>
             <Text style={styles.tagText}>{tag}</Text>
           </View>
@@ -372,16 +387,18 @@ const CommunityInteractionScreen: React.FC = () => {
 
       {/* 互动按钮 */}
       <View style={styles.actionBar}>
-        <TouchableOpacity 
+        <TouchableOpacity;
           style={styles.actionButton}
           onPress={() => handleLike(item.id)}
         >
-          <Icon 
-            name={item.liked ? 'heart' : 'heart-outline'} 
-            size={20} 
-            color={item.liked ? colors.error : colors.textSecondary} 
+          <Icon;
+            name={item.liked ? 'heart' : 'heart-outline'}
+            size={20}
+            color={item.liked ? colors.error : colors.textSecondary}
           />
-          <Text style={[styles.actionText, item.liked && { color: colors.error }]}>
+          <Text;
+            style={[styles.actionText, item.liked && { color: colors.error }]}
+          >
             {item.likes}
           </Text>
         </TouchableOpacity>
@@ -396,14 +413,14 @@ const CommunityInteractionScreen: React.FC = () => {
           <Text style={styles.actionText}>{item.shares}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity 
+        <TouchableOpacity;
           style={styles.actionButton}
           onPress={() => handleBookmark(item.id)}
         >
-          <Icon 
-            name={item.bookmarked ? 'bookmark' : 'bookmark-outline'} 
-            size={20} 
-            color={item.bookmarked ? colors.warning : colors.textSecondary} 
+          <Icon;
+            name={item.bookmarked ? 'bookmark' : 'bookmark-outline'}
+            size={20}
+            color={item.bookmarked ? colors.warning : colors.textSecondary}
           />
         </TouchableOpacity>
       </View>
@@ -457,9 +474,11 @@ const CommunityInteractionScreen: React.FC = () => {
         </View>
       </View>
       <View style={styles.expertActions}>
-        <Button
+        <Button;
           title={item.online ? '立即咨询' : '预约咨询'}
-          onPress={() => {/* 咨询专家 */}}
+          onPress={() => {
+            /* 咨询专家 */
+          }}
         />
       </View>
     </TouchableOpacity>
@@ -470,7 +489,7 @@ const CommunityInteractionScreen: React.FC = () => {
     switch (activeTab) {
       case 'feed':
         return (
-          <FlatList
+          <FlatList;
             data={posts}
             renderItem={renderPostCard}
             keyExtractor={(item) => item.id}
@@ -482,7 +501,7 @@ const CommunityInteractionScreen: React.FC = () => {
         );
       case 'topics':
         return (
-          <FlatList
+          <FlatList;
             data={topics}
             renderItem={renderTopicCard}
             keyExtractor={(item) => item.id}
@@ -494,7 +513,7 @@ const CommunityInteractionScreen: React.FC = () => {
         );
       case 'experts':
         return (
-          <FlatList
+          <FlatList;
             data={experts}
             renderItem={renderExpertCard}
             keyExtractor={(item) => item.id}
@@ -537,7 +556,7 @@ const CommunityInteractionScreen: React.FC = () => {
     <SafeAreaView style={styles.container}>
       {/* 头部 */}
       <View style={styles.header}>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
@@ -559,7 +578,7 @@ const CommunityInteractionScreen: React.FC = () => {
       {renderTabs()}
 
       {/* 内容区域 */}
-      <Animated.View
+      <Animated.View;
         style={[
           styles.contentContainer,
           {
@@ -575,12 +594,12 @@ const CommunityInteractionScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  container: {,
+  flex: 1,
     backgroundColor: colors.background,
   },
-  header: {
-    flexDirection: 'row',
+  header: {,
+  flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: spacing.lg,
@@ -589,21 +608,21 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
   },
-  backButton: {
-    width: 40,
+  backButton: {,
+  width: 40,
     height: 40,
     borderRadius: 20,
     backgroundColor: colors.gray100,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  headerTitle: {
-    fontSize: typography.fontSize.lg,
+  headerTitle: {,
+  fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
     color: colors.text,
   },
-  notificationButton: {
-    width: 40,
+  notificationButton: {,
+  width: 40,
     height: 40,
     borderRadius: 20,
     backgroundColor: colors.gray100,
@@ -611,8 +630,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     position: 'relative',
   },
-  notificationBadge: {
-    position: 'absolute',
+  notificationBadge: {,
+  position: 'absolute',
     top: 8,
     right: 8,
     width: 16,
@@ -622,21 +641,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  notificationCount: {
-    fontSize: 10,
+  notificationCount: {,
+  fontSize: 10,
     color: colors.white,
     fontWeight: '600' as const,
   },
-  searchContainer: {
-    flexDirection: 'row',
+  searchContainer: {,
+  flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
     backgroundColor: colors.surface,
     gap: spacing.md,
   },
-  searchBar: {
-    flex: 1,
+  searchBar: {,
+  flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: colors.gray100,
@@ -645,68 +664,68 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
     gap: spacing.sm,
   },
-  searchInput: {
-    flex: 1,
+  searchInput: {,
+  flex: 1,
     fontSize: typography.fontSize.base,
     color: colors.text,
   },
-  publishButton: {
-    width: 40,
+  publishButton: {,
+  width: 40,
     height: 40,
     borderRadius: 20,
     backgroundColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  tabContainer: {
-    flexDirection: 'row',
+  tabContainer: {,
+  flexDirection: 'row',
     backgroundColor: colors.surface,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
   },
-  tab: {
-    flex: 1,
+  tab: {,
+  flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: spacing.md,
     gap: spacing.xs,
   },
-  activeTab: {
-    borderBottomWidth: 2,
+  activeTab: {,
+  borderBottomWidth: 2,
     borderBottomColor: colors.primary,
   },
-  tabText: {
-    fontSize: typography.fontSize.sm,
+  tabText: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
   },
-  activeTabText: {
-    color: colors.primary,
+  activeTabText: {,
+  color: colors.primary,
     fontWeight: '600' as const,
   },
-  contentContainer: {
-    flex: 1,
+  contentContainer: {,
+  flex: 1,
   },
-  postCard: {
-    backgroundColor: colors.surface,
+  postCard: {,
+  backgroundColor: colors.surface,
     marginHorizontal: spacing.lg,
     marginVertical: spacing.sm,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     ...shadows.sm,
   },
-  postHeader: {
-    flexDirection: 'row',
+  postHeader: {,
+  flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: spacing.md,
   },
-  userInfo: {
-    flexDirection: 'row',
+  userInfo: {,
+  flexDirection: 'row',
     alignItems: 'center',
   },
-  avatar: {
-    width: 40,
+  avatar: {,
+  width: 40,
     height: 40,
     borderRadius: 20,
     backgroundColor: colors.primary + '20',
@@ -714,99 +733,99 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: spacing.md,
   },
-  userDetails: {
-    flex: 1,
+  userDetails: {,
+  flex: 1,
   },
-  userNameRow: {
-    flexDirection: 'row',
+  userNameRow: {,
+  flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.xs,
   },
-  userName: {
-    fontSize: typography.fontSize.base,
+  userName: {,
+  fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
     color: colors.text,
   },
-  userLevel: {
-    fontSize: typography.fontSize.xs,
+  userLevel: {,
+  fontSize: typography.fontSize.xs,
     color: colors.primary,
     backgroundColor: colors.primary + '20',
     paddingHorizontal: spacing.xs,
     paddingVertical: 2,
     borderRadius: borderRadius.sm,
   },
-  postTime: {
-    fontSize: typography.fontSize.sm,
+  postTime: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
     marginTop: 2,
   },
-  moreButton: {
-    padding: spacing.xs,
+  moreButton: {,
+  padding: spacing.xs,
   },
-  topicTag: {
-    alignSelf: 'flex-start',
+  topicTag: {,
+  alignSelf: 'flex-start',
     marginBottom: spacing.sm,
   },
-  topicText: {
-    fontSize: typography.fontSize.sm,
+  topicText: {,
+  fontSize: typography.fontSize.sm,
     color: colors.primary,
     fontWeight: '600' as const,
   },
-  postContent: {
-    fontSize: typography.fontSize.base,
+  postContent: {,
+  fontSize: typography.fontSize.base,
     color: colors.text,
     lineHeight: 22,
     marginBottom: spacing.md,
   },
-  imageContainer: {
-    flexDirection: 'row',
+  imageContainer: {,
+  flexDirection: 'row',
     gap: spacing.sm,
     marginBottom: spacing.md,
   },
-  imagePlaceholder: {
-    width: 80,
+  imagePlaceholder: {,
+  width: 80,
     height: 80,
     backgroundColor: colors.gray100,
     borderRadius: borderRadius.md,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  tagsContainer: {
-    flexDirection: 'row',
+  tagsContainer: {,
+  flexDirection: 'row',
     flexWrap: 'wrap',
     gap: spacing.xs,
     marginBottom: spacing.md,
   },
-  tag: {
-    backgroundColor: colors.gray100,
+  tag: {,
+  backgroundColor: colors.gray100,
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
     borderRadius: borderRadius.sm,
   },
-  tagText: {
-    fontSize: typography.fontSize.xs,
+  tagText: {,
+  fontSize: typography.fontSize.xs,
     color: colors.textSecondary,
   },
-  actionBar: {
-    flexDirection: 'row',
+  actionBar: {,
+  flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingTop: spacing.md,
     borderTopWidth: 1,
     borderTopColor: colors.border,
   },
-  actionButton: {
-    flexDirection: 'row',
+  actionButton: {,
+  flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.xs,
     padding: spacing.sm,
   },
-  actionText: {
-    fontSize: typography.fontSize.sm,
+  actionText: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
   },
-  topicCard: {
-    flexDirection: 'row',
+  topicCard: {,
+  flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: colors.surface,
     marginHorizontal: spacing.lg,
@@ -815,69 +834,69 @@ const styles = StyleSheet.create({
     padding: spacing.lg,
     ...shadows.sm,
   },
-  topicIcon: {
-    width: 48,
+  topicIcon: {,
+  width: 48,
     height: 48,
     borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: spacing.md,
   },
-  topicInfo: {
-    flex: 1,
+  topicInfo: {,
+  flex: 1,
   },
-  topicHeader: {
-    flexDirection: 'row',
+  topicHeader: {,
+  flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
     marginBottom: spacing.xs,
   },
-  topicName: {
-    fontSize: typography.fontSize.base,
+  topicName: {,
+  fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
     color: colors.text,
   },
-  trendingBadge: {
-    backgroundColor: colors.error,
+  trendingBadge: {,
+  backgroundColor: colors.error,
     paddingHorizontal: spacing.xs,
     paddingVertical: 2,
     borderRadius: borderRadius.sm,
   },
-  trendingText: {
-    fontSize: typography.fontSize.xs,
+  trendingText: {,
+  fontSize: typography.fontSize.xs,
     color: colors.white,
     fontWeight: '600' as const,
   },
-  topicStats: {
-    fontSize: typography.fontSize.sm,
+  topicStats: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
   },
-  followButton: {
-    backgroundColor: colors.primary + '20',
+  followButton: {,
+  backgroundColor: colors.primary + '20',
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
     borderRadius: borderRadius.md,
   },
-  followButtonText: {
-    fontSize: typography.fontSize.sm,
+  followButtonText: {,
+  fontSize: typography.fontSize.sm,
     color: colors.primary,
     fontWeight: '600' as const,
   },
-  expertCard: {
-    backgroundColor: colors.surface,
+  expertCard: {,
+  backgroundColor: colors.surface,
     marginHorizontal: spacing.lg,
     marginVertical: spacing.sm,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     ...shadows.sm,
   },
-  expertHeader: {
-    flexDirection: 'row',
+  expertHeader: {,
+  flexDirection: 'row',
     alignItems: 'center',
     marginBottom: spacing.md,
   },
-  expertAvatar: {
-    width: 48,
+  expertAvatar: {,
+  width: 48,
     height: 48,
     borderRadius: 24,
     backgroundColor: colors.primary + '20',
@@ -886,8 +905,8 @@ const styles = StyleSheet.create({
     marginRight: spacing.md,
     position: 'relative',
   },
-  onlineIndicator: {
-    position: 'absolute',
+  onlineIndicator: {,
+  position: 'absolute',
     bottom: 2,
     right: 2,
     width: 12,
@@ -897,76 +916,76 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: colors.surface,
   },
-  expertInfo: {
-    flex: 1,
+  expertInfo: {,
+  flex: 1,
   },
-  expertName: {
-    fontSize: typography.fontSize.base,
+  expertName: {,
+  fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
     color: colors.text,
     marginBottom: 2,
   },
-  expertTitle: {
-    fontSize: typography.fontSize.sm,
+  expertTitle: {,
+  fontSize: typography.fontSize.sm,
     color: colors.primary,
     marginBottom: 2,
   },
-  expertSpecialty: {
-    fontSize: typography.fontSize.sm,
+  expertSpecialty: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
   },
-  expertStats: {
-    alignItems: 'flex-end',
+  expertStats: {,
+  alignItems: 'flex-end',
   },
-  ratingContainer: {
-    flexDirection: 'row',
+  ratingContainer: {,
+  flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.xs,
     marginBottom: spacing.xs,
   },
-  rating: {
-    fontSize: typography.fontSize.sm,
+  rating: {,
+  fontSize: typography.fontSize.sm,
     color: colors.text,
     fontWeight: '600' as const,
   },
-  consultations: {
-    fontSize: typography.fontSize.xs,
+  consultations: {,
+  fontSize: typography.fontSize.xs,
     color: colors.textSecondary,
   },
-  expertActions: {
-    alignItems: 'flex-start',
+  expertActions: {,
+  alignItems: 'flex-start',
   },
-  myContent: {
-    padding: spacing.lg,
+  myContent: {,
+  padding: spacing.lg,
   },
-  myTitle: {
-    fontSize: typography.fontSize.lg,
+  myTitle: {,
+  fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
     color: colors.text,
     marginBottom: spacing.lg,
     textAlign: 'center',
   },
-  myStats: {
-    flexDirection: 'row',
+  myStats: {,
+  flexDirection: 'row',
     justifyContent: 'space-around',
     backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     ...shadows.sm,
   },
-  statItem: {
-    alignItems: 'center',
+  statItem: {,
+  alignItems: 'center',
   },
-  statValue: {
-    fontSize: typography.fontSize.xl,
+  statValue: {,
+  fontSize: typography.fontSize.xl,
     fontWeight: '700' as const,
     color: colors.primary,
     marginBottom: spacing.xs,
   },
-  statLabel: {
-    fontSize: typography.fontSize.sm,
+  statLabel: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
   },
 });
 
-export default CommunityInteractionScreen; 
+export default CommunityInteractionScreen;

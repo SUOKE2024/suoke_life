@@ -18,7 +18,7 @@ import {View,
 } from '../../types/maze';
 const { width } = Dimensions.get('window');
 interface MazeStatsScreenProps {
-  navigation: any;
+  navigation: any;,
   userId: string;
 }
 const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId }) => {
@@ -62,12 +62,12 @@ const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId })
     await loadData();
     setRefreshing(false);
   }, [loadData]);
-  useEffect(() => {
+  useEffect() => {
     loadData();
   }, [loadData]);
   // 渲染统计卡片
   const renderStatsCard = (title: string, value: string | number, icon: string, color: string) => (;)
-    <View style={{[styles.statsCard, { borderLeftColor: color }}]}>;
+    <View style={[styles.statsCard, { borderLeftColor: color }}]}>;
       <View style={styles.statsIcon}>;
         <Icon name={icon} size={24} color={color} />;
       </View>;
@@ -88,18 +88,18 @@ const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId })
   const renderLeaderboardEntry = (entry: LeaderboardEntry, index: number) => {const isCurrentUser = entry.userId === userId;
     const rankColor = index < 3 ? ["#FFD700",#C0C0C0', '#CD7F32'][index] : colors.textSecondary;
     return (
-  <View
+  <View;
         key={entry.userId}
-        style={{[
+        style={[
           styles.leaderboardEntry,
           isCurrentUser && styles.currentUserEntry;
         ]}}
       >
         <View style={styles.rankContainer}>
-          <Text style={{[styles.rankText, { color: rankColor }}]}>
+          <Text style={[styles.rankText, { color: rankColor }}]}>
             #{entry.rank}
           </Text>
-          {index < 3  && <Icon
+          {index < 3  && <Icon;
               name={index === 0 ? "crown" : "medal"}
               size={16}
               color={rankColor}
@@ -141,7 +141,7 @@ const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId })
         <View style={ width: 24 }} />
       </View>
       <View style={styles.tabContainer}>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.tab, selectedTab === 'stats' && styles.activeTab]}
           onPress={() => setSelectedTab('stats')}
         >
@@ -149,7 +149,7 @@ const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId })
             个人统计
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.tab, selectedTab === 'leaderboard' && styles.activeTab]}
           onPress={() => setSelectedTab('leaderboard')}
         >
@@ -158,7 +158,7 @@ const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId })
           </Text>
         </TouchableOpacity>
       </View>
-      <ScrollView
+      <ScrollView;
         style={styles.content}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -199,7 +199,7 @@ const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId })
             <View style={styles.favoriteSection}>
               <Text style={styles.sectionTitle}>喜爱主题</Text>
               <View style={styles.favoriteCard}>
-                <Icon
+                <Icon;
                   name={themeConfig[stats.favoriteTheme].icon}
                   size={32}
                   color={themeConfig[stats.favoriteTheme].color}
@@ -503,8 +503,8 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     marginTop: 2;
   },
-  emptyState: {
-      alignItems: "center",
+  emptyState: {,
+  alignItems: "center",
       paddingVertical: 60;
   },emptyText: {fontSize: 18,fontWeight: '600',color: colors.textSecondary,marginTop: 16;
   },emptySubtext: {fontSize: 14,color: colors.textSecondary,marginTop: 8,textAlign: 'center';

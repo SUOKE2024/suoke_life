@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 interface AccessibilityContextType {
-  isScreenReaderEnabled: boolean;
+  isScreenReaderEnabled: boolean;,
   fontSize: 'small' | 'medium' | 'large';
-  highContrast: boolean;
-  setFontSize: (size: 'small' | 'medium' | 'large') => void;
+  highContrast: boolean;,
+  setFontSize: (size: 'small' | 'medium' | 'large') => void;,
   toggleHighContrast: () => void;
 }
 const AccessibilityContext = createContext<AccessibilityContextType | undefined>(undefined);

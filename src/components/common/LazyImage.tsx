@@ -8,8 +8,7 @@ import {
   ImageStyle,
   ViewStyle,
   ImageSourcePropType,
-  ActivityIndicator,
-} from 'react-native';
+  ActivityIndicator} from 'react-native';
 const { width: screenWidth } = Dimensions.get('window');
 // 图片懒加载配置
 interface LazyImageConfig {
@@ -47,8 +46,7 @@ const DEFAULT_CONFIG: LazyImageConfig = {,
   retryDelay: 1000,
   cachePolicy: 'memory',
   quality: 'medium',
-  progressive: true,
-};
+  progressive: true};
 // 图片缓存管理器
 class ImageCacheManager {
   private static instance: ImageCacheManager;
@@ -112,8 +110,7 @@ export const LazyImage: React.FC<LazyImageProps> = ({
   blurRadius,
   accessible,
   accessibilityLabel,
-  testID,
-}) => {
+  testID}) => {
   const config = { ...DEFAULT_CONFIG, ...userConfig };
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -141,8 +138,7 @@ export const LazyImage: React.FC<LazyImageProps> = ({
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: config.fadeInDuration,
-      useNativeDriver: true,
-    }).start();
+      useNativeDriver: true}).start();
     onLoad?.();
   }, [fadeAnim, config.fadeInDuration, onLoad]);
   // 处理图片加载错误
@@ -164,7 +160,7 @@ export const LazyImage: React.FC<LazyImageProps> = ({
     onLoadEnd?.();
   }, [onLoadEnd]);
   // 预加载图片
-  useEffect(() => {
+  useEffect() => {
     const uri = getImageUri();
     if (uri && config.cachePolicy !== 'none') {
       cacheManager.preloadImage(uri);
@@ -174,7 +170,7 @@ export const LazyImage: React.FC<LazyImageProps> = ({
   const renderPlaceholder = () => {
     if (config.placeholder) {
       return (
-  <Image
+  <Image;
           source={config.placeholder}
           style={[styles.placeholder, style]}
           resizeMode={resizeMode}
@@ -191,7 +187,7 @@ export const LazyImage: React.FC<LazyImageProps> = ({
   const renderErrorImage = () => {
     if (config.errorImage) {
       return (
-  <Image
+  <Image;
           source={config.errorImage}
           style={[styles.errorImage, style]}
           resizeMode={resizeMode}
@@ -213,7 +209,7 @@ export const LazyImage: React.FC<LazyImageProps> = ({
       )}
       {}
       {!error  && <Animated.View style={ opacity: fadeAnim }}>
-          <Image
+          <Image;
             source={source}
             style={[styles.image, style]}
             resizeMode={resizeMode}
@@ -243,30 +239,27 @@ export const ProgressiveImage: React.FC<LazyImageProps & {
     Animated.timing(thumbnailFade, {
       toValue: 1,
       duration: 200,
-      useNativeDriver: true,
-    }).start();
+      useNativeDriver: true}).start();
   }, [thumbnailFade]);
   const handleImageLoad = useCallback() => {
     setImageLoaded(true);
     Animated.timing(imageFade, {
       toValue: 1,
       duration: 300,
-      useNativeDriver: true,
-    }).start() => {
+      useNativeDriver: true}).start() => {
       // 图片加载完成后隐藏缩略图
       Animated.timing(thumbnailFade, {
         toValue: 0,
         duration: 200,
-        useNativeDriver: true,
-      }).start();
+        useNativeDriver: true}).start();
     });
         props.onLoad?.();
   }, [imageFade, thumbnailFade, props.onLoad]);
   return (
   <View style={[styles.container, props.containerStyle]}>
       {}
-      {thumbnailSource  && <Animated.View style={{[styles.thumbnailContainer, { opacity: thumbnailFade }}]}>
-          <Image
+      {thumbnailSource  && <Animated.View style={[styles.thumbnailContainer, { opacity: thumbnailFade }}]}>
+          <Image;
             source={thumbnailSource}
             style={[styles.thumbnail, props.style]}
             resizeMode={props.resizeMode}
@@ -277,7 +270,7 @@ export const ProgressiveImage: React.FC<LazyImageProps & {
       )}
       {}
       <Animated.View style={ opacity: imageFade }}>
-        <LazyImage
+        <LazyImage;
           {...props}
           onLoad={handleImageLoad}
         />
@@ -299,25 +292,22 @@ export const ImageGrid: React.FC<{,
   spacing = 8,
   aspectRatio = 1,
   onImagePress,
-  style,
-}) => {
+  style}) => {
   const imageWidth = (screenWidth - spacing * (columns + 1)) / columns;
   const imageHeight = imageWidth / aspectRatio;
   const renderImage = useCallback(image: any, index: number) => {
     return (
-  <View
+  <View;
         key={image.id}
-        style={{[
+        style={[
           styles.gridItem,
           {
             width: imageWidth,
             height: imageHeight,
             marginLeft: spacing,
-            marginBottom: spacing,
-          }},
-        ]}
+            marginBottom: spacing}}]}
       >
-        <ProgressiveImage
+        <ProgressiveImage;
           source={image.source}
           thumbnailSource={image.thumbnail}
           style={styles.gridImage}
@@ -328,7 +318,7 @@ export const ImageGrid: React.FC<{,
     );
   }, [imageWidth, imageHeight, spacing]);
   return (
-  <View style={{[styles.gridContainer, { paddingTop: spacing }}, style]}>
+  <View style={[styles.gridContainer, { paddingTop: spacing }}, style]}>
       {images.map(renderImage)}
     </View>
   );
@@ -338,7 +328,7 @@ export const useImagePreloader = (imageUris: string[]) => {
   const [preloadedCount, setPreloadedCount] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const cacheManager = useRef(ImageCacheManager.getInstance()).current;
-  useEffect(() => {
+  useEffect() => {
     const preloadImages = async () => {
       let count = 0;
             for (const uri of imageUris) {
@@ -360,78 +350,62 @@ export const useImagePreloader = (imageUris: string[]) => {
     preloadedCount,
     totalCount: imageUris.length,
     isComplete,
-    progress: imageUris.length > 0 ? preloadedCount / imageUris.length : 0,
-  };
+    progress: imageUris.length > 0 ? preloadedCount / imageUris.length : 0};
 };
 const styles = StyleSheet.create({
   container: {,
-  position: 'relative',
-  },
+  position: 'relative'},
   image: {,
   width: '100%',
-    height: '100%',
-  },
+    height: '100%'},
   overlayContainer: {,
   position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    zIndex: 1,
-  },
+    zIndex: 1},
   placeholder: {,
   width: '100%',
-    height: '100%',
-  },
+    height: '100%'},
   placeholderContainer: {,
   width: '100%',
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5F5F5',
-  },
+    backgroundColor: '#F5F5F5'},
   errorImage: {,
   width: '100%',
-    height: '100%',
-  },
+    height: '100%'},
   errorContainer: {,
   width: '100%',
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F0F0F0',
-  },
+    backgroundColor: '#F0F0F0'},
   errorIcon: {,
   width: 24,
     height: 24,
     backgroundColor: '#CCC',
-    borderRadius: 12,
-  },
+    borderRadius: 12},
   thumbnailContainer: {,
   position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    bottom: 0,
-  },
+    bottom: 0},
   thumbnail: {,
   width: '100%',
-    height: '100%',
-  },
+    height: '100%'},
   gridContainer: {,
   flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
+    flexWrap: 'wrap'},
   gridItem: {,
   borderRadius: 8,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden'},
   gridImageContainer: {,
-  flex: 1,
-  },
+  flex: 1},
   gridImage: {,
   width: '100%',
-    height: '100%',
-  },
-});
+    height: '100%'}});
 export default LazyImage;

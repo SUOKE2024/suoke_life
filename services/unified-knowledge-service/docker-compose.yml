@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  unified-knowledge-service:
+    build: .
+    container_name: unified-knowledge-service
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_HOST=postgres
+      - MONGO_HOST=mongodb
+      - REDIS_HOST=redis
+    depends_on:
+      - postgres
+      - mongodb
+      - redis
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    restart: unless-stopped
+    networks:
+      - knowledge-network
+
+  postgres:
+    image: postgres:15
+    container_name: knowledge-postgres
+    environment:
+      POSTGRES_DB: unified_knowledge
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - knowledge-network
+
+  mongodb:
+    image: mongo:6
+    container_name: knowledge-mongodb
+    environment:
+      MONGO_INITDB_DATABASE: knowledge_docs
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - knowledge-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: knowledge-redis
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - knowledge-network
+
+volumes:
+  postgres_data:
+  mongodb_data:
+  redis_data:
+
+networks:
+  knowledge-network:
+    driver: bridge

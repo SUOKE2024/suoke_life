@@ -1,7 +1,7 @@
 // 请求缓存管理器 - 索克生活APP;
 interface CacheItem<T> {
   data: T,
-  timestamp: number;
+  timestamp: number;,
   ttl: number;
 }
 export class RequestCache {

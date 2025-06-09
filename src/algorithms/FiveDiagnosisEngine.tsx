@@ -32,13 +32,13 @@ import CalculationDiagnosisAlgorithm, {import LookingDiagnosisAlgorithm, {import
 */
 // 基础类型定义
 export interface UserProfile {
-  age: number;
+  age: number;,
   gender: "male" | "female" | "other";
-  height: number;
+  height: number;,
   weight: number;
-  occupation: string;
+  occupation: string;,
   medicalHistory: string[];
-  allergies: string[];
+  allergies: string[];,
   medications: string[];
 }
 export interface DiagnosisInput {
@@ -49,55 +49,55 @@ export interface DiagnosisInput {
   palpationData?: PalpData;
   calculationData?: CalcData;
   timestamp?: number;
-  sessionId: string;
+  sessionId: string;,
   userId: string;
 }
 export interface ImageData {
-  data: ArrayBuffer;
+  data: ArrayBuffer;,
   format: string;
-  width: number;
+  width: number;,
   height: number;
 }
 export interface SessionContext {
-  sessionId: string;
+  sessionId: string;,
   timestamp: number;
-  environment: {;
+  environment: {;,
   temperature: number;
-    humidity: number;
+    humidity: number;,
   season: string;
     timeOfDay: string;
 };
   previousSessions?: string[];
 }
 export interface DiagnosisResult {
-  sessionId: string;
+  sessionId: string;,
   userId: string;
-  timestamp: number;
+  timestamp: number;,
   confidence: number;
-  overallAssessment: string;
+  overallAssessment: string;,
   diagnosisResults: {;
     looking?: LookingResult;
     calculation?: CalculationResult;
 };
   fusionResult: FusionResult,
-  syndromeAnalysis: unknown;
+  syndromeAnalysis: unknown;,
   constitutionAnalysis: unknown,
-  treatmentRecommendation: unknown;
+  treatmentRecommendation: unknown;,
   qualityReport: unknown,
   performanceMetrics: unknown;
 }
 export interface LookingResult {
-  confidence: number;
+  confidence: number;,
   features: unknown[];
   analysis: string;
 }
 export interface CalculationResult {
-  confidence: number;
+  confidence: number;,
   fiveElements: unknown;
   analysis: string;
 }
 export interface LocalFusionResult {
-  confidence: number;
+  confidence: number;,
   fusedFeatures: unknown[];
   analysis: string;
 }
@@ -406,7 +406,7 @@ export class FiveDiagnosisEngine {
   // 事件系统
   private emit(event: string, data?: any): void {
     const listeners = this.eventListeners.get(event) || [];
-    listeners.forEach(((listener) => {
+    listeners.forEach((listener) => {
       try {
         listener(data);
       } catch (error) {

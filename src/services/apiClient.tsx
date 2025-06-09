@@ -27,7 +27,7 @@ export interface ApiResponse<T = any> {
 }
 // 错误接口
 interface ApiError {
-  code: string;
+  code: string;,
   message: string;
   details?: unknown;
   timestamp: string;

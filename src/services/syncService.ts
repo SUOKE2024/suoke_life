@@ -13,38 +13,38 @@ export enum SyncStatus {
 }
 // 数据实体接口
 export interface DataEntity {
-  id: string;
+  id: string;,
   type: string;
-  data: any;
+  data: any;,
   version: number;
   lastModified: number;
   checksum?: string;
 }
 // 同步冲突接口
 export interface SyncConflict {
-  id: string;
+  id: string;,
   type: string;
-  localData: DataEntity;
+  localData: DataEntity;,
   remoteData: DataEntity;
-  conflictType: 'version' | 'content' | 'deleted';
+  conflictType: 'version' | 'content' | 'deleted';,
   timestamp: number;
 }
 // 同步结果接口
 export interface SyncResult {
-  status: SyncStatus;
+  status: SyncStatus;,
   synced: number;
-  conflicts: SyncConflict[];
+  conflicts: SyncConflict[];,
   errors: string[];
-  duration: number;
+  duration: number;,
   timestamp: number;
 }
 // 同步配置接口
 interface SyncConfig {
-  enabled: boolean;
+  enabled: boolean;,
   autoSync: boolean;
-  syncInterval: number;
+  syncInterval: number;,
   batchSize: number;
-  conflictResolution: 'local' | 'remote' | 'manual' | 'merge';
+  conflictResolution: 'local' | 'remote' | 'manual' | 'merge';,
   retryAttempts: number;
   retryDelay: number;
 }
@@ -488,8 +488,8 @@ class SyncService {
   // 获取同步状态
   getSyncStatus(): {
     isSyncing: boolean,
-  lastSyncTime: number;
-    conflicts: number,
+  lastSyncTime: number;,
+  conflicts: number,
   autoSync: boolean;
   } {
     return {

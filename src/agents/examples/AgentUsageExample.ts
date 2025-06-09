@@ -27,8 +27,8 @@ export class AgentUsageExample  { 1. 创建小艾智能体 // const agentFactory
     const apiService = AgentApiService.getInstance;
     const subscriptionResponse = await apiService.xiaokeServiceManagement({
       userId: "user123",
-      serviceType: "health_subscription",parameters: {
-      plan: "premium",
+      serviceType: "health_subscription",parameters: {,
+  plan: "premium",
       duration: "monthly"};};);
     }
   // 运行所有示例  public static async runAllExamples() {

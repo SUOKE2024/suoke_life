@@ -23,7 +23,7 @@ export const AuthInput: React.FC<AuthInputProps /> = ({/   const performanceMoni
 AuthInput",{/    "
     trackRender: true,
     trackMemory: false,
-    warnThreshold: 50,  });
+    warnThreshold: 50});
   label,
   error,
   icon,
@@ -42,7 +42,7 @@ AuthInput",{/    "
     <View style={styles.container}>/      <Text style={[styles.label, focused && styles.labelFocused]} />/            {label};
       </Text>/  >;
         styles.inputWrapper,focused && styles.inputWrapperFocused,error && styles.inputWrapperError;
-      ]} />/        {icon && <Text style={styles.inputIcon}>{icon}</Text>}/            <TextInput
+      ]} />/        {icon && <Text style={styles.inputIcon}>{icon}</Text>}/            <TextInput;
 style={styles.input}
           value={value}
           placeholderTextColor={colors.placeholder}
@@ -51,7 +51,7 @@ style={styles.input}
           maxLength={maxLength}
           {...props}
         />/            {counter && maxLength && value  && <Text style={styles.inputCounter}>{value.length}/{maxLength}</Text>/            )}
-        {rightIcon  && <TouchableOpacity
+        {rightIcon  && <TouchableOpacity;
 style={styles.rightIconButton}
             onPress={onRightIconPress}
           accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.rightIcon}>{rightIcon}</Text>/          </TouchableOpacity>/            )}

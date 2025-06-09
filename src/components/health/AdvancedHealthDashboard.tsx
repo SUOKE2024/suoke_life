@@ -2,18 +2,18 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from
 import React, { useState, useEffect } from "react";
 const { width } = Dimensions.get(window");"
 export interface HealthMetric {
-  id: string;
+  id: string;,
   name: string;
-  value: number;
+  value: number;,
   unit: string;
-  status: "normal | "warning" | danger";
+  status: "normal | "warning" | danger";,
   trend: "up | "down" | stable";
   lastUpdated: Date;
 }
 export interface HealthInsight {
-  id: string;
+  id: string;,
   title: string;
-  description: string;
+  description: string;,
   type: "recommendation | "warning" | achievement";
   priority: "low | "medium" | high";
 }
@@ -31,7 +31,7 @@ export const AdvancedHealthDashboard: React.FC<AdvancedHealthDashboardProps>  = 
   const [metrics, setMetrics] = useState<HealthMetric[]>([]);
   const [insights, setInsights] = useState<HealthInsight[]>([]);
   const [loading, setLoading] = useState(true);
-  useEffect(() => {
+  useEffect() => {
     loadHealthData();
   }, [userId]);
   const loadHealthData = async() => {}
@@ -140,7 +140,7 @@ const mockMetrics: HealthMetric[] = [;
     }
   };
   const renderMetricCard = (metric: HealthMetric) => (;)
-    <TouchableOpacity
+    <TouchableOpacity;
 key={metric.id}
       style={styles.metricCard}
       onPress={() => onMetricPress?.(metric)}
@@ -150,16 +150,16 @@ key={metric.id}
         <Text style={styles.trendIcon}>{getTrendIcon(metric.trend)}</    Text>
       </    View>
       <View style={styles.metricValue}>
-        <Text style={{[styles.valueText, { color: getStatusColor(metric.status) }}]}>
+        <Text style={[styles.valueText, { color: getStatusColor(metric.status) }}]}>
           {metric.value}
         </    Text>
         <Text style={styles.unitText}>{metric.unit}</    Text>
       </    View>
-      <View style={{[styles.statusIndicator, { backgroundColor: getStatusColor(metric.status) }}]} /    >
+      <View style={[styles.statusIndicator, { backgroundColor: getStatusColor(metric.status) }}]} /    >
     </    TouchableOpacity>
   );
   const renderInsightCard = (insight: HealthInsight) => (;)
-    <TouchableOpacity
+    <TouchableOpacity;
 key={insight.id}
       style={styles.insightCard}
       onPress={() => onInsightPress?.(insight)}
@@ -200,7 +200,7 @@ key={insight.id}
     </    ScrollView>;
   );
 };
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   flex: 1,
     backgroundColor: "#f5f5f5,",
     padding: 16},

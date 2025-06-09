@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import {
-    Modal,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextStyle,
-    TouchableOpacity,
-    View,
-    ViewStyle,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -49,7 +49,8 @@ export const TimePicker: React.FC<TimePickerProps> = ({
 
   const formatTime = (time: { hour: number; minute: number }): string => {
     if (format === '12') {
-      const hour12 = time.hour === 0 ? 12 : time.hour > 12 ? time.hour - 12 : time.hour;
+      const hour12 =
+        time.hour === 0 ? 12 : time.hour > 12 ? time.hour - 12 : time.hour;
       const period = time.hour >= 12 ? 'PM' : 'AM';
       return `${hour12.toString().padStart(2, '0')}:${time.minute.toString().padStart(2, '0')} ${period}`;
     } else {
@@ -75,7 +76,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
 
   const handleConfirm = () => {
     let finalHour = selectedTime.hour;
-    
+
     if (format === '12') {
       if (isPM && selectedTime.hour !== 12) {
         finalHour = selectedTime.hour + 12;
@@ -89,7 +90,9 @@ export const TimePicker: React.FC<TimePickerProps> = ({
   };
 
   const handleCancel = () => {
-    setSelectedTime(value || { hour: new Date().getHours(), minute: new Date().getMinutes() });
+    setSelectedTime(
+      value || { hour: new Date().getHours(), minute: new Date().getMinutes() }
+    );
     setIsVisible(false);
   };
 
@@ -102,9 +105,12 @@ export const TimePicker: React.FC<TimePickerProps> = ({
         {/* 小时选择器 */}
         <View style={styles.columnContainer}>
           <Text style={styles.columnTitle}>小时</Text>
-          <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-            {hours.map((hour) => (
-              <TouchableOpacity
+          <ScrollView;
+            style={styles.scrollContainer}
+            showsVerticalScrollIndicator={false}
+          >
+            {hours.map(hour) => (
+              <TouchableOpacity;
                 key={hour}
                 style={[
                   styles.timeItem,
@@ -112,7 +118,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
                 ]}
                 onPress={() => setSelectedTime({ ...selectedTime, hour })}
               >
-                <Text
+                <Text;
                   style={[
                     styles.timeText,
                     selectedTime.hour === hour && styles.selectedTimeText,
@@ -128,9 +134,12 @@ export const TimePicker: React.FC<TimePickerProps> = ({
         {/* 分钟选择器 */}
         <View style={styles.columnContainer}>
           <Text style={styles.columnTitle}>分钟</Text>
-          <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-            {minutes.map((minute) => (
-              <TouchableOpacity
+          <ScrollView;
+            style={styles.scrollContainer}
+            showsVerticalScrollIndicator={false}
+          >
+            {minutes.map(minute) => (
+              <TouchableOpacity;
                 key={minute}
                 style={[
                   styles.timeItem,
@@ -138,7 +147,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
                 ]}
                 onPress={() => setSelectedTime({ ...selectedTime, minute })}
               >
-                <Text
+                <Text;
                   style={[
                     styles.timeText,
                     selectedTime.minute === minute && styles.selectedTimeText,
@@ -155,20 +164,26 @@ export const TimePicker: React.FC<TimePickerProps> = ({
         {format === '12' && (
           <View style={styles.columnContainer}>
             <Text style={styles.columnTitle}>时段</Text>
-            <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-              {['AM', 'PM'].map((period) => (
-                <TouchableOpacity
+            <ScrollView;
+              style={styles.scrollContainer}
+              showsVerticalScrollIndicator={false}
+            >
+              {['AM', 'PM'].map(period) => (
+                <TouchableOpacity;
                   key={period}
                   style={[
                     styles.timeItem,
-                    ((period === 'AM' && !isPM) || (period === 'PM' && isPM)) && styles.selectedTimeItem,
+                    (period === 'AM' && !isPM) || (period === 'PM' && isPM)) &&
+                      styles.selectedTimeItem,
                   ]}
                   onPress={() => setIsPM(period === 'PM')}
                 >
-                  <Text
+                  <Text;
                     style={[
                       styles.timeText,
-                      ((period === 'AM' && !isPM) || (period === 'PM' && isPM)) && styles.selectedTimeText,
+                      (period === 'AM' && !isPM) ||
+                        (period === 'PM' && isPM)) &&
+                        styles.selectedTimeText,
                     ]}
                   >
                     {period}
@@ -183,8 +198,8 @@ export const TimePicker: React.FC<TimePickerProps> = ({
   };
 
   const styles = StyleSheet.create({
-    container: {
-      borderWidth: 1,
+    container: {,
+  borderWidth: 1,
       borderColor: currentTheme.colors.outline,
       borderRadius: 8,
       paddingHorizontal: 12,
@@ -193,33 +208,33 @@ export const TimePicker: React.FC<TimePickerProps> = ({
       minHeight: 48,
       justifyContent: 'center',
     },
-    containerDisabled: {
-      backgroundColor: currentTheme.colors.surfaceVariant,
+    containerDisabled: {,
+  backgroundColor: currentTheme.colors.surfaceVariant,
       opacity: 0.6,
     },
-    text: {
-      fontSize: 16,
+    text: {,
+  fontSize: 16,
       color: currentTheme.colors.onSurface,
       ...textStyle,
     },
-    placeholder: {
-      fontSize: 16,
+    placeholder: {,
+  fontSize: 16,
       color: currentTheme.colors.onSurfaceVariant,
       ...placeholderStyle,
     },
-    modal: {
-      flex: 1,
+    modal: {,
+  flex: 1,
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
       justifyContent: 'flex-end',
     },
-    modalContent: {
-      backgroundColor: currentTheme.colors.surface,
+    modalContent: {,
+  backgroundColor: currentTheme.colors.surface,
       borderTopLeftRadius: 16,
       borderTopRightRadius: 16,
       maxHeight: '70%',
     },
-    modalHeader: {
-      flexDirection: 'row',
+    modalHeader: {,
+  flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
       paddingHorizontal: 16,
@@ -227,81 +242,80 @@ export const TimePicker: React.FC<TimePickerProps> = ({
       borderBottomWidth: 1,
       borderBottomColor: currentTheme.colors.outline,
     },
-    headerButton: {
-      paddingHorizontal: 8,
+    headerButton: {,
+  paddingHorizontal: 8,
       paddingVertical: 4,
     },
-    headerButtonText: {
-      fontSize: 16,
+    headerButtonText: {,
+  fontSize: 16,
       color: currentTheme.colors.onSurface,
     },
-    headerTitle: {
-      fontSize: 18,
+    headerTitle: {,
+  fontSize: 18,
       fontWeight: '600',
       color: currentTheme.colors.onSurface,
     },
-    selectedTimeDisplay: {
-      padding: 16,
+    selectedTimeDisplay: {,
+  padding: 16,
       alignItems: 'center',
     },
-    selectedTimeDisplayText: {
-      fontSize: 32,
+    selectedTimeDisplayText: {,
+  fontSize: 32,
       fontWeight: '600',
       color: currentTheme.colors.primary,
     },
-    selectorContainer: {
-      flexDirection: 'row',
+    selectorContainer: {,
+  flexDirection: 'row',
       paddingHorizontal: 16,
       paddingBottom: 16,
     },
-    columnContainer: {
-      flex: 1,
+    columnContainer: {,
+  flex: 1,
       marginHorizontal: 8,
     },
-    columnTitle: {
-      fontSize: 14,
+    columnTitle: {,
+  fontSize: 14,
       fontWeight: '500',
       color: currentTheme.colors.onSurface,
       textAlign: 'center',
       marginBottom: 8,
     },
-    scrollContainer: {
-      maxHeight: 200,
+    scrollContainer: {,
+  maxHeight: 200,
     },
-    timeItem: {
-      paddingVertical: 12,
+    timeItem: {,
+  paddingVertical: 12,
       paddingHorizontal: 8,
       alignItems: 'center',
       borderRadius: 8,
       marginVertical: 2,
     },
-    selectedTimeItem: {
-      backgroundColor: currentTheme.colors.primary,
+    selectedTimeItem: {,
+  backgroundColor: currentTheme.colors.primary,
     },
-    timeText: {
-      fontSize: 16,
+    timeText: {,
+  fontSize: 16,
       color: currentTheme.colors.onSurface,
     },
-    selectedTimeText: {
-      color: currentTheme.colors.onPrimary,
+    selectedTimeText: {,
+  color: currentTheme.colors.onPrimary,
       fontWeight: '600',
     },
   });
 
   return (
     <>
-      <TouchableOpacity
-        style={[
-          styles.container,
-          disabled && styles.containerDisabled,
-          style,
-        ]}
+      <TouchableOpacity;
+        style={[styles.container, disabled && styles.containerDisabled, style]}
         onPress={() => !disabled && setIsVisible(true)}
         disabled={disabled}
         accessible={accessible}
         accessibilityRole="button"
-        accessibilityLabel={accessibilityLabel || `时间选择器，当前值：${value ? formatTime(value) : placeholder}`}
-        accessibilityState={{ disabled }}
+        accessibilityLabel={
+          accessibilityLabel ||
+          `时间选择器，当前值：${value ? formatTime(value) : placeholder}`
+        }
+        accessibilityState={ disabled }}
         testID={testID}
       >
         <Text style={value ? styles.text : styles.placeholder}>
@@ -309,13 +323,13 @@ export const TimePicker: React.FC<TimePickerProps> = ({
         </Text>
       </TouchableOpacity>
 
-      <Modal
+      <Modal;
         visible={isVisible}
-        transparent
+        transparent;
         animationType="slide"
         onRequestClose={handleCancel}
       >
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.modal}
           activeOpacity={1}
           onPress={handleCancel}
@@ -323,12 +337,23 @@ export const TimePicker: React.FC<TimePickerProps> = ({
           <TouchableOpacity activeOpacity={1} onPress={() => {}}>
             <View style={styles.modalContent}>
               <View style={styles.modalHeader}>
-                <TouchableOpacity onPress={handleCancel} style={styles.headerButton}>
+                <TouchableOpacity;
+                  onPress={handleCancel}
+                  style={styles.headerButton}
+                >
                   <Text style={styles.headerButtonText}>取消</Text>
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}>选择时间</Text>
-                <TouchableOpacity onPress={handleConfirm} style={styles.headerButton}>
-                  <Text style={[styles.headerButtonText, { color: currentTheme.colors.primary }]}>
+                <TouchableOpacity;
+                  onPress={handleConfirm}
+                  style={styles.headerButton}
+                >
+                  <Text;
+                    style={[
+                      styles.headerButtonText,
+                      { color: currentTheme.colors.primary },
+                    ]}
+                  >
                     确定
                   </Text>
                 </TouchableOpacity>
@@ -349,4 +374,4 @@ export const TimePicker: React.FC<TimePickerProps> = ({
   );
 };
 
-export default TimePicker; 
+export default TimePicker;

@@ -21,8 +21,8 @@ export interface FiveDiagnosisInput {
   };
   inquiryData?: {
     symptoms: string[],
-  medicalHistory: string[];
-    lifestyle: Record<string, any>;
+  medicalHistory: string[];,
+  lifestyle: Record<string, any>;
     familyHistory?: string[];
     metadata?: Record<string, any>;
   };
@@ -43,13 +43,13 @@ export interface FiveDiagnosisInput {
 }
 // 五诊结果接口
 export interface FiveDiagnosisResult {
-  sessionId: string;
+  sessionId: string;,
   userId: string;
-  timestamp: string;
+  timestamp: string;,
   overallConfidence: number;
-  primarySyndrome: {;
+  primarySyndrome: {;,
   name: string;
-    confidence: number;
+    confidence: number;,
   description: string;
 };
   constitutionType: {,
@@ -72,8 +72,8 @@ export interface FiveDiagnosisResult {
   healthRecommendations: {,
   lifestyle: string[];
     diet: string[],
-  exercise: string[];
-    treatment: string[],
+  exercise: string[];,
+  treatment: string[],
   prevention: string[];
   };
   qualityMetrics: {,
@@ -84,12 +84,12 @@ export interface FiveDiagnosisResult {
 }
 // 五诊服务状态
 export interface FiveDiagnosisServiceStatus {
-  isInitialized: boolean;
+  isInitialized: boolean;,
   isProcessing: boolean;
   lastError?: string;
-  performanceMetrics: {;
+  performanceMetrics: {;,
   averageResponseTime: number;
-    successRate: number;
+    successRate: number;,
   totalSessions: number;
 };
 }
@@ -99,17 +99,17 @@ const DIAGNOSIS_API_CONFIG = {
   baseUrl: 'http://localhost:8003',
     timeout: 30000;
   },
-  look: {
-      baseUrl: "http://localhost:8080",
+  look: {,
+  baseUrl: "http://localhost:8080",
       timeout: 30000;
-  },listen: {
-      baseUrl: "http://localhost:8000",
+  },listen: {,
+  baseUrl: "http://localhost:8000",
       timeout: 30000;
-  },inquiry: {
-      baseUrl: "http://localhost:8001",
+  },inquiry: {,
+  baseUrl: "http://localhost:8001",
       timeout: 30000;
-  },palpation: {
-      baseUrl: "http://localhost:8002",
+  },palpation: {,
+  baseUrl: "http://localhost:8002",
       timeout: 30000;
   };
 };
@@ -565,7 +565,7 @@ export class FiveDiagnosisService {
   // 计算结果可靠性
   private calculateResultReliability(diagnosticResults: any): number {
     const confidences: number[] = [];
-    Object.values(diagnosticResults).forEach(((result: any) => {
+    Object.values(diagnosticResults).forEach((result: any) => {
       if (result && typeof result.confidence === 'number') {
         confidences.push(result.confidence);
       }

@@ -2,10 +2,10 @@ import { usePerformanceMonitor } from "../hooks/    usePerformanceMonitor";
 import React from "react";
 import { HealthData } from "../screens/components/HealthCard";/    import { useState, useCallback, useEffect } from "react";
 export interface UseHealthDataReturn {
-  healthData: HealthData[];
+  healthData: HealthData[];,
   loading: boolean;
   error: string | null,refreshData: () => Promise<void>,updateHealthData: (id: string, data: Partial<HealthData />) => void";/     , addHealthData: (data: HealthData) => void,"
-  removeHealthData: (id: string) => void;
+  removeHealthData: (id: string) => void;,
   getHealthDataById: (id: string) => HealthData | undefined;
 }
 //,
@@ -127,7 +127,7 @@ const performanceMonitor = usePerformanceMonitor("useHealthData', {"')
     },
     [healthData]
   );
-  useEffect(() => {
+  useEffect() => {
     const effectStart = performance.now();
     refreshData();
       const effectEnd = performance.now();

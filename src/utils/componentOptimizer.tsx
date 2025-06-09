@@ -3,17 +3,17 @@ import React from "react";
 import { performanceMonitor, memoryOptimizer } from "./index";/    import React,{ useCallback, useMemo, useRef, useEffect } from "react";
 // React组件性能优化工具   提供组件渲染优化、状态管理优化、重渲染检测等功能
 export interface ComponentPerformanceData {
-  componentName: string;
+  componentName: string;,
   renderCount: number;
-  averageRenderTime: number;
+  averageRenderTime: number;,
   lastRenderTime: number;
-  propsChanges: number;
+  propsChanges: number;,
   stateChanges: number,timestamp: number;
 };
 export interface RenderOptimizationSuggestion {
   type:  ;
 memo" | "callback" | "useMemo" | "state" | "props",
-  severity: "low" | "medium" | "high";
+  severity: "low" | "medium" | "high";,
   message: string;
   component: string;
 }
@@ -87,7 +87,7 @@ memo" | "callback" | "useMemo" | "state" | "props",
   }
   // 获取性能优化建议  getOptimizationSuggestions(): RenderOptimizationSuggestion[] {
     const suggestions: RenderOptimizationSuggestion[] = [];
-    this.componentData.forEach(((data, componentName) => {}))
+    this.componentData.forEach((data, componentName) => {}))
       if (data.renderCount > 50 && data.averageRenderTime > 16) {
         suggestions.push({
       type: "memo",

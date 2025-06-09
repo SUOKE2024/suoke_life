@@ -30,7 +30,7 @@ import { KnowledgeQuery, KnowledgeResult } from '../../services/medKnowledgeServ
   clearError;
 } from '../../store/slices/medKnowledgeSlice';
 interface TabItem {
-  key: string;
+  key: string;,
   title: string;
   icon: string;
 }
@@ -64,11 +64,11 @@ export const MedKnowledgeScreen: React.FC = () => {
       title: '搜索', icon: '🔍' }
   ];
   // 初始化数据加载
-  useEffect(() => {
+  useEffect() => {
     initializeData();
   }, [])  // 检查是否需要添加依赖项;
   // 检查服务健康状态
-  useEffect(() => {
+  useEffect() => {
     const checkHealth = async () => {try {await dispatch(checkServiceHealth()).unwrap();
       } catch (error) {
         console.warn('Service health check failed:', error);
@@ -163,7 +163,7 @@ export const MedKnowledgeScreen: React.FC = () => {
       return (;)
         <View style={styles.errorContainer}>;
           <Text style={styles.errorText}>{errors.constitutions}</Text>;
-          <TouchableOpacity
+          <TouchableOpacity;
             style={styles.retryButton};
             onPress={() => handleErrorRetry('constitutions')};
           >;
@@ -173,7 +173,7 @@ export const MedKnowledgeScreen: React.FC = () => {
       );
     }
     return (
-  <ScrollView
+  <ScrollView;
         style={styles.tabContent}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
@@ -186,7 +186,7 @@ export const MedKnowledgeScreen: React.FC = () => {
           </Text>
         </View>;
         {constitutions.map(constitution) => (;)
-          <ConstitutionCard
+          <ConstitutionCard;
             key={constitution.id};
             constitution={constitution};
             onPress={() => handleConstitutionPress(constitution)};
@@ -271,7 +271,7 @@ export const MedKnowledgeScreen: React.FC = () => {
       {// 服务状态提示}
       {renderServiceStatus()}
       {// 搜索栏}
-      <KnowledgeSearchBar
+      <KnowledgeSearchBar;
         onSearch={handleSearch}
         loading={loading.search}
         placeholder="搜索中医知识、症状、治疗方法..."
@@ -281,17 +281,17 @@ export const MedKnowledgeScreen: React.FC = () => {
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View style={styles.tabList}>
             {tabs.map(tab) => ()
-              <TouchableOpacity
+              <TouchableOpacity;
                 key={tab.key}
-                style={{[
+                style={[
                   styles.tab,
                   activeTab === tab.key && styles.activeTab;
                 ]}}
                 onPress={() => setActiveTab(tab.key)}
               >
                 <Text style={styles.tabIcon}>{tab.icon}</Text>
-                <Text
-                  style={{[
+                <Text;
+                  style={[
                     styles.tabText,
                     activeTab === tab.key && styles.activeTabText;
                   ]}};

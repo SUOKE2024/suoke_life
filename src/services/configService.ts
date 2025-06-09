@@ -4,9 +4,9 @@
 */
 export interface AppConfig {
   // API网关配置
-  gateway: {;
+  gateway: {;,
   baseUrl: string;
-    timeout: number;
+    timeout: number;,
   retryAttempts: number;
     retryDelay: number;
 };

@@ -1,46 +1,46 @@
 import { apiClient } from './apiClient';
 // 数据类型定义
 export interface Constitution {
-  id: string;
+  id: string;,
   name: string;
-  type: string;
+  type: string;,
   characteristics: string[];
-  description: string;
+  description: string;,
   recommendations: string[];
-  symptoms: string[];
+  symptoms: string[];,
   lifestyle: {;
-    diet: string[];
+    diet: string[];,
   exercise: string[];
-    sleep: string[];
+    sleep: string[];,
   emotion: string[];
 };
   created_at: string,
   updated_at: string;
 }
 export interface Symptom {
-  id: string;
+  id: string;,
   name: string;
-  category: string;
+  category: string;,
   description: string;
-  severity: 'mild' | 'moderate' | 'severe';
+  severity: 'mild' | 'moderate' | 'severe';,
   related_constitutions: string[];
-  related_syndromes: string[];
+  related_syndromes: string[];,
   treatments: string[];
-  created_at: string;
+  created_at: string;,
   updated_at: string;
 }
 export interface Acupoint {
-  id: string;
+  id: string;,
   name: string;
-  chinese_name: string;
+  chinese_name: string;,
   location: string;
-  meridian: string;
+  meridian: string;,
   functions: string[];
-  indications: string[];
+  indications: string[];,
   techniques: string[];
   precautions: string[];
   coordinates?: {
-    x: number;
+    x: number;,
   y: number;
     z?: number;
 };
@@ -48,39 +48,39 @@ export interface Acupoint {
   updated_at: string;
 }
 export interface Herb {
-  id: string;
+  id: string;,
   name: string;
-  chinese_name: string;
+  chinese_name: string;,
   latin_name: string;
-  category: string;
+  category: string;,
   properties: {;
-    nature: string; // 性;
+    nature: string; // 性;,
   flavor: string; // 味
     meridian: string[]; // 归经
 };
   functions: string[],
-  indications: string[];
+  indications: string[];,
   dosage: string,
-  contraindications: string[];
+  contraindications: string[];,
   interactions: string[],
-  created_at: string;
+  created_at: string;,
   updated_at: string;
 }
 export interface Syndrome {
-  id: string;
+  id: string;,
   name: string;
-  category: string;
+  category: string;,
   description: string;
-  symptoms: string[];
+  symptoms: string[];,
   tongue_manifestation: string;
-  pulse_manifestation: string;
+  pulse_manifestation: string;,
   treatment_principles: string[];
-  formulas: string[];
+  formulas: string[];,
   created_at: string;
   updated_at: string;
 }
 export interface KnowledgeQuery {
-  query: string;
+  query: string;,
   type: 'symptom' | 'treatment' | 'medicine' | 'general' | 'constitution' | 'acupoint';
   context?: {
     userId?: string;
@@ -96,13 +96,13 @@ export interface KnowledgeQuery {
   };
 }
 export interface KnowledgeResult {
-  id: string;
+  id: string;,
   title: string;
-  content: string;
+  content: string;,
   type: string;
-  relevance: number;
+  relevance: number;,
   source: string;
-  category: string;
+  category: string;,
   tags: string[];
   related_items: {;
     constitutions?: Constitution[];
@@ -113,27 +113,27 @@ export interface KnowledgeResult {
   last_updated: string;
 }
 export interface GraphData {
-  nodes: GraphNode[];
+  nodes: GraphNode[];,
   edges: GraphEdge[];
-  statistics: {;
+  statistics: {;,
   total_nodes: number;
-    total_edges: number;
+    total_edges: number;,
   node_types: Record<string, number>;
     edge_types: Record<string, number>;
 };
 }
 export interface GraphNode {
-  id: string;
+  id: string;,
   label: string;
-  type: string;
+  type: string;,
   properties: Record<string, any>;
   position?: { x: number; y: number;
 };
 }
 export interface GraphEdge {
-  id: string;
+  id: string;,
   source: string;
-  target: string;
+  target: string;,
   type: string;
   weight?: number;
   properties?: Record<string, any>;
@@ -148,15 +148,15 @@ export interface RecommendationRequest {
 };
 }
 export interface HealthRecommendation {
-  id: string;
+  id: string;,
   type: 'lifestyle' | 'diet' | 'exercise' | 'treatment' | 'prevention';
-  title: string;
+  title: string;,
   description: string;
-  priority: 'low' | 'medium' | 'high';
+  priority: 'low' | 'medium' | 'high';,
   evidence_level: number;
-  implementation: {;
+  implementation: {;,
   frequency: string;
-    duration: string;
+    duration: string;,
   instructions: string[];
 };
   contraindications?: string[];

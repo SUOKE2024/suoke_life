@@ -2,19 +2,19 @@ import { View, Text, StyleSheet, ScrollView, Dimensions } from "../../placeholde
 import React, { useState, useEffect } from "react";
 const { width } = Dimensions.get(window");"
 export interface HealthDataPoint {
-  id: string;
+  id: string;,
   timestamp: Date;
-  value: number;
+  value: number;,
   category: string;
   unit: string;
 }
 export interface VisualizationConfig {
-  type: "line | "bar" | pie" | "scatter;";
+  type: "line | "bar" | pie" | "scatter;";,
   timeRange: "1d" | 1w" | "1m | "3m" | 1y;
   metrics: string[];
 }
 export interface EnhancedHealthVisualizationProps {
-  data: HealthDataPoint[];
+  data: HealthDataPoint[];,
   config: VisualizationConfig;
   onDataPointPress?: (dataPoint: HealthDataPoint) => void;
 }
@@ -26,7 +26,7 @@ export const EnhancedHealthVisualization: React.FC<EnhancedHealthVisualizationPr
 }) => {}
   const [processedData, setProcessedData] = useState<HealthDataPoint[]>([]);
   const [loading, setLoading] = useState(true);
-  useEffect(() => {
+  useEffect() => {
     processData();
   }, [data, config]);
   const processData = async() => {}
@@ -76,7 +76,7 @@ const now = new Date();
       <View style={styles.chartContainer}>;
         <Text style={styles.chartTitle}>健康趋势图</    Text>;
         <View style={styles.lineChart}>;
-          {processedData.map((point, index) => (;))
+          {processedData.map(point, index) => (;))
             <View key={point.id} style={styles.dataPoint}>;
               <Text style={styles.pointValue}>{point.value}</    Text>;
               <Text style={styles.pointUnit}>{point.unit}</    Text>;
@@ -97,7 +97,7 @@ const now = new Date();
             const avgValue = categoryData.reduce(sum, p) => sum + p.value, 0) /     categoryData.length;
             return (;)
               <View key={category} style={styles.barItem}>;
-                <View style={{[styles.bar, { height: Math.max(avgValue * 2, 20) }}]} /    >;
+                <View style={[styles.bar, { height: Math.max(avgValue * 2, 20) }}]} /    >;
                 <Text style={styles.barLabel}>{category}</    Text>;
                 <Text style={styles.barValue}>{avgValue.toFixed(1)}</    Text>;
               </    View>;
@@ -114,12 +114,12 @@ const now = new Date();
       <View style={styles.chartContainer}>;
         <Text style={styles.chartTitle}>数据分布</    Text>;
         <View style={styles.pieChart}>;
-          {categories.map((category, index) => {};)
+          {categories.map(category, index) => {};)
             const count = processedData.filter(p => p.category === category).length;
             const percentage = (count / total) * 100).toFixed(1);
             return (;)
               <View key={category} style={styles.pieItem}>;
-                <View style={{[styles.pieSlice, { backgroundColor: getColorForIndex(index) }}]} /    >;
+                <View style={[styles.pieSlice, { backgroundColor: getColorForIndex(index) }}]} /    >;
                 <Text style={styles.pieLabel}>{category}: {percentage}%</    Text>;
               </    View>;
             );
@@ -133,10 +133,10 @@ const now = new Date();
       <View style={styles.chartContainer}>;
         <Text style={styles.chartTitle}>数据散点图</    Text>;
         <View style={styles.scatterChart}>;
-          {processedData.map((point, index) => (;))
-            <View
+          {processedData.map(point, index) => (;))
+            <View;
 key={point.id}
-              style={{[
+              style={[
                 styles.scatterPoint,
                 {
                   left: (index / processedData.length) * (width - 80),
@@ -186,7 +186,7 @@ key={point.id}
     </    ScrollView>;
   );
 };
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   flex: 1,
     backgroundColor: "#f5f5f5",
     padding: 16},

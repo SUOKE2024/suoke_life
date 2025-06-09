@@ -56,7 +56,7 @@ n;
   easing?: unknown;
   useNativeDriver?: boolean;
   loop?: boolean;
-  iterations?: number
+  iterations?: number;
 }
 //   ;
 = 0): Animated.Value => {/    }

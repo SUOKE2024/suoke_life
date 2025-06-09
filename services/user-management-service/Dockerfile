@@ -22,4 +22,4 @@ COPY . .
 EXPOSE 8000
 
 # 启动命令
-CMD ["python", "-c", "print('User Management Service is running on port 8000')"]
+CMD ["python", "main.py"]

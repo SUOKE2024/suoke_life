@@ -22,25 +22,25 @@ import {import { getBlockchainServiceClient } from '../services/blockchain/Block
   HealthDataRecord;
 } from '../types/blockchain';
 interface UseBlockchainServiceState {
-  isLoading: boolean;
+  isLoading: boolean;,
   error: BlockchainError | null;
-  blockchainStatus: BlockchainStatus | null;
+  blockchainStatus: BlockchainStatus | null;,
   healthDataRecords: HealthDataRecord[];
-  accessGrants: AccessGrant[];
+  accessGrants: AccessGrant[];,
   lastOperation: string | null;
 }
 interface UseBlockchainServiceActions {
-  storeHealthData: (request: StoreHealthDataRequest) => Promise<StoreHealthDataResponse>;
-  verifyHealthData: (request: VerifyHealthDataRequest) => Promise<VerifyHealthDataResponse>;
-  verifyWithZKP: (request: VerifyWithZKPRequest) => Promise<VerifyWithZKPResponse>;
-  getHealthDataRecords: (request: GetHealthDataRecordsRequest) => Promise<GetHealthDataRecordsResponse>;
-  authorizeAccess: (request: AuthorizeAccessRequest) => Promise<AuthorizeAccessResponse>;
-  revokeAccess: (request: RevokeAccessRequest) => Promise<RevokeAccessResponse>;
-  getBlockchainStatus: (request: GetBlockchainStatusRequest) => Promise<GetBlockchainStatusResponse>;
-  generateZKProof: (userId: string, dataType: string, privateInputs: Record<string, any>, circuitType: string) => Promise<ZKProof>;
+  storeHealthData: (request: StoreHealthDataRequest) => Promise<StoreHealthDataResponse>;,
+  verifyHealthData: (request: VerifyHealthDataRequest) => Promise<VerifyHealthDataResponse>;,
+  verifyWithZKP: (request: VerifyWithZKPRequest) => Promise<VerifyWithZKPResponse>;,
+  getHealthDataRecords: (request: GetHealthDataRecordsRequest) => Promise<GetHealthDataRecordsResponse>;,
+  authorizeAccess: (request: AuthorizeAccessRequest) => Promise<AuthorizeAccessResponse>;,
+  revokeAccess: (request: RevokeAccessRequest) => Promise<RevokeAccessResponse>;,
+  getBlockchainStatus: (request: GetBlockchainStatusRequest) => Promise<GetBlockchainStatusResponse>;,
+  generateZKProof: (userId: string, dataType: string, privateInputs: Record<string, any>, circuitType: string) => Promise<ZKProof>;,
   refreshBlockchainStatus: () => Promise<void>;
-  refreshHealthDataRecords: (userId: string) => Promise<void>;
-  refreshAccessGrants: (userId: string) => Promise<void>;
+  refreshHealthDataRecords: (userId: string) => Promise<void>;,
+  refreshAccessGrants: (userId: string) => Promise<void>;,
   clearError: () => void;
   batchStoreHealthData: (requests: StoreHealthDataRequest[]) => Promise<StoreHealthDataResponse[]>;
 }
@@ -50,7 +50,7 @@ export function useBlockchainService(): UseBlockchainServiceState & UseBlockchai
   const clientRef = useRef(getBlockchainServiceClient());
   const abortControllerRef = useRef<AbortController | null>(null);
   // 清理函数
-  useEffect(() => {
+  useEffect() => {
     return () => {if (abortControllerRef.current) {abortControllerRef.current.abort();
       }
     };
@@ -193,7 +193,7 @@ export function useBlockchainService(): UseBlockchainServiceState & UseBlockchai
     }));
   }, []);
   // 自动刷新区块链状态
-  useEffect(() => {
+  useEffect() => {
     const interval = setInterval() => {refreshBlockchainStatus();
     }, 30000); // 每30秒刷新一次
     // 初始加载
@@ -222,7 +222,7 @@ export function useBlockchainStatusMonitor() {
       console.warn('区块链状态检查失败:', error);
     }
   }, []);
-  useEffect(() => {
+  useEffect() => {
     // 立即检查一次
     checkStatus();
     // 设置定期检查
@@ -302,7 +302,7 @@ export function useHealthDataOperations(userId: string) {
     }
     const responses = await batchStoreHealthData(requests);
     // 更新本地记录
-    const newRecords: HealthDataRecord[] = responses.map((response, index) => ({
+    const newRecords: HealthDataRecord[] = responses.map(response, index) => ({
       transactionId: response.transactionId,
       dataType: requests[index].dataType,
       dataHash: requests[index].dataHash,
@@ -334,7 +334,7 @@ export function useHealthDataOperations(userId: string) {
     return response;
   }, [userId, getHealthDataRecords]);
   // 初始加载
-  useEffect(() => {
+  useEffect() => {
     loadRecords();
   }, [loadRecords]);
   return {records: localRecords.length > 0 ? localRecords : healthDataRecords,storeData,storeBatchData,verifyData,loadRecords,isLoading,error;

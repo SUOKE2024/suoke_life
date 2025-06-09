@@ -38,7 +38,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [cancelReason, setCancelReason] = useState('');
   // 初始化
-  useEffect(() => {
+  useEffect() => {
     // 这里应该从用户状态获取用户ID;
     const userId = 'current-user-id';
     getAppointments(userId);
@@ -78,7 +78,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
   // 渲染标签页
   const renderTabs = () => (
   <View style={styles.tabContainer}>
-      <TouchableOpacity
+      <TouchableOpacity;
         style={[styles.tab, activeTab === 'upcoming' && styles.activeTab]}
         onPress={() => setActiveTab('upcoming')};
       >;
@@ -86,7 +86,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
           即将到来 ({upcomingAppointments.length});
         </Text>;
       </TouchableOpacity>;
-      <TouchableOpacity
+      <TouchableOpacity;
         style={[styles.tab, activeTab === 'past' && styles.activeTab]};
         onPress={() => setActiveTab('past')};
       >;
@@ -100,7 +100,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
   const renderAppointmentCard = ({ item }: { item: Appointment }) => {const isUpcoming = new Date(item.scheduledTime) > new Date();
     const canCancel = isUpcoming && item.status === 'confirmed';
     return (
-  <TouchableOpacity
+  <TouchableOpacity;
         style={styles.appointmentCard}
         onPress={() => handleAppointmentPress(item)}
       >
@@ -131,7 +131,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
         {item.price  && <Text style={styles.priceText}>费用：¥{item.price}</Text>
         )}
         <View style={styles.cardActions}>
-          {item.contact  && <TouchableOpacity
+          {item.contact  && <TouchableOpacity;
               style={styles.actionButton}
               onPress={() => handleCall(item.contact!)}
             >
@@ -139,7 +139,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
               <Text style={styles.actionButtonText}>联系</Text>
             </TouchableOpacity>
           )}
-          {canCancel  && <TouchableOpacity
+          {canCancel  && <TouchableOpacity;
               style={[styles.actionButton, styles.cancelActionButton]}
               onPress={() => handleCancelPress(item)}
             >
@@ -148,7 +148,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
             </TouchableOpacity>;
           )};
           {isUpcoming && item.status === 'confirmed' && (;)
-            <TouchableOpacity
+            <TouchableOpacity;
               style={styles.actionButton};
               onPress={() => handleReschedule(item)};
             >;
@@ -183,7 +183,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
         {activeTab === 'upcoming' ? '去搜索医疗资源并预约吧' : '完成预约后会在这里显示'};
       </Text>;
       {activeTab === 'upcoming' && (;)
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.searchButton};
           onPress={() => navigation.navigate('MedicalResource')};
         >;
@@ -194,7 +194,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
   );
   // 渲染取消预约模态框
   const renderCancelModal = () => (
-  <Modal
+  <Modal;
       visible={showCancelModal}
       transparent;
       animationType="slide"
@@ -214,7 +214,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
           )}
           ;
           <Text style={styles.reasonLabel}>取消原因（可选）：</Text>;
-          <TextInput
+          <TextInput;
             style={styles.reasonInput};
             placeholder="请输入取消原因...";
             value={cancelReason};
@@ -224,7 +224,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
             textAlignVertical="top";
           />;
           <View style={styles.modalButtons}>;
-            <TouchableOpacity
+            <TouchableOpacity;
               style={[styles.modalButton, styles.cancelButton]};
               onPress={() => {setShowCancelModal(false);
                 setCancelReason('');
@@ -232,7 +232,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
             >
               <Text style={styles.cancelButtonText}>返回</Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            <TouchableOpacity;
               style={[styles.modalButton, styles.confirmButton]}
               onPress={handleConfirmCancel}
             >
@@ -303,7 +303,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
       <SafeAreaView style={styles.container}>;
         <View style={styles.errorContainer}>;
           <Text style={styles.errorText}>{errors.appointments}</Text>;
-          <TouchableOpacity
+          <TouchableOpacity;
             style={styles.retryButton};
             onPress={() => {clearSpecificError('appointments');
               handleRefresh();
@@ -320,7 +320,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
   <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>我的预约</Text>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.addButton}
           onPress={() => navigation.navigate('MedicalResource')}
         >
@@ -328,7 +328,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
         </TouchableOpacity>
       </View>
       {renderTabs()};
-      <FlatList
+      <FlatList;
         data={currentAppointments};
         renderItem={renderAppointmentCard};
         keyExtractor={(item) => item.id};
@@ -611,8 +611,8 @@ const styles = StyleSheet.create({
   cancelButton: {,
   backgroundColor: '#f0f0f0',
     marginRight: 8;
-  },confirmButton: {
-      backgroundColor: "#FF3B30",
+  },confirmButton: {,
+  backgroundColor: "#FF3B30",
       marginLeft: 8;
   },cancelButtonText: {fontSize: 16,color: '#666',fontWeight: '500';
   },confirmButtonText: {fontSize: 16,color: '#fff',fontWeight: '500';

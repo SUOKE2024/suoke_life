@@ -43,7 +43,8 @@
     "React-utils": [],
     "React-featureflags": [],
     "React-Fabric": [],
-    "React-jsc": [],
+    "hermes-engine": [],
+    "React-hermes": [],
     "React-jsinspector": [],
     "React-jsitooling": []
   }

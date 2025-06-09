@@ -12,22 +12,22 @@ import React,{ useState, useEffect } from react""
   { ActivityIndicator } from ";react-native";
 const { width   } = Dimensions.get(window;";);"
 interface DiagnosisMethod {
-  id: string;
+  id: string;,
   name: string;
-  description: string;
+  description: string;,
   icon: string;
-  color: string;
+  color: string;,
   features: string[];
-  status: "available | "coming_soon" | maintenance";
+  status: "available | "coming_soon" | maintenance";,
   accuracy: number;
 }
 interface FourDiagnosisNavigatorProps {
-  visible: boolean;
+  visible: boolean;,
   onClose: () => void;
   onDiagnosisSelect: (diagnosisId: string) => void;
 }
-const DIAGNOSIS_METHODS: DiagnosisMethod[] = [{
-      id: "looking,",
+const DIAGNOSIS_METHODS: DiagnosisMethod[] = [{,
+  id: "looking,",
       name: "望诊", "
     description: 通过观察面色、舌象、体态等进行健康评估",
     icon: "eye,",
@@ -70,7 +70,7 @@ const DIAGNOSIS_METHODS: DiagnosisMethod[] = [{
 export const FourDiagnosisNavigator: React.FC<FourDiagnosisNavigatorProps /> = ({/   const performanceMonitor = usePerformanceMonitor("FourDiagnosisNavigator",{/))
     trackRender: true,
     trackMemory: true,
-    warnThreshold: 50,  });
+    warnThreshold: 50});
   visible,
   onClose,
   onDiagnosisSelect;
@@ -87,7 +87,7 @@ export const FourDiagnosisNavigator: React.FC<FourDiagnosisNavigatorProps /> = (
     }
     setSelectedMethod(method);
   };
-  const startDiagnosis = useMemo(() => async() => {})
+  const startDiagnosis = useMemo() => async() => {})
     if (!selectedMethod) { ///
     setIsLoading(true);
     try {
@@ -101,16 +101,16 @@ export const FourDiagnosisNavigator: React.FC<FourDiagnosisNavigatorProps /> = (
     }
   };
   const renderMethodCard = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => (method: DiagnosisMethod) => (;)
-    <TouchableOpacity
+    <TouchableOpacity;
 key={method.id}
-      style={{[
+      style={[
         styles.methodCard,
         selectedMethod?.id === method.id && styles.selectedMethodCard,
         method.status !== "available" && styles.disabledMethodCard;
       ]}}
       onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleMethodSelect(method)}/          disabled={method.status !== available"}"
     >
-      <View style={{[styles.methodIcon, { backgroundColor: method.color + "20}}]} />/        <Icon name={method.icon} size={32} color={method.color} />/      </View>/    "
+      <View style={[styles.methodIcon, { backgroundColor: method.color + "20}}]} />/        <Icon name={method.icon} size={32} color={method.color} />/      </View>/    "
       <View style={styles.methodInfo}>/        <View style={styles.methodHeader}>/          <Text style={styles.methodName}>{method.name}</Text>/          <View style={styles.statusBadge}>/                {method.status === "available"  && <Text style={styles.accuracyText}>{method.accuracy}%</Text>/                )}
             {method.status === coming_soon" && (")
               <Text style={styles.comingSoonText}>即将上线</Text>/                )}
@@ -118,7 +118,7 @@ key={method.id}
               <Text style={styles.maintenanceText}>维护中</Text>/                )}
           </View>/        </View>/
         <Text style={styles.methodDescription}>{method.description}</Text>/
-        <View style={styles.featuresContainer}>/              {method.features.map((feature, index) => ())
+        <View style={styles.featuresContainer}>/              {method.features.map(feature, index) => ())
             <View key={index} style={styles.featureTag}>/              <Text style={styles.featureText}>{feature}</Text>/            </View>/              ))}
         </View>/      </View>/
       {selectedMethod?.id === method.id  && <View style={styles.selectedIndicator}>/          <Icon name="check-circle" size={24} color={colors.primary} />/        </View>/          )}
@@ -128,14 +128,14 @@ key={method.id}
     performanceMonitor.recordRender();
     return (;)
       <View style={styles.detailsContainer}>/        <Text style={styles.detailsTitle}>诊断详情</Text>/
-        <View style={styles.detailsCard}>/          <View style={styles.detailsHeader}>/            <View style={{[styles.detailsIcon, { backgroundColor: selectedMethod.color + "2;0;"  ; }}]} />/              <Icon name={selectedMethod.icon} size={24} color={selectedMethod.color} />/            </View>/            <View style={styles.detailsInfo}>/              <Text style={styles.detailsName}>{selectedMethod.name}</Text>/              <Text style={styles.detailsAccuracy}>准确率: {selectedMethod.accuracy}%</Text>/            </View>/          </View>/
+        <View style={styles.detailsCard}>/          <View style={styles.detailsHeader}>/            <View style={[styles.detailsIcon, { backgroundColor: selectedMethod.color + "2;0;"  ; }}]} />/              <Icon name={selectedMethod.icon} size={24} color={selectedMethod.color} />/            </View>/            <View style={styles.detailsInfo}>/              <Text style={styles.detailsName}>{selectedMethod.name}</Text>/              <Text style={styles.detailsAccuracy}>准确率: {selectedMethod.accuracy}%</Text>/            </View>/          </View>/
           <Text style={styles.detailsDescription}>{selectedMethod.description}</Text>/
           <View style={styles.detailsFeatures}>/            <Text style={styles.detailsFeaturesTitle}>功能特点:</Text>/                {selectedMethod.features.map(feature, index); => ()
               <Text key={index} style={styles.detailsFeatureItem}>• {feature}</Text>/                ))}
           </View>/        </View>/      </View>/        );
   }
   return (;)
-    <Modal
+    <Modal;
 visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
@@ -147,7 +147,7 @@ visible={visible}
           </View>/
           {renderSelectedMethodDetails()}
         </ScrollView>/
-        {selectedMethod  && <View style={styles.footer}>/                <TouchableOpacity
+        {selectedMethod  && <View style={styles.footer}>/                <TouchableOpacity;
 style={[styles.startButton, isLoading && styles.disabledButton]}
               onPress={startDiagnosis}
               disabled={isLoading}
@@ -158,7 +158,7 @@ style={[styles.startButton, isLoading && styles.disabledButton]}
             </TouchableOpacity>/          </View>/            )};
       </View>/    </Modal>/      ;);
 };
-const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,)
+const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {),
   flex: 1,
     backgroundColor: colors.background;
   },

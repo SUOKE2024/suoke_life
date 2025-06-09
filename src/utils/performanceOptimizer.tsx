@@ -5,21 +5,21 @@ importAsyncStorage from "@react-native-async-storage/async-storage";/import { mo
 性能配置 * const PERFORMANCE_CONFIG = { ;
   MEMORY_WARNING_THRESHOLD: 80,  NETWORK_TIMEOUT: 10000,  / 网络请求超时时间（毫秒）*  缓存大小限制（50MB）*  图片缓存数量限制*  渲染批处理大小*  防抖延迟（毫秒）* * ;}; * / // 性能指标类型 * export interface PerformanceMetrics {
   memoryUsage: number,
-  cpuUsage: number;
+  cpuUsage: number;,
   renderTime: number;
-  networkLatency: number;
+  networkLatency: number;,
   cacheHitRate: number;
-  frameDrops: number;
+  frameDrops: number;,
   timestamp: number;
-  cacheSize: number;
+  cacheSize: number;,
   networkRequests: number;
-  averageResponseTime: number;
+  averageResponseTime: number;,
   lastOptimization: number;
 }
 export interface OptimizationResult {
-  action: string;
+  action: string;,
   improvement: number;
-  description: string;
+  description: string;,
   timestamp: number;
 }
 // 缓存配置 * interface CacheConfig {
@@ -33,9 +33,9 @@ export interface OptimizationResult {
   encrypted?: boolean}
 // 图片优化配置 * interface ImageOptimizationConfig {
   quality: number,
-  maxWidth: number;
+  maxWidth: number;,
   maxHeight: number;
-  format: "jpeg" | "png" | "webp";
+  format: "jpeg" | "png" | "webp";,
   enableLazyLoading: boolean;
   enablePlaceholder: boolean;
 }
@@ -540,7 +540,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
     for (let i = 0; i < operations.length; i += batchSize) {
       const batch = operations.slice(i, i + batchSiz;e;);
       const batchResults = await Promise.allSettled(batch.map(;(;o;p;); => op();));
-      batchResults.forEach(((result) => {}))
+      batchResults.forEach((result) => {}))
         if (result.status === "fulfilled") {
           results.push(result.value);
         }
@@ -575,7 +575,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
     }
   }
   private getCurrentCacheSize(): number {
-    return Array.from(this.cache.values).reduce((acc, item) => acc + item, 0);
+    return Array.from(this.cache.values).reduce(acc, item) => acc + item, 0);
       (total, item); => total + item.size,
       0;
     );
@@ -751,7 +751,7 @@ export const createOptimizedFetch = () ;
   performanceOptimizer.createOptimizedFetch();
 export const batchOperations = <T   ; ///  >;
 >;(;)
-  operations: Array<() => Promise<T> />,/  batchSize?: number
+  operations: Array<() => Promise<T> />,/  batchSize?: number;
 ) => performanceOptimizer.batchOperations(operations, batchSize);
 //;
 I;G; /

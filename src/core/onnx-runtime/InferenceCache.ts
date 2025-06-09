@@ -358,7 +358,7 @@ return data;
   private calculateHitRate(): number {
     // 简化的命中率计算
 const totalAccess = this.accessTimes.size;
-    const hits = Array.from(this.inferenceCache.values()).reduce((acc, item) => acc + item, 0);
+    const hits = Array.from(this.inferenceCache.values()).reduce(acc, item) => acc + item, 0);
       (sum, cached) => sum + cached.accessCount, 0;
     );
     return totalAccess > 0 ? (hits / totalAccess) * 100 : 0;
@@ -366,15 +366,15 @@ const totalAccess = this.accessTimes.size;
 }
 // 辅助接口
 interface CachedInferenceResult {
-  result: InferenceResult;
+  result: InferenceResult;,
   timestamp: number;
   accessCount: number;
 }
 interface CacheStats {
-  modelCacheSize: number;
+  modelCacheSize: number;,
   inferenceCacheSize: number;
-  totalSize: number;
+  totalSize: number;,
   maxSize: number;
-  hitRate: number;
+  hitRate: number;,
   memoryUsage: number;
 }  */

@@ -5,7 +5,7 @@ import axios, { AxiosInstance } from 'axios';
 */
 // 类型定义
 export interface Message {
-  id: string;
+  id: string;,
   topic: string;
   payload: any;
   attributes?: Record<string, string>;
@@ -16,17 +16,17 @@ export interface Topic {
   name: string;
   description?: string;
   properties?: Record<string, string>;
-  creationTime: number;
+  creationTime: number;,
   partitionCount: number;
   retentionHours: number;
 }
 export interface PublishRequest {
-  topic: string;
+  topic: string;,
   payload: any;
   attributes?: Record<string, string>;
 }
 export interface PublishResponse {
-  messageId: string;
+  messageId: string;,
   publishTime: number;
   success: boolean;
   errorMessage?: string;
@@ -64,7 +64,7 @@ export interface ListTopicsResponse {
   totalCount: number;
 }
 export interface Subscription {
-  id: string;
+  id: string;,
   topic: string;
   callback: (message: Message) => void;
   filter?: Record<string, string>;
@@ -97,15 +97,12 @@ export class MessageBusService {
       retryDelay: 1000,
       enableWebSocket: true,
       webSocketUrl: 'ws://localhost:8004/ws',
-      ...config,
-    };
+      ...config};
     this.apiClient = axios.create({
       baseURL: this.config.baseUrl,
       timeout: this.config.timeout,
       headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+        'Content-Type': 'application/json'}});
     // 如果启用WebSocket，则初始化连接
     if (this.config.enableWebSocket) {
       this.initializeWebSocket();
@@ -191,8 +188,7 @@ export class MessageBusService {
       topic,
       callback,
       filter: options.filter,
-      isActive: true,
-    };
+      isActive: true};
     this.subscriptions.set(subscriptionId, subscription);
     // 如果WebSocket连接可用，发送订阅请求
     if (this.webSocket && this.webSocket.readyState === WebSocket.OPEN) {
@@ -201,8 +197,7 @@ export class MessageBusService {
         subscriptionId,
         topic,
         filter: options.filter,
-        subscriptionName: options.subscriptionName,
-      });
+        subscriptionName: options.subscriptionName});
     }
     return subscriptionId;
   }
@@ -220,8 +215,7 @@ export class MessageBusService {
     if (this.webSocket && this.webSocket.readyState === WebSocket.OPEN) {
       this.sendWebSocketMessage({
         type: 'unsubscribe',
-        subscriptionId,
-      });
+        subscriptionId});
     }
     return true;
   }
@@ -291,8 +285,7 @@ export class MessageBusService {
           payload: data.message.payload,
           attributes: data.message.attributes,
           publishTime: data.message.publishTime,
-          publisherId: data.message.publisherId,
-        };
+          publisherId: data.message.publisherId};
         try {
           subscription.callback(message);
         } catch (error) {
@@ -336,8 +329,7 @@ export class MessageBusService {
       type: "subscribe",
       subscriptionId: subscription.id,
           topic: subscription.topic,
-          filter: subscription.filter,
-        });
+          filter: subscription.filter});
       }
     }
   }

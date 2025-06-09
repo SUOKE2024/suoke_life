@@ -1,560 +1,638 @@
-import { usePerformanceMonitor  } from "../../placeholder";../hooks/usePerformanceMonitor";/    import {   View,"
-import { useNavigation } from "@react-navigation/native/import { colors, spacing  } from ;../../constants/theme";/import { API_CONFIG } from ../../constants/    config;
-import React from "react";
-interface ApiResponse<T = any /> { data: T;/     , success: boolean;
-  message?: string;
-  code?: number}
-import React,{ useState, useEffect, useCallback, useMemo } from "react";
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
+import { useNavigation } from '@react-navigation/native';
+import React, { useCallback, useEffect, useState } from 'react';
+import {
   ActivityIndicator,
   Alert,
+  ScrollView,
+  StyleSheet,
   Switch,
-  { Platform    } from react-native""
-/
-interface serviceInfo {
-  id: string;
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+interface ServiceInfo {
+  id: string;,
   name: string;
-  description: string;
-  type: "agent | "core" | diagnosis";
-  isRunning: boolean;
+  description: string;,
+  type: 'agent' | 'core' | 'diagnosis';
+  isRunning: boolean;,
   baseUrl: string;
-  status: "starting | "running" | stopping" | "stopped | "error;
-  lastAction?: string
-};
-export const serviceManagementScreen: React.FC  = () => {};
-const performanceMonitor = usePerformanceMonitor(serviceManagementScreen", { ";)
-    trackRender: true,trackMemory: true,warnThreshold: 50,  };);
-  const navigation = useNavigation;
-  const [loading, setLoading] = useState<boolean>(fals;e;);
-  const [services, setservices] = useState<serviceInfo[] />([;];);/      const [autoStart, setAutoStart] = useState<boolean>(fals;e;);
-  const initializeservices = useCallback(); => {};
-const servicesList: serviceInfo[] = [ { /,
-  id: "xiaoai,",
-        name: "小艾服务", "
-        description: 中医诊断智能体",
-        type: "agent,",
-        isRunning: false,
-        baseUrl: API_CONFIG.AGENTS.XIAOAI,
-        status: "stopped"
-      },
-      {
-        id: xiaoke",
-        name: "小克服务,",
-        description: "服务管理智能体",
-        type: agent",
-        isRunning: false,
-        baseUrl: API_CONFIG.AGENTS.XIAOKE,
-        status: "stopped"
-      },
-      {
-      id: "laoke",
-      name: 老克服务",
-        description: "教育智能体,",
-        type: "agent",
-        isRunning: false,
-        baseUrl: API_CONFIG.AGENTS.LAOKE,
-        status: stopped""
-      },
-      {
-      id: "soer,",
-      name: "索儿服务", "
-        description: 生活智能体",
-        type: "agent,",
-        isRunning: false,
-        baseUrl: API_CONFIG.AGENTS.SOER,
-        status: "stopped"
-      },
-      {
-        id: auth",
-        name: "认证服务,",
-        description: "用户认证和授权",
-        type: core",
-        isRunning: false,
-        baseUrl: API_CONFIG.serviceS.AUTH,
-        status: "stopped"
-      },
-      {
-      id: "user",
-      name: 用户服务",
-        description: "用户资料和数据管理,",
-        type: "core",
-        isRunning: false,
-        baseUrl: API_CONFIG.serviceS.USER,
-        status: stopped""
-      },
-      {
-      id: "health,",
-      name: "健康数据服务", "
-        description: 健康数据收集和分析",
-        type: "core,",
-        isRunning: false,
-        baseUrl: API_CONFIG.serviceS.HEALTH,
-        status: "stopped"
-      },
-      {
-        id: look",
-        name: "望诊服务,",
-        description: "图像分析和识别",
-        type: diagnosis",
-        isRunning: false,
-        baseUrl: API_CONFIG.DIAGNOSIS.LOOK,
-        status: "stopped"
-      },
-      {
-      id: "listen",
-      name: 闻诊服务",
-        description: "音频分析和处理,",
-        type: "diagnosis",
-        isRunning: false,
-        baseUrl: API_CONFIG.DIAGNOSIS.LISTEN,
-        status: stopped""
-      },
-      {
-      id: "inquiry,",
-      name: "问诊服务", "
-        description: 智能问答系统",
-        type: "diagnosis,",
-        isRunning: false,
-        baseUrl: API_CONFIG.DIAGNOSIS.INQUIRY,
-        status: "stopped"
-      },
-      {
-        id: palpation",
-        name: "切诊服务,",
-        description: "脉象检测和分析",
-        type: diagnosis",
-        isRunning: false,
-        baseUrl: API_CONFIG.DIAGNOSIS.PALPATION,
-        status: "stopped"
-      }
-    ]
-    setservices(servicesList);
-    checkservicesStatus(servicesList);
-      const effectEnd = performance.now();
-    performanceMonitor.recordEffect(effectEnd - effectStart);
+  status: 'starting' | 'running' | 'stopping' | 'stopped' | 'error';
+  lastAction?: string;
+}
+
+export const ServiceManagementScreen: React.FC = () => {
+  const navigation = useNavigation();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [services, setServices] = useState<ServiceInfo[]>([]);
+  const [autoStart, setAutoStart] = useState<boolean>(false);
+
+  const servicesList: ServiceInfo[] = [
+    {
+      id: 'xiaoai',
+      name: '小艾服务',
+      description: '中医诊断智能体',
+      type: 'agent',
+      isRunning: false,
+      baseUrl: 'http://localhost:8015',
+      status: 'stopped',
+    },
+    {
+      id: 'xiaoke',
+      name: '小克服务',
+      description: '服务管理智能体',
+      type: 'agent',
+      isRunning: false,
+      baseUrl: 'http://localhost:8016',
+      status: 'stopped',
+    },
+    {
+      id: 'laoke',
+      name: '老克服务',
+      description: '教育智能体',
+      type: 'agent',
+      isRunning: false,
+      baseUrl: 'http://localhost:8017',
+      status: 'stopped',
+    },
+    {
+      id: 'soer',
+      name: '索儿服务',
+      description: '生活智能体',
+      type: 'agent',
+      isRunning: false,
+      baseUrl: 'http://localhost:8018',
+      status: 'stopped',
+    },
+    {
+      id: 'auth',
+      name: '认证服务',
+      description: '用户认证和授权',
+      type: 'core',
+      isRunning: false,
+      baseUrl: 'http://localhost:8001',
+      status: 'stopped',
+    },
+    {
+      id: 'user',
+      name: '用户服务',
+      description: '用户资料和数据管理',
+      type: 'core',
+      isRunning: false,
+      baseUrl: 'http://localhost:8002',
+      status: 'stopped',
+    },
+    {
+      id: 'health',
+      name: '健康数据服务',
+      description: '健康数据收集和分析',
+      type: 'core',
+      isRunning: false,
+      baseUrl: 'http://localhost:8003',
+      status: 'stopped',
+    },
+    {
+      id: 'look',
+      name: '望诊服务',
+      description: '图像分析和识别',
+      type: 'diagnosis',
+      isRunning: false,
+      baseUrl: 'http://localhost:8020',
+      status: 'stopped',
+    },
+    {
+      id: 'listen',
+      name: '闻诊服务',
+      description: '音频分析和处理',
+      type: 'diagnosis',
+      isRunning: false,
+      baseUrl: 'http://localhost:8022',
+      status: 'stopped',
+    },
+    {
+      id: 'inquiry',
+      name: '问诊服务',
+      description: '智能问答系统',
+      type: 'diagnosis',
+      isRunning: false,
+      baseUrl: 'http://localhost:8021',
+      status: 'stopped',
+    },
+    {
+      id: 'palpation',
+      name: '切诊服务',
+      description: '脉象检测和分析',
+      type: 'diagnosis',
+      isRunning: false,
+      baseUrl: 'http://localhost:8024',
+      status: 'stopped',
+    },
+  ];
+
+  const initializeServices = useCallback() => {
+    setServices(servicesList);
+    checkServicesStatus(servicesList);
   }, []);
-  const checkservicesStatus = useCallback(async (servicesList: serviceInfo[;];); => {})
-    setLoading(true);
-    try {
-      const updatedservices = [...(servicesList || services;);];
-      const controller = new AbortController;
-      const timeoutId = setTimeout() => controller.abort(), 3000);
-      const checkPromises = updatedservices.map(async (service;) => {})
-        try {
-          const response = await fetch(`${service.baseUrl}/health`, {/                method: "GET",headers: {
-              Accept": "application/json,/                },signal: controller.sign;a;l;};);
-          return {id: service.id,isRunning: response.ok,status: response.ok ? "running" : stopped" as "running | "stopped"};
-        } catch (error) {
-          return {id: service.id,isRunning: false,status: stopped" as "stopped};
-        }
-      });
-      const results = await Promise.all(checkPromis;e;s;);
-      clearTimeout(timeoutId);
-      results.forEach(result => {};)
-const index = updatedservices.findIndex(s => s.id === result.id;);
-        if (index !== -1) {
-          updatedservices[index] = {
-            ...updatedservices[index],
-            isRunning: result.isRunning,
-            status: result.status;
-          };
-        }
-      });
-      setservices(updatedservices);
-    } catch (error) {
-      Alert.alert(错误", "检查服务状态失败);
-    } finally {
-      setLoading(false);
-    };
-const effectEnd = performance.now();
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [services]);
-  useEffect(); => {};
-const effectStart = performance.now();
-    initializeservices();
-      const effectEnd = performance.now();
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [initializeservices]);
-  const startservice = useCallback(async (serviceId: strin;g;); => {};)
-const service = services.find(s => s.id === serviceI;d;);
-    if (!service) retu;r;n;
-    setservices(prev => prev.map(s => {}))
-      s.id === serviceId;
-        ? { ...s, status: "starting", lastAction: 启动中..."}"
-        : s;
-    ))
-    try {
-      const response = await fetch(`${service.baseUrl}/start`, {/            method: "POST,")
-        headers: {"Content-Type": application/json",/            ;}"
-      ;};);
-      if (response.ok) {
-        setservices(prev => prev.map(s => {}))
-          s.id === serviceId;
-            ? { ...s, isRunning: true, status: "running, lastAction: "启动成功"}"
-            : s;
-        );)
-        Alert.alert(成功", " `${service.name}启动成功`)"
-      } else {
-        throw new Error("启动失败;)"
-      }
-    } catch (error) {
-      setservices(prev => prev.map(s => {}))
-        s.id === serviceId;
-          ? { ...s, status: "error", lastAction: 启动失败"}"
-          : s;
-      );)
-      Alert.alert("错误, `启动${service.name}失败`);"
-    };
-const effectEnd = performance.now();
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [services]);
-  const stopservice = useCallback(async (serviceId: strin;g;); => {};)
-const service = services.find(s => s.id === serviceI;d;);
-    if (!service) retu;r;n;
-    setservices(prev => prev.map(s => {}))
-      s.id === serviceId;
-        ? { ...s, status: "stopping", lastAction: 停止中..."}"
-        : s;
-    ))
-    try {
-      const response = await fetch(`${service.baseUrl}/stop`, {/            method: "POST,")
-        headers: {"Content-Type": application/json",/            ;}"
-      ;};);
-      if (response.ok) {
-        setservices(prev => prev.map(s => {}))
-          s.id === serviceId;
-            ? { ...s, isRunning: false, status: "stopped, lastAction: "停止成功"}"
-            : s;
-        );)
-        Alert.alert(成功", " `${service.name}停止成功`)"
-      } else {
-        throw new Error("停止失败;)"
-      }
-    } catch (error) {
-      setservices(prev => prev.map(s => {}))
-        s.id === serviceId;
-          ? { ...s, status: "error", lastAction: 停止失败"}"
-          : s;
-      );)
-      Alert.alert("错误, `停止${service.name}失败`);"
-    };
-const effectEnd = performance.now();
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [services]);
-  const restartservice = useCallback(async (serviceId: strin;g;); => {})
-    await stopservice(serviceI;d;);
-    setTimeout() => {
-      startservice(serviceId);
-    }, 1000);
-      const effectEnd = performance.now();
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [stopservice, startservice]);
-  const refreshservicesStatus = useCallback(); => {}
-    checkservicesStatus(services);
-      const effectEnd = performance.now();
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [checkservicesStatus, services]);
-  const startAllservices = useCallback(async ;(;) => {})
-    Alert.alert("确认操作", "
-      确定要启动所有服务吗？这可能需要一些时间。",
-      [
-        { text: "取消, style: "cancel"},"
-        {
-          text: 确定",
-          onPress: async(); => {}
-            for (const service of services) {
-              if (!service.isRunning) {
-                await startservice(service.i;d;);
-                await new Promise(resolve => setTimeout(resolve, 1000;););
-              }
-            }
+
+  const checkServicesStatus = useCallback(
+    async (servicesList: ServiceInfo[]) => {
+      setLoading(true);
+      try {
+        const updatedServices = [...(servicesList || services)];
+        const controller = new AbortController();
+        const timeoutId = setTimeout() => controller.abort(), 3000);
+
+        const checkPromises = updatedServices.map(async (service) => {
+          try {
+            const response = await fetch(`${service.baseUrl}/health`, {
+              method: 'GET',
+              headers: {,
+  Accept: 'application/json',
+              },
+              signal: controller.signal,
+            });
+            return {
+              id: service.id,
+              isRunning: response.ok,
+              status: response.ok;
+                ? 'running'
+                : ('stopped' as 'running' | 'stopped'),
+            };
+          } catch (error) {
+            return {
+              id: service.id,
+              isRunning: false,
+              status: 'stopped' as 'stopped',
+            };
           }
-        }
-      ]
-    );
-      const effectEnd = performance.now();
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [services, startservice]);
-  const stopAllservices = useCallback(async ;(;) => {})
-    Alert.alert("确认操作,确定要停止所有服务吗？", "
-      [
-        { text: 取消", style: "cancel},
-        {
-      text: "确定",
-      onPress: async(); => {}
-            for (const service of services) {
-              if (service.isRunning) {
-                await stopservice(service.i;d;);
-              }
-            }
+        });
+
+        const results = await Promise.all(checkPromises);
+        clearTimeout(timeoutId);
+
+        results.forEach(result) => {
+          const index = updatedServices.findIndex(s) => s.id === result.id);
+          if (index !== -1) {
+            updatedServices[index] = {
+              ...updatedServices[index],
+              isRunning: result.isRunning,
+              status: result.status,
+            };
           }
+        });
+
+        setServices(updatedServices);
+      } catch (error) {
+        Alert.alert('错误', '检查服务状态失败');
+      } finally {
+        setLoading(false);
+      }
+    },
+    [services]
+  );
+
+  useEffect() => {
+    initializeServices();
+  }, [initializeServices]);
+
+  const startService = useCallback(
+    async (serviceId: string) => {
+      const service = services.find(s) => s.id === serviceId);
+      if (!service) return;
+
+      setServices(prev) =>
+        prev.map(s) =>
+          s.id === serviceId;
+            ? { ...s, status: 'starting', lastAction: '启动中...' }
+            : s;
+        )
+      );
+
+      try {
+        const response = await fetch(`${service.baseUrl}/start`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          setServices(prev) =>
+            prev.map(s) =>
+              s.id === serviceId;
+                ? {
+                    ...s,
+                    isRunning: true,
+                    status: 'running',
+                    lastAction: '启动成功',
+                  }
+                : s;
+            )
+          );
+          Alert.alert('成功', `${service.name}启动成功`);
+        } else {
+          throw new Error('启动失败');
         }
-      ]
-    );
-      const effectEnd = performance.now();
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [services, stopservice])
-  const getStatusColor = useCallback(status: serviceInfo[status";];) => {}"
+      } catch (error) {
+        setServices(prev) =>
+          prev.map(s) =>
+            s.id === serviceId;
+              ? { ...s, status: 'error', lastAction: '启动失败' }
+              : s;
+          )
+        );
+        Alert.alert('错误', `${service.name}启动失败`);
+      }
+    },
+    [services]
+  );
+
+  const stopService = useCallback(
+    async (serviceId: string) => {
+      const service = services.find(s) => s.id === serviceId);
+      if (!service) return;
+
+      setServices(prev) =>
+        prev.map(s) =>
+          s.id === serviceId;
+            ? { ...s, status: 'stopping', lastAction: '停止中...' }
+            : s;
+        )
+      );
+
+      try {
+        const response = await fetch(`${service.baseUrl}/stop`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          setServices(prev) =>
+            prev.map(s) =>
+              s.id === serviceId;
+                ? {
+                    ...s,
+                    isRunning: false,
+                    status: 'stopped',
+                    lastAction: '停止成功',
+                  }
+                : s;
+            )
+          );
+          Alert.alert('成功', `${service.name}停止成功`);
+        } else {
+          throw new Error('停止失败');
+        }
+      } catch (error) {
+        setServices(prev) =>
+          prev.map(s) =>
+            s.id === serviceId;
+              ? { ...s, status: 'error', lastAction: '停止失败' }
+              : s;
+          )
+        );
+        Alert.alert('错误', `${service.name}停止失败`);
+      }
+    },
+    [services]
+  );
+
+  const restartService = useCallback(
+    async (serviceId: string) => {
+      await stopService(serviceId);
+      setTimeout() => startService(serviceId), 1000);
+    },
+    [startService, stopService]
+  );
+
+  const getStatusColor = (status: string) => {
     switch (status) {
-      case "running: return colors.succe;s;s;"
-case "starting": return colors.warni;n;g;
-case stopping": return colors.warni;n;g;"
-case "stopped: return colors.textSeconda;r;y;"
-case "error": return colors.error;
-      default: return colors.textSeconda;r;y;
-    };
-const effectEnd = performance.now();
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [])
-  const getStatusText = useCallback(status: serviceInfo[status";];) => {}"
-    switch (status) {
-      case "running: return "运行;中
-      case starting": return "启动;中;
-      case "stopping": return 停止;中
-      case "stopped: return "已停;止
-      case error": return "错;误;
-      default: return "未;知";
-    };
-const effectEnd = performance.now();
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, []);
-  const renderserviceCard = useCallback(service: serviceInf;o;); => {}
-    performanceMonitor.recordRender();
-    return (;)
-      <View key={service.id} style={styles.serviceCard}>/        <View style={styles.serviceHeader}>/          <View style={styles.serviceInfo}>/            <Text style={styles.serviceName}>{service.name}</Text>/            <Text style={styles.serviceDescription}>{service.description}</Text>/            <Text style={styles.serviceType}>类型: {service.type}</Text>/          </View>/          <View style={styles.serviceStatus}>/            <View style={{[styles.statusIndicator, { backgroundColor: getStatusColor(service.status)   }}]} />/            <Text style={{[styles.statusText, { color: getStatusColor(service.status)   }}]} />/                  {getStatusText(service.status)};
-            </Text>/          </View>/        </View>/;
-        {service.lastAction && (;)
-          <Text style={styles.lastAction}>最后操作: {service.lastAction}</Text>/            )};
-        <View style={styles.serviceActions}>/              <TouchableOpacity,style={[styles.actionButton, styles.startButton]};
-            onPress={() = accessibilityLabel="TODO: 添加无障碍标签" startservice(service.id)}/                disabled={service.isRunning || service.status === starting"}";
-          >;
-            <Text style={styles.startButtonText}>启动</Text>/          </TouchableOpacity>/;
-          <TouchableOpacity
-style={[styles.actionButton, styles.stopButton]}
-            onPress={() = accessibilityLabel="TODO: 添加无障碍标签" stopservice(service.id)}/                disabled={!service.isRunning || service.status === "stopping}"
-          >
-            <Text style={styles.stopButtonText}>停止</Text>/          </TouchableOpacity>/
-          <TouchableOpacity
-style={[styles.actionButton, styles.restartButton]}
-            onPress={() = accessibilityLabel="TODO: 添加无障碍标签" restartservice(service.id)}/                disabled={service.status === "starting" || service.status === stopping"};"
-          >;
-            <Text style={styles.restartButtonText}>重启</Text>/          </TouchableOpacity>/        </View>/      </View>/        ;);
-      const effectEnd = performance.now();
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [getStatusColor, getStatusText, startservice, stopservice, restartservice]);
-  const groupedservices = useMemo() => {
-    const groups = {agent: services.filter(s => s.type === "agent),"
-      core: services.filter(s => s.type === "core"),diagnosis: services.filter(s => s.type === diagnosis";);};"
-    return grou;p;s;
-      const effectEnd = performance.now();
-    performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [services])
-  return (;)
-    <View style={styles.container}>/      {///            <TouchableOpacity
-onPress={() = accessibilityLabel="TODO: 添加无障碍标签" navigation.goBack()}/              style={styles.backButton}
+      case 'running':
+        return '#27AE60';
+      case 'stopped':
+        return '#95A5A6';
+      case 'starting':
+      case 'stopping':
+        return '#F39C12';
+      case 'error':
+        return '#E74C3C';
+      default:
+        return '#95A5A6';
+    }
+  };
+
+  const getTypeColor = (type: string) => {
+    switch (type) {
+      case 'agent':
+        return '#3498DB';
+      case 'core':
+        return '#9B59B6';
+      case 'diagnosis':
+        return '#E67E22';
+      default:
+        return '#95A5A6';
+    }
+  };
+
+  const renderServiceCard = (service: ServiceInfo) => (
+    <View key={service.id} style={styles.serviceCard}>
+      <View style={styles.serviceHeader}>
+        <View style={styles.serviceInfo}>
+          <Text style={styles.serviceName}>{service.name}</Text>
+          <Text style={styles.serviceDescription}>{service.description}</Text>
+          <View style={styles.serviceDetails}>
+            <View;
+              style={[
+                styles.typeBadge,
+                { backgroundColor: getTypeColor(service.type) },
+              ]}
+            >
+              <Text style={styles.typeBadgeText}>
+                {service.type.toUpperCase()}
+              </Text>
+            </View>
+            <View;
+              style={[
+                styles.statusBadge,
+                { backgroundColor: getStatusColor(service.status) },
+              ]}
+            >
+              <Text style={styles.statusBadgeText}>
+                {service.status.toUpperCase()}
+              </Text>
+            </View>
+          </View>
+          {service.lastAction && (
+            <Text style={styles.lastAction}>
+              最后操作: {service.lastAction}
+            </Text>
+          )}
+        </View>
+        <Switch;
+          value={service.isRunning}
+          onValueChange={(value) => {
+            if (value) {
+              startService(service.id);
+            } else {
+              stopService(service.id);
+            }
+          }}
+          disabled={
+            service.status === 'starting' || service.status === 'stopping'
+          }
+          trackColor={ false: '#E1E8ED', true: '#3498DB' }}
+          thumbColor={service.isRunning ? '#FFFFFF' : '#FFFFFF'}
+        />
+      </View>
+      <View style={styles.serviceActions}>
+        <TouchableOpacity;
+          style={[styles.actionButton, styles.startButton]}
+          onPress={() => startService(service.id)}
+          disabled={service.isRunning || service.status === 'starting'}
         >
-          <Text style={styles.backButtonText}>← 返回</Text>/        </TouchableOpacity>/        <Text style={styles.headerTitle}>服务管理</Text>/            <TouchableOpacity
-onPress={refreshservicesStatus}
-          style={styles.refreshButton}
-          disabled={loading}
-        accessibilityLabel="TODO: 添加无障碍标签"/          <Text style={styles.refreshButtonText}>刷新</Text>/        </TouchableOpacity>/      </View>/
-      {///              <Switch
-value={autoStart};
-            onValueChange={setAutoStart};
-            trackColor={ false: colors.border, true: colors.prima;r;y }}
-            thumbColor={autoStart ? colors.white: colors.textSecondary} />/        </View>/
-        <View style={styles.globalButtons}>/              <TouchableOpacity
-style={[styles.globalButton, styles.startAllButton]}
-            onPress={startAllservices}
-            disabled={loading}
-          accessibilityLabel="TODO: 添加无障碍标签"/            <Text style={styles.startAllButtonText}>启动全部</Text>/          </TouchableOpacity>/
-          <TouchableOpacity
-style={[styles.globalButton, styles.stopAllButton]}
-            onPress={stopAllservices}
-            disabled={loading}
-          accessibilityLabel="TODO: 添加无障碍标签"/            <Text style={styles.stopAllButtonText}>停止全部</Text>/          </TouchableOpacity>/        </View>/      </View>/
-      {loading   && <View style={styles.loadingContainer}>/          <ActivityIndicator size="large" color={colors.primary} />/          <Text style={styles.loadingText}>检查服务状态中...</Text>/        </View>/          )}
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false} />/        {///              {groupedservices.agent.map(renderserviceCard)}
-        </View>/
-        {///              {groupedservices.core.map(renderserviceCard)}
-        </View>/
-        {///              {groupedservices.diagnosis.map(renderserviceCard)}
-        </View>/      </ScrollView>/    </View>/      )
+          <Text style={styles.actionButtonText}>启动</Text>
+        </TouchableOpacity>
+        <TouchableOpacity;
+          style={[styles.actionButton, styles.stopButton]}
+          onPress={() => stopService(service.id)}
+          disabled={!service.isRunning || service.status === 'stopping'}
+        >
+          <Text style={styles.actionButtonText}>停止</Text>
+        </TouchableOpacity>
+        <TouchableOpacity;
+          style={[styles.actionButton, styles.restartButton]}
+          onPress={() => restartService(service.id)}
+          disabled={
+            service.status === 'starting' || service.status === 'stopping'
+          }
+        >
+          <Text style={styles.actionButtonText}>重启</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+
+  const groupedServices = services.reduce(acc, service) => {
+      if (!acc[service.type]) {
+        acc[service.type] = [];
+      }
+      acc[service.type].push(service);
+      return acc;
+    },
+    {} as Record<string, ServiceInfo[]>
+  );
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Text style={styles.backButton}>←</Text>
+        </TouchableOpacity>
+        <Text style={styles.title}>服务管理</Text>
+        <TouchableOpacity onPress={() => checkServicesStatus(services)}>
+          <Text style={styles.refreshButton}>刷新</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.settingsSection}>
+        <View style={styles.settingItem}>
+          <Text style={styles.settingLabel}>自动启动服务</Text>
+          <Switch;
+            value={autoStart}
+            onValueChange={setAutoStart}
+            trackColor={ false: '#E1E8ED', true: '#3498DB' }}
+            thumbColor={autoStart ? '#FFFFFF' : '#FFFFFF'}
+          />
+        </View>
+      </View>
+
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        {loading && (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#3498DB" />
+            <Text style={styles.loadingText}>检查服务状态中...</Text>
+          </View>
+        )}
+
+        {!loading &&
+          Object.entries(groupedServices).map([type, typeServices]) => (
+            <View key={type} style={styles.serviceGroup}>
+              <Text style={styles.groupTitle}>
+                {type === 'agent'
+                  ? '智能体服务'
+                  : type === 'core'
+                    ? '核心服务'
+                    : type === 'diagnosis'
+                      ? '诊断服务'
+                      : type}
+              </Text>
+              {typeServices.map(renderServiceCard)}
+            </View>
+          ))}
+      </ScrollView>
+    </SafeAreaView>
+  );
 };
-const styles = StyleSheet.create({container: {,)
+
+const styles = StyleSheet.create({
+  container: {,
   flex: 1,
-    backgroundColor: colors.background;
+    backgroundColor: '#F5F7FA',
   },
   header: {,
-  flexDirection: "row,",
-    alignItems: "center",
-    justifyContent: space-between",
-    padding: spacing.md,
-    backgroundColor: colors.white,
+  flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-    zIndex: 10;
+    borderBottomColor: '#E1E8ED',
   },
-  backButton: { padding: spacing.sm  },
-  backButtonText: {,
-  color: colors.primary,
-    fontSize: 16,
-    fontWeight: "bold"
+  backButton: {,
+  fontSize: 24,
+    color: '#2C3E50',
   },
-  headerTitle: {,
+  title: {,
   fontSize: 18,
-    fontWeight: "bold",
-    color: colors.textPrimary;
+    fontWeight: 'bold',
+    color: '#2C3E50',
   },
-  refreshButton: { padding: spacing.sm  },
-  refreshButtonText: {,
-  color: colors.primary,
-    fontSize: 16,
-    fontWeight: bold""
-  },
-  globalControls: {,
-  backgroundColor: colors.white,
-    padding: spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-    zIndex: 5;
-  },
-  autoStartContainer: {,
-  flexDirection: "row,",
-    justifyContent: "space-between",
-    alignItems: center",
-    marginBottom: spacing.md;
-  },
-  autoStartLabel: {,
+  refreshButton: {,
   fontSize: 16,
-    color: colors.textPrimary;
+    color: '#3498DB',
+    fontWeight: '600',
   },
-  globalButtons: {,
-  flexDirection: "row,",
-    justifyContent: "space-between"
+  settingsSection: {,
+  backgroundColor: '#FFFFFF',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E1E8ED',
   },
-  globalButton: {,
-  flex: 1,
-    padding: spacing.md,
-    borderRadius: 4,
-    alignItems: center",
-    justifyContent: "center,",
-    marginHorizontal: spacing.sm;
+  settingItem: {,
+  flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  startAllButton: { backgroundColor: colors.primary  },
-  stopAllButton: { backgroundColor: colors.error  },
-  startAllButtonText: {,
-  color: colors.white,
-    fontSize: 16,
-    fontWeight: "bold"
-  },
-  stopAllButtonText: {,
-  color: colors.white,
-    fontSize: 16,
-    fontWeight: bold""
-  },
-  loadingContainer: {,
-  padding: spacing.lg,
-    alignItems: "center"
-  },
-  loadingText: {,
-  color: colors.textSecondary,
-    fontSize: 16,
-    marginTop: spacing.md;
+  settingLabel: {,
+  fontSize: 16,
+    color: '#2C3E50',
+    fontWeight: '500',
   },
   content: {,
   flex: 1,
-    padding: spacing.md;
+    padding: 20,
   },
-  serviceGroup: { marginBottom: spacing.xl  },
+  loadingContainer: {,
+  alignItems: 'center',
+    paddingVertical: 40,
+  },
+  loadingText: {,
+  marginTop: 16,
+    fontSize: 16,
+    color: '#7F8C8D',
+  },
+  serviceGroup: {,
+  marginBottom: 24,
+  },
   groupTitle: {,
-  fontSize: 16,
-    fontWeight: "bold",
-    color: colors.textSecondary,
-    marginBottom: spacing.md;
+  fontSize: 18,
+    fontWeight: 'bold',
+    color: '#2C3E50',
+    marginBottom: 12,
   },
   serviceCard: {,
-  backgroundColor: colors.white,
-    borderRadius: 8,
-    padding: spacing.md,
-    marginBottom: spacing.md,
-    shadowColor: #000",
-    shadowOffset: { width: 0, height;: ;2 },
+  backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 2;
+    elevation: 3,
   },
   serviceHeader: {,
-  flexDirection: "row,",
-    justifyContent: "space-between",
-    alignItems: center""
+  flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 12,
   },
-  serviceInfo: { flex: 1  },
+  serviceInfo: {,
+  flex: 1,
+    marginRight: 16,
+  },
   serviceName: {,
   fontSize: 16,
-    fontWeight: "bold,",
-    color: colors.textPrimary;
+    fontWeight: 'bold',
+    color: '#2C3E50',
+    marginBottom: 4,
   },
   serviceDescription: {,
   fontSize: 14,
-    color: colors.textSecondary,
-    marginTop: spacing.sm,
-    marginBottom: spacing.md;
+    color: '#7F8C8D',
+    marginBottom: 8,
   },
-  serviceType: {,
-  fontSize: 14,
-    color: colors.textSecondary;
+  serviceDetails: {,
+  flexDirection: 'row',
+    gap: 8,
+    marginBottom: 4,
   },
-  serviceStatus: {,
-  flexDirection: "row",
-    alignItems: center""
+  typeBadge: {,
+  paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
   },
-  statusIndicator: {,
-  width: 12,
-    height: 12,
-    borderRadius: 6,
-    marginRight: spacing.sm;
+  typeBadgeText: {,
+  color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '600',
   },
-  statusText: {,
-  fontSize: 14,
-    color: colors.textSecondary;
+  statusBadge: {,
+  paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+  },
+  statusBadgeText: {,
+  color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '600',
   },
   lastAction: {,
-  fontSize: 14,
-    color: colors.textSecondary,
-    marginTop: spacing.sm;
+  fontSize: 12,
+    color: '#95A5A6',
+    fontStyle: 'italic',
   },
   serviceActions: {,
-  flexDirection: "row,",
-    justifyContent: "flex-end",
-    marginTop: spacing.md;
+  flexDirection: 'row',
+    gap: 8,
   },
   actionButton: {,
-  paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.md,
-    borderRadius: 4,
-    marginLeft: spacing.sm;
+  flex: 1,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+    alignItems: 'center',
   },
-  startButton: { backgroundColor: colors.primary  },
-  stopButton: { backgroundColor: colors.error  },
-  restartButton: { backgroundColor: colors.warning  },
-  startButtonText: {,
-  color: colors.white,
-    fontSize: 14,
-    fontWeight: bold""
+  startButton: {,
+  backgroundColor: '#27AE60',
   },
-  stopButtonText: {,
-  color: colors.white,
-    fontSize: 14,
-    fontWeight: "bold"
+  stopButton: {,
+  backgroundColor: '#E74C3C',
   },
-  restartButtonText: {,
-  color: colors.white,
+  restartButton: {,
+  backgroundColor: '#F39C12',
+  },
+  actionButtonText: {,
+  color: '#FFFFFF',
     fontSize: 14,
-    fontWeight: "bold'"'
-  }
+    fontWeight: '600',
+  },
 });
-export default React.memo(serviceManagementScreen);
+
+export default ServiceManagementScreen;

@@ -35,12 +35,12 @@ export default {
   getUsedMemory: jest.fn(() => Promise.resolve(2000000000)),
   getTotalDiskCapacity: jest.fn(() => Promise.resolve(64000000000)),
   getFreeDiskStorage: jest.fn(() => Promise.resolve(32000000000)),
-  getPowerState: jest.fn(() =>)
+  getPowerState: jest.fn(() =>
     Promise.resolve({
       batteryLevel: 0.8,
       batteryState: 'unplugged',
-      lowPowerMode: false
-    });
+      lowPowerMode: false,
+    })
   ),
   isBatteryCharging: jest.fn(() => Promise.resolve(false)),
   isAirplaneMode: jest.fn(() => Promise.resolve(false)),
@@ -63,5 +63,5 @@ export default {
   getIncremental: jest.fn(() => Promise.resolve('mock-incremental')),
   supported32BitAbis: jest.fn(() => Promise.resolve([])),
   supported64BitAbis: jest.fn(() => Promise.resolve([])),
-  supportedAbis: jest.fn(() => Promise.resolve([]))
+  supportedAbis: jest.fn(() => Promise.resolve([])),
 };

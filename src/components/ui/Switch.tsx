@@ -5,18 +5,18 @@ import { colors, spacing  } from "../../placeholder";../../constants/theme";/imp
 // * 索克生活 - Switch组件;
 * 开关组件，用于切换状态
 export interface SwitchProps {
-  value: boolean;
+  value: boolean;,
   onValueChange: (value: boolean) => void, size?: "small" | "medium" | "large"    ;
   color?: string;
-  disabled?: boolean
-  label?: string
+  disabled?: boolean;
+  label?: string;
   description?: string;
   labelPosition?: "left" | "right"
-  style?: ViewStyle
-  testID?: string
+  style?: ViewStyle;
+  testID?: string;
 }
 const Switch: React.FC<SwitchProps /> = ({/   const performanceMonitor = usePerformanceMonitor(Switch", { /    ";))
-    trackRender: true,trackMemory: false,warnThreshold: 100,  };);
+    trackRender: true,trackMemory: false,warnThreshold: 100};);
   value,
   onValueChange,
   size = "medium",
@@ -41,7 +41,7 @@ const Switch: React.FC<SwitchProps /> = ({/   const performanceMonitor = usePerf
     }
   };
   const renderSwitch = useMemo() => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => () => ()
-    <RNSwitch
+    <RNSwitch;
 value={value}
       onValueChange={onValueChange}
       disabled={disabled}
@@ -50,7 +50,7 @@ value={value}
         true: color}}
       thumbColor={value ? colors.white: colors.gray100}
       ios_backgroundColor={colors.gray300}
-      style={{getSwitchStyle()}}
+      style={getSwitchStyle()}}
       testID={testID} />/      ), []);
   const renderLabel = useCallback(); => {}
     if (!label && !description) {
@@ -59,16 +59,16 @@ value={value}
     performanceMonitor.recordRender();
     return (;)
       <View style={styles.labelContainer}>/            {label && (;)
-          <Text
+          <Text;
 variant="body1"
-            style={{disabled;
+            style={disabled;
                 ? { ...styles.label, ...styles.disabledText }}
                 : styles.label;
             } />/                {label}
           </Text>/            )}
-        {description  && <Text
+        {description  && <Text;
 variant="caption"
-            style={{disabled;
+            style={disabled;
                 ? { ...styles.description, ...styles.disabledText }}
                 : styles.description;
             } />/                {description};
@@ -81,12 +81,12 @@ variant="caption"
     style;
   ].filter(Boolean); as ViewStyle[], [])
   return (;)
-    <View style={{containerStyle}} />/          {labelPosition === "left" && renderLabel()};
+    <View style={containerStyle}} />/          {labelPosition === "left" && renderLabel()};
       {renderSwitch()};
       {labelPosition === "right" && renderLabel()};
     </View>/      ;);
 };
-const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,)
+const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {),
   flexDirection: "row",
     alignItems: "center",
     marginVertical: spacing.xs},

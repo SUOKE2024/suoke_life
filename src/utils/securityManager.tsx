@@ -8,34 +8,33 @@ const SECURITY_CONFIG = {
       SESSION_TIMEOUT: 30 * 60 * 1000, // 30分钟
   MAX_LOGIN_ATTEMPTS: 5,
   AUDIT_LOG_MAX_SIZE: 1000,
-  PASSWORD_MIN_LENGTH: 8,
-};
+  PASSWORD_MIN_LENGTH: 8};
 // 接口定义
 export interface DeviceInfo {
-  platform: string;
+  platform: string;,
   version: string;
-  model: string;
+  model: string;,
   uniqueId: string;
   isJailbroken?: boolean;
   isEmulator?: boolean;
 }
 export interface UserSession {
-  userId: string;
+  userId: string;,
   sessionId: string;
-  startTime: number;
+  startTime: number;,
   lastActivity: number;
-  deviceInfo: DeviceInfo;
+  deviceInfo: DeviceInfo;,
   permissions: string[];
   biometricEnabled: boolean;
 }
 export interface SecurityPolicy {
-  requireBiometric: boolean;
+  requireBiometric: boolean;,
   sessionTimeout: number;
-  maxLoginAttempts: number;
+  maxLoginAttempts: number;,
   passwordComplexity: {;
-    minLength: number;
+    minLength: number;,
   requireUppercase: boolean;
-    requireLowercase: boolean;
+    requireLowercase: boolean;,
   requireNumbers: boolean;
     requireSpecialChars: boolean;
 };
@@ -51,10 +50,10 @@ export interface SecurityPolicy {
   };
 }
 export interface SecurityEvent {
-  id: string;
+  id: string;,
   type: string;
   userId?: string;
-  timestamp: number;
+  timestamp: number;,
   details: Record<string, any>;
   severity: "low" | "medium" | "high" | "critical";
   deviceInfo?: DeviceInfo;
@@ -233,8 +232,8 @@ class SecurityAuditManager {
   // 生成安全报告
   generateSecurityReport(timeRange: { start: number; end: number }): {
     summary: string,
-  events: SecurityEvent[];
-    statistics: Record<string, number>;
+  events: SecurityEvent[];,
+  statistics: Record<string, number>;
     recommendations: string[];
   } {
     const events = this.getAuditLogs({ timeRange });
@@ -371,8 +370,8 @@ export class SecurityManager {
     this.logSecurityEvent({
       type: "login",
       userId,
-      details: {
-      action: "session_created",
+      details: {,
+  action: "session_created",
       sessionId: session.sessionId },
       severity: "low",
       deviceInfo;
@@ -402,8 +401,8 @@ export class SecurityManager {
       this.logSecurityEvent({
       type: "logout",
       userId: this.currentSession.userId,
-        details: {
-      action: "session_destroyed",
+        details: {,
+  action: "session_destroyed",
       sessionId: this.currentSession.sessionId },
         severity: "low"
       });

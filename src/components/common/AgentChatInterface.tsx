@@ -9,9 +9,9 @@ import {import React, { useState, useEffect, useRef } from "react";
   Platform;
 } from "../../placeholder";react-native;
 export interface ChatMessage {
-  id: string;
+  id: string;,
   type: user" | "agent;
-  content: string;
+  content: string;,
   timestamp: Date;
   agentType?: "xiaoai" | xiaoke" | "laoke | "soer";
   status?: sending" | "sent | "delivered" | failed;
@@ -35,7 +35,7 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps>  = ({
   const [inputText, setInputText] = useState(");"
   const [isTyping, setIsTyping] = useState(false);
   const scrollViewRef = useRef<ScrollView>(null);
-  useEffect(() => {
+  useEffect() => {
     // 滚动到底部
 scrollToBottom();
   }, [messages]);
@@ -126,7 +126,7 @@ setIsTyping(true);
     return (
   <View key={message.id} style={[styles.messageContainer, isUser ? styles.userMessage : styles.agentMessage]}>
         {!isUser  && <View style={styles.agentHeader}>
-            <View style={{[styles.agentAvatar, { backgroundColor: getAgentColor(message.agentType || agentType) }}]}>
+            <View style={[styles.agentAvatar, { backgroundColor: getAgentColor(message.agentType || agentType) }}]}>
               <Text style={styles.agentAvatarText}>
                 {getAgentName(message.agentType || agentType).charAt(0)}
               </    Text>
@@ -159,7 +159,7 @@ setIsTyping(true);
     return (
   <View style={[styles.messageContainer, styles.agentMessage]}>
         <View style={styles.agentHeader}>
-          <View style={{[styles.agentAvatar, { backgroundColor: getAgentColor(agentType) }}]}>
+          <View style={[styles.agentAvatar, { backgroundColor: getAgentColor(agentType) }}]}>
             <Text style={styles.agentAvatarText}>;
               {getAgentName(agentType).charAt(0)};
             </    Text>;
@@ -179,12 +179,12 @@ setIsTyping(true);
     );
   };
   return (;)
-    <KeyboardAvoidingView
+    <KeyboardAvoidingView;
 style={styles.container}
       behavior={Platform.OS === "ios" ? padding" : "height}
     >
       <View style={styles.header}>
-        <View style={{[styles.headerAvatar, { backgroundColor: getAgentColor(agentType) }}]}>
+        <View style={[styles.headerAvatar, { backgroundColor: getAgentColor(agentType) }}]}>
           <Text style={styles.headerAvatarText}>
             {getAgentName(agentType).charAt(0)}
           </    Text>
@@ -194,7 +194,7 @@ style={styles.container}
           <Text style={styles.headerStatus}>在线</    Text>
         </    View>
       </    View>
-      <ScrollView
+      <ScrollView;
 ref={scrollViewRef}
         style={styles.messagesContainer}
         showsVerticalScrollIndicator={false}
@@ -203,7 +203,7 @@ ref={scrollViewRef}
         {renderTypingIndicator()}
       </    ScrollView>
       <View style={styles.inputContainer}>
-        <TextInput
+        <TextInput;
 style={styles.textInput}
           value={inputText}
           onChangeText={setInputText}
@@ -211,8 +211,8 @@ style={styles.textInput}
           multiline;
 maxLength={500}
         /    >
-        <TouchableOpacity
-style={{[styles.sendButton, { backgroundColor: getAgentColor(agentType) }}]}
+        <TouchableOpacity;
+style={[styles.sendButton, { backgroundColor: getAgentColor(agentType) }}]}
           onPress={handleSendMessage}
           disabled={!inputText.trim() || isTyping}
         >
@@ -222,7 +222,7 @@ style={{[styles.sendButton, { backgroundColor: getAgentColor(agentType) }}]}
     </    KeyboardAvoidingView>
   );
 };
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   flex: 1,
     backgroundColor: "#f5f5f5"},
   header: {,

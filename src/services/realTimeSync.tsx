@@ -2,14 +2,14 @@ import { usePerformanceMonitor } from "../../placeholder";../hooks/    usePerfor
 import React from "react";
 * / 支持WebSocket连接、数据同步、冲突解决等功能* * interface SyncConfig {
   reconnectInterval: number, * /
-  maxReconnectAttempts: number;
+  maxReconnectAttempts: number;,
   heartbeatInterval: number;
   syncInterval: number;
 }
 interface SyncData {
-  id: string;
+  id: string;,
   type: string;
-  data: unknown;
+  data: unknown;,
   timestamp: number;
   version: number;
 }

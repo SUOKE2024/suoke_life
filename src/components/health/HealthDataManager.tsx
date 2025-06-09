@@ -26,7 +26,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
   const [editingData, setEditingData] = useState<HealthData | null>(null);
   const [formData, setFormData] = useState({dataType: HealthDataType.HEART_RATE,value: '',unit: '',source: DataSource.MANUAL,tags: '',notes: '';)
   });
-  useEffect(() => {
+  useEffect() => {
     loadHealthData();
   }, [userId]);
   const loadHealthData = async () => {try {setLoading(true);
@@ -140,7 +140,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
         <Text style={styles.dataSource}>{getSourceLabel(item.source)}</Text>
       </View>
       {item.tags && item.tags.length > 0  && <View style={styles.tagsContainer}>
-          {item.tags.map((tag, index) => ())
+          {item.tags.map(tag, index) => ())
             <Text key={index} style={styles.tag}>{tag}</Text>
           ))}
         </View>
@@ -149,13 +149,13 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
       )}
 ;
       <View style={styles.actionButtons}>;
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.actionButton, styles.editButton]};
           onPress={() => handleEditData(item)};
         >;
           <Text style={styles.actionButtonText}>编辑</Text>;
         </TouchableOpacity>;
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.actionButton, styles.deleteButton]};
           onPress={() => handleDeleteData(item)};
         >;
@@ -172,7 +172,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
           <Text style={styles.addButtonText}>+ 添加数据</Text>;
         </TouchableOpacity>;
       </View>;
-      <ScrollView
+      <ScrollView;
         style={styles.scrollView};
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />;
         };
@@ -186,7 +186,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
         )}
       </ScrollView>
       {// 添加/编辑数据模态框}
-      <Modal
+      <Modal;
         visible={modalVisible}
         animationType="slide"
         transparent={true}
@@ -205,7 +205,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
             </View>
             <View style={styles.formGroup}>
               <Text style={styles.label}>数值</Text>
-              <TextInput
+              <TextInput;
                 style={styles.input}
                 value={formData.value}
                 onChangeText={(text) => setFormData({ ...formData, value: text })}
@@ -214,7 +214,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
             </View>
             <View style={styles.formGroup}>
               <Text style={styles.label}>单位</Text>
-              <TextInput
+              <TextInput;
                 style={styles.input}
                 value={formData.unit}
                 onChangeText={(text) => setFormData({ ...formData, unit: text })}
@@ -229,7 +229,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
             </View>
             <View style={styles.formGroup}>
               <Text style={styles.label}>标签（用逗号分隔）</Text>
-              <TextInput
+              <TextInput;
                 style={styles.input}
                 value={formData.tags}
                 onChangeText={(text) => setFormData({ ...formData, tags: text })}
@@ -238,7 +238,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
             </View>
             <View style={styles.formGroup}>
               <Text style={styles.label}>备注</Text>
-              <TextInput
+              <TextInput;
                 style={[styles.input, styles.textArea]}
                 value={formData.notes}
                 onChangeText={(text) => setFormData({ ...formData, notes: text })}
@@ -248,13 +248,13 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
               />
             </View>
             <View style={styles.modalButtons}>
-              <TouchableOpacity
+              <TouchableOpacity;
                 style={[styles.modalButton, styles.cancelButton]}
                 onPress={() => setModalVisible(false)}
               >
                 <Text style={styles.modalButtonText}>取消</Text>
               </TouchableOpacity>
-              <TouchableOpacity
+              <TouchableOpacity;
                 style={[styles.modalButton, styles.saveButton]}
                 onPress={handleSaveData}
               >
@@ -464,8 +464,8 @@ const styles = StyleSheet.create({
     paddingVertical: 12,borderRadius: 8,marginHorizontal: 8;
   },cancelButton: {backgroundColor: '#666';
   },saveButton: {backgroundColor: '#007AFF';
-  },modalButtonText: {
-      color: "#fff",
+  },modalButtonText: {,
+  color: "#fff",
       fontSize: 16,fontWeight: '500',textAlign: 'center';
   };
 });

@@ -1,0 +1,212 @@
+# 统一健康数据服务数据库配置
+
+# PostgreSQL配置
+postgresql:
+  # 主数据库连接
+  primary:
+    host: ${POSTGRES_HOST:localhost}
+    port: ${POSTGRES_PORT:5432}
+    database: ${POSTGRES_DB:suoke_health}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:password}
+    
+  # 连接池配置
+  pool:
+    size: 20
+    max_overflow: 30
+    timeout: 30
+    recycle: 3600
+    pre_ping: true
+    
+  # 查询配置
+  query:
+    echo: false
+    echo_pool: false
+    future: true
+    
+  # SSL配置
+  ssl:
+    mode: prefer
+    cert_file: null
+    key_file: null
+    ca_file: null
+
+# Redis配置
+redis:
+  # 主Redis连接
+  primary:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    database: ${REDIS_DB:0}
+    password: ${REDIS_PASSWORD:}
+    
+  # 连接池配置
+  pool:
+    max_connections: 20
+    retry_on_timeout: true
+    socket_timeout: 5
+    socket_connect_timeout: 5
+    
+  # 缓存配置
+  cache:
+    default_ttl: 3600  # 1小时
+    health_data_ttl: 7200  # 2小时
+    session_ttl: 1800  # 30分钟
+    
+  # 集群配置（可选）
+  cluster:
+    enabled: false
+    nodes: []
+
+# MongoDB配置
+mongodb:
+  # 主MongoDB连接
+  primary:
+    host: ${MONGO_HOST:localhost}
+    port: ${MONGO_PORT:27017}
+    database: ${MONGO_DB:suoke_health}
+    username: ${MONGO_USER:}
+    password: ${MONGO_PASSWORD:}
+    
+  # 连接配置
+  connection:
+    max_pool_size: 100
+    min_pool_size: 10
+    max_idle_time_ms: 30000
+    server_selection_timeout_ms: 5000
+    
+  # 集合配置
+  collections:
+    health_records: health_records
+    user_profiles: user_profiles
+    diagnostic_data: diagnostic_data
+    tcm_data: tcm_data
+    
+  # 索引配置
+  indexes:
+    health_records:
+      - fields: ["user_id", "created_at"]
+        unique: false
+      - fields: ["data_type", "created_at"]
+        unique: false
+    user_profiles:
+      - fields: ["user_id"]
+        unique: true
+    diagnostic_data:
+      - fields: ["user_id", "diagnosis_type", "created_at"]
+        unique: false
+
+# 数据库迁移配置
+migration:
+  # Alembic配置
+  alembic:
+    script_location: migrations
+    version_table: alembic_version
+    version_table_schema: public
+    
+  # 自动迁移配置
+  auto_migrate:
+    enabled: ${AUTO_MIGRATE:false}
+    backup_before_migrate: true
+    
+# 健康检查配置
+health_check:
+  # 检查间隔（秒）
+  interval: 30
+  
+  # 超时配置（秒）
+  timeout:
+    postgresql: 5
+    redis: 3
+    mongodb: 5
+    
+  # 重试配置
+  retry:
+    max_attempts: 3
+    delay: 1
+
+# 监控配置
+monitoring:
+  # 性能监控
+  performance:
+    enabled: true
+    slow_query_threshold: 1.0  # 秒
+    
+  # 连接监控
+  connection:
+    enabled: true
+    log_connections: false
+    
+  # 指标收集
+  metrics:
+    enabled: true
+    collection_interval: 60  # 秒
+
+# 安全配置
+security:
+  # 数据加密
+  encryption:
+    enabled: ${DB_ENCRYPTION_ENABLED:false}
+    key: ${DB_ENCRYPTION_KEY:}
+    
+  # 访问控制
+  access_control:
+    enabled: true
+    max_connections_per_user: 10
+    
+  # 审计日志
+  audit:
+    enabled: true
+    log_queries: false
+    log_connections: true
+
+# 备份配置
+backup:
+  # 自动备份
+  auto_backup:
+    enabled: ${AUTO_BACKUP_ENABLED:false}
+    schedule: "0 2 * * *"  # 每天凌晨2点
+    retention_days: 30
+    
+  # 备份存储
+  storage:
+    type: local  # local, s3, gcs
+    path: ${BACKUP_PATH:/var/backups/suoke_health}
+    
+# 环境特定配置
+environments:
+  development:
+    postgresql:
+      pool:
+        size: 5
+        max_overflow: 10
+    redis:
+      pool:
+        max_connections: 10
+    mongodb:
+      connection:
+        max_pool_size: 20
+        
+  testing:
+    postgresql:
+      database: suoke_health_test
+      pool:
+        size: 2
+        max_overflow: 5
+    redis:
+      database: 1
+    mongodb:
+      database: suoke_health_test
+      
+  production:
+    postgresql:
+      pool:
+        size: 50
+        max_overflow: 100
+    redis:
+      pool:
+        max_connections: 50
+    mongodb:
+      connection:
+        max_pool_size: 200
+        min_pool_size: 50 

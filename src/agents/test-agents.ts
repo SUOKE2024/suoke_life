@@ -13,7 +13,7 @@ import {createAgent,
 * 测试结果接口
 */
 interface TestResult {
-  testName: string;
+  testName: string;,
   success: boolean;
   duration: number;
   error?: string;
@@ -382,7 +382,7 @@ export class AgentSystemTester {
     const totalTests = this.testResults.length;
     const passedTests = this.testResults.filter(r) => r.success).length;
     const failedTests = totalTests - passedTests;
-    const totalDuration = this.testResults.reduce((acc, item) => acc + item, 0);
+    const totalDuration = this.testResults.reduce(acc, item) => acc + item, 0);
       (sum, r) => sum + r.duration,0;
     );
     console.log("\n📊 测试结果汇总:");
@@ -396,7 +396,7 @@ export class AgentSystemTester {
       console.log("\n❌ 失败的测试:");
       this.testResults;
         .filter(r) => !r.success)
-        .forEach(((r) => console.log(`  - ${r.testName}: ${r.error}`));)
+        .forEach((r) => console.log(`  - ${r.testName}: ${r.error}`));)
     }
     console.log("\n🎉 智能体系统测试完成!\n");
   }

@@ -1,13 +1,13 @@
 import { getCurrentEnvConfig } from '../constants/config';
 // 流式事件类型
 export interface StreamEvent {
-  type: 'benchmark_progress' | 'benchmark_complete' | 'benchmark_error' | 'system_status';
+  type: 'benchmark_progress' | 'benchmark_complete' | 'benchmark_error' | 'system_status';,
   data: any;
   timestamp: string;
 }
 // 流式配置
 export interface StreamConfig {
-  benchmark_id: string;
+  benchmark_id: string;,
   model_id: string;
   total_samples: number;
 }

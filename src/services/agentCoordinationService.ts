@@ -7,26 +7,26 @@ import { apiClient } from './apiClient';
   MessageType;
 } from '../types/agents';
 export interface CoordinationRequest {
-  initiatorAgent: AgentType;
+  initiatorAgent: AgentType;,
   targetAgents: AgentType[];
-  task: string;
+  task: string;,
   priority: 'low' | 'normal' | 'high' | 'urgent';
   data?: any;
   timeout?: number;
 }
 export interface CoordinationResult {
-  collaborationId: string;
+  collaborationId: string;,
   status: 'success' | 'partial' | 'failed';
   responses: AgentResponse[];
   errors?: string[];
   duration: number;
 }
 export interface AgentInfo {
-  id: string;
+  id: string;,
   name: string;
-  type: AgentType;
+  type: AgentType;,
   status: 'active' | 'inactive' | 'busy' | 'error';
-  capabilities: string[];
+  capabilities: string[];,
   load: number;
   lastHeartbeat: Date;
 }
@@ -241,10 +241,10 @@ class AgentCoordinationService {
   */
   getCollaborationStats(): {
     total: number,
-  active: number;
-    completed: number,
-  failed: number;
-    averageDuration: number;
+  active: number;,
+  completed: number,
+  failed: number;,
+  averageDuration: number;
   } {
     const collaborations = Array.from(this.activeCollaborations.values());
     const completed = collaborations.filter(c => c.status === 'completed');

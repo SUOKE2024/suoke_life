@@ -3,11 +3,11 @@ import { apiClient, ApiResponse } from './apiClient';
 // 健康数据类型定义
 export interface HealthData {
   id?: string;
-  userId: string;
+  userId: string;,
   type: HealthDataType;
-  value: number;
+  value: number;,
   unit: string;
-  timestamp: Date;
+  timestamp: Date;,
   source: 'manual' | 'device' | 'sync';
   metadata?: Record<string, any>;
 }
@@ -28,65 +28,65 @@ export type HealthDataType =
   | 'blood_sugar'
   | 'blood_oxygen';
 export interface HealthMetric {
-  id: string;
+  id: string;,
   name: string;
-  value: number;
+  value: number;,
   unit: string;
-  trend: 'up' | 'down' | 'stable';
+  trend: 'up' | 'down' | 'stable';,
   status: 'excellent' | 'good' | 'fair' | 'poor';
-  icon: string;
+  icon: string;,
   color: string;
   lastUpdated: Date;
   normalRange?: {
-    min: number;
+    min: number;,
   max: number;
 };
 }
 export interface HealthGoal {
-  id: string;
+  id: string;,
   userId: string;
-  title: string;
+  title: string;,
   description: string;
-  type: HealthDataType;
+  type: HealthDataType;,
   targetValue: number;
-  currentValue: number;
+  currentValue: number;,
   unit: string;
-  deadline: Date;
+  deadline: Date;,
   progress: number;
-  category: string;
+  category: string;,
   isActive: boolean;
-  createdAt: Date;
+  createdAt: Date;,
   updatedAt: Date;
 }
 export interface HealthSummary {
-  overallScore: number;
+  overallScore: number;,
   constitution: string;
-  recommendations: string[];
+  recommendations: string[];,
   trends: Record<string, 'up' | 'down' | 'stable'>;
-  alerts: HealthAlert[];
+  alerts: HealthAlert[];,
   lastUpdated: Date;
 }
 export interface HealthAlert {
-  id: string;
+  id: string;,
   type: 'warning' | 'info' | 'critical';
-  title: string;
+  title: string;,
   message: string;
-  timestamp: Date;
+  timestamp: Date;,
   isRead: boolean;
   actionRequired: boolean;
 }
 export interface HealthReport {
-  id: string;
+  id: string;,
   userId: string;
-  title: string;
+  title: string;,
   period: {;
-    start: Date;
+    start: Date;,
   end: Date;
 };
   summary: HealthSummary,
-  data: HealthData[];
+  data: HealthData[];,
   insights: string[],
-  recommendations: string[];
+  recommendations: string[];,
   generatedAt: Date,
   format: 'pdf' | 'json' | 'html';
 }
@@ -95,8 +95,7 @@ const STORAGE_KEYS = {
       HEALTH_DATA: "health_data",
       HEALTH_GOALS: 'health_goals',
   HEALTH_SETTINGS: 'health_settings',
-  SYNC_STATUS: 'health_sync_status',
-};
+  SYNC_STATUS: 'health_sync_status'};
 class HealthDataService {
   private cache: Map<string, any> = new Map();
   private syncInProgress = false;
@@ -248,8 +247,7 @@ class HealthDataService {
       const newData: HealthData = {
         ...data,
         id: this.generateId(),
-        timestamp: new Date(),
-      };
+        timestamp: new Date()};
       // 保存到本地存储
       await this.saveHealthDataLocally(newData);
       // 清除相关缓存
@@ -270,8 +268,7 @@ class HealthDataService {
         id: this.generateId(),
         progress: 0,
         createdAt: new Date(),
-        updatedAt: new Date(),
-      };
+        updatedAt: new Date()};
       const goals = await this.getHealthGoals();
       goals.push(newGoal);
       await AsyncStorage.setItem(STORAGE_KEYS.HEALTH_GOALS, JSON.stringify(goals));
@@ -292,8 +289,7 @@ class HealthDataService {
       const updatedGoal = {
         ...goals[index],
         ...updates,
-        updatedAt: new Date(),
-      };
+        updatedAt: new Date()};
       goals[index] = updatedGoal;
       await AsyncStorage.setItem(STORAGE_KEYS.HEALTH_GOALS, JSON.stringify(goals));
       return updatedGoal;
@@ -323,8 +319,7 @@ class HealthDataService {
         insights,
         recommendations,
         generatedAt: new Date(),
-        format,
-      };
+        format};
       return report;
     } catch (error) {
       console.error('Failed to generate health report:', error);
@@ -377,7 +372,7 @@ class HealthDataService {
       return acc;
     }, {} as Record<string, HealthData[]>);
     // 为每种类型计算指标
-    Object.entries(groupedData).forEach((([type, data]) => {
+    Object.entries(groupedData).forEach(([type, data]) => {
       const metric = this.calculateMetricForType(type as HealthDataType, data);
       if (metric) metrics.push(metric);
     });
@@ -411,8 +406,7 @@ class HealthDataService {
       icon: metricInfo.icon,
       color: metricInfo.color,
       lastUpdated: latest.timestamp,
-      normalRange: metricInfo.normalRange,
-    };
+      normalRange: metricInfo.normalRange};
   }
   private getMetricInfo(type: HealthDataType, value: number) {
     const metricInfoMap: Record<HealthDataType, any> = {
@@ -465,40 +459,39 @@ class HealthDataService {
         }
       },
       // 默认处理其他类型
-      body_temperature: {
-      name: "体温",
+      body_temperature: {,
+  name: "体温",
       icon: 'thermometer', color: '#FF5722', normalRange: { min: 36, max: 37.5 }, getStatus: () => 'good' },
-      weight: {
-      name: "体重",
+      weight: {,
+  name: "体重",
       icon: 'scale-bathroom', color: '#9C27B0', normalRange: { min: 50, max: 100 }, getStatus: () => 'good' },
-      height: {
-      name: "身高",
+      height: {,
+  name: "身高",
       icon: 'human-male-height', color: '#607D8B', normalRange: { min: 150, max: 200 }, getStatus: () => 'good' },
-      sleep_duration: {
-      name: "睡眠时长",
+      sleep_duration: {,
+  name: "睡眠时长",
       icon: 'sleep', color: '#3F51B5', normalRange: { min: 7, max: 9 }, getStatus: () => 'good' },
-      exercise_duration: {
-      name: "运动时长",
+      exercise_duration: {,
+  name: "运动时长",
       icon: 'run', color: '#FF9800', normalRange: { min: 30, max: 120 }, getStatus: () => 'good' },
-      stress_level: {
-      name: "压力水平",
+      stress_level: {,
+  name: "压力水平",
       icon: 'brain', color: '#F44336', normalRange: { min: 0, max: 50 }, getStatus: () => 'good' },
-      mood: {
-      name: "情绪",
+      mood: {,
+  name: "情绪",
       icon: 'emoticon-happy', color: '#FFEB3B', normalRange: { min: 60, max: 100 }, getStatus: () => 'good' },
-      nutrition_score: {
-      name: "营养评分",
+      nutrition_score: {,
+  name: "营养评分",
       icon: 'food-apple', color: '#8BC34A', normalRange: { min: 70, max: 100 }, getStatus: () => 'good' },
-      hydration: {
-      name: "水分摄入",
+      hydration: {,
+  name: "水分摄入",
       icon: 'water', color: '#00BCD4', normalRange: { min: 1500, max: 3000 }, getStatus: () => 'good' },
-      blood_sugar: {
-      name: "血糖",
+      blood_sugar: {,
+  name: "血糖",
       icon: 'diabetes', color: '#795548', normalRange: { min: 70, max: 140 }, getStatus: () => 'good' },
-      blood_oxygen: {
-      name: "血氧",
-      icon: 'lungs', color: '#009688', normalRange: { min: 95, max: 100 }, getStatus: () => 'good' },
-    };
+      blood_oxygen: {,
+  name: "血氧",
+      icon: 'lungs', color: '#009688', normalRange: { min: 95, max: 100 }, getStatus: () => 'good' }};
     const info = metricInfoMap[type] || {
       name: type,
       icon: 'help',
@@ -520,8 +513,7 @@ class HealthDataService {
       recommendations: this.generateBasicRecommendations(metrics),
       trends: this.calculateTrends(healthData),
       alerts: [],
-      lastUpdated: new Date(),
-    };
+      lastUpdated: new Date()};
   }
   private calculateOverallScore(metrics: HealthMetric[]): number {
     if (metrics.length === 0) return 0;
@@ -529,8 +521,7 @@ class HealthDataService {
       excellent: 100,
       good: 80,
       fair: 60,
-      poor: 40,
-    };
+      poor: 40};
     const totalScore = metrics.reduce(sum, metric) => {
       return sum + statusScores[metric.status];
     }, 0);
@@ -564,7 +555,7 @@ class HealthDataService {
       acc[item.type].push(item);
       return acc;
     }, {} as Record<string, HealthData[]>);
-    Object.entries(groupedData).forEach((([type, data]) => {
+    Object.entries(groupedData).forEach(([type, data]) => {
       if (data.length >= 2) {
         const recent = data.slice(0, Math.min(3, data.length));
         const older = data.slice(Math.min(3, data.length));

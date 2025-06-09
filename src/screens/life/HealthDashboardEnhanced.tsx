@@ -14,11 +14,10 @@ import React,{ useState, useEffect } from "react;";
   selectDiagnosisResults,
   selectDiagnosisSessions,
   { fetchDiagnosisHistory } from "../../store/slices/diagnosisSlice/    const { width   } = Dimensions.get(";window;";);"
-const chartWidth = useMemo(() => width - spacing.lg * 2, []);
+const chartWidth = useMemo() => width - spacing.lg * 2, []);
 interface HealthMetric {
   const performanceMonitor = usePerformanceMonitor(HealthDashboardEnhanced", { ";)
-    trackRender: true,trackMemory: true,warnThreshold: 50,
-};);
+    trackRender: true,trackMemory: true,warnThreshold: 50};);
   id: string,
   title: string,
   value: string,
@@ -30,16 +29,16 @@ interface HealthMetric {
   data: number[];
 };
 interface ConstitutionData {
-  type: ConstitutionType;
+  type: ConstitutionType;,
   name: string;
-  percentage: number;
+  percentage: number;,
   color: string;
   description: string;
 };
 export const HealthDashboardEnhanced: React.FC  = () => {};
-const dispatch = useMemo(() => useAppDispatch(), []););
-  const diagnosisResults = useMemo(() => useAppSelector(selectDiagnosisResults), []););
-  const diagnosisSessions = useMemo(() => useAppSelector(selectDiagnosisSessions), []);
+const dispatch = useMemo() => useAppDispatch(), []););
+  const diagnosisResults = useMemo() => useAppSelector(selectDiagnosisResults), []););
+  const diagnosisSessions = useMemo() => useAppSelector(selectDiagnosisSessions), []);
   const [selectedPeriod, setSelectedPeriod] = useState<"week | "month" | year">("week;);
   const [refreshing, setRefreshing] = useState<boolean>(fals;e;);
   const [selectedMetric, setSelectedMetric] = useState<string>("overview";);
@@ -103,29 +102,29 @@ const effectStart = performance.now();
     } catch (error) {
       }
   };
-  const onRefresh = useMemo(() => async() => {})
+  const onRefresh = useMemo() => async() => {})
     setRefreshing(true), []);
     await loadDiagnosisHistory;
     setRefreshing(false);
   };
   //
     <View style={styles.overviewContainer}>/          {healthMetrics.map(metric) => ()
-        <TouchableOpacity
+        <TouchableOpacity;
 key={metric.id}
-          style={{[styles.metricCard, { borderLeftColor: metric.color}}]}
+          style={[styles.metricCard, { borderLeftColor: metric.color}}]}
           onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setSelectedMetric(metric.id)}/            >
-          <View style={styles.metricHeader}>/            <Icon name={metric.icon} size={24} color={metric.color} />/            <View style={{[styles.trendBadge, { backgroundColor: getTrendColor(metric.trend)   }}]} />/                  <Icon
+          <View style={styles.metricHeader}>/            <Icon name={metric.icon} size={24} color={metric.color} />/            <View style={[styles.trendBadge, { backgroundColor: getTrendColor(metric.trend)   }}]} />/                  <Icon;
 name={getTrendIcon(metric.trend)}
                 size={12}
                 color="white"
-              />/              <Text style={styles.trendText}>{metric.trendValue}</Text>/            </View>/          </View>/          <Text style={styles.metricTitle}>{metric.title}</Text>/          <View style={styles.metricValueContainer}>/            <Text style={{[styles.metricValue, { color: metric.color}}]} />/                  {metric.value}
+              />/              <Text style={styles.trendText}>{metric.trendValue}</Text>/            </View>/          </View>/          <Text style={styles.metricTitle}>{metric.title}</Text>/          <View style={styles.metricValueContainer}>/            <Text style={[styles.metricValue, { color: metric.color}}]} />/                  {metric.value}
             </Text>/            <Text style={styles.metricUnit}>{metric.unit}</Text>/          </View>/        </TouchableOpacity>/    ))}
     </View>/      ), []);
   const renderChart = useCallback => {}
     if (!selectedMetricData) {return nu;l;l;}
     performanceMonitor.recordRender();
     return (;)
-      <View style={styles.chartContainer}>/        <Text style={styles.chartTitle}>{selectedMetricData.title}趋势</Text>/            <LineChart
+      <View style={styles.chartContainer}>/        <Text style={styles.chartTitle}>{selectedMetricData.title}趋势</Text>/            <LineChart;
 data={
             labels: ["周一, "周二", " 周三", "周四, "周五", " 周六", "周日],"
             datasets;: ;[{
@@ -153,7 +152,7 @@ data={
 style={styles.chart}>/      </View>/        );
   };
   //
-    <View style={styles.constitutionContainer}>/      <Text style={styles.sectionTitle}>中医体质分析</Text>/      <View style={styles.constitutionChart}>/            <PieChart
+    <View style={styles.constitutionContainer}>/      <Text style={styles.sectionTitle}>中医体质分析</Text>/      <View style={styles.constitutionChart}>/            <PieChart;
 data={constitutionData.map(item = /> ({/                name: item.name,))
             population: item.percentage,
             color: item.color,
@@ -169,12 +168,12 @@ data={constitutionData.map(item = /> ({/                name: item.name,))
           paddingLeft="15"
           absolute;
         />/      </View>/      <View style={styles.constitutionLegend}>/            {constitutionData.map(item); => ()
-          <View key={item.type} style={styles.constitutionItem}>/            <View style={{[styles.constitutionDot, { backgroundColor: item.color}}]} />/            <View style={styles.constitutionInfo}>/              <Text style={styles.constitutionName}>{item.name}</Text>/              <Text style={styles.constitutionDescription}>{item.description}</Text>/            </View>/            <Text style={styles.constitutionPercentage}>{item.percentage}%</Text>/          </View>/    ))}
+          <View key={item.type} style={styles.constitutionItem}>/            <View style={[styles.constitutionDot, { backgroundColor: item.color}}]} />/            <View style={styles.constitutionInfo}>/              <Text style={styles.constitutionName}>{item.name}</Text>/              <Text style={styles.constitutionDescription}>{item.description}</Text>/            </View>/            <Text style={styles.constitutionPercentage}>{item.percentage}%</Text>/          </View>/    ))}
       </View>/    </View>/      ), []);
   //
     <View style={styles.historyContainer}>/      <View style={styles.historyHeader}>/        <Text style={styles.sectionTitle}>五诊记录</Text>/        <TouchableOpacity onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> Alert.alert("查看全部, "跳转到完整的诊断历史页面")}>/          <Text style={styles.viewAllText}>查看全部</Text>/        </TouchableOpacity>/      </View>/          {diagnosisSessions.slice(0, 3).map(session) => (")
         <TouchableOpacity key={session.id} style={styles.historyItem} accessibilityLabel="TODO: 添加无障碍标签" />/          <View style={styles.historyIcon}>/            <Icon name="stethoscope" size={20} color={colors.primary} />/          </View>/          <View style={styles.historyContent}>/            <Text style={styles.historyTitle}>五诊检查</Text>/            <Text style={styles.historyDate}>/                  {new Date(session.startTime).toLocaleDateString()}
-            </Text>/          </View>/          <View style={{[styles.historyStatus, { backgroundColor: session.status === completed" ? colors.success : colors.warning}}]} />/            <Text style={styles.historyStatusText}>/              {session.status === "completed ? "已完成" : 进行中"}"
+            </Text>/          </View>/          <View style={[styles.historyStatus, { backgroundColor: session.status === completed" ? colors.success : colors.warning}}]} />/            <Text style={styles.historyStatusText}>/              {session.status === "completed ? "已完成" : 进行中"}"
             </Text>/          </View>/        </TouchableOpacity>/    ))}
     </View>/      ), []);
   const getTrendColor = useCallback() => {
@@ -193,13 +192,13 @@ case "down": return colors.error;
   };
   //
     <View style={styles.periodSelector}>/          {(["week", month",year] as const).map(period) => ()
-        <TouchableOpacity
+        <TouchableOpacity;
 key={period}
           style={[styles.periodButton,
             selectedPeriod === period && styles.activePeriodButton;
           ]}
           onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setSelectedPeriod(period)}/            >
-          <Text
+          <Text;
 style={[styles.periodText,
               selectedPeriod === period && styles.activePeriodText;
             ]} />/            {period === "week" ? 周" : period === "month ? "月" : 年"}"
@@ -208,11 +207,11 @@ style={[styles.periodText,
   return (;)
     <SafeAreaView style={styles.container}>/      {///    ";
       {///          {renderPeriodSelector()};
-      <ScrollView
+      <ScrollView;
 style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         refreshControl={
-          <RefreshControl
+          <RefreshControl;
 refreshing={refreshing}
             onRefresh={onRefresh}
             colors={[colors.primary]}
@@ -225,7 +224,7 @@ refreshing={refreshing}
         {///            {renderDiagnosisHistory()}
       </ScrollView>/    </SafeAreaView>/      ;);
 };
-const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,)
+const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {),
   flex: 1,
     backgroundColor: colors.background},
   header: {,

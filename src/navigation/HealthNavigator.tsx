@@ -3,21 +3,21 @@ import { View, Text } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-const LifeScreen = React.lazy(() => import('../screens/life/LifeScreen'));
-const MedicalResourceScreen = React.lazy(() => import('../screens/health/MedicalResourceScreen'));
-const MedicalResourceDetailScreen = React.lazy(() => import('../screens/health/MedicalResourceDetailScreen'));
-const AppointmentScreen = React.lazy(() => import('../screens/health/AppointmentScreen'));
+const LifeScreen = React.lazy() => import('../screens/life/LifeScreen'));
+const MedicalResourceScreen = React.lazy() => import('../screens/health/MedicalResourceScreen'));
+const MedicalResourceDetailScreen = React.lazy() => import('../screens/health/MedicalResourceDetailScreen'));
+const AppointmentScreen = React.lazy() => import('../screens/health/AppointmentScreen'));
 import { MedKnowledgeScreen } from '../screens/health/MedKnowledgeScreen';
 // 导入屏幕组件
 // 类型定义
 export type HealthTabParamList = {LifeOverview: undefined,
-  MedicalResource: undefined;
+  MedicalResource: undefined;,
   Appointment: undefined,
   MedKnowledge: undefined;
 };
 export type HealthStackParamList = {HealthTabs: undefined,
-  MedicalResourceDetail: {
-    resourceId: string;
+  MedicalResourceDetail: {,
+  resourceId: string;
     reschedule?: boolean;
   };
   AppointmentDetail: {,

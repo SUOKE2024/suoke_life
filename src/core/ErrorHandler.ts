@@ -11,7 +11,7 @@ export enum ErrorType {
   UNKNOWN = 'UNKNOWN'
 }
 export interface AppError {
-  type: ErrorType;
+  type: ErrorType;,
   code: string;
   message: string;
   details?: unknown;

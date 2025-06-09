@@ -5,17 +5,17 @@ import { Text, Card, Container, Button  } from "../../placeholder";../../compone
 // * 索克生活 - 颜色预览组件;
 * 展示更新后的品牌色彩系统
 interface ColorItemProps {
-  name: string;
+  name: string;,
   color: string;
-  description?: string
+  description?: string;
 }
 interface ColorPreviewProps {
-  onBack?: () => void
+  onBack?: () => void;
 }
 const ColorItem: React.FC<ColorItemProps /> = ({/   const performanceMonitor = usePerformanceMonitor(ColorPreview", { /    ";))
-    trackRender: true,trackMemory: false,warnThreshold: 100,  };);
+    trackRender: true,trackMemory: false,warnThreshold: 100};);
 name, color, description }) => (
-  <View style={styles.colorItem}>/    <View style={{[styles.colorSwatch, { backgroundColor: color}}]} />/    <View style={styles.colorInfo}>/      <Text variant="body1" style={styles.colorName}>/            {name}
+  <View style={styles.colorItem}>/    <View style={[styles.colorSwatch, { backgroundColor: color}}]} />/    <View style={styles.colorInfo}>/      <Text variant="body1" style={styles.colorName}>/            {name}
       </Text>/      <Text variant="caption" style={styles.colorValue}>/            {color}
       </Text>/          {description  && <Text variant="caption" style={styles.colorDescription}>/              {description}
         </Text>/    )}
@@ -24,7 +24,7 @@ const ColorPreview: React.FC<ColorPreviewProps />  = ({ onBack }) => {/   /    }
   performanceMonitor.recordRender();
   return (;)
     <ScrollView style={styles.container}>/      <Container padding="lg" />/        {///            {onBack && (;)
-          <View style={styles.backButtonContainer}>/                <Button
+          <View style={styles.backButtonContainer}>/                <Button;
 title="← 返回组件库"
               variant="outline"
               onPress={onBack};
@@ -33,11 +33,11 @@ title="← 返回组件库"
         <Text variant="h1" style={styles.title}>/              索克生活品牌色彩
         </Text>/
         {///                主要品牌色
-          </Text>/              <ColorItem
+          </Text>/              <ColorItem;
 name="索克绿 (Primary)"
             color={colors.primary}
             description="健康、自然、生机的象征"
-          />/              <ColorItem
+          />/              <ColorItem;
 name="索克橙 (Secondary)"
             color={colors.secondary}
             description="活力、温暖、积极的体现"
@@ -49,30 +49,30 @@ name="索克橙 (Secondary)"
         {///                功能色
           </Text>/          <ColorItem name="成功" color={colors.success} />/          <ColorItem name="警告" color={colors.warning} />/          <ColorItem name="错误" color={colors.error} />/          <ColorItem name="信息" color={colors.info} description="使用索克绿" />/        </Card>/
         {///                中医特色色彩
-          </Text>/          <ColorItem name="金" color={colors.tcm.gold} />/              <ColorItem
+          </Text>/          <ColorItem name="金" color={colors.tcm.gold} />/              <ColorItem;
 name="玉"
             color={colors.tcm.jade}
             description="使用索克绿"
           />/          <ColorItem name="朱砂" color={colors.tcm.cinnabar} />/          <ColorItem name="靛青" color={colors.tcm.indigo} />/          <ColorItem name="土" color={colors.tcm.earth} />/        </Card>/
         {///                健康状态色彩
-          </Text>/              <ColorItem
+          </Text>/              <ColorItem;
 name="优秀"
             color={colors.health.excellent}
             description="使用索克绿"
           />/          <ColorItem name="良好" color={colors.health.good} />/          <ColorItem name="一般" color={colors.health.fair} />/          <ColorItem name="较差" color={colors.health.poor} />/          <ColorItem name="危险" color={colors.health.critical} />/        </Card>/
         {///                应用示例
-          </Text>/          <View style={styles.exampleContainer}>/                <View
-style={{[
+          </Text>/          <View style={styles.exampleContainer}>/                <View;
+style={[
                 styles.exampleButton,
                 { backgroundColor: colors.primary}}
-              ]} />/              <Text style={styles.buttonText}>主要按钮</Text>/            </View>/                <View
-style={{[
+              ]} />/              <Text style={styles.buttonText}>主要按钮</Text>/            </View>/                <View;
+style={[
                 styles.exampleButton,
                 { backgroundColor: colors.secondary}}
-              ]} />/              <Text style={styles.buttonText}>次要按钮</Text>/            </View>/            <View style={{[styles.exampleCard, { borderColor: colors.primary}}]} />/              <Text style={styles.cardTitle}>健康卡片</Text>/              <Text style={styles.cardContent}>/                    使用索克绿作为主题色的卡片示例
+              ]} />/              <Text style={styles.buttonText}>次要按钮</Text>/            </View>/            <View style={[styles.exampleCard, { borderColor: colors.primary}}]} />/              <Text style={styles.cardTitle}>健康卡片</Text>/              <Text style={styles.cardContent}>/                    使用索克绿作为主题色的卡片示例
               </Text>/            </View>/          </View>/        </Card>/      </Container>/    </ScrollView>/    );
 }
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   flex: 1,
     backgroundColor: colors.background},
   backButtonContainer: { marginBottom: spacing.md  },

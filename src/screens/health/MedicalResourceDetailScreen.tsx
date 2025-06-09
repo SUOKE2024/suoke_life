@@ -17,9 +17,9 @@ import { MedicalResource, TimeSlot, Review } from '../../store/slices/medicalRes
 } from 'react-native';
 const { width, height } = Dimensions.get('window');
 interface MedicalResourceDetailScreenProps {
-  navigation: any;
+  navigation: any;,
   route: {;
-    params: {;
+    params: {;,
   resourceId: string;
 };
   };
@@ -42,7 +42,7 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
   const [showImageModal, setShowImageModal] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   // 加载资源详情
-  useEffect(() => {
+  useEffect() => {
     if (resourceId) {
       getResourceDetails(resourceId);
     }
@@ -115,7 +115,7 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
       <SafeAreaView style={styles.container}>;
         <View style={styles.errorContainer}>;
           <Text style={styles.errorText}>{errors.details}</Text>;
-          <TouchableOpacity
+          <TouchableOpacity;
             style={styles.retryButton};
             onPress={() => {clearSpecificError('details');
               getResourceDetails(resourceId);
@@ -139,7 +139,7 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
   // 渲染头部信息
   const renderHeader = () => (
   <View style={styles.header}>
-      <TouchableOpacity
+      <TouchableOpacity;
         style={styles.backButton};
         onPress={() => navigation.goBack()};
       >;
@@ -160,7 +160,7 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
     }
     return (;)
       <View style={styles.imageSection}>;
-        <FlatList
+        <FlatList;
           horizontal;
           data={selectedResource.images};
           renderItem={({ item, index }) => (;)
@@ -184,7 +184,7 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
         <Text style={styles.infoText}>{selectedResource.location.address}</Text>
       </View>
       <View style={styles.infoRow}>
-        <Icon
+        <Icon;
           name={selectedResource.availability.isOpen ? 'access-time' : 'schedule'}
           size={20}
           color={selectedResource.availability.isOpen ? '#4CAF50' : '#FF9800'}
@@ -216,7 +216,7 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
   const renderContact = () => (
   <View style={styles.section}>
       <Text style={styles.sectionTitle}>联系方式</Text>
-      <TouchableOpacity
+      <TouchableOpacity;
         style={styles.contactItem}
         onPress={() => handleCall(selectedResource.contact.phone)}
       >
@@ -224,7 +224,7 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
         <Text style={styles.contactText}>{selectedResource.contact.phone}</Text>
         <Icon name="chevron-right" size={20} color="#ccc" />
       </TouchableOpacity>
-      {selectedResource.contact.website  && <TouchableOpacity
+      {selectedResource.contact.website  && <TouchableOpacity;
           style={styles.contactItem};
           onPress={() => handleOpenWebsite(selectedResource.contact.website!)};
         >;
@@ -246,7 +246,7 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
     <View style={styles.section}>;
       <Text style={styles.sectionTitle}>服务项目</Text>;
       <View style={styles.servicesContainer}>;
-        {selectedResource.services.map((service, index) => (;))
+        {selectedResource.services.map(service, index) => (;))
           <View key={index} style={styles.serviceTag}>;
             <Text style={styles.serviceText}>{service}</Text>;
           </View>;
@@ -262,16 +262,16 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
         <Text style={styles.sectionTitle}>可预约时间</Text>
         <View style={styles.timeSlotsContainer}>
           {selectedResource.availability.slots.map(slot) => ()
-            <TouchableOpacity
+            <TouchableOpacity;
               key={slot.id}
-              style={{[
+              style={[
                 styles.timeSlot,
                 !slot.available && styles.timeSlotDisabled;
               ]}}
               onPress={() => slot.available && handleBookTimeSlot(slot)};
               disabled={!slot.available};
             >;
-              <Text style={{[;
+              <Text style={[;
                 styles.timeSlotText,!slot.available && styles.timeSlotTextDisabled;
               ]}}>;
                 {slot.startTime} - {slot.endTime};
@@ -305,8 +305,8 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
             <View style={styles.reviewHeader}>
               <Text style={styles.reviewUser}>{review.userName}</Text>
               <View style={styles.reviewRating}>
-                {[...Array(5)].map((_, i) => ())
-                  <Icon
+                {[...Array(5)].map(_, i) => ())
+                  <Icon;
                     key={i}
                     name="star"
                     size={14}
@@ -329,7 +329,7 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
   };
   // 渲染预约模态框
   const renderBookingModal = () => (
-  <Modal
+  <Modal;
       visible={showBookingModal}
       transparent;
       animationType="slide"
@@ -355,13 +355,13 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
             </View>
           )}
           <View style={styles.modalButtons}>
-            <TouchableOpacity
+            <TouchableOpacity;
               style={[styles.modalButton, styles.cancelButton]};
               onPress={() => setShowBookingModal(false)};
             >;
               <Text style={styles.cancelButtonText}>取消</Text>;
             </TouchableOpacity>;
-            <TouchableOpacity
+            <TouchableOpacity;
               style={[styles.modalButton, styles.confirmButton]};
               onPress={handleConfirmBooking};
             >;
@@ -374,14 +374,14 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
   );
   // 渲染图片查看模态框
   const renderImageModal = () => (
-  <Modal
+  <Modal;
       visible={showImageModal}
       transparent;
       animationType="fade"
       onRequestClose={() => setShowImageModal(false)}
     >
       <View style={styles.imageModalOverlay}>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.imageModalClose}
           onPress={() => setShowImageModal(false)}
         >
@@ -389,7 +389,7 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
         </TouchableOpacity>
         ;
         {selectedResource.images && (;)
-          <FlatList
+          <FlatList;
             horizontal;
             data={selectedResource.images};
             renderItem={({ item }) => (;)
@@ -718,8 +718,8 @@ const styles = StyleSheet.create({
   imageModalOverlay: {,
   flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.9)',justifyContent: 'center',alignItems: 'center';
-  },imageModalClose: {
-      position: "absolute",
+  },imageModalClose: {,
+  position: "absolute",
       top: 50,right: 20,zIndex: 1,padding: 10;
   },fullImage: {width: width,height: height * 0.7,resizeMode: 'contain';
   };

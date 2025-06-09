@@ -1,0 +1,8 @@
+{
+  "deletion_time": "2025-06-09T13:09:42.430449",
+  "deleted_service": "services/health-data-service",
+  "backup_location": "backups/health-data-service_backup_20250609_130933",
+  "unified_service_completion": 90.2,
+  "reason": "统一健康数据服务整合完成",
+  "dependencies_found": 41
+}

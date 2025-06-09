@@ -10,32 +10,32 @@ import {import React from "react";
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get(window");"
 // 类型定义
 export interface PerformanceConfig {
-  lazyLoading: boolean;
+  lazyLoading: boolean;,
   memoryManagement: boolean;
-  renderOptimization: boolean;
+  renderOptimization: boolean;,
   gestureOptimization: boolean;
-  enableFPSMonitoring: boolean;
+  enableFPSMonitoring: boolean;,
   enableMemoryMonitoring: boolean;
-  enableNetworkMonitoring: boolean;
+  enableNetworkMonitoring: boolean;,
   autoOptimization: boolean;
   performanceLevel: "low | "medium" | high" | "auto;"
 }
 export interface AnimationConfig {
-  duration: number;
+  duration: number;,
   easing: string;
-  useNativeDriver: boolean;
+  useNativeDriver: boolean;,
   enableHardwareAcceleration: boolean;
 }
 export interface InteractionFeedback {
-  haptic: boolean;
+  haptic: boolean;,
   sound: boolean;
-  visual: boolean;
+  visual: boolean;,
   hapticType: "light" | medium" | "heavy | "success" | warning" | "error | "notification";
 }
 export interface VisualEffectConfig {
-  shadows: {enabled: boolean;
+  shadows: {enabled: boolean;,
   elevation: number;
-    shadowColor: string;
+    shadowColor: string;,
   shadowOffset: { width: number; height: number;
 };
     shadowOpacity: number,
@@ -52,16 +52,16 @@ export interface VisualEffectConfig {
   };
 }
 export interface ResponsiveConfig {
-  breakpoints: {small: number;
+  breakpoints: {small: number;,
   medium: number;
-    large: number;
+    large: number;,
   xlarge: number;
 };
   spacing: {,
   small: number;
     medium: number,
-  large: number;
-    xlarge: number;
+  large: number;,
+  xlarge: number;
   };
   typography: {,
   small: { fontSize: number; lineHeight: number };
@@ -71,22 +71,22 @@ export interface ResponsiveConfig {
   };
 }
 export interface ThemeConfig {
-  colors: {primary: string;
+  colors: {primary: string;,
   secondary: string;
-    background: string;
+    background: string;,
   surface: string;
-    text: string;
+    text: string;,
   textSecondary: string;
-    border: string;
+    border: string;,
   error: string;
-    warning: string;
+    warning: string;,
   success: string;
 };
   spacing: {,
   xs: number;
     sm: number,
-  md: number;
-    lg: number,
+  md: number;,
+  lg: number,
   xl: number;
   };
   borderRadius: {,
@@ -170,8 +170,8 @@ const avgTime = times.reduce(a, b) => a + b, 0) /     times.length;
   }
   getPerformanceMetrics(): {
     avgFPS: number,
-  avgMemory: number;
-    renderTimes: Map<string, number[]>;
+  avgMemory: number;,
+  renderTimes: Map<string, number[]>;
   } {
     const avgFPS = this.fpsData.length > 0;
       ? this.fpsData.reduce(a, b) => a + b, 0) /     this.fpsData.length ;

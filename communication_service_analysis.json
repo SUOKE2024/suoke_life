@@ -1,0 +1,121 @@
+{
+  "directory_structure": {
+    "total_required": 9,
+    "existing": 9,
+    "missing": 0,
+    "existing_dirs": [
+      "communication_service",
+      "communication_service/message_bus",
+      "communication_service/rag_service",
+      "api",
+      "config",
+      "tests",
+      "docs",
+      "utils",
+      "deploy"
+    ],
+    "missing_dirs": [],
+    "completion_rate": 100.0
+  },
+  "core_files": {
+    "total_required": 8,
+    "existing": 8,
+    "missing": 0,
+    "existing_files": [
+      "Dockerfile",
+      "README.md",
+      "requirements.txt",
+      "communication_service/__init__.py",
+      "communication_service/message_bus/__init__.py",
+      "communication_service/message_bus/main.py",
+      "communication_service/rag_service/__init__.py",
+      "communication_service/rag_service/main.py"
+    ],
+    "missing_files": [],
+    "file_sizes": {
+      "Dockerfile": 566,
+      "README.md": 701,
+      "requirements.txt": 786,
+      "communication_service/__init__.py": 3867,
+      "communication_service/message_bus/__init__.py": 467,
+      "communication_service/message_bus/main.py": 2346,
+      "communication_service/rag_service/__init__.py": 159,
+      "communication_service/rag_service/main.py": 402
+    },
+    "completion_rate": 100.0
+  },
+  "api_endpoints": {
+    "message_bus_endpoints": 4,
+    "rag_service_endpoints": 1,
+    "total_endpoints": 5,
+    "endpoints": {
+      "message_bus": [
+        "api/message-bus/__init__.py",
+        "api/message-bus/grpc/message_bus_pb2.py",
+        "api/message-bus/grpc/__init__.py",
+        "api/message-bus/grpc/message_bus_pb2_grpc.py"
+      ],
+      "rag_service": [
+        "api/rag-service/enhanced_api_gateway.py"
+      ]
+    },
+    "has_apis": true
+  },
+  "configuration": {
+    "config_files": [
+      "config/message-bus/settings.py.backup_priority",
+      "config/message-bus/production.yaml",
+      "config/message-bus/settings.py.backup",
+      "config/message-bus/settings.py",
+      "config/message-bus/settings.py.backup_advanced",
+      "config/message-bus/default.yaml",
+      "config/rag-service/production.yaml",
+      "config/rag-service/settings.py.backup",
+      "config/rag-service/settings.py",
+      "config/rag-service/settings.py.backup_advanced",
+      "config/rag-service/default.yaml",
+      "config/rag-service/__pycache__/settings.cpython-313.pyc"
+    ],
+    "total_configs": 12,
+    "has_message_bus_config": true,
+    "has_rag_service_config": true,
+    "completion_rate": 100
+  },
+  "business_logic": {
+    "message_bus": {
+      "main_file_exists": true,
+      "main_file_size": 2346,
+      "has_service_class": true,
+      "has_async_methods": true
+    },
+    "rag_service": {
+      "main_file_exists": true,
+      "main_file_size": 402,
+      "has_service_class": false,
+      "has_api_integration": true
+    }
+  },
+  "tests": {
+    "test_files": [
+      "tests/message-bus/test_repository.py",
+      "tests/message-bus/test_grpc_server.py",
+      "tests/message-bus/test_simple.py",
+      "tests/message-bus/test_message_service.py",
+      "tests/message-bus/test_integration.py",
+      "tests/message-bus/test_publish.py",
+      "tests/rag-service/test_rag_service.py",
+      "tests/rag-service/test_enhanced_integration.py",
+      "tests/rag-service/test_retriever.py",
+      "tests/rag-service/unit/test_openai_generator.py",
+      "tests/rag-service/unit/test_retriever.py",
+      "tests/rag-service/integration/test_api_endpoints.py",
+      "tests/rag-service/performance/test_performance_comprehensive.py",
+      "tests/rag-service/e2e/test_complete_workflow.py"
+    ],
+    "total_tests": 14,
+    "has_message_bus_tests": true,
+    "has_rag_service_tests": true,
+    "completion_rate": 100
+  },
+  "overall_completion": 97.5
+}

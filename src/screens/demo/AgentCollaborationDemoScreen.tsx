@@ -1,18 +1,18 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "../../placeholder";react-native;
 import React, { useState, useEffect } from "react";
 export interface Agent {
-  id: string;
+  id: string;,
   name: string;
-  type: xiaoai" | "xiaoke | "laoke" | soer;
+  type: xiaoai" | "xiaoke | "laoke" | soer;,
   status: "idle | "working" | collaborating";
   currentTask?: string;
 }
 export interface CollaborationTask {
-  id: string;
+  id: string;,
   title: string;
-  description: string;
+  description: string;,
   participants: string[];
-  status: "pending | "active" | completed";
+  status: "pending | "active" | completed";,
   progress: number;
 }
 /**
@@ -22,7 +22,7 @@ export const AgentCollaborationDemoScreen: React.FC  = () => {};
   const [agents, setAgents] = useState<Agent[]>([]);
   const [tasks, setTasks] = useState<CollaborationTask[]>([]);
   const [selectedTask, setSelectedTask] = useState<string | null>(null);
-  useEffect(() => {
+  useEffect() => {
     initializeDemo();
   }, [])  // 检查是否需要添加依赖项;
   const initializeDemo = () => {}
@@ -171,11 +171,11 @@ const task = tasks.find(t => t.id === taskId);
   };
   const renderAgent = (agent: Agent) => (;)
     <View key={agent.id} style={styles.agentCard}>
-      <View style={{[styles.agentAvatar, { backgroundColor: getAgentColor(agent.type) }}]}>
+      <View style={[styles.agentAvatar, { backgroundColor: getAgentColor(agent.type) }}]}>
         <Text style={styles.agentAvatarText}>{agent.name.charAt(0)}</    Text>
       </    View>
       <Text style={styles.agentName}>{agent.name}</    Text>
-      <View style={{[styles.statusBadge, { backgroundColor: getStatusColor(agent.status) }}]}>
+      <View style={[styles.statusBadge, { backgroundColor: getStatusColor(agent.status) }}]}>
         <Text style={styles.statusText}>{agent.status}</    Text>
       </    View>
       {agent.currentTask  && <Text style={styles.currentTask}>{agent.currentTask}</    Text>
@@ -186,7 +186,7 @@ const task = tasks.find(t => t.id === taskId);
     <View key={task.id} style={styles.taskCard}>
       <View style={styles.taskHeader}>
         <Text style={styles.taskTitle}>{task.title}</    Text>
-        <View style={{[styles.taskStatusBadge, { backgroundColor: getTaskStatusColor(task.status) }}]}>
+        <View style={[styles.taskStatusBadge, { backgroundColor: getTaskStatusColor(task.status) }}]}>
           <Text style={styles.taskStatusText}>{task.status}</    Text>
         </    View>
       </    View>
@@ -197,9 +197,9 @@ const task = tasks.find(t => t.id === taskId);
           {task.participants.map(participantId => {})
             const agent = agents.find(a => a.id === participantId);
             return agent ? (;)
-              <View
+              <View;
 key={participantId}
-                style={{[styles.participantBadge, { backgroundColor: getAgentColor(agent.type) }}]}
+                style={[styles.participantBadge, { backgroundColor: getAgentColor(agent.type) }}]}
               >
                 <Text style={styles.participantText}>{agent.name}</    Text>
               </    View>
@@ -210,14 +210,14 @@ key={participantId}
       {task.status === "active"  && <View style={styles.progressContainer}>
           <Text style={styles.progressLabel}>进度: {task.progress}%</    Text>
           <View style={styles.progressBar}>
-            <View
-style={{[styles.progressFill, { width: `${task.progress}}%` }]}
+            <View;
+style={[styles.progressFill, { width: `${task.progress}}%` }]}
             /    >
           </    View>
         </    View>
       )}
       {task.status === pending" && (")
-        <TouchableOpacity
+        <TouchableOpacity;
 style={styles.startButton}
           onPress={() => startCollaboration(task.id)}
           disabled={selectedTask !== null}
@@ -258,7 +258,7 @@ style={styles.startButton}
     </    ScrollView>;
   );
 };
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   flex: 1,
     backgroundColor: "#f5f5f5",
     padding: 16},

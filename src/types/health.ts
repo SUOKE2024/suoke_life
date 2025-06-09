@@ -9,9 +9,9 @@ export interface HealthContext {
   timestamp: Date;
   sessionId?: string;
   vitalSigns: VitalSigns,
-  symptoms: Symptom[];
+  symptoms: Symptom[];,
   medicalHistory: MedicalHistory,
-  lifestyle: LifestyleData;
+  lifestyle: LifestyleData;,
   environment: EnvironmentData;
   biometrics?: BiometricData;
   labResults?: LabResult[];
@@ -24,8 +24,8 @@ export interface VitalSigns {
 }
 };
   bloodPressure: {systolic: number,
-  diastolic: number;
-    timestamp: Date;
+  diastolic: number;,
+  timestamp: Date;
   };
   heartRate: {,
   value: number;
@@ -47,18 +47,18 @@ export interface VitalSigns {
   };
   weight?: {
     value: number,
-  timestamp: Date;
-    unit: "kg" | lb;
+  timestamp: Date;,
+  unit: "kg" | lb;
   };
   height?: {
     value: number,
-  timestamp: Date;
-    unit: "cm | "in;
+  timestamp: Date;,
+  unit: "cm | "in;
   };
   bmi?: {
     value: number,
-  category: underweight" | "normal | "overweight" | obese;
-    timestamp: Date;
+  category: underweight" | "normal | "overweight" | obese;,
+  timestamp: Date;
   };
 }
 /**
@@ -70,7 +70,7 @@ export interface Symptom {
   name: string;
   description?: string;
   severity: number; // 1-10 scale,
-  duration: string;
+  duration: string;,
   frequency: string,
   onset: Date;
   triggers?: string[];
@@ -101,11 +101,11 @@ export interface MedicalHistory {
 };
 };
   chronicConditions: ChronicCondition[],
-  pastIllnesses: PastIllness[];
+  pastIllnesses: PastIllness[];,
   surgeries: Surgery[],
-  allergies: Allergy[];
+  allergies: Allergy[];,
   medications: Medication[],
-  familyHistory: FamilyHistory[];
+  familyHistory: FamilyHistory[];,
   immunizations: Immunization[],
   hospitalizations: Hospitalization[];
 }
@@ -118,7 +118,7 @@ export interface ChronicCondition {
   name: string;
   icdCode?: string;
   diagnosisDate: Date,
-  severity: "mild | "moderate" | severe";
+  severity: "mild | "moderate" | severe";,
   status: "active | "inactive" | resolved",
   treatment: string[];
   complications?: string[];
@@ -144,7 +144,7 @@ export interface Surgery {
 };
 };
   id: string,
-  procedure: string;
+  procedure: string;,
   date: Date;
   surgeon?: string;
   hospital?: string;
@@ -158,9 +158,9 @@ export interface Allergy {
 };
 };
   id: string,
-  allergen: string;
+  allergen: string;,
   type: "food | "drug" | environmental" | "contact | "other,
-  reaction: string[];
+  reaction: string[];,
   severity: mild" | "moderate | "severe" | life-threatening;
   onsetDate?: Date;
   lastReaction?: Date;
@@ -175,7 +175,7 @@ export interface Medication {
   name: string;
   genericName?: string;
   dosage: string,
-  frequency: string;
+  frequency: string;,
   route: "oral | "topical" | injection" | "inhalation | "other,
   startDate: Date;
   endDate?: Date;
@@ -191,7 +191,7 @@ export interface FamilyHistory {
 };
 };
   id: string,
-  relationship: string;
+  relationship: string;,
   condition: string;
   ageOfOnset?: number;
   ageAtDeath?: number;
@@ -204,7 +204,7 @@ export interface Immunization {
 };
 };
   id: string,
-  vaccine: string;
+  vaccine: string;,
   date: Date;
   provider?: string;
   lotNumber?: string;
@@ -233,11 +233,11 @@ export interface LifestyleData {
 };
 };
   diet: DietData,
-  exercise: ExerciseData;
+  exercise: ExerciseData;,
   sleep: SleepData,
-  stress: StressData;
+  stress: StressData;,
   socialFactors: SocialFactors,
-  habits: Habits;
+  habits: Habits;,
   workEnvironment: WorkEnvironment;
 }
 /**
@@ -256,9 +256,9 @@ proteins: number; // grams,
     minerals: Record<string, number>;
   };
   waterIntake: number; // liters,
-  mealTiming: MealTiming[];
+  mealTiming: MealTiming[];,
   dietaryRestrictions: string[],
-  supplements: Supplement[];
+  supplements: Supplement[];,
   foodAllergies: string[],
   eatingPatterns: string[];
 }
@@ -279,7 +279,7 @@ export interface Supplement {
 };
 };
   name: string,
-  dosage: string;
+  dosage: string;,
   frequency: string,
   startDate: Date;
   endDate?: Date;
@@ -291,9 +291,9 @@ export interface ExerciseData {
 };
 };
   weeklyMinutes: number,
-  activities: ExerciseActivity[];
+  activities: ExerciseActivity[];,
   fitnessLevel: "sedentary | "low" | moderate" | "high | "very_high,
-  goals: string[];
+  goals: string[];,
   limitations: string[],
   preferences: string[];
 }
@@ -303,8 +303,8 @@ export interface ExerciseActivity {
 };
 };
   type: string,
-  duration: number; // minutes;
-intensity: low" | "moderate | "high",
+  duration: number; // minutes;,
+  intensity: low" | "moderate | "high",
   frequency: number; // times per week;
 caloriesBurned?: number;
   heartRateZone?: string;
@@ -316,16 +316,16 @@ export interface SleepData {
 };
 };
   averageHours: number,
-  bedtime: string;
+  bedtime: string;,
   wakeTime: string,
-  sleepQuality: number; // 1-10;
-sleepLatency: number; // minutes to fall asleep,
-  nightAwakenings: number;
+  sleepQuality: number; // 1-10;,
+  sleepLatency: number; // minutes to fall asleep,
+  nightAwakenings: number;,
   sleepEfficiency: number; // percentage;
 sleepStages?: {
     deep: number; // minutes,
-  rem: number; // minutes;
-light: number; // minutes;
+  rem: number; // minutes;,
+  light: number; // minutes;
   }
   sleepDisorders: string[],
   sleepAids: string[];
@@ -338,12 +338,12 @@ export interface StressData {
   perceivedStressLevel: number;
 // 1-10;
 stressSources: string[],
-  copingMechanisms: string[];
+  copingMechanisms: string[];,
   stressSymptoms: string[],
-  relaxationTechniques: string[];
+  relaxationTechniques: string[];,
   workStress: number; // 1-10,
-  personalStress: number; // 1-10;
-financialStress: number; // 1-10;
+  personalStress: number; // 1-10;,
+  financialStress: number; // 1-10;
 }
 /**
 * * 社会因素接口
@@ -351,9 +351,9 @@ export interface SocialFactors {
 };
 };
   maritalStatus: string,
-  livingArrangement: string;
+  livingArrangement: string;,
   socialSupport: number; // 1-10,
-  socialActivities: string[];
+  socialActivities: string[];,
   communityInvolvement: string[],
   culturalFactors: string[];
   religiousBeliefs?: string;
@@ -365,10 +365,10 @@ export interface Habits {
 };
 };
   smoking: SmokingHistory,
-  alcohol: AlcoholConsumption;
+  alcohol: AlcoholConsumption;,
   substanceUse: SubstanceUse[],
-  screenTime: number; // hours per day;
-hobbies: string[],
+  screenTime: number; // hours per day;,
+  hobbies: string[],
   routines: DailyRoutine[];
 }
 /**
@@ -426,16 +426,16 @@ export interface WorkEnvironment {
 };
 };
   occupation: string,
-  workSchedule: string;
+  workSchedule: string;,
   physicalDemands: string,
-  mentalDemands: string;
+  mentalDemands: string;,
   hazardExposure: string[],
-  workSatisfaction: number; // 1-10;
-workLifeBalance: number; // 1-10,
-  commute: {
-    duration: number; // minutes,
-  method: string;
-    stress: number; // 1-10;
+  workSatisfaction: number; // 1-10;,
+  workLifeBalance: number; // 1-10,
+  commute: {,
+  duration: number; // minutes,
+  method: string;,
+  stress: number; // 1-10;
   }
 }
 /**
@@ -444,9 +444,9 @@ export interface EnvironmentData {
 };
 };
   location: GeographicLocation,
-  airQuality: AirQualityData;
+  airQuality: AirQualityData;,
   climate: ClimateData,
-  housing: HousingData;
+  housing: HousingData;,
   exposures: EnvironmentalExposure[],
   seasonalFactors: SeasonalFactors;
 }
@@ -459,9 +459,9 @@ export interface GeographicLocation {
   longitude: number;
   altitude?: number;
   city: string,
-  region: string;
+  region: string;,
   country: string,
-  timezone: string;
+  timezone: string;,
   urbanRural: "urban" | suburban" | "rural;
 }
 /**
@@ -470,13 +470,13 @@ export interface AirQualityData {
 };
 };
   aqi: number,
-  pm25: number;
+  pm25: number;,
   pm10: number,
-  ozone: number;
+  ozone: number;,
   no2: number,
-  so2: number;
+  so2: number;,
   co: number,
-  timestamp: Date;
+  timestamp: Date;,
   source: string;
 }
 /**
@@ -485,11 +485,11 @@ export interface ClimateData {
 };
 };
   temperature: number,
-  humidity: number;
+  humidity: number;,
   pressure: number,
-  uvIndex: number;
+  uvIndex: number;,
   windSpeed: number,
-  precipitation: number;
+  precipitation: number;,
   season: "spring" | summer" | "autumn | "winter",
   timestamp: Date;
 }
@@ -499,15 +499,15 @@ export interface HousingData {
 };
 };
   type: string,
-  age: number;
+  age: number;,
   size: number; // square meters,
-  ventilation: string;
+  ventilation: string;,
   heating: string,
-  cooling: string;
+  cooling: string;,
   waterQuality: string,
-  mold: boolean;
+  mold: boolean;,
   pets: Pet[],
-  indoorPlants: number;
+  indoorPlants: number;,
   smokingIndoors: boolean;
 }
 /**
@@ -518,7 +518,7 @@ export interface Pet {
   type: string;
   breed?: string;
   age: number,
-  vaccinated: boolean;
+  vaccinated: boolean;,
   allergenRisk: low" | "medium | "high";
 }
 /**
@@ -527,9 +527,9 @@ export interface EnvironmentalExposure {
 };
 };
   type: string,
-  source: string;
+  source: string;,
   duration: string,
-  intensity: low" | "medium | "high";
+  intensity: low" | "medium | "high";,
   frequency: string,
   protectiveMeasures: string[];
   healthEffects?: string[];
@@ -540,10 +540,10 @@ export interface SeasonalFactors {
 };
 };
   seasonalAffectiveDisorder: boolean,
-  seasonalAllergies: string[];
+  seasonalAllergies: string[];,
   seasonalActivityChanges: string[],
-  lightExposure: number; // hours per day;
-vitaminDStatus: string;
+  lightExposure: number; // hours per day;,
+  vitaminDStatus: string;
 }
 /**
 * * 生物识别数据接口
@@ -564,8 +564,8 @@ export interface FingerprintData {
 };
 };
   finger: string,
-  template: string; // encrypted template;
-quality: number,
+  template: string; // encrypted template;,
+  quality: number,
   timestamp: Date;
 }
 /**
@@ -576,7 +576,7 @@ export interface FaceRecognitionData {
   template: string;
 // encrypted template;
 confidence: number,
-  landmarks: number[];
+  landmarks: number[];,
   timestamp: Date;
 }
 /**
@@ -587,7 +587,7 @@ export interface VoicePrintData {
   template: string;
 // encrypted template;
 duration: number; // seconds,
-  quality: number;
+  quality: number;,
   language: string,
   timestamp: Date;
 }
@@ -597,8 +597,8 @@ export interface RetinalScanData {
 };
 };
   eye: left" | "right,
-  template: string; // encrypted template;
-quality: number,
+  template: string; // encrypted template;,
+  quality: number,
   timestamp: Date;
 }
 /**
@@ -607,9 +607,9 @@ export interface DNAProfileData {
 };
 };
   markers: string[],
-  ancestry: string[];
+  ancestry: string[];,
   healthRisks: GeneticRisk[],
-  pharmacogenomics: PharmacogeneticProfile[];
+  pharmacogenomics: PharmacogeneticProfile[];,
   consent: GeneticConsent;
 }
 /**
@@ -618,9 +618,9 @@ export interface GeneticRisk {
 };
 };
   condition: string,
-  risk: "low" | moderate" | "high;
+  risk: "low" | moderate" | "high;,
   confidence: number,
-  genes: string[];
+  genes: string[];,
   recommendations: string[];
 }
 /**
@@ -629,7 +629,7 @@ export interface PharmacogeneticProfile {
 };
 };
   drug: string,
-  metabolism: "poor" | intermediate" | "normal | "rapid" | ultra-rapid;
+  metabolism: "poor" | intermediate" | "normal | "rapid" | ultra-rapid;,
   recommendations: string[],
   genes: string[];
 }
@@ -639,9 +639,9 @@ export interface GeneticConsent {
 };
 };
   researchParticipation: boolean,
-  dataSharing: boolean;
+  dataSharing: boolean;,
   familyNotification: boolean,
-  incidentalFindings: boolean;
+  incidentalFindings: boolean;,
   dataRetention: number; // years,
   withdrawalRights: boolean;
 }
@@ -654,11 +654,11 @@ export interface LabResult {
   testName: string;
   testCode?: string;
   value: number | string,
-  unit: string;
+  unit: string;,
   referenceRange: string,
-  status: "normal | "high" | low" | "critical | "abnormal;
+  status: "normal | "high" | low" | "critical | "abnormal;,
   flagged: boolean,
-  date: Date;
+  date: Date;,
   laboratory: string;
   orderingPhysician?: string;
   methodology?: string;
@@ -670,11 +670,11 @@ export interface DeviceData {
 };
 };
   deviceId: string,
-  deviceType: string;
+  deviceType: string;,
   manufacturer: string,
-  model: string;
+  model: string;,
   firmwareVersion: string,
-  dataType: string;
+  dataType: string;,
   measurements: DeviceMeasurement[];
   batteryLevel?: number;
   lastSync: Date;
@@ -687,7 +687,7 @@ export interface DeviceMeasurement {
 };
 };
   timestamp: Date,
-  value: number | string;
+  value: number | string;,
   unit: string,
   quality: good" | "fair | "poor";
   confidence?: number;
@@ -700,13 +700,13 @@ export interface HealthAssessment {
 };
 };
   id: string,
-  userId: string;
+  userId: string;,
   assessmentType: string,
-  date: Date;
+  date: Date;,
   scores: AssessmentScore[],
-  recommendations: HealthRecommendation[];
+  recommendations: HealthRecommendation[];,
   riskFactors: RiskFactor[],
-  overallScore: number;
+  overallScore: number;,
   category: excellent" | "good | "fair" | poor;
   nextAssessmentDate?: Date;
 }
@@ -716,7 +716,7 @@ export interface AssessmentScore {
 };
 };
   domain: string,
-  score: number;
+  score: number;,
   maxScore: number;
   percentile?: number;
   interpretation: string;
@@ -728,13 +728,13 @@ export interface HealthRecommendation {
 };
 };
   id: string,
-  category: string;
+  category: string;,
   priority: "high | "medium" | low",
-  title: string;
+  title: string;,
   description: string,
-  actionItems: string[];
+  actionItems: string[];,
   timeline: string,
-  evidence: string;
+  evidence: string;,
   personalizedFactors: string[];
 }
 /**
@@ -743,9 +743,9 @@ export interface RiskFactor {
 };
 };
   factor: string,
-  level: "low | "moderate" | high" | "very_high;"
+  level: "low | "moderate" | high" | "very_high;",
   modifiable: boolean,
-  impact: string;
+  impact: string;,
   interventions: string[],
   timeline: string;
 }
@@ -755,19 +755,19 @@ export interface HealthGoal {
 };
 };
   id: string,
-  userId: string;
+  userId: string;,
   title: string,
-  description: string;
+  description: string;,
   category: string,
-  targetValue: number;
+  targetValue: number;,
   currentValue: number,
-  unit: string;
+  unit: string;,
   startDate: Date,
-  targetDate: Date;
+  targetDate: Date;,
   status: "active" | completed" | "paused | "cancelled",
-  progress: number; // 0-100%
+  progress: number; // 0-100%,
   milestones: Milestone[],
-  barriers: string[];
+  barriers: string[];,
   motivations: string[];
 }
 /**
@@ -776,7 +776,7 @@ export interface Milestone {
 };
 };
   id: string,
-  title: string;
+  title: string;,
   description: string,
   targetDate: Date;
   completedDate?: Date;
@@ -789,11 +789,11 @@ export interface HealthEvent {
 };
 };
   id: string,
-  userId: string;
+  userId: string;,
   type: string,
-  title: string;
+  title: string;,
   description: string,
-  date: Date;
+  date: Date;,
   severity: low" | "medium | "high" | critical,
   category: string;
   location?: string;

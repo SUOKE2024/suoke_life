@@ -11,6 +11,10 @@ import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.soloader.OpenSourceMergedSoMapping
 import com.facebook.soloader.SoLoader
+// 添加Firebase分析包
+import com.reactlibrary.firebase.FirebaseAnalyticsPackage
+// 添加推送通知支持包
+import com.reactlibrary.pushnotification.ReactNativePushNotificationPackage
 
 class MainApplication : Application(), ReactApplication {
 
@@ -18,8 +22,9 @@ class MainApplication : Application(), ReactApplication {
       object : DefaultReactNativeHost(this) {
         override fun getPackages(): List<ReactPackage> =
             PackageList(this).packages.apply {
-              // Packages that cannot be autolinked yet can be added manually here, for example:
-              // add(MyReactNativePackage())
+              // 添加常用包
+              add(FirebaseAnalyticsPackage()) // 添加Firebase分析
+              add(ReactNativePushNotificationPackage()) // 添加推送通知支持
             }
 
         override fun getJSMainModuleName(): String = "index"
@@ -27,8 +32,7 @@ class MainApplication : Application(), ReactApplication {
         override fun getUseDeveloperSupport(): Boolean = BuildConfig.DEBUG
 
         override val isNewArchEnabled: Boolean = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED
-        override val isHermesEnabled: Boolean = BuildConfig.IS_HERMES_ENABLED
-      }
+        override val isHermesEnabled: Boolean = true // 强制启用Hermes引擎
 
   override val reactHost: ReactHost
     get() = getDefaultReactHost(applicationContext, reactNativeHost)

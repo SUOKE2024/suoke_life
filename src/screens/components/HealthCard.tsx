@@ -21,7 +21,7 @@ export const HealthCard: React.FC  = () => {}
     </    View>;
   );
 }
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   backgroundColor: white",
     borderRadius: 12,
     padding: 16,

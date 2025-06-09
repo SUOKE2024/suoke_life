@@ -6,7 +6,7 @@ import React from "react";
 s";  * / 图像分析* ///     "
 // 数据源类型 * export interface DataSource {
   /
-  id: string;
+  id: string;,
   name: string,type: "database" | "api" | "file" | "stream" | "sensor" | "manual",connection: {url?: string;
     credentials?: Record<string, any>;
     headers?: Record<string, string>;
@@ -20,16 +20,16 @@ s";  * / 图像分析* ///     "
     primaryKey?: string;
     indexes?: string[];
   };
-  refreshRate: number //
+  refreshRate: number //,
   status: "active" | "inactive" | "error"}
 // 分析配置 * export interface AnalysisConfig {
   id: string,
-  name: string;
+  name: string;,
   description: string;
-  type: AnalysisType;
+  type: AnalysisType;,
   dataSources: string[];
-  parameters: {timeRange?:  {start: string;
-      end: string;
+  parameters: {timeRange?:  {start: string;,
+  end: string;
 }
     filters?: Array<{ field: string,
       operator:   | "eq"| "ne",
@@ -76,10 +76,10 @@ s";  * / 图像分析* ///     "
   id: string,
   configId: string,status: "running" | "completed" | "failed" | "cancelled",startTime: string;
   endTime?: string;
-  duration?: number;  results: {summary: {totalRecords: number;
-      processedRecords: number;
-      errorRecords: number;
-      insights: string[];
+  duration?: number;  results: {summary: {totalRecords: number;,
+  processedRecords: number;
+      errorRecords: number;,
+  insights: string[];
       recommendations: string[];
 };
     data: {
@@ -159,16 +159,16 @@ s";  * / 图像分析* ///     "
 }
 // 仪表板配置 * export interface DashboardConfig {
   id: string,
-  name: string;
+  name: string;,
   description: string;
-  layout: {rows: number;
-    columns: number;
-    widgets: Array<{id: string;
-      type: "chart" | "metric" | "table" | "text" | "image" | "iframe";
-      position: {row: number;
-        column: number;
-        rowSpan: number;
-        columnSpan: number;
+  layout: {rows: number;,
+  columns: number;
+    widgets: Array<{id: string;,
+  type: "chart" | "metric" | "table" | "text" | "image" | "iframe";
+      position: {row: number;,
+  column: number;
+        rowSpan: number;,
+  columnSpan: number;
 };
       config: {title?: string;
         analysisId?: string;
@@ -187,11 +187,11 @@ s";  * / 图像分析* ///     "
   updatedAt: string,
   createdBy: string}
 // 报告配置 * export interface ReportConfig {
-    id: string;
+    id: string;,
   name: string;
-  description: string;
-  template: {sections: Array<{id: string;
-      type: | "title"| "summary"| "chart";
+  description: string;,
+  template: {sections: Array<{id: string;,
+  type: | "title"| "summary"| "chart";
         | "table";
         | "text";
         | "recommendations";

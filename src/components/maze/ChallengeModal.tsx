@@ -17,9 +17,9 @@ import { Challenge, ChallengeQuestion } from '../../types/maze';
   Image;
 } from 'react-native';
 interface ChallengeModalProps {
-  challenge: Challenge;
+  challenge: Challenge;,
   visible: boolean;
-  onClose: () => void;
+  onClose: () => void;,
   onComplete: (score: number) => void;
 }
 const { width: screenWidth } = Dimensions.get('window');
@@ -43,7 +43,7 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
   /**
   * 初始化挑战
   */
-  useEffect(() => {
+  useEffect() => {
     if (visible) {
       setCurrentQuestionIndex(0);
       setSelectedAnswers({});
@@ -59,7 +59,7 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
   /**
   * 计时器
   */
-  useEffect(() => {
+  useEffect() => {
     let interval: NodeJS.Timeout;
     if (isTimerActive && timeLeft > 0) {
       interval = setInterval() => {
@@ -124,7 +124,7 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
   const handleSubmit = () => {setIsTimerActive(false);
     // 计算分数
     let correctAnswers = 0;
-    challenge.questions.forEach(((question, index) => {
+    challenge.questions.forEach((question, index) => {
       const selectedAnswer = selectedAnswers[index];
       if (selectedAnswer !== undefined && selectedAnswer === parseInt(String(question.correctAnswer))) {
         correctAnswers++;
@@ -157,13 +157,13 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
   * 渲染问题选项
   */
   const renderAnswerOptions = () => {if (!currentQuestion) return null;
-    return currentQuestion.options.map((option, index) => {const isSelected = selectedAnswers[currentQuestionIndex] === index;)
+    return currentQuestion.options.map(option, index) => {const isSelected = selectedAnswers[currentQuestionIndex] === index;)
       const isCorrect = showResults && index === parseInt(String(currentQuestion.correctAnswer));
       const isWrong = showResults && isSelected && index !== parseInt(String(currentQuestion.correctAnswer));
       return (
-  <TouchableOpacity
+  <TouchableOpacity;
           key={index}
-          style={{[
+          style={[
             styles.answerOption,
             isSelected && styles.selectedOption,
             showResults && isCorrect && styles.correctOption,
@@ -173,13 +173,13 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
           disabled={showResults}
         >
           <View style={styles.optionContent}>
-            <View style={{[
+            <View style={[
               styles.optionIndicator,
               isSelected && styles.selectedIndicator,
               showResults && isCorrect && styles.correctIndicator,
               showResults && isWrong && styles.wrongIndicator;
             ]}}>
-              <Text style={{[
+              <Text style={[
                 styles.optionLetter,
                 isSelected && styles.selectedLetter,
                 showResults && isCorrect && styles.correctLetter,
@@ -188,7 +188,7 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
                 {String.fromCharCode(65 + index)}
               </Text>
             </View>
-            <Text style={{[;
+            <Text style={[;
               styles.optionText,isSelected && styles.selectedText,showResults && isCorrect && styles.correctText,showResults && isWrong && styles.wrongText;
             ]}}>;
               {option};
@@ -216,7 +216,7 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
       <View style={styles.resultsContainer}>;
         <View style={styles.scoreDisplay}>;
           <Icon name="emoji-events" size={48} color="#FFD54F" />;
-          <Animated.Text style={{[styles.scoreText, {opacity: scoreAnim.interpolate({inputRange: [0, 100],outputRange: [0, 1];)
+          <Animated.Text style={[styles.scoreText, {opacity: scoreAnim.interpolate({inputRange: [0, 100],outputRange: [0, 1];)
             }});
           }]}>
             {score}分
@@ -242,14 +242,14 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
           </View>
         </View>
         <View style={styles.resultActions}>
-          <TouchableOpacity
+          <TouchableOpacity;
             style={styles.reviewButton}
             onPress={() => setShowResults(false)}
           >
             <Icon name="replay" size={20} color="#2196F3" />
             <Text style={styles.reviewButtonText}>查看答案</Text>
           </TouchableOpacity>
-          <TouchableOpacity
+          <TouchableOpacity;
             style={styles.completeButton}
             onPress={handleComplete}
           >
@@ -262,7 +262,7 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
   };
   if (!visible) return null;
   return (
-  <Modal
+  <Modal;
       visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
@@ -278,7 +278,7 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
           <View style={styles.headerRight}>
             <View style={styles.timerContainer}>
               <Icon name="access-time" size={16} color={timeLeft < 60 ? "#F44336" : "#4CAF50"} />
-              <Text style={{[
+              <Text style={[
                 styles.timerText,
                 { color: timeLeft < 60 ? "#F44336" : "#4CAF50" }}
               ]}>
@@ -295,7 +295,7 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
           <View style={styles.progressContainer}>;
             <View style={styles.progressBar}>;
               <Animated.View;
-                style={{[;
+                style={[;
                   styles.progressFill,{width: progressAnim.interpolate({inputRange: [0, 1],outputRange: ["0%",100%'];)
                     }});
                   }
@@ -346,7 +346,7 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
         </ScrollView>
         {// 底部操作栏}
         {!showResults  && <View style={styles.footer}>
-            <TouchableOpacity
+            <TouchableOpacity;
               style={[styles.navButton, currentQuestionIndex === 0 && styles.disabledButton]}
               onPress={handlePreviousQuestion}
               disabled={currentQuestionIndex === 0}
@@ -356,8 +356,8 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
                 上一题
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={{[
+            <TouchableOpacity;
+              style={[
                 styles.navButton,
                 styles.primaryButton,
                 selectedAnswers[currentQuestionIndex] === undefined && styles.disabledButton;
@@ -365,14 +365,14 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
               onPress={currentQuestionIndex === totalQuestions - 1 ? handleSubmit : handleNextQuestion}
               disabled={selectedAnswers[currentQuestionIndex] === undefined}
             >
-              <Text style={{[
+              <Text style={[
                 styles.navButtonText,
                 styles.primaryButtonText,
                 selectedAnswers[currentQuestionIndex] === undefined && styles.disabledText;
               ]}}>
                 {currentQuestionIndex === totalQuestions - 1 ? '提交答案' : '下一题'}
               </Text>
-              <Icon
+              <Icon;
                 name={currentQuestionIndex === totalQuestions - 1 ? "send" : "chevron-right"}
                 size={24}
                 color={selectedAnswers[currentQuestionIndex] === undefined ? "#CCC" : "#FFFFFF"}
@@ -685,8 +685,8 @@ const styles = StyleSheet.create({
     color: '#2196F3',
     marginLeft: 8,
     fontWeight: '500';
-  },completeButton: {
-      flexDirection: "row",
+  },completeButton: {,
+  flexDirection: "row",
       alignItems: 'center',paddingVertical: 12,paddingHorizontal: 24,borderRadius: 8,backgroundColor: '#4CAF50';
   },completeButtonText: {fontSize: 16,color: '#FFFFFF',marginLeft: 8,fontWeight: '500';
   };

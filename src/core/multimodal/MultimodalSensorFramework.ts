@@ -468,7 +468,7 @@ export enum SensorStatus {
 }
 // 传感器数据接口;
 export interface SensorData {
-  sensorId: string;
+  sensorId: string;,
   timestamp: Date;
   value: any;
   unit?: string;
@@ -492,64 +492,64 @@ export interface FusedSensorData {
   stressIndicators?: StressIndicatorData;
   exerciseData?: ExerciseSensorData;
   nutritionIndicators?: NutritionIndicatorData;
-  confidence: number;
+  confidence: number;,
   sources: string[];
 }
 // 活动数据接口
 export interface ActivityData {
-  dailySteps: number;
+  dailySteps: number;,
   sedentaryTime: number; // minutes;
-activeTime: number; // minutes;
+activeTime: number; // minutes;,
   caloriesBurned: number;
-  distanceTraveled: number; // meters;
+  distanceTraveled: number; // meters;,
   floorsClimbed: number;
   activityIntensity: low" | "moderate | "high";
 }
 // 环境传感器数据接口
 export interface EnvironmentSensorData {
-  airQuality: {aqi: number;
+  airQuality: {aqi: number;,
   pm25: number;
     pm10: number;
 };
   noiseLevel: number; // decibels,
-  lightLevel: number; // lux;
-temperature: number; // celsius,
-  humidity: number; // percentage;
-pressure: number; // hPa;
+  lightLevel: number; // lux;,
+  temperature: number; // celsius,
+  humidity: number; // percentage;,
+  pressure: number; // hPa;
 }
 // 睡眠传感器数据接口
 export interface SleepSensorData {
   totalSleepDuration: number;
 // minutes;
-deepSleepDuration: number; // minutes;
+deepSleepDuration: number; // minutes;,
   remSleepDuration: number; // minutes;
-lightSleepDuration: number; // minutes;
+lightSleepDuration: number; // minutes;,
   sleepEfficiency: number; // 0-1;
-awakenings: number;
+awakenings: number;,
   sleepLatency: number; // minutes;
 }
 // 压力指标数据接口
 export interface StressIndicatorData {
   heartRateVariability: number;
 // ms;
-cortisolLevel: number; ///    dL;
+cortisolLevel: number; ///    dL;,
   skinConductance: number; // μS;
-respiratoryRate: number; // breaths per minute;
+respiratoryRate: number; // breaths per minute;,
   bloodPressureVariability: number;
 }
 // 运动传感器数据接口
 export interface ExerciseSensorData {
-  weeklyExerciseMinutes: number;
+  weeklyExerciseMinutes: number;,
   intensityDistribution: {;
-    low: number;
+    low: number;,
   moderate: number;
     high: number;
 };
   heartRateZones: {,
   zone1: number; // percentage of time;
 zone2: number,
-  zone3: number;
-    zone4: number,
+  zone3: number;,
+  zone4: number,
   zone5: number;
   };
   recoveryTime: number; // hours;
@@ -558,28 +558,28 @@ zone2: number,
 export interface NutritionIndicatorData {
   hydrationLevel: number;
 // 0-1;
-glucoseLevel: number; ///    dL;
+glucoseLevel: number; ///    dL;,
   glucoseVariability: number; // percentage;
-lactateLevel: number; ///    L;
+lactateLevel: number; ///    L;,
   ketoneLevel: number; ///    L;
 }
 // 健康异常接口
 export interface HealthAnomaly {
-  type: vital_sign" | "activity | "environment" | sleep" | "stress;
+  type: vital_sign" | "activity | "environment" | sleep" | "stress;,
   parameter: string;
-  value: any;
+  value: any;,
   severity: "low" | medium" | "high;
-  description: string;
+  description: string;,
   timestamp: Date;
   recommendations: string[];
 }
 // 健康洞察接口
 export interface HealthInsight {
-  type: string;
+  type: string;,
   title: string;
-  description: string;
+  description: string;,
   score: number; // 0-100;
-insights: string[];
+insights: string[];,
   recommendations: string[];
   timestamp: Date;
 }
@@ -601,39 +601,39 @@ export interface FilterSettings {
 }
 // 校准设置接口
 export interface CalibrationSettings {
-  autoCalibration: boolean;
+  autoCalibration: boolean;,
   calibrationInterval: number; // hours;
 referenceValues?: Record<string, number>;
 }
 // 电源设置接口
 export interface PowerSettings {
-  powerMode: "low" | normal" | "high;
+  powerMode: "low" | normal" | "high;,
   sleepMode: boolean;
   batteryOptimization: boolean;
 }
 // 校准结果接口
 export interface CalibrationResult {
-  success: boolean;
+  success: boolean;,
   accuracy: number;
-  offset: number;
+  offset: number;,
   gain: number;
-  timestamp: Date;
+  timestamp: Date;,
   nextCalibration: Date;
 }
 // 校准数据接口
 export interface CalibrationData {
-  sensorId: string;
+  sensorId: string;,
   referenceValue: number;
-  measuredValue: number;
+  measuredValue: number;,
   offset: number;
-  gain: number;
+  gain: number;,
   timestamp: Date;
 }
 // 数据质量报告接口
 export interface DataQualityReport {
-  overallQuality: DataQuality;
+  overallQuality: DataQuality;,
   sensorQuality: Record<string, DataQuality>;
-  dataCompleteness: number; // percentage;
+  dataCompleteness: number; // percentage;,
   anomaliesDetected: number;
   lastUpdate: Date;
 }

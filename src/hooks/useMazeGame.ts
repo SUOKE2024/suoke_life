@@ -14,19 +14,19 @@ import {Maze,
   GameReward;
 } from '../types/maze';
 interface UseMazeGameProps {
-  mazeId: string;
+  mazeId: string;,
   userId: string;
   onGameComplete?: (score: number, rewards: GameReward[]) => void;
   onError?: (error: string) => void;
 }
 interface MazeGameState {
-  maze: Maze | null;
+  maze: Maze | null;,
   progress: MazeProgress | null;
-  settings: GameSettings | null;
+  settings: GameSettings | null;,
   loading: boolean;
-  error: string | null;
+  error: string | null;,
   isPaused: boolean;
-  currentEvent: {;
+  currentEvent: {;,
   type: GameEventType;
     data?: any;
 } | null;
@@ -229,7 +229,7 @@ export const useMazeGame = ({mazeId,userId,onGameComplete,onError;)
     return Math.round(visitedNodes / totalNodes) * 100);
   }, [state.maze, state.progress]);
   // 初始化
-  useEffect(() => {
+  useEffect() => {
     initializeGame();
     return () => {stopAutoSave();
       if (gameTimerRef.current) {

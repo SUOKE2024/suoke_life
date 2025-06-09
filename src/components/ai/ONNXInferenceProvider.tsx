@@ -21,9 +21,9 @@ import {import {/**
 /**
 * * 推理状态
 export interface InferenceState {
-  isInitialized: boolean;
+  isInitialized: boolean;,
   isLoading: boolean;
-  error: string | null;
+  error: string | null;,
   loadedModels: string[];
   systemStatus: any;
 }
@@ -33,24 +33,24 @@ export interface ONNXInferenceContextType {
   // 状态;
 state: InferenceState;
   // 核心功能
-initialize: () => Promise<void>;
+initialize: () => Promise<void>;,
   destroy: () => Promise<void>;
   // 模型管理
 loadModel: (modelPath: string, modelType?: string) => Promise<ONNXModel>;
   unloadModel: (modelId: string) => Promise<void>;
   // 推理功能
-runInference: (;)
-    modelId: string;
+runInference: (;),
+  modelId: string;
     inputs: Record<string, TensorData>;
     options?: InferenceOptions;
   ) => Promise<Record<string, TensorData>>;
   // 索克生活专用推理
-runTCMDiagnosis: (patientData: TCMPatientData) => Promise<TCMDiagnosisResult>;
-  runHealthAssessment: (healthData: HealthData) => Promise<HealthAssessmentResult>;
-  runSymptomAnalysis: (symptoms: SymptomData) => Promise<SymptomAnalysisResult>;
+runTCMDiagnosis: (patientData: TCMPatientData) => Promise<TCMDiagnosisResult>;,
+  runHealthAssessment: (healthData: HealthData) => Promise<HealthAssessmentResult>;,
+  runSymptomAnalysis: (symptoms: SymptomData) => Promise<SymptomAnalysisResult>;,
   runLifestyleRecommendation: (userData: UserData) => Promise<LifestyleRecommendationResult>;
   // 配置管理
-updateConfig: (config: Partial<ONNXRuntimeConfig>) => void;
+updateConfig: (config: Partial<ONNXRuntimeConfig>) => void;,
   getSystemStatus: () => any;
 }
 /**
@@ -64,32 +64,32 @@ export interface InferenceOptions {
 /**
 * * 索克生活数据类型
 export interface TCMPatientData {
-  pulse: number[];
+  pulse: number[];,
   tongue: number[];
-  complexion: number[];
+  complexion: number[];,
   symptoms: number[];
 }
 export interface HealthData {
-  vitals: number[];
+  vitals: number[];,
   biomarkers: number[];
   lifestyle: number[];
 }
 export interface SymptomData {
-  symptoms: number[];
+  symptoms: number[];,
   duration: number[];
   severity: number[];
 }
 export interface UserData {
-  age: number;
+  age: number;,
   gender: number;
-  activity: number;
+  activity: number;,
   diet: number;
   sleep: number;
 }
 /**
 * * 结果类型
 export interface TCMDiagnosisResult {
-  syndrome: {type: string;
+  syndrome: {type: string;,
   confidence: number;
 };
   constitution: {,
@@ -99,21 +99,21 @@ export interface TCMDiagnosisResult {
   recommendations: string[];
 }
 export interface HealthAssessmentResult {
-  overallScore: number;
+  overallScore: number;,
   riskFactors: number[];
   recommendations: string[];
 }
 export interface SymptomAnalysisResult {
-  possibleConditions: Array<{name: string;
+  possibleConditions: Array<{name: string;,
   probability: number;
 }>
   urgency: ";low" | medium" | "high,
   recommendations: string[];
 }
 export interface LifestyleRecommendationResult {
-  exercise: number;
+  exercise: number;,
   diet: number;
-  sleep: number;
+  sleep: number;,
   stress: number;
   recommendations: string[];
 }
@@ -372,7 +372,7 @@ const preloadModelsAsync = useCallback(async (modelPaths: string[]) => {})
     }
   }, [loadModel]);
   // 应用状态变化处理
-useEffect(() => {
+useEffect() => {
     const handleAppStateChange = (nextAppState: AppStateStatus) => {}
       if (appStateRef.current.match(/inactive|background/    ) && nextAppState === "active) {"
         // 应用从后台回到前台，可能需要重新初始化
@@ -388,13 +388,13 @@ const systemStatus = managerRef.current.getSystemStatus();
     return() => subscription?.remove();
   }, [state.isInitialized]);
   // 自动初始化
-useEffect(() => {
+useEffect() => {
     if (autoInitialize && !state.isInitialized && !state.isLoading) {
       initialize();
     }
   }, [autoInitialize, initialize, state.isInitialized, state.isLoading]);
   // 组件卸载时清理
-useEffect(() => {
+useEffect() => {
     return() => {}
       if (managerRef.current) {
         destroy();
@@ -517,7 +517,7 @@ function parseSymptomAnalysisResult(outputs: Record<string, TensorData>): Sympto
   if (conditionsOutput && urgencyOutput) {
     const conditionProbs = Array.from(conditionsOutput.data);
     const urgencyScore = Array.from(urgencyOutput.data)[0];
-    const possibleConditions = conditionProbs.map((prob, index) => ({name: getConditionName(index),))
+    const possibleConditions = conditionProbs.map(prob, index) => ({name: getConditionName(index),))
       probability: prob;
     })).sort(a, b) => b.probability - a.probability).slice(0, 5);
     const urgency = urgencyScore > 0.7 ? "high" : urgencyScore > 0.4 ? medium" : "low;

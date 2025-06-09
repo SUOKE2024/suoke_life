@@ -1,10 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import {
-    Animated,
-    StyleSheet,
-    View,
-    ViewStyle,
-} from 'react-native';
+import { Animated, StyleSheet, View, ViewStyle } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
 export interface SkeletonProps {
@@ -31,7 +26,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   const { currentTheme } = useTheme();
   const animatedValue = useRef(new Animated.Value(0)).current;
 
-  useEffect(() => {
+  useEffect() => {
     if (animation === 'none') return;
 
     const createAnimation = () => {
@@ -70,7 +65,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
 
   const getVariantStyles = (): ViewStyle => {
     const baseHeight = typeof height === 'number' ? height : 20;
-    
+
     switch (variant) {
       case 'circular':
         const size = typeof width === 'number' ? width : 40;
@@ -87,8 +82,8 @@ export const Skeleton: React.FC<SkeletonProps> = ({
         };
       case 'text':
       default:
-        return {
-          width: width as any,
+        return {,
+  width: width as any,
           height: baseHeight,
           borderRadius: borderRadius || baseHeight / 2,
         };
@@ -121,12 +116,12 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   const animationStyle = getAnimationStyle();
 
   const styles = StyleSheet.create({
-    skeleton: {
-      backgroundColor: currentTheme.colors.outline,
+    skeleton: {,
+  backgroundColor: currentTheme.colors.outline,
       overflow: 'hidden',
     },
-    wave: {
-      position: 'absolute',
+    wave: {,
+  position: 'absolute',
       top: 0,
       left: 0,
       right: 0,
@@ -150,7 +145,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
         <Animated.View style={[styles.wave, animationStyle]} />
       )}
       {animation === 'pulse' && (
-        <Animated.View
+        <Animated.View;
           style={[
             {
               position: 'absolute',
@@ -169,17 +164,17 @@ export const Skeleton: React.FC<SkeletonProps> = ({
 };
 
 // 预设的骨架屏组件
-export const SkeletonText: React.FC<Omit<SkeletonProps, 'variant'>> = (props) => (
-  <Skeleton {...props} variant="text" />
-);
+export const SkeletonText: React.FC<Omit<SkeletonProps, 'variant'>> = (
+  props;
+) => <Skeleton {...props} variant="text" />;
 
-export const SkeletonCircle: React.FC<Omit<SkeletonProps, 'variant'>> = (props) => (
-  <Skeleton {...props} variant="circular" />
-);
+export const SkeletonCircle: React.FC<Omit<SkeletonProps, 'variant'>> = (
+  props;
+) => <Skeleton {...props} variant="circular" />;
 
-export const SkeletonRectangle: React.FC<Omit<SkeletonProps, 'variant'>> = (props) => (
-  <Skeleton {...props} variant="rectangular" />
-);
+export const SkeletonRectangle: React.FC<Omit<SkeletonProps, 'variant'>> = (
+  props;
+) => <Skeleton {...props} variant="rectangular" />;
 
 // 复合骨架屏组件
 export interface SkeletonListProps {
@@ -202,9 +197,9 @@ export const SkeletonList: React.FC<SkeletonListProps> = ({
   style,
 }) => {
   const items = Array.from({ length: count }, (_, index) => (
-    <View
+    <View;
       key={index}
-      style={{
+      style={
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: index < count - 1 ? spacing : 0,
@@ -212,26 +207,17 @@ export const SkeletonList: React.FC<SkeletonListProps> = ({
       }}
     >
       {showAvatar && (
-        <SkeletonCircle
-          width={40}
-          height={40}
-          style={{ marginRight: 12 }}
-        />
+        <SkeletonCircle width={40} height={40} style={ marginRight: 12 }} />
       )}
-      <View style={{ flex: 1 }}>
+      <View style={ flex: 1 }}>
         {showTitle && (
-          <SkeletonText
+          <SkeletonText;
             width="70%"
             height={16}
-            style={{ marginBottom: showSubtitle ? 8 : 0 }}
+            style={ marginBottom: showSubtitle ? 8 : 0 }}
           />
         )}
-        {showSubtitle && (
-          <SkeletonText
-            width="50%"
-            height={12}
-          />
-        )}
+        {showSubtitle && <SkeletonText width="50%" height={12} />}
       </View>
     </View>
   ));
@@ -239,4 +225,4 @@ export const SkeletonList: React.FC<SkeletonListProps> = ({
   return <View style={style}>{items}</View>;
 };
 
-export default Skeleton; 
+export default Skeleton;

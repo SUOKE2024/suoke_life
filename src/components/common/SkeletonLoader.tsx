@@ -17,39 +17,33 @@ const SkeletonItem: React.FC<{,
   style?: any;
 }> = ({ width, height, borderRadius = 4, style }) => {
   const animatedValue = React.useRef(new Animated.Value(0)).current;
-  React.useEffect(() => {
+  React.useEffect() => {
     const animation = Animated.loop()
       Animated.sequence([)
         Animated.timing(animatedValue, {
           toValue: 1,
           duration: 1000,
-          useNativeDriver: false,
-        }),
+          useNativeDriver: false}),
         Animated.timing(animatedValue, {
           toValue: 0,
           duration: 1000,
-          useNativeDriver: false,
-        }),
-      ])
+          useNativeDriver: false})])
     );
     animation.start();
     return () => animation.stop();
   }, [animatedValue]);
   const backgroundColor = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: ["#E1E9EE",#F2F8FC'],
-  });
+    outputRange: ["#E1E9EE",#F2F8FC']});
   return (
   <Animated.View;
-      style={{[
+      style={[
         {
           width,
           height,
           backgroundColor,
-          borderRadius,
-        }},
-        style,
-      ]}
+          borderRadius}},
+        style]}
     />
   );
 };
@@ -57,7 +51,7 @@ const SkeletonItem: React.FC<{,
 const ChatListSkeleton: React.FC<{ count: number }> = ({ count }) => {
   return (
   <View style={styles.container}>
-      {Array.from({ length: count }).map((_, index) => ())
+      {Array.from({ length: count }).map(_, index) => ())
         <View key={index} style={styles.chatItem}>
           {}
           <SkeletonItem width={50} height={50} borderRadius={25} />
@@ -82,7 +76,7 @@ const ChatListSkeleton: React.FC<{ count: number }> = ({ count }) => {
 const CardListSkeleton: React.FC<{ count: number }> = ({ count }) => {
   return (
   <View style={styles.container}>
-      {Array.from({ length: count }).map((_, index) => ())
+      {Array.from({ length: count }).map(_, index) => ())
         <View key={index} style={styles.cardItem}>
           {}
           <SkeletonItem width={screenWidth - 32} height={120} style={ marginBottom: 12 }} />
@@ -110,7 +104,7 @@ const ProfileSkeleton: React.FC = () => {
       </View>
             {}
       <View style={styles.profileStats}>
-        {Array.from({ length: 3 }).map((_, index) => ())
+        {Array.from({ length: 3 }).map(_, index) => ())
           <View key={index} style={styles.statItem}>
             <SkeletonItem width={40} height={24} style={ marginBottom: 4 }} />
             <SkeletonItem width={60} height={14} />
@@ -118,7 +112,7 @@ const ProfileSkeleton: React.FC = () => {
         ))}
       </View>
             {}
-      {Array.from({ length: 5 }).map((_, index) => ())
+      {Array.from({ length: 5 }).map(_, index) => ())
         <View key={index} style={styles.menuItem}>
           <SkeletonItem width={24} height={24} />
           <SkeletonItem width={100} height={16} style={ marginLeft: 12 }} />
@@ -131,8 +125,8 @@ const ProfileSkeleton: React.FC = () => {
 const ListSkeleton: React.FC<{ count: number; height: number }> = ({ count, height }) => {
   return (
   <View style={styles.container}>
-      {Array.from({ length: count }).map((_, index) => ())
-        <View key={index} style={{[styles.listItem, { height }}]}>
+      {Array.from({ length: count }).map(_, index) => ())
+        <View key={index} style={[styles.listItem, { height }}]}>
           <SkeletonItem width={screenWidth - 32} height={height - 16} />
         </View>
       ))}
@@ -146,8 +140,7 @@ const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
   height = 60,
   width = screenWidth - 32,
   style,
-  children,
-}) => {
+  children}) => {
   if (children) {
     return <View style={[styles.container, style]}>{children}</View>;
   }
@@ -166,22 +159,18 @@ const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    padding: 16,
-  },
+    padding: 16},
   chatItem: {,
   flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
-  },
+    borderBottomColor: '#F0F0F0'},
   chatContent: {,
   flex: 1,
-    marginLeft: 12,
-  },
+    marginLeft: 12},
   chatMeta: {,
-  alignItems: 'flex-end',
-  },
+  alignItems: 'flex-end'},
   cardItem: {,
   marginBottom: 20,
     padding: 16,
@@ -190,36 +179,28 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {,
   width: 0,
-      height: 2,
-    },
+      height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 3.84,
-    elevation: 5,
-  },
+    elevation: 5},
   profileHeader: {,
   alignItems: 'center',
-    paddingVertical: 24,
-  },
+    paddingVertical: 24},
   profileStats: {,
   flexDirection: 'row',
     justifyContent: 'space-around',
     paddingVertical: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
-  },
+    borderBottomColor: '#F0F0F0'},
   statItem: {,
-  alignItems: 'center',
-  },
+  alignItems: 'center'},
   menuItem: {,
   flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
-  },
+    borderBottomColor: '#F0F0F0'},
   listItem: {,
   marginBottom: 8,
-    padding: 8,
-  },
-});
+    padding: 8}});
 export default SkeletonLoader;

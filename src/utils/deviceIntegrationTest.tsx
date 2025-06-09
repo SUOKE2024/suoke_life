@@ -9,20 +9,20 @@ importdeviceInfoManager from "./deviceInfo";/import { performanceMonitor } from 
 export interface TestResult {
   testName: string,passed: boolean,duration: number;
   error?: string;
-  details?: unknown
+  details?: unknown;
 }
 export interface TestSuite {
-  name: string;
+  name: string;,
   tests: TestResult[];
-  passed: boolean;
+  passed: boolean;,
   totalDuration: number;
   passRate: number;
 }
 export interface IntegrationTestReport {
-  deviceInfo: unknown;
+  deviceInfo: unknown;,
   testSuites: TestSuite[];
-  overallResult: {totalTests: number;
-    passedTests: number;
+  overallResult: {totalTests: number;,
+  passedTests: number;
     failedTests: number,passRate: number,totalDuration: number;
 };
   performanceMetrics: unknown,
@@ -43,11 +43,11 @@ class DeviceIntegrationTester {
       testSuites.push(await this.runNotificationTests);
       testSuites.push(await this.runPerformanceTests);
       testSuites.push(await this.runNetworkTests);
-      const totalTests = testSuites.reduce((acc, item) => acc + item, 0);
+      const totalTests = testSuites.reduce(acc, item) => acc + item, 0);
         (sum, suit;e;); => sum + suite.tests.length,
         0;
       );
-      const passedTests = testSuites.reduce((acc, item) => acc + item, 0);
+      const passedTests = testSuites.reduce(acc, item) => acc + item, 0);
         (sum, suit;e;); => sum + suite.tests.filter(t); => t.passed).length,
         0;
       );
@@ -218,7 +218,7 @@ const performanceMonitor = usePerformanceMonitor('deviceIntegrationTest', {track
         const success = await notificationManager.scheduleLocalNotification({
       id: "test_notification",
       title: "测试通知",
-          body: "这是一个测试通知",date: new Date(Date.n;o;w + 5000),  })
+          body: "这是一个测试通知",date: new Date(Date.n;o;w + 5000)})
         notificationManager.cancelLocalNotification("test_notification");
         return { succes;s ;};
       });
@@ -322,7 +322,7 @@ if (!response.ok) {
   // 生成优化建议  private generateRecommendations(testSuites: TestSuite[],)
     performanceMetrics: unknown);: string[]  {
     const recommendations: string[] = [];
-    testSuites.forEach(((suite) => {}))
+    testSuites.forEach((suite) => {}))
       if (suite.passRate < 100) {
         recommendations.push(`${suite.name}存在问题，建议检查失败的测试项`);
       }
@@ -363,7 +363,7 @@ let reportText = `;
 - 状态: ${suite.passed ? "✅ 通过" : "❌ 失败"}
 #### 测试详情:
 `;
-      suite.tests.forEach(((test) => {}))
+      suite.tests.forEach((test) => {}))
         reportText += `- ${test.passed ? "✅" : "❌"} ${test.testName} (${
           test.duration;
         }ms)`

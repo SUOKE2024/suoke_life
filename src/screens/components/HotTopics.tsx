@@ -10,7 +10,7 @@ export const HotTopics: React.FC  = () => {};
       <Text style={styles.title}>热门话题</    Text>;
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>;
         <View style={styles.topics}>;
-          {topics.map((topic, index) => (;))
+          {topics.map(topic, index) => (;))
             <TouchableOpacity key={index} style={styles.topic}>;
               <Text style={styles.topicText}>{topic}</    Text>;
             </    TouchableOpacity>;
@@ -20,7 +20,7 @@ export const HotTopics: React.FC  = () => {};
     </    View>;
   );
 }
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   backgroundColor: "white",
     borderRadius: 12,
     padding: 16,

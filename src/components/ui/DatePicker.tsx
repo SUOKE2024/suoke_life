@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import {
-    Modal,
-    StyleSheet,
-    Text,
-    TextStyle,
-    TouchableOpacity,
-    View,
-    ViewStyle
+  Modal,
+  StyleSheet,
+  Text,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -50,7 +50,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   const formatDate = (date: Date): string => {
     if (format) {
       // 简单的格式化实现
-      return format
+      return format;
         .replace('YYYY', date.getFullYear().toString())
         .replace('MM', (date.getMonth() + 1).toString().padStart(2, '0'))
         .replace('DD', date.getDate().toString().padStart(2, '0'))
@@ -93,7 +93,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 
   const renderDatePicker = () => {
     // 简化的日期选择器实现
-    // 在实际项目中，可以使用 @react-native-community/datetimepicker
+    // 在实际项目中，可以使用 @react-native-community/datetimepicker;
     const currentYear = selectedDate.getFullYear();
     const currentMonth = selectedDate.getMonth();
     const currentDay = selectedDate.getDate();
@@ -110,26 +110,31 @@ export const DatePicker: React.FC<DatePickerProps> = ({
           </TouchableOpacity>
           <Text style={styles.headerTitle}>选择日期</Text>
           <TouchableOpacity onPress={handleConfirm} style={styles.headerButton}>
-            <Text style={[styles.headerButtonText, { color: currentTheme.colors.primary }]}>
+            <Text;
+              style={[
+                styles.headerButtonText,
+                { color: currentTheme.colors.primary },
+              ]}
+            >
               确定
             </Text>
           </TouchableOpacity>
         </View>
-        
+
         <View style={styles.pickerContent}>
           <Text style={styles.selectedDateText}>
             {formatDate(selectedDate)}
           </Text>
-          
+
           {/* 简化的选择器 - 实际项目中应使用专业的日期选择器组件 */}
           <View style={styles.quickActions}>
-            <TouchableOpacity
+            <TouchableOpacity;
               style={styles.quickButton}
               onPress={() => setSelectedDate(new Date())}
             >
               <Text style={styles.quickButtonText}>今天</Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            <TouchableOpacity;
               style={styles.quickButton}
               onPress={() => {
                 const yesterday = new Date();
@@ -139,7 +144,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
             >
               <Text style={styles.quickButtonText}>昨天</Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            <TouchableOpacity;
               style={styles.quickButton}
               onPress={() => {
                 const tomorrow = new Date();
@@ -156,8 +161,8 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   };
 
   const styles = StyleSheet.create({
-    container: {
-      borderWidth: 1,
+    container: {,
+  borderWidth: 1,
       borderColor: currentTheme.colors.outline,
       borderRadius: 8,
       paddingHorizontal: 12,
@@ -166,33 +171,33 @@ export const DatePicker: React.FC<DatePickerProps> = ({
       minHeight: 48,
       justifyContent: 'center',
     },
-    containerDisabled: {
-      backgroundColor: currentTheme.colors.surfaceVariant,
+    containerDisabled: {,
+  backgroundColor: currentTheme.colors.surfaceVariant,
       opacity: 0.6,
     },
-    text: {
-      fontSize: 16,
+    text: {,
+  fontSize: 16,
       color: currentTheme.colors.onSurface,
       ...textStyle,
     },
-    placeholder: {
-      fontSize: 16,
+    placeholder: {,
+  fontSize: 16,
       color: currentTheme.colors.onSurfaceVariant,
       ...placeholderStyle,
     },
-    modal: {
-      flex: 1,
+    modal: {,
+  flex: 1,
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
       justifyContent: 'flex-end',
     },
-    pickerContainer: {
-      backgroundColor: currentTheme.colors.surface,
+    pickerContainer: {,
+  backgroundColor: currentTheme.colors.surface,
       borderTopLeftRadius: 16,
       borderTopRightRadius: 16,
       maxHeight: '70%',
     },
-    pickerHeader: {
-      flexDirection: 'row',
+    pickerHeader: {,
+  flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
       paddingHorizontal: 16,
@@ -200,60 +205,59 @@ export const DatePicker: React.FC<DatePickerProps> = ({
       borderBottomWidth: 1,
       borderBottomColor: currentTheme.colors.outline,
     },
-    headerButton: {
-      paddingHorizontal: 8,
+    headerButton: {,
+  paddingHorizontal: 8,
       paddingVertical: 4,
     },
-    headerButtonText: {
-      fontSize: 16,
+    headerButtonText: {,
+  fontSize: 16,
       color: currentTheme.colors.onSurface,
     },
-    headerTitle: {
-      fontSize: 18,
+    headerTitle: {,
+  fontSize: 18,
       fontWeight: '600',
       color: currentTheme.colors.onSurface,
     },
-    pickerContent: {
-      padding: 16,
+    pickerContent: {,
+  padding: 16,
     },
-    selectedDateText: {
-      fontSize: 24,
+    selectedDateText: {,
+  fontSize: 24,
       fontWeight: '600',
       color: currentTheme.colors.primary,
       textAlign: 'center',
       marginBottom: 24,
     },
-    quickActions: {
-      flexDirection: 'row',
+    quickActions: {,
+  flexDirection: 'row',
       justifyContent: 'space-around',
       marginTop: 16,
     },
-    quickButton: {
-      paddingHorizontal: 16,
+    quickButton: {,
+  paddingHorizontal: 16,
       paddingVertical: 8,
       backgroundColor: currentTheme.colors.surfaceVariant,
       borderRadius: 8,
     },
-    quickButtonText: {
-      fontSize: 14,
+    quickButtonText: {,
+  fontSize: 14,
       color: currentTheme.colors.onSurface,
     },
   });
 
   return (
     <>
-      <TouchableOpacity
-        style={[
-          styles.container,
-          disabled && styles.containerDisabled,
-          style,
-        ]}
+      <TouchableOpacity;
+        style={[styles.container, disabled && styles.containerDisabled, style]}
         onPress={() => !disabled && setIsVisible(true)}
         disabled={disabled}
         accessible={accessible}
         accessibilityRole="button"
-        accessibilityLabel={accessibilityLabel || `日期选择器，当前值：${value ? formatDate(value) : placeholder}`}
-        accessibilityState={{ disabled }}
+        accessibilityLabel={
+          accessibilityLabel ||
+          `日期选择器，当前值：${value ? formatDate(value) : placeholder}`
+        }
+        accessibilityState={ disabled }}
         testID={testID}
       >
         <Text style={value ? styles.text : styles.placeholder}>
@@ -261,13 +265,13 @@ export const DatePicker: React.FC<DatePickerProps> = ({
         </Text>
       </TouchableOpacity>
 
-      <Modal
+      <Modal;
         visible={isVisible}
-        transparent
+        transparent;
         animationType="slide"
         onRequestClose={handleCancel}
       >
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.modal}
           activeOpacity={1}
           onPress={handleCancel}
@@ -281,4 +285,4 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   );
 };
 
-export default DatePicker; 
+export default DatePicker;

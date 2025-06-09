@@ -9,18 +9,18 @@ import {import React, { useState, useEffect } from "react";
   Switch;
 } from "../../placeholder";react-native;
 export interface UserProfile {
-  id: string;
+  id: string;,
   name: string;
-  email: string;
+  email: string;,
   phone: string;
   avatar?: string;
-  age: number;
+  age: number;,
   gender: male" | "female | "other";
-  height: number;
+  height: number;,
   weight: number;
-  healthGoals: string[];
+  healthGoals: string[];,
   preferences: {;
-    notifications: boolean;
+    notifications: boolean;,
   dataSharing: boolean;
     darkMode: boolean;
 };
@@ -38,7 +38,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps>  = ({
 }) => {}
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
-  useEffect(() => {
+  useEffect() => {
     loadUserProfile();
   }, [])  // 检查是否需要添加依赖项;
   const loadUserProfile = async() => {}
@@ -145,7 +145,7 @@ const mockProfile: UserProfile = {id: user-001",
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>健康目标</    Text>
       <View style={styles.goalsContainer}>
-        {profile?.healthGoals?.map((goal, index) => ())
+        {profile?.healthGoals?.map(goal, index) => ())
           <View key={index} style={styles.goalTag}>
             <Text style={styles.goalText}>{goal}</    Text>
           </    View>
@@ -158,21 +158,21 @@ const mockProfile: UserProfile = {id: user-001",
       <Text style={styles.sectionTitle}>偏好设置</    Text>
       <View style={styles.preferenceItem}>
         <Text style={styles.preferenceLabel}>推送通知</    Text>;
-        <Switch
+        <Switch;
 value={profile?.preferences.notifications || false}
           onValueChange={(value) => handlePreferenceChange("notifications, value)}"
         /    >
       </    View>
       <View style={styles.preferenceItem}>
         <Text style={styles.preferenceLabel}>数据共享</    Text>
-        <Switch
+        <Switch;
 value={profile?.preferences.dataSharing || false}
           onValueChange={(value) => handlePreferenceChange("dataSharing", value)}
         /    >
       </    View>
       <View style={styles.preferenceItem}>
         <Text style={styles.preferenceLabel}>深色模式</    Text>
-        <Switch
+        <Switch;
 value={profile?.preferences.darkMode || false}
           onValueChange={(value) => handlePreferenceChange(darkMode", value)}"
         /    >
@@ -191,7 +191,7 @@ value={profile?.preferences.darkMode || false}
         <Text style={styles.actionButtonText}>隐私政策</    Text>
       </    TouchableOpacity>
       ;
-      <TouchableOpacity
+      <TouchableOpacity;
 style={[styles.actionButton, styles.logoutButton]}
         onPress={handleLogout}
       >
@@ -228,7 +228,7 @@ style={[styles.actionButton, styles.logoutButton]}
     </    ScrollView>;
   );
 };
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   flex: 1,
     backgroundColor: "#f5f5f5},",
   loadingContainer: {,

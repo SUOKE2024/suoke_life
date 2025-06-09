@@ -15,15 +15,13 @@ export enum AgentStatus {
   IDLE = 'idle',
   MAINTENANCE = 'maintenance',
   ERROR = 'error',
-  OFFLINE = 'offline',
-}
+  OFFLINE = 'offline'}
 // 智能体健康状态枚举
 export enum AgentHealthStatus {
   HEALTHY = 'healthy',
   WARNING = 'warning',
   CRITICAL = 'critical',
-  UNKNOWN = 'unknown',
-}
+  UNKNOWN = 'unknown'}
 // 消息类型枚举
 export enum MessageType {
   TEXT = 'text',
@@ -33,21 +31,20 @@ export enum MessageType {
   SENSOR_DATA = 'sensor_data',
   DIAGNOSTIC_DATA = 'diagnostic_data',
   COMMAND = 'command',
-  NOTIFICATION = 'notification',
-}
+  NOTIFICATION = 'notification'}
 // 基础智能体接口
 export interface Agent {
-  id: string;
+  id: string;,
   name: string;
-  type: AgentType;
+  type: AgentType;,
   description: string;
-  channel: string;
+  channel: string;,
   role: string;
-  capabilities: string[];
+  capabilities: string[];,
   technicalFeatures: Record<string, boolean>;
-  status: AgentStatus;
+  status: AgentStatus;,
   healthStatus: AgentHealthStatus;
-  version: string;
+  version: string;,
   createdAt: Date;
   lastActivity: Date;
 }
@@ -159,26 +156,26 @@ export interface SoerAgent extends Agent {
 }
 // 智能体消息接口
 export interface AgentMessage {
-  id: string;
+  id: string;,
   fromAgent: AgentType;
   toAgent?: AgentType;
-  userId: string;
+  userId: string;,
   sessionId: string;
-  messageType: MessageType;
+  messageType: MessageType;,
   content: unknown;
-  timestamp: Date;
+  timestamp: Date;,
   priority: 'low' | 'normal' | 'high' | 'urgent';
   metadata?: Record<string, any>;
 }
 // 智能体响应接口
 export interface AgentResponse {
-  id: string;
+  id: string;,
   agentType: AgentType;
-  messageId: string;
+  messageId: string;,
   userId: string;
-  sessionId: string;
+  sessionId: string;,
   content: unknown;
-  responseType: 'text' | 'voice' | 'action' | 'data' | 'error';
+  responseType: 'text' | 'voice' | 'action' | 'data' | 'error';,
   timestamp: Date;
   processingTime: number;
   confidence?: number;
@@ -186,22 +183,22 @@ export interface AgentResponse {
 }
 // 智能体协作接口
 export interface AgentCollaboration {
-  id: string;
+  id: string;,
   initiatorAgent: AgentType;
-  participantAgents: AgentType[];
+  participantAgents: AgentType[];,
   collaborationType: 'consultation' | 'data_sharing' | 'task_delegation' | 'knowledge_exchange';
-  status: 'pending' | 'active' | 'completed' | 'failed';
+  status: 'pending' | 'active' | 'completed' | 'failed';,
   startTime: Date;
   endTime?: Date;
   result?: unknown;
 }
 // 智能体事件接口
 export interface AgentEvent {
-  id: string;
+  id: string;,
   agentType: AgentType;
-  eventType: 'status_change' | 'error' | 'collaboration_request' | 'task_completion';
+  eventType: 'status_change' | 'error' | 'collaboration_request' | 'task_completion';,
   timestamp: Date;
-  data: unknown;
+  data: unknown;,
   severity: 'info' | 'warning' | 'error' | 'critical';
 }
 // API响应接口
@@ -219,24 +216,24 @@ export interface ApiResponse<T> {
 }
 // 智能体配置接口
 export interface AgentConfiguration {
-  agentType: AgentType;
+  agentType: AgentType;,
   settings: Record<string, any>;
-  capabilities: string[];
+  capabilities: string[];,
   technicalFeatures: Record<string, boolean>;
-  resourceLimits: {;
+  resourceLimits: {;,
   maxConcurrentSessions: number;
-    maxMemoryUsage: number;
+    maxMemoryUsage: number;,
   maxCpuUsage: number;
 };
   lastUpdated: Date;
 }
 // 智能体性能指标接口
 export interface AgentMetrics {
-  agentType: AgentType;
+  agentType: AgentType;,
   timestamp: Date;
-  performance: {;
+  performance: {;,
   responseTime: number;
-    throughput: number;
+    throughput: number;,
   errorRate: number;
     successRate: number;
 };
@@ -253,21 +250,21 @@ export interface AgentMetrics {
 }
 // 四诊聚合结果接口
 export interface FourDiagnosisAggregationResult {
-  sessionId: string;
+  sessionId: string;,
   userId: string;
-  timestamp: Date;
+  timestamp: Date;,
   diagnosisResults: {;
-    looking: {;
+    looking: {;,
   faceColor: string;
-      tongueImage: string;
+      tongueImage: string;,
   bodyPosture: string;
       confidence: number;
 };
     listening: {,
   voiceQuality: string;
       breathingPattern: string,
-  heartRate: number;
-      confidence: number;
+  heartRate: number;,
+  confidence: number;
     };
     inquiry: {,
   symptoms: string[];
@@ -278,21 +275,21 @@ export interface FourDiagnosisAggregationResult {
     palpation: {,
   pulseType: string;
       pulseRate: number,
-  bodyTemperature: number;
-      confidence: number;
+  bodyTemperature: number;,
+  confidence: number;
     };
   };
   syndromeAnalysis: {,
   primarySyndrome: string;
     secondarySyndromes: string[],
-  confidence: number;
-    recommendations: string[];
+  confidence: number;,
+  recommendations: string[];
   };
   overallAssessment: {,
   healthScore: number;
     riskLevel: 'low' | 'medium' | 'high',
-  urgency: 'routine' | 'priority' | 'urgent';
-    followUpRequired: boolean;
+  urgency: 'routine' | 'priority' | 'urgent';,
+  followUpRequired: boolean;
   };
 }
 // 导出所有类型

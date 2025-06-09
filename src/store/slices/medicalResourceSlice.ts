@@ -2,23 +2,23 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../index';
 // 类型定义
 export interface MedicalResource {
-  id: string;
+  id: string;,
   type: 'hospital' | 'clinic' | 'pharmacy' | 'specialist' | 'doctor';
-  name: string;
+  name: string;,
   location: {;
-    address: string;
+    address: string;,
   coordinates: { lat: number; lng: number;
 };
     city: string,
   district: string;
   };
   services: string[],
-  rating: number;
-  availability: {,
-  isOpen: boolean;
-    hours: string,
-  nextAvailable: string;
-    slots: TimeSlot[];
+  rating: number;,
+  availability: {
+  isOpen: boolean;,
+  hours: string,
+  nextAvailable: string;,
+  slots: TimeSlot[];
   };
   contact: {,
   phone: string;
@@ -33,28 +33,28 @@ export interface MedicalResource {
   reviews?: Review[];
 }
 export interface TimeSlot {
-  id: string;
+  id: string;,
   startTime: string;
-  endTime: string;
+  endTime: string;,
   available: boolean;
   price?: number;
 }
 export interface Review {
-  id: string;
+  id: string;,
   userId: string;
-  userName: string;
+  userName: string;,
   rating: number;
-  comment: string;
+  comment: string;,
   date: string;
 }
 export interface Appointment {
-  id: string;
+  id: string;,
   resourceId: string;
-  resourceName: string;
+  resourceName: string;,
   userId: string;
-  serviceType: string;
+  serviceType: string;,
   scheduledTime: string;
-  duration: number;
+  duration: number;,
   status: 'pending' | 'confirmed' | 'completed' | 'cancelled';
   notes?: string;
   price?: number;
@@ -64,7 +64,7 @@ export interface Appointment {
 export interface ResourceFilters {
   type?: string[];
   location?: {
-    lat: number;
+    lat: number;,
   lng: number;
     radius: number;
 };
@@ -85,31 +85,31 @@ export interface SearchQuery {
 }
 interface MedicalResourceState {
   // 资源数据
-  resources: MedicalResource[];
+  resources: MedicalResource[];,
   searchResults: MedicalResource[];
-  selectedResource: MedicalResource | null;
+  selectedResource: MedicalResource | null;,
   nearbyResources: MedicalResource[];
   // 预约数据
-  appointments: Appointment[];
+  appointments: Appointment[];,
   selectedAppointment: Appointment | null;
   // 搜索和筛选
-  searchQuery: SearchQuery;
+  searchQuery: SearchQuery;,
   searchHistory: string[];
   filters: ResourceFilters;
   // 加载状态
-  loading: {;
+  loading: {;,
   search: boolean;
-    details: boolean;
+    details: boolean;,
   booking: boolean;
-    appointments: boolean;
+    appointments: boolean;,
   nearby: boolean;
 };
   // 错误状态
   errors: {,
   search: string | null;
     details: string | null,
-  booking: string | null;
-    appointments: string | null,
+  booking: string | null;,
+  appointments: string | null,
   nearby: string | null;
   };
   // UI状态
@@ -122,8 +122,8 @@ interface MedicalResourceState {
   pagination: {,
   currentPage: number;
     totalPages: number,
-  totalItems: number;
-    hasMore: boolean;
+  totalItems: number;,
+  hasMore: boolean;
   };
   // 服务健康状态
   serviceHealth: {,

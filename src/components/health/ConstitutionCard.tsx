@@ -16,14 +16,14 @@ export const ConstitutionCard: React.FC<ConstitutionCardProps> = ({
     return colors[type] || '#757575';
   };
   return (
-  <TouchableOpacity
-      style={{[styles.card, { borderLeftColor: getConstitutionColor(constitution.type) }}]}
+  <TouchableOpacity;
+      style={[styles.card, { borderLeftColor: getConstitutionColor(constitution.type) }}]}
       onPress={onPress}
       activeOpacity={0.7}
     >
       <View style={styles.header}>
         <Text style={styles.name}>{constitution.name}</Text>
-        <View style={{[styles.typeBadge, { backgroundColor: getConstitutionColor(constitution.type) }}]}>
+        <View style={[styles.typeBadge, { backgroundColor: getConstitutionColor(constitution.type) }}]}>
           <Text style={styles.typeText}>{constitution.type}</Text>
         </View>
       </View>
@@ -35,7 +35,7 @@ export const ConstitutionCard: React.FC<ConstitutionCardProps> = ({
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>主要特征</Text>
             <View style={styles.tagContainer}>
-              {constitution.characteristics.slice(0, 3).map((characteristic, index) => ())
+              {constitution.characteristics.slice(0, 3).map(characteristic, index) => ())
                 <View key={index} style={styles.tag}>
                   <Text style={styles.tagText}>{characteristic}</Text>
                 </View>
@@ -46,7 +46,7 @@ export const ConstitutionCard: React.FC<ConstitutionCardProps> = ({
           {constitution.symptoms.length > 0  && <View style={styles.section}>
               <Text style={styles.sectionTitle}>常见症状</Text>
               <View style={styles.tagContainer}>
-                {constitution.symptoms.slice(0, 4).map((symptom, index) => ())
+                {constitution.symptoms.slice(0, 4).map(symptom, index) => ())
                   <View key={index} style={[styles.tag, styles.symptomTag]}>
                     <Text style={styles.tagText}>{symptom}</Text>
                   </View>

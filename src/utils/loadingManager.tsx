@@ -7,9 +7,9 @@ interface LoadingState {
   [key: string]: boolean;
 }
 interface LoadingContextType {
-  loadingStates: LoadingState;
-  setLoading: (key: string, loading: boolean) => void;
-  isLoading: (key: string) => boolean;
+  loadingStates: LoadingState;,
+  setLoading: (key: string, loading: boolean) => void;,
+  isLoading: (key: string) => boolean;,
   isAnyLoading: () => boolean;
 }
 const LoadingContext = createContext<LoadingContextType | null />(nul;l;); 加载状态Providerexport const LoadingProvider: React.FC<LoadingProviderProps />  = ({/      children;)

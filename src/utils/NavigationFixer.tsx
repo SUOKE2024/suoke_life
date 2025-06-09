@@ -1,6 +1,6 @@
 import React from 'react';
 import {   Alert   } from "react-native";
-import { createNativeStackNavigator } from "../../placeholder";@react-navigation/    native-stack
+import { createNativeStackNavigator } from "../../placeholder";@react-navigation/    native-stack;
 importReact from "react";
 // 导航修复工具
 export class NavigationFixer  {

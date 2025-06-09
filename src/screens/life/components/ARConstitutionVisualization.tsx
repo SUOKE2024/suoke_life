@@ -8,58 +8,58 @@ import {
   Alert,
   Animated,
   ScrollView,
-  Dimensions
+  Dimensions;
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "../../../components/common/Icon";
 import { colors, spacing } from "../../../constants/theme";
 import { usePerformanceMonitor } from "../../../hooks/usePerformanceMonitor";
 interface ARConstitutionVisualizationProps {
-  visible: boolean;
+  visible: boolean;,
   onClose: () => void;
 }
 interface AcupointData {
-  id: string;
+  id: string;,
   name: string;
-  chineseName: string;
+  chineseName: string;,
   meridian: string;
   position: { x: number; y: number; z: number };
-  functions: string[];
+  functions: string[];,
   indications: string[];
   color: string;
 }
 interface MeridianData {
-  id: string;
+  id: string;,
   name: string;
-  chineseName: string;
+  chineseName: string;,
   element: string;
-  color: string;
+  color: string;,
   points: AcupointData[];
   pathData: string;
 }
 interface ConstitutionVisualization {
-  type: string;
+  type: string;,
   name: string;
-  characteristics: string[];
+  characteristics: string[];,
   color: string;
-  intensity: number;
+  intensity: number;,
   regions: string[];
 }
 export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationProps> = ({
   visible,
-  onClose
+  onClose;
 }) => {
   const performanceMonitor = usePerformanceMonitor("ARConstitutionVisualization", {
     trackRender: true,
     trackMemory: true,
-    warnThreshold: 50
+    warnThreshold: 50;
   });
   const [activeView, setActiveView] = useState<"constitution" | "meridians" | "acupoints" | "ar">("constitution");
   const [selectedMeridian, setSelectedMeridian] = useState<string | null>(null);
   const [selectedAcupoint, setSelectedAcupoint] = useState<AcupointData | null>(null);
   const [arMode, setArMode] = useState<boolean>(false);
-  const rotationAnim = useMemo(() => useRef(new Animated.ValueXY()).current, []);
-  const scaleAnim = useMemo(() => useRef(new Animated.Value(1)).current, []);
+  const rotationAnim = useMemo() => useRef(new Animated.ValueXY()).current, []);
+  const scaleAnim = useMemo() => useRef(new Animated.Value(1)).current, []);
   const [constitutionData] = useState<ConstitutionVisualization[]>([)
     {
       type: "balanced",
@@ -100,7 +100,7 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
       pathData: "M0.2,0.3 Q0.18,0.5 0.15,0.7"
     }
   ]);
-  const startARMode = useCallback(() => {
+  const startARMode = useCallback() => {
     Alert.alert("AR模式",
       "即将启动AR相机模式，请确保设备支持ARKit/ARCore",
       [
@@ -109,18 +109,18 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
       ]
     );
   }, []);
-  const renderConstitutionView = useMemo(() => ())
+  const renderConstitutionView = useMemo() => ())
     <View style={styles.viewContent}>
       <Text style={styles.viewTitle}>体质可视化分析</Text>
       <View style={styles.humanModel}>
-        <Animated.View
-          style={{[
+        <Animated.View;
+          style={[
             styles.modelContainer,
             {
               transform: [
                 {
-                  rotateY: rotationAnim.x.interpolate({
-                    inputRange: [-100, 100],
+                  rotateY: rotationAnim.x.interpolate({,
+  inputRange: [-100, 100],
                     outputRange: ["-30deg", "30deg"]
                   }})
                 },
@@ -131,14 +131,14 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
         >
           <View style={styles.humanSilhouette}>
             <Text style={styles.modelLabel}>3D人体模型</Text>
-            {constitutionData.map((constitution, index) => ())
-              <View
+            {constitutionData.map(constitution, index) => ())
+              <View;
                 key={constitution.type}
-                style={{[
+                style={[
                   styles.constitutionRegion,
                   {
                     backgroundColor: constitution.color + "40",
-                    opacity: constitution.intensity
+                    opacity: constitution.intensity;
                   }}
                 ]}
               >
@@ -149,9 +149,9 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
         </Animated.View>
       </View>
       <View style={styles.constitutionLegend}>
-        {constitutionData.map((constitution) => ())
+        {constitutionData.map(constitution) => ())
           <View key={constitution.type} style={styles.constitutionItem}>
-            <View style={{[styles.constitutionDot, { backgroundColor: constitution.color }}]} />
+            <View style={[styles.constitutionDot, { backgroundColor: constitution.color }}]} />
             <View style={styles.constitutionInfo}>
               <Text style={styles.constitutionName}>{constitution.name}</Text>
               <Text style={styles.constitutionDesc}>
@@ -164,21 +164,21 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
       </View>
     </View>
   ), [constitutionData, rotationAnim, scaleAnim]);
-  const renderMeridiansView = useMemo(() => ())
+  const renderMeridiansView = useMemo() => ())
     <View style={styles.viewContent}>
       <Text style={styles.viewTitle}>经络系统</Text>
       <View style={styles.meridiansContainer}>
-        {meridiansData.map((meridian) => ())
-          <TouchableOpacity
+        {meridiansData.map(meridian) => ())
+          <TouchableOpacity;
             key={meridian.id}
-            style={{[
+            style={[
               styles.meridianCard,
               { borderLeftColor: meridian.color }},
-              selectedMeridian === meridian.id && styles.selectedMeridianCard
+              selectedMeridian === meridian.id && styles.selectedMeridianCard;
             ]}
             onPress={() =>
               setSelectedMeridian()
-                selectedMeridian === meridian.id ? null : meridian.id
+                selectedMeridian === meridian.id ? null : meridian.id;
               )
             }
             accessibilityLabel={`选择${meridian.chineseName}经络`}
@@ -191,8 +191,8 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
             <Text style={styles.pointCount}>{meridian.points.length} 个穴位</Text>
             {selectedMeridian === meridian.id  && <View style={styles.meridianDetails}>
                 <Text style={styles.detailTitle}>主要穴位:</Text>
-                {meridian.points.map((point) => ())
-                  <TouchableOpacity
+                {meridian.points.map(point) => ())
+                  <TouchableOpacity;
                     key={point.id}
                     style={styles.pointItem}
                     onPress={() => setSelectedAcupoint(point)}
@@ -211,13 +211,13 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
       </View>
     </View>
   ), [meridiansData, selectedMeridian]);
-  const renderAcupointsView = useMemo(() => ())
+  const renderAcupointsView = useMemo() => ())
     <View style={styles.viewContent}>
       <Text style={styles.viewTitle}>穴位详解</Text>
       {selectedAcupoint ? ()
         <View style={styles.acupointDetail}>
           <View style={styles.acupointHeader}>
-            <TouchableOpacity
+            <TouchableOpacity;
               style={styles.backButton}
               onPress={() => setSelectedAcupoint(null)}
               accessibilityLabel="返回穴位列表"
@@ -235,13 +235,13 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
             </View>
             <View style={styles.infoSection}>
               <Text style={styles.infoLabel}>主要功能:</Text>
-              {selectedAcupoint.functions.map((func, index) => ())
+              {selectedAcupoint.functions.map(func, index) => ())
                 <Text key={index} style={styles.functionItem}>• {func}</Text>
               ))}
             </View>
             <View style={styles.infoSection}>
               <Text style={styles.infoLabel}>主治病症:</Text>
-              {selectedAcupoint.indications.map((indication, index) => ())
+              {selectedAcupoint.indications.map(indication, index) => ())
                 <Text key={index} style={styles.indicationItem}>• {indication}</Text>
               ))}
             </View>
@@ -258,14 +258,14 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
       ) : (
         <View style={styles.acupointsList}>
           <Text style={styles.instructionText}>选择经络查看穴位详情</Text>
-          {meridiansData.map((meridian) => ())
+          {meridiansData.map(meridian) => ())
             <View key={meridian.id} style={styles.meridianGroup}>
               <Text style={styles.groupTitle}>{meridian.chineseName}</Text>
               <View style={styles.pointsGrid}>
-                {meridian.points.map((point) => ())
-                  <TouchableOpacity
+                {meridian.points.map(point) => ())
+                  <TouchableOpacity;
                     key={point.id}
-                    style={{[styles.pointButton, { borderColor: point.color }}]}
+                    style={[styles.pointButton, { borderColor: point.color }}]}
                     onPress={() => setSelectedAcupoint(point)}
                     accessibilityLabel={`查看${point.chineseName}穴位`}
                   >
@@ -279,7 +279,7 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
       )}
     </View>
   ), [selectedAcupoint, meridiansData]);
-  const renderARView = useMemo(() => ())
+  const renderARView = useMemo() => ())
     <View style={styles.viewContent}>
       <Text style={styles.viewTitle}>AR体质可视化</Text>
       <View style={styles.arContainer}>
@@ -300,20 +300,20 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
         { key: "meridians", label: "经络系统" },
         { key: "acupoints", label: "穴位详解" },
         { key: "ar", label: "AR可视化" }
-      ].map((tab) => ())
-        <TouchableOpacity
+      ].map(tab) => ())
+        <TouchableOpacity;
           key={tab.key}
-          style={{[
+          style={[
             styles.tabItem,
-            activeView === tab.key && styles.activeTabItem
+            activeView === tab.key && styles.activeTabItem;
           ]}}
           onPress={() => setActiveView(tab.key as any)}
           accessibilityLabel={`切换到${tab.label}`}
         >
-          <Text
-            style={{[
+          <Text;
+            style={[
               styles.tabText,
-              activeView === tab.key && styles.activeTabText
+              activeView === tab.key && styles.activeTabText;
             ]}}
           >
             {tab.label}
@@ -337,7 +337,7 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
     }
   };
   return (
-  <Modal
+  <Modal;
       visible={visible}
       animationType="slide"
       presentationStyle="fullScreen"
@@ -345,7 +345,7 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
     >
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
-          <TouchableOpacity
+          <TouchableOpacity;
             style={styles.closeButton}
             onPress={onClose}
             accessibilityLabel="关闭AR体质可视化"
@@ -365,332 +365,332 @@ export const ARConstitutionVisualization: React.FC<ARConstitutionVisualizationPr
 };
 const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background
+  container: {,
+  flex: 1,
+    backgroundColor: colors.background;
   },
-  header: {
-    flexDirection: 'row',
+  header: {,
+  flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border
+    borderBottomColor: colors.border;
   },
-  closeButton: {
-    padding: spacing.xs
+  closeButton: {,
+  padding: spacing.xs;
   },
-  headerTitle: {
-    fontSize: 18,
+  headerTitle: {,
+  fontSize: 18,
     fontWeight: 'bold',
-    color: colors.text
+    color: colors.text;
   },
-  placeholder: {
-    width: 32
+  placeholder: {,
+  width: 32;
   },
-  tabBar: {
-    flexDirection: 'row',
+  tabBar: {,
+  flexDirection: 'row',
     backgroundColor: colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border
+    borderBottomColor: colors.border;
   },
-  tabItem: {
-    flex: 1,
+  tabItem: {,
+  flex: 1,
     paddingVertical: spacing.sm,
     alignItems: 'center'
   },
-  activeTabItem: {
-    borderBottomWidth: 2,
-    borderBottomColor: colors.primary
+  activeTabItem: {,
+  borderBottomWidth: 2,
+    borderBottomColor: colors.primary;
   },
-  tabText: {
-    fontSize: 14,
-    color: colors.textSecondary
+  tabText: {,
+  fontSize: 14,
+    color: colors.textSecondary;
   },
-  activeTabText: {
-    color: colors.primary,
+  activeTabText: {,
+  color: colors.primary,
     fontWeight: 'bold'
   },
-  content: {
-    flex: 1
+  content: {,
+  flex: 1;
   },
-  viewContent: {
-    padding: spacing.md
+  viewContent: {,
+  padding: spacing.md;
   },
-  viewTitle: {
-    fontSize: 20,
+  viewTitle: {,
+  fontSize: 20,
     fontWeight: 'bold',
     color: colors.text,
     marginBottom: spacing.md,
     textAlign: 'center'
   },
-  humanModel: {
-    height: 300,
+  humanModel: {,
+  height: 300,
     backgroundColor: colors.surface,
     borderRadius: 12,
     marginBottom: spacing.md,
     justifyContent: 'center',
     alignItems: 'center'
   },
-  modelContainer: {
-    width: 200,
+  modelContainer: {,
+  width: 200,
     height: 250,
     justifyContent: 'center',
     alignItems: 'center'
   },
-  humanSilhouette: {
-    width: '100%',
+  humanSilhouette: {,
+  width: '100%',
     height: '100%',
     position: 'relative',
     justifyContent: 'center',
     alignItems: 'center'
   },
-  modelLabel: {
-    fontSize: 16,
+  modelLabel: {,
+  fontSize: 16,
     color: colors.textSecondary,
     textAlign: 'center'
   },
-  constitutionRegion: {
-    position: 'absolute',
+  constitutionRegion: {,
+  position: 'absolute',
     width: 60,
     height: 40,
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center'
   },
-  regionLabel: {
-    fontSize: 10,
+  regionLabel: {,
+  fontSize: 10,
     color: colors.text,
     fontWeight: 'bold'
   },
-  constitutionLegend: {
-    backgroundColor: colors.surface,
+  constitutionLegend: {,
+  backgroundColor: colors.surface,
     borderRadius: 12,
-    padding: spacing.md
+    padding: spacing.md;
   },
-  constitutionItem: {
-    flexDirection: 'row',
+  constitutionItem: {,
+  flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm;
   },
-  constitutionDot: {
-    width: 12,
+  constitutionDot: {,
+  width: 12,
     height: 12,
     borderRadius: 6,
-    marginRight: spacing.sm
+    marginRight: spacing.sm;
   },
-  constitutionInfo: {
-    flex: 1
+  constitutionInfo: {,
+  flex: 1;
   },
-  constitutionName: {
-    fontSize: 16,
+  constitutionName: {,
+  fontSize: 16,
     fontWeight: 'bold',
-    color: colors.text
+    color: colors.text;
   },
-  constitutionDesc: {
-    fontSize: 12,
+  constitutionDesc: {,
+  fontSize: 12,
     color: colors.textSecondary,
-    marginTop: 2
+    marginTop: 2;
   },
-  intensityText: {
-    fontSize: 14,
+  intensityText: {,
+  fontSize: 14,
     fontWeight: 'bold',
-    color: colors.primary
+    color: colors.primary;
   },
-  meridiansContainer: {
-    gap: spacing.sm
+  meridiansContainer: {,
+  gap: spacing.sm;
   },
-  meridianCard: {
-    backgroundColor: colors.surface,
+  meridianCard: {,
+  backgroundColor: colors.surface,
     borderRadius: 12,
     padding: spacing.md,
-    borderLeftWidth: 4
+    borderLeftWidth: 4;
   },
-  selectedMeridianCard: {
-    borderColor: colors.primary,
-    borderWidth: 1
+  selectedMeridianCard: {,
+  borderColor: colors.primary,
+    borderWidth: 1;
   },
-  meridianHeader: {
-    flexDirection: 'row',
+  meridianHeader: {,
+  flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: spacing.xs
+    marginBottom: spacing.xs;
   },
-  meridianName: {
-    fontSize: 16,
+  meridianName: {,
+  fontSize: 16,
     fontWeight: 'bold',
-    color: colors.text
+    color: colors.text;
   },
-  meridianElement: {
-    fontSize: 12,
-    color: colors.textSecondary
+  meridianElement: {,
+  fontSize: 12,
+    color: colors.textSecondary;
   },
-  meridianEnglish: {
-    fontSize: 14,
+  meridianEnglish: {,
+  fontSize: 14,
     color: colors.textSecondary,
-    marginBottom: spacing.xs
+    marginBottom: spacing.xs;
   },
-  pointCount: {
-    fontSize: 12,
-    color: colors.primary
+  pointCount: {,
+  fontSize: 12,
+    color: colors.primary;
   },
-  meridianDetails: {
-    marginTop: spacing.sm,
+  meridianDetails: {,
+  marginTop: spacing.sm,
     paddingTop: spacing.sm,
     borderTopWidth: 1,
-    borderTopColor: colors.border
+    borderTopColor: colors.border;
   },
-  detailTitle: {
-    fontSize: 14,
+  detailTitle: {,
+  fontSize: 14,
     fontWeight: 'bold',
     color: colors.text,
-    marginBottom: spacing.xs
+    marginBottom: spacing.xs;
   },
-  pointItem: {
-    padding: spacing.sm,
+  pointItem: {,
+  padding: spacing.sm,
     backgroundColor: colors.background,
     borderRadius: 8,
-    marginBottom: spacing.xs
+    marginBottom: spacing.xs;
   },
-  pointName: {
-    fontSize: 14,
+  pointName: {,
+  fontSize: 14,
     fontWeight: 'bold',
-    color: colors.text
+    color: colors.text;
   },
-  pointFunctions: {
-    fontSize: 12,
+  pointFunctions: {,
+  fontSize: 12,
     color: colors.textSecondary,
-    marginTop: 2
+    marginTop: 2;
   },
-  acupointDetail: {
-    backgroundColor: colors.surface,
+  acupointDetail: {,
+  backgroundColor: colors.surface,
     borderRadius: 12,
-    padding: spacing.md
+    padding: spacing.md;
   },
-  acupointHeader: {
-    flexDirection: 'row',
+  acupointHeader: {,
+  flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: spacing.md
+    marginBottom: spacing.md;
   },
-  backButton: {
-    padding: spacing.xs,
-    marginRight: spacing.sm
+  backButton: {,
+  padding: spacing.xs,
+    marginRight: spacing.sm;
   },
-  acupointTitle: {
-    fontSize: 18,
+  acupointTitle: {,
+  fontSize: 18,
     fontWeight: 'bold',
     color: colors.text,
-    flex: 1
+    flex: 1;
   },
-  acupointInfo: {
-    gap: spacing.md
+  acupointInfo: {,
+  gap: spacing.md;
   },
-  infoSection: {
-    backgroundColor: colors.background,
+  infoSection: {,
+  backgroundColor: colors.background,
     borderRadius: 8,
-    padding: spacing.sm
+    padding: spacing.sm;
   },
-  infoLabel: {
-    fontSize: 14,
+  infoLabel: {,
+  fontSize: 14,
     fontWeight: 'bold',
     color: colors.text,
-    marginBottom: spacing.xs
+    marginBottom: spacing.xs;
   },
-  infoValue: {
-    fontSize: 14,
-    color: colors.textSecondary
+  infoValue: {,
+  fontSize: 14,
+    color: colors.textSecondary;
   },
-  functionItem: {
-    fontSize: 14,
+  functionItem: {,
+  fontSize: 14,
     color: colors.textSecondary,
-    marginBottom: 2
+    marginBottom: 2;
   },
-  indicationItem: {
-    fontSize: 14,
+  indicationItem: {,
+  fontSize: 14,
     color: colors.textSecondary,
-    marginBottom: 2
+    marginBottom: 2;
   },
-  acupointPosition: {
-    backgroundColor: colors.background,
+  acupointPosition: {,
+  backgroundColor: colors.background,
     borderRadius: 8,
-    padding: spacing.sm
+    padding: spacing.sm;
   },
-  positionLabel: {
-    fontSize: 14,
+  positionLabel: {,
+  fontSize: 14,
     fontWeight: 'bold',
     color: colors.text,
-    marginBottom: spacing.xs
+    marginBottom: spacing.xs;
   },
-  positionValue: {
-    fontSize: 14,
+  positionValue: {,
+  fontSize: 14,
     color: colors.textSecondary,
     fontFamily: 'monospace'
   },
-  acupointsList: {
-    gap: spacing.md
+  acupointsList: {,
+  gap: spacing.md;
   },
-  instructionText: {
-    fontSize: 16,
+  instructionText: {,
+  fontSize: 16,
     color: colors.textSecondary,
     textAlign: 'center',
-    marginBottom: spacing.md
+    marginBottom: spacing.md;
   },
-  meridianGroup: {
-    backgroundColor: colors.surface,
+  meridianGroup: {,
+  backgroundColor: colors.surface,
     borderRadius: 12,
-    padding: spacing.md
+    padding: spacing.md;
   },
-  groupTitle: {
-    fontSize: 16,
+  groupTitle: {,
+  fontSize: 16,
     fontWeight: 'bold',
     color: colors.text,
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm;
   },
-  pointsGrid: {
-    flexDirection: 'row',
+  pointsGrid: {,
+  flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: spacing.xs
+    gap: spacing.xs;
   },
-  pointButton: {
-    paddingHorizontal: spacing.sm,
+  pointButton: {,
+  paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
     borderRadius: 16,
     borderWidth: 1,
-    backgroundColor: colors.background
+    backgroundColor: colors.background;
   },
-  pointButtonText: {
-    fontSize: 12,
-    color: colors.text
+  pointButtonText: {,
+  fontSize: 12,
+    color: colors.text;
   },
-  arContainer: {
-    height: 400,
+  arContainer: {,
+  height: 400,
     backgroundColor: colors.surface,
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: spacing.md
+    padding: spacing.md;
   },
-  arPlaceholder: {
-    fontSize: 18,
+  arPlaceholder: {,
+  fontSize: 18,
     color: colors.textSecondary,
-    marginBottom: spacing.md
+    marginBottom: spacing.md;
   },
-  arInstructions: {
-    fontSize: 14,
+  arInstructions: {,
+  fontSize: 14,
     color: colors.textSecondary,
     textAlign: 'center',
-    marginBottom: spacing.lg
+    marginBottom: spacing.lg;
   },
-  arButton: {
-    backgroundColor: colors.primary,
+  arButton: {,
+  backgroundColor: colors.primary,
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
-    borderRadius: 8
+    borderRadius: 8;
   },
-  arButtonText: {
-    fontSize: 16,
+  arButtonText: {,
+  fontSize: 16,
     fontWeight: 'bold',
-    color: colors.white
+    color: colors.white;
   }
 });

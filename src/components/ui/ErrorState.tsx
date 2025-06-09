@@ -1,10 +1,10 @@
 import React from 'react';
 import {
-    Animated,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+  Animated,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 // import { Button } from './Button'; // 暂时注释掉，因为Button组件有语法错误
@@ -30,8 +30,8 @@ export interface ErrorStateProps {
   icon?: string;
   /** 额外操作按钮 */
   actions?: Array<{
-    title: string;
-    onPress: () => void;
+    title: string;,
+  onPress: () => void;
     variant?: 'primary' | 'secondary' | 'outline';
   }>;
 }
@@ -54,7 +54,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
   const scaleAnim = React.useRef(new Animated.Value(0.8)).current;
 
-  React.useEffect(() => {
+  React.useEffect() => {
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -101,8 +101,8 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
           color: currentTheme.colors.warning,
         };
       default:
-        return {
-          icon: icon || '⚠️',
+        return {,
+  icon: icon || '⚠️',
           title: title || '出现错误',
           message: message || '发生了未知错误，请重试',
           color: currentTheme.colors.error,
@@ -131,7 +131,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
   };
 
   return (
-    <Animated.View
+    <Animated.View;
       style={[
         styles.container,
         style,
@@ -143,7 +143,9 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
     >
       <View style={styles.content}>
         {showIcon && (
-          <View style={[styles.iconContainer, { borderColor: errorConfig.color }]}>
+          <View;
+            style={[styles.iconContainer, { borderColor: errorConfig.color }]}
+          >
             <Text style={styles.icon}>{errorConfig.icon}</Text>
           </View>
         )}
@@ -152,22 +154,23 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
           {errorConfig.title}
         </Text>
 
-        <Text style={styles.message}>
-          {errorConfig.message}
-        </Text>
+        <Text style={styles.message}>{errorConfig.message}</Text>
 
         <View style={styles.actionsContainer}>
           {showRetry && onRetry && (
-            <TouchableOpacity
+            <TouchableOpacity;
               onPress={handleRetry}
-              style={[styles.retryButton, { backgroundColor: errorConfig.color }]}
+              style={[
+                styles.retryButton,
+                { backgroundColor: errorConfig.color },
+              ]}
             >
               <Text style={styles.buttonText}>{retryText}</Text>
             </TouchableOpacity>
           )}
 
-          {actions.map((action, index) => (
-            <TouchableOpacity
+          {actions.map(action, index) => (
+            <TouchableOpacity;
               key={index}
               onPress={action.onPress}
               style={styles.actionButton}
@@ -183,18 +186,18 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
 
 const createStyles = (theme: any) => {
   return StyleSheet.create({
-    container: {
-      flex: 1,
+    container: {,
+  flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
       padding: theme.spacing.xl,
     },
-    content: {
-      alignItems: 'center',
+    content: {,
+  alignItems: 'center',
       maxWidth: 300,
     },
-    iconContainer: {
-      width: 80,
+    iconContainer: {,
+  width: 80,
       height: 80,
       borderRadius: 40,
       borderWidth: 2,
@@ -203,36 +206,36 @@ const createStyles = (theme: any) => {
       marginBottom: theme.spacing.lg,
       backgroundColor: theme.colors.surface,
     },
-    icon: {
-      fontSize: 32,
+    icon: {,
+  fontSize: 32,
     },
-    title: {
-      fontSize: theme.typography.fontSize.xl,
+    title: {,
+  fontSize: theme.typography.fontSize.xl,
       fontWeight: theme.typography.fontWeight.bold,
       textAlign: 'center',
       marginBottom: theme.spacing.md,
     },
-    message: {
-      fontSize: theme.typography.fontSize.base,
+    message: {,
+  fontSize: theme.typography.fontSize.base,
       color: theme.colors.onSurfaceVariant,
       textAlign: 'center',
       lineHeight: 24,
       marginBottom: theme.spacing.xl,
     },
-    actionsContainer: {
-      width: '100%',
+    actionsContainer: {,
+  width: '100%',
       gap: theme.spacing.md,
     },
-    retryButton: {
-      width: '100%',
+    retryButton: {,
+  width: '100%',
       paddingVertical: theme.spacing.md,
       paddingHorizontal: theme.spacing.lg,
       borderRadius: theme.borderRadius.md,
       alignItems: 'center',
       justifyContent: 'center',
     },
-    actionButton: {
-      width: '100%',
+    actionButton: {,
+  width: '100%',
       paddingVertical: theme.spacing.md,
       paddingHorizontal: theme.spacing.lg,
       borderRadius: theme.borderRadius.md,
@@ -241,12 +244,12 @@ const createStyles = (theme: any) => {
       alignItems: 'center',
       justifyContent: 'center',
     },
-    buttonText: {
-      fontSize: theme.typography.fontSize.base,
+    buttonText: {,
+  fontSize: theme.typography.fontSize.base,
       fontWeight: theme.typography.fontWeight.medium,
       color: '#FFFFFF',
     },
   });
 };
 
-export default ErrorState; 
+export default ErrorState;

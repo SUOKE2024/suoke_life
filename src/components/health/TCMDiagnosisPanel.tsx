@@ -19,9 +19,9 @@ interface TCMDiagnosisPanelProps {
   userId: string;
 }
 interface DiagnosisFormData {
-  diagnosisType: TCMDiagnosisType;
+  diagnosisType: TCMDiagnosisType;,
   observations: TCMObservation[];
-  conclusion: string;
+  conclusion: string;,
   recommendations: string[];
   confidence: number;
 }
@@ -33,7 +33,7 @@ export const TCMDiagnosisPanel: React.FC<TCMDiagnosisPanelProps> = ({ userId }) 
   const [selectedDiagnosisType, setSelectedDiagnosisType] = useState<TCMDiagnosisType>(TCMDiagnosisType.LOOK);
   const [formData, setFormData] = useState<DiagnosisFormData>({diagnosisType: TCMDiagnosisType.LOOK,observations: [],conclusion: '',recommendations: [],confidence: 80;)
   });
-  useEffect(() => {
+  useEffect() => {
     loadDiagnosisData();
   }, [userId]);
   const loadDiagnosisData = async () => {try {setLoading(true);
@@ -74,8 +74,8 @@ export const TCMDiagnosisPanel: React.FC<TCMDiagnosisPanelProps> = ({ userId }) 
     });
     setModalVisible(true);
   };
-  const addObservation = () => {const newObservation: TCMObservation = {
-      category: "",
+  const addObservation = () => {const newObservation: TCMObservation = {,
+  category: "",
       value: '',description: '',severity: 'mild',confidence: 80;
     };
     setFormData({
@@ -127,7 +127,7 @@ export const TCMDiagnosisPanel: React.FC<TCMDiagnosisPanelProps> = ({ userId }) 
             <Text style={styles.cardTitle}>{getDiagnosisTypeLabel(type)}</Text>
             <Text style={styles.cardDescription}>{getDiagnosisTypeDescription(type)}</Text>
           </View>
-          <TouchableOpacity
+          <TouchableOpacity;
             style={styles.addButton}
             onPress={() => handleAddDiagnosis(type)}
           >
@@ -157,7 +157,7 @@ export const TCMDiagnosisPanel: React.FC<TCMDiagnosisPanelProps> = ({ userId }) 
     <View key={index} style={styles.observationForm}>
       <View style={styles.observationHeader}>
         <Text style={styles.observationTitle}>观察记录 {index + 1}</Text>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.removeButton}
           onPress={() => removeObservation(index)}
         >
@@ -174,7 +174,7 @@ export const TCMDiagnosisPanel: React.FC<TCMDiagnosisPanelProps> = ({ userId }) 
       </View>
       <View style={styles.formRow}>
         <Text style={styles.label}>观察值</Text>
-        <TextInput
+        <TextInput;
           style={styles.input}
           value={observation.value.toString()}
           onChangeText={(text) => updateObservation(index, 'value', text)}
@@ -183,7 +183,7 @@ export const TCMDiagnosisPanel: React.FC<TCMDiagnosisPanelProps> = ({ userId }) 
       </View>
       <View style={styles.formRow}>
         <Text style={styles.label}>描述</Text>
-        <TextInput
+        <TextInput;
           style={[styles.input, styles.textArea]}
           value={observation.description}
           onChangeText={(text) => updateObservation(index, 'description', text)}
@@ -196,14 +196,14 @@ export const TCMDiagnosisPanel: React.FC<TCMDiagnosisPanelProps> = ({ userId }) 
         <Text style={styles.label}>严重程度</Text>
         <View style={styles.severityButtons}>
           {(["mild",moderate', 'severe'] as const).map(severity) => ()
-            <TouchableOpacity
+            <TouchableOpacity;
               key={severity}
-              style={{[
+              style={[
                 styles.severityButton,observation.severity === severity && styles.severityButtonActive;
               ]}};
               onPress={() => updateObservation(index, 'severity', severity)};
             >;
-              <Text style={{[;
+              <Text style={[;
                 styles.severityButtonText,observation.severity === severity && styles.severityButtonTextActive;
               ]}}>;
                 {severity === 'mild' ? '轻度' : severity === 'moderate' ? '中度' : '重度'};
@@ -215,7 +215,7 @@ export const TCMDiagnosisPanel: React.FC<TCMDiagnosisPanelProps> = ({ userId }) 
     </View>;
   );
   const renderDiagnosisModal = () => (
-  <Modal
+  <Modal;
       visible={modalVisible}
       animationType="slide"
       transparent={true}
@@ -235,14 +235,14 @@ export const TCMDiagnosisPanel: React.FC<TCMDiagnosisPanelProps> = ({ userId }) 
                   <Text style={styles.addObservationButtonText}>+ 添加观察</Text>;
                 </TouchableOpacity>;
               </View>;
-              {formData.observations.map((observation, index) =>;)
+              {formData.observations.map(observation, index) =>;)
                 renderObservationForm(observation, index);
               )}
             </View>
             {// 诊断结论}
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>诊断结论</Text>
-              <TextInput
+              <TextInput;
                 style={[styles.input, styles.textArea]}
                 value={formData.conclusion}
                 onChangeText={(text) => setFormData({ ...formData, conclusion: text })}
@@ -254,7 +254,7 @@ export const TCMDiagnosisPanel: React.FC<TCMDiagnosisPanelProps> = ({ userId }) 
             {// 建议}
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>治疗建议</Text>
-              <TextInput
+              <TextInput;
                 style={[styles.input, styles.textArea]}
                 value={formData.recommendations.join('\n')}
                 onChangeText={(text) => setFormData({
@@ -270,7 +270,7 @@ export const TCMDiagnosisPanel: React.FC<TCMDiagnosisPanelProps> = ({ userId }) 
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>诊断可信度: {formData.confidence}%</Text>
               <View style={styles.confidenceSlider}>
-                <TouchableOpacity
+                <TouchableOpacity;
                   style={styles.confidenceButton}
                   onPress={() => setFormData({ ...formData, confidence: Math.max(0, formData.confidence - 10) })}
                 >
@@ -279,7 +279,7 @@ export const TCMDiagnosisPanel: React.FC<TCMDiagnosisPanelProps> = ({ userId }) 
                 <View style={styles.confidenceDisplay}>
                   <Text style={styles.confidenceText}>{formData.confidence}%</Text>
                 </View>
-                <TouchableOpacity
+                <TouchableOpacity;
                   style={styles.confidenceButton}
                   onPress={() => setFormData({ ...formData, confidence: Math.min(100, formData.confidence + 10) })}
                 >
@@ -289,13 +289,13 @@ export const TCMDiagnosisPanel: React.FC<TCMDiagnosisPanelProps> = ({ userId }) 
             </View>
           </ScrollView>
           <View style={styles.modalButtons}>
-            <TouchableOpacity
+            <TouchableOpacity;
               style={[styles.modalButton, styles.cancelButton]}
               onPress={() => setModalVisible(false)}
             >
               <Text style={styles.modalButtonText}>取消</Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            <TouchableOpacity;
               style={[styles.modalButton, styles.saveButton]}
               onPress={handleSaveDiagnosis}
             >
@@ -315,7 +315,7 @@ export const TCMDiagnosisPanel: React.FC<TCMDiagnosisPanelProps> = ({ userId }) 
         {recentDiagnosis.length === 0 ? ()
           <Text style={styles.emptyText}>暂无诊断记录</Text>
         ) : (
-          recentDiagnosis.map((diagnosis, index) => ())
+          recentDiagnosis.map(diagnosis, index) => ())
             <View key={index} style={styles.diagnosisItem}>
               <View style={styles.diagnosisItemHeader}>
                 <Text style={styles.diagnosisType}>
@@ -348,7 +348,7 @@ export const TCMDiagnosisPanel: React.FC<TCMDiagnosisPanelProps> = ({ userId }) 
         <Text style={styles.title}>中医五诊</Text>
         <Text style={styles.subtitle}>望、闻、问、切、算综合诊断</Text>
       </View>
-      <ScrollView
+      <ScrollView;
         style={styles.scrollView}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />;
         };
@@ -699,8 +699,8 @@ const styles = StyleSheet.create({
   fontSize: 12,
     color: '#666';
   },diagnosisConclusion: {fontSize: 14,color: '#333',marginBottom: 8,lineHeight: 20;
-  },diagnosisStats: {
-      flexDirection: "row",
+  },diagnosisStats: {,
+  flexDirection: "row",
       justifyContent: 'space-between';
   },diagnosisStat: {fontSize: 12,color: '#666';
   };

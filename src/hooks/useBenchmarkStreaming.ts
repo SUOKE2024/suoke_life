@@ -2,9 +2,9 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 import { benchmarkStreamingService } from '../services';
 import type { StreamEvent, StreamConfig } from '../services';
 interface BenchmarkStreamingState {
-  isConnected: boolean;
+  isConnected: boolean;,
   connectionState: string;
-  events: StreamEvent[];
+  events: StreamEvent[];,
   error: string | null;
 }
 interface UseBenchmarkStreamingOptions {
@@ -104,7 +104,7 @@ export const useBenchmarkStreaming = (options: UseBenchmarkStreamingOptions = {}
     [state.events]
   );
   // 监控连接状态
-  useEffect(() => {
+  useEffect() => {
     const checkConnectionState = () => {const currentState = benchmarkStreamingService.getConnectionState();
       setState(prevState => ({
         ...prevState,
@@ -116,7 +116,7 @@ export const useBenchmarkStreaming = (options: UseBenchmarkStreamingOptions = {}
     return () => clearInterval(interval);
   }, []);
   // 自动连接
-  useEffect(() => {
+  useEffect() => {
     if (autoConnect) {
       connect();
     }
@@ -124,7 +124,7 @@ export const useBenchmarkStreaming = (options: UseBenchmarkStreamingOptions = {}
     };
   }, [autoConnect, connect, disconnect]);
   // 重连逻辑
-  useEffect(() => {
+  useEffect() => {
     if (!state.isConnected && state.connectionState === 'CLOSED' && autoConnect) {
       reconnectTimeoutRef.current = setTimeout() => {
         console.log('尝试重新连接WebSocket...');

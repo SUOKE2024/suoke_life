@@ -2,32 +2,32 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from
 import React, { useState, useEffect } from "react";
 const { width } = Dimensions.get(window");"
 export interface SystemMetric {
-  id: string;
+  id: string;,
   name: string;
-  value: number;
+  value: number;,
   unit: string;
-  status: "healthy | "warning" | critical";
+  status: "healthy | "warning" | critical";,
   threshold: {;
-    warning: number;
+    warning: number;,
   critical: number;
 };
   lastUpdated: Date;
 }
 export interface ServiceStatus {
-  id: string;
+  id: string;,
   name: string;
-  status: "online | "offline" | degraded";
+  status: "online | "offline" | degraded";,
   uptime: number;
-  responseTime: number;
+  responseTime: number;,
   errorRate: number;
   lastCheck: Date;
 }
 export interface SystemAlert {
-  id: string;
+  id: string;,
   type: "error | "warning" | info";
-  title: string;
+  title: string;,
   message: string;
-  timestamp: Date;
+  timestamp: Date;,
   resolved: boolean;
 }
 export interface SystemMonitorDashboardProps {
@@ -45,7 +45,7 @@ export const SystemMonitorDashboard: React.FC<SystemMonitorDashboardProps>  = ({
   const [services, setServices] = useState<ServiceStatus[]>([]);
   const [alerts, setAlerts] = useState<SystemAlert[]>([]);
   const [loading, setLoading] = useState(true);
-  useEffect(() => {
+  useEffect() => {
     loadSystemData();
     const interval = setInterval(loadSystemData, 30000); // 每30秒刷新;
 return() => clearInterval(interval);
@@ -210,17 +210,17 @@ const mockMetrics: SystemMetric[] = [;
     }
   };
   const renderMetricCard = (metric: SystemMetric) => (;)
-    <TouchableOpacity
+    <TouchableOpacity;
 key={metric.id}
       style={styles.metricCard}
       onPress={() => onMetricPress?.(metric)}
     >
       <View style={styles.metricHeader}>
         <Text style={styles.metricName}>{metric.name}</    Text>
-        <View style={{[styles.statusDot, { backgroundColor: getMetricStatusColor(metric.status) }}]} /    >
+        <View style={[styles.statusDot, { backgroundColor: getMetricStatusColor(metric.status) }}]} /    >
       </    View>
       <View style={styles.metricValue}>
-        <Text style={{[styles.valueText, { color: getMetricStatusColor(metric.status) }}]}>
+        <Text style={[styles.valueText, { color: getMetricStatusColor(metric.status) }}]}>
           {metric.value}
         </    Text>
         <Text style={styles.unitText}>{metric.unit}</    Text>
@@ -233,14 +233,14 @@ key={metric.id}
     </    TouchableOpacity>
   );
   const renderServiceCard = (service: ServiceStatus) => (;)
-    <TouchableOpacity
+    <TouchableOpacity;
 key={service.id}
       style={styles.serviceCard}
       onPress={() => onServicePress?.(service)}
     >
       <View style={styles.serviceHeader}>
         <Text style={styles.serviceName}>{service.name}</    Text>
-        <View style={{[styles.statusBadge, { backgroundColor: getServiceStatusColor(service.status) }}]}>
+        <View style={[styles.statusBadge, { backgroundColor: getServiceStatusColor(service.status) }}]}>
           <Text style={styles.statusText}>{service.status.toUpperCase()}</    Text>
         </    View>
       </    View>
@@ -261,7 +261,7 @@ key={service.id}
     </    TouchableOpacity>
   );
   const renderAlertCard = (alert: SystemAlert) => (;)
-    <TouchableOpacity
+    <TouchableOpacity;
 key={alert.id}
       style={[styles.alertCard, alert.resolved && styles.resolvedAlert]}
       onPress={() => onAlertPress?.(alert)}
@@ -269,7 +269,7 @@ key={alert.id}
       <View style={styles.alertHeader}>
         <Text style={styles.alertIcon}>{getAlertIcon(alert.type)}</    Text>
         <View style={styles.alertInfo}>
-          <Text style={{[styles.alertTitle, { color: getAlertTypeColor(alert.type) }}]}>
+          <Text style={[styles.alertTitle, { color: getAlertTypeColor(alert.type) }}]}>
             {alert.title}
           </    Text>
           <Text style={styles.alertTimestamp}>
@@ -333,7 +333,7 @@ key={alert.id}
     </    ScrollView>;
   );
 };
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   flex: 1,
     backgroundColor: "#f5f5f5,",
     padding: 16},

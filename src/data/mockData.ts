@@ -215,11 +215,11 @@ export const AGENT_CONFIGS = {
   name: "小克",
     avatar: "👨‍⚕️",
     color: "#34C759",description: "医疗服务管理",capabilities: ["预约管理", "医疗记录", "用药提醒", "康复指导"];
-  },laoke: {
-      name: "老克",
+  },laoke: {,
+  name: "老克",
       avatar: "👴",color: "#FF9500",description: "中医养生教育",capabilities: ["中医理论", "养生指导", "食疗建议", "运动推荐"];
-  },soer: {
-      name: "索儿",
+  },soer: {,
+  name: "索儿",
       avatar: "👧",color: "#FF2D92",description: "生活方式指导",capabilities: ["生活规划", "习惯养成", "目标设定", "进度跟踪"];
   };
 } as const;

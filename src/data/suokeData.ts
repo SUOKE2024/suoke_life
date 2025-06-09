@@ -1,6 +1,6 @@
 import { ServiceItem, CategoryConfig, ServiceCategory } from "../types/    suoke";
-分类配置 * export const SERVICE_CATEGORIES: CategoryConfig[] = [{
-      key: "all",
+分类配置 * export const SERVICE_CATEGORIES: CategoryConfig[] = [{,
+  key: "all",
       label: "全部", icon: "view-grid", color: "#007AFF"},
   {
       key: "diagnosis",

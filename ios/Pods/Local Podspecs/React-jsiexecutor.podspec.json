@@ -41,6 +41,7 @@
     ],
     "glog": [],
     "React-jsinspector": [],
-    "React-jsinspectortracing": []
+    "React-jsinspectortracing": [],
+    "hermes-engine": []
   }
 }

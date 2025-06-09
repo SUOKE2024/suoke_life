@@ -15,12 +15,12 @@ import React from "react";
   AgentStatus,
   { CollaborationTask } from ../services/AgentCoordinationService"/    const { width   } = Dimensions.get("window;);
 interface AgentCardProps {
-  agentId: AgentType;
+  agentId: AgentType;,
   status: AgentStatus;
   onPress: () => void;
 }
 const AgentCard: React.FC<AgentCardProps /> = ({/   const performanceMonitor = usePerformanceMonitor("AgentManagementScreen", { /;))
-    trackRender: true,trackMemory: true,warnThreshold: 50,  };);
+    trackRender: true,trackMemory: true,warnThreshold: 50};);
 agentId, status, onPress }) => {}
   const getAgentInfo = useCallback(); => {}
     const effectEnd = performance.now;
@@ -53,9 +53,9 @@ agentId, status, onPress }) => {}
   const isOnline = status.isOnli;n;e;
   performanceMonitor.recordRender();
   return (;)
-    <TouchableOpacity style={styles.agentCard} onPress={onPress} accessibilityLabel="TODO: 添加无障碍标签" />/      <View style={styles.agentHeader}>/        <View style={{[styles.agentIcon, { backgroundColor: info.col;o;r   }}]} />/          <Ionicons name={info.icon as any} size={24} color="white" />/        </View>/        <View style={styles.agentInfo}>/          <Text style={styles.agentName}>{info.name}</Text>/          <Text style={styles.agentDescription}>{info.description}</Text>/        </View>/        <View style={{[styles.statusIndicator, { backgroundColor: isOnline ? "#4CAF50 : "#F44336"}}]} />/      </View>/    "
+    <TouchableOpacity style={styles.agentCard} onPress={onPress} accessibilityLabel="TODO: 添加无障碍标签" />/      <View style={styles.agentHeader}>/        <View style={[styles.agentIcon, { backgroundColor: info.col;o;r   }}]} />/          <Ionicons name={info.icon as any} size={24} color="white" />/        </View>/        <View style={styles.agentInfo}>/          <Text style={styles.agentName}>{info.name}</Text>/          <Text style={styles.agentDescription}>{info.description}</Text>/        </View>/        <View style={[styles.statusIndicator, { backgroundColor: isOnline ? "#4CAF50 : "#F44336"}}]} />/      </View>/    "
       <View style={styles.agentMetrics}>/        <View style={styles.metric}>/          <Text style={styles.metricLabel}>工作负载</Text>/          <View style={styles.progressBar}>/                <View,
-              style={{[
+              style={[
                 styles.progressFill,
                 { width: `${status.workload  }}%`,
                   backgroundColor: status.workload /> 80 ? #F44336" : status.workload > 60 ? "#FF9800 : "#4CAF50",/                    }
@@ -201,7 +201,7 @@ const AgentManagementScreen: React.FC  = () => {}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />/            };
       >;
         <View style={styles.agentsGrid}>/              {agentStatuses.map(statu;s;); => ()
-            <AgentCard
+            <AgentCard;
 key={status.id}
               agentId={status.id}
               status={status}
@@ -212,7 +212,7 @@ key={status.id}
           </View>/            )}
       </ScrollView>/    </SafeAreaView>/      );
 }
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   flex: 1,
     backgroundColor: #f5f5f5"},"
   header: {,

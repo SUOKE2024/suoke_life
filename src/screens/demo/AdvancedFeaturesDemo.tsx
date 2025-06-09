@@ -12,25 +12,25 @@ import React,{ useState, useEffect, useCallback } from ";react";
   Alert,
   { Switch } from "react-native;";
 interface DemoState {
-  graphqlConnected: boolean;
+  graphqlConnected: boolean;,
   graphqlLoading: boolean;
-  graphqlResult: string;
+  graphqlResult: string;,
   offlineInitialized: boolean;
-  syncStatus: string;
+  syncStatus: string;,
   operationCount: number;
-  conflictCount: number;
+  conflictCount: number;,
   wsConnected: boolean;
-  wsLatency: number;
+  wsLatency: number;,
   wsMessages: string[];
-  cacheStats: { memory: unknown;
-    persistent: unknown;
+  cacheStats: { memory: unknown;,
+  persistent: unknown;
     api: unknown;
 }
 }
 export const AdvancedFeaturesDemo: React.FC  = () => {}
   const performanceMonitor = usePerformanceMonitor("";)
 AdvancedFeaturesDemo", { ";
-    trackRender: true,trackMemory: true,warnThreshold: 50,  };);
+    trackRender: true,trackMemory: true,warnThreshold: 50};);
   const [state, setState] = useState<DemoState />({/        graphqlConnected: false,graphqlLoading: false,)
     graphqlResult: ",
     offlineInitialized: false,
@@ -284,7 +284,7 @@ API缓存: ${apiValue}
 value={testData.graphqlQuery}
           onChangeText={(text) = /> setTestData(prev => ({ ...prev, graphqlQuery: text}))}/              placeholder="输入GraphQL查询"
         />/
-        <View style={styles.buttonRow}>/              <TouchableOpacity
+        <View style={styles.buttonRow}>/              <TouchableOpacity;
 style={[styles.button, state.graphqlLoading && styles.buttonDisabled]}
             onPress={testGraphQLQuery}
             disabled={state.graphqlLoading}
@@ -303,17 +303,17 @@ style={[styles.button, state.graphqlLoading && styles.buttonDisabled]}
       {//
           </Text>/        </View>/
         <View style={styles.statusRow}>/          <Text />延迟: </Text>/          <Text style={styles.status}>{state.wsLatency}ms</Text>/        </View>/
-        <TextInput
+        <TextInput;
 style={styles.textInput}
           value={testData.wsMessage}
           onChangeText={(text) = /> setTestData(prev => ({ ...prev, wsMessage: text}))}/              placeholder="输入WebSocket消息"
         />/
-        <View style={styles.buttonRow}>/              <TouchableOpacity
+        <View style={styles.buttonRow}>/              <TouchableOpacity;
 style={[styles.button, state.wsConnected && styles.buttonDisabled]}
             onPress={connectWebSocket}
             disabled={state.wsConnected}
           accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>连接</Text>/          </TouchableOpacity>/
-          <TouchableOpacity
+          <TouchableOpacity;
 style={[styles.button, !state.wsConnected && styles.buttonDisabled]}
             onPress={disconnectWebSocket}
             disabled={!state.wsConnected}
@@ -325,12 +325,12 @@ style={[styles.button, !state.wsConnected && styles.buttonDisabled]}
           </Text>/            ))}
       </View>/
       {///
-        <View style={styles.inputRow}>/              <TextInput
-style={{[styles.textInput, { flex: 1, marginRight: 10}}]}
+        <View style={styles.inputRow}>/              <TextInput;
+style={[styles.textInput, { flex: 1, marginRight: 10}}]}
             value={testData.cacheKey}
             onChangeText={(text) = /> setTestData(prev => ({ ...prev, cacheKey: text}))}/                placeholder="缓存键"
-          />/              <TextInput
-style={{[styles.textInput, { flex: 1}}]}
+          />/              <TextInput;
+style={[styles.textInput, { flex: 1}}]}
             value={testData.cacheValue}
             onChangeText={(text) = /> setTestData(prev => ({ ...prev, cacheValue: text}))}/                placeholder="缓存值"
           />/        </View>/
@@ -342,7 +342,7 @@ style={{[styles.textInput, { flex: 1}}]}
         </Text>/        <Text style={styles.cacheStats}>/          API缓存: {state.cacheStats.api.size || 0} 项, 命中率: {(state.cacheStats.api.hitRate || 0) * 100).toFixed(1)}%
         </Text>/      </View>/    </ScrollView>/      );
 }
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   flex: 1,
     backgroundColor: "#f5f5f5,",
     padding: 16},

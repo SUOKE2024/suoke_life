@@ -13,20 +13,20 @@ export interface UpdateUserRequest {
   weight?: number;
   bloodType?: string;
   emergencyContact?: {
-    name: string;
+    name: string;,
   phone: string;
     relationship: string;
 };
 }
 // 用户偏好设置
 export interface UserPreferences {
-  language: string;
+  language: string;,
   timezone: string;
-  notifications: {;
+  notifications: {;,
   push: boolean;
-    email: boolean;
+    email: boolean;,
   sms: boolean;
-    healthReminders: boolean;
+    healthReminders: boolean;,
   appointmentReminders: boolean;
 };
   privacy: {,
@@ -43,32 +43,32 @@ export interface UserPreferences {
 }
 // 设备信息
 export interface DeviceInfo {
-  id: string;
+  id: string;,
   name: string;
-  type: 'mobile' | 'tablet' | 'wearable' | 'sensor';
+  type: 'mobile' | 'tablet' | 'wearable' | 'sensor';,
   platform: string;
-  version: string;
+  version: string;,
   lastActive: string;
   isActive: boolean;
 }
 // 健康数据记录
 export interface HealthRecord {
-  id: string;
+  id: string;,
   type: 'vital_signs' | 'symptoms' | 'medication' | 'exercise' | 'diet' | 'sleep';
-  data: any;
+  data: any;,
   timestamp: string;
-  source: string;
+  source: string;,
   verified: boolean;
 }
 // 用户统计信息
 export interface UserStats {
-  totalHealthRecords: number;
+  totalHealthRecords: number;,
   lastCheckup: string;
-  healthScore: number;
+  healthScore: number;,
   activeDevices: number;
-  dataPoints: {;
+  dataPoints: {;,
   vitals: number;
-    symptoms: number;
+    symptoms: number;,
   medications: number;
     exercises: number;
 };

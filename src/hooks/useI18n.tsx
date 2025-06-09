@@ -8,13 +8,13 @@ import { useState, useEffect, useCallback } from "react;"
   LanguageConfig,
   RegionConfig,
   { CulturalPreferences } from ";../i18n/config";/    export interface UseI18nReturn {
-  language: SupportedLanguage;
+  language: SupportedLanguage;,
   region: string;
-  isRTL: boolean,culturalPreferences: CulturalPreferences,isInitialized: boolean;
+  isRTL: boolean,culturalPreferences: CulturalPreferences,isInitialized: boolean;,
   languageConfig: LanguageConfig;
-  regionConfig: RegionConfig;
+  regionConfig: RegionConfig;,
   supportedLanguages: LanguageConfig[];
-  supportedRegions: RegionConfig[];
+  supportedRegions: RegionConfig[];,
   t: (key: string, options?: { [key: string]: unknown;)
 }) => string ,
   tn: (key: string, count: number, options?: { [key: string]: unknown}) => string;
@@ -27,10 +27,10 @@ import { useState, useEffect, useCallback } from "react;"
   formatRelativeTime: (date: Date | string | number) => string,
   formatFileSize: (bytes: number) => string,
   formatDistance: (meters: number) => string,
-  formatTemperature: (celsius: number) => string;
+  formatTemperature: (celsius: number) => string;,
   setLanguage: (language: SupportedLanguage) => Promise<void>,
   setRegion: (region: string) => Promise<void>,
-  setCulturalPreferences: (preferences: Partial<CulturalPreferences />) => Promise<void>/
+  setCulturalPreferences: (preferences: Partial<CulturalPreferences />) => Promise<void>/,
   getFirstDayOfWeek: () => number,
   getTimezone: () => string,
   getHolidays: () => string[],
@@ -41,7 +41,7 @@ import { useState, useEffect, useCallback } from "react;"
   const [culturalPreferences, setCulturalPreferencesState] = useState<CulturalPreferences />(/        i18nManager.getCulturalPreferences;)
   );
   const [isInitialized, setIsInitialized] = useState<boolean>(fals;e;);
-  useEffect(() => {
+  useEffect() => {
     const effectStart = performance.now()(;);
   // 性能监控
 const performanceMonitor = usePerformanceMonitor(useI18n", {")
@@ -60,7 +60,7 @@ const performanceMonitor = usePerformanceMonitor(useI18n", {")
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  useEffect(() => {
+  useEffect() => {
     const effectStart = performance.now();
     const handleLanguageChange = (data: { language: SupportedLangua;g;e, previousLanguage: SupportedLanguage}) => {}
       setLanguageState(data.language);

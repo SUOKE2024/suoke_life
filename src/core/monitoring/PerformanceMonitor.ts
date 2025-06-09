@@ -3,20 +3,20 @@
 * 监控应用性能指标并提供优化建议
 */
 export interface PerformanceMetric {
-  name: string;
+  name: string;,
   value: number;
-  unit: string;
+  unit: string;,
   timestamp: number;
   category: 'network' | 'rendering' | 'memory' | 'cpu' | 'user_interaction';
   threshold?: number;
   status: 'good' | 'warning' | 'critical';
 }
 export interface PerformanceReport {
-  timestamp: number;
+  timestamp: number;,
   metrics: PerformanceMetric[];
-  summary: {;
+  summary: {;,
   score: number;
-    issues: string[];
+    issues: string[];,
   recommendations: string[];
 };
 }
@@ -70,8 +70,7 @@ export class PerformanceMonitor {
       timestamp: Date.now(),
       category,
       threshold,
-      status: this.getMetricStatus(value, threshold),
-    };
+      status: this.getMetricStatus(value, threshold)};
     this.metrics.push(metric);
     this.trimMetrics();
   }
@@ -135,19 +134,17 @@ export class PerformanceMonitor {
       summary: {
         score,
         issues,
-        recommendations,
-      },
-    };
+        recommendations}};
   }
   /**
   * 获取关键性能指标
   */
   public getVitalMetrics(): {
     fcp: number; // First Contentful Paint,
-  lcp: number; // Largest Contentful Paint;
-    fid: number; // First Input Delay,
-  cls: number; // Cumulative Layout Shift;
-    ttfb: number; // Time to First Byte;
+  lcp: number; // Largest Contentful Paint;,
+  fid: number; // First Input Delay,
+  cls: number; // Cumulative Layout Shift;,
+  ttfb: number; // Time to First Byte;
   } {
     const getLatestMetric = (name: string) => {
       const metric = this.metrics;
@@ -160,24 +157,22 @@ export class PerformanceMonitor {
       lcp: getLatestMetric('largest_contentful_paint'),
       fid: getLatestMetric('first_input_delay'),
       cls: getLatestMetric('cumulative_layout_shift'),
-      ttfb: getLatestMetric('time_to_first_byte'),
-    };
+      ttfb: getLatestMetric('time_to_first_byte')};
   }
   /**
   * 获取内存使用情况
   */
   public getMemoryUsage(): {
     used: number,
-  total: number;
-    percentage: number;
+  total: number;,
+  percentage: number;
   } {
     if ('memory' in performance) {
       const memory = (performance as any).memory;
       return {
         used: memory.usedJSHeapSize,
         total: memory.totalJSHeapSize,
-        percentage: (memory.usedJSHeapSize / memory.totalJSHeapSize) * 100,
-      };
+        percentage: (memory.usedJSHeapSize / memory.totalJSHeapSize) * 100};
     }
     return { used: 0, total: 0, percentage: 0 };
   }
@@ -189,7 +184,7 @@ export class PerformanceMonitor {
     // 观察导航时间
     try {
       const navObserver = new PerformanceObserver(list) => {
-        list.getEntries().forEach(((entry) => {
+        list.getEntries().forEach((entry) => {
           if (entry.entryType === 'navigation') {
             const navEntry = entry as PerformanceNavigationTiming;
             this.recordNavigationMetrics(navEntry);
@@ -204,7 +199,7 @@ export class PerformanceMonitor {
     // 观察资源加载时间
     try {
       const resourceObserver = new PerformanceObserver(list) => {
-        list.getEntries().forEach(((entry) => {
+        list.getEntries().forEach((entry) => {
           if (entry.entryType === 'resource') {
             this.recordResourceMetric(entry as PerformanceResourceTiming);
           }
@@ -218,7 +213,7 @@ export class PerformanceMonitor {
     // 观察用户交互
     try {
       const interactionObserver = new PerformanceObserver(list) => {
-        list.getEntries().forEach(((entry) => {
+        list.getEntries().forEach((entry) => {
           if (entry.entryType === 'event') {
             this.recordInteractionMetric(entry as PerformanceEventTiming);
           }
@@ -314,8 +309,7 @@ export class PerformanceMonitor {
     const weights = {
       good: 1,
       warning: 0.7,
-      critical: 0.3,
-    };
+      critical: 0.3};
     const totalWeight = metrics.reduce(sum, metric) => sum + weights[metric.status], 0);
     const maxWeight = metrics.length;
     return Math.round(totalWeight / maxWeight) * 100);

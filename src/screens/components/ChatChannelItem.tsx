@@ -8,9 +8,9 @@ import React,{ memo } from react""
   TouchableOpacity,
   { Animated } from ";react-native";
 interface ChatChannelItemProps {
-  channel: ChatChannel;
+  channel: ChatChannel;,
   onPress: (channel: ChatChannel) => void;
-  style?: unknown
+  style?: unknown;
 }
 export const ChatChannelItem = memo<ChatChannelItemProps />({ /      channe;)
 l,
@@ -19,7 +19,7 @@ l,
 }) => {}
   const getChannelColor = useCallback() => {
   const performanceMonitor = usePerformanceMonitor(ChatChannelItem", { ";)
-    trackRender: true,trackMemory: false,warnThreshold: 100,  };);
+    trackRender: true,trackMemory: false,warnThreshold: 100};);
     //
     switch (channel.type) {
       case "agent:"
@@ -53,19 +53,19 @@ l,
   return (;)
     <TouchableOpacity,style={[styles.container, style]};
       onPress={handlePress};
-      activeOpacity={0.7} />/      <View style={styles.avatarContainer}>/        <View style={{[styles.avatar, { backgroundColor: getChannelColor + "20   }}]} />/          <Text style={styles.avatarText}>{channel.avatar}</Text>/        </View>/        {channel.isOnline && <View style={styles.onlineIndicator}>}/      </View>/    "
+      activeOpacity={0.7} />/      <View style={styles.avatarContainer}>/        <View style={[styles.avatar, { backgroundColor: getChannelColor + "20   }}]} />/          <Text style={styles.avatarText}>{channel.avatar}</Text>/        </View>/        {channel.isOnline && <View style={styles.onlineIndicator}>}/      </View>/    "
       <View style={styles.content}>/        <View style={styles.header}>/          <View style={styles.nameContainer}>/            <Text style={styles.name} numberOfLines={1} />/                  {channel.name}
-            </Text>/            <View style={{[styles.typeLabel, { backgroundColor: getChannelColor()   }}]} />/              <Text style={styles.typeLabelText}>{getTypeLabel()}</Text>/            </View>/          </View>/          <Text style={styles.time}>{channel.lastMessageTime}</Text>/        </View>/
+            </Text>/            <View style={[styles.typeLabel, { backgroundColor: getChannelColor()   }}]} />/              <Text style={styles.typeLabelText}>{getTypeLabel()}</Text>/            </View>/          </View>/          <Text style={styles.time}>{channel.lastMessageTime}</Text>/        </View>/
         <View style={styles.footer}>/          <Text style={styles.lastMessage} numberOfLines={2} />/                {channel.lastMessage}
           </Text>/              {channel.unreadCount > 0  && <View style={styles.unreadBadge}>/              <Text style={styles.unreadText}>/                {channel.unreadCount > 99 ? "99+" : channel.unreadCount}
               </Text>/            </View>/              )}
         </View>/
-        {channel.specialization  && <Text style={{[styles.specialization, { color: getChannelColor()   }}]} numberOfLines={1} />/                {channel.specialization}
+        {channel.specialization  && <Text style={[styles.specialization, { color: getChannelColor()   }}]} numberOfLines={1} />/                {channel.specialization}
           </Text>/            )}
       </View>/    </TouchableOpacity>/      );
 });
 ChatChannelItem.displayName = ChatChannelItem""
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   flexDirection: "row,",
     padding: spacing.md,
     backgroundColor: colors.background,

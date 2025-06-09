@@ -1,16 +1,16 @@
 import React, { useEffect, useRef } from 'react';
 import {
-    Animated,
-    StyleSheet,
-    Text,
-    TextStyle,
-    View,
-    ViewStyle,
+  Animated,
+  StyleSheet,
+  Text,
+  TextStyle,
+  View,
+  ViewStyle,
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
 export interface ProgressProps {
-  value: number; // 0-100
+  value: number; // 0-100;
   max?: number;
   size?: 'sm' | 'md' | 'lg';
   variant?: 'default' | 'success' | 'warning' | 'error';
@@ -53,7 +53,7 @@ export const Progress: React.FC<ProgressProps> = ({
   const normalizedValue = Math.min(Math.max(value, 0), max);
   const percentage = (normalizedValue / max) * 100;
 
-  useEffect(() => {
+  useEffect() => {
     if (indeterminate) {
       // 不确定进度动画
       Animated.loop(
@@ -82,7 +82,15 @@ export const Progress: React.FC<ProgressProps> = ({
         progressAnim.setValue(percentage);
       }
     }
-  }, [value, max, animated, indeterminate, percentage, progressAnim, indeterminateAnim]);
+  }, [
+    value,
+    max,
+    animated,
+    indeterminate,
+    percentage,
+    progressAnim,
+    indeterminateAnim,
+  ]);
 
   const getSizeStyles = () => {
     switch (size) {
@@ -97,7 +105,7 @@ export const Progress: React.FC<ProgressProps> = ({
 
   const getVariantColor = () => {
     if (color) return color;
-    
+
     switch (variant) {
       case 'success':
         return currentTheme.colors.success;
@@ -114,18 +122,18 @@ export const Progress: React.FC<ProgressProps> = ({
   const progressColor = getVariantColor();
 
   const styles = StyleSheet.create({
-    container: {
-      width: '100%',
+    container: {,
+  width: '100%',
     },
-    progressBar: {
-      width: '100%',
+    progressBar: {,
+  width: '100%',
       backgroundColor: backgroundColor || currentTheme.colors.outline,
       borderRadius: sizeStyles.borderRadius,
       height: sizeStyles.height,
       overflow: 'hidden',
     },
-    progressFill: {
-      height: '100%',
+    progressFill: {,
+  height: '100%',
       backgroundColor: progressColor,
       borderRadius: sizeStyles.borderRadius,
     },
@@ -133,8 +141,8 @@ export const Progress: React.FC<ProgressProps> = ({
       // React Native不支持backgroundImage，这里可以用其他方式实现条纹效果
       opacity: 0.8,
     },
-    label: {
-      fontSize: 14,
+    label: {,
+  fontSize: 14,
       color: currentTheme.colors.onSurface,
       textAlign: 'center',
       marginTop: 4,
@@ -151,7 +159,7 @@ export const Progress: React.FC<ProgressProps> = ({
 
       return (
         <View style={styles.progressBar}>
-          <Animated.View
+          <Animated.View;
             style={[
               styles.progressFill,
               {
@@ -172,7 +180,7 @@ export const Progress: React.FC<ProgressProps> = ({
 
     return (
       <View style={styles.progressBar}>
-        <Animated.View
+        <Animated.View;
           style={[
             styles.progressFill,
             striped && styles.stripedFill,
@@ -187,27 +195,25 @@ export const Progress: React.FC<ProgressProps> = ({
     accessible,
     accessibilityRole: 'progressbar' as const,
     accessibilityLabel: accessibilityLabel || `进度 ${percentage.toFixed(0)}%`,
-    accessibilityValue: {
-      min: 0,
+    accessibilityValue: {,
+  min: 0,
       max,
       now: normalizedValue,
     },
   });
 
   return (
-    <View
+    <View;
       style={[styles.container, style]}
       testID={testID}
       {...getAccessibilityProps()}
     >
       {renderProgressBar()}
       {showLabel && (
-        <Text style={styles.label}>
-          {label || `${percentage.toFixed(0)}%`}
-        </Text>
+        <Text style={styles.label}>{label || `${percentage.toFixed(0)}%`}</Text>
       )}
     </View>
   );
 };
 
-export default Progress; 
+export default Progress;

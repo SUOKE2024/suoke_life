@@ -71,8 +71,8 @@ await this.downloadModel(modelUrl, localPath, options);
       // 加载下载的模型
 return await this.loadFromPath(localPath);
     } catch (error) {
-      const onnxError: ONNXError = {
-      code: "MODEL_LOAD_FAILED",
+      const onnxError: ONNXError = {,
+  code: "MODEL_LOAD_FAILED",
       message: `从URL加载模型失败: ${error.message}`,
         details: error,
         timestamp: new Date();
@@ -323,23 +323,23 @@ interface DownloadOptions {
   onProgress?: (progress: number, downloaded: number, total: number) => void;
 }
 interface DownloadTask {
-  url: string;
+  url: string;,
   localPath: string;
-  status: "downloading | "completed" | failed" | 'cancelled';
+  status: "downloading | "completed" | failed" | 'cancelled';,
   progress: number;
-  downloadedBytes: number;
+  downloadedBytes: number;,
   totalBytes: number;
   startTime: number;
   jobId?: number;
 }
 interface DownloadProgress {
-  url: string;
+  url: string;,
   progress: number;
-  status: string;
+  status: string;,
   downloadedBytes: number;
   totalBytes: number;
 }
 interface ValidationResult {
-  valid: boolean;
+  valid: boolean;,
   errors: string[];
 }  */

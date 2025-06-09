@@ -26,7 +26,7 @@
     unit?: string;
   ) => {},
   getMetricHistory: (category: string, name: string) => [],
-  generateReport: () => ({,)
+  generateReport: () => ({),
   id: "test",
     timestamp: Date.now(),
     metrics: [],

@@ -5,9 +5,9 @@ importAsyncStorage from "@react-native-async-storage/async-storage";/import { Ev
 y"; /    "
 // 离线操作接口 * export interface OfflineOperation {
   id: string,
-  type: OfflineOperationType;
+  type: OfflineOperationType;,
   entity: string;
-  data: unknown;
+  data: unknown;,
   timestamp: number;
   retryCount: number,maxRetries: number,priority: number;
 }
@@ -20,20 +20,20 @@ s"; /    "
   | "manual";
 // 冲突数据接口 * export interface ConflictData {
   id: string,
-  entity: string;
+  entity: string;,
   clientData: unknown;
-  serverData: unknown;
+  serverData: unknown;,
   timestamp: number;
   strategy: ConflictResolutionStrategy;
 }
 // 同步配置接口 * export interface SyncConfig {
   batchSize: number,
-  retryDelay: number;
+  retryDelay: number;,
   maxRetries: number,conflictStrategy: ConflictResolutionStrategy,syncInterval: number;
 }
 // 网络状态接口 * export interface NetworkState {
   isConnected: boolean,
-  connectionType: string;
+  connectionType: string;,
   isInternetReachable: boolean;
 }
 //;
@@ -51,7 +51,7 @@ export class OfflineManager extends EventEmitter   {private operations: Map<stri
     retryDelay: 5000,
     maxRetries: 3,
     conflictStrategy: "client-wins",
-    syncInterval: 30000,  }
+    syncInterval: 30000}
   private syncTimer: number | null = null;
   private isInitialized: boolean = false;
   constructor(config?: Partial<SyncConfig />) {/        super();

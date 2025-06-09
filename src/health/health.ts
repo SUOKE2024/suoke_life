@@ -1,20 +1,20 @@
 import { Request, Response } from "express";
 // 健康检查端点
 interface HealthStatus {
-  status: "healthy" | "unhealthy";
+  status: "healthy" | "unhealthy";,
   timestamp: string;
-  uptime: number;
+  uptime: number;,
   version: string;
-  services: {database: "connected" | "disconnected";
-    redis: "connected" | "disconnected";
+  services: {database: "connected" | "disconnected";,
+  redis: "connected" | "disconnected";
     external_apis: "available" | "unavailable";
 };
 }
 export const healthCheck = async (req: Request, res: Response) =;
 > ;{
   try {
-    const status: HealthStatus = {
-      status: "healthy",
+    const status: HealthStatus = {,
+  status: "healthy",
       timestamp: new Date().toISOString(),
       uptime: process.uptime(),
       version: process.env.npm_package_version || "1.0.0",

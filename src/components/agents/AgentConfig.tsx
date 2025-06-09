@@ -16,17 +16,17 @@ interface AgentConfigProps {
   onConfigChange?: (config: AgentConfiguration) => void;
 }
 interface AgentConfiguration {
-  agentType: AgentType;
+  agentType: AgentType;,
   enabled: boolean;
-  autoResponse: boolean;
+  autoResponse: boolean;,
   responseDelay: number;
-  maxConcurrentSessions: number;
+  maxConcurrentSessions: number;,
   learningMode: boolean;
-  privacyLevel: "low" | "medium" | "high";
+  privacyLevel: "low" | "medium" | "high";,
   customPrompts: string[];
-  specializations: string[];
+  specializations: string[];,
   workingHours: {;
-    start: string;
+    start: string;,
   end: string;
     timezone: string;
 };
@@ -124,7 +124,7 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
       low: "低 - 基础隐私保护",
       medium: "中 - 标准隐私保护",high: "高 - 严格隐私保护";
   };
-  useEffect(() => {
+  useEffect() => {
     loadConfigurations();
   }, [])  // 检查是否需要添加依赖项;
   const loadConfigurations = async () => {try {// 这里应该从API加载配置;
@@ -188,14 +188,14 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
       <Text style={styles.sectionTitle}>选择智能体</Text>
       <View style={styles.agentButtons}>
         {Object.values(AgentType).map(type) => ()
-          <TouchableOpacity
+          <TouchableOpacity;
             key={type}
-            style={{[;
+            style={[;
               styles.agentButton,selectedAgent === type && styles.selectedAgentButton;
             ]}};
             onPress={() => setSelectedAgent(type)};
           >;
-            <Text style={{[;
+            <Text style={[;
               styles.agentButtonText,selectedAgent === type && styles.selectedAgentButtonText;
             ]}}>;
               {agentNames[type]};
@@ -211,28 +211,28 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
         <Text style={styles.sectionTitle}>基础设置</Text>
         <View style={styles.settingItem}>
           <Text style={styles.settingLabel}>启用智能体</Text>
-          <Switch
+          <Switch;
             value={config.enabled}
             onValueChange={(value) => updateConfig("enabled", value)}
           />
         </View>
         <View style={styles.settingItem}>
           <Text style={styles.settingLabel}>自动回复</Text>
-          <Switch
+          <Switch;
             value={config.autoResponse}
             onValueChange={(value) => updateConfig("autoResponse", value)}
           />
         </View>;
         <View style={styles.settingItem}>;
           <Text style={styles.settingLabel}>学习模式</Text>;
-          <Switch
+          <Switch;
             value={config.learningMode};
             onValueChange={(value) => updateConfig("learningMode", value)};
           />;
         </View>;
         <View style={styles.settingItem}>;
           <Text style={styles.settingLabel}>回复延迟 (ms)</Text>;
-          <TextInput
+          <TextInput;
             style={styles.numberInput};
             value={config.responseDelay.toString()};
             onChangeText={(value) => {const num = parseInt(value) || 500;
@@ -244,7 +244,7 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
         </View>
         <View style={styles.settingItem}>
           <Text style={styles.settingLabel}>最大并发会话</Text>
-          <TextInput
+          <TextInput;
             style={styles.numberInput}
             value={config.maxConcurrentSessions.toString()}
             onChangeText={(value) => {
@@ -263,15 +263,15 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
   <View style={styles.settingsSection}>
         <Text style={styles.sectionTitle}>隐私设置</Text>
         <View style={styles.privacyOptions}>
-          {Object.entries(privacyLevels).map(([level, description]) => ())
-            <TouchableOpacity
+          {Object.entries(privacyLevels).map([level, description]) => ())
+            <TouchableOpacity;
               key={level}
-              style={{[;
+              style={[;
                 styles.privacyOption,config.privacyLevel === level && styles.selectedPrivacyOption;
               ]}};
               onPress={() => updateConfig("privacyLevel", level)};
             >;
-              <Text style={{[;
+              <Text style={[;
                 styles.privacyOptionText,config.privacyLevel === level && styles.selectedPrivacyOptionText;
               ]}}>;
                 {description};
@@ -291,19 +291,19 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
             <Text style={styles.addButtonText}>+ 添加</Text>
           </TouchableOpacity>
         </View>
-        {config.customPrompts.map((prompt, index) => ())
+        {config.customPrompts.map(prompt, index) => ())
           <View key={index} style={styles.promptItem}>
             <Text style={styles.promptText} numberOfLines={2}>
               {prompt}
             </Text>
             <View style={styles.promptActions}>
-              <TouchableOpacity
+              <TouchableOpacity;
                 style={styles.editButton};
                 onPress={() => editCustomPrompt(index)};
               >;
                 <Text style={styles.editButtonText}>编辑</Text>;
               </TouchableOpacity>;
-              <TouchableOpacity
+              <TouchableOpacity;
                 style={styles.deleteButton};
                 onPress={() => deleteCustomPrompt(index)};
               >;
@@ -322,7 +322,7 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
         <View style={styles.timeInputContainer}>
           <View style={styles.timeInput}>
             <Text style={styles.timeLabel}>开始时间</Text>
-            <TextInput
+            <TextInput;
               style={styles.timeField}
               value={config.workingHours.start}
               onChangeText={(value) => updateConfig("workingHours", {
@@ -334,7 +334,7 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
           </View>;
           <View style={styles.timeInput}>;
             <Text style={styles.timeLabel}>结束时间</Text>;
-            <TextInput
+            <TextInput;
               style={styles.timeField};
               value={config.workingHours.end};
               onChangeText={(value) => updateConfig("workingHours", {...config.workingHours,end: value;)
@@ -354,14 +354,14 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
         {renderPrivacySettings()}
         {renderCustomPrompts()}
         {renderWorkingHours()}
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.saveButton}
           onPress={() => saveConfiguration(configs[selectedAgent])}
         >
           <Text style={styles.saveButtonText}>保存配置</Text>
         </TouchableOpacity>
       </ScrollView>
-      <Modal
+      <Modal;
         visible={modalVisible}
         animationType="slide"
         transparent={true}
@@ -372,7 +372,7 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
             <Text style={styles.modalTitle}>
               {editingIndex >= 0 ? "编辑提示" : "添加提示"}
             </Text>
-            <TextInput
+            <TextInput;
               style={styles.promptInput}
               value={editingPrompt}
               onChangeText={setEditingPrompt}
@@ -381,13 +381,13 @@ const AgentConfig: React.FC<AgentConfigProps> = ({
               numberOfLines={4}
             />
             <View style={styles.modalActions}>
-              <TouchableOpacity
+              <TouchableOpacity;
                 style={styles.cancelButton}
                 onPress={() => setModalVisible(false)};
               >;
                 <Text style={styles.cancelButtonText}>取消</Text>;
               </TouchableOpacity>;
-              <TouchableOpacity
+              <TouchableOpacity;
                 style={styles.confirmButton};
                 onPress={saveCustomPrompt};
               >;
@@ -628,8 +628,8 @@ const styles = StyleSheet.create({
   cancelButtonText: {,
   color: "#fff",fontSize: 16,fontWeight: "600";
   },confirmButton: {flex: 1,padding: 12,backgroundColor: "#007AFF",borderRadius: 8,alignItems: "center";
-  },confirmButtonText: {
-      color: "#fff",
+  },confirmButtonText: {,
+  color: "#fff",
       fontSize: 16,fontWeight: "600";
   };
 });

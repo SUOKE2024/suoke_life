@@ -3,7 +3,7 @@ import EnvironmentManager from "../config/    EnvironmentManager";
 import React from "react";
 /
 // 索克生活日志系统   支持结构化日志、日志聚合、实时分析和告警
-export type LogLevel = "debug" | "info" | "warn" | "error" | "fat;a;";
+export type LogLevel = "debug" | "info" | "warn" | "error" | "fatal";
 l;
 export interface LogEntry {
   // 时间戳  timestamp: number;
@@ -39,16 +39,16 @@ export interface LogMetrics {
   按服务统计  byService: Record<string, number>
   // 错误率  errorRate: number;
   // 最近错误  recentErrors: LogEntry[];
-  // 性能指标  performance: { avgProcessingTime: number;
-    throughput: number;
+  // 性能指标  performance: { avgProcessingTime: number;,
+  throughput: number;
     bufferSize: number;
 }
 }
 export interface LogAlert {
   // 告警ID  id: string;
   // 告警名称  name: string;
-  // 告警条件  condition: { level: LogLevel;
-    count: number;
+  // 告警条件  condition: { level: LogLevel;,
+  count: number;
     timeWindow: number  service?: string ;
     keywords?: string[];
 }
@@ -59,8 +59,8 @@ export interface LogAlert {
   // 是否启用  enabled: boolean;
   //
 export interface LogAnalytics {
-  // 错误趋势  errorTrend: Array<{ timestamp: number;
-    count: number;
+  // 错误趋势  errorTrend: Array<{ timestamp: number;,
+  count: number;
 }>
   // 服务健康度  serviceHealth: Record<string,{ status: "healthy" | "warning" | "critical",errorRate: number;
       lastError?: LogEntry}
@@ -172,7 +172,7 @@ export class LoggingSystem   {private static instance: LoggingSystem;
       condition: {,
   level: "error",
         count: 10,
-        timeWindow: 300,  },
+        timeWindow: 300},
       actions: [{,
   type: "webhook",
           config: {,
@@ -205,7 +205,7 @@ export class LoggingSystem   {private static instance: LoggingSystem;
       condition: {,
   level: "fatal",
         count: 1,
-        timeWindow: 60,  },
+        timeWindow: 60},
       actions: [{,
   type: "webhook",
           config: {,
@@ -674,7 +674,7 @@ let status: "healthy" | "warning" | "critical"
           log.level,
           log.service,
           `"${log.message.replace(/"/g, '"')}"`,/              log.requestId || ",
-          log.userId || ",]"
+          log.userId || "]"
         csvLines.push(row.join(",);)
       }
       return csvLines.join("\n;";);

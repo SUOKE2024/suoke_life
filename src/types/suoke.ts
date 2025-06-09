@@ -17,13 +17,13 @@ export type ServiceStatus  = | 'available'
   | 'maintenance';
 // 服务项接口
 export interface ServiceItem {
-  id: string;
+  id: string;,
   title: string;
-  subtitle: string;
+  subtitle: string;,
   icon: string;
-  color: string;
+  color: string;,
   category: ServiceCategory;
-  description: string;
+  description: string;,
   features: string[];
   price?: string;
   available: boolean;
@@ -35,7 +35,7 @@ export interface ServiceItem {
 }
 // 分类配置接口
 export interface CategoryConfig {
-  key: ServiceCategory | 'all';
+  key: ServiceCategory | 'all';,
   label: string;
   icon: string;
   color?: string;
@@ -43,9 +43,9 @@ export interface CategoryConfig {
 }
 // 服务预约接口
 export interface ServiceBooking {
-  id: string;
+  id: string;,
   serviceId: string;
-  userId: string;
+  userId: string;,
   appointmentTime: string;
   status: 'pending' | 'confirmed' | 'completed' | 'cancelled';
   notes?: string;
@@ -53,13 +53,13 @@ export interface ServiceBooking {
 }
 // 诊断结果接口
 export interface DiagnosisResult {
-  id: string;
+  id: string;,
   type: DiagnosisType;
-  userId: string;
+  userId: string;,
   timestamp: string;
-  results: {;
+  results: {;,
   score: number;
-    analysis: string;
+    analysis: string;,
   recommendations: string[];
     images?: string[];
     audioData?: string;
@@ -68,13 +68,13 @@ export interface DiagnosisResult {
 }
 // 健康评估接口
 export interface HealthAssessment {
-  id: string;
+  id: string;,
   userId: string;
-  timestamp: string;
+  timestamp: string;,
   overallScore: number;
-  categories: {;
+  categories: {;,
   physical: number;
-    mental: number;
+    mental: number;,
   lifestyle: number;
     nutrition: number;
 };
@@ -83,9 +83,9 @@ export interface HealthAssessment {
 }
 // 服务使用统计接口
 export interface ServiceUsageStats {
-  serviceId: string;
+  serviceId: string;,
   totalUsage: number;
-  lastUsed: string;
+  lastUsed: string;,
   averageRating: number;
   completionRate: number;
 }

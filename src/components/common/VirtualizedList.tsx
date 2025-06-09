@@ -7,8 +7,7 @@ import {
   Text,
   StyleSheet,
   RefreshControl,
-  ActivityIndicator,
-} from 'react-native';
+  ActivityIndicator} from 'react-native';
 import SkeletonLoader from './SkeletonLoader';
 const { height: screenHeight } = Dimensions.get('window');
 // 虚拟化列表配置
@@ -57,8 +56,7 @@ const DEFAULT_CONFIG: VirtualizedListConfig = {,
   maxToRenderPerBatch: 5,
   updateCellsBatchingPeriod: 50,
   removeClippedSubviews: true,
-  getItemLayout: true,
-};
+  getItemLayout: true};
 // 性能优化的虚拟化列表
 export const VirtualizedList = <T extends ListItem>({
   data,
@@ -77,8 +75,7 @@ export const VirtualizedList = <T extends ListItem>({
   showsVerticalScrollIndicator = true,
   bounces = true,
   enableVirtualization = true,
-  skeletonType = 'list',
-}: VirtualizedListProps<T>) => {
+  skeletonType = 'list'}: VirtualizedListProps<T>) => {
   const config = { ...DEFAULT_CONFIG, ...userConfig };
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const flatListRef = useRef<FlatList<T>>(null);
@@ -89,11 +86,10 @@ export const VirtualizedList = <T extends ListItem>({
   // 优化的getItemLayout;
   const getItemLayout = useMemo() => {
     if (!config.getItemLayout) return undefined;
-        return (data: T[] | null | undefined, index: number) => ({,)
+        return (data: T[] | null | undefined, index: number) => ({),
   length: config.itemHeight,
       offset: config.itemHeight * index,
-      index,
-    });
+      index});
   }, [config.getItemLayout, config.itemHeight]);
   // 优化的renderItem;
   const optimizedRenderItem = useCallback({ item, index }: { item: T; index: number }) => {
@@ -146,7 +142,7 @@ export const VirtualizedList = <T extends ListItem>({
   const refreshControl = useMemo() => {
     if (!onRefresh) return undefined;
         return (
-  <RefreshControl
+  <RefreshControl;
         refreshing={refreshing}
         onRefresh={onRefresh}
         colors={['#007AFF']}
@@ -159,7 +155,7 @@ export const VirtualizedList = <T extends ListItem>({
   // 如果启用虚拟化且数据量大，使用FlatList;
   if (enableVirtualization && data.length > 50) {
     return (
-  <FlatList
+  <FlatList;
         ref={flatListRef}
         data={data}
         renderItem={optimizedRenderItem}
@@ -179,8 +175,7 @@ export const VirtualizedList = <T extends ListItem>({
         style={[styles.container, style]}
         contentContainerStyle={[
           data.length === 0 && styles.emptyContentContainer,
-          contentContainerStyle,
-        ]}
+          contentContainerStyle]}
         showsVerticalScrollIndicator={showsVerticalScrollIndicator}
         bounces={bounces}
         // 性能优化属性
@@ -188,8 +183,7 @@ export const VirtualizedList = <T extends ListItem>({
         legacyImplementation={false}
         maintainVisibleContentPosition={
           minIndexForVisible: 0,
-          autoscrollToTopThreshold: 10,
-        }}
+          autoscrollToTopThreshold: 10}}
       />
     );
   }
@@ -199,7 +193,7 @@ export const VirtualizedList = <T extends ListItem>({
       {loading ? ()
         <SkeletonLoader type={skeletonType} count={8} />
       ) : (
-        <FlatList
+        <FlatList;
           data={data}
           renderItem={optimizedRenderItem}
           keyExtractor={keyExtractor}
@@ -209,8 +203,7 @@ export const VirtualizedList = <T extends ListItem>({
           refreshControl={refreshControl}
           contentContainerStyle={[
             data.length === 0 && styles.emptyContentContainer,
-            contentContainerStyle,
-          ]}
+            contentContainerStyle]}
           showsVerticalScrollIndicator={showsVerticalScrollIndicator}
           bounces={bounces}
           onEndReached={handleEndReached}
@@ -235,10 +228,9 @@ export const ChatVirtualizedList = <T extends ListItem & { message: string; time
     updateCellsBatchingPeriod: 30,
     removeClippedSubviews: true,
     getItemLayout: true,
-    keyExtractor: (item, index) => `chat-${item.id}-${item.timestamp}`,
-  };
+    keyExtractor: (item, index) => `chat-${item.id}-${item.timestamp}`};
   return (
-  <VirtualizedList
+  <VirtualizedList;
       data={data}
       renderItem={renderItem}
       config={chatConfig}
@@ -261,10 +253,9 @@ export const CardVirtualizedList = <T extends ListItem>({
     maxToRenderPerBatch: 3,
     updateCellsBatchingPeriod: 100,
     removeClippedSubviews: true,
-    getItemLayout: true,
-  };
+    getItemLayout: true};
   return (
-  <VirtualizedList
+  <VirtualizedList;
       data={data}
       renderItem={renderItem}
       config={cardConfig}
@@ -307,7 +298,7 @@ export const useInfiniteScroll = <T extends ListItem>()
     }
   }, [fetchData, pageSize, loading]);
   // 初始加载
-  useEffect(() => {
+  useEffect() => {
     loadData(1, true);
   }, [loadData]);
   const refresh = useCallback() => {
@@ -324,37 +315,29 @@ export const useInfiniteScroll = <T extends ListItem>()
     refreshing,
     hasMore,
     refresh,
-    loadMore,
-  };
+    loadMore};
 };
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
-  },
+  flex: 1},
   emptyContainer: {,
   flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 50,
-  },
+    paddingVertical: 50},
   emptyContentContainer: {,
-  flexGrow: 1,
-  },
+  flexGrow: 1},
   emptyText: {,
   fontSize: 16,
     color: '#999',
-    textAlign: 'center',
-  },
+    textAlign: 'center'},
   loadingFooter: {,
   flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 20,
-  },
+    paddingVertical: 20},
   loadingText: {,
   marginLeft: 10,
     fontSize: 14,
-    color: '#666',
-  },
-});
+    color: '#666'}});
 export default VirtualizedList;

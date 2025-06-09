@@ -1,14 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect
-from pydantic import BaseModel
-from typing import Any
-from uuid import uuid4
-from xiaoai.core.agent import XiaoaiAgent
-import contextlib
-import json
-import time
+"""Module placeholder"""
 
-def main() - > None:
-    """主函数 - 自动生成的最小可用版本"""
+def main():
+    """Main function placeholder"""
     pass
 
 if __name__ == "__main__":

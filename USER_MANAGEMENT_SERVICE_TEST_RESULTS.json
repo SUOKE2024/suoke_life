@@ -1,0 +1,199 @@
+{
+  "service_structure": {
+    "main.py": {
+      "exists": true,
+      "size": 5397,
+      "status": "✅"
+    },
+    "Dockerfile": {
+      "exists": true,
+      "size": 446,
+      "status": "✅"
+    },
+    "requirements.txt": {
+      "exists": true,
+      "size": 609,
+      "status": "✅"
+    },
+    "user_management_service/__init__.py": {
+      "exists": true,
+      "size": 382,
+      "status": "✅"
+    },
+    "user_management_service/user_service/services/user_service.py": {
+      "exists": true,
+      "size": 11212,
+      "status": "✅"
+    },
+    "config/settings.py": {
+      "exists": true,
+      "size": 7993,
+      "status": "✅"
+    },
+    "config/database.py": {
+      "exists": true,
+      "size": 3203,
+      "status": "✅"
+    },
+    "config/redis.py": {
+      "exists": true,
+      "size": 8815,
+      "status": "✅"
+    },
+    "config/auth.py": {
+      "exists": true,
+      "size": 9255,
+      "status": "✅"
+    },
+    "completion_rate": 100.0,
+    "summary": "9/9 文件存在"
+  },
+  "api_endpoints": {},
+  "configuration": {
+    "config/settings.py": {
+      "exists": true,
+      "expected_classes": [
+        "DatabaseConfig",
+        "RedisConfig",
+        "AuthConfig"
+      ],
+      "found_classes": [],
+      "completion": 0.0,
+      "status": "⚠️"
+    },
+    "config/database.py": {
+      "exists": true,
+      "expected_classes": [
+        "get_database",
+        "init_database"
+      ],
+      "found_classes": [
+        "init_database"
+      ],
+      "completion": 50.0,
+      "status": "⚠️"
+    },
+    "config/redis.py": {
+      "exists": true,
+      "expected_classes": [
+        "get_redis_client",
+        "CacheManager"
+      ],
+      "found_classes": [],
+      "completion": 0.0,
+      "status": "⚠️"
+    },
+    "config/auth.py": {
+      "exists": true,
+      "expected_classes": [
+        "PasswordManager",
+        "TokenManager"
+      ],
+      "found_classes": [
+        "PasswordManager",
+        "TokenManager"
+      ],
+      "completion": 100.0,
+      "status": "✅"
+    },
+    "overall_completion": 37.5
+  },
+  "dependencies": {
+    "exists": true,
+    "required_dependencies": [
+      "fastapi",
+      "uvicorn",
+      "sqlalchemy",
+      "redis",
+      "pydantic",
+      "python-jose",
+      "passlib",
+      "bcrypt"
+    ],
+    "found_dependencies": [
+      "fastapi",
+      "uvicorn",
+      "sqlalchemy",
+      "redis",
+      "pydantic",
+      "python-jose",
+      "passlib",
+      "bcrypt"
+    ],
+    "completion": 100.0,
+    "status": "✅",
+    "total_lines": 33
+  },
+  "overall_status": "⚠️ 良好",
+  "main_entry": {
+    "exists": true,
+    "required_components": [
+      "FastAPI",
+      "CORSMiddleware",
+      "GZipMiddleware",
+      "TrustedHostMiddleware",
+      "health",
+      "startup",
+      "shutdown"
+    ],
+    "found_components": [
+      "FastAPI",
+      "CORSMiddleware",
+      "GZipMiddleware",
+      "TrustedHostMiddleware",
+      "health"
+    ],
+    "completion": 71.42857142857143,
+    "status": "⚠️",
+    "file_size": 4680
+  },
+  "business_logic": {
+    "exists": true,
+    "required_methods": [
+      "create_user",
+      "get_user",
+      "update_user",
+      "delete_user",
+      "bind_device",
+      "unbind_device",
+      "get_user_devices",
+      "add_health_data",
+      "get_health_data"
+    ],
+    "found_methods": [
+      "create_user",
+      "get_user",
+      "update_user",
+      "delete_user",
+      "bind_device",
+      "unbind_device",
+      "get_user_devices"
+    ],
+    "completion": 77.77777777777779,
+    "status": "⚠️",
+    "class_exists": true
+  },
+  "dockerfile": {
+    "exists": true,
+    "required_instructions": [
+      "FROM python:",
+      "WORKDIR",
+      "COPY requirements.txt",
+      "RUN pip install",
+      "COPY . .",
+      "CMD [\"python\", \"main.py\"]"
+    ],
+    "found_instructions": [
+      "FROM python:",
+      "WORKDIR",
+      "COPY requirements.txt",
+      "RUN pip install",
+      "COPY . .",
+      "CMD [\"python\", \"main.py\"]"
+    ],
+    "completion": 100.0,
+    "status": "✅",
+    "uses_correct_cmd": true
+  },
+  "overall_completion": 81.11772486772487
+}

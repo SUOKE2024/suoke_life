@@ -9,9 +9,9 @@ importReact from "react";
   typography,
   { borderRadius } from "../../constants/    theme";
 interface ProfileHeaderProps {
-  userProfile: UserProfile;
+  userProfile: UserProfile;,
   onEditPress: () => void;
-  getHealthScoreColor: (score: number) => string;
+  getHealthScoreColor: (score: number) => string;,
   getMemberLevelText: (level: string) => string;
 }
 const ProfileHeader: React.FC<ProfileHeaderProps /    > = ({// 性能监控)
@@ -46,8 +46,8 @@ performanceMonitor.recordRender();
       </    View>;
       <View style={styles.statsContainer} /    >;
         <View style={styles.statItem} /    >;
-          <Text
-style={{[
+          <Text;
+style={[
               styles.statValue,
               { color: getHealthScoreColor(userProfile.healthScore)   }}
             ]} /    >
@@ -71,7 +71,7 @@ style={{[
     </    View;>
   ;);
 }
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   backgroundColor: colors.white,
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.xl,

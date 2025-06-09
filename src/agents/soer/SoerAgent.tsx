@@ -150,8 +150,8 @@ caring",         tone: warm",           / 温暖的语调*  生活方式专业* 
       const response = await apiClient.post(`${this.serviceEndpoint}/assess-emotional-state`, {/            user_id: userId,indicato;r;s;};);
       return {userId: response.data.user_id,timestamp: new Date(response.data.timestamp),mood: response.data.mood,intensity: response.data.intensity,triggers: response.data.triggers,context: response.data.context,physicalSymptoms: response.data.physical_symptoms,copingStrategies: response.data.coping_strategies,supportNeeded: response.data.support_needed,notes: response.data.note;s;}
     } catch (error) {
-      return {userId,timestamp: new Date(),mood: "neutral,",intensity: 5,triggers: [],context: {
-      activity: "unknown",
+      return {userId,timestamp: new Date(),mood: "neutral,",intensity: 5,triggers: [],context: {,
+  activity: "unknown",
       location: unknown",;
           socialSituation: "unknown,",timeOfDay: "unknown";
         },physicalSymptoms: [],copingStrategies: [],supportNeeded: fals;e;};
@@ -183,7 +183,7 @@ caring",         tone: warm",           / 温暖的语调*  生活方式专业* 
   }
   ///    >  {
     try {
-      const response = await apiClient.get(`${this.serviceEndpoint}/devices/user/${userId;};`;);// return response.data.map(device: unknow;n;); => ({,)
+      const response = await apiClient.get(`${this.serviceEndpoint}/devices/user/${userId;};`;);// return response.data.map(device: unknow;n;); => ({),
   id: device.id,
         name: device.name,
         type: device.type,
@@ -234,7 +234,7 @@ caring",         tone: warm",           / 温暖的语调*  生活方式专业* 
       const endpoint = status;
         ? `${this.serviceEndpoint}/reminders/user/${userId}?status=${status}`/        : `${this.serviceEndpoint}/reminders/user/${userId;}`;/
       const response = await apiClient.get(endpo;i;n;t;);
-      return response.data.map(reminder: unknow;n;); => ({,)
+      return response.data.map(reminder: unknow;n;); => ({),
   id: reminder.id,
         userId: reminder.user_id,
         type: reminder.type,

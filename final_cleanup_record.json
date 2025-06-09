@@ -1,0 +1,55 @@
+{
+  "timestamp": "2025-06-09T16:33:00.176879",
+  "final_cleanup": {
+    "temp_files_removed": [
+      {
+        "file": "services/agent-services/xiaoai-service/ruff_errors.json",
+        "size": 148876
+      },
+      {
+        "file": "services/agent-services/xiaoai-service/ruff_final_check.json",
+        "size": 4768302
+      },
+      {
+        "file": "services/agent-services/xiaoai-service/ruff_check_after_fix.json",
+        "size": 7313670
+      },
+      {
+        "file": "services/agent-services/xiaoai-service/final_errors.json",
+        "size": 266019
+      },
+      {
+        "file": "services/agent-services/xiaoai-service/current_errors.json",
+        "size": 552179
+      }
+    ],
+    "large_files_archived": [],
+    "structure_optimized": [
+      {
+        "directory": "docs/production",
+        "description": "生产环境文档"
+      },
+      {
+        "directory": "docs/api/v1",
+        "description": "API v1文档"
+      },
+      {
+        "directory": "docs/guides/deployment",
+        "description": "部署指南"
+      },
+      {
+        "directory": "docs/guides/monitoring",
+        "description": "监控指南"
+      },
+      {
+        "directory": "scripts/deployment",
+        "description": "部署脚本"
+      },
+      {
+        "directory": "config/staging",
+        "description": "测试配置"
+      }
+    ],
+    "space_saved": 13049046
+  }
+}

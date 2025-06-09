@@ -301,12 +301,12 @@ const participantCount = session.participants.length;
 /**
 * * 协作会话接口
 interface CollaborationSession {
-  id: string;
+  id: string;,
   taskId: string;
-  participants: string[];
+  participants: string[];,
   startTime: Date;
   endTime?: Date;
-  status: "active" | completed" | 'failed';";
+  status: "active" | completed" | 'failed';";,
   decisions: any[];
   consensusReached: boolean;
 }

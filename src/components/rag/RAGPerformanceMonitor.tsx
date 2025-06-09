@@ -11,11 +11,11 @@ import { selectPerformanceMetrics, selectCacheStats } from '../../store/slices/r
   RefreshControl;
 } from 'react-native';
 interface PerformanceData {
-  responseTime: number;
+  responseTime: number;,
   cacheHitRate: number;
-  errorRate: number;
+  errorRate: number;,
   totalQueries: number;
-  averageResponseTime: number;
+  averageResponseTime: number;,
   lastUpdateTime: number;
 }
 export const RAGPerformanceMonitor: React.FC = () => {
@@ -39,7 +39,7 @@ export const RAGPerformanceMonitor: React.FC = () => {
     });
   }, [performanceMetrics, cacheStats]);
   // 监听性能事件
-  useEffect(() => {
+  useEffect() => {
     const handlePerformanceUpdate = (data: any) => {updatePerformanceData();
     };
     ragService.on('performance', handlePerformanceUpdate);
@@ -51,7 +51,7 @@ export const RAGPerformanceMonitor: React.FC = () => {
     };
   }, [updatePerformanceData]);
   // 定期更新数据
-  useEffect(() => {
+  useEffect() => {
     if (isMonitoring) {
       const interval = setInterval(updatePerformanceData, 5000); // 每5秒更新一次
       return () => clearInterval(interval);
@@ -97,7 +97,7 @@ export const RAGPerformanceMonitor: React.FC = () => {
   const formatTime = (timestamp: number) => {return new Date(timestamp).toLocaleTimeString();
   };
   return (
-  <ScrollView
+  <ScrollView;
       style={styles.container}
       refreshControl={
         <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />
@@ -105,7 +105,7 @@ export const RAGPerformanceMonitor: React.FC = () => {
     >
       <View style={styles.header}>
         <Text style={styles.title}>RAG性能监控</Text>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.monitorButton, isMonitoring && styles.monitorButtonActive]}
           onPress={toggleMonitoring}
         >
@@ -116,7 +116,7 @@ export const RAGPerformanceMonitor: React.FC = () => {
       </View>
       {// 实时状态指示器}
       <View style={styles.statusIndicator}>
-        <View style={{[styles.statusDot, { backgroundColor: isMonitoring ? '#4caf50' : '#9e9e9e' }}]} />
+        <View style={[styles.statusDot, { backgroundColor: isMonitoring ? '#4caf50' : '#9e9e9e' }}]} />
         <Text style={styles.statusText}>
           {isMonitoring ? '实时监控中' : '监控已停止'}
         </Text>
@@ -129,8 +129,8 @@ export const RAGPerformanceMonitor: React.FC = () => {
         {// 响应时间}
         <View style={styles.metricCard}>
           <Text style={styles.metricTitle}>平均响应时间</Text>
-          <Text
-            style={{[
+          <Text;
+            style={[
               styles.metricValue,
               { color: getStatusColor(performanceData.averageResponseTime, { good: 1000, warning: 3000 }}) }
             ]}
@@ -145,8 +145,8 @@ export const RAGPerformanceMonitor: React.FC = () => {
         {// 缓存命中率}
         <View style={styles.metricCard}>
           <Text style={styles.metricTitle}>缓存命中率</Text>
-          <Text
-            style={{[
+          <Text;
+            style={[
               styles.metricValue,
               { color: getStatusColor(100 - performanceData.cacheHitRate, { good: 20, warning: 50 }}) }
             ]}
@@ -161,8 +161,8 @@ export const RAGPerformanceMonitor: React.FC = () => {
         {// 错误率}
         <View style={styles.metricCard}>
           <Text style={styles.metricTitle}>错误率</Text>
-          <Text
-            style={{[
+          <Text;
+            style={[
               styles.metricValue,
               { color: getStatusColor(performanceData.errorRate, { good: 1, warning: 5 }}) }
             ]}
@@ -177,7 +177,7 @@ export const RAGPerformanceMonitor: React.FC = () => {
         {// 总查询数}
         <View style={styles.metricCard}>
           <Text style={styles.metricTitle}>总查询数</Text>
-          <Text style={{[styles.metricValue, { color: '#2196f3' }}]}>
+          <Text style={[styles.metricValue, { color: '#2196f3' }}]}>
             {performanceData.totalQueries}
           </Text>
           <Text style={styles.metricDescription}>
@@ -208,7 +208,7 @@ export const RAGPerformanceMonitor: React.FC = () => {
         <TouchableOpacity style={styles.actionButton} onPress={handleRefresh}>
           <Text style={styles.actionButtonText}>刷新数据</Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={[styles.actionButton, styles.clearButton]}
           onPress={handleClearMetrics}
         >
@@ -235,7 +235,7 @@ export const RAGPerformanceMonitor: React.FC = () => {
           {performanceData.averageResponseTime <= 1000 && ;
           performanceData.cacheHitRate >= 80 && ;
           performanceData.errorRate <= 1 && (;)
-            <Text style={{[styles.suggestion, { color: '#4caf50' }}]}>;
+            <Text style={[styles.suggestion, { color: '#4caf50' }}]}>;
               • 性能表现优秀，系统运行良好;
             </Text>;
           )};

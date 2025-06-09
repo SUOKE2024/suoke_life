@@ -1,32 +1,32 @@
 // 诊断服务类型定义
 // 基础数据类型
 export interface ImageData {
-  data: ArrayBuffer;
+  data: ArrayBuffer;,
   format: string;
-  width: number;
+  width: number;,
   height: number;
   metadata?: Record<string, any>;
 }
 export interface AudioData {
-  data: ArrayBuffer;
+  data: ArrayBuffer;,
   format: string;
-  duration: number;
+  duration: number;,
   sampleRate: number;
   channels?: number;
   metadata?: Record<string, any>;
 }
 export interface PalpationData {
-  type: 'pulse' | 'touch' | 'pressure';
+  type: 'pulse' | 'touch' | 'pressure';,
   sensorData: Record<string, any>;
   metadata?: Record<string, any>;
 }
 // 诊断结果类型
 export interface InquiryResult {
-  sessionId: string;
+  sessionId: string;,
   response: string;
-  extractedSymptoms: string[];
+  extractedSymptoms: string[];,
   confidence: number;
-  nextQuestions: string[];
+  nextQuestions: string[];,
   isComplete: boolean;
 }
 export interface LookResult {
@@ -34,7 +34,7 @@ export interface LookResult {
   faceFeatures?: Record<string, any>;
   complexionAnalysis?: Record<string, any>;
   tongueAnalysis?: Record<string, any>;
-  overallAssessment: string;
+  overallAssessment: string;,
   confidence: number;
   recommendations?: string[];
 }
@@ -42,7 +42,7 @@ export interface ListenResult {
   analysisId: string;
   voiceFeatures?: Record<string, any>;
   breathingPattern?: Record<string, any>;
-  overallAssessment: string;
+  overallAssessment: string;,
   confidence: number;
 }
 export interface PalpationResult {
@@ -50,7 +50,7 @@ export interface PalpationResult {
   pulseAnalysis?: Record<string, any>;
   abdominalAnalysis?: Record<string, any>;
   skinAnalysis?: Record<string, any>;
-  overallAssessment: string;
+  overallAssessment: string;,
   confidence: number;
 }
 // 服务客户端接口
@@ -72,13 +72,13 @@ export interface PalpationServiceClient {
   startRealTimeMonitoring(userId: string): Promise<string>;
 }
 export interface DiagnosisServiceClient {
-  inquiry: InquiryServiceClient;
+  inquiry: InquiryServiceClient;,
   look: LookServiceClient;
-  listen: ListenServiceClient;
+  listen: ListenServiceClient;,
   palpation: PalpationServiceClient;
   healthCheck(): Promise<{ [key: string]: boolean;
 }>;
-  comprehensiveDiagnosis(data: {,)
+  comprehensiveDiagnosis(data: {),
   userId: string;
     imageData?: ImageData;
     audioData?: AudioData;

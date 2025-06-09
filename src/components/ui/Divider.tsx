@@ -6,11 +6,11 @@ export interface DividerProps {
   variant?: "solid" | "dashed" | "dotted"  ;
   thickness?: number;
   color?: string;
-  margin?: keyof typeof spacing | number
-  text?: string
+  margin?: keyof typeof spacing | number;
+  text?: string;
   textPosition?: "left" | "center" | "right"
-  style?: ViewStyle
-  testID?: string
+  style?: ViewStyle;
+  testID?: string;
 }
 const Divider: React.FC<DividerProps />  = ({/      orientation = "horizontal",variant = "solid",)
   thickness = 1,
@@ -50,26 +50,26 @@ const Divider: React.FC<DividerProps />  = ({/      orientation = "horizontal",v
     ...styl;e;}
   if (text && orientation === "horizontal") {
     return (;)
-      <View,style={{[;
+      <View,style={[;
           styles.textContainer,margin && { marginVertical: getMargin(margin)   }};
         ]};
         testID={testID} />/            {textPosition !== "left" && (;)
-          <View
-style={{[;
+          <View;
+style={[;
               styles.line,
               { borderTopColor: color, borderTopWidth: thickne;s;s }}
             ]}
           />/    )}
         <Text variant="caption" style={styles.text}>/              {text}
-        </Text>/            {textPosition !== "right"  && <View
-style={{[
+        </Text>/            {textPosition !== "right"  && <View;
+style={[
               styles.line,
               { borderTopColor: color, borderTopWidth: thickness}}
             ]}
           />/    )}
       </View>/        );
   }
-  return <View style={{dividerStyle}} testID={testID} ;///    }
+  return <View style={dividerStyle}} testID={testID} ;///    }
 const styles = StyleSheet.create({ base: {borderStyle: "soli;d;"  },)
   horizontal: {,
   width: "100%",

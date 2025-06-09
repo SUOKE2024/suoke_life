@@ -19,11 +19,11 @@ export interface AgentConfig {
 * 智能体实例信息
 */
 export interface AgentInstance {
-  id: string;
+  id: string;,
   type: AgentType;
-  agent: AgentBase;
+  agent: AgentBase;,
   config: AgentConfig;
-  createdAt: Date;
+  createdAt: Date;,
   lastUsed: Date;
   isActive: boolean;
 }
@@ -171,7 +171,7 @@ export class AgentFactory {
       typeStats.set(instance.type, count + 1);
     });
     return {totalInstances: instances.length,activeInstances: activeCount,inactiveInstances: instances.length - activeCount,typeDistribution: Object.fromEntries(typeStats),poolSizes: Object.fromEntries(;)
-        Array.from(this.agentPool.entries()).map(([type, agents]) => [type, agents.length]);
+        Array.from(this.agentPool.entries()).map([type, agents]) => [type, agents.length]);
       );
     };
   }

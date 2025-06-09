@@ -200,8 +200,8 @@ const getShapeStyles = (): ViewStyle => {}
   };
   // 获取文本样式
 const getTextStyles = (): TextStyle => {}
-    const baseStyles: TextStyle = {
-      fontWeight: "600",
+    const baseStyles: TextStyle = {,
+  fontWeight: "600",
       textAlign: center"};"
     // 尺寸文本样式
 const sizeTextStyles = {small: {,
@@ -235,7 +235,7 @@ const variantTextStyles = {primary: {,
 const renderContent = () => {}
     if (loading) {
       return (;)
-        <ActivityIndicator
+        <ActivityIndicator;
 size="small"
           color={variant === "outline" || variant === ghost" ? "#007AFF : "#FFFFFF'}"'
         /    >
@@ -245,7 +245,7 @@ size="small"
       <>;
         {leftIcon && <Text style={styles.icon}>{leftIcon}</    Text>};
         {!iconOnly && title && (;)
-          <Text style={{[getTextStyles(), textStyle]}}>;
+          <Text style={[getTextStyles(), textStyle]}}>;
             {title};
           </    Text>;
         )};
@@ -256,13 +256,13 @@ size="small"
   };
   return (;)
     <Animated.View;
-style={{[
+style={[
         {
           transform: [{ scale: scaleValue }}],
           opacity: opacityValue}]}
     >
-      <TouchableOpacity
-style={{[getButtonStyles(), style]}}
+      <TouchableOpacity;
+style={[getButtonStyles(), style]}}
         onPress={handlePress}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}

@@ -8,9 +8,7 @@ export const deepLinkConfig: LinkingOptions<RootStackParamList>['config'] = {,
       Welcome: "welcome",
       Login: 'login',
         Register: 'register',
-        ForgotPassword: 'forgot-password',
-      },
-    },
+        ForgotPassword: 'forgot-password'}},
     Main: {,
   screens: {
         MainTabs: {,
@@ -21,33 +19,24 @@ export const deepLinkConfig: LinkingOptions<RootStackParamList>['config'] = {,
             Life: 'life',
             Maze: 'maze',
             Benchmark: 'benchmark',
-            Profile: 'profile',
-          },
-        },
+            Profile: 'profile'}},
         Settings: 'settings',
         ServiceStatus: 'service-status',
         ServiceManagement: 'service-management',
         DeveloperPanel: 'developer-panel',
         ApiIntegrationDemo: 'api-demo',
-        Benchmark: 'benchmark-detail',
-      },
-    },
+        Benchmark: 'benchmark-detail'}},
     ChatDetail: {,
   path: 'chat/:chatId/:chatType',
       parse: {,
   chatId: (chatId: string) => chatId,
-        chatType: (chatType: string) => chatType,
-      },
-    },
-    AgentDemo: 'agent-demo',
-  },
-};
+        chatType: (chatType: string) => chatType}},
+    AgentDemo: 'agent-demo'}};
 // 完整的链接配置
 export const linkingConfig: LinkingOptions<RootStackParamList> = {,
   prefixes: [
     "suokelife:suokelife.com',
-    'https://app.suokelife.com',
-  ],
+    'https://app.suokelife.com'],
   config: deepLinkConfig,
     // 自定义状态获取逻辑
   getStateFromPath: (path: string, options?: any) => {
@@ -66,17 +55,10 @@ export const linkingConfig: LinkingOptions<RootStackParamList> = {,
       name: "MainTabs",
       state: {,
   routes: [{ name: 'Home' }],
-                      index: 0,
-                    },
-                  },
-                ],
-                index: 0,
-              },
-              params: { agentId },
-            },
-          ],
-          index: 0,
-        };
+                      index: 0}}],
+                index: 0},
+              params: { agentId }}],
+          index: 0};
       }
             return state;
     } catch (error) {
@@ -92,8 +74,7 @@ export const linkingConfig: LinkingOptions<RootStackParamList> = {,
       console.warn('Failed to generate path from state:', error);
       return '/';
     }
-  },
-};
+  }};
 // 导出便捷函数
 export const getStateFromPath = linkingConfig.getStateFromPath!;
 export const getPathFromState = linkingConfig.getPathFromState!;
@@ -136,7 +117,7 @@ export class DeepLinkHandler {
     try {
       const urlObj = new URL(url);
       const params: Record<string, string> = {};
-            urlObj.searchParams.forEach(((value, key) => {
+            urlObj.searchParams.forEach((value, key) => {
         params[key] = value;
       });
             return params;

@@ -1,11 +1,11 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from '../../placeholder';react-native;
 import React from 'react";
 export interface EcoService {
-  id: string;
+  id: string;,
   name: string;
-  description: string;
+  description: string;,
   category: string;
-  icon: string;
+  icon: string;,
   available: boolean;
 }
 export interface EcoServicesProps {
@@ -57,9 +57,9 @@ export const EcoServices: React.FC<EcoServicesProps>  = ({services = [],onServic
     }
   };
   const renderService = (service: EcoService) => (;)
-    <TouchableOpacity
+    <TouchableOpacity;
 key={service.id}
-      style={{[
+      style={[
         styles.serviceCard,
         !service.available && styles.serviceCardDisabled;
       ]}}
@@ -83,7 +83,7 @@ key={service.id}
   return (;)
     <View style={styles.container}>;
       <Text style={styles.title}>生态服务</    Text>;
-      <ScrollView
+      <ScrollView;
 style={styles.scrollView}
         showsVerticalScrollIndicator={false}
       >
@@ -92,7 +92,7 @@ style={styles.scrollView}
     </    View>
   );
 };
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   flex: 1,
     padding: 16,
     backgroundColor: "#f5f5f5"},

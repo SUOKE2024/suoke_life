@@ -1,10 +1,7 @@
-    from grpc._utilities import first_version_is_lower
-from . import inquiry_service_pb2 as inquiry__service__pb2
-from typing import Dict, List, Any, Optional, Union
-import grpc
+"""Module placeholder"""
 
-def main() - > None:
-    """主函数 - 自动生成的最小可用版本"""
+def main():
+    """Main function placeholder"""
     pass
 
 if __name__ == "__main__":

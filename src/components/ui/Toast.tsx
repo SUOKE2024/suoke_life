@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import {
-    Animated,
-    Dimensions,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Animated,
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -49,7 +49,9 @@ export const Toast: React.FC<ToastProps> = ({
   const { currentTheme } = useTheme();
   const styles = createStyles(currentTheme, type, position);
 
-  const translateY = useRef(new Animated.Value(position === 'top' ? -100 : 100)).current;
+  const translateY = useRef(
+    new Animated.Value(position === 'top' ? -100 : 100)
+  ).current;
   const opacity = useRef(new Animated.Value(0)).current;
   const timeoutRef = useRef<NodeJS.Timeout>();
 
@@ -83,7 +85,7 @@ export const Toast: React.FC<ToastProps> = ({
         duration: 250,
         useNativeDriver: true,
       }),
-    ]).start(() => {
+    ]).start() => {
       onClose?.();
     });
   };
@@ -107,19 +109,15 @@ export const Toast: React.FC<ToastProps> = ({
       error: '❌',
     };
 
-    return (
-      <Text style={styles.icon}>
-        {iconMap[type]}
-      </Text>
-    );
+    return <Text style={styles.icon}>{iconMap[type]}</Text>;
   };
 
-  useEffect(() => {
+  useEffect() => {
     if (visible) {
       showToast();
-      
+
       if (duration > 0) {
-        timeoutRef.current = setTimeout(() => {
+        timeoutRef.current = setTimeout() => {
           handleClose();
         }, duration);
       }
@@ -138,7 +136,7 @@ export const Toast: React.FC<ToastProps> = ({
 
   return (
     <View style={styles.overlay}>
-      <Animated.View
+      <Animated.View;
         style={[
           styles.container,
           {
@@ -148,7 +146,7 @@ export const Toast: React.FC<ToastProps> = ({
           style,
         ]}
       >
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.content}
           onPress={onPress}
           activeOpacity={onPress ? 0.8 : 1}
@@ -173,15 +171,19 @@ const createStyles = (theme: any, type: string, position: string) => {
     switch (type) {
       case 'success':
         return {
-          background: theme.colors.successContainer || theme.colors.primaryContainer,
+          background:
+            theme.colors.successContainer || theme.colors.primaryContainer,
           border: theme.colors.success,
-          text: theme.colors.onSuccessContainer || theme.colors.onPrimaryContainer,
+          text:
+            theme.colors.onSuccessContainer || theme.colors.onPrimaryContainer,
         };
       case 'warning':
         return {
-          background: theme.colors.warningContainer || theme.colors.primaryContainer,
+          background:
+            theme.colors.warningContainer || theme.colors.primaryContainer,
           border: theme.colors.warning,
-          text: theme.colors.onWarningContainer || theme.colors.onPrimaryContainer,
+          text:
+            theme.colors.onWarningContainer || theme.colors.onPrimaryContainer,
         };
       case 'error':
         return {
@@ -190,8 +192,8 @@ const createStyles = (theme: any, type: string, position: string) => {
           text: theme.colors.onErrorContainer,
         };
       default:
-        return {
-          background: theme.colors.surfaceVariant,
+        return {,
+  background: theme.colors.surfaceVariant,
           border: theme.colors.primary,
           text: theme.colors.onSurfaceVariant,
         };
@@ -201,8 +203,8 @@ const createStyles = (theme: any, type: string, position: string) => {
   const colors = getTypeColors();
 
   return StyleSheet.create({
-    overlay: {
-      position: 'absolute',
+    overlay: {,
+  position: 'absolute',
       top: 0,
       left: 0,
       right: 0,
@@ -215,46 +217,46 @@ const createStyles = (theme: any, type: string, position: string) => {
       pointerEvents: 'box-none',
       zIndex: 1000,
     },
-    container: {
-      maxWidth: screenWidth - 32,
+    container: {,
+  maxWidth: screenWidth - 32,
       backgroundColor: colors.background,
       borderRadius: theme.borderRadius.lg,
       borderLeftWidth: 4,
       borderLeftColor: colors.border,
       shadowColor: theme.colors.shadow,
-      shadowOffset: {
-        width: 0,
+      shadowOffset: {,
+  width: 0,
         height: 4,
       },
       shadowOpacity: 0.15,
       shadowRadius: 8,
       elevation: 8,
     },
-    content: {
-      flexDirection: 'row',
+    content: {,
+  flexDirection: 'row',
       alignItems: 'center',
       padding: theme.spacing.md,
     },
-    icon: {
-      fontSize: 20,
+    icon: {,
+  fontSize: 20,
       marginRight: theme.spacing.sm,
     },
-    message: {
-      flex: 1,
+    message: {,
+  flex: 1,
       fontSize: theme.typography.fontSize.sm,
       color: colors.text,
       lineHeight: theme.typography.fontSize.sm * 1.4,
     },
-    closeButton: {
-      padding: theme.spacing.xs,
+    closeButton: {,
+  padding: theme.spacing.xs,
       marginLeft: theme.spacing.sm,
     },
-    closeText: {
-      fontSize: 18,
+    closeText: {,
+  fontSize: 18,
       color: colors.text,
       fontWeight: theme.typography.fontWeight.bold,
     },
   });
 };
 
-export default Toast; 
+export default Toast;

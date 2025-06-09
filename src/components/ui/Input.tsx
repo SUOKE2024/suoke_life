@@ -100,13 +100,13 @@ const Input: React.FC<InputProps> = ({
           {label}
         </Text>
       )}
-      <View style={{getContainerStyle()}}>
+      <View style={getContainerStyle()}}>
         {leftIcon  && <View style={styles.leftIcon}>
             {leftIcon}
           </View>
         )}
-        <TextInput
-          style={{getInputStyle()}}
+        <TextInput;
+          style={getInputStyle()}}
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
@@ -123,7 +123,7 @@ const Input: React.FC<InputProps> = ({
           testID={testID}
           {...props}
         />
-        {type === "password"  && <TouchableOpacity
+        {type === "password"  && <TouchableOpacity;
             style={styles.rightIcon}
             onPress={togglePasswordVisibility}
             accessibilityLabel={isPasswordVisible ? "隐藏密码" : "显示密码"}
@@ -136,7 +136,7 @@ const Input: React.FC<InputProps> = ({
           </View>
         )}
       </View>
-      {(errorMessage || helperText)  && <Text style={{error ? [styles.helperText, styles.errorText] : styles.helperText}}>
+      {(errorMessage || helperText)  && <Text style={error ? [styles.helperText, styles.errorText] : styles.helperText}}>
           {error ? errorMessage : helperText}
         </Text>
       )}
@@ -145,8 +145,7 @@ const Input: React.FC<InputProps> = ({
 };
 const styles = StyleSheet.create({
   wrapper: {,
-  marginBottom: 16,
-  },
+  marginBottom: 16},
   container: {,
   flexDirection: "row",
     alignItems: "center",
@@ -155,71 +154,53 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ddd",
     paddingHorizontal: 12,
-    height: 48,
-  },
+    height: 48},
   small: {,
   height: 40,
-    paddingHorizontal: 8,
-  },
+    paddingHorizontal: 8},
   large: {,
   height: 56,
-    paddingHorizontal: 16,
-  },
+    paddingHorizontal: 16},
   filled: {,
   backgroundColor: "#f5f5f5",
-    borderWidth: 0,
-  },
+    borderWidth: 0},
   underlined: {,
   backgroundColor: "transparent",
     borderWidth: 0,
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
-    borderRadius: 0,
-  },
+    borderRadius: 0},
   focused: {,
-  borderColor: "#007AFF",
-  },
+  borderColor: "#007AFF"},
   error: {,
-  borderColor: "#FF3B30",
-  },
+  borderColor: "#FF3B30"},
   disabled: {,
   backgroundColor: "#f0f0f0",
-    borderColor: "#ccc",
-  },
+    borderColor: "#ccc"},
   input: {,
   flex: 1,
     fontSize: 16,
     color: "#333",
-    paddingVertical: 0,
-  },
+    paddingVertical: 0},
   smallInput: {,
-  fontSize: 14,
-  },
+  fontSize: 14},
   largeInput: {,
-  fontSize: 18,
-  },
+  fontSize: 18},
   multiline: {,
   textAlignVertical: "top",
-    paddingVertical: 8,
-  },
+    paddingVertical: 8},
   leftIcon: {,
-  marginRight: 8,
-  },
+  marginRight: 8},
   rightIcon: {,
-  marginLeft: 8,
-  },
+  marginLeft: 8},
   label: {,
   marginBottom: 4,
     color: "#666",
-    fontSize: 14,
-  },
+    fontSize: 14},
   helperText: {,
   marginTop: 4,
     color: "#666",
-    fontSize: 12,
-  },
+    fontSize: 12},
   errorText: {,
-  color: "#FF3B30",
-  },
-});
+  color: "#FF3B30"}});
 export default Input;

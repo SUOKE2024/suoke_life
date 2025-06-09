@@ -13,13 +13,13 @@ export enum ValidationSeverity {
   CRITICAL = "CRITICAL"
 }
 export interface ValidationRule {
-  id: string;
+  id: string;,
   name: string;
   type: ValidationType,severity: ValidationSeverity,validate: (data: unknown, context?: ValidationContext) => ValidationResult;
-  sanitize?: (data: unknown) => any;
+  sanitize?: (data: unknown) => any;,
   description: string;
-  examples?: { valid: unknown[];
-    invalid: unknown[];
+  examples?: { valid: unknown[];,
+  invalid: unknown[];
 };
 }
 export interface ValidationContext {
@@ -30,20 +30,20 @@ export interface ValidationContext {
   metadata?: Record<string, any>;
 }
 export interface ValidationResult {
-  isValid: boolean;
+  isValid: boolean;,
   severity: ValidationSeverity,message: string,code: string;
   field?: string;
   value?: unknown;
   suggestion?: string;
-  sanitizedValue?: unknown
+  sanitizedValue?: unknown;
 }
 export interface ValidationReport {
-  id: string;
+  id: string;,
   timestamp: number;
-  context: ValidationContext;
+  context: ValidationContext;,
   results: ValidationResult[];
-  summary: {totalChecks: number;
-    passed: number;
+  summary: {totalChecks: number;,
+  passed: number;
     warnings: number,errors: number,critical: number;
 };
   isValid: boolean;

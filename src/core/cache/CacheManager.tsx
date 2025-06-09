@@ -18,7 +18,7 @@ export enum CacheStrategy {
 }
 export interface CacheItem<T = any> {
   key: string,
-  value: T;
+  value: T;,
   timestamp: number;
   ttl?: number; // 生存时间（毫秒）
   accessCount: number,
@@ -27,32 +27,32 @@ export interface CacheItem<T = any> {
   metadata?: Record<string, any>;
 }
 export interface CacheConfig {
-  type: CacheType;
+  type: CacheType;,
   strategy: CacheStrategy;
   maxSize: number;
   maxMemory?: number; // 最大内存使用（字节）
   defaultTTL?: number; // 默认TTL（毫秒）
   cleanupInterval?: number; // 清理间隔（毫秒）
   compression?: boolean; // 是否压缩
-  maxMemorySize: number; // 最大内存缓存大小(MB);
+  maxMemorySize: number; // 最大内存缓存大小(MB);,
   persistentStorage: boolean; // 是否启用持久化存储
   encryptionEnabled: boolean; // 是否启用加密
 }
 export interface CacheStats {
-  hits: number;
+  hits: number;,
   misses: number;
-  hitRate: number;
+  hitRate: number;,
   totalItems: number;
-  totalSize: number;
+  totalSize: number;,
   memoryUsage: number;
   oldestItem?: number;
   newestItem?: number;
-  totalHits: number;
+  totalHits: number;,
   totalMisses: number;
   evictionCount: number;
 }
 export interface CacheLayer {
-  name: string;
+  name: string;,
   config: CacheConfig;
   cache: Map<string, CacheItem>;
   stats: CacheStats;
@@ -245,7 +245,7 @@ export class CacheManager {
   ): Promise<void> {
     try {
       const data = await dataLoader();
-      const items = Array.from(data.entries()).map(([key, value]) => ({key,value,options;))
+      const items = Array.from(data.entries()).map([key, value]) => ({key,value,options;))
       }));
       await this.setMultiple(layerName, items);
     } catch (error) {
@@ -380,7 +380,7 @@ export class CacheManager {
           const keys = Object.keys(localStorage).filter(key) =>;
             key.startsWith(`cache_${layer.name}_`);
           );
-          keys.forEach(((key) => localStorage.removeItem(key));)
+          keys.forEach((key) => localStorage.removeItem(key));)
         }
         break;
       case CacheType.SESSION_STORAGE:
@@ -388,7 +388,7 @@ export class CacheManager {
           const keys = Object.keys(sessionStorage).filter(key) =>;
             key.startsWith(`cache_${layer.name}_`);
           );
-          keys.forEach(((key) => sessionStorage.removeItem(key));)
+          keys.forEach((key) => sessionStorage.removeItem(key));)
         }
         break;
       case CacheType.INDEXED_DB:

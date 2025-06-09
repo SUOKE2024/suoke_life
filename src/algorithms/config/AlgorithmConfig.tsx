@@ -1,16 +1,16 @@
 import React from 'react';
 export interface LookingConfig {
-  enabled: boolean;
+  enabled: boolean;,
   models: {;
-    tongueAnalysis: ModelConfig;
+    tongueAnalysis: ModelConfig;,
   faceAnalysis: ModelConfig;
     bodyAnalysis: ModelConfig;
 };
   imageProcessing: {,
   maxWidth: number;
     maxHeight: number,
-  quality: number;
-    formats: string[]
+  quality: number;,
+  formats: string[]
   };
   confidence: {,
   threshold: number;
@@ -18,17 +18,17 @@ export interface LookingConfig {
   }
 }
 export interface ListeningConfig {
-  enabled: boolean;
+  enabled: boolean;,
   models: {;
-    voiceAnalysis: ModelConfig;
+    voiceAnalysis: ModelConfig;,
   breathingAnalysis: ModelConfig;
     coughAnalysis: ModelConfig;
 };
   audioProcessing: {,
   sampleRate: number;
     channels: number,
-  bitDepth: number;
-    maxDuration: number;
+  bitDepth: number;,
+  maxDuration: number;
   };
   confidence: {,
   threshold: number;
@@ -36,9 +36,9 @@ export interface ListeningConfig {
   }
 }
 export interface InquiryConfig {
-  enabled: boolean;
+  enabled: boolean;,
   models: {;
-    symptomAnalysis: ModelConfig;
+    symptomAnalysis: ModelConfig;,
   nlpProcessing: ModelConfig;
     semanticAnalysis: ModelConfig;
 };
@@ -53,9 +53,9 @@ export interface InquiryConfig {
   }
 }
 export interface PalpationConfig {
-  enabled: boolean;
+  enabled: boolean;,
   models: {;
-    pulseAnalysis: ModelConfig;
+    pulseAnalysis: ModelConfig;,
   pressureAnalysis: ModelConfig;
     temperatureAnalysis: ModelConfig;
 };
@@ -70,9 +70,9 @@ export interface PalpationConfig {
   }
 }
 export interface CalculationConfig {
-  enabled: boolean;
+  enabled: boolean;,
   models: {;
-    lunarCalculation: ModelConfig;
+    lunarCalculation: ModelConfig;,
   fiveElementsAnalysis: ModelConfig;
     yinYangAnalysis: ModelConfig;
 };
@@ -85,13 +85,13 @@ export interface CalculationConfig {
   }
 }
 export interface FusionConfig {
-  enabled: boolean;
+  enabled: boolean;,
   algorithm: 'weighted_average' | 'neural_fusion' | 'bayesian_fusion';
-  weights: {;
+  weights: {;,
   looking: number;
-    listening: number;
+    listening: number;,
   inquiry: number;
-    palpation: number;
+    palpation: number;,
   calculation: number;
 };
   fusion: {,
@@ -101,9 +101,9 @@ export interface FusionConfig {
   }
 }
 export interface SyndromeConfig {
-  enabled: boolean;
+  enabled: boolean;,
   models: {;
-    patternRecognition: ModelConfig;
+    patternRecognition: ModelConfig;,
   syndromeClassification: ModelConfig;
 };
   analysis: {,
@@ -113,9 +113,9 @@ export interface SyndromeConfig {
   }
 }
 export interface ConstitutionConfig {
-  enabled: boolean;
+  enabled: boolean;,
   models: {;
-    constitutionClassification: ModelConfig;
+    constitutionClassification: ModelConfig;,
   bodyTypeAnalysis: ModelConfig;
 };
   analysis: {,
@@ -125,9 +125,9 @@ export interface ConstitutionConfig {
   }
 }
 export interface TreatmentConfig {
-  enabled: boolean;
+  enabled: boolean;,
   models: {;
-    recommendationEngine: ModelConfig;
+    recommendationEngine: ModelConfig;,
   herbFormulation: ModelConfig;
     lifestyleAdvice: ModelConfig;
 };
@@ -138,30 +138,30 @@ export interface TreatmentConfig {
   }
 }
 export interface ModelConfig {
-  name: string;
+  name: string;,
   version: string;
-  path: string;
+  path: string;,
   type: 'tensorflow' | 'pytorch' | 'onnx' | 'custom';
-  device: 'cpu' | 'gpu' | 'auto';
+  device: 'cpu' | 'gpu' | 'auto';,
   batchSize: number;
   timeout: number;
 }
 export interface KnowledgeBaseConfig {
-  version: string;
+  version: string;,
   updateInterval: number;
-  sources: string[];
+  sources: string[];,
   caching: {;
-    enabled: boolean;
+    enabled: boolean;,
   ttl: number;
     maxSize: number;
 }
 }
 export interface QualityControlConfig {
-  enabled: boolean;
+  enabled: boolean;,
   checks: {;
-    dataValidation: boolean;
+    dataValidation: boolean;,
   resultValidation: boolean;
-    crossValidation: boolean;
+    crossValidation: boolean;,
   expertReview: boolean;
 };
   thresholds: {,
@@ -171,11 +171,11 @@ export interface QualityControlConfig {
   }
 }
 export interface MonitoringConfig {
-  enabled: boolean;
+  enabled: boolean;,
   metrics: {;
-    performance: boolean;
+    performance: boolean;,
   accuracy: boolean;
-    usage: boolean;
+    usage: boolean;,
   errors: boolean;
 };
   reporting: {,
@@ -185,11 +185,11 @@ export interface MonitoringConfig {
   }
 }
 export interface PerformanceConfig {
-  maxConcurrentSessions: number;
+  maxConcurrentSessions: number;,
   timeoutMs: number;
-  retryAttempts: number;
+  retryAttempts: number;,
   caching: {;
-    enabled: boolean;
+    enabled: boolean;,
   strategy: 'lru' | 'lfu' | 'ttl';
     maxSize: number;
 };

@@ -8,7 +8,7 @@ import React,{ memo } from react""
   TouchableOpacity,
   { ViewStyle } from ";react-native";
 export interface Message {
-  id: string;
+  id: string;,
   text: string,sender: user" | AgentType,";
   timestamp: Date;
 type?: "text | "image" | voice"
@@ -20,13 +20,13 @@ interface ChatMessageProps {
   onLongPress?: (message: Message) => void;
   style?: ViewStyle;
   showTimestamp?: boolean;
-showAvatar?: boolean
+showAvatar?: boolean;
 }
 export const ChatMessage: React.FC<ChatMessageProps /> = memo({/   const performanceMonitor = usePerformanceMonitor(ChatMessage",;))
 {/
     trackRender: true,
     trackMemory: false,
-    warnThreshold: 100,  });
+    warnThreshold: 100});
   message,
   onPress,
   onLongPress,
@@ -66,11 +66,11 @@ export const ChatMessage: React.FC<ChatMessageProps /> = memo({/   const perform
   };
   performanceMonitor.recordRender();
   return (;)
-    <View,style={{[;
+    <View,style={[;
         styles.container,isUser ? styles.userContainer : styles.agentContainer,style;
-      ]}} />/      {///          {!isUser && showAvatar  && <View style={styles.agentInfo}>/          <View style={{[styles.agentAvatar, { backgroundColor: agent?.color + "2;0  ; }}]} />/            <Text style={styles.agentAvatarText}>{agent?.avatar}</Text>/          </View>/          <Text style={styles.agentName}>{agent?.name}</Text>/        </View>/          )}"
-      {///          <TouchableOpacity
-style={{[
+      ]}} />/      {///          {!isUser && showAvatar  && <View style={styles.agentInfo}>/          <View style={[styles.agentAvatar, { backgroundColor: agent?.color + "2;0  ; }}]} />/            <Text style={styles.agentAvatarText}>{agent?.avatar}</Text>/          </View>/          <Text style={styles.agentName}>{agent?.name}</Text>/        </View>/          )}"
+      {///          <TouchableOpacity;
+style={[
           styles.messageBubble,
           isUser ? styles.userBubble : styles.agentBubble,
           !isUser && agent && { borderLeftColor: agent.color}}
@@ -78,13 +78,13 @@ style={{[
         onPress={handlePress}
         onLongPress={handleLongPress}
         activeOpacity={0.8}
-      accessibilityLabel="TODO: 添加无障碍标签" />/            <Textstyle={{[
+      accessibilityLabel="TODO: 添加无障碍标签" />/            <Textstyle={[
             styles.messageText,
             isUser ? styles.userText : styles.agentText;
           ]}} />/              {message.text}
         </Text>/
         {///            {showTimestamp  && <View style={styles.messageFooter}>/            <Text style={styles.timestamp}>/                  {formatTimestamp(message.timestamp)}
-            </Text>/                {isUser && message.status  && <Text style={{[ ///  >
+            </Text>/                {isUser && message.status  && <Text style={[ ///  >
                 styles.statusIcon,
                 message.status === "read" && styles.readStatus,
                 message.status === failed" && styles.failedStatus"
@@ -94,7 +94,7 @@ style={{[
       </TouchableOpacity>/    </View>/      )
 });
 ChatMessage.displayName = "ChatMessage"
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   marginVertical: spacing.xs,
     paddingHorizontal: spacing.md;
   },

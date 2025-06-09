@@ -10,7 +10,7 @@ interface ApiResponse<T = any /> { data: T,
 // 请求配置接口 * interface RequestConfig {
   headers?: Record<string, string>
   timeout?: number;
-  requireAuth?: boolean
+  requireAuth?: boolean;
 }
 // HTTP方法类型 * type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATC;H";
 class ApiClient {

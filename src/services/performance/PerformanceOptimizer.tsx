@@ -10,8 +10,8 @@ export interface PerformanceMetrics {
   // 错误率（%）  errorRate: number;
 }
 export interface OptimizationConfig {
-  // 缓存配置  cache: { enabled: boolean;
-    ttl: number  , maxSize: number  / 最大缓存大小（MB）* //;
+  // 缓存配置  cache: { enabled: boolean;,
+  ttl: number  , maxSize: number  / 最大缓存大小（MB）* //;
 } * / // 并发配置  concurrency: { maxConcurrent: number,
     queueSize: number,
     timeout: number  }
@@ -43,7 +43,7 @@ export class PerformanceOptimizer   {private static instance: PerformanceOptimiz
       concurrency: {,
   maxConcurrent: 10,
         queueSize: 100,
-        timeout: 30000,  },
+        timeout: 30000},
       preload: {,
   enabled: true,
         resources: ["user-profile",health-data", "agent-models"]

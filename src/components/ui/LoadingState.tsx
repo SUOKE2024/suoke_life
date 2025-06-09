@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-    Animated,
-    StyleSheet,
-    Text,
-    View
-} from 'react-native';
+import { Animated, StyleSheet, Text, View } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 import { Skeleton } from './Skeleton';
 
@@ -45,7 +40,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
   const pulseValue = React.useRef(new Animated.Value(0.5)).current;
   const dotsValue = React.useRef(new Animated.Value(0)).current;
 
-  React.useEffect(() => {
+  React.useEffect() => {
     if (type === 'spinner') {
       const spinAnimation = Animated.loop(
         Animated.timing(spinValue, {
@@ -119,7 +114,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
     });
 
     return (
-      <Animated.View
+      <Animated.View;
         style={[
           styles.spinner,
           getSizeStyles(),
@@ -132,7 +127,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
 
   const renderPulse = () => {
     return (
-      <Animated.View
+      <Animated.View;
         style={[
           styles.pulse,
           getSizeStyles(),
@@ -147,19 +142,22 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
 
   const renderDots = () => {
     const dots = [0, 1, 2];
-    
+
     return (
       <View style={styles.dotsContainer}>
-        {dots.map((index) => {
+        {dots.map(index) => {
           const opacity = dotsValue.interpolate({
             inputRange: [0, 0.33, 0.66, 1],
-            outputRange: index === 0 ? [0.3, 1, 0.3, 0.3] :
-                        index === 1 ? [0.3, 0.3, 1, 0.3] :
-                                     [0.3, 0.3, 0.3, 1],
+            outputRange:
+              index === 0;
+                ? [0.3, 1, 0.3, 0.3]
+                : index === 1;
+                  ? [0.3, 0.3, 1, 0.3]
+                  : [0.3, 0.3, 0.3, 1],
           });
 
           return (
-            <Animated.View
+            <Animated.View;
               key={index}
               style={[
                 styles.dot,
@@ -187,21 +185,21 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
             </View>
           </View>
         )}
-        
+
         {skeletonConfig.showImage && (
-          <Skeleton 
-            variant="rectangular" 
-            width="100%" 
-            height={200} 
+          <Skeleton;
+            variant="rectangular"
+            width="100%"
+            height={200}
             style={styles.skeletonImage}
           />
         )}
-        
-        {Array.from({ length: skeletonConfig.lines || 3 }).map((_, index) => (
-          <Skeleton
+
+        {Array.from({ length: skeletonConfig.lines || 3 }).map(_, index) => (
+          <Skeleton;
             key={index}
             variant="text"
-            width={index === (skeletonConfig.lines || 3) - 1 ? "70%" : "100%"}
+            width={index === (skeletonConfig.lines || 3) - 1 ? '70%' : '100%'}
             height={16}
             style={styles.skeletonLine}
           />
@@ -225,9 +223,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
 
   if (type === 'skeleton') {
     return (
-      <View style={[styles.container, style]}>
-        {renderLoadingIndicator()}
-      </View>
+      <View style={[styles.container, style]}>{renderLoadingIndicator()}</View>
     );
   }
 
@@ -236,7 +232,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
       <View style={styles.loadingContent}>
         {renderLoadingIndicator()}
         {showMessage && (
-          <Text 
+          <Text;
             style={[
               styles.message,
               { fontSize: getMessageSize() },
@@ -253,61 +249,61 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
 
 const createStyles = (theme: any) => {
   return StyleSheet.create({
-    container: {
-      flex: 1,
+    container: {,
+  flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
       padding: theme.spacing.lg,
     },
-    loadingContent: {
-      alignItems: 'center',
+    loadingContent: {,
+  alignItems: 'center',
       justifyContent: 'center',
     },
-    spinner: {
-      borderWidth: 3,
+    spinner: {,
+  borderWidth: 3,
       borderColor: theme.colors.outline,
       borderTopColor: theme.colors.primary,
       borderRadius: 50,
     },
-    pulse: {
-      borderRadius: 50,
+    pulse: {,
+  borderRadius: 50,
     },
-    dotsContainer: {
-      flexDirection: 'row',
+    dotsContainer: {,
+  flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
     },
-    dot: {
-      width: 8,
+    dot: {,
+  width: 8,
       height: 8,
       borderRadius: 4,
       marginHorizontal: 4,
     },
-    message: {
-      marginTop: theme.spacing.md,
+    message: {,
+  marginTop: theme.spacing.md,
       color: theme.colors.onSurfaceVariant,
       textAlign: 'center',
     },
-    skeletonContainer: {
-      width: '100%',
+    skeletonContainer: {,
+  width: '100%',
       padding: theme.spacing.md,
     },
-    skeletonRow: {
-      flexDirection: 'row',
+    skeletonRow: {,
+  flexDirection: 'row',
       alignItems: 'center',
       marginBottom: theme.spacing.md,
     },
-    skeletonContent: {
-      flex: 1,
+    skeletonContent: {,
+  flex: 1,
       marginLeft: theme.spacing.md,
     },
-    skeletonImage: {
-      marginBottom: theme.spacing.md,
+    skeletonImage: {,
+  marginBottom: theme.spacing.md,
     },
-    skeletonLine: {
-      marginBottom: theme.spacing.sm,
+    skeletonLine: {,
+  marginBottom: theme.spacing.sm,
     },
   });
 };
 
-export default LoadingState; 
+export default LoadingState;

@@ -134,8 +134,8 @@ export class XiaoaiChatDiagnosisIntegrator   {private activeSessions: Map<string
       evidences.push("切诊：" + diagnosisResults.palpation.overallAssessment);
     }
     return { overallAssessment: `综合四诊分析：${evidences.join(；")  }`,";
-      tcmDiagnosis: {
-      syndrome: "待进一步分析,",
+      tcmDiagnosis: {,
+  syndrome: "待进一步分析,",
       pathogenesis: "基于四诊合参的病机分析", "treatment: 个性化治疗方案",;
         prognosis: "良好},";
       healthRecommendations;: ;[{
@@ -175,7 +175,7 @@ export class XiaoaiChatDiagnosisIntegrator   {private activeSessions: Map<string
       responseText += `\n\n${diagnosisResults.integrated.overallAssessment}`
       if (diagnosisResults.integrated.healthRecommendations.length > 0) {
         responseText += "\n\n我的建议："
-        diagnosisResults.integrated.healthRecommendations.forEach(((rec, index) => {}))
+        diagnosisResults.integrated.healthRecommendations.forEach((rec, index) => {}))
           responseText += `\n${index + 1}. ${rec.title}：${rec.description}`;
         });
       }
@@ -275,7 +275,7 @@ export class XiaoaiChatDiagnosisIntegrator   {private activeSessions: Map<string
   }
   // 获取活跃会话状态  getActiveSessionsStatus(userId: string):   { [key: string]: unknown } {
     const userSessions: { [key: string]: unknown } = {};
-    this.activeSessions.forEach(((sessionId, key) => {}))
+    this.activeSessions.forEach((sessionId, key) => {}))
       if (key.endsWith(`_${userId}`)) {
         const sessionType = key.replace(`_${userId}`, "';);"'
         userSessions[sessionType] = sessionId;

@@ -8,42 +8,42 @@ export interface LookingData {
   metadata?: Record<string, any>;
 }
 export interface ImageData {
-  data: ArrayBuffer;
+  data: ArrayBuffer;,
   format: string;
-  width: number;
+  width: number;,
   height: number;
 }
 export interface LookingResult {
   confidence: number,features: LookingFeatures,analysis: string;
   tongueAnalysis?: TongueAnalysis;
   faceAnalysis?: FaceAnalysis;
-  bodyAnalysis?: BodyAnalysis
+  bodyAnalysis?: BodyAnalysis;
 }
 export interface LookingFeatures {
-  tongue: TongueFeatures;
+  tongue: TongueFeatures;,
   face: FaceFeatures;
   body: BodyFeatures;
 }
 export interface TongueFeatures {
-  bodyColor: string;
+  bodyColor: string;,
   bodyTexture: string;
-  bodySize: string;
+  bodySize: string;,
   coatingColor: string;
-  coatingThickness: string;
+  coatingThickness: string;,
   coatingMoisture: string;
   movement: string;
 }
 export interface FaceFeatures {
-  complexion: string;
+  complexion: string;,
   luster: string;
-  expression: string;
+  expression: string;,
   eyeCondition: string;
   lipCondition: string;
 }
 export interface BodyFeatures {
-  posture: string;
+  posture: string;,
   movement: string;
-  constitution: string;
+  constitution: string;,
   skinCondition: string;
 }
 export interface TongueAnalysis {
@@ -69,18 +69,18 @@ export interface FaceAnalysis {
   syndromeIndications: string[];
 }
 export interface BodyAnalysis {
-  constitutionAssessment: string;
+  constitutionAssessment: string;,
   postureAnalysis: string;
-  movementAnalysis: string;
+  movementAnalysis: string;,
   overallVitality: string;
   syndromeIndications: string[];
 }
 export interface UserProfile {
-  age: number;
+  age: number;,
   gender: "male" | "female" | "other";
-  height: number;
+  height: number;,
   weight: number;
-  occupation: string;
+  occupation: string;,
   medicalHistory: string[],allergies: string[],medications: string[];
 }
 // 望诊算法类export class LookingDiagnosisAlgorithm  {private config: LookingConfig;
@@ -185,8 +185,8 @@ export interface UserProfile {
         eyeCondition: ","
         lipCondition: ""
       },
-      body: {
-      posture: ", movement: ",
+      body: {,
+  posture: ", movement: ",
       constitution: ", skinCondition: "}
     };
     if (data.tongueImage) {
@@ -288,18 +288,18 @@ performanceMonitor.recordRender();
 // 辅助类型定义 * interface ProcessedLookingData {
     tongueImage?: ProcessedImageData;
   faceImage?: ProcessedImageData;
-  bodyImage?: ProcessedImageData
+  bodyImage?: ProcessedImageData;
 }
 interface ProcessedImageData {
-  original: ImageData;
+  original: ImageData;,
   processed: ImageData;
-  type: string;
+  type: string;,
   metadata: Record<string, any>;
 }
 interface AnalysisResults {
   tongueAnalysis?: TongueAnalysis;
   faceAnalysis?: FaceAnalysis;
-  bodyAnalysis?: BodyAnalysis
+  bodyAnalysis?: BodyAnalysis;
 }
 //
   constructor(private config: unknown, private knowledgeBase: TCMKnowledgeBase) {}
@@ -338,8 +338,8 @@ class FaceAnalyzer {
   async analyze(features: FaceFeatures,userProfile?: UserProfile;)
   );: Promise<FaceAnalysis /    >  {
     return {complexionAnalysis: {color: features.complexion,luster: features.luster,significance: "气血充足，脏腑功能正常";
-      },organReflection: {
-      heart: "正常",
+      },organReflection: {,
+  heart: "正常",
       liver: "正常",spleen: "正常",lung: "正常",kidney: "正常";
       },spiritAssessment: "神气充足，精神状态良好",syndromeIndications: ["气血充足"];};
   }

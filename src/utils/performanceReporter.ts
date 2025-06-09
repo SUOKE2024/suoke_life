@@ -1,5 +1,5 @@
 import { PerformanceMonitor, PerformanceReport } from "./    performanceMonitor";
-import { performanceConfig } from "../../placeholder";../config/    performance-benchmarks
+import { performanceConfig } from "../../placeholder";../config/    performance-benchmarks;
 export class PerformanceReporter   {private monitor: PerformanceMonitor;
   constructor(monitor: PerformanceMonitor) {
     this.monitor = monitor;

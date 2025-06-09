@@ -18,112 +18,112 @@ const iconMap: Record<string, string> = {
   'chevron-right': '›',
   'chevron-up': '⌃',
   'chevron-down': '⌄',
-  
+
   // 诊断相关图标
-  'eye': '👁',
-  'ear': '👂',
+  eye: '👁',
+  ear: '👂',
   'message-circle': '💬',
-  'hand': '✋',
+  hand: '✋',
   'bar-chart': '📊',
-  'activity': '📈',
-  'heart': '❤️',
-  'user': '👤',
-  'users': '👥',
-  
+  activity: '📈',
+  heart: '❤️',
+  user: '👤',
+  users: '👥',
+
   // 操作图标
-  'plus': '+',
-  'minus': '-',
-  'x': '×',
-  'check': '✓',
+  plus: '+',
+  minus: '-',
+  x: '×',
+  check: '✓',
   'refresh-cw': '↻',
-  'settings': '⚙️',
-  'search': '🔍',
-  'filter': '🔽',
-  'edit': '✏️',
-  'trash': '🗑',
-  'save': '💾',
-  'download': '⬇️',
-  'upload': '⬆️',
-  
+  settings: '⚙️',
+  search: '🔍',
+  filter: '🔽',
+  edit: '✏️',
+  trash: '🗑',
+  save: '💾',
+  download: '⬇️',
+  upload: '⬆️',
+
   // 状态图标
-  'info': 'ℹ️',
+  info: 'ℹ️',
   'alert-circle': '⚠️',
   'alert-triangle': '⚠️',
   'check-circle': '✅',
   'x-circle': '❌',
   'help-circle': '❓',
-  
+
   // 媒体图标
-  'play': '▶️',
-  'pause': '⏸',
-  'stop': '⏹',
-  'volume': '🔊',
+  play: '▶️',
+  pause: '⏸',
+  stop: '⏹',
+  volume: '🔊',
   'volume-off': '🔇',
-  'camera': '📷',
-  'image': '🖼',
-  'mic': '🎤',
+  camera: '📷',
+  image: '🖼',
+  mic: '🎤',
   'mic-off': '🎤',
-  
+
   // 通用图标
-  'home': '🏠',
-  'star': '⭐',
-  'bookmark': '🔖',
-  'calendar': '📅',
-  'clock': '🕐',
-  'mail': '✉️',
-  'phone': '📞',
+  home: '🏠',
+  star: '⭐',
+  bookmark: '🔖',
+  calendar: '📅',
+  clock: '🕐',
+  mail: '✉️',
+  phone: '📞',
   'map-pin': '📍',
-  'globe': '🌐',
-  'wifi': '📶',
-  'battery': '🔋',
-  
+  globe: '🌐',
+  wifi: '📶',
+  battery: '🔋',
+
   // 健康相关图标
-  'zap': '⚡',
-  'shield': '🛡',
-  'thermometer': '🌡',
-  'pill': '💊',
-  'stethoscope': '🩺',
-  'bandage': '🩹',
-  'syringe': '💉',
-  
+  zap: '⚡',
+  shield: '🛡',
+  thermometer: '🌡',
+  pill: '💊',
+  stethoscope: '🩺',
+  bandage: '🩹',
+  syringe: '💉',
+
   // 文件图标
-  'file': '📄',
-  'folder': '📁',
-  'clipboard': '📋',
-  'book': '📖',
+  file: '📄',
+  folder: '📁',
+  clipboard: '📋',
+  book: '📖',
   'file-text': '📄',
-  
+
   // 其他
-  'lock': '🔒',
-  'unlock': '🔓',
-  'key': '🔑',
-  'link': '🔗',
+  lock: '🔒',
+  unlock: '🔓',
+  key: '🔑',
+  link: '🔗',
   'external-link': '↗️',
-  'share': '📤',
-  'copy': '📋',
-  'scissors': '✂️',
+  share: '📤',
+  copy: '📋',
+  scissors: '✂️',
 };
 
-const Icon: React.FC<IconProps> = ({ 
-  name, 
-  size = 24, 
-  color = '#000', 
-  style 
+const Icon: React.FC<IconProps> = ({
+  name,
+  size = 24,
+  color = '#000',
+  style,
 }) => {
   const iconSymbol = iconMap[name] || '?';
-  
+
   return (
-    <Text 
+    <Text;
       style={[
         styles.icon,
-        { 
-          fontSize: size, 
+        {
+          fontSize: size,
           color,
           lineHeight: size,
           width: size,
           height: size,
         },
-        style
+        style,
       ]}
     >
       {iconSymbol}
@@ -132,8 +132,8 @@ const Icon: React.FC<IconProps> = ({
 };
 
 const styles = StyleSheet.create({
-  icon: {
-    textAlign: 'center',
+  icon: {,
+  textAlign: 'center',
     textAlignVertical: 'center',
   },
 });

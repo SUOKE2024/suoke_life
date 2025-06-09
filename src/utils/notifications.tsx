@@ -27,7 +27,7 @@ export interface NotificationAction {
   options?: {
     foreground?: boolean;
     destructive?: boolean;
-    authenticationRequired?: boolean
+    authenticationRequired?: boolean;
 };
 }
 export interface NotificationCategory {
@@ -35,7 +35,7 @@ export interface NotificationCategory {
   options?: {
     customDismissAction?: boolean;
     allowInCarPlay?: boolean;
-    allowAnnouncement?: boolean
+    allowAnnouncement?: boolean;
 }
 }
 //;
@@ -47,9 +47,9 @@ n;
   | "measurement"
   | "appointment";
 export interface HealthReminder {
-  id: string;
+  id: string;,
   type: HealthReminderType;
-  title: string;
+  title: string;,
   message: string,time: Date,repeat: boolean;
 repeatInterval?: "daily" | "weekly" | "monthly";
   enabled: boolean;
@@ -146,8 +146,8 @@ class NotificationManager {
     if (!this.notificationModule) {
       return;
     }
-    const categories: NotificationCategory[] = [{
-      id: "HEALTH_REMINDER",
+    const categories: NotificationCategory[] = [{,
+  id: "HEALTH_REMINDER",
       actions: [{,
   id: "COMPLETE",
             title: "已完成",
@@ -429,7 +429,7 @@ const performanceMonitor = usePerformanceMonitor("notifications, {")
         message: "该服药了，请按时服用您的药物",
         time: new Date(Date.now;(;) + 60 * 60 * 1000),  repeat: true,
         repeatInterval: "daily" as const,
-        enabled: false,  },
+        enabled: false},
       {
         type: "exercise" as HealthReminderType,
         title: "运动提醒",

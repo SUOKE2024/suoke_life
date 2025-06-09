@@ -2,46 +2,69 @@
 
 ## 概述
 
-索克生活平台提供完整的RESTful API和gRPC接口，支持健康管理、智能体交互、区块链数据管理等功能。
+索克生活平台提供了一套完整的RESTful API，支持健康管理、智能体交互、区块链操作等核心功能。本文档详细描述了所有可用的API端点、请求格式和响应结构。
 
 ## 基础信息
 
-- **API版本**: v1.0
-- **基础URL**: `https://api.suoke-life.com/v1`
-- **认证方式**: JWT Bearer Token
-- **数据格式**: JSON
+- **基础URL**: `https://api.suoke.life`
+- **API版本**: v1
+- **认证方式**: Bearer Token (JWT)
+- **内容类型**: `application/json`
 - **字符编码**: UTF-8
 
 ## 认证
 
-所有API请求都需要在Header中包含认证信息：
+所有API请求都需要在请求头中包含有效的访问令牌：
 
 ```http
-Authorization: Bearer <your_jwt_token>
+Authorization: Bearer <access_token>
+```
+
+### 获取访问令牌
+
+```http
+POST /api/auth/login
 Content-Type: application/json
+
+{
+  "username": "your_username",
+  "password": "your_password"
+}
 ```
 
-## 智能体服务 API
-
-### 小艾服务 (XiaoAi Service)
-
-**基础URL**: `/agents/xiaoai`
-
-#### 1. 健康咨询
-
-```http
-POST /agents/xiaoai/consult
-```
-
-**请求参数**:
+**响应示例**:
 ```json
 {
-  "user_id": "string",
-  "message": "string",
-  "context": {
-    "symptoms": ["string"],
-    "duration": "string",
-    "severity": "mild|moderate|severe"
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "token_type": "Bearer",
+  "expires_in": 3600
+}
+```
+
+## API端点
+
+### 1. 用户管理服务 (User Management Service)
+
+#### 1.1 用户注册
+
+```http
+POST /api/users/register
+```
+
+**请求体**:
+```json
+{
+  "username": "string",
+  "email": "string",
+  "password": "string",
+  "phone": "string",
+  "profile": {
+    "name": "string",
+    "age": "integer",
+    "gender": "string",
+    "height": "number",
+    "weight": "number"
   }
 }
 ```
@@ -49,465 +72,808 @@ POST /agents/xiaoai/consult
 **响应**:
 ```json
 {
-  "success": true,
-  "data": {
-    "response": "string",
-    "suggestions": ["string"],
-    "confidence": 0.95,
-    "follow_up_questions": ["string"]
+  "user_id": "uuid",
+  "username": "string",
+  "email": "string",
+  "created_at": "datetime",
+  "profile": {
+    "name": "string",
+    "age": "integer",
+    "gender": "string"
   }
 }
 ```
 
-#### 2. 四诊分析
+#### 1.2 获取用户信息
 
 ```http
-POST /agents/xiaoai/diagnosis
+GET /api/users/profile
 ```
 
-**请求参数**:
+**响应**:
 ```json
 {
-  "user_id": "string",
-  "diagnosis_data": {
-    "wang_zhen": {
-      "tongue_image": "base64_string",
-      "face_image": "base64_string"
-    },
-    "wen_zhen": {
-      "voice_data": "base64_string",
-      "breathing_pattern": "object"
-    },
-    "wen_zhen_inquiry": {
-      "symptoms": ["string"],
-      "medical_history": "string"
-    },
-    "qie_zhen": {
-      "pulse_data": "object"
+  "user_id": "uuid",
+  "username": "string",
+  "email": "string",
+  "profile": {
+    "name": "string",
+    "age": "integer",
+    "gender": "string",
+    "height": "number",
+    "weight": "number",
+    "medical_history": ["string"]
+  },
+  "created_at": "datetime",
+  "updated_at": "datetime"
+}
+```
+
+#### 1.3 更新用户信息
+
+```http
+PUT /api/users/profile
+```
+
+**请求体**:
+```json
+{
+  "profile": {
+    "name": "string",
+    "age": "integer",
+    "height": "number",
+    "weight": "number"
+  }
+}
+```
+
+### 2. 健康数据服务 (Health Data Service)
+
+#### 2.1 提交健康数据
+
+```http
+POST /api/health/data
+```
+
+**请求体**:
+```json
+{
+  "type": "string", // "vital_signs", "symptoms", "medication", "exercise"
+  "data": {
+    "timestamp": "datetime",
+    "values": {
+      "heart_rate": "number",
+      "blood_pressure": {
+        "systolic": "number",
+        "diastolic": "number"
+      },
+      "temperature": "number",
+      "weight": "number"
     }
-  }
+  },
+  "source": "string", // "manual", "device", "wearable"
+  "device_id": "string"
 }
 ```
 
 **响应**:
 ```json
 {
-  "success": true,
-  "data": {
-    "constitution_type": "string",
-    "health_score": 85,
-    "recommendations": ["string"],
-    "detailed_analysis": {
-      "qi_blood_status": "string",
-      "organ_health": "object",
-      "lifestyle_advice": ["string"]
-    }
-  }
+  "record_id": "uuid",
+  "user_id": "uuid",
+  "type": "string",
+  "timestamp": "datetime",
+  "status": "processed",
+  "blockchain_hash": "string"
 }
 ```
 
-### 小克服务 (XiaoKe Service)
-
-**基础URL**: `/agents/xiaoke`
-
-#### 1. 健康数据分析
+#### 2.2 查询健康数据
 
 ```http
-POST /agents/xiaoke/analyze
-```
-
-**请求参数**:
-```json
-{
-  "user_id": "string",
-  "data_type": "health_metrics|lifestyle|nutrition",
-  "data": "object",
-  "time_range": {
-    "start_date": "2024-01-01",
-    "end_date": "2024-12-31"
-  }
-}
-```
-
-**响应**:
-```json
-{
-  "success": true,
-  "data": {
-    "analysis_result": "object",
-    "trends": ["object"],
-    "insights": ["string"],
-    "recommendations": ["string"]
-  }
-}
-```
-
-#### 2. 个人健康档案
-
-```http
-GET /agents/xiaoke/profile/{user_id}
-```
-
-**响应**:
-```json
-{
-  "success": true,
-  "data": {
-    "user_profile": {
-      "basic_info": "object",
-      "health_metrics": "object",
-      "medical_history": "object",
-      "lifestyle_data": "object"
-    },
-    "last_updated": "2024-01-01T00:00:00Z"
-  }
-}
-```
-
-### 老克服务 (LaoKe Service)
-
-**基础URL**: `/agents/laoke`
-
-#### 1. 中医知识查询
-
-```http
-GET /agents/laoke/knowledge
+GET /api/health/data?type={type}&start_date={date}&end_date={date}&limit={number}
 ```
 
 **查询参数**:
-- `query`: 搜索关键词
-- `category`: 知识分类 (herbs|acupoints|theories|treatments)
-- `limit`: 返回数量限制 (默认10)
+- `type`: 数据类型 (可选)
+- `start_date`: 开始日期 (ISO 8601格式)
+- `end_date`: 结束日期 (ISO 8601格式)
+- `limit`: 返回记录数量限制 (默认100)
 
 **响应**:
 ```json
 {
-  "success": true,
-  "data": {
-    "results": [
-      {
-        "title": "string",
-        "content": "string",
-        "category": "string",
-        "source": "string",
-        "confidence": 0.95
-      }
-    ],
-    "total": 100
-  }
+  "data": [
+    {
+      "record_id": "uuid",
+      "type": "string",
+      "timestamp": "datetime",
+      "values": {},
+      "source": "string"
+    }
+  ],
+  "total": "integer",
+  "page": "integer",
+  "limit": "integer"
 }
 ```
 
-#### 2. 辨证论治
+#### 2.3 生成健康报告
 
 ```http
-POST /agents/laoke/syndrome-differentiation
+POST /api/health/reports/generate
 ```
 
-**请求参数**:
+**请求体**:
 ```json
 {
-  "user_id": "string",
-  "symptoms": ["string"],
-  "constitution": "string",
-  "diagnosis_data": "object"
-}
-```
-
-**响应**:
-```json
-{
-  "success": true,
-  "data": {
-    "syndrome": "string",
-    "treatment_principle": "string",
-    "herbal_formula": {
-      "name": "string",
-      "ingredients": ["object"],
-      "dosage": "string",
-      "usage": "string"
-    },
-    "lifestyle_advice": ["string"]
-  }
-}
-```
-
-### 索儿服务 (SoEr Service)
-
-**基础URL**: `/agents/soer`
-
-#### 1. 生活方式建议
-
-```http
-POST /agents/soer/lifestyle-advice
-```
-
-**请求参数**:
-```json
-{
-  "user_id": "string",
-  "current_lifestyle": {
-    "sleep_pattern": "object",
-    "exercise_routine": "object",
-    "diet_habits": "object",
-    "stress_level": "low|medium|high"
+  "report_type": "string", // "weekly", "monthly", "comprehensive"
+  "date_range": {
+    "start_date": "date",
+    "end_date": "date"
   },
-  "goals": ["string"]
+  "include_recommendations": "boolean"
 }
 ```
 
 **响应**:
 ```json
 {
-  "success": true,
+  "report_id": "uuid",
+  "status": "generating",
+  "estimated_completion": "datetime"
+}
+```
+
+#### 2.4 获取健康报告
+
+```http
+GET /api/health/reports/{report_id}
+```
+
+**响应**:
+```json
+{
+  "report_id": "uuid",
+  "user_id": "uuid",
+  "type": "string",
+  "generated_at": "datetime",
+  "status": "completed",
   "data": {
+    "summary": {
+      "overall_score": "number",
+      "trend": "string",
+      "key_insights": ["string"]
+    },
+    "vital_signs": {
+      "average_heart_rate": "number",
+      "blood_pressure_trend": "string",
+      "weight_change": "number"
+    },
     "recommendations": [
       {
-        "category": "sleep|exercise|nutrition|stress",
-        "advice": "string",
-        "priority": "high|medium|low",
-        "implementation_steps": ["string"]
+        "category": "string",
+        "priority": "string",
+        "description": "string",
+        "action_items": ["string"]
+      }
+    ]
+  }
+}
+```
+
+### 3. 智能体服务 (Agent Services)
+
+#### 3.1 小艾智能体 - 健康咨询
+
+```http
+POST /api/agents/xiaoai/chat
+```
+
+**请求体**:
+```json
+{
+  "message": "string",
+  "context": "string", // "health_consultation", "lifestyle_advice", "general"
+  "conversation_id": "uuid", // 可选，用于维持对话上下文
+  "user_data": {
+    "recent_symptoms": ["string"],
+    "current_medications": ["string"],
+    "lifestyle_factors": {}
+  }
+}
+```
+
+**响应**:
+```json
+{
+  "response": "string",
+  "conversation_id": "uuid",
+  "confidence": "number",
+  "recommendations": [
+    {
+      "type": "string",
+      "description": "string",
+      "priority": "string"
+    }
+  ],
+  "follow_up_questions": ["string"],
+  "timestamp": "datetime"
+}
+```
+
+#### 3.2 小克智能体 - 症状诊断
+
+```http
+POST /api/agents/xiaoke/diagnose
+```
+
+**请求体**:
+```json
+{
+  "symptoms": [
+    {
+      "name": "string",
+      "severity": "integer", // 1-10
+      "duration": "string",
+      "frequency": "string"
+    }
+  ],
+  "patient_info": {
+    "age": "integer",
+    "gender": "string",
+    "medical_history": ["string"],
+    "current_medications": ["string"]
+  },
+  "additional_info": "string"
+}
+```
+
+**响应**:
+```json
+{
+  "diagnosis_id": "uuid",
+  "primary_diagnosis": {
+    "condition": "string",
+    "confidence": "number",
+    "description": "string"
+  },
+  "differential_diagnosis": [
+    {
+      "condition": "string",
+      "confidence": "number",
+      "reasoning": "string"
+    }
+  ],
+  "recommendations": {
+    "immediate_actions": ["string"],
+    "lifestyle_changes": ["string"],
+    "follow_up": "string",
+    "red_flags": ["string"]
+  },
+  "tcm_analysis": {
+    "syndrome": "string",
+    "constitution": "string",
+    "treatment_principle": "string"
+  },
+  "timestamp": "datetime"
+}
+```
+
+#### 3.3 老克智能体 - 中医调理
+
+```http
+POST /api/agents/laoke/treatment
+```
+
+**请求体**:
+```json
+{
+  "diagnosis": "string",
+  "constitution": "string",
+  "symptoms": ["string"],
+  "treatment_goals": ["string"],
+  "preferences": {
+    "treatment_type": ["acupuncture", "herbal", "lifestyle"],
+    "intensity": "string",
+    "duration": "string"
+  }
+}
+```
+
+**响应**:
+```json
+{
+  "treatment_plan_id": "uuid",
+  "treatment_plan": {
+    "principle": "string",
+    "duration": "string",
+    "phases": [
+      {
+        "phase": "string",
+        "duration": "string",
+        "goals": ["string"],
+        "methods": [
+          {
+            "type": "string",
+            "description": "string",
+            "frequency": "string",
+            "notes": "string"
+          }
+        ]
+      }
+    ]
+  },
+  "herbal_formula": {
+    "name": "string",
+    "ingredients": [
+      {
+        "herb": "string",
+        "dosage": "string",
+        "function": "string"
       }
     ],
-    "personalized_plan": "object"
+    "preparation": "string",
+    "usage": "string"
+  },
+  "lifestyle_recommendations": {
+    "diet": ["string"],
+    "exercise": ["string"],
+    "sleep": ["string"],
+    "emotional": ["string"]
+  },
+  "monitoring": {
+    "indicators": ["string"],
+    "frequency": "string",
+    "adjustments": ["string"]
   }
 }
 ```
 
-## 健康数据服务 API
-
-**基础URL**: `/health-data`
-
-### 1. 健康指标记录
+#### 3.4 索儿智能体 - 健康教育
 
 ```http
-POST /health-data/metrics
+POST /api/agents/soer/educate
 ```
 
-**请求参数**:
+**请求体**:
 ```json
 {
-  "user_id": "string",
-  "metrics": {
-    "blood_pressure": {
-      "systolic": 120,
-      "diastolic": 80,
-      "timestamp": "2024-01-01T00:00:00Z"
-    },
-    "heart_rate": {
-      "value": 72,
-      "timestamp": "2024-01-01T00:00:00Z"
-    },
-    "weight": {
-      "value": 70.5,
-      "timestamp": "2024-01-01T00:00:00Z"
-    }
+  "topic": "string",
+  "user_level": "string", // "beginner", "intermediate", "advanced"
+  "format": "string", // "article", "video", "interactive", "quiz"
+  "personalization": {
+    "age_group": "string",
+    "health_conditions": ["string"],
+    "interests": ["string"]
   }
 }
 ```
 
-### 2. 健康报告生成
-
-```http
-GET /health-data/report/{user_id}
-```
-
-**查询参数**:
-- `period`: 报告周期 (daily|weekly|monthly|yearly)
-- `format`: 报告格式 (json|pdf)
-
-## 区块链服务 API
-
-**基础URL**: `/blockchain`
-
-### 1. 健康数据上链
-
-```http
-POST /blockchain/store-health-data
-```
-
-**请求参数**:
+**响应**:
 ```json
 {
-  "user_id": "string",
+  "content_id": "uuid",
+  "title": "string",
+  "content": {
+    "text": "string",
+    "media": [
+      {
+        "type": "string",
+        "url": "string",
+        "description": "string"
+      }
+    ],
+    "interactive_elements": [
+      {
+        "type": "string",
+        "data": {}
+      }
+    ]
+  },
+  "learning_objectives": ["string"],
+  "key_takeaways": ["string"],
+  "related_topics": ["string"],
+  "difficulty_level": "string",
+  "estimated_time": "integer"
+}
+```
+
+### 4. 区块链服务 (Blockchain Service)
+
+#### 4.1 创建健康记录哈希
+
+```http
+POST /api/blockchain/create-hash
+```
+
+**请求体**:
+```json
+{
+  "data": {
+    "record_id": "uuid",
+    "user_id": "uuid",
+    "timestamp": "datetime",
+    "data_hash": "string",
+    "metadata": {}
+  },
+  "privacy_level": "string" // "public", "private", "semi_private"
+}
+```
+
+**响应**:
+```json
+{
+  "transaction_id": "string",
+  "block_hash": "string",
+  "timestamp": "datetime",
+  "status": "pending",
+  "gas_used": "number"
+}
+```
+
+#### 4.2 验证健康记录
+
+```http
+POST /api/blockchain/verify
+```
+
+**请求体**:
+```json
+{
+  "record_id": "uuid",
   "data_hash": "string",
-  "data_type": "health_record|diagnosis_result|treatment_plan",
-  "metadata": {
-    "timestamp": "2024-01-01T00:00:00Z",
-    "data_source": "string",
-    "privacy_level": "public|private|restricted"
+  "transaction_id": "string"
+}
+```
+
+**响应**:
+```json
+{
+  "is_valid": "boolean",
+  "verification_details": {
+    "block_number": "integer",
+    "transaction_hash": "string",
+    "timestamp": "datetime",
+    "confirmations": "integer"
+  },
+  "integrity_check": {
+    "data_match": "boolean",
+    "timestamp_valid": "boolean",
+    "signature_valid": "boolean"
   }
 }
 ```
 
-### 2. 零知识证明验证
+#### 4.3 查询区块链记录
 
 ```http
-POST /blockchain/verify-zkp
+GET /api/blockchain/records?user_id={uuid}&start_date={date}&end_date={date}
 ```
 
-**请求参数**:
+**响应**:
 ```json
 {
-  "proof": "string",
-  "public_inputs": "object",
-  "verification_key": "string"
-}
-```
-
-## 诊断服务 API
-
-### 望诊服务
-
-**基础URL**: `/diagnosis/wang-zhen`
-
-```http
-POST /diagnosis/wang-zhen/analyze
-```
-
-**请求参数**:
-```json
-{
-  "user_id": "string",
-  "images": {
-    "tongue": "base64_string",
-    "face": "base64_string"
+  "records": [
+    {
+      "record_id": "uuid",
+      "transaction_id": "string",
+      "block_hash": "string",
+      "timestamp": "datetime",
+      "data_type": "string",
+      "privacy_level": "string",
+      "status": "confirmed"
+    }
+  ],
+  "total": "integer",
+  "blockchain_info": {
+    "network": "string",
+    "latest_block": "integer",
+    "gas_price": "number"
   }
 }
 ```
 
-### 闻诊服务
+### 5. 诊断服务 (Diagnostic Services)
 
-**基础URL**: `/diagnosis/wen-zhen`
+#### 5.1 望诊 - 图像分析
 
 ```http
-POST /diagnosis/wen-zhen/analyze
+POST /api/diagnostic/look/analyze
 ```
 
-**请求参数**:
-```json
-{
-  "user_id": "string",
-  "audio_data": "base64_string",
-  "duration": 30
+**请求体** (multipart/form-data):
+```
+image: file (支持 jpg, png, 最大10MB)
+analysis_type: string ("tongue", "face", "skin", "eyes")
+metadata: json {
+  "lighting_conditions": "string",
+  "image_quality": "string",
+  "patient_age": "integer",
+  "patient_gender": "string"
 }
 ```
 
-### 问诊服务
-
-**基础URL**: `/diagnosis/wen-zhen-inquiry`
-
-```http
-POST /diagnosis/wen-zhen-inquiry/session
-```
-
-**请求参数**:
+**响应**:
 ```json
 {
-  "user_id": "string",
-  "session_type": "initial|follow_up",
-  "context": "object"
+  "analysis_id": "uuid",
+  "analysis_type": "string",
+  "results": {
+    "overall_assessment": "string",
+    "specific_findings": [
+      {
+        "feature": "string",
+        "description": "string",
+        "significance": "string",
+        "confidence": "number"
+      }
+    ],
+    "tcm_interpretation": {
+      "constitution": "string",
+      "pathological_patterns": ["string"],
+      "organ_systems": ["string"]
+    }
+  },
+  "recommendations": ["string"],
+  "confidence_score": "number",
+  "processing_time": "number"
 }
 ```
 
-### 切诊服务
-
-**基础URL**: `/diagnosis/qie-zhen`
+#### 5.2 闻诊 - 声音分析
 
 ```http
-POST /diagnosis/qie-zhen/analyze
+POST /api/diagnostic/listen/analyze
 ```
 
-**请求参数**:
+**请求体** (multipart/form-data):
+```
+audio: file (支持 wav, mp3, 最大50MB)
+analysis_type: string ("voice", "breathing", "cough", "heartbeat")
+duration: integer (录音时长，秒)
+```
+
+**响应**:
 ```json
 {
-  "user_id": "string",
-  "pulse_data": {
-    "waveform": "array",
-    "duration": 60,
-    "sampling_rate": 1000
+  "analysis_id": "uuid",
+  "audio_quality": {
+    "clarity": "number",
+    "noise_level": "number",
+    "duration": "number"
+  },
+  "analysis_results": {
+    "voice_characteristics": {
+      "pitch": "string",
+      "tone": "string",
+      "strength": "string",
+      "rhythm": "string"
+    },
+    "breathing_pattern": {
+      "rate": "number",
+      "depth": "string",
+      "regularity": "string"
+    },
+    "abnormal_sounds": ["string"]
+  },
+  "tcm_assessment": {
+    "qi_condition": "string",
+    "organ_function": ["string"],
+    "pathological_indicators": ["string"]
+  },
+  "recommendations": ["string"]
+}
+```
+
+#### 5.3 问诊 - 智能问诊
+
+```http
+POST /api/diagnostic/inquiry/session
+```
+
+**请求体**:
+```json
+{
+  "session_type": "string", // "initial", "follow_up", "symptom_specific"
+  "patient_info": {
+    "age": "integer",
+    "gender": "string",
+    "chief_complaint": "string"
+  },
+  "previous_session_id": "uuid" // 可选，用于继续之前的问诊
+}
+```
+
+**响应**:
+```json
+{
+  "session_id": "uuid",
+  "current_question": {
+    "question_id": "string",
+    "text": "string",
+    "type": "string", // "multiple_choice", "scale", "text", "yes_no"
+    "options": ["string"], // 仅用于选择题
+    "context": "string"
+  },
+  "progress": {
+    "completed_questions": "integer",
+    "total_estimated": "integer",
+    "completion_percentage": "number"
+  },
+  "session_status": "string" // "active", "completed", "paused"
+}
+```
+
+#### 5.4 提交问诊答案
+
+```http
+POST /api/diagnostic/inquiry/answer
+```
+
+**请求体**:
+```json
+{
+  "session_id": "uuid",
+  "question_id": "string",
+  "answer": "string", // 或 number，根据问题类型
+  "confidence": "number", // 可选，用户对答案的确信度
+  "additional_notes": "string" // 可选
+}
+```
+
+**响应**:
+```json
+{
+  "next_question": {
+    "question_id": "string",
+    "text": "string",
+    "type": "string",
+    "options": ["string"]
+  },
+  "session_complete": "boolean",
+  "preliminary_assessment": {
+    "symptom_clusters": ["string"],
+    "severity_indicators": ["string"],
+    "urgency_level": "string"
+  }
+}
+```
+
+#### 5.5 切诊 - 脉象分析
+
+```http
+POST /api/diagnostic/palpation/pulse
+```
+
+**请求体**:
+```json
+{
+  "measurement_data": {
+    "duration": "integer", // 测量时长（秒）
+    "sensor_data": [
+      {
+        "timestamp": "number",
+        "pressure": "number",
+        "position": "string" // "cun", "guan", "chi"
+      }
+    ],
+    "measurement_conditions": {
+      "patient_position": "string",
+      "room_temperature": "number",
+      "time_of_day": "string"
+    }
+  },
+  "patient_state": {
+    "recent_activity": "string",
+    "emotional_state": "string",
+    "medications": ["string"]
+  }
+}
+```
+
+**响应**:
+```json
+{
+  "pulse_analysis": {
+    "rate": "number",
+    "rhythm": "string",
+    "strength": "string",
+    "depth": "string",
+    "width": "string",
+    "length": "string"
+  },
+  "pulse_qualities": [
+    {
+      "quality": "string",
+      "description": "string",
+      "clinical_significance": "string"
+    }
+  ],
+  "tcm_interpretation": {
+    "organ_systems": ["string"],
+    "qi_blood_status": "string",
+    "pathological_patterns": ["string"],
+    "constitution_type": "string"
+  },
+  "recommendations": {
+    "immediate": ["string"],
+    "lifestyle": ["string"],
+    "follow_up": "string"
   }
 }
 ```
 
 ## 错误处理
 
-所有API都使用统一的错误响应格式：
+所有API端点都使用标准的HTTP状态码，并返回统一格式的错误响应：
 
 ```json
 {
-  "success": false,
   "error": {
-    "code": "ERROR_CODE",
-    "message": "错误描述",
-    "details": "详细错误信息"
-  },
-  "timestamp": "2024-01-01T00:00:00Z"
+    "code": "string",
+    "message": "string",
+    "details": "string",
+    "timestamp": "datetime",
+    "request_id": "uuid"
+  }
 }
 ```
 
 ### 常见错误码
 
-- `AUTH_001`: 认证失败
-- `AUTH_002`: Token过期
-- `PARAM_001`: 参数缺失
-- `PARAM_002`: 参数格式错误
-- `RATE_001`: 请求频率超限
-- `SERVER_001`: 服务器内部错误
-- `SERVICE_001`: 服务不可用
+- `400 Bad Request`: 请求参数错误
+- `401 Unauthorized`: 未授权访问
+- `403 Forbidden`: 权限不足
+- `404 Not Found`: 资源不存在
+- `429 Too Many Requests`: 请求频率超限
+- `500 Internal Server Error`: 服务器内部错误
+- `503 Service Unavailable`: 服务暂时不可用
 
-## 限流规则
+## 速率限制
 
-- 普通用户：100请求/分钟
-- VIP用户：500请求/分钟
-- 企业用户：1000请求/分钟
+为了保护系统稳定性，API实施了速率限制：
 
-## SDK和示例
+- **标准用户**: 每分钟100次请求
+- **高级用户**: 每分钟500次请求
+- **企业用户**: 每分钟2000次请求
 
-### JavaScript SDK
+超出限制时，将返回`429 Too Many Requests`状态码。
 
-```javascript
-import { SuokeLifeAPI } from '@suoke-life/sdk';
+## 数据格式
 
-const client = new SuokeLifeAPI({
-  apiKey: 'your_api_key',
-  baseURL: 'https://api.suoke-life.com/v1'
-});
+### 日期时间格式
 
-// 健康咨询
-const response = await client.xiaoai.consult({
-  user_id: 'user123',
-  message: '我最近感觉疲劳，该怎么办？'
-});
+所有日期时间字段都使用ISO 8601格式：
+```
+2024-01-15T10:30:00Z
 ```
 
-### Python SDK
+### 数值精度
 
-```python
-from suoke_life import SuokeLifeClient
+- 体重、身高等测量值：保留2位小数
+- 温度：保留1位小数
+- 血压：整数值
+- 心率：整数值
 
-client = SuokeLifeClient(
-    api_key='your_api_key',
-    base_url='https://api.suoke-life.com/v1'
-)
+## SDK和示例代码
 
-# 健康数据分析
-result = client.xiaoke.analyze({
-    'user_id': 'user123',
-    'data_type': 'health_metrics',
-    'data': {...}
-})
-```
+我们提供了多种编程语言的SDK：
 
-## 更新日志
+- [JavaScript/TypeScript SDK](https://github.com/suoke-life/sdk-js)
+- [Python SDK](https://github.com/suoke-life/sdk-python)
+- [Java SDK](https://github.com/suoke-life/sdk-java)
+- [Swift SDK](https://github.com/suoke-life/sdk-swift)
 
-### v1.0.0 (2024-01-01)
-- 初始版本发布
-- 支持四大智能体服务
-- 完整的健康数据管理
-- 区块链数据存储
+## 支持和反馈
+
+如有API使用问题或建议，请联系：
+
+- 技术支持邮箱: api-support@suoke.life
+- 开发者社区: https://community.suoke.life
+- GitHub Issues: https://github.com/suoke-life/api-issues
 
 ---
 
-**文档更新时间**: 2024-01-01  
-**联系方式**: api-support@suoke-life.com 
+*最后更新: 2024年1月15日*
+*API版本: v1.0.0* 

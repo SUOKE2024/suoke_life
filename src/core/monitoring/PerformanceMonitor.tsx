@@ -2,14 +2,14 @@ import { usePerformanceMonitor } from "../../hooks/usePerformanceMonitor";
 import React from "react";
 // 索克生活 - 性能监控系统 - 提供性能指标收集、分析、报告和优化建议
 export interface PerformanceMetric {
-  name: string;
+  name: string;,
   value: number;
-  unit: string;
+  unit: string;,
   timestamp: number;
   category: PerformanceCategory;
   tags?: Record<string, string>;
   threshold?: {
-    warning: number;
+    warning: number;,
   critical: number;
 };
 }
@@ -24,29 +24,29 @@ export enum PerformanceCategory {
   BUSINESS_LOGIC = "BUSINESS_LOGIC"
 }
 export interface PerformanceReport {
-  id: string;
+  id: string;,
   timestamp: number;
-  duration: number;
+  duration: number;,
   metrics: PerformanceMetric[];
-  summary: {;
+  summary: {;,
   totalMetrics: number;
-    warningCount: number;
+    warningCount: number;,
   criticalCount: number;
-    averageResponseTime: number;
+    averageResponseTime: number;,
   memoryUsage: number;
     cpuUsage: number;
 };
   recommendations: string[],
-  trends: {
-    improving: string[],
-  degrading: string[];
-    stable: string[];
+  trends: {,
+  improving: string[],
+  degrading: string[];,
+  stable: string[];
   };
 }
 export interface PerformanceThreshold {
-  category: PerformanceCategory;
+  category: PerformanceCategory;,
   metricName: string;
-  warning: number;
+  warning: number;,
   critical: number;
   unit: string;
 }
@@ -186,7 +186,7 @@ export class PerformanceMonitor {
       );
       allMetrics.push(...recentMetrics);
       // 统计警告和严重问题
-      recentMetrics.forEach(((metric) => {
+      recentMetrics.forEach((metric) => {
         if (metric.threshold) {
           if (metric.value >= metric.threshold.critical) {
             criticalCount++;
@@ -278,7 +278,7 @@ export class PerformanceMonitor {
     }
   }
   private notifyListeners(metric: PerformanceMetric): void {
-    this.listeners.forEach(((listener) => {
+    this.listeners.forEach((listener) => {
       try {
         listener(metric);
       } catch (error) {

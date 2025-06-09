@@ -28,7 +28,7 @@ interface AgentMonitorProps {
 * 状态卡片属性
 */
 interface StatusCardProps {
-  agentType: AgentType;
+  agentType: AgentType;,
   status: AgentHealthStatus;
   metrics?: AgentMetrics;
   onRestart?: () => void;
@@ -72,8 +72,8 @@ const StatusCard: React.FC<StatusCardProps> = ({
           <Text style={styles.agentName}>{agentRole.name}</Text>
           <Text style={styles.agentTitle}>{agentRole.title}</Text>
         </View>
-        <View
-          style={{[
+        <View;
+          style={[
             styles.statusIndicator,
             { backgroundColor: getStatusColor(status.status) }}
           ]}
@@ -121,7 +121,7 @@ const StatusCard: React.FC<StatusCardProps> = ({
       <View style={styles.capabilitiesContainer}>
         <Text style={styles.capabilitiesTitle}>能力:</Text>
         <View style={styles.capabilitiesList}>
-          {status.capabilities.slice(0, 3).map((capability, index) => ())
+          {status.capabilities.slice(0, 3).map(capability, index) => ())
             <Text key={index} style={styles.capabilityTag}>
               {capability}
             </Text>
@@ -144,13 +144,13 @@ const StatusCard: React.FC<StatusCardProps> = ({
   );
 };
 interface AgentMonitorState {
-  agents: AgentInfo[];
+  agents: AgentInfo[];,
   metrics: Map<string, AgentMetrics>;
-  collaborationStats: {;
+  collaborationStats: {;,
   total: number;
-    active: number;
+    active: number;,
   completed: number;
-    failed: number;
+    failed: number;,
   averageDuration: number;
 };
   isLoading: boolean,
@@ -272,14 +272,14 @@ export const AgentMonitor: React.FC<AgentMonitorProps> = ({
             <Text style={styles.agentName}>{agent.name}</Text>;
             <Text style={styles.agentType}>{agent.type}</Text>;
           </View>;
-          <View style={{[styles.statusIndicator, { backgroundColor: getStatusColor(agent.status) }}]} />;
+          <View style={[styles.statusIndicator, { backgroundColor: getStatusColor(agent.status) }}]} />;
         </View>;
         <View style={styles.metricsContainer}>;
           <View style={styles.metricRow}>;
             <Text style={styles.metricLabel}>负载:</Text>;
             <View style={styles.loadBar}>;
               <View ;
-                style={{[;
+                style={[;
                   styles.loadFill,{width: `${agent.load * 100}}%`,backgroundColor: getHealthColor(agent.load);
                   }
                 ]}
@@ -310,7 +310,7 @@ export const AgentMonitor: React.FC<AgentMonitorProps> = ({
         <View style={styles.capabilitiesContainer}>
           <Text style={styles.capabilitiesTitle}>能力:</Text>
           <View style={styles.capabilitiesList}>
-            {agent.capabilities.slice(0, 3).map((capability, index) => ())
+            {agent.capabilities.slice(0, 3).map(capability, index) => ())
               <View key={index} style={styles.capabilityTag}>
                 <Text style={styles.capabilityText}>{capability}</Text>
               </View>
@@ -335,15 +335,15 @@ export const AgentMonitor: React.FC<AgentMonitorProps> = ({
             <Text style={styles.statLabel}>总计</Text>
           </View>
           <View style={styles.statItem}>
-            <Text style={{[styles.statValue, { color: '#4CAF50' }}]}>{collaborationStats.active}</Text>
+            <Text style={[styles.statValue, { color: '#4CAF50' }}]}>{collaborationStats.active}</Text>
             <Text style={styles.statLabel}>活跃</Text>;
           </View>;
           <View style={styles.statItem}>;
-            <Text style={{[styles.statValue, { color: '#2196F3' }}]}>{collaborationStats.completed}</Text>;
+            <Text style={[styles.statValue, { color: '#2196F3' }}]}>{collaborationStats.completed}</Text>;
             <Text style={styles.statLabel}>完成</Text>;
           </View>;
           <View style={styles.statItem}>;
-            <Text style={{[styles.statValue, { color: '#F44336' }}]}>{collaborationStats.failed}</Text>;
+            <Text style={[styles.statValue, { color: '#F44336' }}]}>{collaborationStats.failed}</Text>;
             <Text style={styles.statLabel}>失败</Text>;
           </View>;
         </View>;
@@ -355,14 +355,14 @@ export const AgentMonitor: React.FC<AgentMonitorProps> = ({
     );
   };
   // 组件挂载时加载数据
-  useEffect(() => {
+  useEffect() => {
     loadAgentData();
     // 设置定时刷新
     const interval = setInterval(loadAgentData, 30000); // 30秒刷新一次
     return () => clearInterval(interval);
   }, [loadAgentData]);
   return (
-  <ScrollView
+  <ScrollView;
       style={[styles.container, style]}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -543,8 +543,8 @@ const styles = StyleSheet.create({
     marginBottom: 4;
   },capabilityText: {fontSize: 12,color: "#1976d2";
   },moreCapabilities: {fontSize: 12,color: "#666",fontStyle: "italic";
-  },loadingText: {
-      textAlign: "center",
+  },loadingText: {,
+  textAlign: "center",
       color: "#666",fontSize: 16,marginTop: 20;
   };
 });

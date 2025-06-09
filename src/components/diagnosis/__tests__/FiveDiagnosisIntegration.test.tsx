@@ -166,11 +166,16 @@ describe('FiveDiagnosisScreen Integration', () => {
 describe('Five Diagnosis Components Integration', () => {
   it('should have all required diagnosis components', () => {
     // 验证所有诊断组件都已正确导入
-    const LookDiagnosisComponent = require('../components/LookDiagnosisComponent').LookDiagnosisComponent;
-    const ListenDiagnosisComponent = require('../components/ListenDiagnosisComponent').ListenDiagnosisComponent;
-    const InquiryDiagnosisComponent = require('../components/InquiryDiagnosisComponent').InquiryDiagnosisComponent;
-    const PalpationDiagnosisComponent = require('../components/PalpationDiagnosisComponent').PalpationDiagnosisComponent;
-    const CalculationDiagnosisComponent = require('../CalculationDiagnosisComponent').default;
+    const LookDiagnosisComponent =
+      require('../components/LookDiagnosisComponent').LookDiagnosisComponent;
+    const ListenDiagnosisComponent =
+      require('../components/ListenDiagnosisComponent').ListenDiagnosisComponent;
+    const InquiryDiagnosisComponent =
+      require('../components/InquiryDiagnosisComponent').InquiryDiagnosisComponent;
+    const PalpationDiagnosisComponent =
+      require('../components/PalpationDiagnosisComponent').PalpationDiagnosisComponent;
+    const CalculationDiagnosisComponent =
+      require('../CalculationDiagnosisComponent').default;
 
     expect(LookDiagnosisComponent).toBeDefined();
     expect(ListenDiagnosisComponent).toBeDefined();
@@ -183,12 +188,15 @@ describe('Five Diagnosis Components Integration', () => {
     // 验证所有组件都遵循相同的接口规范
     const components = [
       require('../components/LookDiagnosisComponent').LookDiagnosisComponent,
-      require('../components/ListenDiagnosisComponent').ListenDiagnosisComponent,
-      require('../components/InquiryDiagnosisComponent').InquiryDiagnosisComponent,
-      require('../components/PalpationDiagnosisComponent').PalpationDiagnosisComponent,
+      require('../components/ListenDiagnosisComponent')
+        .ListenDiagnosisComponent,
+      require('../components/InquiryDiagnosisComponent')
+        .InquiryDiagnosisComponent,
+      require('../components/PalpationDiagnosisComponent')
+        .PalpationDiagnosisComponent,
     ];
 
-    components.forEach(Component => {
+    components.forEach((Component) => {
       expect(typeof Component).toBe('function');
       // 这里可以添加更多的接口一致性检查
     });
@@ -232,6 +240,8 @@ describe('Five Diagnosis Service Integration', () => {
     };
 
     await fiveDiagnosisService.performDiagnosis(mockInput);
-    expect(fiveDiagnosisService.performDiagnosis).toHaveBeenCalledWith(mockInput);
+    expect(fiveDiagnosisService.performDiagnosis).toHaveBeenCalledWith(
+      mockInput
+    );
   });
-}); 
+});

@@ -8,7 +8,7 @@ interface ApiResponse<T = any /> { data: T;/    , success: boolean;
   serviceUrl: string;
 /
   apiKey?: string;
-  timeout: number;
+  timeout: number;,
   retryAttempts: number;
 }
 // 用户偏好设置 * export interface UserPreferences {
@@ -16,7 +16,7 @@ interface ApiResponse<T = any /> { data: T;/    , success: boolean;
   highContrast: boolean,voiceType: "male" | "female" | "child",speechRate: number;
 //;
   dialect?: string;
-  screenReader: boolean;
+  screenReader: boolean;,
   signLanguage: boolean;
   enabledFeatures: string[];
 }
@@ -25,14 +25,14 @@ interface ApiResponse<T = any /> { data: T;/    , success: boolean;
   / base64编码的图像数据* *, userId: string * /     ;
   preferences?: UserPreferences;
   location?:  {
-    latitude: number;
-    longitude: number;
+    latitude: number;,
+  longitude: number;
 };
 }
 export interface BlindAssistanceResponse {
-  sceneDescription: string;
-  obstacles: Array<{type: string;
-    distance: number,direction: string,confidence: number;
+  sceneDescription: string;,
+  obstacles: Array<{type: string;,
+  distance: number,direction: string,confidence: number;
 }>;
   navigationGuidance: string,
   confidence: number;
@@ -43,25 +43,25 @@ export interface BlindAssistanceResponse {
   language: string;
 }
 export interface SignLanguageResponse {
-  text: string;
+  text: string;,
   confidence: number;
-  segments: Array<{text: string;
-    startTimeMs: number,endTimeMs: number,confidence: number;
+  segments: Array<{text: string;,
+  startTimeMs: number,endTimeMs: number,confidence: number;
 }>;
 }
 // 屏幕阅读接口 * export interface ScreenReadingRequest {
   screenData: string  ;
   / base64编码的屏幕截图* *, userId: string * /     ;
   context?: string;
-  preferences?: UserPreferences
+  preferences?: UserPreferences;
 }
 export interface ScreenReadingResponse {
-  screenDescription: string;
-  elements: Array<{elementType: string;
-    content: string;
-    action: string;
-    location: {x: number;
-      y: number,width: number,height: number;
+  screenDescription: string;,
+  elements: Array<{elementType: string;,
+  content: string;
+    action: string;,
+  location: {x: number;,
+  y: number,width: number,height: number;
 };
   }>;
   audioDescription?: string; //
@@ -70,7 +70,7 @@ export interface ScreenReadingResponse {
   / base64编码的音频数据* *, userId: string * /     ;
   context?: string;
   language: string;
-  dialect?: string
+  dialect?: string;
 }
 export interface VoiceAssistanceResponse {
   recognizedText: string,responseText: string;
@@ -78,10 +78,10 @@ export interface VoiceAssistanceResponse {
 }
 // 内容转换接口 * export interface AccessibleContentRequest {
   contentId: string,
-  contentType: string;
+  contentType: string;,
   userId: string;
   targetFormat: "audio" | "braille" | "large-text" | "high-contrast";
-  preferences?: UserPreferences
+  preferences?: UserPreferences;
 };
 export interface AccessibleContentResponse {
   accessibleContent: string;
@@ -92,7 +92,7 @@ export interface AccessibleContentResponse {
   audioData: string;
   / base64编码的音频数据* *, userId: string, * /  ;
   sourceLanguage: string,targetLanguage: string;
-  context?: string
+  context?: string;
 }
 export interface SpeechTranslationResponse {
   originalText: string,translatedText: string;
@@ -100,25 +100,25 @@ export interface SpeechTranslationResponse {
 }
 // 健康数据收集接口 * export interface BackgroundCollectionRequest {
   userId: string,
-  dataTypes: string[];
+  dataTypes: string[];,
   collectionInterval: number;
   privacyLevel: "minimal" | "standard" | "comprehensive";
 }
 export interface BackgroundCollectionResponse {
-  success: boolean;
+  success: boolean;,
   message: string;
   collectionId: string;
 }
 // 危机报警接口 * export interface HealthAlertRequest {
     userId: string,alertType: "emergency" | "warning" | "info",healthData: Record<string, any>;
-  location?:  { latitude: number;
-    longitude: number;
+  location?:  { latitude: number;,
+  longitude: number;
 }
 }
 export interface HealthAlertResponse {
-  alertId: string;
+  alertId: string;,
   alertLevel: "critical" | "high" | "medium" | "low";
-  message: string;
+  message: string;,
   recommendedActions: Array<{action: string,priority: number,description: string;
 }>;
   agentActions: Array<{,

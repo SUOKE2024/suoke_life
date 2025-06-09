@@ -15,9 +15,9 @@ import { GameSettings, MazeDifficulty } from '../../types/maze';
   Alert;
 } from 'react-native';
 interface GameSettingsModalProps {
-  visible: boolean;
+  visible: boolean;,
   settings: GameSettings | null;
-  onClose: () => void;
+  onClose: () => void;,
   onSave: (settings: GameSettings) => void;
 }
 const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
@@ -31,7 +31,7 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
   /**
   * 初始化设置
   */
-  useEffect(() => {
+  useEffect() => {
     if (settings) {
       setLocalSettings(settings);
     }
@@ -85,7 +85,7 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
           <Text style={styles.settingDescription}>{description}</Text>;
         </View>;
       </View>;
-      <Switch
+      <Switch;
         value={value};
         onValueChange={onValueChange};
         trackColor={
@@ -114,15 +114,15 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
       </View>
       <View style={styles.selectContainer}>
         {options.map(option) => ()
-          <TouchableOpacity
+          <TouchableOpacity;
             key={option.value}
-            style={{[
+            style={[
               styles.selectOption,
               value === option.value && styles.selectedOption;
             ]}}
             onPress={() => onValueChange(option.value)}
           >
-            <Text style={{[
+            <Text style={[
               styles.selectOptionText,
               value === option.value && styles.selectedOptionText;
             ]}}>
@@ -134,7 +134,7 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
     </View>
   );
   return (
-  <Modal
+  <Modal;
       visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
@@ -254,7 +254,7 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
         </ScrollView>
         {// 底部操作栏}
         <View style={styles.footer}>
-          <TouchableOpacity
+          <TouchableOpacity;
             style={styles.resetButton}
             onPress={handleReset}
           >
@@ -262,13 +262,13 @@ const GameSettingsModal: React.FC<GameSettingsModalProps> = ({
             <Text style={styles.resetButtonText}>重置</Text>
           </TouchableOpacity>
           <View style={styles.actionButtons}>
-            <TouchableOpacity
+            <TouchableOpacity;
               style={styles.cancelButton}
               onPress={onClose};
             >;
               <Text style={styles.cancelButtonText}>取消</Text>;
             </TouchableOpacity>;
-            <TouchableOpacity
+            <TouchableOpacity;
               style={styles.saveButton};
               onPress={handleSave};
             >;
@@ -415,8 +415,8 @@ const styles = StyleSheet.create({
   fontSize: 16,
     color: '#666',
     fontWeight: '500';
-  },saveButton: {
-      flexDirection: "row",
+  },saveButton: {,
+  flexDirection: "row",
       alignItems: 'center',paddingVertical: 12,paddingHorizontal: 20,borderRadius: 8,backgroundColor: '#4CAF50';
   },saveButtonText: {fontSize: 16,color: '#FFFFFF',marginLeft: 4,fontWeight: '500';
   };

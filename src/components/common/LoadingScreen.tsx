@@ -7,7 +7,7 @@ importReact from "react";
 interface LoadingScreenProps {
   message?: string;
 size?: "small" | "large";
-  color?: string
+  color?: string;
 }
 export const LoadingScreen: React.FC<LoadingScreenProps /    > = ({
   // 性能监控;
@@ -27,7 +27,7 @@ performanceMonitor.recordRender();
     </    View;>
   ;);
 }
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   flex: 1,
     justifyContent: "center",
     alignItems: "center",

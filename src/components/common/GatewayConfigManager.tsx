@@ -5,15 +5,15 @@ import { analyticsService } from '../../services/analyticsService';
 import { syncService } from '../../services/syncService';
 import { offlineService } from '../../services/offlineService';
 interface ConfigSection {
-  id: string;
+  id: string;,
   title: string;
-  icon: string;
+  icon: string;,
   configs: ConfigItem[];
 }
 interface ConfigItem {
-  key: string;
+  key: string;,
   label: string;
-  type: 'boolean' | 'number' | 'string' | 'select';
+  type: 'boolean' | 'number' | 'string' | 'select';,
   value: any;
   description?: string;
   options?: { label: string; value: any;
@@ -28,13 +28,12 @@ interface GatewayConfigManagerProps {
 }
 export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
   visible = true,
-  onClose,
-}) => {
+  onClose}) => {
   const [configs, setConfigs] = useState<ConfigSection[]>([]);
   const [activeSection, setActiveSection] = useState('gateway');
   const [hasChanges, setHasChanges] = useState(false);
   const [saving, setSaving] = useState(false);
-  useEffect(() => {
+  useEffect() => {
     if (visible) {
       loadConfigurations();
     }
@@ -48,8 +47,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
         retryDelay: configService.get('gateway.retryDelay', 1000),
         enableCache: configService.get('gateway.enableCache', true),
         cacheTimeout: configService.get('gateway.cacheTimeout', 300000),
-        enableCircuitBreaker: configService.get('gateway.enableCircuitBreaker', true),
-      };
+        enableCircuitBreaker: configService.get('gateway.enableCircuitBreaker', true)};
       const analyticsConfig = analyticsService.getConfig();
       const syncConfig = syncService.getConfig();
       const offlineConfig = offlineService.getSyncStatus();
@@ -67,8 +65,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               description: '单个请求的最大等待时间',
               min: 1000,
               max: 120000,
-              unit: 'ms',
-            },
+              unit: 'ms'},
             {
       key: "retryAttempts",
       label: '重试次数',
@@ -76,8 +73,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               value: gatewayConfig.retryAttempts || 3,
               description: '请求失败时的重试次数',
               min: 0,
-              max: 10,
-            },
+              max: 10},
             {
       key: "retryDelay",
       label: '重试延迟',
@@ -86,15 +82,13 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               description: '重试之间的延迟时间',
               min: 100,
               max: 10000,
-              unit: 'ms',
-            },
+              unit: 'ms'},
             {
       key: "enableCache",
       label: '启用缓存',
               type: 'boolean',
               value: gatewayConfig.enableCache !== false,
-              description: '是否启用响应缓存',
-            },
+              description: '是否启用响应缓存'},
             {
       key: "cacheTimeout",
       label: '缓存超时时间',
@@ -103,17 +97,13 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               description: '缓存数据的有效期',
               min: 10000,
               max: 3600000,
-              unit: 'ms',
-            },
+              unit: 'ms'},
             {
       key: "enableCircuitBreaker",
       label: '启用熔断器',
               type: 'boolean',
               value: gatewayConfig.enableCircuitBreaker !== false,
-              description: '是否启用熔断器保护',
-            },
-          ],
-        },
+              description: '是否启用熔断器保护'}]},
         {
       id: "analytics",
       title: '分析配置',
@@ -124,8 +114,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
       label: '启用分析',
               type: 'boolean',
               value: analyticsConfig.enabled,
-              description: '是否收集分析数据',
-            },
+              description: '是否收集分析数据'},
             {
       key: "batchSize",
       label: '批处理大小',
@@ -133,8 +122,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               value: analyticsConfig.batchSize,
               description: '批量发送事件的数量',
               min: 10,
-              max: 200,
-            },
+              max: 200},
             {
       key: "flushInterval",
       label: '刷新间隔',
@@ -143,31 +131,25 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               description: '自动发送数据的间隔',
               min: 5000,
               max: 300000,
-              unit: 'ms',
-            },
+              unit: 'ms'},
             {
       key: "enableUserTracking",
       label: '用户行为跟踪',
               type: 'boolean',
               value: analyticsConfig.enableUserTracking,
-              description: '是否跟踪用户行为',
-            },
+              description: '是否跟踪用户行为'},
             {
       key: "enablePerformanceTracking",
       label: '性能跟踪',
               type: 'boolean',
               value: analyticsConfig.enablePerformanceTracking,
-              description: '是否跟踪性能指标',
-            },
+              description: '是否跟踪性能指标'},
             {
       key: "enableErrorTracking",
       label: '错误跟踪',
               type: 'boolean',
               value: analyticsConfig.enableErrorTracking,
-              description: '是否跟踪错误信息',
-            },
-          ],
-        },
+              description: '是否跟踪错误信息'}]},
         {
       id: "sync",
       title: '同步配置',
@@ -178,15 +160,13 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
       label: '启用同步',
               type: 'boolean',
               value: syncConfig.enabled,
-              description: '是否启用数据同步',
-            },
+              description: '是否启用数据同步'},
             {
       key: "autoSync",
       label: '自动同步',
               type: 'boolean',
               value: syncConfig.autoSync,
-              description: '是否自动同步数据',
-            },
+              description: '是否自动同步数据'},
             {
       key: "syncInterval",
       label: '同步间隔',
@@ -195,8 +175,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               description: '自动同步的时间间隔',
               min: 60000,
               max: 3600000,
-              unit: 'ms',
-            },
+              unit: 'ms'},
             {
       key: "batchSize",
       label: '批处理大小',
@@ -204,8 +183,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               value: syncConfig.batchSize,
               description: '批量同步的数据量',
               min: 10,
-              max: 200,
-            },
+              max: 200},
             {
       key: "conflictResolution",
       label: '冲突解决策略',
@@ -224,9 +202,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
       value: 'remote' },
                 {
       label: "自动合并",
-      value: 'merge' },
-              ],
-            },
+      value: 'merge' }]},
             {
       key: "retryAttempts",
       label: '重试次数',
@@ -234,10 +210,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               value: syncConfig.retryAttempts,
               description: '同步失败时的重试次数',
               min: 0,
-              max: 10,
-            },
-          ],
-        },
+              max: 10}]},
         {
       id: "offline",
       title: '离线配置',
@@ -248,8 +221,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
       label: '启用离线模式',
               type: 'boolean',
               value: true, // 从离线服务状态推断
-              description: '是否支持离线操作',
-            },
+              description: '是否支持离线操作'},
             {
       key: "maxCacheSize",
       label: '最大缓存大小',
@@ -257,8 +229,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               value: 50, // 默认值
               description: '离线缓存的最大条目数',
               min: 10,
-              max: 500,
-            },
+              max: 500},
             {
       key: "cacheStrategy",
       label: '缓存策略',
@@ -274,19 +245,13 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
       value: 'fifo' },
                 {
       label: "TTL (基于时间)",
-      value: 'ttl' },
-              ],
-            },
+      value: 'ttl' }]},
             {
       key: "autoCleanup",
       label: '自动清理',
               type: 'boolean',
               value: true,
-              description: '是否自动清理过期缓存',
-            },
-          ],
-        },
-      ];
+              description: '是否自动清理过期缓存'}]}];
       setConfigs(configSections);
     } catch (error) {
       console.error('Error loading configurations:', error);
@@ -301,8 +266,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               ...section,
               configs: section.configs.map(config =>)
                 config.key === configKey ? { ...config, value } : config,
-              ),
-            }
+              )}
           : section,
       ),
     );
@@ -335,8 +299,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
       // 记录配置更改事件
       analyticsService.trackEvent('system', {
       action: "config_updated",
-      sections: Object.keys(newConfigs),
-      });
+      sections: Object.keys(newConfigs)});
       setHasChanges(false);
       Alert.alert("成功", "配置已保存');
     } catch (error) {
@@ -358,9 +321,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
           onPress: () => {
             loadConfigurations();
             setHasChanges(false);
-          },
-        },
-      ],
+          }}],
     );
   };
   const renderConfigItem = (sectionId: string, config: ConfigItem) => {
@@ -368,7 +329,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
       switch (config.type) {
         case 'boolean':
           return (
-  <Switch
+  <Switch;
               value={config.value}
               onValueChange={(value) => updateConfigValue(sectionId, config.key, value)}
               trackColor={
@@ -380,7 +341,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
         case 'number':
           return (
   <View style={styles.numberInput}>
-              <TextInput
+              <TextInput;
                 style={styles.textInput}
                 value={String(config.value)}
                 onChangeText={(text) => {
@@ -400,7 +361,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
           );
         case 'string':
           return (
-  <TextInput
+  <TextInput;
               style={styles.textInput}
               value={config.value}
               onChangeText={(value) => updateConfigValue(sectionId, config.key, value)}
@@ -410,18 +371,16 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
         case 'select':
           return (
   <View style={styles.selectContainer}>
-              {config.options?.map((option => ()))
-                <TouchableOpacity
+              {config.options?.map(option => ()))
+                <TouchableOpacity;
                   key={option.value}
-                  style={{[
-                    styles.selectOption, config.value === option.value && styles.selectedOption,
-                  ]}}
+                  style={[
+                    styles.selectOption, config.value === option.value && styles.selectedOption]}}
                   onPress={() => updateConfigValue(sectionId, config.key, option.value)}
                 >
-                  <Text style={{[
+                  <Text style={[
                     styles.selectOptionText,
-                    config.value === option.value && styles.selectedOptionText,
-                  ]}}>
+                    config.value === option.value && styles.selectedOptionText]}}>
                     {option.label}
                   </Text>
                 </TouchableOpacity>
@@ -469,7 +428,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
       <View style={styles.header}>
         <Text style={styles.title}>网关配置管理</Text>
         <View style={styles.headerActions}>
-          {hasChanges  && <TouchableOpacity
+          {hasChanges  && <TouchableOpacity;
               style={styles.saveButton}
               onPress={saveConfigurations}
               disabled={saving}
@@ -479,7 +438,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
               </Text>
             </TouchableOpacity>
           )}
-          <TouchableOpacity
+          <TouchableOpacity;
             style={styles.resetButton}
             onPress={resetToDefaults}
           >
@@ -494,19 +453,17 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
       <View style={styles.body}>
         <View style={styles.sidebar}>
           <Text style={styles.sidebarTitle}>配置分类</Text>
-          {configs.map((section => ()))
-            <TouchableOpacity
+          {configs.map(section => ()))
+            <TouchableOpacity;
               key={section.id}
-              style={{[
-                styles.sidebarItem, activeSection === section.id && styles.activeSidebarItem,
-              ]}}
+              style={[
+                styles.sidebarItem, activeSection === section.id && styles.activeSidebarItem]}}
               onPress={() => setActiveSection(section.id)}
             >
               <Text style={styles.sidebarIcon}>{section.icon}</Text>
-              <Text style={{[
+              <Text style={[
                 styles.sidebarText,
-                activeSection === section.id && styles.activeSidebarText,
-              ]}}>
+                activeSection === section.id && styles.activeSidebarText]}}>
                 {section.title}
               </Text>
             </TouchableOpacity>
@@ -526,8 +483,7 @@ export const GatewayConfigManager: React.FC<GatewayConfigManagerProps> = ({
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
+    backgroundColor: '#f5f5f5'},
   header: {,
   flexDirection: 'row',
     justifyContent: 'space-between',
@@ -535,93 +491,75 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#fff',
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
+    borderBottomColor: '#e0e0e0'},
   title: {,
   fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
-  },
+    color: '#333'},
   headerActions: {,
   flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   saveButton: {,
   paddingHorizontal: 12,
     paddingVertical: 6,
     backgroundColor: '#00aa00',
     borderRadius: 6,
-    marginRight: 8,
-  },
+    marginRight: 8},
   saveButtonText: {,
   color: '#fff',
     fontSize: 14,
-    fontWeight: '500',
-  },
+    fontWeight: '500'},
   resetButton: {,
   paddingHorizontal: 12,
     paddingVertical: 6,
     backgroundColor: '#ff8800',
     borderRadius: 6,
-    marginRight: 8,
-  },
+    marginRight: 8},
   resetButtonText: {,
   color: '#fff',
     fontSize: 14,
-    fontWeight: '500',
-  },
+    fontWeight: '500'},
   closeButton: {,
-  padding: 8,
-  },
+  padding: 8},
   closeText: {,
   fontSize: 18,
-    color: '#666',
-  },
+    color: '#666'},
   body: {,
   flex: 1,
-    flexDirection: 'row',
-  },
+    flexDirection: 'row'},
   sidebar: {,
   width: 200,
     backgroundColor: '#fff',
     borderRightWidth: 1,
     borderRightColor: '#e0e0e0',
-    padding: 16,
-  },
+    padding: 16},
   sidebarTitle: {,
   fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 16,
-  },
+    marginBottom: 16},
   sidebarItem: {,
   flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 12,
     paddingHorizontal: 8,
     borderRadius: 6,
-    marginBottom: 4,
-  },
+    marginBottom: 4},
   activeSidebarItem: {,
-  backgroundColor: '#e3f2fd',
-  },
+  backgroundColor: '#e3f2fd'},
   sidebarIcon: {,
   fontSize: 16,
-    marginRight: 8,
-  },
+    marginRight: 8},
   sidebarText: {,
   fontSize: 14,
     color: '#666',
-    flex: 1,
-  },
+    flex: 1},
   activeSidebarText: {,
   color: '#007AFF',
-    fontWeight: '500',
-  },
+    fontWeight: '500'},
   content: {,
   flex: 1,
-    padding: 16,
-  },
+    padding: 16},
   section: {,
   backgroundColor: '#fff',
     borderRadius: 8,
@@ -630,48 +568,39 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 2,
-  },
+    elevation: 2},
   sectionTitle: {,
   fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 16,
-  },
+    marginBottom: 16},
   configItem: {,
   marginBottom: 20,
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
+    borderBottomColor: '#f0f0f0'},
   configHeader: {,
   flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
-  },
+    marginBottom: 8},
   configLabel: {,
   fontSize: 16,
     fontWeight: '500',
     color: '#333',
-    flex: 1,
-  },
+    flex: 1},
   configInput: {,
-  marginLeft: 16,
-  },
+  marginLeft: 16},
   configDescription: {,
   fontSize: 12,
     color: '#666',
-    marginBottom: 8,
-  },
+    marginBottom: 8},
   configSelectWrapper: {,
-  marginTop: 8,
-  },
+  marginTop: 8},
   configRange: {,
   fontSize: 11,
     color: '#999',
-    marginTop: 4,
-  },
+    marginTop: 4},
   textInput: {,
   borderWidth: 1,
     borderColor: '#e0e0e0',
@@ -680,52 +609,41 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     fontSize: 14,
     backgroundColor: '#fff',
-    minWidth: 120,
-  },
+    minWidth: 120},
   numberInput: {,
   flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   unitText: {,
   fontSize: 12,
     color: '#666',
-    marginLeft: 8,
-  },
+    marginLeft: 8},
   selectContainer: {,
   flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
-  },
+    gap: 8},
   selectOption: {,
   paddingHorizontal: 12,
     paddingVertical: 6,
     borderWidth: 1,
     borderColor: '#e0e0e0',
     borderRadius: 6,
-    backgroundColor: '#fff',
-  },
+    backgroundColor: '#fff'},
   selectedOption: {,
   backgroundColor: '#007AFF',
-    borderColor: '#007AFF',
-  },
+    borderColor: '#007AFF'},
   selectOptionText: {,
   fontSize: 12,
-    color: '#666',
-  },
+    color: '#666'},
   selectedOptionText: {,
-  color: '#fff',
-  },
+  color: '#fff'},
   changesBanner: {,
   backgroundColor: '#fff3e0',
     padding: 12,
     borderTopWidth: 1,
     borderTopColor: '#ff8800',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   changesText: {,
   fontSize: 14,
     color: '#e65100',
-    fontWeight: '500',
-  },
-});
+    fontWeight: '500'}});
 export default GatewayConfigManager;

@@ -2,26 +2,26 @@
 * * AI模型优化服务
 * 负责优化和管理AI模型的性能
 export interface ModelMetrics {
-  accuracy: number;
+  accuracy: number;,
   latency: number;
-  memoryUsage: number;
+  memoryUsage: number;,
   cpuUsage: number;
   throughput: number;
 }
 export interface OptimizationConfig {
-  targetAccuracy: number;
+  targetAccuracy: number;,
   maxLatency: number;
-  maxMemoryUsage: number;
+  maxMemoryUsage: number;,
   enableQuantization: boolean;
-  enablePruning: boolean;
+  enablePruning: boolean;,
   enableDistillation: boolean;
 }
 export interface ModelInfo {
-  id: string;
+  id: string;,
   name: string;
-  version: string;
+  version: string;,
   type: "classification | "regression" | nlp" | "vision;"
-  size: number;
+  size: number;,
   metrics: ModelMetrics;
   isOptimized: boolean;
 }
@@ -252,8 +252,8 @@ optimizedMetrics.accuracy = Math.min(optimizedMetrics.accuracy, 1.0);
 * * 获取优化队列状态
   public getOptimizationStatus(): {
     queueLength: number,
-  isOptimizing: boolean;
-    currentQueue: string[];
+  isOptimizing: boolean;,
+  currentQueue: string[];
   } {
     return {queueLength: this.optimizationQueue.length,isOptimizing: this.isOptimizing,currentQueue: [...this.optimizationQueue];
     };

@@ -16,7 +16,7 @@ import { KnowledgeNode } from '../../types/maze';
   Alert;
 } from 'react-native';
 interface KnowledgeNodeModalProps {
-  knowledgeNode: KnowledgeNode;
+  knowledgeNode: KnowledgeNode;,
   visible: boolean;
   onClose: () => void;
 }
@@ -45,8 +45,8 @@ const KnowledgeNodeModal: React.FC<KnowledgeNodeModalProps> = ({
         {images && images.length > 0  && <View style={styles.imageSection}>
             <Text style={styles.sectionTitle}>相关图片</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {images.map((imageUrl, index) => ())
-                <TouchableOpacity
+              {images.map(imageUrl, index) => ())
+                <TouchableOpacity;
                   key={index}
                   style={styles.imageContainer}
                   onPress={() => handleImagePress(index)}
@@ -63,8 +63,8 @@ const KnowledgeNodeModal: React.FC<KnowledgeNodeModalProps> = ({
         {// 视频展示}
         {videos && videos.length > 0  && <View style={styles.videoSection}>
             <Text style={styles.sectionTitle}>相关视频</Text>
-            {videos.map((videoUrl, index) => ())
-              <TouchableOpacity
+            {videos.map(videoUrl, index) => ())
+              <TouchableOpacity;
                 key={index}
                 style={styles.videoItem}
                 onPress={() => Alert.alert("提示", "视频播放功能开发中...')}
@@ -79,8 +79,8 @@ const KnowledgeNodeModal: React.FC<KnowledgeNodeModalProps> = ({
         {audio && audio.length > 0 && (;)
           <View style={styles.audioSection}>;
             <Text style={styles.sectionTitle}>相关音频</Text>;
-            {audio.map((audioUrl, index) => (;))
-              <TouchableOpacity
+            {audio.map(audioUrl, index) => (;))
+              <TouchableOpacity;
                 key={index};
                 style={styles.audioItem};
                 onPress={() => Alert.alert("提示", "音频播放功能开发中...')};
@@ -103,7 +103,7 @@ const KnowledgeNodeModal: React.FC<KnowledgeNodeModalProps> = ({
       <View style={styles.tagsContainer}>;
         <Text style={styles.tagsTitle}>相关标签</Text>;
         <View style={styles.tagsWrapper}>;
-          {knowledgeNode.relatedTags.map((tag, index) => (;))
+          {knowledgeNode.relatedTags.map(tag, index) => (;))
             <View key={index} style={styles.tag}>;
               <Text style={styles.tagText}>{tag}</Text>;
             </View>;
@@ -115,7 +115,7 @@ const KnowledgeNodeModal: React.FC<KnowledgeNodeModalProps> = ({
   return (
   <>
       {// 主模态框}
-      <Modal
+      <Modal;
         visible={visible}
         animationType="slide"
         presentationStyle="pageSheet"
@@ -164,7 +164,7 @@ const KnowledgeNodeModal: React.FC<KnowledgeNodeModalProps> = ({
             {// 交互元素}
             {knowledgeNode.interactiveElements && knowledgeNode.interactiveElements.length > 0  && <View style={styles.interactiveSection}>
                 <Text style={styles.sectionTitle}>互动内容</Text>
-                <TouchableOpacity
+                <TouchableOpacity;
                   style={styles.interactiveButton}
                   onPress={() => Alert.alert("提示", "互动功能开发中...')}
                 >
@@ -178,21 +178,21 @@ const KnowledgeNodeModal: React.FC<KnowledgeNodeModalProps> = ({
           </ScrollView>
           {// 底部操作栏}
           <View style={styles.footer}>
-            <TouchableOpacity
+            <TouchableOpacity;
               style={styles.actionButton}
               onPress={() => Alert.alert("提示", "收藏功能开发中...')}
             >
               <Icon name="bookmark-border" size={20} color="#4CAF50" />
               <Text style={styles.actionButtonText}>收藏</Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            <TouchableOpacity;
               style={styles.actionButton}
               onPress={() => Alert.alert("提示", "分享功能开发中...')}
             >
               <Icon name="share" size={20} color="#4CAF50" />
               <Text style={styles.actionButtonText}>分享</Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            <TouchableOpacity;
               style={[styles.actionButton, styles.primaryButton]}
               onPress={onClose}
             >
@@ -205,20 +205,20 @@ const KnowledgeNodeModal: React.FC<KnowledgeNodeModalProps> = ({
         </View>
       </Modal>
       {// 全屏图片查看模态框}
-      {showFullImage && knowledgeNode.multimedia?.images  && <Modal
+      {showFullImage && knowledgeNode.multimedia?.images  && <Modal;
           visible={showFullImage}
           animationType="fade"
           presentationStyle="overFullScreen"
           onRequestClose={() => setShowFullImage(false)}
         >
           <View style={styles.fullImageContainer}>;
-            <TouchableOpacity
+            <TouchableOpacity;
               style={styles.fullImageCloseButton};
               onPress={() => setShowFullImage(false)};
             >;
               <Icon name="close" size={30} color="#FFFFFF" />;
             </TouchableOpacity>;
-            <Image
+            <Image;
               source={ uri: knowledgeNode.multimedia.images[currentImageIndex] }};
               style={styles.fullImage};
               resizeMode="contain";
@@ -431,8 +431,8 @@ const styles = StyleSheet.create({
   },
   fullImageContainer: {,
   flex: 1,backgroundColor: 'rgba(0, 0, 0, 0.9)',justifyContent: 'center',alignItems: 'center';
-  },fullImageCloseButton: {
-      position: "absolute",
+  },fullImageCloseButton: {,
+  position: "absolute",
       top: 50,right: 20,zIndex: 1,padding: 10;
   },fullImage: {width: screenWidth,height: screenHeight * 0.8;
   };

@@ -5,18 +5,18 @@ import React from "react";
 export interface PerformanceMetric {
   componentName: string,metricType:  ;
 render" | memory" | "network | "effect",
-  value: number;
+  value: number;,
   timestamp: number;
   threshold?: number;
   severity: good" | "warning | "critical";
 }
 export interface PerformanceReport {
-  sessionId: string;
+  sessionId: string;,
   startTime: number;
-  endTime: number;
+  endTime: number;,
   metrics: PerformanceMetric[];
-  summary: {totalComponents: number;
-    slowComponents: string[];
+  summary: {totalComponents: number;,
+  slowComponents: string[];
     memoryLeaks: string[],criticalIssues: number,averageRenderTime: number;
 };
 }

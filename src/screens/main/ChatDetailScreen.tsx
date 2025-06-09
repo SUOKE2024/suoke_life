@@ -10,8 +10,7 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
-  ActivityIndicator,
-} from 'react-native';
+  ActivityIndicator} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -20,9 +19,9 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 // 消息类型定义
 interface ChatMessage {
-  id: string;
+  id: string;,
   content: string;
-  timestamp: number;
+  timestamp: number;,
   sender: 'user' | 'agent' | 'doctor' | 'other';
   senderName?: string;
   type: 'text' | 'image' | 'audio' | 'file';
@@ -31,7 +30,7 @@ interface ChatMessage {
 // 路由参数类型
 type ChatDetailRouteParams = {
   chatId: string,
-  chatType: string;
+  chatType: string;,
   chatName: string;
 };
 type MainTabParamList = {
@@ -56,21 +55,16 @@ const ChatDetailScreen: React.FC = () => {
     const replies: Record<string, string[]> = {
       xiaoai: [
         "我正在分析您的健康数据，请稍等...", "根据您的描述，建议您注意休息和饮食调理。',
-        "我为您推荐一些适合的健康建议，您可以参考一下。", "您的健康状况看起来不错，继续保持良好的生活习惯。',
-      ],
+        "我为您推荐一些适合的健康建议，您可以参考一下。", "您的健康状况看起来不错，继续保持良好的生活习惯。'],
       xiaoke: [
         "从中医角度来看，您的症状可能与体质有关。", "建议您进行四诊合参的全面检查。',
-        "根据中医理论，这种情况需要辨证论治。", "我建议您调整作息，配合适当的中医调理。',
-      ],
+        "根据中医理论，这种情况需要辨证论治。", "我建议您调整作息，配合适当的中医调理。'],
       laoke: [
         "让我为您制定一个个性化的健康管理方案。", "根据您的年龄和体质，我推荐以下康复训练。',
-        "健康管理是一个长期过程，需要坚持和耐心。", "您的康复进展很好，继续按照计划执行。',
-      ],
+        "健康管理是一个长期过程，需要坚持和耐心。", "您的康复进展很好，继续按照计划执行。'],
       soer: [
         "生活方式的改变需要循序渐进，不要急于求成。", "我为您推荐一些简单易行的日常保健方法。',
-        "保持积极的心态对健康很重要。", "今天的运动目标完成得如何？记得适量运动。',
-      ],
-    };
+        "保持积极的心态对健康很重要。", "今天的运动目标完成得如何？记得适量运动。']};
     const agentReplies = replies[agentId] || replies.xiaoai;
     return agentReplies[Math.floor(Math.random() * agentReplies.length)];
   };
@@ -79,8 +73,7 @@ const ChatDetailScreen: React.FC = () => {
     const replies = [
       "感谢您的咨询，我会仔细查看您的情况。", "根据您的描述，建议您到医院进行进一步检查。',
       "请按时服药，有任何不适及时联系我。", "您的恢复情况良好，继续按照治疗方案执行。',
-      '建议您注意饮食和作息，配合药物治疗。',
-    ];
+      '建议您注意饮食和作息，配合药物治疗。'];
     return replies[Math.floor(Math.random() * replies.length)];
   };
   // 加载聊天历史
@@ -102,16 +95,14 @@ const ChatDetailScreen: React.FC = () => {
           sender: chatType === 'user' ? 'other' : chatType as any,
           senderName: chatName,
           type: 'text',
-          status: 'read',
-        },
+          status: 'read'},
         {
       id: "2",
       content: '您好，我想咨询一下健康管理的问题。',
           timestamp: Date.now() - 3000000, // 50分钟前
           sender: 'user',
           type: 'text',
-          status: 'read',
-        },
+          status: 'read'},
         {
       id: "3",
       content: chatType === 'agent' ?
@@ -123,9 +114,7 @@ const ChatDetailScreen: React.FC = () => {
           sender: chatType === 'user' ? 'other' : chatType as any,
           senderName: chatType === 'user' ? '群成员' : chatName,
           type: 'text',
-          status: 'read',
-        },
-      ];
+          status: 'read'}];
       setMessages(mockMessages);
     } catch (error) {
       console.error('加载聊天历史失败:', error);
@@ -147,8 +136,7 @@ const ChatDetailScreen: React.FC = () => {
       timestamp: Date.now(),
       sender: 'user',
       type: 'text',
-      status: 'sending',
-    };
+      status: 'sending'};
     setMessages(prev => [...prev, userMessage]);
     try {
       // 模拟发送延迟
@@ -170,8 +158,7 @@ const ChatDetailScreen: React.FC = () => {
             sender: chatType as any,
             senderName: chatName,
             type: 'text',
-            status: 'read',
-          };
+            status: 'read'};
           setMessages(prev => [...prev, replyMessage]);
         }, 1000 + Math.random() * 2000); // 1-3秒后回复
       }
@@ -187,11 +174,11 @@ const ChatDetailScreen: React.FC = () => {
     }
   }, [inputText, sending, chatType, chatId, chatName]);
   // 初始化加载
-  useEffect(() => {
+  useEffect() => {
     loadChatHistory();
   }, [loadChatHistory]);
   // 自动滚动到底部
-  useEffect(() => {
+  useEffect() => {
     if (messages.length > 0) {
       setTimeout() => {
         flatListRef.current?.scrollToEnd({ animated: true });
@@ -282,12 +269,12 @@ const ChatDetailScreen: React.FC = () => {
           <Icon name="dots-vertical" size={24} color="#333" />
         </TouchableOpacity>
       </View>
-      <KeyboardAvoidingView
+      <KeyboardAvoidingView;
         style={styles.content}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         {}
-        <FlatList
+        <FlatList;
           ref={flatListRef}
           data={messages}
           renderItem={renderMessage}
@@ -298,7 +285,7 @@ const ChatDetailScreen: React.FC = () => {
         />
         {}
         <View style={styles.inputContainer}>
-          <TextInput
+          <TextInput;
             style={styles.textInput}
             placeholder="输入消息..."
             value={inputText}
@@ -307,7 +294,7 @@ const ChatDetailScreen: React.FC = () => {
             maxLength={500}
             placeholderTextColor="#999"
           />
-          <TouchableOpacity
+          <TouchableOpacity;
             style={[styles.sendButton, (!inputText.trim() || sending) && styles.sendButtonDisabled]}
             onPress={sendMessage}
             disabled={!inputText.trim() || sending}
@@ -326,8 +313,7 @@ const ChatDetailScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    backgroundColor: '#f6f6f6',
-  },
+    backgroundColor: '#f6f6f6'},
   header: {,
   flexDirection: 'row',
     alignItems: 'center',
@@ -335,95 +321,72 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     backgroundColor: '#fff',
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
+    borderBottomColor: '#e0e0e0'},
   backButton: {,
   padding: 8,
-    marginRight: 8,
-  },
+    marginRight: 8},
   headerTitle: {,
   flex: 1,
     fontSize: 18,
     fontWeight: '600',
-    color: '#333',
-  },
+    color: '#333'},
   moreButton: {,
-  padding: 8,
-  },
+  padding: 8},
   content: {,
-  flex: 1,
-  },
+  flex: 1},
   loadingContainer: {,
   flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   loadingText: {,
   fontSize: 16,
     color: '#666',
-    marginTop: 10,
-  },
+    marginTop: 10},
   messagesList: {,
-  flex: 1,
-  },
+  flex: 1},
   messagesContent: {,
-  padding: 16,
-  },
+  padding: 16},
   messageContainer: {,
-  marginBottom: 16,
-  },
+  marginBottom: 16},
   userMessage: {,
-  alignItems: 'flex-end',
-  },
+  alignItems: 'flex-end'},
   otherMessage: {,
-  alignItems: 'flex-start',
-  },
+  alignItems: 'flex-start'},
   senderName: {,
   fontSize: 12,
     color: '#666',
     marginBottom: 4,
-    marginLeft: 8,
-  },
+    marginLeft: 8},
   messageBubble: {,
   maxWidth: '80%',
     paddingHorizontal: 16,
     paddingVertical: 10,
-    borderRadius: 20,
-  },
+    borderRadius: 20},
   userBubble: {,
-  backgroundColor: '#007AFF',
-  },
+  backgroundColor: '#007AFF'},
   otherBubble: {,
   backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: '#e0e0e0',
-  },
+    borderColor: '#e0e0e0'},
   messageText: {,
   fontSize: 16,
-    lineHeight: 22,
-  },
+    lineHeight: 22},
   userText: {,
-  color: '#fff',
-  },
+  color: '#fff'},
   otherText: {,
-  color: '#333',
-  },
+  color: '#333'},
   messageInfo: {,
   flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 4,
-  },
+    marginTop: 4},
   userInfo: {,
-  justifyContent: 'flex-end',
-  },
+  justifyContent: 'flex-end'},
   otherInfo: {,
-  justifyContent: 'flex-start',
-  },
+  justifyContent: 'flex-start'},
   timeText: {,
   fontSize: 12,
     color: '#999',
-    marginHorizontal: 4,
-  },
+    marginHorizontal: 4},
   inputContainer: {,
   flexDirection: 'row',
     alignItems: 'flex-end',
@@ -431,8 +394,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     backgroundColor: '#fff',
     borderTopWidth: 1,
-    borderTopColor: '#e0e0e0',
-  },
+    borderTopColor: '#e0e0e0'},
   textInput: {,
   flex: 1,
     borderWidth: 1,
@@ -443,18 +405,14 @@ const styles = StyleSheet.create({
     marginRight: 12,
     maxHeight: 100,
     fontSize: 16,
-    color: '#333',
-  },
+    color: '#333'},
   sendButton: {,
   width: 40,
     height: 40,
     borderRadius: 20,
     backgroundColor: '#007AFF',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   sendButtonDisabled: {,
-  backgroundColor: '#ccc',
-  },
-});
+  backgroundColor: '#ccc'}});
 export default ChatDetailScreen;

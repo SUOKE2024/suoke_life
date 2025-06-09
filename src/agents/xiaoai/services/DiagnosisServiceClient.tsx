@@ -23,14 +23,14 @@ const API_CONFIG = {
   baseUrl: "http://localhost:8080",
     timeout: 30000,
     retries: 3;
-  },listen: {
-      baseUrl: "http://localhost:8000",
+  },listen: {,
+  baseUrl: "http://localhost:8000",
       timeout: 30000,retries: 3;
-  },palpation: {
-      baseUrl: "http://localhost:8002",
+  },palpation: {,
+  baseUrl: "http://localhost:8002",
       timeout: 30000,retries: 3;
-  },calculation: {
-      baseUrl: "http://localhost:8003",
+  },calculation: {,
+  baseUrl: "http://localhost:8003",
       timeout: 30000,retries: 3;
   };
 };
@@ -373,7 +373,7 @@ export class DiagnosisServiceClientImpl implements DiagnosisServiceClient {
     return results;
   }
   // 综合诊断
-  async comprehensiveDiagnosis(data: {,)
+  async comprehensiveDiagnosis(data: {),
   userId: string;
     imageData?: ImageData;
     audioData?: AudioData;
@@ -440,7 +440,7 @@ export class DiagnosisServiceClientImpl implements DiagnosisServiceClient {
   }
   private calculateOverallConfidence(results: any): number {
     const confidences: number[] = [];
-    Object.values(results).forEach(((result: any) => {
+    Object.values(results).forEach((result: any) => {
       if (result && typeof result.confidence === 'number') {
         confidences.push(result.confidence);
       }

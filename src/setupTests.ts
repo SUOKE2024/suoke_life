@@ -1,5 +1,4 @@
 import 'react-native-gesture-handler/jestSetup';
-import React from 'react';
 
 // Mock React Native modules;
 jest.mock('react-native-reanimated', () => {
@@ -7,7 +6,7 @@ jest.mock('react-native-reanimated', () => {
   Reanimated.default.call = () => {};
   return Reanimated;
 });
-// Mock AsyncStorage
+// Mock AsyncStorage;
 jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock')
 );
@@ -20,7 +19,7 @@ jest.mock('react-native-vector-icons/FontAwesome', () => 'Icon');
 jest.mock('react-native-permissions', () => ({
   PERMISSIONS: {,
   IOS: {
-      CAMERA: "ios.permission.CAMERA",
+      CAMERA: 'ios.permission.CAMERA',
       MICROPHONE: 'ios.permission.MICROPHONE',
       LOCATION_WHEN_IN_USE: 'ios.permission.LOCATION_WHEN_IN_USE',
     },
@@ -56,7 +55,7 @@ jest.mock('react-native-device-info', () => ({
 }));
 // Mock react-native-mmkv;
 jest.mock('react-native-mmkv', () => ({
-  MMKV: jest.fn().mockImplementation() => ({,)
+  MMKV: jest.fn().mockImplementation() => ({,
   set: jest.fn(),
     getString: jest.fn(),
     getNumber: jest.fn(),
@@ -79,8 +78,8 @@ jest.mock('react-native-mmkv', () => ({
 }));
 // Mock other React Native modules;
 jest.mock('react-native-vision-camera', () => ({
-      Camera: "Camera",
-      useCameraDevices: () => ({ back: {}, front: {} }),
+  Camera: 'Camera',
+  useCameraDevices: () => ({ back: {}, front: {} }),
   useFrameProcessor: () => {},
 }));
 jest.mock('react-native-voice', () => ({
@@ -91,7 +90,7 @@ jest.mock('react-native-voice', () => ({
 }));
 // Mock react-navigation;
 jest.mock('@react-navigation/native', () => ({
-  useNavigation: () => ({,)
+  useNavigation: () => ({,
   navigate: jest.fn(),
     goBack: jest.fn(),
     dispatch: jest.fn(),

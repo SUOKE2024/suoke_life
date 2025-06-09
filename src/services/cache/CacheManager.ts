@@ -290,7 +290,7 @@ export function useCache<T>(key: string, fetcher: () => Promise<T>, ttl?: number
   const [data, setData] = React.useState<T | null>(null);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<Error | null>(null);
-  React.useEffect(() => {
+  React.useEffect() => {
     let mounted = true;
     const loadData = async () => {
       try {

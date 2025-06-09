@@ -9,7 +9,7 @@ import json
 import time
 import subprocess
 from pathlib import Path
-from datetime import datetime, timedelta
+import datetime
 from typing import Dict, List, Any
 
 class ContinuousMonitoring:
@@ -148,10 +148,7 @@ class ContinuousMonitoring:
 自动化报告生成器
 """
 
-import json
-import time
-from datetime import datetime
-from pathlib import Path
+import datetime
 
 def generate_daily_report():
     """生成每日报告"""

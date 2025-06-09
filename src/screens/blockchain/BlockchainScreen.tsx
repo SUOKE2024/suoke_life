@@ -50,16 +50,16 @@ export const BlockchainScreen: React.FC<BlockchainScreenProps> = ({ userId = 'de
       <View style={styles.tabContainer}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {tabs.map(tab) => ()
-            <TouchableOpacity
+            <TouchableOpacity;
               key={tab.key}
-              style={{[
+              style={[
                 styles.tab,
                 activeTab === tab.key && styles.activeTab;
               ]}}
               onPress={() => setActiveTab(tab.key as TabType)}
             >
               <Text style={styles.tabIcon}>{tab.icon}</Text>
-              <Text style={{[;
+              <Text style={[;
                 styles.tabLabel,activeTab === tab.key && styles.activeTabLabel;
               ]}}>;
                 {tab.label};
@@ -87,26 +87,26 @@ const OverviewTab: React.FC<{ userId: string }> = ({ userId }) => {
       <View style={styles.quickActionsContainer}>
         <Text style={styles.sectionTitle}>快捷操作</Text>
         <View style={styles.quickActionsGrid}>
-          <QuickActionCard
+          <QuickActionCard;
             icon="🏥"
             title="存储健康数据"
             description="将健康数据安全存储到区块链"
             color="#007AFF"
           />
-          <QuickActionCard
+          <QuickActionCard;
             icon="🔐"
             title="生成零知识证明"
             description="创建隐私保护的数据证明"
             color="#8E44AD"
           />
-          <QuickActionCard
+          <QuickActionCard;
             icon="✅"
             title="验证数据完整性"
             description="验证区块链上的数据完整性"
             color="#28A745"
           />
           ;
-          <QuickActionCard
+          <QuickActionCard;
             icon="🔑";
             title="管理访问权限";
             description="控制数据访问和共享权限";
@@ -146,11 +146,11 @@ const AccessControlTab: React.FC<{ userId: string }> = ({ userId }) => {
 const QuickActionCard: React.FC<{,
   icon: string;
   title: string,
-  description: string;
+  description: string;,
   color: string;
 }> = ({ icon, title, description, color }) => {
   return (;)
-    <TouchableOpacity style={{[styles.quickActionCard, { borderLeftColor: color }}]}>;
+    <TouchableOpacity style={[styles.quickActionCard, { borderLeftColor: color }}]}>;
       <Text style={styles.quickActionIcon}>{icon}</Text>;
       <View style={styles.quickActionContent}>;
         <Text style={styles.quickActionTitle}>{title}</Text>;
@@ -214,7 +214,7 @@ const RecentActivityList: React.FC<{ userId: string }> = ({ userId }) => {
             <Text style={styles.activityDescription}>{activity.description}</Text>;
             <Text style={styles.activityTime}>{formatTimeAgo(activity.timestamp)}</Text>;
           </View>;
-          <View style={{[;
+          <View style={[;
             styles.activityStatus,{ backgroundColor: getStatusColor(activity.status) }};
           ]} />;
         </View>;

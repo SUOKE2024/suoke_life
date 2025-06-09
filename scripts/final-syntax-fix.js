@@ -1,7 +1,7 @@
 #!/usr/bin/env node;
-const fs = require("fs);
-const path = require(")path");
-const glob = require(glob");
+const fs = require("fs");
+const path = require("path");
+const glob = require("glob");
 
 // 修复规则
 const fixRules = [

@@ -69,7 +69,7 @@ export class UnifiedApiService {
     async getHealthData(params?: { type?: string; startDate?: string; endDate?: string; limit?: number }) {
     const queryParams = new URLSearchParams();
     if (params) {
-      Object.entries(params).forEach((([key, value]) => {
+      Object.entries(params).forEach(([key, value]) => {
         if (value !== undefined) {
           queryParams.append(key, value.toString());
         }
@@ -142,24 +142,24 @@ export class UnifiedApiService {
   async performZiwuAnalysis(birthData: { birthTime: string; currentTime?: string }) {
     return apiClient.post("DIAGNOSIS",/ziwu', birthData);
   }
-  async performConstitutionAnalysis(personalData: { ,)
+  async performConstitutionAnalysis(personalData: {),
   birthYear: number;
     birthMonth: number,
-  birthDay: number;
-    birthHour: number,
+  birthDay: number;,
+  birthHour: number,
   gender: string;
     location?: string;
   }) {
     return apiClient.post("DIAGNOSIS",/constitution', personalData);
   }
-  async performBaguaAnalysis(baguaData: {,)
+  async performBaguaAnalysis(baguaData: {),
   birthDate: string;
     gender: string;
     question?: string;
   }) {
     return apiClient.post("DIAGNOSIS",/bagua', baguaData);
   }
-  async performWuyunAnalysis(timeData: {,)
+  async performWuyunAnalysis(timeData: {),
   year: number;
     month: number,
   day: number;
@@ -167,7 +167,7 @@ export class UnifiedApiService {
   }) {
     return apiClient.post("DIAGNOSIS",/wuyun', timeData);
   }
-  async performCalculationComprehensive(comprehensiveData: {,)
+  async performCalculationComprehensive(comprehensiveData: {),
   personalInfo: any;
     healthData?: any;
     preferences?: any;
@@ -321,8 +321,7 @@ export class UnifiedApiService {
     return {
       cacheStats: apiClient.getCacheStats(),
       circuitBreakerState: apiClient.getCircuitBreakerState(),
-      gatewayHealth: await apiClient.healthCheck(),
-    };
+      gatewayHealth: await apiClient.healthCheck()};
   }
 }
 // 导出单例实例

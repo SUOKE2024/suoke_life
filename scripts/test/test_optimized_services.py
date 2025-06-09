@@ -1,5 +1,5 @@
 import sys
-from datetime import datetime
+import datetime
 from typing import Dict, Any, List
 import aiohttp
 import asyncio

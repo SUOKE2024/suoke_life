@@ -1,0 +1,79 @@
+{
+  "timestamp": "2025-06-09T12:10:36.823235",
+  "file_metrics": {
+    "total_files": 335,
+    "total_size_mb": 1.36,
+    "file_types": {
+      ".txt": {
+        "count": 3,
+        "size": 2030
+      },
+      "": {
+        "count": 3,
+        "size": 2232
+      },
+      ".auth-service": {
+        "count": 1,
+        "size": 944
+      },
+      ".md": {
+        "count": 1,
+        "size": 408
+      },
+      ".user-service": {
+        "count": 1,
+        "size": 607
+      },
+      ".py": {
+        "count": 106,
+        "size": 408261
+      },
+      ".backup": {
+        "count": 80,
+        "size": 345503
+      },
+      ".backup_advanced": {
+        "count": 80,
+        "size": 345503
+      },
+      ".backup_priority": {
+        "count": 42,
+        "size": 155327
+      },
+      ".proto": {
+        "count": 1,
+        "size": 8072
+      },
+      ".yaml": {
+        "count": 7,
+        "size": 29815
+      },
+      ".pyc": {
+        "count": 10,
+        "size": 124670
+      }
+    }
+  },
+  "system_metrics": {
+    "cpu_cores": 8,
+    "disk_total_gb": 460.43,
+    "disk_used_gb": 359.18,
+    "disk_free_gb": 101.26,
+    "disk_used_percent": 78.01
+  },
+  "code_structure": {
+    "python_files": 106,
+    "total_lines": 12530,
+    "functions": 550,
+    "classes": 183
+  },
+  "docker_config": {
+    "dockerfile_exists": true,
+    "compose_exists": true,
+    "dockerfile_optimized": true,
+    "has_health_check": false
+  },
+  "recommendations": [
+    "🏥 建议添加健康检查"
+  ]
+}

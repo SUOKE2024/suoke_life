@@ -15,60 +15,60 @@ export interface InquiryData {
 }
 export interface SymptomData {
   name: string,description: string,severity: number;
-  , duration: string;
+  , duration: string;,
   frequency: string;
-  triggers: string[];
+  triggers: string[];,
   relievingFactors: string[];
   associatedSymptoms: string[];
   location?: string;
-  quality?: string
+  quality?: string;
 }
 export interface MedicalHistoryData {
-  previousDiagnoses: string[];
+  previousDiagnoses: string[];,
   surgeries: string[];
-  hospitalizations: string[];
+  hospitalizations: string[];,
   medications: MedicationData[];
   allergies: string[],immunizations: string[],familyHistory: string[];
 }
 export interface MedicationData {
-  name: string;
+  name: string;,
   dosage: string;
   frequency: string,duration: string,purpose: string;
   sideEffects?: string[];
 }
 export interface LifestyleData {
-  occupation: string;
+  occupation: string;,
   exerciseHabits: string;
   smokingStatus: string,alcoholConsumption: string,stressLevel: number;
-  , workEnvironment: string;
+  , workEnvironment: string;,
   hobbies: string[];
 }
 export interface FamilyHistoryData {
-  parents: string[];
+  parents: string[];,
   siblings: string[];
   grandparents: string[],commonDiseases: string[],geneticConditions: string[];
 }
 export interface PainAssessment {
-  location: string[],intensity: number;
+  location: string[],intensity: number;,
   quality: string  / 刺痛、胀痛、隐痛等*  , aggravatingFactors: string[], * /
   relievingFactors: string[];
-  radiationPattern?: string
+  radiationPattern?: string;
 }
 export interface SleepPattern {
-  bedtime: string;
+  bedtime: string;,
   wakeTime: string,sleepDuration: number,sleepQuality: number;
   , difficulties: string[]  / 入睡困难、易醒等* ;
 } * /
 export interface DietaryHabits {
-  mealTimes: string[];
+  mealTimes: string[];,
   appetite: string;
-  preferences: string[];
+  preferences: string[];,
   aversions: string[],digestiveIssues: string[],waterIntake: number;
 ///     , specialDiets: string[];
 }
 export interface EmotionalState {
   mood: string,stressLevel: number;
-  , anxietyLevel: number  / 1-10* ///
+  , anxietyLevel: number  / 1-10* ///,
   copingMechanisms: string[];
   socialSupport: string;
 }
@@ -79,91 +79,91 @@ export interface InquiryResult {
   syndromePatterns?: SyndromePattern[];
 }
 export interface InquiryFeatures {
-  symptoms: ProcessedSymptom[];
+  symptoms: ProcessedSymptom[];,
   constitution: ConstitutionalFeatures;
-  lifestyle: LifestyleFeatures;
+  lifestyle: LifestyleFeatures;,
   emotional: EmotionalFeatures;
 }
 export interface ProcessedSymptom {
-  name: string;
+  name: string;,
   tcmCategory: string;
-  severity: number;
+  severity: number;,
   chronicity: string,pattern: string,organSystem: string[];
 }
 export interface ConstitutionalFeatures {
-  bodyType: string;
+  bodyType: string;,
   energyLevel: string;
-  temperaturePreference: string;
+  temperaturePreference: string;,
   digestiveStrength: string;
   sleepQuality: string;
 }
 export interface LifestyleFeatures {
-  activityLevel: string;
+  activityLevel: string;,
   stressFactors: string[];
-  environmentalFactors: string[];
+  environmentalFactors: string[];,
   socialFactors: string[];
 }
 export interface EmotionalFeatures {
-  dominantEmotion: string;
+  dominantEmotion: string;,
   emotionalStability: string;
-  stressResponse: string;
+  stressResponse: string;,
   mentalEnergy: string;
 }
 export interface SymptomAnalysis {
-  primarySymptoms: AnalyzedSymptom[];
+  primarySymptoms: AnalyzedSymptom[];,
   secondarySymptoms: AnalyzedSymptom[];
-  symptomPatterns: SymptomPattern[];
+  symptomPatterns: SymptomPattern[];,
   organSystemInvolvement: OrganSystemAnalysis[];
   pathogenesis: PathogenesisAnalysis;
 }
 export interface AnalyzedSymptom {
-  symptom: ProcessedSymptom;
+  symptom: ProcessedSymptom;,
   tcmSignificance: string;
-  organCorrelation: string[];
+  organCorrelation: string[];,
   syndromeImplication: string[];
   severity: "mild" | "moderate" | "severe";
 }
 export interface SymptomPattern {
-  name: string;
+  name: string;,
   symptoms: string[];
-  confidence: number;
+  confidence: number;,
   tcmInterpretation: string;
 };
 export interface OrganSystemAnalysis {
   system: string,involvement: number;
-  , symptoms: string[];
+  , symptoms: string[];,
   dysfunction: string;
 }
 export interface PathogenesisAnalysis {
-  primaryCause: string;
+  primaryCause: string;,
   secondaryCauses: string[];
-  pathogenicFactors: string[];
+  pathogenicFactors: string[];,
   diseaseStage: string;
   prognosis: string;
 }
 export interface ConstitutionalAnalysis {
-  bodyType: string;
+  bodyType: string;,
   constitution: string;
-  strengths: string[];
+  strengths: string[];,
   weaknesses: string[];
-  tendencies: string[];
+  tendencies: string[];,
   recommendations: string[];
 }
 export interface SyndromePattern {
-  name: string;
+  name: string;,
   confidence: number;
-  supportingSymptoms: string[];
+  supportingSymptoms: string[];,
   contradictingSymptoms: string[];
   tcmExplanation: string;
 }
 export interface UserProfile {
-  age: number;
+  age: number;,
   gender: "male" | "female" | "other";
-  height: number;
+  height: number;,
   weight: number;
-  occupation: string;
+  occupation: string;,
   medicalHistory: string[];
-  allergies: string[];
+  allergies: string[];,
   medications: string[];
 }
 // 问诊算法类export class InquiryDiagnosisAlgorithm  {private config: InquiryConfig;
@@ -428,12 +428,12 @@ export interface UserProfile {
   painAssessment?: PainAssessment;
   sleepPattern?: SleepPattern;
   dietaryHabits?: DietaryHabits;
-  emotionalState?: EmotionalState
+  emotionalState?: EmotionalState;
 }
 interface NLPResults {
-  extractedSymptoms: string[];
+  extractedSymptoms: string[];,
   medicalEntities: string[];
-  sentimentAnalysis: unknown;
+  sentimentAnalysis: unknown;,
   keyPhrases: string[];
 }
 interface AnalysisResults {
@@ -458,7 +458,7 @@ interface AnalysisResults {
     userProfile?: UserProfile;
   );: Promise<SymptomAnalysis /    >  {
     return {
-      primarySymptoms: symptoms.map(s) => ({,)
+      primarySymptoms: symptoms.map(s) => ({),
   symptom: s,
         tcmSignificance: "脾胃虚弱",
         organCorrelation: s.organSystem,
@@ -472,12 +472,12 @@ interface AnalysisResults {
           confidence: 0.8,
           tcmInterpretation: "脾胃功能失调"
         };
-      ],organSystemInvolvement: [{
-      system: "脾胃",
+      ],organSystemInvolvement: [{,
+  system: "脾胃",
       involvement: 0.8,symptoms: symptoms.map(s) => s.name),dysfunction: "运化失常";
         };
-      ],pathogenesis: {
-      primaryCause: "饮食不节",
+      ],pathogenesis: {,
+  primaryCause: "饮食不节",
       secondaryCauses: ["情志不遂"],pathogenicFactors: ["湿邪"],diseaseStage: "初期",prognosis: "良好";
       };
     };

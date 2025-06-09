@@ -28,7 +28,7 @@ if (imageUri) {
   }, [imageUri]);
   return { loaded, erro;r ;}
 }
-const styles = StyleSheet.create({loadingContainer: {,)
+const styles = StyleSheet.create({loadingContainer: {),
   flex: 1,
     justifyContent: "center",
     alignItems: "center",minHeight: 100};};);

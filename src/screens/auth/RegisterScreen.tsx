@@ -2,30 +2,31 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 import {
-    Alert,
-    Animated,
-    Keyboard,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Alert,
+  Animated,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Input } from '../../components/ui';
-import { Button } from '../../components/ui/Button';
-import { borderRadius, colors, shadows, spacing, typography } from '../../constants/theme';
 
 type AuthStackParamList = {
-  Welcome: undefined;
+  Welcome: undefined;,
   Login: undefined;
-  Register: undefined;
+  Register: undefined;,
   ForgotPassword: undefined;
 };
 
-type RegisterScreenNavigationProp = NativeStackNavigationProp<AuthStackParamList, 'Register'>;
+type RegisterScreenNavigationProp = NativeStackNavigationProp<
+  AuthStackParamList,
+  'Register'
+>;
 
 const RegisterScreen: React.FC = () => {
   const navigation = useNavigation<RegisterScreenNavigationProp>();
@@ -37,21 +38,21 @@ const RegisterScreen: React.FC = () => {
     confirmPassword: '',
   });
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<{[key: string]: string}>({});
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const buttonScale = new Animated.Value(1);
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData(prev) => ({ ...prev, [field]: value }));
     // 清除对应字段的错误
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
+      setErrors(prev) => ({ ...prev, [field]: '' }));
     }
   };
 
   const validateForm = () => {
-    const newErrors: {[key: string]: string} = {};
-    
+    const newErrors: { [key: string]: string } = {};
+
     // 用户名验证
     if (!formData.username.trim()) {
       newErrors.username = '请输入用户名';
@@ -60,7 +61,7 @@ const RegisterScreen: React.FC = () => {
     } else if (formData.username.length > 20) {
       newErrors.username = '用户名不能超过20个字符';
     }
-    
+
     // 邮箱验证
     if (!formData.email.trim()) {
       newErrors.email = '请输入邮箱地址';
@@ -70,7 +71,7 @@ const RegisterScreen: React.FC = () => {
         newErrors.email = '请输入有效的邮箱地址';
       }
     }
-    
+
     // 手机号验证
     if (!formData.phone.trim()) {
       newErrors.phone = '请输入手机号';
@@ -80,7 +81,7 @@ const RegisterScreen: React.FC = () => {
         newErrors.phone = '请输入有效的手机号';
       }
     }
-    
+
     // 密码验证
     if (!formData.password.trim()) {
       newErrors.password = '请输入密码';
@@ -89,20 +90,20 @@ const RegisterScreen: React.FC = () => {
     } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
       newErrors.password = '密码需要包含大小写字母和数字';
     }
-    
+
     // 确认密码验证
     if (!formData.confirmPassword.trim()) {
       newErrors.confirmPassword = '请确认密码';
     } else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = '两次输入的密码不一致';
     }
-    
+
     // 服务条款验证
     if (!agreedToTerms) {
       Alert.alert('提示', '请阅读并同意服务条款和隐私政策');
       return false;
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -111,10 +112,10 @@ const RegisterScreen: React.FC = () => {
     if (!validateForm()) {
       return;
     }
-    
+
     Keyboard.dismiss();
     setLoading(true);
-    
+
     // 按钮动画
     Animated.sequence([
       Animated.timing(buttonScale, {
@@ -128,12 +129,11 @@ const RegisterScreen: React.FC = () => {
         useNativeDriver: true,
       }),
     ]).start();
-    
+
     try {
-      // TODO: 实现实际的注册逻辑
-      // 这里应该调用用户服务
-      await new Promise(resolve => setTimeout(resolve, 1500)); // 模拟网络请求
-      
+      // 模拟注册请求
+      await new Promise(resolve) => setTimeout(resolve, 1500));
+
       Alert.alert('注册成功', '欢迎加入索克生活！请查收邮箱验证邮件。', [
         {
           text: '确定',
@@ -164,18 +164,39 @@ const RegisterScreen: React.FC = () => {
   const showTermsAndConditions = () => {
     Alert.alert(
       '服务条款与隐私政策',
-      '索克生活平台尊重并保护所有用户的个人隐私权。为了给您提供更准确、更有针对性的服务，本平台会按照本隐私权政策的规定使用和披露您的个人信息。本平台将以高度的勤勉、审慎义务对待这些信息。除本隐私权政策另有规定外，在未征得您事先许可的情况下，本平台不会将这些信息对外披露或向第三方提供。',
+      '索克生活平台尊重并保护所有用户的个人隐私权。为了给您提供更准确、更有针对性的服务，本平台会按照本隐私权政策的规定使用和披露您的个人信息。',
       [{ text: '我知道了', style: 'default' }]
     );
   };
 
+  const renderInput = (
+    field: string,
+    placeholder: string,
+    secureTextEntry = false,
+    keyboardType: 'default' | 'email-address' | 'phone-pad' = 'default'
+  ) => (
+    <View style={styles.inputContainer}>
+      <TextInput;
+        style={[styles.input, errors[field] && styles.inputError]}
+        placeholder={placeholder}
+        value={formData[field as keyof typeof formData]}
+        onChangeText={(value) => handleInputChange(field, value)}
+        secureTextEntry={secureTextEntry}
+        keyboardType={keyboardType}
+        autoCapitalize="none"
+        autoCorrect={false}
+      />
+      {errors[field] && <Text style={styles.errorText}>{errors[field]}</Text>}
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView
+      <KeyboardAvoidingView;
         style={styles.keyboardAvoid}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <ScrollView
+        <ScrollView;
           style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
@@ -197,79 +218,24 @@ const RegisterScreen: React.FC = () => {
 
           {/* 表单区域 */}
           <View style={styles.formSection}>
-            <View style={styles.inputContainer}>
-              <Input
-                label="用户名"
-                value={formData.username}
-                onChangeText={(value) => handleInputChange('username', value)}
-                placeholder="请输入用户名"
-                error={!!errors.username}
-                errorMessage={errors.username}
-                testID="username-input"
-              />
-            </View>
-
-            <View style={styles.inputContainer}>
-              <Input
-                label="邮箱地址"
-                value={formData.email}
-                onChangeText={(value) => handleInputChange('email', value)}
-                placeholder="请输入邮箱地址"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                error={!!errors.email}
-                errorMessage={errors.email}
-                testID="email-input"
-              />
-            </View>
-
-            <View style={styles.inputContainer}>
-              <Input
-                label="手机号"
-                value={formData.phone}
-                onChangeText={(value) => handleInputChange('phone', value)}
-                placeholder="请输入手机号"
-                keyboardType="phone-pad"
-                error={!!errors.phone}
-                errorMessage={errors.phone}
-                testID="phone-input"
-              />
-            </View>
-
-            <View style={styles.inputContainer}>
-              <Input
-                label="密码"
-                value={formData.password}
-                onChangeText={(value) => handleInputChange('password', value)}
-                placeholder="请输入密码"
-                secureTextEntry
-                error={!!errors.password}
-                errorMessage={errors.password}
-                testID="password-input"
-              />
-            </View>
-
-            <View style={styles.inputContainer}>
-              <Input
-                label="确认密码"
-                value={formData.confirmPassword}
-                onChangeText={(value) => handleInputChange('confirmPassword', value)}
-                placeholder="请再次输入密码"
-                secureTextEntry
-                error={!!errors.confirmPassword}
-                errorMessage={errors.confirmPassword}
-                testID="confirm-password-input"
-              />
-            </View>
+            {renderInput('username', '请输入用户名')}
+            {renderInput('email', '请输入邮箱地址', false, 'email-address')}
+            {renderInput('phone', '请输入手机号', false, 'phone-pad')}
+            {renderInput('password', '请输入密码', true)}
+            {renderInput('confirmPassword', '请再次输入密码', true)}
 
             {/* 服务条款同意 */}
             <View style={styles.termsContainer}>
-              <TouchableOpacity
+              <TouchableOpacity;
                 style={styles.checkbox}
                 onPress={toggleTermsAgreement}
-                testID="terms-checkbox"
               >
-                <View style={[styles.checkboxInner, agreedToTerms && styles.checkboxChecked]}>
+                <View;
+                  style={[
+                    styles.checkboxInner,
+                    agreedToTerms && styles.checkboxChecked,
+                  ]}
+                >
                   {agreedToTerms && <Text style={styles.checkmark}>✓</Text>}
                 </View>
               </TouchableOpacity>
@@ -286,13 +252,24 @@ const RegisterScreen: React.FC = () => {
             </View>
 
             {/* 注册按钮 */}
-            <Animated.View style={[styles.buttonContainer, { transform: [{ scale: buttonScale }] }]}>
-              <Button
-                title={loading ? '注册中...' : '注册'}
+            <Animated.View;
+              style={[
+                styles.buttonContainer,
+                { transform: [{ scale: buttonScale }] },
+              ]}
+            >
+              <TouchableOpacity;
+                style={[
+                  styles.registerButton,
+                  loading && styles.registerButtonDisabled,
+                ]}
                 onPress={handleRegister}
                 disabled={loading}
-                loading={loading}
-              />
+              >
+                <Text style={styles.registerButtonText}>
+                  {loading ? '注册中...' : '注册'}
+                </Text>
+              </TouchableOpacity>
             </Animated.View>
 
             {/* 登录链接 */}
@@ -310,146 +287,186 @@ const RegisterScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
+  container: {,
+  flex: 1,
+    backgroundColor: '#F5F7FA',
   },
-  keyboardAvoid: {
-    flex: 1,
+  keyboardAvoid: {,
+  flex: 1,
   },
-  scrollView: {
-    flex: 1,
+  scrollView: {,
+  flex: 1,
   },
-  scrollContent: {
-    flexGrow: 1,
-    paddingBottom: spacing.xl,
+  scrollContent: {,
+  flexGrow: 1,
+    paddingBottom: 24,
   },
-  header: {
-    alignItems: 'center',
-    paddingTop: spacing.lg,
-    paddingHorizontal: spacing.lg,
-    paddingBottom: spacing.xl,
+  header: {,
+  alignItems: 'center',
+    paddingTop: 24,
+    paddingHorizontal: 24,
+    paddingBottom: 32,
   },
-  backButton: {
-    position: 'absolute',
-    left: spacing.lg,
-    top: spacing.lg,
+  backButton: {,
+  position: 'absolute',
+    left: 24,
+    top: 24,
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: colors.surface,
+    backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
-    ...shadows.sm,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
-  backButtonText: {
-    fontSize: 20,
-    color: colors.primary,
+  backButtonText: {,
+  fontSize: 20,
+    color: '#3498DB',
     fontWeight: 'bold',
   },
-  logoContainer: {
-    marginBottom: spacing.lg,
+  logoContainer: {,
+  marginBottom: 24,
   },
-  logoPlaceholder: {
-    width: 80,
+  logoPlaceholder: {,
+  width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: colors.primary,
+    backgroundColor: '#3498DB',
     justifyContent: 'center',
     alignItems: 'center',
-    ...shadows.md,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 5,
   },
-  logoText: {
-    fontSize: 24,
+  logoText: {,
+  fontSize: 24,
     fontWeight: 'bold',
-    color: colors.white,
+    color: '#FFFFFF',
   },
-  title: {
-    fontSize: typography.fontSize['2xl'],
-    fontWeight: '700' as const,
-    color: colors.text,
-    marginBottom: spacing.sm,
+  title: {,
+  fontSize: 28,
+    fontWeight: '700',
+    color: '#2C3E50',
+    marginBottom: 8,
   },
-  subtitle: {
-    fontSize: typography.fontSize.base,
-    color: colors.textSecondary,
+  subtitle: {,
+  fontSize: 16,
+    color: '#7F8C8D',
     textAlign: 'center',
     lineHeight: 22,
   },
-  formSection: {
-    paddingHorizontal: spacing.lg,
+  formSection: {,
+  paddingHorizontal: 24,
   },
-  inputContainer: {
-    marginBottom: spacing.lg,
+  inputContainer: {,
+  marginBottom: 20,
   },
-  termsContainer: {
-    flexDirection: 'row',
+  input: {,
+  borderWidth: 1,
+    borderColor: '#E1E8ED',
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    fontSize: 16,
+    backgroundColor: '#F8F9FA',
+  },
+  inputError: {,
+  borderColor: '#E74C3C',
+  },
+  errorText: {,
+  color: '#E74C3C',
+    fontSize: 14,
+    marginTop: 4,
+  },
+  termsContainer: {,
+  flexDirection: 'row',
     alignItems: 'flex-start',
-    marginBottom: spacing.xl,
-    paddingHorizontal: spacing.sm,
+    marginBottom: 32,
+    paddingHorizontal: 8,
   },
-  checkbox: {
-    marginRight: spacing.sm,
+  checkbox: {,
+  marginRight: 8,
     marginTop: 2,
   },
-  checkboxInner: {
-    width: 20,
+  checkboxInner: {,
+  width: 20,
     height: 20,
     borderWidth: 2,
-    borderColor: colors.border,
+    borderColor: '#BDC3C7',
     borderRadius: 4,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.surface,
+    backgroundColor: '#FFFFFF',
   },
-  checkboxChecked: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
+  checkboxChecked: {,
+  backgroundColor: '#3498DB',
+    borderColor: '#3498DB',
   },
-  checkmark: {
-    color: colors.white,
+  checkmark: {,
+  color: '#FFFFFF',
     fontSize: 12,
     fontWeight: 'bold',
   },
-  termsTextContainer: {
-    flex: 1,
+  termsTextContainer: {,
+  flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
   },
-  termsText: {
-    fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
+  termsText: {,
+  fontSize: 14,
+    color: '#7F8C8D',
     lineHeight: 20,
   },
-  termsLink: {
-    fontSize: typography.fontSize.sm,
-    color: colors.primary,
-    fontWeight: '500' as const,
+  termsLink: {,
+  fontSize: 14,
+    color: '#3498DB',
+    fontWeight: '500',
     textDecorationLine: 'underline',
   },
-  buttonContainer: {
-    marginBottom: spacing.lg,
+  buttonContainer: {,
+  marginBottom: 24,
   },
-  registerButton: {
-    height: 50,
-    borderRadius: borderRadius.lg,
+  registerButton: {,
+  backgroundColor: '#3498DB',
+    borderRadius: 8,
+    paddingVertical: 16,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
-  loginContainer: {
-    flexDirection: 'row',
+  registerButtonDisabled: {,
+  backgroundColor: '#BDC3C7',
+  },
+  registerButtonText: {,
+  color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  loginContainer: {,
+  flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: spacing.lg,
+    paddingTop: 24,
   },
-  loginText: {
-    fontSize: typography.fontSize.base,
-    color: colors.textSecondary,
-    marginRight: spacing.xs,
+  loginText: {,
+  fontSize: 16,
+    color: '#7F8C8D',
+    marginRight: 4,
   },
-  loginLink: {
-    fontSize: typography.fontSize.base,
-    color: colors.primary,
-    fontWeight: '500' as const,
+  loginLink: {,
+  fontSize: 16,
+    color: '#3498DB',
+    fontWeight: '500',
   },
 });
 

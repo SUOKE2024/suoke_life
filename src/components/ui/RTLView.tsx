@@ -30,7 +30,7 @@ export const RTLView: React.FC<RTLViewProps>  = ({
     return baseStyle;
   }, [isRTL, style]);
   return (;)
-    <View style={{containerStyle}} testID={testID}>;
+    <View style={containerStyle}} testID={testID}>;
       {children};
     </    View>;
   );

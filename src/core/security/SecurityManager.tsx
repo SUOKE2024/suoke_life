@@ -39,21 +39,21 @@ export enum AuditEventType {
   SYSTEM_CHANGE = "SYSTEM_CHANGE"
 }
 export interface SecurityPolicy {
-  id: string;
+  id: string;,
   name: string;
-  description: string;
+  description: string;,
   rules: SecurityRule[];
-  isActive: boolean;
+  isActive: boolean;,
   priority: number;
-  createdAt: number;
+  createdAt: number;,
   updatedAt: number;
 }
 export interface SecurityRule {
-  id: string;
+  id: string;,
   type: | "ACCESS_CONTROL"| "DATA_PROTECTION"| "THREAT_DETECTION";
     | "COMPLIANCE"
-  condition: (context: SecurityContext) => boolean;
-  action: (context: SecurityContext) => SecurityAction;
+  condition: (context: SecurityContext) => boolean;,
+  action: (context: SecurityContext) => SecurityAction;,
   severity: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
   isEnabled: boolean;
 }
@@ -72,41 +72,41 @@ export interface SecurityAction {
   type: "ALLOW" | "DENY" | "WARN" | "LOG" | "BLOCK" | "QUARANTINE",message: string;
   details?: unknown;
   requiresApproval?: boolean;
-  notifyAdmin?: boolean
+  notifyAdmin?: boolean;
 }
 export interface AuditEvent {
   id: string,type: AuditEventType;
   userId?: string;
   resource?: string;
-action: string;
+action: string;,
   result: "SUCCESS" | "FAILURE" | "BLOCKED";
   timestamp: number;
   ipAddress?: string;
   userAgent?: string;
   details?: unknown;
-riskScore?: number
+riskScore?: number;
 }
 export interface ThreatDetection {
-  id: string;
+  id: string;,
   type: ThreatType;
-  severity: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+  severity: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";,
   description: string;
-  source: string;
+  source: string;,
   timestamp: number;
-  isResolved: boolean;
+  isResolved: boolean;,
   evidence: unknown[];
   mitigationSteps: string[];
 };
 export interface EncryptionConfig {
   algorithm: "AES-256-GCM" | "ChaCha20-Poly1305" | "RSA-OAEP",keySize: number;
   ivSize?: number;
-  tagSize?: number
+  tagSize?: number;
 }
 export interface AccessControlEntry {
   userId: string,resource: string,permissions: PermissionType[];
   conditions?: Record<string, any>;
   expiresAt?: number;
-  grantedBy: string;
+  grantedBy: string;,
   grantedAt: number;
 }
 export class SecurityManager   {private static instance: SecurityManager;
@@ -626,7 +626,7 @@ this.logAuditEvent({
   id: "require_authentication",
           type: "ACCESS_CONTROL",
           condition: (context) => !context.userId,
-          action: () => ({,)
+          action: () => ({),
   type: "DENY",
             message: "需要身份验证",
             requiresApproval: false;
@@ -641,7 +641,7 @@ this.logAuditEvent({
             Boolean()
               context.resource?.startsWith("/admin") &&/                    context.userRole !== "admin"
             ),
-          action: () => ({,)
+          action: () => ({),
   type: "DENY",
             message: "需要管理员权限",
             notifyAdmin: true;

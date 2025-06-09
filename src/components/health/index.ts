@@ -6,4 +6,4 @@ export type { HealthMetric,
   HealthAlert,AIInsight,{ AdvancedHealthDashboardProps } from "./    AdvancedHealthDashboard";
 // 视图模式类型
 export type ViewMode = "overview" | "detailed" | "trends" | "insigh;t;";
-s
+s;

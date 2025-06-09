@@ -1,54 +1,60 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import {
-    Animated,
-    Dimensions,
-    RefreshControl,
-    ScrollView,
-    Share,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Animated,
+  Dimensions,
+  RefreshControl,
+  ScrollView,
+  Share,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Button } from '../../components/ui/Button';
-import { borderRadius, colors, shadows, spacing, typography } from '../../constants/theme';
+import {
+  borderRadius,
+  colors,
+  shadows,
+  spacing,
+  typography,
+} from '../../constants/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
 
 interface HealthMetric {
-  id: string;
+  id: string;,
   name: string;
-  value: number;
+  value: number;,
   unit: string;
-  status: 'excellent' | 'good' | 'normal' | 'attention' | 'warning';
+  status: 'excellent' | 'good' | 'normal' | 'attention' | 'warning';,
   trend: 'up' | 'down' | 'stable';
-  change: number;
+  change: number;,
   icon: string;
-  color: string;
+  color: string;,
   description: string;
   recommendation?: string;
 }
 
 interface HealthScore {
-  overall: number;
+  overall: number;,
   categories: {
-    cardiovascular: number;
-    metabolism: number;
-    immunity: number;
-    mental: number;
+    cardiovascular: number;,
+  metabolism: number;
+    immunity: number;,
+  mental: number;
     sleep: number;
   };
 }
 
 interface AIInsight {
-  id: string;
+  id: string;,
   type: 'positive' | 'neutral' | 'warning';
-  title: string;
+  title: string;,
   content: string;
-  priority: 'high' | 'medium' | 'low';
+  priority: 'high' | 'medium' | 'low';,
   actionable: boolean;
   icon: string;
 }
@@ -56,9 +62,11 @@ interface AIInsight {
 const HealthReportScreen: React.FC = () => {
   const navigation = useNavigation();
   const [refreshing, setRefreshing] = useState(false);
-  const [activeTab, setActiveTab] = useState<'overview' | 'metrics' | 'insights' | 'trends'>('overview');
+  const [activeTab, setActiveTab] = useState<
+    'overview' | 'metrics' | 'insights' | 'trends'
+  >('overview');
   const [reportData, setReportData] = useState<any>(null);
-  
+
   // 动画值
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(50)).current;
@@ -66,8 +74,8 @@ const HealthReportScreen: React.FC = () => {
   // 健康评分
   const healthScore = {
     overall: 85,
-    categories: {
-      cardiovascular: 88,
+    categories: {,
+  cardiovascular: 88,
       metabolism: 82,
       immunity: 90,
       mental: 78,
@@ -150,7 +158,8 @@ const HealthReportScreen: React.FC = () => {
       id: '1',
       type: 'positive',
       title: '心血管健康改善',
-      content: '过去30天您的心率变异性提升了12%，表明心血管适应性增强。这与您坚持的有氧运动密切相关。',
+      content:
+        '过去30天您的心率变异性提升了12%，表明心血管适应性增强。这与您坚持的有氧运动密切相关。',
       priority: 'medium',
       actionable: false,
       icon: 'heart-plus',
@@ -159,7 +168,8 @@ const HealthReportScreen: React.FC = () => {
       id: '2',
       type: 'warning',
       title: '压力水平偏高',
-      content: '检测到您的皮质醇水平在工作日明显升高，建议增加放松练习和压力管理技巧。',
+      content:
+        '检测到您的皮质醇水平在工作日明显升高，建议增加放松练习和压力管理技巧。',
       priority: 'high',
       actionable: true,
       icon: 'alert-circle',
@@ -168,7 +178,8 @@ const HealthReportScreen: React.FC = () => {
       id: '3',
       type: 'neutral',
       title: '营养摄入分析',
-      content: '您的蛋白质摄入充足，但维生素D略显不足。建议适当增加户外活动或补充维生素D。',
+      content:
+        '您的蛋白质摄入充足，但维生素D略显不足。建议适当增加户外活动或补充维生素D。',
       priority: 'medium',
       actionable: true,
       icon: 'nutrition',
@@ -176,7 +187,7 @@ const HealthReportScreen: React.FC = () => {
   ];
 
   // 初始化动画
-  useEffect(() => {
+  useEffect() => {
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -196,7 +207,7 @@ const HealthReportScreen: React.FC = () => {
   // 加载报告数据
   const loadReportData = async () => {
     // 模拟加载数据
-    setTimeout(() => {
+    setTimeout() => {
       setReportData({
         generatedAt: new Date().toISOString(),
         period: '最近30天',
@@ -215,34 +226,50 @@ const HealthReportScreen: React.FC = () => {
   // 获取状态颜色
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'excellent': return colors.success;
-      case 'good': return colors.primary;
-      case 'normal': return colors.info;
-      case 'attention': return colors.warning;
-      case 'warning': return colors.error;
-      default: return colors.textSecondary;
+      case 'excellent':
+        return colors.success;
+      case 'good':
+        return colors.primary;
+      case 'normal':
+        return colors.info;
+      case 'attention':
+        return colors.warning;
+      case 'warning':
+        return colors.error;
+      default:
+        return colors.textSecondary;
     }
   };
 
   // 获取状态文本
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'excellent': return '优秀';
-      case 'good': return '良好';
-      case 'normal': return '正常';
-      case 'attention': return '注意';
-      case 'warning': return '警告';
-      default: return '未知';
+      case 'excellent':
+        return '优秀';
+      case 'good':
+        return '良好';
+      case 'normal':
+        return '正常';
+      case 'attention':
+        return '注意';
+      case 'warning':
+        return '警告';
+      default:
+        return '未知';
     }
   };
 
   // 获取趋势图标
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up': return 'trending-up';
-      case 'down': return 'trending-down';
-      case 'stable': return 'trending-neutral';
-      default: return 'minus';
+      case 'up':
+        return 'trending-up';
+      case 'down':
+        return 'trending-down';
+      case 'stable':
+        return 'trending-neutral';
+      default:
+        return 'minus';
     }
   };
 
@@ -269,21 +296,20 @@ const HealthReportScreen: React.FC = () => {
 
     return (
       <View style={styles.tabContainer}>
-        {tabs.map((tab) => (
-          <TouchableOpacity
+        {tabs.map(tab) => (
+          <TouchableOpacity;
             key={tab.key}
-            style={[
-              styles.tab,
-              activeTab === tab.key && styles.activeTab,
-            ]}
+            style={[styles.tab, activeTab === tab.key && styles.activeTab]}
             onPress={() => setActiveTab(tab.key as any)}
           >
-            <Icon
+            <Icon;
               name={tab.icon}
               size={20}
-              color={activeTab === tab.key ? colors.primary : colors.textSecondary}
+              color={
+                activeTab === tab.key ? colors.primary : colors.textSecondary;
+              }
             />
-            <Text
+            <Text;
               style={[
                 styles.tabText,
                 activeTab === tab.key && styles.activeTabText,
@@ -304,26 +330,33 @@ const HealthReportScreen: React.FC = () => {
         <Text style={styles.scoreValue}>{healthScore.overall}</Text>
         <Text style={styles.scoreLabel}>综合评分</Text>
         <View style={styles.scoreRing}>
-          <View
+          <View;
             style={[
               styles.scoreProgress,
               {
-                transform: [{ rotate: `${(healthScore.overall / 100) * 360}deg` }],
+                transform: [
+                  { rotate: `${(healthScore.overall / 100) * 360}deg` },
+                ],
               },
             ]}
           />
         </View>
       </View>
-      
+
       <View style={styles.categoryScores}>
-        {Object.entries(healthScore.categories).map(([key, value]) => (
+        {Object.entries(healthScore.categories).map([key, value]) => (
           <View key={key} style={styles.categoryScore}>
             <Text style={styles.categoryValue}>{value}</Text>
             <Text style={styles.categoryLabel}>
-              {key === 'cardiovascular' ? '心血管' :
-               key === 'metabolism' ? '代谢' :
-               key === 'immunity' ? '免疫' :
-               key === 'mental' ? '心理' : '睡眠'}
+              {key === 'cardiovascular'
+                ? '心血管'
+                : key === 'metabolism'
+                  ? '代谢'
+                  : key === 'immunity'
+                    ? '免疫'
+                    : key === 'mental'
+                      ? '心理'
+                      : '睡眠'}
             </Text>
           </View>
         ))}
@@ -334,10 +367,15 @@ const HealthReportScreen: React.FC = () => {
   // 渲染健康指标
   const renderHealthMetrics = () => (
     <View style={styles.metricsContainer}>
-      {healthMetrics.map((metric) => (
+      {healthMetrics.map(metric) => (
         <View key={metric.id} style={styles.metricCard}>
           <View style={styles.metricHeader}>
-            <View style={[styles.metricIcon, { backgroundColor: metric.color + '20' }]}>
+            <View;
+              style={[
+                styles.metricIcon,
+                { backgroundColor: metric.color + '20' },
+              ]}
+            >
               <Icon name={metric.icon} size={24} color={metric.color} />
             </View>
             <View style={styles.metricInfo}>
@@ -348,34 +386,54 @@ const HealthReportScreen: React.FC = () => {
               </View>
             </View>
             <View style={styles.metricStatus}>
-              <View style={[styles.statusBadge, { backgroundColor: getStatusColor(metric.status) }]}>
-                <Text style={styles.statusText}>{getStatusText(metric.status)}</Text>
+              <View;
+                style={[
+                  styles.statusBadge,
+                  { backgroundColor: getStatusColor(metric.status) },
+                ]}
+              >
+                <Text style={styles.statusText}>
+                  {getStatusText(metric.status)}
+                </Text>
               </View>
               <View style={styles.trendContainer}>
-                <Icon
+                <Icon;
                   name={getTrendIcon(metric.trend)}
                   size={16}
-                  color={metric.trend === 'up' ? colors.success : 
-                         metric.trend === 'down' ? colors.error : colors.textSecondary}
+                  color={
+                    metric.trend === 'up'
+                      ? colors.success;
+                      : metric.trend === 'down'
+                        ? colors.error;
+                        : colors.textSecondary;
+                  }
                 />
                 {metric.change !== 0 && (
-                  <Text style={[
-                    styles.changeText,
-                    { color: metric.change > 0 ? colors.success : colors.error }
-                  ]}>
-                    {metric.change > 0 ? '+' : ''}{metric.change}
+                  <Text;
+                    style={[
+                      styles.changeText,
+                      {
+                        color:
+                          metric.change > 0 ? colors.success : colors.error,
+                      },
+                    ]}
+                  >
+                    {metric.change > 0 ? '+' : ''}
+                    {metric.change}
                   </Text>
                 )}
               </View>
             </View>
           </View>
-          
+
           <Text style={styles.metricDescription}>{metric.description}</Text>
-          
+
           {metric.recommendation && (
             <View style={styles.recommendationContainer}>
               <Icon name="lightbulb-outline" size={16} color={colors.warning} />
-              <Text style={styles.recommendationText}>{metric.recommendation}</Text>
+              <Text style={styles.recommendationText}>
+                {metric.recommendation}
+              </Text>
             </View>
           )}
         </View>
@@ -386,39 +444,56 @@ const HealthReportScreen: React.FC = () => {
   // 渲染AI洞察
   const renderAIInsights = () => (
     <View style={styles.insightsContainer}>
-      {aiInsights.map((insight) => (
+      {aiInsights.map(insight) => (
         <View key={insight.id} style={styles.insightCard}>
           <View style={styles.insightHeader}>
-            <View style={[
-              styles.insightIcon,
-              {
-                backgroundColor: insight.type === 'positive' ? colors.success + '20' :
-                                insight.type === 'warning' ? colors.error + '20' :
-                                colors.info + '20'
-              }
-            ]}>
-              <Icon
+            <View;
+              style={[
+                styles.insightIcon,
+                {
+                  backgroundColor:
+                    insight.type === 'positive'
+                      ? colors.success + '20'
+                      : insight.type === 'warning'
+                        ? colors.error + '20'
+                        : colors.info + '20',
+                },
+              ]}
+            >
+              <Icon;
                 name={insight.icon}
                 size={20}
-                color={insight.type === 'positive' ? colors.success :
-                       insight.type === 'warning' ? colors.error :
-                       colors.info}
+                color={
+                  insight.type === 'positive'
+                    ? colors.success;
+                    : insight.type === 'warning'
+                      ? colors.error;
+                      : colors.info;
+                }
               />
             </View>
             <View style={styles.insightInfo}>
               <Text style={styles.insightTitle}>{insight.title}</Text>
               <View style={styles.insightMeta}>
-                <View style={[
-                  styles.priorityBadge,
-                  {
-                    backgroundColor: insight.priority === 'high' ? colors.error :
-                                   insight.priority === 'medium' ? colors.warning :
-                                   colors.success
-                  }
-                ]}>
+                <View;
+                  style={[
+                    styles.priorityBadge,
+                    {
+                      backgroundColor:
+                        insight.priority === 'high'
+                          ? colors.error;
+                          : insight.priority === 'medium'
+                            ? colors.warning;
+                            : colors.success,
+                    },
+                  ]}
+                >
                   <Text style={styles.priorityText}>
-                    {insight.priority === 'high' ? '高优先级' :
-                     insight.priority === 'medium' ? '中优先级' : '低优先级'}
+                    {insight.priority === 'high'
+                      ? '高优先级'
+                      : insight.priority === 'medium'
+                        ? '中优先级'
+                        : '低优先级'}
                   </Text>
                 </View>
                 {insight.actionable && (
@@ -429,14 +504,16 @@ const HealthReportScreen: React.FC = () => {
               </View>
             </View>
           </View>
-          
+
           <Text style={styles.insightContent}>{insight.content}</Text>
-          
+
           {insight.actionable && (
             <View style={styles.insightActions}>
-              <Button
+              <Button;
                 title="查看建议"
-                onPress={() => {/* 查看建议 */}}
+                onPress={() => {
+                  /* 查看建议 */
+                }}
               />
             </View>
           )}
@@ -452,9 +529,11 @@ const HealthReportScreen: React.FC = () => {
       <View style={styles.chartPlaceholder}>
         <Icon name="chart-line" size={48} color={colors.textSecondary} />
         <Text style={styles.chartPlaceholderText}>趋势图表</Text>
-        <Text style={styles.chartPlaceholderSubtext}>显示过去30天的健康数据变化</Text>
+        <Text style={styles.chartPlaceholderSubtext}>
+          显示过去30天的健康数据变化
+        </Text>
       </View>
-      
+
       <View style={styles.trendSummary}>
         <Text style={styles.trendSummaryTitle}>关键趋势</Text>
         <View style={styles.trendItems}>
@@ -500,7 +579,7 @@ const HealthReportScreen: React.FC = () => {
     <SafeAreaView style={styles.container}>
       {/* 头部 */}
       <View style={styles.header}>
-        <TouchableOpacity
+        <TouchableOpacity;
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
@@ -515,13 +594,13 @@ const HealthReportScreen: React.FC = () => {
       {/* 标签栏 */}
       {renderTabs()}
 
-      <ScrollView
+      <ScrollView;
         style={styles.content}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <Animated.View
+        <Animated.View;
           style={[
             styles.contentContainer,
             {
@@ -551,12 +630,12 @@ const HealthReportScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  container: {,
+  flex: 1,
     backgroundColor: colors.background,
   },
-  header: {
-    flexDirection: 'row',
+  header: {,
+  flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: spacing.lg,
@@ -565,95 +644,95 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
   },
-  backButton: {
-    width: 40,
+  backButton: {,
+  width: 40,
     height: 40,
     borderRadius: 20,
     backgroundColor: colors.gray100,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  headerTitle: {
-    fontSize: typography.fontSize.lg,
+  headerTitle: {,
+  fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
     color: colors.text,
   },
-  shareButton: {
-    width: 40,
+  shareButton: {,
+  width: 40,
     height: 40,
     borderRadius: 20,
     backgroundColor: colors.gray100,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  tabContainer: {
-    flexDirection: 'row',
+  tabContainer: {,
+  flexDirection: 'row',
     backgroundColor: colors.surface,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
   },
-  tab: {
-    flex: 1,
+  tab: {,
+  flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: spacing.md,
     gap: spacing.xs,
   },
-  activeTab: {
-    borderBottomWidth: 2,
+  activeTab: {,
+  borderBottomWidth: 2,
     borderBottomColor: colors.primary,
   },
-  tabText: {
-    fontSize: typography.fontSize.sm,
+  tabText: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
   },
-  activeTabText: {
-    color: colors.primary,
+  activeTabText: {,
+  color: colors.primary,
     fontWeight: '600' as const,
   },
-  content: {
-    flex: 1,
+  content: {,
+  flex: 1,
   },
-  contentContainer: {
-    padding: spacing.lg,
+  contentContainer: {,
+  padding: spacing.lg,
   },
-  reportInfo: {
-    backgroundColor: colors.surface,
+  reportInfo: {,
+  backgroundColor: colors.surface,
     padding: spacing.md,
     borderRadius: borderRadius.md,
     marginBottom: spacing.lg,
     ...shadows.sm,
   },
-  reportInfoText: {
-    fontSize: typography.fontSize.sm,
+  reportInfoText: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
     textAlign: 'center',
   },
-  scoreContainer: {
-    backgroundColor: colors.surface,
+  scoreContainer: {,
+  backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginBottom: spacing.lg,
     ...shadows.sm,
   },
-  overallScore: {
-    alignItems: 'center',
+  overallScore: {,
+  alignItems: 'center',
     marginBottom: spacing.lg,
     position: 'relative',
   },
-  scoreValue: {
-    fontSize: 48,
+  scoreValue: {,
+  fontSize: 48,
     fontWeight: '700' as const,
     color: colors.primary,
   },
-  scoreLabel: {
-    fontSize: typography.fontSize.sm,
+  scoreLabel: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
     marginTop: spacing.xs,
   },
-  scoreRing: {
-    position: 'absolute',
+  scoreRing: {,
+  position: 'absolute',
     width: 120,
     height: 120,
     borderRadius: 60,
@@ -661,8 +740,8 @@ const styles = StyleSheet.create({
     borderColor: colors.gray200,
     top: -10,
   },
-  scoreProgress: {
-    position: 'absolute',
+  scoreProgress: {,
+  position: 'absolute',
     width: 120,
     height: 120,
     borderRadius: 60,
@@ -671,226 +750,226 @@ const styles = StyleSheet.create({
     borderRightColor: 'transparent',
     borderBottomColor: 'transparent',
   },
-  categoryScores: {
-    flexDirection: 'row',
+  categoryScores: {,
+  flexDirection: 'row',
     justifyContent: 'space-around',
   },
-  categoryScore: {
-    alignItems: 'center',
+  categoryScore: {,
+  alignItems: 'center',
   },
-  categoryValue: {
-    fontSize: typography.fontSize.lg,
+  categoryValue: {,
+  fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
     color: colors.text,
   },
-  categoryLabel: {
-    fontSize: typography.fontSize.xs,
+  categoryLabel: {,
+  fontSize: typography.fontSize.xs,
     color: colors.textSecondary,
     marginTop: spacing.xs,
   },
-  metricsContainer: {
-    gap: spacing.md,
+  metricsContainer: {,
+  gap: spacing.md,
   },
-  metricCard: {
-    backgroundColor: colors.surface,
+  metricCard: {,
+  backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     ...shadows.sm,
   },
-  metricHeader: {
-    flexDirection: 'row',
+  metricHeader: {,
+  flexDirection: 'row',
     alignItems: 'center',
     marginBottom: spacing.md,
   },
-  metricIcon: {
-    width: 48,
+  metricIcon: {,
+  width: 48,
     height: 48,
     borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: spacing.md,
   },
-  metricInfo: {
-    flex: 1,
+  metricInfo: {,
+  flex: 1,
   },
-  metricName: {
-    fontSize: typography.fontSize.base,
+  metricName: {,
+  fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
     color: colors.text,
     marginBottom: spacing.xs,
   },
-  metricValue: {
-    flexDirection: 'row',
+  metricValue: {,
+  flexDirection: 'row',
     alignItems: 'baseline',
   },
-  metricNumber: {
-    fontSize: typography.fontSize.xl,
+  metricNumber: {,
+  fontSize: typography.fontSize.xl,
     fontWeight: '700' as const,
     color: colors.text,
   },
-  metricUnit: {
-    fontSize: typography.fontSize.sm,
+  metricUnit: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
     marginLeft: spacing.xs,
   },
-  metricStatus: {
-    alignItems: 'flex-end',
+  metricStatus: {,
+  alignItems: 'flex-end',
   },
-  statusBadge: {
-    paddingHorizontal: spacing.sm,
+  statusBadge: {,
+  paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
     borderRadius: borderRadius.sm,
     marginBottom: spacing.xs,
   },
-  statusText: {
-    fontSize: typography.fontSize.xs,
+  statusText: {,
+  fontSize: typography.fontSize.xs,
     color: colors.white,
     fontWeight: '600' as const,
   },
-  trendContainer: {
-    flexDirection: 'row',
+  trendContainer: {,
+  flexDirection: 'row',
     alignItems: 'center',
   },
-  changeText: {
-    fontSize: typography.fontSize.xs,
+  changeText: {,
+  fontSize: typography.fontSize.xs,
     marginLeft: spacing.xs,
     fontWeight: '600' as const,
   },
-  metricDescription: {
-    fontSize: typography.fontSize.sm,
+  metricDescription: {,
+  fontSize: typography.fontSize.sm,
     color: colors.text,
     lineHeight: 20,
     marginBottom: spacing.sm,
   },
-  recommendationContainer: {
-    flexDirection: 'row',
+  recommendationContainer: {,
+  flexDirection: 'row',
     alignItems: 'flex-start',
     backgroundColor: colors.warning + '10',
     padding: spacing.sm,
     borderRadius: borderRadius.sm,
   },
-  recommendationText: {
-    fontSize: typography.fontSize.sm,
+  recommendationText: {,
+  fontSize: typography.fontSize.sm,
     color: colors.text,
     marginLeft: spacing.sm,
     flex: 1,
   },
-  insightsContainer: {
-    gap: spacing.md,
+  insightsContainer: {,
+  gap: spacing.md,
   },
-  insightCard: {
-    backgroundColor: colors.surface,
+  insightCard: {,
+  backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     ...shadows.sm,
   },
-  insightHeader: {
-    flexDirection: 'row',
+  insightHeader: {,
+  flexDirection: 'row',
     alignItems: 'flex-start',
     marginBottom: spacing.md,
   },
-  insightIcon: {
-    width: 40,
+  insightIcon: {,
+  width: 40,
     height: 40,
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: spacing.md,
   },
-  insightInfo: {
-    flex: 1,
+  insightInfo: {,
+  flex: 1,
   },
-  insightTitle: {
-    fontSize: typography.fontSize.base,
+  insightTitle: {,
+  fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
     color: colors.text,
     marginBottom: spacing.xs,
   },
-  insightMeta: {
-    flexDirection: 'row',
+  insightMeta: {,
+  flexDirection: 'row',
     gap: spacing.sm,
   },
-  priorityBadge: {
-    paddingHorizontal: spacing.xs,
+  priorityBadge: {,
+  paddingHorizontal: spacing.xs,
     paddingVertical: 2,
     borderRadius: borderRadius.sm,
   },
-  priorityText: {
-    fontSize: typography.fontSize.xs,
+  priorityText: {,
+  fontSize: typography.fontSize.xs,
     color: colors.white,
     fontWeight: '600' as const,
   },
-  actionableBadge: {
-    backgroundColor: colors.primary + '20',
+  actionableBadge: {,
+  backgroundColor: colors.primary + '20',
     paddingHorizontal: spacing.xs,
     paddingVertical: 2,
     borderRadius: borderRadius.sm,
   },
-  actionableText: {
-    fontSize: typography.fontSize.xs,
+  actionableText: {,
+  fontSize: typography.fontSize.xs,
     color: colors.primary,
     fontWeight: '600' as const,
   },
-  insightContent: {
-    fontSize: typography.fontSize.sm,
+  insightContent: {,
+  fontSize: typography.fontSize.sm,
     color: colors.text,
     lineHeight: 20,
     marginBottom: spacing.md,
   },
-  insightActions: {
-    alignItems: 'flex-start',
+  insightActions: {,
+  alignItems: 'flex-start',
   },
-  trendsContainer: {
-    backgroundColor: colors.surface,
+  trendsContainer: {,
+  backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     ...shadows.sm,
   },
-  trendsTitle: {
-    fontSize: typography.fontSize.lg,
+  trendsTitle: {,
+  fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
     color: colors.text,
     marginBottom: spacing.lg,
   },
-  chartPlaceholder: {
-    alignItems: 'center',
+  chartPlaceholder: {,
+  alignItems: 'center',
     justifyContent: 'center',
     height: 200,
     backgroundColor: colors.gray100,
     borderRadius: borderRadius.md,
     marginBottom: spacing.lg,
   },
-  chartPlaceholderText: {
-    fontSize: typography.fontSize.base,
+  chartPlaceholderText: {,
+  fontSize: typography.fontSize.base,
     color: colors.textSecondary,
     marginTop: spacing.sm,
   },
-  chartPlaceholderSubtext: {
-    fontSize: typography.fontSize.sm,
+  chartPlaceholderSubtext: {,
+  fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
     marginTop: spacing.xs,
   },
-  trendSummary: {
-    marginTop: spacing.lg,
+  trendSummary: {,
+  marginTop: spacing.lg,
   },
-  trendSummaryTitle: {
-    fontSize: typography.fontSize.base,
+  trendSummaryTitle: {,
+  fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
     color: colors.text,
     marginBottom: spacing.md,
   },
-  trendItems: {
-    gap: spacing.sm,
+  trendItems: {,
+  gap: spacing.sm,
   },
-  trendItem: {
-    flexDirection: 'row',
+  trendItem: {,
+  flexDirection: 'row',
     alignItems: 'center',
   },
-  trendItemText: {
-    fontSize: typography.fontSize.sm,
+  trendItemText: {,
+  fontSize: typography.fontSize.sm,
     color: colors.text,
     marginLeft: spacing.sm,
   },
 });
 
-export default HealthReportScreen; 
+export default HealthReportScreen;

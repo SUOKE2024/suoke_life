@@ -9,26 +9,26 @@ importIcon from "./Icon/import { colors, spacing, typography  } from "../../plac
   SectionList,
   { Alert } from ";react-native";
 export interface Contact {
-  id: string;
+  id: string;,
   name: string;
   type: agent" | "doctor | "user",avatar: string,isOnline: boolean;
   lastSeen?: string;
   specialization?: string;
   agentType?: xiaoai" | "xiaoke | "laoke" | soer;
   department?: string;
-  title?: string
+  title?: string;
 }
 interface ContactsListProps {
-  contacts: Contact[];
+  contacts: Contact[];,
   onContactPress: (contact: Contact) => void;
   showSearch?: boolean;
   groupByType?: boolean;
-  showOnlineStatus?: boolean
+  showOnlineStatus?: boolean;
 }
-const ContactsList: React.FC<ContactsListProps /> = ({/   const performanceMonitor = usePerformanceMonitor("ContactsList, { ,"))
+const ContactsList: React.FC<ContactsListProps /> = ({/   const performanceMonitor = usePerformanceMonitor("ContactsList, {"))
     trackRender: true,
     trackMemory: true,
-    warnThreshold: 50,  };);
+    warnThreshold: 50};);
   contacts,
   onContactPress,
   showSearch = true,
@@ -50,8 +50,8 @@ const ContactsList: React.FC<ContactsListProps /> = ({/   const performanceMonit
     }
     const groups = useMemo(); => useMemo(); => useMemo() => {
       agent: { title: "智能体助手, data: [] as Contact[] },"
-      doctor: {
-      title: "医生专家", "
+      doctor: {,
+  title: "医生专家", "
       data: [] as Contact[] },
       user: { title: 用户好友", data: [] as Contact[] ;}"
     }, []);
@@ -90,7 +90,7 @@ case "doctor":
       onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> onContactPress(item)}/          activeOpacity={0.7}
     >
       <View style={styles.avatarContainer}>/        <Text style={styles.avatar}>{item.avatar}</Text>/            {showOnlineStatus && item.isOnline  && <View style={styles.onlineIndicator}>/            )}
-      </View>/      <View style={styles.contactInfo}>/        <View style={styles.contactHeader}>/          <Text style={styles.contactName}>{item.name}</Text>/              <Icon
+      </View>/      <View style={styles.contactInfo}>/        <View style={styles.contactHeader}>/          <Text style={styles.contactName}>{item.name}</Text>/              <Icon;
 name={getContactTypeIcon(item.type)}
             size={16}
             color={getContactTypeColor(item.type)} />/        </View>/            {item.specialization  && <Text style={styles.specialization} numberOfLines={1} />/                {item.specialization}
@@ -101,11 +101,11 @@ name={getContactTypeIcon(item.type)}
           </Text>/            )}
         {!item.isOnline && item.lastSeen  && <Text style={styles.lastSeen}>/                最后在线: {item.lastSeen}
           </Text>/            )}
-      </View>/      <View style={styles.contactActions}>/            <TouchableOpacity
+      </View>/      <View style={styles.contactActions}>/            <TouchableOpacity;
 style={styles.actionButton}
           onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleStartChat(item)}/            >
           <Icon name="message" size={20} color={colors.primary} />/        </TouchableOpacity>/            {item.type === doctor" && (")
-          <TouchableOpacity
+          <TouchableOpacity;
 style={styles.actionButton}
             onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleBookAppointment(item)}/              >
             <Icon name="calendar" size={20} color={colors.secondary} />/          </TouchableOpacity>/            )}
@@ -141,7 +141,7 @@ style={styles.actionButton}
             value={searchQuery};
             onChangeText={setSearchQuery};
             placeholderTextColor={colors.textSecondary} />/              {searchQuery.length > 0 && (;)
-            <TouchableOpacity
+            <TouchableOpacity;
 onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setSearchQuery(")}/                  style={styles.clearButton}"
             >
               <Icon name="close-circle" size={20} color={colors.textSecondary} />/            </TouchableOpacity>/              )}
@@ -150,7 +150,7 @@ onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setSearchQuery
       {filteredContacts.length === 0 ? (;)
         renderEmptyState;
       ) : (
-        <SectionList
+        <SectionList;
 sections={groupedContacts}
           keyExtractor={(item) = /> item.id}/              renderItem={renderContactItem}
           renderSectionHeader={groupByType ? renderSectionHeader: undefined}
@@ -159,7 +159,7 @@ sections={groupedContacts}
           ItemSeparatorComponent={() => <View style={styles.separator}>}/          stickySectionHeadersEnabled={true} />/          )}
     </View>/      );
 };
-const styles = useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {,)
+const styles = useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({container: {),
   flex: 1,
     backgroundColor: colors.background},
   searchContainer: {,
@@ -266,7 +266,7 @@ const styles = useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet
   separator: {,
   height: 1,
     backgroundColor: colors.border,
-    marginLeft: 76,  },
+    marginLeft: 76},
   emptyState: {,
   flex: 1,
     justifyContent: "center",

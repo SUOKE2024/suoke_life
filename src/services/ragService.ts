@@ -3,7 +3,7 @@ import { EventEmitter } from '../utils/eventEmitter';
 import { RAG_CONFIG, getCurrentEnvConfig } from '../constants/config';
 // RAG查询请求接口
 export interface RAGQueryRequest {
-  query: string;
+  query: string;,
   userId: string;
   sessionId?: string;
   context?: Record<string, any>;
@@ -12,7 +12,7 @@ export interface RAGQueryRequest {
   complexity?: 'simple' | 'moderate' | 'complex' | 'expert';
   preferredAgent?: 'xiaoai' | 'xiaoke' | 'laoke' | 'soer';
   multimodalData?: Array<{
-    type: 'image' | 'audio' | 'video' | 'sensor';
+    type: 'image' | 'audio' | 'video' | 'sensor';,
   data: string | ArrayBuffer;
     metadata?: Record<string, any>;
 }>;
@@ -22,42 +22,42 @@ export interface RAGQueryRequest {
 }
 // RAG查询响应接口
 export interface RAGQueryResponse {
-  requestId: string;
+  requestId: string;,
   answer: string;
-  sources: Array<{;
+  sources: Array<{;,
   id: string;
-    title: string;
+    title: string;,
   source: string;
     url?: string;
-    snippet: string;
+    snippet: string;,
   score: number;
 }>;
   confidence: number,
-  reasoningChain: string[];
-  agentInfo: {,
-  agentName: string;
-    agentType: string,
+  reasoningChain: string[];,
+  agentInfo: {
+  agentName: string;,
+  agentType: string,
   processingTime: number;
   };
   processingTime: number,
-  followUpQuestions: string[];
+  followUpQuestions: string[];,
   metadata: Record<string, any>;
 }
 // 流式响应接口
 export interface StreamResponse {
-  requestId: string;
+  requestId: string;,
   answerFragment: string;
   isFinal: boolean;
   sources?: Array<{
-    id: string;
+    id: string;,
   title: string;
-    source: string;
+    source: string;,
   snippet: string;
 }>;
 }
 // 中医分析请求接口
 export interface TCMAnalysisRequest {
-  symptoms: string[];
+  symptoms: string[];,
   userId: string;
   constitutionType?:
     | 'qi_deficiency'
@@ -83,27 +83,27 @@ export interface TCMAnalysisRequest {
 }
 // 中医分析响应接口
 export interface TCMAnalysisResponse {
-  requestId: string;
+  requestId: string;,
   syndromeAnalysis: {;
-    primarySyndrome: string;
+    primarySyndrome: string;,
   secondarySyndromes: string[];
-    confidence: number;
+    confidence: number;,
   reasoning: string[];
 };
   constitutionAssessment: {,
   constitutionType: string;
     score: number,
-  characteristics: string[];
-    recommendations: string[];
+  characteristics: string[];,
+  recommendations: string[];
   };
   treatmentPrinciples: string[],
-  lifestyleRecommendations: string[];
+  lifestyleRecommendations: string[];,
   reasoningChain: string[],
   confidence: number;
 }
 // 中药推荐请求接口
 export interface HerbRecommendationRequest {
-  syndromeType: string;
+  syndromeType: string;,
   constitutionType: string;
   userId: string;
   contraindications?: string[];
@@ -115,30 +115,30 @@ export interface HerbRecommendationRequest {
 }
 // 中药推荐响应接口
 export interface HerbRecommendationResponse {
-  requestId: string;
+  requestId: string;,
   recommendedFormulas: Array<{;
-    name: string;
+    name: string;,
   composition: Array<{;
-      herb: string;
+      herb: string;,
   dosage: string;
       function: string;
 }>;
     preparation: string,
-  dosage: string;
-    duration: string,
+  dosage: string;,
+  duration: string,
   confidence: number;
   }>;
   singleHerbs: Array<{,
   name: string;
     function: string,
-  dosage: string;
-    precautions: string[];
+  dosage: string;,
+  precautions: string[];
   }>;
   safetyWarnings: string[],
-  usageInstructions: {
-    preparation: string,
-  administration: string;
-    timing: string,
+  usageInstructions: {,
+  preparation: string,
+  administration: string;,
+  timing: string,
   duration: string;
   };
   contraindications: string[],
@@ -146,7 +146,7 @@ export interface HerbRecommendationResponse {
 }
 // 文档索引请求接口
 export interface DocumentIndexRequest {
-  content: string;
+  content: string;,
   title: string;
   source: string;
   metadata?: Record<string, any>;
@@ -402,10 +402,10 @@ export class RAGService extends EventEmitter {
   ): Promise<
     Array<{
       id: string,
-  title: string;
-      content: string,
-  score: number;
-      metadata: Record<string, any>;
+  title: string;,
+  content: string,
+  score: number;,
+  metadata: Record<string, any>;
     }>
   > {
     if (!this.isInitialized) {
@@ -419,10 +419,10 @@ export class RAGService extends EventEmitter {
         throw new Error('文档搜索失败：无响应数据');
       }
       return response.data as Array<{id: string,
-  title: string;
-        content: string,
-  score: number;
-        metadata: Record<string, any>;
+  title: string;,
+  content: string,
+  score: number;,
+  metadata: Record<string, any>;
       }>;
     } catch (error) {
       throw error;
@@ -455,8 +455,8 @@ export class RAGService extends EventEmitter {
   // 健康检查增强
   async performHealthCheck(): Promise<{
     isHealthy: boolean,
-  services: {
-      rag: boolean,
+  services: {,
+  rag: boolean,
   tcm: boolean;
     };
     latency: number,
@@ -528,7 +528,7 @@ export class RAGService extends EventEmitter {
       const results = await Promise.allSettled(requests.map(request => this.query(request)));
       const responses: RAGQueryResponse[] = [];
       const errors: Error[] = [];
-      results.forEach(((result, index) => {
+      results.forEach((result, index) => {
         if (result.status === 'fulfilled') {
           responses.push(result.value);
         } else {

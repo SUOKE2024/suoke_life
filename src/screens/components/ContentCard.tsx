@@ -8,13 +8,13 @@ import React,{ memo } from ";react";
   TouchableOpacity,
   { Animated } from "react-native;";
 interface ContentCardProps {
-  item: ContentItem;
+  item: ContentItem;,
   onPress: (item: ContentItem) => void;
   onBookmark?: (item: ContentItem) => void;
   onLike?: (item: ContentItem) => void;
   isBookmarked?: boolean;
   isLiked?: boolean;
-  style?: unknown
+  style?: unknown;
 }
 export const ContentCard = memo<ContentCardProps />({/      ite;)
 m,
@@ -28,7 +28,7 @@ m,
   const typeConfig = CONTENT_TYPE_CONFIG[item.typ;e;];
   const difficultyConfig = DIFFICULTY_CONFIG[item.difficult;y;];
   const handlePress = useCallback() => {
-  const performanceMonitor = usePerformanceMonitor("ContentCard", {trackRender: true,trackMemory: false,warnThreshold: 100,  };);
+  const performanceMonitor = usePerformanceMonitor("ContentCard", {trackRender: true,trackMemory: false,warnThreshold: 100};);
     //
     onPress(item);
   };
@@ -49,21 +49,21 @@ m,
       activeOpacity={0.8} />/      {///          {item.featured && (;)
         <View style={styles.featuredBadge}>/          <Icon name="star" size={12} color={colors.white} />/          <Text style={styles.featuredText}>精选</Text>/        </View>/          )};
       {///;
-        <View style={styles.headerInfo}>/          <View style={styles.typeContainer}>/                <Icon
+        <View style={styles.headerInfo}>/          <View style={styles.typeContainer}>/                <Icon;
 name={typeConfig.icon};
               size={14};
-              color={typeConfig.color} />/            <Text style={{[styles.typeText, { color: typeConfig.col;o;r   }}]} />/                  {typeConfig.name}
+              color={typeConfig.color} />/            <Text style={[styles.typeText, { color: typeConfig.col;o;r   }}]} />/                  {typeConfig.name}
             </Text>/          </View>/
           <View style={styles.metaInfo}>/            <Text style={styles.author}>{item.author}</Text>/            <Text style={styles.separator}>•</Text>/            <Text style={styles.readTime}>{item.readTime}</Text>/          </View>/        </View>/
-        {///              <TouchableOpacity
+        {///              <TouchableOpacity;
 style={styles.actionButton}
-            onPress={handleBookmark} />/                <Icon
+            onPress={handleBookmark} />/                <Icon;
 name={isBookmarked ? "bookmark" : "bookmark-outline"}
               size={20}
               color={isBookmarked ? colors.primary: colors.textSecondary} />/          </TouchableOpacity>/
-          <TouchableOpacity
+          <TouchableOpacity;
 style={styles.actionButton}
-            onPress={handleLike} />/                <Icon
+            onPress={handleLike} />/                <Icon;
 name={isLiked ? "heart" : "heart-outline"}
               size={20}
               color={isLiked ? colors.error: colors.textSecondary} />/          </TouchableOpacity>/        </View>/      </View>/
@@ -73,16 +73,16 @@ name={isLiked ? "heart" : "heart-outline"}
         {item.description  && <Text style={styles.description} numberOfLines={3} />/                {item.description}
           </Text>/            )}
       </View>/
-      {///              {item.tags.slice(0, 3).map((tag, index) => ())
+      {///              {item.tags.slice(0, 3).map(tag, index) => ())
             <View key={index} style={styles.tag}>/              <Text style={styles.tagText}>{tag}</Text>/            </View>/              ))}
           {item.tags.length > 3  && <Text style={styles.moreTagsText}>+{item.tags.length - 3}</Text>/              )}
         </View>/
-        <View style={styles.stats}>/          <View style={{[styles.difficultyBadge, { backgroundColor: difficultyConfig.color + 20"}}]} />/            <Text style={{[styles.difficultyText, { color: difficultyConfig.color}}]} />/                  {difficultyConfig.name}"
+        <View style={styles.stats}>/          <View style={[styles.difficultyBadge, { backgroundColor: difficultyConfig.color + 20"}}]} />/            <Text style={[styles.difficultyText, { color: difficultyConfig.color}}]} />/                  {difficultyConfig.name}"
             </Text>/          </View>/
           <View style={styles.likesContainer}>/            <Icon name="heart-outline" size={14} color={colors.textSecondary} />/            <Text style={styles.likesText}>{item.likes}</Text>/          </View>/        </View>/      </View>/    </TouchableOpacity>/      )
 });
 ContentCard.displayName = "ContentCard"
-const styles = StyleSheet.create({container: {,)
+const styles = StyleSheet.create({container: {),
   backgroundColor: colors.background,
     borderRadius: borderRadius.lg,
     padding: spacing.md,

@@ -12,11 +12,11 @@ import { MazeProgress } from '../../types/maze';
   Dimensions;
 } from 'react-native';
 interface ProgressDisplayProps {
-  progress: MazeProgress;
+  progress: MazeProgress;,
   gameTime: number;
-  isPaused: boolean;
+  isPaused: boolean;,
   onPause: () => void;
-  onResume: () => void;
+  onResume: () => void;,
   onSettings: () => void;
   onExit: () => void;
 }
@@ -52,17 +52,17 @@ const ProgressDisplay: React.FC<ProgressDisplayProps> = ({
       <View style={styles.topBar}>
         {// 左侧：游戏控制}
         <View style={styles.leftSection}>
-          <TouchableOpacity
+          <TouchableOpacity;
             style={styles.controlButton}
             onPress={isPaused ? onResume : onPause}
           >
-            <Icon
+            <Icon;
               name={isPaused ? 'play-arrow' : 'pause'}
               size={24}
               color="#FFFFFF"
             />
           </TouchableOpacity>
-          <TouchableOpacity
+          <TouchableOpacity;
             style={styles.controlButton}
             onPress={onSettings}
           >
@@ -80,7 +80,7 @@ const ProgressDisplay: React.FC<ProgressDisplayProps> = ({
         </View>
         {// 右侧：退出按钮}
         <View style={styles.rightSection}>
-          <TouchableOpacity
+          <TouchableOpacity;
             style={styles.exitButton}
             onPress={onExit}
           >
@@ -124,8 +124,8 @@ const ProgressDisplay: React.FC<ProgressDisplayProps> = ({
       {// 进度条}
       <View style={styles.progressBarContainer}>
         <View style={styles.progressBarBackground}>
-          <View
-            style={{[
+          <View;
+            style={[
               styles.progressBarFill,
               { width: `${getCompletionPercentage()}}%` }
             ]};
@@ -246,11 +246,11 @@ const styles = StyleSheet.create({
   },
   progressText: {,
   color: '#C8E6C9',fontSize: 11,textAlign: 'center',marginTop: 4;
-  },locationInfo: {
-      flexDirection: "row",
+  },locationInfo: {,
+  flexDirection: "row",
       alignItems: 'center',justifyContent: 'center';
-  },locationText: {
-      color: "#C8E6C9",
+  },locationText: {,
+  color: "#C8E6C9",
       fontSize: 11,marginLeft: 4,fontFamily: 'monospace';
   };
 });

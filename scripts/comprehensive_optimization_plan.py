@@ -377,7 +377,7 @@ print(response.json())
 
 # 调用服务
 data = {{"data": "test", "options": {{"mode": "standard"}}}}
-response = requests.post(
+response = requests.post()
     'http://localhost:8080/api/v1/{service_name.replace('-', '_')}/process',
     json=data,
     headers={{'Authorization': 'Bearer YOUR_JWT_TOKEN'}}
@@ -394,13 +394,13 @@ fetch('http://localhost:8080/health')
 .then(data => console.log(data));
 
 // 调用服务
-fetch('http://localhost:8080/api/v1/{service_name.replace('-', '_')}/process', {{
+fetch('http://localhost:8080/api/v1/{service_name.replace('-', '_')}/process', {{)
 method: 'POST',
 headers: {{
     'Content-Type': 'application/json',
     'Authorization': 'Bearer YOUR_JWT_TOKEN'
 }},
-body: JSON.stringify({{
+body: JSON.stringify({{)
     data: 'test',
     options: {{ mode: 'standard' }}
 }})

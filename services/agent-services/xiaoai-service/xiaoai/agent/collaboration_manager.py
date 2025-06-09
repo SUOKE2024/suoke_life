@@ -1,14 +1,15 @@
-from logging import logging
+import logging
 from loguru import logger
-from os import os
-from time import time
+import os
+import time
 from typing import Any
-from uuid import uuid4
-import self.logging
+import uuid
 
-def main() - > None:
+
+def main() -> None:
     """主函数 - 自动生成的最小可用版本"""
     pass
+
 
 if __name__ == "__main__":
     main()

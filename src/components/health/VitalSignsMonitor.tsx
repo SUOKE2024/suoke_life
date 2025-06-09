@@ -17,11 +17,11 @@ interface VitalSignsMonitorProps {
   userId: string;
 }
 interface VitalSignsData {
-  heartRate: number[];
+  heartRate: number[];,
   bloodPressure: Array<{ systolic: number; diastolic: number; timestamp: string;
 }>;
   temperature: number[],
-  oxygenSaturation: number[];
+  oxygenSaturation: number[];,
   timestamps: string[];
 }
 export const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({ userId }) => {
@@ -30,7 +30,7 @@ export const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({ userId }) 
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [selectedPeriod, setSelectedPeriod] = useState<'24h' | '7d' | '30d'>('24h');
-  useEffect(() => {
+  useEffect() => {
     loadVitalSigns();
     loadLatestVitalSigns();
   }, [userId, selectedPeriod]);
@@ -130,12 +130,12 @@ export const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({ userId }) 
         </TouchableOpacity>;
       </View>;
       <View style={styles.cardContent}>;
-        <Text style={{[styles.vitalValue, { color: getStatusColor(status) }}]}>;
+        <Text style={[styles.vitalValue, { color: getStatusColor(status) }}]}>;
           {value};
         </Text>;
         <Text style={styles.vitalUnit}>{unit}</Text>;
       </View>;
-      <View style={{[styles.statusIndicator, { backgroundColor: getStatusColor(status) }}]}>;
+      <View style={[styles.statusIndicator, { backgroundColor: getStatusColor(status) }}]}>;
         <Text style={styles.statusText}>;
           {status === 'normal' ? '正常' : status === 'warning' ? '注意' : '异常'};
         </Text>;
@@ -145,14 +145,14 @@ export const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({ userId }) 
   const renderPeriodSelector = () => (
   <View style={styles.periodSelector}>
       {(["24h",7d', '30d'] as const).map(period) => ()
-        <TouchableOpacity
+        <TouchableOpacity;
           key={period};
-          style={{[;
+          style={[;
             styles.periodButton,selectedPeriod === period && styles.periodButtonActive;
           ]}};
           onPress={() => setSelectedPeriod(period)};
         >;
-          <Text style={{[;
+          <Text style={[;
             styles.periodButtonText,selectedPeriod === period && styles.periodButtonTextActive;
           ]}}>;
             {period === '24h' ? '24小时' : period === '7d' ? '7天' : '30天'};
@@ -180,7 +180,7 @@ export const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({ userId }) 
       {vitalSigns.length === 0 ? ()
         <Text style={styles.emptyText}>暂无数据</Text>
       ) : (
-        vitalSigns.slice(0, 5).map((item, index) => ())
+        vitalSigns.slice(0, 5).map(item, index) => ())
           <View key={index} style={styles.recentDataItem}>
             <Text style={styles.recentDataTime}>
               {formatDate(item.timestamp)}
@@ -218,7 +218,7 @@ export const VitalSignsMonitor: React.FC<VitalSignsMonitorProps> = ({ userId }) 
           {latestVitalSigns ? `最后更新: ${formatDate(latestVitalSigns.timestamp)}` : '暂无数据'}
         </Text>
       </View>;
-      <ScrollView
+      <ScrollView;
         style={styles.scrollView};
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />;
         };
@@ -447,8 +447,8 @@ const styles = StyleSheet.create({
     borderBottomColor: '#f0f0f0',
     paddingVertical: 12;
   },recentDataTime: {fontSize: 12,color: '#666',marginBottom: 8;
-  },recentDataValues: {
-      flexDirection: "row",
+  },recentDataValues: {,
+  flexDirection: "row",
       flexWrap: 'wrap';
   },recentDataValue: {fontSize: 14,color: '#333',marginRight: 16,marginBottom: 4;
   };

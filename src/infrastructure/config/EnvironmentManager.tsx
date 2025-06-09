@@ -13,10 +13,10 @@ export interface EnvironmentConfig {
   // 性能配置  performance: PerformanceConfig;
 }
 export interface ServiceConfig {
-  // API网关配置  apiGateway: { host: string;
-    port: number;
-    timeout: number;
-    rateLimit: number;
+  // API网关配置  apiGateway: { host: string;,
+  port: number;
+    timeout: number;,
+  rateLimit: number;
 }
   // 智能体服务配置  agents: { xiaoai: ServiceEndpoint,
     xiaoke: ServiceEndpoint,
@@ -32,22 +32,22 @@ export interface ServiceConfig {
     blockchain: ServiceEndpoint}
 }
 export interface ServiceEndpoint {
-  host: string;
+  host: string;,
   port: number;
-  protocol: "http" | "https" | "grpc";
+  protocol: "http" | "https" | "grpc";,
   timeout: number;
-  retries: number;
+  retries: number;,
   healthCheck: string;
 }
 export interface DatabaseConfig {
-  // 主数据库  primary: { type: "postgresql" | "mysql" | "mongodb";
-    host: string;
-    port: number;
-    database: string;
-    username: string;
-    password: string;
-    ssl: boolean;
-    poolSize: number;
+  // 主数据库  primary: { type: "postgresql" | "mysql" | "mongodb";,
+  host: string;
+    port: number;,
+  database: string;
+    username: string;,
+  password: string;
+    ssl: boolean;,
+  poolSize: number;
 }
   // 读副本  replicas: Array<{ host: string,
     port: number,
@@ -63,8 +63,8 @@ export interface DatabaseConfig {
 export interface CacheConfig {
   // Redis配置  redis: { host: string,port: number;
     password?: string;
-    db: number;
-    cluster: boolean;
+    db: number;,
+  cluster: boolean;
     nodes?: Array<{ host: string, port: number;
 }>;
   };
@@ -74,10 +74,10 @@ export interface CacheConfig {
     consistency: "eventual" | "strong"}
 }
 export interface MonitoringConfig {
-  // Prometheus配置  prometheus: { enabled: boolean;
-    host: string;
-    port: number;
-    scrapeInterval: number;
+  // Prometheus配置  prometheus: { enabled: boolean;,
+  host: string;
+    port: number;,
+  scrapeInterval: number;
 }
   // Grafana配置  grafana: { enabled: boolean,
     host: string,
@@ -98,8 +98,8 @@ export interface MonitoringConfig {
 export interface LoggingConfig {
   // 日志级别  level: "debug" | "info" | "warn" | "error" | "fatal";
   // 日志格式  format: "json" | "text";
-  // 日志输出  outputs: Array<{type: "console" | "file" | "elasticsearch" | "loki";
-    config: Record<string, any>;
+  // 日志输出  outputs: Array<{type: "console" | "file" | "elasticsearch" | "loki";,
+  config: Record<string, any>;
 }>;
   // 日志轮转  rotation: { enabled: boolean,
     maxSize: string,
@@ -110,8 +110,8 @@ export interface LoggingConfig {
     includeContext: boolean}
 }
 export interface SecurityConfig {
-  // JWT配置  jwt: { secret: string;
-    expiresIn: string;
+  // JWT配置  jwt: { secret: string;,
+  expiresIn: string;
     algorithm: string;
 }
   // CORS配置  cors: { origins: string[],
@@ -125,10 +125,10 @@ export interface SecurityConfig {
     contractAddress: string}
 }
 export interface PerformanceConfig {
-  // 连接池配置  connectionPool: { maxConnections: number;
-    minConnections: number;
-    acquireTimeout: number;
-    idleTimeout: number;
+  // 连接池配置  connectionPool: { maxConnections: number;,
+  minConnections: number;
+    acquireTimeout: number;,
+  idleTimeout: number;
 }
   // 缓存配置  cache: { defaultTtl: number,
     maxMemory: string,
@@ -394,8 +394,8 @@ export class EnvironmentManager   {private static instance: EnvironmentManager;
         },
         logging: {,
   level: "info",
-          outputs: [{
-      type: "console",
+          outputs: [{,
+  type: "console",
       config: {} },
             {
       type: "file",
@@ -425,8 +425,8 @@ export class EnvironmentManager   {private static instance: EnvironmentManager;
         },
         logging: {,
   level: "warn",
-          outputs: [{
-      type: "console",
+          outputs: [{,
+  type: "console",
       config: {} },
             {
       type: "file",

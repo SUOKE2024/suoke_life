@@ -1,11 +1,11 @@
 import React, { useMemo, useState } from 'react';
 import {
-    FlatList,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+  FlatList,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -55,7 +55,11 @@ export interface TableProps {
     selectedRowKeys?: string[];
     onChange?: (selectedRowKeys: string[], selectedRows: any[]) => void;
     onSelect?: (record: any, selected: boolean, selectedRows: any[]) => void;
-    onSelectAll?: (selected: boolean, selectedRows: any[], changeRows: any[]) => void;
+    onSelectAll?: (
+      selected: boolean,
+      selectedRows: any[],
+      changeRows: any[]
+    ) => void;
   };
   /** 排序配置 */
   sortConfig?: {
@@ -71,10 +75,10 @@ export interface TableProps {
   loading?: boolean;
   /** 分页配置 */
   pagination?: {
-    current: number;
-    pageSize: number;
-    total: number;
-    onChange: (page: number, pageSize: number) => void;
+    current: number;,
+  pageSize: number;
+    total: number;,
+  onChange: (page: number, pageSize: number) => void;
   };
 }
 
@@ -105,14 +109,14 @@ export const Table: React.FC<TableProps> = ({
   );
 
   // 计算列宽
-  const totalFixedWidth = useMemo(() => {
-    return columns.reduce((total, col) => {
+  const totalFixedWidth = useMemo() => {
+    return columns.reduce(total, col) => {
       return total + (col.width || 0);
     }, 0);
   }, [columns]);
 
-  const flexColumns = useMemo(() => {
-    return columns.filter(col => !col.width);
+  const flexColumns = useMemo() => {
+    return columns.filter(col) => !col.width);
   }, [columns]);
 
   const getColumnWidth = (column: TableColumn) => {
@@ -151,13 +155,13 @@ export const Table: React.FC<TableProps> = ({
       if (selected) {
         newSelectedKeys = [...selectedKeys, key];
       } else {
-        newSelectedKeys = selectedKeys.filter(k => k !== key);
+        newSelectedKeys = selectedKeys.filter(k) => k !== key);
       }
     }
 
     setSelectedKeys(newSelectedKeys);
-    
-    const selectedRows = dataSource.filter(item => 
+
+    const selectedRows = dataSource.filter(item) =>
       newSelectedKeys.includes(item[rowKey])
     );
 
@@ -169,15 +173,15 @@ export const Table: React.FC<TableProps> = ({
   const handleSelectAll = (selected: boolean) => {
     if (!rowSelection) return;
 
-    const allKeys = dataSource.map(item => item[rowKey]);
+    const allKeys = dataSource.map(item) => item[rowKey]);
     const newSelectedKeys = selected ? allKeys : [];
-    
+
     setSelectedKeys(newSelectedKeys);
-    
+
     const selectedRows = selected ? dataSource : [];
-    const changeRows = selected ? dataSource : dataSource.filter(item => 
-      selectedKeys.includes(item[rowKey])
-    );
+    const changeRows = selected;
+      ? dataSource;
+      : dataSource.filter(item) => selectedKeys.includes(item[rowKey]));
 
     rowSelection.onChange?.(newSelectedKeys, selectedRows);
     rowSelection.onSelectAll?.(selected, selectedRows, changeRows);
@@ -192,9 +196,11 @@ export const Table: React.FC<TableProps> = ({
         {rowSelection && (
           <View style={[styles.headerCell, styles.selectionCell]}>
             {rowSelection.type !== 'radio' && (
-              <TouchableOpacity
+              <TouchableOpacity;
                 style={styles.checkbox}
-                onPress={() => handleSelectAll(selectedKeys.length !== dataSource.length)}
+                onPress={() =>
+                  handleSelectAll(selectedKeys.length !== dataSource.length)
+                }
               >
                 <Text style={styles.checkboxText}>
                   {selectedKeys.length === dataSource.length ? '☑' : '☐'}
@@ -203,14 +209,21 @@ export const Table: React.FC<TableProps> = ({
             )}
           </View>
         )}
-        
-        {columns.map((column, index) => (
-          <TouchableOpacity
+
+        {columns.map(column, index) => (
+          <TouchableOpacity;
             key={column.key}
             style={[
               styles.headerCell,
               { width: getColumnWidth(column) },
-              column.align && { alignItems: column.align === 'center' ? 'center' : column.align === 'right' ? 'flex-end' : 'flex-start' },
+              column.align && {
+                alignItems:
+                  column.align === 'center'
+                    ? 'center'
+                    : column.align === 'right'
+                      ? 'flex-end'
+                      : 'flex-start',
+              },
             ]}
             onPress={() => handleSort(column)}
             disabled={!column.sortable}
@@ -218,8 +231,10 @@ export const Table: React.FC<TableProps> = ({
             <Text style={styles.headerText}>{column.title}</Text>
             {column.sortable && (
               <Text style={styles.sortIcon}>
-                {sortConfig?.field === column.key
-                  ? sortConfig.order === 'asc' ? '↑' : '↓'
+                {sortConfig?.field === column.key;
+                  ? sortConfig.order === 'asc'
+                    ? '↑'
+                    : '↓'
                   : '↕'}
               </Text>
             )}
@@ -235,19 +250,26 @@ export const Table: React.FC<TableProps> = ({
     const content = column.render ? column.render(value, record, index) : value;
 
     return (
-      <View
+      <View;
         key={column.key}
         style={[
           styles.cell,
           { width: getColumnWidth(column) },
-          column.align && { alignItems: column.align === 'center' ? 'center' : column.align === 'right' ? 'flex-end' : 'flex-start' },
+          column.align && {
+            alignItems:
+              column.align === 'center'
+                ? 'center'
+                : column.align === 'right'
+                  ? 'flex-end'
+                  : 'flex-start',
+          },
           cellStyle,
         ]}
       >
         {typeof content === 'string' || typeof content === 'number' ? (
           <Text style={styles.cellText}>{content}</Text>
         ) : (
-          content
+          content;
         )}
       </View>
     );
@@ -260,7 +282,7 @@ export const Table: React.FC<TableProps> = ({
     const isEven = index % 2 === 0;
 
     return (
-      <TouchableOpacity
+      <TouchableOpacity;
         style={[
           styles.row,
           striped && !isEven && styles.stripedRow,
@@ -272,18 +294,24 @@ export const Table: React.FC<TableProps> = ({
       >
         {rowSelection && (
           <View style={[styles.cell, styles.selectionCell]}>
-            <TouchableOpacity
+            <TouchableOpacity;
               style={styles.checkbox}
               onPress={() => handleRowSelect(item, !isSelected)}
             >
               <Text style={styles.checkboxText}>
-                {isSelected ? (rowSelection.type === 'radio' ? '●' : '☑') : (rowSelection.type === 'radio' ? '○' : '☐')}
+                {isSelected;
+                  ? rowSelection.type === 'radio'
+                    ? '●'
+                    : '☑'
+                  : rowSelection.type === 'radio'
+                    ? '○'
+                    : '☐'}
               </Text>
             </TouchableOpacity>
           </View>
         )}
-        
-        {columns.map(column => renderCell(column, item, index))}
+
+        {columns.map(column) => renderCell(column, item, index))}
       </TouchableOpacity>
     );
   };
@@ -308,9 +336,9 @@ export const Table: React.FC<TableProps> = ({
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={styles.tableContainer}>
           {renderHeader()}
-          
+
           {dataSource.length > 0 ? (
-            <FlatList
+            <FlatList;
               data={dataSource}
               renderItem={renderRow}
               keyExtractor={(item) => item[rowKey]}
@@ -329,21 +357,21 @@ const createStyles = (
   theme: any,
   size: 'sm' | 'md' | 'lg',
   bordered: boolean,
-  striped: boolean
+  striped: boolean;
 ) => {
   const sizeConfig = {
-    sm: {
-      cellPadding: theme.spacing.xs,
+    sm: {,
+  cellPadding: theme.spacing.xs,
       fontSize: theme.typography.fontSize.sm,
       minHeight: 32,
     },
-    md: {
-      cellPadding: theme.spacing.sm,
+    md: {,
+  cellPadding: theme.spacing.sm,
       fontSize: theme.typography.fontSize.base,
       minHeight: 40,
     },
-    lg: {
-      cellPadding: theme.spacing.md,
+    lg: {,
+  cellPadding: theme.spacing.md,
       fontSize: theme.typography.fontSize.lg,
       minHeight: 48,
     },
@@ -352,23 +380,23 @@ const createStyles = (
   const config = sizeConfig[size];
 
   return StyleSheet.create({
-    container: {
-      backgroundColor: theme.colors.surface,
+    container: {,
+  backgroundColor: theme.colors.surface,
       borderRadius: theme.borderRadius.md,
       overflow: 'hidden',
     },
-    tableContainer: {
-      minWidth: '100%',
+    tableContainer: {,
+  minWidth: '100%',
     },
-    headerRow: {
-      flexDirection: 'row',
+    headerRow: {,
+  flexDirection: 'row',
       backgroundColor: theme.colors.surfaceVariant,
       borderBottomWidth: bordered ? 1 : 0,
       borderBottomColor: theme.colors.outline,
       minHeight: config.minHeight,
     },
-    headerCell: {
-      flex: 1,
+    headerCell: {,
+  flex: 1,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
@@ -378,30 +406,30 @@ const createStyles = (
       borderRightColor: theme.colors.outline,
       minHeight: config.minHeight,
     },
-    headerText: {
-      fontSize: config.fontSize,
+    headerText: {,
+  fontSize: config.fontSize,
       fontWeight: theme.typography.fontWeight.semibold,
       color: theme.colors.onSurface,
     },
-    sortIcon: {
-      fontSize: config.fontSize,
+    sortIcon: {,
+  fontSize: config.fontSize,
       color: theme.colors.onSurfaceVariant,
       marginLeft: theme.spacing.xs,
     },
-    row: {
-      flexDirection: 'row',
+    row: {,
+  flexDirection: 'row',
       borderBottomWidth: bordered ? 1 : 0,
       borderBottomColor: theme.colors.outline,
       minHeight: config.minHeight,
     },
-    stripedRow: {
-      backgroundColor: theme.colors.surfaceVariant,
+    stripedRow: {,
+  backgroundColor: theme.colors.surfaceVariant,
     },
-    selectedRow: {
-      backgroundColor: theme.colors.primaryContainer,
+    selectedRow: {,
+  backgroundColor: theme.colors.primaryContainer,
     },
-    cell: {
-      flex: 1,
+    cell: {,
+  flex: 1,
       justifyContent: 'center',
       paddingHorizontal: config.cellPadding,
       paddingVertical: config.cellPadding,
@@ -409,33 +437,33 @@ const createStyles = (
       borderRightColor: theme.colors.outline,
       minHeight: config.minHeight,
     },
-    cellText: {
-      fontSize: config.fontSize,
+    cellText: {,
+  fontSize: config.fontSize,
       color: theme.colors.onSurface,
     },
-    selectionCell: {
-      width: 50,
+    selectionCell: {,
+  width: 50,
       alignItems: 'center',
     },
-    checkbox: {
-      padding: theme.spacing.xs,
+    checkbox: {,
+  padding: theme.spacing.xs,
     },
-    checkboxText: {
-      fontSize: config.fontSize,
+    checkboxText: {,
+  fontSize: config.fontSize,
       color: theme.colors.primary,
     },
-    emptyContainer: {
-      padding: theme.spacing.xl,
+    emptyContainer: {,
+  padding: theme.spacing.xl,
       alignItems: 'center',
       justifyContent: 'center',
       minHeight: 120,
     },
-    emptyText: {
-      fontSize: config.fontSize,
+    emptyText: {,
+  fontSize: config.fontSize,
       color: theme.colors.onSurfaceVariant,
     },
-    loadingText: {
-      fontSize: config.fontSize,
+    loadingText: {,
+  fontSize: config.fontSize,
       color: theme.colors.onSurfaceVariant,
       textAlign: 'center',
       padding: theme.spacing.xl,
