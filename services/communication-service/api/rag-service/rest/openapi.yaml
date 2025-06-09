@@ -1,0 +1,575 @@
+openapi: 3.0.0
+info:
+  title: 索克生活 RAG 服务 API
+  description: |
+    检索增强生成(RAG)服务提供知识检索和增强生成能力，帮助智能体回答用户问题。
+  version: 1.0.0
+  contact:
+    name: 索克生活技术团队
+    email: tech@suokelife.com
+
+servers:
+  - url: /api/v1
+    description: RAG 服务 API v1
+
+tags:
+  - name: query
+    description: 查询相关接口
+  - name: admin
+    description: 管理接口
+  - name: health
+    description: 健康检查接口
+
+paths:
+  /query:
+    post:
+      tags:
+        - query
+      summary: 进行RAG查询
+      description: 根据用户输入进行检索并生成回答
+      operationId: query
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryRequest'
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /query/stream:
+    post:
+      tags:
+        - query
+      summary: 流式RAG查询
+      description: 流式返回生成结果
+      operationId: streamQuery
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryRequest'
+      responses:
+        '200':
+          description: 成功，返回文本/事件流
+          content:
+            text/event-stream:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /query_multimodal:
+    post:
+      tags:
+        - query
+      summary: 多模态RAG推理
+      description: 支持文本+图片/音频/视频等多模态输入的RAG推理，自动提取多模态内容特征并参与生成。
+      operationId: queryMultimodal
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: 查询文本
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: 多模态文件（图片/音频/视频等）
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  answer:
+                    type: string
+                  references:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DocumentReference'
+                  multimodal_context:
+                    type: array
+                    items:
+                      type: object
+                  retrieval_latency_ms:
+                    type: number
+                  generation_latency_ms:
+                    type: number
+                  total_latency_ms:
+                    type: number
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /documents:
+    post:
+      tags:
+        - admin
+      summary: 添加文档
+      description: 将文档添加到知识库
+      operationId: addDocument
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddDocumentRequest'
+      responses:
+        '201':
+          description: 创建成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddDocumentResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    get:
+      tags:
+        - admin
+      summary: 列出文档
+      description: 获取知识库中的文档列表
+      operationId: listDocuments
+      parameters:
+        - name: collection
+          in: query
+          description: 集合名称
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: 页码，从1开始
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          description: 每页数量
+          required: false
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListDocumentsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /documents/{documentId}:
+    delete:
+      tags:
+        - admin
+      summary: 删除文档
+      description: 从知识库中删除指定文档
+      operationId: deleteDocument
+      parameters:
+        - name: documentId
+          in: path
+          description: 文档ID
+          required: true
+          schema:
+            type: string
+        - name: collection
+          in: query
+          description: 集合名称
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 删除成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteDocumentResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /collections:
+    get:
+      tags:
+        - admin
+      summary: 列出集合
+      description: 获取所有知识集合
+      operationId: listCollections
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCollectionsResponse'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /health:
+    get:
+      tags:
+        - health
+      summary: 健康检查
+      description: 检查服务健康状态
+      operationId: health
+      responses:
+        '200':
+          description: 服务正常
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+        '500':
+          description: 服务异常
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+  /documents/upload_multimodal:
+    post:
+      tags:
+        - admin
+      summary: 多模态文件上传
+      description: 支持图片、音频、视频等多模态文件上传，自动提取特征并入库。
+      operationId: uploadDocumentsMultimodal
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: 多模态文件（图片/音频/视频等）
+                collection_name:
+                  type: string
+                  description: 集合名称
+      responses:
+        '200':
+          description: 上传成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  document_ids:
+                    type: array
+                    items:
+                      type: string
+                  count:
+                    type: integer
+                  message:
+                    type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+components:
+  schemas:
+    QueryRequest:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+          description: 用户查询
+          example: "痰湿体质的调理方法有哪些？"
+        topK:
+          type: integer
+          description: 返回的最相关文档数量
+          default: 5
+          example: 5
+        systemPrompt:
+          type: string
+          description: 系统提示词
+          example: "你是一位中医专家，请根据提供的资料回答问题。"
+        collectionNames:
+          type: array
+          items:
+            type: string
+          description: 在特定集合中搜索
+          example: ["中医基础理论", "方剂学数据"]
+        generationParams:
+          type: object
+          additionalProperties:
+            type: string
+          description: 生成参数
+          example: {"temperature": "0.7", "maxTokens": "1024"}
+        metadataFilter:
+          type: object
+          additionalProperties:
+            type: string
+          description: 元数据过滤
+          example: {"category": "调理方法", "author": "张三"}
+        userId:
+          type: string
+          description: 用户ID
+          example: "user_123456"
+
+    QueryResponse:
+      type: object
+      required:
+        - answer
+      properties:
+        answer:
+          type: string
+          description: 生成的回答
+        references:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentReference'
+          description: 引用的文档
+        retrievalLatencyMs:
+          type: number
+          format: float
+          description: 检索耗时(毫秒)
+        generationLatencyMs:
+          type: number
+          format: float
+          description: 生成耗时(毫秒)
+        totalLatencyMs:
+          type: number
+          format: float
+          description: 总耗时(毫秒)
+
+    DocumentReference:
+      type: object
+      required:
+        - id
+        - title
+        - source
+      properties:
+        id:
+          type: string
+          description: 文档ID
+        title:
+          type: string
+          description: 文档标题
+        source:
+          type: string
+          description: 文档来源
+        url:
+          type: string
+          description: 文档URL
+        snippet:
+          type: string
+          description: 相关片段
+
+    AddDocumentRequest:
+      type: object
+      required:
+        - content
+      properties:
+        content:
+          type: string
+          description: 文档内容
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: 文档元数据
+        reindex:
+          type: boolean
+          description: 是否重新索引
+          default: false
+        collectionName:
+          type: string
+          description: 集合名称
+          default: "default"
+
+    AddDocumentResponse:
+      type: object
+      required:
+        - documentId
+        - success
+      properties:
+        documentId:
+          type: string
+          description: 文档ID
+        success:
+          type: boolean
+          description: 是否成功
+        message:
+          type: string
+          description: 消息
+
+    DeleteDocumentResponse:
+      type: object
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: 是否成功
+        message:
+          type: string
+          description: 消息
+
+    ListDocumentsResponse:
+      type: object
+      required:
+        - documents
+        - total
+      properties:
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentMetadata'
+          description: 文档列表
+        total:
+          type: integer
+          description: 文档总数
+        page:
+          type: integer
+          description: 当前页码
+        pageSize:
+          type: integer
+          description: 每页数量
+        
+    DocumentMetadata:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: 文档ID
+        title:
+          type: string
+          description: 文档标题
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: 文档元数据
+        createdAt:
+          type: string
+          format: date-time
+          description: 创建时间
+        updatedAt:
+          type: string
+          format: date-time
+          description: 更新时间
+          
+    ListCollectionsResponse:
+      type: object
+      required:
+        - collections
+      properties:
+        collections:
+          type: array
+          items:
+            $ref: '#/components/schemas/Collection'
+          description: 集合列表
+            
+    Collection:
+      type: object
+      required:
+        - name
+        - documentCount
+      properties:
+        name:
+          type: string
+          description: 集合名称
+        documentCount:
+          type: integer
+          description: 文档数量
+        description:
+          type: string
+          description: 集合描述
+        lastUpdated:
+          type: string
+          format: date-time
+          description: 最后更新时间
+          
+    HealthResponse:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum: [UNKNOWN, SERVING, NOT_SERVING]
+          description: 服务状态
+        details:
+          type: object
+          additionalProperties:
+            type: string
+          description: 详细信息
+          
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          description: 错误代码
+        message:
+          type: string
+          description: 错误消息
+        details:
+          type: object
+          additionalProperties: true
+          description: 错误详情
+
+  responses:
+    BadRequest:
+      description: 请求参数错误
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: 资源不存在
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalError:
+      description: 服务器内部错误
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'

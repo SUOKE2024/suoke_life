@@ -1,0 +1,15 @@
+{
+  "ignore_dirs": [
+    "node_modules",
+    ".git",
+    "ios/build",
+    "android/build",
+    "android/.gradle",
+    ".metro-cache",
+    "coverage",
+    "reports",
+    "services",
+    "venv",
+    "logs"
+  ]
+} 

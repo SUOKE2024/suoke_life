@@ -1,0 +1,146 @@
+syntax = "proto3";
+
+package messagebus;
+
+option go_package = "services/message-bus/api/grpc";
+
+service MessageBusService {
+  // 发布消息到指定主题
+  rpc PublishMessage(PublishRequest) returns (PublishResponse) {}
+  
+  // 创建一个新主题
+  rpc CreateTopic(CreateTopicRequest) returns (CreateTopicResponse) {}
+  
+  // 获取主题列表
+  rpc ListTopics(ListTopicsRequest) returns (ListTopicsResponse) {}
+  
+  // 获取主题详情
+  rpc GetTopic(GetTopicRequest) returns (GetTopicResponse) {}
+  
+  // 删除主题
+  rpc DeleteTopic(DeleteTopicRequest) returns (DeleteTopicResponse) {}
+  
+  // 流式订阅主题消息
+  rpc Subscribe(SubscribeRequest) returns (stream SubscribeResponse) {}
+  
+  // 获取服务健康状态
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse) {}
+}
+
+// 消息对象
+message Message {
+  string id = 1;                 // 消息ID
+  string topic = 2;              // 消息所属主题
+  bytes payload = 3;             // 消息主体内容
+  map<string, string> attributes = 4; // 消息属性，用于过滤和路由
+  int64 publish_time = 5;        // 发布时间戳 (Unix毫秒)
+  string publisher_id = 6;       // 发布者ID
+}
+
+// 主题定义
+message Topic {
+  string name = 1;               // 主题名称
+  string description = 2;        // 主题描述
+  map<string, string> properties = 3; // 主题属性
+  int64 creation_time = 4;       // 创建时间戳 (Unix毫秒)
+  int32 partition_count = 5;     // 分区数量
+  int32 retention_hours = 6;     // 消息保留时间(小时)
+}
+
+// 发布消息请求
+message PublishRequest {
+  string topic = 1;              // 主题名称
+  bytes payload = 2;             // 消息主体内容
+  map<string, string> attributes = 3; // 消息属性
+}
+
+// 发布消息响应
+message PublishResponse {
+  string message_id = 1;         // 已发布消息的ID
+  int64 publish_time = 2;        // 服务器处理发布的时间戳
+  bool success = 3;              // 是否发布成功
+  string error_message = 4;      // 错误信息(如果有)
+}
+
+// 创建主题请求
+message CreateTopicRequest {
+  string name = 1;               // 主题名称
+  string description = 2;        // 主题描述
+  map<string, string> properties = 3; // 主题属性
+  int32 partition_count = 4;     // 分区数量
+  int32 retention_hours = 5;     // 消息保留时间(小时)
+}
+
+// 创建主题响应
+message CreateTopicResponse {
+  bool success = 1;              // 是否创建成功
+  string error_message = 2;      // 错误信息(如果有)
+  Topic topic = 3;               // 已创建的主题信息
+}
+
+// 主题列表请求
+message ListTopicsRequest {
+  int32 page_size = 1;           // 每页大小
+  string page_token = 2;         // 分页标记
+}
+
+// 主题列表响应
+message ListTopicsResponse {
+  repeated Topic topics = 1;     // 主题列表
+  string next_page_token = 2;    // 下一页标记
+  int32 total_count = 3;         // 总主题数
+}
+
+// 获取主题请求
+message GetTopicRequest {
+  string name = 1;               // 主题名称
+}
+
+// 获取主题响应
+message GetTopicResponse {
+  Topic topic = 1;               // 主题信息
+  bool success = 2;              // 是否成功
+  string error_message = 3;      // 错误信息(如果有)
+}
+
+// 删除主题请求
+message DeleteTopicRequest {
+  string name = 1;               // 主题名称
+}
+
+// 删除主题响应
+message DeleteTopicResponse {
+  bool success = 1;              // 是否删除成功
+  string error_message = 2;      // 错误信息(如果有)
+}
+
+// 订阅请求
+message SubscribeRequest {
+  string topic = 1;              // 主题名称
+  string subscription_name = 2;  // 订阅名称
+  map<string, string> filter = 3; // 消息过滤条件
+  bool acknowledge = 4;          // 是否需要确认
+  int32 max_messages = 5;        // 最大批量消息数
+  int32 timeout_seconds = 6;     // 超时时间(秒)
+}
+
+// 订阅响应
+message SubscribeResponse {
+  repeated Message messages = 1; // 消息列表
+}
+
+// 健康检查请求
+message HealthCheckRequest {
+  string service = 1;            // 服务名称
+}
+
+// 健康检查响应
+message HealthCheckResponse {
+  enum ServingStatus {
+    UNKNOWN = 0;
+    SERVING = 1;
+    NOT_SERVING = 2;
+    SERVICE_UNKNOWN = 3;
+  }
+  ServingStatus status = 1;      // 服务状态
+} 

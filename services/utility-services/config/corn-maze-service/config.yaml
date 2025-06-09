@@ -1,0 +1,42 @@
+# Corn Maze Service 配置文件
+
+service:
+  name: corn-maze-service
+  version: 0.1.0
+  description: 基于中医理论的健康迷宫服务
+
+grpc:
+  port: 50057
+  max_workers: 10
+  reflection_enabled: true  # 启用gRPC反射服务，便于调试
+
+metrics:
+  port: 51057
+  enabled: true
+
+logging:
+  level: INFO  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  dir: logs
+  use_json: false  # 是否使用JSON格式记录日志
+
+database:
+  path: data/maze.db
+  backup_interval: 86400  # 备份间隔（秒），默认每天
+  max_backups: 7  # 保留的最大备份数
+
+security:
+  require_authentication: true
+  token_validation_url: http://auth-service:50050/validate
+  allowed_services:
+    - user-service
+    - api-gateway
+
+maze:
+  default_size: 10  # 默认迷宫大小
+  max_size: 20  # 最大迷宫大小
+  cache_enabled: true  # 是否启用缓存
+  cache_ttl: 3600  # 缓存过期时间（秒）
+  generation:
+    max_attempts: 5  # 生成迷宫的最大尝试次数
+    timeout: 30  # 生成超时时间（秒）

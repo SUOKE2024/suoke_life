@@ -1,0 +1,413 @@
+syntax = "proto3";
+
+package medical_resource;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+// 医疗资源微服务
+service MedicalResourceService {
+    // 资源管理
+    rpc GetAvailableResources(ResourceRequest) returns (ResourceResponse);
+    rpc BookResource(BookingRequest) returns (BookingResponse);
+    rpc CancelBooking(CancelRequest) returns (CancelResponse);
+    rpc UpdateResourceStatus(UpdateResourceStatusRequest) returns (UpdateResourceStatusResponse);
+    
+    // 智能推荐
+    rpc GetRecommendations(RecommendationRequest) returns (RecommendationResponse);
+    rpc MatchDoctor(DoctorMatchRequest) returns (DoctorMatchResponse);
+    rpc RecommendTreatment(TreatmentRecommendationRequest) returns (TreatmentRecommendationResponse);
+    
+    // 预约管理
+    rpc CreateAppointment(AppointmentRequest) returns (AppointmentResponse);
+    rpc UpdateAppointment(UpdateAppointmentRequest) returns (AppointmentResponse);
+    rpc GetAppointments(GetAppointmentsRequest) returns (AppointmentsResponse);
+    rpc CancelAppointment(CancelAppointmentRequest) returns (CancelAppointmentResponse);
+    
+    // 资源监控
+    rpc GetResourceStatus(StatusRequest) returns (StatusResponse);
+    rpc GetAnalytics(AnalyticsRequest) returns (AnalyticsResponse);
+    rpc GetResourceUtilization(UtilizationRequest) returns (UtilizationResponse);
+    
+    // 小克智能体接口
+    rpc XiaokeAnalyzeConstitution(ConstitutionAnalysisRequest) returns (ConstitutionAnalysisResponse);
+    rpc XiaokeOptimizeSchedule(ScheduleOptimizationRequest) returns (ScheduleOptimizationResponse);
+}
+
+// 基础数据类型
+enum ResourceType {
+    RESOURCE_TYPE_UNSPECIFIED = 0;
+    DOCTOR = 1;
+    FACILITY = 2;
+    EQUIPMENT = 3;
+    MEDICINE = 4;
+}
+
+enum ConstitutionType {
+    CONSTITUTION_TYPE_UNSPECIFIED = 0;
+    PING_HE = 1;        // 平和质
+    QI_XU = 2;          // 气虚质
+    YANG_XU = 3;        // 阳虚质
+    YIN_XU = 4;         // 阴虚质
+    TAN_SHI = 5;        // 痰湿质
+    SHI_RE = 6;         // 湿热质
+    XUE_YU = 7;         // 血瘀质
+    QI_YU = 8;          // 气郁质
+    TE_BING = 9;        // 特禀质
+}
+
+enum AppointmentStatus {
+    APPOINTMENT_STATUS_UNSPECIFIED = 0;
+    PENDING = 1;
+    CONFIRMED = 2;
+    CANCELLED = 3;
+    COMPLETED = 4;
+    NO_SHOW = 5;
+}
+
+enum UrgencyLevel {
+    URGENCY_LEVEL_UNSPECIFIED = 0;
+    LOW = 1;
+    MEDIUM = 2;
+    HIGH = 3;
+    EMERGENCY = 4;
+}
+
+// 资源相关消息
+message Resource {
+    string id = 1;
+    ResourceType type = 2;
+    string name = 3;
+    string description = 4;
+    map<string, string> attributes = 5;
+    bool available = 6;
+    Location location = 7;
+    Schedule schedule = 8;
+    repeated string specialties = 9;
+    float rating = 10;
+    int32 total_reviews = 11;
+    google.protobuf.Timestamp created_at = 12;
+    google.protobuf.Timestamp updated_at = 13;
+}
+
+message Location {
+    string address = 1;
+    double latitude = 2;
+    double longitude = 3;
+    string city = 4;
+    string province = 5;
+}
+
+message Schedule {
+    repeated TimeSlot available_slots = 1;
+    repeated TimeSlot booked_slots = 2;
+}
+
+message TimeSlot {
+    google.protobuf.Timestamp start_time = 1;
+    google.protobuf.Timestamp end_time = 2;
+    bool available = 3;
+}
+
+// 医生相关消息
+message Doctor {
+    string id = 1;
+    string name = 2;
+    string title = 3;
+    repeated string specialties = 4;
+    int32 years_experience = 5;
+    string hospital = 6;
+    string department = 7;
+    float rating = 8;
+    int32 total_patients = 9;
+    repeated string certifications = 10;
+    string bio = 11;
+    Schedule schedule = 12;
+    Location location = 13;
+    bool tcm_specialist = 14;  // 是否为中医专家
+    repeated ConstitutionType constitution_specialties = 15;
+}
+
+// 预约相关消息
+message Appointment {
+    string id = 1;
+    string user_id = 2;
+    string resource_id = 3;
+    ResourceType resource_type = 4;
+    google.protobuf.Timestamp appointment_time = 5;
+    int32 duration_minutes = 6;
+    AppointmentStatus status = 7;
+    string notes = 8;
+    UrgencyLevel urgency = 9;
+    string symptoms = 10;
+    ConstitutionType user_constitution = 11;
+    google.protobuf.Timestamp created_at = 12;
+    google.protobuf.Timestamp updated_at = 13;
+}
+
+// 推荐相关消息
+message Recommendation {
+    string id = 1;
+    ResourceType resource_type = 2;
+    string resource_id = 3;
+    string title = 4;
+    string description = 5;
+    float confidence_score = 6;
+    string reasoning = 7;
+    map<string, string> metadata = 8;
+}
+
+// 请求消息
+message ResourceRequest {
+    ResourceType type = 1;
+    string location = 2;
+    repeated string specialties = 3;
+    google.protobuf.Timestamp start_time = 4;
+    google.protobuf.Timestamp end_time = 5;
+    bool available_only = 6;
+    int32 limit = 7;
+    int32 offset = 8;
+}
+
+message BookingRequest {
+    string user_id = 1;
+    string resource_id = 2;
+    google.protobuf.Timestamp start_time = 3;
+    int32 duration_minutes = 4;
+    string notes = 5;
+    UrgencyLevel urgency = 6;
+}
+
+message CancelRequest {
+    string booking_id = 1;
+    string reason = 2;
+}
+
+message RecommendationRequest {
+    string user_id = 1;
+    ConstitutionType constitution = 2;
+    repeated string symptoms = 3;
+    string location = 4;
+    UrgencyLevel urgency = 5;
+    int32 max_results = 6;
+}
+
+message DoctorMatchRequest {
+    ConstitutionType constitution = 1;
+    repeated string symptoms = 2;
+    string preferred_location = 3;
+    bool tcm_preferred = 4;
+    int32 max_results = 5;
+}
+
+message TreatmentRecommendationRequest {
+    string user_id = 1;
+    ConstitutionType constitution = 2;
+    repeated string symptoms = 3;
+    repeated string current_medications = 4;
+    string medical_history = 5;
+}
+
+message AppointmentRequest {
+    string user_id = 1;
+    string doctor_id = 2;
+    google.protobuf.Timestamp preferred_time = 3;
+    int32 duration_minutes = 4;
+    string symptoms = 5;
+    string notes = 6;
+    UrgencyLevel urgency = 7;
+}
+
+message UpdateAppointmentRequest {
+    string appointment_id = 1;
+    google.protobuf.Timestamp new_time = 2;
+    string notes = 3;
+    AppointmentStatus status = 4;
+}
+
+message GetAppointmentsRequest {
+    string user_id = 1;
+    google.protobuf.Timestamp start_date = 2;
+    google.protobuf.Timestamp end_date = 3;
+    AppointmentStatus status = 4;
+    int32 limit = 5;
+    int32 offset = 6;
+}
+
+message CancelAppointmentRequest {
+    string appointment_id = 1;
+    string reason = 2;
+}
+
+message StatusRequest {
+    string resource_id = 1;
+    ResourceType resource_type = 2;
+}
+
+message AnalyticsRequest {
+    google.protobuf.Timestamp start_date = 1;
+    google.protobuf.Timestamp end_date = 2;
+    repeated string metrics = 3;
+    string group_by = 4;
+}
+
+message UtilizationRequest {
+    ResourceType resource_type = 1;
+    google.protobuf.Timestamp start_date = 2;
+    google.protobuf.Timestamp end_date = 3;
+}
+
+message UpdateResourceStatusRequest {
+    string resource_id = 1;
+    bool available = 2;
+    string reason = 3;
+}
+
+// 小克智能体相关请求
+message ConstitutionAnalysisRequest {
+    string user_id = 1;
+    repeated string symptoms = 2;
+    map<string, string> health_data = 3;
+    string lifestyle_info = 4;
+}
+
+message ScheduleOptimizationRequest {
+    repeated string resource_ids = 1;
+    google.protobuf.Timestamp optimization_date = 2;
+    map<string, float> optimization_weights = 3;
+}
+
+// 响应消息
+message ResourceResponse {
+    repeated Resource resources = 1;
+    int32 total_count = 2;
+    bool has_more = 3;
+}
+
+message BookingResponse {
+    string booking_id = 1;
+    bool success = 2;
+    string message = 3;
+    Appointment appointment = 4;
+}
+
+message CancelResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+message RecommendationResponse {
+    repeated Recommendation recommendations = 1;
+    string reasoning = 2;
+    float confidence = 3;
+}
+
+message DoctorMatchResponse {
+    repeated Doctor doctors = 1;
+    string match_reasoning = 2;
+    float overall_confidence = 3;
+}
+
+message TreatmentRecommendationResponse {
+    repeated TreatmentOption treatment_options = 1;
+    string analysis = 2;
+    repeated string precautions = 3;
+}
+
+message TreatmentOption {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    string type = 4;  // 中医/西医/综合
+    float effectiveness_score = 5;
+    repeated string required_resources = 6;
+    int32 estimated_duration_days = 7;
+    string cost_estimate = 8;
+}
+
+message AppointmentResponse {
+    Appointment appointment = 1;
+    bool success = 2;
+    string message = 3;
+}
+
+message AppointmentsResponse {
+    repeated Appointment appointments = 1;
+    int32 total_count = 2;
+    bool has_more = 3;
+}
+
+message CancelAppointmentResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+message StatusResponse {
+    string resource_id = 1;
+    bool available = 2;
+    float utilization_rate = 3;
+    int32 pending_appointments = 4;
+    google.protobuf.Timestamp last_updated = 5;
+    map<string, string> status_details = 6;
+}
+
+message AnalyticsResponse {
+    map<string, AnalyticsData> metrics = 1;
+    google.protobuf.Timestamp generated_at = 2;
+}
+
+message AnalyticsData {
+    repeated DataPoint data_points = 1;
+    string unit = 2;
+    string description = 3;
+}
+
+message DataPoint {
+    google.protobuf.Timestamp timestamp = 1;
+    double value = 2;
+    map<string, string> labels = 3;
+}
+
+message UtilizationResponse {
+    ResourceType resource_type = 1;
+    float average_utilization = 2;
+    repeated ResourceUtilization resource_utilizations = 3;
+}
+
+message ResourceUtilization {
+    string resource_id = 1;
+    string resource_name = 2;
+    float utilization_rate = 3;
+    int32 total_bookings = 4;
+    int32 available_slots = 5;
+}
+
+message UpdateResourceStatusResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+// 小克智能体相关响应
+message ConstitutionAnalysisResponse {
+    ConstitutionType primary_constitution = 1;
+    ConstitutionType secondary_constitution = 2;
+    float confidence_score = 3;
+    string analysis_summary = 4;
+    repeated string recommendations = 5;
+    map<string, float> constitution_scores = 6;
+}
+
+message ScheduleOptimizationResponse {
+    bool success = 1;
+    string message = 2;
+    repeated OptimizationSuggestion suggestions = 3;
+    float expected_improvement = 4;
+}
+
+message OptimizationSuggestion {
+    string resource_id = 1;
+    string suggestion_type = 2;
+    string description = 3;
+    float impact_score = 4;
+    map<string, string> parameters = 5;
+} 

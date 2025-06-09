@@ -1,0 +1,131 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rag-service
+  namespace: suoke
+  labels:
+    app: rag-service
+    service: rag-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: rag-service
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: rag-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: rag-service
+        image: ${DOCKER_REGISTRY}/suoke/rag-service:${TAG}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+          name: http
+        - containerPort: 9000
+          name: grpc
+        env:
+        - name: LOG_LEVEL
+          value: "info"
+        - name: ENV
+          value: "${ENV}"
+        - name: PORT
+          value: "8000"
+        - name: GRPC_PORT
+          value: "9000"
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: rag-service-secrets
+              key: openai-api-key
+        - name: VECTOR_DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: rag-service-config
+              key: vector-db-host
+        - name: VECTOR_DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: rag-service-config
+              key: vector-db-port
+        - name: VECTOR_DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: rag-service-config
+              key: vector-db-name
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: rag-service-config
+              key: redis-host
+        - name: REDIS_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: rag-service-config
+              key: redis-port
+        - name: TELEMETRY_ENABLED
+          value: "true"
+        - name: OTLP_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: rag-service-config
+              key: otlp-endpoint
+        resources:
+          limits:
+            cpu: "1"
+            memory: "2Gi"
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+        - name: cache-volume
+          mountPath: /app/cache
+      volumes:
+      - name: config-volume
+        configMap:
+          name: rag-service-config
+      - name: cache-volume
+        emptyDir: {}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - rag-service
+              topologyKey: "kubernetes.io/hostname"
+      terminationGracePeriodSeconds: 60 

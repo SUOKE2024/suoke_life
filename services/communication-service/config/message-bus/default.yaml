@@ -1,0 +1,323 @@
+# Message Bus 服务默认配置
+
+# 基本服务配置
+environment: development  # 环境: development, testing, staging, production
+debug: true  # 是否启用调试模式
+enable_auth: false  # 是否启用认证
+max_message_size_bytes: 4194304  # 最大消息大小 (4MB)
+
+# 服务器配置
+server:
+  host: 0.0.0.0
+  port: 50051
+  max_workers: 10
+
+# Kafka配置
+kafka:
+  bootstrap_servers:
+    - localhost:9092
+  topic_prefix: sokelife-
+  consumer_group_id: message-bus-service
+  auto_create_topics: true
+  num_partitions: 3
+  replication_factor: 1
+  security_protocol: PLAINTEXT
+  # 安全认证 - 在生产环境中配置
+  # sasl_mechanism: PLAIN
+  # sasl_plain_username: kafka-user
+  # sasl_plain_password: kafka-pass
+
+# Redis配置 (可选，用于主题和订阅管理)
+redis:
+  host: localhost
+  port: 6379
+  db: 0
+  # password: redis-password
+  ssl: false
+
+# 指标配置
+metrics:
+  enabled: true
+  port: 9090
+
+# 日志配置
+logging:
+  level: INFO  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: standard  # standard, json
+  log_file: logs/message_bus.log
+
+# 消息配置
+messages:
+  default_ttl_hours: 24  # 消息默认存活时间
+  retention_policy: delete  # 消息保留策略: delete, archive
+  max_batch_size: 100  # 批量操作的最大消息数量
+
+# 限流配置
+rate_limiting:
+  enabled: true
+  max_requests_per_minute: 1000  # 每分钟最大请求数
+  burst_size: 100  # 突发请求数量
+
+# 弹性配置
+resilience:
+  retry:
+    max_attempts: 3  # 最大重试次数
+    initial_backoff_ms: 100  # 初始重试等待时间(毫秒)
+    max_backoff_ms: 1000  # 最大重试等待时间(毫秒)
+    backoff_multiplier: 2.0  # 重试等待时间乘数
+  circuit_breaker:
+    failure_threshold: 5  # 触发断路器的失败次数
+    reset_timeout_ms: 30000  # 断路器重置超时(毫秒)
+    half_open_requests: 1  # 半开状态下允许的请求数
+
+# 安全配置 (在生产环境中使用)
+security:
+  auth_service:
+    url: http://localhost:8080/auth
+    timeout_ms: 5000
+  jwt:
+    public_key_path: ""  # JWT公钥路径
+    issuer: sokelife
+    audience: message-bus
+  tls:
+    enabled: false
+    cert_file: certs/server.crt
+    key_file: certs/server.key
+    ca_file: certs/ca.crt
+
+# 消息总线服务默认配置
+service:
+  name: message-bus
+  version: 1.0.0
+  description: 索克生活APP的消息总线服务，处理微服务间的异步通信和事件分发
+
+server:
+  host: 0.0.0.0
+  port: 8085
+  debug: false
+  workers: 8  # 增加工作线程以处理高并发消息
+  timeout: 30
+  cors:
+    enabled: true
+    origins:
+      - "*"
+
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: logs/message-bus.log
+  max_size: 10485760  # 10MB
+  backup_count: 5
+
+# 标准数据库配置
+database:
+  # 主数据库配置（用于消息持久化和元数据存储）
+  primary:
+    type: postgresql
+    host: ${DB_HOST:-localhost}
+    port: ${DB_PORT:-5432}
+    username: ${DB_USER:-postgres}
+    password: ${DB_PASS:-postgres}
+    database: ${DB_NAME:-message_bus}
+    
+    # 连接池配置 - 增大以支持高并发
+    pool:
+      min_size: 10
+      max_size: ${DB_POOL_SIZE:-50}
+      max_overflow: ${DB_MAX_OVERFLOW:-20}
+      timeout: ${DB_POOL_TIMEOUT:-30}
+      recycle: ${DB_POOL_RECYCLE:-3600}
+      use_lifo: true
+      echo: ${DB_ECHO:-false}
+    
+    # 性能优化参数
+    optimization:
+      prepared_statement_cache_size: 200
+      statement_timeout: 30000
+      idle_in_transaction_session_timeout: 60000
+      effective_cache_size: "8GB"
+      maintenance_work_mem: "128MB"
+      max_parallel_workers_per_gather: 4
+      enable_partitionwise_join: true
+    
+    # 连接参数
+    options:
+      application_name: "message_bus"
+      client_encoding: "UTF8"
+      connect_timeout: 10
+      keepalives: 1
+      keepalives_idle: 60
+    
+    # 事务隔离级别
+    isolation_level: "READ COMMITTED"
+  
+  # 只读副本配置（用于读写分离）
+  replicas:
+    enabled: ${DB_REPLICAS_ENABLED:-false}
+    strategy: "round_robin"
+    nodes:
+      - host: ${DB_REPLICA1_HOST}
+        port: ${DB_REPLICA1_PORT:-5432}
+        username: ${DB_REPLICA1_USER:-postgres}
+        password: ${DB_REPLICA1_PASS:-postgres}
+        database: ${DB_REPLICA1_NAME:-message_bus}
+        pool:
+          min_size: 5
+          max_size: ${DB_REPLICA1_POOL_SIZE:-25}
+          max_overflow: 10
+          timeout: 20
+  
+  # SQLite配置（用于本地存储和消息缓存）
+  sqlite:
+    path: ${SQLITE_PATH:-data/local_cache.db}
+    journal_mode: "WAL"
+    synchronous: "NORMAL"
+    busy_timeout: 5000
+    cache_size: 2000
+    temp_store: "MEMORY"
+  
+  # 缓存配置
+  cache:
+    type: redis
+    host: ${REDIS_HOST:-localhost}
+    port: ${REDIS_PORT:-6379}
+    db: ${REDIS_DB:-0}
+    password: ${REDIS_PASS}
+    ttl: ${REDIS_TTL:-3600}
+    key_prefix: "msgbus:"
+    
+    # Redis连接池配置 - 增大以支持消息缓存
+    pool:
+      min_idle: 10
+      max_idle: 50
+      max_active: 100
+      max_wait: 3000
+      timeout: 2000
+    
+    # 本地缓存配置
+    local:
+      enabled: true
+      max_size: 20000
+      ttl: 300
+  
+  # 监控配置
+  monitoring:
+    query_timeout_threshold: 1000
+    slow_query_log: true
+    slow_query_threshold: 500
+    connection_stats: true
+    query_stats: true
+
+# 消息总线配置
+message_bus:
+  # 消息持久化
+  persistence:
+    enabled: true
+    retention_days: 7  # 保留7天的消息历史
+    batch_size: 100
+    flush_interval: 5  # 秒
+  
+  # 消息优先级
+  priority:
+    levels: 5
+    default_level: 3
+  
+  # 消息传递保证
+  delivery:
+    strategy: "at_least_once"  # at_least_once, at_most_once, exactly_once
+    max_retries: 3
+    retry_delay: 5000  # 毫秒
+    dead_letter_queue: true
+  
+  # 主题配置
+  topics:
+    - name: "user.events"
+      partitions: 4
+      retention_hours: 24
+    
+    - name: "health.data"
+      partitions: 8
+      retention_hours: 72
+    
+    - name: "agent.notifications"
+      partitions: 4
+      retention_hours: 24
+    
+    - name: "system.events"
+      partitions: 2
+      retention_hours: 48
+
+# 队列引擎配置 
+queue_engine:
+  type: ${QUEUE_ENGINE:-kafka}  # kafka, rabbitmq, redis
+  
+  # Kafka配置
+  kafka:
+    bootstrap_servers: ${KAFKA_BOOTSTRAP_SERVERS:-localhost:9092}
+    client_id: message_bus_service
+    group_id: message_bus_group
+    auto_offset_reset: earliest
+    enable_auto_commit: false
+    session_timeout_ms: 30000
+    heartbeat_interval_ms: 10000
+    max_poll_interval_ms: 300000
+    max_poll_records: 500
+  
+  # RabbitMQ配置（备选）
+  rabbitmq:
+    host: ${RABBITMQ_HOST:-localhost}
+    port: ${RABBITMQ_PORT:-5672}
+    username: ${RABBITMQ_USER:-guest}
+    password: ${RABBITMQ_PASS:-guest}
+    virtual_host: ${RABBITMQ_VHOST:-/}
+    ssl_enabled: false
+    prefetch_count: 100
+  
+  # Redis Streams配置（备选）
+  redis_streams:
+    host: ${REDIS_STREAMS_HOST:-localhost}
+    port: ${REDIS_STREAMS_PORT:-6379}
+    db: ${REDIS_STREAMS_DB:-1}
+    password: ${REDIS_STREAMS_PASS}
+    max_stream_length: 10000
+    consumer_group: message_bus_group
+
+# 安全配置
+security:
+  jwt:
+    secret: ${JWT_SECRET}
+    algorithm: HS256
+    expires: 3600  # 1小时
+  
+  api_keys:
+    enabled: true
+    header_name: X-API-Key
+  
+  message_encryption:
+    enabled: ${MESSAGE_ENCRYPTION_ENABLED:-false}
+    algorithm: "AES-256-GCM"
+    key_rotation_days: 30
+
+# 可观测性配置
+telemetry:
+  tracing:
+    enabled: ${TRACING_ENABLED:-true}  # 默认开启，消息总线服务的跟踪非常重要
+    exporter: otlp
+    endpoint: ${OTLP_ENDPOINT:-localhost:4317}
+    service_name: message-bus
+    environment: ${SERVICE_ENV:-development}
+  
+  metrics:
+    enabled: ${METRICS_ENABLED:-true}
+    exporter: prometheus
+    endpoint: ${METRICS_ENDPOINT:-localhost:9090}
+    export_interval: 15  # 秒
+  
+  # 消息总线特有的指标
+  message_metrics:
+    enabled: true
+    throughput_window: 60  # 秒
+    latency_percentiles: [50, 95, 99]
+    topic_metrics: true
+    producer_metrics: true
+    consumer_metrics: true

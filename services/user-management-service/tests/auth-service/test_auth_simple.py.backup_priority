@@ -1,0 +1,11 @@
+        from auth_service.cmd.server.main import create_app
+from fastapi.testclient import TestClient
+from typing import Dict, List, Any, Optional, Union
+import pytest
+
+def main() - > None:
+    """主函数 - 自动生成的最小可用版本"""
+    pass
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,129 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+scrape_configs:
+  # Prometheus自身监控
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Node Exporter - 系统指标
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+
+  # cAdvisor - 容器指标
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['cadvisor:8080']
+
+  # 索克生活微服务监控
+  - job_name: 'suoke-api-gateway'
+    static_configs:
+      - targets: ['host.docker.internal:8000']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  - job_name: 'suoke-user-management'
+    static_configs:
+      - targets: ['host.docker.internal:8001']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  - job_name: 'suoke-health-data'
+    static_configs:
+      - targets: ['host.docker.internal:8002']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  - job_name: 'suoke-blockchain'
+    static_configs:
+      - targets: ['host.docker.internal:8003']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  - job_name: 'suoke-communication'
+    static_configs:
+      - targets: ['host.docker.internal:8030']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  - job_name: 'suoke-utility-services'
+    static_configs:
+      - targets: ['host.docker.internal:8040']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  # 智能体服务监控
+  - job_name: 'suoke-xiaoai-agent'
+    static_configs:
+      - targets: ['host.docker.internal:8015']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  - job_name: 'suoke-xiaoke-agent'
+    static_configs:
+      - targets: ['host.docker.internal:8016']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  - job_name: 'suoke-laoke-agent'
+    static_configs:
+      - targets: ['host.docker.internal:8017']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  - job_name: 'suoke-soer-agent'
+    static_configs:
+      - targets: ['host.docker.internal:8018']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  # 诊断服务监控
+  - job_name: 'suoke-diagnostic-look'
+    static_configs:
+      - targets: ['host.docker.internal:8019']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  - job_name: 'suoke-diagnostic-listen'
+    static_configs:
+      - targets: ['host.docker.internal:8020']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  - job_name: 'suoke-diagnostic-inquiry'
+    static_configs:
+      - targets: ['host.docker.internal:8021']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  - job_name: 'suoke-diagnostic-palpation'
+    static_configs:
+      - targets: ['host.docker.internal:8022']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  - job_name: 'suoke-diagnostic-calculation'
+    static_configs:
+      - targets: ['host.docker.internal:8023']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  # 数据库监控
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['host.docker.internal:5432']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['host.docker.internal:6379']
+    metrics_path: '/metrics'
+    scrape_interval: 30s 

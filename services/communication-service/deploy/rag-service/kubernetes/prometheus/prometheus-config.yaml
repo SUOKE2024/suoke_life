@@ -1,0 +1,203 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: suoke
+  labels:
+    app: prometheus
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+      evaluation_interval: 15s
+      scrape_timeout: 10s
+
+    alerting:
+      alertmanagers:
+      - static_configs:
+        - targets:
+          - alertmanager:9093
+
+    rule_files:
+      - "/etc/prometheus/rules/*.yml"
+
+    scrape_configs:
+      # RAG服务监控
+      - job_name: 'rag-service'
+        metrics_path: '/metrics'
+        scrape_interval: 10s
+        kubernetes_sd_configs:
+        - role: pod
+        relabel_configs:
+        - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_pod_label_app]
+          regex: suoke;rag-service
+          action: keep
+        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+          regex: "true"
+          action: keep
+        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+          regex: (.+)
+          target_label: __metrics_path__
+          replacement: $1
+        - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+          regex: ([^:]+)(?::\d+)?;(\d+)
+          target_label: __address__
+          replacement: $1:$2
+        - source_labels: [__meta_kubernetes_namespace]
+          target_label: kubernetes_namespace
+        - source_labels: [__meta_kubernetes_pod_name]
+          target_label: kubernetes_pod_name
+        - source_labels: [__meta_kubernetes_pod_label_app]
+          target_label: app
+
+      # Kubernetes API服务器监控
+      - job_name: 'kubernetes-apiservers'
+        kubernetes_sd_configs:
+        - role: endpoints
+        scheme: https
+        tls_config:
+          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+        relabel_configs:
+        - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+          action: keep
+          regex: default;kubernetes;https
+
+      # Kubernetes节点监控
+      - job_name: 'kubernetes-nodes'
+        scheme: https
+        tls_config:
+          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+        kubernetes_sd_configs:
+        - role: node
+        relabel_configs:
+        - action: labelmap
+          regex: __meta_kubernetes_node_label_(.+)
+        - target_label: __address__
+          replacement: kubernetes.default.svc:443
+        - source_labels: [__meta_kubernetes_node_name]
+          regex: (.+)
+          target_label: __metrics_path__
+          replacement: /api/v1/nodes/$1/proxy/metrics
+
+      # Kubelet监控
+      - job_name: 'kubernetes-kubelet'
+        scheme: https
+        tls_config:
+          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+        kubernetes_sd_configs:
+        - role: node
+        relabel_configs:
+        - action: labelmap
+          regex: __meta_kubernetes_node_label_(.+)
+        - target_label: __address__
+          replacement: kubernetes.default.svc:443
+        - source_labels: [__meta_kubernetes_node_name]
+          regex: (.+)
+          target_label: __metrics_path__
+          replacement: /api/v1/nodes/$1/proxy/metrics/cadvisor
+
+      # Milvus服务监控
+      - job_name: 'milvus'
+        metrics_path: '/metrics'
+        kubernetes_sd_configs:
+        - role: endpoints
+        relabel_configs:
+        - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name]
+          regex: suoke;milvus-service
+          action: keep
+        - source_labels: [__meta_kubernetes_namespace]
+          target_label: kubernetes_namespace
+        - source_labels: [__meta_kubernetes_service_name]
+          target_label: kubernetes_service_name
+
+      # Redis服务监控
+      - job_name: 'redis'
+        metrics_path: '/metrics'
+        kubernetes_sd_configs:
+        - role: endpoints
+        relabel_configs:
+        - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name]
+          regex: suoke;redis-service
+          action: keep
+        - source_labels: [__meta_kubernetes_namespace]
+          target_label: kubernetes_namespace
+        - source_labels: [__meta_kubernetes_service_name]
+          target_label: kubernetes_service_name
+
+    # 告警规则配置
+  rules.yml: |
+    groups:
+    - name: rag-service-alerts
+      rules:
+      # 服务可用性告警
+      - alert: RagServiceDown
+        expr: up{app="rag-service"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "RAG服务不可用"
+          description: "实例 {{ $labels.instance }} 的RAG服务已停止运行超过1分钟。"
+      
+      # 高错误率告警
+      - alert: RagServiceHighErrorRate
+        expr: sum(rate(rag_service_errors_total[5m])) / sum(rate(rag_service_requests_total[5m])) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "RAG服务错误率过高"
+          description: "RAG服务错误率超过5%，持续5分钟。"
+      
+      # 响应时间告警
+      - alert: RagServiceSlowResponse
+        expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{app="rag-service"}[5m])) by (le)) > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "RAG服务响应时间过长"
+          description: "RAG服务95%请求的响应时间超过2秒，持续5分钟。"
+      
+      # 内存使用告警
+      - alert: RagServiceHighMemoryUsage
+        expr: container_memory_usage_bytes{container="rag-service"} / container_spec_memory_limit_bytes{container="rag-service"} > 0.85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "RAG服务内存使用率过高"
+          description: "实例 {{ $labels.instance }} 的RAG服务内存使用率超过85%，持续5分钟。"
+      
+      # CPU使用告警
+      - alert: RagServiceHighCPUUsage
+        expr: sum(rate(container_cpu_usage_seconds_total{container="rag-service"}[5m])) by (instance, container) / sum(container_spec_cpu_quota{container="rag-service"} / 100000) by (instance, container) > 0.85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "RAG服务CPU使用率过高"
+          description: "实例 {{ $labels.instance }} 的RAG服务CPU使用率超过85%，持续5分钟。"
+      
+      # Milvus连接告警
+      - alert: RagServiceMilvusConnectionFailure
+        expr: sum(rate(rag_service_errors_total{error_type="milvus_connection"}[5m])) > 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "RAG服务无法连接到Milvus"
+          description: "RAG服务出现Milvus连接错误，持续2分钟。"
+      
+      # OpenAI API调用告警
+      - alert: RagServiceOpenAIAPIFailure
+        expr: sum(rate(rag_service_errors_total{error_type="openai_api"}[5m])) > 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "RAG服务OpenAI API调用失败"
+          description: "RAG服务出现OpenAI API调用错误，持续2分钟。" 

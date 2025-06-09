@@ -1,0 +1,153 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: corn-maze-service
+  namespace: soke-life
+  labels:
+    app: corn-maze-service
+    component: gaming
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: corn-maze-service
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: corn-maze-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "51057"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: corn-maze-service
+        image: ${DOCKER_REGISTRY}/corn-maze-service:${IMAGE_TAG}
+        imagePullPolicy: Always
+        ports:
+        - name: grpc
+          containerPort: 50057
+        - name: metrics
+          containerPort: 51057
+        - name: health
+          containerPort: 51058
+        env:
+        - name: APP_ENV
+          value: "${APP_ENV}"
+        - name: DB_PATH
+          value: "/app/data/maze.db"
+        - name: LOG_LEVEL
+          value: "INFO"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        readinessProbe:
+          httpGet:
+            path: /readiness
+            port: health
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: health
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        volumeMounts:
+        - name: data
+          mountPath: /app/data
+        - name: logs
+          mountPath: /app/logs
+        - name: config
+          mountPath: /app/config
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: corn-maze-data-pvc
+      - name: logs
+        emptyDir: {}
+      - name: config
+        configMap:
+          name: corn-maze-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: corn-maze-service
+  namespace: soke-life
+  labels:
+    app: corn-maze-service
+spec:
+  selector:
+    app: corn-maze-service
+  ports:
+  - name: grpc
+    port: 50057
+    targetPort: grpc
+  - name: metrics
+    port: 51057
+    targetPort: metrics
+  - name: health
+    port: 51058
+    targetPort: health
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: corn-maze-data-pvc
+  namespace: soke-life
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: standard
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: corn-maze-config
+  namespace: soke-life
+data:
+  config.yaml: |-
+    app:
+      name: "corn-maze-service"
+      version: "1.0.0"
+    
+    grpc:
+      port: 50057
+      max_workers: 10
+      max_concurrent_rpcs: 100
+      max_message_length: 10485760
+    
+    metrics:
+      enabled: true
+      port: 51057
+    
+    health:
+      enabled: true
+      port: 51058
+    
+    db:
+      path: "data/maze.db"
+      pool_size: 10
+      timeout: 30
+      journal_mode: "WAL"
+    
+    logging:
+      level: "INFO"
+      format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+      file: "logs/corn-maze-service.log"
+      max_size: 10485760
+      backup_count: 5
+      stdout: true

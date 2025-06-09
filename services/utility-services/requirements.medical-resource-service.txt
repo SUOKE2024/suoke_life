@@ -1,0 +1,78 @@
+# 医疗资源服务依赖包
+
+# Web框架
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+pydantic>=2.5.0
+pydantic-settings>=2.1.0
+
+# 数据库
+sqlalchemy>=2.0.0
+asyncpg>=0.29.0
+alembic>=1.13.0
+redis>=5.0.0
+motor>=3.3.0  # MongoDB异步驱动
+
+# HTTP客户端
+httpx>=0.25.0
+aiohttp>=3.9.0
+
+# 地理位置
+geopy>=2.4.0
+
+# 机器学习和AI
+scikit-learn>=1.3.0
+numpy>=1.24.0
+pandas>=2.1.0
+
+# 缓存
+aiocache>=0.12.0
+
+# 日志
+structlog>=23.2.0
+
+# 配置管理
+pyyaml>=6.0.1
+python-dotenv>=1.0.0
+
+# 测试
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.1.0
+pytest-mock>=3.12.0
+pytest-xdist>=3.5.0
+
+# 代码质量
+black>=23.11.0
+flake8>=6.1.0
+isort>=5.12.0
+mypy>=1.7.0
+
+# 监控
+prometheus-client>=0.19.0
+
+# 安全
+cryptography>=41.0.0
+passlib[bcrypt]>=1.7.4
+
+# 工具
+click>=8.1.0
+rich>=13.7.0
+
+# 性能监控
+psutil>=5.9.0
+
+# 时间处理
+python-dateutil>=2.8.2
+
+# JSON处理
+orjson>=3.9.0
+
+# 异步任务
+celery>=5.3.0
+
+# 数据验证
+marshmallow>=3.20.0
+
+# 网络请求
+requests>=2.31.0 
