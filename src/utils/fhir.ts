@@ -2,16 +2,16 @@
 // 支持健康数据采集、存储、交换的FHIR格式转换与校验
 export interface FhirObservation {
   resourceType: "Observation";,
-  status: string;
+  status: string;,
   category: Array<{;,
-  coding: Array<{;
-      system: string;,
+  coding: Array<{;,
+  system: string;,
   code: string;
 }>;
   }>;
   code: {,
-  coding: Array<{
-      system: string,
+  coding: Array<{,
+  system: string,
   code: string;,
   display: string}>;
   };
@@ -19,8 +19,8 @@ export interface FhirObservation {
   reference: string};
   effectiveDateTime?: string;
   valueQuantity: {,
-  value: number;
-    unit: string,
+  value: number;,
+  unit: string,
   system: string;,
   code: string}
 }
@@ -32,8 +32,8 @@ export function toFhirObservationTemperature(;)
       resourceType: "Observation",
       status: "final",
     category: [{,
-  coding: [{
-      system: "http:///    observation-category",
+  coding: [{,
+  system: "http:///    observation-category",
       code: "vital-signs";
       }];
     }],code: {coding: [{,
@@ -52,14 +52,14 @@ export function toFhirObservationBloodPressure(;)
       resourceType: "Observation",
       status: "final",
     category: [{,
-  coding: [{
-      system: "http:///    observation-category",
+  coding: [{,
+  system: "http:///    observation-category",
       code: "vital-signs"
       }]
     }],
     code: {,
-  coding: [{
-      system: "http:// loinc.org",
+  coding: [{,
+  system: "http:// loinc.org",
       code: "85354-9",
         display: "Blood pressure panel"
       }];
@@ -71,8 +71,8 @@ export function toFhirObservationBloodPressure(;)
       }
     }, {
       code: {,
-  coding: [{
-      system: "http:// loinc.org",
+  coding: [{,
+  system: "http:// loinc.org",
       code: "8462-4",
           display: "Diastolic blood pressure"
         }]
@@ -94,8 +94,8 @@ export function toFhirObservationHeartRate(;)
       resourceType: "Observation",
       status: "final",
     category: [{,
-  coding: [{
-      system: "http:///    observation-category",
+  coding: [{,
+  system: "http:///    observation-category",
       code: "vital-signs";
       }];
     }],code: {coding: [{,

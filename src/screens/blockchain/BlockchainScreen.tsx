@@ -144,7 +144,7 @@ const AccessControlTab: React.FC<{ userId: string }> = ({ userId }) => {
 };
 // 快捷操作卡片
 const QuickActionCard: React.FC<{,
-  icon: string;
+  icon: string;,
   title: string,
   description: string;,
   color: string;

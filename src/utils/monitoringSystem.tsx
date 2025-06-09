@@ -28,9 +28,9 @@ export interface ErrorInfo {
 };
 export interface AlertRule {
   id: string;,
-  name: string;
+  name: string;,
   metric: string;,
-  threshold: number;
+  threshold: number;,
   operator: ">" | "<" | "=" | ">=" | "<=",enabled: boolean,cooldown: number;
   lastTriggered?: number,
   actions: AlertAction[];

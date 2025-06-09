@@ -40,11 +40,11 @@ export enum AuditEventType {
 }
 export interface SecurityPolicy {
   id: string;,
-  name: string;
+  name: string;,
   description: string;,
-  rules: SecurityRule[];
+  rules: SecurityRule[];,
   isActive: boolean;,
-  priority: number;
+  priority: number;,
   createdAt: number;,
   updatedAt: number;
 }
@@ -54,7 +54,7 @@ export interface SecurityRule {
     | "COMPLIANCE"
   condition: (context: SecurityContext) => boolean;,
   action: (context: SecurityContext) => SecurityAction;,
-  severity: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+  severity: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";,
   isEnabled: boolean;
 }
 export interface SecurityContext {
@@ -79,7 +79,7 @@ export interface AuditEvent {
   userId?: string;
   resource?: string;
 action: string;,
-  result: "SUCCESS" | "FAILURE" | "BLOCKED";
+  result: "SUCCESS" | "FAILURE" | "BLOCKED";,
   timestamp: number;
   ipAddress?: string;
   userAgent?: string;
@@ -88,13 +88,13 @@ riskScore?: number;
 }
 export interface ThreatDetection {
   id: string;,
-  type: ThreatType;
+  type: ThreatType;,
   severity: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";,
-  description: string;
+  description: string;,
   source: string;,
-  timestamp: number;
+  timestamp: number;,
   isResolved: boolean;,
-  evidence: unknown[];
+  evidence: unknown[];,
   mitigationSteps: string[];
 };
 export interface EncryptionConfig {

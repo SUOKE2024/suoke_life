@@ -3,7 +3,7 @@ import { configService } from './configService';
 // 事件类型定义
 export interface AnalyticsEvent {
   id: string;,
-  type: 'api_call' | 'error' | 'performance' | 'user_action' | 'system';
+  type: 'api_call' | 'error' | 'performance' | 'user_action' | 'system';,
   timestamp: number;,
   data: Record<string, any>;
   userId?: string;
@@ -14,37 +14,37 @@ export interface AnalyticsEvent {
 // 性能指标
 export interface PerformanceMetrics {
   responseTime: number;,
-  throughput: number;
+  throughput: number;,
   errorRate: number;,
-  cacheHitRate: number;
+  cacheHitRate: number;,
   memoryUsage: number;,
   cpuUsage: number;
 }
 // 用户行为数据
 export interface UserBehavior {
   userId: string;,
-  sessionId: string;
+  sessionId: string;,
   actions: string[];,
-  duration: number;
+  duration: number;,
   screens: string[];,
   errors: number;
 }
 // 服务使用统计
 export interface ServiceUsage {
   service: string;,
-  calls: number;
+  calls: number;,
   errors: number;,
-  avgResponseTime: number;
+  avgResponseTime: number;,
   lastUsed: number;
 }
 // 分析配置
 interface AnalyticsConfig {
   enabled: boolean;,
-  batchSize: number;
+  batchSize: number;,
   flushInterval: number;,
-  maxEvents: number;
+  maxEvents: number;,
   enableUserTracking: boolean;,
-  enablePerformanceTracking: boolean;
+  enablePerformanceTracking: boolean;,
   enableErrorTracking: boolean;
 }
 class AnalyticsService {
@@ -84,7 +84,7 @@ class AnalyticsService {
     try {
       this.performanceObserver = new PerformanceObserver(list) => {
         const entries = list.getEntries();
-        entries.forEach((entry) => {
+        entries.forEach(entry) => {
           this.trackEvent('performance', {
             name: entry.name,
             duration: entry.duration,
@@ -241,7 +241,7 @@ class AnalyticsService {
         }
       });
     // 计算会话持续时间
-    userSessions.forEach((behavior, key) => {
+    userSessions.forEach(behavior, key) => {
       const sessionEvents = this.events.filter(e =>)
         e.userId === behavior.userId && e.sessionId === behavior.sessionId;
       );

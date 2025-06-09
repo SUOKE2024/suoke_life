@@ -4,9 +4,9 @@ import { performanceMonitor, memoryOptimizer } from "./index";/    import React,
 // React组件性能优化工具   提供组件渲染优化、状态管理优化、重渲染检测等功能
 export interface ComponentPerformanceData {
   componentName: string;,
-  renderCount: number;
+  renderCount: number;,
   averageRenderTime: number;,
-  lastRenderTime: number;
+  lastRenderTime: number;,
   propsChanges: number;,
   stateChanges: number,timestamp: number;
 };
@@ -14,7 +14,7 @@ export interface RenderOptimizationSuggestion {
   type:  ;
 memo" | "callback" | "useMemo" | "state" | "props",
   severity: "low" | "medium" | "high";,
-  message: string;
+  message: string;,
   component: string;
 }
 // 组件性能优化器类export class ComponentOptimizer  {private static instance: ComponentOptimizer;
@@ -87,7 +87,7 @@ memo" | "callback" | "useMemo" | "state" | "props",
   }
   // 获取性能优化建议  getOptimizationSuggestions(): RenderOptimizationSuggestion[] {
     const suggestions: RenderOptimizationSuggestion[] = [];
-    this.componentData.forEach((data, componentName) => {}))
+    this.componentData.forEach(data, componentName) => {}))
       if (data.renderCount > 50 && data.averageRenderTime > 16) {
         suggestions.push({
       type: "memo",

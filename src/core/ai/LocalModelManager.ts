@@ -8,15 +8,15 @@ import RNFS from 'react-native-fs';
 
 export interface LocalModel {
   id: string;,
-  name: string;
+  name: string;,
   type: 'onnx' | 'tflite' | 'pytorch';,
-  version: string;
+  version: string;,
   filePath: string;,
-  fileSize: number;
+  fileSize: number;,
   capabilities: string[];,
-  isLoaded: boolean;
+  isLoaded: boolean;,
   lastUsed: number;,
-  accuracy: number;
+  accuracy: number;,
   inferenceTimeMs: number;
 }
 
@@ -32,9 +32,9 @@ export interface ModelInferenceRequest {
 
 export interface ModelInferenceResult {
   modelId: string;,
-  result: any;
+  result: any;,
   confidence: number;,
-  processingTime: number;
+  processingTime: number;,
   fromCache: boolean;,
   metadata: Record<string, any>;
 }

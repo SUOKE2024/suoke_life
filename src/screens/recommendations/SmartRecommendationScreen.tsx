@@ -25,25 +25,25 @@ const { width: screenWidth } = Dimensions.get('window');
 
 interface Recommendation {
   id: string;,
-  type: 'diet' | 'exercise' | 'lifestyle' | 'medical' | 'mental';
+  type: 'diet' | 'exercise' | 'lifestyle' | 'medical' | 'mental';,
   title: string;,
-  description: string;
+  description: string;,
   priority: 'high' | 'medium' | 'low';,
-  confidence: number;
+  confidence: number;,
   tags: string[];,
   actionable: boolean;
   estimatedTime?: string;
   difficulty?: 'easy' | 'medium' | 'hard';
   benefits: string[];,
-  icon: string;
+  icon: string;,
   color: string;
 }
 
 interface UserProfile {
   age: number;,
-  gender: 'male' | 'female';
+  gender: 'male' | 'female';,
   healthGoals: string[];,
-  currentConditions: string[];
+  currentConditions: string[];,
   lifestyle: string;,
   activityLevel: string;
 }

@@ -32,9 +32,9 @@ import {import Svg, {import {/**
 } from '../../types/maze';
 interface MazeRendererProps {
   maze: Maze;,
-  progress: MazeProgress;
+  progress: MazeProgress;,
   isMoving: boolean;,
-  isPaused: boolean;
+  isPaused: boolean;,
   gameSettings: GameSettings | null;
   onMove?: (direction: Direction) => void;
 }

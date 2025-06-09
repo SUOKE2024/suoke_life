@@ -9,34 +9,34 @@ import { offlineCacheManager } from './OfflineCacheManager';
 
 export interface OrchestrationConfig {
   enableLocalInference: boolean;,
-  enableCloudInference: boolean;
+  enableCloudInference: boolean;,
   enableCaching: boolean;,
-  enableFallback: boolean;
+  enableFallback: boolean;,
   maxConcurrentRequests: number;,
-  defaultTimeout: number;
+  defaultTimeout: number;,
   performanceThresholds: {,
-  localMaxLatency: number;
-    cloudMaxLatency: number;,
+  localMaxLatency: number;,
+  cloudMaxLatency: number;,
   minConfidence: number;
   };
 }
 
 export interface HealthMetrics {
   localModelsLoaded: number;,
-  cloudModelsAvailable: number;
+  cloudModelsAvailable: number;,
   cacheHitRate: number;,
-  averageLatency: number;
+  averageLatency: number;,
   successRate: number;,
   activeRequests: number;
 }
 
 export interface InferenceMetrics {
   totalRequests: number;,
-  localRequests: number;
+  localRequests: number;,
   cloudRequests: number;,
-  hybridRequests: number;
+  hybridRequests: number;,
   cacheHits: number;,
-  failures: number;
+  failures: number;,
   averageLatency: number;,
   throughput: number;
 }
@@ -114,8 +114,8 @@ export class HybridInferenceOrchestrator {
    * 执行智能推理
    */
   async inference(request: {,
-  modelId: string;
-    inputData: any;
+  modelId: string;,
+  inputData: any;
     options?: {
       priority?: 'low' | 'normal' | 'high' | 'critical';
       timeout?: number;
@@ -125,10 +125,10 @@ export class HybridInferenceOrchestrator {
     };
   }): Promise<{
     result: any;,
-  confidence: number;
-    processingTime: number;,
-  source: 'local' | 'cloud' | 'hybrid' | 'cache';
-    modelUsed: string;,
+  confidence: number;,
+  processingTime: number;,
+  source: 'local' | 'cloud' | 'hybrid' | 'cache';,
+  modelUsed: string;,
   metadata: Record<string, any>;
   }> {
     const startTime = Date.now();

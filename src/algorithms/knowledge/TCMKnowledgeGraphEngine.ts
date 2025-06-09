@@ -5,7 +5,7 @@ import { EventEmitter } from 'events;';
 // 基础数据结构定义
 export interface TCMEntity {
   id: string;,
-  name: string;
+  name: string;,
   type: EntityType;,
   properties: Record<string, any>;
   aliases?: string[];
@@ -14,16 +14,16 @@ export interface TCMEntity {
 }
 export interface TCMRelation {
   id: string;,
-  source: string;
+  source: string;,
   target: string;,
-  type: RelationType;
+  type: RelationType;,
   properties: Record<string, any>;
   weight?: number;
   confidence?: number;
 }
 export interface TCMTriple {
   subject: TCMEntity;,
-  predicate: TCMRelation;
+  predicate: TCMRelation;,
   object: TCMEntity;
 }
 export enum EntityType {SYMPTOM =
@@ -71,8 +71,8 @@ FOLLOWS = "follows                // 后于"
 export interface DiagnosisInput {
   symptoms: string[];
   tongueAnalysis?: {color: string;,
-  coating: string;
-    texture: string;,
+  coating: string;,
+  texture: string;,
   moisture: number;
 };
   pulseAnalysis?: {
@@ -91,17 +91,17 @@ export interface DiagnosisInput {
 }
 export interface DiagnosisResult {
   primarySyndrome: TCMEntity;,
-  secondarySyndromes: TCMEntity[];
+  secondarySyndromes: TCMEntity[];,
   confidence: number;,
-  reasoning: ReasoningPath[];
+  reasoning: ReasoningPath[];,
   recommendations: TreatmentRecommendation[];,
   differentialDiagnosis: DifferentialDiagnosis[];
 }
 export interface ReasoningPath {
   step: number;,
-  description: string;
+  description: string;,
   entities: TCMEntity[];,
-  relations: TCMRelation[];
+  relations: TCMRelation[];,
   confidence: number;,
   reasoning: string;
 }
@@ -116,15 +116,15 @@ export interface TreatmentRecommendation {
 }
 export interface DifferentialDiagnosis {
   syndrome: TCMEntity;,
-  probability: number;
+  probability: number;,
   supportingEvidence: string[];,
   contradictingEvidence: string[];
 }
 export interface KnowledgeGraphConfig {
   enableFuzzyMatching: boolean;,
-  confidenceThreshold: number;
+  confidenceThreshold: number;,
   maxReasoningDepth: number;,
-  enableTemporalReasoning: boolean;
+  enableTemporalReasoning: boolean;,
   enableUncertaintyHandling: boolean;,
   weightingStrategy: uniform" | "frequency | "expert" | ml;
 }
@@ -394,7 +394,7 @@ const protocols = [;
 for (const entityType of Object.values(EntityType)) {
       this.entityIndex.set(entityType, new Set());
     }
-    this.entities.forEach((entity, id) => {}))
+    this.entities.forEach(entity, id) => {}))
       const typeSet = this.entityIndex.get(entity.type);
       if (typeSet) {
         typeSet.add(id);
@@ -404,7 +404,7 @@ for (const entityType of Object.values(EntityType)) {
 for (const relationType of Object.values(RelationType)) {
       this.relationIndex.set(relationType, new Set());
     }
-    this.relations.forEach((relation, id) => {}))
+    this.relations.forEach(relation, id) => {}))
       const typeSet = this.relationIndex.get(relation.type);
       if (typeSet) {
         typeSet.add(id);
@@ -747,7 +747,7 @@ if (evidence.pulseEvidence?.syndromeIndicators) {
 * * 构建推理路径
   private buildReasoningPaths(evidence: any, syndromes: TCMEntity[]): ReasoningPath[] {
     const paths: ReasoningPath[] = [];
-    syndromes.forEach((syndrome, index) => {}))
+    syndromes.forEach(syndrome, index) => {}))
       const path: ReasoningPath = {step: index + 1,
         description: `推理${syndrome.name}`,
         entities: [syndrome],

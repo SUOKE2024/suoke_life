@@ -1,8 +1,8 @@
 export interface DiagnosisStep {
   id: string;,
-  title: string;
+  title: string;,
   description: string;,
-  icon: string;
+  icon: string;,
   component: React.ComponentType<DiagnosisComponentProps>;
 }
 
@@ -22,17 +22,17 @@ export interface DiagnosisInput {
 
 export interface FiveDiagnosisResult {
   sessionId: string;,
-  userId: string;
+  userId: string;,
   timestamp: string;,
-  overallConfidence: number;
+  overallConfidence: number;,
   primarySyndrome: {,
-  name: string;
-    confidence: number;,
+  name: string;,
+  confidence: number;,
   description: string;
   };
   constitutionType: {,
-  type: string;
-    characteristics: string[];,
+  type: string;,
+  characteristics: string[];,
   recommendations: string[];
   };
   diagnosticResults: {
@@ -43,20 +43,20 @@ export interface FiveDiagnosisResult {
     calculation?: DiagnosisResult;
   };
   fusionAnalysis: {,
-  evidenceStrength: number;
-    syndromePatterns: string[];,
+  evidenceStrength: number;,
+  syndromePatterns: string[];,
   riskFactors: string[];
   };
   healthRecommendations: {,
-  lifestyle: string[];
-    diet: string[];,
-  exercise: string[];
-    treatment: string[];,
+  lifestyle: string[];,
+  diet: string[];,
+  exercise: string[];,
+  treatment: string[];,
   prevention: string[];
   };
   qualityMetrics: {,
-  dataQuality: number;
-    resultReliability: number;,
+  dataQuality: number;,
+  resultReliability: number;,
   completeness: number;
   };
   overallAssessment: string;
@@ -64,9 +64,9 @@ export interface FiveDiagnosisResult {
 
 export interface DiagnosisResult {
   type: string;,
-  confidence: number;
+  confidence: number;,
   findings: string[];,
-  recommendations: string[];
+  recommendations: string[];,
   timestamp: string;
 }
 
@@ -86,7 +86,7 @@ export interface ListenDiagnosisData {
 
 export interface InquiryDiagnosisData {
   symptoms: string[];,
-  medicalHistory: string[];
+  medicalHistory: string[];,
   lifestyle: any;
   currentSymptoms?: string[];
   painLevel?: number;
@@ -103,18 +103,18 @@ export interface PalpationDiagnosisData {
 
 export interface CalculationDiagnosisData {
   personalInfo: {,
-  birthYear: number;
-    birthMonth: number;,
-  birthDay: number;
-    birthHour: number;,
-  gender: string;
-    location: string;
+  birthYear: number;,
+  birthMonth: number;,
+  birthDay: number;,
+  birthHour: number;,
+  gender: string;,
+  location: string;
   };
   analysisTypes: {,
-  ziwuLiuzhu: boolean;
-    constitution: boolean;,
-  bagua: boolean;
-    wuyunLiuqi: boolean;,
+  ziwuLiuzhu: boolean;,
+  constitution: boolean;,
+  bagua: boolean;,
+  wuyunLiuqi: boolean;,
   comprehensive: boolean;
   };
   currentTime: string;,

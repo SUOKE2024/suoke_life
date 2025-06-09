@@ -18,14 +18,14 @@ import {View,
 const { width, height } = Dimensions.get('window');
 interface MazeCompletionScreenProps {
   navigation: any;,
-  route: {;
-    params: {;,
-  score: number;
-      completionTime: number;,
-  stepsCount: number;
-      theme: MazeTheme;,
-  difficulty: MazeDifficulty;
-      rewards: GameReward[];
+  route: {;,
+  params: {;,
+  score: number;,
+  completionTime: number;,
+  stepsCount: number;,
+  theme: MazeTheme;,
+  difficulty: MazeDifficulty;,
+  rewards: GameReward[];
       isNewRecord?: boolean;
       mazeName: string;
       onPlayAgain?: () => void;

@@ -9,7 +9,7 @@ interface AnalyticsDashboardProps {
 }
 interface DashboardTab {
   id: string;,
-  title: string;
+  title: string;,
   icon: string;
 }
 const TABS: DashboardTab[] = [

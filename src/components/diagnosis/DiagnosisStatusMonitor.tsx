@@ -15,9 +15,9 @@ interface DiagnosisStatusMonitorProps {
 }
 interface ServiceHealth {
   inquiry: boolean;,
-  look: boolean;
+  look: boolean;,
   listen: boolean;,
-  palpation: boolean;
+  palpation: boolean;,
   calculation: boolean;
 }
 export default React.memo(function DiagnosisStatusMonitor({

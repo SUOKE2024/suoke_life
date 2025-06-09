@@ -23,7 +23,7 @@ if (
 
 export interface AccordionItem {
   key: string;,
-  title: string;
+  title: string;,
   content: React.ReactNode;
   disabled?: boolean;
   icon?: React.ReactNode;

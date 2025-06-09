@@ -34,17 +34,17 @@ import {import type {queryRAG,
 export interface UseRAGReturn {
   // 状态
   isQuerying: boolean;,
-  isStreaming: boolean;
+  isStreaming: boolean;,
   isAnalyzing: boolean;,
-  isRecommending: boolean;
+  isRecommending: boolean;,
   currentResult: RAGQueryResponse | null;,
-  queryHistory: RAGQueryResponse[];
+  queryHistory: RAGQueryResponse[];,
   tcmAnalysisResult: any;,
-  herbRecommendationResult: any;
+  herbRecommendationResult: any;,
   error: string | null;
   // 统计信息
   cacheStats: any;,
-  performanceMetrics: any;
+  performanceMetrics: any;,
   preferences: any;,
   offlineStatus: any;
   // 基础查询方法
@@ -59,7 +59,7 @@ export interface UseRAGReturn {
   queryWithSensorData: (query: string, sensorData: any, userId: string) => Promise<void>;
   // 状态管理
   clearResult: () => void;,
-  clearError: () => void;
+  clearError: () => void;,
   updateUserPreferences: (prefs: Partial<any>) => void;
   // 缓存管理
   clearQueryCache: () => void;,
@@ -73,7 +73,7 @@ export interface UseRAGReturn {
   // 历史管理
   getQueryHistory: () => RAGQueryResponse[];,
   searchHistory: (keyword: string) => RAGQueryResponse[];,
-  exportHistory: () => string;
+  exportHistory: () => string;,
   importHistory: (data: string) => void;
   // 智能推荐
   getSmartSuggestions: (context: string) => Promise<string[]>;,

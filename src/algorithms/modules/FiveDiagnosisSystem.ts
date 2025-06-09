@@ -242,102 +242,102 @@ class DiagnosisSynthesisEngine {
 // 类型定义
 export interface ComprehensiveDiagnosisResult {
   userId: string;,
-  timestamp: Date;
+  timestamp: Date;,
   individualResults: FiveDiagnosisResults;,
-  synthesis: DiagnosisSynthesis;
+  synthesis: DiagnosisSynthesis;,
   confidence: number;,
   recommendations: TreatmentRecommendation[];
 }
 export interface FiveDiagnosisResults {
   look: LookDiagnosisResult;,
-  listen: ListenDiagnosisResult;
+  listen: ListenDiagnosisResult;,
   inquiry: InquiryDiagnosisResult;,
-  pulse: PulseDiagnosisResult;
+  pulse: PulseDiagnosisResult;,
   palpation: PalpationDiagnosisResult;
 }
 export interface LookDiagnosisResult {
   faceColor: FaceColorAnalysis;,
-  tongueAnalysis: TongueAnalysis;
+  tongueAnalysis: TongueAnalysis;,
   bodyShape: BodyShapeAnalysis;,
-  spirit: SpiritAnalysis;
+  spirit: SpiritAnalysis;,
   confidence: number;
 }
 export interface ListenDiagnosisResult {
   voiceAnalysis: VoiceAnalysis;,
-  breathingAnalysis: BreathingAnalysis;
+  breathingAnalysis: BreathingAnalysis;,
   coughAnalysis: CoughAnalysis;,
-  odorAnalysis: OdorAnalysis;
+  odorAnalysis: OdorAnalysis;,
   confidence: number;
 }
 export interface InquiryDiagnosisResult {
   chiefComplaint: ChiefComplaintAnalysis;,
-  presentIllness: PresentIllnessAnalysis;
+  presentIllness: PresentIllnessAnalysis;,
   pastHistory: PastHistoryAnalysis;,
-  familyHistory: FamilyHistoryAnalysis;
+  familyHistory: FamilyHistoryAnalysis;,
   personalHistory: PersonalHistoryAnalysis;,
-  systemReview: SystemReviewAnalysis;
+  systemReview: SystemReviewAnalysis;,
   confidence: number;
 }
 export interface PulseDiagnosisResult {
   pulseCharacteristics: PulseCharacteristics;,
-  pulsePositions: PulsePositions;
+  pulsePositions: PulsePositions;,
   pulseStrength: PulseStrength;,
-  pulseRhythm: PulseRhythm;
+  pulseRhythm: PulseRhythm;,
   confidence: number;
 }
 export interface PalpationDiagnosisResult {
   abdominalPalpation: AbdominalPalpation;,
-  acupointPalpation: AcupointPalpation;
+  acupointPalpation: AcupointPalpation;,
   skinTemperature: SkinTemperatureAnalysis;,
-  muscleTexture: MuscleTextureAnalysis;
+  muscleTexture: MuscleTextureAnalysis;,
   confidence: number;
 }
 export interface DiagnosisSynthesis {
   syndrome: SyndromeAnalysis;,
-  constitution: ConstitutionAnalysis;
+  constitution: ConstitutionAnalysis;,
   pathology: PathologyAnalysis;,
   treatment: TreatmentAnalysis;
 }
 // 详细分析类型
 export interface FaceColorAnalysis {
   color: string;,
-  luster: string;
+  luster: string;,
   distribution: string;
 }
 export interface TongueAnalysis {
   tongueBody: {color: string;,
-  texture: string;
-    size: string;
+  texture: string;,
+  size: string;
 };
   tongueCoating: {,
-  color: string;
-    thickness: string,
+  color: string;,
+  thickness: string,
   moisture: string;
   };
 }
 export interface BodyShapeAnalysis {
   build: string;,
-  posture: string;
+  posture: string;,
   movement: string;
 }
 export interface SpiritAnalysis {
   vitality: string;,
-  consciousness: string;
+  consciousness: string;,
   expression: string;
 }
 export interface VoiceAnalysis {
   volume: string;,
-  tone: string;
+  tone: string;,
   rhythm: string;
 }
 export interface BreathingAnalysis {
   rate: string;,
-  depth: string;
+  depth: string;,
   rhythm: string;
 }
 export interface CoughAnalysis {
   present: boolean;,
-  type: string;
+  type: string;,
   frequency: string;
 }
 export interface OdorAnalysis {
@@ -346,17 +346,17 @@ export interface OdorAnalysis {
 }
 export interface ChiefComplaintAnalysis {
   primarySymptom: string;,
-  duration: string;
+  duration: string;,
   severity: number;
 }
 export interface PresentIllnessAnalysis {
   onset: string;,
-  progression: string;
+  progression: string;,
   triggers: string[];
 }
 export interface PastHistoryAnalysis {
   chronicDiseases: string[];,
-  surgeries: string[];
+  surgeries: string[];,
   allergies: string[];
 }
 export interface FamilyHistoryAnalysis {
@@ -364,8 +364,8 @@ export interface FamilyHistoryAnalysis {
 }
 export interface PersonalHistoryAnalysis {
   lifestyle: {diet: string[];,
-  exercise: string[];
-    sleep: number;,
+  exercise: string[];,
+  sleep: number;,
   stress: number;
 };
 }
@@ -374,9 +374,9 @@ export interface SystemReviewAnalysis {
 }
 export interface PulseCharacteristics {
   rate: string;,
-  depth: string;
+  depth: string;,
   width: string;,
-  length: string;
+  length: string;,
   smoothness: string;
 }
 export interface PulsePositions {
@@ -388,7 +388,7 @@ export interface PulsePositions {
 }
 export interface PulseStrength {
   overall: string;,
-  leftHand: string;
+  leftHand: string;,
   rightHand: string;
 }
 export interface PulseRhythm {
@@ -397,7 +397,7 @@ export interface PulseRhythm {
 }
 export interface AbdominalPalpation {
   tenderness: string;,
-  masses: string;
+  masses: string;,
   distension: string;,
   temperature: string;
 }
@@ -407,42 +407,42 @@ export interface AcupointPalpation {
 }
 export interface SkinTemperatureAnalysis {
   overall: number;,
-  distribution: string;
+  distribution: string;,
   abnormalAreas: string[];
 }
 export interface MuscleTextureAnalysis {
   tension: string;,
-  elasticity: string;
+  elasticity: string;,
   thickness: string;
 }
 export interface SyndromeAnalysis {
   primarySyndrome: string;,
-  secondarySyndromes: string[];
+  secondarySyndromes: string[];,
   confidence: number;,
   evidence: string[];
 }
 export interface ConstitutionAnalysis {
   constitutionType: string;,
-  characteristics: string[];
+  characteristics: string[];,
   confidence: number;
 }
 export interface PathologyAnalysis {
   pathogenesis: string;,
-  location: string[];
+  location: string[];,
   nature: string;,
   confidence: number;
 }
 export interface TreatmentAnalysis {
   principle: string;,
-  methods: string[];
+  methods: string[];,
   contraindications: string[];,
   confidence: number;
 }
 export interface TreatmentRecommendation {
   type: string;,
-  description: string;
+  description: string;,
   priority: "high | "medium" | low";,
-  duration: string;
+  duration: string;,
   precautions: string[];
 }
 export default FiveDiagnosisSystem;

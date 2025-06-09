@@ -55,12 +55,12 @@ export interface TemperatureData {
 }
 export interface LocalTemperatureData {
   location: string;,
-  temperature: number;
+  temperature: number;,
   comparison: "warmer" | "cooler" | "normal";
 }
 export interface TemperatureDistributionData {
   head: number;,
-  chest: number;
+  chest: number;,
   abdomen: number;,
   limbs: number,extremities: number;
 };
@@ -76,7 +76,7 @@ export interface PalpationResult {
 }
 export interface PalpationFeatures {
   pulse: PulseFeatures;,
-  touch: TouchFeatures;
+  touch: TouchFeatures;,
   temperature: TemperatureFeatures,pressure: PressureFeatures;
 };
 export interface PulseFeatures {
@@ -85,7 +85,7 @@ export interface PulseFeatures {
 } * /
 export interface TouchFeatures {
   skinCondition: string;,
-  muscleCondition: string;
+  muscleCondition: string;,
   jointCondition: string;,
   abdominalCondition: string;
 }
@@ -98,7 +98,7 @@ export interface PressureFeatures {
 }
 export interface PulseAnalysis {
   pulseType: PulseType;,
-  pulseCharacteristics: PulseCharacteristics;
+  pulseCharacteristics: PulseCharacteristics;,
   organCorrelation: OrganCorrelation;,
   syndromeIndications: string[],pathologicalSignificance: string;
 };
@@ -115,23 +115,23 @@ export interface PulseCharacteristics {
 }
 export interface OrganCorrelation {
   heart: string;,
-  liver: string;
+  liver: string;,
   spleen: string;,
-  lung: string;
+  lung: string;,
   kidney: string;,
-  gallbladder: string;
+  gallbladder: string;,
   stomach: string;,
-  smallIntestine: string;
+  smallIntestine: string;,
   largeIntestine: string;,
-  bladder: string;
+  bladder: string;,
   tripleHeater: string;,
   pericardium: string;
 }
 export interface TouchAnalysis {
   skinAnalysis: SkinAnalysis;,
-  muscleAnalysis: MuscleAnalysis;
+  muscleAnalysis: MuscleAnalysis;,
   jointAnalysis: JointAnalysis;,
-  abdominalAnalysis: AbdominalAnalysis;
+  abdominalAnalysis: AbdominalAnalysis;,
   overallAssessment: string;
 }
 export interface SkinAnalysis {
@@ -155,19 +155,19 @@ export interface JointAnalysis {
   tcmInterpretation: string}
 export interface AbdominalAnalysis {
   organAssessment: OrganAssessment;,
-  pathologicalFindings: PathologicalFinding[];
+  pathologicalFindings: PathologicalFinding[];,
   tcmInterpretation: string;
 }
 export interface OrganAssessment {
   liver: string;,
-  spleen: string;
+  spleen: string;,
   kidney: string;,
-  stomach: string;
+  stomach: string;,
   intestines: string;
 }
 export interface PathologicalFinding {
   type: string;,
-  location: string;
+  location: string;,
   significance: string;,
   recommendation: string;
 }
@@ -181,16 +181,16 @@ export interface ThermalPattern {
 }
 export interface OrganThermalState {
   organ: string;,
-  thermalState: string;
+  thermalState: string;,
   significance: string;
 }
 export interface UserProfile {
   age: number;,
-  gender: "male" | "female" | "other";
+  gender: "male" | "female" | "other";,
   height: number;,
-  weight: number;
+  weight: number;,
   occupation: string;,
-  medicalHistory: string[];
+  medicalHistory: string[];,
   allergies: string[];,
   medications: string[];
 }
@@ -499,8 +499,8 @@ class TouchAnalyzer {
         tcmInterpretation: "皮肤润泽，提示津液充足，营卫调和"
       },
       muscleAnalysis: {,
-  tone: {
-      value: "适中",
+  tone: {,
+  value: "适中",
       significance: "脾胃功能正常"},
         elasticity: {,
   value: "良好",
@@ -511,8 +511,8 @@ class TouchAnalyzer {
         tcmInterpretation: "肌肉有力，提示脾胃健运，肾气充足"
       },
       jointAnalysis: {,
-  mobility: {
-      value: "灵活",
+  mobility: {,
+  value: "灵活",
       significance: "筋骨健康"},
         stability: {,
   value: "稳定",
@@ -523,8 +523,8 @@ class TouchAnalyzer {
         tcmInterpretation: "关节灵活，提示肝主筋、肾主骨功能正常"
       },
       abdominalAnalysis: {,
-  organAssessment: {
-      liver: "正常",
+  organAssessment: {,
+  liver: "正常",
       spleen: "正常",
           kidney: "正常",
           stomach: "正常",

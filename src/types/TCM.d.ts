@@ -109,8 +109,8 @@ export interface BiomarkerData {
   timestamp: MCPTimestamp;
   /** 参考范围
   referenceRange: {,
-  min: number;
-    max: number;
+  min: number;,
+  max: number;
     optimal?: number;
   };
   /** 测量设备信息
@@ -156,20 +156,20 @@ export interface InspectionData {
 }
   /** 面色
   complexion: {,
-  color: "red" | yellow" | "white | "black" | blue"";
-    luster: "lustrous | "dull,
+  color: "red" | yellow" | "white | "black" | blue"";,
+  luster: "lustrous | "dull,
   description: string;
   };
   /** 舌诊
   tongue: {,
-  body: {
-      color: pale" | "red | "dark-red" | purple,
+  body: {,
+  color: pale" | "red | "dark-red" | purple,
   texture: "tender | "normal" | old";,
   shape: "thin | "normal" | fat" | "cracked;"
     };
     coating: {,
-  color: "white" | yellow" | "gray | "black";
-      thickness: thin" | "thick,
+  color: "white" | yellow" | "gray | "black";,
+  thickness: thin" | "thick,
   moisture: "moist" | dry" | "slippery;
     };
   };
@@ -193,8 +193,8 @@ export interface AuscultationData {
   };
   /** 呼吸
   breathing: {,
-  pattern: "normal | "short" | deep" | "irregular;"
-    sound: "normal" | wheezing" | "rattling;
+  pattern: "normal | "short" | deep" | "irregular;",
+  sound: "normal" | wheezing" | "rattling;
   };
   /** 气味
   odor?: {
@@ -220,16 +220,16 @@ export interface InquiryData {
   familyHistory: string[];
   /** 个人史
   personalHistory: {,
-  lifestyle: string;
-    diet: string,
+  lifestyle: string;,
+  diet: string,
   sleep: string;,
   exercise: string,
   stress: string;
   };
   /** 症状评分
   symptoms: Array<{,
-  name: string;
-    severity: number; // 1-10,
+  name: string;,
+  severity: number; // 1-10,
   duration: string;,
   frequency: string;
   }>;
@@ -260,15 +260,15 @@ export interface PalpationData {
   palpation: {
     /** 腹诊
     abdomen: {,
-  tenderness: boolean;
-      distension: boolean,
+  tenderness: boolean;,
+  distension: boolean,
   masses: boolean;,
   temperature: "cold | "normal" | hot";
     };
     /** 穴位按压
     acupoints: Array<{,
-  name: string;
-      tenderness: boolean,
+  name: string;,
+  tenderness: boolean,
   sensitivity: number; // 1-10;
     }>
   };
@@ -302,21 +302,21 @@ export interface CalculationData {
   ziwuLiuzhu: {
     /** 当前时辰
     currentHour: {,
-  earthlyBranch: string; // 地支
-meridian: string; // 对应经络,
+  earthlyBranch: string; // 地支,
+  meridian: string; // 对应经络,
   organ: string; // 对应脏腑
     }
     /** 开穴时间
     openingPoints: Array<{,
-  time: string;
-      point: string,
+  time: string;,
+  point: string,
   meridian: string;,
   function: string;
     }>;
     /** 治疗建议时间
     optimalTreatmentTime: {,
-  start: MCPTimestamp;
-      end: MCPTimestamp,
+  start: MCPTimestamp;,
+  end: MCPTimestamp,
   reason: string;
     };
     /** 调养建议
@@ -333,8 +333,8 @@ meridian: string; // 对应经络,
     };
     /** 五行分析
     fiveElements: {,
-  wood: number;
-      fire: number,
+  wood: number;,
+  fire: number,
   earth: number;,
   metal: number,
   water: number;
@@ -343,14 +343,14 @@ meridian: string; // 对应经络,
     constitutionType: TCMConstitution;
     /** 五行强弱
     elementStrength: {,
-  strongest: string;
-      weakest: string,
+  strongest: string;,
+  weakest: string,
   balance: number; // 0-1，1为最平衡
     }
     /** 调理建议
     adjustmentAdvice: {,
-  strengthen: string[]; // 需要加强的方面
-reduce: string[]; // 需要减少的方面,
+  strengthen: string[]; // 需要加强的方面,
+  reduce: string[]; // 需要减少的方面,
   methods: string[]; // 调理方法
     }
   };
@@ -358,21 +358,21 @@ reduce: string[]; // 需要减少的方面,
   baguaAnalysis: {
     /** 本命卦
     natalHexagram: {,
-  name: string;
-      symbol: string,
+  name: string;,
+  symbol: string,
   element: string;,
   direction: string;
     };
     /** 健康分析
     healthAnalysis: {,
-  strengths: string[]; // 健康优势
-weaknesses: string[]; // 健康弱点,
+  strengths: string[]; // 健康优势,
+  weaknesses: string[]; // 健康弱点,
   risks: string[]; // 潜在风险
     }
     /** 方位指导
     directionalGuidance: {,
-  favorable: string[]; // 有利方位
-unfavorable: string[]; // 不利方位,
+  favorable: string[]; // 有利方位,
+  unfavorable: string[]; // 不利方位,
   livingAdvice: string[]; // 居住建议
     }
   };
@@ -380,16 +380,16 @@ unfavorable: string[]; // 不利方位,
   wuyunLiuqi: {
     /** 年度运气
     annualQi: {,
-  year: number;
-      mainQi: string; // 主气,
+  year: number;,
+  mainQi: string; // 主气,
   guestQi: string; // 客气,
   hostHeaven: string; // 司天,
   hostEarth: string; // 在泉
     }
     /** 疾病预测
     diseasePrediction: {,
-  susceptibleDiseases: string[]; // 易患疾病
-preventionMethods: string[]; // 预防方法,
+  susceptibleDiseases: string[]; // 易患疾病,
+  preventionMethods: string[]; // 预防方法,
   criticalPeriods: Array<{ // 关键时期,
   period: string,
   risk: low" | "medium | "high";,
@@ -398,8 +398,8 @@ preventionMethods: string[]; // 预防方法,
     };
     /** 调养指导
     seasonalGuidance: {,
-  spring: string[];
-      summer: string[],
+  spring: string[];,
+  summer: string[],
   autumn: string[];,
   winter: string[];
     };
@@ -410,28 +410,28 @@ preventionMethods: string[]; // 预防方法,
     overallScore: number; // 0-100;
     /** 主要健康风险
     primaryRisks: Array<{,
-  risk: string;
-      severity: low" | "medium | "high",
+  risk: string;,
+  severity: low" | "medium | "high",
   probability: number; // 0-1;,
   prevention: string[];
     }>;
     /** 个性化调养方案
     personalizedPlan: {,
-  immediate: string[]; // 即时调养
-shortTerm: string[]; // 短期调养（1-3个月）,
+  immediate: string[]; // 即时调养,
+  shortTerm: string[]; // 短期调养（1-3个月）,
   longTerm: string[] // 长期调养（3个月以上）
     }
     /** 最佳调养时机
     optimalTimings: Array<{,
-  activity: string;
-      timing: string,
+  activity: string;,
+  timing: string,
   reason: string;
     }>;
   };
   /** 算诊置信度
   confidence: {,
-  overall: number; // 0-1;
-ziwuLiuzhu: number,
+  overall: number; // 0-1;,
+  ziwuLiuzhu: number,
   constitution: number;,
   bagua: number,
   wuyunLiuqi: number;
@@ -502,8 +502,8 @@ export interface AgentDiagnosisResult {
     };
     /** 生活调理
     lifestyle: {,
-  diet: string[];
-      exercise: string[],
+  diet: string[];,
+  exercise: string[],
   sleep: string[];,
   emotion: string[];
     };

@@ -20,7 +20,7 @@ const { width, height } = Dimensions.get('window');
 // 诊断步骤接口
 interface DiagnosisStep {
   id: string;,
-  name: string;
+  name: string;,
   description: string;,
   status: 'pending' | 'collecting' | 'analyzing' | 'completed' | 'failed';
   data?: unknown;
@@ -31,9 +31,9 @@ interface DiagnosisStep {
 // 患者档案接口
 interface PatientProfile {
   name: string;,
-  age: number;
+  age: number;,
   gender: 'male' | 'female';,
-  chiefComplaint: string;
+  chiefComplaint: string;,
   symptoms: string[];
   medicalHistory?: string[];
   currentMedications?: string[];

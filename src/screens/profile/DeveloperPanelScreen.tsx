@@ -15,25 +15,25 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface DebugInfo {
   errorStats: {,
-  total: number;
-    recent: number;,
+  total: number;,
+  recent: number;,
   bySeverity: Record<string, number>;
   };
   performanceStats: {,
-  total: number;
-    byType: Record<string, number>;
+  total: number;,
+  byType: Record<string, number>;
     averageDuration: Record<string, number>;
   };
   networkStats: {,
-  totalRequests: number;
-    averageResponseTime: number;,
+  totalRequests: number;,
+  averageResponseTime: number;,
   successRate: number;
   };
   systemInfo: {,
-  platform: string;
-    version: string;,
-  isDebug: boolean;
-    timestamp: string;
+  platform: string;,
+  version: string;,
+  isDebug: boolean;,
+  timestamp: string;
   };
 }
 
@@ -51,8 +51,8 @@ export const DeveloperPanelScreen: React.FC = () => {
     try {
       // 模拟调试信息
       const mockDebugInfo: DebugInfo = {,
-  errorStats: {
-          total: 12,
+  errorStats: {,
+  total: 12,
           recent: 3,
           bySeverity: {,
   ERROR: 5,

@@ -17,18 +17,18 @@ interface AgentConfigProps {
 }
 interface AgentConfiguration {
   agentType: AgentType;,
-  enabled: boolean;
+  enabled: boolean;,
   autoResponse: boolean;,
-  responseDelay: number;
+  responseDelay: number;,
   maxConcurrentSessions: number;,
-  learningMode: boolean;
+  learningMode: boolean;,
   privacyLevel: "low" | "medium" | "high";,
-  customPrompts: string[];
+  customPrompts: string[];,
   specializations: string[];,
-  workingHours: {;
-    start: string;,
-  end: string;
-    timezone: string;
+  workingHours: {;,
+  start: string;,
+  end: string;,
+  timezone: string;
 };
 }
 const defaultConfigs: Record<AgentType, AgentConfiguration> = {

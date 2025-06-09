@@ -7,11 +7,11 @@ export interface TranslationResource {
 }
 export interface LanguageConfig {
   code: SupportedLanguage;,
-  name: string;
+  name: string;,
   nativeName: string;,
-  direction: ltr" | "rtl;
+  direction: ltr" | "rtl;,
   dateFormat: string;,
-  numberFormat: string;
+  numberFormat: string;,
   currency: string;
 }
 export interface TranslationContext {
@@ -218,7 +218,7 @@ if (!this.loadedLanguages.has(language)) {
       let result = translation;
       // 处理插值
 if (interpolations) {
-        Object.entries(interpolations).forEach(([placeholder, value]) => {}))
+        Object.entries(interpolations).forEach([placeholder, value]) => {}))
           result = result.replace(new RegExp(`{${placeholder}}}`, "g"), String(value));
         });
       }
@@ -407,7 +407,7 @@ if (systemLanguage.startsWith("zh-CN) || systemLanguage.startsWith("zh-Hans")) {
     newTranslations: TranslationResource;
   ): TranslationResource {
     const result = { ...existing };
-    Object.entries(newTranslations).forEach(([key, value]) => {}))
+    Object.entries(newTranslations).forEach([key, value]) => {}))
       if (typeof value === object" && value !== null && !Array.isArray(value)) {"
         result[key] = this.mergeTranslations(result[key] as TranslationResource) || {},
           value as TranslationResource;
@@ -425,7 +425,7 @@ if (systemLanguage.startsWith("zh-CN) || systemLanguage.startsWith("zh-Hans")) {
   keyCount: number;
   }> {
     const stats: Record<string, any> = {};
-    this.languageConfigs.forEach((config, language) => {}))
+    this.languageConfigs.forEach(config, language) => {}))
       const translations = this.translations.get(language);
       stats[language] = {
         loaded: this.loadedLanguages.has(language),

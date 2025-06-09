@@ -14,7 +14,7 @@ export type PermissionType =
   | "notifications";
 export interface PermissionResult {
   granted: boolean;,
-  status: PermissionStatus;
+  status: PermissionStatus;,
   canAskAgain: boolean;
 }
 class PermissionManager {

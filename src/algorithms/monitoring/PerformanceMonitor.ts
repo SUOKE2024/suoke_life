@@ -7,52 +7,52 @@
 */
 export interface MonitoringConfig {
   enabled: boolean;,
-  metrics: {;
-    performance: boolean;,
-  accuracy: boolean;
-    usage: boolean;,
+  metrics: {;,
+  performance: boolean;,
+  accuracy: boolean;,
+  usage: boolean;,
   errors: boolean;
 };
   reporting: {,
-  interval: number;
-    destination: string,
+  interval: number;,
+  destination: string,
   format: 'json' | 'csv' | 'prometheus';
   };
 }
 export interface PerformanceMetrics {
   responseTime: {;,
-  average: number;
-    p50: number;,
-  p95: number;
-    p99: number;
+  average: number;,
+  p50: number;,
+  p95: number;,
+  p99: number;
 };
   throughput: {,
-  requestsPerSecond: number;
-    requestsPerMinute: number;
+  requestsPerSecond: number;,
+  requestsPerMinute: number;
   };
   accuracy: {,
-  overallAccuracy: number;
-    diagnosisAccuracy: {,
-  looking: number;
-      listening: number,
+  overallAccuracy: number;,
+  diagnosisAccuracy: {,
+  looking: number;,
+  listening: number,
   inquiry: number;,
   palpation: number,
   calculation: number;
     };
   };
   resourceUsage: {,
-  cpuUsage: number;
-    memoryUsage: number,
+  cpuUsage: number;,
+  memoryUsage: number,
   diskUsage: number;
   };
   errorRate: {,
-  total: number;
-    byType: Record<string, number>;
+  total: number;,
+  byType: Record<string, number>;
   };
 }
 export interface MetricEvent {
   timestamp: number;,
-  type: string;
+  type: string;,
   value: number;
   metadata?: Record<string, any>;
 }

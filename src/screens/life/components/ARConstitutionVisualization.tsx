@@ -20,28 +20,28 @@ interface ARConstitutionVisualizationProps {
 }
 interface AcupointData {
   id: string;,
-  name: string;
+  name: string;,
   chineseName: string;,
-  meridian: string;
+  meridian: string;,
   position: { x: number; y: number; z: number };
   functions: string[];,
-  indications: string[];
+  indications: string[];,
   color: string;
 }
 interface MeridianData {
   id: string;,
-  name: string;
+  name: string;,
   chineseName: string;,
-  element: string;
+  element: string;,
   color: string;,
-  points: AcupointData[];
+  points: AcupointData[];,
   pathData: string;
 }
 interface ConstitutionVisualization {
   type: string;,
-  name: string;
+  name: string;,
   characteristics: string[];,
-  color: string;
+  color: string;,
   intensity: number;,
   regions: string[];
 }

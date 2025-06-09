@@ -40,16 +40,16 @@ export interface LogMetrics {
   // 错误率  errorRate: number;
   // 最近错误  recentErrors: LogEntry[];
   // 性能指标  performance: { avgProcessingTime: number;,
-  throughput: number;
-    bufferSize: number;
+  throughput: number;,
+  bufferSize: number;
 }
 }
 export interface LogAlert {
   // 告警ID  id: string;
   // 告警名称  name: string;
   // 告警条件  condition: { level: LogLevel;,
-  count: number;
-    timeWindow: number  service?: string ;
+  count: number;,
+  timeWindow: number  service?: string ;
     keywords?: string[];
 }
   // 告警动作  actions: Array<{,

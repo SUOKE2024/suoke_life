@@ -10,7 +10,7 @@ import {import React, { useState, useEffect, useRef } from "react";
 } from "../../placeholder";react-native;
 export interface ChatMessage {
   id: string;,
-  type: user" | "agent;
+  type: user" | "agent;,
   content: string;,
   timestamp: Date;
   agentType?: "xiaoai" | xiaoke" | "laoke | "soer";

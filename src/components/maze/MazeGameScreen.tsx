@@ -34,8 +34,8 @@ import GameSettingsModal from './GameSettingsModal';
 // GameCompletionModal 已替换为 MazeCompletionScreen;
 interface MazeGameScreenProps {
   route: {;,
-  params: {;
-      mazeId: string;,
+  params: {;,
+  mazeId: string;,
   userId: string;
       resumeGame?: boolean;
 };

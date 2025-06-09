@@ -2,16 +2,16 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "../../plac
 import React, { useState, useEffect } from "react";
 export interface Agent {
   id: string;,
-  name: string;
+  name: string;,
   type: xiaoai" | "xiaoke | "laoke" | soer;,
   status: "idle | "working" | collaborating";
   currentTask?: string;
 }
 export interface CollaborationTask {
   id: string;,
-  title: string;
+  title: string;,
   description: string;,
-  participants: string[];
+  participants: string[];,
   status: "pending | "active" | completed";,
   progress: number;
 }

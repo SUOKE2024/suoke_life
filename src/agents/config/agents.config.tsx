@@ -4,17 +4,17 @@ import React from 'react';
 // 基于README.md第1013-1063行的智能体描述
 export interface AgentConfig {
   id: string;,
-  name: string;
+  name: string;,
   type: AgentType;,
-  description: string;
+  description: string;,
   channel: string;,
-  role: string;
+  role: string;,
   capabilities: string[];,
   technicalFeatures: Record<string, boolean>;
   apiEndpoint: string;,
-  port: number;
+  port: number;,
   enabled: boolean;,
-  maxConcurrentTasks: number;
+  maxConcurrentTasks: number;,
   responseTimeout: number;,
   retryAttempts: number;
 }
@@ -183,7 +183,7 @@ export const AGENT_CONFIGS: Record<AgentType, AgentConfig> = {
 // 智能体协作配置
 export interface CollaborationConfig {
   primaryAgent: AgentType;,
-  supportingAgents: AgentType[];
+  supportingAgents: AgentType[];,
   scenario: string;,
   description: string;
 }

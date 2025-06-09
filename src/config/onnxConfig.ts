@@ -22,25 +22,25 @@ export type PerformanceMode = power_save" | "balanced | "performance;";
 * * ONNX Runtime 配置接口
 export interface ONNXRuntimeConfig {
   environment: Environment;,
-  deviceType: DeviceType;
+  deviceType: DeviceType;,
   performanceMode: PerformanceMode;,
-  inference: InferenceConfig;
+  inference: InferenceConfig;,
   quantization: QuantizationConfig;,
-  optimization: ModelOptimizationOptions;
+  optimization: ModelOptimizationOptions;,
   edgeCompute: EdgeComputeConfig;,
-  cache: {;
-    enabled: boolean;,
-  maxSize: number;
-    ttl: number;
+  cache: {;,
+  enabled: boolean;,
+  maxSize: number;,
+  ttl: number;
 };
   logging: {,
-  enabled: boolean;
-    level: debug" | "info | "warn" | error,
+  enabled: boolean;,
+  level: debug" | "info | "warn" | error,
   maxLogFiles: number;
   };
   models: {,
-  baseUrl: string;
-    downloadTimeout: number,
+  baseUrl: string;,
+  downloadTimeout: number,
   retryAttempts: number;,
   preloadModels: string[];
   };
@@ -220,8 +220,8 @@ export const SUOKE_LIFE_MODELS_CONFIG = {tcm: {quantization: {level: "int8" as c
     }
   },
   health: {,
-  quantization: {
-      level: "fp16" as const,
+  quantization: {,
+  level: "fp16" as const,
       preserveAccuracy: true,
       targetDevice: cpu" as const"
     },
@@ -235,8 +235,8 @@ export const SUOKE_LIFE_MODELS_CONFIG = {tcm: {quantization: {level: "int8" as c
     }
   },
   symptom: {,
-  quantization: {
-      level: "dynamic" as const,
+  quantization: {,
+  level: "dynamic" as const,
       preserveAccuracy: false,
       targetDevice: cpu" as const"
     },
@@ -250,8 +250,8 @@ export const SUOKE_LIFE_MODELS_CONFIG = {tcm: {quantization: {level: "int8" as c
     }
   },
   lifestyle: {,
-  quantization: {
-      level: "int8" as const,
+  quantization: {,
+  level: "int8" as const,
       preserveAccuracy: false,
       targetDevice: cpu" as const"
     },

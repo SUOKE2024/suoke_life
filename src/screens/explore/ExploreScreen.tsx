@@ -14,11 +14,11 @@ import React, { useState, useEffect } from "react";
   ActivityIndicator} from "../../placeholder";react-native;
 interface KnowledgeItem {
   id: string;,
-  title: string;
+  title: string;,
   description: string;,
-  category: string;
+  category: string;,
   readTime: string;,
-  difficulty: "beginner | "intermediate" | advanced";
+  difficulty: "beginner | "intermediate" | advanced";,
   tags: string[];
   thumbnail?: string;
   author: string;,
@@ -26,7 +26,7 @@ interface KnowledgeItem {
 }
 interface Category {
   id: string;,
-  name: string;
+  name: string;,
   icon: string;,
   count: number;
 }

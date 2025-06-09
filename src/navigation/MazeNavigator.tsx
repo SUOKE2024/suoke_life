@@ -7,27 +7,27 @@ export type MazeTheme = 'classic' | 'dark' | 'nature';
 export type MazeDifficulty = 'easy' | 'medium' | 'hard';
 export interface GameReward {
   id: string;,
-  type: string;
+  type: string;,
   value: number;
 }
 
 export type MazeStackParamList = {
   MazeMain: undefined;,
-  MazeGame: {
-    mazeId: string;,
+  MazeGame: {,
+  mazeId: string;,
   userId: string;
   };
   CreateMaze: undefined;,
-  MazeStats: {
-    userId: string;
+  MazeStats: {,
+  userId: string;
   };
   MazeCompletion: {,
-  score: number;
-    completionTime: number;,
-  stepsCount: number;
-    theme: MazeTheme;,
-  difficulty: MazeDifficulty;
-    rewards: GameReward[];
+  score: number;,
+  completionTime: number;,
+  stepsCount: number;,
+  theme: MazeTheme;,
+  difficulty: MazeDifficulty;,
+  rewards: GameReward[];
     isNewRecord?: boolean;
     mazeName: string;
     onPlayAgain?: () => void;

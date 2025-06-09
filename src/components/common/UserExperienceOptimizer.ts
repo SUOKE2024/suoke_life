@@ -2,22 +2,22 @@
 // 负责监控和优化用户体验相关指标
 export interface UXMetrics {
   loadTime: number;,
-  interactionDelay: number;
+  interactionDelay: number;,
   errorRate: number;,
-  userSatisfaction: number;
+  userSatisfaction: number;,
   accessibilityScore: number;
 }
 export interface UXOptimizationConfig {
   enablePerformanceMonitoring: boolean;,
-  enableAccessibilityChecks: boolean;
+  enableAccessibilityChecks: boolean;,
   enableUserFeedback: boolean;,
   optimizationThreshold: number;
 }
 export interface UXRecommendation {
   type: 'performance' | 'accessibility' | 'usability' | 'content';,
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  priority: 'low' | 'medium' | 'high' | 'critical';,
   description: string;,
-  action: string;
+  action: string;,
   impact: number;
 }
 /**

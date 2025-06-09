@@ -440,7 +440,7 @@ export class DiagnosisServiceClientImpl implements DiagnosisServiceClient {
   }
   private calculateOverallConfidence(results: any): number {
     const confidences: number[] = [];
-    Object.values(results).forEach((result: any) => {
+    Object.values(results).forEach(result: any) => {
       if (result && typeof result.confidence === 'number') {
         confidences.push(result.confidence);
       }

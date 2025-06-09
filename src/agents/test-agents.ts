@@ -6,7 +6,7 @@ import {
     COLLABORATION_STRATEGIES,
     createAgent,
     executeAgentTask,
-    initializeAgentSystem
+    initializeAgentSystem;
 } from "./index";
 import { AgentType } from "./types";
 
@@ -14,8 +14,8 @@ import { AgentType } from "./types";
  * 测试结果接口
  */
 interface TestResult {
-  testName: string;
-  success: boolean;
+  testName: string;,
+  success: boolean;,
   duration: number;
   error?: string;
   data?: any;
@@ -83,7 +83,7 @@ export class AgentSystemTester {
     // 测试工具函数
     await this.runTest("工具函数测试", async () => {
       const xiaoaiCapabilities = AgentSystemUtils.getAgentCapabilities(
-        AgentType.XIAOAI
+        AgentType.XIAOAI;
       );
       const xiaokeRole = AgentSystemUtils.getAgentRole(AgentType.XIAOKE);
       const chatAgent = AgentSystemUtils.getAgentByChannel("chat");
@@ -155,7 +155,7 @@ export class AgentSystemTester {
       }
 
       const statuses = await Promise.all(
-        agents.map((agent) => agent.getHealthStatus())
+        agents.map(agent) => agent.getHealthStatus())
       );
 
       for (const agent of agents) {
@@ -204,7 +204,7 @@ export class AgentSystemTester {
       );
       const response = await this.coordinator.coordinateTask(
         "我感觉头痛，请帮我分析一下可能的原因并推荐相关服务",
-        context
+        context;
       );
 
       if (!response.success) {
@@ -357,11 +357,10 @@ export class AgentSystemTester {
    */
   private printTestResults(): void {
     const totalTests = this.testResults.length;
-    const passedTests = this.testResults.filter((r) => r.success).length;
+    const passedTests = this.testResults.filter(r) => r.success).length;
     const failedTests = totalTests - passedTests;
-    const totalDuration = this.testResults.reduce(
-      (sum, r) => sum + r.duration,
-      0
+    const totalDuration = this.testResults.reduce(sum, r) => sum + r.duration,
+      0;
     );
 
     console.log("\n📊 测试结果汇总:");
@@ -369,13 +368,13 @@ export class AgentSystemTester {
     console.log(`通过: ${passedTests}`);
     console.log(`失败: ${failedTests}`);
     console.log(`总耗时: ${totalDuration}ms`);
-    console.log(`成功率: ${((passedTests / totalTests) * 100).toFixed(2)}%`);
+    console.log(`成功率: ${(passedTests / totalTests) * 100).toFixed(2)}%`);
 
     if (failedTests > 0) {
       console.log("\n❌ 失败的测试:");
-      this.testResults
-        .filter((r) => !r.success)
-        .forEach((r) => {
+      this.testResults;
+        .filter(r) => !r.success)
+        .forEach(r) => {
           console.log(`  - ${r.testName}: ${r.error}`);
         });
     }

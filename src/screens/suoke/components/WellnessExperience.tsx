@@ -19,11 +19,11 @@ interface WellnessExperienceProps {
 }
 interface WellnessScene {
   id: string;,
-  name: string;
+  name: string;,
   type: "mountain" | water" | "forest | "temple";,
-  description: string;
+  description: string;,
   duration: number;,
-  difficulty: easy" | "medium | "hard";
+  difficulty: easy" | "medium | "hard";,
   benefits: string[];
 }
 const WellnessExperience: React.FC<WellnessExperienceProps /> = ({/   const performanceMonitor = usePerformanceMonitor(WellnessExperience", { /    ";))

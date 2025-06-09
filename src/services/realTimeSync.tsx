@@ -3,14 +3,14 @@ import React from "react";
 * / 支持WebSocket连接、数据同步、冲突解决等功能* * interface SyncConfig {
   reconnectInterval: number, * /
   maxReconnectAttempts: number;,
-  heartbeatInterval: number;
+  heartbeatInterval: number;,
   syncInterval: number;
 }
 interface SyncData {
   id: string;,
-  type: string;
+  type: string;,
   data: unknown;,
-  timestamp: number;
+  timestamp: number;,
   version: number;
 }
 interface ConflictResolution {

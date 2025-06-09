@@ -151,17 +151,17 @@ const animations = {
 // 主题类型定义
 export interface Theme {
   colors: typeof colors.light;,
-  typography: typeof typography;
+  typography: typeof typography;,
   spacing: typeof spacing;,
-  borderRadius: typeof borderRadius;
+  borderRadius: typeof borderRadius;,
   shadows: typeof shadows;,
-  animations: typeof animations;
+  animations: typeof animations;,
   isDark: boolean;
 }
 // 主题上下文类型
 interface ThemeContextType {
   theme: 'light' | 'dark';,
-  toggleTheme: () => void;
+  toggleTheme: () => void;,
   currentTheme: Theme;
 }
 

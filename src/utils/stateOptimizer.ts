@@ -2,26 +2,26 @@
 // 应用状态管理优化工具   提供状态更新优化、状态变化追踪、状态性能监控等功能
 export interface StateChangeEvent {
   stateName: string;,
-  oldValue: unknown;
+  oldValue: unknown;,
   newValue: unknown;,
-  timestamp: number;
+  timestamp: number;,
   duration: number;,
   source: string;
 }
 export interface StatePerformanceData {
   stateName: string;,
-  updateCount: number;
+  updateCount: number;,
   averageUpdateTime: number;,
-  lastUpdateTime: number;
+  lastUpdateTime: number;,
   totalChanges: number;,
-  unnecessaryUpdates: number;
+  unnecessaryUpdates: number;,
   timestamp: number;
 }
 export interface StateOptimizationSuggestion {
   type: 'batching' | 'memoization' | 'normalization' | 'splitting';,
-  severity: 'low' | 'medium' | 'high';
+  severity: 'low' | 'medium' | 'high';,
   message: string;,
-  stateName: string;
+  stateName: string;,
   impact: number;
 }
 // 批量更新项接口
@@ -145,14 +145,14 @@ private processBatchedUpdates(): void {
       clearTimeout(this.batchTimer);
       this.batchTimer = null;
     }
-    this.batchedUpdates.forEach((updates, stateName) => {
+    this.batchedUpdates.forEach(updates, stateName) => {
       if (updates.length > 0) {
         const mergedUpdate = updates.reduce(acc, { update }) => {
           return { ...acc, ...(update as object) };
         }, {} as Record<string, unknown>);
         this.startStateUpdate(`${stateName}_batch`);
         this.endStateUpdate(`${stateName}_batch`, {}, mergedUpdate, 'batch');
-        updates.forEach(({ resolve }) => resolve());)
+        updates.forEach({ resolve }) => resolve());)
       }
     });
     this.batchedUpdates.clear();
@@ -173,7 +173,7 @@ getStateHistory(stateName: string, limit: number = 50): StateChangeEvent[] {
   // 获取优化建议
 getOptimizationSuggestions(): StateOptimizationSuggestion[] {
     const suggestions: StateOptimizationSuggestion[] = [];
-    this.stateData.forEach((data, stateName) => {
+    this.stateData.forEach(data, stateName) => {
       const unnecessaryRate = data.unnecessaryUpdates / data.updateCount;
       if (unnecessaryRate > 0.3) {
         suggestions.push({
@@ -238,8 +238,8 @@ exportStateData(): {
     performanceData: StatePerformanceData[],
   history: Record<string, StateChangeEvent[]>;
         stats: {,
-  totalStates: number;
-      totalUpdates: number,
+  totalStates: number;,
+  totalUpdates: number,
   averageUpdateTime: number;,
   unnecessaryUpdateRate: number,
   slowestStates: StatePerformanceData[];,
@@ -249,7 +249,7 @@ exportStateData(): {
     timestamp: number;
   } {
     const history: Record<string, StateChangeEvent[]> = {};
-    this.stateHistory.forEach((events, stateName) => {
+    this.stateHistory.forEach(events, stateName) => {
       history[stateName] = [...events];
     });
     return { performanceData: Array.from(this.stateData.values()), history, stats: this.getStateStats(), timestamp: Date.now() };

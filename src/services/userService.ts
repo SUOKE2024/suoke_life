@@ -14,24 +14,24 @@ export interface UpdateUserRequest {
   bloodType?: string;
   emergencyContact?: {
     name: string;,
-  phone: string;
-    relationship: string;
+  phone: string;,
+  relationship: string;
 };
 }
 // 用户偏好设置
 export interface UserPreferences {
   language: string;,
-  timezone: string;
+  timezone: string;,
   notifications: {;,
-  push: boolean;
-    email: boolean;,
-  sms: boolean;
-    healthReminders: boolean;,
+  push: boolean;,
+  email: boolean;,
+  sms: boolean;,
+  healthReminders: boolean;,
   appointmentReminders: boolean;
 };
   privacy: {,
-  profileVisibility: 'public' | 'private' | 'friends';
-    dataSharing: boolean,
+  profileVisibility: 'public' | 'private' | 'friends';,
+  dataSharing: boolean,
   analyticsOptIn: boolean;
   };
   healthGoals: {
@@ -44,33 +44,33 @@ export interface UserPreferences {
 // 设备信息
 export interface DeviceInfo {
   id: string;,
-  name: string;
+  name: string;,
   type: 'mobile' | 'tablet' | 'wearable' | 'sensor';,
-  platform: string;
+  platform: string;,
   version: string;,
-  lastActive: string;
+  lastActive: string;,
   isActive: boolean;
 }
 // 健康数据记录
 export interface HealthRecord {
   id: string;,
-  type: 'vital_signs' | 'symptoms' | 'medication' | 'exercise' | 'diet' | 'sleep';
+  type: 'vital_signs' | 'symptoms' | 'medication' | 'exercise' | 'diet' | 'sleep';,
   data: any;,
-  timestamp: string;
+  timestamp: string;,
   source: string;,
   verified: boolean;
 }
 // 用户统计信息
 export interface UserStats {
   totalHealthRecords: number;,
-  lastCheckup: string;
+  lastCheckup: string;,
   healthScore: number;,
-  activeDevices: number;
+  activeDevices: number;,
   dataPoints: {;,
-  vitals: number;
-    symptoms: number;,
-  medications: number;
-    exercises: number;
+  vitals: number;,
+  symptoms: number;,
+  medications: number;,
+  exercises: number;
 };
 }
 class UserService {

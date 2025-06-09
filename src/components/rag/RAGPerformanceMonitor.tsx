@@ -12,9 +12,9 @@ import { selectPerformanceMetrics, selectCacheStats } from '../../store/slices/r
 } from 'react-native';
 interface PerformanceData {
   responseTime: number;,
-  cacheHitRate: number;
+  cacheHitRate: number;,
   errorRate: number;,
-  totalQueries: number;
+  totalQueries: number;,
   averageResponseTime: number;,
   lastUpdateTime: number;
 }

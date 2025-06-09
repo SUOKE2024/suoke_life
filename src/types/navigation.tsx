@@ -6,14 +6,14 @@ export type AuthStackParamList = {
   Welcome: undefine;
   d;
   Login: undefined;,
-  Register: undefined;
+  Register: undefined;,
   ForgotPassword: undefined;
 };
 export type MainTabParamList = {
   Home: undefine;
   d;
   Suoke: undefined;,
-  Explore: undefined;
+  Explore: undefined;,
   Life: undefined;,
   Profile: undefined;
 };
@@ -21,7 +21,7 @@ export type MainStackParamList = {
   MainTabs: undefine;
   d;
   Settings: undefined;,
-  ServiceStatus: undefined;
+  ServiceStatus: undefined;,
   ServiceManagement: undefined;,
   DeveloperPanel: undefined;
 };

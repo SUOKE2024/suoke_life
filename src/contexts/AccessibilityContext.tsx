@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 interface AccessibilityContextType {
   isScreenReaderEnabled: boolean;,
-  fontSize: 'small' | 'medium' | 'large';
+  fontSize: 'small' | 'medium' | 'large';,
   highContrast: boolean;,
   setFontSize: (size: 'small' | 'medium' | 'large') => void;,
   toggleHighContrast: () => void;

@@ -17,11 +17,11 @@ interface AgentDashboardProps {
 }
 interface QuickAction {
   id: string;,
-  title: string;
+  title: string;,
   description: string;,
-  agentType: AgentType;
+  agentType: AgentType;,
   action: () => void;,
-  icon: string;
+  icon: string;,
   color: string;
 }
 const { width } = Dimensions.get("window");

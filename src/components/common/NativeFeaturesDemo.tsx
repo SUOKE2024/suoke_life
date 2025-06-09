@@ -9,18 +9,18 @@ importIcon from "react-native-vector-icons/MaterialCommunityIcons/import { color
   { ActivityIndicator } from "react-native;";
 interface FeatureStatus {
   available: boolean;,
-  enabled: boolean;
+  enabled: boolean;,
   loading: boolean;
   error?: string;
 }
 interface NativeFeaturesState {
   camera: FeatureStatus;,
-  voice: FeatureStatus;
+  voice: FeatureStatus;,
   location: FeatureStatus;,
-  notifications: FeatureStatus;
+  notifications: FeatureStatus;,
   permissions: {camera: boolean;,
-  microphone: boolean;
-    location: boolean;,
+  microphone: boolean;,
+  location: boolean;,
   notifications: boolean;
 }
 }

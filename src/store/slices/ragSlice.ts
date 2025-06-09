@@ -14,7 +14,7 @@ import type {RAGQueryRequest,
 export interface RAGState {
   // 查询状态
   isQuerying: boolean;,
-  isStreaming: boolean;
+  isStreaming: boolean;,
   currentQuery: string;,
   queryHistory: RAGQueryResponse[];
   // 当前结果
@@ -31,31 +31,31 @@ export interface RAGState {
   lastError: Error | null;
   // 缓存管理
   cacheStats: {;,
-  size: number;
-    keys: string[];,
-  hitRate: number;
-    totalQueries: number;,
+  size: number;,
+  keys: string[];,
+  hitRate: number;,
+  totalQueries: number;,
   cacheHits: number;
 };
   // 性能监控
   performance: {,
-  averageResponseTime: number;
-    totalQueries: number,
+  averageResponseTime: number;,
+  totalQueries: number,
   successRate: number;,
   failureCount: number;
   };
   // 用户偏好
   preferences: {,
-  enableCache: boolean;
-    enableStreaming: boolean,
+  enableCache: boolean;,
+  enableStreaming: boolean,
   defaultTaskType: 'consultation' | 'diagnosis' | 'treatment' | 'prevention';,
   maxHistorySize: number,
   autoSaveHistory: boolean;
   };
   // 离线支持
   offline: {,
-  isOffline: boolean;
-    pendingQueries: RAGQueryRequest[],
+  isOffline: boolean;,
+  pendingQueries: RAGQueryRequest[],
   offlineCache: RAGQueryResponse[];
   };
 }

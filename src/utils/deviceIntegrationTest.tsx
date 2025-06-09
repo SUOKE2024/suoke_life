@@ -13,17 +13,17 @@ export interface TestResult {
 }
 export interface TestSuite {
   name: string;,
-  tests: TestResult[];
+  tests: TestResult[];,
   passed: boolean;,
-  totalDuration: number;
+  totalDuration: number;,
   passRate: number;
 }
 export interface IntegrationTestReport {
   deviceInfo: unknown;,
-  testSuites: TestSuite[];
+  testSuites: TestSuite[];,
   overallResult: {totalTests: number;,
-  passedTests: number;
-    failedTests: number,passRate: number,totalDuration: number;
+  passedTests: number;,
+  failedTests: number,passRate: number,totalDuration: number;
 };
   performanceMetrics: unknown,
   recommendations: string[];
@@ -322,7 +322,7 @@ if (!response.ok) {
   // 生成优化建议  private generateRecommendations(testSuites: TestSuite[],)
     performanceMetrics: unknown);: string[]  {
     const recommendations: string[] = [];
-    testSuites.forEach((suite) => {}))
+    testSuites.forEach(suite) => {}))
       if (suite.passRate < 100) {
         recommendations.push(`${suite.name}存在问题，建议检查失败的测试项`);
       }
@@ -363,7 +363,7 @@ let reportText = `;
 - 状态: ${suite.passed ? "✅ 通过" : "❌ 失败"}
 #### 测试详情:
 `;
-      suite.tests.forEach((test) => {}))
+      suite.tests.forEach(test) => {}))
         reportText += `- ${test.passed ? "✅" : "❌"} ${test.testName} (${
           test.duration;
         }ms)`

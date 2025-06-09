@@ -4,11 +4,11 @@ import { apiClient } from './apiClient';
 // 健康数据类型定义
 export interface HealthData {
   id: string;,
-  userId: string;
+  userId: string;,
   type: HealthDataType;,
-  value: number;
+  value: number;,
   unit: string;,
-  timestamp: Date;
+  timestamp: Date;,
   source: 'manual' | 'device' | 'sync';
   metadata?: Record<string, any>;
 }
@@ -30,13 +30,13 @@ export type HealthDataType =
   | 'blood_oxygen';
 export interface HealthMetric {
   id: string;,
-  name: string;
+  name: string;,
   value: number;,
-  unit: string;
+  unit: string;,
   trend: 'up' | 'down' | 'stable';,
-  status: 'excellent' | 'good' | 'fair' | 'poor';
+  status: 'excellent' | 'good' | 'fair' | 'poor';,
   icon: string;,
-  color: string;
+  color: string;,
   lastUpdated: Date;
   normalRange?: {
     min: number;,
@@ -45,23 +45,23 @@ export interface HealthMetric {
 }
 export interface HealthGoal {
   id: string;,
-  userId: string;
+  userId: string;,
   title: string;,
-  description: string;
+  description: string;,
   type: HealthDataType;,
-  targetValue: number;
+  targetValue: number;,
   currentValue: number;,
-  unit: string;
+  unit: string;,
   deadline: Date;,
-  progress: number;
+  progress: number;,
   category: string;,
-  isActive: boolean;
+  isActive: boolean;,
   createdAt: Date;,
   updatedAt: Date;
 }
 export interface HealthSummary {
   overallScore: number;,
-  constitution: string;
+  constitution: string;,
   recommendations: string[];,
   trends: Record<string, 'up' | 'down' | 'stable'>;
   alerts: HealthAlert[];,
@@ -69,19 +69,19 @@ export interface HealthSummary {
 }
 export interface HealthAlert {
   id: string;,
-  type: 'warning' | 'info' | 'critical';
+  type: 'warning' | 'info' | 'critical';,
   title: string;,
-  message: string;
+  message: string;,
   timestamp: Date;,
-  isRead: boolean;
+  isRead: boolean;,
   actionRequired: boolean;
 }
 export interface HealthReport {
   id: string;,
-  userId: string;
+  userId: string;,
   title: string;,
-  period: {;
-    start: Date;,
+  period: {;,
+  start: Date;,
   end: Date;
 };
   summary: HealthSummary,
@@ -436,7 +436,7 @@ class HealthDataService {
       return acc;
     }, {} as Record<string, HealthData[]>);
     // 为每种类型计算指标
-    Object.entries(groupedData).forEach(([type, data]) => {
+    Object.entries(groupedData).forEach([type, data]) => {
       const metric = this.calculateMetricForType(type as HealthDataType, data);
       if (metric) metrics.push(metric);
     });
@@ -591,7 +591,7 @@ class HealthDataService {
       acc[item.type].push(item);
       return acc;
     }, {} as Record<string, HealthData[]>);
-    Object.entries(groupedData).forEach(([type, data]) => {
+    Object.entries(groupedData).forEach([type, data]) => {
       if (data.length >= 2) {
         const recent = data.slice(0, Math.min(3, data.length));
         const older = data.slice(Math.min(3, data.length));

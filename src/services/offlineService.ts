@@ -5,21 +5,21 @@ import { errorHandler, AppError } from './errorHandler';
 // 离线操作类型
 export interface OfflineOperation {
   id: string;,
-  type: 'CREATE' | 'UPDATE' | 'DELETE';
+  type: 'CREATE' | 'UPDATE' | 'DELETE';,
   service: string;,
   endpoint: string;
   data?: any;
   timestamp: string;,
-  retryCount: number;
+  retryCount: number;,
   maxRetries: number;,
   priority: 'low' | 'medium' | 'high';
 }
 // 缓存项接口
 export interface CacheItem {
   key: string;,
-  data: any;
+  data: any;,
   timestamp: string;,
-  ttl: number;
+  ttl: number;,
   service: string;,
   endpoint: string;
   etag?: string;
@@ -27,9 +27,9 @@ export interface CacheItem {
 // 同步状态
 export interface SyncStatus {
   isOnline: boolean;,
-  lastSyncTime: string | null;
+  lastSyncTime: string | null;,
   pendingOperations: number;,
-  failedOperations: number;
+  failedOperations: number;,
   syncInProgress: boolean;
 }
 // 离线服务类
@@ -151,7 +151,7 @@ export class OfflineService {
   async clearExpiredCache(): Promise<void> {
     const now = Date.now();
     const expiredKeys: string[] = [];
-    this.cache.forEach((item, key) => {
+    this.cache.forEach(item, key) => {
       const cacheTime = new Date(item.timestamp).getTime();
       if (now - cacheTime > item.ttl) {
         expiredKeys.push(key);
@@ -181,7 +181,7 @@ export class OfflineService {
       // 处理结果
       const successfulOperations: string[] = [];
       const failedOperations: OfflineOperation[] = [];
-      results.forEach((result, index) => {
+      results.forEach(result, index) => {
         const operation = sortedOperations[index];
                 if (result.status === 'fulfilled') {
           successfulOperations.push(operation.id);

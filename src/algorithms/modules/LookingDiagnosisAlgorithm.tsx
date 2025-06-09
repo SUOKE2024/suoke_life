@@ -9,7 +9,7 @@ export interface LookingData {
 }
 export interface ImageData {
   data: ArrayBuffer;,
-  format: string;
+  format: string;,
   width: number;,
   height: number;
 }
@@ -21,28 +21,28 @@ export interface LookingResult {
 }
 export interface LookingFeatures {
   tongue: TongueFeatures;,
-  face: FaceFeatures;
+  face: FaceFeatures;,
   body: BodyFeatures;
 }
 export interface TongueFeatures {
   bodyColor: string;,
-  bodyTexture: string;
+  bodyTexture: string;,
   bodySize: string;,
-  coatingColor: string;
+  coatingColor: string;,
   coatingThickness: string;,
-  coatingMoisture: string;
+  coatingMoisture: string;,
   movement: string;
 }
 export interface FaceFeatures {
   complexion: string;,
-  luster: string;
+  luster: string;,
   expression: string;,
-  eyeCondition: string;
+  eyeCondition: string;,
   lipCondition: string;
 }
 export interface BodyFeatures {
   posture: string;,
-  movement: string;
+  movement: string;,
   constitution: string;,
   skinCondition: string;
 }
@@ -70,16 +70,16 @@ export interface FaceAnalysis {
 }
 export interface BodyAnalysis {
   constitutionAssessment: string;,
-  postureAnalysis: string;
+  postureAnalysis: string;,
   movementAnalysis: string;,
-  overallVitality: string;
+  overallVitality: string;,
   syndromeIndications: string[];
 }
 export interface UserProfile {
   age: number;,
-  gender: "male" | "female" | "other";
+  gender: "male" | "female" | "other";,
   height: number;,
-  weight: number;
+  weight: number;,
   occupation: string;,
   medicalHistory: string[],allergies: string[],medications: string[];
 }
@@ -292,7 +292,7 @@ performanceMonitor.recordRender();
 }
 interface ProcessedImageData {
   original: ImageData;,
-  processed: ImageData;
+  processed: ImageData;,
   type: string;,
   metadata: Record<string, any>;
 }

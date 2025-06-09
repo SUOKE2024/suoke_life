@@ -21,11 +21,11 @@ interface UseMazeGameProps {
 }
 interface MazeGameState {
   maze: Maze | null;,
-  progress: MazeProgress | null;
+  progress: MazeProgress | null;,
   settings: GameSettings | null;,
-  loading: boolean;
+  loading: boolean;,
   error: string | null;,
-  isPaused: boolean;
+  isPaused: boolean;,
   currentEvent: {;,
   type: GameEventType;
     data?: any;

@@ -39,33 +39,33 @@ export enum TaskStatus {
 }
 export interface AgentCapability {
   type: TaskType;,
-  proficiency: number; // 0-1之间，表示熟练度
+  proficiency: number; // 0-1之间，表示熟练度,
   maxConcurrentTasks: number;,
-  averageProcessingTime: number; // 毫秒
+  averageProcessingTime: number; // 毫秒,
   specializations: string[];
 }
 export interface AgentStatus {
   id: string;,
-  type: AgentType;
+  type: AgentType;,
   isOnline: boolean;,
-  currentLoad: number; // 0-1之间，表示当前负载
+  currentLoad: number; // 0-1之间，表示当前负载,
   capabilities: AgentCapability[];,
-  activeTasks: string[];
+  activeTasks: string[];,
   lastHeartbeat: number;,
-  performance: {;
-    successRate: number;,
-  averageResponseTime: number;
-    totalTasksCompleted: number;
+  performance: {;,
+  successRate: number;,
+  averageResponseTime: number;,
+  totalTasksCompleted: number;
 };
 }
 export interface Task {
   id: string;,
-  type: TaskType;
+  type: TaskType;,
   priority: TaskPriority;,
   status: TaskStatus;
   assignedAgent?: AgentType;
   requesterUserId: string;,
-  data: unknown;
+  data: unknown;,
   metadata: {;,
   createdAt: number;
     assignedAt?: number;
@@ -81,18 +81,18 @@ export interface Task {
 }
 export interface CoordinationRule {
   id: string;,
-  name: string;
+  name: string;,
   condition: (task: Task, agents: Map<AgentType, AgentStatus>) => boolean;
   action: (task: Task, agents: Map<AgentType, AgentStatus>) => AgentType | null;
   priority: number;
 }
 export interface CollaborationRequest {
   id: string;,
-  fromAgent: AgentType;
+  fromAgent: AgentType;,
   toAgent: AgentType;,
-  taskId: string;
+  taskId: string;,
   requestType: "CONSULTATION" | "HANDOVER" | "ASSISTANCE" | "KNOWLEDGE_SHARE";,
-  data: unknown;
+  data: unknown;,
   timestamp: number;,
   status: "PENDING" | "ACCEPTED" | "REJECTED" | "COMPLETED";
 }

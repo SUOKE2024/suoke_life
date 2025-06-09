@@ -15,11 +15,11 @@ import React,{ useState, useEffect } from "react;";
 const { width   } = Dimensions.get("window;);"
 interface HealthMetric {
   id: string;,
-  name: string;
+  name: string;,
   value: number;,
-  unit: string;
+  unit: string;,
   trend: "up" | down" | "stable;,
-  status: "excellent" | good" | "fair | "poor";
+  status: "excellent" | good" | "fair | "poor";,
   icon: string;,
   color: string;
 };

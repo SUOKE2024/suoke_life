@@ -12,12 +12,12 @@ render" | memory" | "network | "effect",
 }
 export interface PerformanceReport {
   sessionId: string;,
-  startTime: number;
+  startTime: number;,
   endTime: number;,
-  metrics: PerformanceMetric[];
+  metrics: PerformanceMetric[];,
   summary: {totalComponents: number;,
-  slowComponents: string[];
-    memoryLeaks: string[],criticalIssues: number,averageRenderTime: number;
+  slowComponents: string[];,
+  memoryLeaks: string[],criticalIssues: number,averageRenderTime: number;
 };
 }
 class PerformanceReporter {

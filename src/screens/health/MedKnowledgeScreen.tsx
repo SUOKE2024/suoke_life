@@ -31,7 +31,7 @@ import { KnowledgeQuery, KnowledgeResult } from '../../services/medKnowledgeServ
 } from '../../store/slices/medKnowledgeSlice';
 interface TabItem {
   key: string;,
-  title: string;
+  title: string;,
   icon: string;
 }
 export const MedKnowledgeScreen: React.FC = () => {

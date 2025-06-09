@@ -35,7 +35,7 @@ const { width, height   } = Dimensions.get(";window;";);
 // 手势配置 * interface GestureConfig {
   enableSwipe: boolean,
   enablePinch: boolean;,
-  enableRotation: boolean;
+  enableRotation: boolean;,
   enableDoubleTap: boolean;,
   swipeThreshold: number;
   onSwipeLeft?: () => void;
@@ -49,9 +49,9 @@ const { width, height   } = Dimensions.get(";window;";);
 // 动画配置 * interface AnimationConfig {
   enableEntrance: boolean,
   enableExit: boolean;,
-  enableHover: boolean;
+  enableHover: boolean;,
   enablePress: boolean;,
-  duration: number;
+  duration: number;,
   easing: "ease" | linear" | "bounce | "spring";
 };
 interface UserExperienceEnhancerProps {

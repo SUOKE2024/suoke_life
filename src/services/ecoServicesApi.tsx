@@ -5,17 +5,17 @@ importAsyncStorage from "@react-native-async-storage/async-storage";/    importC
 数据类型定义 * export interface FarmProduct {
   id: string,
   name: string;,
-  category: string;
+  category: string;,
   origin: string;,
-  healthBenefits: string[];
+  healthBenefits: string[];,
   season: string;,
-  price: number;
+  price: number;,
   unit: string;,
-  image: string;
+  image: string;,
   organic: boolean;,
-  stock: number;
+  stock: number;,
   rating: number;,
-  reviews: number;
+  reviews: number;,
   blockchain: {verified: boolean,traceability: BlockchainTrace[],certifications: string[];
 };
   tcmProperties: { nature: string,
@@ -31,22 +31,22 @@ importAsyncStorage from "@react-native-async-storage/async-storage";/    importC
 }
 export interface BlockchainTrace {
   timestamp: string;,
-  location: string;
+  location: string;,
   action: string;,
-  verifier: string;
+  verifier: string;,
   hash: string;
 }
 export interface WellnessDestination {
   id: string;,
-  name: string;
+  name: string;,
   location: string;,
-  type: "mountain" | "water" | "forest" | "hot_spring" | "temple" | "village";
+  type: "mountain" | "water" | "forest" | "hot_spring" | "temple" | "village";,
   description: string;,
-  healthFeatures: string[];
+  healthFeatures: string[];,
   activities: string[];,
-  rating: number;
+  rating: number;,
   price: number;,
-  image: string;
+  image: string;,
   tcmBenefits: string[];,
   availability: {available: boolean;,
   nextAvailable: string,capacity: number,booked: number;
@@ -61,12 +61,12 @@ export interface WellnessDestination {
 }
 export interface NutritionPlan {
   id: string;,
-  name: string;
+  name: string;,
   constitution: string,season: string,meals: {break;,
-  fast: string[];
-    lunch: string[];,
-  dinner: string[];
-    snacks: string[];
+  fast: string[];,
+  lunch: string[];,
+  dinner: string[];,
+  snacks: string[];
 };
   ingredients: FarmProduct[],
   benefits: string[],
@@ -78,9 +78,9 @@ export interface NutritionPlan {
   aiOptimized: boolean}
 export interface UserPreferences {
   constitution: string;,
-  allergies: string[];
+  allergies: string[];,
   dietaryRestrictions: string[];,
-  healthGoals: string[];
+  healthGoals: string[];,
   location: string;,
   budget: {min: number;,
   max: number;

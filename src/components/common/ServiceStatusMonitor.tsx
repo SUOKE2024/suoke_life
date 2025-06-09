@@ -16,9 +16,9 @@ const { width } = Dimensions.get('window');
 // 服务状态类型
 interface ServiceStatus {
   id: string;,
-  name: string;
+  name: string;,
   endpoint: string;,
-  status: 'healthy' | 'unhealthy' | 'unknown' | 'maintenance';
+  status: 'healthy' | 'unhealthy' | 'unknown' | 'maintenance';,
   lastCheck: Date;
   responseTime?: number;
   version?: string;
@@ -29,7 +29,7 @@ interface ServiceStatus {
 // 服务分类
 interface ServiceCategory {
   id: string;,
-  name: string;
+  name: string;,
   services: ServiceStatus[];,
   color: string;
 }

@@ -2,7 +2,7 @@ import {   DeviceEventEmitter   } from 'react-native';
 importNetInfo from "@react-native-community/    netinfo";
 interface NetworkState {
   isConnected: boolean;,
-  type: string;
+  type: string;,
   isInternetReachable: boolean;
 strength?: number;
 }

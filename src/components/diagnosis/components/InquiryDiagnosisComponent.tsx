@@ -17,7 +17,7 @@ import {
 
 interface Symptom {
   id: string;,
-  name: string;
+  name: string;,
   category: string;,
   selected: boolean;
 }

@@ -11,9 +11,9 @@ import { TCMKnowledgeBase } from '../knowledge/TCMKnowledgeBase';
 // 类型定义
 export interface CalculationData {
   birthDate: string;,
-  birthTime: string;
+  birthTime: string;,
   birthPlace: string;,
-  currentDate: string;
+  currentDate: string;,
   currentTime: string;,
   currentLocation: string;
   lunarData?: LunarData;
@@ -21,63 +21,63 @@ export interface CalculationData {
 }
 export interface LunarData {
   year: string;,
-  month: string;
+  month: string;,
   day: string;,
-  hour: string;
+  hour: string;,
   yearStem: string;,
-  yearBranch: string;
+  yearBranch: string;,
   monthStem: string;,
-  monthBranch: string;
+  monthBranch: string;,
   dayStem: string;,
-  dayBranch: string;
+  dayBranch: string;,
   hourStem: string;,
-  hourBranch: string;
+  hourBranch: string;,
   zodiac: string;,
   solarTerm: string;
 }
 export interface CalculationResult {
   confidence: number;,
-  fiveElements: FiveElementsAnalysis;
+  fiveElements: FiveElementsAnalysis;,
   yinYang: YinYangAnalysis;,
-  qiFlow: QiFlowAnalysis;
+  qiFlow: QiFlowAnalysis;,
   constitution: ConstitutionCalculation;,
-  seasonalInfluence: SeasonalInfluence;
+  seasonalInfluence: SeasonalInfluence;,
   timeInfluence: TimeInfluence;,
-  analysis: string;
+  analysis: string;,
   recommendations: string[];,
   warnings: string[];
   processingTime?: number;
 }
 export interface FiveElementsAnalysis {
   birthElements: {;,
-  wood: number;
-    fire: number;,
-  earth: number;
-    metal: number;,
+  wood: number;,
+  fire: number;,
+  earth: number;,
+  metal: number;,
   water: number;
 };
   currentElements: {,
-  wood: number;
-    fire: number,
+  wood: number;,
+  fire: number,
   earth: number;,
   metal: number,
   water: number;
   };
   balance: {,
-  overall: number;
-    deficiency: string[],
+  overall: number;,
+  deficiency: string[],
   excess: string[];,
   harmony: number;
   };
   interactions: {,
-  generation: ElementInteraction[];
-    restriction: ElementInteraction[],
+  generation: ElementInteraction[];,
+  restriction: ElementInteraction[],
   overacting: ElementInteraction[];,
   insulting: ElementInteraction[];
   };
   organCorrelation: {,
-  liver: number;
-    heart: number,
+  liver: number;,
+  heart: number,
   spleen: number;,
   lung: number,
   kidney: number;
@@ -85,25 +85,25 @@ export interface FiveElementsAnalysis {
 }
 export interface ElementInteraction {
   from: string;,
-  to: string;
+  to: string;,
   strength: number;,
-  type: 'generation' | 'restriction' | 'overacting' | 'insulting';
+  type: 'generation' | 'restriction' | 'overacting' | 'insulting';,
   description: string;
 }
 export interface YinYangAnalysis {
   birthYinYang: {;,
-  yin: number;
-    yang: number;,
+  yin: number;,
+  yang: number;,
   balance: number;
 };
   currentYinYang: {,
-  yin: number;
-    yang: number,
+  yin: number;,
+  yang: number,
   balance: number;
   };
   dynamicBalance: {,
-  trend: 'increasing_yin' | 'increasing_yang' | 'stable' | 'fluctuating';
-    stability: number,
+  trend: 'increasing_yin' | 'increasing_yang' | 'stable' | 'fluctuating';,
+  stability: number,
   harmony: number;
   };
   organYinYang: {,
@@ -118,28 +118,28 @@ export interface YinYangAnalysis {
 export interface QiFlowAnalysis {
   meridianFlow: {;
     [meridian: string]: {;,
-  strength: number;
-      direction: 'forward' | 'reverse' | 'stagnant';,
-  blockages: string[];
-      openness: number;
+  strength: number;,
+  direction: 'forward' | 'reverse' | 'stagnant';,
+  blockages: string[];,
+  openness: number;
 };
   };
   dailyRhythm: {
     [hour: string]: {,
-  dominantMeridian: string;
-      qiStrength: number,
+  dominantMeridian: string;,
+  qiStrength: number,
   recommendations: string[];
     };
   };
   seasonalFlow: {,
-  currentSeason: string;
-    qiDirection: string,
+  currentSeason: string;,
+  qiDirection: string,
   strength: number;,
   adaptability: number;
   };
   overallFlow: {,
-  circulation: number;
-    vitality: number,
+  circulation: number;,
+  vitality: number,
   balance: number;,
   blockages: string[];
   };
@@ -148,53 +148,53 @@ export interface ConstitutionCalculation {
   primaryConstitution: string;
   secondaryConstitution?: string;
   constitutionStrength: number;,
-  adaptability: number;
+  adaptability: number;,
   vulnerabilities: string[];,
-  strengths: string[];
+  strengths: string[];,
   seasonalVariations: {;,
-  spring: number;
-    summer: number;,
-  autumn: number;
-    winter: number;
+  spring: number;,
+  summer: number;,
+  autumn: number;,
+  winter: number;
 };
   lifeStageInfluence: {,
-  current: string;
-    characteristics: string[],
+  current: string;,
+  characteristics: string[],
   recommendations: string[];
   };
 }
 export interface SeasonalInfluence {
   currentSeason: string;,
-  seasonalQi: {;
-    dominant: string;,
-  strength: number;
-    direction: string;
+  seasonalQi: {;,
+  dominant: string;,
+  strength: number;,
+  direction: string;
 };
   solarTerm: {,
-  current: string;
-    influence: string,
+  current: string;,
+  influence: string,
   recommendations: string[];
   };
   climaticFactors: {,
-  wind: number;
-    cold: number,
+  wind: number;,
+  cold: number,
   heat: number;,
   dampness: number,
   dryness: number;,
   fire: number;
   };
   adaptation: {,
-  required: string[];
-    difficulty: number,
+  required: string[];,
+  difficulty: number,
   support: string[];
   };
 }
 export interface TimeInfluence {
   currentHour: string;,
-  dominantMeridian: string;
+  dominantMeridian: string;,
   qiActivity: {;,
-  level: number;
-    direction: string;,
+  level: number;,
+  direction: string;,
   quality: string;
 };
   optimalActivities: string[],
@@ -204,17 +204,17 @@ export interface TimeInfluence {
 }
 export interface UserProfile {
   age: number;,
-  gender: 'male' | 'female' | 'other';
+  gender: 'male' | 'female' | 'other';,
   height: number;,
-  weight: number;
+  weight: number;,
   occupation: string;,
-  medicalHistory: string[];
+  medicalHistory: string[];,
   allergies: string[];,
   medications: string[];
 }
 interface LocationData {
   latitude: number;,
-  longitude: number;
+  longitude: number;,
   timezone: string;
 }
 /**

@@ -8,7 +8,7 @@ import { apiClient } from './apiClient';
 } from '../types/agents';
 export interface CoordinationRequest {
   initiatorAgent: AgentType;,
-  targetAgents: AgentType[];
+  targetAgents: AgentType[];,
   task: string;,
   priority: 'low' | 'normal' | 'high' | 'urgent';
   data?: any;
@@ -16,18 +16,18 @@ export interface CoordinationRequest {
 }
 export interface CoordinationResult {
   collaborationId: string;,
-  status: 'success' | 'partial' | 'failed';
+  status: 'success' | 'partial' | 'failed';,
   responses: AgentResponse[];
   errors?: string[];
   duration: number;
 }
 export interface AgentInfo {
   id: string;,
-  name: string;
+  name: string;,
   type: AgentType;,
-  status: 'active' | 'inactive' | 'busy' | 'error';
+  status: 'active' | 'inactive' | 'busy' | 'error';,
   capabilities: string[];,
-  load: number;
+  load: number;,
   lastHeartbeat: Date;
 }
 class AgentCoordinationService {

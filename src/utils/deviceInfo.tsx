@@ -7,33 +7,33 @@ interface ApiResponse<T = any /> { data: T;/     , success: boolean;
 code?: number}
 export interface DeviceCapabilities {
   camera: boolean;,
-  microphone: boolean;
+  microphone: boolean;,
   location: boolean;,
-  biometrics: boolean;
+  biometrics: boolean;,
   nfc: boolean;,
   bluetooth: boolean;
 }
 export interface DeviceSpecs {
   deviceId: string;,
-  brand: string;
+  brand: string;,
   model: string;,
-  systemName: string;
+  systemName: string;,
   systemVersion: string,buildNumber: string,bundleId: string;,
-  totalMemory: number;
+  totalMemory: number;,
   usedMemory: number;,
-  totalDiskCapacity: number;
+  totalDiskCapacity: number;,
   freeDiskStorage: number;,
-  batteryLevel: number;
+  batteryLevel: number;,
   screenWidth: number;,
-  screenHeight: number;
+  screenHeight: number;,
   pixelRatio: number;,
-  fontScale: number;
+  fontScale: number;,
   carrier: string;,
-  ipAddress: string;
+  ipAddress: string;,
   macAddress: string;,
-  capabilities: DeviceCapabilities;
+  capabilities: DeviceCapabilities;,
   isEmulator: boolean;,
-  isTablet: boolean;
+  isTablet: boolean;,
   hasNotch: boolean;,
   supportedAbis: string[];
 }

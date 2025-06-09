@@ -15,34 +15,34 @@ import {medKnowledgeService,
 export interface MedKnowledgeState {
   // 数据状态
   constitutions: Constitution[];,
-  symptoms: Symptom[];
+  symptoms: Symptom[];,
   acupoints: Acupoint[];,
-  herbs: Herb[];
+  herbs: Herb[];,
   syndromes: Syndrome[];,
-  searchResults: KnowledgeResult[];
+  searchResults: KnowledgeResult[];,
   knowledgeGraph: GraphData | null;,
   recommendations: HealthRecommendation[];
   // 当前选中项
   selectedConstitution: Constitution | null;,
-  selectedSymptom: Symptom | null;
+  selectedSymptom: Symptom | null;,
   selectedAcupoint: Acupoint | null;,
-  selectedHerb: Herb | null;
+  selectedHerb: Herb | null;,
   selectedSyndrome: Syndrome | null;
   // 加载状态
   loading: {;,
-  constitutions: boolean;
-    symptoms: boolean;,
-  acupoints: boolean;
-    herbs: boolean;,
-  syndromes: boolean;
-    search: boolean;,
-  graph: boolean;
-    recommendations: boolean;
+  constitutions: boolean;,
+  symptoms: boolean;,
+  acupoints: boolean;,
+  herbs: boolean;,
+  syndromes: boolean;,
+  search: boolean;,
+  graph: boolean;,
+  recommendations: boolean;
 };
   // 错误状态
   error: {,
-  constitutions: string | null;
-    symptoms: string | null,
+  constitutions: string | null;,
+  symptoms: string | null,
   acupoints: string | null;,
   herbs: string | null,
   syndromes: string | null;,
@@ -55,16 +55,16 @@ export interface MedKnowledgeState {
   searchHistory: string[];
   // 缓存状态
   lastUpdated: {,
-  constitutions: number | null;
-    symptoms: number | null,
+  constitutions: number | null;,
+  symptoms: number | null,
   acupoints: number | null;,
   herbs: number | null,
   syndromes: number | null;
   };
   // 服务状态
   serviceHealth: {,
-  status: 'unknown' | 'healthy' | 'unhealthy';
-    lastCheck: number | null;
+  status: 'unknown' | 'healthy' | 'unhealthy';,
+  lastCheck: number | null;
   };
 }
 // 初始状态

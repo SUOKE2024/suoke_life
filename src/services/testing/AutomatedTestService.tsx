@@ -42,8 +42,8 @@ export interface TestSuite {
   // 套件描述  description: string;
   // 测试用例  testCases: TestCase[];
   // 套件配置  config: { parallel: boolean;,
-  maxConcurrency: number;
-    timeout: number;,
+  maxConcurrency: number;,
+  timeout: number;,
   retries: number;
 }
 }
@@ -67,8 +67,8 @@ export interface CoverageReport {
   // 覆盖率百分比  percentage: number;
   // 文件覆盖率  files: Record<string;
     { lines: number;,
-  covered: number;
-      percentage: number;
+  covered: number;,
+  percentage: number;
 }
   >
 }

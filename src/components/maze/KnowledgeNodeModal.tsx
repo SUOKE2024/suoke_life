@@ -17,7 +17,7 @@ import { KnowledgeNode } from '../../types/maze';
 } from 'react-native';
 interface KnowledgeNodeModalProps {
   knowledgeNode: KnowledgeNode;,
-  visible: boolean;
+  visible: boolean;,
   onClose: () => void;
 }
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');

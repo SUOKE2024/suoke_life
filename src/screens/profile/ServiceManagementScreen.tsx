@@ -14,11 +14,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface ServiceInfo {
   id: string;,
-  name: string;
+  name: string;,
   description: string;,
-  type: 'agent' | 'core' | 'diagnosis';
+  type: 'agent' | 'core' | 'diagnosis';,
   isRunning: boolean;,
-  baseUrl: string;
+  baseUrl: string;,
   status: 'starting' | 'running' | 'stopping' | 'stopped' | 'error';
   lastAction?: string;
 }

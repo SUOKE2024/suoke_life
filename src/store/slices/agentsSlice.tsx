@@ -15,8 +15,8 @@ interface ApiClientResponse<T = any> {
 }
 // 初始状态
 const initialState: AgentsState = {,
-  conversations: {
-    xiaoai: [],
+  conversations: {,
+  xiaoai: [],
     xiaoke: [],
     laoke: [],
     soer: []
@@ -106,8 +106,8 @@ const agentsSlice = createSlice({name: "agents",initialState,reducers: {setActiv
     addUserMessage: ()
       state,
       action: PayloadAction<{,
-  agentType: AgentType;
-        content: string;
+  agentType: AgentType;,
+  content: string;
         type?: "text" | "image" | "audio" | "file";
       }>
     ) => {
@@ -135,8 +135,8 @@ const agentsSlice = createSlice({name: "agents",initialState,reducers: {setActiv
     updateMessage: ()
       state,
       action: PayloadAction<{,
-  agentType: AgentType;
-        messageId: string,
+  agentType: AgentType;,
+  messageId: string,
   updates: Partial<AgentMessage>;
       }>
     ) => {

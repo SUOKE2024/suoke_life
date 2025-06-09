@@ -206,11 +206,11 @@ interface PerformanceBenchmarkProps {
 
 interface BenchmarkResult {
   name: string;,
-  iterations: number;
+  iterations: number;,
   totalTime: number;,
-  averageTime: number;
+  averageTime: number;,
   minTime: number;,
-  maxTime: number;
+  maxTime: number;,
   fps: number;
 }
 

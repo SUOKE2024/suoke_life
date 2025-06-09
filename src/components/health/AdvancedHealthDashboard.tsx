@@ -3,18 +3,18 @@ import React, { useState, useEffect } from "react";
 const { width } = Dimensions.get(window");"
 export interface HealthMetric {
   id: string;,
-  name: string;
+  name: string;,
   value: number;,
-  unit: string;
+  unit: string;,
   status: "normal | "warning" | danger";,
-  trend: "up | "down" | stable";
+  trend: "up | "down" | stable";,
   lastUpdated: Date;
 }
 export interface HealthInsight {
   id: string;,
-  title: string;
+  title: string;,
   description: string;,
-  type: "recommendation | "warning" | achievement";
+  type: "recommendation | "warning" | achievement";,
   priority: "low | "medium" | high";
 }
 export interface AdvancedHealthDashboardProps {

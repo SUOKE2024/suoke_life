@@ -20,7 +20,7 @@ import { RootState } from '../../store';
 // 消息类型定义
 interface ChatMessage {
   id: string;,
-  content: string;
+  content: string;,
   timestamp: number;,
   sender: 'user' | 'agent' | 'doctor' | 'other';
   senderName?: string;

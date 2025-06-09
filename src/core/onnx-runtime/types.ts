@@ -4,7 +4,7 @@ export interface QuantizationConfig {
   level: QuantizationLevel;
   calibrationDataPath?: string;
   outputPath: string;,
-  preserveAccuracy: boolean;
+  preserveAccuracy: boolean;,
   targetDevice: TargetDevice;,
   optimizationLevel: OptimizationLevel;
 }
@@ -14,13 +14,13 @@ export type OptimizationLevel = basic" | "extended | "all;";
 // 边缘计算配置
 export interface EdgeComputeConfig {
   enableBatching: boolean;,
-  batchSize: number;
+  batchSize: number;,
   maxConcurrentSessions: number;,
-  memoryLimit: number;
+  memoryLimit: number;,
   cpuThreads: number;,
-  enableGPU: boolean;
+  enableGPU: boolean;,
   enableNPU: boolean;,
-  fallbackStrategy: FallbackStrategy;
+  fallbackStrategy: FallbackStrategy;,
   powerOptimization: PowerOptimizationLevel;
 }
 export type FallbackStrategy = cpu-only" | "cloud-fallback | "cache-only;";
@@ -36,29 +36,29 @@ export interface DeviceCapabilities {
 }
 export interface CPUCapabilities {
   cores: number;,
-  architecture: string;
+  architecture: string;,
   frequency: number;,
-  supportedInstructions: string[];
+  supportedInstructions: string[];,
   thermalThrottling: boolean;
 }
 export interface MemoryCapabilities {
   total: number;,
-  available: number;
+  available: number;,
   type: string;,
   bandwidth: number;
 }
 export interface GPUCapabilities {
   vendor: string;,
-  model: string;
+  model: string;,
   memory: number;,
-  computeUnits: number;
+  computeUnits: number;,
   supportedAPIs: string[];
 }
 export interface NPUCapabilities {
   vendor: string;,
-  model: string;
+  model: string;,
   tops: number;,
-  supportedPrecisions: string[];
+  supportedPrecisions: string[];,
   driverVersion: string;
 }
 export type ExecutionProvider = | cpu"";
@@ -72,7 +72,7 @@ export type ExecutionProvider = | cpu"";
 // 推理结果
 export interface InferenceResult {
   sessionId: string;,
-  modelId: string;
+  modelId: string;,
   outputs: Map<string, TensorData>;
   latency: number;,
   memoryUsage: number;
@@ -83,11 +83,11 @@ export interface InferenceResult {
 // 模型优化选项
 export interface ModelOptimizationOptions {
   enableGraphOptimization: boolean;,
-  enableMemoryPattern: boolean;
+  enableMemoryPattern: boolean;,
   enableCPUMemArena: boolean;,
-  executionMode: ExecutionMode;
+  executionMode: ExecutionMode;,
   graphOptimizationLevel: GraphOptimizationLevel;,
-  enableProfiling: boolean;
+  enableProfiling: boolean;,
   logSeverityLevel: LogLevel;
 }
 export type ExecutionMode = "sequential" | parallel;
@@ -96,17 +96,17 @@ export type LogLevel = "verbose" | info" | "warning | "error" | fatal;
 // 缓存配置
 export interface CacheConfig {
   enableModelCache: boolean;,
-  enableInferenceCache: boolean;
+  enableInferenceCache: boolean;,
   maxCacheSize: number;,
-  cacheDirectory: string;
+  cacheDirectory: string;,
   ttl: number;,
-  compressionEnabled: boolean;
+  compressionEnabled: boolean;,
   encryptionEnabled: boolean;
 }
 // 模型加载选项
 export interface ModelLoadOptions {
   providers: ExecutionProvider[];,
-  sessionOptions: ModelOptimizationOptions;
+  sessionOptions: ModelOptimizationOptions;,
   enableProfiling: boolean;,
   warmupRuns: number;
   preloadInputs?: TensorData[];
@@ -114,9 +114,9 @@ export interface ModelLoadOptions {
 // 性能指标
 export interface PerformanceMetrics {
   modelLoadTime: number;,
-  firstInferenceTime: number;
+  firstInferenceTime: number;,
   averageInferenceTime: number;,
-  memoryPeakUsage: number;
+  memoryPeakUsage: number;,
   cpuUsage: number;
   gpuUsage?: number;
   powerConsumption?: number;
@@ -144,7 +144,7 @@ export type ONNXErrorCode = | "MODEL_LOAD_FAILED";
 // 事件类型
 export interface ONNXEvent {
   type: ONNXEventType;,
-  timestamp: Date;
+  timestamp: Date;,
   data: any;
   sessionId?: string;
   modelId?: string;

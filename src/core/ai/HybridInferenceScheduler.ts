@@ -5,38 +5,38 @@
 
 export interface InferenceRequest {
   id: string;,
-  modelId: string;
+  modelId: string;,
   inputData: any;,
-  priority: 'low' | 'normal' | 'high' | 'critical';
+  priority: 'low' | 'normal' | 'high' | 'critical';,
   timeout: number;,
-  requiresPrivacy: boolean;
+  requiresPrivacy: boolean;,
   complexity: 'simple' | 'medium' | 'complex';,
   metadata: Record<string, any>;
 }
 
 export interface InferenceResult {
   requestId: string;,
-  result: any;
+  result: any;,
   confidence: number;,
-  processingTime: number;
+  processingTime: number;,
   source: 'local' | 'cloud' | 'hybrid';,
-  modelUsed: string;
+  modelUsed: string;,
   metadata: Record<string, any>;
 }
 
 export interface NetworkStatus {
   isOnline: boolean;,
-  connectionType: 'wifi' | 'cellular' | 'none';
+  connectionType: 'wifi' | 'cellular' | 'none';,
   bandwidth: number; // Mbps;,
-  latency: number; // ms;
+  latency: number; // ms;,
   isStable: boolean;
 }
 
 export interface DeviceCapabilities {
   cpuCores: number;,
-  memoryMB: number;
+  memoryMB: number;,
   gpuAvailable: boolean;,
-  batteryLevel: number;
+  batteryLevel: number;,
   thermalState: 'normal' | 'fair' | 'serious' | 'critical';
 }
 
@@ -337,8 +337,8 @@ export class HybridInferenceScheduler {
    * 集成多个推理结果
    */
   private ensembleResults(results: InferenceResult[]): {,
-  result: any;
-    confidence: number;
+  result: any;,
+  confidence: number;
   } {
     if (results.length === 1) {
       return {
@@ -464,8 +464,8 @@ export class HybridInferenceScheduler {
     string,
     {
       avgProcessingTime: number;,
-  requestCount: number;
-      successRate: number;
+  requestCount: number;,
+  successRate: number;
     }
   > {
     const stats: Record<string, any> = {};

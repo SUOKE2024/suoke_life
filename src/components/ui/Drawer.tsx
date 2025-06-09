@@ -13,7 +13,7 @@ import { useTheme } from '../../contexts/ThemeContext';
 
 export interface DrawerProps {
   visible: boolean;,
-  onClose: () => void;
+  onClose: () => void;,
   children: React.ReactNode;
   position?: 'left' | 'right';
   width?: number;

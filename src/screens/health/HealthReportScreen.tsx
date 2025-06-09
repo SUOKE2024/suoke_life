@@ -26,13 +26,13 @@ const { width: screenWidth } = Dimensions.get('window');
 
 interface HealthMetric {
   id: string;,
-  name: string;
+  name: string;,
   value: number;,
-  unit: string;
+  unit: string;,
   status: 'excellent' | 'good' | 'normal' | 'attention' | 'warning';,
-  trend: 'up' | 'down' | 'stable';
+  trend: 'up' | 'down' | 'stable';,
   change: number;,
-  icon: string;
+  icon: string;,
   color: string;,
   description: string;
   recommendation?: string;
@@ -40,22 +40,22 @@ interface HealthMetric {
 
 interface HealthScore {
   overall: number;,
-  categories: {
-    cardiovascular: number;,
-  metabolism: number;
-    immunity: number;,
-  mental: number;
-    sleep: number;
+  categories: {,
+  cardiovascular: number;,
+  metabolism: number;,
+  immunity: number;,
+  mental: number;,
+  sleep: number;
   };
 }
 
 interface AIInsight {
   id: string;,
-  type: 'positive' | 'neutral' | 'warning';
+  type: 'positive' | 'neutral' | 'warning';,
   title: string;,
-  content: string;
+  content: string;,
   priority: 'high' | 'medium' | 'low';,
-  actionable: boolean;
+  actionable: boolean;,
   icon: string;
 }
 

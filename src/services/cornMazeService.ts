@@ -33,7 +33,7 @@ import {/**
 */
 interface CornMazeServiceConfig {
   baseURL: string;,
-  timeout: number;
+  timeout: number;,
   retryAttempts: number;,
   enableCache: boolean;
 }

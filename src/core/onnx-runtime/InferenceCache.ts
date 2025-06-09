@@ -367,14 +367,14 @@ const totalAccess = this.accessTimes.size;
 // 辅助接口
 interface CachedInferenceResult {
   result: InferenceResult;,
-  timestamp: number;
+  timestamp: number;,
   accessCount: number;
 }
 interface CacheStats {
   modelCacheSize: number;,
-  inferenceCacheSize: number;
+  inferenceCacheSize: number;,
   totalSize: number;,
-  maxSize: number;
+  maxSize: number;,
   hitRate: number;,
   memoryUsage: number;
 }  */

@@ -3,14 +3,14 @@ import React, { useState, useEffect } from "react";
 const { width } = Dimensions.get(window");"
 export interface HealthDataPoint {
   id: string;,
-  timestamp: Date;
+  timestamp: Date;,
   value: number;,
-  category: string;
+  category: string;,
   unit: string;
 }
 export interface VisualizationConfig {
   type: "line | "bar" | pie" | "scatter;";,
-  timeRange: "1d" | 1w" | "1m | "3m" | 1y;
+  timeRange: "1d" | 1w" | "1m | "3m" | 1y;,
   metrics: string[];
 }
 export interface EnhancedHealthVisualizationProps {

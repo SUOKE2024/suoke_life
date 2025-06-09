@@ -16,7 +16,7 @@ export interface TabItem {
 }
 interface TabSelectorProps {
   tabs: TabItem[];,
-  selectedTabId: string;
+  selectedTabId: string;,
   onTabPress: (tabId: string) => void;
   style?: ViewStyle;
   tabStyle?: ViewStyle;

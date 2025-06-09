@@ -10,7 +10,7 @@ interface Props {
 }
 interface State {
   hasError: boolean;,
-  error: AppError | null;
+  error: AppError | null;,
   retryCount: number;
 }
 export class ErrorBoundary extends Component<Props, State> {

@@ -7,7 +7,7 @@ const RESULT_PREFIX = 'diagnosis_result_';
 // 缓存配置
 interface CacheConfig {
   maxAge: number; // 最大缓存时间（毫秒）;,
-  maxSize: number; // 最大缓存条目数
+  maxSize: number; // 最大缓存条目数,
   compressionEnabled: boolean; // 是否启用压缩
 }
 // 缓存条目
@@ -22,19 +22,19 @@ interface CacheEntry<T> {
 // 诊断会话缓存
 interface DiagnosisSessionCache {
   sessionId: string;,
-  userId: string;
+  userId: string;,
   startTime: number;,
-  lastUpdateTime: number;
+  lastUpdateTime: number;,
   currentStep: string;,
-  collectedData: Partial<FiveDiagnosisInput>;
+  collectedData: Partial<FiveDiagnosisInput>;,
   isCompleted: boolean;
 }
 // 诊断结果缓存
 interface DiagnosisResultCache {
   resultId: string;,
-  sessionId: string;
+  sessionId: string;,
   userId: string;,
-  result: FiveDiagnosisResult;
+  result: FiveDiagnosisResult;,
   createdAt: number;,
   isSynced: boolean;
 }
@@ -42,8 +42,8 @@ export class DiagnosisCacheManager {
   private config: CacheConfig;
   private memoryCache: Map<string, CacheEntry<any>>;
   private cacheStats: {,
-  hits: number;
-    misses: number,
+  hits: number;,
+  misses: number,
   evictions: number;,
   totalSize: number;
   };

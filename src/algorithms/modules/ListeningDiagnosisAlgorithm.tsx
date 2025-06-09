@@ -10,9 +10,9 @@ export interface ListeningData {
 }
 export interface AudioData {
   data: ArrayBuffer;,
-  format: string;
+  format: string;,
   sampleRate: number;,
-  channels: number;
+  channels: number;,
   duration: number;
 }
 export interface ListeningResult {
@@ -23,29 +23,29 @@ export interface ListeningResult {
 }
 export interface ListeningFeatures {
   voice: VoiceFeatures;,
-  breathing: BreathingFeatures;
+  breathing: BreathingFeatures;,
   cough: CoughFeatures;
 }
 export interface VoiceFeatures {
   pitch: number;,
-  volume: number;
+  volume: number;,
   tone: string;,
-  clarity: string;
+  clarity: string;,
   rhythm: string;,
   emotion: string;
 }
 export interface BreathingFeatures {
   rate: number;,
-  depth: string;
+  depth: string;,
   rhythm: string;,
-  sound: string;
+  sound: string;,
   effort: string;
 }
 export interface CoughFeatures {
   frequency: number;,
-  intensity: string;
+  intensity: string;,
   type: string;,
-  wetness: string;
+  wetness: string;,
   timing: string;
 }
 export interface VoiceAnalysis {
@@ -89,9 +89,9 @@ export interface CoughAnalysis {
 }
 export interface UserProfile {
   age: number;,
-  gender: "male" | "female" | "other";
+  gender: "male" | "female" | "other";,
   height: number;,
-  weight: number;
+  weight: number;,
   occupation: string;,
   medicalHistory: string[],allergies: string[],medications: string[];
 }
@@ -302,7 +302,7 @@ performanceMonitor.recordRender();
 }
 interface ProcessedAudioData {
   original: AudioData;,
-  processed: AudioData;
+  processed: AudioData;,
   type: string;,
   metadata: Record<string, any>;
 }

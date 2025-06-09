@@ -29,7 +29,7 @@ export interface ImageAssistanceResponse {
   error?: string}
 export interface SignLanguageResponse {
   recognized_text: string;,
-  confidence: number;
+  confidence: number;,
   segments: Array<{text: string;,
   start_time_ms: number,end_time_ms: number,confidence: number;
 }>;
@@ -42,11 +42,11 @@ export interface AccessibleContentResponse {
 export interface ScreenReadingResponse {
   screen_description: string;,
   ui_elements: Array<{element_type: string;,
-  content: string;
-    action: string;,
+  content: string;,
+  action: string;,
   location: {x: number;,
-  y: number;
-      width: number;,
+  y: number;,
+  width: number;,
   height: number;
 };
   }>;
@@ -54,8 +54,8 @@ export interface ScreenReadingResponse {
   error?: string}
 export interface AccessibilitySettingsResponse {
   current_preferences: {language: string;,
-  voice_type: string;
-    speech_rate: number;,
+  voice_type: string;,
+  speech_rate: number;,
   high_contrast: boolean,screen_reader: boolean,font_size: string;
     [key: string]: unknown;
 };

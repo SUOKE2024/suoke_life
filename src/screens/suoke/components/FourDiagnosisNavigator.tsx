@@ -13,17 +13,17 @@ import React,{ useState, useEffect } from react""
 const { width   } = Dimensions.get(window;";);"
 interface DiagnosisMethod {
   id: string;,
-  name: string;
+  name: string;,
   description: string;,
-  icon: string;
+  icon: string;,
   color: string;,
-  features: string[];
+  features: string[];,
   status: "available | "coming_soon" | maintenance";,
   accuracy: number;
 }
 interface FourDiagnosisNavigatorProps {
   visible: boolean;,
-  onClose: () => void;
+  onClose: () => void;,
   onDiagnosisSelect: (diagnosisId: string) => void;
 }
 const DIAGNOSIS_METHODS: DiagnosisMethod[] = [{,

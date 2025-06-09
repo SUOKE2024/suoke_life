@@ -6,13 +6,13 @@ import { syncService } from '../../services/syncService';
 import { offlineService } from '../../services/offlineService';
 interface ConfigSection {
   id: string;,
-  title: string;
+  title: string;,
   icon: string;,
   configs: ConfigItem[];
 }
 interface ConfigItem {
   key: string;,
-  label: string;
+  label: string;,
   type: 'boolean' | 'number' | 'string' | 'select';,
   value: any;
   description?: string;

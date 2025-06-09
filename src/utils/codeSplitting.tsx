@@ -9,7 +9,7 @@ import React from "react";
     return importPromi;s;e;
   }
   // 预加载模块  preload(modulePaths: string[]) {
-    modulePaths.forEach((path) => {}))
+    modulePaths.forEach(path) => {}))
       if (!this.cache.has(path);) {
 this.import(path).catch(error) => {}
           });

@@ -13,7 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface ApiTestResult {
   name: string;,
-  category: string;
+  category: string;,
   status: 'PASSED' | 'FAILED' | 'PENDING';
   duration?: number;
   endpoint: string;,
@@ -23,9 +23,9 @@ interface ApiTestResult {
 
 interface TestSummary {
   total: number;,
-  passed: number;
+  passed: number;,
   failed: number;,
-  successRate: number;
+  successRate: number;,
   avgDuration: number;
 }
 

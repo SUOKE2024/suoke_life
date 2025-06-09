@@ -28,18 +28,18 @@ const { width: screenWidth } = Dimensions.get('window');
 
 interface HealthMetric {
   id: string;,
-  name: string;
+  name: string;,
   value: number;,
-  unit: string;
+  unit: string;,
   trend: 'up' | 'down' | 'neutral';,
-  change: number;
+  change: number;,
   color: string;,
   icon: string;
 }
 
 interface ChartData {
   label: string;,
-  value: number;
+  value: number;,
   date: string;
 }
 

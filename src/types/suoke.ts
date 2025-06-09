@@ -18,11 +18,11 @@ export type ServiceStatus  = | 'available'
 // 服务项接口
 export interface ServiceItem {
   id: string;,
-  title: string;
+  title: string;,
   subtitle: string;,
-  icon: string;
+  icon: string;,
   color: string;,
-  category: ServiceCategory;
+  category: ServiceCategory;,
   description: string;,
   features: string[];
   price?: string;
@@ -36,7 +36,7 @@ export interface ServiceItem {
 // 分类配置接口
 export interface CategoryConfig {
   key: ServiceCategory | 'all';,
-  label: string;
+  label: string;,
   icon: string;
   color?: string;
   description?: string;
@@ -44,9 +44,9 @@ export interface CategoryConfig {
 // 服务预约接口
 export interface ServiceBooking {
   id: string;,
-  serviceId: string;
+  serviceId: string;,
   userId: string;,
-  appointmentTime: string;
+  appointmentTime: string;,
   status: 'pending' | 'confirmed' | 'completed' | 'cancelled';
   notes?: string;
   price: number;
@@ -54,12 +54,12 @@ export interface ServiceBooking {
 // 诊断结果接口
 export interface DiagnosisResult {
   id: string;,
-  type: DiagnosisType;
+  type: DiagnosisType;,
   userId: string;,
-  timestamp: string;
+  timestamp: string;,
   results: {;,
-  score: number;
-    analysis: string;,
+  score: number;,
+  analysis: string;,
   recommendations: string[];
     images?: string[];
     audioData?: string;
@@ -69,14 +69,14 @@ export interface DiagnosisResult {
 // 健康评估接口
 export interface HealthAssessment {
   id: string;,
-  userId: string;
+  userId: string;,
   timestamp: string;,
-  overallScore: number;
+  overallScore: number;,
   categories: {;,
-  physical: number;
-    mental: number;,
-  lifestyle: number;
-    nutrition: number;
+  physical: number;,
+  mental: number;,
+  lifestyle: number;,
+  nutrition: number;
 };
   recommendations: string[],
   nextAssessmentDate: string;
@@ -84,8 +84,8 @@ export interface HealthAssessment {
 // 服务使用统计接口
 export interface ServiceUsageStats {
   serviceId: string;,
-  totalUsage: number;
+  totalUsage: number;,
   lastUsed: string;,
-  averageRating: number;
+  averageRating: number;,
   completionRate: number;
 }

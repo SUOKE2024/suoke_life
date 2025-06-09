@@ -6,15 +6,15 @@ interface AgentAnalyticsProps {
 }
 interface AnalyticsData {
   agentType: AgentType;,
-  metrics: AgentMetrics;
+  metrics: AgentMetrics;,
   trends: {;,
-  responseTimeChange: number;
-    successRateChange: number;,
+  responseTimeChange: number;,
+  successRateChange: number;,
   throughputChange: number;
 };
   alerts: Array<{,
-  type: 'warning' | 'error' | 'info';
-    message: string,
+  type: 'warning' | 'error' | 'info';,
+  message: string,
   timestamp: Date;
   }>;
 }

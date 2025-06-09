@@ -148,7 +148,7 @@ export class MonitoringDeployment  {private static instance: MonitoringDeploymen
         }
       ]
     });
-    Object.entries(config.services.agents).forEach(([name, agent]) => {}))
+    Object.entries(config.services.agents).forEach([name, agent]) => {}))
       scrapeConfigs.push({ jobName: `agent-${name  }`,)
         scrapeInterval: "15s",
         metricsPath: "/metrics",/            staticConfigs: [{ targets: [`${agent.host  }:${agent.port}`],
@@ -157,7 +157,7 @@ export class MonitoringDeployment  {private static instance: MonitoringDeploymen
         ]
       });
     });
-    Object.entries(config.services.diagnosis).forEach(([name, service]) => {}))
+    Object.entries(config.services.diagnosis).forEach([name, service]) => {}))
       scrapeConfigs.push({ jobName: `diagnosis-${name  }`,)
         scrapeInterval: "15s",
         metricsPath: "/metrics",/            staticConfigs: [{ targets: [`${service.host  }:${service.port}`],
@@ -166,7 +166,7 @@ export class MonitoringDeployment  {private static instance: MonitoringDeploymen
         ]
       });
     });
-    Object.entries(config.services.data).forEach(([name, service]) => {}))
+    Object.entries(config.services.data).forEach([name, service]) => {}))
       scrapeConfigs.push({ jobName: `data-${name  }`,)
         scrapeInterval: "15s",
         metricsPath: "/metrics",/            staticConfigs: [{ targets: [`${service.host  }:${service.port}`],

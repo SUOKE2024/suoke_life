@@ -4,19 +4,19 @@
 */
 export interface PerformanceMetric {
   name: string;,
-  value: number;
+  value: number;,
   unit: string;,
-  timestamp: number;
+  timestamp: number;,
   category: 'network' | 'rendering' | 'memory' | 'cpu' | 'user_interaction';
   threshold?: number;
   status: 'good' | 'warning' | 'critical';
 }
 export interface PerformanceReport {
   timestamp: number;,
-  metrics: PerformanceMetric[];
+  metrics: PerformanceMetric[];,
   summary: {;,
-  score: number;
-    issues: string[];,
+  score: number;,
+  issues: string[];,
   recommendations: string[];
 };
 }
@@ -184,7 +184,7 @@ export class PerformanceMonitor {
     // 观察导航时间
     try {
       const navObserver = new PerformanceObserver(list) => {
-        list.getEntries().forEach((entry) => {
+        list.getEntries().forEach(entry) => {
           if (entry.entryType === 'navigation') {
             const navEntry = entry as PerformanceNavigationTiming;
             this.recordNavigationMetrics(navEntry);
@@ -199,7 +199,7 @@ export class PerformanceMonitor {
     // 观察资源加载时间
     try {
       const resourceObserver = new PerformanceObserver(list) => {
-        list.getEntries().forEach((entry) => {
+        list.getEntries().forEach(entry) => {
           if (entry.entryType === 'resource') {
             this.recordResourceMetric(entry as PerformanceResourceTiming);
           }
@@ -213,7 +213,7 @@ export class PerformanceMonitor {
     // 观察用户交互
     try {
       const interactionObserver = new PerformanceObserver(list) => {
-        list.getEntries().forEach((entry) => {
+        list.getEntries().forEach(entry) => {
           if (entry.entryType === 'event') {
             this.recordInteractionMetric(entry as PerformanceEventTiming);
           }

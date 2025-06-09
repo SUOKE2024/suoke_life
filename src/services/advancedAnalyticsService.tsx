@@ -25,9 +25,9 @@ s";  * / 图像分析* ///     "
 // 分析配置 * export interface AnalysisConfig {
   id: string,
   name: string;,
-  description: string;
+  description: string;,
   type: AnalysisType;,
-  dataSources: string[];
+  dataSources: string[];,
   parameters: {timeRange?:  {start: string;,
   end: string;
 }
@@ -77,10 +77,10 @@ s";  * / 图像分析* ///     "
   configId: string,status: "running" | "completed" | "failed" | "cancelled",startTime: string;
   endTime?: string;
   duration?: number;  results: {summary: {totalRecords: number;,
-  processedRecords: number;
-      errorRecords: number;,
-  insights: string[];
-      recommendations: string[];
+  processedRecords: number;,
+  errorRecords: number;,
+  insights: string[];,
+  recommendations: string[];
 };
     data: {
       raw?: unknown[];
@@ -160,14 +160,14 @@ s";  * / 图像分析* ///     "
 // 仪表板配置 * export interface DashboardConfig {
   id: string,
   name: string;,
-  description: string;
+  description: string;,
   layout: {rows: number;,
-  columns: number;
-    widgets: Array<{id: string;,
-  type: "chart" | "metric" | "table" | "text" | "image" | "iframe";
-      position: {row: number;,
-  column: number;
-        rowSpan: number;,
+  columns: number;,
+  widgets: Array<{id: string;,
+  type: "chart" | "metric" | "table" | "text" | "image" | "iframe";,
+  position: {row: number;,
+  column: number;,
+  rowSpan: number;,
   columnSpan: number;
 };
       config: {title?: string;
@@ -188,7 +188,7 @@ s";  * / 图像分析* ///     "
   createdBy: string}
 // 报告配置 * export interface ReportConfig {
     id: string;,
-  name: string;
+  name: string;,
   description: string;,
   template: {sections: Array<{id: string;,
   type: | "title"| "summary"| "chart";
@@ -293,8 +293,8 @@ s";  * / 图像分析* ///     "
         status: "running",
         startTime,
         results: {,
-  summary: {
-            totalRecords: 0,
+  summary: {,
+  totalRecords: 0,
             processedRecords: 0,
             errorRecords: 0,
             insights:  [],
@@ -409,8 +409,8 @@ s";  * / 图像分析* ///     "
     riskFactors: Record<string, any>,
     models?: string[]
   ): Promise< { overallRisk: {,
-  score: number //
-      confidence: number}
+  score: number //,
+  confidence: number}
     specificRisks: Array<{ type: string,
       score: number,
       level: "low" | "medium" | "high" | "critical",
@@ -443,8 +443,8 @@ s";  * / 图像分析* ///     "
       | "local_outlier_factor"
       | "statistical" = "isolation_forest",
     sensitivity: number = 0.1): Promise< {,
-  anomalies: Array<{
-      timestamp: string,
+  anomalies: Array<{,
+  timestamp: string,
       value: unknown,
       score: number,
       severity: "low" | "medium" | "high",

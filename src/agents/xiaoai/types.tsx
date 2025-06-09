@@ -14,9 +14,9 @@ export interface ImageData {
 }
 export interface VideoData {
   data: ArrayBuffer | string;,
-  format: "mp4" | "webm" | "avi";
+  format: "mp4" | "webm" | "avi";,
   width: number;,
-  height: number;
+  height: number;,
   duration: number;,
   frameRate: number;
   quality?: "low" | "medium" | "high";
@@ -53,20 +53,20 @@ export interface BasicUserInfo {
 }
 export interface HealthProfile {
   chronicConditions: string[];,
-  allergies: string[];
+  allergies: string[];,
   medications: Medication[];,
-  vitalSigns: VitalSigns;
+  vitalSigns: VitalSigns;,
   constitution: ConstitutionType;,
-  riskFactors: RiskFactor[];
+  riskFactors: RiskFactor[];,
   healthGoals: HealthGoal[];
 }
 export interface UserPreferences {
   communicationStyle: "formal" | "casual" | "medical" | "friendly";,
-  language: string;
+  language: string;,
   voicePreferences: VoiceProfile;,
-  privacyLevel: "low" | "medium" | "high";
+  privacyLevel: "low" | "medium" | "high";,
   notificationPreferences: NotificationPreferences;,
-  accessibilityPreferences: AccessibilityPreferences;
+  accessibilityPreferences: AccessibilityPreferences;,
   culturalPreferences: CulturalPreferences;
 }
 // 聊天相关类型 * export interface ChatContext {
@@ -110,7 +110,7 @@ export interface ChatAction {
 }
 export interface VoiceProfile {
   gender: "male" | "female" | "neutral";,
-  age: "child" | "adult" | "elderly";
+  age: "child" | "adult" | "elderly";,
   tone: "warm" | "professional" | "friendly" | "calm",speed: "slow" | "normal" | "fast",language: string;
   dialect?: string;
 }
@@ -137,25 +137,25 @@ export interface VoiceHealthIndicators {
   tongueAnalysis?: TongueAnalysis;
   bodyAnalysis?: BodyAnalysis;
   overallAssessment: string;,
-  confidence: number;
+  confidence: number;,
   recommendations: string[];,
   tcmFindings: TCMFindings;
 }
 export interface FaceAnalysis {
   complexion: string;,
-  colorAnalysis: ColorAnalysis;
+  colorAnalysis: ColorAnalysis;,
   facialFeatures: FacialFeatures,emotionalState: string,healthIndicators: string[];
 }
 export interface TongueAnalysis {
   tongueBody: TongueBodyAnalysis;,
-  tongueCoating: TongueCoatingAnalysis;
+  tongueCoating: TongueCoatingAnalysis;,
   tongueShape: TongueShapeAnalysis;,
-  tongueMovement: TongueMovementAnalysis;
+  tongueMovement: TongueMovementAnalysis;,
   overallCondition: string;
 }
 export interface BodyAnalysis {
   posture: string;,
-  movement: string;
+  movement: string;,
   vitality: string;,
   skinCondition: string,overallHealth: string;
 };
@@ -165,33 +165,33 @@ export interface ListenResult {
   coughAnalysis?: CoughAnalysis;
   heartSounds?: HeartSoundAnalysis;
   overallAssessment: string;,
-  confidence: number;
+  confidence: number;,
   tcmFindings: TCMFindings;
 }
 export interface InquiryResult {
   symptoms: SymptomAnalysis[];,
-  constitutionType: ConstitutionType;
+  constitutionType: ConstitutionType;,
   healthConcerns: HealthConcern[];,
   riskFactors: RiskFactor[],recommendations: string[],followUpQuestions: string[];
   tcmSyndrome?: TCMSyndrome;
 }
 export interface PalpationResult {
   pulseAnalysis: PulseAnalysis;,
-  pressurePoints: PressurePointAnalysis[];
+  pressurePoints: PressurePointAnalysis[];,
   overallAssessment: string;,
-  confidence: number;
+  confidence: number;,
   tcmFindings: TCMFindings;
 }
 export interface IntegratedDiagnosis {
   lookFindings: LookResult;,
-  listenFindings: ListenResult;
+  listenFindings: ListenResult;,
   inquiryFindings: InquiryResult;,
   palpationFindings: PalpationResult,integratedAssessment: string,tcmDiagnosis: TCMDiagnosis;
   westernMedicineCorrelation?: WesternMedicineCorrelation;
   treatmentPrinciples: string[];,
-  recommendedTreatments: Treatment[];
+  recommendedTreatments: Treatment[];,
   lifestyleRecommendations: LifestyleRecommendation[];,
-  followUpPlan: FollowUpPlan;
+  followUpPlan: FollowUpPlan;,
   confidence: number;
 }
 // 健康数据相关类型 * export interface HealthDataInput {
@@ -207,16 +207,16 @@ export interface IntegratedDiagnosis {
 }
 export interface HealthAnalysis {
   summary: string;,
-  insights: HealthInsight[];
+  insights: HealthInsight[];,
   riskAssessment: RiskAssessment;,
   trends: HealthTrend[],recommendations: HealthRecommendation[],alerts: HealthAlert[];
   tcmAssessment?: TCMHealthAssessment;
 }
 export interface HealthTrends {
   timeRange: TimeRange;,
-  trends: HealthTrend[];
+  trends: HealthTrend[];,
   patterns: HealthPattern[];,
-  predictions: HealthPrediction[];
+  predictions: HealthPrediction[];,
   recommendations: string[];
 }
 export interface HealthRecommendation {
@@ -254,40 +254,40 @@ export interface InterfaceAdaptation {
 // 体质评估相关类型 * export interface ConstitutionAssessmentData {
   physicalCharacteristics: PhysicalCharacteristics,
   psychologicalTraits: PsychologicalTraits;,
-  lifestyle: LifestyleData;
+  lifestyle: LifestyleData;,
   symptoms: string[];,
-  medicalHistory: MedicalHistoryItem[];
+  medicalHistory: MedicalHistoryItem[];,
   environmentalFactors: EnvironmentalFactors;
 }
 export interface ConstitutionResult {
   primaryConstitution: ConstitutionType;,
-  secondaryConstitutions: ConstitutionType[];
+  secondaryConstitutions: ConstitutionType[];,
   constitutionScore: ConstitutionScore;,
-  characteristics: string[];
+  characteristics: string[];,
   strengths: string[];,
   weaknesses: string[],recommendations: ConstitutionRecommendation[],seasonalGuidance: SeasonalGuidance[];
 }
 export interface CalculationResult {
   diagnosis: string;,
-  confidence: number;
+  confidence: number;,
   reasoning: string[];,
-  differentialDiagnosis: string[];
+  differentialDiagnosis: string[];,
   treatmentPrinciples: string[];,
-  prescriptionRecommendations: PrescriptionRecommendation[];
+  prescriptionRecommendations: PrescriptionRecommendation[];,
   prognosisAssessment: PrognosisAssessment;
 }
 // 智能体协作相关类型 * export interface AgentTask {
   taskId: string,
   type: "diagnosis" | "recommendation" | "education" | "service" | "lifestyle";,
-  priority: "low" | "medium" | "high" | "urgent";
+  priority: "low" | "medium" | "high" | "urgent";,
   requiredAgents: AgentType[];,
-  data: unknown;
+  data: unknown;,
   context: TaskContext;
   deadline?: Date;
 }
 export interface AgentCoordinationResult {
   taskId: string;,
-  status: "pending" | "in_progress" | "completed" | "failed";
+  status: "pending" | "in_progress" | "completed" | "failed";,
   results: AgentTaskResult[];
   aggregatedResult?: unknown;
   recommendations?: string[]
@@ -297,18 +297,18 @@ r;
 // 其他支持类型 * export interface PersonalityTraits {
   style: "caring" | "professional" | "friendly" | "authoritative",
   tone: "warm" | "neutral" | "energetic" | "calm";,
-  expertise: "health" | "medical" | "wellness" | "general";
+  expertise: "health" | "medical" | "wellness" | "general";,
   patience: "low" | "medium" | "high";,
-  empathy: "low" | "medium" | "high";
+  empathy: "low" | "medium" | "high";,
   culturalSensitivity: "low" | "medium" | "high";
 }
 export interface AgentHealthStatus {
   status: "healthy" | "degraded" | "error";,
-  uptime: number;
+  uptime: number;,
   responseTime: number;,
-  accuracy: number;
+  accuracy: number;,
   lastUpdate: Date;,
-  activeConnections: number;
+  activeConnections: number;,
   memoryUsage: number;,
   errors: AgentError[];
 }
@@ -324,9 +324,9 @@ export interface AgentHealthStatus {
 }
 export interface TCMDiagnosis {
   mainSyndrome: string;,
-  secondarySyndromes: string[];
+  secondarySyndromes: string[];,
   organSystems: string[];,
-  pathogenesis: string;
+  pathogenesis: string;,
   treatmentPrinciples: string[];,
   prognosis: string,confidence: number;
 };
@@ -375,8 +375,8 @@ s";  * / 特禀质* ///     "
   createMedicalRecord(data: MedicalRecordInput): Promise<MedicalRecord  /     >;
   updateMedicalRecord()
     recordId: string;,
-  updates: Partial<MedicalRecord />);: Promise<MedicalRecord />;/      getMedicalHistory(;
-    userId: string;
+  updates: Partial<MedicalRecord />);: Promise<MedicalRecord />;/      getMedicalHistory(;,
+  userId: string;
     filters?: MedicalHistoryFilters;
   );: Promise<MedicalRecord[] /    >;
   generateHealthReport(userId: string, type: ReportType);: Promise<HealthReport /    >;

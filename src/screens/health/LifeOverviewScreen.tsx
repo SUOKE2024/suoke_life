@@ -29,29 +29,29 @@ interface LifeOverviewScreenProps {
 }
 interface HealthMetric {
   id: string;,
-  name: string;
+  name: string;,
   value: number;,
-  unit: string;
+  unit: string;,
   trend: 'up' | 'down' | 'stable';,
-  status: 'excellent' | 'good' | 'fair' | 'poor';
+  status: 'excellent' | 'good' | 'fair' | 'poor';,
   icon: string;,
   color: string;
 }
 interface AgentRecommendation {
   id: string;,
-  agentName: string;
+  agentName: string;,
   title: string;,
-  description: string;
+  description: string;,
   priority: 'high' | 'medium' | 'low';,
   actionRequired: boolean;
 }
 interface HealthGoal {
   id: string;,
-  title: string;
+  title: string;,
   description: string;,
-  targetValue: number;
+  targetValue: number;,
   currentValue: number;,
-  unit: string;
+  unit: string;,
   progress: number;,
   category: string;
 }

@@ -12,7 +12,7 @@ import {import { benchmarkService } from '../../services';
 } from 'react-native';
 interface BenchmarkResultDetailProps {
   visible: boolean;,
-  taskId: string | null;
+  taskId: string | null;,
   onClose: () => void;
 }
 export const BenchmarkResultDetail: React.FC<BenchmarkResultDetailProps> = ({

@@ -4,8 +4,8 @@ declare global {
   interface Performance {
   memory?: {
       usedJSHeapSize: number;,
-  totalJSHeapSize: number;
-      jsHeapSizeLimit: number;
+  totalJSHeapSize: number;,
+  jsHeapSizeLimit: number;
 };
   }
 }
@@ -22,9 +22,9 @@ interface PerformanceMonitorConfig {
 // 性能指标接口
 interface PerformanceMetrics {
   renderTime: number;,
-  memoryUsage: number;
+  memoryUsage: number;,
   networkLatency: number;,
-  componentMountTime: number;
+  componentMountTime: number;,
   updateCount: number;,
   errorCount: number;
 }
@@ -187,8 +187,8 @@ export const usePerformanceMonitor = ()
       type: "error",
       timestamp: Date.now(),
       metadata: {,
-  error: {
-          name: error.name,
+  error: {,
+  name: error.name,
           message: error.message,
           stack: error.stack},
         componentName,

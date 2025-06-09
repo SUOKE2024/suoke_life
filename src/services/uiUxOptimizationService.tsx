@@ -11,55 +11,55 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get(window");"
 // 类型定义
 export interface PerformanceConfig {
   lazyLoading: boolean;,
-  memoryManagement: boolean;
+  memoryManagement: boolean;,
   renderOptimization: boolean;,
-  gestureOptimization: boolean;
+  gestureOptimization: boolean;,
   enableFPSMonitoring: boolean;,
-  enableMemoryMonitoring: boolean;
+  enableMemoryMonitoring: boolean;,
   enableNetworkMonitoring: boolean;,
-  autoOptimization: boolean;
+  autoOptimization: boolean;,
   performanceLevel: "low | "medium" | high" | "auto;"
 }
 export interface AnimationConfig {
   duration: number;,
-  easing: string;
+  easing: string;,
   useNativeDriver: boolean;,
   enableHardwareAcceleration: boolean;
 }
 export interface InteractionFeedback {
   haptic: boolean;,
-  sound: boolean;
+  sound: boolean;,
   visual: boolean;,
   hapticType: "light" | medium" | "heavy | "success" | warning" | "error | "notification";
 }
 export interface VisualEffectConfig {
   shadows: {enabled: boolean;,
-  elevation: number;
-    shadowColor: string;,
+  elevation: number;,
+  shadowColor: string;,
   shadowOffset: { width: number; height: number;
 };
     shadowOpacity: number,
   shadowRadius: number;
   };
   gradients: {,
-  enabled: boolean;
-    colors: string[],
+  enabled: boolean;,
+  colors: string[],
   locations: number[];
   };
   blur: {,
-  enabled: boolean;
-    intensity: number;
+  enabled: boolean;,
+  intensity: number;
   };
 }
 export interface ResponsiveConfig {
   breakpoints: {small: number;,
-  medium: number;
-    large: number;,
+  medium: number;,
+  large: number;,
   xlarge: number;
 };
   spacing: {,
-  small: number;
-    medium: number,
+  small: number;,
+  medium: number,
   large: number;,
   xlarge: number;
   };
@@ -72,26 +72,26 @@ export interface ResponsiveConfig {
 }
 export interface ThemeConfig {
   colors: {primary: string;,
-  secondary: string;
-    background: string;,
-  surface: string;
-    text: string;,
-  textSecondary: string;
-    border: string;,
-  error: string;
-    warning: string;,
+  secondary: string;,
+  background: string;,
+  surface: string;,
+  text: string;,
+  textSecondary: string;,
+  border: string;,
+  error: string;,
+  warning: string;,
   success: string;
 };
   spacing: {,
-  xs: number;
-    sm: number,
+  xs: number;,
+  sm: number,
   md: number;,
   lg: number,
   xl: number;
   };
   borderRadius: {,
-  small: number;
-    medium: number,
+  small: number;,
+  medium: number,
   large: number;
   };
   typography: {,

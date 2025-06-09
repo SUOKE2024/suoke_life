@@ -3,26 +3,26 @@
 * 负责优化和管理AI模型的性能
 export interface ModelMetrics {
   accuracy: number;,
-  latency: number;
+  latency: number;,
   memoryUsage: number;,
-  cpuUsage: number;
+  cpuUsage: number;,
   throughput: number;
 }
 export interface OptimizationConfig {
   targetAccuracy: number;,
-  maxLatency: number;
+  maxLatency: number;,
   maxMemoryUsage: number;,
-  enableQuantization: boolean;
+  enableQuantization: boolean;,
   enablePruning: boolean;,
   enableDistillation: boolean;
 }
 export interface ModelInfo {
   id: string;,
-  name: string;
+  name: string;,
   version: string;,
-  type: "classification | "regression" | nlp" | "vision;"
+  type: "classification | "regression" | nlp" | "vision;",
   size: number;,
-  metrics: ModelMetrics;
+  metrics: ModelMetrics;,
   isOptimized: boolean;
 }
 export class AIModelOptimizationService {private models: Map<string, ModelInfo> = new Map();

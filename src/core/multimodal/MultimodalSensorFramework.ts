@@ -469,7 +469,7 @@ export enum SensorStatus {
 // 传感器数据接口;
 export interface SensorData {
   sensorId: string;,
-  timestamp: Date;
+  timestamp: Date;,
   value: any;
   unit?: string;
   quality: DataQuality;
@@ -498,18 +498,18 @@ export interface FusedSensorData {
 // 活动数据接口
 export interface ActivityData {
   dailySteps: number;,
-  sedentaryTime: number; // minutes;
-activeTime: number; // minutes;,
-  caloriesBurned: number;
+  sedentaryTime: number; // minutes;,
+  activeTime: number; // minutes;,
+  caloriesBurned: number;,
   distanceTraveled: number; // meters;,
-  floorsClimbed: number;
+  floorsClimbed: number;,
   activityIntensity: low" | "moderate | "high";
 }
 // 环境传感器数据接口
 export interface EnvironmentSensorData {
   airQuality: {aqi: number;,
-  pm25: number;
-    pm10: number;
+  pm25: number;,
+  pm10: number;
 };
   noiseLevel: number; // decibels,
   lightLevel: number; // lux;,
@@ -522,10 +522,10 @@ export interface SleepSensorData {
   totalSleepDuration: number;
 // minutes;
 deepSleepDuration: number; // minutes;,
-  remSleepDuration: number; // minutes;
-lightSleepDuration: number; // minutes;,
-  sleepEfficiency: number; // 0-1;
-awakenings: number;,
+  remSleepDuration: number; // minutes;,
+  lightSleepDuration: number; // minutes;,
+  sleepEfficiency: number; // 0-1;,
+  awakenings: number;,
   sleepLatency: number; // minutes;
 }
 // 压力指标数据接口
@@ -533,21 +533,21 @@ export interface StressIndicatorData {
   heartRateVariability: number;
 // ms;
 cortisolLevel: number; ///    dL;,
-  skinConductance: number; // μS;
-respiratoryRate: number; // breaths per minute;,
+  skinConductance: number; // μS;,
+  respiratoryRate: number; // breaths per minute;,
   bloodPressureVariability: number;
 }
 // 运动传感器数据接口
 export interface ExerciseSensorData {
   weeklyExerciseMinutes: number;,
-  intensityDistribution: {;
-    low: number;,
-  moderate: number;
-    high: number;
+  intensityDistribution: {;,
+  low: number;,
+  moderate: number;,
+  high: number;
 };
   heartRateZones: {,
-  zone1: number; // percentage of time;
-zone2: number,
+  zone1: number; // percentage of time;,
+  zone2: number,
   zone3: number;,
   zone4: number,
   zone5: number;
@@ -559,28 +559,28 @@ export interface NutritionIndicatorData {
   hydrationLevel: number;
 // 0-1;
 glucoseLevel: number; ///    dL;,
-  glucoseVariability: number; // percentage;
-lactateLevel: number; ///    L;,
+  glucoseVariability: number; // percentage;,
+  lactateLevel: number; ///    L;,
   ketoneLevel: number; ///    L;
 }
 // 健康异常接口
 export interface HealthAnomaly {
   type: vital_sign" | "activity | "environment" | sleep" | "stress;,
-  parameter: string;
+  parameter: string;,
   value: any;,
-  severity: "low" | medium" | "high;
+  severity: "low" | medium" | "high;,
   description: string;,
-  timestamp: Date;
+  timestamp: Date;,
   recommendations: string[];
 }
 // 健康洞察接口
 export interface HealthInsight {
   type: string;,
-  title: string;
+  title: string;,
   description: string;,
-  score: number; // 0-100;
-insights: string[];,
-  recommendations: string[];
+  score: number; // 0-100;,
+  insights: string[];,
+  recommendations: string[];,
   timestamp: Date;
 }
 // 传感器配置接口
@@ -608,24 +608,24 @@ referenceValues?: Record<string, number>;
 // 电源设置接口
 export interface PowerSettings {
   powerMode: "low" | normal" | "high;,
-  sleepMode: boolean;
+  sleepMode: boolean;,
   batteryOptimization: boolean;
 }
 // 校准结果接口
 export interface CalibrationResult {
   success: boolean;,
-  accuracy: number;
+  accuracy: number;,
   offset: number;,
-  gain: number;
+  gain: number;,
   timestamp: Date;,
   nextCalibration: Date;
 }
 // 校准数据接口
 export interface CalibrationData {
   sensorId: string;,
-  referenceValue: number;
+  referenceValue: number;,
   measuredValue: number;,
-  offset: number;
+  offset: number;,
   gain: number;,
   timestamp: Date;
 }
@@ -634,7 +634,7 @@ export interface DataQualityReport {
   overallQuality: DataQuality;,
   sensorQuality: Record<string, DataQuality>;
   dataCompleteness: number; // percentage;,
-  anomaliesDetected: number;
+  anomaliesDetected: number;,
   lastUpdate: Date;
 }
 // 具体传感器实现示例

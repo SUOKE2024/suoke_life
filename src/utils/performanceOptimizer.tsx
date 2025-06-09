@@ -6,19 +6,19 @@ importAsyncStorage from "@react-native-async-storage/async-storage";/import { mo
   MEMORY_WARNING_THRESHOLD: 80,  NETWORK_TIMEOUT: 10000,  / 网络请求超时时间（毫秒）*  缓存大小限制（50MB）*  图片缓存数量限制*  渲染批处理大小*  防抖延迟（毫秒）* * ;}; * / // 性能指标类型 * export interface PerformanceMetrics {
   memoryUsage: number,
   cpuUsage: number;,
-  renderTime: number;
+  renderTime: number;,
   networkLatency: number;,
-  cacheHitRate: number;
+  cacheHitRate: number;,
   frameDrops: number;,
-  timestamp: number;
+  timestamp: number;,
   cacheSize: number;,
-  networkRequests: number;
+  networkRequests: number;,
   averageResponseTime: number;,
   lastOptimization: number;
 }
 export interface OptimizationResult {
   action: string;,
-  improvement: number;
+  improvement: number;,
   description: string;,
   timestamp: number;
 }
@@ -34,9 +34,9 @@ export interface OptimizationResult {
 // 图片优化配置 * interface ImageOptimizationConfig {
   quality: number,
   maxWidth: number;,
-  maxHeight: number;
+  maxHeight: number;,
   format: "jpeg" | "png" | "webp";,
-  enableLazyLoading: boolean;
+  enableLazyLoading: boolean;,
   enablePlaceholder: boolean;
 }
 //
@@ -540,7 +540,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
     for (let i = 0; i < operations.length; i += batchSize) {
       const batch = operations.slice(i, i + batchSiz;e;);
       const batchResults = await Promise.allSettled(batch.map(;(;o;p;); => op();));
-      batchResults.forEach((result) => {}))
+      batchResults.forEach(result) => {}))
         if (result.status === "fulfilled") {
           results.push(result.value);
         }

@@ -19,13 +19,13 @@ const { width } = Dimensions.get('window');
 // 产品类型定义
 interface Product {
   id: string;,
-  name: string;
+  name: string;,
   price: number;
   originalPrice?: number;
   image: string;,
-  category: string;
+  category: string;,
   rating: number;,
-  reviews: number;
+  reviews: number;,
   description: string;,
   tags: string[];
   isRecommended?: boolean;
@@ -34,9 +34,9 @@ interface Product {
 // 服务类型定义
 interface Service {
   id: string;,
-  title: string;
+  title: string;,
   subtitle: string;,
-  icon: string;
+  icon: string;,
   color: string;,
   description: string;
   price?: number;
@@ -45,9 +45,9 @@ interface Service {
 // 分类类型定义
 interface Category {
   id: string;,
-  name: string;
+  name: string;,
   icon: string;,
-  color: string;
+  color: string;,
   count: number;
 }
 const SuokeScreen: React.FC = () => {

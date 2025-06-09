@@ -7,33 +7,33 @@ import { XiaoaiAgentImpl } from "./xiaoai/XiaoaiAgentImpl";// import React from 
 * 基于README.md描述实现智能体生命周期管理
 export interface AgentManagerConfig {
   enableAutoStart: boolean;,
-  enableHealthMonitoring: boolean;
+  enableHealthMonitoring: boolean;,
   enableLoadBalancing: boolean;,
-  enableFailover: boolean;
+  enableFailover: boolean;,
   maxRetries: number;,
-  timeoutMs: number;
+  timeoutMs: number;,
   healthCheckIntervalMs: number;,
   logLevel: "debug" | "info" | "warn" | "error";
 }
 export interface AgentStatus {
   agentType: AgentType;,
-  status: "initializing" | "active" | "inactive" | "error" | "maintenance";
+  status: "initializing" | "active" | "inactive" | "error" | "maintenance";,
   uptime: number;,
-  lastHealthCheck: Date;
+  lastHealthCheck: Date;,
   errorCount: number;,
-  successCount: number;
+  successCount: number;,
   averageResponseTime: number;,
-  currentLoad: number;
+  currentLoad: number;,
   capabilities: string[];,
   version: string;
 }
 export interface AgentMetrics {
   totalTasks: number;,
-  successfulTasks: number;
+  successfulTasks: number;,
   failedTasks: number;,
-  averageResponseTime: number;
+  averageResponseTime: number;,
   peakLoad: number;,
-  uptime: number;
+  uptime: number;,
   errorRate: number;,
   lastUpdate: Date;
 }

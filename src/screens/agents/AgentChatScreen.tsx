@@ -26,9 +26,9 @@ const { width, height } = Dimensions.get('window');
 // 消息类型定义
 interface Message {
   id: string;,
-  text: string;
+  text: string;,
   sender: 'user' | 'agent';,
-  timestamp: Date;
+  timestamp: Date;,
   type: 'text' | 'image' | 'voice' | 'file' | 'diagnosis';,
   status: 'sending' | 'sent' | 'delivered' | 'read' | 'failed';
   metadata?: {
@@ -43,16 +43,16 @@ interface Message {
 // 智能体信息类型
 interface AgentInfo {
   id: string;,
-  name: string;
+  name: string;,
   avatar: string;,
-  description: string;
+  description: string;,
   capabilities: string[];,
-  serviceEndpoint: string;
+  serviceEndpoint: string;,
   status: 'online' | 'offline' | 'busy';,
-  colors: {
-    primary: string;,
-  secondary: string;
-    accent: string;
+  colors: {,
+  primary: string;,
+  secondary: string;,
+  accent: string;
   };
 }
 

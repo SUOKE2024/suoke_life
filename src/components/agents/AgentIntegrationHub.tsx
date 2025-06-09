@@ -2,17 +2,17 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "../../plac
 import React, { useState, useEffect } from "react";
 export interface Agent {
   id: string;,
-  name: string;
+  name: string;,
   type: xiaoai" | "xiaoke | "laoke" | soer;,
-  status: "online | "offline" | busy";
+  status: "online | "offline" | busy";,
   capabilities: string[];,
   lastActive: Date;
 }
 export interface AgentTask {
   id: string;,
-  agentId: string;
+  agentId: string;,
   type: string;,
-  status: "pending | "running" | completed" | "failed;"
+  status: "pending | "running" | completed" | "failed;",
   priority: "low" | medium" | "high;,
   createdAt: Date;
 }

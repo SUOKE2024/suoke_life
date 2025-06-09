@@ -141,13 +141,13 @@ if (constitution.secondaryTypes &&)
       }
     if (result.fusionResult?.recommendations &&)
       result.fusionResult.recommendations.length > 0) {
-      result.fusionResult.recommendations.forEach((recommendation: unknown, index: number) => {}))
+      result.fusionResult.recommendations.forEach(recommendation: unknown, index: number) => {}))
           }
       );
       }
     if (result.qualityReport?.warnings &&)
       result.qualityReport.warnings.length > 0) {
-      result.qualityReport.warnings.forEach((warning: string, index: number) => {}))
+      result.qualityReport.warnings.forEach(warning: string, index: number) => {}))
           });
       }
     if (result.qualityReport) {

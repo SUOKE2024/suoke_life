@@ -34,27 +34,27 @@ export enum TaskType {
 // 智能体能力接口
 export interface AgentCapability {
   id: string;,
-  name: string;
+  name: string;,
   description: string;,
-  enabled: boolean;
+  enabled: boolean;,
   version: string;
 }
 // 智能体健康状态
 export interface AgentHealth {
   status: AgentStatus;,
-  lastHeartbeat: Date;
+  lastHeartbeat: Date;,
   responseTime: number;,
-  errorCount: number;
+  errorCount: number;,
   uptime: number;
 }
 // 智能体任务接口
 export interface AgentTask {
   id: string;,
-  type: TaskType;
+  type: TaskType;,
   priority: AgentPriority;,
-  payload: any;
+  payload: any;,
   createdAt: Date;,
-  assignedTo: AgentType;
+  assignedTo: AgentType;,
   status: 'pending' | 'processing' | 'completed' | 'failed';
   result?: any;
   error?: string;
@@ -62,9 +62,9 @@ export interface AgentTask {
 // 智能体消息接口
 export interface AgentMessage {
   id: string;,
-  from: AgentType;
+  from: AgentType;,
   to: AgentType | AgentType[];,
-  type: 'request' | 'response' | 'notification' | 'broadcast';
+  type: 'request' | 'response' | 'notification' | 'broadcast';,
   content: any;,
   timestamp: Date;
   correlationId?: string;
@@ -72,9 +72,9 @@ export interface AgentMessage {
 // 智能体协作上下文
 export interface CollaborationContext {
   sessionId: string;,
-  participants: AgentType[];
+  participants: AgentType[];,
   primaryAgent: AgentType;,
-  scenario: string;
+  scenario: string;,
   sharedData: Record<string, any>;
   startTime: Date;
   endTime?: Date;
@@ -82,11 +82,11 @@ export interface CollaborationContext {
 // 智能体性能指标
 export interface AgentMetrics {
   agentType: AgentType;,
-  tasksCompleted: number;
+  tasksCompleted: number;,
   averageResponseTime: number;,
-  successRate: number;
+  successRate: number;,
   errorRate: number;,
-  throughput: number;
+  throughput: number;,
   lastUpdated: Date;
 }
 // 智能体事件类型
@@ -95,35 +95,35 @@ export type AgentEvent =
   | { type: 'agent_stopped'; agentType: AgentType; timestamp: Date }
   | {
       type: 'task_assigned';,
-  taskId: string;
-      agentType: AgentType;,
+  taskId: string;,
+  agentType: AgentType;,
   timestamp: Date;
     }
   | {
       type: 'task_completed';,
-  taskId: string;
-      agentType: AgentType;,
-  result: any;
-      timestamp: Date;
+  taskId: string;,
+  agentType: AgentType;,
+  result: any;,
+  timestamp: Date;
     }
   | {
       type: 'task_failed';,
-  taskId: string;
-      agentType: AgentType;,
-  error: string;
-      timestamp: Date;
+  taskId: string;,
+  agentType: AgentType;,
+  error: string;,
+  timestamp: Date;
     }
   | {
       type: 'collaboration_started';,
-  sessionId: string;
-      participants: AgentType[];,
+  sessionId: string;,
+  participants: AgentType[];,
   timestamp: Date;
     }
   | { type: 'collaboration_ended'; sessionId: string; timestamp: Date }
   | {
       type: 'health_check';,
-  agentType: AgentType;
-      health: AgentHealth;,
+  agentType: AgentType;,
+  health: AgentHealth;,
   timestamp: Date;
     };
 // 基础智能体接口

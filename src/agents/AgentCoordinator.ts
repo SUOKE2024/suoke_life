@@ -27,17 +27,17 @@ export interface AgentResponse {
 
 export interface AgentCollaborationMessage {
   id: string;,
-  timestamp: Date;
+  timestamp: Date;,
   participants: AgentType[];,
-  message: string;
+  message: string;,
   result: AgentResponse;
 }
 
 export interface AgentDecisionResult {
   decision: string;,
-  confidence: number;
+  confidence: number;,
   reasoning: string[];,
-  alternatives: string[];
+  alternatives: string[];,
   recommendedActions: string[];,
   metadata: any;
 }

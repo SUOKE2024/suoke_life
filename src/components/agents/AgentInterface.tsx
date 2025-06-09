@@ -28,7 +28,7 @@ interface AgentInterfaceProps {
 */
 interface Message {
   id: string;,
-  type: "user" | "agent";
+  type: "user" | "agent";,
   content: string;,
   timestamp: Date;
   agentType?: AgentType;

@@ -7,27 +7,27 @@ interface ApiResponse<T = any /> { data: T;/    , success: boolean;
 * / 支持智能重试、缓存、熔断器、离线队列等高级功能* * interface RetryConfig {
   maxAttempts: number, * /
   baseDelay: number;,
-  maxDelay: number;
+  maxDelay: number;,
   backoffFactor: number;
 }
 interface CacheConfig {
   ttl: number;,
-  maxSize: number;
+  maxSize: number;,
   strategy: "memory" | "storage" | "both";
 }
 interface RequestQueue {
   id: string;,
-  method: string;
+  method: string;,
   endpoint: string;
   data?: unknown;
   config?: unknown;
   timestamp: number;,
-  retryCount: number;
+  retryCount: number;,
   priority: number;
 }
 interface CircuitBreakerConfig {
   failureThreshold: number;,
-  recoveryTimeout: number;
+  recoveryTimeout: number;,
   monitoringPeriod: number;
 }
 class CircuitBreaker {

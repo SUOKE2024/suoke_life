@@ -1,201 +1,201 @@
 import React from 'react';
 export interface LookingConfig {
   enabled: boolean;,
-  models: {;
-    tongueAnalysis: ModelConfig;,
-  faceAnalysis: ModelConfig;
-    bodyAnalysis: ModelConfig;
+  models: {;,
+  tongueAnalysis: ModelConfig;,
+  faceAnalysis: ModelConfig;,
+  bodyAnalysis: ModelConfig;
 };
   imageProcessing: {,
-  maxWidth: number;
-    maxHeight: number,
+  maxWidth: number;,
+  maxHeight: number,
   quality: number;,
   formats: string[]
   };
   confidence: {,
-  threshold: number;
-    minSamples: number;
+  threshold: number;,
+  minSamples: number;
   }
 }
 export interface ListeningConfig {
   enabled: boolean;,
-  models: {;
-    voiceAnalysis: ModelConfig;,
-  breathingAnalysis: ModelConfig;
-    coughAnalysis: ModelConfig;
+  models: {;,
+  voiceAnalysis: ModelConfig;,
+  breathingAnalysis: ModelConfig;,
+  coughAnalysis: ModelConfig;
 };
   audioProcessing: {,
-  sampleRate: number;
-    channels: number,
+  sampleRate: number;,
+  channels: number,
   bitDepth: number;,
   maxDuration: number;
   };
   confidence: {,
-  threshold: number;
-    minSamples: number;
+  threshold: number;,
+  minSamples: number;
   }
 }
 export interface InquiryConfig {
   enabled: boolean;,
-  models: {;
-    symptomAnalysis: ModelConfig;,
-  nlpProcessing: ModelConfig;
-    semanticAnalysis: ModelConfig;
+  models: {;,
+  symptomAnalysis: ModelConfig;,
+  nlpProcessing: ModelConfig;,
+  semanticAnalysis: ModelConfig;
 };
   textProcessing: {,
-  maxLength: number;
-    languages: string[],
+  maxLength: number;,
+  languages: string[],
   encoding: string;
   };
   confidence: {,
-  threshold: number;
-    minKeywords: number;
+  threshold: number;,
+  minKeywords: number;
   }
 }
 export interface PalpationConfig {
   enabled: boolean;,
-  models: {;
-    pulseAnalysis: ModelConfig;,
-  pressureAnalysis: ModelConfig;
-    temperatureAnalysis: ModelConfig;
+  models: {;,
+  pulseAnalysis: ModelConfig;,
+  pressureAnalysis: ModelConfig;,
+  temperatureAnalysis: ModelConfig;
 };
   sensorProcessing: {,
-  samplingRate: number;
-    filterFrequency: number,
+  samplingRate: number;,
+  filterFrequency: number,
   calibration: boolean;
   };
   confidence: {,
-  threshold: number;
-    minDuration: number;
+  threshold: number;,
+  minDuration: number;
   }
 }
 export interface CalculationConfig {
   enabled: boolean;,
-  models: {;
-    lunarCalculation: ModelConfig;,
-  fiveElementsAnalysis: ModelConfig;
-    yinYangAnalysis: ModelConfig;
+  models: {;,
+  lunarCalculation: ModelConfig;,
+  fiveElementsAnalysis: ModelConfig;,
+  yinYangAnalysis: ModelConfig;
 };
   calendar: {,
   type: 'gregorian' | 'lunar' | 'both'
   };
   confidence: {,
-  threshold: number;
-    historicalDepth: number;
+  threshold: number;,
+  historicalDepth: number;
   }
 }
 export interface FusionConfig {
   enabled: boolean;,
-  algorithm: 'weighted_average' | 'neural_fusion' | 'bayesian_fusion';
+  algorithm: 'weighted_average' | 'neural_fusion' | 'bayesian_fusion';,
   weights: {;,
-  looking: number;
-    listening: number;,
-  inquiry: number;
-    palpation: number;,
+  looking: number;,
+  listening: number;,
+  inquiry: number;,
+  palpation: number;,
   calculation: number;
 };
   fusion: {,
-  minDiagnoses: number;
-    confidenceBoost: number,
+  minDiagnoses: number;,
+  confidenceBoost: number,
   conflictResolution: 'majority' | 'confidence' | 'expert_system'
   }
 }
 export interface SyndromeConfig {
   enabled: boolean;,
-  models: {;
-    patternRecognition: ModelConfig;,
+  models: {;,
+  patternRecognition: ModelConfig;,
   syndromeClassification: ModelConfig;
 };
   analysis: {,
-  maxSyndromes: number;
-    minConfidence: number,
+  maxSyndromes: number;,
+  minConfidence: number,
   includeSubSyndromes: boolean;
   }
 }
 export interface ConstitutionConfig {
   enabled: boolean;,
-  models: {;
-    constitutionClassification: ModelConfig;,
+  models: {;,
+  constitutionClassification: ModelConfig;,
   bodyTypeAnalysis: ModelConfig;
 };
   analysis: {,
-  constitutionTypes: string[];
-    adaptiveWeighting: boolean,
+  constitutionTypes: string[];,
+  adaptiveWeighting: boolean,
   ageFactors: boolean;
   }
 }
 export interface TreatmentConfig {
   enabled: boolean;,
-  models: {;
-    recommendationEngine: ModelConfig;,
-  herbFormulation: ModelConfig;
-    lifestyleAdvice: ModelConfig;
+  models: {;,
+  recommendationEngine: ModelConfig;,
+  herbFormulation: ModelConfig;,
+  lifestyleAdvice: ModelConfig;
 };
   recommendation: {,
-  maxRecommendations: number;
-    personalization: boolean,
+  maxRecommendations: number;,
+  personalization: boolean,
   safetyChecks: boolean;
   }
 }
 export interface ModelConfig {
   name: string;,
-  version: string;
+  version: string;,
   path: string;,
-  type: 'tensorflow' | 'pytorch' | 'onnx' | 'custom';
+  type: 'tensorflow' | 'pytorch' | 'onnx' | 'custom';,
   device: 'cpu' | 'gpu' | 'auto';,
-  batchSize: number;
+  batchSize: number;,
   timeout: number;
 }
 export interface KnowledgeBaseConfig {
   version: string;,
-  updateInterval: number;
+  updateInterval: number;,
   sources: string[];,
-  caching: {;
-    enabled: boolean;,
-  ttl: number;
-    maxSize: number;
+  caching: {;,
+  enabled: boolean;,
+  ttl: number;,
+  maxSize: number;
 }
 }
 export interface QualityControlConfig {
   enabled: boolean;,
-  checks: {;
-    dataValidation: boolean;,
-  resultValidation: boolean;
-    crossValidation: boolean;,
+  checks: {;,
+  dataValidation: boolean;,
+  resultValidation: boolean;,
+  crossValidation: boolean;,
   expertReview: boolean;
 };
   thresholds: {,
-  minConfidence: number;
-    maxUncertainty: number,
+  minConfidence: number;,
+  maxUncertainty: number,
   consistencyCheck: number;
   }
 }
 export interface MonitoringConfig {
   enabled: boolean;,
-  metrics: {;
-    performance: boolean;,
-  accuracy: boolean;
-    usage: boolean;,
+  metrics: {;,
+  performance: boolean;,
+  accuracy: boolean;,
+  usage: boolean;,
   errors: boolean;
 };
   reporting: {,
-  interval: number;
-    destination: string,
+  interval: number;,
+  destination: string,
   format: 'json' | 'csv' | 'prometheus'
   }
 }
 export interface PerformanceConfig {
   maxConcurrentSessions: number;,
-  timeoutMs: number;
+  timeoutMs: number;,
   retryAttempts: number;,
-  caching: {;
-    enabled: boolean;,
-  strategy: 'lru' | 'lfu' | 'ttl';
-    maxSize: number;
+  caching: {;,
+  enabled: boolean;,
+  strategy: 'lru' | 'lfu' | 'ttl';,
+  maxSize: number;
 };
   optimization: {,
-  parallelProcessing: boolean;
-    gpuAcceleration: boolean,
+  parallelProcessing: boolean;,
+  gpuAcceleration: boolean,
   modelQuantization: boolean;
   }
 }

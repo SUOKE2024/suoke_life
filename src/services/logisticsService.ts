@@ -1,11 +1,11 @@
 // 物流服务 - 处理配送、追踪等物流相关功能
 export interface DeliveryAddress {
   id: string;,
-  name: string;
+  name: string;,
   phone: string;,
-  province: string;
+  province: string;,
   city: string;,
-  district: string;
+  district: string;,
   detail: string;,
   isDefault: boolean;
 }
@@ -14,12 +14,12 @@ export interface LogisticsOrder {
   orderNumber: string;
   trackingNumber?: string;
   status: "pending" | "picked_up" | "in_transit" | "delivered" | "cancelled";,
-  sender: DeliveryAddress;
+  sender: DeliveryAddress;,
   receiver: DeliveryAddress;,
-  items: Array<{;
-    name: string;,
-  quantity: number;
-    weight: number;
+  items: Array<{;,
+  name: string;,
+  quantity: number;,
+  weight: number;
 }>;
   estimatedDelivery?: Date;
   actualDelivery?: Date;
@@ -28,15 +28,15 @@ export interface LogisticsOrder {
 }
 export interface TrackingInfo {
   timestamp: Date;,
-  status: string;
+  status: string;,
   location: string;,
   description: string;
 }
 export interface DeliveryQuote {
   carrierId: string;,
-  carrierName: string;
+  carrierName: string;,
   serviceType: string;,
-  price: number;
+  price: number;,
   estimatedDays: number;,
   features: string[];
 }

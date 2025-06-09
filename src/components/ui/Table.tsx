@@ -76,8 +76,8 @@ export interface TableProps {
   /** 分页配置 */
   pagination?: {
     current: number;,
-  pageSize: number;
-    total: number;,
+  pageSize: number;,
+  total: number;,
   onChange: (page: number, pageSize: number) => void;
   };
 }

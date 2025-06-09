@@ -1,7 +1,7 @@
 // 启动任务接口
 export interface StartupTask {
   name: string;,
-  priority: number;
+  priority: number;,
   dependencies: string[];,
   execute: () => Promise<void>;
   timeout?: number;

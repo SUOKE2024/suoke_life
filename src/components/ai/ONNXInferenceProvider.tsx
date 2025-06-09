@@ -22,9 +22,9 @@ import {import {/**
 * * 推理状态
 export interface InferenceState {
   isInitialized: boolean;,
-  isLoading: boolean;
+  isLoading: boolean;,
   error: string | null;,
-  loadedModels: string[];
+  loadedModels: string[];,
   systemStatus: any;
 }
 /**
@@ -40,8 +40,8 @@ loadModel: (modelPath: string, modelType?: string) => Promise<ONNXModel>;
   unloadModel: (modelId: string) => Promise<void>;
   // 推理功能
 runInference: (;),
-  modelId: string;
-    inputs: Record<string, TensorData>;
+  modelId: string;,
+  inputs: Record<string, TensorData>;
     options?: InferenceOptions;
   ) => Promise<Record<string, TensorData>>;
   // 索克生活专用推理
@@ -65,25 +65,25 @@ export interface InferenceOptions {
 * * 索克生活数据类型
 export interface TCMPatientData {
   pulse: number[];,
-  tongue: number[];
+  tongue: number[];,
   complexion: number[];,
   symptoms: number[];
 }
 export interface HealthData {
   vitals: number[];,
-  biomarkers: number[];
+  biomarkers: number[];,
   lifestyle: number[];
 }
 export interface SymptomData {
   symptoms: number[];,
-  duration: number[];
+  duration: number[];,
   severity: number[];
 }
 export interface UserData {
   age: number;,
-  gender: number;
+  gender: number;,
   activity: number;,
-  diet: number;
+  diet: number;,
   sleep: number;
 }
 /**
@@ -93,14 +93,14 @@ export interface TCMDiagnosisResult {
   confidence: number;
 };
   constitution: {,
-  type: string;
-    confidence: number;
+  type: string;,
+  confidence: number;
   };
   recommendations: string[];
 }
 export interface HealthAssessmentResult {
   overallScore: number;,
-  riskFactors: number[];
+  riskFactors: number[];,
   recommendations: string[];
 }
 export interface SymptomAnalysisResult {
@@ -112,9 +112,9 @@ export interface SymptomAnalysisResult {
 }
 export interface LifestyleRecommendationResult {
   exercise: number;,
-  diet: number;
+  diet: number;,
   sleep: number;,
-  stress: number;
+  stress: number;,
   recommendations: string[];
 }
 // 创建上下文

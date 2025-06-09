@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 // 内存监控工具   索克生活APP - 性能优化
 interface MemoryInfo {
   usedJSHeapSize: number;,
-  totalJSHeapSize: number;
+  totalJSHeapSize: number;,
   jsHeapSizeLimit: number;
 }
 class MemoryMonitor {

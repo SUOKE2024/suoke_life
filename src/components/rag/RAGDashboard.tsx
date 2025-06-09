@@ -17,7 +17,7 @@ import { TCMAnalysisComponent } from './TCMAnalysisComponent';
 const { width, height } = Dimensions.get('window');
 interface TabItem {
   id: string;,
-  title: string;
+  title: string;,
   icon: string;
 }
 const tabs: TabItem[] = [

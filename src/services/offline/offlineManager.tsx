@@ -6,9 +6,9 @@ y"; /    "
 // 离线操作接口 * export interface OfflineOperation {
   id: string,
   type: OfflineOperationType;,
-  entity: string;
+  entity: string;,
   data: unknown;,
-  timestamp: number;
+  timestamp: number;,
   retryCount: number,maxRetries: number,priority: number;
 }
 //;
@@ -21,9 +21,9 @@ s"; /    "
 // 冲突数据接口 * export interface ConflictData {
   id: string,
   entity: string;,
-  clientData: unknown;
+  clientData: unknown;,
   serverData: unknown;,
-  timestamp: number;
+  timestamp: number;,
   strategy: ConflictResolutionStrategy;
 }
 // 同步配置接口 * export interface SyncConfig {

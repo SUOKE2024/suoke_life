@@ -3,9 +3,9 @@ import React from "react";
 // 索克生活 - 性能监控系统 - 提供性能指标收集、分析、报告和优化建议
 export interface PerformanceMetric {
   name: string;,
-  value: number;
+  value: number;,
   unit: string;,
-  timestamp: number;
+  timestamp: number;,
   category: PerformanceCategory;
   tags?: Record<string, string>;
   threshold?: {
@@ -25,16 +25,16 @@ export enum PerformanceCategory {
 }
 export interface PerformanceReport {
   id: string;,
-  timestamp: number;
+  timestamp: number;,
   duration: number;,
-  metrics: PerformanceMetric[];
+  metrics: PerformanceMetric[];,
   summary: {;,
-  totalMetrics: number;
-    warningCount: number;,
-  criticalCount: number;
-    averageResponseTime: number;,
-  memoryUsage: number;
-    cpuUsage: number;
+  totalMetrics: number;,
+  warningCount: number;,
+  criticalCount: number;,
+  averageResponseTime: number;,
+  memoryUsage: number;,
+  cpuUsage: number;
 };
   recommendations: string[],
   trends: {,
@@ -45,9 +45,9 @@ export interface PerformanceReport {
 }
 export interface PerformanceThreshold {
   category: PerformanceCategory;,
-  metricName: string;
+  metricName: string;,
   warning: number;,
-  critical: number;
+  critical: number;,
   unit: string;
 }
 export class PerformanceMonitor {
@@ -186,7 +186,7 @@ export class PerformanceMonitor {
       );
       allMetrics.push(...recentMetrics);
       // 统计警告和严重问题
-      recentMetrics.forEach((metric) => {
+      recentMetrics.forEach(metric) => {
         if (metric.threshold) {
           if (metric.value >= metric.threshold.critical) {
             criticalCount++;
@@ -278,7 +278,7 @@ export class PerformanceMonitor {
     }
   }
   private notifyListeners(metric: PerformanceMetric): void {
-    this.listeners.forEach((listener) => {
+    this.listeners.forEach(listener) => {
       try {
         listener(metric);
       } catch (error) {
@@ -314,8 +314,8 @@ export class PerformanceMonitor {
     return Math.random() * 100; // 实际实现需要使用系统API;
   }
   private analyzeTrends(timeRangeMs: number): {,
-  improving: string[];
-    degrading: string[],
+  improving: string[];,
+  degrading: string[],
   stable: string[];
   } {
     // 趋势分析的实现

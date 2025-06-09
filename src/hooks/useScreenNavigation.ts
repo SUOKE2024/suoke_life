@@ -3,11 +3,11 @@ import { useNavigation } from "@react-navigation/native";/    import {   Alert  
 import { useCallback } from "react";
 export interface UseScreenNavigationReturn {
   goBack: () => void;,
-  goToHome: () => void;
+  goToHome: () => void;,
   goToProfile: () => void;,
-  goToSettings: () => void;
+  goToSettings: () => void;,
   goToLogin: () => void;,
-  goToRegister: () => void;
+  goToRegister: () => void;,
   showAlert: (title: string, message: string, onConfirm?: () => void) => void;
   showConfirm: (title: string;),
   message: string,onConfirm: () => void,onCancel?: () => void;

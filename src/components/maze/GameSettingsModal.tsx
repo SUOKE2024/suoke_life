@@ -16,7 +16,7 @@ import { GameSettings, MazeDifficulty } from '../../types/maze';
 } from 'react-native';
 interface GameSettingsModalProps {
   visible: boolean;,
-  settings: GameSettings | null;
+  settings: GameSettings | null;,
   onClose: () => void;,
   onSave: (settings: GameSettings) => void;
 }

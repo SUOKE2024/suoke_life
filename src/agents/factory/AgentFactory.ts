@@ -20,11 +20,11 @@ export interface AgentConfig {
 */
 export interface AgentInstance {
   id: string;,
-  type: AgentType;
+  type: AgentType;,
   agent: AgentBase;,
-  config: AgentConfig;
+  config: AgentConfig;,
   createdAt: Date;,
-  lastUsed: Date;
+  lastUsed: Date;,
   isActive: boolean;
 }
 /**

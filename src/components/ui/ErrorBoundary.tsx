@@ -23,7 +23,7 @@ interface ErrorBoundaryProps {
 
 interface ErrorBoundaryState {
   hasError: boolean;,
-  error: Error | null;
+  error: Error | null;,
   errorInfo: ErrorInfo | null;
 }
 

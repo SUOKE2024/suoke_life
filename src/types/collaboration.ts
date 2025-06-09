@@ -61,11 +61,11 @@ export enum MessageType {
 // 智能体协作接口
 export interface AgentCollaboration {
   id: string;,
-  initiator: AgentType;
+  initiator: AgentType;,
   participants: AgentType[];,
-  status: CollaborationStatus;
+  status: CollaborationStatus;,
   context: CollaborationContext;,
-  messages: CollaborationMessage[];
+  messages: CollaborationMessage[];,
   createdAt: Date;,
   updatedAt: Date;
 }
@@ -73,18 +73,18 @@ export interface AgentCollaboration {
 // 协作上下文
 export interface CollaborationContext {
   userId: string;,
-  sessionId: string;
+  sessionId: string;,
   task: string;,
-  priority: 'low' | 'medium' | 'high';
+  priority: 'low' | 'medium' | 'high';,
   metadata: Record<string, any>;
 }
 
 // 协作消息
 export interface CollaborationMessage {
   id: string;,
-  from: AgentType;
+  from: AgentType;,
   to: AgentType[];,
-  type: MessageType;
+  type: MessageType;,
   content: any;,
   timestamp: Date;
 }
@@ -92,11 +92,11 @@ export interface CollaborationMessage {
 // 协作任务
 export interface CollaborationTask {
   id: string;,
-  title: string;
+  title: string;,
   description: string;,
-  requiredCapabilities: string[];
+  requiredCapabilities: string[];,
   priority: TaskPriority;,
-  status: TaskStatus;
+  status: TaskStatus;,
   createdAt: Date;
   updatedAt?: Date;
   completedAt?: Date;
@@ -108,9 +108,9 @@ export interface CollaborationTask {
 // 体质分析结果
 export interface ConstitutionAnalysis {
   primaryType: ConstitutionType;,
-  secondaryTypes: ConstitutionType[];
+  secondaryTypes: ConstitutionType[];,
   confidence: number;,
-  characteristics: string[];
+  characteristics: string[];,
   recommendations: string[];,
   analysisDate: Date;
 }
@@ -118,7 +118,7 @@ export interface ConstitutionAnalysis {
 // 症状数据
 export interface SymptomData {
   name: string;,
-  severity: number; // 1-10;
+  severity: number; // 1-10;,
   duration: string;,
   frequency: string;
   description?: string;
@@ -139,9 +139,9 @@ export interface VitalSigns {
 // 生活方式数据
 export interface LifestyleData {
   sleepHours: number;,
-  exerciseFrequency: number;
+  exerciseFrequency: number;,
   dietType: string;,
-  stressLevel: number;
+  stressLevel: number;,
   smokingStatus: boolean;,
   alcoholConsumption: string;
 }
@@ -149,9 +149,9 @@ export interface LifestyleData {
 // 健康数据接口
 export interface HealthData {
   userId: string;,
-  constitution: ConstitutionAnalysis;
+  constitution: ConstitutionAnalysis;,
   symptoms: SymptomData[];,
-  vitalSigns: VitalSigns;
+  vitalSigns: VitalSigns;,
   lifestyle: LifestyleData;,
   timestamp: Date;
 }
@@ -159,22 +159,22 @@ export interface HealthData {
 // 诊断结果
 export interface DiagnosisResult {
   tcmDiagnosis: {,
-  syndrome: string;
-    pattern: string;,
-  constitution: ConstitutionType;
-    meridians: string[];,
-  organs: string[];
-    pathogenesis: string;,
-  treatmentPrinciple: string;
-    confidence: number;
+  syndrome: string;,
+  pattern: string;,
+  constitution: ConstitutionType;,
+  meridians: string[];,
+  organs: string[];,
+  pathogenesis: string;,
+  treatmentPrinciple: string;,
+  confidence: number;
   };
   modernDiagnosis: {,
-  primaryDiagnosis: string;
-    differentialDiagnosis: string[];,
-  icdCodes: string[];
-    severity: 'mild' | 'moderate' | 'severe';,
-  prognosis: string;
-    recommendedTests: string[];,
+  primaryDiagnosis: string;,
+  differentialDiagnosis: string[];,
+  icdCodes: string[];,
+  severity: 'mild' | 'moderate' | 'severe';,
+  prognosis: string;,
+  recommendedTests: string[];,
   confidence: number;
   };
   confidence: number;
@@ -198,10 +198,10 @@ export interface TreatmentResult {
   targetConstitution: ConstitutionType;
   };
   validation: {,
-  safetyCheck: boolean;
-    drugInteractions: string[];,
-  contraindications: string[];
-    suggestedAdjustments: string[];,
+  safetyCheck: boolean;,
+  drugInteractions: string[];,
+  contraindications: string[];,
+  suggestedAdjustments: string[];,
   approvalStatus: 'approved' | 'needs_modification' | 'rejected';
   };
   adjustments: string[];
@@ -214,6 +214,6 @@ export interface CollaborationResult {
   treatment?: TreatmentResult;
   lifestyle?: any;
   confidence: number;,
-  recommendations: string[];
+  recommendations: string[];,
   timestamp: Date;
 }

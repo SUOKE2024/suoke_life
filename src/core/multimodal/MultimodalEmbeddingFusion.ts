@@ -14,7 +14,7 @@ export enum ModalityType {
 */
 export interface Embedding {
   id: string;,
-  vector: number[];
+  vector: number[];,
   modality: ModalityType;,
   metadata: Record<string, any>;
 }
@@ -34,7 +34,7 @@ export interface FusionResult {
   fusedEmbedding: number[];,
   modalityWeights: Record<ModalityType, number>;
   confidence: number;,
-  strategy: string;
+  strategy: string;,
   metadata: Record<string, any>;
 }
 /**
@@ -259,7 +259,7 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
     const values = embeddings.map(e => e.vector);
     const { weights, output } = this.crossModalAttention.computeAttention(query, keys, values);
     const modalityWeights: Record<ModalityType, number> = {};
-    embeddings.forEach((embedding, index) => {
+    embeddings.forEach(embedding, index) => {
       modalityWeights[embedding.modality] = weights[index];
     });
     return { embedding: output, weights: modalityWeights };

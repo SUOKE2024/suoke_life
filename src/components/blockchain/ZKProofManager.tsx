@@ -165,7 +165,7 @@ export const ZKProofManager: React.FC<ZKProofManagerProps> = ({ userId }) => {
 };
 // 生成证明模态框
 const GenerateProofModal: React.FC<{,
-  visible: boolean;
+  visible: boolean;,
   onClose: () => void,
   onSubmit: (dataType: string, privateInputs: Record<string, any>, circuitType: string) => void,
   isLoading: boolean;
@@ -231,7 +231,7 @@ const GenerateProofModal: React.FC<{,
 };
 // 验证证明模态框
 const VerifyProofModal: React.FC<{,
-  visible: boolean;
+  visible: boolean;,
   onClose: () => void,
   onSubmit: (request: VerifyWithZKPRequest) => void,
   isLoading: boolean;,

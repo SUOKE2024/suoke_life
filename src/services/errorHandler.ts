@@ -288,8 +288,8 @@ export class ErrorHandler {
   }
   // 格式化错误信息用于显示
   formatErrorForDisplay(error: AppError): {,
-  title: string;
-    message: string,
+  title: string;,
+  message: string,
   actions: string[];
   } {
     const recovery = this.getRecoveryAdvice(error);

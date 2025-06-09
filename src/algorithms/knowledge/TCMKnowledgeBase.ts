@@ -7,55 +7,55 @@
 */
 export interface KnowledgeBaseConfig {
   version: string;,
-  updateInterval: number;
+  updateInterval: number;,
   sources: string[];,
-  caching: {;
-    enabled: boolean;,
-  ttl: number;
-    maxSize: number;
+  caching: {;,
+  enabled: boolean;,
+  ttl: number;,
+  maxSize: number;
 }
 }
 export interface TCMConcept {
   id: string;,
-  name: string;
+  name: string;,
   category: string;,
-  description: string;
+  description: string;,
   properties: Record<string, any>;
   relationships: ConceptRelationship[];,
-  sources: string[];
+  sources: string[];,
   confidence: number;
 }
 export interface ConceptRelationship {
   type: 'belongs_to' | 'related_to' | 'opposite_to' | 'generates' | 'restricts';,
-  target: string;
+  target: string;,
   strength: number;,
   description: string;
 }
 export interface DiagnosisPattern {
   id: string;,
-  name: string;
+  name: string;,
   category: string;,
-  symptoms: string[];
+  symptoms: string[];,
   signs: string[];,
-  syndromes: string[];
+  syndromes: string[];,
   treatments: string[];,
   confidence: number;
 }
 export interface SyndromeInfo {
   id: string;,
-  name: string;
+  name: string;,
   category: string;,
-  description: string;
+  description: string;,
   mainSymptoms: string[];,
-  secondarySymptoms: string[];
+  secondarySymptoms: string[];,
   tongueFeatures: string[];,
-  pulseFeatures: string[];
+  pulseFeatures: string[];,
   treatments: TreatmentInfo[];,
   prognosis: string;
 }
 export interface TreatmentInfo {
   type: 'herbal' | 'acupuncture' | 'lifestyle' | 'diet';,
-  name: string;
+  name: string;,
   description: string;
   dosage?: string;
   duration?: string;
@@ -64,16 +64,16 @@ export interface TreatmentInfo {
 }
 export interface ConstitutionType {
   id: string;,
-  name: string;
+  name: string;,
   description: string;,
-  characteristics: {;
-    physical: string[];,
-  psychological: string[];
-    pathological: string[];
+  characteristics: {;,
+  physical: string[];,
+  psychological: string[];,
+  pathological: string[];
 };
   recommendations: {,
-  diet: string[];
-    exercise: string[],
+  diet: string[];,
+  exercise: string[],
   lifestyle: string[];,
   prevention: string[]
   }

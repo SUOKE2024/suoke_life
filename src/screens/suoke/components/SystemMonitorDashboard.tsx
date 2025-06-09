@@ -3,30 +3,30 @@ import React, { useState, useEffect } from "react";
 const { width } = Dimensions.get(window");"
 export interface SystemMetric {
   id: string;,
-  name: string;
+  name: string;,
   value: number;,
-  unit: string;
+  unit: string;,
   status: "healthy | "warning" | critical";,
-  threshold: {;
-    warning: number;,
+  threshold: {;,
+  warning: number;,
   critical: number;
 };
   lastUpdated: Date;
 }
 export interface ServiceStatus {
   id: string;,
-  name: string;
+  name: string;,
   status: "online | "offline" | degraded";,
-  uptime: number;
+  uptime: number;,
   responseTime: number;,
-  errorRate: number;
+  errorRate: number;,
   lastCheck: Date;
 }
 export interface SystemAlert {
   id: string;,
-  type: "error | "warning" | info";
+  type: "error | "warning" | info";,
   title: string;,
-  message: string;
+  message: string;,
   timestamp: Date;,
   resolved: boolean;
 }

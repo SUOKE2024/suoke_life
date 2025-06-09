@@ -6,7 +6,7 @@ code?: number}
 API集成测试工具   用于测试前端与后端API的集成
 interface TestResult {
   service: string;,
-  endpoint: string;
+  endpoint: string;,
   success: boolean;
   status?: number;
   responseTime: number;
@@ -15,9 +15,9 @@ interface TestResult {
 }
 interface TestReport {
   timestamp: string;,
-  totalTests: number;
+  totalTests: number;,
   passedTests: number;,
-  failedTests: number;
+  failedTests: number;,
   results: TestResult[];
 }
 // API集成测试类class ApiIntegrationTest {

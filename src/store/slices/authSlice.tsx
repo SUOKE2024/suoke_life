@@ -12,14 +12,14 @@ interface LoginRequest {
 // 注册请求参数
 interface RegisterRequest {
   username: string;,
-  email: string;
+  email: string;,
   password: string;
   phone?: string;
 }
 // 登录响应
 interface LoginResponse {
   user: User;,
-  accessToken: string;
+  accessToken: string;,
   refreshToken: string;
 }
 // 初始状态

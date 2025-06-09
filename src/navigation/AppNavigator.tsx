@@ -43,7 +43,7 @@ const NAVIGATION_STATE_KEY = '@navigation_state';
 
 // 内部导航器组件
 const RootNavigator: React.FC<{,
-  isAuthenticated: boolean;
+  isAuthenticated: boolean;,
   isDemoMode: boolean;
 }> = ({ isAuthenticated, isDemoMode }) => {
   return (

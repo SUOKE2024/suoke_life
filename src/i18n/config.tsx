@@ -15,9 +15,9 @@ N;
 // 语言配置接口 * export interface LanguageConfig {
   code: SupportedLanguage,
   name: string;,
-  nativeName: string;
+  nativeName: string;,
   isRTL: boolean;,
-  dateFormat: string;
+  dateFormat: string;,
   timeFormat: string;,
   numberFormat: {decimal: string,thousands: string,currency: string;
 };
@@ -167,7 +167,7 @@ N;
   CULTURAL_PREFERENCES: "@suoke_life:cultural_preferences"};
 // 地区配置接口 * export interface RegionConfig {
     code: string;,
-  name: string;
+  name: string;,
   timezone: string;,
   currency: string,measurementSystem: "metric" | "imperial",firstDayOfWeek: 0 | 1;  holidays: string[];
 }
@@ -240,9 +240,9 @@ N;
 // 文化偏好接口 * export interface CulturalPreferences {
   colorScheme: "light" | "dark" | "auto",
   accentColor: string;,
-  fontSize: "small" | "medium" | "large";
+  fontSize: "small" | "medium" | "large";,
   animationSpeed: "slow" | "normal" | "fast";,
-  soundEnabled: boolean;
+  soundEnabled: boolean;,
   hapticEnabled: boolean;,
   reducedMotion: boolean;
 }

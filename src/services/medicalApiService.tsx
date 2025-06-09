@@ -9,13 +9,13 @@ n";  * / Practice Fusion医疗系统* ///     "
 // 医疗数据类型 * export interface MedicalRecord {
   id: string,
   patientId: string;,
-  providerId: string;
+  providerId: string;,
   recordType: | "diagnosis"| "prescription"| "lab_result";
     | "vital_signs";
     | "allergy";
     | "immunization";
   data: unknown;,
-  timestamp: string;
+  timestamp: string;,
   source: MedicalApiProvider;,
   verified: boolean;
   metadata?:  {
@@ -42,7 +42,7 @@ n";  * / Practice Fusion医疗系统* ///     "
 // 医疗预约信息 * export interface MedicalAppointment {
   id: string,
   patientId: string;,
-  providerId: string;
+  providerId: string;,
   clinicianId: string;,
   appointmentType: | "consultation"| "follow_up"| "procedure";
     | "lab_test"
@@ -62,8 +62,8 @@ n";  * / Practice Fusion医疗系统* ///     "
   patientId: string,clinicianId: string,medication: {name: string;
     genericName?: string;
     dosage: string;,
-  frequency: string;
-    duration: string;,
+  frequency: string;,
+  duration: string;,
   instructions: string;
 }
   prescribedDate: string,
@@ -89,9 +89,9 @@ n";  * / Practice Fusion医疗系统* ///     "
 // API配置 * interface ApiConfig {
   baseUrl: string,
   apiKey: string;,
-  version: string;
+  version: string;,
   timeout: number;,
-  retryAttempts: number;
+  retryAttempts: number;,
   rateLimit: {requests: number;,
   window: number ;
 }

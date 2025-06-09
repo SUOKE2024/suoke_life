@@ -23,9 +23,9 @@ const { width, height } = Dimensions.get('window');
 // 诊断结果类型
 interface DiagnosisResult {
   id: string;,
-  serviceType: string;
+  serviceType: string;,
   result: string;,
-  confidence: number;
+  confidence: number;,
   timestamp: Date;,
   details: any;
 }
@@ -33,16 +33,16 @@ interface DiagnosisResult {
 // 诊断服务信息类型
 interface DiagnosisServiceInfo {
   id: string;,
-  name: string;
+  name: string;,
   description: string;,
-  icon: string;
+  icon: string;,
   endpoint: string;,
-  capabilities: string[];
+  capabilities: string[];,
   status: 'active' | 'inactive' | 'maintenance';,
-  colors: {
-    primary: string;,
-  secondary: string;
-    accent: string;
+  colors: {,
+  primary: string;,
+  secondary: string;,
+  accent: string;
   };
 }
 

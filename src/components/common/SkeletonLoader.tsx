@@ -11,7 +11,7 @@ interface SkeletonLoaderProps {
 }
 // 骨架屏动画组件
 const SkeletonItem: React.FC<{,
-  width: number;
+  width: number;,
   height: number;
   borderRadius?: number;
   style?: any;

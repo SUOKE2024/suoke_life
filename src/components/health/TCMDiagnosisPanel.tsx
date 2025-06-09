@@ -20,9 +20,9 @@ interface TCMDiagnosisPanelProps {
 }
 interface DiagnosisFormData {
   diagnosisType: TCMDiagnosisType;,
-  observations: TCMObservation[];
+  observations: TCMObservation[];,
   conclusion: string;,
-  recommendations: string[];
+  recommendations: string[];,
   confidence: number;
 }
 export const TCMDiagnosisPanel: React.FC<TCMDiagnosisPanelProps> = ({ userId }) => {

@@ -17,7 +17,7 @@ interface ServiceStatus {
   status: 'online' | 'offline' | 'unknown';
   responseTime?: number;
   lastChecked: Date;,
-  endpoint: string;
+  endpoint: string;,
   category: 'agent' | 'core' | 'diagnosis';
 }
 

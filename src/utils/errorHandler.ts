@@ -22,7 +22,7 @@ export enum ErrorSeverity {
 // 错误接口
 export interface AppError {
   id: string;,
-  type: ErrorType;
+  type: ErrorType;,
   severity: ErrorSeverity;,
   message: string;
   details?: any;
@@ -36,9 +36,9 @@ export interface AppError {
 // 错误处理配置
 interface ErrorHandlerConfig {
   enableCrashlytics: boolean;,
-  enableLocalLogging: boolean;
+  enableLocalLogging: boolean;,
   enableUserNotification: boolean;,
-  maxErrorsInMemory: number;
+  maxErrorsInMemory: number;,
   autoReportThreshold: ErrorSeverity;
 }
 // 默认配置

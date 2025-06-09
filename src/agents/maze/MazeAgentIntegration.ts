@@ -15,13 +15,13 @@ import {/**
 */
 export interface MazeContext {
   currentPosition: Position;,
-  visitedNodes: Position[];
+  visitedNodes: Position[];,
   mazeTheme: MazeTheme;,
-  difficulty: MazeDifficulty;
+  difficulty: MazeDifficulty;,
   score: number;,
-  stepsCount: number;
+  stepsCount: number;,
   timeSpent: number;,
-  completedChallenges: string[];
+  completedChallenges: string[];,
   acquiredKnowledge: string[];,
   playerLevel: 'beginner' | 'intermediate' | 'advanced';
 }

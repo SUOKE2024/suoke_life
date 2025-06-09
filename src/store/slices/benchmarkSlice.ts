@@ -10,37 +10,37 @@ import { benchmarkService } from '../../services';
 interface BenchmarkState {
   // 任务相关
   tasks: BenchmarkTask[];,
-  currentTask: BenchmarkTask | null;
+  currentTask: BenchmarkTask | null;,
   currentResult: BenchmarkResult | null;
   // 服务状态
   healthStatus: HealthStatus | null;,
   plugins: Plugin[];
   // UI状态
   loading: {;,
-  tasks: boolean;
-    result: boolean;,
-  health: boolean;
-    plugins: boolean;,
+  tasks: boolean;,
+  result: boolean;,
+  health: boolean;,
+  plugins: boolean;,
   submit: boolean;
 };
   // 错误状态
   error: {,
-  tasks: string | null;
-    result: string | null,
+  tasks: string | null;,
+  result: string | null,
   health: string | null;,
   plugins: string | null,
   submit: string | null;
   };
   // 过滤和排序
   filters: {,
-  status: string | null;
-    modelId: string | null,
+  status: string | null;,
+  modelId: string | null,
   benchmarkId: string | null;
   };
   // 实时状态
   streaming: {,
-  isConnected: boolean;
-    connectionState: string,
+  isConnected: boolean;,
+  connectionState: string,
   lastEvent: any | null;
   };
 }

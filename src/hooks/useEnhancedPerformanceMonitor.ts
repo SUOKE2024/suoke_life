@@ -3,38 +3,38 @@ import { InteractionManager, Dimensions } from 'react-native';
 // 性能指标接口
 interface PerformanceMetrics {
   renderTime: number;,
-  memoryUsage: number;
+  memoryUsage: number;,
   networkLatency: number;,
-  frameDrops: number;
+  frameDrops: number;,
   interactionDelay: number;,
-  bundleSize: number;
+  bundleSize: number;,
   cacheHitRate: number;,
-  errorCount: number;
+  errorCount: number;,
   warningCount: number;,
   timestamp: number;
 }
 // 性能阈值配置
 interface PerformanceThresholds {
   renderTime: number;,
-  memoryUsage: number;
+  memoryUsage: number;,
   networkLatency: number;,
-  frameDrops: number;
+  frameDrops: number;,
   interactionDelay: number;
 }
 // 性能优化建议
 interface OptimizationSuggestion {
   type: 'render' | 'memory' | 'network' | 'interaction' | 'bundle';,
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: 'low' | 'medium' | 'high' | 'critical';,
   message: string;,
-  action: string;
+  action: string;,
   impact: string;
 }
 // 性能监控配置
 interface PerformanceMonitorConfig {
   enabled: boolean;,
-  sampleRate: number;
+  sampleRate: number;,
   thresholds: PerformanceThresholds;,
-  reportInterval: number;
+  reportInterval: number;,
   maxSamples: number;,
   enableDetailedLogging: boolean;
 }

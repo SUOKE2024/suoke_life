@@ -48,7 +48,7 @@ n;
   | "appointment";
 export interface HealthReminder {
   id: string;,
-  type: HealthReminderType;
+  type: HealthReminderType;,
   title: string;,
   message: string,time: Date,repeat: boolean;
 repeatInterval?: "daily" | "weekly" | "monthly";

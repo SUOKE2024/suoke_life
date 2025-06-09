@@ -9,11 +9,11 @@ import { useState, useEffect, useCallback } from "react;"
   RegionConfig,
   { CulturalPreferences } from ";../i18n/config";/    export interface UseI18nReturn {
   language: SupportedLanguage;,
-  region: string;
+  region: string;,
   isRTL: boolean,culturalPreferences: CulturalPreferences,isInitialized: boolean;,
-  languageConfig: LanguageConfig;
+  languageConfig: LanguageConfig;,
   regionConfig: RegionConfig;,
-  supportedLanguages: LanguageConfig[];
+  supportedLanguages: LanguageConfig[];,
   supportedRegions: RegionConfig[];,
   t: (key: string, options?: { [key: string]: unknown;)
 }) => string ,

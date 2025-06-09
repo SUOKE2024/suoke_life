@@ -10,9 +10,9 @@ import React from "react";
     | "genetic"
     | "environmental"
   data: unknown;,
-  timestamp: number;
+  timestamp: number;,
   source: string;,
-  privacy_level: "public" | "private" | "confidential" | "restricted";
+  privacy_level: "public" | "private" | "confidential" | "restricted";,
   consent: ConsentRecord;,
   hash: string;
 }
@@ -25,11 +25,11 @@ export interface ConsentRecord {
 // 区块结构 * export interface Block {
   index: number,
   timestamp: number;,
-  data: HealthDataRecord[];
+  data: HealthDataRecord[];,
   previousHash: string;,
-  hash: string;
+  hash: string;,
   nonce: number;,
-  merkleRoot: string;
+  merkleRoot: string;,
   validator: string;
 }
 // 交易记录 * export interface Transaction {
@@ -40,7 +40,7 @@ export interface ConsentRecord {
   from: string;
   to?: string;
   data: unknown;,
-  timestamp: number;
+  timestamp: number;,
   signature: string;,
   fee: number;
 }
@@ -54,7 +54,7 @@ export interface ConsentRecord {
 // 零知识证明 * export interface ZKProof {
   statement: string,
   proof: string;,
-  publicInputs: unknown[];
+  publicInputs: unknown[];,
   verificationKey: string;,
   timestamp: number;
 };

@@ -1,22 +1,22 @@
 import React from 'react';
 export interface QualityIssue {
   type: 'data' | 'result' | 'consistency' | 'safety';,
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: 'low' | 'medium' | 'high' | 'critical';,
   message: string;,
   suggestion: string;
 }
 export interface QualityReport {
   valid: boolean;,
-  score: number;
+  score: number;,
   warnings: string[];,
-  medicalAdvice: string[];
+  medicalAdvice: string[];,
   followUpRecommendations: string[];,
   issues: QualityIssue[];
 }
 export interface QualityControlConfig {
   thresholds: {;,
-  minConfidence: number;
-    consistencyCheck: number;
+  minConfidence: number;,
+  consistencyCheck: number;
 };
   rules: {
     [key: string]: boolean;
@@ -29,14 +29,14 @@ export interface ValidationRule {
 }
 export interface ValidationResult {
   valid: boolean;,
-  message: string;
+  message: string;,
   suggestion: string;
 }
 export interface ValidationInput {
   input: any;,
-  diagnosisResults: any;
+  diagnosisResults: any;,
   fusionResult: any;,
-  syndromeAnalysis: any;
+  syndromeAnalysis: any;,
   constitutionAnalysis: any;,
   treatmentRecommendation: any;
 }

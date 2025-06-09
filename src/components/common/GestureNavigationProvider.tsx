@@ -5,9 +5,9 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 // 手势配置接口
 interface GestureConfig {
   swipeThreshold: number;,
-  velocityThreshold: number;
+  velocityThreshold: number;,
   enableBackGesture: boolean;,
-  enableQuickActions: boolean;
+  enableQuickActions: boolean;,
   enableHapticFeedback: boolean;,
   edgeSwipeWidth: number;
 }

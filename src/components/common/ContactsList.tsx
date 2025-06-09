@@ -10,7 +10,7 @@ importIcon from "./Icon/import { colors, spacing, typography  } from "../../plac
   { Alert } from ";react-native";
 export interface Contact {
   id: string;,
-  name: string;
+  name: string;,
   type: agent" | "doctor | "user",avatar: string,isOnline: boolean;
   lastSeen?: string;
   specialization?: string;

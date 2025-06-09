@@ -10,7 +10,7 @@ importReact from "react";
   { borderRadius } from "../../constants/    theme";
 interface ProfileHeaderProps {
   userProfile: UserProfile;,
-  onEditPress: () => void;
+  onEditPress: () => void;,
   getHealthScoreColor: (score: number) => string;,
   getMemberLevelText: (level: string) => string;
 }

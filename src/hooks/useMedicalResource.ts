@@ -103,8 +103,8 @@ export const useMedicalResource = () => {const dispatch = useDispatch<AppDispatc
   }, [search, filters]);
   const searchByLocation = useCallback(location: { lat: number; lng: number; radius?: number }, resourceType?: string[]) => {
     const query: SearchQuery = {,
-  filters: {
-        location: {,
+  filters: {,
+  location: {,
   lat: location.lat,
           lng: location.lng,
           radius: location.radius || 5000, // 默认5km;

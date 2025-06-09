@@ -13,7 +13,7 @@ import { useTheme } from '../../contexts/ThemeContext';
 
 export interface TabItem {
   key: string;,
-  title: string;
+  title: string;,
   content: React.ReactNode;
   disabled?: boolean;
   badge?: string | number;

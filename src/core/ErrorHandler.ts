@@ -12,7 +12,7 @@ export enum ErrorType {
 }
 export interface AppError {
   type: ErrorType;,
-  code: string;
+  code: string;,
   message: string;
   details?: unknown;
   timestamp: Date;

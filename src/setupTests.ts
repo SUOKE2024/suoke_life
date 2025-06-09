@@ -18,8 +18,8 @@ jest.mock('react-native-vector-icons/FontAwesome', () => 'Icon');
 // Mock react-native-permissions;
 jest.mock('react-native-permissions', () => ({
   PERMISSIONS: {,
-  IOS: {
-      CAMERA: 'ios.permission.CAMERA',
+  IOS: {,
+  CAMERA: 'ios.permission.CAMERA',
       MICROPHONE: 'ios.permission.MICROPHONE',
       LOCATION_WHEN_IN_USE: 'ios.permission.LOCATION_WHEN_IN_USE',
     },

@@ -6,7 +6,7 @@ import React, { useMemo, useCallback } from "react";
 * 单选框组件，用于单选操作
 export interface RadioProps {
   value: string;,
-  selected: boolean;
+  selected: boolean;,
   onSelect: (value: string) => void;
   label?: string;
   description?: string;

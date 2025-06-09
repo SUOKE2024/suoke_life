@@ -2,14 +2,14 @@
 // 基础数据类型
 export interface ImageData {
   data: ArrayBuffer;,
-  format: string;
+  format: string;,
   width: number;,
   height: number;
   metadata?: Record<string, any>;
 }
 export interface AudioData {
   data: ArrayBuffer;,
-  format: string;
+  format: string;,
   duration: number;,
   sampleRate: number;
   channels?: number;
@@ -23,9 +23,9 @@ export interface PalpationData {
 // 诊断结果类型
 export interface InquiryResult {
   sessionId: string;,
-  response: string;
+  response: string;,
   extractedSymptoms: string[];,
-  confidence: number;
+  confidence: number;,
   nextQuestions: string[];,
   isComplete: boolean;
 }
@@ -73,7 +73,7 @@ export interface PalpationServiceClient {
 }
 export interface DiagnosisServiceClient {
   inquiry: InquiryServiceClient;,
-  look: LookServiceClient;
+  look: LookServiceClient;,
   listen: ListenServiceClient;,
   palpation: PalpationServiceClient;
   healthCheck(): Promise<{ [key: string]: boolean;

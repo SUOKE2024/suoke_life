@@ -23,10 +23,10 @@ export interface RAGQueryRequest {
 // RAG查询响应接口
 export interface RAGQueryResponse {
   requestId: string;,
-  answer: string;
+  answer: string;,
   sources: Array<{;,
-  id: string;
-    title: string;,
+  id: string;,
+  title: string;,
   source: string;
     url?: string;
     snippet: string;,
@@ -34,7 +34,7 @@ export interface RAGQueryResponse {
 }>;
   confidence: number,
   reasoningChain: string[];,
-  agentInfo: {
+  agentInfo: {,
   agentName: string;,
   agentType: string,
   processingTime: number;
@@ -46,12 +46,12 @@ export interface RAGQueryResponse {
 // 流式响应接口
 export interface StreamResponse {
   requestId: string;,
-  answerFragment: string;
+  answerFragment: string;,
   isFinal: boolean;
   sources?: Array<{
     id: string;,
-  title: string;
-    source: string;,
+  title: string;,
+  source: string;,
   snippet: string;
 }>;
 }
@@ -84,15 +84,15 @@ export interface TCMAnalysisRequest {
 // 中医分析响应接口
 export interface TCMAnalysisResponse {
   requestId: string;,
-  syndromeAnalysis: {;
-    primarySyndrome: string;,
-  secondarySyndromes: string[];
-    confidence: number;,
+  syndromeAnalysis: {;,
+  primarySyndrome: string;,
+  secondarySyndromes: string[];,
+  confidence: number;,
   reasoning: string[];
 };
   constitutionAssessment: {,
-  constitutionType: string;
-    score: number,
+  constitutionType: string;,
+  score: number,
   characteristics: string[];,
   recommendations: string[];
   };
@@ -104,7 +104,7 @@ export interface TCMAnalysisResponse {
 // 中药推荐请求接口
 export interface HerbRecommendationRequest {
   syndromeType: string;,
-  constitutionType: string;
+  constitutionType: string;,
   userId: string;
   contraindications?: string[];
   allergies?: string[];
@@ -116,12 +116,12 @@ export interface HerbRecommendationRequest {
 // 中药推荐响应接口
 export interface HerbRecommendationResponse {
   requestId: string;,
-  recommendedFormulas: Array<{;
-    name: string;,
-  composition: Array<{;
-      herb: string;,
-  dosage: string;
-      function: string;
+  recommendedFormulas: Array<{;,
+  name: string;,
+  composition: Array<{;,
+  herb: string;,
+  dosage: string;,
+  function: string;
 }>;
     preparation: string,
   dosage: string;,
@@ -129,8 +129,8 @@ export interface HerbRecommendationResponse {
   confidence: number;
   }>;
   singleHerbs: Array<{,
-  name: string;
-    function: string,
+  name: string;,
+  function: string,
   dosage: string;,
   precautions: string[];
   }>;
@@ -147,7 +147,7 @@ export interface HerbRecommendationResponse {
 // 文档索引请求接口
 export interface DocumentIndexRequest {
   content: string;,
-  title: string;
+  title: string;,
   source: string;
   metadata?: Record<string, any>;
   documentType?: string;
@@ -528,7 +528,7 @@ export class RAGService extends EventEmitter {
       const results = await Promise.allSettled(requests.map(request => this.query(request)));
       const responses: RAGQueryResponse[] = [];
       const errors: Error[] = [];
-      results.forEach((result, index) => {
+      results.forEach(result, index) => {
         if (result.status === 'fulfilled') {
           responses.push(result.value);
         } else {

@@ -200,21 +200,21 @@ export class TCMOntologyModel {
 // 接口定义
 export interface SyndromePattern {
   name: string;,
-  category: string;
+  category: string;,
   pathogenesis: string;,
-  mainSymptoms: PatternSymptom[];
+  mainSymptoms: PatternSymptom[];,
   tongueManifestations: TongueManifestations;,
-  pulseManifestations: string[];
+  pulseManifestations: string[];,
   treatmentPrinciple: string;,
-  recommendedFormulas: string[];
+  recommendedFormulas: string[];,
   contraindications: string[];,
-  prognosis: string;
+  prognosis: string;,
   differentialDiagnosis: string[];
 }
 
 export interface PatternSymptom {
   name: string;,
-  weight: number;
+  weight: number;,
   required: boolean;
 }
 
@@ -225,119 +225,119 @@ export interface TongueManifestations {
 
 export interface ConstitutionProfile {
   name: string;,
-  characteristics: string[];
+  characteristics: string[];,
   physicalTraits: PhysicalTraits;,
-  psychologicalTraits: PsychologicalTraits;
+  psychologicalTraits: PsychologicalTraits;,
   susceptibleDiseases: string[];,
-  adaptationCapacity: AdaptationCapacity;
+  adaptationCapacity: AdaptationCapacity;,
   healthMaintenance: HealthMaintenance;
 }
 
 export interface PhysicalTraits {
   complexion: string;,
-  bodyType: string;
+  bodyType: string;,
   energy: string;,
-  sleep: string;
+  sleep: string;,
   appetite: string;
 }
 
 export interface PsychologicalTraits {
   personality: string;,
-  emotion: string;
+  emotion: string;,
   stress: string;
 }
 
 export interface AdaptationCapacity {
   climate: string;,
-  season: string;
+  season: string;,
   environment: string;
 }
 
 export interface HealthMaintenance {
   diet: string;,
-  exercise: string;
+  exercise: string;,
   lifestyle: string;,
   emotion: string;
 }
 
 export interface HerbProfile {
   name: string;,
-  latinName: string;
+  latinName: string;,
   category: string;,
-  subCategory: string;
+  subCategory: string;,
   nature: string;,
-  flavor: string[];
+  flavor: string[];,
   meridians: string[];,
-  functions: string[];
+  functions: string[];,
   indications: string[];,
-  dosage: string;
+  dosage: string;,
   contraindications: string[];,
-  incompatibilities: string[];
+  incompatibilities: string[];,
   processing: string[];,
   modernPharmacology: ModernPharmacology;
 }
 
 export interface ModernPharmacology {
   activeComponents: string[];,
-  pharmacologicalEffects: string[];
+  pharmacologicalEffects: string[];,
   clinicalApplications: string[];
 }
 
 export interface FormulaProfile {
   name: string;,
-  category: string;
+  category: string;,
   subCategory: string;,
-  composition: FormulaComponent[];
+  composition: FormulaComponent[];,
   functions: string[];,
-  indications: string[];
+  indications: string[];,
   contraindications: string[];,
-  modifications: FormulaModification[];
+  modifications: FormulaModification[];,
   preparation: string;,
-  dosage: string;
+  dosage: string;,
   modernApplications: string[];
 }
 
 export interface FormulaComponent {
   herb: string;,
-  dosage: string;
+  dosage: string;,
   role: string;
 }
 
 export interface FormulaModification {
   condition: string;,
-  addition: string[];
+  addition: string[];,
   removal: string[];
 }
 
 export interface MeridianProfile {
   name: string;,
-  abbreviation: string;
+  abbreviation: string;,
   type: string;,
-  pairedOrgan: string;
+  pairedOrgan: string;,
   flowDirection: string;,
-  peakTime: string;
+  peakTime: string;,
   mainFunctions: string[];,
-  pathology: string[];
+  pathology: string[];,
   keyPoints: AcupointProfile[];
 }
 
 export interface AcupointProfile {
   name: string;,
-  location: string;
+  location: string;,
   functions: string[];
 }
 
 export interface OrganProfile {
   name: string;,
-  category: string;
+  category: string;,
   element: string;,
-  season: string;
+  season: string;,
   emotion: string;,
-  tissue: string;
+  tissue: string;,
   sensoryOrgan: string;,
-  fluid: string;
+  fluid: string;,
   mainFunctions: string[];,
-  physiologicalCharacteristics: string[];
+  physiologicalCharacteristics: string[];,
   pathologicalManifestations: string[];,
   commonSyndromes: string[];
 }
@@ -351,36 +351,36 @@ export interface SymptomInput {
 
 export interface PatternAnalysisResult {
   primaryPattern: PatternMatch | null;,
-  alternativePatterns: PatternMatch[];
+  alternativePatterns: PatternMatch[];,
   confidence: number;,
-  recommendations: TreatmentRecommendation[];
+  recommendations: TreatmentRecommendation[];,
   timestamp: Date;
 }
 
 export interface PatternMatch {
   patternId: string;,
-  pattern: SyndromePattern;
+  pattern: SyndromePattern;,
   score: number;,
-  matchedSymptoms: MatchedSymptom[];
+  matchedSymptoms: MatchedSymptom[];,
   confidence: number;
 }
 
 export interface PatternMatchResult {
   score: number;,
-  matchedSymptoms: MatchedSymptom[];
+  matchedSymptoms: MatchedSymptom[];,
   confidence: number;
 }
 
 export interface MatchedSymptom {
   symptomName: string;,
-  userSeverity: number;
+  userSeverity: number;,
   patternWeight: number;,
   score: number;
 }
 
 export interface TreatmentRecommendation {
   type: 'formula' | 'principle' | 'contraindication' | 'lifestyle';,
-  title: string;
+  title: string;,
   content: string;,
   priority: 'high' | 'medium' | 'low';
 }

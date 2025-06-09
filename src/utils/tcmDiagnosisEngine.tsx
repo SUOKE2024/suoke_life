@@ -1,14 +1,14 @@
 // 简化的中医诊断引擎
 export interface TCMDiagnosisResult {
   constitution: string;,
-  confidence: number;
+  confidence: number;,
   symptoms: string[];,
   recommendations: string[];
 }
 
 export interface InquiryData {
   symptoms: string[];,
-  duration: string;
+  duration: string;,
   severity: number;
 }
 

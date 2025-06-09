@@ -14,7 +14,7 @@ export enum ValidationSeverity {
 }
 export interface ValidationRule {
   id: string;,
-  name: string;
+  name: string;,
   type: ValidationType,severity: ValidationSeverity,validate: (data: unknown, context?: ValidationContext) => ValidationResult;
   sanitize?: (data: unknown) => any;,
   description: string;
@@ -39,12 +39,12 @@ export interface ValidationResult {
 }
 export interface ValidationReport {
   id: string;,
-  timestamp: number;
+  timestamp: number;,
   context: ValidationContext;,
-  results: ValidationResult[];
+  results: ValidationResult[];,
   summary: {totalChecks: number;,
-  passed: number;
-    warnings: number,errors: number,critical: number;
+  passed: number;,
+  warnings: number,errors: number,critical: number;
 };
   isValid: boolean;
   sanitizedData?: unknown}

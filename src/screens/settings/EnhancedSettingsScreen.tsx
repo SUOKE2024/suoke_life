@@ -37,7 +37,7 @@ interface SettingItem {
 
 interface SettingSection {
   id: string;,
-  title: string;
+  title: string;,
   items: SettingItem[];
 }
 

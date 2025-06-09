@@ -4,12 +4,12 @@ export interface PerformanceConfig {
 enabled: boolean;
   // 开发环境配置
 development: {;,
-  trackRender: boolean;
-    trackMemory: boolean;,
-  trackNetwork: boolean;
-    logToConsole: boolean;,
-  warnThreshold: number; // ms;
-    errorThreshold: number // ms;
+  trackRender: boolean;,
+  trackMemory: boolean;,
+  trackNetwork: boolean;,
+  logToConsole: boolean;,
+  warnThreshold: number; // ms;,
+  errorThreshold: number // ms;
 }
   // 生产环境配置
 production: {,

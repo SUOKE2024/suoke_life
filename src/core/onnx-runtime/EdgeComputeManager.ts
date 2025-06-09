@@ -331,11 +331,11 @@ interface ComputeLoad {
 }
 interface ComputeTask {
   id: string;,
-  type: string;
+  type: string;,
   priority: "low" | normal" | "high;
   estimatedLoad?: ComputeLoad;
   timeout: number;,
-  status: "queued" | running" | "completed | "failed" | cancelled" | "paused;
+  status: "queued" | running" | "completed | "failed" | cancelled" | "paused;,
   createdAt: Date;
   startTime?: Date;
   completedAt?: Date;
@@ -354,7 +354,7 @@ interface ComputeTaskRequest {
 }
 interface ComputeTaskStatus {
   id: string;,
-  status: string;
+  status: string;,
   progress: number;
   startTime?: Date;
   estimatedCompletion?: Date;
@@ -362,11 +362,11 @@ interface ComputeTaskStatus {
 }
 interface EdgeComputeStats {
   activeTasks: number;,
-  queuedTasks: number;
+  queuedTasks: number;,
   completedTasks: number;,
-  averageExecutionTime: number;
+  averageExecutionTime: number;,
   currentLoad: ComputeLoad;,
-  thermalState: ThermalState;
+  thermalState: ThermalState;,
   memoryUsage: number;,
   cpuUsage: number;
 }  */

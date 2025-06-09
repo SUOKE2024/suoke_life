@@ -8,35 +8,35 @@ export const GATEWAY_CONFIG = {
   API_VERSION: 'v1',
   TIMEOUT: 30000,
   
-  RETRY: {
-    MAX_ATTEMPTS: 3,
+  RETRY: {,
+  MAX_ATTEMPTS: 3,
     DELAY: 1000,
     BACKOFF_FACTOR: 2,
   },
   
-  CACHE: {
-    TTL: 300000, // 5分钟
+  CACHE: {,
+  TTL: 300000, // 5分钟
     MAX_SIZE: 1000,
   },
   
-  CIRCUIT_BREAKER: {
-    FAILURE_THRESHOLD: 5,
+  CIRCUIT_BREAKER: {,
+  FAILURE_THRESHOLD: 5,
     RECOVERY_TIMEOUT: 60000,
   },
   
-  RATE_LIMIT: {
-    MAX_REQUESTS: 100,
+  RATE_LIMIT: {,
+  MAX_REQUESTS: 100,
     WINDOW_MS: 60000, // 1分钟
   },
   
-  SECURITY: {
-    ENABLE_CORS: true,
+  SECURITY: {,
+  ENABLE_CORS: true,
     ENABLE_HELMET: true,
     ENABLE_RATE_LIMITING: true,
   },
   
-  MONITORING: {
-    ENABLE_METRICS: true,
+  MONITORING: {,
+  ENABLE_METRICS: true,
     ENABLE_LOGGING: true,
     ENABLE_TRACING: true,
   },
@@ -44,10 +44,10 @@ export const GATEWAY_CONFIG = {
 
 // 服务端点配置
 export const SERVICE_ENDPOINTS = {
-  AUTH: {
-    BASE_URL: '/api/v1/auth',
-    endpoints: {
-      LOGIN: '/login',
+  AUTH: {,
+  BASE_URL: '/api/v1/auth',
+    endpoints: {,
+  LOGIN: '/login',
       REGISTER: '/register',
       REFRESH: '/refresh',
       LOGOUT: '/logout',
@@ -57,10 +57,10 @@ export const SERVICE_ENDPOINTS = {
     },
   },
 
-  USER: {
-    BASE_URL: '/api/v1/user',
-    endpoints: {
-      PROFILE: '/profile',
+  USER: {,
+  BASE_URL: '/api/v1/user',
+    endpoints: {,
+  PROFILE: '/profile',
       UPDATE: '/update',
       DELETE: '/delete',
       PREFERENCES: '/preferences',
@@ -68,10 +68,10 @@ export const SERVICE_ENDPOINTS = {
     },
   },
 
-  HEALTH_DATA: {
-    BASE_URL: '/api/v1/health',
-    endpoints: {
-      DATA: '/data',
+  HEALTH_DATA: {,
+  BASE_URL: '/api/v1/health',
+    endpoints: {,
+  DATA: '/data',
       METRICS: '/metrics',
       REPORTS: '/reports',
       SYNC: '/sync',
@@ -80,10 +80,10 @@ export const SERVICE_ENDPOINTS = {
     },
   },
 
-  AGENTS: {
-    BASE_URL: '/api/v1/agents',
-    endpoints: {
-      XIAOAI: '/xiaoai',
+  AGENTS: {,
+  BASE_URL: '/api/v1/agents',
+    endpoints: {,
+  XIAOAI: '/xiaoai',
       XIAOKE: '/xiaoke',
       LAOKE: '/laoke',
       SOER: '/soer',
@@ -93,10 +93,10 @@ export const SERVICE_ENDPOINTS = {
     },
   },
 
-  DIAGNOSIS: {
-    BASE_URL: '/api/v1/diagnosis',
-    endpoints: {
-      INQUIRY: '/inquiry',
+  DIAGNOSIS: {,
+  BASE_URL: '/api/v1/diagnosis',
+    endpoints: {,
+  INQUIRY: '/inquiry',
       LISTEN: '/listen',
       LOOK: '/look',
       PALPATION: '/palpation',
@@ -107,20 +107,20 @@ export const SERVICE_ENDPOINTS = {
     },
   },
 
-  RAG: {
-    BASE_URL: '/api/v1/rag',
-    endpoints: {
-      QUERY: '/query',
+  RAG: {,
+  BASE_URL: '/api/v1/rag',
+    endpoints: {,
+  QUERY: '/query',
       STREAM_QUERY: '/stream-query',
       KNOWLEDGE: '/knowledge',
       SEARCH: '/search',
     },
   },
 
-  BLOCKCHAIN: {
-    BASE_URL: '/api/v1/blockchain',
-    endpoints: {
-      STORE: '/store',
+  BLOCKCHAIN: {,
+  BASE_URL: '/api/v1/blockchain',
+    endpoints: {,
+  STORE: '/store',
       VERIFY: '/verify',
       RETRIEVE: '/retrieve',
       MINT: '/mint',
@@ -128,73 +128,73 @@ export const SERVICE_ENDPOINTS = {
     },
   },
 
-  MESSAGE_BUS: {
-    BASE_URL: '/api/v1/messaging',
-    endpoints: {
-      PUBLISH: '/publish',
+  MESSAGE_BUS: {,
+  BASE_URL: '/api/v1/messaging',
+    endpoints: {,
+  PUBLISH: '/publish',
       SUBSCRIBE: '/subscribe',
       UNSUBSCRIBE: '/unsubscribe',
     },
   },
 
-  MEDICAL_RESOURCE: {
-    BASE_URL: '/api/v1/medical',
-    endpoints: {
-      SEARCH: '/search',
+  MEDICAL_RESOURCE: {,
+  BASE_URL: '/api/v1/medical',
+    endpoints: {,
+  SEARCH: '/search',
       DETAILS: '/details',
       RECOMMENDATIONS: '/recommendations',
     },
   },
 
-  CORN_MAZE: {
-    BASE_URL: '/api/v1/maze',
-    endpoints: {
-      GENERATE: '/generate',
+  CORN_MAZE: {,
+  BASE_URL: '/api/v1/maze',
+    endpoints: {,
+  GENERATE: '/generate',
       SOLVE: '/solve',
       PROGRESS: '/progress',
     },
   },
 
-  ACCESSIBILITY: {
-    BASE_URL: '/api/v1/accessibility',
-    endpoints: {
-      SETTINGS: '/settings',
+  ACCESSIBILITY: {,
+  BASE_URL: '/api/v1/accessibility',
+    endpoints: {,
+  SETTINGS: '/settings',
       FEATURES: '/features',
       SUPPORT: '/support',
     },
   },
 
-  SUOKE_BENCH: {
-    BASE_URL: '/api/v1/benchmark',
-    endpoints: {
-      RUN: '/run',
+  SUOKE_BENCH: {,
+  BASE_URL: '/api/v1/benchmark',
+    endpoints: {,
+  RUN: '/run',
       RESULTS: '/results',
       COMPARE: '/compare',
     },
   },
 
-  MED_KNOWLEDGE: {
-    BASE_URL: '/api/v1/knowledge',
-    endpoints: {
-      SEARCH: '/search',
+  MED_KNOWLEDGE: {,
+  BASE_URL: '/api/v1/knowledge',
+    endpoints: {,
+  SEARCH: '/search',
       GRAPH: '/graph',
       ONTOLOGY: '/ontology',
     },
   },
 
-  HUMAN_REVIEW: {
-    BASE_URL: '/api/v1/review',
-    endpoints: {
-      SUBMIT: '/submit',
+  HUMAN_REVIEW: {,
+  BASE_URL: '/api/v1/review',
+    endpoints: {,
+  SUBMIT: '/submit',
       STATUS: '/status',
       FEEDBACK: '/feedback',
     },
   },
 
-  INTEGRATION: {
-    BASE_URL: '/api/v1/integration',
-    endpoints: {
-      CONNECT: '/connect',
+  INTEGRATION: {,
+  BASE_URL: '/api/v1/integration',
+    endpoints: {,
+  CONNECT: '/connect',
       SYNC: '/sync',
       STATUS: '/status',
     },
@@ -203,13 +203,13 @@ export const SERVICE_ENDPOINTS = {
 
 // 负载均衡配置
 export const LOAD_BALANCER_CONFIG = {
-  STRATEGIES: {
-    ROUND_ROBIN: 'round_robin',
+  STRATEGIES: {,
+  ROUND_ROBIN: 'round_robin',
     LEAST_CONNECTIONS: 'least_connections',
     WEIGHTED: 'weighted',
   },
-  HEALTH_CHECK: {
-    INTERVAL: 30000,
+  HEALTH_CHECK: {,
+  INTERVAL: 30000,
     TIMEOUT: 5000,
     RETRIES: 3,
   },
@@ -217,32 +217,32 @@ export const LOAD_BALANCER_CONFIG = {
 
 // 缓存策略配置
 export const CACHE_STRATEGIES = {
-  AUTH: {
-    TTL: 3600000, // 1小时
+  AUTH: {,
+  TTL: 3600000, // 1小时
     STRATEGY: 'memory',
   },
-  USER_DATA: {
-    TTL: 1800000, // 30分钟
+  USER_DATA: {,
+  TTL: 1800000, // 30分钟
     STRATEGY: 'hybrid',
   },
-  HEALTH_DATA: {
-    TTL: 300000, // 5分钟
+  HEALTH_DATA: {,
+  TTL: 300000, // 5分钟
     STRATEGY: 'storage',
   },
-  STATIC_DATA: {
-    TTL: 86400000, // 24小时
+  STATIC_DATA: {,
+  TTL: 86400000, // 24小时
     STRATEGY: 'memory',
   },
-  RAG_QUERIES: {
-    TTL: 600000, // 10分钟
+  RAG_QUERIES: {,
+  TTL: 600000, // 10分钟
     STRATEGY: 'hybrid',
   },
 };
 
 // 错误处理配置
 export const ERROR_HANDLING = {
-  ERROR_CATEGORIES: {
-    NETWORK: 'network',
+  ERROR_CATEGORIES: {,
+  NETWORK: 'network',
     AUTHENTICATION: 'auth',
     AUTHORIZATION: 'authz',
     VALIDATION: 'validation',
@@ -250,14 +250,14 @@ export const ERROR_HANDLING = {
     SYSTEM: 'system',
   },
   
-  RETRY_STRATEGIES: {
-    EXPONENTIAL_BACKOFF: 'exponential',
+  RETRY_STRATEGIES: {,
+  EXPONENTIAL_BACKOFF: 'exponential',
     LINEAR_BACKOFF: 'linear',
     FIXED_DELAY: 'fixed',
   },
   
-  THRESHOLDS: {
-    ERROR_RATE: 0.1, // 10%
+  THRESHOLDS: {,
+  ERROR_RATE: 0.1, // 10%
     RESPONSE_TIME: 5000, // 5秒
     TIMEOUT_RATE: 0.05, // 5%
   },
@@ -265,8 +265,8 @@ export const ERROR_HANDLING = {
 
 // 安全配置
 export const SECURITY_CONFIG = {
-  CORS: {
-    ALLOWED_ORIGINS: [
+  CORS: {,
+  ALLOWED_ORIGINS: [
       'http://localhost:3000',
       'http://localhost:8081',
       'https://suoke.life'
@@ -276,38 +276,38 @@ export const SECURITY_CONFIG = {
     CREDENTIALS: true,
   },
   
-  RATE_LIMITING: {
-    WINDOW_MS: 60000, // 1分钟
+  RATE_LIMITING: {,
+  WINDOW_MS: 60000, // 1分钟
     MAX_REQUESTS: 100,
   },
   
-  INPUT_VALIDATION: {
-    MAX_PAYLOAD_SIZE: '10mb',
+  INPUT_VALIDATION: {,
+  MAX_PAYLOAD_SIZE: '10mb',
     SANITIZE_INPUT: true,
   },
 };
 
 // 监控配置
 export const MONITORING_CONFIG = {
-  METRICS: {
-    ENABLE_PROMETHEUS: true,
+  METRICS: {,
+  ENABLE_PROMETHEUS: true,
     ENABLE_CUSTOM_METRICS: true,
     COLLECTION_INTERVAL: 15000, // 15秒
   },
   
-  LOGGING: {
-    LEVEL: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
+  LOGGING: {,
+  LEVEL: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
     FORMAT: 'json',
     ENABLE_REQUEST_LOGGING: true,
   },
   
-  TRACING: {
-    ENABLE_JAEGER: true,
+  TRACING: {,
+  ENABLE_JAEGER: true,
     SAMPLE_RATE: 0.1, // 10%
   },
   
-  HEALTH_CHECKS: {
-    INTERVAL: 30000, // 30秒
+  HEALTH_CHECKS: {,
+  INTERVAL: 30000, // 30秒
     TIMEOUT: 5000, // 5秒
     ENDPOINTS: ['/health', '/ready', '/live'],
   },
@@ -315,22 +315,22 @@ export const MONITORING_CONFIG = {
 
 // 环境特定配置
 export const ENVIRONMENT_CONFIG = {
-  development: {
-    GATEWAY_URL: 'http://localhost:8080',
+  development: {,
+  GATEWAY_URL: 'http://localhost:8080',
     DEBUG: true,
     ENABLE_MOCK: true,
     LOG_LEVEL: 'debug',
   },
   
-  staging: {
-    GATEWAY_URL: 'https://staging-api.suoke.life',
+  staging: {,
+  GATEWAY_URL: 'https://staging-api.suoke.life',
     DEBUG: false,
     ENABLE_MOCK: false,
     LOG_LEVEL: 'info',
   },
   
-  production: {
-    GATEWAY_URL: 'https://api.suoke.life',
+  production: {,
+  GATEWAY_URL: 'https://api.suoke.life',
     DEBUG: false,
     ENABLE_MOCK: false,
     LOG_LEVEL: 'error',

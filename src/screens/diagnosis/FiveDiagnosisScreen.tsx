@@ -34,7 +34,7 @@ enum DiagnosisStep {
 // 诊断状态接口
 interface DiagnosisState {
   currentStep: DiagnosisStep;,
-  completedSteps: Set<DiagnosisStep>;
+  completedSteps: Set<DiagnosisStep>;,
   isProcessing: boolean;,
   progress: number;
   error?: string;
@@ -493,8 +493,8 @@ export default React.memo(function FiveDiagnosisScreen() {
         };
       case DiagnosisStep.PALPATION:
         return {,
-  pulseData: {
-            rate: 72,
+  pulseData: {,
+  rate: 72,
             rhythm: '规律',
             strength: '中等',
             quality: '滑脉'
@@ -502,8 +502,8 @@ export default React.memo(function FiveDiagnosisScreen() {
         };
       case DiagnosisStep.CALCULATION:
         return {,
-  personalInfo: {
-            birthYear: 1990,
+  personalInfo: {,
+  birthYear: 1990,
             birthMonth: 5,
             birthDay: 15,
             birthHour: 10,

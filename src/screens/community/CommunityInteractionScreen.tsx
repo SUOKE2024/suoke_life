@@ -23,42 +23,42 @@ import {
 
 interface Post {
   id: string;,
-  author: {
-    id: string;,
-  name: string;
-    avatar: string;,
-  level: string;
-    verified: boolean;
+  author: {,
+  id: string;,
+  name: string;,
+  avatar: string;,
+  level: string;,
+  verified: boolean;
   };
   content: string;
   images?: string[];
   topic: string;,
-  tags: string[];
+  tags: string[];,
   likes: number;,
-  comments: number;
+  comments: number;,
   shares: number;,
-  timestamp: string;
+  timestamp: string;,
   liked: boolean;,
   bookmarked: boolean;
 }
 
 interface Topic {
   id: string;,
-  name: string;
+  name: string;,
   icon: string;,
-  color: string;
+  color: string;,
   posts: number;,
-  followers: number;
+  followers: number;,
   trending: boolean;
 }
 
 interface Expert {
   id: string;,
-  name: string;
+  name: string;,
   avatar: string;,
-  title: string;
+  title: string;,
   specialty: string;,
-  rating: number;
+  rating: number;,
   consultations: number;,
   online: boolean;
 }

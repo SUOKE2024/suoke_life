@@ -14,8 +14,8 @@ export interface EnvironmentConfig {
 }
 export interface ServiceConfig {
   // API网关配置  apiGateway: { host: string;,
-  port: number;
-    timeout: number;,
+  port: number;,
+  timeout: number;,
   rateLimit: number;
 }
   // 智能体服务配置  agents: { xiaoai: ServiceEndpoint,
@@ -33,20 +33,20 @@ export interface ServiceConfig {
 }
 export interface ServiceEndpoint {
   host: string;,
-  port: number;
+  port: number;,
   protocol: "http" | "https" | "grpc";,
-  timeout: number;
+  timeout: number;,
   retries: number;,
   healthCheck: string;
 }
 export interface DatabaseConfig {
   // 主数据库  primary: { type: "postgresql" | "mysql" | "mongodb";,
-  host: string;
-    port: number;,
-  database: string;
-    username: string;,
-  password: string;
-    ssl: boolean;,
+  host: string;,
+  port: number;,
+  database: string;,
+  username: string;,
+  password: string;,
+  ssl: boolean;,
   poolSize: number;
 }
   // 读副本  replicas: Array<{ host: string,
@@ -75,8 +75,8 @@ export interface CacheConfig {
 }
 export interface MonitoringConfig {
   // Prometheus配置  prometheus: { enabled: boolean;,
-  host: string;
-    port: number;,
+  host: string;,
+  port: number;,
   scrapeInterval: number;
 }
   // Grafana配置  grafana: { enabled: boolean,
@@ -111,8 +111,8 @@ export interface LoggingConfig {
 }
 export interface SecurityConfig {
   // JWT配置  jwt: { secret: string;,
-  expiresIn: string;
-    algorithm: string;
+  expiresIn: string;,
+  algorithm: string;
 }
   // CORS配置  cors: { origins: string[],
     methods: string[],headers: string[];
@@ -126,8 +126,8 @@ export interface SecurityConfig {
 }
 export interface PerformanceConfig {
   // 连接池配置  connectionPool: { maxConnections: number;,
-  minConnections: number;
-    acquireTimeout: number;,
+  minConnections: number;,
+  acquireTimeout: number;,
   idleTimeout: number;
 }
   // 缓存配置  cache: { defaultTtl: number,
@@ -159,14 +159,14 @@ export class EnvironmentManager   {private static instance: EnvironmentManager;
   }
   ///        return {
       services: {,
-  apiGateway: {
-          host: process.env.API_GATEWAY_HOST || "0.0.0.0",
+  apiGateway: {,
+  host: process.env.API_GATEWAY_HOST || "0.0.0.0",
           port: parseInt(process.env.API_GATEWAY_PORT || "8080"),
           timeout: parseInt(process.env.API_GATEWAY_TIMEOUT || "30000"),
           rateLimit: parseInt(process.env.API_GATEWAY_RATE_LIMIT || "1000")},
         agents: {,
-  xiaoai: {
-            host: process.env.XIAOAI_HOST || "localhost",
+  xiaoai: {,
+  host: process.env.XIAOAI_HOST || "localhost",
             port: parseInt(process.env.XIAOAI_PORT || "8081"),
             protocol: "http",
             timeout: 30000,
@@ -195,8 +195,8 @@ export class EnvironmentManager   {private static instance: EnvironmentManager;
             healthCheck: "/health",/              }
         },
         diagnosis: {,
-  look: {
-            host: process.env.LOOK_SERVICE_HOST || "localhost",
+  look: {,
+  host: process.env.LOOK_SERVICE_HOST || "localhost",
             port: parseInt(process.env.LOOK_SERVICE_PORT || "8085"),
             protocol: "http",
             timeout: 30000,
@@ -232,8 +232,8 @@ export class EnvironmentManager   {private static instance: EnvironmentManager;
             healthCheck: "/health",/              }
         },
         data: {,
-  healthData: {
-            host: process.env.HEALTH_DATA_SERVICE_HOST || "localhost",
+  healthData: {,
+  host: process.env.HEALTH_DATA_SERVICE_HOST || "localhost",
             port: parseInt(process.env.HEALTH_DATA_SERVICE_PORT || "8090"),
             protocol: "http",
             timeout: 30000,
@@ -256,8 +256,8 @@ export class EnvironmentManager   {private static instance: EnvironmentManager;
         }
       },
       database: {,
-  primary: {
-      type: "postgresql",
+  primary: {,
+  type: "postgresql",
       host: process.env.DB_HOST || "localhost",
           port: parseInt(process.env.DB_PORT || "5432"),
           database: process.env.DB_NAME || "suoke_life",
@@ -273,8 +273,8 @@ export class EnvironmentManager   {private static instance: EnvironmentManager;
         }
       },
       cache: {,
-  redis: {
-          host: process.env.REDIS_HOST || "localhost",
+  redis: {,
+  host: process.env.REDIS_HOST || "localhost",
           port: parseInt(process.env.REDIS_PORT || "6379"),
           password: process.env.REDIS_PASSWORD,
           db: parseInt(process.env.REDIS_DB || "0"),
@@ -316,8 +316,8 @@ export class EnvironmentManager   {private static instance: EnvironmentManager;
           includeContext: process.env.LOG_INCLUDE_CONTEXT === "true"}
       },
       security: {,
-  jwt: {
-          secret: process.env.JWT_SECRET || "your-secret-key",
+  jwt: {,
+  secret: process.env.JWT_SECRET || "your-secret-key",
           expiresIn: process.env.JWT_EXPIRES_IN || "24h",
           algorithm: process.env.JWT_ALGORITHM || "HS256"},
         cors: {,
@@ -347,8 +347,8 @@ export class EnvironmentManager   {private static instance: EnvironmentManager;
         }
       },
       performance: {,
-  connectionPool: {
-          maxConnections: parseInt(process.env.MAX_CONNECTIONS || "100"),
+  connectionPool: {,
+  maxConnections: parseInt(process.env.MAX_CONNECTIONS || "100"),
           minConnections: parseInt(process.env.MIN_CONNECTIONS || "10"),
           acquireTimeout: parseInt(process.env.ACQUIRE_TIMEOUT || "30000"),
           idleTimeout: parseInt(process.env.IDLE_TIMEOUT || "300000")},
@@ -407,8 +407,8 @@ export class EnvironmentManager   {private static instance: EnvironmentManager;
   name: "Production",
         type: "production",
         database: {,
-  primary: {
-            ssl: true,
+  primary: {,
+  ssl: true,
             poolSize: 20},
           sharding: { enabled: true  }
         },
@@ -437,8 +437,8 @@ export class EnvironmentManager   {private static instance: EnvironmentManager;
           ]
         },
         performance: {,
-  connectionPool: {
-            maxConnections: 200,
+  connectionPool: {,
+  maxConnections: 200,
             minConnections: 20},
           concurrency: {,
   maxConcurrent: 500,

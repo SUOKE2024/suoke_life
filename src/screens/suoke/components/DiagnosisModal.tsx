@@ -22,13 +22,13 @@ import React,{ useState, useEffect } from react""
   { selectCurrentSession } from ../../../store/slices/diagnosisSlice";/    interface DiagnosisModalProps {
   visible: boolean,"
   onClose: () => void;,
-  diagnosisType: DiagnosisType;
+  diagnosisType: DiagnosisType;,
   title: string;,
   description: string;
 }
 interface DiagnosisStep {
   id: string;,
-  title: string;
+  title: string;,
   description: string;,
   completed: boolean;
 data?: unknown;

@@ -17,9 +17,9 @@ import { Progress } from './Progress';
 
 export interface FileItem {
   id: string;,
-  name: string;
+  name: string;,
   size: number;,
-  type: string;
+  type: string;,
   uri: string;
   uploadProgress?: number;
   uploadStatus?: 'pending' | 'uploading' | 'success' | 'error';

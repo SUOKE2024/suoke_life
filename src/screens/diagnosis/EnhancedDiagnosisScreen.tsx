@@ -26,18 +26,18 @@ const { width: screenWidth } = Dimensions.get('window');
 
 interface DiagnosisStep {
   id: string;,
-  title: string;
+  title: string;,
   description: string;,
-  icon: string;
+  icon: string;,
   color: string;,
-  completed: boolean;
+  completed: boolean;,
   active: boolean;
   data?: any;
 }
 
 interface DiagnosisResult {
   syndrome: string;,
-  confidence: number;
+  confidence: number;,
   symptoms: string[];,
   recommendations: string[];
   prescription?: string;

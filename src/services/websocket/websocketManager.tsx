@@ -35,7 +35,7 @@ g;
 // 重连配置接口 * export interface ReconnectConfig {
   enabled: boolean,
   maxAttempts: number;,
-  delay: number;
+  delay: number;,
   backoffMultiplier: number;,
   maxDelay: number;
 }
@@ -44,8 +44,8 @@ g;
 /    ;
   protocols?: string[];
   heartbeat: {enabled: boolean;,
-  interval: number;
-    timeout: number;
+  interval: number;,
+  timeout: number;
 };
   reconnect: ReconnectConfig;
   auth?:  {
@@ -287,7 +287,7 @@ this.emit("pong", { latency: this.latency});
     }, this.config.heartbeat.timeout);
   }
   // 重新订阅所有频道  private resubscribeAll(): void {
-    this.subscriptions.forEach((config, channel) => {}))
+    this.subscriptions.forEach(config, channel) => {}))
       this.send({
         type: "subscribe",
         channel,

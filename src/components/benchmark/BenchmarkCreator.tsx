@@ -13,7 +13,7 @@ import type { BenchmarkConfig, ModelConfig, Plugin } from '../../services';
 } from 'react-native';
 interface BenchmarkCreatorProps {
   visible: boolean;,
-  onClose: () => void;
+  onClose: () => void;,
   onSubmit: (taskId: string) => void;
 }
 export const BenchmarkCreator: React.FC<BenchmarkCreatorProps> = ({

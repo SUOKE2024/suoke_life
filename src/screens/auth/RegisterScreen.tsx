@@ -18,7 +18,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 type AuthStackParamList = {
   Welcome: undefined;,
-  Login: undefined;
+  Login: undefined;,
   Register: undefined;,
   ForgotPassword: undefined;
 };

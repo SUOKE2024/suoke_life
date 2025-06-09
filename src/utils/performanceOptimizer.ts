@@ -4,25 +4,25 @@ import React from 'react';
 // 性能监控接口
 interface PerformanceMetrics {
   renderTime: number;,
-  memoryUsage: number;
+  memoryUsage: number;,
   networkLatency: number;,
-  cacheHitRate: number;
+  cacheHitRate: number;,
   errorRate: number;
 }
 // 图像优化配置
 interface ImageOptimizationConfig {
   quality: number;,
-  maxWidth: number;
+  maxWidth: number;,
   maxHeight: number;,
-  format: 'jpeg' | 'png' | 'webp';
+  format: 'jpeg' | 'png' | 'webp';,
   enableLazyLoading: boolean;
 }
 // 网络优化配置
 interface NetworkOptimizationConfig {
   enableCompression: boolean;,
-  enableCaching: boolean;
+  enableCaching: boolean;,
   retryAttempts: number;,
-  timeout: number;
+  timeout: number;,
   enableHttp2: boolean;
 }
 // 性能优化器类
@@ -62,14 +62,14 @@ class PerformanceOptimizer {
       const cachedImages = await AsyncStorage.getItem('optimized_images');
       if (cachedImages) {
         const imageData = JSON.parse(cachedImages);
-        Object.entries(imageData).forEach(([key, value]) => {
+        Object.entries(imageData).forEach([key, value]) => {
           this.imageCache.set(key, value as string);
         });
       }
       const cachedNetwork = await AsyncStorage.getItem('network_cache');
       if (cachedNetwork) {
         const networkData = JSON.parse(cachedNetwork);
-        Object.entries(networkData).forEach(([key, value]) => {
+        Object.entries(networkData).forEach([key, value]) => {
           this.networkCache.set(key, value as any);
         });
       }
@@ -152,7 +152,7 @@ class PerformanceOptimizer {
       const entries = Array.from(this.imageCache.entries());
       const toKeep = entries.slice(-50); // 保留最后50个
       this.imageCache.clear();
-      toKeep.forEach(([key, value]) => {
+      toKeep.forEach([key, value]) => {
         this.imageCache.set(key, value);
       });
     }
@@ -161,7 +161,7 @@ class PerformanceOptimizer {
       const entries = Array.from(this.componentCache.entries());
       const toKeep = entries.slice(-25);
       this.componentCache.clear();
-      toKeep.forEach(([key, value]) => {
+      toKeep.forEach([key, value]) => {
         this.componentCache.set(key, value);
       });
     }
@@ -170,7 +170,7 @@ class PerformanceOptimizer {
       const entries = Array.from(this.networkCache.entries());
       const toKeep = entries.slice(-100);
       this.networkCache.clear();
-      toKeep.forEach(([key, value]) => {
+      toKeep.forEach([key, value]) => {
         this.networkCache.set(key, value);
       });
     }

@@ -18,40 +18,40 @@ expo-linear-gradient;
 // 类型定义
 interface TongueAnalysisResult {
   color: string;,
-  coating: string;
+  coating: string;,
   texture: string;,
-  moisture: number;
+  moisture: number;,
   thickness: number;,
-  color_confidence: number;
+  color_confidence: number;,
   coating_confidence: number;,
-  abnormal_areas: string[];
+  abnormal_areas: string[];,
   timestamp: string;
 }
 interface PulseAnalysisResult {
   pulse_type: string;,
-  rate: number;
+  rate: number;,
   rhythm: string;,
-  strength: number;
+  strength: number;,
   depth: number;,
-  width: number;
+  width: number;,
   confidence: number;,
   waveform_features: Record<string, any>;
   timestamp: string;
 }
 interface DiagnosisResult {
   tongue_analysis: TongueAnalysisResult;,
-  pulse_analysis: PulseAnalysisResult;
+  pulse_analysis: PulseAnalysisResult;,
   syndrome_classification: {;,
-  primary_syndrome: string;
-    primary_score: number;,
-  secondary_syndromes: Array<{;
-      syndrome: string;,
+  primary_syndrome: string;,
+  primary_score: number;,
+  secondary_syndromes: Array<{;,
+  syndrome: string;,
   score: number;
 }>;
   };
   recommendations: Array<{,
-  type: string;
-    content: string,
+  type: string;,
+  content: string,
   priority: number;
   }>;
   timestamp: string;

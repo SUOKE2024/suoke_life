@@ -34,7 +34,7 @@ interface LazyLoaderProps {
 
 interface LazyLoaderState {
   hasError: boolean;,
-  isLoading: boolean;
+  isLoading: boolean;,
   retryAttempts: number;
   error?: Error;
 }

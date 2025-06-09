@@ -27,20 +27,20 @@ class ErrorHandler {
 }
 export interface ModelConfig {
   modelId: string;,
-  modelType: 'onnx' | 'tflite' | 'pytorch' | 'custom';
+  modelType: 'onnx' | 'tflite' | 'pytorch' | 'custom';,
   modelPath: string;,
-  inputShape: number[];
+  inputShape: number[];,
   outputShape: number[];,
-  precision: 'fp32' | 'fp16' | 'int8';
+  precision: 'fp32' | 'fp16' | 'int8';,
   deviceType: 'cpu' | 'gpu' | 'npu';,
-  maxBatchSize: number;
+  maxBatchSize: number;,
   warmupIterations: number;
 }
 export interface InferenceRequest {
   requestId: string;,
-  modelId: string;
+  modelId: string;,
   inputData: any;,
-  priority: 'low' | 'normal' | 'high' | 'critical';
+  priority: 'low' | 'normal' | 'high' | 'critical';,
   timeout: number;,
   metadata: {;
     userId?: string;
@@ -50,24 +50,24 @@ export interface InferenceRequest {
 }
 export interface InferenceResult {
   requestId: string;,
-  modelId: string;
+  modelId: string;,
   outputData: any;,
-  confidence: number;
+  confidence: number;,
   latency: number;,
-  deviceUsed: string;
+  deviceUsed: string;,
   metadata: {;,
-  timestamp: number;
-    processingTime: number;,
+  timestamp: number;,
+  processingTime: number;,
   memoryUsage: number;
 };
 }
 export interface DeviceInfo {
   deviceId: string;,
-  deviceType: 'cpu' | 'gpu' | 'npu';
+  deviceType: 'cpu' | 'gpu' | 'npu';,
   capabilities: string[];,
-  memoryTotal: number;
+  memoryTotal: number;,
   memoryAvailable: number;,
-  computeUnits: number;
+  computeUnits: number;,
   isAvailable: boolean;
 }
 export class EdgeAIInferenceFramework extends EventEmitter {

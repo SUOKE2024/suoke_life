@@ -13,7 +13,7 @@ import React,{ useState, useEffect } from ";react";
   { Alert } from "react-native;";
 interface AccessibilitySettingsProps {
   visible: boolean;,
-  onClose: () => void;
+  onClose: () => void;,
   userId: string;
   onSettingsChange?: (enabled: boolean) => void;
 }

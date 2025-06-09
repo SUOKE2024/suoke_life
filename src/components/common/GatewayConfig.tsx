@@ -17,7 +17,7 @@ import {
 import { useApiService } from '../../services/IntegratedApiService';
 interface ConfigItem {
   key: string;,
-  label: string;
+  label: string;,
   type: 'boolean' | 'number' | 'string';,
   value: any;
   description?: string;

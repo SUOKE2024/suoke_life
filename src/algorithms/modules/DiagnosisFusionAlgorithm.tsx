@@ -12,16 +12,16 @@ sessionContext?: SessionContext;
 }
 export interface UserProfile {
   age: number;,
-  gender: "male" | "female" | "other";
+  gender: "male" | "female" | "other";,
   height: number;,
-  weight: number;
+  weight: number;,
   occupation: string;,
   medicalHistory: string[],allergies: string[],medications: string[];
   constitution?: string;
 }
 export interface SessionContext {
   sessionId: string;,
-  timestamp: number;
+  timestamp: number;,
   environment: {temperature: number;,
   humidity: number,season: string,timeOfDay: string;
 };
@@ -29,43 +29,43 @@ export interface SessionContext {
 }
 export interface FusionResult {
   confidence: number;,
-  overallAssessment: string;
+  overallAssessment: string;,
   primarySyndromes: SyndromeResult[];,
-  secondarySyndromes: SyndromeResult[];
+  secondarySyndromes: SyndromeResult[];,
   constitutionAnalysis: ConstitutionResult;,
-  riskFactors: RiskFactor[];
+  riskFactors: RiskFactor[];,
   recommendations: Recommendation[];,
-  followUpAdvice: string[];
+  followUpAdvice: string[];,
   dataQuality: DataQualityReport;
 }
 export interface SyndromeResult {
   id: string;,
-  name: string;
+  name: string;,
   confidence: number;,
-  evidence: Evidence[];
+  evidence: Evidence[];,
   severity: "mild" | "moderate" | "severe";,
-  urgency: "low" | "medium" | "high";
+  urgency: "low" | "medium" | "high";,
   description: string;
 }
 export interface Evidence {
   source: "looking" | "listening" | "inquiry" | "palpation" | "calculation";,
-  type: string;
+  type: string;,
   value: unknown;,
-  weight: number;
+  weight: number;,
   confidence: number;,
   description: string;
 }
 export interface ConstitutionResult {
   primaryType: string;,
-  secondaryTypes: string[];
+  secondaryTypes: string[];,
   confidence: number;,
-  characteristics: string[];
+  characteristics: string[];,
   tendencies: string[];,
   recommendations: string[];
 }
 export interface RiskFactor {
   type: string;,
-  level: "low" | "medium" | "high";
+  level: "low" | "medium" | "high";,
   description: string;,
   prevention: string[];
 }
@@ -77,7 +77,7 @@ export interface Recommendation {
 }
 export interface DataQualityReport {
   completeness: number;,
-  consistency: number;
+  consistency: number;,
   reliability: number,issues: string[],suggestions: string[];
 }
 // 诊断融合算法类export class DiagnosisFusionAlgorithm  {private config: FusionConfig;
@@ -97,7 +97,7 @@ export interface DataQualityReport {
     this.weightMatrix.set("palpation", 0.2);
     this.weightMatrix.set("calculation", 0.1);
     if (this.config.weights) {
-      Object.entries(this.config.weights).forEach(([key, value]) => {}))
+      Object.entries(this.config.weights).forEach([key, value]) => {}))
         this.weightMatrix.set(key, value);
       });
     }

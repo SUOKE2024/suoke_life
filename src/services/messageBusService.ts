@@ -6,7 +6,7 @@ import axios, { AxiosInstance } from 'axios';
 // 类型定义
 export interface Message {
   id: string;,
-  topic: string;
+  topic: string;,
   payload: any;
   attributes?: Record<string, string>;
   publishTime: number;
@@ -17,7 +17,7 @@ export interface Topic {
   description?: string;
   properties?: Record<string, string>;
   creationTime: number;,
-  partitionCount: number;
+  partitionCount: number;,
   retentionHours: number;
 }
 export interface PublishRequest {
@@ -27,7 +27,7 @@ export interface PublishRequest {
 }
 export interface PublishResponse {
   messageId: string;,
-  publishTime: number;
+  publishTime: number;,
   success: boolean;
   errorMessage?: string;
 }
@@ -65,7 +65,7 @@ export interface ListTopicsResponse {
 }
 export interface Subscription {
   id: string;,
-  topic: string;
+  topic: string;,
   callback: (message: Message) => void;
   filter?: Record<string, string>;
   isActive: boolean;

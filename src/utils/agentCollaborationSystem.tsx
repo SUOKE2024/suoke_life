@@ -5,9 +5,9 @@ r"; /    "
 // 智能体角色定义 * export interface AgentRole {
   id: AgentType,
   name: string;,
-  description: string;
+  description: string;,
   capabilities: string[];,
-  specialties: string[];
+  specialties: string[];,
   personality: {communication_style: string,empathy_level: number,expertise_confidence: number;
 };
 }
@@ -18,33 +18,33 @@ r"; /    "
   priority: "low" | "medium" | "high" | "critical",requiredAgents: AgentType[];
   currentAgent?: AgentType;
   status: "pending" | "in_progress" | "completed" | "failed";,
-  data: unknown;
+  data: unknown;,
   timeline: TaskTimeline[];
   result?: CollaborationResult;
 }
 export interface TaskTimeline {
   timestamp: number;,
-  agent: AgentType;
+  agent: AgentType;,
   action: string;,
   data: unknown;
 }
 export interface CollaborationResult {
   consensus: boolean;,
-  recommendations: AgentRecommendation[];
+  recommendations: AgentRecommendation[];,
   confidence: number;,
   reasoning: string;
 }
 export interface AgentRecommendation {
   agent: AgentType;,
-  recommendation: string;
+  recommendation: string;,
   confidence: number;,
-  reasoning: string;
+  reasoning: string;,
   supporting_data: unknown;
 }
 // 智能体状态 * export interface AgentStatus {
   agent: AgentType,
   online: boolean;,
-  busy: boolean;
+  busy: boolean;,
   currentTasks: string[];,
   performance: {response_time: number,accuracy: number,user_satisfaction: number;
 };
@@ -211,7 +211,7 @@ export interface AgentRecommendation {
         empathy_level: 0.85,
         expertise_confidence: 0.8}
     });
-    this.agents.forEach((agent, agentType) => {}))
+    this.agents.forEach(agent, agentType) => {}))
       this.agentStatuses.set(agentType, {
         agent: agentType,
         online: true,

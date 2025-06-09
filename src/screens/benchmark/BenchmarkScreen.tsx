@@ -21,7 +21,7 @@ const BenchmarkDashboard: React.FC<{,
 );
 
 const BenchmarkCreator: React.FC<{,
-  visible: boolean;
+  visible: boolean;,
   onClose: () => void;,
   onSubmit: (taskId: string) => void;
 }> = ({ visible, onClose, onSubmit }) => {
@@ -60,7 +60,7 @@ const BenchmarkCreator: React.FC<{,
 };
 
 const BenchmarkResultDetail: React.FC<{,
-  visible: boolean;
+  visible: boolean;,
   taskId: string | null;,
   onClose: () => void;
 }> = ({ visible, taskId, onClose }) => {

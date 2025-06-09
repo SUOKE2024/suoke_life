@@ -13,18 +13,18 @@ import React,{ useState, useEffect, useCallback } from ";react";
   { Switch } from "react-native;";
 interface DemoState {
   graphqlConnected: boolean;,
-  graphqlLoading: boolean;
+  graphqlLoading: boolean;,
   graphqlResult: string;,
-  offlineInitialized: boolean;
+  offlineInitialized: boolean;,
   syncStatus: string;,
-  operationCount: number;
+  operationCount: number;,
   conflictCount: number;,
-  wsConnected: boolean;
+  wsConnected: boolean;,
   wsLatency: number;,
-  wsMessages: string[];
+  wsMessages: string[];,
   cacheStats: { memory: unknown;,
-  persistent: unknown;
-    api: unknown;
+  persistent: unknown;,
+  api: unknown;
 }
 }
 export const AdvancedFeaturesDemo: React.FC  = () => {}

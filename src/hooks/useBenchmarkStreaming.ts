@@ -3,7 +3,7 @@ import { benchmarkStreamingService } from '../services';
 import type { StreamEvent, StreamConfig } from '../services';
 interface BenchmarkStreamingState {
   isConnected: boolean;,
-  connectionState: string;
+  connectionState: string;,
   events: StreamEvent[];,
   error: string | null;
 }

@@ -69,7 +69,7 @@ export interface BlockchainService {
 // 服务状态接口
 export interface ServiceHealth {
   services: ServiceStatus[];,
-  overallHealth: 'healthy' | 'degraded' | 'unhealthy';
+  overallHealth: 'healthy' | 'degraded' | 'unhealthy';,
   lastCheck: string;
 }
 // 集成API服务实现
@@ -303,9 +303,9 @@ export const integratedApiService = new IntegratedApiService();
 // React Context;
 interface ApiServiceContextType {
   apiService: IntegratedApiService;,
-  serviceHealth: ServiceHealth | null;
+  serviceHealth: ServiceHealth | null;,
   isLoading: boolean;,
-  error: string | null;
+  error: string | null;,
   refreshHealth: () => Promise<void>;
 }
 const ApiServiceContext = createContext<ApiServiceContextType | undefined>(undefined);

@@ -23,9 +23,9 @@ import {import { getBlockchainServiceClient } from '../services/blockchain/Block
 } from '../types/blockchain';
 interface UseBlockchainServiceState {
   isLoading: boolean;,
-  error: BlockchainError | null;
+  error: BlockchainError | null;,
   blockchainStatus: BlockchainStatus | null;,
-  healthDataRecords: HealthDataRecord[];
+  healthDataRecords: HealthDataRecord[];,
   accessGrants: AccessGrant[];,
   lastOperation: string | null;
 }
@@ -38,10 +38,10 @@ interface UseBlockchainServiceActions {
   revokeAccess: (request: RevokeAccessRequest) => Promise<RevokeAccessResponse>;,
   getBlockchainStatus: (request: GetBlockchainStatusRequest) => Promise<GetBlockchainStatusResponse>;,
   generateZKProof: (userId: string, dataType: string, privateInputs: Record<string, any>, circuitType: string) => Promise<ZKProof>;,
-  refreshBlockchainStatus: () => Promise<void>;
+  refreshBlockchainStatus: () => Promise<void>;,
   refreshHealthDataRecords: (userId: string) => Promise<void>;,
   refreshAccessGrants: (userId: string) => Promise<void>;,
-  clearError: () => void;
+  clearError: () => void;,
   batchStoreHealthData: (requests: StoreHealthDataRequest[]) => Promise<StoreHealthDataResponse[]>;
 }
 export function useBlockchainService(): UseBlockchainServiceState & UseBlockchainServiceActions {

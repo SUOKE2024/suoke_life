@@ -16,36 +16,36 @@ export interface InquiryData {
 export interface SymptomData {
   name: string,description: string,severity: number;
   , duration: string;,
-  frequency: string;
+  frequency: string;,
   triggers: string[];,
-  relievingFactors: string[];
+  relievingFactors: string[];,
   associatedSymptoms: string[];
   location?: string;
   quality?: string;
 }
 export interface MedicalHistoryData {
   previousDiagnoses: string[];,
-  surgeries: string[];
+  surgeries: string[];,
   hospitalizations: string[];,
-  medications: MedicationData[];
+  medications: MedicationData[];,
   allergies: string[],immunizations: string[],familyHistory: string[];
 }
 export interface MedicationData {
   name: string;,
-  dosage: string;
+  dosage: string;,
   frequency: string,duration: string,purpose: string;
   sideEffects?: string[];
 }
 export interface LifestyleData {
   occupation: string;,
-  exerciseHabits: string;
+  exerciseHabits: string;,
   smokingStatus: string,alcoholConsumption: string,stressLevel: number;
   , workEnvironment: string;,
   hobbies: string[];
 }
 export interface FamilyHistoryData {
   parents: string[];,
-  siblings: string[];
+  siblings: string[];,
   grandparents: string[],commonDiseases: string[],geneticConditions: string[];
 }
 export interface PainAssessment {
@@ -61,7 +61,7 @@ export interface SleepPattern {
 } * /
 export interface DietaryHabits {
   mealTimes: string[];,
-  appetite: string;
+  appetite: string;,
   preferences: string[];,
   aversions: string[],digestiveIssues: string[],waterIntake: number;
 ///     , specialDiets: string[];
@@ -69,7 +69,7 @@ export interface DietaryHabits {
 export interface EmotionalState {
   mood: string,stressLevel: number;
   , anxietyLevel: number  / 1-10* ///,
-  copingMechanisms: string[];
+  copingMechanisms: string[];,
   socialSupport: string;
 }
 export interface InquiryResult {
@@ -80,52 +80,52 @@ export interface InquiryResult {
 }
 export interface InquiryFeatures {
   symptoms: ProcessedSymptom[];,
-  constitution: ConstitutionalFeatures;
+  constitution: ConstitutionalFeatures;,
   lifestyle: LifestyleFeatures;,
   emotional: EmotionalFeatures;
 }
 export interface ProcessedSymptom {
   name: string;,
-  tcmCategory: string;
+  tcmCategory: string;,
   severity: number;,
   chronicity: string,pattern: string,organSystem: string[];
 }
 export interface ConstitutionalFeatures {
   bodyType: string;,
-  energyLevel: string;
+  energyLevel: string;,
   temperaturePreference: string;,
-  digestiveStrength: string;
+  digestiveStrength: string;,
   sleepQuality: string;
 }
 export interface LifestyleFeatures {
   activityLevel: string;,
-  stressFactors: string[];
+  stressFactors: string[];,
   environmentalFactors: string[];,
   socialFactors: string[];
 }
 export interface EmotionalFeatures {
   dominantEmotion: string;,
-  emotionalStability: string;
+  emotionalStability: string;,
   stressResponse: string;,
   mentalEnergy: string;
 }
 export interface SymptomAnalysis {
   primarySymptoms: AnalyzedSymptom[];,
-  secondarySymptoms: AnalyzedSymptom[];
+  secondarySymptoms: AnalyzedSymptom[];,
   symptomPatterns: SymptomPattern[];,
-  organSystemInvolvement: OrganSystemAnalysis[];
+  organSystemInvolvement: OrganSystemAnalysis[];,
   pathogenesis: PathogenesisAnalysis;
 }
 export interface AnalyzedSymptom {
   symptom: ProcessedSymptom;,
-  tcmSignificance: string;
+  tcmSignificance: string;,
   organCorrelation: string[];,
-  syndromeImplication: string[];
+  syndromeImplication: string[];,
   severity: "mild" | "moderate" | "severe";
 }
 export interface SymptomPattern {
   name: string;,
-  symptoms: string[];
+  symptoms: string[];,
   confidence: number;,
   tcmInterpretation: string;
 };
@@ -136,33 +136,33 @@ export interface OrganSystemAnalysis {
 }
 export interface PathogenesisAnalysis {
   primaryCause: string;,
-  secondaryCauses: string[];
+  secondaryCauses: string[];,
   pathogenicFactors: string[];,
-  diseaseStage: string;
+  diseaseStage: string;,
   prognosis: string;
 }
 export interface ConstitutionalAnalysis {
   bodyType: string;,
-  constitution: string;
+  constitution: string;,
   strengths: string[];,
-  weaknesses: string[];
+  weaknesses: string[];,
   tendencies: string[];,
   recommendations: string[];
 }
 export interface SyndromePattern {
   name: string;,
-  confidence: number;
+  confidence: number;,
   supportingSymptoms: string[];,
-  contradictingSymptoms: string[];
+  contradictingSymptoms: string[];,
   tcmExplanation: string;
 }
 export interface UserProfile {
   age: number;,
-  gender: "male" | "female" | "other";
+  gender: "male" | "female" | "other";,
   height: number;,
-  weight: number;
+  weight: number;,
   occupation: string;,
-  medicalHistory: string[];
+  medicalHistory: string[];,
   allergies: string[];,
   medications: string[];
 }
@@ -432,7 +432,7 @@ export interface UserProfile {
 }
 interface NLPResults {
   extractedSymptoms: string[];,
-  medicalEntities: string[];
+  medicalEntities: string[];,
   sentimentAnalysis: unknown;,
   keyPhrases: string[];
 }

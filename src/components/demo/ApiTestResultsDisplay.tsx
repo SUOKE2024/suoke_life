@@ -9,29 +9,29 @@ importReact from ";react";
   { TouchableOpacity } from "react-native";
 interface ApiTestResult {
   name: string;,
-  category: string;
+  category: string;,
   status: ";PASSED" | FAILED",
   duration: number;,
-  endpoint: string;
+  endpoint: string;,
   method: string;
   error?: string;
 }
 interface ApiTestSummary {
   total: number;,
-  passed: number;
+  passed: number;,
   failed: number;,
-  successRate: number;
+  successRate: number;,
   avgDuration: number;
 }
 interface ApiTestCategories {
   [key: string]: { total: number;,
-  passed: number;
-    failed: number;
+  passed: number;,
+  failed: number;
 };
 }
 interface ApiTestResultsDisplayProps {
   summary: ApiTestSummary;,
-  categories: ApiTestCategories;
+  categories: ApiTestCategories;,
   details: ApiTestResult[];
   onRetryTest?: (testName: string) => void;
 onViewDetails?: (test: ApiTestResult) => void;

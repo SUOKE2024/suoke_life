@@ -22,7 +22,7 @@ import {
 
 interface Message {
   id: string;,
-  type: 'user' | 'ai';
+  type: 'user' | 'ai';,
   content: string;,
   timestamp: string;
   suggestions?: string[];
@@ -30,18 +30,18 @@ interface Message {
 
 interface HealthTip {
   id: string;,
-  title: string;
+  title: string;,
   content: string;,
-  category: string;
+  category: string;,
   icon: string;,
   priority: 'high' | 'medium' | 'low';
 }
 
 interface QuickAction {
   id: string;,
-  title: string;
+  title: string;,
   description: string;,
-  icon: string;
+  icon: string;,
   color: string;
 }
 

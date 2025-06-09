@@ -20,8 +20,8 @@ export interface AgentState {
 };
   // 用户偏好
   userPreferences: {,
-  preferredAgents: string[];
-    interactionSettings: Record<string, any>;
+  preferredAgents: string[];,
+  interactionSettings: Record<string, any>;
   };
 }
 // 初始状态
@@ -160,8 +160,8 @@ const agentSlice = createSlice({
     },
     // 更新性能指标
     updatePerformanceMetrics: (state, action: PayloadAction<{),
-  agentId: string;
-      metrics: Partial<AgentState['performanceMetrics']>;
+  agentId: string;,
+  metrics: Partial<AgentState['performanceMetrics']>;
     }>) => {
       const { agentId, metrics } = action.payload;
       if (metrics.responseTime && metrics.responseTime[agentId]) {
@@ -191,7 +191,7 @@ const agentSlice = createSlice({
         state.loading = false;
         state.agents = action.payload;
         // 更新性能指标
-        Object.entries(action.payload).forEach(([agentId, status]) => {
+        Object.entries(action.payload).forEach([agentId, status]) => {
           if (status.responseTime) {
             state.performanceMetrics.responseTime[agentId] = status.responseTime;
           }

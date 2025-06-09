@@ -30,9 +30,9 @@ interface HealthMetric {
 };
 interface ConstitutionData {
   type: ConstitutionType;,
-  name: string;
+  name: string;,
   percentage: number;,
-  color: string;
+  color: string;,
   description: string;
 };
 export const HealthDashboardEnhanced: React.FC  = () => {};

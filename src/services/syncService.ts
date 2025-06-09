@@ -14,38 +14,38 @@ export enum SyncStatus {
 // 数据实体接口
 export interface DataEntity {
   id: string;,
-  type: string;
+  type: string;,
   data: any;,
-  version: number;
+  version: number;,
   lastModified: number;
   checksum?: string;
 }
 // 同步冲突接口
 export interface SyncConflict {
   id: string;,
-  type: string;
+  type: string;,
   localData: DataEntity;,
-  remoteData: DataEntity;
+  remoteData: DataEntity;,
   conflictType: 'version' | 'content' | 'deleted';,
   timestamp: number;
 }
 // 同步结果接口
 export interface SyncResult {
   status: SyncStatus;,
-  synced: number;
+  synced: number;,
   conflicts: SyncConflict[];,
-  errors: string[];
+  errors: string[];,
   duration: number;,
   timestamp: number;
 }
 // 同步配置接口
 interface SyncConfig {
   enabled: boolean;,
-  autoSync: boolean;
+  autoSync: boolean;,
   syncInterval: number;,
-  batchSize: number;
+  batchSize: number;,
   conflictResolution: 'local' | 'remote' | 'manual' | 'merge';,
-  retryAttempts: number;
+  retryAttempts: number;,
   retryDelay: number;
 }
 // 同步事件接口
@@ -268,8 +268,8 @@ class SyncService {
   }
   // 上传本地数据
   private async uploadLocalData(entities: DataEntity[]): Promise<{,
-  synced: number;
-    conflicts: SyncConflict[],
+  synced: number;,
+  conflicts: SyncConflict[],
   errors: string[];
   }> {
     let synced = 0;
@@ -320,8 +320,8 @@ class SyncService {
   }
   // 下载远程数据
   private async downloadRemoteData(entities: DataEntity[]): Promise<{,
-  synced: number;
-    conflicts: SyncConflict[],
+  synced: number;,
+  conflicts: SyncConflict[],
   errors: string[];
   }> {
     let synced = 0;

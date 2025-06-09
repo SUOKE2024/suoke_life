@@ -19,7 +19,7 @@ const { width, height } = Dimensions.get('window');
 
 interface Message {
   id: string;,
-  text: string;
+  text: string;,
   isUser: boolean;,
   timestamp: Date;
   type?: 'text' | 'analysis' | 'suggestion';
@@ -27,17 +27,17 @@ interface Message {
 
 interface QuickAction {
   id: string;,
-  title: string;
+  title: string;,
   icon: string;,
-  description: string;
+  description: string;,
   action: () => void;
 }
 
 interface HealthSuggestion {
   id: string;,
-  category: string;
+  category: string;,
   title: string;,
-  description: string;
+  description: string;,
   priority: 'high' | 'medium' | 'low';,
   icon: string;
 }

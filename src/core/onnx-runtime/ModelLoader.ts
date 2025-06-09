@@ -324,19 +324,19 @@ interface DownloadOptions {
 }
 interface DownloadTask {
   url: string;,
-  localPath: string;
+  localPath: string;,
   status: "downloading | "completed" | failed" | 'cancelled';,
-  progress: number;
+  progress: number;,
   downloadedBytes: number;,
-  totalBytes: number;
+  totalBytes: number;,
   startTime: number;
   jobId?: number;
 }
 interface DownloadProgress {
   url: string;,
-  progress: number;
+  progress: number;,
   status: string;,
-  downloadedBytes: number;
+  downloadedBytes: number;,
   totalBytes: number;
 }
 interface ValidationResult {

@@ -4,7 +4,7 @@ import React from "react";
 API服务配置接口 * interface ApiServiceConfig {
   baseURL: string,
   timeout: number;,
-  retries: number;
+  retries: number;,
   enableCache: boolean;,
   enableRealTime: boolean;
 }
@@ -25,31 +25,31 @@ constitution: { type: string,
 // 智能体状态接口 * interface AgentStatus {
   id: string,
   name: string;,
-  status: "online" | "offline" | "busy";
+  status: "online" | "offline" | "busy";,
   workload: number;,
   performance: {accuracy: number;,
-  responseTime: number;
-    userSatisfaction: number;
+  responseTime: number;,
+  userSatisfaction: number;
 }
   currentTask?: string,
   lastUpdate: string}
 // 诊断结果接口 * interface DiagnosisResult {
   id: string,
   userId: string;,
-  type: "look" | "listen" | "inquiry" | "palpation" | "comprehensive";
+  type: "look" | "listen" | "inquiry" | "palpation" | "comprehensive";,
   results: {symptoms: string[];,
-  constitution: string;
-    recommendations: string[];,
+  constitution: string;,
+  recommendations: string[];,
   confidence: number;
 }
   timestamp: string}
 // 用户设置接口 * interface UserSettings {
   accessibility: {screenReader: boolean,
     highContrast: boolean;,
-  largeText: boolean;
-    reduceMotion: boolean;,
-  voiceOver: boolean;
-    hapticFeedback: boolean;
+  largeText: boolean;,
+  reduceMotion: boolean;,
+  voiceOver: boolean;,
+  hapticFeedback: boolean;
 }
   personalization: { theme: "light" | "dark" | "auto",
     language: "zh" | "en",
@@ -67,19 +67,19 @@ constitution: { type: string,
 // 区块链健康记录接口 * interface BlockchainHealthRecord {
   id: string,
   userId: string;,
-  dataHash: string;
+  dataHash: string;,
   timestamp: string;,
-  signature: string;
+  signature: string;,
   verified: boolean;,
   metadata: {dataType: string;,
-  source: string;
-    version: string;
+  source: string;,
+  version: string;
 }
 }
 // 医疗资源接口 * interface MedicalResource {
   id: string,
   type: "hospital" | "clinic" | "pharmacy" | "specialist";,
-  name: string;
+  name: string;,
   location: {address: string;,
   coordinates: { lat: number, lng: number;
 }
@@ -104,27 +104,27 @@ constitution: { type: string,
 };
 interface KnowledgeResult {
   id: string;,
-  title: string;
+  title: string;,
   content: string;,
-  relevance: number;
+  relevance: number;,
   source: string;,
-  category: string;
+  category: string;,
   tags: string[];,
   lastUpdated: string;
 }
 // 反馈接口 * interface UserFeedback {
   userId: string,
   type: "bug" | "feature" | "improvement" | "general";,
-  rating: number;
+  rating: number;,
   message: string;
   metadata?: unknown;
 }
 // 性能指标接口 * interface PerformanceMetrics {
   userId: string,
   renderTime: number;,
-  memoryUsage: number;
+  memoryUsage: number;,
   networkLatency: number;,
-  errorCount: number;
+  errorCount: number;,
   userSatisfaction: number;
 };
 export class ApiIntegrationService  {private eventEmitter: EventEmitter;

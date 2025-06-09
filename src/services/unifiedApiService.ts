@@ -69,7 +69,7 @@ export class UnifiedApiService {
     async getHealthData(params?: { type?: string; startDate?: string; endDate?: string; limit?: number }) {
     const queryParams = new URLSearchParams();
     if (params) {
-      Object.entries(params).forEach(([key, value]) => {
+      Object.entries(params).forEach([key, value]) => {
         if (value !== undefined) {
           queryParams.append(key, value.toString());
         }
@@ -143,8 +143,8 @@ export class UnifiedApiService {
     return apiClient.post("DIAGNOSIS",/ziwu', birthData);
   }
   async performConstitutionAnalysis(personalData: {),
-  birthYear: number;
-    birthMonth: number,
+  birthYear: number;,
+  birthMonth: number,
   birthDay: number;,
   birthHour: number,
   gender: string;
@@ -153,15 +153,15 @@ export class UnifiedApiService {
     return apiClient.post("DIAGNOSIS",/constitution', personalData);
   }
   async performBaguaAnalysis(baguaData: {),
-  birthDate: string;
-    gender: string;
+  birthDate: string;,
+  gender: string;
     question?: string;
   }) {
     return apiClient.post("DIAGNOSIS",/bagua', baguaData);
   }
   async performWuyunAnalysis(timeData: {),
-  year: number;
-    month: number,
+  year: number;,
+  month: number,
   day: number;
     location?: string;
   }) {

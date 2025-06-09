@@ -33,11 +33,11 @@ import CalculationDiagnosisAlgorithm, {import LookingDiagnosisAlgorithm, {import
 // 基础类型定义
 export interface UserProfile {
   age: number;,
-  gender: "male" | "female" | "other";
+  gender: "male" | "female" | "other";,
   height: number;,
-  weight: number;
+  weight: number;,
   occupation: string;,
-  medicalHistory: string[];
+  medicalHistory: string[];,
   allergies: string[];,
   medications: string[];
 }
@@ -54,26 +54,26 @@ export interface DiagnosisInput {
 }
 export interface ImageData {
   data: ArrayBuffer;,
-  format: string;
+  format: string;,
   width: number;,
   height: number;
 }
 export interface SessionContext {
   sessionId: string;,
-  timestamp: number;
+  timestamp: number;,
   environment: {;,
-  temperature: number;
-    humidity: number;,
-  season: string;
-    timeOfDay: string;
+  temperature: number;,
+  humidity: number;,
+  season: string;,
+  timeOfDay: string;
 };
   previousSessions?: string[];
 }
 export interface DiagnosisResult {
   sessionId: string;,
-  userId: string;
+  userId: string;,
   timestamp: number;,
-  confidence: number;
+  confidence: number;,
   overallAssessment: string;,
   diagnosisResults: {;
     looking?: LookingResult;
@@ -88,17 +88,17 @@ export interface DiagnosisResult {
 }
 export interface LookingResult {
   confidence: number;,
-  features: unknown[];
+  features: unknown[];,
   analysis: string;
 }
 export interface CalculationResult {
   confidence: number;,
-  fiveElements: unknown;
+  fiveElements: unknown;,
   analysis: string;
 }
 export interface LocalFusionResult {
   confidence: number;,
-  fusedFeatures: unknown[];
+  fusedFeatures: unknown[];,
   analysis: string;
 }
 export enum DiagnosisType {
@@ -406,7 +406,7 @@ export class FiveDiagnosisEngine {
   // 事件系统
   private emit(event: string, data?: any): void {
     const listeners = this.eventListeners.get(event) || [];
-    listeners.forEach((listener) => {
+    listeners.forEach(listener) => {
       try {
         listener(data);
       } catch (error) {

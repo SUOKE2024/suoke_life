@@ -44,17 +44,17 @@ export interface FiveDiagnosisInput {
 // 五诊结果接口
 export interface FiveDiagnosisResult {
   sessionId: string;,
-  userId: string;
+  userId: string;,
   timestamp: string;,
-  overallConfidence: number;
+  overallConfidence: number;,
   primarySyndrome: {;,
-  name: string;
-    confidence: number;,
+  name: string;,
+  confidence: number;,
   description: string;
 };
   constitutionType: {,
-  type: string;
-    characteristics: string[],
+  type: string;,
+  characteristics: string[],
   recommendations: string[];
   };
   diagnosticResults: {
@@ -70,15 +70,15 @@ export interface FiveDiagnosisResult {
   riskFactors: string[];
   };
   healthRecommendations: {,
-  lifestyle: string[];
-    diet: string[],
+  lifestyle: string[];,
+  diet: string[],
   exercise: string[];,
   treatment: string[],
   prevention: string[];
   };
   qualityMetrics: {,
-  dataQuality: number;
-    resultReliability: number,
+  dataQuality: number;,
+  resultReliability: number,
   completeness: number;
   };
 }
@@ -88,8 +88,8 @@ export interface FiveDiagnosisServiceStatus {
   isProcessing: boolean;
   lastError?: string;
   performanceMetrics: {;,
-  averageResponseTime: number;
-    successRate: number;,
+  averageResponseTime: number;,
+  successRate: number;,
   totalSessions: number;
 };
 }
@@ -565,7 +565,7 @@ export class FiveDiagnosisService {
   // 计算结果可靠性
   private calculateResultReliability(diagnosticResults: any): number {
     const confidences: number[] = [];
-    Object.values(diagnosticResults).forEach((result: any) => {
+    Object.values(diagnosticResults).forEach(result: any) => {
       if (result && typeof result.confidence === 'number') {
         confidences.push(result.confidence);
       }

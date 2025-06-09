@@ -147,10 +147,10 @@ interface AgentMonitorState {
   agents: AgentInfo[];,
   metrics: Map<string, AgentMetrics>;
   collaborationStats: {;,
-  total: number;
-    active: number;,
-  completed: number;
-    failed: number;,
+  total: number;,
+  active: number;,
+  completed: number;,
+  failed: number;,
   averageDuration: number;
 };
   isLoading: boolean,

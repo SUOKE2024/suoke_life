@@ -49,7 +49,7 @@ export interface AgentMessage {
   fromAgentId: string;
   toAgentId?: string;
   type: MessageType;,
-  content: any;
+  content: any;,
   timestamp: Date;,
   priority: MessagePriority;
   metadata?: Record<string, any>;
@@ -58,7 +58,7 @@ export interface AgentMessage {
 * * 智能体响应接口
 export interface AgentResponse {
   messageId: string;,
-  agentId: string;
+  agentId: string;,
   success: boolean;
   data?: any;
   error?: string;
@@ -103,9 +103,9 @@ export interface AgentLearning {
 * * 经验接口
 export interface Experience {
   taskId: string;,
-  action: string;
+  action: string;,
   context: any;,
-  outcome: any;
+  outcome: any;,
   feedback: number; // -1 到 1 的反馈分数;,
   timestamp: Date;
 }
@@ -113,9 +113,9 @@ export interface Experience {
 * * 知识接口
 export interface Knowledge {
   domain: string;,
-  type: "fact | "rule" | pattern" | "case;"
+  type: "fact | "rule" | pattern" | "case;",
   content: any;,
-  confidence: number;
+  confidence: number;,
   source: string;,
   timestamp: Date;
 }
@@ -123,18 +123,18 @@ export interface Knowledge {
 * * 学习统计接口
 export interface LearningStats {
   totalExperiences: number;,
-  successRate: number;
+  successRate: number;,
   averageFeedback: number;,
-  knowledgeBaseSize: number;
+  knowledgeBaseSize: number;,
   lastLearningTime: Date;
 }
 /**
 * * 性能指标接口
 export interface PerformanceMetrics {
   accuracy: number;,
-  responseTime: number;
+  responseTime: number;,
   throughput: number;,
-  errorRate: number;
+  errorRate: number;,
   userSatisfaction: number;,
   timestamp: Date;
 }
@@ -142,13 +142,13 @@ export interface PerformanceMetrics {
 * * 智能体配置接口
 export interface AgentConfig {
   id: string;,
-  name: string;
+  name: string;,
   type: AgentType;,
-  capabilities: string[];
+  capabilities: string[];,
   maxConcurrentTasks: number;,
-  timeout: number;
+  timeout: number;,
   retryAttempts: number;,
-  learningEnabled: boolean;
+  learningEnabled: boolean;,
   communicationConfig: CommunicationConfig;,
   resourceLimits: ResourceLimits;
 }
@@ -164,16 +164,16 @@ export enum AgentType {
 * * 通信配置接口;
 export interface CommunicationConfig {
   protocol: grpc" | "rest | "websocket";,
-  endpoint: string;
+  endpoint: string;,
   timeout: number;,
-  retryPolicy: RetryPolicy;
+  retryPolicy: RetryPolicy;,
   authentication: AuthConfig;
 }
 /**
 * * 重试策略接口
 export interface RetryPolicy {
   maxAttempts: number;,
-  backoffStrategy: linear" | "exponential;
+  backoffStrategy: linear" | "exponential;,
   initialDelay: number;,
   maxDelay: number;
 }
@@ -187,7 +187,7 @@ export interface AuthConfig {
 * * 资源限制接口
 export interface ResourceLimits {
   maxMemoryMB: number;,
-  maxCpuPercent: number;
+  maxCpuPercent: number;,
   maxDiskMB: number;,
   maxNetworkMbps: number;
 }
@@ -211,7 +211,7 @@ export interface AgentMonitoring {
 * * 健康状态接口
 export interface HealthStatus {
   status: "healthy" | degraded" | "unhealthy;,
-  checks: HealthCheck[];
+  checks: HealthCheck[];,
   lastCheckTime: Date;
 }
 /**
@@ -226,11 +226,11 @@ export interface HealthCheck {
 * * 智能体指标接口
 export interface AgentMetrics {
   tasksProcessed: number;,
-  averageResponseTime: number;
+  averageResponseTime: number;,
   errorCount: number;,
-  memoryUsage: number;
+  memoryUsage: number;,
   cpuUsage: number;,
-  networkUsage: number;
+  networkUsage: number;,
   timestamp: Date;
 }
 /**
@@ -246,7 +246,7 @@ export enum LogLevel {
 * * 日志条目接口;
 export interface LogEntry {
   level: LogLevel;,
-  message: string;
+  message: string;,
   timestamp: Date;
   metadata?: Record<string, any>;
 }
@@ -254,9 +254,9 @@ export interface LogEntry {
 * * 告警规则接口
 export interface AlertRule {
   name: string;,
-  condition: string;
+  condition: string;,
   threshold: number;,
-  action: "log | "notify" | restart";
+  action: "log | "notify" | restart";,
   enabled: boolean;
 }
 export default {

@@ -11,8 +11,8 @@ prepare_react_native_project!
 target 'SuokeLife' do
   config = use_native_modules!
   
-  # 移除SocketRocket版本冲突，让React Native自动管理
-  # pod 'SocketRocket', '0.7.1'
+  # 让React Native自动管理SocketRocket版本
+  # pod 'SocketRocket', '~> 0.6.0'
   
   use_react_native!(
     :path => config[:reactNativePath],

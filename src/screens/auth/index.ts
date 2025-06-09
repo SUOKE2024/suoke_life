@@ -8,7 +8,7 @@ export { default as WelcomeScreen } from './WelcomeScreen';
 // 导出类型定义
 export type AuthStackParamList = {
   Welcome: undefined;,
-  Login: undefined;
+  Login: undefined;,
   Register: undefined;,
   ForgotPassword: undefined;
 };

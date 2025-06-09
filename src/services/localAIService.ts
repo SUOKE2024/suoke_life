@@ -2,16 +2,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // 本地AI模型接口
 interface LocalAIModel {
   id: string;,
-  name: string;
+  name: string;,
   version: string;,
-  size: number;
+  size: number;,
   capabilities: string[];,
   isLoaded: boolean;
 }
 // 本地推理结果
 interface LocalInferenceResult {
   confidence: number;,
-  result: any;
+  result: any;,
   processingTime: number;,
   modelUsed: string;
 }

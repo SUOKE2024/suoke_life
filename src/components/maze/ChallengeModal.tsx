@@ -18,7 +18,7 @@ import { Challenge, ChallengeQuestion } from '../../types/maze';
 } from 'react-native';
 interface ChallengeModalProps {
   challenge: Challenge;,
-  visible: boolean;
+  visible: boolean;,
   onClose: () => void;,
   onComplete: (score: number) => void;
 }
@@ -124,7 +124,7 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
   const handleSubmit = () => {setIsTimerActive(false);
     // 计算分数
     let correctAnswers = 0;
-    challenge.questions.forEach((question, index) => {
+    challenge.questions.forEach(question, index) => {
       const selectedAnswer = selectedAnswers[index];
       if (selectedAnswer !== undefined && selectedAnswer === parseInt(String(question.correctAnswer))) {
         correctAnswers++;

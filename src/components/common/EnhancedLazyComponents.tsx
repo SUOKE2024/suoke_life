@@ -197,8 +197,8 @@ export const usePreloadComponent = ()
 // 批量预加载Hook;
 export const useBatchPreload = ()
   components: Array<{,
-  key: string;
-    importFunc: () => Promise<any>;
+  key: string;,
+  importFunc: () => Promise<any>;
     condition?: boolean;
   }>
 ) => {
@@ -206,7 +206,7 @@ export const useBatchPreload = ()
   const preloadManager = PreloadManager.getInstance();
   useEffect() => {
     let count = 0;
-        components.forEach(({ key, importFunc, condition = true }) => {
+        components.forEach({ key, importFunc, condition = true }) => {
       if (condition) {
         preloadManager.preload(key, importFunc);
         count++;

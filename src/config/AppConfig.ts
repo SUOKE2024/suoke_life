@@ -9,34 +9,34 @@ export type Environment = 'development' | 'staging' | 'production';
 // API配置接口
 export interface ApiConfig {
   baseUrl: string;,
-  timeout: number;
+  timeout: number;,
   retryAttempts: number;,
-  retryDelay: number;
+  retryDelay: number;,
   enableMocking: boolean;
 }
 // 智能体配置接口
 export interface AgentConfig {
   xiaoai: {;,
-  enabled: boolean;
-    endpoint: string;,
-  timeout: number;
-    maxSessions: number;
+  enabled: boolean;,
+  endpoint: string;,
+  timeout: number;,
+  maxSessions: number;
 };
   xiaoke: {,
-  enabled: boolean;
-    endpoint: string,
+  enabled: boolean;,
+  endpoint: string,
   timeout: number;,
   maxSessions: number;
   };
   laoke: {,
-  enabled: boolean;
-    endpoint: string,
+  enabled: boolean;,
+  endpoint: string,
   timeout: number;,
   maxSessions: number;
   };
   soer: {,
-  enabled: boolean;
-    endpoint: string,
+  enabled: boolean;,
+  endpoint: string,
   timeout: number;,
   maxSessions: number;
   };
@@ -44,81 +44,81 @@ export interface AgentConfig {
 // 五诊配置接口
 export interface DiagnosisConfig {
   looking: {;,
-  enabled: boolean;
-    aiModelEndpoint: string;,
+  enabled: boolean;,
+  aiModelEndpoint: string;,
   confidenceThreshold: number;
 };
   listening: {,
-  enabled: boolean;
-    aiModelEndpoint: string,
+  enabled: boolean;,
+  aiModelEndpoint: string,
   confidenceThreshold: number;
   };
   inquiry: {,
-  enabled: boolean;
-    aiModelEndpoint: string,
+  enabled: boolean;,
+  aiModelEndpoint: string,
   confidenceThreshold: number;
   };
   palpation: {,
-  enabled: boolean;
-    aiModelEndpoint: string,
+  enabled: boolean;,
+  aiModelEndpoint: string,
   confidenceThreshold: number;
   };
   calculation: {,
-  enabled: boolean;
-    aiModelEndpoint: string,
+  enabled: boolean;,
+  aiModelEndpoint: string,
   confidenceThreshold: number;
   };
 }
 // 性能配置接口
 export interface PerformanceConfig {
   enableMonitoring: boolean;,
-  sampleRate: number;
+  sampleRate: number;,
   renderThreshold: number;,
-  memoryThreshold: number;
+  memoryThreshold: number;,
   networkThreshold: number;,
-  enableReporting: boolean;
+  enableReporting: boolean;,
   reportingEndpoint: string;
 }
 // 安全配置接口
 export interface SecurityConfig {
   enableEncryption: boolean;,
-  jwtSecret: string;
+  jwtSecret: string;,
   tokenExpiry: number;,
-  enableBiometric: boolean;
+  enableBiometric: boolean;,
   enablePinCode: boolean;,
   sessionTimeout: number;
 }
 // 功能开关配置接口
 export interface FeatureFlags {
   enableFiveDiagnosis: boolean;,
-  enableAgentCoordination: boolean;
+  enableAgentCoordination: boolean;,
   enableBlockchain: boolean;,
-  enableOfflineMode: boolean;
+  enableOfflineMode: boolean;,
   enablePushNotifications: boolean;,
-  enableAnalytics: boolean;
+  enableAnalytics: boolean;,
   enableCrashReporting: boolean;,
   enablePerformanceMonitoring: boolean;
 }
 // 主配置接口
 export interface AppConfiguration {
   environment: Environment;,
-  version: string;
+  version: string;,
   buildNumber: string;,
-  api: ApiConfig;
+  api: ApiConfig;,
   agents: AgentConfig;,
-  diagnosis: DiagnosisConfig;
+  diagnosis: DiagnosisConfig;,
   performance: PerformanceConfig;,
-  security: SecurityConfig;
+  security: SecurityConfig;,
   features: FeatureFlags;,
-  logging: {;
-    level: 'debug' | 'info' | 'warn' | 'error';,
-  enableConsole: boolean;
-    enableRemote: boolean;,
+  logging: {;,
+  level: 'debug' | 'info' | 'warn' | 'error';,
+  enableConsole: boolean;,
+  enableRemote: boolean;,
   remoteEndpoint: string;
 };
   cache: {,
-  enableCache: boolean;
-    maxSize: number,
+  enableCache: boolean;,
+  maxSize: number,
   ttl: number;
   };
 }
@@ -143,7 +143,7 @@ const developmentConfig: AppConfiguration = {,
     retryDelay: 1000,
     enableMocking: true},
   agents: {,
-  xiaoai: {
+  xiaoai: {,
   enabled: true,
       endpoint: 'http://localhost:8001',
       timeout: 30000,
@@ -164,7 +164,7 @@ const developmentConfig: AppConfiguration = {,
       timeout: 30000,
       maxSessions: 10}},
   diagnosis: {,
-  looking: {
+  looking: {,
   enabled: true,
       aiModelEndpoint: 'http://localhost:8001/diagnosis/looking',
       confidenceThreshold: 0.7},
@@ -229,7 +229,7 @@ const productionConfig: AppConfiguration = {,
     retryDelay: 1000,
     enableMocking: false},
   agents: {,
-  xiaoai: {
+  xiaoai: {,
   enabled: true,
       endpoint: 'https://xiaoai.suokelife.com',
       timeout: 30000,
@@ -250,7 +250,7 @@ const productionConfig: AppConfiguration = {,
       timeout: 30000,
       maxSessions: 100}},
   diagnosis: {,
-  looking: {
+  looking: {,
   enabled: true,
       aiModelEndpoint: 'https://xiaoai.suokelife.com/diagnosis/looking',
       confidenceThreshold: 0.8},

@@ -186,7 +186,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
 };
 // 添加数据模态框
 const AddDataModal: React.FC<{,
-  visible: boolean;
+  visible: boolean;,
   onClose: () => void,
   onSubmit: (dataType: string, data: any, metadata?: Record<string, string>) => void;
 }> = ({ visible, onClose, onSubmit }) => {
@@ -259,7 +259,7 @@ const AddDataModal: React.FC<{,
 };
 // 记录详情模态框
 const RecordDetailModal: React.FC<{,
-  record: HealthDataRecord | null;
+  record: HealthDataRecord | null;,
   onClose: () => void,
   onVerify: (record: HealthDataRecord) => void;
 }> = ({ record, onClose, onVerify }) => {

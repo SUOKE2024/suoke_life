@@ -19,17 +19,17 @@ interface CalculationDiagnosisProps {
 }
 interface PersonalInfo {
   birthYear: number;,
-  birthMonth: number;
+  birthMonth: number;,
   birthDay: number;,
-  birthHour: number;
+  birthHour: number;,
   gender: string;,
   location: string;
 }
 interface AnalysisTypes {
   ziwuLiuzhu: boolean;,
-  constitution: boolean;
+  constitution: boolean;,
   bagua: boolean;,
-  wuyunLiuqi: boolean;
+  wuyunLiuqi: boolean;,
   comprehensive: boolean;
 }
 const { width: screenWidth } = Dimensions.get('window');

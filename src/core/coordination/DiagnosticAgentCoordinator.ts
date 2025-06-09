@@ -4,32 +4,32 @@ import { MetricsCollector } from '../monitoring/MetricsCollector';
 import { ErrorHandler } from '../error/ErrorHandler';
 export interface DiagnosticResult {
   serviceType: 'calculation' | 'look' | 'listen' | 'inquiry' | 'palpation';,
-  timestamp: number;
+  timestamp: number;,
   data: any;,
-  confidence: number;
+  confidence: number;,
   metadata: {;,
-  sessionId: string;
-    userId: string;,
+  sessionId: string;,
+  userId: string;,
   version: string;
 };
 }
 export interface AgentResponse {
   agentType: 'xiaoai' | 'xiaoke' | 'laoke' | 'soer';,
-  timestamp: number;
+  timestamp: number;,
   analysis: any;,
-  recommendations: any[];
+  recommendations: any[];,
   confidence: number;,
-  metadata: {;
-    sessionId: string;,
-  userId: string;
-    version: string;
+  metadata: {;,
+  sessionId: string;,
+  userId: string;,
+  version: string;
 };
 }
 export interface CoordinationSession {
   sessionId: string;,
-  userId: string;
+  userId: string;,
   startTime: number;,
-  diagnosticResults: DiagnosticResult[];
+  diagnosticResults: DiagnosticResult[];,
   agentResponses: AgentResponse[];
   consensusResult?: any;
   status: 'active' | 'completed' | 'failed';
@@ -199,7 +199,7 @@ export class DiagnosticAgentCoordinator extends EventEmitter {
     const confidence = totalWeight / responses.length;
     // 生成最终共识结果
     const finalResult: any = {};
-    Object.keys(consensusData).forEach((key => {
+    Object.keys(consensusData).forEach(key => {
       const items = consensusData[key];
       const weightedAvg =
         items.reduce(sum: number, item: any) => sum + item.value * item.weight, 0) /;

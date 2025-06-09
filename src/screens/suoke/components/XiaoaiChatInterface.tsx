@@ -17,7 +17,7 @@ importIcon from "../../../components/common/Icon/import { colors  } from "../../
   UserProfile } from "../../../agents/xiaoai/types/    ";
 interface XiaoaiChatInterfaceProps {
   visible: boolean;,
-  onClose: () => void;
+  onClose: () => void;,
   userId: string;
 }
 const { width, height   } = Dimensions.get(";window;";);

@@ -22,7 +22,7 @@ u;
 // 缓存统计接口 * export interface CacheStats {
   size: number,
   memoryUsage: number;,
-  hitRate: number;
+  hitRate: number;,
   missRate: number;,
   totalHits: number,totalMisses: number,totalRequests: number;
   oldestItem?: number;

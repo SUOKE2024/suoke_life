@@ -21,9 +21,9 @@ export interface MultimodalQuery {
 * * 检索结果接口
 export interface RetrievalResult {
   id: string;,
-  content: string;
+  content: string;,
   modality: ModalityType;,
-  score: number;
+  score: number;,
   metadata: Record<string, any>;
   embedding?: number[];
 }
@@ -31,9 +31,9 @@ export interface RetrievalResult {
 * * RAG响应接口
 export interface RAGResponse {
   answer: string;,
-  confidence: number;
+  confidence: number;,
   sources: RetrievalResult[];,
-  fusionResult: FusionResult;
+  fusionResult: FusionResult;,
   reasoning: string;,
   metadata: Record<string, any>;
 }
@@ -260,7 +260,7 @@ const result = await this.languageModel.generateWithReasoning(prompt, context);
   ): string[] {
     const context: string[] = [];
     // 添加检索到的文档内容
-retrievalResults.forEach((result, index) => {}))
+retrievalResults.forEach(result, index) => {}))
       context.push(`[文档${index + 1}] ${result.content}`);
     });
     // 添加模态信息
@@ -336,8 +336,8 @@ await this.vectorDB.insert(id, embedding.vector, {
 * * 批量添加文档
   async addDocuments()
     documents: Array<{,
-  id: string;
-      content: string,
+  id: string;,
+  content: string,
   modality: ModalityType;
       metadata?: Record<string, any>;
     }>

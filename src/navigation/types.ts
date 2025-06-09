@@ -1,15 +1,15 @@
 // 根导航参数类型
 export type RootStackParamList = {
   Auth: undefined;,
-  Main: undefined;
+  Main: undefined;,
   ChatDetail: {,
-  chatId: string;
-    chatType: string;,
+  chatId: string;,
+  chatType: string;,
   chatName: string;
   };
   AgentChat: {,
-  agentId: string;
-    agentName: string;
+  agentId: string;,
+  agentName: string;
   };
   DiagnosisService: {,
   serviceType: string;
@@ -19,36 +19,36 @@ export type RootStackParamList = {
 // 认证导航参数类型
 export type AuthStackParamList = {
   Welcome: undefined;,
-  Login: undefined;
+  Login: undefined;,
   Register: undefined;,
   ForgotPassword: undefined;
 };
 // 主导航参数类型
 export type MainStackParamList = {
   MainTabs: undefined;,
-  Settings: undefined;
+  Settings: undefined;,
   ServiceStatus: undefined;,
-  ServiceManagement: undefined;
+  ServiceManagement: undefined;,
   DeveloperPanel: undefined;,
-  ApiIntegrationDemo: undefined;
+  ApiIntegrationDemo: undefined;,
   Benchmark: undefined;
 };
 // 主标签页参数类型
 export type MainTabParamList = {
   Home: undefined;,
-  Suoke: undefined;
+  Suoke: undefined;,
   Explore: undefined;,
-  Life: undefined;
+  Life: undefined;,
   Maze: undefined;,
-  Benchmark: undefined;
+  Benchmark: undefined;,
   Profile: undefined;
 };
 // 健康导航参数类型
 export type HealthStackParamList = {
   LifeOverview: undefined;,
-  MedicalResources: undefined;
+  MedicalResources: undefined;,
   AppointmentManagement: undefined;,
-  MedicalKnowledge: undefined;
+  MedicalKnowledge: undefined;,
   HealthDetail: {,
   type: string;
     id?: string;
@@ -62,15 +62,15 @@ export type MazeStackParamList = {
     difficulty?: string;
   };
   MazeResults: {,
-  score: number;
-    time: number;
+  score: number;,
+  time: number;
   };
 };
 // 智能体导航参数类型
 export type AgentStackParamList = {
   AgentList: undefined;,
-  AgentChat: {
-    agentId: string;,
+  AgentChat: {,
+  agentId: string;,
   agentName: string;
   };
   AgentProfile: {,
@@ -80,11 +80,11 @@ export type AgentStackParamList = {
 // 诊断导航参数类型
 export type DiagnosisStackParamList = {
   DiagnosisHome: undefined;,
-  DiagnosisService: {
-    serviceType: string;
+  DiagnosisService: {,
+  serviceType: string;
   };
   DiagnosisHistory: undefined;,
-  DiagnosisResult: {
-    resultId: string;
+  DiagnosisResult: {,
+  resultId: string;
   };
 };

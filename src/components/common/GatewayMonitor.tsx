@@ -4,7 +4,7 @@ import { unifiedApiService } from '../../services/unifiedApiService';
 import { apiClient } from '../../services/apiClient';
 interface ServiceHealth {
   name: string;,
-  status: 'healthy' | 'unhealthy' | 'unknown';
+  status: 'healthy' | 'unhealthy' | 'unknown';,
   instances: number;
   responseTime?: number;
   lastCheck?: string;

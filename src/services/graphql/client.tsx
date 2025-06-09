@@ -50,7 +50,7 @@ n"; /    "
 // 缓存项接口 * interface CacheItem {
   data: unknown,
   timestamp: number;,
-  ttl: number;
+  ttl: number;,
   key: string;
 }
 // GraphQL客户端事件 * export interface GraphQLClientEvents {

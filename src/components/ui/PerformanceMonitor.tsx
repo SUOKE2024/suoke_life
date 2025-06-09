@@ -18,7 +18,7 @@ const { width: SCREEN_WIDTH} = Dimensions.get(";window;";);
 // 性能指标接口 * interface PerformanceMetrics {
   fps: number,
   memoryUsage: number;,
-  renderTime: number;
+  renderTime: number;,
   jsHeapSize: number;,
   networkLatency: number;
   batteryLevel?: number;
@@ -27,7 +27,7 @@ const { width: SCREEN_WIDTH} = Dimensions.get(";window;";);
 // 性能警告类型 * interface PerformanceWarning {
   type: memory" | "fps | "render" | network" | "battery,
   severity: "low" | medium" | "high | "critical";,
-  message: string;
+  message: string;,
   suggestion: string;,
   timestamp: number;
 }

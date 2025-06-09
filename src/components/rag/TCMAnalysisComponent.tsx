@@ -12,7 +12,7 @@ import {
 // 简化的类型定义
 interface TCMAnalysisRequest {
   symptoms: string[];,
-  userId: string;
+  userId: string;,
   constitutionType: string;
   medicalHistory?: string[];
   currentMedications?: string[];
@@ -26,32 +26,32 @@ interface TCMAnalysisRequest {
 }
 interface TCMAnalysisResponse {
   syndromeAnalysis: {;,
-  primarySyndrome: string;
-    secondarySyndromes: string[];,
+  primarySyndrome: string;,
+  secondarySyndromes: string[];,
   confidence: number;
 };
   constitutionAssessment: {,
-  constitutionType: string;
-    characteristics: string[];
+  constitutionType: string;,
+  characteristics: string[];
   };
   recommendations: {,
-  lifestyle: string[];
-    dietary: string[],
+  lifestyle: string[];,
+  dietary: string[],
   exercise: string[];
   };
 }
 interface HerbRecommendationRequest {
   syndromeType: string;,
-  constitutionType: string;
+  constitutionType: string;,
   userId: string;,
   currentSymptoms: string[];
 }
 interface HerbRecommendationResponse {
   formula: {;,
-  name: string;
-    herbs: Array<{;,
-  name: string;
-      dosage: string;,
+  name: string;,
+  herbs: Array<{;,
+  name: string;,
+  dosage: string;,
   function: string;
 }>;
   };
@@ -141,8 +141,8 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
     try {
       // 模拟分析结果
       const mockResult: TCMAnalysisResponse = {,
-  syndromeAnalysis: {
-      primarySyndrome: "气虚血瘀",
+  syndromeAnalysis: {,
+  primarySyndrome: "气虚血瘀",
       secondarySyndromes: ["脾胃虚弱", "肝气郁结'],
           confidence: 0.85;
         },
@@ -177,8 +177,8 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
     try {
       // 模拟中药推荐结果
       const mockHerbResult: HerbRecommendationResponse = {,
-  formula: {
-      name: "补中益气汤加减",
+  formula: {,
+  name: "补中益气汤加减",
       herbs: [
             {
       name: "黄芪", "

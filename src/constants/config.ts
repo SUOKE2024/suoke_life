@@ -27,49 +27,49 @@ export const API_GATEWAY_CONFIG = {
   TIMEOUT: 30000,
   RETRY_ATTEMPTS: 3,
   
-  SERVICES: {
-    AUTH: {
-      BASE_URL: '/api/v1/auth',
-      ENDPOINTS: {
-        LOGIN: '/login',
+  SERVICES: {,
+  AUTH: {,
+  BASE_URL: '/api/v1/auth',
+      ENDPOINTS: {,
+  LOGIN: '/login',
         REGISTER: '/register',
         REFRESH: '/refresh',
         LOGOUT: '/logout',
       },
     },
     
-    USER: {
-      BASE_URL: '/api/v1/user',
-      ENDPOINTS: {
-        PROFILE: '/profile',
+    USER: {,
+  BASE_URL: '/api/v1/user',
+      ENDPOINTS: {,
+  PROFILE: '/profile',
         UPDATE: '/update',
         DELETE: '/delete',
       },
     },
     
-    HEALTH: {
-      BASE_URL: '/api/v1/health',
-      ENDPOINTS: {
-        DATA: '/data',
+    HEALTH: {,
+  BASE_URL: '/api/v1/health',
+      ENDPOINTS: {,
+  DATA: '/data',
         METRICS: '/metrics',
         REPORTS: '/reports',
       },
     },
     
-    AGENTS: {
-      BASE_URL: '/api/v1/agents',
-      ENDPOINTS: {
-        XIAOAI: '/xiaoai',
+    AGENTS: {,
+  BASE_URL: '/api/v1/agents',
+      ENDPOINTS: {,
+  XIAOAI: '/xiaoai',
         XIAOKE: '/xiaoke',
         LAOKE: '/laoke',
         SOER: '/soer',
       },
     },
     
-    DIAGNOSIS: {
-      BASE_URL: '/api/v1/diagnosis',
-      ENDPOINTS: {
-        INQUIRY: '/inquiry',
+    DIAGNOSIS: {,
+  BASE_URL: '/api/v1/diagnosis',
+      ENDPOINTS: {,
+  INQUIRY: '/inquiry',
         LISTEN: '/listen',
         LOOK: '/look',
         PALPATION: '/palpation',
@@ -77,19 +77,19 @@ export const API_GATEWAY_CONFIG = {
       },
     },
     
-    RAG: {
-      BASE_URL: '/api/v1/rag',
-      ENDPOINTS: {
-        QUERY: '/query',
+    RAG: {,
+  BASE_URL: '/api/v1/rag',
+      ENDPOINTS: {,
+  QUERY: '/query',
         KNOWLEDGE: '/knowledge',
         SEARCH: '/search',
       },
     },
     
-    BLOCKCHAIN: {
-      BASE_URL: '/api/v1/blockchain',
-      ENDPOINTS: {
-        STORE: '/store',
+    BLOCKCHAIN: {,
+  BASE_URL: '/api/v1/blockchain',
+      ENDPOINTS: {,
+  STORE: '/store',
         VERIFY: '/verify',
         RETRIEVE: '/retrieve',
       },
@@ -118,17 +118,17 @@ export const HEALTH_CONFIG = {
   BATCH_SIZE: 100,
   MAX_HISTORY_DAYS: 365,
   
-  VITAL_SIGNS: {
-    HEART_RATE: { MIN: 60, MAX: 100 },
-    BLOOD_PRESSURE: {
-      SYSTOLIC: { MIN: 90, MAX: 140 },
+  VITAL_SIGNS: {,
+  HEART_RATE: { MIN: 60, MAX: 100 },
+    BLOOD_PRESSURE: {,
+  SYSTOLIC: { MIN: 90, MAX: 140 },
       DIASTOLIC: { MIN: 60, MAX: 90 },
     },
     TEMPERATURE: { MIN: 36.0, MAX: 37.5 },
   },
   
-  ACTIVITY_GOALS: {
-    STEPS: 10000,
+  ACTIVITY_GOALS: {,
+  STEPS: 10000,
     CALORIES: 2000,
     EXERCISE_MINUTES: 30,
   },
@@ -136,15 +136,15 @@ export const HEALTH_CONFIG = {
 
 // 诊断配置
 export const DIAGNOSIS_CONFIG = {
-  TYPES: {
-    INQUIRY: '问诊',
+  TYPES: {,
+  INQUIRY: '问诊',
     LISTEN: '闻诊',
     LOOK: '望诊',
     PALPATION: '切诊',
   },
   
-  PRIORITIES: {
-    LOW: 1,
+  PRIORITIES: {,
+  LOW: 1,
     MEDIUM: 2,
     HIGH: 3,
     CRITICAL: 4,
@@ -155,14 +155,14 @@ export const DIAGNOSIS_CONFIG = {
 
 // 缓存配置
 export const CACHE_CONFIG = {
-  STRATEGIES: {
-    MEMORY: 'memory',
+  STRATEGIES: {,
+  MEMORY: 'memory',
     STORAGE: 'storage',
     HYBRID: 'hybrid',
   },
   
-  TTL: {
-    SHORT: 60000,    // 1分钟
+  TTL: {,
+  SHORT: 60000,    // 1分钟
     MEDIUM: 300000,  // 5分钟
     LONG: 3600000,   // 1小时
   },
@@ -170,14 +170,14 @@ export const CACHE_CONFIG = {
 
 // 错误处理配置
 export const ERROR_CONFIG = {
-  CIRCUIT_BREAKER: {
-    FAILURE_THRESHOLD: 5,
+  CIRCUIT_BREAKER: {,
+  FAILURE_THRESHOLD: 5,
     RECOVERY_TIMEOUT: 60000,
     MONITOR_TIMEOUT: 30000,
   },
   
-  RETRY: {
-    MAX_ATTEMPTS: 3,
+  RETRY: {,
+  MAX_ATTEMPTS: 3,
     DELAY: 1000,
     BACKOFF_FACTOR: 2,
   },
@@ -185,24 +185,24 @@ export const ERROR_CONFIG = {
 
 // 环境特定配置
 export const ENV_CONFIG = {
-  development: {
-    GATEWAY_URL: 'http://localhost:8080',
+  development: {,
+  GATEWAY_URL: 'http://localhost:8080',
     ENABLE_LOGGING: true,
     ENABLE_DEBUG: true,
     ENABLE_MOCK_DATA: true,
     ENABLE_GATEWAY_MONITOR: true,
   },
   
-  staging: {
-    GATEWAY_URL: 'https://staging-api.suoke.life',
+  staging: {,
+  GATEWAY_URL: 'https://staging-api.suoke.life',
     ENABLE_LOGGING: true,
     ENABLE_DEBUG: false,
     ENABLE_MOCK_DATA: false,
     ENABLE_GATEWAY_MONITOR: true,
   },
   
-  production: {
-    GATEWAY_URL: 'https://api.suoke.life',
+  production: {,
+  GATEWAY_URL: 'https://api.suoke.life',
     ENABLE_LOGGING: false,
     ENABLE_DEBUG: false,
     ENABLE_MOCK_DATA: false,

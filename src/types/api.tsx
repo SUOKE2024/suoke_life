@@ -27,16 +27,16 @@ export interface ApiRequest {
 // 离线数据类型
 export interface OfflineData {
   id: string;,
-  timestamp: number;
+  timestamp: number;,
   operation: 'CREATE' | 'UPDATE' | 'DELETE';,
-  entity: string;
+  entity: string;,
   payload: Record<string, unknown>;
   synced: boolean;
 }
 // 数据冲突类型
 export interface DataConflict {
   id: string;,
-  entity: string;
+  entity: string;,
   clientData: Record<string, unknown>;
   serverData: Record<string, unknown>;
   timestamp: number;,
@@ -45,9 +45,9 @@ export interface DataConflict {
 // 健康数据类型
 export interface HealthMetric {
   id: string;,
-  type: 'heart_rate' | 'blood_pressure' | 'weight' | 'blood_sugar' | 'sleep' | 'steps';
+  type: 'heart_rate' | 'blood_pressure' | 'weight' | 'blood_sugar' | 'sleep' | 'steps';,
   value: number | string;,
-  unit: string;
+  unit: string;,
   timestamp: string;,
   source: 'manual' | 'device' | 'api';
   metadata?: Record<string, unknown>;
@@ -55,16 +55,16 @@ export interface HealthMetric {
 // 智能体消息类型
 export interface AgentMessage {
   id: string;,
-  agentId: string;
+  agentId: string;,
   content: string;,
-  type: 'text' | 'image' | 'audio' | 'file';
+  type: 'text' | 'image' | 'audio' | 'file';,
   timestamp: string;
   metadata?: Record<string, unknown>;
 }
 // 诊断数据类型
 export interface DiagnosisData {
   id: string;,
-  userId: string;
+  userId: string;,
   type: 'five_diagnosis' | 'symptom_analysis' | 'health_assessment';,
   data: Record<string, unknown>;
   result?: DiagnosisResult;
@@ -73,7 +73,7 @@ export interface DiagnosisData {
 }
 export interface DiagnosisResult {
   id: string;,
-  diagnosis: string;
+  diagnosis: string;,
   confidence: number;,
   recommendations: string[];
   followUp?: string;
@@ -82,35 +82,35 @@ export interface DiagnosisResult {
 // 用户配置类型
 export interface UserPreferences {
   theme: 'light' | 'dark' | 'auto';,
-  language: 'zh' | 'en';
+  language: 'zh' | 'en';,
   notifications: NotificationSettings;,
-  privacy: PrivacySettings;
+  privacy: PrivacySettings;,
   accessibility: AccessibilitySettings;
 }
 export interface NotificationSettings {
   enabled: boolean;,
-  types: {;
-    health_reminders: boolean;,
-  agent_messages: boolean;
-    system_updates: boolean;,
+  types: {;,
+  health_reminders: boolean;,
+  agent_messages: boolean;,
+  system_updates: boolean;,
   emergency_alerts: boolean;
 };
   schedule: {,
-  start_time: string;
-    end_time: string,
+  start_time: string;,
+  end_time: string,
   timezone: string;
   };
 }
 export interface PrivacySettings {
   data_sharing: boolean;,
-  analytics: boolean;
+  analytics: boolean;,
   personalization: boolean;,
   third_party_integrations: boolean;
 }
 export interface AccessibilitySettings {
   font_size: 'small' | 'medium' | 'large' | 'extra_large';,
-  high_contrast: boolean;
+  high_contrast: boolean;,
   screen_reader: boolean;,
-  voice_commands: boolean;
+  voice_commands: boolean;,
   haptic_feedback: boolean;
 }

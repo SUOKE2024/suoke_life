@@ -40,9 +40,9 @@ import React from "react";
 // 训练任务接口 * export interface TrainingTask {
   id: string,
   name: string;,
-  description: string;
+  description: string;,
   modelConfig: ModelConfig;,
-  datasetId: string;
+  datasetId: string;,
   status: "pending" | "running" | "completed" | "failed" | "cancelled",progress: number,metrics: {accuracy?: number;
     precision?: number;
     recall?: number;
@@ -57,8 +57,8 @@ import React from "react";
   modelId: string,
   taskId: string;,
   metrics: {overall: {accuracy: number;,
-  precision: number;
-      recall: number,f1Score: number,auc: number;
+  precision: number;,
+  recall: number,f1Score: number,auc: number;
 };
     byDiagnosis: {
       [diagnosis: string]: { accuracy: number,
@@ -80,11 +80,11 @@ import React from "react";
 // 模型部署状态接口 * export interface ModelDeployment {
   modelId: string,
   version: string;,
-  status: "staging" | "production" | "deprecated";
+  status: "staging" | "production" | "deprecated";,
   deploymentTime: number;,
   performance: {averageResponseTime: number;,
-  throughput: number;
-    errorRate: number;,
+  throughput: number;,
+  errorRate: number;,
   accuracy: number;
 }
   rollbackInfo?: { previousVersion: string,rollbackTime: number,reason: string};

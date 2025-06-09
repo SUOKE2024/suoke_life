@@ -64,13 +64,13 @@ g;"; * /     | "tcm_diagnosis""
 // 智能体性能指标 * export interface AgentMetrics {
   tasksProcessed: number,
   successRate: number;,
-  averageResponseTime: number;
+  averageResponseTime: number;,
   lastActive: Date;
 }
 // 智能体任务 * export interface AgentTask {
   taskId: string,
   type: string;,
-  data: unknown;
+  data: unknown;,
   priority: "low" | "medium" | "high" | "urgent";,
   timestamp: Date;
   userId?: string;
@@ -89,7 +89,7 @@ g;"; * /     | "tcm_diagnosis""
 // 智能体配置 * export interface AgentConfig {
   maxConcurrentTasks: number,
   timeoutMs: number;,
-  retryAttempts: number;
+  retryAttempts: number;,
   cacheEnabled: boolean;,
   cacheTTL: number;
   [key: string]: unknown;
@@ -120,7 +120,7 @@ export interface ContactInfo {
 }
 export interface EmergencyContact {
   name: string;,
-  relationship: string;
+  relationship: string;,
   phone: string;
   email?: string;
 }
@@ -140,7 +140,7 @@ export interface Schedule {
 }
 export interface Feedback {
   id: string;,
-  userId: string;
+  userId: string;,
   rating: number;
   comment?: string;
   timestamp: Date;
@@ -149,11 +149,11 @@ export interface Feedback {
 // 通知类型 * export interface Notification {
   id: string,
   userId: string;,
-  type: string;
+  type: string;,
   title: string;,
-  message: string;
+  message: string;,
   priority: "low" | "medium" | "high" | "urgent";,
-  read: boolean;
+  read: boolean;,
   timestamp: Date;
   expiresAt?: Date;
   actionUrl?: string;
@@ -179,7 +179,7 @@ d;
   | "special_constitution";
 export interface HealthGoal {
   id: string;,
-  type: string;
+  type: string;,
   description: string;
   targetValue?: number;
   currentValue?: number;
@@ -195,7 +195,7 @@ export interface RiskFactor {
 }
 export interface Medication {
   name: string;,
-  dosage: string;
+  dosage: string;,
   frequency: string;,
   startDate: Date;
   endDate?: Date;
@@ -205,9 +205,9 @@ export interface Medication {
 // 服务相关基础类型 * export interface ServiceProvider {
   id: string,
   name: string;,
-  type: string;
+  type: string;,
   rating: number;,
-  verified: boolean;
+  verified: boolean;,
   contact: ContactInfo;
   location?: Location;
 }
@@ -219,7 +219,7 @@ export interface PricingInfo {
 }
 export interface Discount {
   type: string;,
-  value: number;
+  value: number;,
   description: string;
   validUntil?: Date;
   conditions?: string[];
@@ -238,24 +238,24 @@ export interface AvailabilityInfo {
     | "bank_transfer"
     | "cash";
   provider: string;,
-  details: unknown;
+  details: unknown;,
   default: boolean;,
   verified: boolean;
 }
 export interface PaymentRequest {
   amount: number;,
-  currency: string;
+  currency: string;,
   description: string;,
-  paymentMethod: PaymentMethod;
+  paymentMethod: PaymentMethod;,
   userId: string;
   orderId?: string;
   metadata?: unknown;
 }
 export interface PaymentTransaction {
   id: string;,
-  userId: string;
+  userId: string;,
   amount: number;,
-  currency: string;
+  currency: string;,
   method: PaymentMethod;,
   status: | "pending"| "processing"| "completed";
     | "failed"| "cancelled"| "refunded";
@@ -269,9 +269,9 @@ export interface PaymentTransaction {
 // 订阅相关基础类型 * export interface SubscriptionPlan {
   id: string,
   name: string;,
-  description: string;
+  description: string;,
   price: PricingInfo;,
-  duration: string;
+  duration: string;,
   features: string[];
   limitations?: unknown;
   popular?: boolean;
@@ -399,7 +399,7 @@ export interface AgentResponse {
 */
 export interface UserProfile {
   id: string;,
-  name: string;
+  name: string;,
   age: number;,
   gender: 'male' | 'female' | 'other';
   constitution?: ConstitutionType; // 中医体质
@@ -428,9 +428,9 @@ export interface HealthData {
 */
 export interface UserPreferences {
   language: string;,
-  timezone: string;
+  timezone: string;,
   notificationSettings: NotificationSettings;,
-  privacySettings: PrivacySettings;
+  privacySettings: PrivacySettings;,
   accessibilitySettings: AccessibilitySettings;,
   communicationStyle: 'formal' | 'casual' | 'friendly';
   preferredAgents?: AgentType[];
@@ -451,7 +451,7 @@ export interface LocationInfo {
 */
 export interface DeviceInfo {
   deviceId: string;,
-  platform: 'ios' | 'android' | 'web';
+  platform: 'ios' | 'android' | 'web';,
   version: string;,
   capabilities: string[];
   sensors?: string[];
@@ -461,9 +461,9 @@ export interface DeviceInfo {
 */
 export interface ConversationMessage {
   id: string;,
-  agentType: AgentType;
+  agentType: AgentType;,
   message: string;,
-  timestamp: Date;
+  timestamp: Date;,
   isUser: boolean;
   metadata?: any;
 }
@@ -472,7 +472,7 @@ export interface ConversationMessage {
 */
 export interface MedicalRecord {
   id: string;,
-  date: Date;
+  date: Date;,
   type: 'diagnosis' | 'treatment' | 'prescription' | 'test_result';,
   description: string;
   doctor?: string;
@@ -512,7 +512,7 @@ export interface Symptom {
 */
 export interface HealthMeasurement {
   type: string;,
-  value: number;
+  value: number;,
   unit: string;,
   timestamp: Date;
   device?: string;
@@ -523,7 +523,7 @@ export interface HealthMeasurement {
 */
 export interface ActivityData {
   type: 'walking' | 'running' | 'cycling' | 'swimming' | 'other';,
-  duration: number; // 分钟
+  duration: number; // 分钟,
   intensity: 'low' | 'moderate' | 'high';
   calories?: number;
   distance?: number;
@@ -534,7 +534,7 @@ export interface ActivityData {
 */
 export interface SleepData {
   bedtime: Date;,
-  wakeTime: Date;
+  wakeTime: Date;,
   duration: number; // 小时;,
   quality: 1 | 2 | 3 | 4 | 5;
   deepSleep?: number;
@@ -547,10 +547,10 @@ export interface SleepData {
 */
 export interface NutritionData {
   meals: Meal[];,
-  totalCalories: number;
+  totalCalories: number;,
   macronutrients: {;,
-  carbs: number;
-    protein: number;,
+  carbs: number;,
+  protein: number;,
   fat: number;
 };
   micronutrients?: { [key: string]: number };
@@ -561,7 +561,7 @@ export interface NutritionData {
 */
 export interface Meal {
   type: 'breakfast' | 'lunch' | 'dinner' | 'snack';,
-  foods: Food[];
+  foods: Food[];,
   timestamp: Date;,
   calories: number;
 }
@@ -570,7 +570,7 @@ export interface Meal {
 */
 export interface Food {
   name: string;,
-  quantity: number;
+  quantity: number;,
   unit: string;,
   calories: number;
   nutrients?: { [key: string]: number;
@@ -581,7 +581,7 @@ export interface Food {
 */
 export interface MoodData {
   mood: 'very_sad' | 'sad' | 'neutral' | 'happy' | 'very_happy';,
-  stress: 1 | 2 | 3 | 4 | 5;
+  stress: 1 | 2 | 3 | 4 | 5;,
   energy: 1 | 2 | 3 | 4 | 5;
   notes?: string;
   timestamp: Date;
@@ -591,14 +591,14 @@ export interface MoodData {
 */
 export interface NotificationSettings {
   enabled: boolean;,
-  healthReminders: boolean;
+  healthReminders: boolean;,
   appointmentReminders: boolean;,
-  medicationReminders: boolean;
+  medicationReminders: boolean;,
   exerciseReminders: boolean;,
-  sleepReminders: boolean;
+  sleepReminders: boolean;,
   quietHours: {;,
-  start: string;
-    end: string;
+  start: string;,
+  end: string;
 };
 }
 /**
@@ -606,9 +606,9 @@ export interface NotificationSettings {
 */
 export interface PrivacySettings {
   dataSharing: boolean;,
-  anonymousAnalytics: boolean;
+  anonymousAnalytics: boolean;,
   locationTracking: boolean;,
-  healthDataSharing: boolean;
+  healthDataSharing: boolean;,
   marketingCommunications: boolean;
 }
 /**
@@ -616,11 +616,11 @@ export interface PrivacySettings {
 */
 export interface AccessibilitySettings {
   voiceGuidance: boolean;,
-  signLanguage: boolean;
+  signLanguage: boolean;,
   highContrast: boolean;,
-  largeText: boolean;
+  largeText: boolean;,
   screenReader: boolean;,
-  hapticFeedback: boolean;
+  hapticFeedback: boolean;,
   slowAnimations: boolean;
 }
 /**
@@ -628,11 +628,11 @@ export interface AccessibilitySettings {
 */
 export interface AgentHealthStatus {
   agentType: AgentType;,
-  status: 'healthy' | 'warning' | 'error' | 'initializing' | 'shutdown';
+  status: 'healthy' | 'warning' | 'error' | 'initializing' | 'shutdown';,
   load: number; // 0-1;,
-  responseTime: number; // 毫秒
+  responseTime: number; // 毫秒,
   errorRate: number; // 0-1;,
-  lastCheck: Date;
+  lastCheck: Date;,
   capabilities: AgentCapability[];,
   version: string;
   uptime?: number;
@@ -646,11 +646,11 @@ export interface AgentHealthStatus {
 */
 export interface AgentCollaborationMessage {
   id: string;,
-  fromAgent: AgentType;
+  fromAgent: AgentType;,
   toAgent: AgentType;,
-  messageType: 'request' | 'response' | 'notification' | 'data_share';
+  messageType: 'request' | 'response' | 'notification' | 'data_share';,
   content: any;,
-  priority: 'low' | 'normal' | 'high' | 'urgent';
+  priority: 'low' | 'normal' | 'high' | 'urgent';,
   timestamp: Date;
   correlationId?: string;
   metadata?: any;
@@ -660,7 +660,7 @@ export interface AgentCollaborationMessage {
 */
 export interface AgentDecisionResult {
   decision: string;,
-  confidence: number;
+  confidence: number;,
   reasoning: string[];
   alternatives?: string[];
   recommendedActions?: string[];

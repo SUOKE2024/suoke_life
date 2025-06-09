@@ -15,7 +15,7 @@ import { Direction, GameSettings } from '../../types/maze';
 } from 'react-native';
 interface GameControlsProps {
   onMove: (direction: Direction) => void;,
-  disabled: boolean;
+  disabled: boolean;,
   gameSettings: GameSettings | null;
 }
 const { width: screenWidth } = Dimensions.get('window');

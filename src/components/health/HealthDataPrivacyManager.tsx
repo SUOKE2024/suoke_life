@@ -21,39 +21,39 @@ import { useTranslation } from 'react-i18next';
 const { width, height } = Dimensions.get('window');
 interface HealthDataRecord {
   record_id: string;,
-  user_id: string;
+  user_id: string;,
   data_type: string;,
-  data_hash: string;
+  data_hash: string;,
   blockchain_tx_hash: string;
   ipfs_hash?: string;
   zkp_proof_id?: string;
   metadata: {,
-  privacy_level: string;
-    data_size: number;,
-  encryption_algorithm: string;
-    storage_locations: string[];
+  privacy_level: string;,
+  data_size: number;,
+  encryption_algorithm: string;,
+  storage_locations: string[];
   };
   created_at: string;,
-  updated_at: string;
+  updated_at: string;,
   access_permissions: string[];,
   is_verified: boolean;
 }
 interface PrivacySettings {
   data_sharing_enabled: boolean;,
-  anonymization_level: 'none' | 'basic' | 'advanced';
+  anonymization_level: 'none' | 'basic' | 'advanced';,
   zkp_verification_required: boolean;,
-  blockchain_storage_enabled: boolean;
+  blockchain_storage_enabled: boolean;,
   ipfs_storage_enabled: boolean;,
-  auto_approve_research: boolean;
+  auto_approve_research: boolean;,
   retention_period_days: number;
 }
 interface ZKPProofInfo {
   proof_id: string;,
-  statement: string;
+  statement: string;,
   created_at: string;,
-  expires_at: string;
+  expires_at: string;,
   is_valid: boolean;,
-  verification_key: string;
+  verification_key: string;,
   public_inputs_count: number;
 }
 const HealthDataPrivacyManager: React.FC = () => {
@@ -263,8 +263,8 @@ const HealthDataPrivacyManager: React.FC = () => {
         {
           opacity: animatedValue,
           transform: [{,
-  translateY: animatedValue.interpolate({
-              inputRange: [0, 1],
+  translateY: animatedValue.interpolate({,
+  inputRange: [0, 1],
               outputRange: [50, 0]}})}]}]}
     >
       <View style={styles.recordHeader}>

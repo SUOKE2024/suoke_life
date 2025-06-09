@@ -22,15 +22,15 @@ logLevel?: ";debug" | info" | "warn | "error"
 }
 export interface AgentInstance {
   id: string;,
-  agent: Agent;
+  agent: Agent;,
   config: AgentConfig;,
-  status: AgentStatus;
+  status: AgentStatus;,
   healthStatus: AgentHealthStatus;,
-  createdAt: Date;
+  createdAt: Date;,
   lastActivity: Date;,
   metrics: {totalRequests: number;,
-  successfulRequests: number;
-    failedRequests: number,averageResponseTime: number,uptime: number;
+  successfulRequests: number;,
+  failedRequests: number,averageResponseTime: number,uptime: number;
 };
 }
 export class AgentFactory   {private static instance: AgentFactory;

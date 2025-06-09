@@ -5,31 +5,31 @@
 export interface PerformanceMetrics {
   // API性能指标
   apiResponseTime: number;,
-  apiSuccessRate: number;
+  apiSuccessRate: number;,
   apiErrorRate: number;,
   apiThroughput: number;
   // 网络性能指标
   networkLatency: number;,
-  networkBandwidth: number;
+  networkBandwidth: number;,
   connectionQuality: 'excellent' | 'good' | 'fair' | 'poor';
   // 应用性能指标
   memoryUsage: number;,
-  cpuUsage: number;
+  cpuUsage: number;,
   batteryLevel: number;,
   storageUsage: number;
   // 用户体验指标
   screenLoadTime: number;,
-  interactionResponseTime: number;
+  interactionResponseTime: number;,
   errorCount: number;,
   crashCount: number;
 }
 export interface PerformanceAlert {
   id: string;,
-  type: 'warning' | 'error' | 'critical';
+  type: 'warning' | 'error' | 'critical';,
   metric: keyof PerformanceMetrics;,
-  value: number;
+  value: number;,
   threshold: number;,
-  message: string;
+  message: string;,
   timestamp: Date;,
   resolved: boolean;
 }

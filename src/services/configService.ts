@@ -5,22 +5,22 @@
 export interface AppConfig {
   // API网关配置
   gateway: {;,
-  baseUrl: string;
-    timeout: number;,
-  retryAttempts: number;
-    retryDelay: number;
+  baseUrl: string;,
+  timeout: number;,
+  retryAttempts: number;,
+  retryDelay: number;
 };
     // 功能开关
   features: {
     [featureName: string]: {,
-  enabled: boolean;
-      rolloutPercentage: number;
+  enabled: boolean;,
+  rolloutPercentage: number;
     };
   };
     // 用户界面配置
   ui: {,
-  theme: 'light' | 'dark' | 'auto';
-    language: string,
+  theme: 'light' | 'dark' | 'auto';,
+  language: string,
   enableAnimations: boolean;
   };
 }

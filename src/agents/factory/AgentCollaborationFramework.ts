@@ -302,12 +302,12 @@ const participantCount = session.participants.length;
 * * 协作会话接口
 interface CollaborationSession {
   id: string;,
-  taskId: string;
+  taskId: string;,
   participants: string[];,
   startTime: Date;
   endTime?: Date;
   status: "active" | completed" | 'failed';";,
-  decisions: any[];
+  decisions: any[];,
   consensusReached: boolean;
 }
 export default AgentCollaborationFramework;

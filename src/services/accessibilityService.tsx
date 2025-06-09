@@ -17,7 +17,7 @@ interface ApiResponse<T = any /> { data: T;/    , success: boolean;
 //;
   dialect?: string;
   screenReader: boolean;,
-  signLanguage: boolean;
+  signLanguage: boolean;,
   enabledFeatures: string[];
 }
 // 导盲服务接口 * export interface BlindAssistanceRequest {
@@ -44,7 +44,7 @@ export interface BlindAssistanceResponse {
 }
 export interface SignLanguageResponse {
   text: string;,
-  confidence: number;
+  confidence: number;,
   segments: Array<{text: string;,
   startTimeMs: number,endTimeMs: number,confidence: number;
 }>;
@@ -58,8 +58,8 @@ export interface SignLanguageResponse {
 export interface ScreenReadingResponse {
   screenDescription: string;,
   elements: Array<{elementType: string;,
-  content: string;
-    action: string;,
+  content: string;,
+  action: string;,
   location: {x: number;,
   y: number,width: number,height: number;
 };
@@ -79,7 +79,7 @@ export interface VoiceAssistanceResponse {
 // 内容转换接口 * export interface AccessibleContentRequest {
   contentId: string,
   contentType: string;,
-  userId: string;
+  userId: string;,
   targetFormat: "audio" | "braille" | "large-text" | "high-contrast";
   preferences?: UserPreferences;
 };
@@ -101,12 +101,12 @@ export interface SpeechTranslationResponse {
 // 健康数据收集接口 * export interface BackgroundCollectionRequest {
   userId: string,
   dataTypes: string[];,
-  collectionInterval: number;
+  collectionInterval: number;,
   privacyLevel: "minimal" | "standard" | "comprehensive";
 }
 export interface BackgroundCollectionResponse {
   success: boolean;,
-  message: string;
+  message: string;,
   collectionId: string;
 }
 // 危机报警接口 * export interface HealthAlertRequest {
@@ -117,7 +117,7 @@ export interface BackgroundCollectionResponse {
 }
 export interface HealthAlertResponse {
   alertId: string;,
-  alertLevel: "critical" | "high" | "medium" | "low";
+  alertLevel: "critical" | "high" | "medium" | "low";,
   message: string;,
   recommendedActions: Array<{action: string,priority: number,description: string;
 }>;

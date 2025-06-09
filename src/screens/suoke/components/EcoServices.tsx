@@ -2,9 +2,9 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from '../../plac
 import React from 'react";
 export interface EcoService {
   id: string;,
-  name: string;
+  name: string;,
   description: string;,
-  category: string;
+  category: string;,
   icon: string;,
   available: boolean;
 }

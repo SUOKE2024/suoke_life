@@ -4,7 +4,7 @@
 */
 export interface TokenInfo {
   accessToken: string;,
-  refreshToken: string;
+  refreshToken: string;,
   expiresAt: Date;,
   tokenType: string;
 }

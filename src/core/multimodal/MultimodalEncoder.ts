@@ -16,24 +16,24 @@ export interface EncoderConfig {
 */
 export interface TongueFeatures {
   color: {;,
-  red: number;
-    pink: number;,
-  pale: number;
-    purple: number;
+  red: number;,
+  pink: number;,
+  pale: number;,
+  purple: number;
 };
   coating: {,
-  thickness: number;
-    color: string,
+  thickness: number;,
+  color: string,
   distribution: number;
   };
   texture: {,
-  cracks: number;
-    spots: number,
+  cracks: number;,
+  spots: number,
   smoothness: number;
   };
   shape: {,
-  size: number;
-    edges: string,
+  size: number;,
+  edges: string,
   tip: string;
   };
 }
@@ -42,25 +42,25 @@ export interface TongueFeatures {
 */
 export interface PulseFeatures {
   rate: number;,
-  rhythm: {;
-    regularity: number;,
+  rhythm: {;,
+  regularity: number;,
   pattern: string;
 };
   strength: {,
-  amplitude: number;
-    force: number;
+  amplitude: number;,
+  force: number;
   };
   quality: {,
-  floating: number;
-    deep: number,
+  floating: number;,
+  deep: number,
   slow: number;,
   rapid: number,
   weak: number;,
   strong: number;
   };
   waveform: {,
-  peaks: number[];
-    valleys: number[],
+  peaks: number[];,
+  valleys: number[],
   duration: number;
   };
 }
@@ -498,8 +498,8 @@ export class MultimodalEncoder extends EventEmitter {
   */
   async encodeMultimodal()
     inputs: Array<{,
-  data: any;
-      modality: ModalityType;
+  data: any;,
+  modality: ModalityType;
       metadata?: Record<string, any>;
     }>
   ): Promise<Embedding[]> {

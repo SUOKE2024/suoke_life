@@ -63,8 +63,8 @@ const sampleBiomarkers: BiomarkerData[] = [;
             calibrationDate: mcpTimestamp.fromDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000))
           },
           tcmAssociation: {,
-  relatedOrgans: [{
-              organ: heart",
+  relatedOrgans: [{,
+  organ: heart",
               state: "normal,",
               score: 85,
               symptoms: [],
@@ -98,8 +98,8 @@ unit: mmHg",
             optimal: 120;
           },
           tcmAssociation: {,
-  relatedOrgans: [{
-              organ: heart",
+  relatedOrgans: [{,
+  organ: heart",
               state: "normal,",
               score: 88,
               symptoms: [],
@@ -135,8 +135,8 @@ const sampleCalculation: CalculationData = {,
           }
         },
         ziwuLiuzhu: {,
-  currentHour: {
-            earthlyBranch: 巳",
+  currentHour: {,
+  earthlyBranch: 巳",
             meridian: "脾经,",
             organ: "脾"
           },
@@ -156,8 +156,8 @@ const sampleCalculation: CalculationData = {,
           recommendations: ["此时宜健脾养胃", " 避免过度思虑", "适量运动]
         },
         constitutionAnalysis: {,
-  fourPillars: {
-            year: {,
+  fourPillars: {,
+  year: {,
   heavenly: "庚", "
       earthly: 午" },"
             month: { heavenly: "辛, earthly: "巳" },"
@@ -186,8 +186,8 @@ const sampleCalculation: CalculationData = {,
           }
         },
         baguaAnalysis: {,
-  natalHexagram: {
-      name: "乾为天",
+  natalHexagram: {,
+  name: "乾为天",
       symbol: ☰",
             element: "金,",
             direction: "西北"
@@ -204,8 +204,8 @@ const sampleCalculation: CalculationData = {,
           }
         },
         wuyunLiuqi: {,
-  annualQi: {
-            year: 2024,
+  annualQi: {,
+  year: 2024,
             mainQi: "太阴湿土,",
             guestQi: "厥阴风木", "
             hostHeaven: 少阳相火",
@@ -281,8 +281,8 @@ const sampleAgentDiagnoses: AgentDiagnosisResult[] = [;
         {
       agentId: "xiaoai",
       diagnosis: {,
-  primarySyndrome: {
-              name: 气血平和",
+  primarySyndrome: {,
+  name: 气血平和",
               code: "QX-001,",
               category: "qi-blood",
               severity: mild",

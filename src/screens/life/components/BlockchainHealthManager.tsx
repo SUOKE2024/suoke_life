@@ -12,22 +12,22 @@ import React,{ useState, useEffect } from react""
   { ActivityIndicator } from ";react-native";
 interface HealthDataRecord {
   id: string;,
-  type: diagnosis" | "medication | "test_result" | vital_signs" | "lifestyle;
+  type: diagnosis" | "medication | "test_result" | vital_signs" | "lifestyle;,
   title: string;,
-  description: string;
+  description: string;,
   timestamp: Date;,
-  hash: string;
+  hash: string;,
   verified: boolean;,
-  encrypted: boolean;
+  encrypted: boolean;,
   shared: boolean;,
   size: string;
 };
 interface DataPermission {
   id: string;,
-  entity: string;
+  entity: string;,
   type: "hospital" | doctor" | "researcher | "insurance" | family",
   permissions: string[];,
-  expiryDate: Date;
+  expiryDate: Date;,
   active: boolean;
 };
 interface BlockchainHealthManagerProps {

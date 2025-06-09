@@ -10,19 +10,19 @@ import {import React, { useState, useEffect } from "react";
 } from "../../placeholder";react-native;
 export interface UserProfile {
   id: string;,
-  name: string;
+  name: string;,
   email: string;,
   phone: string;
   avatar?: string;
   age: number;,
-  gender: male" | "female | "other";
+  gender: male" | "female | "other";,
   height: number;,
-  weight: number;
+  weight: number;,
   healthGoals: string[];,
-  preferences: {;
-    notifications: boolean;,
-  dataSharing: boolean;
-    darkMode: boolean;
+  preferences: {;,
+  notifications: boolean;,
+  dataSharing: boolean;,
+  darkMode: boolean;
 };
 }
 export interface ProfileScreenProps {

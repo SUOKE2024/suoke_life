@@ -33,8 +33,8 @@ const DEFAULT_CONFIG: XiaoaiConfig = {,
     language: "zh,",
     dialect: undefined},
   diagnosis: {,
-  look: {
-      enabled: true,
+  look: {,
+  enabled: true,
       faceAnalysis: true,
       tongueAnalysis: true,
       bodyAnalysis: true,
@@ -80,8 +80,8 @@ const DEFAULT_CONFIG: XiaoaiConfig = {,
       confidenceAggregation: "weighted_average}"
   },
   healthAnalysis: {,
-  dataCollection: {
-      enabled: true,
+  dataCollection: {,
+  enabled: true,
       frequency: "daily",
       autoSync: true,
       dataTypes: [vitals",symptoms, "lifestyle", environment"],"
@@ -111,8 +111,8 @@ const DEFAULT_CONFIG: XiaoaiConfig = {,
   accessibility: {,
   enabled: false,
     features: {,
-  visualImpairment: {
-        enabled: false,
+  visualImpairment: {,
+  enabled: false,
         screenReader: true,
         highContrast: false,
         largeText: false,
@@ -166,7 +166,7 @@ const DEFAULT_CONFIG: XiaoaiConfig = {,
       check_in_reminders: "weekly"}
   },
   privacy: {,
-  dataCollection: {
+  dataCollection: {,
   analytics: true,
       diagnosticData: true,
       usageStatistics: true,
@@ -185,7 +185,7 @@ const DEFAULT_CONFIG: XiaoaiConfig = {,
       endToEnd: true}
   },
   performance: {,
-  caching: {
+  caching: {,
   enabled: true,
       ttl: CACHE_CONFIG.TTL.MEDIUM,
       maxSize: 100 * 1024 * 1024,  strategy: "lru},"
@@ -196,28 +196,28 @@ const DEFAULT_CONFIG: XiaoaiConfig = {,
 // 配置接口 * export interface XiaoaiConfig {
   version: string, *
   enabled: boolean;,
-  debugMode: boolean;
+  debugMode: boolean;,
   personality: PersonalityTraits;,
-  voice: VoiceProfile;
+  voice: VoiceProfile;,
   diagnosis: DiagnosisConfig;,
-  healthAnalysis: HealthAnalysisConfig;
+  healthAnalysis: HealthAnalysisConfig;,
   accessibility: AccessibilityConfig;,
-  language: LanguageConfig;
+  language: LanguageConfig;,
   notification: NotificationConfig;,
-  privacy: PrivacyConfig;
+  privacy: PrivacyConfig;,
   performance: PerformanceConfig;,
   experimental: ExperimentalFeatures;
 }
 interface ExperimentalFeatures {
   advancedDiagnostics: boolean;,
-  aiPoweredPredictions: boolean;
+  aiPoweredPredictions: boolean;,
   augmentedRealitySupport: boolean;,
-  blockchainIntegration: boolean;
+  blockchainIntegration: boolean;,
   quantumAlgorithms: boolean;
 }
 // 配置变更事件 * export interface ConfigChangeEvent {
   key: string, // oldValue: unknown;,
-  newValue: unknown;
+  newValue: unknown;,
   timestamp: Date;
 }
 // 小艾配置管理器类export class XiaoaiConfigManager extends EventEmitter  {private static instance: XiaoaiConfigManager;
@@ -264,7 +264,7 @@ private constructor() {
         return nu;l;l;
       });
       const results = await Promise.all(promi;s;e;s;);
-      results.forEach((result) => {}))
+      results.forEach(result) => {}))
         if (result) {
           this.setConfigValue(result.key, result.value, false);
         }
@@ -369,7 +369,7 @@ const performanceMonitor = usePerformanceMonitor("XiaoaiConfigManager, {")
   }
   //
     if (keys) {
-      keys.forEach((key) => {}))
+      keys.forEach(key) => {}))
         this.setConfigValue(key, (DEFAULT_CONFIG as any)[key], false);
       });
     } else {

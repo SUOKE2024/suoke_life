@@ -42,7 +42,7 @@ export interface GatewayError extends Error {
 // 服务状态接口
 export interface ServiceStatus {
   name: string;,
-  status: 'healthy' | 'unhealthy' | 'unknown';
+  status: 'healthy' | 'unhealthy' | 'unknown';,
   instances: number;
   responseTime?: number;
   lastCheck?: string;

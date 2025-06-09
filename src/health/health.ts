@@ -2,12 +2,12 @@ import { Request, Response } from "express";
 // 健康检查端点
 interface HealthStatus {
   status: "healthy" | "unhealthy";,
-  timestamp: string;
+  timestamp: string;,
   uptime: number;,
-  version: string;
+  version: string;,
   services: {database: "connected" | "disconnected";,
-  redis: "connected" | "disconnected";
-    external_apis: "available" | "unavailable";
+  redis: "connected" | "disconnected";,
+  external_apis: "available" | "unavailable";
 };
 }
 export const healthCheck = async (req: Request, res: Response) =;

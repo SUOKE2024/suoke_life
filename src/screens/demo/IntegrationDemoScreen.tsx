@@ -13,7 +13,7 @@ import React,{ useState, useEffect } from "react";
   { SafeAreaView } from react-native""
 interface demoStep {
   id: string;,
-  title: string;
+  title: string;,
   description: string;,
   status: "pending | "running" | completed" | "error;"
   result?: unknown;

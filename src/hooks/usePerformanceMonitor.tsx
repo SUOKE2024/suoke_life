@@ -15,7 +15,7 @@ interface PerformanceMetrics {
 }
 interface UsePerformanceMonitorReturn {
   recordRender: () => void;,
-  getMetrics: () => PerformanceMetrics[];
+  getMetrics: () => PerformanceMetrics[];,
   clearMetrics: () => void;,
   averageRenderTime: number;
 }

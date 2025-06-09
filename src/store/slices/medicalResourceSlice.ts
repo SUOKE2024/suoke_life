@@ -3,10 +3,10 @@ import { RootState } from '../index';
 // 类型定义
 export interface MedicalResource {
   id: string;,
-  type: 'hospital' | 'clinic' | 'pharmacy' | 'specialist' | 'doctor';
+  type: 'hospital' | 'clinic' | 'pharmacy' | 'specialist' | 'doctor';,
   name: string;,
-  location: {;
-    address: string;,
+  location: {;,
+  address: string;,
   coordinates: { lat: number; lng: number;
 };
     city: string,
@@ -14,7 +14,7 @@ export interface MedicalResource {
   };
   services: string[],
   rating: number;,
-  availability: {
+  availability: {,
   isOpen: boolean;,
   hours: string,
   nextAvailable: string;,
@@ -34,26 +34,26 @@ export interface MedicalResource {
 }
 export interface TimeSlot {
   id: string;,
-  startTime: string;
+  startTime: string;,
   endTime: string;,
   available: boolean;
   price?: number;
 }
 export interface Review {
   id: string;,
-  userId: string;
+  userId: string;,
   userName: string;,
-  rating: number;
+  rating: number;,
   comment: string;,
   date: string;
 }
 export interface Appointment {
   id: string;,
-  resourceId: string;
+  resourceId: string;,
   resourceName: string;,
-  userId: string;
+  userId: string;,
   serviceType: string;,
-  scheduledTime: string;
+  scheduledTime: string;,
   duration: number;,
   status: 'pending' | 'confirmed' | 'completed' | 'cancelled';
   notes?: string;
@@ -65,8 +65,8 @@ export interface ResourceFilters {
   type?: string[];
   location?: {
     lat: number;,
-  lng: number;
-    radius: number;
+  lng: number;,
+  radius: number;
 };
   services?: string[];
   rating?: number;
@@ -86,7 +86,7 @@ export interface SearchQuery {
 interface MedicalResourceState {
   // 资源数据
   resources: MedicalResource[];,
-  searchResults: MedicalResource[];
+  searchResults: MedicalResource[];,
   selectedResource: MedicalResource | null;,
   nearbyResources: MedicalResource[];
   // 预约数据
@@ -94,41 +94,41 @@ interface MedicalResourceState {
   selectedAppointment: Appointment | null;
   // 搜索和筛选
   searchQuery: SearchQuery;,
-  searchHistory: string[];
+  searchHistory: string[];,
   filters: ResourceFilters;
   // 加载状态
   loading: {;,
-  search: boolean;
-    details: boolean;,
-  booking: boolean;
-    appointments: boolean;,
+  search: boolean;,
+  details: boolean;,
+  booking: boolean;,
+  appointments: boolean;,
   nearby: boolean;
 };
   // 错误状态
   errors: {,
-  search: string | null;
-    details: string | null,
+  search: string | null;,
+  details: string | null,
   booking: string | null;,
   appointments: string | null,
   nearby: string | null;
   };
   // UI状态
   ui: {,
-  showFilters: boolean;
-    showMap: boolean,
+  showFilters: boolean;,
+  showMap: boolean,
   viewMode: 'list' | 'grid' | 'map';
   };
   // 缓存和分页
   pagination: {,
-  currentPage: number;
-    totalPages: number,
+  currentPage: number;,
+  totalPages: number,
   totalItems: number;,
   hasMore: boolean;
   };
   // 服务健康状态
   serviceHealth: {,
-  status: 'healthy' | 'unhealthy' | 'unknown';
-    lastCheck: string | null;
+  status: 'healthy' | 'unhealthy' | 'unknown';,
+  lastCheck: string | null;
     message?: string;
   };
 }

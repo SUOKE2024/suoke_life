@@ -3,15 +3,15 @@ import { performanceMonitor } from "./    performanceMonitor";
 内存优化工具   提供内存监控、垃圾回收建议、内存泄漏检测等功能
 export interface MemorySnapshot {
   timestamp: number;,
-  usedJSHeapSize: number;
+  usedJSHeapSize: number;,
   totalJSHeapSize: number,jsHeapSizeLimit: number,components: Map<string, number>;
   listeners: Map<string, number>
 }
 export interface MemoryLeak {
   type: "component" | "listener" | "timer" | "memory";,
-  name: string;
+  name: string;,
   count: number;,
-  growth: number;
+  growth: number;,
   severity: "low" | "medium" | "high" | "critical";,
   suggestion: string;
 }
@@ -108,7 +108,7 @@ export interface MemoryOptimizationSuggestion {
   }
   // 检测内存泄漏  detectLeaks(): MemoryLeak[] {
     const leaks: MemoryLeak[] = [];
-    this.componentRegistry.forEach((count, name) => {}))
+    this.componentRegistry.forEach(count, name) => {}))
       if (count > 10) {
         leaks.push({
           type: "component",
@@ -120,7 +120,7 @@ export interface MemoryOptimizationSuggestion {
         });
       }
     });
-    this.listenerRegistry.forEach((count, name) => {}))
+    this.listenerRegistry.forEach(count, name) => {}))
       if (count > 20) {
         leaks.push({
           type: "listener",
@@ -182,7 +182,7 @@ export interface MemoryOptimizationSuggestion {
   // 获取优化建议  getOptimizationSuggestions(): MemoryOptimizationSuggestion[] {
     const suggestions: MemoryOptimizationSuggestion[] = [];
     const leaks = this.detectLeaks;
-    leaks.forEach((leak) => {}))
+    leaks.forEach(leak) => {}))
       suggestions.push({
       type: "warning",
       priority: leak.severity as any,
@@ -224,7 +224,7 @@ export interface MemoryOptimizationSuggestion {
   // 建议清理操作  private suggestCleanup(): void {
     }
   // 清理定时器  private cleanupTimers(): void {
-    this.timerRegistry.forEach((timer) => {}))
+    this.timerRegistry.forEach(timer) => {}))
       / 这里只是示例* ///     }
   // 强制垃圾回收（如果支持）  forceGarbageCollection(): boolean {
     / 这个方法主要用于开发和调试目的，实际上在RN中无法手动触发GC* ///     }

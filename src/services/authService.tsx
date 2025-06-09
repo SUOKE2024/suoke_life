@@ -18,14 +18,14 @@ export interface LoginRequest {
 // 登录响应
 export interface LoginResponse {
   user: User;,
-  accessToken: string;
+  accessToken: string;,
   refreshToken: string;,
   expiresIn: number;
 }
 // 注册请求参数
 export interface RegisterRequest {
   username: string;,
-  email: string;
+  email: string;,
   password: string;
   phone?: string;
   deviceId?: string;
@@ -33,7 +33,7 @@ export interface RegisterRequest {
 // 注册响应
 export interface RegisterResponse {
   user: User;,
-  accessToken: string;
+  accessToken: string;,
   refreshToken: string;,
   expiresIn: number;
 }
@@ -49,7 +49,7 @@ export interface VerifyResetCodeRequest {
 // 重置密码请求参数
 export interface ResetPasswordRequest {
   email: string;,
-  code: string;
+  code: string;,
   newPassword: string;
 }
 // 刷新令牌请求参数
@@ -59,7 +59,7 @@ export interface RefreshTokenRequest {
 // 刷新令牌响应
 export interface RefreshTokenResponse {
   accessToken: string;,
-  refreshToken: string;
+  refreshToken: string;,
   expiresIn: number;
 }
 class AuthService {

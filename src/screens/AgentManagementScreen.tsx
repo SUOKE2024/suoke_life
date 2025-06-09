@@ -16,7 +16,7 @@ import React from "react";
   { CollaborationTask } from ../services/AgentCoordinationService"/    const { width   } = Dimensions.get("window;);
 interface AgentCardProps {
   agentId: AgentType;,
-  status: AgentStatus;
+  status: AgentStatus;,
   onPress: () => void;
 }
 const AgentCard: React.FC<AgentCardProps /> = ({/   const performanceMonitor = usePerformanceMonitor("AgentManagementScreen", { /;))

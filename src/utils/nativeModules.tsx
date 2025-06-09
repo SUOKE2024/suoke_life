@@ -5,32 +5,32 @@ import React from "react";
 VisionCamera 相关类型和功能 * export interface CameraConfig {
   quality: "low" | "medium" | "high" | "4k",
   enableAudio: boolean;,
-  flashMode: "off" | "on" | "auto";
+  flashMode: "off" | "on" | "auto";,
   cameraPosition: "front" | "back";
 }
 export interface PhotoResult {
   path: string;,
-  width: number;
+  width: number;,
   height: number;,
-  size: number;
+  size: number;,
   timestamp: number;
 }
 export interface VideoResult {
   path: string;,
-  duration: number;
+  duration: number;,
   size: number;,
   timestamp: number;
 }
 // Voice 相关类型和功能 * export interface VoiceConfig {
   locale: string,
   continuous: boolean;,
-  interimResults: boolean;
+  interimResults: boolean;,
   maxAlternatives: number;,
   timeout: number;
 }
 export interface VoiceResult {
   transcript: string;,
-  confidence: number;
+  confidence: number;,
   isFinal: boolean;,
   alternatives: Array<{transcript: string;,
   confidence: number;
@@ -39,7 +39,7 @@ export interface VoiceResult {
 // 位置服务相关类型 * export interface LocationConfig {
   accuracy: "low" | "balanced" | "high" | "highest",
   timeout: number;,
-  maximumAge: number;
+  maximumAge: number;,
   enableHighAccuracy: boolean;
 };
 export interface LocationResult {

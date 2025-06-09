@@ -3,7 +3,7 @@ import { getCurrentEnvConfig } from '../constants/config';
 // 基准测试配置接口
 export interface BenchmarkConfig {
   benchmark_id: string;,
-  model_id: string;
+  model_id: string;,
   model_version: string;,
   test_data: any[];
   config?: Record<string, any>;
@@ -11,11 +11,11 @@ export interface BenchmarkConfig {
 // 基准测试任务接口
 export interface BenchmarkTask {
   task_id: string;,
-  benchmark_id: string;
+  benchmark_id: string;,
   model_id: string;,
-  model_version: string;
+  model_version: string;,
   status: 'pending' | 'running' | 'completed' | 'failed';,
-  progress: number;
+  progress: number;,
   created_at: string;
   results?: BenchmarkResult;
   error_message?: string;
@@ -23,12 +23,12 @@ export interface BenchmarkTask {
 // 基准测试结果接口
 export interface BenchmarkResult {
   task_id: string;,
-  benchmark_id: string;
+  benchmark_id: string;,
   model_id: string;,
-  model_version: string;
+  model_version: string;,
   metrics: Record<string, number>;
   predictions: ModelPrediction[];,
-  execution_time: number;
+  execution_time: number;,
   timestamp: string;,
   metadata: Record<string, any>;
 }
@@ -42,7 +42,7 @@ export interface ModelPrediction {
 // 模型配置接口
 export interface ModelConfig {
   model_id: string;,
-  model_version: string;
+  model_version: string;,
   model_type: string;
   description?: string;
   metadata?: Record<string, any>;
@@ -50,16 +50,16 @@ export interface ModelConfig {
 // 插件接口
 export interface Plugin {
   name: string;,
-  version: string;
+  version: string;,
   description: string;,
-  author: string;
+  author: string;,
   category: string;,
   enabled: boolean;
 }
 // 基准测试状态接口
 export interface BenchmarkStatus {
   task_id: string;,
-  status: string;
+  status: string;,
   progress: number;
   current_step?: string;
   estimated_remaining_time?: number;
@@ -68,12 +68,12 @@ export interface BenchmarkStatus {
 // 服务健康状态接口
 export interface HealthStatus {
   status: 'healthy' | 'unhealthy';,
-  version: string;
+  version: string;,
   uptime: number;,
-  system_info: {;
-    cpu_usage: number;,
-  memory_usage: number;
-    disk_usage: number;
+  system_info: {;,
+  cpu_usage: number;,
+  memory_usage: number;,
+  disk_usage: number;
 };
 }
 /**

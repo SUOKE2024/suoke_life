@@ -16,20 +16,20 @@ import React,{ useState } from react""
 const { width   } = Dimensions.get(window;";);"
 interface EcoService {
   id: string;,
-  title: string;
+  title: string;,
   subtitle: string;,
-  description: string;
+  description: string;,
   icon: string;,
-  color: string;
+  color: string;,
   category: "food_agriculture | "mountain_wellness";,
-  features: string[];
+  features: string[];,
   benefits: string[];
   locations?: string[];
   seasons?: string[]
 };
 interface EcoLifestyleNavigatorProps {
   visible: boolean;,
-  onClose: () => void;
+  onClose: () => void;,
   onServiceSelect: (serviceId: string) => void;
 };
 const ECO_SERVICES: EcoService[] = [;
@@ -171,7 +171,7 @@ key={service.id}
         <Text style={styles.serviceSubtitle}>{service.subtitle}</    Text>
         <Text style={styles.serviceDescription}>{service.description}</    Text>
         <View style={styles.featuresContainer} /    >
-          {service.features.slice(0, 3).map((feature, index) => ()))
+          {service.features.slice(0, 3).map(feature, index) => ()))
             <View key={index} style={styles.featureTag} /    >
               <Text style={styles.featureText}>{feature}</    Text>
             </    View>

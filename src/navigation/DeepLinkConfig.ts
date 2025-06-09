@@ -2,18 +2,18 @@ import { LinkingOptions, getStateFromPath as getStateFromPathRN, getPathFromStat
 import { RootStackParamList } from './types';
 // 深度链接配置
 export const deepLinkConfig: LinkingOptions<RootStackParamList>['config'] = {,
-  screens: {
-    Auth: {,
-  screens: {
-      Welcome: "welcome",
+  screens: {,
+  Auth: {,
+  screens: {,
+  Welcome: "welcome",
       Login: 'login',
         Register: 'register',
         ForgotPassword: 'forgot-password'}},
     Main: {,
-  screens: {
-        MainTabs: {,
-  screens: {
-      Home: "home",
+  screens: {,
+  MainTabs: {,
+  screens: {,
+  Home: "home",
       Suoke: 'suoke',
             Explore: 'explore',
             Life: 'life',
@@ -117,7 +117,7 @@ export class DeepLinkHandler {
     try {
       const urlObj = new URL(url);
       const params: Record<string, string> = {};
-            urlObj.searchParams.forEach((value, key) => {
+            urlObj.searchParams.forEach(value, key) => {
         params[key] = value;
       });
             return params;

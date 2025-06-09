@@ -2,16 +2,16 @@ import { apiClient } from './apiClient';
 // 数据类型定义
 export interface Constitution {
   id: string;,
-  name: string;
+  name: string;,
   type: string;,
-  characteristics: string[];
+  characteristics: string[];,
   description: string;,
-  recommendations: string[];
+  recommendations: string[];,
   symptoms: string[];,
-  lifestyle: {;
-    diet: string[];,
-  exercise: string[];
-    sleep: string[];,
+  lifestyle: {;,
+  diet: string[];,
+  exercise: string[];,
+  sleep: string[];,
   emotion: string[];
 };
   created_at: string,
@@ -19,25 +19,25 @@ export interface Constitution {
 }
 export interface Symptom {
   id: string;,
-  name: string;
+  name: string;,
   category: string;,
-  description: string;
+  description: string;,
   severity: 'mild' | 'moderate' | 'severe';,
-  related_constitutions: string[];
+  related_constitutions: string[];,
   related_syndromes: string[];,
-  treatments: string[];
+  treatments: string[];,
   created_at: string;,
   updated_at: string;
 }
 export interface Acupoint {
   id: string;,
-  name: string;
+  name: string;,
   chinese_name: string;,
-  location: string;
+  location: string;,
   meridian: string;,
-  functions: string[];
+  functions: string[];,
   indications: string[];,
-  techniques: string[];
+  techniques: string[];,
   precautions: string[];
   coordinates?: {
     x: number;,
@@ -49,14 +49,14 @@ export interface Acupoint {
 }
 export interface Herb {
   id: string;,
-  name: string;
+  name: string;,
   chinese_name: string;,
-  latin_name: string;
+  latin_name: string;,
   category: string;,
-  properties: {;
-    nature: string; // 性;,
-  flavor: string; // 味
-    meridian: string[]; // 归经
+  properties: {;,
+  nature: string; // 性;,
+  flavor: string; // 味,
+  meridian: string[]; // 归经
 };
   functions: string[],
   indications: string[];,
@@ -68,15 +68,15 @@ export interface Herb {
 }
 export interface Syndrome {
   id: string;,
-  name: string;
+  name: string;,
   category: string;,
-  description: string;
+  description: string;,
   symptoms: string[];,
-  tongue_manifestation: string;
+  tongue_manifestation: string;,
   pulse_manifestation: string;,
-  treatment_principles: string[];
+  treatment_principles: string[];,
   formulas: string[];,
-  created_at: string;
+  created_at: string;,
   updated_at: string;
 }
 export interface KnowledgeQuery {
@@ -97,13 +97,13 @@ export interface KnowledgeQuery {
 }
 export interface KnowledgeResult {
   id: string;,
-  title: string;
+  title: string;,
   content: string;,
-  type: string;
+  type: string;,
   relevance: number;,
-  source: string;
+  source: string;,
   category: string;,
-  tags: string[];
+  tags: string[];,
   related_items: {;
     constitutions?: Constitution[];
     symptoms?: Symptom[];
@@ -114,17 +114,17 @@ export interface KnowledgeResult {
 }
 export interface GraphData {
   nodes: GraphNode[];,
-  edges: GraphEdge[];
+  edges: GraphEdge[];,
   statistics: {;,
-  total_nodes: number;
-    total_edges: number;,
+  total_nodes: number;,
+  total_edges: number;,
   node_types: Record<string, number>;
     edge_types: Record<string, number>;
 };
 }
 export interface GraphNode {
   id: string;,
-  label: string;
+  label: string;,
   type: string;,
   properties: Record<string, any>;
   position?: { x: number; y: number;
@@ -132,7 +132,7 @@ export interface GraphNode {
 }
 export interface GraphEdge {
   id: string;,
-  source: string;
+  source: string;,
   target: string;,
   type: string;
   weight?: number;
@@ -149,14 +149,14 @@ export interface RecommendationRequest {
 }
 export interface HealthRecommendation {
   id: string;,
-  type: 'lifestyle' | 'diet' | 'exercise' | 'treatment' | 'prevention';
+  type: 'lifestyle' | 'diet' | 'exercise' | 'treatment' | 'prevention';,
   title: string;,
-  description: string;
+  description: string;,
   priority: 'low' | 'medium' | 'high';,
-  evidence_level: number;
+  evidence_level: number;,
   implementation: {;,
-  frequency: string;
-    duration: string;,
+  frequency: string;,
+  duration: string;,
   instructions: string[];
 };
   contraindications?: string[];

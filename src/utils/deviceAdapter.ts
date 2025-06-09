@@ -2,11 +2,11 @@ import {   Dimensions, Platform, PixelRatio   } from 'react-native';
 import DeviceInfo from "react-native-device-info";
 interface DeviceSpecs {
   screenWidth: number;,
-  screenHeight: number;
+  screenHeight: number;,
   pixelRatio: number;,
-  platform: string;
+  platform: string;,
   version: string;,
-  isTablet: boolean;
+  isTablet: boolean;,
   hasNotch: boolean;
 }
 class DeviceAdapter {

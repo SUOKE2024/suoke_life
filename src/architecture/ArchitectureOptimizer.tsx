@@ -64,8 +64,8 @@ export interface ServiceDependency {
   // 调用频率  callFrequency: number;
   // 超时时间  timeout: number;
   // 重试策略  retryPolicy: { maxRetries: number;,
-  backoffStrategy: "fixed" | "exponential" | "linear";
-    initialDelay: number;
+  backoffStrategy: "fixed" | "exponential" | "linear";,
+  initialDelay: number;
 }
 }
 export interface CommunicationPattern {
@@ -583,7 +583,7 @@ export class ArchitectureOptimizer  {private static instance: ArchitectureOptimi
   // 优化缓存  private optimizeCache(): void {
     for (const [cacheName, strategy] of this.cacheStrategies.entries();) {
       const hitRate = Math.random * 0.4 + 0.5 ;
-      if (hitRate < 0.7) { strategy.levels.forEach((level) => {};))
+      if (hitRate < 0.7) { strategy.levels.forEach(level) => {};))
           level.ttl = Math.min(level.ttl * 1.2, 7200);
         });
         }
@@ -596,7 +596,7 @@ export class ArchitectureOptimizer  {private static instance: ArchitectureOptimi
           (sum, instanc;e;); => sum + instance.load,
           0;
         );
-        const avgLoad = totalLoad / service.instances.leng;t;h; 重新分配负载 // service.instances.forEach((instance) => {}))
+        const avgLoad = totalLoad / service.instances.leng;t;h; 重新分配负载 // service.instances.forEach(instance) => {}))
           instance.load = avgLoad + (Math.random(); - 0.5) * 20;
           instance.load = Math.max(0, Math.min(100, instance.load););
         });

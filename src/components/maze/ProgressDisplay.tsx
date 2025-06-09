@@ -13,11 +13,11 @@ import { MazeProgress } from '../../types/maze';
 } from 'react-native';
 interface ProgressDisplayProps {
   progress: MazeProgress;,
-  gameTime: number;
+  gameTime: number;,
   isPaused: boolean;,
-  onPause: () => void;
+  onPause: () => void;,
   onResume: () => void;,
-  onSettings: () => void;
+  onSettings: () => void;,
   onExit: () => void;
 }
 const { width: screenWidth } = Dimensions.get('window');

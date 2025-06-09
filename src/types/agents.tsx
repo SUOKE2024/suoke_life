@@ -35,17 +35,17 @@ export enum MessageType {
 // 基础智能体接口
 export interface Agent {
   id: string;,
-  name: string;
+  name: string;,
   type: AgentType;,
-  description: string;
+  description: string;,
   channel: string;,
-  role: string;
+  role: string;,
   capabilities: string[];,
   technicalFeatures: Record<string, boolean>;
   status: AgentStatus;,
-  healthStatus: AgentHealthStatus;
+  healthStatus: AgentHealthStatus;,
   version: string;,
-  createdAt: Date;
+  createdAt: Date;,
   lastActivity: Date;
 }
 // 小艾智能体接口 - 首页聊天频道版主 & 四诊协调智能体
@@ -160,9 +160,9 @@ export interface AgentMessage {
   fromAgent: AgentType;
   toAgent?: AgentType;
   userId: string;,
-  sessionId: string;
+  sessionId: string;,
   messageType: MessageType;,
-  content: unknown;
+  content: unknown;,
   timestamp: Date;,
   priority: 'low' | 'normal' | 'high' | 'urgent';
   metadata?: Record<string, any>;
@@ -170,13 +170,13 @@ export interface AgentMessage {
 // 智能体响应接口
 export interface AgentResponse {
   id: string;,
-  agentType: AgentType;
+  agentType: AgentType;,
   messageId: string;,
-  userId: string;
+  userId: string;,
   sessionId: string;,
-  content: unknown;
+  content: unknown;,
   responseType: 'text' | 'voice' | 'action' | 'data' | 'error';,
-  timestamp: Date;
+  timestamp: Date;,
   processingTime: number;
   confidence?: number;
   metadata?: Record<string, any>;
@@ -184,9 +184,9 @@ export interface AgentResponse {
 // 智能体协作接口
 export interface AgentCollaboration {
   id: string;,
-  initiatorAgent: AgentType;
+  initiatorAgent: AgentType;,
   participantAgents: AgentType[];,
-  collaborationType: 'consultation' | 'data_sharing' | 'task_delegation' | 'knowledge_exchange';
+  collaborationType: 'consultation' | 'data_sharing' | 'task_delegation' | 'knowledge_exchange';,
   status: 'pending' | 'active' | 'completed' | 'failed';,
   startTime: Date;
   endTime?: Date;
@@ -195,9 +195,9 @@ export interface AgentCollaboration {
 // 智能体事件接口
 export interface AgentEvent {
   id: string;,
-  agentType: AgentType;
+  agentType: AgentType;,
   eventType: 'status_change' | 'error' | 'collaboration_request' | 'task_completion';,
-  timestamp: Date;
+  timestamp: Date;,
   data: unknown;,
   severity: 'info' | 'warning' | 'error' | 'critical';
 }
@@ -221,8 +221,8 @@ export interface AgentConfiguration {
   capabilities: string[];,
   technicalFeatures: Record<string, boolean>;
   resourceLimits: {;,
-  maxConcurrentSessions: number;
-    maxMemoryUsage: number;,
+  maxConcurrentSessions: number;,
+  maxMemoryUsage: number;,
   maxCpuUsage: number;
 };
   lastUpdated: Date;
@@ -230,64 +230,64 @@ export interface AgentConfiguration {
 // 智能体性能指标接口
 export interface AgentMetrics {
   agentType: AgentType;,
-  timestamp: Date;
+  timestamp: Date;,
   performance: {;,
-  responseTime: number;
-    throughput: number;,
-  errorRate: number;
-    successRate: number;
+  responseTime: number;,
+  throughput: number;,
+  errorRate: number;,
+  successRate: number;
 };
   resources: {,
-  cpuUsage: number;
-    memoryUsage: number,
+  cpuUsage: number;,
+  memoryUsage: number,
   networkUsage: number;
   };
   sessions: {,
-  active: number;
-    total: number,
+  active: number;,
+  total: number,
   averageDuration: number;
   };
 }
 // 四诊聚合结果接口
 export interface FourDiagnosisAggregationResult {
   sessionId: string;,
-  userId: string;
+  userId: string;,
   timestamp: Date;,
-  diagnosisResults: {;
-    looking: {;,
-  faceColor: string;
-      tongueImage: string;,
-  bodyPosture: string;
-      confidence: number;
+  diagnosisResults: {;,
+  looking: {;,
+  faceColor: string;,
+  tongueImage: string;,
+  bodyPosture: string;,
+  confidence: number;
 };
     listening: {,
-  voiceQuality: string;
-      breathingPattern: string,
+  voiceQuality: string;,
+  breathingPattern: string,
   heartRate: number;,
   confidence: number;
     };
     inquiry: {,
-  symptoms: string[];
-      medicalHistory: string[],
+  symptoms: string[];,
+  medicalHistory: string[],
   lifestyle: Record<string, any>;
       confidence: number;
     };
     palpation: {,
-  pulseType: string;
-      pulseRate: number,
+  pulseType: string;,
+  pulseRate: number,
   bodyTemperature: number;,
   confidence: number;
     };
   };
   syndromeAnalysis: {,
-  primarySyndrome: string;
-    secondarySyndromes: string[],
+  primarySyndrome: string;,
+  secondarySyndromes: string[],
   confidence: number;,
   recommendations: string[];
   };
   overallAssessment: {,
-  healthScore: number;
-    riskLevel: 'low' | 'medium' | 'high',
+  healthScore: number;,
+  riskLevel: 'low' | 'medium' | 'high',
   urgency: 'routine' | 'priority' | 'urgent';,
   followUpRequired: boolean;
   };

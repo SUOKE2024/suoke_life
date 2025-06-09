@@ -18,8 +18,8 @@ import { MedicalResource, TimeSlot, Review } from '../../store/slices/medicalRes
 const { width, height } = Dimensions.get('window');
 interface MedicalResourceDetailScreenProps {
   navigation: any;,
-  route: {;
-    params: {;,
+  route: {;,
+  params: {;,
   resourceId: string;
 };
   };

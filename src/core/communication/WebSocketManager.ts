@@ -12,18 +12,18 @@ export enum MessageType {
   }
   export interface WebSocketMessage {
   type: MessageType;,
-  payload: any;
-    timestamp: number;,
+  payload: any;,
+  timestamp: number;,
   messageId: string;
     userId?: string;
     sessionId?: string;
 }
   export interface ConnectionConfig {
   url: string;,
-  reconnectInterval: number;
-    maxReconnectAttempts: number;,
-  heartbeatInterval: number;
-    timeout: number;
+  reconnectInterval: number;,
+  maxReconnectAttempts: number;,
+  heartbeatInterval: number;,
+  timeout: number;
 }
   export interface MessageHandler {
   type: MessageType;,

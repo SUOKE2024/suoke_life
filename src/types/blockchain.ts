@@ -2,15 +2,15 @@
 // 基于 services/blockchain-service/api/grpc/blockchain.proto;
 export interface StoreHealthDataRequest {
   userId: string;,
-  dataType: string;
+  dataType: string;,
   dataHash: Uint8Array;,
-  encryptedData: Uint8Array;
+  encryptedData: Uint8Array;,
   metadata: Record<string, string>;
   timestamp: number;
 }
 export interface StoreHealthDataResponse {
   transactionId: string;,
-  blockHash: string;
+  blockHash: string;,
   success: boolean;,
   message: string;
 }
@@ -20,19 +20,19 @@ export interface VerifyHealthDataRequest {
 }
 export interface VerifyHealthDataResponse {
   valid: boolean;,
-  message: string;
+  message: string;,
   verificationTimestamp: number;
 }
 export interface VerifyWithZKPRequest {
   userId: string;,
-  verifierId: string;
+  verifierId: string;,
   dataType: string;,
-  proof: Uint8Array;
+  proof: Uint8Array;,
   publicInputs: Uint8Array;
 }
 export interface VerifyWithZKPResponse {
   valid: boolean;,
-  message: string;
+  message: string;,
   verificationDetails: Record<string, string>;
 }
 export interface GetHealthDataRecordsRequest {
@@ -45,7 +45,7 @@ export interface GetHealthDataRecordsRequest {
 }
 export interface HealthDataRecord {
   transactionId: string;,
-  dataType: string;
+  dataType: string;,
   dataHash: Uint8Array;,
   metadata: Record<string, string>;
   timestamp: number;,
@@ -53,20 +53,20 @@ export interface HealthDataRecord {
 }
 export interface GetHealthDataRecordsResponse {
   records: HealthDataRecord[];,
-  totalCount: number;
+  totalCount: number;,
   page: number;,
   pageSize: number;
 }
 export interface AuthorizeAccessRequest {
   userId: string;,
-  authorizedId: string;
+  authorizedId: string;,
   dataTypes: string[];,
-  expirationTime: number;
+  expirationTime: number;,
   accessPolicies: Record<string, string>;
 }
 export interface AuthorizeAccessResponse {
   authorizationId: string;,
-  success: boolean;
+  success: boolean;,
   message: string;
 }
 export interface RevokeAccessRequest {
@@ -76,7 +76,7 @@ export interface RevokeAccessRequest {
 }
 export interface RevokeAccessResponse {
   success: boolean;,
-  message: string;
+  message: string;,
   revocationTimestamp: number;
 }
 export interface GetBlockchainStatusRequest {
@@ -84,9 +84,9 @@ export interface GetBlockchainStatusRequest {
 }
 export interface GetBlockchainStatusResponse {
   currentBlockHeight: number;,
-  connectedNodes: number;
+  connectedNodes: number;,
   consensusStatus: string;,
-  syncPercentage: number;
+  syncPercentage: number;,
   nodeInfo: Record<string, string>;
   lastBlockTimestamp: number;
 }
@@ -109,24 +109,24 @@ export class BlockchainError extends Error {
 // 零知识证明相关类型
 export interface ZKProof {
   proof: Uint8Array;,
-  publicInputs: Uint8Array;
+  publicInputs: Uint8Array;,
   verificationKey: string;,
   circuitType: string;
 }
 export interface ZKPVerificationResult {
   valid: boolean;,
-  proofHash: string;
+  proofHash: string;,
   verificationTimestamp: number;,
   verifierSignature: string;
 }
 // 访问控制类型
 export interface AccessGrant {
   id: string;,
-  userId: string;
+  userId: string;,
   authorizedId: string;,
-  dataTypes: string[];
+  dataTypes: string[];,
   permissions: AccessPermission[];,
-  expirationTime: number;
+  expirationTime: number;,
   createdAt: number;,
   status: AccessGrantStatus;
 }
@@ -143,18 +143,18 @@ export enum AccessGrantStatus {
 // 区块链状态类型
 export interface BlockchainStatus {
   isConnected: boolean;,
-  currentBlockHeight: number;
+  currentBlockHeight: number;,
   networkId: string;,
-  consensusStatus: 'SYNCING' | 'SYNCED' | 'ERROR';
+  consensusStatus: 'SYNCING' | 'SYNCED' | 'ERROR';,
   syncPercentage: number;,
-  lastBlockTimestamp: number;
+  lastBlockTimestamp: number;,
   nodeCount: number;,
   transactionPoolSize: number;
 }
 // 健康数据类型扩展
 export interface HealthDataMetadata {
   source: string;,
-  version: string;
+  version: string;,
   checksum: string;,
   encryptionAlgorithm: string;
   compressionType?: string;
@@ -162,12 +162,12 @@ export interface HealthDataMetadata {
 }
 export interface EncryptedHealthData {
   encryptedData: Uint8Array;,
-  encryptionKey: string;
+  encryptionKey: string;,
   iv: Uint8Array;,
-  algorithm: string;
+  algorithm: string;,
   keyDerivation: {;,
-  algorithm: string;
-    salt: Uint8Array;,
+  algorithm: string;,
+  salt: Uint8Array;,
   iterations: number;
 };
 }

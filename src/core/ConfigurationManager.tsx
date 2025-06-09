@@ -2,8 +2,8 @@ import React from "react";
 // 配置管理器   索克生活APP - 架构优化
 interface AppConfig {
   api: {baseUrl: string;,
-  timeout: number;
-    retryAttempts: number;
+  timeout: number;,
+  retryAttempts: number;
 };
   agents: { xiaoai: {,
   enabled: boolean,
@@ -59,8 +59,8 @@ class ConfigurationManager {
   baseUrl: "https: timeout: 10000,
         retryAttempts: 3},
       agents: {,
-  xiaoai: {
-          enabled: true,
+  xiaoai: {,
+  enabled: true,
           model: "gpt-4"},
         xiaoke: {,
   enabled: true,

@@ -22,8 +22,8 @@ export class LaokeKnowledgeIntegration {
   * 基于症状分析推荐相关体质
   */
   async analyzeConstitutionBySymptoms(symptoms: string[]): Promise<{,
-  constitutions: Constitution[];
-    confidence: number,
+  constitutions: Constitution[];,
+  confidence: number,
   reasoning: string;
   }> {
     try {
@@ -94,8 +94,8 @@ export class LaokeKnowledgeIntegration {
   * 智能症状搜索和分析
   */
   async intelligentSymptomSearch(symptomDescription: string): Promise<{,
-  symptoms: Symptom[];
-    relatedConstitutions: Constitution[],
+  symptoms: Symptom[];,
+  relatedConstitutions: Constitution[],
   suggestedTreatments: string[];,
   tcmAnalysis: string;
   }> {
@@ -121,8 +121,8 @@ export class LaokeKnowledgeIntegration {
   * 知识图谱查询和推理
   */
   async queryKnowledgeGraph(query: {),
-  entityType: string;
-    entityId: string;
+  entityType: string;,
+  entityId: string;
     relationshipType?: string;
     depth?: number;
   }): Promise<{
@@ -155,14 +155,14 @@ export class LaokeKnowledgeIntegration {
   symptoms: string[];
     constitution?: string;
     lifestyle: {,
-  diet: string[];
-      exercise: string[],
+  diet: string[];,
+  exercise: string[],
   sleep: string;,
   stress: string;
     };
     demographics: {,
-  age: number;
-      gender: string;
+  age: number;,
+  gender: string;
     };
   }): Promise<{
     overallScore: number,

@@ -20,7 +20,7 @@ export enum ErrorSeverity {
 }
 export interface ErrorInfo {
   type: ErrorType;,
-  severity: ErrorSeverity;
+  severity: ErrorSeverity;,
   message: string;
   code?: string;
   details?: any;
@@ -31,7 +31,7 @@ export interface ErrorInfo {
 }
 export interface ErrorHandlerConfig {
   enableLogging: boolean;,
-  enableReporting: boolean;
+  enableReporting: boolean;,
   enableUserNotification: boolean;
   reportingEndpoint?: string;
   maxRetries: number;,

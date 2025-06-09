@@ -18,7 +18,7 @@ import { isLoggedIn } from '../../utils/authUtils';
 
 interface LoginFormData {
   email: string;,
-  password: string;
+  password: string;,
   rememberMe: boolean;
 }
 

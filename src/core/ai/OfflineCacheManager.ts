@@ -7,20 +7,20 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export interface CacheEntry {
   id: string;,
-  type: 'inference_result' | 'user_data' | 'model_config' | 'health_record';
+  type: 'inference_result' | 'user_data' | 'model_config' | 'health_record';,
   data: any;,
   timestamp: number;
   expiresAt?: number;
   priority: 'low' | 'normal' | 'high' | 'critical';,
-  size: number;
+  size: number;,
   syncStatus: 'pending' | 'synced' | 'failed';
 }
 
 export interface CacheConfig {
   maxSizeMB: number;,
-  maxEntries: number;
+  maxEntries: number;,
   defaultTTL: number;,
-  compressionEnabled: boolean;
+  compressionEnabled: boolean;,
   encryptionEnabled: boolean;
 }
 

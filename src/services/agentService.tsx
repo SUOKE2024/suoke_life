@@ -5,7 +5,7 @@ import { FourDiagnosisAggregationResult } from '../types/agents';
 // 智能体信息接口
 export interface AgentInfo {
   id: string;,
-  name: string;
+  name: string;,
   status: 'online' | 'offline' | 'busy';,
   capabilities: string[];
   description?: string;
@@ -14,7 +14,7 @@ export interface AgentInfo {
 // 消息接口
 export interface Message {
   id: string;,
-  content: string;
+  content: string;,
   timestamp: number;,
   sender: string;
   type?: 'text' | 'image' | 'audio' | 'file';
@@ -23,7 +23,7 @@ export interface Message {
 // 咨询会话接口
 export interface ConsultationSession {
   sessionId: string;,
-  agentId: string;
+  agentId: string;,
   status: 'active' | 'completed' | 'cancelled';,
   startTime: number;
   endTime?: number;
@@ -31,9 +31,9 @@ export interface ConsultationSession {
 // 智能体建议接口
 export interface AgentSuggestion {
   id: string;,
-  title: string;
+  title: string;,
   content: string;,
-  category: string;
+  category: string;,
   priority: 'high' | 'medium' | 'low';
 }
 // API响应类型
@@ -50,9 +50,9 @@ export interface ApiResponse<T = any> {
 // 智能体状态类型
 export interface AgentStatus {
   id: string;,
-  name: string;
+  name: string;,
   status: 'online' | 'offline' | 'busy' | 'away';,
-  lastActive: number;
+  lastActive: number;,
   capabilities: string[];
   currentTask?: string;
   healthScore?: number;
@@ -61,18 +61,18 @@ export interface AgentStatus {
 // 智能体交互类型
 export interface AgentInteraction {
   agentId: string;,
-  userId: string;
+  userId: string;,
   sessionId: string;,
-  messages: AgentMessage[];
+  messages: AgentMessage[];,
   context: Record<string, any>;
   startTime: number;,
   lastUpdate: number;
 }
 export interface AgentMessage {
   id: string;,
-  content: string;
+  content: string;,
   timestamp: number;,
-  sender: 'user' | 'agent';
+  sender: 'user' | 'agent';,
   type: 'text' | 'image' | 'audio' | 'data';
   metadata?: Record<string, any>;
 }
@@ -137,7 +137,7 @@ export class AgentService {
   }
   // 执行健康检查
   private performHealthCheck() {
-    this.agents.forEach((agent, agentId) => {
+    this.agents.forEach(agent, agentId) => {
       // 模拟健康检查
       const healthScore = Math.max(70, Math.min(100, agent.healthScore! + (Math.random() - 0.5) * 10));
       const responseTime = Math.max(100, Math.min(1000, agent.responseTime! + (Math.random() - 0.5) * 100));

@@ -9,9 +9,9 @@ o";  * / 加密货币* ///     "
 d";  * / 已过期* ///     " // 支付订单信息 * export interface PaymentOrder {
   id: string,
   userId: string;,
-  amount: number;
+  amount: number;,
   currency: string;,
-  description: string;
+  description: string;,
   orderType: | "medical_service"| "health_product"| "subscription";
     | "consultation";
     | "medication";
@@ -35,9 +35,9 @@ d";  * / 已过期* ///     " // 支付订单信息 * export interface PaymentOr
   orderId: string;
   transactionId?: string;
   amount: number;,
-  currency: string;
+  currency: string;,
   status: PaymentStatus;,
-  provider: PaymentProvider;
+  provider: PaymentProvider;,
   paymentMethod: PaymentMethod;,
   timestamp: string;
   receipt?:  {
@@ -62,15 +62,15 @@ d";  * / 已过期* ///     " // 支付订单信息 * export interface PaymentOr
 // 支付配置 * interface PaymentConfig {
   provider: PaymentProvider,
   apiKey: string;,
-  secretKey: string;
+  secretKey: string;,
   merchantId: string;,
-  environment: "sandbox" | "production";
+  environment: "sandbox" | "production";,
   webhookUrl: string;,
-  supportedCurrencies: string[];
+  supportedCurrencies: string[];,
   supportedMethods: PaymentMethod[];,
   fees: {percentage: number;,
-  fixed: number;
-    currency: string;
+  fixed: number;,
+  currency: string;
 }
 }
 //
@@ -286,7 +286,7 @@ const response = await apiClient.post(;)
       const params = new URLSearchParams;(;);
       params.append("userId", userId);
       if (filters) {
-        Object.entries(filters).forEach(([key, value]) => {}))
+        Object.entries(filters).forEach([key, value]) => {}))
           if (value) {
             if (key === "dateRange") {
               params.append("startDate", (value as any).start)

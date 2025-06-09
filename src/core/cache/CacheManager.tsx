@@ -28,32 +28,32 @@ export interface CacheItem<T = any> {
 }
 export interface CacheConfig {
   type: CacheType;,
-  strategy: CacheStrategy;
+  strategy: CacheStrategy;,
   maxSize: number;
   maxMemory?: number; // 最大内存使用（字节）
   defaultTTL?: number; // 默认TTL（毫秒）
   cleanupInterval?: number; // 清理间隔（毫秒）
   compression?: boolean; // 是否压缩
   maxMemorySize: number; // 最大内存缓存大小(MB);,
-  persistentStorage: boolean; // 是否启用持久化存储
+  persistentStorage: boolean; // 是否启用持久化存储,
   encryptionEnabled: boolean; // 是否启用加密
 }
 export interface CacheStats {
   hits: number;,
-  misses: number;
+  misses: number;,
   hitRate: number;,
-  totalItems: number;
+  totalItems: number;,
   totalSize: number;,
   memoryUsage: number;
   oldestItem?: number;
   newestItem?: number;
   totalHits: number;,
-  totalMisses: number;
+  totalMisses: number;,
   evictionCount: number;
 }
 export interface CacheLayer {
   name: string;,
-  config: CacheConfig;
+  config: CacheConfig;,
   cache: Map<string, CacheItem>;
   stats: CacheStats;
 }
@@ -380,7 +380,7 @@ export class CacheManager {
           const keys = Object.keys(localStorage).filter(key) =>;
             key.startsWith(`cache_${layer.name}_`);
           );
-          keys.forEach((key) => localStorage.removeItem(key));)
+          keys.forEach(key) => localStorage.removeItem(key));)
         }
         break;
       case CacheType.SESSION_STORAGE:
@@ -388,7 +388,7 @@ export class CacheManager {
           const keys = Object.keys(sessionStorage).filter(key) =>;
             key.startsWith(`cache_${layer.name}_`);
           );
-          keys.forEach((key) => sessionStorage.removeItem(key));)
+          keys.forEach(key) => sessionStorage.removeItem(key));)
         }
         break;
       case CacheType.INDEXED_DB:

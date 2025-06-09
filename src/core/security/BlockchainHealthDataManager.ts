@@ -505,9 +505,9 @@ return [];
 // 相关接口和类型定义
 export interface DataPermissions {
   read: boolean;,
-  write: boolean;
+  write: boolean;,
   share: boolean;,
-  delete: boolean;
+  delete: boolean;,
   audit: boolean;
   timeLimit?: number;
   ipRestrictions?: string[];
@@ -519,23 +519,23 @@ export interface SharingPermissions extends DataPermissions {allowSubsharing: bo
 }
 export interface RequesterCredentials {
   requesterId: string;,
-  publicKey: string;
+  publicKey: string;,
   signature: string;,
-  decryptionKey: string;
+  decryptionKey: string;,
   purpose: string;,
   timestamp: Date;
 }
 export interface DataStorageResult {
   success: boolean;,
-  dataHash: string;
+  dataHash: string;,
   blockHeight: number;,
-  storageNodes: string[];
+  storageNodes: string[];,
   zkProofHash: string;,
   timestamp: Date;
 }
 export interface DataSharingResult {
   success: boolean;,
-  sharingId: string;
+  sharingId: string;,
   contractAddress: string;,
   sharingKey: string;
   expiresAt?: Date;
@@ -550,11 +550,11 @@ export interface IntegrityVerificationResult {
 }
 export interface DataAccessRecord {
   id: string;,
-  userId: string;
+  userId: string;,
   dataHash: string;,
-  accessorId: string;
+  accessorId: string;,
   operation: string;,
-  timestamp: Date;
+  timestamp: Date;,
   ipAddress: string;,
   userAgent: string;
   dataType?: string;
@@ -567,25 +567,25 @@ export interface TimeRange {
 }
 export interface DataUsageReport {
   userId: string;,
-  timeRange: TimeRange;
+  timeRange: TimeRange;,
   totalAccesses: number;,
-  uniqueAccessors: number;
+  uniqueAccessors: number;,
   dataTypesAccessed: Record<string, number>;
   accessPatterns: AccessPattern[];,
-  securityEvents: SecurityEvent[];
+  securityEvents: SecurityEvent[];,
   generatedAt: Date;
 }
 export interface AccessPattern {
   pattern: string;,
-  frequency: number;
+  frequency: number;,
   timeDistribution: Record<string, number>;
   riskLevel: low" | "medium | "high";
 }
 export interface SecurityEvent {
   id: string;,
-  type: string;
+  type: string;,
   severity: low" | "medium | "high" | critical;,
-  description: string;
+  description: string;,
   timestamp: Date;,
   userId: string;
   dataHash?: string;
@@ -593,47 +593,47 @@ export interface SecurityEvent {
 }
 export interface BlockchainStatus {
   isInitialized: boolean;,
-  blockHeight: number;
+  blockHeight: number;,
   nodeCount: number;,
-  contractCount: number;
+  contractCount: number;,
   consensusStatus: string;,
   lastBlockTime: Date;
 }
 export interface SystemStats {
   totalDataBlocks: number;,
-  totalUsers: number;
+  totalUsers: number;,
   totalSharedData: number;,
-  averageBlockTime: number;
+  averageBlockTime: number;,
   networkHashRate: number;,
   storageUtilization: number;
 }
 export interface DataBlock {
   hash: string;,
-  userId: string;
+  userId: string;,
   data: EncryptedData;,
-  zkProof: ZKProof;
+  zkProof: ZKProof;,
   timestamp: Date;,
-  blockHeight: number;
+  blockHeight: number;,
   previousHash: string;,
   nonce: number;
 }
 export interface EncryptedData {
   ciphertext: string;,
-  iv: string;
+  iv: string;,
   authTag: string;,
-  algorithm: string;
+  algorithm: string;,
   keyId: string;
 }
 export interface ZKProof {
   hash: string;,
-  proof: string;
+  proof: string;,
   publicInputs: string[];,
-  verificationKey: string;
+  verificationKey: string;,
   circuit: string;
 }
 export interface DistributionResult {
   success: boolean;,
-  nodes: string[];
+  nodes: string[];,
   replicationFactor: number;
 }
 // 错误类定义
@@ -871,8 +871,8 @@ class SharingContract {
   public createdAt: Date;
   private terminated: boolean = false;
   constructor(params: {),
-  id: string;
-    ownerId: string,
+  id: string;,
+  ownerId: string,
   recipientId: string;,
   dataHash: string,
   permissions: SharingPermissions;

@@ -325,21 +325,21 @@ return new Promise(resolve => {};)
 // 辅助接口和类型
 interface OptimizationTask {
   id: string;,
-  model: ONNXModel;
+  model: ONNXModel;,
   options: ModelOptimizationOptions;,
-  status: pending" | "running | "completed" | failed;
+  status: pending" | "running | "completed" | failed;,
   createdAt: Date;
   completedAt?: Date;
   error?: string;
 }
 interface OptimizationResult {
   originalModelId: string;,
-  optimizedModelId: string;
+  optimizedModelId: string;,
   options: ModelOptimizationOptions;,
-  improvements: {;
-    inferenceSpeedGain: number;  // 推理速度提升倍数;,
-  memoryReduction: number;     // 内存减少比例
-modelSizeChange: number;     // 模型大小变化比例
+  improvements: {;,
+  inferenceSpeedGain: number;  // 推理速度提升倍数;,
+  memoryReduction: number;     // 内存减少比例,
+  modelSizeChange: number;     // 模型大小变化比例
 }
   timestamp: Date,
   success: boolean;
@@ -347,8 +347,8 @@ modelSizeChange: number;     // 模型大小变化比例
 }
 interface BottleneckAnalysis {
   modelId: string;,
-  bottlenecks: string[];
+  bottlenecks: string[];,
   recommendations: string[];,
-  overallScore: number;
+  overallScore: number;,
   metrics: PerformanceMetrics;
 }  */
