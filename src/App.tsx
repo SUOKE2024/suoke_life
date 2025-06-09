@@ -2,22 +2,22 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React, { Suspense, useEffect, useState } from 'react';
-import {
-    Alert,
-    StatusBar,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native';
+import { Alert, StatusBar, StyleSheet, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { APP_CONFIG, getCurrentEnvConfig } from './constants/config';
 import { ApiServiceProvider } from './services/IntegratedApiService';
 
 // 懒加载屏幕组件
 const HomeScreen = React.lazy(() => import('./screens/main/HomeScreen'));
-const LifeOverviewScreen = React.lazy(() => import('./screens/health/LifeOverviewScreen'));
-const FiveDiagnosisAgentIntegrationScreen = React.lazy(() => import('./screens/demo/FiveDiagnosisAgentIntegrationScreen'));
-const ExploreScreen = React.lazy(() => import('./screens/explore/ExploreScreen'));
+const LifeOverviewScreen = React.lazy(
+  () => import('./screens/health/LifeOverviewScreen')
+);
+const FiveDiagnosisAgentIntegrationScreen = React.lazy(
+  () => import('./screens/demo/FiveDiagnosisAgentIntegrationScreen')
+);
+const ExploreScreen = React.lazy(
+  () => import('./screens/explore/ExploreScreen')
+);
 
 // 临时创建简单的ProfileScreen组件
 const ProfileScreen = () => (
@@ -27,17 +27,27 @@ const ProfileScreen = () => (
 );
 
 // 懒加载网关组件
-const GatewayMonitor = React.lazy(() => import('./components/common/GatewayMonitor'));
-const GatewayConfig = React.lazy(() => import('./components/common/GatewayConfig'));
-const AnalyticsDashboard = React.lazy(() => import('./components/common/AnalyticsDashboard'));
-const GatewayConfigManager = React.lazy(() => import('./components/common/GatewayConfigManager'));
+const GatewayMonitor = React.lazy(
+  () => import('./components/common/GatewayMonitor')
+);
+const GatewayConfig = React.lazy(
+  () => import('./components/common/GatewayConfig')
+);
+const AnalyticsDashboard = React.lazy(
+  () => import('./components/common/AnalyticsDashboard')
+);
+const GatewayConfigManager = React.lazy(
+  () => import('./components/common/GatewayConfigManager')
+);
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 // 网关管理屏幕
 const GatewayManagementScreen = () => {
-  const [activeTab, setActiveTab] = useState<'monitor' | 'config' | 'analytics' | 'settings'>('monitor');
+  const [activeTab, setActiveTab] = useState<
+    'monitor' | 'config' | 'analytics' | 'settings'
+  >('monitor');
 
   const renderContent = () => {
     switch (activeTab) {
@@ -160,7 +170,9 @@ const MainTabs = () => {
 };
 
 // 应用状态检查组件
-const AppStatusChecker: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const AppStatusChecker: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [isReady, setIsReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -187,7 +199,8 @@ const AppStatusChecker: React.FC<{ children: React.ReactNode }> = ({ children })
 
       setIsReady(true);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : '应用初始化失败';
+      const errorMessage =
+        err instanceof Error ? err.message : '应用初始化失败';
       setError(errorMessage);
       console.error('App initialization error:', err);
       Alert.alert('初始化错误', errorMessage, [

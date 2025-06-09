@@ -1,8 +1,9 @@
 
-import test-agents from '../test-agents.ts';
+import testAgents from '../test-agents';
+
 describe('test-agents', () => {
   it('应该正确导出', () => {
-    expect(test-agents).toBeDefined();
+    expect(testAgents).toBeDefined();
   });
   it('应该处理正常输入', () => {
     // 添加正常输入测试
