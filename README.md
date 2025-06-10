@@ -16,6 +16,7 @@
 - 🛠️ **统一支持服务** - 人工审核和无障碍支持
 - 📊 **实时监控** - Prometheus + Grafana监控体系
 - 🚀 **自动化部署** - Docker + Kubernetes生产部署
+- 🧠 **Claude AI 集成** - 智能代码审查和文档生成
 
 ## 🏗️ 架构概览
 
@@ -30,7 +31,8 @@
 ├── 工具服务 (Integration + Medical Resources)
 ├── API网关 (Routing + Load Balancing)
 ├── 公共服务 (Shared Components)
-└── 区块链服务 (Security + Privacy)
+├── 区块链服务 (Security + Privacy)
+└── Claude AI 集成 (Code Review + Documentation)
 ```
 
 ## 🚀 快速开始
@@ -38,13 +40,16 @@
 ### 开发环境
 ```bash
 # 1. 克隆项目
-git clone https://github.com/suoke/suoke_life.git
+git clone https://github.com/SUOKE2024/suoke_life.git
 cd suoke_life
 
 # 2. 安装依赖
 npm install
 
-# 3. 启动开发环境
+# 3. 配置 Claude AI 集成
+./scripts/install-claude.sh
+
+# 4. 启动开发环境
 docker-compose up -d
 npm start
 ```

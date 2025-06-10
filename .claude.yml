@@ -1,0 +1,155 @@
+# Claude AI 配置
+version: "1.0"
+
+# 项目信息
+project:
+  name: "索克生活平台"
+  description: "智能健康管理平台 - 由人工智能智能体驱动的现代化健康管理平台"
+  language: ["TypeScript", "Python", "React Native", "JavaScript"]
+  framework: ["React Native", "FastAPI", "Docker", "Kubernetes"]
+
+# AI 辅助功能
+features:
+  code_review: true
+  auto_documentation: true
+  bug_detection: true
+  performance_optimization: true
+  security_analysis: true
+  architecture_analysis: true
+  test_generation: true
+
+# 代码审查规则
+code_review:
+  auto_approve_minor: false
+  require_human_review: true
+  focus_areas:
+    - "安全性检查"
+    - "性能优化"
+    - "代码质量"
+    - "最佳实践"
+    - "中医智慧数字化"
+    - "AI智能体协作"
+    - "微服务架构"
+    - "React Native最佳实践"
+  
+  # 特殊关注点
+  special_focus:
+    - "健康数据隐私保护"
+    - "医疗AI算法准确性"
+    - "多智能体协同逻辑"
+    - "区块链数据安全"
+    - "实时诊断性能"
+
+# 文档生成
+documentation:
+  auto_generate: true
+  languages: ["zh-CN", "en-US"]
+  include_api_docs: true
+  include_architecture_docs: true
+  include_user_guides: true
+  
+  # 特定文档类型
+  medical_docs:
+    - "中医辨证论治文档"
+    - "AI诊断算法说明"
+    - "健康数据处理流程"
+    - "智能体协作机制"
+
+# 性能监控
+performance:
+  monitor_response_time: true
+  monitor_memory_usage: true
+  monitor_api_latency: true
+  target_response_time: "100ms"
+  target_availability: "99.9%"
+
+# 安全配置
+security:
+  scan_vulnerabilities: true
+  check_data_privacy: true
+  validate_medical_compliance: true
+  monitor_access_patterns: true
+  
+  # 医疗数据特殊要求
+  medical_security:
+    - "HIPAA合规性检查"
+    - "个人健康信息保护"
+    - "数据匿名化验证"
+    - "访问权限控制"
+
+# 测试配置
+testing:
+  auto_generate_tests: true
+  test_coverage_target: 95
+  include_integration_tests: true
+  include_e2e_tests: true
+  
+  # 医疗AI特殊测试
+  medical_tests:
+    - "诊断准确性测试"
+    - "智能体协作测试"
+    - "数据一致性测试"
+    - "性能压力测试"
+
+# 代码质量标准
+quality:
+  complexity_threshold: 10
+  duplication_threshold: 5
+  maintainability_index: 80
+  
+  # 项目特定标准
+  medical_standards:
+    - "医疗算法可解释性"
+    - "数据处理透明度"
+    - "错误处理完整性"
+    - "日志记录规范性"
+
+# 智能体特定配置
+agents:
+  xiaoai:
+    focus: "用户交互和体验优化"
+    review_areas: ["UI/UX", "用户反馈处理", "界面响应性"]
+  
+  xiaoke:
+    focus: "健康数据分析和处理"
+    review_areas: ["数据算法", "分析准确性", "处理效率"]
+  
+  laoke:
+    focus: "中医智慧和传统医学"
+    review_areas: ["中医理论", "辨证逻辑", "传统医学数字化"]
+  
+  soer:
+    focus: "系统集成和协调"
+    review_areas: ["服务集成", "系统协调", "整体架构"]
+
+# 排除规则
+exclude:
+  paths:
+    - "node_modules/"
+    - "venv/"
+    - "venv_clean/"
+    - "coverage/"
+    - "dist/"
+    - "build/"
+    - "*.log"
+    - "*.tmp"
+  
+  files:
+    - "package-lock.json"
+    - "*.pyc"
+    - "*.pyo"
+    - "*.pyd"
+    - ".DS_Store"
+
+# 通知配置
+notifications:
+  slack_webhook: "${SLACK_WEBHOOK_URL}"
+  email_alerts: true
+  github_comments: true
+  
+  # 关键问题立即通知
+  critical_alerts:
+    - "安全漏洞"
+    - "医疗数据泄露风险"
+    - "系统性能严重下降"
+    - "AI诊断准确性问题" 
